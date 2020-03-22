@@ -30,7 +30,6 @@ import classNames from 'classnames';
 import { _t } from '../../languageHandler';
 import {RoomPermalinkCreator} from '../../utils/permalinks/Permalinks';
 
-import {MatrixClientPeg} from '../../MatrixClientPeg';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
@@ -55,6 +54,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -97,8 +97,12 @@ export default createReactClass({
         viaServers: PropTypes.arrayOf(PropTypes.string),
     },
 
+    statics: {
+        contextType: MatrixClientContext,
+    },
+
     getInitialState: function() {
-        const llMembers = MatrixClientPeg.get().hasLazyLoadMembersEnabled();
+        const llMembers = this.context.hasLazyLoadMembersEnabled();
         return {
             room: null,
             roomId: null,
@@ -165,17 +169,17 @@ export default createReactClass({
 
     componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room", this.onRoom);
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().on("Room.name", this.onRoomName);
-        MatrixClientPeg.get().on("Room.accountData", this.onRoomAccountData);
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
-        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
-        MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
-        MatrixClientPeg.get().on("accountData", this.onAccountData);
-        MatrixClientPeg.get().on("crypto.keyBackupStatus", this.onKeyBackupStatus);
-        MatrixClientPeg.get().on("deviceVerificationChanged", this.onDeviceVerificationChanged);
-        MatrixClientPeg.get().on("userTrustStatusChanged", this.onUserVerificationChanged);
+        this.context.on("Room", this.onRoom);
+        this.context.on("Room.timeline", this.onRoomTimeline);
+        this.context.on("Room.name", this.onRoomName);
+        this.context.on("Room.accountData", this.onRoomAccountData);
+        this.context.on("RoomState.events", this.onRoomStateEvents);
+        this.context.on("RoomState.members", this.onRoomStateMember);
+        this.context.on("Room.myMembership", this.onMyMembership);
+        this.context.on("accountData", this.onAccountData);
+        this.context.on("crypto.keyBackupStatus", this.onKeyBackupStatus);
+        this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+        this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
@@ -245,7 +249,7 @@ export default createReactClass({
         // NB: This does assume that the roomID will not change for the lifetime of
         // the RoomView instance
         if (initial) {
-            newState.room = MatrixClientPeg.get().getRoom(newState.roomId);
+            newState.room = this.context.getRoom(newState.roomId);
             if (newState.room) {
                 newState.showApps = this._shouldShowApps(newState.room);
                 this._onRoomLoaded(newState.room);
@@ -347,7 +351,7 @@ export default createReactClass({
                     peekLoading: true,
                     isPeeking: true, // this will change to false if peeking fails
                 });
-                MatrixClientPeg.get().peekInRoom(roomId).then((room) => {
+                this.context.peekInRoom(roomId).then((room) => {
                     if (this.unmounted) {
                         return;
                     }
@@ -380,7 +384,7 @@ export default createReactClass({
                 });
             } else if (room) {
                 // Stop peeking because we have joined this room previously
-                MatrixClientPeg.get().stopPeeking();
+                this.context.stopPeeking();
                 this.setState({isPeeking: false});
             }
         }
@@ -477,18 +481,18 @@ export default createReactClass({
             roomView.removeEventListener('dragend', this.onDragLeaveOrEnd);
         }
         dis.unregister(this.dispatcherRef);
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room", this.onRoom);
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
-            MatrixClientPeg.get().removeListener("Room.accountData", this.onRoomAccountData);
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
-            MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
-            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
-            MatrixClientPeg.get().removeListener("accountData", this.onAccountData);
-            MatrixClientPeg.get().removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
-            MatrixClientPeg.get().removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
-            MatrixClientPeg.get().removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+        if (this.context) {
+            this.context.removeListener("Room", this.onRoom);
+            this.context.removeListener("Room.timeline", this.onRoomTimeline);
+            this.context.removeListener("Room.name", this.onRoomName);
+            this.context.removeListener("Room.accountData", this.onRoomAccountData);
+            this.context.removeListener("RoomState.events", this.onRoomStateEvents);
+            this.context.removeListener("Room.myMembership", this.onMyMembership);
+            this.context.removeListener("RoomState.members", this.onRoomStateMember);
+            this.context.removeListener("accountData", this.onAccountData);
+            this.context.removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
+            this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
+            this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -538,7 +542,6 @@ export default createReactClass({
         }
     },
 
-
     onKeyDown: function(ev) {
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
@@ -578,9 +581,7 @@ export default createReactClass({
                   payload.data.description || payload.data.name);
               break;
             case 'picture_snapshot':
-                ContentMessages.sharedInstance().sendContentListToRoom(
-                    [payload.file], this.state.room.roomId, MatrixClientPeg.get(),
-                );
+                ContentMessages.sharedInstance().sendContentListToRoom([payload.file], this.state.room.roomId, this.context);
                 break;
             case 'notifier_enabled':
             case 'upload_started':
@@ -669,7 +670,7 @@ export default createReactClass({
         // we'll only be showing a spinner.
         if (this.state.joining) return;
 
-        if (ev.getSender() !== MatrixClientPeg.get().credentials.userId) {
+        if (ev.getSender() !== this.context.credentials.userId) {
             // update unread count when scrolled up
             if (!this.state.searchResults && this.state.atEndOfLiveTimeline) {
                 // no change
@@ -725,8 +726,7 @@ export default createReactClass({
 
     _loadMembersIfJoined: async function(room) {
         // lazy load members if enabled
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
+        if (this.context.hasLazyLoadMembersEnabled()) {
             if (room && room.getMyMembership() === 'join') {
                 try {
                     await room.loadMembersIfNeeded();
@@ -761,7 +761,7 @@ export default createReactClass({
 
     _updatePreviewUrlVisibility: function({roomId}) {
         // URL Previews in E2EE rooms can be a privacy leak so use a different setting which is per-room explicit
-        const key = MatrixClientPeg.get().isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
+        const key = this.context.isRoomEncrypted(roomId) ? 'urlPreviewsEnabled_e2ee' : 'urlPreviewsEnabled';
         this.setState({
             showUrlPreview: SettingsStore.getValue(key, roomId),
         });
@@ -795,11 +795,10 @@ export default createReactClass({
     },
 
     _updateE2EStatus: async function(room) {
-        const cli = MatrixClientPeg.get();
-        if (!cli.isRoomEncrypted(room.roomId)) {
+        if (!this.context.isRoomEncrypted(room.roomId)) {
             return;
         }
-        if (!cli.isCryptoEnabled()) {
+        if (!this.context.isCryptoEnabled()) {
             // If crypto is not currently enabled, we aren't tracking devices at all,
             // so we don't know what the answer is. Let's error on the safe side and show
             // a warning for this case.
@@ -824,21 +823,21 @@ export default createReactClass({
         const verified = [];
         const unverified = [];
         e2eMembers.map(({userId}) => userId)
-            .filter((userId) => userId !== cli.getUserId())
+            .filter((userId) => userId !== this.context.getUserId())
             .forEach((userId) => {
-                (cli.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId)
+                (this.context.checkUserTrust(userId).isCrossSigningVerified() ?
+                verified : unverified).push(userId);
             });
 
         debuglog("e2e verified", verified, "unverified", unverified);
 
         /* Check all verified user devices. */
         /* Don't alarm if no other users are verified  */
-        const targets = (verified.length > 0) ? [...verified, cli.getUserId()] : verified;
+        const targets = (verified.length > 0) ? [...verified, this.context.getUserId()] : verified;
         for (const userId of targets) {
-            const devices = await cli.getStoredDevicesForUser(userId);
+            const devices = await this.context.getStoredDevicesForUser(userId);
             const anyDeviceNotVerified = devices.some(({deviceId}) => {
-                return !cli.checkDeviceTrust(userId, deviceId).isVerified();
+                return !this.context.checkDeviceTrust(userId, deviceId).isVerified();
             });
             if (anyDeviceNotVerified) {
                 this.setState({
@@ -920,7 +919,7 @@ export default createReactClass({
 
     _updatePermissions: function(room) {
         if (room) {
-            const me = MatrixClientPeg.get().getUserId();
+            const me = this.context.getUserId();
             const canReact = room.getMyMembership() === "join" && room.currentState.maySendEvent("m.reaction", me);
             const canReply = room.maySendMessage();
 
@@ -1004,7 +1003,7 @@ export default createReactClass({
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            const searchPromise = MatrixClientPeg.get().backPaginateRoomEventsSearch(
+            const searchPromise = this.context.backPaginateRoomEventsSearch(
                 this.state.searchResults);
             return this._handleSearchResult(searchPromise);
         } else {
@@ -1030,10 +1029,8 @@ export default createReactClass({
     },
 
     onJoinButtonClicked: function(ev) {
-        const cli = MatrixClientPeg.get();
-
         // If the user is a ROU, allow them to transition to a PWLU
-        if (cli && cli.isGuest()) {
+        if (this.context && this.context.isGuest()) {
             // Join this room once the user has registered and logged in
             // (If we failed to peek, we may not have a valid room object.)
             dis.dispatch({
@@ -1130,7 +1127,7 @@ export default createReactClass({
         ev.stopPropagation();
         ev.preventDefault();
         ContentMessages.sharedInstance().sendContentListToRoom(
-            ev.dataTransfer.files, this.state.room.roomId, MatrixClientPeg.get(),
+            ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
         this.setState({ draggingFile: false });
         dis.dispatch({action: 'focus_composer'});
@@ -1143,12 +1140,12 @@ export default createReactClass({
     },
 
     injectSticker: function(url, info, text) {
-        if (MatrixClientPeg.get().isGuest()) {
+        if (this.context.isGuest()) {
             dis.dispatch({action: 'require_registration'});
             return;
         }
 
-        ContentMessages.sharedInstance().sendStickerContentToRoom(url, this.state.room.roomId, info, text, MatrixClientPeg.get())
+        ContentMessages.sharedInstance().sendStickerContentToRoom(url, this.state.room.roomId, info, text, this.context)
             .then(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
                     // Let the staus bar handle this
@@ -1239,11 +1236,8 @@ export default createReactClass({
     },
 
     getSearchResultTiles: function() {
-        const EventTile = sdk.getComponent('rooms.EventTile');
         const SearchResultTile = sdk.getComponent('rooms.SearchResultTile');
         const Spinner = sdk.getComponent("elements.Spinner");
-
-        const cli = MatrixClientPeg.get();
 
         // XXX: todo: merge overlapping results somehow?
         // XXX: why doesn't searching on name work?
@@ -1252,21 +1246,21 @@ export default createReactClass({
 
         if (this.state.searchInProgress) {
             ret.push(<li key="search-spinner">
-                         <Spinner />
-                     </li>);
+                 <Spinner />
+             </li>);
         }
 
         if (!this.state.searchResults.next_batch) {
             if (this.state.searchResults.results.length == 0) {
                 ret.push(<li key="search-top-marker">
-                         <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
-                         </li>,
-                        );
+                     <h2 className="mx_RoomView_topMarker">{ _t("No results") }</h2>
+                 </li>,
+                );
             } else {
                 ret.push(<li key="search-top-marker">
-                         <h2 className="mx_RoomView_topMarker">{ _t("No more results") }</h2>
-                         </li>,
-                        );
+                     <h2 className="mx_RoomView_topMarker">{ _t("No more results") }</h2>
+                 </li>,
+                );
             }
         }
 
@@ -1286,7 +1280,7 @@ export default createReactClass({
 
             const mxEv = result.context.getEvent();
             const roomId = mxEv.getRoomId();
-            const room = cli.getRoom(roomId);
+            const room = this.context.getRoom(roomId);
 
             if (!haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -1353,7 +1347,7 @@ export default createReactClass({
     },
 
     onForgetClick: function() {
-        MatrixClientPeg.get().forget(this.state.room.roomId).then(function() {
+        this.context.forget(this.state.room.roomId).then(function() {
             dis.dispatch({ action: 'view_next_room' });
         }, function(err) {
             const errCode = err.errcode || _t("unknown error code");
@@ -1370,7 +1364,7 @@ export default createReactClass({
         this.setState({
             rejecting: true,
         });
-        MatrixClientPeg.get().leave(this.state.roomId).then(function() {
+        this.context.leave(this.state.roomId).then(function() {
             dis.dispatch({ action: 'view_next_room' });
             self.setState({
                 rejecting: false,
@@ -1397,15 +1391,14 @@ export default createReactClass({
             rejecting: true,
         });
 
-        const cli = MatrixClientPeg.get();
         try {
-            const myMember = this.state.room.getMember(cli.getUserId());
+            const myMember = this.state.room.getMember(this.context.getUserId());
             const inviteEvent = myMember.events.member;
-            const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
+            const ignoredUsers = this.context.getIgnoredUsers();
             ignoredUsers.push(inviteEvent.getSender()); // de-duped internally in the js-sdk
-            await cli.setIgnoredUsers(ignoredUsers);
+            await this.context.setIgnoredUsers(ignoredUsers);
 
-            await cli.leave(this.state.roomId);
+            await this.context.leave(this.state.roomId);
             dis.dispatch({ action: 'view_next_room' });
             this.setState({
                 rejecting: false,
@@ -1624,7 +1617,7 @@ export default createReactClass({
         const createEvent = this.state.room.currentState.getStateEvents("m.room.create", "");
         if (!createEvent || !createEvent.getContent()['predecessor']) return null;
 
-        return MatrixClientPeg.get().getRoom(createEvent.getContent()['predecessor']['room_id']);
+        return this.context.getRoom(createEvent.getContent()['predecessor']['room_id']);
     },
 
     _getHiddenHighlightCount: function() {
@@ -1718,7 +1711,7 @@ export default createReactClass({
                     </ErrorBoundary>
                 );
             } else {
-                const myUserId = MatrixClientPeg.get().credentials.userId;
+                const myUserId = this.context.credentials.userId;
                 const myMember = this.state.room.getMember(myUserId);
                 const inviteEvent = myMember.events.member;
                 var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
@@ -1785,13 +1778,13 @@ export default createReactClass({
         const showRoomUpgradeBar = (
             roomVersionRecommendation &&
             roomVersionRecommendation.needsUpgrade &&
-            this.state.room.userMayUpgradeRoom(MatrixClientPeg.get().credentials.userId)
+            this.state.room.userMayUpgradeRoom(this.context.credentials.userId)
         );
 
         const showRoomRecoveryReminder = (
             SettingsStore.getValue("showRoomRecoveryReminder") &&
-            MatrixClientPeg.get().isRoomEncrypted(this.state.room.roomId) &&
-            !MatrixClientPeg.get().getKeyBackupEnabled()
+            this.context.isRoomEncrypted(this.state.room.roomId) &&
+            !this.context.getKeyBackupEnabled()
         );
 
         const hiddenHighlightCount = this._getHiddenHighlightCount();
@@ -1862,7 +1855,7 @@ export default createReactClass({
         const auxPanel = (
             <AuxPanel room={this.state.room}
               fullHeight={false}
-              userId={MatrixClientPeg.get().credentials.userId}
+              userId={this.context.credentials.userId}
               conferenceHandler={this.props.ConferenceHandler}
               draggingFile={this.state.draggingFile}
               displayConfCallNotification={this.state.displayConfCallNotification}
