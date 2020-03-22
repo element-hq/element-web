@@ -21,5 +21,6 @@
     "Your Riot is misconfigured": "Via kliento Riot estas misagordita",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Viaj Riot-agordoj enhavas nevalidan JSON-on. Bonvolu korekti la problemon kaj reŝarĝi la paĝon.",
     "The message from the parser is: %(message)s": "La mesaĝo el la analizilo estas: %(message)s",
-    "Invalid JSON": "Nevalida JSON"
+    "Invalid JSON": "Nevalida JSON",
+    "Go to your browser to complete Sign In": "Iru al via foliumilo por fini la saluton"
 }

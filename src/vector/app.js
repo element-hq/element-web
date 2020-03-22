@@ -40,6 +40,7 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import {loadConfig, preparePlatform} from "./initial-load";
 
 let lastLocationHashSet = null;
 
@@ -146,31 +147,23 @@ export async function loadApp(fragparts) {
     const params = parseQs(window.location);
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    // if (configSyntaxError) {
-    //     const errorMessage = (
-    //         <div>
-    //             <p>
-    //                 {_t(
-    //                     "Your Riot configuration contains invalid JSON. Please correct the problem " +
-    //                     "and reload the page.",
-    //                 )}
-    //             </p>
-    //             <p>
-    //                 {_t(
-    //                     "The message from the parser is: %(message)s",
-    //                     {message: configError.err.message || _t("Invalid JSON")},
-    //                 )}
-    //             </p>
-    //         </div>
-    //     );
-    //
-    //     const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-    //     window.matrixChat = ReactDOM.render(
-    //         <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-    //         document.getElementById('matrixchat'),
-    //     );
-    //     return;
-    // }
+    if (configInfo.configSyntaxError) {
+        const errorMessage = (
+            <div>
+                <p>
+                    {_t(
+                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
+                        "and reload the page.",
+                    )}
+                </p>
+                <p>
+                    {_t(
+                        "The message from the parser is: %(message)s",
+                        {message: configInfo.configError.err.message || _t("Invalid JSON")},
+                    )}
+                </p>
+            </div>
+        );
 
     const configError = false; // TODO
     const validBrowser = true;
@@ -180,7 +173,7 @@ export async function loadApp(fragparts) {
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configError) {
+    if (configInfo.configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
@@ -232,8 +225,6 @@ export async function loadApp(fragparts) {
             document.getElementById('matrixchat'),
         );
     }
-
-    window.performance.mark("end");
 }
 
 async function verifyServerConfig() {

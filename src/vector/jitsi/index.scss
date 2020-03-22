@@ -1,0 +1,75 @@
+/*
+Copyright 2020 New Vector Ltd.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Match the user's theme: https://github.com/vector-im/riot-web/issues/12794
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    src: url('~matrix-react-sdk/res/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: Nunito, Arial, Helvetica, sans-serif;
+    background-color: #181b21;
+    color: #edf3ff;
+}
+
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+#jitsiContainer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#joinButtonContainer {
+    display: table;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+.joinConferenceFloating {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.joinConferencePrompt {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    text-align: center;
+}
+
+#joinButton {
+    // A mix of AccessibleButton styles
+    cursor: pointer;
+    padding: 7px 18px;
+    text-align: center;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #03b381;
+    border: 0;
+}

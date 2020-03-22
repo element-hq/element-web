@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.5.11",
+  "version": "1.5.13",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -40,13 +40,13 @@
     "build:res": "node scripts/copy-res.js",
     "build:genfiles": "yarn reskindex && yarn build:res",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:compile": "babel -d lib --verbose --extensions \".ts,.js\" src",
+    "build:compile": "babel -d lib --verbose --extensions \".ts,.js,.tsx\" src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
     "build:electron": "yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
     "build:electron:linux": "yarn build && electron-builder -l --x64",
     "build:electron:macos": "yarn build && electron-builder -m --x64",
     "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "tsc --emitDeclarationOnly --jsx react",
     "install:electron": "electron-builder install-app-deps",
     "dist": "scripts/package.sh",
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
@@ -56,14 +56,13 @@
     "lint": "yarn lint:types && yarn lint:ts && yarn lint:js && yarn lint:style",
     "lint:js": "eslint src",
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest"
   },
   "dependencies": {
     "browser-request": "^0.3.3",
     "favico.js": "^0.3.10",
-    "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
@@ -94,7 +93,7 @@
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
-    "@types/react": "^16.9.17",
+    "@types/react": "16.9",
     "@types/react-dom": "^16.9.4",
     "autoprefixer": "^9.7.3",
     "babel-eslint": "^10.0.3",
@@ -153,7 +152,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "8.0.2",
+    "electronVersion": "7.1.14",
     "files": [
       "node_modules/**",
       "src/**"
@@ -188,7 +187,15 @@
       "output": "electron_app/dist",
       "app": "electron_app"
     },
-    "afterSign": "scripts/electron_afterSign.js"
+    "afterSign": "scripts/electron_afterSign.js",
+    "protocols": [
+      {
+        "name": "riot",
+        "schemes": [
+          "riot"
+        ]
+      }
+    ]
   },
   "jest": {
     "modulePathIgnorePatterns": [

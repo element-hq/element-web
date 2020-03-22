@@ -5,6 +5,7 @@ Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,10 +23,29 @@ limitations under the License.
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
+import {MatrixClient} from "matrix-js-sdk";
+import Modal from "matrix-react-sdk/src/Modal";
+import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
+import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
+import {Categories, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
+import {Key} from "matrix-react-sdk/src/Keyboard";
+import React from "react";
 
 const ipcRenderer = window.ipcRenderer;
+const isMac = navigator.platform.toUpperCase().includes('MAC');
+
+// register Mac specific shortcuts
+if (isMac) {
+    registerShortcut(Categories.NAVIGATION, {
+        keybinds: [{
+            modifiers: [Modifiers.COMMAND],
+            key: Key.COMMA,
+        }],
+        description: _td("Open user settings"),
+    });
+}
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
@@ -116,6 +136,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('addEventToIndex', ev, profile);
     }
 
+    async deleteEvent(eventId: string): Promise<boolean> {
+        return this._ipcCall('deleteEvent', eventId);
+    }
+
     async isEventIndexEmpty(): Promise<boolean> {
         return this._ipcCall('isEventIndexEmpty');
     }
@@ -197,6 +221,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         ipcRenderer.on('ipcReply', this._onIpcReply.bind(this));
         ipcRenderer.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+
+        ipcRenderer.on('preferences', () => {
+            dis.dispatch({ action: 'view_user_settings' });
+        });
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
@@ -291,7 +319,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     supportsAutoHideMenuBar(): boolean {
         // This is irelevant on Mac as Menu bars don't live in the app window
-        return !navigator.platform.toUpperCase().includes('MAC');
+        return !isMac;
     }
 
     async getAutoHideMenuBarEnabled(): boolean {
@@ -304,7 +332,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     supportsMinimizeToTray(): boolean {
         // Things other than Mac support tray icons
-        return !navigator.platform.toUpperCase().includes('MAC');
+        return !isMac;
     }
 
     async getMinimizeToTrayEnabled(): boolean {
@@ -390,6 +418,20 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this._ipcCall('setLanguage', preferredLangs).catch(error => {
             console.log("Failed to send setLanguage IPC to Electron");
             console.error(error);
+        });
+    }
+
+    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
+        const url = super.getSSOCallbackUrl(hsUrl, isUrl);
+        url.protocol = "riot";
+        return url;
+    }
+
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas") {
+        super.startSingleSignOn(mxClient, loginType); // this will get intercepted by electron-main will-navigate
+        Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
+            title: _t("Go to your browser to complete Sign In"),
+            description: <Spinner />,
         });
     }
 }

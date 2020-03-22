@@ -34,6 +34,7 @@ module.exports = (env, argv) => {
             "bundle": "./src/vector/index.js",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
+            "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
             // CSS themes
@@ -85,7 +86,7 @@ module.exports = (env, argv) => {
             aliasFields: ['matrix_src_browser', 'browser'],
 
             // We need to specify that TS can be resolved without an extension
-            extensions: ['.js', '.json', '.ts'],
+            extensions: ['.js', '.json', '.ts', '.tsx'],
             alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
@@ -306,11 +307,19 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ['mobileguide', 'usercontent'],
+                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
                 vars: {
                     og_image_url: og_image_url,
                 },
+            }),
+
+            // This is the jitsi widget wrapper (embedded, so isolated stack)
+            new HtmlWebpackPlugin({
+                template: './src/vector/jitsi/index.html',
+                filename: 'jitsi.html',
+                minify: argv.mode === 'production',
+                chunks: ['jitsi'],
             }),
 
             // This is the mobile guide's entry point (separate for faster mobile loading)

@@ -24,7 +24,8 @@
         "feature_invite_only_padlocks": "enable",
         "feature_event_indexing": "disable",
         "feature_bridge_state": "labs",
-        "feature_presence_in_room_list": "labs"
+        "feature_presence_in_room_list": "labs",
+        "feature_custom_themes": "labs"
     },
     "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
