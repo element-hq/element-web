@@ -313,7 +313,7 @@ async function _restoreFromLocalStorage(opts) {
     }
 }
 
-function _handleLoadSessionFailure(e) {
+async function _handleLoadSessionFailure(e) {
     console.error("Unable to load session", e);
 
     const SessionRestoreErrorDialog =
@@ -323,16 +323,15 @@ function _handleLoadSessionFailure(e) {
         error: e.message,
     });
 
-    return modal.finished.then(([success]) => {
-        if (success) {
-            // user clicked continue.
-            _clearStorage();
-            return false;
-        }
+    const [success] = await modal.finished;
+    if (success) {
+        // user clicked continue.
+        await _clearStorage();
+        return false;
+    }
 
-        // try, try again
-        return loadSession();
-    });
+    // try, try again
+    return loadSession();
 }
 
 /**
