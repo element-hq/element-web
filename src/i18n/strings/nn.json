@@ -395,7 +395,7 @@
     "Close": "Lukk",
     "Remote addresses for this room:": "Fjernadresser for dette rommet:",
     "Local addresses for this room:": "Lokaladresser for dette rommet:",
-    "This room has no local addresses": "Dette rommer har ingen lokaladresser",
+    "This room has no local addresses": "Dette rommet har ingen lokaladresser",
     "New address (e.g. #foo:%(localDomain)s)": "Ny adresse (t.d. #foo:%(localDomain)s)",
     "Invalid community ID": "Ugyldig fellesskaps-ID",
     "'%(groupId)s' is not a valid community ID": "'%(groupId)s' er ikkje ein gyldig fellesskaps-ID",
