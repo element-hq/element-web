@@ -27,7 +27,7 @@ require('highlight.js/styles/github.css');
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
 import './rageshakesetup';
 import './modernizr';
-
+import './polyfills.js'
 // load service worker if available on this platform
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
