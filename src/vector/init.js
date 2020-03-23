@@ -122,22 +122,17 @@ async function loadTheme() {
     await setTheme();
 }
 
-function settled(prom) {
-    return prom.catch(() => Promise.resolve());
-}
-
 import rageshakeProm from "./rageshakesetup";
 
 export async function initRageshake() {
     return rageshakeProm;
 }
 
-export async function initBase() {
+export function initBase() {
     initPlatform();
     const loadOlmProm = loadOlm();
     const loadConfigProm = loadConfig();
     const loadLanguageProm = loadConfigProm.then(() => loadLanguage());
-    await settled(loadLanguageProm);
 
     return {
         loadOlmProm,

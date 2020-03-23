@@ -67,6 +67,10 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
+// + check if we need to redirect to mobile_guide.
+// + check if browser is supported/user has ignored check.
+// + check if app init passed (rageshake, theme, skin, i18n) [ignore olm] - at this point we load react.
+// + check if the config passed was valid.
 async function init() {
     try {
         const {initRageshake, initBase, initApp, loadApp} = await import(
@@ -102,12 +106,21 @@ async function init() {
             });
         }
 
-        await initBase();
-        await initApp(); // TODO
+        // check if browser is supported
+
+        const {
+            loadOlmProm,
+            loadConfigProm,
+            loadLanguageProm,
+        } = await initBase();
+        await initApp(); // this loads theme and skin neither of which we allow to fail
+
+        await settled(loadLanguageProm);
+        await settled(loadConfigProm);
+        await settled(loadOlmProm); // give olm a chance to load (it is allowed to fail though)
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-        // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-        // import and thus running before the skin can load.
+        // run on the components.
         await loadApp(fragparts);
     } catch (e) {
         // import
@@ -133,7 +146,4 @@ async function init() {
     // theme
 }
 
-init().catch(err => {
-    // importing failed somewhere TODO
-    console.error(err);
-});
+init();

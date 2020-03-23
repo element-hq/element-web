@@ -40,7 +40,6 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import {loadConfig, preparePlatform} from "./initial-load";
 
 let lastLocationHashSet = null;
 

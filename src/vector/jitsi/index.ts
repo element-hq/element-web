@@ -20,7 +20,6 @@ require("./index.scss");
 import * as qs from 'querystring';
 import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { loadConfig, preparePlatform } from "../initial-load";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -40,6 +39,13 @@ let widgetApi: WidgetApi;
 
 (async function () {
     try {
+        // load init path (should be instant as the parent already loaded it)
+        // @ts-ignore
+        const { loadConfig, initPlatform } = import(
+            /* webpackChunkName: "init" */
+            /* webpackPreload: true */
+            "../init");
+
         // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
         // spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
         const widgetQuery = qs.parse(window.location.hash.substring(1));
@@ -62,7 +68,7 @@ let widgetApi: WidgetApi;
         });
 
         // Bootstrap ourselves for loading the script and such
-        preparePlatform();
+        initPlatform();
         await loadConfig();
 
         // Populate the Jitsi params now
