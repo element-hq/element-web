@@ -716,14 +716,20 @@ export default class EventIndex extends EventEmitter {
             }
         });
 
+        let ret = false;
+        let paginationToken = "";
+
         // Set the pagination token to the oldest event that we retrieved.
         if (matrixEvents.length > 0) {
-            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(), EventTimeline.BACKWARDS);
-            return true;
-        } else {
-            timeline.setPaginationToken("", EventTimeline.BACKWARDS);
-            return false;
+            paginationToken = matrixEvents[matrixEvents.length - 1].getId();
+            ret = true;
         }
+
+        console.log("EventIndex: Populating file panel with", matrixEvents.length,
+                    "events and setting the pagination token to", paginationToken);
+
+        timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);
+        return ret;
     }
 
     /**
