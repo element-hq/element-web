@@ -20,7 +20,6 @@ require("./index.scss");
 import * as qs from 'querystring';
 import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { loadConfig, preparePlatform } from "../initial-load";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -61,12 +60,8 @@ let widgetApi: WidgetApi;
             await widgetApi.setAlwaysOnScreen(false);
         });
 
-        // Bootstrap ourselves for loading the script and such
-        preparePlatform();
-        await loadConfig();
-
         // Populate the Jitsi params now
-        jitsiDomain = qsParam('conferenceDomain', true) || SdkConfig.get()['jitsi']['preferredDomain'];
+        jitsiDomain = qsParam('conferenceDomain', false);
         conferenceId = qsParam('conferenceId');
         displayName = qsParam('displayName', true);
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
