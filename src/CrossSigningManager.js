@@ -168,7 +168,7 @@ export async function promptForBackupPassphrase() {
     const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
     const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
             showSummary: false, keyCallback: k => key = k,
-    }, null, /* priority = */ false, /* static = */ false);
+    }, null, /* priority = */ false, /* static = */ true);
 
     const success = await finished;
     if (!success) throw new Error("Key backup prompt cancelled");
