@@ -74,12 +74,14 @@ export default class CrossSigningPanel extends React.PureComponent {
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+        const crossSigningReady = await cli.crossSigningReady();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            crossSigningReady,
         });
     }
 
@@ -124,6 +126,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            crossSigningReady,
         } = this.state;
 
         let errorSection;
@@ -139,11 +142,14 @@ export default class CrossSigningPanel extends React.PureComponent {
         );
 
         let summarisedStatus;
-        if (!homeserverSupportsCrossSigning) {
+        if (homeserverSupportsCrossSigning === undefined) {
+            const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
+            summarisedStatus = <p><InlineSpinner /></p>;
+        } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = <p>{_t(
                 "Your homeserver does not support cross-signing.",
             )}</p>;
-        } else if (enabledForAccount && crossSigningPublicKeysOnDevice) {
+        } else if (crossSigningReady) {
             summarisedStatus = <p>✅ {_t(
                 "Cross-signing and secret storage are enabled.",
             )}</p>;

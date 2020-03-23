@@ -107,7 +107,10 @@ export default class DeviceListener {
         ) return;
 
         if (!cli.isCryptoEnabled()) return;
-        if (!cli.getCrossSigningId()) {
+
+        const crossSigningReady = await cli.crossSigningReady();
+
+        if (!crossSigningReady) {
             if (this._dismissedThisDeviceToast) {
                 ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
                 return;
