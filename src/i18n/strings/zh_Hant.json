@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "您的 Riot 包含無效的 JSON。請修正問題並重新整理頁面。",
     "The message from the parser is: %(message)s": "從解析器而來的訊息為：%(message)s",
     "Invalid JSON": "無效的 JSON",
-    "Go to your browser to complete Sign In": "到您的瀏覽器完成登入"
+    "Go to your browser to complete Sign In": "到您的瀏覽器完成登入",
+    "Open user settings": "開啟使用者設定"
 }
