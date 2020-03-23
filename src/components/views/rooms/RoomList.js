@@ -647,8 +647,13 @@ export default createReactClass({
         // case insensitive if room name includes filter,
         // or if starts with `#` and one of room's aliases starts with filter
         return list.filter((room) => {
-            if (filter[0] === "#" && room.getAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
-                return true;
+            if (filter[0] === "#") {
+                if (room.getCanonicalAlias() && room.getCanonicalAlias().toLowerCase().startsWith(lcFilter)) {
+                    return true;
+                }
+                if (room.getAltAliases().some((alias) => alias.toLowerCase().startsWith(lcFilter))) {
+                    return true;
+                }
             }
             return room.name && utils.removeHiddenChars(room.name.toLowerCase()).toLowerCase().includes(fuzzyFilter);
         });
