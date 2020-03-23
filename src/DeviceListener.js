@@ -162,7 +162,6 @@ export default class DeviceListener {
                 return;
             }
 
-            // FIXME: do we a different message?
             ToastStore.sharedInstance().addOrReplaceToast({
                 key: THIS_DEVICE_TOAST_KEY,
                 title: _t("Encryption upgrade available"),
