@@ -128,7 +128,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragparts) {
+export async function loadApp(fragparts, configInfo) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -165,14 +165,21 @@ export async function loadApp(fragparts) {
             </div>
         );
 
-    const configError = false; // TODO
-    const validBrowser = true;
+        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+        window.matrixChat = ReactDOM.render(
+            <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
+        );
+        return;
+    }
+
+    const validBrowser = true; // TODO
     const acceptInvalidBrowser = false;
 
     const platform = PlatformPeg.get();
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
+
     if (configInfo.configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
