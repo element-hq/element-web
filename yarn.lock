@@ -2444,7 +2444,7 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^2.12.1, commander@^2.19.0, commander@^2.20.0:
+commander@^2.12.1, commander@^2.15.1, commander@^2.19.0, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -6691,6 +6691,14 @@ progress@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
+project-name-generator@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/project-name-generator/-/project-name-generator-2.1.7.tgz#504c68a2a843247aa3af493a226ecf78ce8beceb"
+  integrity sha512-kLGQGiyvkZsWtqhPhUs85UkSgmH5OnZJLNrtlqkK+GZPR0cybe8Nr9jG3bD52w2siH9EE3l/a9y56bn0YX5wYw==
+  dependencies:
+    commander "^2.15.1"
+    lodash "^4.17.10"
 
 promise-inflight@^1.0.1:
   version "1.0.1"
