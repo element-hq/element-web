@@ -573,7 +573,7 @@
     "%(oneUser)sjoined %(count)s times|other": "%(oneUser)s is %(count)s keer toegetreden",
     "%(oneUser)sjoined %(count)s times|one": "%(oneUser)s is toegetreden",
     "%(severalUsers)sleft %(count)s times|other": "%(severalUsers)s is %(count)s keer weggegaan",
-    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s is weggegaan",
+    "%(severalUsers)sleft %(count)s times|one": "%(severalUsers)s zijn weggegaan",
     "%(oneUser)sleft %(count)s times|other": "%(oneUser)s is %(count)s keer weggegaan",
     "%(oneUser)sleft %(count)s times|one": "%(oneUser)s is weggegaan",
     "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)s zijn %(count)s keer toegetreden en weggegaan",

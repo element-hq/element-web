@@ -1884,5 +1884,13 @@
     "Direct Messages": "Директни съобщения",
     "Go": "Давай",
     "Failed to find the following users": "Неуспешно откриване на следните потребители",
-    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s"
+    "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "Следните потребители не съществуват или са невалидни и не могат да бъдат поканени: %(csvNames)s",
+    "The version of Riot": "Версията на Riot",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Дали използвате Riot на устройство, на което основния механизъм за достъп е докосване",
+    "Whether you're using Riot as an installed Progressive Web App": "Дали използвате Riot като инсталирано прогресивно уеб приложение (PWA)",
+    "Your user agent": "Информация за браузъра ви",
+    "The information being sent to us to help make Riot better includes:": "Информацията, която се изпраща за да ни помогне да подобрим Riot включва:",
+    "There are unknown sessions in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "В тази стая има непознати сесии: ако продължите без да ги потвърдите, ще е възможно някой да подслуша обаждането ви.",
+    "Review Sessions": "Прегледай сесиите",
+    "If you cancel now, you won't complete verifying the other user.": "Ако се откажете сега, няма да завършите верификацията на другия потребител."
 }
