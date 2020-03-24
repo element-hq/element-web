@@ -602,7 +602,7 @@
     "%(names)s and %(count)s others are typing …|one": "%(names)s ve bir diğeri yazıyor…",
     "%(names)s and %(lastPerson)s are typing …": "%(names)s ve %(lastPerson)s yazıyor…",
     "Cannot reach homeserver": "Ana sunucuya erişilemiyor",
-    "Your Riot is misconfigured": "Rioutunuz hatalı yapılandırılmış",
+    "Your Riot is misconfigured": "Riot hatalı yapılandırılmış",
     "Cannot reach identity server": "Kimlik sunucu erişilemiyor",
     "No homeserver URL provided": "Ana sunucu adresi belirtilmemiş",
     "Unexpected error resolving homeserver configuration": "Ana sunucu yapılandırması çözümlenirken beklenmeyen hata",
