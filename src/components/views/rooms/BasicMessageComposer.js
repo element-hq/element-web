@@ -157,7 +157,7 @@ export default class BasicMessageEditor extends React.Component {
                 this._hidePlaceholder();
             }
         }
-        if(isEmpty) {
+        if (isEmpty) {
             this._formatBarRef.hide();
         }
         this.setState({autoComplete: this.props.model.autoComplete});
