@@ -36,6 +36,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         // if false, will close the dialog as soon as the restore completes succesfully
         // default: true
         showSummary: PropTypes.bool,
+        // If specified, gather the key from the user but then call the function with the backup
+        // key rather than actually (necessarily) restoring the backup.
+        keyCallback: PropTypes.func,
     };
 
     static defaultProps = {
@@ -103,9 +106,18 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             restoreType: RESTORE_TYPE_PASSPHRASE,
         });
         try {
+            // We do still restore the key backup: we must ensure that the key backup key
+            // is the right one and restoring it is currently the only way we can do this.
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
                 this.state.passPhrase, undefined, undefined, this.state.backupInfo,
             );
+            if (this.props.keyCallback) {
+                const key = await MatrixClientPeg.get().keyBackupKeyFromPassword(
+                    this.state.passPhrase, this.state.backupInfo,
+                );
+                this.props.keyCallback(key);
+            }
+
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
@@ -135,6 +147,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
             );
+            if (this.props.keyCallback) {
+                const key = MatrixClientPeg.get().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                this.props.keyCallback(key);
+            }
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
