@@ -24,9 +24,6 @@ export const PHASE_DONE = 2;    //final done stage, but still showing UX
 export const PHASE_CONFIRM_SKIP = 3;
 export const PHASE_FINISHED = 4; //UX can be closed
 
-/**
- * Holds the active "Complete Security" session
- */
 export class SetupEncryptionStore extends EventEmitter {
     static sharedInstance() {
         if (!global.mx_SetupEncryptionStore) global.mx_SetupEncryptionStore = new SetupEncryptionStore();
