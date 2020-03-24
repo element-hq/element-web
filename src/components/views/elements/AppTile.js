@@ -419,6 +419,12 @@ export default class AppTile extends React.Component {
             if (this.props.onCapabilityRequest) {
                 this.props.onCapabilityRequest(requestedCapabilities);
             }
+
+            // We only tell Jitsi widgets that we're ready because they're realistically the only ones
+            // using this custom extension to the widget API.
+            if (this.props.type === 'jitsi') {
+                widgetMessaging.flagReadyToContinue();
+            }
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
