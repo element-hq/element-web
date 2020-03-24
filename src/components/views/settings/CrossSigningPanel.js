@@ -65,7 +65,6 @@ export default class CrossSigningPanel extends React.PureComponent {
     };
 
     async _getUpdatedStatus() {
-        // XXX: Add public accessors if we keep this around in production
         const cli = MatrixClientPeg.get();
         const crossSigning = cli._crypto._crossSigningInfo;
         const secretStorage = cli._crypto._secretStorage;
