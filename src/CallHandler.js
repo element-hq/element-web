@@ -433,7 +433,13 @@ async function _startCallApp(roomId, type) {
     const confId = `JitsiConference_${generateHumanReadableId()}`;
     const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
 
-    const widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
+    let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
+
+    // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
+    const parsedUrl = new URL(widgetUrl);
+    parsedUrl.search = ''; // set to empty string to make the URL class use searchParams instead
+    parsedUrl.searchParams.set('confId', confId);
+    widgetUrl = parsedUrl.toString();
 
     const widgetData = {
         conferenceId: confId,
