@@ -149,14 +149,16 @@ export default class BasicMessageEditor extends React.Component {
             const position = selection.end || selection;
             this._setLastCaretFromPosition(position);
         }
+        const {isEmpty} = this.props.model;
         if (this.props.placeholder) {
-            const {isEmpty} = this.props.model;
             if (isEmpty) {
-                this._formatBarRef.hide();
                 this._showPlaceholder();
             } else {
                 this._hidePlaceholder();
             }
+        }
+        if(isEmpty) {
+            this._formatBarRef.hide();
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
