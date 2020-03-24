@@ -152,6 +152,7 @@ export default class BasicMessageEditor extends React.Component {
         if (this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
+                this._formatBarRef.hide();
                 this._showPlaceholder();
             } else {
                 this._hidePlaceholder();
