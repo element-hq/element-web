@@ -70,7 +70,6 @@ export default class CrossSigningPanel extends React.PureComponent {
     };
 
     async _getUpdatedStatus() {
-        // XXX: Add public accessors if we keep this around in production
         const cli = MatrixClientPeg.get();
         const crossSigning = cli._crypto._crossSigningInfo;
         const secretStorage = cli._crypto._secretStorage;
@@ -79,6 +78,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+        const crossSigningReady = await cli.isCrossSigningReady();
         const secretStorageKeyNeedsUpgrade = await cli.secretStorageKeyNeedsUpgrade();
 
         this.setState({
@@ -86,6 +86,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            crossSigningReady,
             secretStorageKeyNeedsUpgrade,
         });
     }
@@ -131,6 +132,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            crossSigningReady,
             secretStorageKeyNeedsUpgrade,
         } = this.state;
 
@@ -147,11 +149,14 @@ export default class CrossSigningPanel extends React.PureComponent {
         );
 
         let summarisedStatus;
-        if (!homeserverSupportsCrossSigning) {
+        if (homeserverSupportsCrossSigning === undefined) {
+            const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
+            summarisedStatus = <p><InlineSpinner /></p>;
+        } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = <p>{_t(
                 "Your homeserver does not support cross-signing.",
             )}</p>;
-        } else if (enabledForAccount && crossSigningPublicKeysOnDevice) {
+        } else if (crossSigningReady) {
             summarisedStatus = <p>✅ {_t(
                 "Cross-signing and secret storage are enabled.",
             )}</p>;
