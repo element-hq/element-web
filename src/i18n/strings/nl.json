@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Uw Riot-configuratie bevat ongeldige JSON. Corrigeer het probleem en herlaad de pagina.",
     "The message from the parser is: %(message)s": "De ontleder meldt: %(message)s",
     "Invalid JSON": "Ongeldige JSON",
-    "Go to your browser to complete Sign In": "Ga naar uw browser om de aanmelding te voltooien"
+    "Go to your browser to complete Sign In": "Ga naar uw browser om de aanmelding te voltooien",
+    "Open user settings": "Open de gebruikersinstellingen"
 }
