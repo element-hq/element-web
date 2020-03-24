@@ -93,6 +93,9 @@ module.exports = (env, argv) => {
 
                 // same goes for js-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
+                // and prop-types and sanitize-html
+                "prop-types": path.resolve(__dirname, 'node_modules/prop-types'),
+                "sanitize-html": path.resolve(__dirname, 'node_modules/sanitize-html'),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, 'webapp'),
