@@ -23,5 +23,5 @@
     "The message from the parser is: %(message)s": "De ontleder meldt: %(message)s",
     "Invalid JSON": "Ongeldige JSON",
     "Go to your browser to complete Sign In": "Ga naar uw browser om de aanmelding te voltooien",
-    "Open user settings": "Open gebruikersinstellingen"
+    "Open user settings": "Open de gebruikersinstellingen"
 }
