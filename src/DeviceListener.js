@@ -169,7 +169,7 @@ export default class DeviceListener {
                 key: THIS_DEVICE_TOAST_KEY,
                 title: _t("Encryption upgrade available"),
                 icon: "verification_warning",
-                props: {kind: 'upgrade_encryption'},
+                props: {kind: 'upgrade_ssss'},
                 component: sdk.getComponent("toasts.SetupEncryptionToast"),
             });
         } else {
