@@ -149,9 +149,15 @@ const onSecretRequested = async function({
     if (!callbacks.getCrossSigningKeyCache) return;
     if (name === "m.cross_signing.self_signing") {
         const key = await callbacks.getCrossSigningKeyCache("self_signing");
+        if (!key) {
+            console.log(`self_signing requested by ${deviceId}, but not found in cache`);
+        }
         return key && encodeBase64(key);
     } else if (name === "m.cross_signing.user_signing") {
         const key = await callbacks.getCrossSigningKeyCache("user_signing");
+        if (!key) {
+            console.log(`user_signing requested by ${deviceId}, but not found in cache`);
+        }
         return key && encodeBase64(key);
     }
     console.warn("onSecretRequested didn't recognise the secret named ", name);
