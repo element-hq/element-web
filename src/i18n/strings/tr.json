@@ -18,7 +18,7 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot yapılandırmanız geçersiz JSON ifadesi içermektedir. Lütfen problemi düzeltin ve sayfayı yenileyin.",
     "Invalid JSON": "Geçersiz JSON",
     "Your Riot is misconfigured": "Riot hatalı ayarlanmış",
-    "Unexpected error preparing the app. See console for details.": "Uygulamayı hazırlarken beklenmeyen hata oluştu. Lütfen detaylar için konsola bakınız.",
+    "Unexpected error preparing the app. See console for details.": "Uygulama hazırlanırken beklenmeyen bir hata oldu. Detaylar için konsola bakın.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Geçersiz yapılandırma: default_server_config, default_server_name, yada default_hs_url den sadece birisi seçilebilir.",
     "Invalid configuration: no default server specified.": "Geçersiz yapılandırma: varsayılan sunucu seçilmemiş.",
     "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
