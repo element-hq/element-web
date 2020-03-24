@@ -447,6 +447,8 @@ export default class BasicMessageEditor extends React.Component {
             } else if (event.key === Key.TAB) {
                 this._tabCompleteName();
                 handled = true;
+            } else if (event.key === Key.BACKSPACE) {
+                this._formatBarRef.hide();
             }
         }
         if (handled) {
