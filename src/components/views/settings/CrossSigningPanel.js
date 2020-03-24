@@ -33,6 +33,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPublicKeysOnDevice: false,
             crossSigningPrivateKeysInStorage: false,
             secretStorageKeyInAccount: false,
+            secretStorageKeyNeedsUpgrade: null,
         };
     }
 
@@ -60,6 +61,10 @@ export default class CrossSigningPanel extends React.PureComponent {
         }
     };
 
+    _onBootstrapClick = () => {
+        this._bootstrapSecureSecretStorage(false);
+    };
+
     onStatusChanged = () => {
         this._getUpdatedStatus();
     };
@@ -74,6 +79,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
         const crossSigningReady = await cli.isCrossSigningReady();
+        const secretStorageKeyNeedsUpgrade = await cli.secretStorageKeyNeedsUpgrade();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
@@ -81,6 +87,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
+            secretStorageKeyNeedsUpgrade,
         });
     }
 
@@ -126,6 +133,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
+            secretStorageKeyNeedsUpgrade,
         } = this.state;
 
         let errorSection;
@@ -180,7 +188,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         ) {
             bootstrapButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._bootstrapSecureSecretStorage}>
+                    <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
                         {_t("Bootstrap cross-signing and secret storage")}
                     </AccessibleButton>
                 </div>
@@ -208,6 +216,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("Homeserver feature support:")}</td>
                             <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Secret Storage key format:")}</td>
+                            <td>{secretStorageKeyNeedsUpgrade ? _t("outdated") : _t("up to date")}</td>
                         </tr>
                    </tbody></table>
                 </details>

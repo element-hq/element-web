@@ -1524,6 +1524,7 @@ export default createReactClass({
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
+                    priority: ToastStore.PRIORITY_REALTIME,
                 });
             }
         });

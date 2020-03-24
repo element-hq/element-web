@@ -72,8 +72,8 @@ export default class VerificationPanel extends React.PureComponent {
 
     renderQRPhase(pending) {
         const {member, request} = this.props;
-        const showSAS = request.methods.includes(verificationMethods.SAS);
-        const showQR = this.props.request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
+        const showSAS = request.otherPartySupportsMethod(verificationMethods.SAS);
+        const showQR = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         const noCommonMethodError = !showSAS && !showQR ?
