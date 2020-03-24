@@ -33,6 +33,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPublicKeysOnDevice: false,
             crossSigningPrivateKeysInStorage: false,
             secretStorageKeyInAccount: false,
+            secretStorageKeyNeedsUpgrade: null,
         };
     }
 
@@ -78,12 +79,14 @@ export default class CrossSigningPanel extends React.PureComponent {
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
+        const secretStorageKeyNeedsUpgrade = await cli.secretStorageKeyNeedsUpgrade();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            secretStorageKeyNeedsUpgrade,
         });
     }
 
@@ -128,6 +131,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
+            secretStorageKeyNeedsUpgrade,
         } = this.state;
 
         let errorSection;
@@ -207,6 +211,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("Homeserver feature support:")}</td>
                             <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Secret Storage key format:")}</td>
+                            <td>{secretStorageKeyNeedsUpgrade ? _t("outdated") : _t("up to date")}</td>
                         </tr>
                    </tbody></table>
                 </details>
