@@ -78,6 +78,7 @@ export default class WidgetMessaging {
 
     /**
      * Tells the widget that the client is ready to handle further widget requests.
+     * @returns {Promise<*>} Resolves after the widget has acknowledged the ready message.
      */
     flagReadyToContinue() {
         return this.messageToWidget({
