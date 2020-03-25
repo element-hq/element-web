@@ -1737,5 +1737,7 @@
     "Do you want to chat with %(user)s?": "Möchtest du mit %(user)s chatten?",
     "<userName/> wants to chat": "<userName/> möchte mit dir chatten",
     "Start chatting": "Chat starten",
-    "Reject & Ignore user": "Ablehnen & Nutzer ignorieren"
+    "Reject & Ignore user": "Ablehnen & Nutzer ignorieren",
+    "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
+    "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel für Räume von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s"
 }
