@@ -190,7 +190,7 @@ export default class SetupEncryptionBody extends React.Component {
             const Spinner = sdk.getComponent('views.elements.Spinner');
             return <Spinner />;
         } else {
-            throw new Error(`Unknown phase ${phase}`);
+            console.log(`SetupEncryptionBody: Unknown phase ${phase}`);
         }
     }
 }
