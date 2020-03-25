@@ -168,23 +168,20 @@ limitations under the License.
 .mx_RoomSubList:not(.resized-all) > .mx_RoomSubList_scroll {
     &.mx_IndicatorScrollbar_topOverflow::before {
         position: sticky;
+        content: "";
+        top: 0;
         left: 0;
         right: 0;
         height: 8px;
-        content: "";
-        display: block;
         z-index: 100;
+        display: block;
         pointer-events: none;
+        transition: background-image 0.1s ease-in;
+        background: linear-gradient(to top, $panel-gradient);
     }
 
 
     &.mx_IndicatorScrollbar_topOverflow {
         margin-top: -8px;
-    }
-
-    &.mx_IndicatorScrollbar_topOverflow::before {
-        top: 0;
-        transition: background-image 0.1s ease-in;
-        background: linear-gradient(to top, $panel-gradient);
     }
 }
