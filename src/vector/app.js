@@ -41,8 +41,7 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import {setTheme} from "matrix-react-sdk/src/theme";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
-import {loadConfig, preparePlatform} from "./initial-load";
-import {loadLanguage, loadOlm} from "./init";
+import {loadConfig, preparePlatform, loadLanguage, loadOlm} from "./init";
 
 let lastLocationHashSet = null;
 

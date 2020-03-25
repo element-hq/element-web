@@ -23,7 +23,49 @@ import Olm from 'olm';
 
 import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+import ElectronPlatform from "./platform/ElectronPlatform";
+import WebPlatform from "./platform/WebPlatform";
+import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
+
+export function preparePlatform() {
+    if ((<any>window).ipcRenderer) {
+        console.log("Using Electron platform");
+        const plaf = new ElectronPlatform();
+        PlatformPeg.set(plaf);
+    } else {
+        console.log("Using Web platform");
+        PlatformPeg.set(new WebPlatform());
+    }
+}
+
+export async function loadConfig(): Promise<{configError?: Error, configSyntaxError: boolean}> {
+    const platform = PlatformPeg.get();
+
+    let configJson;
+    let configError;
+    let configSyntaxError = false;
+    try {
+        configJson = await platform.getConfig();
+    } catch (e) {
+        configError = e;
+
+        if (e && e.err && e.err instanceof SyntaxError) {
+            console.error("SyntaxError loading config:", e);
+            configSyntaxError = true;
+            configJson = {}; // to prevent errors between here and loading CSS for the error box
+        }
+    }
+
+    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
+    //
+    // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
+    SdkConfig.put(configJson);
+
+    return {configError, configSyntaxError};
+}
 
 export function loadOlm(): Promise<void> {
     /* Load Olm. We try the WebAssembly version first, and then the legacy,
