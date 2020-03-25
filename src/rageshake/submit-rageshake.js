@@ -119,6 +119,12 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
             body.append("storageManager_persisted", await navigator.storage.persisted());
         } catch (e) {}
     }
+    // Safari
+    if (document.hasStorageAccess) {
+        try {
+            body.append("storageManager_persisted", await document.hasStorageAccess());
+        } catch (e) {}
+    }
     if (navigator.storage && navigator.storage.estimate) {
         try {
             const estimate = await navigator.storage.estimate();
