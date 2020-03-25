@@ -18,7 +18,7 @@ import React from "react";
 
 // derived from code from github.com/noeldelgado/gemini-scrollbar
 // Copyright (c) Noel Delgado <pixelia.me@gmail.com> (pixelia.me)
-function getScrollbarWidth(alternativeOverflow) {
+function getScrollbarWidth() {
     const div = document.createElement('div');
     div.className = 'mx_AutoHideScrollbar'; //to get width of css scrollbar
     div.style.position = 'absolute';
@@ -26,9 +26,6 @@ function getScrollbarWidth(alternativeOverflow) {
     div.style.width = '100px';
     div.style.height = '100px';
     div.style.overflow = "scroll";
-    if (alternativeOverflow) {
-        div.style.overflow = alternativeOverflow;
-    }
     div.style.msOverflowStyle = '-ms-autohiding-scrollbar';
     document.body.appendChild(div);
     const scrollbarWidth = (div.offsetWidth - div.clientWidth);
@@ -39,18 +36,7 @@ function getScrollbarWidth(alternativeOverflow) {
 function install() {
     const scrollbarWidth = getScrollbarWidth();
     if (scrollbarWidth !== 0) {
-        const hasForcedOverlayScrollbar = getScrollbarWidth('overlay') === 0;
-        // overflow: overlay on webkit doesn't auto hide the scrollbar
-        if (hasForcedOverlayScrollbar) {
-            document.body.classList.add("mx_scrollbar_overlay_noautohide");
-        } else {
-            document.body.classList.add("mx_scrollbar_nooverlay");
-            const style = document.createElement('style');
-            style.type = 'text/css';
-            style.innerText =
-                `body.mx_scrollbar_nooverlay { --scrollbar-width: ${scrollbarWidth}px; }`;
-            document.head.appendChild(style);
-        }
+        document.body.classList.add("mx_scrollbar_noautohide");
     }
 }
 
@@ -67,42 +53,7 @@ const installBodyClassesIfNeeded = (function() {
 export default class AutoHideScrollbar extends React.Component {
     constructor(props) {
         super(props);
-        this.onOverflow = this.onOverflow.bind(this);
-        this.onUnderflow = this.onUnderflow.bind(this);
         this._collectContainerRef = this._collectContainerRef.bind(this);
-        this._needsOverflowListener = null;
-    }
-
-    onOverflow() {
-        this.containerRef.classList.add("mx_AutoHideScrollbar_overflow");
-        this.containerRef.classList.remove("mx_AutoHideScrollbar_underflow");
-    }
-
-    onUnderflow() {
-        this.containerRef.classList.remove("mx_AutoHideScrollbar_overflow");
-        this.containerRef.classList.add("mx_AutoHideScrollbar_underflow");
-    }
-
-    checkOverflow() {
-        if (!this._needsOverflowListener) {
-            return;
-        }
-        if (this.containerRef.scrollHeight > this.containerRef.clientHeight) {
-            this.onOverflow();
-        } else {
-            this.onUnderflow();
-        }
-    }
-
-    componentDidUpdate() {
-        this.checkOverflow();
-    }
-
-    componentDidMount() {
-        installBodyClassesIfNeeded();
-        this._needsOverflowListener =
-            document.body.classList.contains("mx_scrollbar_nooverlay");
-        this.checkOverflow();
     }
 
     _collectContainerRef(ref) {
@@ -126,9 +77,7 @@ export default class AutoHideScrollbar extends React.Component {
                     onScroll={this.props.onScroll}
                     onWheel={this.props.onWheel}
                 >
-            <div className="mx_AutoHideScrollbar_offset">
-                { this.props.children }
-            </div>
+            { this.props.children }
         </div>);
     }
 }
