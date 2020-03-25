@@ -1235,7 +1235,7 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
     "Verify by comparing unique emoji.": "Verify by comparing unique emoji.",
     "Verify all users in a room to ensure it's secure.": "Verify all users in a room to ensure it's secure.",
-    "In encrypted rooms, verify all users in a room to ensure it’s secure.": "In encrypted rooms, verify all users in a room to ensure it’s secure.",
+    "In encrypted rooms, verify all users to ensure it’s secure.": "In encrypted rooms, verify all users to ensure it’s secure.",
     "Verified": "Verified",
     "You've successfully verified %(displayName)s!": "You've successfully verified %(displayName)s!",
     "Got it": "Got it",

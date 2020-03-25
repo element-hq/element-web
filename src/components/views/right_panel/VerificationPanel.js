@@ -179,7 +179,7 @@ export default class VerificationPanel extends React.PureComponent {
         if (this.props.isRoomEncrypted) {
             text = _t("Verify all users in a room to ensure it's secure.");
         } else {
-            text = _t("In encrypted rooms, verify all users in a room to ensure it’s secure.");
+            text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
