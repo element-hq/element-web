@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "A Riot beállításod érvénytelen JSON szöveget tartalmaz. Kérlek javítsd és töltsd újra az oldalt.",
     "The message from the parser is: %(message)s": "A feldolgozó algoritmus üzenete: %(message)s",
     "Invalid JSON": "Érvénytelen JSON",
-    "Go to your browser to complete Sign In": "A böngészőben fejezd be a bejelentkezést"
+    "Go to your browser to complete Sign In": "A böngészőben fejezd be a bejelentkezést",
+    "Open user settings": "Felhasználói beállítások megnyitása"
 }
