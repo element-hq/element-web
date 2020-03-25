@@ -21,3 +21,4 @@ electron/pub
 /config.local*.json
 /src/component-index.js
 /.tmp
+/webpack-stats.json

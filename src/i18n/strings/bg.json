@@ -21,5 +21,7 @@
     "Your Riot is misconfigured": "Riot не е конфигуриран правилно",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot конфигурацията ви съдържа невалиден JSON. Коригирайте проблема и презаредете страницата.",
     "The message from the parser is: %(message)s": "Грешката от парсъра е: %(message)s",
-    "Invalid JSON": "Невалиден JSON"
+    "Invalid JSON": "Невалиден JSON",
+    "Open user settings": "Отвори потребителските настройки",
+    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането"
 }
