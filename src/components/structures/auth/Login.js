@@ -53,6 +53,10 @@ _td("Invalid base_url for m.identity_server");
 _td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
 
+const M_LOGIN_CAS = "m.login.cas";
+const M_LOGIN_SSO = "m.login.sso";
+const SSO_FLOWS = [M_LOGIN_SSO, M_LOGIN_CAS];
+
 /**
  * A wire component which glues together login UI components and Login logic
  */
@@ -122,11 +126,11 @@ export default createReactClass({
             'm.login.password': this._renderPasswordStep,
 
             // CAS and SSO are the same thing, modulo the url we link to
-            'm.login.cas': () => this._renderSsoStep("cas"),
-            'm.login.sso': () => this._renderSsoStep("sso"),
+            [M_LOGIN_CAS]: () => this._renderSsoStep("cas"),
+            [M_LOGIN_SSO]: () => this._renderSsoStep("sso"),
         };
 
-        this._initLoginLogic();
+        this._initLoginLogic(true);
     },
 
     componentWillUnmount: function() {
@@ -138,7 +142,7 @@ export default createReactClass({
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         // Ensure that we end up actually logging in to the right place
-        this._initLoginLogic(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
+        this._initLoginLogic(false, newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
     },
 
     onPasswordLoginError: function(errorText) {
@@ -342,12 +346,12 @@ export default createReactClass({
 
     onTryRegisterClick: function(ev) {
         const step = this._getCurrentFlowStep();
-        if (step === 'm.login.sso' || step === 'm.login.cas') {
+        if (SSO_FLOWS.includes(step)) {
             // If we're showing SSO it means that registration is also probably disabled,
             // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
             ev.preventDefault();
             ev.stopPropagation();
-            const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
+            const ssoKind = step === M_LOGIN_SSO ? 'sso' : 'cas';
             PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
         } else {
             // Don't intercept - just go through to the register page
@@ -369,7 +373,7 @@ export default createReactClass({
         });
     },
 
-    _initLoginLogic: async function(hsUrl, isUrl) {
+    _initLoginLogic: async function(initial, hsUrl, isUrl) {
         hsUrl = hsUrl || this.props.serverConfig.hsUrl;
         isUrl = isUrl || this.props.serverConfig.isUrl;
 
@@ -427,6 +431,13 @@ export default createReactClass({
             for (let i = 0; i < flows.length; i++ ) {
                 if (!this._isSupportedFlow(flows[i])) {
                     continue;
+                }
+
+                // if this is the initial render and the flow we choose is SSO/CAS then go to it automatically
+                // we do not do this when the user has changed to the server manually as that may be jarring.
+                if (initial && SSO_FLOWS.includes(flows[i].type)) {
+                    const tmpCli = this._loginLogic.createTemporaryClient();
+                    PlatformPeg.get().startSingleSignOn(tmpCli, flows[i].type === M_LOGIN_SSO ? "sso": "cas");
                 }
 
                 // we just pick the first flow where we support all the
