@@ -56,6 +56,9 @@ module.exports = (env, argv) => {
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
                     },
+                    default: {
+                        reuseExistingChunk: true,
+                    },
                 },
             },
 
