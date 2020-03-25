@@ -40,31 +40,21 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<{configError?: Error, configSyntaxError: boolean}> {
+export async function loadConfig(): Promise<Error | void> {
     const platform = PlatformPeg.get();
 
     let configJson;
-    let configError;
-    let configSyntaxError = false;
     try {
         configJson = await platform.getConfig();
     } catch (e) {
-        configError = e;
-
-        if (e && e.err && e.err instanceof SyntaxError) {
-            console.error("SyntaxError loading config:", e);
-            configSyntaxError = true;
-            configJson = {}; // to prevent errors between here and loading CSS for the error box
-        }
+        return e;
+    } finally {
+        // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+        // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
+        //
+        // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
+        SdkConfig.put(configJson || {});
     }
-
-    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-    //
-    // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(configJson);
-
-    return {configError, configSyntaxError};
 }
 
 export function loadOlm(): Promise<void> {

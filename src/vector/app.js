@@ -187,7 +187,7 @@ export async function loadApp() {
     const platform = PlatformPeg.get();
 
     // Load the config from the platform
-    const configInfo = await loadConfig();
+    const configError = await loadConfig();
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
@@ -216,7 +216,7 @@ export async function loadApp() {
     await setTheme();
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configInfo.configSyntaxError) {
+    if (configError && configError.err && configError.err instanceof SyntaxError) {
         const errorMessage = (
             <div>
                 <p>
@@ -228,7 +228,7 @@ export async function loadApp() {
                 <p>
                     {_t(
                         "The message from the parser is: %(message)s",
-                        {message: configInfo.configError.err.message || _t("Invalid JSON")},
+                        {message: configError.err.message || _t("Invalid JSON")},
                     )}
                 </p>
             </div>
@@ -248,7 +248,7 @@ export async function loadApp() {
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configInfo.configError) {
+    if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
