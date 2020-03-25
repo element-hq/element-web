@@ -19,8 +19,6 @@ require("./index.scss");
 
 import * as qs from 'querystring';
 import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import { loadConfig, preparePlatform } from "../initial-load";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -54,28 +52,26 @@ let widgetApi: WidgetApi;
         // Set this up as early as possible because Riot will be hitting it almost immediately.
         widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
             Capability.AlwaysOnScreen,
+            Capability.GetRiotWebConfig,
         ]);
-
-        widgetApi.waitReady().then(async () => {
-            // Start off by ensuring we're not stuck on screen
-            await widgetApi.setAlwaysOnScreen(false);
-        });
-
-        // Bootstrap ourselves for loading the script and such
-        preparePlatform();
-        await loadConfig();
+        widgetApi.expectingExplicitReady = true;
 
         // Populate the Jitsi params now
-        jitsiDomain = qsParam('conferenceDomain', true) || SdkConfig.get()['jitsi']['preferredDomain'];
+        jitsiDomain = qsParam('conferenceDomain');
         conferenceId = qsParam('conferenceId');
         displayName = qsParam('displayName', true);
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
 
+        await widgetApi.waitReady();
+        await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
+
+        const riotConfig = await widgetApi.getRiotConfig();
+
         // Get the Jitsi Meet API loaded up as fast as possible, but ensure that the widget's postMessage
         // receiver (WidgetApi) is up and running first.
         const scriptTag = document.createElement("script");
-        scriptTag.src = SdkConfig.get()['jitsi']['externalApiUrl'];
+        scriptTag.src = riotConfig['jitsi']['externalApiUrl'];
         document.body.appendChild(scriptTag);
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
