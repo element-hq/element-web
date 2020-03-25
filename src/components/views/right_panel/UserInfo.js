@@ -1319,20 +1319,15 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         );
     }
 
-    let devicesSection;
-    if (isRoomEncrypted) {
-        devicesSection = <DevicesSection
-            loading={devices === undefined}
-            devices={devices}
-            userId={member.userId} />;
-    }
-
     const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
             { verifyButton }
-            { devicesSection }
+            <DevicesSection
+                loading={devices === undefined}
+                devices={devices}
+                userId={member.userId} />
         </div>
     );
 
