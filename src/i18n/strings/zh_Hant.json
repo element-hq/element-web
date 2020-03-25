@@ -2287,5 +2287,8 @@
     "Navigate composer history": "瀏覽編輯區歷史紀錄",
     "Previous/next unread room or DM": "上一下／下一個未讀聊天室或直接訊息",
     "Previous/next room or DM": "上一個／下一個聊天室或直接訊息",
-    "Toggle right panel": "切換右側面板"
+    "Toggle right panel": "切換右側面板",
+    "Secret Storage key format:": "秘密儲存金鑰格式：",
+    "outdated": "太舊了",
+    "up to date": "已為最新"
 }
