@@ -2288,5 +2288,8 @@
     "Navigate composer history": "Explorer l’historique du compositeur",
     "Previous/next unread room or DM": "Salon ou message direct non lu précédent/suivant",
     "Previous/next room or DM": "Salon ou message direct précédent/suivant",
-    "Toggle right panel": "Afficher/masquer le panneau de droite"
+    "Toggle right panel": "Afficher/masquer le panneau de droite",
+    "Secret Storage key format:": "Format de clé du coffre secret :",
+    "outdated": "obsolète",
+    "up to date": "à jour"
 }
