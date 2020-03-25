@@ -206,10 +206,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithCache(
                 undefined, /* targetRoomId */
                 undefined, /* targetSessionId */
-                backupInfo
+                backupInfo,
             );
             this.setState({
-                recoverInfo
+                recoverInfo,
             });
             return true;
         } catch (e) {
