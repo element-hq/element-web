@@ -41,7 +41,7 @@ export default class SetupEncryptionBody extends React.Component {
         this.state = {
             phase: store.phase,
             // this serves dual purpose as the object for the request logic and
-            // the presence of it insidicating that we're in 'verify mode'.
+            // the presence of it indicating that we're in 'verify mode'.
             // Because of the latter, it lives in the state.
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
