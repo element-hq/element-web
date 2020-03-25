@@ -560,6 +560,12 @@ export default createReactClass({
                     handled = true;
                 }
                 break;
+
+            case Key.ESCAPE:
+                this._messagePanel.forgetReadMarker();
+                this.jumpToLiveTimeline();
+                handled = true;
+                break;
         }
 
         if (handled) {
