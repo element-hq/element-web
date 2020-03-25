@@ -153,7 +153,7 @@ const onSecretRequested = async function({
             const key = await callbacks.getCrossSigningKeyCache("self_signing");
             if (!key) {
                 console.log(
-                    `self_signing requested by ${deviceId}, but not found in cache`
+                    `self_signing requested by ${deviceId}, but not found in cache`,
                 );
             }
             return key && encodeBase64(key);
@@ -161,7 +161,7 @@ const onSecretRequested = async function({
             const key = await callbacks.getCrossSigningKeyCache("user_signing");
             if (!key) {
                 console.log(
-                    `user_signing requested by ${deviceId}, but not found in cache`
+                    `user_signing requested by ${deviceId}, but not found in cache`,
                 );
             }
             return key && encodeBase64(key);
@@ -170,7 +170,7 @@ const onSecretRequested = async function({
         const key = await client._crypto.getSessionBackupPrivateKey();
         if (!key) {
             console.log(
-                `session backup key requested by ${deviceId}, but not found in cache`
+                `session backup key requested by ${deviceId}, but not found in cache`,
             );
         }
         return key && encodeBase64(key);
