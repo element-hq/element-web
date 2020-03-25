@@ -165,10 +165,7 @@ export async function loadApp(fragparts, configInfo) {
         );
 
         const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-        window.matrixChat = ReactDOM.render(
-            <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-        );
-        return;
+        return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
     }
 
     const validBrowser = true; // TODO
@@ -180,31 +177,30 @@ export async function loadApp(fragparts, configInfo) {
     console.log("Vector starting at " + urlWithoutQuery);
 
     if (configInfo.configError) {
-        window.matrixChat = ReactDOM.render(<div className="error">
+        return <div className="error">
             Unable to load config file: please refresh the page to try again.
-        </div>, document.getElementById('matrixchat'));
+        </div>;
     } else if (validBrowser || acceptInvalidBrowser) {
         platform.startUpdater();
 
-        // Don't bother loading the app until the config is verified
-        verifyServerConfig().then((config) => {
+        try {
+            // Don't bother loading the app until the config is verified
+            const config = await verifyServerConfig();
+
             const MatrixChat = sdk.getComponent('structures.MatrixChat');
-            window.matrixChat = ReactDOM.render(
-                <MatrixChat
-                    onNewScreen={onNewScreen}
-                    makeRegistrationUrl={makeRegistrationUrl}
-                    ConferenceHandler={VectorConferenceHandler}
-                    config={config}
-                    realQueryParams={params}
-                    startingFragmentQueryParams={fragparts.params}
-                    enableGuest={!config.disable_guests}
-                    onTokenLoginCompleted={onTokenLoginCompleted}
-                    initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                    defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-                />,
-                document.getElementById('matrixchat'),
-            );
-        }).catch(err => {
+            return <MatrixChat
+                onNewScreen={onNewScreen}
+                makeRegistrationUrl={makeRegistrationUrl}
+                ConferenceHandler={VectorConferenceHandler}
+                config={config}
+                realQueryParams={params}
+                startingFragmentQueryParams={fragparts.params}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={getScreenFromLocation(window.location)}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+            />;
+        } catch (err) {
             console.error(err);
 
             let errorMessage = err.translatedMessage
@@ -213,23 +209,17 @@ export async function loadApp(fragparts, configInfo) {
 
             // Like the compatibility page, AWOOOOOGA at the user
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-            window.matrixChat = ReactDOM.render(
-                <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-                document.getElementById('matrixchat'),
-            );
-        });
+            return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
+        }
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
-        window.matrixChat = ReactDOM.render(
-            <CompatibilityPage onAccept={function() {
-                if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-                console.log("User accepts the compatibility risks.");
-                loadApp();
-            }} />,
-            document.getElementById('matrixchat'),
-        );
+        return <CompatibilityPage onAccept={function() {
+            if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
+            console.log("User accepts the compatibility risks.");
+            loadApp();
+        }} />;
     }
 }
 

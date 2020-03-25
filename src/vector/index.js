@@ -73,7 +73,7 @@ function checkBrowserFeatures() {
 // + check if the config passed was valid.
 async function init() {
     try {
-        const {initRageshake, initBase, initApp, loadApp} = await import(
+        const {initRageshake, initBase, initApp, loadApp, renderError} = await import(
             /* webpackChunkName: "init" */
             /* webpackPreload: true */
             "./init");
@@ -106,8 +106,6 @@ async function init() {
             });
         }
 
-        // check if browser is supported
-
         const {
             loadOlmProm,
             loadConfigProm,
@@ -121,10 +119,10 @@ async function init() {
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
-        await loadApp(fragparts);
+        await loadApp(fragparts, {});
     } catch (e) {
-        // import
-        return;
+        console.error(e);
+        // await renderError();
     } finally {
         const acceptInvalidBrowser = window.localStorage &&
             window.localStorage.getItem("mx_accepts_unsupported_browser");

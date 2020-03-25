@@ -18,6 +18,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
+
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import {setTheme} from "matrix-react-sdk/src/theme";
@@ -29,7 +33,7 @@ import Olm from 'olm';
 import ElectronPlatform from "./platform/ElectronPlatform";
 import WebPlatform from "./platform/WebPlatform";
 
-function initPlatform() {
+export function initPlatform() {
     // set the platform for react sdk
     if (window.ipcRenderer) {
         console.log("Using Electron platform");
@@ -149,10 +153,23 @@ export async function initApp() {
     await loadThemeProm;
 }
 
-export async function loadApp(fragparts) {
+export async function loadApp(fragparts, configInfo) {
     const app = await import(
         /* webpackChunkName: "app" */
         /* webpackPreload: true */
         "./app");
-    return app.loadApp(fragparts);
+    window.matrixChat = ReactDOM.render(
+        await app.loadApp(fragparts, configInfo),
+        document.getElementById('matrixchat'),
+    );
+}
+
+export async function renderError() {
+    const ErrorPage = (await import(
+        /* webpackChunkName: "ErrorPage" */
+        "../components/structures/ErrorPage")).default;
+    window.matrixChat = ReactDOM.render(
+        <ErrorPage />,
+        document.getElementById('matrixchat'),
+    );
 }
