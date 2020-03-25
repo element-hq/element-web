@@ -22,6 +22,10 @@ limitations under the License.
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
 
+import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+
+
 export function loadOlm() {
     /* Load Olm. We try the WebAssembly version first, and then the legacy,
      * asm.js version if that fails. For this reason we need to wait for this
@@ -57,4 +61,23 @@ export function loadOlm() {
             console.log("Both WebAssembly and asm.js Olm failed!", e);
         });
     });
+}
+
+export async function loadLanguage() {
+    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
+    let langs = [];
+
+    if (!prefLang) {
+        languageHandler.getLanguagesFromBrowser().forEach((l) => {
+            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
+        });
+    } else {
+        langs = [prefLang];
+    }
+    try {
+        await languageHandler.setLanguage(langs);
+        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
+    } catch (e) {
+        console.error("Unable to set language", e);
+    }
 }

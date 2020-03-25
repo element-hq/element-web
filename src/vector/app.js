@@ -27,7 +27,6 @@ import ReactDOM from 'react-dom';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
@@ -38,13 +37,12 @@ import url from 'url';
 import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import {setTheme} from "matrix-react-sdk/src/theme";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
 import {loadConfig, preparePlatform} from "./initial-load";
-import {loadOlm} from "./init";
+import {loadLanguage, loadOlm} from "./init";
 
 let lastLocationHashSet = null;
 
@@ -302,25 +300,6 @@ export async function loadApp() {
             }} />,
             document.getElementById('matrixchat'),
         );
-    }
-}
-
-async function loadLanguage() {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
-    let langs = [];
-
-    if (!prefLang) {
-        languageHandler.getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
-        });
-    } else {
-        langs = [prefLang];
-    }
-    try {
-        await languageHandler.setLanguage(langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
-    } catch (e) {
-        console.error("Unable to set language", e);
     }
 }
 
