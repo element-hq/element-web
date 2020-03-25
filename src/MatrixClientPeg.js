@@ -148,6 +148,9 @@ class _MatrixClientPeg {
             // check that we have a version of the js-sdk which includes initCrypto
             if (!SettingsStore.getValue("lowBandwidth") && this.matrixClient.initCrypto) {
                 await this.matrixClient.initCrypto();
+                this.matrixClient.setCryptoTrustCrossSignedDevices(
+                    !SettingsStore.getValue('e2ee.manuallyVerifyAllSessions'),
+                );
                 StorageManager.setCryptoInitialised(true);
             }
         } catch (e) {
