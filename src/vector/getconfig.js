@@ -21,15 +21,19 @@ import request from 'browser-request';
 export async function getVectorConfig(relativeLocation) {
     if (relativeLocation === undefined) relativeLocation = '';
     if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
+
+    const specificConfigPromise = getConfig(`${relativeLocation}config.${document.domain}.json`);
+    const generalConfigPromise = getConfig(relativeLocation + "config.json");
+
     try {
-        const configJson = await getConfig(`${relativeLocation}config.${document.domain}.json`);
+        const configJson = await specificConfigPromise;
         // 404s succeed with an empty json config, so check that there are keys
         if (Object.keys(configJson).length === 0) {
             throw new Error(); // throw to enter the catch
         }
         return configJson;
     } catch (e) {
-        return await getConfig(relativeLocation + "config.json");
+        return await generalConfigPromise;
     }
 }
 
