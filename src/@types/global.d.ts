@@ -18,4 +18,5 @@ interface Window {
     Olm: {
         init: () => Promise<void>;
     };
+    mxSendRageshake: (text: string, withLogs?: boolean) => void;
 }

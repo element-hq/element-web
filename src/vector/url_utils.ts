@@ -20,7 +20,7 @@ import * as qs from 'querystring';
 // so we're re-using query string like format
 //
 // returns {location, params}
-export function parseQsFromFragment(location) {
+export function parseQsFromFragment(location: Location) {
     // if we have a fragment, it will start with '#', which we need to drop.
     // (if we don't, this will return '').
     const fragment = location.hash.substring(1);
@@ -41,6 +41,6 @@ export function parseQsFromFragment(location) {
     return result;
 }
 
-export function parseQs(location) {
+export function parseQs(location: Location) {
     return qs.parse(location.search.substring(1));
 }

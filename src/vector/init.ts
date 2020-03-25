@@ -26,7 +26,7 @@ import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 
 
-export function loadOlm() {
+export function loadOlm(): Promise<void> {
     /* Load Olm. We try the WebAssembly version first, and then the legacy,
      * asm.js version if that fails. For this reason we need to wait for this
      * to finish before continuing to load the rest of the app. In future
