@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,40 +16,6 @@ limitations under the License.
 */
 
 import React from "react";
-
-// derived from code from github.com/noeldelgado/gemini-scrollbar
-// Copyright (c) Noel Delgado <pixelia.me@gmail.com> (pixelia.me)
-function getScrollbarWidth() {
-    const div = document.createElement('div');
-    div.className = 'mx_AutoHideScrollbar'; //to get width of css scrollbar
-    div.style.position = 'absolute';
-    div.style.top = '-9999px';
-    div.style.width = '100px';
-    div.style.height = '100px';
-    div.style.overflow = "scroll";
-    div.style.msOverflowStyle = '-ms-autohiding-scrollbar';
-    document.body.appendChild(div);
-    const scrollbarWidth = (div.offsetWidth - div.clientWidth);
-    document.body.removeChild(div);
-    return scrollbarWidth;
-}
-
-function install() {
-    const scrollbarWidth = getScrollbarWidth();
-    if (scrollbarWidth !== 0) {
-        document.body.classList.add("mx_scrollbar_noautohide");
-    }
-}
-
-const installBodyClassesIfNeeded = (function() {
-    let installed = false;
-    return function() {
-        if (!installed) {
-            install();
-            installed = true;
-        }
-    };
-})();
 
 export default class AutoHideScrollbar extends React.Component {
     constructor(props) {
