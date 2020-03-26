@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import dis from '../dispatcher';
+import {pendingVerificationRequestForUser} from '../verification';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
@@ -135,7 +136,20 @@ export default class RightPanelStore extends Store {
                 break;
 
             case 'set_right_panel_phase': {
-                const targetPhase = payload.phase;
+                let targetPhase = payload.phase;
+                let refireParams = payload.refireParams;
+                // redirect to EncryptionPanel if there is an ongoing verification request
+                if (targetPhase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+                    const {member} = payload.refireParams;
+                    const pendingRequest = pendingVerificationRequestForUser(member);
+                    if (pendingRequest) {
+                        targetPhase = RIGHT_PANEL_PHASES.EncryptionPanel;
+                        refireParams = {
+                            verificationRequest: pendingRequest,
+                            member,
+                        };
+                    }
+                }
                 if (!RIGHT_PANEL_PHASES[targetPhase]) {
                     console.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
                     return;
@@ -153,7 +167,7 @@ export default class RightPanelStore extends Store {
                         });
                     }
                 } else {
-                    if (targetPhase === this._state.lastRoomPhase && !payload.refireParams) {
+                    if (targetPhase === this._state.lastRoomPhase && !refireParams) {
                         this._setState({
                             showRoomPanel: !this._state.showRoomPanel,
                         });
@@ -161,7 +175,7 @@ export default class RightPanelStore extends Store {
                         this._setState({
                             lastRoomPhase: targetPhase,
                             showRoomPanel: true,
-                            lastRoomPhaseParams: payload.refireParams || {},
+                            lastRoomPhaseParams: refireParams || {},
                         });
                     }
                 }
@@ -170,7 +184,7 @@ export default class RightPanelStore extends Store {
                 dis.dispatch({
                     action: 'after_right_panel_phase_change',
                     phase: targetPhase,
-                    ...(payload.refireParams || {}),
+                    ...(refireParams || {}),
                 });
                 break;
             }
