@@ -91,7 +91,7 @@ const EncryptionPanel = (props) => {
     }, [request]);
 
     let cancelButton;
-    if (request && request.pending) {
+    if (layout !== "dialog" && request && request.pending) {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         cancelButton = (<AccessibleButton
             className="mx_EncryptionPanel_cancel"
