@@ -2290,5 +2290,9 @@
     "Toggle right panel": "切換右側面板",
     "Secret Storage key format:": "秘密儲存金鑰格式：",
     "outdated": "太舊了",
-    "up to date": "已為最新"
+    "up to date": "已為最新",
+    "Self signing private key:": "自行簽章私鑰：",
+    "cached locally": "本機快取",
+    "not found locally": "在本機找不到",
+    "User signing private key:": "使用者簽章私鑰："
 }
