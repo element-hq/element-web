@@ -7450,6 +7450,21 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
+matrix-js-sdk@5.2.0-rc.1:
+  version "5.2.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.2.0-rc.1.tgz#014239eb713ea3b648b7a573785d01edff1efd03"
+  integrity sha512-Jv/0kyZEtkfrD6mlq3g2YoFI2+eOBFOz5D186jJAvFg1W7UaQ5gn6iualR+2AKa1AIk2AT6lDcgPb1djZ7/3Vw==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.2"
+    loglevel "^1.6.4"
+    qs "^6.5.2"
+    request "^2.88.0"
+    unhomoglyph "^1.0.2"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "5.1.1"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b2e154377a4268441a3b27b183dd7f7018187035"
@@ -7494,6 +7509,7 @@ matrix-mock-request@^1.2.3:
     flux "2.1.1"
     focus-visible "^5.0.2"
     fuse.js "^2.2.0"
+    gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
     glob-to-regexp "^0.4.1"
     highlight.js "^9.15.8"
@@ -7514,6 +7530,7 @@ matrix-mock-request@^1.2.3:
     react-beautiful-dnd "^4.0.1"
     react-dom "^16.9.0"
     react-focus-lock "^2.2.1"
+    react-gemini-scrollbar "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     text-encoding-utf-8 "^1.0.1"
