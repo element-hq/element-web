@@ -189,7 +189,7 @@ export default class DeviceListener {
                 this._activeNagToasts.add(device.deviceId);
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: toastKey(device.deviceId),
-                    title: _t("Unverified session"),
+                    title: _t("Unverified login. Was this you?"),
                     icon: "verification_warning",
                     props: { device },
                     component: sdk.getComponent("toasts.UnverifiedSessionToast"),
