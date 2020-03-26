@@ -22,5 +22,6 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Zure Riot konfigurazioak baliogabeko JSON kodea du. Zuzendu arazoa eta kargatu orria berriro.",
     "The message from the parser is: %(message)s": "Prozesatzailearen mezua hau da: %(message)s",
     "Invalid JSON": "JSON baliogabea",
-    "Go to your browser to complete Sign In": "Joan zure nabigatzailera izena ematen bukatzeko"
+    "Go to your browser to complete Sign In": "Joan zure nabigatzailera izena ematen bukatzeko",
+    "Open user settings": "Ireki erabiltzailearen ezarpenak"
 }

@@ -5031,10 +5031,6 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-"gemini-scrollbar@github:matrix-org/gemini-scrollbar#91e1e566", gemini-scrollbar@matrix-org/gemini-scrollbar#91e1e566:
-  version "1.4.3"
-  resolved "https://codeload.github.com/matrix-org/gemini-scrollbar/tar.gz/91e1e566fa33324188f278801baf4a79f9f554ab"
-
 gensync@^1.0.0-beta.1:
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/gensync/-/gensync-1.0.0-beta.1.tgz#58f4361ff987e5ff6e1e7a210827aa371eaac269"
@@ -7455,8 +7451,8 @@ mathml-tag-names@^2.1.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "5.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/86304fd037ac43a493000fa42f393eaafc0480ac"
+  version "5.1.1"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b2e154377a4268441a3b27b183dd7f7018187035"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -7477,8 +7473,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "2.2.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/53fabf61d6647dfedf62352f6aa35ac55fa49203"
+  version "2.2.3"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/b09c063d1b2cae9e26b336de0b0ed69f3d6afcc8"
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7498,7 +7494,6 @@ matrix-mock-request@^1.2.3:
     flux "2.1.1"
     focus-visible "^5.0.2"
     fuse.js "^2.2.0"
-    gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
     glob-to-regexp "^0.4.1"
     highlight.js "^9.15.8"
@@ -7519,7 +7514,6 @@ matrix-mock-request@^1.2.3:
     react-beautiful-dnd "^4.0.1"
     react-dom "^16.9.0"
     react-focus-lock "^2.2.1"
-    react-gemini-scrollbar "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     text-encoding-utf-8 "^1.0.1"
@@ -9902,12 +9896,6 @@ react-focus-lock@^2.2.1:
     react-clientside-effect "^1.2.2"
     use-callback-ref "^1.2.1"
     use-sidecar "^1.0.1"
-
-"react-gemini-scrollbar@github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594":
-  version "2.1.5"
-  resolved "https://codeload.github.com/matrix-org/react-gemini-scrollbar/tar.gz/9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
-  dependencies:
-    gemini-scrollbar matrix-org/gemini-scrollbar#91e1e566
 
 react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4:
   version "16.13.0"

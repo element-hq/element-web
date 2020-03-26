@@ -39,9 +39,6 @@ import url from 'url';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
 
-import ElectronPlatform from './platform/ElectronPlatform';
-import WebPlatform from './platform/WebPlatform';
-
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
@@ -50,6 +47,7 @@ import {setTheme} from "matrix-react-sdk/src/theme";
 import Olm from 'olm';
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
+import {loadConfig, preparePlatform} from "./initial-load";
 
 let lastLocationHashSet = null;
 
@@ -191,35 +189,11 @@ export async function loadApp() {
     await loadOlm();
 
     // set the platform for react sdk
-    if (window.ipcRenderer) {
-        console.log("Using Electron platform");
-        const plaf = new ElectronPlatform();
-        PlatformPeg.set(plaf);
-    } else {
-        console.log("Using Web platform");
-        PlatformPeg.set(new WebPlatform());
-    }
-
+    preparePlatform();
     const platform = PlatformPeg.get();
 
-    let configJson;
-    let configError;
-    let configSyntaxError = false;
-    try {
-        configJson = await platform.getConfig();
-    } catch (e) {
-        configError = e;
-
-        if (e && e.err && e.err instanceof SyntaxError) {
-            console.error("SyntaxError loading config:", e);
-            configSyntaxError = true;
-            configJson = {}; // to prevent errors between here and loading CSS for the error box
-        }
-    }
-
-    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-    SdkConfig.put(configJson);
+    // Load the config from the platform
+    const configInfo = await loadConfig();
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
@@ -248,7 +222,7 @@ export async function loadApp() {
     await setTheme();
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configSyntaxError) {
+    if (configInfo.configSyntaxError) {
         const errorMessage = (
             <div>
                 <p>
@@ -260,7 +234,7 @@ export async function loadApp() {
                 <p>
                     {_t(
                         "The message from the parser is: %(message)s",
-                        {message: configError.err.message || _t("Invalid JSON")},
+                        {message: configInfo.configError.err.message || _t("Invalid JSON")},
                     )}
                 </p>
             </div>
@@ -280,7 +254,7 @@ export async function loadApp() {
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configError) {
+    if (configInfo.configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
@@ -298,7 +272,7 @@ export async function loadApp() {
                     config={newConfig}
                     realQueryParams={params}
                     startingFragmentQueryParams={fragparts.params}
-                    enableGuest={!configJson.disable_guests}
+                    enableGuest={!SdkConfig.get().disable_guests}
                     onTokenLoginCompleted={onTokenLoginCompleted}
                     initialScreenAfterLogin={getScreenFromLocation(window.location)}
                     defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}

@@ -2,7 +2,7 @@
   "name": "riot-web",
   "productName": "Riot",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -37,11 +37,13 @@
     "reskindex:watch-react": "node scripts/yarn-sub.js matrix-react-sdk reskindex:watch",
     "clean": "rimraf lib webapp electron_app/dist",
     "build": "yarn clean && yarn build:genfiles && yarn build:compile && yarn build:types && yarn build:bundle",
+    "build-stats": "yarn clean && yarn build:genfiles && yarn build:compile && yarn build:types && yarn build:bundle-stats",
     "build:res": "node scripts/copy-res.js",
     "build:genfiles": "yarn reskindex && yarn build:res",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:compile": "babel -d lib --verbose --extensions \".ts,.js,.tsx\" src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
+    "build:bundle-stats": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production --json > webpack-stats.json",
     "build:electron": "yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
     "build:electron:linux": "yarn build && electron-builder -l --x64",
     "build:electron:macos": "yarn build && electron-builder -m --x64",
@@ -63,7 +65,6 @@
   "dependencies": {
     "browser-request": "^0.3.3",
     "favico.js": "^0.3.10",
-    "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
@@ -153,7 +154,7 @@
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "7.1.12",
+    "electronVersion": "7.1.14",
     "files": [
       "node_modules/**",
       "src/**"
