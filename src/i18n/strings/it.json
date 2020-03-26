@@ -2276,5 +2276,17 @@
     "Esc": "Esc",
     "Enter": "Invio",
     "Space": "Barra spaziatrice",
-    "End": "Fine"
+    "End": "Fine",
+    "Manually Verify by Text": "Verifica manualmente con testo",
+    "Interactively verify by Emoji": "Verifica interattivamente con emoji",
+    "Secret Storage key format:": "Formato chiave di archivio segreto:",
+    "outdated": "non aggiornato",
+    "up to date": "aggiornato",
+    "Confirm by comparing the following with the User Settings in your other session:": "Conferma confrontando il seguente con le impostazioni utente nell'altra sessione:",
+    "Confirm this user's session by comparing the following with their User Settings:": "Conferma questa sessione confrontando il seguente con le sue impostazioni utente:",
+    "If they don't match, the security of your communication may be compromised.": "Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.",
+    "Navigate composer history": "Naviga cronologia compositore",
+    "Previous/next unread room or DM": "Stanza o msg non letti successivi/precedenti",
+    "Previous/next room or DM": "Stanza o msg successivi/precedenti",
+    "Toggle right panel": "Apri/chiudi pannello a destra"
 }
