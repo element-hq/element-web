@@ -17,6 +17,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Comments and documentation where needed
 * Sharing knowledge of different areas among the team
 * Ensuring it's something we're comfortable maintaining for the long term
+* Progress indicators and local echo where appropriate with network activity
 
 ### We should avoid
 
