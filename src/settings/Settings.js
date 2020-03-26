@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from 'matrix-js-sdk';
+
 import {_td} from '../languageHandler';
 import {
     AudioNotificationsEnabledController,
@@ -24,6 +26,7 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
+import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 
@@ -524,5 +527,13 @@ export const SETTINGS = {
     "showCallButtonsInComposer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
+    },
+    "e2ee.manuallyVerifyAllSessions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Manually verify all remote sessions"),
+        default: false,
+        controller: new PushToMatrixClientController(
+            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+        ),
     },
 };
