@@ -50,7 +50,7 @@ function initRageshake() {
 
 initRageshake();
 
-global.mxSendRageshake = function(text, withLogs) {
+window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
         console.error("Cannot send a rageshake without a message - please tell us what went wrong");

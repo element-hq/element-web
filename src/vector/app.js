@@ -18,8 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import olmWasmPath from 'olm/olm.wasm';
-
 import React from 'react';
 // add React and ReactPerf to the global namespace, to make them easier to
 // access via the console
@@ -29,7 +27,6 @@ import ReactDOM from 'react-dom';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
 import {_t, _td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
@@ -40,14 +37,11 @@ import url from 'url';
 import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import {setTheme} from "matrix-react-sdk/src/theme";
 
-import Olm from 'olm';
-
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
-import {loadConfig, preparePlatform} from "./initial-load";
+import {loadConfig, preparePlatform, loadLanguage, loadOlm} from "./init";
 
 let lastLocationHashSet = null;
 
@@ -193,7 +187,7 @@ export async function loadApp() {
     const platform = PlatformPeg.get();
 
     // Load the config from the platform
-    const configInfo = await loadConfig();
+    const configError = await loadConfig();
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
@@ -222,7 +216,7 @@ export async function loadApp() {
     await setTheme();
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configInfo.configSyntaxError) {
+    if (configError && configError.err && configError.err instanceof SyntaxError) {
         const errorMessage = (
             <div>
                 <p>
@@ -234,7 +228,7 @@ export async function loadApp() {
                 <p>
                     {_t(
                         "The message from the parser is: %(message)s",
-                        {message: configInfo.configError.err.message || _t("Invalid JSON")},
+                        {message: configError.err.message || _t("Invalid JSON")},
                     )}
                 </p>
             </div>
@@ -254,7 +248,7 @@ export async function loadApp() {
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configInfo.configError) {
+    if (configError) {
         window.matrixChat = ReactDOM.render(<div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>, document.getElementById('matrixchat'));
@@ -305,62 +299,6 @@ export async function loadApp() {
             }} />,
             document.getElementById('matrixchat'),
         );
-    }
-}
-
-function loadOlm() {
-    /* Load Olm. We try the WebAssembly version first, and then the legacy,
-     * asm.js version if that fails. For this reason we need to wait for this
-     * to finish before continuing to load the rest of the app. In future
-     * we could somehow pass a promise down to react-sdk and have it wait on
-     * that so olm can be loading in parallel with the rest of the app.
-     *
-     * We also need to tell the Olm js to look for its wasm file at the same
-     * level as index.html. It really should be in the same place as the js,
-     * ie. in the bundle directory, but as far as I can tell this is
-     * completely impossible with webpack. We do, however, use a hashed
-     * filename to avoid caching issues.
-     */
-    return Olm.init({
-        locateFile: () => olmWasmPath,
-    }).then(() => {
-        console.log("Using WebAssembly Olm");
-    }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version", e);
-        return new Promise((resolve, reject) => {
-            const s = document.createElement('script');
-            s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
-            s.onload = resolve;
-            s.onerror = reject;
-            document.body.appendChild(s);
-        }).then(() => {
-            // Init window.Olm, ie. the one just loaded by the script tag,
-            // not 'Olm' which is still the failed wasm version.
-            return window.Olm.init();
-        }).then(() => {
-            console.log("Using legacy Olm");
-        }).catch((e) => {
-            console.log("Both WebAssembly and asm.js Olm failed!", e);
-        });
-    });
-}
-
-async function loadLanguage() {
-    const prefLang = SettingsStore.getValue("language", null, /*excludeDefault=*/true);
-    let langs = [];
-
-    if (!prefLang) {
-        languageHandler.getLanguagesFromBrowser().forEach((l) => {
-            langs.push(...languageHandler.getNormalizedLanguageKeys(l));
-        });
-    } else {
-        langs = [prefLang];
-    }
-    try {
-        await languageHandler.setLanguage(langs);
-        document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
-    } catch (e) {
-        console.error("Unable to set language", e);
     }
 }
 
