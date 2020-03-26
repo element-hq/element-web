@@ -57,10 +57,10 @@ export default class TileErrorBoundary extends React.Component {
             return (<div className={classNames(classes)}>
                 <div className="mx_EventTile_line">
                     <span>
-                        {_t("An error occurred while rendering this event.")}
-                        { mxEvent && ` [${mxEvent.getType()}]` }
+                        {_t("Can't load this message")}
+                        { mxEvent && ` (${mxEvent.getType()})` }
                         <a onClick={this._onBugReport} href="#">
-                            {_t("Submit debug logs")}
+                            {_t("Submit logs")}
                         </a>
                     </span>
                 </div>

@@ -661,11 +661,10 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 .mx_EventTile_tileError {
     color: red;
+    text-align: center;
 
     .mx_EventTile_line span {
         padding: 4px 8px;
-        border-radius: 11px;
-        box-shadow: 0px 0px 3px red inset;
     }
 
     a {
