@@ -20,7 +20,6 @@ import Modal from '../../../Modal';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
 import DeviceListener from '../../../DeviceListener';
 import SetupEncryptionDialog from "../dialogs/SetupEncryptionDialog";
 import { accessSecretStorage } from '../../../CrossSigningManager';
