@@ -34,6 +34,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage: false,
             selfSigningPrivateKeyCached: false,
             userSigningPrivateKeyCached: false,
+            sessionBackupKeyCached: false,
             secretStorageKeyInAccount: false,
             secretStorageKeyNeedsUpgrade: null,
         };
@@ -80,6 +81,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const selfSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"));
         const userSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"));
+        const sessionBackupKeyCached = !!(await cli._crypto.getSessionBackupPrivateKey());
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
@@ -91,6 +93,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
+            sessionBackupKeyCached,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -139,6 +142,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
+            sessionBackupKeyCached,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -225,6 +229,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("User signing private key:")}</td>
                             <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Session backup key:")}</td>
+                            <td>{sessionBackupKeyCached ? _t("cached locally") : _t("not found locally")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Secret storage public key:")}</td>
