@@ -93,7 +93,11 @@ const EncryptionPanel = (props) => {
     let cancelButton;
     if (request && request.pending) {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        cancelButton = <AccessibleButton className="mx_EncryptionPanel_cancel" onClick={onCancel} title={_t('Cancel')}></AccessibleButton>;
+        cancelButton = (<AccessibleButton
+            className="mx_EncryptionPanel_cancel"
+            onClick={onCancel}
+            title={_t('Cancel')}
+        ></AccessibleButton>);
     }
 
     const onStartVerification = useCallback(async () => {
@@ -110,7 +114,7 @@ const EncryptionPanel = (props) => {
         (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
     if (!request || requested) {
         const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
-        return <React.Fragment>
+        return (<React.Fragment>
             {cancelButton}
             <EncryptionInfo
                 isRoomEncrypted={isRoomEncrypted}
@@ -118,9 +122,9 @@ const EncryptionPanel = (props) => {
                 member={member}
                 waitingForOtherParty={requested && initiatedByMe}
                 waitingForNetwork={requested && !initiatedByMe} />
-        </React.Fragment>;
+        </React.Fragment>);
     } else {
-        return <React.Fragment>
+        return (<React.Fragment>
             {cancelButton}
             <VerificationPanel
                 isRoomEncrypted={isRoomEncrypted}
@@ -130,7 +134,7 @@ const EncryptionPanel = (props) => {
                 request={request}
                 key={request.channel.transactionId}
                 phase={phase} />
-        </React.Fragment>;
+        </React.Fragment>);
     }
 };
 EncryptionPanel.propTypes = {
