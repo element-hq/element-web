@@ -1297,8 +1297,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userVerified = userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
     const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
-                        homeserverSupportsCrossSigning &&
-                        isRoomEncrypted && !userVerified && !isMe;
+                        homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));
@@ -1320,20 +1319,15 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         );
     }
 
-    let devicesSection;
-    if (isRoomEncrypted) {
-        devicesSection = <DevicesSection
-            loading={devices === undefined}
-            devices={devices}
-            userId={member.userId} />;
-    }
-
     const securitySection = (
         <div className="mx_UserInfo_container">
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
             { verifyButton }
-            { devicesSection }
+            <DevicesSection
+                loading={devices === undefined}
+                devices={devices}
+                userId={member.userId} />
         </div>
     );
 
@@ -1496,7 +1490,7 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.Room
         case RIGHT_PANEL_PHASES.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
             content = (
-                <EncryptionPanel {...props} member={member} onClose={onClose} />
+                <EncryptionPanel {...props} member={member} onClose={onClose} isRoomEncrypted={isRoomEncrypted} />
             );
             break;
     }

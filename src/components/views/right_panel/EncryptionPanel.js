@@ -30,7 +30,8 @@ import {_t} from "../../../languageHandler";
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = ({verificationRequest, verificationRequestPromise, member, onClose, layout}) => {
+const EncryptionPanel = (props) => {
+    const {verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted} = props;
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
@@ -98,6 +99,7 @@ const EncryptionPanel = ({verificationRequest, verificationRequestPromise, membe
     if (!request || requested) {
         const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
         return <EncryptionInfo
+            isRoomEncrypted={isRoomEncrypted}
             onStartVerification={onStartVerification}
             member={member}
             waitingForOtherParty={requested && initiatedByMe}
@@ -105,6 +107,7 @@ const EncryptionPanel = ({verificationRequest, verificationRequestPromise, membe
     } else {
         return (
             <VerificationPanel
+                isRoomEncrypted={isRoomEncrypted}
                 layout={layout}
                 onClose={onClose}
                 member={member}

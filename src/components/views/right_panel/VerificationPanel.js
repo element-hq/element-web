@@ -48,6 +48,7 @@ export default class VerificationPanel extends React.PureComponent {
             PHASE_DONE,
         ]).isRequired,
         onClose: PropTypes.func.isRequired,
+        isRoomEncrypted: PropTypes.bool,
     };
 
     constructor(props) {
@@ -174,15 +175,22 @@ export default class VerificationPanel extends React.PureComponent {
     renderVerifiedPhase() {
         const {member} = this.props;
 
+        let text;
+        if (this.props.isRoomEncrypted) {
+            text = _t("Verify all users in a room to ensure it's secure.");
+        } else {
+            text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
+        }
+
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
-                <h3>Verified</h3>
+                <h3>{_t("Verified")}</h3>
                 <p>{_t("You've successfully verified %(displayName)s!", {
                     displayName: member.displayName || member.name || member.userId,
                 })}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
-                <p>Verify all users in a room to ensure it's secure.</p>
+                <p>{ text }</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
@@ -209,7 +217,7 @@ export default class VerificationPanel extends React.PureComponent {
 
         return (
             <div className="mx_UserInfo_container">
-                <h3>Verification cancelled</h3>
+                <h3>{_t("Verification cancelled")}</h3>
                 <p>{ text }</p>
 
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
@@ -231,7 +239,7 @@ export default class VerificationPanel extends React.PureComponent {
                 if (this.state.sasEvent) {
                     const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
                     return <div className="mx_UserInfo_container">
-                        <h3>Compare emoji</h3>
+                        <h3>{_t("Compare emoji")}</h3>
                         <VerificationShowSas
                             displayName={displayName}
                             sas={this.state.sasEvent.sas}
