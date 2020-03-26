@@ -223,6 +223,11 @@ Before attempting to develop on Riot you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk), which
 also defines the design, architecture and style for Riot too.
 
+Before starting work on a feature, it's best to ensure your plan aligns well
+with our vision for Riot. Please chat with the team in
+[#riot-dev:matrix.org](https://matrix.to/#/#riot-dev:matrix.org) before you
+start so we can ensure it's something we'd be willing to merge.
+
 You should also familiarise yourself with the ["Here be Dragons" guide
 ](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
 to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
