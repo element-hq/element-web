@@ -18,7 +18,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
 import DeviceListener from '../../../DeviceListener';
+import SetupEncryptionDialog from "../dialogs/SetupEncryptionDialog";
 import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class SetupEncryptionToast extends React.PureComponent {
@@ -32,7 +34,12 @@ export default class SetupEncryptionToast extends React.PureComponent {
     };
 
     _onSetupClick = async () => {
-        accessSecretStorage();
+        if (this.props.kind === "verify_this_session") {
+            Modal.createTrackedDialog('Verify session', 'Verify session', SetupEncryptionDialog,
+                {}, null, /* priority = */ false, /* static = */ true);
+        } else {
+            accessSecretStorage();
+        }
     };
 
     getDescription() {
