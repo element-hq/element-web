@@ -37,6 +37,10 @@ limitations under the License.
     font-size: 15px;
 }
 
+.mx_CompleteSecurity_waiting {
+    color: $notice-secondary-color;
+}
+
 .mx_CompleteSecurity_actionRow {
     display: flex;
     justify-content: flex-end;

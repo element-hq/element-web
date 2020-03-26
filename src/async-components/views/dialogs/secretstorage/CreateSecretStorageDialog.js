@@ -23,6 +23,7 @@ import { scorePassword } from '../../../../utils/PasswordScorer';
 import FileSaver from 'file-saver';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
+import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 
 const PHASE_LOADING = 0;
 const PHASE_MIGRATE = 1;
@@ -83,7 +84,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload?
             canUploadKeysWithPasswordOnly: null,
-            accountPassword: props.accountPassword,
+            accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
             // status of the key backup toggle switch
             useKeyBackup: true,
@@ -117,6 +118,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             backupInfo,
             backupSigStatus,
         });
+
+        return {
+            backupInfo,
+            backupSigStatus,
+        };
     }
 
     async _queryKeyUploadAuth() {
@@ -238,6 +244,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     createSecretStorageKey: async () => this._keyInfo,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
+                    getKeyBackupPassphrase: promptForBackupPassphrase,
                 });
             }
             this.setState({
@@ -269,13 +276,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
-            /* priority = */ false, /* static = */ true,
+            /* priority = */ false, /* static = */ false,
         );
 
         await finished;
-        await this._fetchBackupInfo();
+        const { backupSigStatus } = await this._fetchBackupInfo();
         if (
-            this.state.backupSigStatus.usable &&
+            backupSigStatus.usable &&
             this.state.canUploadKeysWithPasswordOnly &&
             this.state.accountPassword
         ) {
@@ -400,12 +407,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         let authPrompt;
         let nextCaption = _t("Next");
-        if (!this.state.backupSigStatus.usable) {
-            authPrompt = <div>
-                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
-            </div>;
-            nextCaption = _t("Restore");
-        } else if (this.state.canUploadKeysWithPasswordOnly) {
+        if (this.state.canUploadKeysWithPasswordOnly) {
             authPrompt = <div>
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field
@@ -418,6 +420,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     autoFocus={true}
                 /></div>
             </div>;
+        } else if (!this.state.backupSigStatus.usable) {
+            authPrompt = <div>
+                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
+            </div>;
+            nextCaption = _t("Restore");
         } else {
             authPrompt = <p>
                 {_t("You'll need to authenticate with the server to confirm the upgrade.")}
@@ -433,6 +440,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div>{authPrompt}</div>
             <DialogButtons
                 primaryButton={nextCaption}
+                onPrimaryButtonClick={this._onMigrateFormSubmit}
                 hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             >

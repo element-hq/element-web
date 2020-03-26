@@ -87,6 +87,13 @@ async function localSearch(searchTerm, roomId = undefined) {
         searchArgs.room_id = roomId;
     }
 
+    const emptyResult = {
+        results: [],
+        highlights: [],
+    };
+
+    if (searchTerm === "") return emptyResult;
+
     const eventIndex = EventIndexPeg.get();
 
     const localResult = await eventIndex.search(searchArgs);
@@ -95,11 +102,6 @@ async function localSearch(searchTerm, roomId = undefined) {
         search_categories: {
             room_events: localResult,
         },
-    };
-
-    const emptyResult = {
-        results: [],
-        highlights: [],
     };
 
     const result = MatrixClientPeg.get()._processRoomEventsSearch(

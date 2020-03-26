@@ -559,13 +559,19 @@ export default createReactClass({
             case 'view_user_info':
                 this._viewUser(payload.userId, payload.subAction);
                 break;
-            case 'view_room':
+            case 'view_room': {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(payload);
+                const promise = this._viewRoom(payload);
+                if (payload.deferred_action) {
+                    promise.then(() => {
+                        dis.dispatch(payload.deferred_action);
+                    });
+                }
                 break;
+            }
             case 'view_prev_room':
                 this._viewNextRoom(-1);
                 break;
@@ -594,9 +600,8 @@ export default createReactClass({
             break;
             case 'view_room_directory': {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
-                    config: this.props.config,
-                }, 'mx_RoomDirectory_dialogWrapper');
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
+                    'mx_RoomDirectory_dialogWrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this._viewSomethingBehindModal();
@@ -862,7 +867,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.then(() => {
+        return waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -885,7 +890,7 @@ export default createReactClass({
                 presentedId += "/" + roomInfo.event_id;
             }
             newState.ready = true;
-            this.setState(newState, ()=>{
+            this.setState(newState, () => {
                 this.notifyNewScreen('room/' + presentedId);
             });
         });
@@ -1008,6 +1013,10 @@ export default createReactClass({
                 // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
                 go_welcome_on_cancel: true,
+                screen_after: {
+                    screen: `user/${this.props.config.welcomeUserId}`,
+                    params: { action: 'chat' },
+                },
             });
             return;
         }
@@ -1177,7 +1186,15 @@ export default createReactClass({
     _onLoggedIn: async function() {
         ThemeController.isLogin = false;
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (MatrixClientPeg.currentUserIsJustRegistered()) {
+        // If a specific screen is set to be shown after login, show that above
+        // all else, as it probably means the user clicked on something already.
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
+            this.showScreen(
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
+            );
+            this._screenAfterLogin = null;
+        } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
@@ -1477,26 +1494,40 @@ export default createReactClass({
             }
         });
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            cli.on("crypto.verification.request", request => {
-                if (request.pending) {
-                    ToastStore.sharedInstance().addOrReplaceToast({
-                        key: 'verifreq_' + request.channel.transactionId,
-                        title: _t("Verification Request"),
-                        icon: "verification",
-                        props: {request},
-                        component: sdk.getComponent("toasts.VerificationRequestToast"),
-                    });
-                }
-            });
-        } else {
-            cli.on("crypto.verification.start", (verifier) => {
+        cli.on("crypto.keySignatureUploadFailure", (failures, source, continuation) => {
+            const KeySignatureUploadFailedDialog =
+                sdk.getComponent('views.dialogs.KeySignatureUploadFailedDialog');
+            Modal.createTrackedDialog(
+                'Failed to upload key signatures',
+                'Failed to upload key signatures',
+                KeySignatureUploadFailedDialog,
+                { failures, source, continuation });
+        });
+
+        cli.on("crypto.verification.request", request => {
+            const isFlagOn = SettingsStore.isFeatureEnabled("feature_cross_signing");
+
+            if (!isFlagOn && !request.channel.deviceId) {
+                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
+                return;
+            }
+
+            if (request.verifier) {
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                    verifier,
+                    verifier: request.verifier,
                 }, null, /* priority = */ false, /* static = */ true);
-            });
-        }
+            } else if (request.pending) {
+                ToastStore.sharedInstance().addOrReplaceToast({
+                    key: 'verifreq_' + request.channel.transactionId,
+                    title: _t("Verification Request"),
+                    icon: "verification",
+                    props: {request},
+                    component: sdk.getComponent("toasts.VerificationRequestToast"),
+                    priority: ToastStore.PRIORITY_REALTIME,
+                });
+            }
+        });
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
         const colorScheme = SettingsStore.getValue("roomColor");
@@ -1890,7 +1921,10 @@ export default createReactClass({
             // secret storage.
             SettingsStore.setFeatureEnabled("feature_cross_signing", true);
             this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
-        } else if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        } else if (
+            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        ) {
             // This will only work if the feature is set to 'enable' in the config,
             // since it's too early in the lifecycle for users to have turned the
             // labs flag on.

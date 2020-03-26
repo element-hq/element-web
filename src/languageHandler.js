@@ -21,6 +21,7 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import React from 'react';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import PlatformPeg from "./PlatformPeg";
 
 // $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
@@ -283,6 +284,11 @@ export function setMissingEntryGenerator(f) {
 export function setLanguage(preferredLangs) {
     if (!Array.isArray(preferredLangs)) {
         preferredLangs = [preferredLangs];
+    }
+
+    const plaf = PlatformPeg.get();
+    if (plaf) {
+        plaf.setLanguage(preferredLangs);
     }
 
     let langToUse;

@@ -247,6 +247,8 @@ export default createReactClass({
                     });
                 };
 
+                // This button should actually Download because usercontent/ will try to click itself
+                // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
@@ -269,6 +271,8 @@ export default createReactClass({
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
                     textContent: _t("Download %(text)s", { text: text }),
+                    // only auto-download if a user triggered this iframe explicitly
+                    auto: !this.props.decryptedBlob,
                 }, "*");
             };
 
@@ -290,7 +294,7 @@ export default createReactClass({
                             src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
                             onLoad={onIframeLoad}
                             ref={this._iframe}
-                            sandbox="allow-scripts allow-downloads" />
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
                     </div>
                 </span>
             );

@@ -52,9 +52,11 @@ module.exports = async function changeRoomSettings(session, settings) {
 
     if (settings.alias) {
         session.log.step(`sets alias to ${settings.alias}`);
-        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings input[type=text]");
+        const summary = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings summary");
+        await summary.click();
+        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details input[type=text]");
         await session.replaceInputText(aliasField, settings.alias.substring(1, settings.alias.lastIndexOf(":")));
-        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings .mx_AccessibleButton");
+        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details .mx_AccessibleButton");
         await addButton.click();
         await session.delay(10); // delay to give time for the validator to run and check the alias
         session.log.done();

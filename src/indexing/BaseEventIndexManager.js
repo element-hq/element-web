@@ -123,6 +123,10 @@ export default class BaseEventIndexManager {
         throw new Error("Unimplemented");
     }
 
+    async deleteEvent(eventId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * Check if our event index is empty.
      */

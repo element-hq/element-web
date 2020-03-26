@@ -42,8 +42,13 @@ pre, code {
     font-size: 100% !important;
 }
 
-.error, .warning {
+.error, .warning,
+.text-error, .text-warning {
     color: $warning-color;
+}
+
+.text-success {
+    color: $accent-color;
 }
 
 b {
@@ -200,37 +205,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_fadable {
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
-}
-
-/* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
-   Stop the scrollbar view from pushing out the container's overall sizing, which causes
-   flexbox to adapt to the new size and cause the view to keep growing.
- */
-.gm-scrollbar-container .gm-scroll-view {
-    position: absolute;
-}
-
-/* Expand thumbs on hoverover */
-.gm-scrollbar {
-    border-radius: 5px !important;
-}
-.gm-scrollbar.-vertical {
-    width: 6px;
-    transition: width 120ms ease-out !important;
-}
-.gm-scrollbar.-vertical:hover,
-.gm-scrollbar.-vertical:active {
-    width: 8px;
-    transition: width 120ms ease-out !important;
-}
-.gm-scrollbar.-horizontal {
-    height: 6px;
-    transition: height 120ms ease-out !important;
-}
-.gm-scrollbar.-horizontal:hover,
-.gm-scrollbar.-horizontal:active {
-    height: 8px;
-    transition: height 120ms ease-out !important;
 }
 
 // These are magic constants which are excluded from tinting, to let themes

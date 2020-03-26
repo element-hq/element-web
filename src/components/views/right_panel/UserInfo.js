@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom, {findDMForUser} from '../../../createRoom';
+import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -43,6 +43,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
+import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -136,54 +137,21 @@ function useIsEncrypted(cli, room) {
     return isEncrypted;
 }
 
-async function verifyDevice(userId, device) {
-    const cli = MatrixClientPeg.get();
-    const member = cli.getUser(userId);
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-    Modal.createTrackedDialog("Verification warning", "unverified session", QuestionDialog, {
-        headerImage: require("../../../../res/img/e2e/warning.svg"),
-        title: _t("Not Trusted"),
-        description: <div>
-            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: member.displayName, userId})}</p>
-            <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
-        </div>,
-        onFinished: async (doneClicked) => {
-            const manuallyVerifyClicked = !doneClicked;
-            if (!manuallyVerifyClicked) {
-                return;
-            }
-            const cli = MatrixClientPeg.get();
-            const verificationRequest = await cli.requestVerification(
-                userId,
-                [device.deviceId],
-            );
-            dis.dispatch({
-                action: "set_right_panel_phase",
-                phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                refireParams: {member, verificationRequest},
-            });
-        },
-        primaryButton: _t("Done"),
-        cancelButton: _t("Manually Verify"),
-    });
-}
-
-function verifyUser(user) {
-    const cli = MatrixClientPeg.get();
-    const dmRoom = findDMForUser(cli, user.userId);
-    let existingRequest;
-    if (dmRoom) {
-        existingRequest = cli.findVerificationRequestDMInProgress(dmRoom.roomId);
-    }
-    dis.dispatch({
-        action: "set_right_panel_phase",
-        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-        refireParams: {
-            member: user,
-            verificationRequest: existingRequest,
-        },
-    });
+function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
+    return useAsyncMemo(async () => {
+        if (!canVerify) {
+            return false;
+        }
+        setUpdating(true);
+        try {
+            await cli.downloadKeys([member.userId]);
+            const xsi = cli.getStoredCrossSigningForUser(member.userId);
+            const key = xsi && xsi.getId();
+            return !!key;
+        } finally {
+            setUpdating(false);
+        }
+    }, [cli, member, canVerify], false);
 }
 
 function DeviceItem({userId, device}) {
@@ -212,7 +180,7 @@ function DeviceItem({userId, device}) {
 
     const onDeviceClick = () => {
         if (!isVerified) {
-            verifyDevice(userId, device);
+            verifyDevice(cli.getUser(userId), device);
         }
     };
 
@@ -1324,21 +1292,32 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
 
     let verifyButton;
     const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
-    if (
-        SettingsStore.isFeatureEnabled("feature_cross_signing") &&
-        homeserverSupportsCrossSigning
-    ) {
-        const userTrust = cli.checkUserTrust(member.userId);
-        const userVerified = userTrust.isCrossSigningVerified();
-        const isMe = member.userId === cli.getUserId();
 
-        if (isRoomEncrypted && !userVerified && !isMe) {
-            verifyButton = (
-                <AccessibleButton className="mx_UserInfo_field" onClick={() => verifyUser(member)}>
-                    {_t("Verify")}
-                </AccessibleButton>
-            );
-        }
+    const userTrust = cli.checkUserTrust(member.userId);
+    const userVerified = userTrust.isCrossSigningVerified();
+    const isMe = member.userId === cli.getUserId();
+    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+                        homeserverSupportsCrossSigning &&
+                        isRoomEncrypted && !userVerified && !isMe;
+
+    const setUpdating = (updating) => {
+        setPendingUpdateCount(count => count + (updating ? 1 : -1));
+    };
+    const hasCrossSigningKeys =
+        useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
+
+    if (canVerify) {
+        verifyButton = (
+            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
+                if (hasCrossSigningKeys) {
+                    verifyUser(member);
+                } else {
+                    legacyVerifyUser(member);
+                }
+            }}>
+                {_t("Verify")}
+            </AccessibleButton>
+        );
     }
 
     let devicesSection;

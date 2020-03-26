@@ -165,6 +165,8 @@ $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
 
+$kbd-border-color: #000000;
+
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
@@ -216,10 +218,6 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
 .mx_filterFlipColor {
-    filter: invert(1);
-}
-
-.gm-scrollbar .thumb {
     filter: invert(1);
 }
 

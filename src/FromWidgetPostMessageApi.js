@@ -24,6 +24,8 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
+import {Capability, KnownWidgetActions} from "./widgets/WidgetApi";
+import SdkConfig from "./SdkConfig";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -213,11 +215,18 @@ export default class FromWidgetPostMessageApi {
             const data = event.data.data;
             const val = data.value;
 
-            if (ActiveWidgetStore.widgetHasCapability(widgetId, 'm.always_on_screen')) {
+            if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.AlwaysOnScreen)) {
                 ActiveWidgetStore.setWidgetPersistence(widgetId, val);
             }
         } else if (action === 'get_openid') {
             // Handled by caller
+        } else if (action === KnownWidgetActions.GetRiotWebConfig) {
+            if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.GetRiotWebConfig)) {
+                this.sendResponse(event, {
+                    api: INBOUND_API_NAME,
+                    config: SdkConfig.get(),
+                });
+            }
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});

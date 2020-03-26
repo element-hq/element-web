@@ -126,13 +126,13 @@ export default class VerificationQRCode extends React.PureComponent {
             buf = Buffer.concat([buf, tmpBuf]);
         };
         const appendInt = (i: number) => {
-            const tmpBuf = Buffer.alloc(4);
-            tmpBuf.writeInt8(i, 0);
+            const tmpBuf = Buffer.alloc(2);
+            tmpBuf.writeInt16BE(i, 0);
             buf = Buffer.concat([buf, tmpBuf]);
         };
-        const appendStr = (s: string, enc: string) => {
+        const appendStr = (s: string, enc: string, withLengthPrefix = true) => {
             const tmpBuf = Buffer.from(s, enc);
-            appendInt(tmpBuf.byteLength);
+            if (withLengthPrefix) appendInt(tmpBuf.byteLength);
             buf = Buffer.concat([buf, tmpBuf]);
         };
         const appendEncBase64 = (b64: string) => {
@@ -142,7 +142,7 @@ export default class VerificationQRCode extends React.PureComponent {
         };
 
         // Actually build the buffer for the QR code
-        appendStr(this.props.prefix, "ascii");
+        appendStr(this.props.prefix, "ascii", false);
         appendByte(this.props.version);
         appendByte(this.props.mode);
         appendStr(this.props.transactionId, "utf-8");

@@ -33,6 +33,13 @@ limitations under the License.
         }
     }
 
+    h3,
+    .mx_RoomPreviewBar_message p {
+        // break-word, with fallback to break-all, which is wider supported
+        word-break: break-all;
+        word-break: break-word;
+    }
+
     .mx_Spinner {
         width: auto;
         height: auto;

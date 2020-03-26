@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -225,13 +225,32 @@ export default createReactClass({
             case 'feature_custom_status_changed':
                 this.forceUpdate();
                 break;
+
+            case 'view_room':
+                // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcut access
+                if (payload.room_id === this.props.room.roomId) {
+                    this._scrollIntoView();
+                }
+                break;
         }
+    },
+
+    _scrollIntoView: function() {
+        if (!this._roomTile.current) return;
+        this._roomTile.current.scrollIntoView({
+            block: "nearest",
+            behavior: "auto",
+        });
     },
 
     _onActiveRoomChange: function() {
         this.setState({
             selected: this.props.room.roomId === RoomViewStore.getRoomId(),
         });
+    },
+
+    UNSAFE_componentWillMount: function() {
+        this._roomTile = createRef();
     },
 
     componentDidMount: function() {
@@ -256,6 +275,11 @@ export default createReactClass({
             if (statusUser) {
                 statusUser.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
             }
+        }
+
+        // when we're first rendered (or our sublist is expanded) make sure we are visible if we're active
+        if (this.state.selected) {
+            this._scrollIntoView();
         }
     },
 
@@ -490,16 +514,16 @@ export default createReactClass({
                 height="13"
                 alt="dm"
             />;
+        }
 
-            const { room } = this.props;
-            const member = room.getMember(dmUserId);
-            if (
-                member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
-                SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
-            ) {
-                const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
-                dmOnline = <UserOnlineDot userId={dmUserId} />;
-            }
+        const { room } = this.props;
+        const member = room.getMember(dmUserId);
+        if (
+            member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
+            SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
+        ) {
+            const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
+            dmOnline = <UserOnlineDot userId={dmUserId} />;
         }
 
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
@@ -538,7 +562,7 @@ export default createReactClass({
         }
 
         return <React.Fragment>
-            <RovingTabIndexWrapper>
+            <RovingTabIndexWrapper inputRef={this._roomTile}>
                 {({onFocus, isActive, ref}) =>
                     <AccessibleButton
                         onFocus={onFocus}

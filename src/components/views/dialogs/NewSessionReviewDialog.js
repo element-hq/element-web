@@ -23,6 +23,7 @@ import VerificationRequestDialog from './VerificationRequestDialog';
 import BaseDialog from './BaseDialog';
 import DialogButtons from '../elements/DialogButtons';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
 
 @replaceableComponent("views.dialogs.NewSessionReviewDialog")
 export default class NewSessionReviewDialog extends React.PureComponent {
@@ -33,20 +34,38 @@ export default class NewSessionReviewDialog extends React.PureComponent {
     }
 
     onCancelClick = () => {
-        this.props.onFinished(false);
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
+            headerImage: require("../../../../res/img/e2e/warning.svg"),
+            title: _t("Your account is not secure"),
+            description: <div>
+                {_t("One of the following may be compromised:")}
+                <ul>
+                    <li>{_t("Your password")}</li>
+                    <li>{_t("Your homeserver")}</li>
+                    <li>{_t("This session, or the other session")}</li>
+                    <li>{_t("The internet connection either session is using")}</li>
+                </ul>
+                <div>
+                    {_t("We recommend you change your password and recovery key in Settings immediately")}
+                </div>
+            </div>,
+            onFinished: () => this.props.onFinished(false),
+        });
     }
 
-    onContinueClick = async () => {
+    onContinueClick = () => {
         const { userId, device } = this.props;
         const cli = MatrixClientPeg.get();
-        const request = await cli.requestVerification(
+        const requestPromise = cli.requestVerification(
             userId,
             [device.deviceId],
         );
 
         this.props.onFinished(true);
         Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
-            verificationRequest: request,
+            verificationRequestPromise: requestPromise,
+            member: cli.getUser(userId),
         });
     }
 

@@ -26,3 +26,21 @@ limitations under the License.
     outline: none;
     box-shadow: none;
 }
+
+.mx_AliasSettings {
+    summary {
+        cursor: pointer;
+        color: $accent-color;
+        font-weight: 600;
+        list-style: none;
+
+        // list-style doesn't do it for webkit
+        &::-webkit-details-marker {
+            display: none;
+        }
+    }
+
+    .mx_AliasSettings_localAliasHeader {
+        margin-top: 35px;
+    }
+}

@@ -48,6 +48,11 @@ export default class VerificationShowSas extends React.Component {
         this.props.onDone();
     };
 
+    onDontMatchClick = () => {
+        this.setState({ cancelling: true });
+        this.props.onCancel();
+    };
+
     render() {
         let sasDisplay;
         let sasCaption;
@@ -98,9 +103,14 @@ export default class VerificationShowSas extends React.Component {
         }
 
         let confirm;
-        if (this.state.pending) {
-            const {displayName} = this.props;
-            const text = _t("Waiting for %(displayName)s to verify…", {displayName});
+        if (this.state.pending || this.state.cancelling) {
+            let text;
+            if (this.state.pending) {
+                const {displayName} = this.props;
+                text = _t("Waiting for %(displayName)s to verify…", {displayName});
+            } else {
+                text = _t("Cancelling…");
+            }
             confirm = <PendingActionSpinner text={text} />;
         } else {
             // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
@@ -109,7 +119,7 @@ export default class VerificationShowSas extends React.Component {
                 onPrimaryButtonClick={this.onMatchClick}
                 primaryButtonClass="mx_UserInfo_wideButton"
                 cancelButton={_t("They don't match")}
-                onCancel={this.props.onCancel}
+                onCancel={this.onDontMatchClick}
                 cancelButtonClass="mx_UserInfo_wideButton"
             />;
         }

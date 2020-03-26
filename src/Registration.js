@@ -39,6 +39,8 @@ export const SAFE_LOCALPART_REGEX = /^[a-z0-9=_\-./]+$/;
  *     If true, goes to the home page if the user cancels the action
  * @param {bool} options.go_welcome_on_cancel
  *     If true, goes to the welcome page if the user cancels the action
+ * @param {bool} options.screen_after
+ *     If present the screen to redirect to after a successful login or register.
  */
 export async function startAnyRegistrationFlow(options) {
     if (options === undefined) options = {};
@@ -66,13 +68,21 @@ export async function startAnyRegistrationFlow(options) {
     //     });
     //} else {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
-            title: _t("Registration Required"),
-            description: _t("You need to register to do this. Would you like to register now?"),
-            button: _t("Register"),
+        const modal = Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
+            hasCancelButton: true,
+            quitOnly: true,
+            title: _t("Sign In or Create Account"),
+            description: _t("Use your account or create a new one to continue."),
+            button: _t("Create Account"),
+            extraButtons: [
+                <button key="start_login" onClick={() => {
+                    modal.close();
+                    dis.dispatch({action: 'start_login', screenAfterLogin: options.screen_after});
+                }}>{ _t('Sign In') }</button>,
+            ],
             onFinished: (proceed) => {
                 if (proceed) {
-                    dis.dispatch({action: 'start_registration'});
+                    dis.dispatch({action: 'start_registration', screenAfterLogin: options.screen_after});
                 } else if (options.go_home_on_cancel) {
                     dis.dispatch({action: 'view_home_page'});
                 } else if (options.go_welcome_on_cancel) {
@@ -101,4 +111,3 @@ export async function startAnyRegistrationFlow(options) {
 //     }
 //     throw new Error("Register request succeeded when it should have returned 401!");
 // }
-

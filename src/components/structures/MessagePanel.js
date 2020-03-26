@@ -28,6 +28,7 @@ import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
+import {textForEvent} from "../../TextForEvent";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -523,7 +524,8 @@ export default class MessagePanel extends React.Component {
         // if there is a previous event and it has the same sender as this event
         // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
         if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
-            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
+            // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
+            haveTileForEvent(prevEvent) && (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
             (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
             continuation = true;
         }
@@ -879,6 +881,11 @@ class CreationGrouper {
     }
 
     getTiles() {
+        // If we don't have any events to group, don't even try to group them. The logic
+        // below assumes that we have a group of events to deal with, but we might not if
+        // the events we were supposed to group were redacted.
+        if (!this.events || !this.events.length) return [];
+
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventListSummary = sdk.getComponent('views.elements.EventListSummary');
 
@@ -956,15 +963,30 @@ class MemberGrouper {
     }
 
     shouldGroup(ev) {
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
         return isMembershipChange(ev);
     }
 
     add(ev) {
+        if (ev.getType() === 'm.room.member') {
+            // We'll just double check that it's worth our time to do so, through an
+            // ugly hack. If textForEvent returns something, we should group it for
+            // rendering but if it doesn't then we'll exclude it.
+            const renderText = textForEvent(ev);
+            if (!renderText || renderText.trim().length === 0) return; // quietly ignore
+        }
         this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
         this.events.push(ev);
     }
 
     getTiles() {
+        // If we don't have any events to group, don't even try to group them. The logic
+        // below assumes that we have a group of events to deal with, but we might not if
+        // the events we were supposed to group were redacted.
+        if (!this.events || !this.events.length) return [];
+
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const MemberEventListSummary = sdk.getComponent('views.elements.MemberEventListSummary');
 

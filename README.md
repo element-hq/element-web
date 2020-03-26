@@ -34,7 +34,7 @@ All code lands on the `develop` branch - `master` is only used for stable releas
 **Please file PRs against `develop`!!**
 
 Please follow the standard Matrix contributor's guide:
-https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
+https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.rst
 
 Please follow the Matrix JS/React code style as per:
 https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md

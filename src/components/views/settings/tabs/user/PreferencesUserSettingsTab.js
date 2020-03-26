@@ -25,6 +25,12 @@ import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
+    static ROOM_LIST_SETTINGS = [
+        'RoomList.orderAlphabetically',
+        'RoomList.orderByImportance',
+        'breadcrumbs',
+    ];
+
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
@@ -45,11 +51,6 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
-    ];
-
-    static ROOM_LIST_SETTINGS = [
-        'RoomList.orderByImportance',
-        'breadcrumbs',
     ];
 
     static ADVANCED_SETTINGS = [
@@ -173,15 +174,21 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
-
-                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
-
                     <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                </div>
 
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                </div>
+
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
                     {minimizeToTrayOption}

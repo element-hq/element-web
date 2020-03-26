@@ -893,6 +893,26 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
+
+    whois: new Command({
+        name: "whois",
+        description: _td("Displays information about a user"),
+        args: '<user-id>',
+        runFn: function(roomId, userId) {
+            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+                return reject(this.getUsage());
+            }
+
+            const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
+
+            dis.dispatch({
+                action: 'view_user',
+                member: member || {userId},
+            });
+            return success();
+        },
+        category: CommandCategories.advanced,
+    }),
 };
 /* eslint-enable babel/no-invalid-this */
 

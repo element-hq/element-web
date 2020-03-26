@@ -45,9 +45,17 @@ limitations under the License.
     margin: 10px 100px 10px 0; // Align with the rest of the view
 }
 
-.mx_SettingsTab_section .mx_SettingsFlag {
-    margin-right: 100px;
-    margin-bottom: 10px;
+.mx_SettingsTab_section {
+    margin-bottom: 24px;
+
+    .mx_SettingsFlag {
+        margin-right: 100px;
+        margin-bottom: 10px;
+    }
+
+    &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
+        margin-right: 0px !important;
+    }
 }
 
 .mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {

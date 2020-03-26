@@ -208,7 +208,7 @@ export default createReactClass({
         }
 
         const av = (
-            <MemberAvatar member={member} width={36} height={36} />
+            <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />
         );
 
         if (member.user) {

@@ -48,6 +48,11 @@ export function tryPersistStorage() {
         navigator.storage.persist().then(persistent => {
             console.log("StorageManager: Persistent?", persistent);
         });
+    } else if (document.requestStorageAccess) { // Safari
+        document.requestStorageAccess().then(
+            () => console.log("StorageManager: Persistent?", true),
+            () => console.log("StorageManager: Persistent?", false),
+        );
     } else {
         console.log("StorageManager: Persistence unsupported");
     }

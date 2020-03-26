@@ -149,13 +149,16 @@ export default class BasicMessageEditor extends React.Component {
             const position = selection.end || selection;
             this._setLastCaretFromPosition(position);
         }
+        const {isEmpty} = this.props.model;
         if (this.props.placeholder) {
-            const {isEmpty} = this.props.model;
             if (isEmpty) {
                 this._showPlaceholder();
             } else {
                 this._hidePlaceholder();
             }
+        }
+        if (isEmpty) {
+            this._formatBarRef.hide();
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
@@ -370,6 +373,16 @@ export default class BasicMessageEditor extends React.Component {
         } else if (modKey && event.key === Key.GREATER_THAN) {
             this._onFormatAction("quote");
             handled = true;
+        // redo
+        } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
+                  (IS_MAC && modKey && event.shiftKey && event.key === Key.Z)) {
+            if (this.historyManager.canRedo()) {
+                const {parts, caret} = this.historyManager.redo();
+                // pass matching inputType so historyManager doesn't push echo
+                // when invoked from rerender callback.
+                model.reset(parts, caret, "historyRedo");
+            }
+            handled = true;
         // undo
         } else if (modKey && event.key === Key.Z) {
             if (this.historyManager.canUndo()) {
@@ -379,28 +392,19 @@ export default class BasicMessageEditor extends React.Component {
                 model.reset(parts, caret, "historyUndo");
             }
             handled = true;
-        // redo
-        } else if (modKey && event.key === Key.Y) {
-            if (this.historyManager.canRedo()) {
-                const {parts, caret} = this.historyManager.redo();
-                // pass matching inputType so historyManager doesn't push echo
-                // when invoked from rerender callback.
-                model.reset(parts, caret, "historyRedo");
-            }
-            handled = true;
         // insert newline on Shift+Enter
         } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
             this._insertText("\n");
             handled = true;
         // move selection to start of composer
-        } else if (modKey && event.key === Key.HOME) {
+        } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
             setSelection(this._editorRef, model, {
                 index: 0,
                 offset: 0,
             });
             handled = true;
         // move selection to end of composer
-        } else if (modKey && event.key === Key.END) {
+        } else if (modKey && event.key === Key.END && !event.shiftKey) {
             setSelection(this._editorRef, model, {
                 index: model.parts.length - 1,
                 offset: model.parts[model.parts.length - 1].text.length,
@@ -471,10 +475,14 @@ export default class BasicMessageEditor extends React.Component {
                 const addedLen = range.replace([partCreator.pillCandidate(range.text)]);
                 return model.positionForOffset(caret.offset + addedLen, true);
             });
-            await model.autoComplete.onTab();
-            if (!model.autoComplete.hasSelection()) {
-                this.setState({showVisualBell: true});
-                model.autoComplete.close();
+
+            // Don't try to do things with the autocomplete if there is none shown
+            if (model.autoComplete) {
+                await model.autoComplete.onTab();
+                if (!model.autoComplete.hasSelection()) {
+                    this.setState({showVisualBell: true});
+                    model.autoComplete.close();
+                }
             }
         } catch (err) {
             console.error(err);
@@ -559,6 +567,7 @@ export default class BasicMessageEditor extends React.Component {
             return;
         }
         this.historyManager.ensureLastChangesPushed(this.props.model);
+        this._modifiedFlag = true;
         switch (action) {
             case "bold":
                 toggleInlineFormat(range, "**");

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Script to perform a release of matrix-react-sdk.
 #
@@ -11,6 +11,7 @@ cd `dirname $0`
 
 for i in matrix-js-sdk
 do
+    echo "Checking version of $i..."
     depver=`cat package.json | jq -r .dependencies[\"$i\"]`
     latestver=`yarn info -s $i dist-tags.next`
     if [ "$depver" != "$latestver" ]

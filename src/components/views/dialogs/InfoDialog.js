@@ -32,6 +32,7 @@ export default createReactClass({
         button: PropTypes.string,
         onFinished: PropTypes.func,
         hasCloseButton: PropTypes.bool,
+        onKeyDown: PropTypes.func,
     },
 
     getDefaultProps: function() {
@@ -50,10 +51,13 @@ export default createReactClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
-            <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_InfoDialog"
+                onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
                 hasCancel={this.props.hasCloseButton}
+                onKeyDown={this.props.onKeyDown}
             >
                 <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
                     { this.props.description }
