@@ -22,6 +22,7 @@ export const Key = {
     PAGE_UP: "PageUp",
     PAGE_DOWN: "PageDown",
     BACKSPACE: "Backspace",
+    DELETE: "Delete",
     ARROW_UP: "ArrowUp",
     ARROW_DOWN: "ArrowDown",
     ARROW_LEFT: "ArrowLeft",
