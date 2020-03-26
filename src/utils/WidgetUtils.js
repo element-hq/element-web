@@ -28,6 +28,7 @@ const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
+import {Capability} from "../widgets/WidgetApi";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -454,12 +455,15 @@ export default class WidgetUtils {
     static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
+        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
-        if (appType == 'jitsi') capWhitelist.push("m.always_on_screen");
+        if (appType === 'jitsi') {
+            capWhitelist.push(Capability.AlwaysOnScreen);
+            capWhitelist.push(Capability.GetRiotWebConfig);
+        }
 
         return capWhitelist;
     }
