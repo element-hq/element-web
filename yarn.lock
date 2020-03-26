@@ -2912,7 +2912,7 @@ commander@2.17.x:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.17.1.tgz#bd77ab7de6de94205ceacc72f1716d29f20a77bf"
   integrity sha512-wPMUt6FnH2yzG95SA6mzjQOEKUU3aLaDEmzs1ti+1E9h+CsrZghRlqEM/EJ4KscsQVG8uNN4uVreUeT8+drlgg==
 
-commander@^2.20.0:
+commander@^2.15.1, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -7465,20 +7465,6 @@ matrix-js-sdk@5.2.0-rc.1:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "5.1.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b2e154377a4268441a3b27b183dd7f7018187035"
-  dependencies:
-    "@babel/runtime" "^7.8.3"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.2"
-    loglevel "^1.6.4"
-    qs "^6.5.2"
-    request "^2.88.0"
-    unhomoglyph "^1.0.2"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -7487,9 +7473,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "2.2.3"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/b09c063d1b2cae9e26b336de0b0ed69f3d6afcc8"
+matrix-react-sdk@2.3.0-rc.1:
+  version "2.3.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.3.0-rc.1.tgz#f79a0c225a7b0bc42bc3c82ae227cd982b567a3d"
+  integrity sha512-96TZxf0pedhRuqz9nREkjTBhBGfsqRP9pn3TZnzETakegiJVuzJben3FKkRDPW+QQxCmJ/ES4xh8bGei8q3JIg==
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7509,7 +7496,6 @@ matrix-mock-request@^1.2.3:
     flux "2.1.1"
     focus-visible "^5.0.2"
     fuse.js "^2.2.0"
-    gemini-scrollbar "github:matrix-org/gemini-scrollbar#91e1e566"
     gfm.css "^1.1.1"
     glob-to-regexp "^0.4.1"
     highlight.js "^9.15.8"
@@ -7517,10 +7503,11 @@ matrix-mock-request@^1.2.3:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "5.2.0-rc.1"
     minimist "^1.2.0"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"
+    project-name-generator "^2.1.7"
     prop-types "^15.5.8"
     qrcode "^1.4.4"
     qrcode-react "^0.1.16"
@@ -7530,7 +7517,6 @@ matrix-mock-request@^1.2.3:
     react-beautiful-dnd "^4.0.1"
     react-dom "^16.9.0"
     react-focus-lock "^2.2.1"
-    react-gemini-scrollbar "github:matrix-org/react-gemini-scrollbar#9cf17f63b7c0b0ec5f31df27da0f82f7238dc594"
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     text-encoding-utf-8 "^1.0.1"
@@ -9613,6 +9599,14 @@ progress@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
+project-name-generator@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/project-name-generator/-/project-name-generator-2.1.7.tgz#504c68a2a843247aa3af493a226ecf78ce8beceb"
+  integrity sha512-kLGQGiyvkZsWtqhPhUs85UkSgmH5OnZJLNrtlqkK+GZPR0cybe8Nr9jG3bD52w2siH9EE3l/a9y56bn0YX5wYw==
+  dependencies:
+    commander "^2.15.1"
+    lodash "^4.17.10"
 
 promise-inflight@^1.0.1:
   version "1.0.1"
