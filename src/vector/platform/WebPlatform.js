@@ -91,12 +91,6 @@ export default class WebPlatform extends VectorBasePlatform {
             global.focus();
             notification.close();
         };
-
-        // Chrome only dismisses notifications after 20s, which
-        // is waaaaay too long
-        global.setTimeout(function() {
-            notification.close();
-        }, 5 * 1000);
     }
 
     _getVersion(): Promise<string> {
