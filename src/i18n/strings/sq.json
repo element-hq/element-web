@@ -2265,5 +2265,20 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End"
+    "End": "End",
+    "Manually Verify by Text": "Verifikojeni Dorazi përmes Teksti",
+    "Interactively verify by Emoji": "Verifikojeni në mënyrë ndërvepruese përmes Emoji-sh",
+    "Secret Storage key format:": "Format kyçesh Depozite të Fshehtë:",
+    "outdated": "e vjetruar",
+    "up to date": "e përditësuar",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Nisni një bisedë me dikë duke përdorur emrin e tij, emrin e përdoruesit për të (bie fjala, <userId/>) ose adresë email.",
+    "Confirm by comparing the following with the User Settings in your other session:": "Ripohojeni duke krahasuar sa vijon me Rregullimet e Përdoruesit te sesioni juaj tjetër:",
+    "Confirm this user's session by comparing the following with their User Settings:": "Ripohojeni këtë sesion përdoruesi duke krahasuar sa vijon me Rregullimet e tij të Përdoruesit:",
+    "If they don't match, the security of your communication may be compromised.": "Nëse s’përputhen, siguria e komunikimeve tuaja mund të jetë komprometuar.",
+    "Super": "Super",
+    "Navigate composer history": "Lëvizni nëpër historikun e hartuesit",
+    "Toggle video on/off": "Aktivizoni/çaktivizoni videon",
+    "Previous/next unread room or DM": "Dhoma ose MD i palexuar i mëparshëm/pasues",
+    "Previous/next room or DM": "Dhoma ose MD i mëparshëm/pasues",
+    "Toggle right panel": "Hap/mbyll panelin djathtas"
 }
