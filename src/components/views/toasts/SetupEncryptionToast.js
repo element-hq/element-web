@@ -20,7 +20,9 @@ import Modal from '../../../Modal';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
 import DeviceListener from '../../../DeviceListener';
+import SetupEncryptionDialog from "../dialogs/SetupEncryptionDialog";
 import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class SetupEncryptionToast extends React.PureComponent {
@@ -57,13 +59,18 @@ export default class SetupEncryptionToast extends React.PureComponent {
     }
 
     _onSetupClick = async () => {
-        const Spinner = sdk.getComponent("elements.Spinner");
-        const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
-        try {
-            await accessSecretStorage();
-            await this._waitForCompletion();
-        } finally {
-            modal.close();
+        if (this.props.kind === "verify_this_session") {
+            Modal.createTrackedDialog('Verify session', 'Verify session', SetupEncryptionDialog,
+                {}, null, /* priority = */ false, /* static = */ true);
+        } else {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+            try {
+                await accessSecretStorage();
+                await this._waitForCompletion();
+            } finally {
+                modal.close();
+            }
         }
     };
 

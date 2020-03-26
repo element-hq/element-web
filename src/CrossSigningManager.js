@@ -145,13 +145,34 @@ const onSecretRequested = async function({
         console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
         return;
     }
-    const callbacks = client.getCrossSigningCacheCallbacks();
-    if (!callbacks.getCrossSigningKeyCache) return;
-    if (name === "m.cross_signing.self_signing") {
-        const key = await callbacks.getCrossSigningKeyCache("self_signing");
-        return key && encodeBase64(key);
-    } else if (name === "m.cross_signing.user_signing") {
-        const key = await callbacks.getCrossSigningKeyCache("user_signing");
+    if (name.startsWith("m.cross_signing")) {
+        const callbacks = client.getCrossSigningCacheCallbacks();
+        if (!callbacks.getCrossSigningKeyCache) return;
+        /* Explicit enumeration here is deliberate – never share the master key! */
+        if (name === "m.cross_signing.self_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("self_signing");
+            if (!key) {
+                console.log(
+                    `self_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        } else if (name === "m.cross_signing.user_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("user_signing");
+            if (!key) {
+                console.log(
+                    `user_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        }
+    } else if (name === "m.megolm_backup.v1") {
+        const key = await client._crypto.getSessionBackupPrivateKey();
+        if (!key) {
+            console.log(
+                `session backup key requested by ${deviceId}, but not found in cache`,
+            );
+        }
         return key && encodeBase64(key);
     }
     console.warn("onSecretRequested didn't recognise the secret named ", name);

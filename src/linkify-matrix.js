@@ -200,13 +200,17 @@ matrixLinkify.options = {
         switch (type) {
             case "url": {
                 // intercept local permalinks to users and show them like userids (in userinfo of current room)
-                const permalink = parsePermalink(href);
-                if (permalink && permalink.userId) {
-                    return {
-                        click: function(e) {
-                            matrixLinkify.onUserClick(e, permalink.userId);
-                        },
-                    };
+                try {
+                    const permalink = parsePermalink(href);
+                    if (permalink && permalink.userId) {
+                        return {
+                            click: function(e) {
+                                matrixLinkify.onUserClick(e, permalink.userId);
+                            },
+                        };
+                    }
+                } catch (e) {
+                    // OK fine, it's not actually a permalink
                 }
                 break;
             }

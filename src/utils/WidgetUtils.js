@@ -28,6 +28,7 @@ const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
+import {Capability} from "../widgets/WidgetApi";
 
 /**
  * Encodes a URI according to a set of template variables. Variables will be
@@ -422,17 +423,28 @@ export default class WidgetUtils {
         app.eventId = eventId;
         app.name = app.name || app.type;
 
+        if (app.type === 'jitsi') {
+            console.log("Replacing Jitsi widget URL with local wrapper");
+            if (!app.data || !app.data.conferenceId) {
+                // Assumed to be a v1 widget: add a data object for visibility on the wrapper
+                // TODO: Remove this once mobile supports v2 widgets
+                console.log("Replacing v1 Jitsi widget with v2 equivalent");
+                const parsed = new URL(app.url);
+                app.data = {
+                    conferenceId: parsed.searchParams.get("confId"),
+                    domain: "jitsi.riot.im", // v1 widgets have this hardcoded
+                };
+            }
+
+            app.url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
+        }
+
         if (app.data) {
             Object.keys(app.data).forEach((key) => {
                 params['$' + key] = app.data[key];
             });
 
             app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
-        }
-
-        if (app.type === 'jitsi') {
-            console.log("Replacing Jitsi widget URL with local wrapper");
-            app.url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
         }
 
         app.url = encodeUri(app.url, params);
@@ -443,12 +455,15 @@ export default class WidgetUtils {
     static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
+        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
-        if (appType == 'jitsi') capWhitelist.push("m.always_on_screen");
+        if (appType === 'jitsi') {
+            capWhitelist.push(Capability.AlwaysOnScreen);
+            capWhitelist.push(Capability.GetRiotWebConfig);
+        }
 
         return capWhitelist;
     }
