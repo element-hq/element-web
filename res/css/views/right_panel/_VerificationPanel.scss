@@ -15,6 +15,21 @@ limitations under the License.
 */
 
 .mx_UserInfo {
+    .mx_EncryptionPanel_cancel {
+        mask: url('$(res)/img/feather-customised/cancel.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: cover;
+        width: 14px;
+        height: 14px;
+        background-color: $settings-subsection-fg-color;
+        cursor: pointer;
+        position: absolute;
+        z-index: 100;
+        top: 14px;
+        right: 14px;
+    }
+
     .mx_VerificationPanel_verified_section .mx_E2EIcon {
         // Override general user info margin
         margin: 0 auto !important;
