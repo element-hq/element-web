@@ -20,6 +20,7 @@ import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
 import * as Matrix from "matrix-js-sdk";
 import {_td} from "../../../languageHandler";
+import PlatformPeg from "../../../PlatformPeg";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
@@ -43,7 +44,8 @@ export default class Welcome extends React.PureComponent {
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
         });
-        const callbackUrl = this.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl());
+        const plaf = PlatformPeg.get();
+        const callbackUrl = plaf.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl());
 
         return (
             <AuthPage>
