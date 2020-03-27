@@ -52,8 +52,8 @@ export default class Welcome extends React.PureComponent {
                         className="mx_WelcomePage"
                         url={pageUrl}
                         replaceMap={{
-                            "$ssoUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "sso"),
-                            "$casUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "cas"),
+                            "$riot:ssoUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "sso"),
+                            "$riot:casUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "cas"),
                         }}
                     />
                     <LanguageSelector />
