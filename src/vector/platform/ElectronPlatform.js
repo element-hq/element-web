@@ -427,8 +427,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return url;
     }
 
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas") {
-        super.startSingleSignOn(mxClient, loginType); // this will get intercepted by electron-main will-navigate
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", showModal: boolean) {
+        super.startSingleSignOn(mxClient, loginType, false); // this will get intercepted by electron-main will-navigate
         Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
             title: _t("Go to your browser to complete Sign In"),
             description: <Spinner />,
