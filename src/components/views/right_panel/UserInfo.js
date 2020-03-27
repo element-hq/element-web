@@ -1388,6 +1388,7 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
             <div>
                 <div>
                     <MemberAvatar
+                        key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member}
                         width={2 * 0.3 * window.innerHeight} // 2x@30vh
                         height={2 * 0.3 * window.innerHeight} // 2x@30vh
