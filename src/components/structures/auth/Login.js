@@ -437,7 +437,7 @@ export default createReactClass({
                 // we do not do this when the user has changed to the server manually as that may be jarring.
                 if (initial && SSO_FLOWS.includes(flows[i].type)) {
                     const tmpCli = this._loginLogic.createTemporaryClient();
-                    PlatformPeg.get().startSingleSignOn(tmpCli, flows[i].type === M_LOGIN_SSO ? "sso": "cas");
+                    PlatformPeg.get().startSingleSignOn(tmpCli, flows[i].type === M_LOGIN_SSO ? "sso": "cas", true);
                 }
 
                 // we just pick the first flow where we support all the
