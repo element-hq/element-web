@@ -2300,5 +2300,6 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Szóköz",
-    "End": "End"
+    "End": "End",
+    "Session backup key:": "Munkamenet másolat kulcs:"
 }
