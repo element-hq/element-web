@@ -435,7 +435,8 @@ export default createReactClass({
 
                 // if this is the initial render and the flow we choose is SSO/CAS then go to it automatically
                 // we do not do this when the user has changed to the server manually as that may be jarring.
-                if (initial && SSO_FLOWS.includes(flows[i].type)) {
+                // Only allow it when disable_custom_urls is asserted so that we don't prevent user from changing HS URL
+                if (initial && SdkConfig.get()['disable_custom_urls'] && SSO_FLOWS.includes(flows[i].type)) {
                     const tmpCli = this._loginLogic.createTemporaryClient();
                     PlatformPeg.get().startSingleSignOn(tmpCli, flows[i].type === M_LOGIN_SSO ? "sso": "cas", true);
                 }
