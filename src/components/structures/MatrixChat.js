@@ -2021,7 +2021,7 @@ export default createReactClass({
             }
         } else if (this.state.view === VIEWS.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome />;
+            view = <Welcome {...this.getServerProperties()} />;
         } else if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (
