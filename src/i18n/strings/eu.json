@@ -2291,5 +2291,7 @@
     "In encrypted rooms, verify all users to ensure it’s secure.": "Gela zifratuetan, egiaztatu erabiltzaile guztiak segurua dela baieztatzeko.",
     "Verified": "Egiaztatuta",
     "Verification cancelled": "Egiaztaketa ezeztatuta",
-    "Compare emoji": "Konparatu emojiak"
+    "Compare emoji": "Konparatu emojiak",
+    "Unverified login. Was this you?": "Egiaztatu gabeko saioa. Zu izan zara?",
+    "Session backup key:": "Saioaren babes-kopia gakoa:"
 }
