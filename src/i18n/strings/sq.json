@@ -2294,5 +2294,6 @@
     "In encrypted rooms, verify all users to ensure it’s secure.": "Në dhoma të fshehtëzuara, verifikoni krejt përdoruesi për të garantuar se është e sigurt.",
     "Verified": "I verifikuar",
     "Verification cancelled": "Verifikimi u anulua",
-    "Compare emoji": "Krahasoni emoji"
+    "Compare emoji": "Krahasoni emoji",
+    "Session backup key:": "Kyç kopjeruajtjeje sesioni:"
 }
