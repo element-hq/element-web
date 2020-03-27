@@ -22,11 +22,6 @@ limitations under the License.
 import {MatrixClient} from "matrix-js-sdk";
 import dis from './dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
-import Modal from "./Modal";
-import InfoDialog from "./components/views/dialogs/InfoDialog";
-import {_t} from "./languageHandler";
-import Spinner from "./components/views/elements/Spinner";
-import React from "react";
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -188,21 +183,9 @@ export default class BasePlatform {
      * Begin Single Sign On flows.
      * @param {MatrixClient} mxClient the matrix client using which we should start the flow
      * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
-     * @param {boolean} showModal whether or not to show the spinner modal.
      */
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso"|"cas", showModal: boolean) {
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso"|"cas") {
         const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl());
-        if (showModal) {
-            Modal.createTrackedDialog('BasePlatform', 'SSO', InfoDialog, {
-                title: _t("Single sign-on"),
-                description: <div>
-                    <Spinner />
-                    <a href={callbackUrl} rel="noreferrer noopener">
-                        {_t("Click here if you're not redirected automatically")}
-                    </a>
-                </div>,
-            });
-        }
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
 }

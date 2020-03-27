@@ -19,6 +19,10 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
 import * as Matrix from "matrix-js-sdk";
+import {_td} from "../../../languageHandler";
+
+// translatable strings for Welcome pages
+_td("Sign in with SSO");
 
 export default class Welcome extends React.PureComponent {
     render() {
