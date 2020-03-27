@@ -25,6 +25,8 @@
     "Error": "Error",
     "Unable to load! Check your network connectivity and try again.": "Unable to load! Check your network connectivity and try again.",
     "Dismiss": "Dismiss",
+    "Single sign-on": "Single sign-on",
+    "Click here if you're not redirected automatically": "Click here if you're not redirected automatically",
     "Call Failed": "Call Failed",
     "There are unknown sessions in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "There are unknown sessions in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.",
     "Review Sessions": "Review Sessions",
