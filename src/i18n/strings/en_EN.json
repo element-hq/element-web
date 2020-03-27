@@ -1831,6 +1831,7 @@
     "Please enter the code it contains:": "Please enter the code it contains:",
     "Code": "Code",
     "Submit": "Submit",
+    "Single Sign On": "Single Sign On",
     "Start authentication": "Start authentication",
     "Unable to validate homeserver/identity server": "Unable to validate homeserver/identity server",
     "Your Modular server": "Your Modular server",

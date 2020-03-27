@@ -1,7 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -565,6 +565,67 @@ export const MsisdnAuthEntry = createReactClass({
     },
 });
 
+export class SSOAuthEntry extends React.Component {
+    static propTypes = {
+        matrixClient: PropTypes.object.isRequired,
+        authSessionId: PropTypes.string.isRequired,
+        loginType: PropTypes.string.isRequired,
+        submitAuthDict: PropTypes.func.isRequired,
+        errorText: PropTypes.string,
+    };
+
+    static LOGIN_TYPE = "m.login.sso";
+    static UNSTABLE_LOGIN_TYPE = "org.matrix.login.sso";
+
+    static STAGE_PREAUTH = 1; // button to start SSO
+    static STAGE_POSTAUTH = 2; // button to confirm SSO completed
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // We actually send the user through fallback auth so we don't have to
+            // deal with a redirect back to us, losing application context.
+            ssoUrl: props.matrixClient.getFallbackAuthUrl(
+                this.props.loginType,
+                this.props.authSessionId,
+            ),
+            stage: SSOAuthEntry.STAGE_PREAUTH,
+        };
+    }
+
+    onStartAuthClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
+        // certainly will need to open the thing in a new tab to avoid loosing application
+        // context.
+
+        window.open(e.target.href, '_blank');
+        this.setState({stage: SSOAuthEntry.STAGE_POSTAUTH});
+    };
+
+    onConfirmClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        this.props.submitAuthDict({});
+    };
+
+    render () {
+        if (this.state.stage === SSOAuthEntry.STAGE_PREAUTH) {
+            return <a href={this.state.ssoUrl} target='_blank' rel='noopener' onClick={this.onStartAuthClick}>
+                {_t("Single Sign On")}
+            </a>;
+        } else {
+            return <a href='' target='_blank' rel='noopener' onClick={this.onConfirmClick}>
+                {_t("Continue")}
+            </a>;
+        }
+    }
+}
+
 export const FallbackAuthEntry = createReactClass({
     displayName: 'FallbackAuthEntry',
 
@@ -643,11 +704,12 @@ const AuthEntryComponents = [
     EmailIdentityAuthEntry,
     MsisdnAuthEntry,
     TermsAuthEntry,
+    SSOAuthEntry,
 ];
 
 export default function getEntryComponentForLoginType(loginType) {
     for (const c of AuthEntryComponents) {
-        if (c.LOGIN_TYPE == loginType) {
+        if (c.LOGIN_TYPE === loginType || c.UNSTABLE_LOGIN_TYPE === loginType) {
             return c;
         }
     }
