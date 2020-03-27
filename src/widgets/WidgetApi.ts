@@ -23,6 +23,7 @@ export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
+    GetRiotWebConfig = "im.vector.web.riot_config",
 }
 
 export enum KnownWidgetActions {
@@ -33,7 +34,10 @@ export enum KnownWidgetActions {
     UpdateVisibility = "visibility",
     ReceiveOpenIDCredentials = "openid_credentials",
     SetAlwaysOnScreen = "set_always_on_screen",
+    GetRiotWebConfig = "im.vector.web.riot_config",
+    ClientReady = "im.vector.ready",
 }
+
 export type WidgetAction = KnownWidgetActions | string;
 
 export enum WidgetApiType {
@@ -63,9 +67,14 @@ export interface FromWidgetRequest extends WidgetRequest {
  */
 export class WidgetApi {
     private origin: string;
-    private inFlightRequests: {[requestId: string]: (reply: FromWidgetRequest) => void} = {};
+    private inFlightRequests: { [requestId: string]: (reply: FromWidgetRequest) => void } = {};
     private readyPromise: Promise<any>;
     private readyPromiseResolve: () => void;
+
+    /**
+     * Set this to true if your widget is expecting a ready message from the client. False otherwise (default).
+     */
+    public expectingExplicitReady = false;
 
     constructor(currentUrl: string, private widgetId: string, private requestedCapabilities: string[]) {
         this.origin = new URL(currentUrl).origin;
@@ -83,7 +92,14 @@ export class WidgetApi {
 
                 if (payload.action === KnownWidgetActions.GetCapabilities) {
                     this.onCapabilitiesRequest(<ToWidgetRequest>payload);
+                    if (!this.expectingExplicitReady) {
+                        this.readyPromiseResolve();
+                    }
+                } else if (payload.action === KnownWidgetActions.ClientReady) {
                     this.readyPromiseResolve();
+
+                    // Automatically acknowledge so we can move on
+                    this.replyToRequest(<ToWidgetRequest>payload, {});
                 } else {
                     console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }
@@ -126,7 +142,10 @@ export class WidgetApi {
             data: payload,
             response: {}, // Not used at this layer - it's used when the client responds
         };
-        this.inFlightRequests[request.requestId] = callback;
+
+        if (callback) {
+            this.inFlightRequests[request.requestId] = callback;
+        }
 
         console.log(`[WidgetAPI] Sending request: `, request);
         window.parent.postMessage(request, "*");
@@ -134,7 +153,16 @@ export class WidgetApi {
 
     public setAlwaysOnScreen(onScreen: boolean): Promise<any> {
         return new Promise<any>(resolve => {
-            this.callAction(KnownWidgetActions.SetAlwaysOnScreen, {value: onScreen}, resolve);
+            this.callAction(KnownWidgetActions.SetAlwaysOnScreen, {value: onScreen}, null);
+            resolve(); // SetAlwaysOnScreen is currently fire-and-forget, but that could change.
+        });
+    }
+
+    public getRiotConfig(): Promise<any> {
+        return new Promise<any>(resolve => {
+            this.callAction(KnownWidgetActions.GetRiotWebConfig, {}, response => {
+                resolve(response.response.config);
+            });
         });
     }
 }

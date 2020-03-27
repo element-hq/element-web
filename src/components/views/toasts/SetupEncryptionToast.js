@@ -16,23 +16,61 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Modal from '../../../Modal';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import DeviceListener from '../../../DeviceListener';
+import SetupEncryptionDialog from "../dialogs/SetupEncryptionDialog";
 import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class SetupEncryptionToast extends React.PureComponent {
     static propTypes = {
         toastKey: PropTypes.string.isRequired,
-        kind: PropTypes.oneOf(['set_up_encryption', 'verify_this_session', 'upgrade_encryption']).isRequired,
+        kind: PropTypes.oneOf([
+            'set_up_encryption',
+            'verify_this_session',
+            'upgrade_encryption',
+            'upgrade_ssss',
+        ]).isRequired,
     };
 
     _onLaterClick = () => {
         DeviceListener.sharedInstance().dismissEncryptionSetup();
     };
 
+    async _waitForCompletion() {
+        if (this.props.kind === 'upgrade_ssss') {
+            return new Promise(resolve => {
+                const recheck = async () => {
+                    const needsUpgrade = await MatrixClientPeg.get().secretStorageKeyNeedsUpgrade();
+                    if (!needsUpgrade) {
+                        MatrixClientPeg.get().removeListener('accountData', recheck);
+                        resolve();
+                    }
+                };
+                MatrixClientPeg.get().on('accountData', recheck);
+                recheck();
+            });
+        } else {
+            return;
+        }
+    }
+
     _onSetupClick = async () => {
-        accessSecretStorage();
+        if (this.props.kind === "verify_this_session") {
+            Modal.createTrackedDialog('Verify session', 'Verify session', SetupEncryptionDialog,
+                {}, null, /* priority = */ false, /* static = */ true);
+        } else {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+            try {
+                await accessSecretStorage();
+                await this._waitForCompletion();
+            } finally {
+                modal.close();
+            }
+        }
     };
 
     getDescription() {
@@ -42,6 +80,8 @@ export default class SetupEncryptionToast extends React.PureComponent {
                 return _t('Verify yourself & others to keep your chats safe');
             case 'verify_this_session':
                 return _t('Other users may not trust it');
+            case 'upgrade_ssss':
+                return _t('Update your secure storage');
         }
     }
 
@@ -49,6 +89,7 @@ export default class SetupEncryptionToast extends React.PureComponent {
         switch (this.props.kind) {
             case 'set_up_encryption':
             case 'upgrade_encryption':
+            case 'upgrade_ssss':
                 return _t('Upgrade');
             case 'verify_this_session':
                 return _t('Verify');
