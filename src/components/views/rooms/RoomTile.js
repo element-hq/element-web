@@ -37,6 +37,7 @@ import E2EIcon from './E2EIcon';
 import InviteOnlyIcon from './InviteOnlyIcon';
 // eslint-disable-next-line camelcase
 import rate_limited_func from '../../../ratelimitedfunc';
+import { shieldStatusForMembership } from '../../../utils/ShieldUtils';
 
 export default createReactClass({
     displayName: 'RoomTile',
@@ -154,40 +155,9 @@ export default createReactClass({
             return;
         }
 
-        // Duplication between here and _updateE2eStatus in RoomView
-        const e2eMembers = await this.props.room.getEncryptionTargetMembers();
-        const verified = [];
-        const unverified = [];
-        e2eMembers.map(({userId}) => userId)
-            .filter((userId) => userId !== cli.getUserId())
-            .forEach((userId) => {
-                (cli.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId);
-            });
-
-        /* Check all verified user devices. */
-        /* Don't alarm if no other users are verified  */
-        const isDM = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
-        const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
-                            !isDM &&                    // Don't alarm for self in DMs with other users
-                            (e2eMembers.length != 2) || // Don't alarm for self in 1:1 chats with other users
-                            (e2eMembers.length == 1);   // Do alarm for self if we're alone in a room
-        const targets = includeUser ? [...verified, cli.getUserId()] : verified;
-        for (const userId of targets) {
-            const devices = await cli.getStoredDevicesForUser(userId);
-            const allDevicesVerified = devices.every(({deviceId}) => {
-                return cli.checkDeviceTrust(userId, deviceId).isVerified();
-            });
-            if (!allDevicesVerified) {
-                this.setState({
-                    e2eStatus: "warning",
-                });
-                return;
-            }
-        }
-
+        /* At this point, the user has encryption on and cross-signing on */
         this.setState({
-            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+            e2eStatus: await shieldStatusForMembership(cli, this.props.room),
         });
     },
 

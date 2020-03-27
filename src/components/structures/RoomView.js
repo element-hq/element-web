@@ -56,6 +56,7 @@ import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { shieldStatusForMembership } from '../../utils/ShieldUtils';
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -818,45 +819,9 @@ export default createReactClass({
             return;
         }
 
-        // Duplication between here and _updateE2eStatus in RoomTile
         /* At this point, the user has encryption on and cross-signing on */
-        const e2eMembers = await room.getEncryptionTargetMembers();
-        const verified = [];
-        const unverified = [];
-        e2eMembers.map(({userId}) => userId)
-            .filter((userId) => userId !== this.context.getUserId())
-            .forEach((userId) => {
-                (this.context.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId);
-            });
-
-        debuglog("e2e verified", verified, "unverified", unverified);
-
-        /* Check all verified user devices. */
-        /* Don't alarm if no other users are verified  */
-        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
-        const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
-                            !isDM &&                    // Don't alarm for self in DMs with other users
-                            (e2eMembers.length != 2) || // Don't alarm for self in 1:1 chats with other users
-                            (e2eMembers.length == 1);   // Do alarm for self if we're alone in a room
-        const targets = includeUser ? [...verified, this.context.getUserId()] : verified;
-        for (const userId of targets) {
-            const devices = await this.context.getStoredDevicesForUser(userId);
-            const anyDeviceNotVerified = devices.some(({deviceId}) => {
-                return !this.context.checkDeviceTrust(userId, deviceId).isVerified();
-            });
-            if (anyDeviceNotVerified) {
-                this.setState({
-                    e2eStatus: "warning",
-                });
-                debuglog("e2e status set to warning as not all users trust all of their sessions." +
-                         " Aborted on user", userId);
-                return;
-            }
-        }
-
         this.setState({
-            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+            e2eStatus: await shieldStatusForMembership(this.context, room),
         });
     },
 
