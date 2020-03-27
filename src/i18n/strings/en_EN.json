@@ -588,6 +588,7 @@
     "cached locally": "cached locally",
     "not found locally": "not found locally",
     "User signing private key:": "User signing private key:",
+    "Session backup key:": "Session backup key:",
     "Secret storage public key:": "Secret storage public key:",
     "in account data": "in account data",
     "Homeserver feature support:": "Homeserver feature support:",
