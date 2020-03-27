@@ -17,7 +17,7 @@ interface Room {
     roomId: string;
 }
 
-export async function shieldStatusForMembership(client: Client, room: Room) {
+export async function shieldStatusForMembership(client: Client, room: Room): Promise<string> {
     const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
