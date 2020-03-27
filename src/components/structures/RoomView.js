@@ -40,7 +40,6 @@ import rate_limited_func from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
-import DMRoomMap from '../../utils/DMRoomMap';
 
 import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 

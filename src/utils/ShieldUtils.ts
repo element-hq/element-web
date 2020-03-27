@@ -12,12 +12,17 @@ interface Client {
     }
 }
 
-export async function shieldStatusForMembership(client: Client, room) {
+interface Room {
+    getEncryptionTargetMembers: () => Promise<[{userId: string}]>;
+    roomId: string;
+}
+
+export async function shieldStatusForMembership(client: Client, room: Room) {
     const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
-    const verified = [];
-    const unverified = [];
+    const verified: string[] = [];
+    const unverified: string[] = [];
     members.filter((userId) => userId !== client.getUserId())
         .forEach((userId) => {
             (client.checkUserTrust(userId).isCrossSigningVerified() ?
@@ -28,8 +33,8 @@ export async function shieldStatusForMembership(client: Client, room) {
     /* Don't alarm if no other users are verified  */
     const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
                         !inDMMap &&                 // Don't alarm for self in DMs with other users
-                        (members.length != 2) || // Don't alarm for self in 1:1 chats with other users
-                        (members.length == 1);   // Do alarm for self if we're alone in a room
+                        (members.length !== 2) || // Don't alarm for self in 1:1 chats with other users
+                        (members.length === 1);   // Do alarm for self if we're alone in a room
     const targets = includeUser ? [...verified, client.getUserId()] : verified;
     for (const userId of targets) {
         const devices = await client.getStoredDevicesForUser(userId);
