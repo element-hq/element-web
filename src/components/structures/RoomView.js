@@ -40,6 +40,7 @@ import rate_limited_func from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
+import DMRoomMap from '../../utils/DMRoomMap';
 
 import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
@@ -833,7 +834,12 @@ export default createReactClass({
 
         /* Check all verified user devices. */
         /* Don't alarm if no other users are verified  */
-        const targets = (verified.length > 0) ? [...verified, this.context.getUserId()] : verified;
+        const isDM = !!DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+        const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
+                            !isDM &&                    // Don't alarm for self in DMs with other users
+                            (e2eMembers.length != 2) || // Don't alarm for self in 1:1 chats with other users
+                            (e2eMembers.length == 1);   // Do alarm for self if we're alone in a room
+        const targets = includeUser ? [...verified, this.context.getUserId()] : verified;
         for (const userId of targets) {
             const devices = await this.context.getStoredDevicesForUser(userId);
             const anyDeviceNotVerified = devices.some(({deviceId}) => {
