@@ -2280,5 +2280,19 @@
     "Toggle video on/off": "Aktivizoni/çaktivizoni videon",
     "Previous/next unread room or DM": "Dhoma ose MD i palexuar i mëparshëm/pasues",
     "Previous/next room or DM": "Dhoma ose MD i mëparshëm/pasues",
-    "Toggle right panel": "Hap/mbyll panelin djathtas"
+    "Toggle right panel": "Hap/mbyll panelin djathtas",
+    "Unverified login. Was this you?": "Hyrje e paverifikuar. A qetë ju?",
+    "Manually verify all remote sessions": "Verifikoni dorazi krejt sesionet e largët",
+    "Update your secure storage": "Përditësoni depozitën tuaj të sigurt",
+    "Self signing private key:": "Kyç privat vetënënshkrimi:",
+    "cached locally": "ruajtur në fshehtinë lokalisht",
+    "not found locally": "i pagjetur lokalisht",
+    "User signing private key:": "Kyç privat nënshkrimesh përdoruesi:",
+    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Verifikoni individualisht çdo sesion të përdorur nga një përdorues, për t’i vënë shenjë si i besuar, duke mos besuar pajisje <em>cross-signed</em>.",
+    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "Në dhoma të fshehtëzuara, mesazhet tuaj sigurohen dhe vetëm ju dhe marrësi ka kyçet unikë për shkyçjen e tyre.",
+    "Verify all users in a room to ensure it's secure.": "Verifiko krejt përdoruesit në dhomë, për të garantuar se është e sigurt.",
+    "In encrypted rooms, verify all users to ensure it’s secure.": "Në dhoma të fshehtëzuara, verifikoni krejt përdoruesi për të garantuar se është e sigurt.",
+    "Verified": "I verifikuar",
+    "Verification cancelled": "Verifikimi u anulua",
+    "Compare emoji": "Krahasoni emoji"
 }
