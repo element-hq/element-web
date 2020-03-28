@@ -20,6 +20,7 @@ import * as React from "react";
 import {_t} from '../../languageHandler';
 import * as PropTypes from "prop-types";
 import * as sdk from "../../index";
+import AutoHideScrollbar from './AutoHideScrollbar';
 import { ReactNode } from "react";
 
 /**
@@ -113,9 +114,9 @@ export default class TabbedView extends React.Component<IProps, IState> {
     private _renderTabPanel(tab: Tab): React.ReactNode {
         return (
             <div className="mx_TabbedView_tabPanel" key={"mx_tabpanel_" + tab.label}>
-                <div className='mx_TabbedView_tabPanelContent'>
+                <AutoHideScrollbar className='mx_TabbedView_tabPanelContent'>
                     {tab.body}
-                </div>
+                </AutoHideScrollbar>
             </div>
         );
     }
