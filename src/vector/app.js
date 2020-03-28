@@ -38,10 +38,9 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
-import {loadConfig, preparePlatform, loadLanguage, loadOlm} from "./init";
+import {loadConfig, preparePlatform, loadLanguage, loadOlm, loadTheme} from "./init";
 
 let lastLocationHashSet = null;
 
@@ -186,8 +185,13 @@ export async function loadApp() {
     preparePlatform();
     const platform = PlatformPeg.get();
 
-    // Load the config from the platform
-    const configError = await loadConfig();
+    let configError;
+    try {
+        // Load the config from the platform
+        await loadConfig();
+    } catch (e) {
+        configError = e;
+    }
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
@@ -213,7 +217,7 @@ export async function loadApp() {
     }
 
     // as quickly as we possibly can, set a default theme...
-    await setTheme();
+    await loadTheme();
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
     if (configError && configError.err && configError.err instanceof SyntaxError) {

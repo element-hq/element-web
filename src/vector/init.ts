@@ -19,14 +19,17 @@ limitations under the License.
 
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
-import Olm from 'olm';
+import Olm from "olm";
 
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import {setTheme} from "matrix-react-sdk/src/theme";
+import * as sdk from "matrix-react-sdk";
+
 import ElectronPlatform from "./platform/ElectronPlatform";
 import WebPlatform from "./platform/WebPlatform";
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 
 export function preparePlatform() {
@@ -40,21 +43,8 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<Error | void> {
-    const platform = PlatformPeg.get();
-
-    let configJson;
-    try {
-        configJson = await platform.getConfig();
-    } catch (e) {
-        return e;
-    } finally {
-        // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-        // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-        //
-        // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-        SdkConfig.put(configJson || {});
-    }
+export async function loadConfig() {
+    SdkConfig.put(await PlatformPeg.get().getConfig());
 }
 
 export function loadOlm(): Promise<void> {
@@ -111,4 +101,22 @@ export async function loadLanguage() {
     } catch (e) {
         console.error("Unable to set language", e);
     }
+}
+
+export async function loadSkin() {
+    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
+    // the SDK until we have to in imports.
+    console.log("Loading skin...");
+    // import the skin async so that it doesn't execute potentially unsupported code
+    const skin = await import(
+        /* webpackChunkName: "riot-web-component-index" */
+        /* webpackPreload: true */
+        "../component-index");
+    await sdk.loadSkin(skin);
+    console.log("Skin loaded!");
+}
+
+export async function loadTheme() {
+    // as quickly as we possibly can, set a default theme...
+    await setTheme();
 }

@@ -35,13 +35,11 @@ if ('serviceWorker' in navigator) {
 
 // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
 // the SDK until we have to in imports.
-console.log("Loading skin...");
-import * as sdk from 'matrix-react-sdk';
-import * as skin from "../component-index";
-sdk.loadSkin(skin);
-console.log("Skin loaded!");
+import {loadSkin} from "./init";
+loadSkin().then(() => {
+    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
+    // import and thus running before the skin can load.
+    require("./app").loadApp();
+});
 
-// Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-// run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-// import and thus running before the skin can load.
-require("./app").loadApp();
