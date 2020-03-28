@@ -111,6 +111,7 @@ export async function loadSkin() {
     const skin = await import(
         /* webpackChunkName: "riot-web-component-index" */
         /* webpackPreload: true */
+        // @ts-ignore - this file gets generated so fails lint
         "../component-index");
     await sdk.loadSkin(skin);
     console.log("Skin loaded!");
