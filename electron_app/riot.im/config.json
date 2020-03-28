@@ -13,7 +13,6 @@
     ],
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
-    "welcomeUserId": "@riot-bot:matrix.org",
     "roomDirectory": {
         "servers": [
             "matrix.org"

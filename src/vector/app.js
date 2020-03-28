@@ -127,7 +127,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragparts, configInfo) {
+export async function loadApp(fragparts, configError) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -146,7 +146,7 @@ export async function loadApp(fragparts, configInfo) {
     const params = parseQs(window.location);
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configInfo.configSyntaxError) {
+    if (configError && configError.err && configError.err instanceof SyntaxError) {
         const errorMessage = (
             <div>
                 <p>
@@ -158,7 +158,7 @@ export async function loadApp(fragparts, configInfo) {
                 <p>
                     {_t(
                         "The message from the parser is: %(message)s",
-                        {message: configInfo.configError.err.message || _t("Invalid JSON")},
+                        {message: configError.err.message || _t("Invalid JSON")},
                     )}
                 </p>
             </div>
@@ -176,7 +176,7 @@ export async function loadApp(fragparts, configInfo) {
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
 
-    if (configInfo.configError) {
+    if (configError) {
         return <div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>;

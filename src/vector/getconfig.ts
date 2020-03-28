@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ import request from 'browser-request';
 
 // Load the config file. First try to load up a domain-specific config of the
 // form "config.$domain.json" and if that fails, fall back to config.json.
-export async function getVectorConfig(relativeLocation) {
-    if (relativeLocation === undefined) relativeLocation = '';
+export async function getVectorConfig(relativeLocation: string='') {
     if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
 
     const specificConfigPromise = getConfig(`${relativeLocation}config.${document.domain}.json`);
@@ -37,7 +36,7 @@ export async function getVectorConfig(relativeLocation) {
     }
 }
 
-function getConfig(configJsonFilename) {
+function getConfig(configJsonFilename: string): Promise<{}> {
     return new Promise(function(resolve, reject) {
         request(
             { method: "GET", url: configJsonFilename, qs: { cachebuster: Date.now() } },
