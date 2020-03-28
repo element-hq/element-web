@@ -260,7 +260,8 @@ export async function loadApp() {
         platform.startUpdater();
 
         // Don't bother loading the app until the config is verified
-        verifyServerConfig().then((newConfig) => {
+        try {
+            const newConfig = await verifyServerConfig();
             const MatrixChat = sdk.getComponent('structures.MatrixChat');
             window.matrixChat = ReactDOM.render(
                 <MatrixChat
@@ -277,7 +278,7 @@ export async function loadApp() {
                 />,
                 document.getElementById('matrixchat'),
             );
-        }).catch(err => {
+        } catch (err) {
             console.error(err);
 
             let errorMessage = err.translatedMessage
@@ -290,7 +291,7 @@ export async function loadApp() {
                 <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
                 document.getElementById('matrixchat'),
             );
-        });
+        }
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
