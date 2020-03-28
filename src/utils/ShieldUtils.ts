@@ -5,6 +5,7 @@ interface Client {
     getUserId: () => string;
     checkUserTrust: (userId: string) => {
         isCrossSigningVerified: () => boolean
+        wasCrossSigningVerified: () => boolean
     };
     getStoredDevicesForUser: (userId: string) => Promise<[{ deviceId: string }]>;
     checkDeviceTrust: (userId: string, deviceId: string) => {
@@ -28,6 +29,13 @@ export async function shieldStatusForMembership(client: Client, room: Room): Pro
             (client.checkUserTrust(userId).isCrossSigningVerified() ?
             verified : unverified).push(userId);
         });
+
+    /* Alarm if any unverified users were verified before. */
+    for (const userId of unverified) {
+        if (client.checkUserTrust(userId).wasCrossSigningVerified()) {
+            return "warning";
+        }
+    }
 
     /* Check all verified user devices. */
     /* Don't alarm if no other users are verified  */
