@@ -2304,5 +2304,6 @@
     "In encrypted rooms, verify all users to ensure it’s secure.": "在已加密的聊天室中，驗證所有使用者以確保其安全。",
     "Verified": "已驗證",
     "Verification cancelled": "驗證已取消",
-    "Compare emoji": "比較顏文字"
+    "Compare emoji": "比較顏文字",
+    "Session backup key:": "工作階段備份金鑰："
 }
