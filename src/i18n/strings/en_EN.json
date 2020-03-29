@@ -153,6 +153,7 @@
     "Usage": "Usage",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
     "Sends a message as plain text, without interpreting it as markdown": "Sends a message as plain text, without interpreting it as markdown",
+    "Sends a message as html, without interpreting it as markdown": "Sends a message as html, without interpreting it as markdown",
     "Searches DuckDuckGo for results": "Searches DuckDuckGo for results",
     "/ddg is not a command": "/ddg is not a command",
     "To use it, just wait for autocomplete results to load and tab through them.": "To use it, just wait for autocomplete results to load and tab through them.",
