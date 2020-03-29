@@ -121,3 +121,9 @@ export async function loadTheme() {
     // as quickly as we possibly can, set a default theme...
     await setTheme();
 }
+
+import rageshakeProm from "./rageshakesetup";
+
+export async function initRageshake() {
+    return rageshakeProm;
+}

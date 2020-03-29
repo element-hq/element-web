@@ -24,8 +24,7 @@ limitations under the License.
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
-// These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import './rageshakesetup';
+
 import './modernizr';
 
 // load service worker if available on this platform
@@ -33,13 +32,28 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
-// Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
-// the SDK until we have to in imports.
-import {loadSkin} from "./init";
-loadSkin().then(() => {
+async function start() {
+    const { initRageshake, loadSkin } = await import(
+        /* webpackChunkName: "init" */
+        /* webpackPreload: true */
+        "./init");
+
+    // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
+    await initRageshake();
+
+    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
+    // the SDK until we have to in imports.
+    await loadSkin();
+
     // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
     // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
     // import and thus running before the skin can load.
-    require("./app").loadApp();
-});
+    const { loadApp } = await import(
+        /* webpackChunkName: "app" */
+        /* webpackPreload: true */
+        "./app");
 
+    loadApp();
+}
+
+start();
