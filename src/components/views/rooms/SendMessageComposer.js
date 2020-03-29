@@ -131,8 +131,13 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, false);
         } else if (this._prepareToEncrypt) {
             this._prepareToEncrypt();
+        } else if (event.key === Key.ESCAPE) {
+            dis.dispatch({
+                action: 'reply_to_event',
+                event: null,
+            });
         }
-    }
+    };
 
     onVerticalArrow(e, up) {
         // arrows from an initial-caret composer navigates recent messages to edit
