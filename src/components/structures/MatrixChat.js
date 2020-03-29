@@ -657,6 +657,7 @@ export default createReactClass({
                     collapseLhs: true,
                 });
                 break;
+            case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
