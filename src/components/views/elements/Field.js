@@ -69,8 +69,8 @@ export default class Field extends React.PureComponent {
         // All other props pass through to the <input>.
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             valid: undefined,
             feedback: undefined,
