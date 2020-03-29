@@ -116,7 +116,6 @@ export default createReactClass({
                         </div>
                         <div>
                             <Field
-                                id="mx_TextInputDialog_field"
                                 className="mx_TextInputDialog_input"
                                 ref={this._field}
                                 type="text"

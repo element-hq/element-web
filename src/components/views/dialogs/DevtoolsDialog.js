@@ -302,7 +302,7 @@ class FilteredList extends React.PureComponent {
     render() {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
-            <Field id="DevtoolsDialog_FilteredList_filter" label={_t('Filter results')} autoFocus={true} size={64}
+            <Field label={_t('Filter results')} autoFocus={true} size={64}
                    type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                    // force re-render so that autoFocus is applied when this component is re-used
