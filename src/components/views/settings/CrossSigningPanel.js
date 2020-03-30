@@ -108,12 +108,12 @@ export default class CrossSigningPanel extends React.PureComponent {
      * 2. Access existing secret storage by requesting passphrase and accessing
      *    cross-signing keys as needed.
      * 3. All keys are loaded and there's nothing to do.
-     * @param {bool} [force] Bootstrap again even if keys already present
+     * @param {bool} [forceReset] Bootstrap again even if keys already present
      */
-    _bootstrapSecureSecretStorage = async (force=false) => {
+    _bootstrapSecureSecretStorage = async (forceReset=false) => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(() => undefined, force);
+            await accessSecretStorage(() => undefined, forceReset);
         } catch (e) {
             this.setState({ error: e });
             console.error("Error bootstrapping secret storage", e);

@@ -216,19 +216,19 @@ export async function promptForBackupPassphrase() {
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
- * @param {bool} [force] Reset secret storage even if it's already set up
+ * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(func = async () => { }, force = false) {
+export async function accessSecretStorage(func = async () => { }, forceReset = false) {
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
-        if (!await cli.hasSecretStorageKey() || force) {
+        if (!await cli.hasSecretStorageKey() || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force,
+                    force: forceReset,
                 },
                 null, /* priority = */ false, /* static = */ true,
             );
