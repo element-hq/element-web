@@ -1,3 +1,9 @@
+Changes in [1.5.14](https://github.com/vector-im/riot-web/releases/tag/v1.5.14) (2020-03-30)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14-rc.1...v1.5.14)
+
+ * Upgrade JS SDK to 5.2.0 and React SDK to 2.3.0
+
 Changes in [1.5.14-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.14-rc.1) (2020-03-26)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.13...v1.5.14-rc.1)
