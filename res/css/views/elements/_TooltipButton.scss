@@ -28,7 +28,7 @@ limitations under the License.
     transition: opacity 0.2s ease-in;
     opacity: 0.6;
 
-    line-height: 11px;
+    line-height: 0.733rem;
     text-align: center;
 
     cursor: pointer;
@@ -47,6 +47,6 @@ limitations under the License.
 .mx_TooltipButton_helpText {
     width: 400px;
     text-align: start;
-    line-height: 17px !important;
+    line-height: 1.133rem !important;
 }
 

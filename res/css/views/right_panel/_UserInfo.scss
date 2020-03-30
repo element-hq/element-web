@@ -20,7 +20,7 @@ limitations under the License.
     flex-direction: column;
     flex: 1;
     overflow-y: auto;
-    font-size: 12px;
+    font-size: 0.8rem;
 
     .mx_UserInfo_cancel {
         cursor: pointer;
@@ -43,7 +43,7 @@ limitations under the License.
     }
 
     h2 {
-        font-size: 18px;
+        font-size: 1.2rem;
         font-weight: 600;
         margin: 18px 0 0 0;
     }
@@ -109,7 +109,7 @@ limitations under the License.
         justify-content: center;
 
         // override the calculated sizes so that the letter isn't HUGE
-        font-size: 56px !important;
+        font-size: 3.733rem !important;
         width: 100% !important;
         transition: font-size 0.5s;
     }
@@ -122,7 +122,7 @@ limitations under the License.
         text-transform: uppercase;
         color: $notice-secondary-color;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 0.8rem;
         margin: 4px 0;
     }
 
@@ -134,8 +134,8 @@ limitations under the License.
         text-align: center;
 
         h2 {
-            font-size: 18px;
-            line-height: 25px;
+            font-size: 1.2rem;
+            line-height: 1.667rem;
             flex: 1;
             justify-content: center;
             align-items: center;
@@ -197,7 +197,7 @@ limitations under the License.
     .mx_UserInfo_field {
         cursor: pointer;
         color: $accent-color;
-        line-height: 16px;
+        line-height: 1.067rem;
         margin: 8px 0;
 
         &.mx_UserInfo_destructive {
@@ -206,7 +206,7 @@ limitations under the License.
     }
 
     .mx_UserInfo_statusMessage {
-        font-size: 11px;
+        font-size: 0.733rem;
         opacity: 0.5;
         overflow: hidden;
         white-space: nowrap;
@@ -282,6 +282,6 @@ limitations under the License.
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar_initial {
-        font-size: 40px !important; // override the other override because here the avatar is smaller
+        font-size: 2.667rem !important; // override the other override because here the avatar is smaller
     }
 }

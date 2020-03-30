@@ -16,6 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+:root {
+    font-size: 15px;
+}
+
 html {
     /* hack to stop overscroll bounce on OSX and iOS.
        N.B. Breaks things when we have legitimate horizontal overscroll */
@@ -25,7 +29,7 @@ html {
 
 body {
     font-family: $font-family;
-    font-size: 15px;
+    font-size: 1rem;
     background-color: $primary-bg-color;
     color: $primary-fg-color;
     border: 0px;
@@ -60,7 +64,7 @@ b {
 h2 {
     color: $primary-fg-color;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 1.2rem;
     margin-top: 16px;
     margin-bottom: 16px;
 }
@@ -76,7 +80,7 @@ input[type=search],
 input[type=password] {
     padding: 9px;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: 0.933rem;
     font-weight: 600;
     min-width: 0;
 }
@@ -253,7 +257,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: $light-fg-color;
     z-index: 4012;
     font-weight: 300;
-    font-size: 15px;
+    font-size: 1rem;
     position: relative;
     padding: 25px 30px 30px 30px;
     max-height: 80%;
@@ -321,8 +325,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_title {
-    font-size: 22px;
-    line-height: 36px;
+    font-size: 1.467rem;
+    line-height: 2.400rem;
     color: $dialog-title-fg-color;
 }
 
@@ -350,7 +354,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_content {
     margin: 24px 0 68px;
-    font-size: 14px;
+    font-size: 0.933rem;
     color: $primary-fg-color;
     word-wrap: break-word;
 }
@@ -446,7 +450,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_TextInputDialog_input {
-    font-size: 15px;
+    font-size: 1rem;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;

@@ -35,7 +35,7 @@ limitations under the License.
 
 .mx_MessageEditHistoryDialog_edits {
     list-style-type: none;
-    font-size: 14px;
+    font-size: 0.933rem;
     padding: 0;
     color: $primary-fg-color;
 
@@ -60,7 +60,7 @@ limitations under the License.
     }
 
     .mx_MessageActionBar .mx_AccessibleButton {
-        font-size: 10px;
+        font-size: 0.667rem;
         padding: 0 8px;
     }
 }
