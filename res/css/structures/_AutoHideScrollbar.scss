@@ -14,28 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AutoHideScrollbar {
-    overflow-x: hidden;
-    overflow-y: auto;
-    overflow-y: overlay;    // where supported
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-
-    &::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-        background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 3px;
-        background-color: transparent;
-    }
-
-    scrollbar-color: transparent transparent;
+// make any scrollbar grey and thin
+html {
+    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+}
+// scrollbar-width is not inherited (but -color is, why?!),
+// so declare it on every element
+* {
     scrollbar-width: thin;
 }
 
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: $scrollbar-track-color;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: $scrollbar-thumb-color;
+}
+
+// make auto-hide scrollbars not transparent again on hover
 .mx_AutoHideScrollbar:hover {
+    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+
     &::-webkit-scrollbar {
         background-color: $scrollbar-track-color;
     }
@@ -43,5 +46,22 @@ limitations under the License.
     &::-webkit-scrollbar-thumb {
         background-color: $scrollbar-thumb-color;
     }
-    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+}
+
+// make scrollbars transparent for autohide scrollbars
+.mx_AutoHideScrollbar {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-y: overlay;    // where supported
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+    &::-webkit-scrollbar {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    scrollbar-color: transparent transparent;
 }

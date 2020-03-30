@@ -166,7 +166,6 @@ export default class BugReportDialog extends React.Component {
                         ) }
                     </b></p>
                     <Field
-                        id="mx_BugReportDialog_issueUrl"
                         type="text"
                         className="mx_BugReportDialog_field_input"
                         label={_t("GitHub issue")}
@@ -175,7 +174,6 @@ export default class BugReportDialog extends React.Component {
                         placeholder="https://github.com/vector-im/riot-web/issues/..."
                     />
                     <Field
-                        id="mx_BugReportDialog_notes"
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
                         label={_t("Notes")}

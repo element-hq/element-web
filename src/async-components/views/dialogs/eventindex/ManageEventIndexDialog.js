@@ -168,7 +168,6 @@ export default class ManageEventIndexDialog extends React.Component {
                         totalRooms: formatCountLong(this.state.roomCount),
                     })} <br />
                     <Field
-                        id={"crawlerSleepTimeMs"}
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
                         value={this.state.crawlerSleepTime}
