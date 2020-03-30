@@ -6,6 +6,7 @@ function mkClient(selfTrust) {
         getUserId: () => "@self:localhost",
         checkUserTrust: (userId) => ({
             isCrossSigningVerified: () => userId[1] == "T",
+            wasCrossSigningVerified: () => userId[1] == "T",
         }),
         checkDeviceTrust: (userId, deviceId) => ({
             isVerified: () => userId === "@self:localhost" ? selfTrust : userId[2] == "T",
