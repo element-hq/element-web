@@ -422,7 +422,6 @@ export default class GeneralUserSettingsTab extends React.Component {
                         <Field
                             label={_t("Custom theme URL")}
                             type='text'
-                            id='mx_GeneralUserSettingsTab_customThemeInput'
                             autoComplete="off"
                             onChange={this._onCustomThemeChange}
                             value={this.state.customThemeUrl}
@@ -448,7 +447,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <Field id="theme" label={_t("Theme")} element="select"
+                <Field label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}
                        disabled={this.state.useSystemTheme}
                 >

@@ -62,7 +62,6 @@ class EditableAliasesList extends EditableItemList {
                 className="mx_EditableItemList_newItem"
             >
                 <RoomAliasField
-                    id={`mx_EditableItemList_new_${this.props.id}`}
                     ref={this._aliasField}
                     onChange={onChange}
                     value={this.props.newItem || ""}

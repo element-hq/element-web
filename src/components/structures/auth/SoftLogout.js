@@ -213,7 +213,6 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     {error}
                     <Field
-                        id="softlogout_password"
                         type="password"
                         label={_t("Password")}
                         onChange={this.onPasswordChange}

@@ -18,7 +18,7 @@ interface Room {
     roomId: string;
 }
 
-export async function shieldStatusForMembership(client: Client, room: Room): Promise<string> {
+export async function shieldStatusForRoom(client: Client, room: Room): Promise<string> {
     const members = (await room.getEncryptionTargetMembers()).map(({userId}) => userId);
     const inDMMap = !!DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
@@ -41,8 +41,8 @@ export async function shieldStatusForMembership(client: Client, room: Room): Pro
     /* Don't alarm if no other users are verified  */
     const includeUser = (verified.length > 0) &&    // Don't alarm for self in rooms where nobody else is verified
                         !inDMMap &&                 // Don't alarm for self in DMs with other users
-                        (members.length !== 2) || // Don't alarm for self in 1:1 chats with other users
-                        (members.length === 1);   // Do alarm for self if we're alone in a room
+                        (members.length !== 2) ||   // Don't alarm for self in 1:1 chats with other users
+                        (members.length === 1);     // Do alarm for self if we're alone in a room
     const targets = includeUser ? [...verified, client.getUserId()] : verified;
     for (const userId of targets) {
         const devices = await client.getStoredDevicesForUser(userId);

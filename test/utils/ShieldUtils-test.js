@@ -1,4 +1,4 @@
-import { shieldStatusForMembership } from '../../src/utils/ShieldUtils';
+import { shieldStatusForRoom } from '../../src/utils/ShieldUtils';
 import DMRoomMap from '../../src/utils/DMRoomMap';
 
 function mkClient(selfTrust) {
@@ -55,7 +55,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@FF1:h", "@FF2:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual("normal");
     });
 
@@ -68,7 +68,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@TT2:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -81,7 +81,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@TT1:h", "@FF2:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -94,7 +94,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -107,7 +107,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@TT:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -120,7 +120,7 @@ describe("shieldStatusForMembership self-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 });
@@ -140,7 +140,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -152,7 +152,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h", "@TT: h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 
@@ -164,7 +164,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
             roomId: dm ? "DM" : "other",
             getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h", "@FT: h"].map((userId) => ({userId})),
         };
-        const status = await shieldStatusForMembership(client, room);
+        const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
     });
 });

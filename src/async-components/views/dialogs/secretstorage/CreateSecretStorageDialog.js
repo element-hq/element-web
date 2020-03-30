@@ -412,7 +412,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field
                     type="password"
-                    id="mx_CreateSecretStorage_accountPassword"
                     label={_t("Password")}
                     value={this.state.accountPassword}
                     onChange={this._onAccountPasswordChange}
@@ -497,7 +496,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
                     type="password"
-                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
                     value={this.state.passPhrase}
@@ -574,7 +572,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
                     type="password"
-                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseConfirmChange}
                     value={this.state.passPhraseConfirm}
                     className="mx_CreateSecretStorageDialog_passPhraseField"
