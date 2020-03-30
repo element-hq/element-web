@@ -82,12 +82,12 @@ class Command {
 
     constructor({
         command,
-        aliases=[],
-        args='',
+        aliases = [],
+        args = '',
         description,
         runFn=undefined,
-        category=CommandCategories.other,
-        hideCompletionAfterSpace=false,
+        category = CommandCategories.other,
+        hideCompletionAfterSpace = false,
     }: {
         command: string;
         aliases?: string[];
@@ -437,7 +437,7 @@ export const Commands = [
         aliases: ['j', 'goto'],
         args: '<room-alias>',
         description: _td('Joins room with given alias'),
-        runFn: function(roomId, args) {
+        runFn: function(_, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
                 // the public-facing one for most users and the other is a
@@ -710,7 +710,7 @@ export const Commands = [
                 if (matches) {
                     const userId = matches[1];
                     if (matches.length === 4 && undefined !== matches[3]) {
-                        powerLevel = parseInt(matches[3]);
+                        powerLevel = parseInt(matches[3], 10);
                     }
                     if (!isNaN(powerLevel)) {
                         const cli = MatrixClientPeg.get();
