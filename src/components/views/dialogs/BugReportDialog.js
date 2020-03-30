@@ -23,7 +23,8 @@ import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import sendBugReport from '../../../rageshake/submit-rageshake';
+import sendBugReport, {downloadBugReport} from '../../../rageshake/submit-rageshake';
+import AccessibleButton from "../elements/AccessibleButton";
 
 export default class BugReportDialog extends React.Component {
     constructor(props) {
@@ -95,6 +96,32 @@ export default class BugReportDialog extends React.Component {
         });
     }
 
+    _onDownload = async (ev) => {
+        this.setState({ busy: true, progress: null, err: null });
+        this._sendProgressCallback(_t("Preparing to download logs"));
+
+        try {
+            await downloadBugReport({
+                sendLogs: true,
+                progressCallback: this._sendProgressCallback,
+                label: this.props.label,
+            });
+
+            this.setState({
+                busy: false,
+                progress: null,
+            });
+        } catch (err) {
+            if (!this._unmounted) {
+                this.setState({
+                    busy: false,
+                    progress: null,
+                    err: _t("Failed to send logs: ") + `${err.message}`,
+                });
+            }
+        }
+    };
+
     _onTextChange(ev) {
         this.setState({ text: ev.target.value });
     }
@@ -165,6 +192,11 @@ export default class BugReportDialog extends React.Component {
                             },
                         ) }
                     </b></p>
+
+                    <AccessibleButton onClick={this._onDownload} kind="link">
+                        { _t("Click here to download your logs.") }
+                    </AccessibleButton>
+
                     <Field
                         type="text"
                         className="mx_BugReportDialog_field_input"

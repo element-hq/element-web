@@ -195,7 +195,7 @@ export async function downloadBugReport(opts) {
                     resolve();
                 });
                 reader.readAsArrayBuffer(e[1]);
-            }))
+            }));
         } else {
             metadata += `${e[0]} = ${e[1]}\n`;
         }
