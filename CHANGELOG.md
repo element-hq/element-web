@@ -1,3 +1,9 @@
+Changes in [2.3.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.3.0) (2020-03-30)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.3.0-rc.1...v2.3.0)
+
+ * Upgrade JS SDK to 5.2.0
+
 Changes in [2.3.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.3.0-rc.1) (2020-03-26)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.3...v2.3.0-rc.1)
