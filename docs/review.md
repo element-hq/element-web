@@ -41,15 +41,15 @@ When reviewing code, here are some things we look for and also things we avoid:
 
 ### Workflow
 
-* Authors should request review from riot-web team by default (if someone on the
-  team is clearly the expert in an area, a direct review request to them may be
-  more appropriate)
+* Authors should request review from the riot-web team by default (if someone on
+  the team is clearly the expert in an area, a direct review request to them may
+  be more appropriate)
 * Reviewers should remove the team review request and request review from
   themselves when starting a review to avoid double review
-* Authors should link to other layers of their PR in their PR before requesting
-  review. Reviewers might be coming from different places and could miss other
-  required PRs.
-* Avoid force pushing to a PR after first round of review
+* If there are multiple related PRs authors should reference each of the PRs in
+  the others before requesting review. Reviewers might start reviewing from
+  different places and could miss other required PRs.
+* Avoid force pushing to a PR after the first round of review
 * Use the GitHub default of merge commits when landing (avoid alternate options
   like squash or rebase)
 * PR author merges after review (assuming they have write access)
