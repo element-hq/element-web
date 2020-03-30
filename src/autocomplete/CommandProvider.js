@@ -23,17 +23,16 @@ import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import {TextualCompletion} from './Components';
 import type {Completion, SelectionRange} from "./Autocompleter";
-import {CommandMap} from '../SlashCommands';
-
-const COMMANDS = Object.values(CommandMap);
+import {Commands, CommandMap} from '../SlashCommands';
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
     constructor() {
         super(COMMAND_RE);
-        this.matcher = new QueryMatcher(COMMANDS, {
-           keys: ['command', 'args', 'description'],
+        this.matcher = new QueryMatcher(Commands, {
+            keys: ['command', 'args', 'description'],
+            funcs: [({aliases}) => aliases.join(" ")], // aliases
         });
     }
 
@@ -46,31 +45,40 @@ export default class CommandProvider extends AutocompleteProvider {
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
             const name = command[1].substr(1); // strip leading `/`
-            if (CommandMap[name]) {
+            if (CommandMap.has(name)) {
                 // some commands, namely `me` and `ddg` don't suit having the usage shown whilst typing their arguments
-                if (CommandMap[name].hideCompletionAfterSpace) return [];
-                matches = [CommandMap[name]];
+                if (CommandMap.get(name).hideCompletionAfterSpace) return [];
+                matches = [CommandMap.get(name)];
             }
         } else {
             if (query === '/') {
                 // If they have just entered `/` show everything
-                matches = COMMANDS;
+                matches = Commands;
             } else {
                 // otherwise fuzzy match against all of the fields
                 matches = this.matcher.match(command[1]);
             }
         }
 
-        return matches.map((result) => ({
-            // If the command is the same as the one they entered, we don't want to discard their arguments
-            completion: result.command === command[1] ? command[0] : (result.command + ' '),
-            type: "command",
-            component: <TextualCompletion
-                title={result.command}
-                subtitle={result.args}
-                description={_t(result.description)} />,
-            range,
-        }));
+
+        return matches.map((result) => {
+            let completion = result.getCommand() + ' ';
+            const usedAlias = result.aliases.find(alias => `/${alias}` === command[1]);
+            // If the command (or an alias) is the same as the one they entered, we don't want to discard their arguments
+            if (usedAlias || result.getCommand() === command[1]) {
+                completion = command[0];
+            }
+
+            return {
+                completion,
+                type: "command",
+                component: <TextualCompletion
+                    title={`/${usedAlias || result.command}`}
+                    subtitle={result.args}
+                    description={_t(result.description)} />,
+                range,
+            };
+        });
     }
 
     getName() {
