@@ -469,6 +469,9 @@ export default class EventIndex extends EventEmitter {
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
+            const undecryptableEvents = matrixEvents.filter((ev) => {
+                return ev.isDecryptionFailure();
+            });
 
             // Collect the redaction events so we can delete the redacted events
             // from the index.
@@ -503,7 +506,10 @@ export default class EventIndex extends EventEmitter {
             console.log(
                 "EventIndex: Crawled room",
                 client.getRoom(checkpoint.roomId).name,
-                "and fetched", events.length, "events.",
+                "and fetched total", matrixEvents.length, "events of which",
+                events.length, "are being added,", redactionEvents.length,
+                "are redacted,", matrixEvents.length - events.length,
+                "are being skipped, undecryptable", undecryptableEvents.length,
             );
 
             try {
