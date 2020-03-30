@@ -155,7 +155,7 @@ export default class RoomProfileSettings extends React.Component {
                        onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
-                        <Field id="profileDisplayName" label={_t("Room Name")}
+                        <Field label={_t("Room Name")}
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} disabled={!this.state.canSetName} />
                         <Field id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}

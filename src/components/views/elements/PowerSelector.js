@@ -132,7 +132,7 @@ export default createReactClass({
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {
             picker = (
-                <Field id={`powerSelector_custom_${this.props.powerLevelKey}`} type="number"
+                <Field type="number"
                        label={label} max={this.props.maxValue}
                        onBlur={this.onCustomBlur} onKeyDown={this.onCustomKeyDown} onChange={this.onCustomChange}
                        value={String(this.state.customValue)} disabled={this.props.disabled} />
@@ -151,7 +151,7 @@ export default createReactClass({
             });
 
             picker = (
-                <Field id={`powerSelector_notCustom_${this.props.powerLevelKey}`} element="select"
+                <Field element="select"
                        label={label} onChange={this.onSelectChange}
                        value={String(this.state.selectValue)} disabled={this.props.disabled}>
                     {options}
