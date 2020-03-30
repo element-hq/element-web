@@ -46,6 +46,7 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
+    matrixClientIsReady: false,
 };
 
 /**
@@ -59,9 +60,26 @@ class RoomViewStore extends Store {
 
         // Initialise state
         this._state = INITIAL_STATE;
+        if (MatrixClientPeg.get()) {
+            this._state.matrixClientIsReady = MatrixClientPeg.get().isInitialSyncComplete();
+        }
     }
 
     _setState(newState) {
+        // If values haven't changed, there's nothing to do.
+        // This only tries a shallow comparison, so unchanged objects will slip
+        // through, but that's probably okay for now.
+        let stateChanged = false;
+        for (const key of Object.keys(newState)) {
+            if (this._state[key] !== newState[key]) {
+                stateChanged = true;
+                break;
+            }
+        }
+        if (!stateChanged) {
+            return;
+        }
+
         this._state = Object.assign(this._state, newState);
         this.__emitChange();
     }
@@ -136,6 +154,11 @@ class RoomViewStore extends Store {
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
+            case 'sync_state':
+                this._setState({
+                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
+                });
+                break;
         }
     }
 
@@ -350,7 +373,7 @@ class RoomViewStore extends Store {
     }
 
     shouldPeek() {
-        return this._state.shouldPeek;
+        return this._state.shouldPeek && this._state.matrixClientIsReady;
     }
 }
 

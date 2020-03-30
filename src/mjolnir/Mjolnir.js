@@ -61,22 +61,22 @@ export class Mjolnir {
     setup() {
         if (!MatrixClientPeg.get()) return;
         this._updateLists(SettingsStore.getValue("mjolnirRooms"));
-        MatrixClientPeg.get().on("RoomState.events", this._onEvent.bind(this));
+        MatrixClientPeg.get().on("RoomState.events", this._onEvent);
     }
 
     stop() {
-        SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+        if (this._mjolnirWatchRef) {
+            SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+            this._mjolnirWatchRef = null;
+        }
 
-        try {
-            if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
-        } catch (e) {
-            console.error(e);
-            // Only the tests cause problems with this particular block of code. We should
-            // never be here in production.
+        if (this._dispatcherRef) {
+            dis.unregister(this._dispatcherRef);
+            this._dispatcherRef = null;
         }
 
         if (!MatrixClientPeg.get()) return;
-        MatrixClientPeg.get().removeListener("RoomState.events", this._onEvent.bind(this));
+        MatrixClientPeg.get().removeListener("RoomState.events", this._onEvent);
     }
 
     async getOrCreatePersonalList(): Promise<BanList> {
@@ -130,13 +130,13 @@ export class Mjolnir {
         this._lists = this._lists.filter(b => b.roomId !== roomId);
     }
 
-    _onEvent(event) {
+    _onEvent = (event) => {
         if (!MatrixClientPeg.get()) return;
         if (!this._roomIds.includes(event.getRoomId())) return;
         if (!ALL_RULE_TYPES.includes(event.getType())) return;
 
         this._updateLists(this._roomIds);
-    }
+    };
 
     _onListsChanged(settingName, roomId, atLevel, newValue) {
         // We know that ban lists are only recorded at one level so we don't need to re-eval them

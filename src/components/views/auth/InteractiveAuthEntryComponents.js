@@ -142,10 +142,9 @@ export const PasswordAuthEntry = createReactClass({
 
         return (
             <div>
-                <p>{ _t("To continue, please enter your password.") }</p>
+                <p>{ _t("Confirm your identity by entering your account password below.") }</p>
                 <form onSubmit={this._onSubmit} className="mx_InteractiveAuthEntryComponents_passwordSection">
                     <Field
-                        id="mx_InteractiveAuthEntryComponents_password"
                         className={passwordBoxClass}
                         type="password"
                         name="passwordField"
@@ -331,7 +330,7 @@ export const TermsAuthEntry = createReactClass({
             checkboxes.push(
                 <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
                     <input type="checkbox" onChange={() => this._togglePolicy(policy.id)} checked={checked} />
-                    <a href={policy.url} target="_blank" rel="noopener">{ policy.name }</a>
+                    <a href={policy.url} target="_blank" rel="noreferrer noopener">{ policy.name }</a>
                 </label>,
             );
         }
@@ -604,6 +603,7 @@ export const FallbackAuthEntry = createReactClass({
             this.props.authSessionId,
         );
         this._popupWindow = window.open(url);
+        this._popupWindow.opener = null;
     },
 
     _onReceiveMessage: function(event) {
@@ -641,7 +641,7 @@ const AuthEntryComponents = [
     TermsAuthEntry,
 ];
 
-export function getEntryComponentForLoginType(loginType) {
+export default function getEntryComponentForLoginType(loginType) {
     for (const c of AuthEntryComponents) {
         if (c.LOGIN_TYPE == loginType) {
             return c;

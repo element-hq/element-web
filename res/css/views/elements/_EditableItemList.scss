@@ -20,14 +20,21 @@ limitations under the License.
 }
 
 .mx_EditableItem {
+    display: flex;
     margin-bottom: 5px;
-    margin-left: 15px;
 }
 
 .mx_EditableItem_delete {
+    order: 3;
     margin-right: 5px;
     cursor: pointer;
     vertical-align: middle;
+    width: 14px;
+    height: 14px;
+    mask-image: url('$(res)/img/feather-customised/cancel.svg');
+    mask-repeat: no-repeat;
+    background-color: $warning-color;
+    mask-size: 100%;
 }
 
 .mx_EditableItem_email {
@@ -36,12 +43,19 @@ limitations under the License.
 
 .mx_EditableItem_promptText {
     margin-right: 10px;
+    order: 2;
 }
 
 .mx_EditableItem_confirmBtn {
     margin-right: 5px;
 }
 
+.mx_EditableItem_item {
+    flex: auto 1 0;
+    order: 1;
+}
+
 .mx_EditableItemList_label {
     margin-bottom: 5px;
 }
+

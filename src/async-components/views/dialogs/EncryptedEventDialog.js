@@ -191,7 +191,7 @@ export default createReactClass({
                     <h4>{ _t('Event information') }</h4>
                     { this._renderEventInfo() }
 
-                    <h4>{ _t('Sender device information') }</h4>
+                    <h4>{ _t('Sender session information') }</h4>
                     { this._renderDeviceInfo() }
                 </div>
                 <div className="mx_Dialog_buttons">

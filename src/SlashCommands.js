@@ -81,6 +81,8 @@ class Command {
     }
 
     run(roomId, args) {
+        // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
+        if (!this.runFn) return;
         return this.runFn.bind(this)(roomId, args);
     }
 
@@ -769,7 +771,7 @@ export const CommandMap = {
     verify: new Command({
         name: 'verify',
         args: '<user-id> <device-id> <device-signing-key>',
-        description: _td('Verifies a user, device, and pubkey tuple'),
+        description: _td('Verifies a user, session, and pubkey tuple'),
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+) +(\S+) +(\S+)$/);
@@ -783,22 +785,22 @@ export const CommandMap = {
                     return success((async () => {
                         const device = await cli.getStoredDevice(userId, deviceId);
                         if (!device) {
-                            throw new Error(_t('Unknown (user, device) pair:') + ` (${userId}, ${deviceId})`);
+                            throw new Error(_t('Unknown (user, session) pair:') + ` (${userId}, ${deviceId})`);
                         }
                         const deviceTrust = await cli.checkDeviceTrust(userId, deviceId);
 
                         if (deviceTrust.isVerified()) {
                             if (device.getFingerprint() === fingerprint) {
-                                throw new Error(_t('Device already verified!'));
+                                throw new Error(_t('Session already verified!'));
                             } else {
-                                throw new Error(_t('WARNING: Device already verified, but keys do NOT MATCH!'));
+                                throw new Error(_t('WARNING: Session already verified, but keys do NOT MATCH!'));
                             }
                         }
 
                         if (device.getFingerprint() !== fingerprint) {
                             const fprint = device.getFingerprint();
                             throw new Error(
-                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and device' +
+                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
                                     ' %(deviceId)s is "%(fprint)s" which does not match the provided key ' +
                                     '"%(fingerprint)s". This could mean your communications are being intercepted!',
                                     {
@@ -819,7 +821,7 @@ export const CommandMap = {
                                 <p>
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
-                                            'from %(userId)s\'s device %(deviceId)s. Device marked as verified.',
+                                            'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
                                             {userId, deviceId})
                                     }
                                 </p>
@@ -891,6 +893,26 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
+
+    whois: new Command({
+        name: "whois",
+        description: _td("Displays information about a user"),
+        args: '<user-id>',
+        runFn: function(roomId, userId) {
+            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+                return reject(this.getUsage());
+            }
+
+            const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
+
+            dis.dispatch({
+                action: 'view_user',
+                member: member || {userId},
+            });
+            return success();
+        },
+        category: CommandCategories.advanced,
+    }),
 };
 /* eslint-enable babel/no-invalid-this */
 
@@ -905,25 +927,25 @@ const aliases = {
 
 
 /**
- * Process the given text for /commands and perform them.
+ * Process the given text for /commands and return a bound method to perform them.
  * @param {string} roomId The room in which the command was performed.
  * @param {string} input The raw text input by the user.
- * @return {Object|null} An object with the property 'error' if there was an error
+ * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function processCommandInput(roomId, input) {
+export function getCommand(roomId, input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
     if (input[0] !== '/') return null; // not a command
 
-    const bits = input.match(/^(\S+?)( +((.|\n)*))?$/);
+    const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
     let cmd;
     let args;
     if (bits) {
         cmd = bits[1].substring(1).toLowerCase();
-        args = bits[3];
+        args = bits[2];
     } else {
         cmd = input;
     }
@@ -932,11 +954,6 @@ export function processCommandInput(roomId, input) {
         cmd = aliases[cmd];
     }
     if (CommandMap[cmd]) {
-        // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!CommandMap[cmd].runFn) return null;
-
-        return CommandMap[cmd].run(roomId, args);
-    } else {
-        return reject(_t('Unrecognised command:') + ' ' + input);
+        return () => CommandMap[cmd].run(roomId, args);
     }
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,37 +15,28 @@ limitations under the License.
 */
 
 import * as React from "react";
-import dis from "../../dispatcher";
 import { _t } from '../../languageHandler';
+import ToastStore from "../../stores/ToastStore";
 import classNames from "classnames";
 
 export default class ToastContainer extends React.Component {
     constructor() {
         super();
-        this.state = {toasts: []};
-    }
+        this.state = {toasts: ToastStore.sharedInstance().getToasts()};
 
-    componentDidMount() {
-        this._dispatcherRef = dis.register(this.onAction);
+        // Start listening here rather than in componentDidMount because
+        // toasts may dismiss themselves in their didMount if they find
+        // they're already irrelevant by the time they're mounted, and
+        // our own componentDidMount is too late.
+        ToastStore.sharedInstance().on('update', this._onToastStoreUpdate);
     }
 
     componentWillUnmount() {
-        dis.unregister(this._dispatcherRef);
+        ToastStore.sharedInstance().removeListener('update', this._onToastStoreUpdate);
     }
 
-    onAction = (payload) => {
-        if (payload.action === "show_toast") {
-            this._addToast(payload.toast);
-        }
-    };
-
-    _addToast(toast) {
-        this.setState({toasts: this.state.toasts.concat(toast)});
-    }
-
-    dismissTopToast = () => {
-        const [, ...remaining] = this.state.toasts;
-        this.setState({toasts: remaining});
+    _onToastStoreUpdate = () => {
+        this.setState({toasts: ToastStore.sharedInstance().getToasts()});
     };
 
     render() {
@@ -62,8 +53,8 @@ export default class ToastContainer extends React.Component {
             const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
 
             const toastProps = Object.assign({}, props, {
-                dismiss: this.dismissTopToast,
                 key,
+                toastKey: key,
             });
             toast = (<div className={toastClasses}>
                 <h2>{title}{countIndicator}</h2>

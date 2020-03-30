@@ -118,6 +118,7 @@ export default class DeactivateAccountDialog extends React.Component {
 
         const Field = sdk.getComponent('elements.Field');
 
+        // this is on purpose not a <form /> to prevent Enter triggering submission, to further prevent accidents
         return (
             <BaseDialog className="mx_DeactivateAccountDialog"
                 onFinished={this.props.onFinished}
@@ -173,7 +174,6 @@ export default class DeactivateAccountDialog extends React.Component {
 
                         <p>{ _t("To continue, please enter your password:") }</p>
                         <Field
-                            id="mx_DeactivateAccountDialog_password"
                             type="password"
                             label={_t('Password')}
                             onChange={this._onPasswordFieldChange}

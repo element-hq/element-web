@@ -39,6 +39,7 @@ import {makeGroupPermalink, makeUserPermalink} from "../../utils/permalinks/Perm
 import {Group} from "matrix-js-sdk";
 import {allSettled, sleep} from "../../utils/promise";
 import RightPanelStore from "../../stores/RightPanelStore";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const LONG_DESC_PLACEHOLDER = _td(
 `<h1>HTML for your community's page</h1>
@@ -423,6 +424,7 @@ export default createReactClass({
             membershipBusy: false,
             publicityBusy: false,
             inviterProfile: null,
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
         };
     },
 
@@ -435,12 +437,18 @@ export default createReactClass({
         this._initGroupStore(this.props.groupId, true);
 
         this._dispatcherRef = dis.register(this._onAction);
+        this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
     },
 
     componentWillUnmount: function() {
         this._unmounted = true;
         this._matrixClient.removeListener("Group.myMembership", this._onGroupMyMembership);
         dis.unregister(this._dispatcherRef);
+
+        // Remove RightPanelStore listener
+        if (this._rightPanelStoreToken) {
+            this._rightPanelStoreToken.remove();
+        }
     },
 
     componentWillReceiveProps: function(newProps) {
@@ -452,6 +460,12 @@ export default createReactClass({
                 this._initGroupStore(newProps.groupId);
             });
         }
+    },
+
+    _onRightPanelStoreUpdate: function() {
+        this.setState({
+            showRightPanel: RightPanelStore.getSharedInstance().isOpenForGroup,
+        });
     },
 
     _onGroupMyMembership: function(group) {
@@ -481,7 +495,7 @@ export default createReactClass({
                         group_id: groupId,
                     },
                 });
-                dis.dispatch({action: 'require_registration'});
+                dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${groupId}`}});
                 willDoOnboarding = true;
             }
             if (stateKey === GroupStore.STATE_KEY.Summary) {
@@ -554,10 +568,6 @@ export default createReactClass({
                         GROUP_JOINPOLICY_INVITE,
             },
         });
-        dis.dispatch({
-            action: 'panel_disable',
-            sideDisabled: true,
-        });
     },
 
     _onShareClick: function() {
@@ -579,10 +589,6 @@ export default createReactClass({
                     editing: false,
                     profileForm: null,
                 });
-                break;
-            case 'after_right_panel_phase_change':
-                // We don't keep state on the right panel, so just re-render to update
-                this.forceUpdate();
                 break;
             default:
                 break;
@@ -726,7 +732,7 @@ export default createReactClass({
 
     _onJoinClick: async function() {
         if (this._matrixClient.isGuest()) {
-            dis.dispatch({action: 'require_registration'});
+            dis.dispatch({action: 'require_registration', screen_after: {screen: `group/${this.props.groupId}`}});
             return;
         }
 
@@ -821,10 +827,10 @@ export default createReactClass({
                 {_t(
                     "Want more than a community? <a>Get your own server</a>", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </div>;
@@ -1173,7 +1179,6 @@ export default createReactClass({
     render: function() {
         const GroupAvatar = sdk.getComponent("avatars.GroupAvatar");
         const Spinner = sdk.getComponent("elements.Spinner");
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         if (this.state.summaryLoading && this.state.error === null || this.state.saving) {
             return <Spinner />;
@@ -1299,9 +1304,7 @@ export default createReactClass({
                 );
             }
 
-            const rightPanel = RightPanelStore.getSharedInstance().isOpenForGroup
-                ? <RightPanel groupId={this.props.groupId} />
-                : undefined;
+            const rightPanel = this.state.showRightPanel ? <RightPanel groupId={this.props.groupId} /> : undefined;
 
             const headerClasses = {
                 "mx_GroupView_header": true,
@@ -1332,10 +1335,10 @@ export default createReactClass({
                         <GroupHeaderButtons />
                     </div>
                     <MainSplit panel={rightPanel}>
-                        <GeminiScrollbarWrapper className="mx_GroupView_body">
+                        <AutoHideScrollbar className="mx_GroupView_body">
                             { this._getMembershipSection() }
                             { this._getGroupSection() }
-                        </GeminiScrollbarWrapper>
+                        </AutoHideScrollbar>
                     </MainSplit>
                 </main>
             );

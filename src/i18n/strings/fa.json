@@ -52,7 +52,6 @@
     "Noisy": "پرسروصدا",
     "Collecting app version information": "درحال جمع‌آوری اطلاعات نسخه‌ی برنامه",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "آیا مطمئنید که می‌خواهید نام مستعار گپ %(alias)s را پاک و  %(name)s را از فهرست حذف کنید؟",
-    "This will allow you to return to your account after signing out, and sign in on other devices.": "این به شما اجازه خواهد داد که پس از خروج به اکانت خود بازگردید و از سایر دستگاه‌ها وارد شوید.",
     "Cancel": "لغو",
     "Enable notifications for this account": "آگاه سازی با رایانامه را برای این اکانت فعال کن",
     "Messages containing <span>keywords</span>": "پیا‌م‌های دارای <span> این کلیدواژه‌ها </span>",

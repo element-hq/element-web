@@ -51,8 +51,8 @@ limitations under the License.
         &.mx_Toast_hasIcon {
             &::after {
                 content: "";
-                width: 20px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
                 grid-column: 1;
                 grid-row: 1;
                 mask-size: 100%;
@@ -62,6 +62,10 @@ limitations under the License.
             &.mx_Toast_icon_verification::after {
                 mask-image: url("$(res)/img/e2e/normal.svg");
                 background-color: $primary-fg-color;
+            }
+
+            &.mx_Toast_icon_verification_warning::after {
+                background-image: url("$(res)/img/e2e/warning.svg");
             }
 
             h2, .mx_Toast_body {
@@ -93,6 +97,10 @@ limitations under the License.
             text-overflow: ellipsis;
             margin: 4px 0 11px 0;
             font-size: 12px;
+        }
+
+        .mx_Toast_deviceID {
+            font-size: 10px;
         }
     }
 }

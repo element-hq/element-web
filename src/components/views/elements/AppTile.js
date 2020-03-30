@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import url from 'url';
-import qs from 'querystring';
+import qs from 'qs';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -419,6 +419,12 @@ export default class AppTile extends React.Component {
             if (this.props.onCapabilityRequest) {
                 this.props.onCapabilityRequest(requestedCapabilities);
             }
+
+            // We only tell Jitsi widgets that we're ready because they're realistically the only ones
+            // using this custom extension to the widget API.
+            if (this.props.type === 'jitsi') {
+                widgetMessaging.flagReadyToContinue();
+            }
         }).catch((err) => {
             console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
         });
@@ -520,7 +526,13 @@ export default class AppTile extends React.Component {
             parsedWidgetUrl.query.react_perf = true;
         }
         let safeWidgetUrl = '';
-        if (ALLOWED_APP_URL_SCHEMES.indexOf(parsedWidgetUrl.protocol) !== -1) {
+        if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol) || (
+            // Check if the widget URL is a Jitsi widget in Electron
+            parsedWidgetUrl.protocol === 'vector:'
+            && parsedWidgetUrl.host === 'vector'
+            && parsedWidgetUrl.pathname === '/webapp/jitsi.html'
+            && this.props.type === 'jitsi'
+        )) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
         return safeWidgetUrl;
@@ -552,7 +564,7 @@ export default class AppTile extends React.Component {
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getSafeUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
-            { target: '_blank', href: this._getSafeUrl(), rel: 'noopener'}).click();
+            { target: '_blank', href: this._getSafeUrl(), rel: 'noreferrer noopener'}).click();
     }
 
     _onReloadWidgetClick() {

@@ -193,7 +193,6 @@ export default class PasswordLogin extends React.Component {
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_email"
                     name="username" // make it a little easier for browser's remember-password
                     key="email_input"
                     type="text"
@@ -202,13 +201,13 @@ export default class PasswordLogin extends React.Component {
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_username"
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
@@ -216,6 +215,7 @@ export default class PasswordLogin extends React.Component {
                     value={this.state.username}
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
@@ -231,7 +231,6 @@ export default class PasswordLogin extends React.Component {
 
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_phoneNumber"
                     name="phoneNumber"
                     key="phone_input"
                     type="text"
@@ -240,6 +239,7 @@ export default class PasswordLogin extends React.Component {
                     prefix={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
                     onBlur={this.onPhoneNumberBlur}
+                    disabled={this.props.disableSubmit}
                     autoFocus
                 />;
             }
@@ -287,10 +287,10 @@ export default class PasswordLogin extends React.Component {
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Field
-                        id="mx_PasswordLogin_type"
                         element="select"
                         value={this.state.loginType}
                         onChange={this.onLoginTypeChange}
+                        disabled={this.props.disableSubmit}
                     >
                         <option
                             key={PasswordLogin.LOGIN_FIELD_MXID}
@@ -324,12 +324,12 @@ export default class PasswordLogin extends React.Component {
                     {loginField}
                     <Field
                         className={pwFieldClass}
-                        id="mx_PasswordLogin_password"
                         type="password"
                         name="password"
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
+                        disabled={this.props.disableSubmit}
                     />
                     {forgotPasswordJsx}
                     <input className="mx_Login_submit"

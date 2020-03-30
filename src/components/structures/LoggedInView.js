@@ -39,6 +39,7 @@ import RoomListActions from '../../actions/RoomListActions';
 import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, CollapseDistributor} from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -337,13 +338,13 @@ const LoggedInView = createReactClass({
 
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
-        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey ||
-            ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
+        const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
+        const isModifier = ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
 
         switch (ev.key) {
             case Key.PAGE_UP:
             case Key.PAGE_DOWN:
-                if (!hasModifier) {
+                if (!hasModifier && !isModifier) {
                     this._onScrollKeyPressed(ev);
                     handled = true;
                 }
@@ -365,8 +366,6 @@ const LoggedInView = createReactClass({
                 }
                 break;
             case Key.BACKTICK:
-                if (ev.key !== "`") break;
-
                 // Ideally this would be CTRL+P for "Profile", but that's
                 // taken by the print dialog. CTRL+I for "Information"
                 // was previously chosen but conflicted with italics in
@@ -379,12 +378,43 @@ const LoggedInView = createReactClass({
                     handled = true;
                 }
                 break;
+
+            case Key.SLASH:
+                if (ctrlCmdOnly) {
+                    KeyboardShortcuts.toggleDialog();
+                    handled = true;
+                }
+                break;
+
+            case Key.ARROW_UP:
+            case Key.ARROW_DOWN:
+                if (ev.altKey && !ev.ctrlKey && !ev.metaKey) {
+                    dis.dispatch({
+                        action: 'view_room_delta',
+                        delta: ev.key === Key.ARROW_UP ? -1 : 1,
+                        unread: ev.shiftKey,
+                    });
+                    handled = true;
+                }
+                break;
+
+            case Key.PERIOD:
+                if (ctrlCmdOnly && (this.props.page_type === "room_view" || this.props.page_type === "group_view")) {
+                    dis.dispatch({
+                        action: 'toggle_right_panel',
+                        type: this.props.page_type === "room_view" ? "room" : "group",
+                    });
+                    handled = true;
+                }
         }
 
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();
-        } else if (!hasModifier) {
+        } else if (!isModifier && !ev.altKey && !ev.ctrlKey && !ev.metaKey) {
+            // The above condition is crafted to _allow_ characters with Shift
+            // already pressed (but not the Shift key down itself).
+
             const isClickShortcut = ev.target !== document.body &&
                 (ev.key === Key.SPACE || ev.key === Key.ENTER);
 
@@ -585,7 +615,8 @@ const LoggedInView = createReactClass({
                 limitType={usageLimitEvent.getContent().limit_type}
             />;
         } else if (this.props.showCookieBar &&
-            this.props.config.piwik
+            this.props.config.piwik &&
+            navigator.doNotTrack !== "1"
         ) {
             const policyUrl = this.props.config.piwik.policyUrl || null;
             topBar = <CookieBar policyUrl={policyUrl} />;

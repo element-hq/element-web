@@ -62,10 +62,10 @@ export default class DevicesPanel extends React.Component {
                 let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
-                    errtxt = _t("Your homeserver does not support device management.");
+                    errtxt = _t("Your homeserver does not support session management.");
                 } else {
-                    console.error("Error loading devices:", error);
-                    errtxt = _t("Unable to load device list");
+                    console.error("Error loading sessions:", error);
+                    errtxt = _t("Unable to load session list");
                 }
                 this.setState({deviceLoadError: errtxt});
             },
@@ -130,7 +130,7 @@ export default class DevicesPanel extends React.Component {
                 makeRequest: this._makeDeleteRequest.bind(this),
             });
         }).catch((e) => {
-            console.error("Error deleting devices", e);
+            console.error("Error deleting sessions", e);
             if (this._unmounted) { return; }
         }).finally(() => {
             this.setState({
@@ -188,7 +188,7 @@ export default class DevicesPanel extends React.Component {
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
             <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
-               { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
+               { _t("Delete %(count)s sessions", {count: this.state.selectedDevices.length}) }
             </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");

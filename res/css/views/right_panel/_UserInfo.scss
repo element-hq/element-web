@@ -23,15 +23,23 @@ limitations under the License.
     font-size: 12px;
 
     .mx_UserInfo_cancel {
-        height: 16px;
-        width: 16px;
-        padding: 10px 0 10px 10px;
         cursor: pointer;
-        mask-image: url('$(res)/img/minimise.svg');
-        mask-repeat: no-repeat;
-        mask-position: 16px center;
-        background-color: $rightpanel-button-color;
         position: absolute;
+        top: 0;
+        border-radius: 4px;
+        background-color: $dark-panel-bg-color;
+        margin: 9px;
+        z-index: 1; // render on top of the right panel
+
+        div {
+            height: 16px;
+            width: 16px;
+            padding: 4px;
+            mask-image: url('$(res)/img/minimise.svg');
+            mask-repeat: no-repeat;
+            mask-position: 7px center;
+            background-color: $rightpanel-button-color;
+        }
     }
 
     h2 {
@@ -41,12 +49,17 @@ limitations under the License.
     }
 
     .mx_UserInfo_container {
-        padding: 0 16px 16px 16px;
+        padding: 8px 16px;
+    }
+
+    .mx_UserInfo_separator {
         border-bottom: 1px solid lightgray;
     }
 
     .mx_UserInfo_memberDetailsContainer {
+        padding-top: 0;
         padding-bottom: 0;
+        margin-bottom: 8px;
     }
 
     .mx_RoomTile_nameContainer {
@@ -68,6 +81,7 @@ limitations under the License.
     .mx_UserInfo_avatar > div {
         max-width: 30vh;
         margin: 0 auto;
+        transition: 0.5s;
     }
 
     .mx_UserInfo_avatar > div > div {
@@ -95,8 +109,9 @@ limitations under the License.
         justify-content: center;
 
         // override the calculated sizes so that the letter isn't HUGE
-        font-size: 26px !important;
+        font-size: 56px !important;
         width: 100% !important;
+        transition: font-size 0.5s;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
@@ -122,11 +137,18 @@ limitations under the License.
             font-size: 18px;
             line-height: 25px;
             flex: 1;
-            overflow-x: auto;
-            max-height: 50px;
-            display: flex;
             justify-content: center;
             align-items: center;
+
+            // limit to 2 lines, show an ellipsis if it overflows
+            // this looks webkit specific but is supported by Firefox 68+
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+
+            overflow: hidden;
+            word-break: break-all;
+            text-overflow: ellipsis;
 
             .mx_E2EIcon {
                 margin: 5px;
@@ -196,10 +218,9 @@ limitations under the License.
         padding-bottom: 16px;
     }
 
-    .mx_UserInfo_scrollContainer .mx_UserInfo_container {
+    .mx_UserInfo_container:not(.mx_UserInfo_separator) {
         padding-top: 16px;
         padding-bottom: 0;
-        border-bottom: none;
 
         > :not(h3) {
             margin-left: 8px;
@@ -242,17 +263,25 @@ limitations under the License.
         .mx_UserInfo_expand {
             display: flex;
             margin-top: 11px;
-            color: $accent-color;
         }
     }
 
-    .mx_UserInfo_verify {
+    .mx_UserInfo_wideButton {
         display: block;
-        background-color: $accent-color;
-        color: $accent-fg-color;
-        border-radius: 4px;
-        padding: 7px 1.5em;
-        text-align: center;
         margin: 16px 0;
+    }
+    button.mx_UserInfo_wideButton {
+        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
+    }
+}
+
+.mx_UserInfo.mx_UserInfo_smallAvatar {
+    .mx_UserInfo_avatar > div {
+        max-width: 72px;
+        margin: 0 auto;
+    }
+
+    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
+        font-size: 40px !important; // override the other override because here the avatar is smaller
     }
 }

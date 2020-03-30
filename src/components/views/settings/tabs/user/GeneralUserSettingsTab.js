@@ -61,6 +61,8 @@ export default class GeneralUserSettingsTab extends React.Component {
             emails: [],
             msisdns: [],
             ...this._calculateThemeState(),
+            customThemeUrl: "",
+            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -70,7 +72,16 @@ export default class GeneralUserSettingsTab extends React.Component {
         const cli = MatrixClientPeg.get();
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
-        this.setState({serverSupportsSeparateAddAndBind});
+
+        const capabilities = await cli.getCapabilities(); // this is cached
+        const changePasswordCap = capabilities['m.change_password'];
+
+        // You can change your password so long as the capability isn't explicitly disabled. The implicit
+        // behaviour is you can change your password when the capability is missing or has not-false as
+        // the enabled flag value.
+        const canChangePassword = !changePasswordCap || changePasswordCap['enabled'] !== false;
+
+        this.setState({serverSupportsSeparateAddAndBind, canChangePassword});
 
         this._getThreepidState();
     }
@@ -160,8 +171,8 @@ export default class GeneralUserSettingsTab extends React.Component {
         // for free. So we might as well use that for our own purposes.
         const idServerUrl = MatrixClientPeg.get().getIdentityServerUrl();
         const authClient = new IdentityAuthClient();
-        const idAccessToken = await authClient.getAccessToken({ check: false });
         try {
+            const idAccessToken = await authClient.getAccessToken({ check: false });
             await startTermsFlow([new Service(
                 SERVICE_TYPES.IS,
                 idServerUrl,
@@ -252,7 +263,7 @@ export default class GeneralUserSettingsTab extends React.Component {
             title: _t("Success"),
             description: _t(
                 "Your password was successfully changed. You will not receive " +
-                "push notifications on other devices until you log back in to them",
+                "push notifications on other sessions until you log back in to them",
             ) + ".",
         });
     };
@@ -263,6 +274,41 @@ export default class GeneralUserSettingsTab extends React.Component {
                 if (success) this.props.closeSettingsFn();
             },
         });
+    };
+
+    _onAddCustomTheme = async () => {
+        let currentThemes = SettingsStore.getValue("custom_themes");
+        if (!currentThemes) currentThemes = [];
+        currentThemes = currentThemes.map(c => c); // cheap clone
+
+        if (this._themeTimer) {
+            clearTimeout(this._themeTimer);
+        }
+
+        try {
+            const r = await fetch(this.state.customThemeUrl);
+            const themeInfo = await r.json();
+            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
+                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
+                return;
+            }
+            currentThemes.push(themeInfo);
+        } catch (e) {
+            console.error(e);
+            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            return; // Don't continue on error
+        }
+
+        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
+        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+
+        this._themeTimer = setTimeout(() => {
+            this.setState({customThemeMessage: {text: "", isError: false}});
+        }, 3000);
+    };
+
+    _onCustomThemeChange = (e) => {
+        this.setState({customThemeUrl: e.target.value});
     };
 
     _renderProfileSection() {
@@ -280,7 +326,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
         const Spinner = sdk.getComponent("views.elements.Spinner");
 
-        const passwordChangeForm = (
+        let passwordChangeForm = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
                 rowClassName=""
@@ -314,11 +360,18 @@ export default class GeneralUserSettingsTab extends React.Component {
             threepidSection = <Spinner />;
         }
 
+        let passwordChangeText = _t("Set a new account password...");
+        if (!this.state.canChangePassword) {
+            // Just don't show anything if you can't do anything.
+            passwordChangeText = null;
+            passwordChangeForm = null;
+        }
+
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_accountSection">
                 <span className="mx_SettingsTab_subheading">{_t("Account")}</span>
                 <p className="mx_SettingsTab_subsectionText">
-                    {_t("Set a new account password...")}
+                    {passwordChangeText}
                 </p>
                 {passwordChangeForm}
                 {threepidSection}
@@ -352,18 +405,57 @@ export default class GeneralUserSettingsTab extends React.Component {
                 />
             </div>;
         }
+
+        let customThemeForm;
+        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+            let messageElement = null;
+            if (this.state.customThemeMessage.text) {
+                if (this.state.customThemeMessage.isError) {
+                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                } else {
+                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                }
+            }
+            customThemeForm = (
+                <div className='mx_SettingsTab_section'>
+                    <form onSubmit={this._onAddCustomTheme}>
+                        <Field
+                            label={_t("Custom theme URL")}
+                            type='text'
+                            autoComplete="off"
+                            onChange={this._onCustomThemeChange}
+                            value={this.state.customThemeUrl}
+                        />
+                        <AccessibleButton
+                            onClick={this._onAddCustomTheme}
+                            type="submit" kind="primary_sm"
+                            disabled={!this.state.customThemeUrl.trim()}
+                        >{_t("Add theme")}</AccessibleButton>
+                        {messageElement}
+                    </form>
+                </div>
+            );
+        }
+
+        const themes = Object.entries(enumerateThemes())
+            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
+        const customThemes = themes.filter(p => !builtInThemes.includes(p))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <Field id="theme" label={_t("Theme")} element="select"
+                <Field label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}
                        disabled={this.state.useSystemTheme}
                 >
-                    {Object.entries(enumerateThemes()).map(([theme, text]) => {
-                        return <option key={theme} value={theme}>{text}</option>;
+                    {orderedThemes.map(theme => {
+                        return <option key={theme.id} value={theme.id}>{theme.name}</option>;
                     })}
                 </Field>
+                {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
         );

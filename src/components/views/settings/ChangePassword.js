@@ -113,13 +113,13 @@ export default createReactClass({
             description:
                 <div>
                     { _t(
-                        'Changing password will currently reset any end-to-end encryption keys on all devices, ' +
+                        'Changing password will currently reset any end-to-end encryption keys on all sessions, ' +
                         'making encrypted chat history unreadable, unless you first export your room keys ' +
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',
                     ) }
                     {' '}
-                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noopener">
+                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noreferrer noopener">
                         https://github.com/vector-im/riot-web/issues/2671
                     </a>
                 </div>,
@@ -235,7 +235,7 @@ export default createReactClass({
         if (!this.state.cachedPassword) {
             currentPassword = (
                 <div className={rowClassName}>
-                    <Field id="mx_ChangePassword_oldPassword"
+                    <Field
                         type="password"
                         label={_t('Current password')}
                         value={this.state.oldPassword}
@@ -253,20 +253,22 @@ export default createReactClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPassword"
+                            <Field
                                 type="password"
                                 label={passwordLabel}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
+                                autoComplete="new-password"
                             />
                         </div>
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPasswordConfirm"
+                            <Field
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
                                 onChange={this.onChangeNewPasswordConfirm}
+                                autoComplete="new-password"
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>

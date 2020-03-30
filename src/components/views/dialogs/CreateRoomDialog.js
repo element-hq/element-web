@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -44,13 +45,13 @@ export default createReactClass({
     },
 
     _roomCreateOptions() {
-        const createOpts = {};
+        const opts = {};
+        const createOpts = opts.createOpts = {};
         createOpts.name = this.state.name;
         if (this.state.isPublic) {
             createOpts.visibility = "public";
             createOpts.preset = "public_chat";
-            // to prevent createRoom from enabling guest access
-            createOpts['initial_state'] = [];
+            opts.guestAccess = false;
             const {alias} = this.state;
             const localPart = alias.substr(1, alias.indexOf(":") - 1);
             createOpts['room_alias_name'] = localPart;
@@ -61,7 +62,7 @@ export default createReactClass({
         if (this.state.noFederate) {
             createOpts.creation_content = {'m.federate': false};
         }
-        return createOpts;
+        return opts;
     },
 
     componentDidMount() {
@@ -173,7 +174,7 @@ export default createReactClass({
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
-                    <RoomAliasField id="alias" ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
+                    <RoomAliasField ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
                 </div>
             );
         } else {
@@ -187,8 +188,8 @@ export default createReactClass({
             >
                 <form onSubmit={this.onOk} onKeyDown={this._onKeyDown}>
                     <div className="mx_Dialog_content">
-                        <Field id="name" ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
-                        <Field id="topic" label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
+                        <Field ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
+                        <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
                         <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
                         { privateLabel }
                         { publicLabel }

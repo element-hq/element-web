@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017-2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as Matrix from "matrix-js-sdk";
+import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -52,6 +53,7 @@ import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -62,7 +64,8 @@ import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
-import KeyVerificationStateObserver from '../../utils/KeyVerificationStateObserver';
+import ToastStore from "../../stores/ToastStore";
+import * as StorageManager from "../../utils/StorageManager";
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -79,25 +82,24 @@ export const VIEWS = {
     // we are showing the registration view
     REGISTER: 3,
 
-    // completeing the registration flow
+    // completing the registration flow
     POST_REGISTRATION: 4,
 
     // showing the 'forgot password' view
     FORGOT_PASSWORD: 5,
 
-    // we have valid matrix credentials (either via an explicit login, via the
-    // initial re-animation/guest registration, or via a registration), and are
-    // now setting up a matrixclient to talk to it. This isn't an instant
-    // process because we need to clear out indexeddb. While it is going on we
-    // show a big spinner.
-    LOGGING_IN: 6,
+    // showing flow to trust this new device with cross-signing
+    COMPLETE_SECURITY: 6,
+
+    // flow to setup SSSS / cross-signing on this account
+    E2E_SETUP: 7,
 
     // we are logged in with an active matrix client.
-    LOGGED_IN: 7,
+    LOGGED_IN: 8,
 
     // We are logged out (invalid token) but have our local state again. The user
     // should log back in to rehydrate the client.
-    SOFT_LOGOUT: 8,
+    SOFT_LOGOUT: 9,
 };
 
 // Actions that are redirected through the onboarding process prior to being
@@ -256,6 +258,9 @@ export default createReactClass({
             // logout page.
             Lifecycle.loadSession({});
         }
+
+        this._accountPassword = null;
+        this._accountPasswordTimer = null;
     },
 
     componentDidMount: function() {
@@ -352,6 +357,8 @@ export default createReactClass({
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
+
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
     },
 
     componentWillUpdate: function(props, state) {
@@ -501,6 +508,8 @@ export default createReactClass({
                     view: VIEWS.LOGIN,
                 });
                 this.notifyNewScreen('login');
+                ThemeController.isLogin = true;
+                this._themeWatcher.recheck();
                 break;
             case 'start_post_registration':
                 this.setState({
@@ -550,13 +559,19 @@ export default createReactClass({
             case 'view_user_info':
                 this._viewUser(payload.userId, payload.subAction);
                 break;
-            case 'view_room':
+            case 'view_room': {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                this._viewRoom(payload);
+                const promise = this._viewRoom(payload);
+                if (payload.deferred_action) {
+                    promise.then(() => {
+                        dis.dispatch(payload.deferred_action);
+                    });
+                }
                 break;
+            }
             case 'view_prev_room':
                 this._viewNextRoom(-1);
                 break;
@@ -585,9 +600,8 @@ export default createReactClass({
             break;
             case 'view_room_directory': {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
-                    config: this.props.config,
-                }, 'mx_RoomDirectory_dialogWrapper');
+                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
+                    'mx_RoomDirectory_dialogWrapper', false, true);
 
                 // View the welcome or home page if we need something to look at
                 this._viewSomethingBehindModal();
@@ -643,6 +657,7 @@ export default createReactClass({
                     collapseLhs: true,
                 });
                 break;
+            case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
@@ -656,16 +671,14 @@ export default createReactClass({
                 });
                 break;
             }
-            case 'on_logging_in':
-                // We are now logging in, so set the state to reflect that
-                // NB. This does not touch 'ready' since if our dispatches
-                // are delayed, the sync could already have completed
-                this.setStateForNewView({
-                    view: VIEWS.LOGGING_IN,
-                });
-                break;
             case 'on_logged_in':
-                if (!Lifecycle.isSoftLogout()) {
+                if (
+                    !Lifecycle.isSoftLogout() &&
+                    this.state.view !== VIEWS.LOGIN &&
+                    this.state.view !== VIEWS.REGISTER &&
+                    this.state.view !== VIEWS.COMPLETE_SECURITY &&
+                    this.state.view !== VIEWS.E2E_SETUP
+                ) {
                     this._onLoggedIn();
                 }
                 break;
@@ -757,6 +770,8 @@ export default createReactClass({
         }
 
         this.setStateForNewView(newState);
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
         this.notifyNewScreen('register');
     },
 
@@ -853,7 +868,7 @@ export default createReactClass({
             waitFor = this.firstSyncPromise.promise;
         }
 
-        waitFor.then(() => {
+        return waitFor.then(() => {
             let presentedId = roomInfo.room_alias || roomInfo.room_id;
             const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
             if (room) {
@@ -876,7 +891,7 @@ export default createReactClass({
                 presentedId += "/" + roomInfo.event_id;
             }
             newState.ready = true;
-            this.setState(newState, ()=>{
+            this.setState(newState, () => {
                 this.notifyNewScreen('room/' + presentedId);
             });
         });
@@ -907,6 +922,8 @@ export default createReactClass({
             view: VIEWS.WELCOME,
         });
         this.notifyNewScreen('welcome');
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     _viewHome: function() {
@@ -916,6 +933,8 @@ export default createReactClass({
         });
         this._setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
+        ThemeController.isLogin = false;
+        this._themeWatcher.recheck();
     },
 
     _viewUser: function(userId, subAction) {
@@ -968,9 +987,9 @@ export default createReactClass({
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
 
-        const [shouldCreate, createOpts] = await modal.finished;
+        const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
-            createRoom({createOpts});
+            createRoom(opts);
         }
     },
 
@@ -995,6 +1014,10 @@ export default createReactClass({
                 // needs to be reset so that they can revisit /user/.. // (and trigger
                 // `_chatCreateOrReuse` again)
                 go_welcome_on_cancel: true,
+                screen_after: {
+                    screen: `user/${this.props.config.welcomeUserId}`,
+                    params: { action: 'chat' },
+                },
             });
             return;
         }
@@ -1162,14 +1185,23 @@ export default createReactClass({
      * Called when a new logged in session has started
      */
     _onLoggedIn: async function() {
+        ThemeController.isLogin = false;
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
-        if (MatrixClientPeg.currentUserIsJustRegistered()) {
+        // If a specific screen is set to be shown after login, show that above
+        // all else, as it probably means the user clicked on something already.
+        if (this._screenAfterLogin && this._screenAfterLogin.screen) {
+            this.showScreen(
+                this._screenAfterLogin.screen,
+                this._screenAfterLogin.params,
+            );
+            this._screenAfterLogin = null;
+        } else if (MatrixClientPeg.currentUserIsJustRegistered()) {
             MatrixClientPeg.setJustRegisteredUserId(null);
 
             if (this.props.config.welcomeUserId && getCurrentLanguage().startsWith("en")) {
                 const welcomeUserRoom = await this._startWelcomeUserChat();
                 if (welcomeUserRoom === null) {
-                    // We didn't rediret to the welcome user room, so show
+                    // We didn't redirect to the welcome user room, so show
                     // the homepage.
                     dis.dispatch({action: 'view_home_page'});
                 }
@@ -1181,6 +1213,8 @@ export default createReactClass({
         } else {
             this._showScreenAfterLogin();
         }
+
+        StorageManager.tryPersistStorage();
     },
 
     _showScreenAfterLogin: function() {
@@ -1228,6 +1262,8 @@ export default createReactClass({
         });
         this.subTitleStatus = '';
         this._setPageSubtitle();
+        ThemeController.isLogin = true;
+        this._themeWatcher.recheck();
     },
 
     /**
@@ -1357,7 +1393,8 @@ export default createReactClass({
                 cancelButton: _t('Dismiss'),
                 onFinished: (confirmed) => {
                     if (confirmed) {
-                        window.open(consentUri, '_blank');
+                        const wnd = window.open(consentUri, '_blank');
+                        wnd.opener = null;
                     }
                 },
             }, null, true);
@@ -1389,6 +1426,8 @@ export default createReactClass({
         cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e, err) => dft.eventDecrypted(e, err));
 
+        // TODO: We can remove this once cross-signing is the only way.
+        // https://github.com/vector-im/riot-web/issues/11908
         const krh = new KeyRequestHandler(cli);
         cli.on("crypto.roomKeyRequest", (req) => {
             krh.handleKeyRequest(req);
@@ -1456,35 +1495,40 @@ export default createReactClass({
             }
         });
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            cli.on("crypto.verification.request", request => {
-                let requestObserver;
-                if (request.event.getRoomId()) {
-                    requestObserver = new KeyVerificationStateObserver(
-                        request.event, MatrixClientPeg.get());
-                }
+        cli.on("crypto.keySignatureUploadFailure", (failures, source, continuation) => {
+            const KeySignatureUploadFailedDialog =
+                sdk.getComponent('views.dialogs.KeySignatureUploadFailedDialog');
+            Modal.createTrackedDialog(
+                'Failed to upload key signatures',
+                'Failed to upload key signatures',
+                KeySignatureUploadFailedDialog,
+                { failures, source, continuation });
+        });
 
-                if (!requestObserver || requestObserver.pending) {
-                    dis.dispatch({
-                        action: "show_toast",
-                        toast: {
-                            key: request.event.getId(),
-                            title: _t("Verification Request"),
-                            icon: "verification",
-                            props: {request, requestObserver},
-                            component: sdk.getComponent("toasts.VerificationRequestToast"),
-                        },
-                    });
-                }
-            });
-        } else {
-            cli.on("crypto.verification.start", (verifier) => {
+        cli.on("crypto.verification.request", request => {
+            const isFlagOn = SettingsStore.isFeatureEnabled("feature_cross_signing");
+
+            if (!isFlagOn && !request.channel.deviceId) {
+                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
+                return;
+            }
+
+            if (request.verifier) {
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-                    verifier,
+                    verifier: request.verifier,
                 }, null, /* priority = */ false, /* static = */ true);
-            });
-        }
+            } else if (request.pending) {
+                ToastStore.sharedInstance().addOrReplaceToast({
+                    key: 'verifreq_' + request.channel.transactionId,
+                    title: _t("Verification Request"),
+                    icon: "verification",
+                    props: {request},
+                    component: sdk.getComponent("toasts.VerificationRequestToast"),
+                    priority: ToastStore.PRIORITY_REALTIME,
+                });
+            }
+        });
         // Fire the tinter right on startup to ensure the default theme is applied
         // A later sync can/will correct the tint to be the right value for the user
         const colorScheme = SettingsStore.getValue("roomColor");
@@ -1572,6 +1616,10 @@ export default createReactClass({
         } else if (screen == 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',
+            });
+        } else if (screen === 'complete_security') {
+            dis.dispatch({
+                action: 'start_complete_security',
             });
         } else if (screen == 'post_registration') {
             dis.dispatch({
@@ -1734,6 +1782,10 @@ export default createReactClass({
         this.showScreen("forgot_password");
     },
 
+    onRegisterFlowComplete: function(credentials, password) {
+        return this.onUserCompletedLoginFlow(credentials, password);
+    },
+
     // returns a promise which resolves to the new MatrixClient
     onRegistered: function(credentials) {
         return Lifecycle.setLoggedIn(credentials);
@@ -1822,20 +1874,100 @@ export default createReactClass({
         this._loggedInView = ref;
     },
 
+    async onUserCompletedLoginFlow(credentials, password) {
+        this._accountPassword = password;
+        // self-destruct the password after 5mins
+        if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
+        this._accountPasswordTimer = setTimeout(() => {
+            this._accountPassword = null;
+            this._accountPasswordTimer = null;
+        }, 60 * 5 * 1000);
+
+        // Wait for the client to be logged in (but not started)
+        // which is enough to ask the server about account data.
+        const loggedIn = new Promise(resolve => {
+            const actionHandlerRef = dis.register(payload => {
+                if (payload.action !== "on_logged_in") {
+                    return;
+                }
+                dis.unregister(actionHandlerRef);
+                resolve();
+            });
+        });
+
+        // Create and start the client in the background
+        const setLoggedInPromise = Lifecycle.setLoggedIn(credentials);
+        await loggedIn;
+
+        const cli = MatrixClientPeg.get();
+        // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
+        // because the client hasn't been started yet.
+        if (!isCryptoAvailable()) {
+            this._onLoggedIn();
+        }
+
+        // Test for the master cross-signing key in SSSS as a quick proxy for
+        // whether cross-signing has been set up on the account.
+        let masterKeyInStorage = false;
+        try {
+            masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
+        } catch (e) {
+            if (e.errcode !== "M_NOT_FOUND") {
+                console.warn("Secret storage account data check failed", e);
+            }
+        }
+
+        if (masterKeyInStorage) {
+            // Auto-enable cross-signing for the new session when key found in
+            // secret storage.
+            SettingsStore.setFeatureEnabled("feature_cross_signing", true);
+            this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
+        } else if (
+            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
+        ) {
+            // This will only work if the feature is set to 'enable' in the config,
+            // since it's too early in the lifecycle for users to have turned the
+            // labs flag on.
+            this.setStateForNewView({ view: VIEWS.E2E_SETUP });
+        } else {
+            this._onLoggedIn();
+        }
+
+        return setLoggedInPromise;
+    },
+
+    // complete security / e2e setup has finished
+    onCompleteSecurityE2eSetupFinished() {
+        this._onLoggedIn();
+    },
+
     render: function() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
         let view;
 
-        if (
-            this.state.view === VIEWS.LOADING ||
-            this.state.view === VIEWS.LOGGING_IN
-        ) {
+        if (this.state.view === VIEWS.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
             view = (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
                 </div>
+            );
+        } else if (this.state.view === VIEWS.COMPLETE_SECURITY) {
+            const CompleteSecurity = sdk.getComponent('structures.auth.CompleteSecurity');
+            view = (
+                <CompleteSecurity
+                    onFinished={this.onCompleteSecurityE2eSetupFinished}
+                />
+            );
+        } else if (this.state.view === VIEWS.E2E_SETUP) {
+            const E2eSetup = sdk.getComponent('structures.auth.E2eSetup');
+            view = (
+                <E2eSetup
+                    onFinished={this.onCompleteSecurityE2eSetupFinished}
+                    accountPassword={this._accountPassword}
+                />
             );
         } else if (this.state.view === VIEWS.POST_REGISTRATION) {
             // needs to be before normal PageTypes as you are logged in technically
@@ -1901,9 +2033,10 @@ export default createReactClass({
                     email={this.props.startingFragmentQueryParams.email}
                     brand={this.props.config.brand}
                     makeRegistrationUrl={this._makeRegistrationUrl}
-                    onLoggedIn={this.onRegistered}
+                    onLoggedIn={this.onRegisterFlowComplete}
                     onLoginClick={this.onLoginClick}
                     onServerConfigChange={this.onServerConfigChange}
+                    defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     {...this.getServerProperties()}
                 />
             );
@@ -1921,7 +2054,7 @@ export default createReactClass({
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
-                    onLoggedIn={Lifecycle.setLoggedIn}
+                    onLoggedIn={this.onUserCompletedLoginFlow}
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}

@@ -213,7 +213,7 @@ export default createReactClass({
         }
 
         return (
-            <li className="mx_WhoIsTypingTile">
+            <li className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
                     { this._renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit) }
                 </div>

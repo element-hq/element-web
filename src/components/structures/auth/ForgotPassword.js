@@ -152,8 +152,8 @@ export default createReactClass({
                     <div>
                         { _t(
                             "Changing your password will reset any end-to-end encryption keys " +
-                            "on all of your devices, making encrypted chat history unreadable. Set up " +
-                            "Key Backup or export your room keys from another device before resetting your " +
+                            "on all of your sessions, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another session before resetting your " +
                             "password.",
                         ) }
                     </div>,
@@ -296,7 +296,6 @@ export default createReactClass({
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_email"
                         name="reset_email" // define a name so browser's password autofill gets less confused
                         type="text"
                         label={_t('Email')}
@@ -307,7 +306,6 @@ export default createReactClass({
                 </div>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_password"
                         name="reset_password"
                         type="password"
                         label={_t('Password')}
@@ -315,7 +313,6 @@ export default createReactClass({
                         onChange={this.onInputChanged.bind(this, "password")}
                     />
                     <Field
-                        id="mx_ForgotPassword_passwordConfirm"
                         name="reset_password_confirm"
                         type="password"
                         label={_t('Confirm')}
@@ -358,7 +355,7 @@ export default createReactClass({
         return <div>
             <p>{_t("Your password has been reset.")}</p>
             <p>{_t(
-                "You have been logged out of all devices and will no longer receive " +
+                "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
             )}</p>

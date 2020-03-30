@@ -218,7 +218,7 @@ export default class ShareDialog extends React.Component {
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         {
-                            socials.map((social) => <a rel="noopener"
+                            socials.map((social) => <a rel="noreferrer noopener"
                                                        target="_blank"
                                                        key={social.name}
                                                        name={social.name}

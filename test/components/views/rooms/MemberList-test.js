@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import lolex from 'lolex';
 
 import * as TestUtils from '../../../test-utils';
 
@@ -27,7 +26,6 @@ describe('MemberList', () => {
     let parentDiv = null;
     let client = null;
     let root = null;
-    let clock = null;
     let memberListRoom;
     let memberList = null;
 
@@ -39,8 +37,6 @@ describe('MemberList', () => {
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.hasLazyLoadMembersEnabled = () => false;
-
-        clock = lolex.install();
 
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
@@ -113,8 +109,6 @@ describe('MemberList', () => {
             parentDiv.remove();
             parentDiv = null;
         }
-
-        clock.uninstall();
 
         done();
     });

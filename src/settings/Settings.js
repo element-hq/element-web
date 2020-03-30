@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from 'matrix-js-sdk';
+
 import {_td} from '../languageHandler';
 import {
     AudioNotificationsEnabledController,
@@ -24,6 +26,7 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
+import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 
@@ -128,15 +131,15 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_ftue_dms": {
-        isFeature: true,
-        displayName: _td("New DM invite dialog (under development)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_presence_in_room_list": {
         isFeature: true,
         displayName: _td("Show a presence dot next to DMs in the room list"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_custom_themes": {
+        isFeature: true,
+        displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -150,10 +153,9 @@ export const SETTINGS = {
     },
     "feature_cross_signing": {
         isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-        controller: new ReloadOnChangeController(),
     },
     "feature_event_indexing": {
         isFeature: true,
@@ -166,6 +168,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
+    },
+    "feature_invite_only_padlocks": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show padlocks on invite only rooms"),
+        default: true,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -264,6 +272,11 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'dontSendTypingNotifications',
     },
+    "showTypingNotifications": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show typing notifications"),
+        default: true,
+    },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),
@@ -320,6 +333,10 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "room_directory_servers": {
+        supportedLevels: ['account'],
+        default: [],
+    },
     "integrationProvisioning": {
         supportedLevels: ['account'],
         default: true,
@@ -355,8 +372,8 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td('Never send encrypted messages to unverified devices from this device'),
-            "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),
+            "default": _td('Never send encrypted messages to unverified sessions from this session'),
+            "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
     },
@@ -429,14 +446,19 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    "RoomList.orderAlphabetically": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Order rooms by name"),
+        default: false,
+    },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        displayName: _td("Show rooms with unread notifications first"),
         default: true,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show recently visited rooms above the room list"),
+        displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
@@ -486,5 +508,32 @@ export const SETTINGS = {
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: RIGHT_PANEL_PHASES.GroupMemberList,
+    },
+    "enableEventIndexing": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Enable message search in encrypted rooms"),
+        default: true,
+    },
+    "keepSecretStoragePassphraseForSession": {
+         supportedLevels: ['device', 'config'],
+         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         default: false,
+    },
+    "crawlerSleepTime": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("How fast should messages be downloaded."),
+        default: 3000,
+    },
+    "showCallButtonsInComposer": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+    },
+    "e2ee.manuallyVerifyAllSessions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Manually verify all remote sessions"),
+        default: false,
+        controller: new PushToMatrixClientController(
+            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+        ),
     },
 };

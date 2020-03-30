@@ -62,9 +62,22 @@ export interface SearchArgs {
     room_id: ?string;
 }
 
-export interface HistoricEvent {
+export interface EventAndProfile {
     event: MatrixEvent;
     profile: MatrixProfile;
+}
+
+export interface LoadArgs {
+    roomId: string;
+    limit: number;
+    fromEvent: string;
+    direction: string;
+}
+
+export interface IndexStats {
+    size: number;
+    event_count: number;
+    room_count: number;
 }
 
 /**
@@ -92,7 +105,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve when the event index is
      * initialized.
      */
-    async initEventIndex(): Promise<> {
+    async initEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -110,10 +123,24 @@ export default class BaseEventIndexManager {
         throw new Error("Unimplemented");
     }
 
+    async deleteEvent(eventId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * Check if our event index is empty.
      */
     indexIsEmpty(): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Get statistical information of the index.
+     *
+     * @return {Promise<IndexStats>} A promise that will resolve to the index
+     * statistics.
+     */
+    async getStats(): Promise<IndexStats> {
         throw new Error("Unimplemented");
     }
 
@@ -123,15 +150,15 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the queued up events
      * were added to the index.
      */
-    async commitLiveEvents(): Promise<> {
+    async commitLiveEvents(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
     /**
      * Search the event index using the given term for matching events.
      *
-     * @param {SearchArgs} searchArgs The search configuration sets what should
-     * be searched for and what should be contained in the search result.
+     * @param {SearchArgs} searchArgs The search configuration for the search,
+     * sets the search term and determines the search result contents.
      *
      * @return {Promise<[SearchResult]>} A promise that will resolve to an array
      * of search results once the search is done.
@@ -145,7 +172,7 @@ export default class BaseEventIndexManager {
      *
      * This is used to add a batch of events to the index.
      *
-     * @param {[HistoricEvent]} events The list of events and profiles that
+     * @param {[EventAndProfile]} events The list of events and profiles that
      * should be added to the event index.
      * @param {[CrawlerCheckpoint]} checkpoint A new crawler checkpoint that
      * should be stored in the index which should be used to continue crawling
@@ -158,7 +185,7 @@ export default class BaseEventIndexManager {
      * were already added to the index, false otherwise.
      */
     async addHistoricEvents(
-        events: [HistoricEvent],
+        events: [EventAndProfile],
         checkpoint: CrawlerCheckpoint | null,
         oldCheckpoint: CrawlerCheckpoint | null,
     ): Promise<bool> {
@@ -174,7 +201,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been stored.
      */
-    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -187,7 +214,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the checkpoint has
      * been removed.
      */
-    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -201,13 +228,33 @@ export default class BaseEventIndexManager {
         throw new Error("Unimplemented");
     }
 
+    /** Load events that contain an mxc URL to a file from the index.
+     *
+     * @param  {object} args Arguments object for the method.
+     * @param  {string} args.roomId The ID of the room for which the events
+     * should be loaded.
+     * @param  {number} args.limit The maximum number of events to return.
+     * @param  {string} args.fromEvent An event id of a previous event returned
+     * by this method. Passing this means that we are going to continue loading
+     * events from this point in the history.
+     * @param  {string} args.direction The direction to which we should continue
+     * loading events from. This is used only if fromEvent is used as well.
+     *
+     * @return {Promise<[EventAndProfile]>} A promise that will resolve to an
+     * array of Matrix events that contain mxc URLs accompanied with the
+     * historic profile of the sender.
+     */
+    async loadFileEvents(args: LoadArgs): Promise<[EventAndProfile]> {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * close our event index.
      *
      * @return {Promise} A promise that will resolve once the event index has
      * been closed.
      */
-    async closeEventIndex(): Promise<> {
+    async closeEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -217,7 +264,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve once the event index has
      * been deleted.
      */
-    async deleteEventIndex(): Promise<> {
+    async deleteEventIndex(): Promise<void> {
         throw new Error("Unimplemented");
     }
 }

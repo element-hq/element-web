@@ -132,10 +132,10 @@ export default class ProfileSettings extends React.Component {
                 {_t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
-                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noopener">{sub}</a>,
+                        a: sub => <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">{sub}</a>,
                     },
                 )}
-                <a href={hostingSignupLink} target="_blank" rel="noopener">
+                <a href={hostingSignupLink} target="_blank" rel="noreferrer noopener">
                     <img src={require("../../../../res/img/external-link.svg")} width="11" height="10" alt='' />
                 </a>
             </span>;
@@ -153,7 +153,7 @@ export default class ProfileSettings extends React.Component {
                             {this.state.userId}
                             {hostingSignup}
                         </p>
-                        <Field id="profileDisplayName" label={_t("Display Name")}
+                        <Field label={_t("Display Name")}
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} />
                     </div>

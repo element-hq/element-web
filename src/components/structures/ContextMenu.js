@@ -255,7 +255,7 @@ export class ContextMenu extends React.Component {
 
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
-        } else {
+        } else if (position.top !== undefined) {
             const target = position.top;
 
             // By default, no adjustment is made
@@ -350,7 +350,7 @@ export const ContextMenuButton = ({ label, isExpanded, children, ...props }) => 
 };
 ContextMenuButton.propTypes = {
     ...AccessibleButton.propTypes,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     isExpanded: PropTypes.bool.isRequired, // whether or not the context menu is currently open
 };
 
@@ -377,7 +377,6 @@ export const MenuGroup = ({children, label, ...props}) => {
     </div>;
 };
 MenuGroup.propTypes = {
-    ...AccessibleButton.propTypes,
     label: PropTypes.string.isRequired,
     className: PropTypes.string, // optional
 };

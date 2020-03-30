@@ -1,5 +1,6 @@
 /*
 Copyright 2017, 2018 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import { _t } from '../../languageHandler';
 import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 const TagPanel = createReactClass({
     displayName: 'TagPanel',
@@ -64,8 +66,8 @@ const TagPanel = createReactClass({
         this.unmounted = true;
         this.context.removeListener("Group.myMembership", this._onGroupMyMembership);
         this.context.removeListener("sync", this._onClientSync);
-        if (this._filterStoreToken) {
-            this._filterStoreToken.remove();
+        if (this._tagOrderStoreToken) {
+            this._tagOrderStoreToken.remove();
         }
     },
 
@@ -105,7 +107,6 @@ const TagPanel = createReactClass({
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const ActionButton = sdk.getComponent('elements.ActionButton');
         const TintableSvg = sdk.getComponent('elements.TintableSvg');
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -137,9 +138,8 @@ const TagPanel = createReactClass({
                 { clearButton }
             </div>
             <div className="mx_TagPanel_divider" />
-            <GeminiScrollbarWrapper
+            <AutoHideScrollbar
                 className="mx_TagPanel_scroller"
-                autoshow={true}
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
                 // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6253
                 onMouseDown={this.onMouseDown}
@@ -165,7 +165,7 @@ const TagPanel = createReactClass({
                             </div>
                     ) }
                 </Droppable>
-            </GeminiScrollbarWrapper>
+            </AutoHideScrollbar>
         </div>;
     },
 });
