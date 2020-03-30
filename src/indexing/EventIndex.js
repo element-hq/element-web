@@ -509,7 +509,7 @@ export default class EventIndex extends EventEmitter {
                 "and fetched total", matrixEvents.length, "events of which",
                 events.length, "are being added,", redactionEvents.length,
                 "are redacted,", matrixEvents.length - events.length,
-                "are being skipped, undecryptable", undecryptableEvents.length
+                "are being skipped, undecryptable", undecryptableEvents.length,
             );
 
             try {
