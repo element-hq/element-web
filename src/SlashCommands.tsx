@@ -269,7 +269,7 @@ export const Commands = [
                 const ev = cli.getRoom(roomId).currentState.getStateEvents('m.room.member', cli.getUserId());
                 const content = {
                     ...ev ? ev.getContent() : { membership: 'join' },
-                    displaycommand: args,
+                    displayname: args,
                 };
                 return success(cli.sendStateEvent(roomId, 'm.room.member', content, cli.getUserId()));
             }
@@ -883,6 +883,24 @@ export const Commands = [
             const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
 
             Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
+            return success();
+        },
+        category: CommandCategories.advanced,
+    }),
+    new Command({
+        command: "whois",
+        description: _td("Displays information about a user"),
+        args: "<user-id>",
+        runFn: function (roomId, userId) {
+            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+                return reject(this.getUsage());
+            }
+
+            const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
+            dis.dispatch({
+                action: 'view_user',
+                member: member || {userId},
+            });
             return success();
         },
         category: CommandCategories.advanced,
