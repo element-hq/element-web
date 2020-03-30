@@ -37,7 +37,7 @@ import E2EIcon from './E2EIcon';
 import InviteOnlyIcon from './InviteOnlyIcon';
 // eslint-disable-next-line camelcase
 import rate_limited_func from '../../../ratelimitedfunc';
-import { shieldStatusForMembership } from '../../../utils/ShieldUtils';
+import { shieldStatusForRoom } from '../../../utils/ShieldUtils';
 
 export default createReactClass({
     displayName: 'RoomTile',
@@ -157,7 +157,7 @@ export default createReactClass({
 
         /* At this point, the user has encryption on and cross-signing on */
         this.setState({
-            e2eStatus: await shieldStatusForMembership(cli, this.props.room),
+            e2eStatus: await shieldStatusForRoom(cli, this.props.room),
         });
     },
 

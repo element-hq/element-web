@@ -55,7 +55,7 @@ import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { shieldStatusForMembership } from '../../utils/ShieldUtils';
+import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -820,7 +820,7 @@ export default createReactClass({
 
         /* At this point, the user has encryption on and cross-signing on */
         this.setState({
-            e2eStatus: await shieldStatusForMembership(this.context, room),
+            e2eStatus: await shieldStatusForRoom(this.context, room),
         });
     },
 
