@@ -128,6 +128,15 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
+    html: new Command({
+        name: 'html',
+        args: '<message>',
+        description: _td('Sends a message as html, without interpreting it as markdown'),
+        runFn: function(roomId, messages) {
+            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+        },
+        category: CommandCategories.messages,
+    }),
     ddg: new Command({
         name: 'ddg',
         args: '<query>',
