@@ -1785,5 +1785,7 @@
     "Keep a copy of it somewhere secure, like a password manager or even a safe.": "Bewahre ihn sicher auf, wie in einem Passwort-Manager oder einem Safe.",
     "Your recovery key": "Dein Wiederherstellungsschlüssel",
     "Copy": "In Zwischenablage kopieren",
-    "Make a copy of your recovery key": "Speichere deinen Wiederherstellungsschlüssel"
+    "Make a copy of your recovery key": "Speichere deinen Wiederherstellungsschlüssel",
+    "Unverified login. Was this you?": "Nicht verifzierte Anmeldung. Bist du es gewesen?",
+    "Sends a message as html, without interpreting it as markdown": "Verschickt eine Nachricht im html-Format, ohne sie in Markdown zu formatieren"
 }
