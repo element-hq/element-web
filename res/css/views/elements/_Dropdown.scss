@@ -29,7 +29,7 @@ limitations under the License.
     position: relative;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
-    font-size: 0.8rem;
+    font-size: $font-12px;
     user-select: none;
 }
 
@@ -53,7 +53,7 @@ limitations under the License.
 
 .mx_Dropdown_option {
     height: 35px;
-    line-height: 2.333rem;
+    line-height: $font-35px;
     padding-left: 8px;
     padding-right: 8px;
 }

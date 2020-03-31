@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+@import "./_font-sizes.scss";
+
 :root {
     font-size: 15px;
 }
@@ -29,7 +31,7 @@ html {
 
 body {
     font-family: $font-family;
-    font-size: 1rem;
+    font-size: $font-15px;
     background-color: $primary-bg-color;
     color: $primary-fg-color;
     border: 0px;
@@ -64,7 +66,7 @@ b {
 h2 {
     color: $primary-fg-color;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: $font-18px;
     margin-top: 16px;
     margin-bottom: 16px;
 }
@@ -80,7 +82,7 @@ input[type=search],
 input[type=password] {
     padding: 9px;
     font-family: $font-family;
-    font-size: 0.933rem;
+    font-size: $font-14px;
     font-weight: 600;
     min-width: 0;
 }
@@ -257,7 +259,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: $light-fg-color;
     z-index: 4012;
     font-weight: 300;
-    font-size: 1rem;
+    font-size: $font-15px;
     position: relative;
     padding: 25px 30px 30px 30px;
     max-height: 80%;
@@ -325,8 +327,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_title {
-    font-size: 1.467rem;
-    line-height: 2.400rem;
+    font-size: $font-22px;
+    line-height: $font-36px;
     color: $dialog-title-fg-color;
 }
 
@@ -354,7 +356,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_content {
     margin: 24px 0 68px;
-    font-size: 0.933rem;
+    font-size: $font-14px;
     color: $primary-fg-color;
     word-wrap: break-word;
 }
@@ -450,7 +452,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_TextInputDialog_input {
-    font-size: 1rem;
+    font-size: $font-15px;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;

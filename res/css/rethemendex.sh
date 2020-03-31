@@ -8,7 +8,7 @@ cd `dirname $0`
     # we used to have exclude /themes from the find at this point.
     # as themes are no longer a spurious subdirectory of css/, we don't
     # need it any more.
-    find . -iname _\*.scss | fgrep -v _components.scss | LC_ALL=C sort |
+    find . -iname _\*.scss | sort | fgrep -v _components.scss | LC_ALL=C sort |
         while read i; do
             echo "@import \"$i\";"
         done

@@ -17,7 +17,7 @@ limitations under the License.
 .mx_ReactionsRowButton {
     display: inline-flex;
     height: 20px;
-    line-height: 1.400rem;
+    line-height: $font-21px;
     margin-right: 6px;
     padding: 0 6px;
     border: 1px solid $reaction-row-button-border-color;

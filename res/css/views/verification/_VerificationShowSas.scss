@@ -48,14 +48,14 @@ limitations under the License.
 }
 
 .mx_VerificationShowSas_emojiSas_emoji {
-    font-size: 2.133rem;
+    font-size: $font-32px;
 }
 
 .mx_VerificationShowSas_emojiSas_label {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 0.8rem;
+    font-size: $font-12px;
 }
 
 .mx_VerificationShowSas_emojiSas_break {

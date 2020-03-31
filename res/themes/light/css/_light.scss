@@ -310,7 +310,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
     border: 0px;
     border-radius: 4px;
     font-family: $font-family;
-    font-size: 0.933rem;
+    font-size: $font-14px;
     color: $button-fg-color;
     background-color: $button-bg-color;
     width: auto;
@@ -331,7 +331,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 @define-mixin mx_DialogButton_small {
     @mixin mx_DialogButton;
-    font-size: 1rem;
+    font-size: $font-15px;
     padding: 0px 1.5em 0px 1.5em;
 }
 

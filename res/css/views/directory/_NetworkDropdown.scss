@@ -47,9 +47,9 @@ limitations under the License.
 
     .mx_NetworkDropdown_server_title {
         padding: 0 10px;
-        font-size: 1rem;
+        font-size: $font-15px;
         font-weight: 600;
-        line-height: 1.333rem;
+        line-height: $font-20px;
         margin-bottom: 4px;
 
         // remove server button
@@ -77,16 +77,16 @@ limitations under the License.
 
     .mx_NetworkDropdown_server_subtitle {
         padding: 0 10px;
-        font-size: 0.667rem;
-        line-height: 0.933rem;
+        font-size: $font-10px;
+        line-height: $font-14px;
         margin-top: -4px;
         margin-bottom: 4px;
         color: $muted-fg-color;
     }
 
     .mx_NetworkDropdown_server_network {
-        font-size: 0.8rem;
-        line-height: 1.067rem;
+        font-size: $font-12px;
+        line-height: $font-16px;
         padding: 4px 10px;
         cursor: pointer;
         position: relative;
@@ -154,7 +154,7 @@ limitations under the License.
 
     .mx_NetworkDropdown_handle_server {
         color: $muted-fg-color;
-        font-size: 0.8rem;
+        font-size: $font-12px;
     }
 }
 

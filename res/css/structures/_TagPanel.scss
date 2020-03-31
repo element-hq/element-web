@@ -139,7 +139,7 @@ limitations under the License.
     background-color: $neutral-badge-color;
     color: #ffffff;
     font-weight: 600;
-    font-size: 0.667rem;
+    font-size: $font-10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
@@ -157,7 +157,7 @@ limitations under the License.
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 0.933rem;
+    font-size: $font-14px;
     padding: 0 5px;
     background-color: $roomtile-name-color;
 }
