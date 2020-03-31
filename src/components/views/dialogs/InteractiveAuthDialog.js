@@ -94,7 +94,6 @@ export default createReactClass({
     },
 
     _onUpdateStagePhase: function(newStage, newPhase) {
-        console.log({newStage, newPhase});
         // We copy the stage and stage phase params into state for title selection in render()
         this.setState({uiaStage: newStage, uiaStagePhase: newPhase});
     },
