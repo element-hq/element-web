@@ -1444,9 +1444,11 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
         <div className="mx_UserInfo_container mx_UserInfo_separator">
             <div className="mx_UserInfo_profile">
                 <div>
-                    <h2 aria-label={displayName}>
+                    <h2 title={displayName} aria-label={displayName}>
                         { e2eIcon }
-                        { displayName }
+                        <span>
+                            { displayName }
+                        </span>
                     </h2>
                 </div>
                 <div>{ member.userId }</div>
