@@ -2304,5 +2304,7 @@
     "Verified": "Verificato",
     "Verification cancelled": "Verifica annullata",
     "Compare emoji": "Confronta emoji",
-    "Cancel replying to a message": "Annulla la risposta a un messaggio"
+    "Cancel replying to a message": "Annulla la risposta a un messaggio",
+    "Sends a message as html, without interpreting it as markdown": "Invia un messaggio come html, senza interpretarlo come markdown",
+    "Sign in with SSO": "Accedi con SSO"
 }
