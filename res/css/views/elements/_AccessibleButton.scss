@@ -48,7 +48,8 @@ limitations under the License.
     font-weight: 600;
 }
 
-.mx_AccessibleButton_kind_primary.mx_AccessibleButton_disabled {
+.mx_AccessibleButton_kind_primary.mx_AccessibleButton_disabled,
+.mx_AccessibleButton_kind_primary_outline.mx_AccessibleButton_disabled {
     opacity: 0.4;
 }
 
@@ -74,8 +75,7 @@ limitations under the License.
 }
 
 .mx_AccessibleButton_kind_danger.mx_AccessibleButton_disabled,
-mx_AccessibleButton_kind_danger_outline.mx_AccessibleButton_disabled
-{
+.mx_AccessibleButton_kind_danger_outline.mx_AccessibleButton_disabled {
     color: $button-danger-disabled-fg-color;
     background-color: $button-danger-disabled-bg-color;
 }
