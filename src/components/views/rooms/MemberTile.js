@@ -121,10 +121,10 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         const { userId } = this.props.member;
         const isMe = userId === cli.getUserId();
-        const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-        if (!userVerified) {
+        const userTrust = cli.checkUserTrust(userId);
+        if (!userTrust.isCrossSigningVerified()) {
             this.setState({
-                e2eStatus: "normal",
+                e2eStatus: userTrust.wasCrossSigningVerified() ? "warning" : "normal",
             });
             return;
         }

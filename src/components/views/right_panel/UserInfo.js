@@ -68,8 +68,10 @@ export const getE2EStatus = (cli, userId, devices) => {
         return hasUnverifiedDevice ? "warning" : "verified";
     }
     const isMe = userId === cli.getUserId();
-    const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-    if (!userVerified) return "normal";
+    const userTrust = cli.checkUserTrust(userId);
+    if (!userTrust.isCrossSigningVerified()) {
+        return userTrust.wasCrossSigningVerified() ? "warning" : "normal";
+    }
 
     const anyDeviceUnverified = devices.some(device => {
         const { deviceId } = device;
