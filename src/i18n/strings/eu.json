@@ -2293,5 +2293,8 @@
     "Verification cancelled": "Egiaztaketa ezeztatuta",
     "Compare emoji": "Konparatu emojiak",
     "Unverified login. Was this you?": "Egiaztatu gabeko saioa. Zu izan zara?",
-    "Session backup key:": "Saioaren babes-kopia gakoa:"
+    "Session backup key:": "Saioaren babes-kopia gakoa:",
+    "Sends a message as html, without interpreting it as markdown": "Bidali mezua html gisa, markdown balitz aztertu gabe",
+    "Sign in with SSO": "Hasi saioa SSO-rekin",
+    "Cancel replying to a message": "Utzi mezua erantzuteari"
 }
