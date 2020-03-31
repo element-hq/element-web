@@ -332,7 +332,7 @@ export default class SendMessageComposer extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);

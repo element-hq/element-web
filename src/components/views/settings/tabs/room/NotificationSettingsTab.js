@@ -38,7 +38,7 @@ export default class NotificationsSettingsTab extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         Notifier.getSoundForRoom(this.props.roomId).then((soundData) => {
             if (!soundData) {
                 return;

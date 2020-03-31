@@ -42,7 +42,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
-    async UNSAFE_componentWillMount(): void {
+    async UNSAFE_componentWillMount(): void { // eslint-disable-line camelcase
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);

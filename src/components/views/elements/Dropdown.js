@@ -117,7 +117,7 @@ export default class Dropdown extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         this._button = createRef();
         // Listen for all clicks on the document so we can close the
         // menu when the user clicks somewhere else
