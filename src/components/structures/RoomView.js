@@ -472,6 +472,10 @@ export default createReactClass({
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
         }
 
+        if (this.state.shouldPeek) {
+            this.context.stopPeeking();
+        }
+
         // stop tracking room changes to format permalinks
         this._stopAllPermalinkCreators();
 
