@@ -71,6 +71,16 @@ export const CommandCategories = {
 
 type RunFn = ((roomId: string, args: string, cmd: string) => {error: any} | {promise: Promise<any>});
 
+interface ICommandOpts {
+    command: string;
+    aliases?: string[];
+    args?: string;
+    description: string;
+    runFn?: RunFn;
+    category: string;
+    hideCompletionAfterSpace?: boolean;
+}
+
 class Command {
     command: string;
     aliases: string[];
@@ -80,30 +90,14 @@ class Command {
     category: string;
     hideCompletionAfterSpace: boolean;
 
-    constructor({
-        command,
-        aliases = [],
-        args = '',
-        description,
-        runFn = undefined,
-        category = CommandCategories.other,
-        hideCompletionAfterSpace = false,
-    }: {
-        command: string;
-        aliases?: string[];
-        args?: string;
-        description: string;
-        runFn?: RunFn;
-        category: string;
-        hideCompletionAfterSpace?: boolean;
-    }) {
-        this.command = command;
-        this.aliases = aliases;
-        this.args = args;
-        this.description = description;
-        this.runFn = runFn;
-        this.category = category;
-        this.hideCompletionAfterSpace = hideCompletionAfterSpace;
+    constructor(opts: ICommandOpts) {
+        this.command = opts.command;
+        this.aliases = opts.aliases || [];
+        this.args = opts.args || "";
+        this.description = opts.description;
+        this.runFn = opts.runFn;
+        this.category = opts.category || CommandCategories.other;
+        this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
     }
 
     getCommand() {
@@ -853,7 +847,6 @@ export const Commands = [
     }),
     new Command({
         command: 'discardsession',
-        aliases: ['newballsplease'],
         description: _td('Forces the current outbound group session in an encrypted room to be discarded'),
         runFn: function(roomId) {
             try {
@@ -900,7 +893,7 @@ export const Commands = [
         command: "whois",
         description: _td("Displays information about a user"),
         args: "<user-id>",
-        runFn: function (roomId, userId) {
+        runFn: function(roomId, userId) {
             if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
                 return reject(this.getUsage());
             }
