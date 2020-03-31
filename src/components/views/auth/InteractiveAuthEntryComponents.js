@@ -25,6 +25,7 @@ import classnames from 'classnames';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+import AccessibleButton from "../elements/AccessibleButton";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -59,10 +60,20 @@ import SettingsStore from "../../../settings/SettingsStore";
  *                         session to be failed and the process to go back to the start.
  * setEmailSid:            m.login.email.identity only: a function to be called with the
  *                         email sid after a token is requested.
+ * onPhaseChange:          A function which is called when the stage's phase changes. If
+ *                         the stage has no phases, call this with DEFAULT_PHASE. Takes
+ *                         one argument, the phase, and is always defined/required.
+ * continueText:           For stages which have a continue button, the text to use.
+ * continueKind:           For stages which have a continue button, the style of button to
+ *                         use. For example, 'danger' or 'primary'.
+ * onCancel                A function with no arguments which is called by the stage if the
+ *                         user knowingly cancelled/dismissed the authentication attempt.
  *
  * Each component may also provide the following functions (beyond the standard React ones):
  *    focus: set the input focus appropriately in the form.
  */
+
+export const DEFAULT_PHASE = 0;
 
 export const PasswordAuthEntry = createReactClass({
     displayName: 'PasswordAuthEntry',
@@ -78,6 +89,11 @@ export const PasswordAuthEntry = createReactClass({
         // is the auth logic currently waiting for something to
         // happen?
         busy: PropTypes.bool,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     getInitialState: function() {
@@ -175,6 +191,11 @@ export const RecaptchaAuthEntry = createReactClass({
         stageParams: PropTypes.object.isRequired,
         errorText: PropTypes.string,
         busy: PropTypes.bool,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     _onCaptchaResponse: function(response) {
@@ -236,6 +257,11 @@ export const TermsAuthEntry = createReactClass({
         errorText: PropTypes.string,
         busy: PropTypes.bool,
         showContinue: PropTypes.bool,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     componentWillMount: function() {
@@ -378,6 +404,11 @@ export const EmailIdentityAuthEntry = createReactClass({
         stageState: PropTypes.object.isRequired,
         fail: PropTypes.func.isRequired,
         setEmailSid: PropTypes.func.isRequired,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     getInitialState: function() {
@@ -420,6 +451,11 @@ export const MsisdnAuthEntry = createReactClass({
         clientSecret: PropTypes.func,
         submitAuthDict: PropTypes.func.isRequired,
         matrixClient: PropTypes.object,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     getInitialState: function() {
@@ -571,13 +607,17 @@ export class SSOAuthEntry extends React.Component {
         loginType: PropTypes.string.isRequired,
         submitAuthDict: PropTypes.func.isRequired,
         errorText: PropTypes.string,
+        onPhaseChange: PropTypes.func.isRequired,
+        continueText: PropTypes.string,
+        continueKind: PropTypes.string,
+        onCancel: PropTypes.func,
     };
 
     static LOGIN_TYPE = "m.login.sso";
     static UNSTABLE_LOGIN_TYPE = "org.matrix.login.sso";
 
-    static STAGE_PREAUTH = 1; // button to start SSO
-    static STAGE_POSTAUTH = 2; // button to confirm SSO completed
+    static PHASE_PREAUTH = 1; // button to start SSO
+    static PHASE_POSTAUTH = 2; // button to confirm SSO completed
 
     constructor(props) {
         super(props);
@@ -589,39 +629,56 @@ export class SSOAuthEntry extends React.Component {
                 this.props.loginType,
                 this.props.authSessionId,
             ),
-            stage: SSOAuthEntry.STAGE_PREAUTH,
+            phase: SSOAuthEntry.PHASE_PREAUTH,
         };
     }
 
-    onStartAuthClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+    componentDidMount(): void {
+        this.props.onPhaseChange(SSOAuthEntry.PHASE_PREAUTH);
+    }
 
+    onStartAuthClick = () => {
         // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
         // certainly will need to open the thing in a new tab to avoid loosing application
         // context.
 
-        window.open(e.target.href, '_blank');
-        this.setState({stage: SSOAuthEntry.STAGE_POSTAUTH});
+        window.open(this.state.ssoUrl, '_blank');
+        this.setState({phase: SSOAuthEntry.PHASE_POSTAUTH});
+        this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
 
-    onConfirmClick = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    onConfirmClick = () => {
         this.props.submitAuthDict({});
     };
 
     render () {
-        if (this.state.stage === SSOAuthEntry.STAGE_PREAUTH) {
-            return <a href={this.state.ssoUrl} target='_blank' rel='noopener' onClick={this.onStartAuthClick}>
-                {_t("Single Sign On")}
-            </a>;
+        let continueButton = null;
+        const cancelButton = (
+            <AccessibleButton
+                onClick={this.props.onCancel}
+                kind={this.props.continueKind ? (this.props.continueKind + '_outline') : 'primary_outline'}
+            >{_t("Cancel")}</AccessibleButton>
+        );
+        if (this.state.phase === SSOAuthEntry.PHASE_PREAUTH) {
+            continueButton = (
+                <AccessibleButton
+                    onClick={this.onStartAuthClick}
+                    kind={this.props.continueKind || 'primary'}
+                >{this.props.continueText || _t("Single Sign On")}</AccessibleButton>
+            );
         } else {
-            return <a href='' target='_blank' rel='noopener' onClick={this.onConfirmClick}>
-                {_t("Continue")}
-            </a>;
+            continueButton = (
+                <AccessibleButton
+                    onClick={this.onConfirmClick}
+                    kind={this.props.continueKind || 'primary'}
+                >{this.props.continueText || _t("Confirm")}</AccessibleButton>
+            );
         }
+
+        return <div className='mx_InteractiveAuthEntryComponents_sso_buttons'>
+            {cancelButton}
+            {continueButton}
+        </div>;
     }
 }
 
@@ -634,6 +691,11 @@ export const FallbackAuthEntry = createReactClass({
         loginType: PropTypes.string.isRequired,
         submitAuthDict: PropTypes.func.isRequired,
         errorText: PropTypes.string,
+        onPhaseChange: PropTypes.func.isRequired,
+    },
+
+    componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
     componentWillMount: function() {
