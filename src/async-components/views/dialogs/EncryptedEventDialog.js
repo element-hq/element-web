@@ -79,7 +79,7 @@ export default createReactClass({
     },
 
     onDeviceVerificationChanged: function(userId, device) {
-        if (userId == this.props.event.getSender()) {
+        if (userId === this.props.event.getSender()) {
             this.refreshDevice().then((dev) => {
                 this.setState({ device: dev });
             });

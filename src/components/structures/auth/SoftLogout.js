@@ -54,7 +54,7 @@ export default class SoftLogout extends React.Component {
 
         this.state = {
             loginView: LOGIN_VIEW.LOADING,
-            keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
+            keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
 
             busy: false,
             password: "",

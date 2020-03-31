@@ -71,7 +71,7 @@ export default createReactClass({
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     },
 
     componentWillReceiveProps(newProps) {
