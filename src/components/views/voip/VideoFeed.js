@@ -31,6 +31,7 @@ export default createReactClass({
         onResize: PropTypes.func,
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount() {
         this._vid = createRef();
     },

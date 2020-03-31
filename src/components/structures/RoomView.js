@@ -168,7 +168,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this.context.on("Room", this.onRoom);
         this.context.on("Room.timeline", this.onRoomTimeline);

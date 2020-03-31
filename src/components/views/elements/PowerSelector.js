@@ -63,6 +63,7 @@ export default createReactClass({
     },
 
     componentWillMount: function() {
+        // TODO: [REACT-WARNING] Move this to class constructor
         this._initStateFromProps(this.props);
     },
 
