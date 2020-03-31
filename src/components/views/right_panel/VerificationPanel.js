@@ -57,7 +57,7 @@ export default class VerificationPanel extends React.PureComponent {
         this._hasVerifier = false;
     }
 
-    renderQRPhase(pending) {
+    renderQRPhase() {
         const {member, request} = this.props;
         const showSAS = request.otherPartySupportsMethod(verificationMethods.SAS);
         const showQR = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
@@ -119,24 +119,16 @@ export default class VerificationPanel extends React.PureComponent {
 
         let sasBlock;
         if (showSAS) {
-            let button;
-            if (pending) {
-                button = <Spinner />;
-            } else {
-                const disabled = this.state.emojiButtonClicked;
-                button = (
-                    <AccessibleButton disabled={disabled} kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
-                        {_t("Verify by emoji")}
-                    </AccessibleButton>
-                );
-            }
+            const disabled = this.state.emojiButtonClicked;
             const sasLabel = showQR ?
                 _t("If you can't scan the code above, verify by comparing unique emoji.") :
                 _t("Verify by comparing unique emoji.");
             sasBlock = <div className="mx_UserInfo_container">
                 <h3>{_t("Verify by emoji")}</h3>
                 <p>{sasLabel}</p>
-                { button }
+                <AccessibleButton disabled={disabled} kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
+                    {_t("Verify by emoji")}
+                </AccessibleButton>
             </div>;
         }
 
@@ -150,6 +142,30 @@ export default class VerificationPanel extends React.PureComponent {
             {sasBlock}
             {noCommonMethodBlock}
         </React.Fragment>;
+    }
+
+    renderQRReciprocatePhase() {
+        const {member} = this.props;
+        const FormButton = sdk.getComponent("elements.FormButton");
+
+        let body;
+        if (this.state.reciprocateQREvent) {
+            // riot web doesn't support scanning yet, so assume here we're the client being scanned.
+            body = <React.Fragment>
+                <p>{_t("Almost there! Is %(displayName)s show the same shield?", {
+                        displayName: member.displayName || member.name || member.userId,
+                    })}</p>
+                <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
+                <p><FormButton label={_t("No")} kind="danger" onClick={this.state.reciprocateQREvent.cancel} /></p>
+                <p><FormButton label={_t("Yes")} onClick={this.state.reciprocateQREvent.confirm} /></p>
+            </React.Fragment>;
+        } else {
+            body = <p><Spinner/></p>;
+        }
+        return <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
+            <h3>{_t("Verify by scanning")}</h3>
+            { body }
+        </div>;
     }
 
     renderVerifiedPhase() {
@@ -208,7 +224,7 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     render() {
-        const {member, phase} = this.props;
+        const {member, phase, request} = this.props;
 
         const displayName = member.displayName || member.name || member.userId;
 
@@ -216,20 +232,26 @@ export default class VerificationPanel extends React.PureComponent {
             case PHASE_READY:
                 return this.renderQRPhase();
             case PHASE_STARTED:
-                if (this.state.sasEvent) {
-                    const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
-                    return <div className="mx_UserInfo_container">
-                        <h3>{_t("Compare emoji")}</h3>
-                        <VerificationShowSas
-                            displayName={displayName}
-                            sas={this.state.sasEvent.sas}
-                            onCancel={this._onSasMismatchesClick}
-                            onDone={this._onSasMatchesClick}
-                            inDialog={this.props.inDialog}
-                        />
-                    </div>;
-                } else {
-                    return this.renderQRPhase(true); // keep showing same phase but with a spinner
+                switch (request.chosenMethod) {
+                    case verificationMethods.RECIPROCATE_QR_CODE:
+                        return this.renderQRReciprocatePhase();
+                    case verificationMethods.SAS: {
+                        const VerificationShowSas = sdk.getComponent('views.verification.VerificationShowSas');
+                        const emojis = this.state.sasEvent ?
+                            <VerificationShowSas
+                                displayName={displayName}
+                                sas={this.state.sasEvent.sas}
+                                onCancel={this._onSasMismatchesClick}
+                                onDone={this._onSasMatchesClick}
+                                inDialog={this.props.inDialog}
+                            /> : <Spinner />;
+                        return <div className="mx_UserInfo_container">
+                            <h3>{_t("Compare emoji")}</h3>
+                            { emojis }
+                        </div>;
+                    }
+                    default:
+                        return null;
                 }
             case PHASE_DONE:
                 return this.renderVerifiedPhase();
@@ -258,10 +280,12 @@ export default class VerificationPanel extends React.PureComponent {
         this.state.sasEvent.mismatch();
     };
 
-    _onVerifierShowSas = (sasEvent) => {
+    _updateVerifierState = () => {
         const {request} = this.props;
-        request.verifier.off('show_sas', this._onVerifierShowSas);
-        this.setState({sasEvent});
+        const {sasEvent, reciprocateQREvent} = request;
+        request.verifier.off('show_sas', this._updateVerifierState);
+        request.verifier.off('show_reciprocate_qr', this._updateVerifierState);
+        this.setState({sasEvent, reciprocateQREvent});
     };
 
     _onRequestChange = async () => {
@@ -269,7 +293,8 @@ export default class VerificationPanel extends React.PureComponent {
         const hadVerifier = this._hasVerifier;
         this._hasVerifier = !!request.verifier;
         if (!hadVerifier && this._hasVerifier) {
-            request.verifier.on('show_sas', this._onVerifierShowSas);
+            request.verifier.on('show_sas', this._updateVerifierState);
+            request.verifier.on('show_reciprocate_qr', this._updateVerifierState);
             try {
                 // on the requester side, this is also awaited in _startSAS,
                 // but that's ok as verify should return the same promise.
@@ -284,7 +309,9 @@ export default class VerificationPanel extends React.PureComponent {
         const {request} = this.props;
         request.on("change", this._onRequestChange);
         if (request.verifier) {
-            this.setState({sasEvent: request.verifier.sasEvent});
+            const {request} = this.props;
+            const {sasEvent, reciprocateQREvent} = request;
+            this.setState({sasEvent, reciprocateQREvent});
         }
         this._onRequestChange();
     }
@@ -292,7 +319,8 @@ export default class VerificationPanel extends React.PureComponent {
     componentWillUnmount() {
         const {request} = this.props;
         if (request.verifier) {
-            request.verifier.off('show_sas', this._onVerifierShowSas);
+            request.verifier.off('show_sas', this._updateVerifierState);
+            request.verifier.off('show_reciprocate_qr', this._updateVerifierState);
         }
         request.off("change", this._onRequestChange);
     }
