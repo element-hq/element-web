@@ -200,6 +200,24 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         }
     }
 
+    async _restoreWithCachedKey(backupInfo) {
+        if (!backupInfo) return false;
+        try {
+            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithCache(
+                undefined, /* targetRoomId */
+                undefined, /* targetSessionId */
+                backupInfo,
+            );
+            this.setState({
+                recoverInfo,
+            });
+            return true;
+        } catch (e) {
+            console.log("restoreWithCachedKey failed:", e);
+            return false;
+        }
+    }
+
     async _loadBackupStatus() {
         this.setState({
             loading: true,
@@ -212,6 +230,15 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 backupInfo,
                 backupKeyStored,
             });
+
+            const gotCache = await this._restoreWithCachedKey(backupInfo);
+            if (gotCache) {
+                console.log("RestoreKeyBackupDialog: found cached backup key");
+                this.setState({
+                    loading: false,
+                });
+                return;
+            }
 
             // If the backup key is stored, we can proceed directly to restore.
             if (backupKeyStored) {

@@ -470,7 +470,6 @@ export default createReactClass({
             _t("Email") :
             _t("Email (optional)");
         return <Field
-            id="mx_RegistrationForm_email"
             ref={field => this[FIELD_EMAIL] = field}
             type="text"
             label={emailPlaceholder}
@@ -524,7 +523,6 @@ export default createReactClass({
             onOptionChange={this.onPhoneCountryChange}
         />;
         return <Field
-            id="mx_RegistrationForm_phoneNumber"
             ref={field => this[FIELD_PHONE_NUMBER] = field}
             type="text"
             label={phoneLabel}

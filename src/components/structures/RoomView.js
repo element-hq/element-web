@@ -55,6 +55,7 @@ import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -234,6 +235,11 @@ export default createReactClass({
             showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
         };
+
+        if (!initial && this.state.shouldPeek && !newState.shouldPeek) {
+            // Stop peeking because we have joined this room now
+            this.context.stopPeeking();
+        }
 
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
@@ -464,6 +470,10 @@ export default createReactClass({
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
+
+        if (this.state.shouldPeek) {
+            this.context.stopPeeking();
         }
 
         // stop tracking room changes to format permalinks
@@ -817,40 +827,9 @@ export default createReactClass({
             return;
         }
 
-        // Duplication between here and _updateE2eStatus in RoomTile
         /* At this point, the user has encryption on and cross-signing on */
-        const e2eMembers = await room.getEncryptionTargetMembers();
-        const verified = [];
-        const unverified = [];
-        e2eMembers.map(({userId}) => userId)
-            .filter((userId) => userId !== this.context.getUserId())
-            .forEach((userId) => {
-                (this.context.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId);
-            });
-
-        debuglog("e2e verified", verified, "unverified", unverified);
-
-        /* Check all verified user devices. */
-        /* Don't alarm if no other users are verified  */
-        const targets = (verified.length > 0) ? [...verified, this.context.getUserId()] : verified;
-        for (const userId of targets) {
-            const devices = await this.context.getStoredDevicesForUser(userId);
-            const anyDeviceNotVerified = devices.some(({deviceId}) => {
-                return !this.context.checkDeviceTrust(userId, deviceId).isVerified();
-            });
-            if (anyDeviceNotVerified) {
-                this.setState({
-                    e2eStatus: "warning",
-                });
-                debuglog("e2e status set to warning as not all users trust all of their sessions." +
-                         " Aborted on user", userId);
-                return;
-            }
-        }
-
         this.setState({
-            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+            e2eStatus: await shieldStatusForRoom(this.context, room),
         });
     },
 

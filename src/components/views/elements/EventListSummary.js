@@ -20,6 +20,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import {MatrixEvent, RoomMember} from "matrix-js-sdk";
 import {useStateToggle} from "../../../hooks/useStateToggle";
+import AccessibleButton from "./AccessibleButton";
 
 const EventListSummary = ({events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText}) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
@@ -42,24 +43,15 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
         );
     }
 
+    let body;
     if (expanded) {
-        return (
-            <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
-                <div className={"mx_EventListSummary_toggle"} onClick={toggleExpanded}>
-                    { _t('collapse') }
-                </div>
-                <div className="mx_EventListSummary_line">&nbsp;</div>
-                { children }
-            </div>
-        );
-    }
-
-    const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
-    return (
-        <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
-            <div className={"mx_EventListSummary_toggle"} onClick={toggleExpanded}>
-                { _t('expand') }
-            </div>
+        body = <React.Fragment>
+            <div className="mx_EventListSummary_line">&nbsp;</div>
+            { children }
+        </React.Fragment>;
+    } else {
+        const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
+        body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">
                     <span className="mx_EventListSummary_avatars" onClick={toggleExpanded}>
@@ -70,6 +62,15 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
                     </span>
                 </div>
             </div>
+        );
+    }
+
+    return (
+        <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+            <AccessibleButton className="mx_EventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
+                { expanded ? _t('collapse') : _t('expand') }
+            </AccessibleButton>
+            { body }
         </div>
     );
 };

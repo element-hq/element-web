@@ -223,7 +223,8 @@ export default class ServerConfig extends React.PureComponent {
                     {sub}
                 </a>,
             })}
-            <Field id="mx_ServerConfig_hsUrl"
+            <Field
+                id="mx_ServerConfig_hsUrl"
                 label={_t("Homeserver URL")}
                 placeholder={this.props.serverConfig.hsUrl}
                 value={this.state.hsUrl}
@@ -246,7 +247,7 @@ export default class ServerConfig extends React.PureComponent {
                     {sub}
             </a>,
             })}
-            <Field id="mx_ServerConfig_isUrl"
+            <Field
                 label={_t("Identity Server URL")}
                 placeholder={this.props.serverConfig.isUrl}
                 value={this.state.isUrl || ''}

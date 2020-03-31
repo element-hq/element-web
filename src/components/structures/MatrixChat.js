@@ -657,6 +657,7 @@ export default createReactClass({
                     collapseLhs: true,
                 });
                 break;
+            case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
@@ -2021,7 +2022,7 @@ export default createReactClass({
             }
         } else if (this.state.view === VIEWS.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome />;
+            view = <Welcome {...this.getServerProperties()} />;
         } else if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (

@@ -142,13 +142,34 @@ const onSecretRequested = async function({
         console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
         return;
     }
-    const callbacks = client.getCrossSigningCacheCallbacks();
-    if (!callbacks.getCrossSigningKeyCache) return;
-    if (name === "m.cross_signing.self_signing") {
-        const key = await callbacks.getCrossSigningKeyCache("self_signing");
-        return key && encodeBase64(key);
-    } else if (name === "m.cross_signing.user_signing") {
-        const key = await callbacks.getCrossSigningKeyCache("user_signing");
+    if (name.startsWith("m.cross_signing")) {
+        const callbacks = client.getCrossSigningCacheCallbacks();
+        if (!callbacks.getCrossSigningKeyCache) return;
+        /* Explicit enumeration here is deliberate – never share the master key! */
+        if (name === "m.cross_signing.self_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("self_signing");
+            if (!key) {
+                console.log(
+                    `self_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        } else if (name === "m.cross_signing.user_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("user_signing");
+            if (!key) {
+                console.log(
+                    `user_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        }
+    } else if (name === "m.megolm_backup.v1") {
+        const key = await client._crypto.getSessionBackupPrivateKey();
+        if (!key) {
+            console.log(
+                `session backup key requested by ${deviceId}, but not found in cache`,
+            );
+        }
         return key && encodeBase64(key);
     }
     console.warn("onSecretRequested didn't recognise the secret named ", name);
@@ -192,19 +213,19 @@ export async function promptForBackupPassphrase() {
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
- * @param {bool} [force] Reset secret storage even if it's already set up
+ * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(func = async () => { }, force = false) {
+export async function accessSecretStorage(func = async () => { }, forceReset = false) {
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
-        if (!await cli.hasSecretStorageKey() || force) {
+        if (!await cli.hasSecretStorageKey() || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force,
+                    force: forceReset,
                 },
                 null, /* priority = */ false, /* static = */ true,
             );
