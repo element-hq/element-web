@@ -37,6 +37,8 @@ export default class EmbeddedPage extends React.PureComponent {
         className: PropTypes.string,
         // Whether to wrap the page in a scrollbar
         scrollbar: PropTypes.bool,
+        // Map of keys to replace with values, e.g {$placeholder: "value"}
+        replaceMap: PropTypes.object,
     };
 
     static contextType = MatrixClientContext;
@@ -81,6 +83,13 @@ export default class EmbeddedPage extends React.PureComponent {
                 }
 
                 body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
+
+                if (this.props.replaceMap) {
+                    Object.keys(this.props.replaceMap).forEach(key => {
+                        body = body.split(key).join(this.props.replaceMap[key]);
+                    });
+                }
+
                 this.setState({ page: body });
             },
         );
