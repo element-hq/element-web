@@ -56,7 +56,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
@@ -89,9 +89,7 @@ export default createReactClass({
                 ),
             });
         });
-    },
 
-    componentDidMount: function() {
         this.refreshRoomList();
     },
 

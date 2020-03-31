@@ -44,7 +44,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._loadBackupStatus();
     }
 

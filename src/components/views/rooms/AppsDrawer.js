@@ -55,13 +55,10 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
-    },
-
-    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
 

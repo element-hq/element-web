@@ -113,7 +113,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
 
         // map from login step type to a function which will render a control

@@ -429,7 +429,7 @@ export const MsisdnAuthEntry = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._submitUrl = null;
         this._sid = null;
         this._msisdn = null;

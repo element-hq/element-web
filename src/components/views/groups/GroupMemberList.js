@@ -47,7 +47,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._initGroupStore(this.props.groupId);
     },

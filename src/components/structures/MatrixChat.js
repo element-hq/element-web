@@ -221,7 +221,7 @@ export default createReactClass({
         return {serverConfig: props};
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         SdkConfig.put(this.props.config);
 
         // Used by _viewRoom before getting state from sync
@@ -261,9 +261,7 @@ export default createReactClass({
 
         this._accountPassword = null;
         this._accountPasswordTimer = null;
-    },
 
-    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this._themeWatcher = new ThemeWatcher();
         this._themeWatcher.start();

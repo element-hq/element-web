@@ -82,7 +82,7 @@ export default class ManageEventIndexDialog extends React.Component {
         }
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         let eventIndexSize = 0;
         let crawlingRoomsCount = 0;
         let roomCount = 0;

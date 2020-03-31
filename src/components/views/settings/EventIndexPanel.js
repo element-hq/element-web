@@ -63,7 +63,7 @@ export default class EventIndexPanel extends React.Component {
         }
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         this.updateState();
     }
 

@@ -49,7 +49,7 @@ export default createReactClass({
         }
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {

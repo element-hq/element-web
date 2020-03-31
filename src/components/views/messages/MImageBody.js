@@ -67,11 +67,6 @@ export default class MImageBody extends React.Component {
         this._image = createRef();
     }
 
-    componentWillMount() {
-        this.unmounted = false;
-        this.context.on('sync', this.onClientSync);
-    }
-
     // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
     onClientSync(syncState, prevState) {
         if (this.unmounted) return;
@@ -258,6 +253,9 @@ export default class MImageBody extends React.Component {
     }
 
     componentDidMount() {
+        this.unmounted = false;
+        this.context.on('sync', this.onClientSync);
+
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);

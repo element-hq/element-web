@@ -37,7 +37,7 @@ export default createReactClass({
         return { device: null };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         const client = MatrixClientPeg.get();
 

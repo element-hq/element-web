@@ -55,7 +55,7 @@ export default createReactClass({
         askReason: false,
     }),
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._reasonField = null;
     },
 

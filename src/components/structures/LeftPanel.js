@@ -44,7 +44,7 @@ const LeftPanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.focusedElement = null;
 
         this._breadcrumbsWatcherRef = SettingsStore.watchSetting(

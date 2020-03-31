@@ -33,7 +33,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
     },
