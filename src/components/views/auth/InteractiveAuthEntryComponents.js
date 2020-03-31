@@ -619,16 +619,19 @@ export class SSOAuthEntry extends React.Component {
     static PHASE_PREAUTH = 1; // button to start SSO
     static PHASE_POSTAUTH = 2; // button to confirm SSO completed
 
+    _ssoUrl: string;
+
     constructor(props) {
         super(props);
 
+        // We actually send the user through fallback auth so we don't have to
+        // deal with a redirect back to us, losing application context.
+        this._ssoUrl = props.matrixClient.getFallbackAuthUrl(
+            this.props.loginType,
+            this.props.authSessionId,
+        );
+
         this.state = {
-            // We actually send the user through fallback auth so we don't have to
-            // deal with a redirect back to us, losing application context.
-            ssoUrl: props.matrixClient.getFallbackAuthUrl(
-                this.props.loginType,
-                this.props.authSessionId,
-            ),
             phase: SSOAuthEntry.PHASE_PREAUTH,
         };
     }
@@ -642,7 +645,7 @@ export class SSOAuthEntry extends React.Component {
         // certainly will need to open the thing in a new tab to avoid losing application
         // context.
 
-        window.open(this.state.ssoUrl, '_blank');
+        window.open(this._ssoUrl, '_blank');
         this.setState({phase: SSOAuthEntry.PHASE_POSTAUTH});
         this.props.onPhaseChange(SSOAuthEntry.PHASE_POSTAUTH);
     };
