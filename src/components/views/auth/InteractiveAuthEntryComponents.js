@@ -639,7 +639,7 @@ export class SSOAuthEntry extends React.Component {
 
     onStartAuthClick = () => {
         // Note: We don't use PlatformPeg's startSsoAuth functions because we almost
-        // certainly will need to open the thing in a new tab to avoid loosing application
+        // certainly will need to open the thing in a new tab to avoid losing application
         // context.
 
         window.open(this.state.ssoUrl, '_blank');
