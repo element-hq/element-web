@@ -236,6 +236,11 @@ export default createReactClass({
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
         };
 
+        if (!initial && this.state.shouldPeek && !newState.shouldPeek) {
+            // Stop peeking because we have joined this room now
+            this.context.stopPeeking();
+        }
+
         // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
         console.log(
             'RVS update:',
@@ -465,6 +470,10 @@ export default createReactClass({
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
             RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
+        }
+
+        if (this.state.shouldPeek) {
+            this.context.stopPeeking();
         }
 
         // stop tracking room changes to format permalinks
