@@ -651,7 +651,7 @@ export class SSOAuthEntry extends React.Component {
         this.props.submitAuthDict({});
     };
 
-    render () {
+    render() {
         let continueButton = null;
         const cancelButton = (
             <AccessibleButton

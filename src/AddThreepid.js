@@ -193,7 +193,8 @@ export default class AddThreepid {
                         const dialogAesthetics = {
                             [SSOAuthEntry.PHASE_PREAUTH]: {
                                 title: _t("Use Single Sign On to continue"),
-                                body: _t("Confirm adding this email address by using Single Sign On to prove your identity."),
+                                body: _t("Confirm adding this email address by using " +
+                                    "Single Sign On to prove your identity."),
                                 continueText: _t("Single Sign On"),
                                 continueKind: "primary",
                             },
@@ -308,7 +309,8 @@ export default class AddThreepid {
                     const dialogAesthetics = {
                         [SSOAuthEntry.PHASE_PREAUTH]: {
                             title: _t("Use Single Sign On to continue"),
-                            body: _t("Confirm adding this phone number by using Single Sign On to prove your identity."),
+                            body: _t("Confirm adding this phone number by using " +
+                                "Single Sign On to prove your identity."),
                             continueText: _t("Single Sign On"),
                             continueKind: "primary",
                         },
