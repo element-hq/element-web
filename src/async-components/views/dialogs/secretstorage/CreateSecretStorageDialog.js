@@ -67,8 +67,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this._keyInfo = null;
-        this._encodedRecoveryKey = null;
+        this._recoveryKey = null;
         this._recoveryKeyNode = null;
         this._setZxcvbnResultTimeout = null;
 
@@ -180,7 +179,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onDownloadClick = () => {
-        const blob = new Blob([this._encodedRecoveryKey], {
+        const blob = new Blob([this._recoveryKey.encodedPrivateKey], {
             type: 'text/plain;charset=us-ascii',
         });
         FileSaver.saveAs(blob, 'recovery-key.txt');
@@ -234,14 +233,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             if (force) {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    createSecretStorageKey: async () => this._keyInfo,
+                    createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
             } else {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    createSecretStorageKey: async () => this._keyInfo,
+                    createSecretStorageKey: async () => this._recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
                     getKeyBackupPassphrase: promptForBackupPassphrase,
@@ -299,10 +298,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onSkipPassPhraseClick = async () => {
-        const [keyInfo, encodedRecoveryKey] =
+        this._recoveryKey =
             await MatrixClientPeg.get().createRecoveryKeyFromPassphrase();
-        this._keyInfo = keyInfo;
-        this._encodedRecoveryKey = encodedRecoveryKey;
         this.setState({
             copied: false,
             downloaded: false,
@@ -335,10 +332,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         if (this.state.passPhrase !== this.state.passPhraseConfirm) return;
 
-        const [keyInfo, encodedRecoveryKey] =
+        this._recoveryKey =
             await MatrixClientPeg.get().createRecoveryKeyFromPassphrase(this.state.passPhrase);
-        this._keyInfo = keyInfo;
-        this._encodedRecoveryKey = encodedRecoveryKey;
         this.setState({
             copied: false,
             downloaded: false,
@@ -613,7 +608,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 </div>
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKey">
-                        <code ref={this._collectRecoveryKeyNode}>{this._encodedRecoveryKey}</code>
+                        <code ref={this._collectRecoveryKeyNode}>{this._recoveryKey.encodedPrivateKey}</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
                         <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>

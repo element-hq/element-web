@@ -32,7 +32,7 @@ function getId() {
 export default class Field extends React.PureComponent {
     static propTypes = {
         // The field's ID, which binds the input and label together. Immutable.
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
         // The element to create. Defaults to "input".
         // To define options for a select, use <Field><option ... /></Field>
         element: PropTypes.oneOf(["input", "select", "textarea"]),

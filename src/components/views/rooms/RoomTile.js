@@ -37,6 +37,7 @@ import E2EIcon from './E2EIcon';
 import InviteOnlyIcon from './InviteOnlyIcon';
 // eslint-disable-next-line camelcase
 import rate_limited_func from '../../../ratelimitedfunc';
+import { shieldStatusForRoom } from '../../../utils/ShieldUtils';
 
 export default createReactClass({
     displayName: 'RoomTile',
@@ -154,35 +155,9 @@ export default createReactClass({
             return;
         }
 
-        // Duplication between here and _updateE2eStatus in RoomView
-        const e2eMembers = await this.props.room.getEncryptionTargetMembers();
-        const verified = [];
-        const unverified = [];
-        e2eMembers.map(({userId}) => userId)
-            .filter((userId) => userId !== cli.getUserId())
-            .forEach((userId) => {
-                (cli.checkUserTrust(userId).isCrossSigningVerified() ?
-                verified : unverified).push(userId);
-            });
-
-        /* Check all verified user devices. */
-        /* Don't alarm if no other users are verified  */
-        const targets = (verified.length > 0) ? [...verified, cli.getUserId()] : verified;
-        for (const userId of targets) {
-            const devices = await cli.getStoredDevicesForUser(userId);
-            const allDevicesVerified = devices.every(({deviceId}) => {
-                return cli.checkDeviceTrust(userId, deviceId).isVerified();
-            });
-            if (!allDevicesVerified) {
-                this.setState({
-                    e2eStatus: "warning",
-                });
-                return;
-            }
-        }
-
+        /* At this point, the user has encryption on and cross-signing on */
         this.setState({
-            e2eStatus: unverified.length === 0 ? "verified" : "normal",
+            e2eStatus: await shieldStatusForRoom(cli, this.props.room),
         });
     },
 

@@ -85,7 +85,7 @@ class Command {
         aliases = [],
         args = '',
         description,
-        runFn=undefined,
+        runFn = undefined,
         category = CommandCategories.other,
         hideCompletionAfterSpace = false,
     }: {
@@ -157,6 +157,15 @@ export const Commands = [
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
             return success(MatrixClientPeg.get().sendTextMessage(roomId, messages));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'html',
+        args: '<message>',
+        description: _td('Sends a message as html, without interpreting it as markdown'),
+        runFn: function(roomId, messages) {
+            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
         },
         category: CommandCategories.messages,
     }),
