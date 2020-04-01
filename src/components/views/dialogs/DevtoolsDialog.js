@@ -268,7 +268,7 @@ class FilteredList extends React.PureComponent {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
         this.setState({
             filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),

@@ -129,7 +129,7 @@ export default class Dropdown extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (!nextProps.children || nextProps.children.length === 0) {
             return;
         }

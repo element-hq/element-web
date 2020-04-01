@@ -83,7 +83,7 @@ const Pill = createReactClass({
     },
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    async UNSAFE_componentWillReceiveProps(nextProps) {
+    async UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line new-cap
         let resourceId;
         let prefix;
 

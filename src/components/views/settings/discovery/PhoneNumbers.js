@@ -51,7 +51,7 @@ export class PhoneNumber extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         const { bound } = nextProps.msisdn;
         this.setState({ bound });
     }

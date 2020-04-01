@@ -59,7 +59,7 @@ export class EmailAddress extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         const { bound } = nextProps.email;
         this.setState({ bound });
     }

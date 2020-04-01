@@ -73,7 +73,7 @@ export default class ServerConfig extends React.PureComponent {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (newProps.serverConfig.hsUrl === this.state.hsUrl &&
             newProps.serverConfig.isUrl === this.state.isUrl) return;
 
