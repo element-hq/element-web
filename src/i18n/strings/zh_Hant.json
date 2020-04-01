@@ -2307,5 +2307,6 @@
     "Compare emoji": "比較顏文字",
     "Session backup key:": "工作階段備份金鑰：",
     "Sends a message as html, without interpreting it as markdown": "以 html 形式傳送訊息，不將其翻譯為 markdown",
-    "Cancel replying to a message": "取消回覆訊息"
+    "Cancel replying to a message": "取消回覆訊息",
+    "Sign in with SSO": "使用單一登入系統登入"
 }
