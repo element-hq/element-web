@@ -16,15 +16,14 @@ limitations under the License.
 */
 
 import AutocompleteWrapperModel from "./autocomplete";
-import Avatar from "../Avatar";
-import MatrixClientPeg from "../MatrixClientPeg";
+import * as Avatar from "../Avatar";
 
 class BasePart {
     constructor(text = "") {
         this._text = text;
     }
 
-    acceptsInsertion(chr) {
+    acceptsInsertion(chr, offset, inputType) {
         return true;
     }
 
@@ -57,10 +56,11 @@ class BasePart {
     }
 
     // append str, returns the remaining string if a character was rejected.
-    appendUntilRejected(str) {
+    appendUntilRejected(str, inputType) {
+        const offset = this.text.length;
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr, i)) {
+            if (!this.acceptsInsertion(chr, offset + i, inputType)) {
                 this._text = this._text + str.substr(0, i);
                 return str.substr(i);
             }
@@ -70,10 +70,10 @@ class BasePart {
 
     // inserts str at offset if all the characters in str were accepted, otherwise don't do anything
     // return whether the str was accepted or not.
-    insertAll(offset, str) {
+    validateAndInsert(offset, str, inputType) {
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr)) {
+            if (!this.acceptsInsertion(chr, offset + i, inputType)) {
                 return false;
             }
         }
@@ -102,11 +102,23 @@ class BasePart {
     toString() {
         return `${this.type}(${this.text})`;
     }
+
+    serialize() {
+        return {type: this.type, text: this.text};
+    }
 }
 
+// exported for unit tests, should otherwise only be used through PartCreator
 export class PlainPart extends BasePart {
-    acceptsInsertion(chr) {
-        return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "\n";
+    acceptsInsertion(chr, offset, inputType) {
+        if (chr === "\n") {
+            return false;
+        }
+        // when not pasting or dropping text, reject characters that should start a pill candidate
+        if (inputType !== "insertFromPaste" && inputType !== "insertFromDrop") {
+            return chr !== "@" && chr !== "#" && chr !== ":";
+        }
+        return true;
     }
 
     toDOMNode() {
@@ -127,7 +139,6 @@ export class PlainPart extends BasePart {
 
     updateDOMNode(node) {
         if (node.textContent !== this.text) {
-            // console.log("changing plain text from", node.textContent, "to", this.text);
             node.textContent = this.text;
         }
     }
@@ -153,6 +164,7 @@ class PillPart extends BasePart {
 
     toDOMNode() {
         const container = document.createElement("span");
+        container.setAttribute("spellcheck", "false");
         container.className = this.className;
         container.appendChild(document.createTextNode(this.text));
         this.setAvatar(container);
@@ -196,9 +208,9 @@ class PillPart extends BasePart {
     }
 }
 
-export class NewlinePart extends BasePart {
-    acceptsInsertion(chr, i) {
-        return (this.text.length + i) === 0 && chr === "\n";
+class NewlinePart extends BasePart {
+    acceptsInsertion(chr, offset) {
+        return offset === 0 && chr === "\n";
     }
 
     acceptsRemoval(position, chr) {
@@ -232,29 +244,18 @@ export class NewlinePart extends BasePart {
     }
 }
 
-export class RoomPillPart extends PillPart {
-    constructor(displayAlias) {
+class RoomPillPart extends PillPart {
+    constructor(displayAlias, room) {
         super(displayAlias, displayAlias);
-        this._room = this._findRoomByAlias(displayAlias);
-    }
-
-    _findRoomByAlias(alias) {
-        const client = MatrixClientPeg.get();
-        if (alias[0] === '#') {
-            return client.getRooms().find((r) => {
-                return r.getAliases().includes(alias);
-            });
-        } else {
-            return client.getRoom(alias);
-        }
+        this._room = room;
     }
 
     setAvatar(node) {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this._room.name);
-            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+            initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
+            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId)}`;
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
@@ -268,13 +269,22 @@ export class RoomPillPart extends PillPart {
     }
 }
 
-export class UserPillPart extends PillPart {
+class AtRoomPillPart extends RoomPillPart {
+    get type() {
+        return "at-room-pill";
+    }
+}
+
+class UserPillPart extends PillPart {
     constructor(userId, displayName, member) {
         super(userId, displayName);
         this._member = member;
     }
 
     setAvatar(node) {
+        if (!this._member) {
+            return;
+        }
         const name = this._member.name || this._member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
         let avatarUrl = Avatar.avatarUrlForMember(
@@ -300,24 +310,30 @@ export class UserPillPart extends PillPart {
     get className() {
         return "mx_UserPill mx_Pill";
     }
+
+    serialize() {
+        const obj = super.serialize();
+        obj.resourceId = this.resourceId;
+        return obj;
+    }
 }
 
 
-export class PillCandidatePart extends PlainPart {
+class PillCandidatePart extends PlainPart {
     constructor(text, autoCompleteCreator) {
         super(text);
         this._autoCompleteCreator = autoCompleteCreator;
     }
 
     createAutoComplete(updateCallback) {
-        return this._autoCompleteCreator(updateCallback);
+        return this._autoCompleteCreator.create(updateCallback);
     }
 
-    acceptsInsertion(chr, i) {
-        if ((this.text.length + i) === 0) {
+    acceptsInsertion(chr, offset, inputType) {
+        if (offset === 0) {
             return true;
         } else {
-            return super.acceptsInsertion(chr, i);
+            return super.acceptsInsertion(chr, offset, inputType);
         }
     }
 
@@ -334,16 +350,30 @@ export class PillCandidatePart extends PlainPart {
     }
 }
 
-export class PartCreator {
-    constructor(getAutocompleterComponent, updateQuery, room) {
-        this._autoCompleteCreator = (updateCallback) => {
+export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
+    return (partCreator) => {
+        return (updateCallback) => {
             return new AutocompleteWrapperModel(
                 updateCallback,
                 getAutocompleterComponent,
                 updateQuery,
-                room,
+                partCreator,
             );
         };
+    };
+}
+
+export class PartCreator {
+    constructor(room, client, autoCompleteCreator = null) {
+        this._room = room;
+        this._client = client;
+        // pre-create the creator as an object even without callback so it can already be passed
+        // to PillCandidatePart (e.g. while deserializing) and set later on
+        this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
+    }
+
+    setAutoCompleteCreator(autoCompleteCreator) {
+        this._autoCompleteCreator.create = autoCompleteCreator(this);
     }
 
     createPartForInput(input) {
@@ -351,7 +381,7 @@ export class PartCreator {
             case "#":
             case "@":
             case ":":
-                return new PillCandidatePart("", this._autoCompleteCreator);
+                return this.pillCandidate("");
             case "\n":
                 return new NewlinePart();
             default:
@@ -360,7 +390,95 @@ export class PartCreator {
     }
 
     createDefaultPart(text) {
+        return this.plain(text);
+    }
+
+    deserializePart(part) {
+        switch (part.type) {
+            case "plain":
+                return this.plain(part.text);
+            case "newline":
+                return this.newline();
+            case "at-room-pill":
+                return this.atRoomPill(part.text);
+            case "pill-candidate":
+                return this.pillCandidate(part.text);
+            case "room-pill":
+                return this.roomPill(part.text);
+            case "user-pill":
+                return this.userPill(part.text, part.resourceId);
+        }
+    }
+
+    plain(text) {
         return new PlainPart(text);
+    }
+
+    newline() {
+        return new NewlinePart("\n");
+    }
+
+    pillCandidate(text) {
+        return new PillCandidatePart(text, this._autoCompleteCreator);
+    }
+
+    roomPill(alias, roomId) {
+        let room;
+        if (roomId || alias[0] !== "#") {
+            room = this._client.getRoom(roomId || alias);
+        } else {
+            room = this._client.getRooms().find((r) => {
+                return r.getCanonicalAlias() === alias ||
+                       r.getAltAliases().includes(alias);
+            });
+        }
+        return new RoomPillPart(alias, room);
+    }
+
+    atRoomPill(text) {
+        return new AtRoomPillPart(text, this._room);
+    }
+
+    userPill(displayName, userId) {
+        const member = this._room.getMember(userId);
+        return new UserPillPart(userId, displayName, member);
+    }
+
+    createMentionParts(partIndex, displayName, userId) {
+        const pill = this.userPill(displayName, userId);
+        const postfix = this.plain(partIndex === 0 ? ": " : " ");
+        return [pill, postfix];
     }
 }
 
+// part creator that support auto complete for /commands,
+// used in SendMessageComposer
+export class CommandPartCreator extends PartCreator {
+    createPartForInput(text, partIndex) {
+        // at beginning and starts with /? create
+        if (partIndex === 0 && text[0] === "/") {
+            // text will be inserted by model, so pass empty string
+            return this.command("");
+        } else {
+            return super.createPartForInput(text, partIndex);
+        }
+    }
+
+    command(text) {
+        return new CommandPart(text, this._autoCompleteCreator);
+    }
+
+    deserializePart(part) {
+        if (part.type === "command") {
+            return this.command(part.text);
+        } else {
+            return super.deserializePart(part);
+        }
+    }
+}
+
+class CommandPart extends PillCandidatePart {
+    get type() {
+        return "command";
+    }
+}

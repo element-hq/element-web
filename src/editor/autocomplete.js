@@ -15,24 +15,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {UserPillPart, RoomPillPart, PlainPart} from "./parts";
-
 export default class AutocompleteWrapperModel {
-    constructor(updateCallback, getAutocompleterComponent, updateQuery, room) {
+    constructor(updateCallback, getAutocompleterComponent, updateQuery, partCreator) {
         this._updateCallback = updateCallback;
         this._getAutocompleterComponent = getAutocompleterComponent;
         this._updateQuery = updateQuery;
+        this._partCreator = partCreator;
         this._query = null;
-        this._room = room;
     }
 
     onEscape(e) {
         this._getAutocompleterComponent().onEscape(e);
         this._updateCallback({
-            replacePart: new PlainPart(this._queryPart.text),
-            caretOffset: this._queryOffset,
+            replaceParts: [this._partCreator.plain(this._queryPart.text)],
             close: true,
         });
+    }
+
+    close() {
+        this._updateCallback({close: true});
+    }
+
+    hasSelection() {
+        return this._getAutocompleterComponent().hasSelection();
+    }
+
+    hasCompletions() {
+        const ac = this._getAutocompleterComponent();
+        return ac && ac.countCompletions() > 0;
     }
 
     onEnter() {
@@ -42,75 +52,70 @@ export default class AutocompleteWrapperModel {
     async onTab(e) {
         const acComponent = this._getAutocompleterComponent();
 
-        if (acComponent.state.completionList.length === 0) {
+        if (acComponent.countCompletions() === 0) {
             // Force completions to show for the text currently entered
             await acComponent.forceComplete();
             // Select the first item by moving "down"
-            await acComponent.onDownArrow();
+            await acComponent.moveSelection(+1);
         } else {
-            if (e.shiftKey) {
-                await acComponent.onUpArrow();
-            } else {
-                await acComponent.onDownArrow();
-            }
+            await acComponent.moveSelection(e.shiftKey ? -1 : +1);
         }
-        this._updateCallback({
-            close: true,
-        });
     }
 
     onUpArrow() {
-        this._getAutocompleterComponent().onUpArrow();
+        this._getAutocompleterComponent().moveSelection(-1);
     }
 
     onDownArrow() {
-        this._getAutocompleterComponent().onDownArrow();
+        this._getAutocompleterComponent().moveSelection(+1);
     }
 
-    onPartUpdate(part, offset) {
+    onPartUpdate(part, pos) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this._queryPart = part;
-        this._queryOffset = offset;
-        this._updateQuery(part.text);
+        this._partIndex = pos.index;
+        return this._updateQuery(part.text);
     }
 
     onComponentSelectionChange(completion) {
         if (!completion) {
             this._updateCallback({
-                replacePart: this._queryPart,
-                caretOffset: this._queryOffset,
+                replaceParts: [this._queryPart],
             });
         } else {
             this._updateCallback({
-                replacePart: this._partForCompletion(completion),
+                replaceParts: this._partForCompletion(completion),
             });
         }
     }
 
     onComponentConfirm(completion) {
         this._updateCallback({
-            replacePart: this._partForCompletion(completion),
+            replaceParts: this._partForCompletion(completion),
             close: true,
         });
     }
 
     _partForCompletion(completion) {
-        const firstChr = completion.completionId && completion.completionId[0];
-        switch (firstChr) {
-            case "@": {
-                const displayName = completion.completion;
-                const userId = completion.completionId;
-                const member = this._room.getMember(userId);
-                return new UserPillPart(userId, displayName, member);
-            }
-            case "#": {
-                const displayAlias = completion.completionId;
-                return new RoomPillPart(displayAlias);
-            }
-            // also used for emoji completion
+        const {completionId} = completion;
+        const text = completion.completion;
+        switch (completion.type) {
+            case "room":
+                return [this._partCreator.roomPill(text, completionId), this._partCreator.plain(completion.suffix)];
+            case "at-room":
+                return [this._partCreator.atRoomPill(completionId), this._partCreator.plain(completion.suffix)];
+            case "user":
+                // not using suffix here, because we also need to calculate
+                // the suffix when clicking a display name to insert a mention,
+                // which happens in createMentionParts
+                return this._partCreator.createMentionParts(this._partIndex, text, completionId);
+            case "command":
+                // command needs special handling for auto complete, but also renders as plain texts
+                return [this._partCreator.command(text)];
             default:
-                return new PlainPart(completion.completion);
+                // used for emoji and other plain text completion replacement
+                return [this._partCreator.plain(text)];
         }
     }
 }

@@ -16,12 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import dis from '../../../dispatcher';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import SettingsStore from "../../../settings/SettingsStore";
 import PropTypes from "prop-types";
-import {RoomPermalinkCreator} from "../../../matrix-to";
+import {RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 
 function cancelQuoting() {
     dis.dispatch({
@@ -35,20 +35,21 @@ export default class ReplyPreview extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
+        this.unmounted = false;
 
         this.state = {
-            event: null,
+            event: RoomViewStore.getQuotingEvent(),
         };
 
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
-
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
-        this._onRoomViewStoreUpdate();
     }
 
     componentWillUnmount() {
+        this.unmounted = true;
+
         // Remove RoomStore listener
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
@@ -56,6 +57,8 @@ export default class ReplyPreview extends React.Component {
     }
 
     _onRoomViewStoreUpdate() {
+        if (this.unmounted) return;
+
         const event = RoomViewStore.getQuotingEvent();
         if (this.state.event !== event) {
             this.setState({ event });

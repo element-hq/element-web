@@ -44,10 +44,9 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_MatrixToolbar_link
-{
-    color: $accent-fg-color ! important;
-    text-decoration: underline ! important;
+.mx_MatrixToolbar_link {
+    color: $accent-fg-color !important;
+    text-decoration: underline !important;
     cursor: pointer;
 }
 

@@ -78,8 +78,7 @@ export class EditableItem extends React.Component {
 
         return (
             <div className="mx_EditableItem">
-                <img src={require("../../../../res/img/feather-customised/cancel.svg")} width={14} height={14}
-                     onClick={this._onRemove} className="mx_EditableItem_delete" alt={_t("Remove")} />
+                <div onClick={this._onRemove} className="mx_EditableItem_delete" title={_t("Remove")} role="button" />
                 <span className="mx_EditableItem_item">{this.props.value}</span>
             </div>
         );
@@ -88,6 +87,7 @@ export class EditableItem extends React.Component {
 
 export default class EditableItemList extends React.Component {
     static propTypes = {
+        id: PropTypes.string.isRequired,
         items: PropTypes.arrayOf(PropTypes.string).isRequired,
         itemsLabel: PropTypes.string,
         noItemsLabel: PropTypes.string,
@@ -119,13 +119,12 @@ export default class EditableItemList extends React.Component {
 
     _renderNewItemField() {
         return (
-            <form onSubmit={this._onItemAdded} autoComplete={false}
+            <form onSubmit={this._onItemAdded} autoComplete="off"
                   noValidate={true} className="mx_EditableItemList_newItem">
-                <Field id="newEmailAddress" label={this.props.placeholder}
-                       type="text" autoComplete="off" value={this.props.newItem}
-                       onChange={this._onNewItemChanged}
-                />
-                <AccessibleButton onClick={this._onItemAdded} kind="primary">
+                <Field label={this.props.placeholder} type="text"
+                       autoComplete="off" value={this.props.newItem || ""} onChange={this._onNewItemChanged}
+                       list={this.props.suggestionsListId} />
+                <AccessibleButton onClick={this._onItemAdded} kind="primary" type="submit">
                     {_t("Add")}
                 </AccessibleButton>
             </form>
@@ -135,11 +134,11 @@ export default class EditableItemList extends React.Component {
     render() {
         const editableItems = this.props.items.map((item, index) => {
             if (!this.props.canRemove) {
-                return <li>{item}</li>;
+                return <li key={item}>{item}</li>;
             }
 
             return <EditableItem
-                key={index}
+                key={item}
                 index={index}
                 value={item}
                 onRemove={this._onItemRemoved}

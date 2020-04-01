@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,22 +18,26 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import { GroupMemberType } from '../../../groups';
-import withMatrixClient from '../../../wrappers/withMatrixClient';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-export default withMatrixClient(React.createClass({
+export default createReactClass({
     displayName: 'GroupMemberTile',
 
     propTypes: {
-        matrixClient: PropTypes.object,
         groupId: PropTypes.string.isRequired,
         member: GroupMemberType.isRequired,
     },
 
     getInitialState: function() {
         return {};
+    },
+
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     onClick: function(e) {
@@ -48,13 +53,16 @@ export default withMatrixClient(React.createClass({
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
         const name = this.props.member.displayname || this.props.member.userId;
-        const avatarUrl = this.props.matrixClient.mxcUrlToHttp(
+        const avatarUrl = this.context.mxcUrlToHttp(
             this.props.member.avatarUrl,
             36, 36, 'crop',
         );
 
         const av = (
-            <BaseAvatar name={this.props.member.userId}
+            <BaseAvatar
+                aria-hidden="true"
+                name={this.props.member.displayname || this.props.member.userId}
+                idName={this.props.member.userId}
                 width={36} height={36}
                 url={avatarUrl}
             />
@@ -67,4 +75,4 @@ export default withMatrixClient(React.createClass({
             />
         );
     },
-}));
+});

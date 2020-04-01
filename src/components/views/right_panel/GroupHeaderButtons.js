@@ -3,6 +3,7 @@ Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,21 +21,21 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
-import HeaderButtons from './HeaderButtons';
-import RightPanel from '../../structures/RightPanel';
+import HeaderButtons, {HEADER_KIND_GROUP} from './HeaderButtons';
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 const GROUP_PHASES = [
-    RightPanel.Phase.GroupMemberInfo,
-    RightPanel.Phase.GroupMemberList,
+    RIGHT_PANEL_PHASES.GroupMemberInfo,
+    RIGHT_PANEL_PHASES.GroupMemberList,
 ];
 const ROOM_PHASES = [
-    RightPanel.Phase.GroupRoomList,
-    RightPanel.Phase.GroupRoomInfo,
+    RIGHT_PANEL_PHASES.GroupRoomList,
+    RIGHT_PANEL_PHASES.GroupRoomInfo,
 ];
 
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props) {
-        super(props, RightPanel.Phase.GroupMemberList);
+        super(props, HEADER_KIND_GROUP);
         this._onMembersClicked = this._onMembersClicked.bind(this);
         this._onRoomsClicked = this._onRoomsClicked.bind(this);
     }
@@ -44,29 +45,39 @@ export default class GroupHeaderButtons extends HeaderButtons {
 
         if (payload.action === "view_user") {
             if (payload.member) {
-                this.setPhase(RightPanel.Phase.RoomMemberInfo, {member: payload.member});
+                this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, {member: payload.member});
             } else {
-                this.setPhase(RightPanel.Phase.GroupMemberList);
+                this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
             }
         } else if (payload.action === "view_group") {
-            this.setPhase(RightPanel.Phase.GroupMemberList);
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
         } else if (payload.action === "view_group_room") {
-            this.setPhase(RightPanel.Phase.GroupRoomInfo, {groupRoomId: payload.groupRoomId, groupId: payload.groupId});
+            this.setPhase(
+                RIGHT_PANEL_PHASES.GroupRoomInfo,
+                {groupRoomId: payload.groupRoomId, groupId: payload.groupId},
+            );
         } else if (payload.action === "view_group_room_list") {
-            this.setPhase(RightPanel.Phase.GroupRoomList);
+            this.setPhase(RIGHT_PANEL_PHASES.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
-            this.setPhase(RightPanel.Phase.GroupMemberList);
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
         } else if (payload.action === "view_group_user") {
-            this.setPhase(RightPanel.Phase.GroupMemberInfo, {member: payload.member});
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo, {member: payload.member});
         }
     }
 
     _onMembersClicked() {
-        this.togglePhase(RightPanel.Phase.GroupMemberList, GROUP_PHASES);
+        if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
+            // send the active phase to trigger a toggle
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+        }
     }
 
     _onRoomsClicked() {
-        this.togglePhase(RightPanel.Phase.GroupRoomList, ROOM_PHASES);
+        // This toggles for us, if needed
+        this.setPhase(RIGHT_PANEL_PHASES.GroupRoomList);
     }
 
     renderButtons() {

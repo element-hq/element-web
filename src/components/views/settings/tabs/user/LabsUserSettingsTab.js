@@ -19,7 +19,7 @@ import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-const sdk = require("../../../../..");
+import * as sdk from "../../../../../index";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -32,7 +32,7 @@ export class LabsSettingToggle extends React.Component {
     };
 
     render() {
-        const label = _t(SettingsStore.getDisplayName(this.props.featureId));
+        const label = SettingsStore.getDisplayName(this.props.featureId);
         const value = SettingsStore.isFeatureEnabled(this.props.featureId);
         return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} />;
     }
@@ -49,11 +49,24 @@ export default class LabsUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
+                <div className='mx_SettingsTab_subsectionText'>
+                    {
+                        _t('Customise your experience with experimental labs features. ' +
+                            '<a>Learn more</a>.', {}, {
+                            'a': (sub) => {
+                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                    rel='noreferrer noopener' target='_blank'>{sub}</a>;
+                            },
+                        })
+                    }
+                </div>
                 <div className="mx_SettingsTab_section">
                     {flags}
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
+                    <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
+                    <SettingsFlag name={"keepSecretStoragePassphraseForSession"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );

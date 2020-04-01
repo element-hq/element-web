@@ -1,6 +1,7 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,10 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_AddressPickerDialog {
+    a:link,
+    a:hover,
+    a:visited {
+        @mixin mx_Dialog_link;
+    }
+}
+
 /* Using a textarea for this element, to circumvent autofill */
 .mx_AddressPickerDialog_input,
-.mx_AddressPickerDialog_input:focus
-{
+.mx_AddressPickerDialog_input:focus {
     height: 26px;
     font-size: 14px;
     font-family: $font-family;
@@ -36,7 +44,7 @@ limitations under the License.
 }
 
 .mx_AddressPickerDialog .mx_Dialog_content {
-    min-height: 50px
+    min-height: 50px;
 }
 
 .mx_AddressPickerDialog_inputContainer {
@@ -68,3 +76,6 @@ limitations under the License.
     pointer-events: none;
 }
 
+.mx_AddressPickerDialog_identityServer {
+    margin-top: 1em;
+}

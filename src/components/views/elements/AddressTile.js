@@ -17,14 +17,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import sdk from "../../../index";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import { UserAddressType } from '../../../UserAddress.js';
 
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'AddressTile',
 
     propTypes: {

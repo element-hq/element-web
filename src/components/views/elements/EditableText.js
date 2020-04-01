@@ -15,10 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
+import {Key} from "../../../Keyboard";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'EditableText',
 
     propTypes: {
@@ -63,7 +65,7 @@ module.exports = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.value = nextProps.initialValue;
-            if (this.refs.editable_div) {
+            if (this._editable_div.current) {
                 this.showPlaceholder(!this.value);
             }
         }
@@ -74,24 +76,27 @@ module.exports = React.createClass({
         // as React doesn't play nice with contentEditable.
         this.value = '';
         this.placeholder = false;
+
+        this._editable_div = createRef();
     },
 
     componentDidMount: function() {
         this.value = this.props.initialValue;
-        if (this.refs.editable_div) {
+        if (this._editable_div.current) {
             this.showPlaceholder(!this.value);
         }
     },
 
     showPlaceholder: function(show) {
         if (show) {
-            this.refs.editable_div.textContent = this.props.placeholder;
-            this.refs.editable_div.setAttribute("class", this.props.className + " " + this.props.placeholderClassName);
+            this._editable_div.current.textContent = this.props.placeholder;
+            this._editable_div.current.setAttribute("class", this.props.className
+                + " " + this.props.placeholderClassName);
             this.placeholder = true;
             this.value = '';
         } else {
-            this.refs.editable_div.textContent = this.value;
-            this.refs.editable_div.setAttribute("class", this.props.className);
+            this._editable_div.current.textContent = this.value;
+            this._editable_div.current.setAttribute("class", this.props.className);
             this.placeholder = false;
         }
     },
@@ -118,7 +123,7 @@ module.exports = React.createClass({
         this.value = this.props.initialValue;
         this.showPlaceholder(!this.value);
         this.onValueChanged(false);
-        this.refs.editable_div.blur();
+        this._editable_div.current.blur();
     },
 
     onValueChanged: function(shouldSubmit) {
@@ -132,7 +137,7 @@ module.exports = React.createClass({
             this.showPlaceholder(false);
         }
 
-        if (ev.key === "Enter") {
+        if (ev.key === Key.ENTER) {
             ev.stopPropagation();
             ev.preventDefault();
         }
@@ -149,9 +154,9 @@ module.exports = React.createClass({
             this.value = ev.target.textContent;
         }
 
-        if (ev.key === "Enter") {
+        if (ev.key === Key.ENTER) {
             this.onFinish(ev);
-        } else if (ev.key === "Escape") {
+        } else if (ev.key === Key.ESCAPE) {
             this.cancelEdit();
         }
 
@@ -183,7 +188,7 @@ module.exports = React.createClass({
 
     onFinish: function(ev, shouldSubmit) {
         const self = this;
-        const submit = (ev.key === "Enter") || shouldSubmit;
+        const submit = (ev.key === Key.ENTER) || shouldSubmit;
         this.setState({
             phase: this.Phases.Display,
         }, () => {
@@ -217,7 +222,7 @@ module.exports = React.createClass({
             </div>;
         } else {
             // show the content editable div, but manually manage its contents as react and contentEditable don't play nice together
-            editableEl = <div ref="editable_div"
+            editableEl = <div ref={this._editable_div}
                               contentEditable={true}
                               className={className}
                               onKeyDown={this.onKeyDown}

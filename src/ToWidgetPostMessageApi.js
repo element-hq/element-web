@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Promise from "bluebird";
-
 // const OUTBOUND_API_NAME = 'toWidget';
 
 // Initiate requests using the "toWidget" postMessage API and handle responses

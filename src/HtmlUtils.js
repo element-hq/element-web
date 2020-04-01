@@ -1,6 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,18 +23,17 @@ import ReplyThread from "./components/views/elements/ReplyThread";
 
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
-import highlight from 'highlight.js';
 import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
-import escape from 'lodash/escape';
 import classNames from 'classnames';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import url from 'url';
 
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOJIBASE_REGEX from 'emojibase-regex';
+import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
+import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 
 linkifyMatrix(linkify);
 
@@ -63,7 +64,7 @@ const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
  * need emojification.
  * unicodeToImage uses this function.
  */
-export function containsEmoji(str) {
+function mightContainEmoji(str) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -74,7 +75,7 @@ export function containsEmoji(str) {
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    const data = EMOJIBASE.find(e => e.unicode === char);
+    const data = getEmojiFromUnicode(char);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
@@ -86,7 +87,7 @@ export function unicodeToShortcode(char) {
  */
 export function shortcodeToUnicode(shortcode) {
     shortcode = shortcode.slice(1, shortcode.length - 1);
-    const data = EMOJIBASE.find(e => e.shortcodes && e.shortcodes.includes(shortcode));
+    const data = SHORTCODE_TO_EMOJI.get(shortcode);
     return data ? data.unicode : null;
 }
 
@@ -152,33 +153,13 @@ const transformTags = { // custom to matrix
         if (attribs.href) {
             attribs.target = '_blank'; // by default
 
-            let m;
-            // FIXME: horrible duplication with linkify-matrix
-            m = attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN);
-            if (m) {
-                attribs.href = m[1];
+            const transformed = tryTransformPermalinkToLocalHref(attribs.href);
+            if (transformed !== attribs.href || attribs.href.match(linkifyMatrix.VECTOR_URL_PATTERN)) {
+                attribs.href = transformed;
                 delete attribs.target;
-            } else {
-                m = attribs.href.match(linkifyMatrix.MATRIXTO_URL_PATTERN);
-                if (m) {
-                    const entity = m[1];
-                    switch (entity[0]) {
-                        case '@':
-                            attribs.href = '#/user/' + entity;
-                            break;
-                        case '+':
-                            attribs.href = '#/group/' + entity;
-                            break;
-                        case '#':
-                        case '!':
-                            attribs.href = '#/room/' + entity;
-                            break;
-                    }
-                    delete attribs.target;
-                }
             }
         }
-        attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
+        attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
     'img': function(tagName, attribs) {
@@ -250,7 +231,7 @@ const sanitizeHtmlParams = {
     allowedAttributes: {
         // custom ones first:
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
-        span: ['data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
+        span: ['data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         img: ['src', 'width', 'height', 'alt', 'title'],
         ol: ['start'],
@@ -395,6 +376,7 @@ class TextHighlighter extends BaseHighlighter {
  * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
  * opts.returnString: return an HTML string rather than JSX elements
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
+ * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
 export function bodyToHtml(content, highlights, opts={}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
@@ -424,11 +406,13 @@ export function bodyToHtml(content, highlights, opts={}) {
             };
         }
 
-        let formattedBody = content.formatted_body;
-        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
-        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(content.body) : content.body;
+        let formattedBody = typeof content.formatted_body === 'string' ? content.formatted_body : null;
+        const plainBody = typeof content.body === 'string' ? content.body : null;
 
-        bodyHasEmoji = containsEmoji(isHtmlMessage ? formattedBody : content.body);
+        if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
+        strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(plainBody) : plainBody;
+
+        bodyHasEmoji = mightContainEmoji(isHtmlMessage ? formattedBody : plainBody);
 
         // Only generate safeBody if the message was sent as org.matrix.custom.html
         if (isHtmlMessage) {
@@ -459,10 +443,12 @@ export function bodyToHtml(content, highlights, opts={}) {
         const match = BIGEMOJI_REGEX.exec(contentBodyTrimmed);
         emojiBody = match && match[0] && match[0].length === contentBodyTrimmed.length &&
                     // Prevent user pills expanding for users with only emoji in
-                    // their username
+                    // their username. Permalinks (links in pills) can be any URL
+                    // now, so we just check for an HTTP-looking thing.
                     (
                         content.formatted_body == undefined ||
-		                !content.formatted_body.includes("https://matrix.to/")
+                        (!content.formatted_body.includes("http:") &&
+                        !content.formatted_body.includes("https:"))
                     );
     }
 
@@ -473,18 +459,19 @@ export function bodyToHtml(content, highlights, opts={}) {
     });
 
     return isDisplayedWithHtml ?
-        <span key="body" className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span key="body" className={className} dir="auto">{ strippedBody }</span>;
+        <span key="body" ref={opts.ref} className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
 }
 
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
- * @param {string} str
- * @returns {string}
+ * @param {string} str string to linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
+ * @returns {string} Linkified string
  */
-export function linkifyString(str) {
-    return _linkifyString(str);
+export function linkifyString(str, options = linkifyMatrix.options) {
+    return _linkifyString(str, options);
 }
 
 /**
@@ -502,8 +489,44 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml) {
-    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
+export function linkifyAndSanitizeHtml(dirtyHtml, options = linkifyMatrix.options) {
+    return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
+}
+
+/**
+ * Returns if a node is a block element or not.
+ * Only takes html nodes into account that are allowed in matrix messages.
+ *
+ * @param {Node} node
+ * @returns {bool}
+ */
+export function checkBlockNode(node) {
+    switch (node.nodeName) {
+        case "H1":
+        case "H2":
+        case "H3":
+        case "H4":
+        case "H5":
+        case "H6":
+        case "PRE":
+        case "BLOCKQUOTE":
+        case "DIV":
+        case "P":
+        case "UL":
+        case "OL":
+        case "LI":
+        case "HR":
+        case "TABLE":
+        case "THEAD":
+        case "TBODY":
+        case "TR":
+        case "TH":
+        case "TD":
+            return true;
+        default:
+            return false;
+    }
 }

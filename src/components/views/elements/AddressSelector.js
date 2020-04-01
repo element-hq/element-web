@@ -15,15 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'AddressSelector',
 
     propTypes: {

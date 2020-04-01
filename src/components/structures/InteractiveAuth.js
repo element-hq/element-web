@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Matrix from 'matrix-js-sdk';
-const InteractiveAuth = Matrix.InteractiveAuth;
-
-import React from 'react';
+import {InteractiveAuth} from "matrix-js-sdk";
+import React, {createRef} from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-import {getEntryComponentForLoginType} from '../views/auth/InteractiveAuthEntryComponents';
+import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
-export default React.createClass({
+import * as sdk from '../../index';
+
+export default createReactClass({
     displayName: 'InteractiveAuth',
 
     propTypes: {
@@ -91,13 +92,14 @@ export default React.createClass({
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
             doRequest: this._requestCallback,
+            busyChanged: this._onBusyChanged,
             inputs: this.props.inputs,
             stateUpdated: this._authStateUpdated,
             matrixClient: this.props.matrixClient,
             sessionId: this.props.sessionId,
             clientSecret: this.props.clientSecret,
             emailSid: this.props.emailSid,
-            requestEmailToken: this.props.requestEmailToken,
+            requestEmailToken: this._requestEmailToken,
         });
 
         this._authLogic.attemptAuth().then((result) => {
@@ -117,7 +119,7 @@ export default React.createClass({
             this.setState({
                 errorText: msg,
             });
-        }).done();
+        });
 
         this._intervalId = null;
         if (this.props.poll) {
@@ -125,6 +127,8 @@ export default React.createClass({
                 this._authLogic.poll();
             }, 2000);
         }
+
+        this._stageComponent = createRef();
     },
 
     componentWillUnmount: function() {
@@ -135,15 +139,29 @@ export default React.createClass({
         }
     },
 
+    _requestEmailToken: async function(...args) {
+        this.setState({
+            busy: true,
+        });
+        try {
+            return await this.props.requestEmailToken(...args);
+        } finally {
+            this.setState({
+                busy: false,
+            });
+        }
+    },
+
     tryContinue: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.tryContinue) {
-            this.refs.stageComponent.tryContinue();
+        if (this._stageComponent.current && this._stageComponent.current.tryContinue) {
+            this._stageComponent.current.tryContinue();
         }
     },
 
     _authStateUpdated: function(stageType, stageState) {
         const oldStage = this.state.authStage;
         this.setState({
+            busy: false,
             authStage: stageType,
             stageState: stageState,
             errorText: stageState.error,
@@ -152,32 +170,33 @@ export default React.createClass({
         });
     },
 
-    _requestCallback: function(auth, background) {
-        const makeRequestPromise = this.props.makeRequest(auth);
+    _requestCallback: function(auth) {
+        // This wrapper just exists because the js-sdk passes a second
+        // 'busy' param for backwards compat. This throws the tests off
+        // so discard it here.
+        return this.props.makeRequest(auth);
+    },
 
-        // if it's a background request, just do it: we don't want
-        // it to affect the state of our UI.
-        if (background) return makeRequestPromise;
-
-        // otherwise, manage the state of the spinner and error messages
-        this.setState({
-            busy: true,
-            errorText: null,
-            stageErrorText: null,
-        });
-        return makeRequestPromise.finally(() => {
-            if (this._unmounted) {
-                return;
-            }
+    _onBusyChanged: function(busy) {
+        // if we've started doing stuff, reset the error messages
+        if (busy) {
             this.setState({
-                busy: false,
+                busy: true,
+                errorText: null,
+                stageErrorText: null,
             });
-        });
+        }
+        // The JS SDK eagerly reports itself as "not busy" right after any
+        // immediate work has completed, but that's not really what we want at
+        // the UI layer, so we ignore this signal and show a spinner until
+        // there's a new screen to show the user. This is implemented by setting
+        // `busy: false` in `_authStateUpdated`.
+        // See also https://github.com/vector-im/riot-web/issues/12546
     },
 
     _setFocus: function() {
-        if (this.refs.stageComponent && this.refs.stageComponent.focus) {
-            this.refs.stageComponent.focus();
+        if (this._stageComponent.current && this._stageComponent.current.focus) {
+            this._stageComponent.current.focus();
         }
     },
 
@@ -187,11 +206,19 @@ export default React.createClass({
 
     _renderCurrentStage: function() {
         const stage = this.state.authStage;
-        if (!stage) return null;
+        if (!stage) {
+            if (this.state.busy) {
+                const Loader = sdk.getComponent("elements.Spinner");
+                return <Loader />;
+            } else {
+                return null;
+            }
+        }
 
         const StageComponent = getEntryComponentForLoginType(stage);
         return (
-            <StageComponent ref="stageComponent"
+            <StageComponent
+                ref={this._stageComponent}
                 loginType={stage}
                 matrixClient={this.props.matrixClient}
                 authSessionId={this._authLogic.getSessionId()}

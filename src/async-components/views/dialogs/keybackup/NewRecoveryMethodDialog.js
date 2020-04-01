@@ -1,5 +1,6 @@
 /*
-Copyright 2018-2019 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +17,8 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import sdk from "../../../../index";
-import MatrixClientPeg from '../../../../MatrixClientPeg';
+import * as sdk from "../../../../index";
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import dis from "../../../../dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
@@ -40,9 +41,11 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
 
     onSetupClick = async () => {
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
-        Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
-            onFinished: this.props.onFinished,
-        });
+        Modal.createTrackedDialog(
+            'Restore Backup', '', RestoreKeyBackupDialog, {
+                onFinished: this.props.onFinished,
+            }, null, /* priority = */ false, /* static = */ true,
+        );
     }
 
     render() {
@@ -70,7 +73,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
             content = <div>
                 {newMethodDetected}
                 <p>{_t(
-                    "This device is encrypting history using the new recovery method.",
+                    "This session is encrypting history using the new recovery method.",
                 )}</p>
                 {hackWarning}
                 <DialogButtons

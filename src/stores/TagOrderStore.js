@@ -18,7 +18,8 @@ import dis from '../dispatcher';
 import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
+import SettingsStore from "../settings/SettingsStore";
 
 const INITIAL_STATE = {
     orderedTags: null,
@@ -40,6 +41,7 @@ class TagOrderStore extends Store {
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
+        SettingsStore.monitorSetting("TagPanel.enableTagPanel", null);
     }
 
     _setState(newState) {
@@ -141,8 +143,13 @@ class TagOrderStore extends Store {
                             newTags = [...this._state.selectedTags, payload.tag];
                         }
                     } else {
-                        // Select individual tag
-                        newTags = [payload.tag];
+                        if (this._state.selectedTags.length === 1 && this._state.selectedTags.includes(payload.tag)) {
+                            // Existing (only) selected tag is being normally clicked again, clear tags
+                            newTags = [];
+                        } else {
+                            // Select individual tag
+                            newTags = [payload.tag];
+                        }
                     }
                     // Only set the anchor tag if the tag was previously unselected, otherwise
                     // the next range starts with an unselected tag.
@@ -166,12 +173,21 @@ class TagOrderStore extends Store {
                 });
                 Analytics.trackEvent('FilterStore', 'deselect_tags');
             break;
+            case 'on_client_not_viable':
             case 'on_logged_out': {
                 // Reset state without pushing an update to the view, which generally assumes that
                 // the matrix client isn't `null` and so causing a re-render will cause NPEs.
                 this._state = Object.assign({}, INITIAL_STATE);
                 break;
             }
+            case 'setting_updated':
+                if (payload.settingName === 'TagPanel.enableTagPanel' && !payload.newValue) {
+                    this._setState({
+                        selectedTags: [],
+                    });
+                    Analytics.trackEvent('FilterStore', 'disable_tags');
+                }
+                break;
         }
     }
 

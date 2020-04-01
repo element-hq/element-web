@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,7 +43,6 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AddWidget_button {
     order: 2;
     cursor: pointer;
-    padding-right: 12px;
     padding: 0;
     margin: 5px auto 5px auto;
     color: $accent-color;
@@ -153,40 +153,12 @@ $AppsDrawerBodyHeight: 273px;
     background-color: $accent-color;
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_reload {
-    mask-image: url('$(res)/img/feather-customised/widget/refresh.svg');
-    mask-size: 100%;
-}
-
 .mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
     mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
 }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_snapshot {
-    mask-image: url('$(res)/img/feather-customised/widget/camera.svg');
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_edit {
-    mask-image: url('$(res)/img/feather-customised/widget/edit.svg');
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_delete {
-    mask-image: url('$(res)/img/feather-customised/widget/bin.svg');
-    background-color: $warning-color;
-}
-
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_cancel {
-    mask-image: url('$(res)/img/feather-customised/widget/x-circle.svg');
-}
-
-/* delete ? */
-.mx_AppTileMenuBarWidget {
-    cursor: pointer;
-    width: 10px;
-    height: 10px;
-    padding: 1px;
-    transition-duration: 500ms;
-    border: 1px solid transparent;
+.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_menu {
+    mask-image: url('$(res)/img/icon_context.svg');
 }
 
 .mx_AppTileMenuBarWidgetDelete {
@@ -198,7 +170,7 @@ $AppsDrawerBodyHeight: 273px;
     border-radius: 2px;
 }
 
-.mx_AppTileBody{
+.mx_AppTileBody {
     height: $AppsDrawerBodyHeight;
     width: 100%;
     overflow: hidden;
@@ -234,7 +206,7 @@ $AppsDrawerBodyHeight: 273px;
     background-color: $lightbox-bg-color;
     border: 1px solid rgba(0, 0, 0, 0);
     width: 200px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     border-radius: 3px;
     margin: 5px;
@@ -248,7 +220,7 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppIconTile:hover {
     border: 1px solid $accent-color;
-    box-shadow: 0 0 10px 5px rgba(200,200,200,0.5);
+    box-shadow: 0 0 10px 5px rgba(200, 200, 200, 0.5);
 }
 
 .mx_AppIconTile_content {
@@ -270,9 +242,8 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppIconTile_image {
     padding: 10px;
-    width: 75%;
-    max-width:100px;
-    max-height:100px;
+    max-width: 100px;
+    max-height: 100px;
     width: auto;
     height: auto;
 }
@@ -295,44 +266,61 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppPermissionWarning {
     text-align: center;
-    background-color: $primary-bg-color;
+    background-color: $widget-menu-bar-bg-color;
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-size: 16px;
 }
 
-.mx_AppPermissionWarningImage {
-    margin: 10px 0;
+.mx_AppPermissionWarning_row {
+    margin-bottom: 12px;
 }
 
-.mx_AppPermissionWarningImage img {
-    width: 100px;
+.mx_AppPermissionWarning_smallText {
+    font-size: 12px;
 }
 
-.mx_AppPermissionWarningText {
-    max-width: 400px;
-    margin: 10px auto 10px auto;
-    color: $primary-fg-color;
+.mx_AppPermissionWarning_bolder {
+    font-weight: 600;
 }
 
-.mx_AppPermissionWarningTextLabel {
-    font-weight: bold;
-    display: block;
+.mx_AppPermissionWarning h4 {
+    margin: 0;
+    padding: 0;
 }
 
-.mx_AppPermissionWarningTextURL {
-    color: $accent-color;
+.mx_AppPermissionWarning_helpIcon {
+    margin-top: 1px;
+    margin-right: 2px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
 }
 
-.mx_AppPermissionButton {
-    border: none;
-    padding: 5px 20px;
-    border-radius: 5px;
-    background-color: $button-bg-color;
-    color: $button-fg-color;
-    cursor: pointer;
+.mx_AppPermissionWarning_helpIcon::before {
+    display: inline-block;
+    background-color: $accent-color;
+    mask-repeat: no-repeat;
+    mask-size: 12px;
+    width: 12px;
+    height: 12px;
+    mask-position: center;
+    content: '';
+    vertical-align: middle;
+    mask-image: url('$(res)/img/feather-customised/help-circle.svg');
+}
+
+.mx_AppPermissionWarning_tooltip {
+    @mixin mx_Tooltip_dark;
+
+    ul {
+        list-style-position: inside;
+        padding-left: 2px;
+        margin-left: 0;
+    }
 }
 
 .mx_AppLoading {
@@ -361,11 +349,11 @@ form.mx_Custom_Widget_Form div {
 }
 
 @keyframes mx_AppLoading_spinner_fadeIn_animation {
-    from { opacity: 0 }
-    to { opacity: 1 }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 
 .mx_AppLoading iframe {
-  display: none;
+    display: none;
 }

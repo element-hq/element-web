@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'MessageSpinner',
 
     render: function() {

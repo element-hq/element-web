@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const Avatar = require('../../../Avatar');
-const sdk = require("../../../index");
-const dispatcher = require("../../../dispatcher");
+import createReactClass from 'create-react-class';
+import * as Avatar from '../../../Avatar';
+import * as sdk from "../../../index";
+import dis from "../../../dispatcher";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
@@ -56,7 +56,7 @@ module.exports = React.createClass({
     },
 
     _getState: function(props) {
-        if (props.member) {
+        if (props.member && props.member.name) {
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
@@ -83,7 +83,7 @@ module.exports = React.createClass({
 
         if (viewUserOnClick) {
             onClick = () => {
-                dispatcher.dispatch({
+                dis.dispatch({
                     action: 'view_user',
                     member: this.props.member,
                 });

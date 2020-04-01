@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,7 +23,7 @@ limitations under the License.
  * @return {Object[]} An array of objects with the form:
  * { key: $KEY, val: $VALUE, place: "add|del" }
  */
-module.exports.getKeyValueArrayDiffs = function(before, after) {
+export function getKeyValueArrayDiffs(before, after) {
     const results = [];
     const delta = {};
     Object.keys(before).forEach(function(beforeKey) {
@@ -76,7 +77,7 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
     });
 
     return results;
-};
+}
 
 /**
  * Shallow-compare two objects for equality: each key and value must be identical
@@ -84,7 +85,7 @@ module.exports.getKeyValueArrayDiffs = function(before, after) {
  * @param {Object} objB Second object to compare against the first
  * @return {boolean} whether the two objects have same key=values
  */
-module.exports.shallowEqual = function(objA, objB) {
+export function shallowEqual(objA, objB) {
     if (objA === objB) {
         return true;
     }
@@ -109,4 +110,4 @@ module.exports.shallowEqual = function(objA, objB) {
     }
 
     return true;
-};
+}

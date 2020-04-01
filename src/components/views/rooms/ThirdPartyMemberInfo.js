@@ -16,11 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {MatrixEvent} from "matrix-js-sdk";
 import {_t} from "../../../languageHandler";
 import dis from "../../../dispatcher";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import Modal from "../../../Modal";
 import {isValid3pidInvite} from "../../../RoomInvite";
 
@@ -121,7 +121,7 @@ export default class ThirdPartyMemberInfo extends React.Component {
 
         // We shamelessly rip off the MemberInfo styles here.
         return (
-            <div className="mx_MemberInfo">
+            <div className="mx_MemberInfo" role="tabpanel">
                 <div className="mx_MemberInfo_name">
                     <AccessibleButton className="mx_MemberInfo_cancel"
                         onClick={this.onCancel}

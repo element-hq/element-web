@@ -17,12 +17,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher';
-import { KeyCode } from '../../../Keyboard';
+import {Key} from '../../../Keyboard';
 
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'ForwardMessage',
 
     propTypes: {
@@ -32,7 +33,6 @@ module.exports = React.createClass({
     componentWillMount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            rightDisabled: true,
             middleDisabled: true,
         });
     },
@@ -44,15 +44,14 @@ module.exports = React.createClass({
     componentWillUnmount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            sideDisabled: false,
             middleDisabled: false,
         });
         document.removeEventListener('keydown', this._onKeyDown);
     },
 
     _onKeyDown: function(ev) {
-        switch (ev.keyCode) {
-            case KeyCode.ESCAPE:
+        switch (ev.key) {
+            case Key.ESCAPE:
                 this.props.onCancelClick();
                 break;
         }

@@ -17,23 +17,29 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import classNames from "classnames";
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'InfoDialog',
     propTypes: {
+        className: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.node,
         button: PropTypes.string,
         onFinished: PropTypes.func,
+        hasCloseButton: PropTypes.bool,
+        onKeyDown: PropTypes.func,
     },
 
     getDefaultProps: function() {
         return {
             title: '',
             description: '',
+            hasCloseButton: false,
         };
     },
 
@@ -45,12 +51,15 @@ export default React.createClass({
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
-            <BaseDialog className="mx_InfoDialog" onFinished={this.props.onFinished}
+            <BaseDialog
+                className="mx_InfoDialog"
+                onFinished={this.props.onFinished}
                 title={this.props.title}
                 contentId='mx_Dialog_content'
-                hasCancel={false}
+                hasCancel={this.props.hasCloseButton}
+                onKeyDown={this.props.onKeyDown}
             >
-                <div className="mx_Dialog_content" id="mx_Dialog_content">
+                <div className={classNames("mx_Dialog_content", this.props.className)} id="mx_Dialog_content">
                     { this.props.description }
                 </div>
                 <DialogButtons primaryButton={this.props.button || _t('OK')}

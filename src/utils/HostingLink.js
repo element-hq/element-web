@@ -18,7 +18,7 @@ import url from 'url';
 import qs from 'qs';
 
 import SdkConfig from '../SdkConfig';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 
 export function getHostingLink(campaign) {
     const hostingLink = SdkConfig.get().hosting_signup_link;

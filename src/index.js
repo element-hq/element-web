@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +17,14 @@ limitations under the License.
 
 import Skinner from './Skinner';
 
-module.exports.loadSkin = function(skinObject) {
+export function loadSkin(skinObject) {
     Skinner.load(skinObject);
-};
+}
 
-module.exports.resetSkin = function() {
+export function resetSkin() {
     Skinner.reset();
-};
+}
 
-module.exports.getComponent = function(componentName) {
+export function getComponent(componentName) {
     return Skinner.getComponent(componentName);
-};
+}

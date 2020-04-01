@@ -232,13 +232,13 @@ Example:
 }
 */
 
-import SdkConfig from './SdkConfig';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
 import dis from './dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
+import {IntegrationManagers} from "./integrations/IntegrationManagers";
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -279,7 +279,7 @@ function inviteUser(event, roomId, userId) {
         }
     }
 
-    client.invite(roomId, userId).done(function() {
+    client.invite(roomId, userId).then(function() {
         sendResponse(event, {
             success: true,
         });
@@ -398,7 +398,7 @@ function setPlumbingState(event, roomId, status) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).done(() => {
+    client.sendStateEvent(roomId, "m.room.plumbing", { status: status }).then(() => {
         sendResponse(event, {
             success: true,
         });
@@ -414,7 +414,7 @@ function setBotOptions(event, roomId, userId) {
         sendError(event, _t('You need to be logged in.'));
         return;
     }
-    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).done(() => {
+    client.sendStateEvent(roomId, "m.room.bot.options", event.data.content, "_" + userId).then(() => {
         sendResponse(event, {
             success: true,
         });
@@ -444,7 +444,7 @@ function setBotPower(event, roomId, userId, level) {
             },
         );
 
-        client.setPowerLevel(roomId, userId, level, powerEvent).done(() => {
+        client.setPowerLevel(roomId, userId, level, powerEvent).then(() => {
             sendResponse(event, {
                 success: true,
             });
@@ -546,20 +546,30 @@ const onMessage = function(event) {
     // This means the URL could contain a path (like /develop) and still be used
     // to validate event origins, which do not specify paths.
     // (See https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-    //
-    // All strings start with the empty string, so for sanity return if the length
-    // of the event origin is 0.
-    //
+    let configUrl;
+    try {
+        if (!openManagerUrl) openManagerUrl = IntegrationManagers.sharedInstance().getPrimaryManager().uiUrl;
+        configUrl = new URL(openManagerUrl);
+    } catch (e) {
+        // No integrations UI URL, ignore silently.
+        return;
+    }
+    let eventOriginUrl;
+    try {
+        eventOriginUrl = new URL(event.origin);
+    } catch (e) {
+        return;
+    }
     // TODO -- Scalar postMessage API should be namespaced with event.data.api field
     // Fix following "if" statement to respond only to specific API messages.
-    const url = SdkConfig.get().integrations_ui_url;
     if (
-        event.origin.length === 0 ||
-        !url.startsWith(event.origin + '/') ||
+        configUrl.origin !== eventOriginUrl.origin ||
         !event.data.action ||
         event.data.api // Ignore messages with specific API set
     ) {
-        return; // don't log this - debugging APIs like to spam postMessage which floods the log otherwise
+        // don't log this - debugging APIs and browser add-ons like to spam
+        // postMessage which floods the log otherwise
+        return;
     }
 
     if (event.data.action === "close_scalar") {
@@ -647,26 +657,30 @@ const onMessage = function(event) {
 };
 
 let listenerCount = 0;
-module.exports = {
-    startListening: function() {
-        if (listenerCount === 0) {
-            window.addEventListener("message", onMessage, false);
-        }
-        listenerCount += 1;
-    },
+let openManagerUrl = null;
 
-    stopListening: function() {
-        listenerCount -= 1;
-        if (listenerCount === 0) {
-            window.removeEventListener("message", onMessage);
-        }
-        if (listenerCount < 0) {
-            // Make an error so we get a stack trace
-            const e = new Error(
-                "ScalarMessaging: mismatched startListening / stopListening detected." +
-                " Negative count",
-            );
-            console.error(e);
-        }
-    },
-};
+export function startListening() {
+    if (listenerCount === 0) {
+        window.addEventListener("message", onMessage, false);
+    }
+    listenerCount += 1;
+}
+
+export function stopListening() {
+    listenerCount -= 1;
+    if (listenerCount === 0) {
+        window.removeEventListener("message", onMessage);
+    }
+    if (listenerCount < 0) {
+        // Make an error so we get a stack trace
+        const e = new Error(
+            "ScalarMessaging: mismatched startListening / stopListening detected." +
+            " Negative count",
+        );
+        console.error(e);
+    }
+}
+
+export function setOpenManagerUrl(url) {
+    openManagerUrl = url;
+}

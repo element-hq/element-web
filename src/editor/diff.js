@@ -25,16 +25,6 @@ function firstDiff(a, b) {
     return compareLen;
 }
 
-function lastDiff(a, b) {
-    const compareLen = Math.min(a.length, b.length);
-    for (let i = 0; i < compareLen; ++i) {
-        if (a[a.length - i] !== b[b.length - i]) {
-            return i;
-        }
-    }
-    return compareLen;
-}
-
 function diffStringsAtEnd(oldStr, newStr) {
     const len = Math.min(oldStr.length, newStr.length);
     const startInCommon = oldStr.substr(0, len) === newStr.substr(0, len);
@@ -52,24 +42,25 @@ function diffStringsAtEnd(oldStr, newStr) {
     }
 }
 
+// assumes only characters have been deleted at one location in the string, and none added
 export function diffDeletion(oldStr, newStr) {
     if (oldStr === newStr) {
         return {};
     }
     const firstDiffIdx = firstDiff(oldStr, newStr);
-    const lastDiffIdx = oldStr.length - lastDiff(oldStr, newStr) + 1;
-    return {at: firstDiffIdx, removed: oldStr.substring(firstDiffIdx, lastDiffIdx)};
+    const amount = oldStr.length - newStr.length;
+    return {at: firstDiffIdx, removed: oldStr.substr(firstDiffIdx, amount)};
 }
 
-export function diffInsertion(oldStr, newStr) {
-    const diff = diffDeletion(newStr, oldStr);
-    if (diff.removed) {
-        return {at: diff.at, added: diff.removed};
-    } else {
-        return diff;
-    }
-}
-
+/**
+ * Calculates which string was added and removed around the caret position
+ * @param {String} oldValue the previous value
+ * @param {String} newValue the new value
+ * @param {Number} caretPosition the position of the caret after `newValue` was applied.
+ * @return {object} an object with `at` as the offset where characters were removed and/or added,
+ *                  `added` with the added string (if any), and
+ *                  `removed` with the removed string (if any)
+ */
 export function diffAtCaret(oldValue, newValue, caretPosition) {
     const diffLen = newValue.length - oldValue.length;
     const caretPositionBeforeInput = caretPosition - diffLen;

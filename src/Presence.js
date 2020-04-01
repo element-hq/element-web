@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const MatrixClientPeg = require("./MatrixClientPeg");
-const dis = require("./dispatcher");
+import {MatrixClientPeg} from "./MatrixClientPeg";
+import dis from "./dispatcher";
 import Timer from './utils/Timer';
 
  // Time in ms after that a user is considered as unavailable/away
@@ -24,7 +25,6 @@ const UNAVAILABLE_TIME_MS = 3 * 60 * 1000; // 3 mins
 const PRESENCE_STATES = ["online", "offline", "unavailable"];
 
 class Presence {
-
     constructor() {
         this._activitySignal = null;
         this._unavailableTimer = null;
@@ -43,7 +43,7 @@ class Presence {
             try {
                 await this._unavailableTimer.finished();
                 this.setState("unavailable");
-            } catch(e) { /* aborted, stop got called */ }
+            } catch (e) { /* aborted, stop got called */ }
         }
     }
 
@@ -88,7 +88,7 @@ class Presence {
         if (PRESENCE_STATES.indexOf(newState) === -1) {
             throw new Error("Bad presence state: " + newState);
         }
-        const old_state = this.state;
+        const oldState = this.state;
         this.state = newState;
 
         if (MatrixClientPeg.get().isGuest()) {
@@ -97,12 +97,12 @@ class Presence {
 
         try {
             await MatrixClientPeg.get().setPresence(this.state);
-            console.log("Presence: %s", newState);
-        } catch(err) {
+            console.info("Presence: %s", newState);
+        } catch (err) {
             console.error("Failed to set presence: %s", err);
-            this.state = old_state;
+            this.state = oldState;
         }
     }
 }
 
-module.exports = new Presence();
+export default new Presence();

@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,18 +16,23 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
-import Matrix from 'matrix-js-sdk';
-import sdk from '../../index';
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {Filter} from 'matrix-js-sdk';
+import * as sdk from '../../index';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
+import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
-const FilePanel = React.createClass({
+const FilePanel = createReactClass({
     displayName: 'FilePanel',
+    // This is used to track if a decrypted event was a live event and should be
+    // added to the timeline.
+    decryptingEvents: new Set(),
 
     propTypes: {
         roomId: PropTypes.string.isRequired,
@@ -38,55 +44,147 @@ const FilePanel = React.createClass({
         };
     },
 
-    componentWillMount: function() {
-        this.updateTimelineSet(this.props.roomId);
-    },
+    onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+        if (room.roomId !== this.props.roomId) return;
+        if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
-    componentWillReceiveProps: function(nextProps) {
-        if (nextProps.roomId !== this.props.roomId) {
-            // otherwise we race between re-rendering the TimelinePanel and setting the new timelineSet.
-            //
-            // FIXME: this race only happens because of the promise returned by getOrCreateFilter().
-            // We should only need to create the containsUrl filter once per login session, so in practice
-            // it shouldn't be being done here at all.  Then we could just update the timelineSet directly
-            // without resetting it first, and speed up room-change.
-            this.setState({ timelineSet: null });
-            this.updateTimelineSet(nextProps.roomId);
+        if (ev.isBeingDecrypted()) {
+            this.decryptingEvents.add(ev.getId());
+        } else {
+            this.addEncryptedLiveEvent(ev);
         }
     },
 
-    updateTimelineSet: function(roomId) {
+    onEventDecrypted(ev, err) {
+        if (ev.getRoomId() !== this.props.roomId) return;
+        const eventId = ev.getId();
+
+        if (!this.decryptingEvents.delete(eventId)) return;
+        if (err) return;
+
+        this.addEncryptedLiveEvent(ev);
+    },
+
+    addEncryptedLiveEvent(ev, toStartOfTimeline) {
+        if (!this.state.timelineSet) return;
+
+        const timeline = this.state.timelineSet.getLiveTimeline();
+        if (ev.getType() !== "m.room.message") return;
+        if (["m.file", "m.image", "m.video", "m.audio"].indexOf(ev.getContent().msgtype) == -1) {
+            return;
+        }
+
+        if (!this.state.timelineSet.eventIdToTimeline(ev.getId())) {
+            this.state.timelineSet.addEventToTimeline(ev, timeline, false);
+        }
+    },
+
+    async componentDidMount() {
+        const client = MatrixClientPeg.get();
+
+        await this.updateTimelineSet(this.props.roomId);
+
+        if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
+
+        // The timelineSets filter makes sure that encrypted events that contain
+        // URLs never get added to the timeline, even if they are live events.
+        // These methods are here to manually listen for such events and add
+        // them despite the filter's best efforts.
+        //
+        // We do this only for encrypted rooms and if an event index exists,
+        // this could be made more general in the future or the filter logic
+        // could be fixed.
+        if (EventIndexPeg.get() !== null) {
+            client.on('Room.timeline', this.onRoomTimeline);
+            client.on('Event.decrypted', this.onEventDecrypted);
+        }
+    },
+
+    componentWillUnmount() {
+        const client = MatrixClientPeg.get();
+        if (client === null) return;
+
+        if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
+
+        if (EventIndexPeg.get() !== null) {
+            client.removeListener('Room.timeline', this.onRoomTimeline);
+            client.removeListener('Event.decrypted', this.onEventDecrypted);
+        }
+    },
+
+    async fetchFileEventsServer(room) {
+        const client = MatrixClientPeg.get();
+
+        const filter = new Filter(client.credentials.userId);
+        filter.setDefinition(
+            {
+                "room": {
+                    "timeline": {
+                        "contains_url": true,
+                        "types": [
+                            "m.room.message",
+                        ],
+                    },
+                },
+            },
+        );
+
+        const filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
+        filter.filterId = filterId;
+        const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
+
+        return timelineSet;
+    },
+
+    onPaginationRequest(timelineWindow, direction, limit) {
+        const client = MatrixClientPeg.get();
+        const eventIndex = EventIndexPeg.get();
+        const roomId = this.props.roomId;
+
+        const room = client.getRoom(roomId);
+
+        // We override the pagination request for encrypted rooms so that we ask
+        // the event index to fulfill the pagination request. Asking the server
+        // to paginate won't ever work since the server can't correctly filter
+        // out events containing URLs
+        if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+            return eventIndex.paginateTimelineWindow(room, timelineWindow, direction, limit);
+        } else {
+            return timelineWindow.paginate(direction, limit);
+        }
+    },
+
+    async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(roomId);
+        const eventIndex = EventIndexPeg.get();
 
         this.noRoom = !room;
 
         if (room) {
-            const filter = new Matrix.Filter(client.credentials.userId);
-            filter.setDefinition(
-                {
-                    "room": {
-                        "timeline": {
-                            "contains_url": true,
-                            "types": [
-                                "m.room.message",
-                            ],
-                        },
-                    },
-                },
-            );
+            let timelineSet;
 
-            // FIXME: we shouldn't be doing this every time we change room - see comment above.
-            client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter).then(
-                (filterId)=>{
-                    filter.filterId = filterId;
-                    const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
-                    this.setState({ timelineSet: timelineSet });
-                },
-                (error)=>{
-                    console.error("Failed to get or create file panel filter", error);
-                },
-            );
+            try {
+                timelineSet = await this.fetchFileEventsServer(room);
+
+                // If this room is encrypted the file panel won't be populated
+                // correctly since the defined filter doesn't support encrypted
+                // events and the server can't check if encrypted events contain
+                // URLs.
+                //
+                // This is where our event index comes into place, we ask the
+                // event index to populate the timelineSet for us. This call
+                // will add 10 events to the live timeline of the set. More can
+                // be requested using pagination.
+                if (client.isRoomEncrypted(roomId) && eventIndex !== null) {
+                    const timeline = timelineSet.getLiveTimeline();
+                    await eventIndex.populateFileTimeline(timelineSet, timeline, room, 10);
+                }
+
+                this.setState({ timelineSet: timelineSet });
+            } catch (error) {
+                console.error("Failed to get or create file panel filter", error);
+            }
         } else {
             console.error("Failed to add filtered timelineSet for FilePanel as no room!");
         }
@@ -116,20 +214,22 @@ const FilePanel = React.createClass({
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <TimelinePanel key={"filepanel_" + this.props.roomId}
-                    className="mx_FilePanel"
-                    manageReadReceipts={false}
-                    manageReadMarkers={false}
-                    timelineSet={this.state.timelineSet}
-                    showUrlPreview = {false}
-                    tileShape="file_grid"
-                    resizeNotifier={this.props.resizeNotifier}
-                    empty={_t('There are no visible files in this room')}
-                />
+                <div className="mx_FilePanel" role="tabpanel">
+                    <TimelinePanel key={"filepanel_" + this.props.roomId}
+                        manageReadReceipts={false}
+                        manageReadMarkers={false}
+                        timelineSet={this.state.timelineSet}
+                        showUrlPreview = {false}
+                        onPaginationRequest={this.onPaginationRequest}
+                        tileShape="file_grid"
+                        resizeNotifier={this.props.resizeNotifier}
+                        empty={_t('There are no visible files in this room')}
+                    />
+                </div>
             );
         } else {
             return (
-                <div className="mx_FilePanel">
+                <div className="mx_FilePanel" role="tabpanel">
                     <Loader />
                 </div>
             );
@@ -137,4 +237,4 @@ const FilePanel = React.createClass({
     },
 });
 
-module.exports = FilePanel;
+export default FilePanel;

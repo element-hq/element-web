@@ -17,21 +17,26 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const sdk = require('../../../index');
-const rate_limited_func = require('../../../ratelimitedfunc');
-const CallHandler = require("../../../CallHandler");
+import rate_limited_func from "../../../ratelimitedfunc";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import CallHandler from "../../../CallHandler";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
 const SHOW_MORE_INCREMENT = 100;
 
-module.exports = React.createClass({
+// Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
+// matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
+
+export default createReactClass({
     displayName: 'MemberList',
 
     getInitialState: function() {
@@ -186,7 +191,7 @@ module.exports = React.createClass({
         }
     },
 
-    _updateList: new rate_limited_func(function() {
+    _updateList: rate_limited_func(function() {
         this._updateListNow();
     }, 500),
 
@@ -335,10 +340,13 @@ module.exports = React.createClass({
         }
 
         // Fourth by name (alphabetical)
-        const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-        const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+        const nameA = (memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name).replace(SORT_REGEX, "");
+        const nameB = (memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name).replace(SORT_REGEX, "");
         // console.log(`Comparing userA_name=${nameA} against userB_name=${nameB} - returning`);
-        return nameA.localeCompare(nameB);
+        return nameA.localeCompare(nameB, {
+            ignorePunctuation: true,
+            sensitivity: "base",
+        });
     },
 
     onSearchQueryChanged: function(searchQuery) {
@@ -392,33 +400,20 @@ module.exports = React.createClass({
         }
     },
 
-    _makeMemberTiles: function(members, membership) {
+    _makeMemberTiles: function(members) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
+        const EntityTile = sdk.getComponent("rooms.EntityTile");
 
-        const memberList = members.map((m) => {
-            return (
-                <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this._showPresence} />
-            );
+        return members.map((m) => {
+            if (m.userId) {
+                // Is a Matrix invite
+                return <MemberTile key={m.userId} member={m} ref={m.userId} showPresence={this._showPresence} />;
+            } else {
+                // Is a 3pid invite
+                return <EntityTile key={m.getStateKey()} name={m.getContent().display_name} suppressOnHover={true}
+                                   onClick={() => this._onPending3pidInviteClick(m)} />;
+            }
         });
-
-        // XXX: surely this is not the right home for this logic.
-        // Double XXX: Now it's really, really not the right home for this logic:
-        // we shouldn't even be passing in the 'membership' param to this function.
-        // Ew, ew, and ew.
-        // Triple XXX: This violates the size constraint, the output is expected/desired
-        // to be the same length as the members input array.
-        if (membership === "invite") {
-            const EntityTile = sdk.getComponent("rooms.EntityTile");
-            memberList.push(...this._getPending3PidInvites().map((e) => {
-                return <EntityTile key={e.getStateKey()}
-                    name={e.getContent().display_name}
-                    suppressOnHover={true}
-                    onClick={() => this._onPending3pidInviteClick(e)}
-                />;
-            }));
-        }
-
-        return memberList;
     },
 
     _getChildrenJoined: function(start, end) {
@@ -430,7 +425,12 @@ module.exports = React.createClass({
     },
 
     _getChildrenInvited: function(start, end) {
-        return this._makeMemberTiles(this.state.filteredInvitedMembers.slice(start, end), 'invite');
+        let targets = this.state.filteredInvitedMembers;
+        if (end > this.state.filteredInvitedMembers.length) {
+            targets = targets.concat(this._getPending3PidInvites());
+        }
+
+        return this._makeMemberTiles(targets.slice(start, end));
     },
 
     _getChildCountInvited: function() {
@@ -482,7 +482,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <div className="mx_MemberList">
+            <div className="mx_MemberList" role="tabpanel">
                 { inviteButton }
                 <AutoHideScrollbar>
                     <div className="mx_MemberList_wrapper">

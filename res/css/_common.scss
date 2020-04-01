@@ -30,6 +30,11 @@ body {
     color: $primary-fg-color;
     border: 0px;
     margin: 0px;
+
+    // needed to match the designs correctly on macOS
+    // see https://github.com/vector-im/riot-web/issues/11425
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 pre, code {
@@ -37,8 +42,13 @@ pre, code {
     font-size: 100% !important;
 }
 
-.error, .warning {
+.error, .warning,
+.text-error, .text-warning {
     color: $warning-color;
+}
+
+.text-success {
+    color: $accent-color;
 }
 
 b {
@@ -104,22 +114,22 @@ input[type=text], input[type=password], textarea {
     color: $primary-fg-color;
 }
 
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    outline: none;
-    box-shadow: none;
-}
-
 /* Required by Firefox */
 textarea {
     font-family: $font-family;
     color: $primary-fg-color;
 }
 
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 // This is used to hide the standard outline added by browsers for
 // accessible (focusable) components. Not intended for buttons, but
 // should be used on things like focusable containers where the outline
 // is usually not helping anyone.
-.mx_HiddenFocusable {
+*:focus:not(.focus-visible) {
     outline: none;
 }
 
@@ -129,6 +139,13 @@ textarea {
 // appear to be part of the input
 
 .mx_Dialog, .mx_MatrixChat {
+    .mx_textinput > input[type=text],
+    .mx_textinput > input[type=search] {
+        border: none;
+        flex: 1;
+        color: $primary-fg-color;
+    }
+
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
@@ -147,13 +164,6 @@ textarea {
     .mx_textinput {
         display: flex;
         align-items: center;
-
-        > input[type=text],
-        > input[type=search] {
-            border: none;
-            flex: 1;
-            color: $primary-fg-color;
-        }
     }
 
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
@@ -166,14 +176,12 @@ textarea {
 /*** panels ***/
 .dark-panel {
     background-color: $dark-panel-bg-color;
-}
 
-.dark-panel {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
         color: $input-darker-fg-color;
-        background-color: $input-darker-bg-color;
+        background-color: $primary-bg-color;
         border: none;
     }
 }
@@ -197,37 +205,6 @@ textarea {
 .mx_fadable {
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
-}
-
-/* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
-   Stop the scrollbar view from pushing out the container's overall sizing, which causes
-   flexbox to adapt to the new size and cause the view to keep growing.
- */
-.gm-scrollbar-container .gm-scroll-view {
-    position: absolute;
-}
-
-/* Expand thumbs on hoverover */
-.gm-scrollbar {
-    border-radius: 5px ! important;
-}
-.gm-scrollbar.-vertical {
-    width: 6px;
-    transition: width 120ms ease-out ! important;
-}
-.gm-scrollbar.-vertical:hover,
-.gm-scrollbar.-vertical:active {
-    width: 8px;
-    transition: width 120ms ease-out ! important;
-}
-.gm-scrollbar.-horizontal {
-    height: 6px;
-    transition: height 120ms ease-out ! important;
-}
-.gm-scrollbar.-horizontal:hover,
-.gm-scrollbar.-horizontal:active {
-    height: 8px;
-    transition: height 120ms ease-out ! important;
 }
 
 // These are magic constants which are excluded from tinting, to let themes
@@ -269,14 +246,6 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-/* Spinner Dialog overide */
-.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
-    width: auto;
-    border-radius: 8px;
-    padding: 0px;
-    box-shadow: none;
 }
 
 .mx_Dialog {
@@ -340,7 +309,15 @@ textarea {
 
 .mx_Dialog_header {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.mx_Dialog_titleImage {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    margin-left: -2px;
+    margin-right: 4px;
 }
 
 .mx_Dialog_title {
@@ -383,14 +360,20 @@ textarea {
     text-align: right;
 }
 
-.mx_Dialog button, .mx_Dialog input[type="submit"] {
+/* XXX: Our button style are a mess: buttons that happen to appear in dialogs get special styles applied
+ * to them that no button anywhere else in the app gets by default. In practice, buttons in other places
+ * in the app look the same by being AccessibleButtons, or possibly by having explict button classes.
+ * We should go through and have one consistent set of styles for buttons throughout the app.
+ * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
+ */
+.mx_Dialog button, .mx_Dialog input[type="submit"], .mx_Dialog_buttons button, .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: 8px;
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color ! important;
+    border: 1px solid $accent-color;
     color: $accent-color;
     background-color: $button-secondary-bg-color;
 }
@@ -399,30 +382,43 @@ textarea {
     margin-right: 0px;
 }
 
-.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover {
+.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover, .mx_Dialog_buttons button:hover, .mx_Dialog_buttons input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
 
-.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus {
+.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus, .mx_Dialog_buttons button:focus, .mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog  input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary, .mx_Dialog_buttons button.mx_Dialog_primary, .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
     background-color: $accent-color;
     min-width: 156px;
 }
 
-.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger {
+.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger, .mx_Dialog_buttons button.danger, .mx_Dialog_buttons input[type="submit"].danger {
     background-color: $warning-color;
     border: solid 1px $warning-color;
     color: $accent-fg-color;
 }
 
-.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled {
+.mx_Dialog button.warning, .mx_Dialog input[type="submit"].warning {
+    border: solid 1px $warning-color;
+    color: $warning-color;
+}
+
+.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled, .mx_Dialog_buttons button:disabled, .mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
+}
+
+/* Spinner Dialog overide */
+.mx_Dialog_wrapper.mx_Dialog_spinner .mx_Dialog {
+    width: auto;
+    border-radius: 8px;
+    padding: 0px;
+    box-shadow: none;
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
@@ -456,16 +452,6 @@ textarea {
     padding: 9px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
-}
-
-::-moz-selection {
-    background-color: $accent-color;
-    color: $selection-fg-color;
-}
-
-::selection {
-    background-color: $accent-color;
-    color: $selection-fg-color;
 }
 
 .mx_textButton {
@@ -560,4 +546,29 @@ textarea {
 
 .mx_Username_color8 {
     color: $username-variant8-color;
+}
+
+@define-mixin mx_Tooltip_dark {
+    box-shadow: none;
+    background-color: $tooltip-timeline-bg-color;
+    color: $tooltip-timeline-fg-color;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 8px;
+}
+
+// This is a workaround for our mixins not supporting child selectors
+.mx_Tooltip_dark {
+    .mx_Tooltip_chevron::after {
+        border-right-color: $tooltip-timeline-bg-color;
+    }
+}
+
+@define-mixin mx_Settings_fullWidthField {
+    margin-right: 100px;
+}
+
+@define-mixin mx_Settings_tooltip {
+    // So it fits in the space provided by the page
+    max-width: 120px;
 }

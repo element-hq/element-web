@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import AccessibleButton from '../elements/AccessibleButton';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import {_t} from "../../../languageHandler";
 import MemberAvatar from '../avatars/MemberAvatar';
 import classNames from 'classnames';
-import * as ContextualMenu from "../../structures/ContextualMenu";
 import StatusMessageContextMenu from "../context_menus/StatusMessageContextMenu";
 import SettingsStore from "../../../settings/SettingsStore";
+import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 
 export default class MemberStatusMessageAvatar extends React.Component {
     static propTypes = {
@@ -38,12 +38,15 @@ export default class MemberStatusMessageAvatar extends React.Component {
         resizeMethod: 'crop',
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             hasStatus: this.hasStatus,
+            menuDisplayed: false,
         };
+
+        this._button = createRef();
     }
 
     componentWillMount() {
@@ -60,7 +63,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
     }
 
-    componentWillUmount() {
+    componentWillUnmount() {
         const { user } = this.props.member;
         if (!user) {
             return;
@@ -86,25 +89,12 @@ export default class MemberStatusMessageAvatar extends React.Component {
         });
     };
 
-    _onClick = (e) => {
-        e.stopPropagation();
+    openMenu = () => {
+        this.setState({ menuDisplayed: true });
+    };
 
-        const elementRect = e.target.getBoundingClientRect();
-
-        const x = (elementRect.left + window.pageXOffset);
-        const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
-        const chevronOffset = (elementRect.width - chevronWidth) / 2;
-        const chevronMargin = 1; // Add some spacing away from target
-        const y = elementRect.top + window.pageYOffset - chevronMargin;
-
-        ContextualMenu.createMenu(StatusMessageContextMenu, {
-            chevronOffset: chevronOffset,
-            chevronFace: 'bottom',
-            left: x,
-            top: y,
-            menuWidth: 226,
-            user: this.props.member.user,
-        });
+    closeMenu = () => {
+        this.setState({ menuDisplayed: false });
     };
 
     render() {
@@ -124,10 +114,39 @@ export default class MemberStatusMessageAvatar extends React.Component {
             "mx_MemberStatusMessageAvatar_hasStatus": this.state.hasStatus,
         });
 
-        return <AccessibleButton className={classes}
-            element="div" onClick={this._onClick}
-        >
-            {avatar}
-        </AccessibleButton>;
+        let contextMenu;
+        if (this.state.menuDisplayed) {
+            const elementRect = this._button.current.getBoundingClientRect();
+
+            const chevronWidth = 16; // See .mx_ContextualMenu_chevron_bottom
+            const chevronMargin = 1; // Add some spacing away from target
+
+            contextMenu = (
+                <ContextMenu
+                    chevronOffset={(elementRect.width - chevronWidth) / 2}
+                    chevronFace="bottom"
+                    left={elementRect.left + window.pageXOffset}
+                    top={elementRect.top + window.pageYOffset - chevronMargin}
+                    menuWidth={226}
+                    onFinished={this.closeMenu}
+                >
+                    <StatusMessageContextMenu user={this.props.member.user} onFinished={this.closeMenu} />
+                </ContextMenu>
+            );
+        }
+
+        return <React.Fragment>
+            <ContextMenuButton
+                className={classes}
+                inputRef={this._button}
+                onClick={this.openMenu}
+                isExpanded={this.state.menuDisplayed}
+                label={_t("User Status")}
+            >
+                {avatar}
+            </ContextMenuButton>
+
+            { contextMenu }
+        </React.Fragment>;
     }
 }

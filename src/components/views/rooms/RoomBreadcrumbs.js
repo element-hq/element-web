@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {createRef} from "react";
 import dis from "../../../dispatcher";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomAvatar from '../avatars/RoomAvatar';
 import classNames from 'classnames';
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import Analytics from "../../../Analytics";
 import * as RoomNotifs from '../../../RoomNotifs';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
@@ -29,40 +29,41 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import {_t} from "../../../languageHandler";
 
 const MAX_ROOMS = 20;
+const MIN_ROOMS_BEFORE_ENABLED = 10;
+
+// The threshold time in milliseconds to wait for an autojoined room to show up.
+const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90 seconds
 
 export default class RoomBreadcrumbs extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {rooms: []};
+        this.state = {rooms: [], enabled: false};
 
         this.onAction = this.onAction.bind(this);
         this._dispatcherRef = null;
+
+        // The room IDs we're waiting to come down the Room handler and when we
+        // started waiting for them. Used to track a room over an upgrade/autojoin.
+        this._waitingRoomQueue = [/* { roomId, addedTs } */];
+
+        this._scroller = createRef();
     }
 
     componentWillMount() {
         this._dispatcherRef = dis.register(this.onAction);
 
-        let storedRooms = SettingsStore.getValue("breadcrumb_rooms");
-        if (!storedRooms || !storedRooms.length) {
-            // Fallback to the rooms stored in localstorage for those who would have had this.
-            // TODO: Remove this after a bit - the feature was only on develop, so a few weeks should be plenty time.
-            const roomStr = localStorage.getItem("mx_breadcrumb_rooms");
-            if (roomStr) {
-                try {
-                    storedRooms = JSON.parse(roomStr);
-                } catch (e) {
-                    console.error("Failed to parse breadcrumbs:", e);
-                }
-            }
-        }
+        const storedRooms = SettingsStore.getValue("breadcrumb_rooms");
         this._loadRoomIds(storedRooms || []);
 
         this._settingWatchRef = SettingsStore.watchSetting("breadcrumb_rooms", null, this.onBreadcrumbsChanged);
+
+        this.setState({enabled: this._shouldEnable()});
 
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
         MatrixClientPeg.get().on("Room.receipt", this.onRoomReceipt);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
+        MatrixClientPeg.get().on("Room", this.onRoom);
     }
 
     componentWillUnmount() {
@@ -76,6 +77,7 @@ export default class RoomBreadcrumbs extends React.Component {
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.timeline", this.onRoomTimeline);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
+            client.removeListener("Room", this.onRoom);
         }
     }
 
@@ -94,8 +96,22 @@ export default class RoomBreadcrumbs extends React.Component {
     onAction(payload) {
         switch (payload.action) {
             case 'view_room':
+                if (payload.auto_join && !MatrixClientPeg.get().getRoom(payload.room_id)) {
+                    // Queue the room instead of pushing it immediately - we're probably just waiting
+                    // for a join to complete (ie: joining the upgraded room).
+                    this._waitingRoomQueue.push({roomId: payload.room_id, addedTs: (new Date).getTime()});
+                    break;
+                }
                 this._appendRoomId(payload.room_id);
                 break;
+
+            // XXX: slight hack in order to zero the notification count when a room
+            // is read. Copied from RoomTile
+            case 'on_room_read': {
+                const room = MatrixClientPeg.get().getRoom(payload.roomId);
+                this._calculateRoomBadges(room, /*zero=*/true);
+                break;
+            }
         }
     }
 
@@ -108,6 +124,7 @@ export default class RoomBreadcrumbs extends React.Component {
                 this.setState({rooms});
             }
         }
+        this.onRoomMembershipChanged();
     };
 
     onRoomReceipt = (event, room) => {
@@ -147,6 +164,33 @@ export default class RoomBreadcrumbs extends React.Component {
         this._loadRoomIds(value);
     };
 
+    onRoomMembershipChanged = () => {
+        if (!this.state.enabled && this._shouldEnable()) {
+            this.setState({enabled: true});
+        }
+    };
+
+    onRoom = (room) => {
+        // Always check for membership changes when we see new rooms
+        this.onRoomMembershipChanged();
+
+        const waitingRoom = this._waitingRoomQueue.find(r => r.roomId === room.roomId);
+        if (!waitingRoom) return;
+        this._waitingRoomQueue.splice(this._waitingRoomQueue.indexOf(waitingRoom), 1);
+
+        const now = (new Date()).getTime();
+        if ((now - waitingRoom.addedTs) > AUTOJOIN_WAIT_THRESHOLD_MS) return; // Too long ago.
+        this._appendRoomId(room.roomId); // add the room we've been waiting for
+    };
+
+    _shouldEnable() {
+        const client = MatrixClientPeg.get();
+        const joinedRoomCount = client.getRooms().reduce((count, r) => {
+            return count + (r.getMyMembership() === "join" ? 1 : 0);
+        }, 0);
+        return joinedRoomCount >= MIN_ROOMS_BEFORE_ENABLED;
+    }
+
     _loadRoomIds(roomIds) {
         if (!roomIds || roomIds.length <= 0) return; // Skip updates with no rooms
 
@@ -164,7 +208,7 @@ export default class RoomBreadcrumbs extends React.Component {
         });
     }
 
-    _calculateBadgesForRoom(room) {
+    _calculateBadgesForRoom(room, zero=false) {
         if (!room) return null;
 
         // Reset the notification variables for simplicity
@@ -173,6 +217,8 @@ export default class RoomBreadcrumbs extends React.Component {
             formattedCount: "0",
             showCount: false,
         };
+
+        if (zero) return roomModel;
 
         const notifState = RoomNotifs.getRoomNotifsState(room.roomId);
         if (RoomNotifs.MENTION_BADGE_STATES.includes(notifState)) {
@@ -195,14 +241,14 @@ export default class RoomBreadcrumbs extends React.Component {
         return roomModel;
     }
 
-    _calculateRoomBadges(room) {
+    _calculateRoomBadges(room, zero=false) {
         if (!room) return;
 
         const rooms = this.state.rooms.slice();
         const roomModel = rooms.find((r) => r.room.roomId === room.roomId);
         if (!roomModel) return; // No applicable room, so don't do math on it
 
-        const badges = this._calculateBadgesForRoom(room);
+        const badges = this._calculateBadgesForRoom(room, zero);
         if (!badges) return; // No badges for some reason
 
         Object.assign(roomModel, badges);
@@ -240,8 +286,8 @@ export default class RoomBreadcrumbs extends React.Component {
         }
         this.setState({rooms});
 
-        if (this.refs.scroller) {
-            this.refs.scroller.moveToOrigin();
+        if (this._scroller.current) {
+            this._scroller.current.moveToOrigin();
         }
 
         // We don't track room aesthetics (badges, membership, etc) over the wire so we
@@ -285,7 +331,7 @@ export default class RoomBreadcrumbs extends React.Component {
 
         // check for collapsed here and not at parent so we keep rooms in our state
         // when collapsing and expanding
-        if (this.props.collapsed) {
+        if (this.props.collapsed || !this.state.enabled) {
             return null;
         }
 
@@ -317,7 +363,7 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             let dmIndicator;
-            if (this._isDmRoom(r.room)) {
+            if (this._isDmRoom(r.room) && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
                 dmIndicator = <img
                     src={require("../../../../res/img/icon_person.svg")}
                     className="mx_RoomBreadcrumbs_dmIndicator"
@@ -328,8 +374,14 @@ export default class RoomBreadcrumbs extends React.Component {
             }
 
             return (
-                <AccessibleButton className={classes} key={r.room.roomId} onClick={() => this._viewRoom(r.room, i)}
-                    onMouseEnter={() => this._onMouseEnter(r.room)} onMouseLeave={() => this._onMouseLeave(r.room)}>
+                <AccessibleButton
+                    className={classes}
+                    key={r.room.roomId}
+                    onClick={() => this._viewRoom(r.room, i)}
+                    onMouseEnter={() => this._onMouseEnter(r.room)}
+                    onMouseLeave={() => this._onMouseLeave(r.room)}
+                    aria-label={_t("Room %(name)s", {name: r.room.name})}
+                >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
                     {dmIndicator}
@@ -338,10 +390,16 @@ export default class RoomBreadcrumbs extends React.Component {
             );
         });
         return (
-            <IndicatorScrollbar ref="scroller" className="mx_RoomBreadcrumbs"
-                trackHorizontalOverflow={true} verticalScrollsHorizontally={true}>
-                { avatars }
-            </IndicatorScrollbar>
+            <div role="toolbar" aria-label={_t("Recent rooms")}>
+                <IndicatorScrollbar
+                    ref={this._scroller}
+                    className="mx_RoomBreadcrumbs"
+                    trackHorizontalOverflow={true}
+                    verticalScrollsHorizontally={true}
+                >
+                    { avatars }
+                </IndicatorScrollbar>
+            </div>
         );
     }
 }

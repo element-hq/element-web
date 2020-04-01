@@ -14,14 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-import sinon from 'sinon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
-import sdk from 'matrix-react-sdk';
+import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
-import * as TestUtils from '../../../test-utils';
 import {mkServerConfig} from "../../../test-utils";
 
 const Login = sdk.getComponent(
@@ -32,13 +29,11 @@ describe('Login', function() {
     let parentDiv;
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
     });
 
     afterEach(function() {
-        sinon.restore();
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
     });
@@ -55,6 +50,11 @@ describe('Login', function() {
     it('should show form with change server link', function() {
         const root = render();
 
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            currentFlow: "m.login.password",
+        });
+
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,
             sdk.getComponent('auth.PasswordLogin'),
@@ -69,11 +69,16 @@ describe('Login', function() {
     });
 
     it('should show form without change server link when custom URLs disabled', function() {
-        sinon.stub(SdkConfig, "get").returns({
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
             disable_custom_urls: true,
         });
 
         const root = render();
+
+        // Set non-empty flows & matrixClient to get past the loading spinner
+        root.setState({
+            currentFlow: "m.login.password",
+        });
 
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,

@@ -16,13 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
-import TextForEvent from './TextForEvent';
+import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
-import Avatar from './Avatar';
+import * as Avatar from './Avatar';
 import dis from './dispatcher';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
@@ -100,18 +100,65 @@ const Notifier = {
         }
     },
 
-    _playAudioNotification: function(ev, room) {
-        const e = document.getElementById("messageAudio");
-        if (e) {
-            e.play();
+    getSoundForRoom: async function(roomId) {
+        // We do no caching here because the SDK caches setting
+        // and the browser will cache the sound.
+        const content = SettingsStore.getValue("notificationSound", roomId);
+        if (!content) {
+            return null;
+        }
+
+        if (!content.url) {
+            console.warn(`${roomId} has custom notification sound event, but no url key`);
+            return null;
+        }
+
+        if (!content.url.startsWith("mxc://")) {
+            console.warn(`${roomId} has custom notification sound event, but url is not a mxc url`);
+            return null;
+        }
+
+        // Ideally in here we could use MSC1310 to detect the type of file, and reject it.
+
+        return {
+            url: MatrixClientPeg.get().mxcUrlToHttp(content.url),
+            name: content.name,
+            type: content.type,
+            size: content.size,
+        };
+    },
+
+    _playAudioNotification: async function(ev, room) {
+        const sound = await this.getSoundForRoom(room.roomId);
+        console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
+
+        try {
+            const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
+            let audioElement = selector;
+            if (!selector) {
+                if (!sound) {
+                    console.error("No audio element or sound to play for notification");
+                    return;
+                }
+                audioElement = new Audio(sound.url);
+                if (sound.type) {
+                    audioElement.type = sound.type;
+                }
+                document.body.appendChild(audioElement);
+            }
+            await audioElement.play();
+        } catch (ex) {
+            console.warn("Caught error when trying to fetch room notification sound:", ex);
         }
     },
 
     start: function() {
-        this.boundOnEvent = this.onEvent.bind(this);
-        this.boundOnSyncStateChange = this.onSyncStateChange.bind(this);
-        this.boundOnRoomReceipt = this.onRoomReceipt.bind(this);
-        this.boundOnEventDecrypted = this.onEventDecrypted.bind(this);
+        // do not re-bind in the case of repeated call
+        this.boundOnEvent = this.boundOnEvent || this.onEvent.bind(this);
+        this.boundOnSyncStateChange = this.boundOnSyncStateChange || this.onSyncStateChange.bind(this);
+        this.boundOnRoomReceipt = this.boundOnRoomReceipt || this.onRoomReceipt.bind(this);
+        this.boundOnEventDecrypted = this.boundOnEventDecrypted || this.onEventDecrypted.bind(this);
+
         MatrixClientPeg.get().on('event', this.boundOnEvent);
         MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
         MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
@@ -121,7 +168,7 @@ const Notifier = {
     },
 
     stop: function() {
-        if (MatrixClientPeg.get() && this.boundOnRoomTimeline) {
+        if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
             MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
             MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
@@ -153,12 +200,13 @@ const Notifier = {
 
         if (enable) {
             // Attempt to get permission from user
-            plaf.requestNotificationPermission().done((result) => {
+            plaf.requestNotificationPermission().then((result) => {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
                     const description = result === 'denied'
-                        ? _t('Riot does not have permission to send you notifications - please check your browser settings')
+                        ? _t('Riot does not have permission to send you notifications - ' +
+                            'please check your browser settings')
                         : _t('Riot was not given permission to send notifications - please try again');
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
@@ -318,4 +366,4 @@ if (!global.mxNotifier) {
     global.mxNotifier = Notifier;
 }
 
-module.exports = global.mxNotifier;
+export default global.mxNotifier;

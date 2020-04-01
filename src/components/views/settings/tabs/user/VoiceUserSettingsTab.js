@@ -20,57 +20,73 @@ import CallMediaHandler from "../../../../../CallMediaHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
-const Modal = require("../../../../../Modal");
-const sdk = require("../../../../..");
-const MatrixClientPeg = require("../../../../../MatrixClientPeg");
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import * as sdk from "../../../../../index";
+import Modal from "../../../../../Modal";
 
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            mediaDevices: null,
+            mediaDevices: false,
             activeAudioOutput: null,
             activeAudioInput: null,
             activeVideoInput: null,
         };
     }
 
-    componentWillMount(): void {
-        this._refreshMediaDevices();
+    async componentDidMount() {
+        const canSeeDeviceLabels = await CallMediaHandler.hasAnyLabeledDevices();
+        if (canSeeDeviceLabels) {
+            this._refreshMediaDevices();
+        }
     }
 
     _refreshMediaDevices = async (stream) => {
-        if (stream) {
-            // kill stream so that we don't leave it lingering around with webcam enabled etc
-            // as here we called gUM to ask user for permission to their device names only
-            stream.getTracks().forEach((track) => track.stop());
-        }
-
         this.setState({
             mediaDevices: await CallMediaHandler.getDevices(),
             activeAudioOutput: CallMediaHandler.getAudioOutput(),
             activeAudioInput: CallMediaHandler.getAudioInput(),
             activeVideoInput: CallMediaHandler.getVideoInput(),
         });
+        if (stream) {
+            // kill stream (after we've enumerated the devices, otherwise we'd get empty labels again)
+            // so that we don't leave it lingering around with webcam enabled etc
+            // as here we called gUM to ask user for permission to their device names only
+            stream.getTracks().forEach((track) => track.stop());
+        }
     };
 
-    _requestMediaPermissions = () => {
-        const getUserMedia = (
-            window.navigator.getUserMedia || window.navigator.webkitGetUserMedia || window.navigator.mozGetUserMedia
-        );
-        if (getUserMedia) {
-            return getUserMedia.apply(window.navigator, [
-                { video: true, audio: true },
-                this._refreshMediaDevices,
-                function() {
-                    const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
-                    Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
-                        title: _t('No media permissions'),
-                        description: _t('You may need to manually permit Riot to access your microphone/webcam'),
-                    });
-                },
-            ]);
+    _requestMediaPermissions = async () => {
+        let constraints;
+        let stream;
+        let error;
+        try {
+            constraints = {video: true, audio: true};
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+            // user likely doesn't have a webcam,
+            // we should still allow to select a microphone
+            if (err.name === "NotFoundError") {
+                constraints = { audio: true };
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraints);
+                } catch (err) {
+                    error = err;
+                }
+            } else {
+                error = err;
+            }
+        }
+        if (error) {
+            const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
+            Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
+                title: _t('No media permissions'),
+                description: _t('You may need to manually permit Riot to access your microphone/webcam'),
+            });
+        } else {
+            this._refreshMediaDevices(stream);
         }
     };
 
@@ -99,8 +115,14 @@ export default class VoiceUserSettingsTab extends React.Component {
         MatrixClientPeg.get().setForceTURN(!p2p);
     };
 
+    _changeFallbackICEServerAllowed = (allow) => {
+        MatrixClientPeg.get().setFallbackICEServerAllowed(allow);
+    };
+
     _renderDeviceOptions(devices, category) {
-        return devices.map((d) => <option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
+        return devices.map((d) => {
+            return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{d.label}</option>);
+        });
     }
 
     render() {
@@ -141,7 +163,7 @@ export default class VoiceUserSettingsTab extends React.Component {
             if (audioOutputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioOutputs);
                 speakerDropdown = (
-                    <Field element="select" label={_t("Audio Output")} id="audioOutput"
+                    <Field element="select" label={_t("Audio Output")}
                            value={this.state.activeAudioOutput || defaultDevice}
                            onChange={this._setAudioOutput}>
                         {this._renderDeviceOptions(audioOutputs, 'audioOutput')}
@@ -153,7 +175,7 @@ export default class VoiceUserSettingsTab extends React.Component {
             if (audioInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(audioInputs);
                 microphoneDropdown = (
-                    <Field element="select" label={_t("Microphone")} id="audioInput"
+                    <Field element="select" label={_t("Microphone")}
                            value={this.state.activeAudioInput || defaultDevice}
                            onChange={this._setAudioInput}>
                         {this._renderDeviceOptions(audioInputs, 'audioInput')}
@@ -165,7 +187,7 @@ export default class VoiceUserSettingsTab extends React.Component {
             if (videoInputs.length > 0) {
                 const defaultDevice = getDefaultDevice(videoInputs);
                 webcamDropdown = (
-                    <Field element="select" label={_t("Camera")} id="videoInput"
+                    <Field element="select" label={_t("Camera")}
                            value={this.state.activeVideoInput || defaultDevice}
                            onChange={this._setVideoInput}>
                         {this._renderDeviceOptions(videoInputs, 'videoInput')}
@@ -183,7 +205,16 @@ export default class VoiceUserSettingsTab extends React.Component {
                     {microphoneDropdown}
                     {webcamDropdown}
                     <SettingsFlag name='VideoView.flipVideoHorizontally' level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name='webRtcAllowPeerToPeer' level={SettingLevel.DEVICE} onChange={this._changeWebRtcMethod} />
+                    <SettingsFlag
+                        name='webRtcAllowPeerToPeer'
+                        level={SettingLevel.DEVICE}
+                        onChange={this._changeWebRtcMethod}
+                    />
+                    <SettingsFlag
+                        name='fallbackICEServerAllowed'
+                        level={SettingLevel.DEVICE}
+                        onChange={this._changeFallbackICEServerAllowed}
+                    />
                 </div>
             </div>
         );

@@ -16,6 +16,7 @@ limitations under the License.
 
 .mx_ManageIntegsButton_error {
     position: relative;
+    float: right;
     cursor: not-allowed;
 }
 
@@ -23,18 +24,6 @@ limitations under the License.
     position: absolute;
     right: -5px;
     top: -5px;
-}
-
-.mx_ManageIntegsButton_error {
-    float: right;
-}
-
-.mx_ManageIntegsButton_error .mx_ManageIntegsButton_errorPopup {
-    display: none;
-}
-
-.mx_ManageIntegsButton_error:hover .mx_ManageIntegsButton_errorPopup {
-    display: inline;
 }
 
 .mx_ManageIntegsButton_errorPopup {
@@ -50,4 +39,12 @@ limitations under the License.
     color: $accent-fg-color;
     text-align: center;
     z-index: 1000;
+}
+
+.mx_ManageIntegsButton_error .mx_ManageIntegsButton_errorPopup {
+    display: none;
+}
+
+.mx_ManageIntegsButton_error:hover .mx_ManageIntegsButton_errorPopup {
+    display: inline;
 }

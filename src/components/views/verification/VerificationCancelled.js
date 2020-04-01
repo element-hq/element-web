@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 export default class VerificationCancelled extends React.Component {
@@ -31,7 +31,7 @@ export default class VerificationCancelled extends React.Component {
                     "The other party cancelled the verification.",
                 )}</p>
                 <DialogButtons
-                    primaryButton={_t('Cancel')}
+                    primaryButton={_t('OK')}
                     hasCancel={false}
                     onPrimaryButtonClick={this.props.onDone}
                 />

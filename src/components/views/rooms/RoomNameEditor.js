@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
+import createReactClass from 'create-react-class';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'RoomNameEditor',
 
     propTypes: {
@@ -66,14 +65,14 @@ module.exports = React.createClass({
 
         return (
                 <div className="mx_RoomHeader_name">
-                    <EditableText ref="editor"
-                         className="mx_RoomHeader_nametext mx_RoomHeader_editable"
-                         placeholderClassName="mx_RoomHeader_placeholder"
-                         placeholder={this._placeholderName}
-                         blurToCancel={false}
-                         initialValue={this.state.name}
-                         onValueChanged={this._onValueChanged}
-                         dir="auto" />
+                    <EditableText
+                        className="mx_RoomHeader_nametext mx_RoomHeader_editable"
+                        placeholderClassName="mx_RoomHeader_placeholder"
+                        placeholder={this._placeholderName}
+                        blurToCancel={false}
+                        initialValue={this.state.name}
+                        onValueChanged={this._onValueChanged}
+                        dir="auto" />
                 </div>
         );
     },

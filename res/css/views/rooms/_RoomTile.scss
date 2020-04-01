@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +26,11 @@ limitations under the License.
     position: relative;
 }
 
+.mx_RoomTile:focus {
+    filter: none !important;
+    background-color: $roomtile-focused-bg-color;
+}
+
 .mx_RoomTile_menuButton {
     display: none;
     flex: 0 0 16px;
@@ -34,20 +40,12 @@ limitations under the License.
     background-position: center;
 }
 
-// toggle menuButton and badge on hover/menu displayed
-.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover, .mx_RoomTile_menuDisplayed {
-    .mx_RoomTile_menuButton {
-        display: block;
-    }
-}
-
 .mx_RoomTile_tooltip {
     display: inline-block;
     position: relative;
     top: -54px;
     left: -12px;
 }
-
 
 .mx_RoomTile_nameContainer {
     display: flex;
@@ -100,18 +98,40 @@ limitations under the License.
     z-index: 2;
 }
 
+// Note we match .mx_E2EIcon to make sure this matches more tightly than just
+// .mx_E2EIcon on its own
+.mx_RoomTile_e2eIcon.mx_E2EIcon {
+    height: 14px;
+    width: 14px;
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    right: -5px;
+    z-index: 1;
+    margin: 0;
+}
+
 .mx_RoomTile_name {
     font-size: 14px;
-    padding: 0 6px;
+    padding: 0 4px;
     color: $roomtile-name-color;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
 
+.mx_RoomTile_badge {
+    flex: 0 1 content;
+    border-radius: 0.8em;
+    padding: 0 0.4em;
+    color: $roomtile-badge-fg-color;
+    font-weight: 600;
+    font-size: 12px;
+}
+
 .collapsed {
     .mx_RoomTile {
-        margin: 0 2px;
+        margin: 0 6px;
         padding: 0 2px;
         position: relative;
         justify-content: center;
@@ -135,13 +155,15 @@ limitations under the License.
     }
 }
 
-.mx_RoomTile_badge {
-    flex: 0 1 content;
-    border-radius: 0.8em;
-    padding: 0 0.4em;
-    color: $accent-fg-color;
-    font-weight: 600;
-    font-size: 12px;
+// toggle menuButton and badge on menu displayed
+.mx_RoomTile_menuDisplayed,
+// or on keyboard focus of room tile
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:focus-within,
+// or on pointer hover
+.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
+    .mx_RoomTile_menuButton {
+        display: block;
+    }
 }
 
 .mx_RoomTile_unreadNotify .mx_RoomTile_badge,
@@ -150,8 +172,8 @@ limitations under the License.
 }
 
 .mx_RoomTile_highlight .mx_RoomTile_badge,
-.mx_RoomTile_badge.mx_RoomTile_badgeRed
-{
+.mx_RoomTile_badge.mx_RoomTile_badgeRed {
+    color: $accent-fg-color;
     background-color: $warning-color;
 }
 
@@ -174,11 +196,6 @@ limitations under the License.
 
 .mx_DNDRoomTile_dragging {
     transform: scale(1.05, 1.05);
-}
-
-.mx_RoomTile:focus {
-    filter: none !important;
-    background-color: $roomtile-focused-bg-color;
 }
 
 .mx_RoomTile_arrow {

@@ -16,6 +16,7 @@ $room-highlight-color: #343a46;
 // typical text (dark-on-white in light skin)
 $primary-fg-color: $text-primary-color;
 $primary-bg-color: $bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -121,6 +122,9 @@ $event-sending-color: $text-secondary-color;
 $event-redacted-fg-color: #606060;
 $event-redacted-border-color: #000000;
 
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: #25271F;
+
 // event timestamp
 $event-timestamp-color: $text-secondary-color;
 
@@ -140,6 +144,10 @@ $button-danger-fg-color: #ffffff;
 $button-danger-bg-color: $notice-primary-color;
 $button-danger-disabled-fg-color: #ffffff;
 $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+$button-link-fg-color: $accent-color;
+$button-link-bg-color: transparent;
+
+$visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
 
@@ -157,8 +165,17 @@ $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
 
+$kbd-border-color: #000000;
+
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
+
+$interactive-tooltip-bg-color: $base-color;
+$interactive-tooltip-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #272c35;
+
+$user-tile-hover-bg-color: $header-panel-bg-color;
 
 // ***** Mixins! *****
 
@@ -192,14 +209,15 @@ $tooltip-timeline-fg-color: #ffffff;
     background-color: $button-secondary-bg-color;
 }
 
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
+
 // Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
 .mx_filterFlipColor {
-    filter: invert(1);
-}
-
-.gm-scrollbar .thumb {
     filter: invert(1);
 }
 
@@ -225,4 +243,14 @@ $tooltip-timeline-fg-color: #ffffff;
             background-color: #080808;
         }
     }
+}
+
+// diff highlight colors
+// intentionally swapped to avoid inversion
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
 }

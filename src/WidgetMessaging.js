@@ -23,10 +23,11 @@ limitations under the License.
 import FromWidgetPostMessageApi from './FromWidgetPostMessageApi';
 import ToWidgetPostMessageApi from './ToWidgetPostMessageApi';
 import Modal from "./Modal";
-import MatrixClientPeg from "./MatrixClientPeg";
+import {MatrixClientPeg} from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetUtils from "./utils/WidgetUtils";
+import {KnownWidgetActions} from "./widgets/WidgetApi";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -72,6 +73,17 @@ export default class WidgetMessaging {
             }
             // Return the response field for the request
             return data.response;
+        });
+    }
+
+    /**
+     * Tells the widget that the client is ready to handle further widget requests.
+     * @returns {Promise<*>} Resolves after the widget has acknowledged the ready message.
+     */
+    flagReadyToContinue() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.ClientReady,
         });
     }
 

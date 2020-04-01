@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
 export default class IndicatorScrollbar extends React.Component {
-    static PropTypes = {
+    static propTypes = {
         // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
         // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
         // by the parent element.
@@ -38,6 +38,8 @@ export default class IndicatorScrollbar extends React.Component {
         this.checkOverflow = this.checkOverflow.bind(this);
         this._scrollElement = null;
         this._autoHideScrollbar = null;
+        this._likelyTrackpadUser = null;
+        this._checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
         this.state = {
             leftIndicatorOffset: 0,
@@ -62,6 +64,22 @@ export default class IndicatorScrollbar extends React.Component {
 
     _collectScrollerComponent(autoHideScrollbar) {
         this._autoHideScrollbar = autoHideScrollbar;
+    }
+
+
+    componentDidUpdate(prevProps) {
+        const prevLen = prevProps && prevProps.children && prevProps.children.length || 0;
+        const curLen = this.props.children && this.props.children.length || 0;
+        // check overflow only if amount of children changes.
+        // if we don't guard here, we end up with an infinite
+        // render > componentDidUpdate > checkOverflow > setState > render loop
+        if (prevLen !== curLen) {
+            this.checkOverflow();
+        }
+    }
+
+    componentDidMount() {
+        this.checkOverflow();
     }
 
     checkOverflow() {
@@ -91,10 +109,6 @@ export default class IndicatorScrollbar extends React.Component {
             this._scrollElement.classList.add("mx_IndicatorScrollbar_rightOverflow");
         } else {
             this._scrollElement.classList.remove("mx_IndicatorScrollbar_rightOverflow");
-        }
-
-        if (this._autoHideScrollbar) {
-            this._autoHideScrollbar.checkOverflow();
         }
 
         if (this.props.trackHorizontalOverflow) {
@@ -129,9 +143,39 @@ export default class IndicatorScrollbar extends React.Component {
             // the harshness of the scroll behaviour. Should be a value between 0 and 1.
             const yRetention = 1.0;
 
-            if (Math.abs(e.deltaX) <= xyThreshold) {
+            // whenever we see horizontal scrolling, assume the user is on a trackpad
+            // for at least the next 1 minute.
+            const now = new Date().getTime();
+            if (Math.abs(e.deltaX) > 0) {
+                this._likelyTrackpadUser = true;
+                this._checkAgainForTrackpad = now + (1 * 60 * 1000);
+            } else {
+                // if we haven't seen any horizontal scrolling for a while, assume
+                // the user might have plugged in a mousewheel
+                if (this._likelyTrackpadUser && now >= this._checkAgainForTrackpad) {
+                    this._likelyTrackpadUser = false;
+                }
+            }
+
+            // don't mess with the horizontal scroll for trackpad users
+            // See https://github.com/vector-im/riot-web/issues/10005
+            if (this._likelyTrackpadUser) {
+                return;
+            }
+
+            if (Math.abs(e.deltaX) <= xyThreshold) { // we are vertically scrolling.
+                // HACK: We increase the amount of scroll to counteract smooth scrolling browsers.
+                // Smooth scrolling browsers (Firefox) use the relative area to determine the scroll
+                // amount, which means the likely small area of content results in a small amount of
+                // movement - not what people expect. We pick arbitrary values for when to apply more
+                // scroll, and how much to apply. On Windows 10, Chrome scrolls 100 units whereas
+                // Firefox scrolls just 3 due to smooth scrolling.
+
+                const additionalScroll = e.deltaY < 0 ? -50 : 50;
+
                 // noinspection JSSuspiciousNameCombination
-                this._scrollElement.scrollLeft += e.deltaY * yRetention;
+                const val = Math.abs(e.deltaY) < 25 ? (e.deltaY + additionalScroll) : e.deltaY;
+                this._scrollElement.scrollLeft += val * yRetention;
             }
         }
     };

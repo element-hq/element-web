@@ -13,11 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
+import SettingsStore from "./settings/SettingsStore";
+import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
@@ -74,9 +76,11 @@ function textForMemberEvent(ev) {
                     return _t('%(senderName)s changed their profile picture.', {senderName});
                 } else if (!prevContent.avatar_url && content.avatar_url) {
                     return _t('%(senderName)s set a profile picture.', {senderName});
+                } else if (SettingsStore.getValue("showHiddenEventsInTimeline")) {
+                    // This is a null rejoin, it will only be visible if the Labs option is enabled
+                    return _t("%(senderName)s made no change.", {senderName});
                 } else {
-                    // suppress null rejoins
-                    return '';
+                    return "";
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
@@ -97,15 +101,14 @@ function textForMemberEvent(ev) {
                 }
             } else if (prevContent.membership === "ban") {
                 return _t('%(senderName)s unbanned %(targetName)s.', {senderName, targetName});
-            } else if (prevContent.membership === "join") {
-                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             } else if (prevContent.membership === "invite") {
                 return _t('%(senderName)s withdrew %(targetName)s\'s invitation.', {
                     senderName,
                     targetName,
                 }) + ' ' + reason;
             } else {
-                return _t('%(targetName)s left the room.', {targetName});
+                // sender is not target and made the target leave, if not from invite/ban then this is a kick
+                return _t('%(senderName)s kicked %(targetName)s.', {senderName, targetName}) + ' ' + reason;
             }
     }
 }
@@ -123,6 +126,13 @@ function textForRoomNameEvent(ev) {
 
     if (!ev.getContent().name || ev.getContent().name.trim().length === 0) {
         return _t('%(senderDisplayName)s removed the room name.', {senderDisplayName});
+    }
+    if (ev.getPrevContent().name) {
+        return _t('%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.', {
+            senderDisplayName,
+            oldRoomName: ev.getPrevContent().name,
+            newRoomName: ev.getContent().name,
+        });
     }
     return _t('%(senderDisplayName)s changed the room name to %(roomName)s.', {
         senderDisplayName,
@@ -266,61 +276,55 @@ function textForMessageEvent(ev) {
     return message;
 }
 
-function textForRoomAliasesEvent(ev) {
-    // An alternative implementation of this as a first-class event can be found at
-    // https://github.com/matrix-org/matrix-react-sdk/blob/dc7212ec2bd12e1917233ed7153b3e0ef529a135/src/components/views/messages/RoomAliasesEvent.js
-    // This feels a bit overkill though, and it's not clear the i18n really needs it
-    // so instead it's landing as a simple textual event.
-
-    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const oldAliases = ev.getPrevContent().aliases || [];
-    const newAliases = ev.getContent().aliases || [];
-
-    const addedAliases = newAliases.filter((x) => !oldAliases.includes(x));
-    const removedAliases = oldAliases.filter((x) => !newAliases.includes(x));
-
-    if (!addedAliases.length && !removedAliases.length) {
-        return '';
-    }
-
-    if (addedAliases.length && !removedAliases.length) {
-        return _t('%(senderName)s added %(count)s %(addedAddresses)s as addresses for this room.', {
-            senderName: senderName,
-            count: addedAliases.length,
-            addedAddresses: addedAliases.join(', '),
-        });
-    } else if (!addedAliases.length && removedAliases.length) {
-        return _t('%(senderName)s removed %(count)s %(removedAddresses)s as addresses for this room.', {
-            senderName: senderName,
-            count: removedAliases.length,
-            removedAddresses: removedAliases.join(', '),
-        });
-    } else {
-        return _t(
-            '%(senderName)s added %(addedAddresses)s and removed %(removedAddresses)s as addresses for this room.', {
-                senderName: senderName,
-                addedAddresses: addedAliases.join(', '),
-                removedAddresses: removedAliases.join(', '),
-            },
-        );
-    }
-}
-
 function textForCanonicalAliasEvent(ev) {
     const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const oldAlias = ev.getPrevContent().alias;
+    const oldAltAliases = ev.getPrevContent().alt_aliases || [];
     const newAlias = ev.getContent().alias;
+    const newAltAliases = ev.getContent().alt_aliases || [];
+    const removedAltAliases = oldAltAliases.filter(alias => !newAltAliases.includes(alias));
+    const addedAltAliases = newAltAliases.filter(alias => !oldAltAliases.includes(alias));
 
-    if (newAlias) {
-        return _t('%(senderName)s set the main address for this room to %(address)s.', {
-            senderName: senderName,
-            address: ev.getContent().alias,
-        });
-    } else if (oldAlias) {
-        return _t('%(senderName)s removed the main address for this room.', {
+    if (!removedAltAliases.length && !addedAltAliases.length) {
+        if (newAlias) {
+            return _t('%(senderName)s set the main address for this room to %(address)s.', {
+                senderName: senderName,
+                address: ev.getContent().alias,
+            });
+        } else if (oldAlias) {
+            return _t('%(senderName)s removed the main address for this room.', {
+                senderName: senderName,
+            });
+        }
+    } else if (newAlias === oldAlias) {
+        if (addedAltAliases.length && !removedAltAliases.length) {
+            return _t('%(senderName)s added the alternative addresses %(addresses)s for this room.', {
+                senderName: senderName,
+                addresses: addedAltAliases.join(", "),
+                count: addedAltAliases.length,
+            });
+        } if (removedAltAliases.length && !addedAltAliases.length) {
+            return _t('%(senderName)s removed the alternative addresses %(addresses)s for this room.', {
+                senderName: senderName,
+                addresses: removedAltAliases.join(", "),
+                count: removedAltAliases.length,
+            });
+        } if (removedAltAliases.length && addedAltAliases.length) {
+            return _t('%(senderName)s changed the alternative addresses for this room.', {
+                senderName: senderName,
+            });
+        }
+    } else {
+        // both alias and alt_aliases where modified
+        return _t('%(senderName)s changed the main and alternative addresses for this room.', {
             senderName: senderName,
         });
     }
+    // in case there is no difference between the two events,
+    // say something as we can't simply hide the tile from here
+    return _t('%(senderName)s changed the addresses for this room.', {
+        senderName: senderName,
+    });
 }
 
 function textForCallAnswerEvent(event) {
@@ -356,13 +360,25 @@ function textForCallHangupEvent(event) {
 function textForCallInviteEvent(event) {
     const senderName = event.sender ? event.sender.name : _t('Someone');
     // FIXME: Find a better way to determine this from the event?
-    let callType = "voice";
+    let isVoice = true;
     if (event.getContent().offer && event.getContent().offer.sdp &&
             event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        callType = "video";
+        isVoice = false;
     }
-    const supported = MatrixClientPeg.get().supportsVoip() ? "" : _t('(not supported by this browser)');
-    return _t('%(senderName)s placed a %(callType)s call.', {senderName, callType}) + ' ' + supported;
+    const isSupported = MatrixClientPeg.get().supportsVoip();
+
+    // This ladder could be reduced down to a couple string variables, however other languages
+    // can have a hard time translating those strings. In an effort to make translations easier
+    // and more accurate, we break out the string-based variables to a couple booleans.
+    if (isVoice && isSupported) {
+        return _t("%(senderName)s placed a voice call.", {senderName});
+    } else if (isVoice && !isSupported) {
+        return _t("%(senderName)s placed a voice call. (not supported by this browser)", {senderName});
+    } else if (!isVoice && isSupported) {
+        return _t("%(senderName)s placed a video call.", {senderName});
+    } else if (!isVoice && !isSupported) {
+        return _t("%(senderName)s placed a video call. (not supported by this browser)", {senderName});
+    }
 }
 
 function textForThreePidInviteEvent(event) {
@@ -403,18 +419,11 @@ function textForHistoryVisibilityEvent(event) {
     }
 }
 
-function textForEncryptionEvent(event) {
-    const senderName = event.sender ? event.sender.name : event.getSender();
-    return _t('%(senderName)s turned on end-to-end encryption (algorithm %(algorithm)s).', {
-        senderName,
-        algorithm: event.getContent().algorithm,
-    });
-}
-
 // Currently will only display a change if a user's power level is changed
 function textForPowerEvent(event) {
     const senderName = event.sender ? event.sender.name : event.getSender();
-    if (!event.getPrevContent() || !event.getPrevContent().users) {
+    if (!event.getPrevContent() || !event.getPrevContent().users ||
+        !event.getContent() || !event.getContent().users) {
         return '';
     }
     const userDefault = event.getContent().users_default || 0;
@@ -457,7 +466,7 @@ function textForPowerEvent(event) {
 }
 
 function textForPinnedEvent(event) {
-    const senderName = event.getSender();
+    const senderName = event.sender ? event.sender.name : event.getSender();
     return _t("%(senderName)s changed the pinned messages for the room.", {senderName});
 }
 
@@ -491,6 +500,87 @@ function textForWidgetEvent(event) {
     }
 }
 
+function textForMjolnirEvent(event) {
+    const senderName = event.getSender();
+    const {entity: prevEntity} = event.getPrevContent();
+    const {entity, recommendation, reason} = event.getContent();
+
+    // Rule removed
+    if (!entity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning users matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning rooms matching %(glob)s",
+                {senderName, glob: prevEntity});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s removed the rule banning servers matching %(glob)s",
+                {senderName, glob: prevEntity});
+        }
+
+        // Unknown type. We'll say something, but we shouldn't end up here.
+        return _t("%(senderName)s removed a ban rule matching %(glob)s", {senderName, glob: prevEntity});
+    }
+
+    // Invalid rule
+    if (!recommendation || !reason) return _t(`%(senderName)s updated an invalid ban rule`, {senderName});
+
+    // Rule updated
+    if (entity === prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s updated the rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s updated a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // New rule
+    if (!prevEntity) {
+        if (USER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning users matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning rooms matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+            return _t("%(senderName)s created a rule banning servers matching %(glob)s for %(reason)s",
+                {senderName, glob: entity, reason});
+        }
+
+        // Unknown type. We'll say something but we shouldn't end up here.
+        return _t("%(senderName)s created a ban rule matching %(glob)s for %(reason)s",
+            {senderName, glob: entity, reason});
+    }
+
+    // else the entity !== prevEntity - count as a removal & add
+    if (USER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (ROOM_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    } else if (SERVER_RULE_TYPES.includes(event.getType())) {
+        return _t("%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching " +
+            "%(newGlob)s for %(reason)s",
+            {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+    }
+
+    // Unknown type. We'll say something but we shouldn't end up here.
+    return _t("%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s " +
+        "for %(reason)s", {senderName, oldGlob: prevEntity, newGlob: entity, reason});
+}
+
 const handlers = {
     'm.room.message': textForMessageEvent,
     'm.call.invite': textForCallInviteEvent,
@@ -499,14 +589,12 @@ const handlers = {
 };
 
 const stateHandlers = {
-    'm.room.aliases': textForRoomAliasesEvent,
     'm.room.canonical_alias': textForCanonicalAliasEvent,
     'm.room.name': textForRoomNameEvent,
     'm.room.topic': textForTopicEvent,
     'm.room.member': textForMemberEvent,
     'm.room.third_party_invite': textForThreePidInviteEvent,
     'm.room.history_visibility': textForHistoryVisibilityEvent,
-    'm.room.encryption': textForEncryptionEvent,
     'm.room.power_levels': textForPowerEvent,
     'm.room.pinned_events': textForPinnedEvent,
     'm.room.server_acl': textForServerACLEvent,
@@ -518,10 +606,13 @@ const stateHandlers = {
     'im.vector.modular.widgets': textForWidgetEvent,
 };
 
-module.exports = {
-    textForEvent: function(ev) {
-        const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-        if (handler) return handler(ev);
-        return '';
-    },
-};
+// Add all the Mjolnir stuff to the renderer
+for (const evType of ALL_RULE_TYPES) {
+    stateHandlers[evType] = textForMjolnirEvent;
+}
+
+export function textForEvent(ev) {
+    const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
+    if (handler) return handler(ev);
+    return '';
+}

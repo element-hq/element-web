@@ -26,11 +26,12 @@ limitations under the License.
  */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'ErrorDialog',
     propTypes: {
         title: PropTypes.string,
@@ -41,6 +42,7 @@ export default React.createClass({
         button: PropTypes.string,
         focus: PropTypes.bool,
         onFinished: PropTypes.func.isRequired,
+        headerImage: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -55,9 +57,12 @@ export default React.createClass({
     render: function() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
-            <BaseDialog className="mx_ErrorDialog" onFinished={this.props.onFinished}
-                    title={this.props.title || _t('Error')}
-                    contentId='mx_Dialog_content'
+            <BaseDialog
+                className="mx_ErrorDialog"
+                onFinished={this.props.onFinished}
+                title={this.props.title || _t('Error')}
+                headerImage={this.props.headerImage}
+                contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
                     { this.props.description || _t('An error has occurred.') }

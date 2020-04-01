@@ -1,6 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,25 +20,27 @@ limitations under the License.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import classNames from 'classnames';
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'Tooltip',
 
     propTypes: {
         // Class applied to the element used to position the tooltip
-        className: React.PropTypes.string,
+        className: PropTypes.string,
         // Class applied to the tooltip itself
-        tooltipClassName: React.PropTypes.string,
+        tooltipClassName: PropTypes.string,
         // Whether the tooltip is visible or hidden.
         // The hidden state allows animating the tooltip away via CSS.
         // Defaults to visible if unset.
-        visible: React.PropTypes.bool,
+        visible: PropTypes.bool,
         // the react element to put into the tooltip
-        label: React.PropTypes.node,
+        label: PropTypes.node,
     },
 
     getDefaultProps() {
@@ -97,7 +101,9 @@ module.exports = React.createClass({
         const parent = ReactDOM.findDOMNode(this).parentNode;
         let style = {};
         style = this._updatePosition(style);
-        style.display = "block";
+        // Hide the entire container when not visible. This prevents flashing of the tooltip
+        // if it is not meant to be visible on first mount.
+        style.display = this.props.visible ? "block" : "none";
 
         const tooltipClasses = classNames("mx_Tooltip", this.props.tooltipClassName, {
             "mx_Tooltip_visible": this.props.visible,

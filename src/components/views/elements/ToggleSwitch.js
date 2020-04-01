@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,59 +15,47 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 import classNames from "classnames";
+import * as sdk from "../../../index";
 
-export default class ToggleSwitch extends React.Component {
-    static propTypes = {
-        // Whether or not this toggle is in the 'on' position. Default false (off).
-        checked: PropTypes.bool,
-
-        // Whether or not the user can interact with the switch
-        disabled: PropTypes.bool,
-
-        // Called when the checked state changes. First argument will be the new state.
-        onChange: PropTypes.func,
+// Controlled Toggle Switch element, written with Accessibility in mind
+const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
+    const _onClick = (e) => {
+        if (disabled) return;
+        onChange(!checked);
     };
 
-    constructor(props) {
-        super(props);
+    const classes = classNames({
+        "mx_ToggleSwitch": true,
+        "mx_ToggleSwitch_on": checked,
+        "mx_ToggleSwitch_enabled": !disabled,
+    });
 
-        this.state = {
-            checked: props.checked || false, // default false
-        };
-    }
+    const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+    return (
+        <AccessibleButton {...props}
+            className={classes}
+            onClick={_onClick}
+            role="switch"
+            aria-checked={checked}
+            aria-disabled={disabled}
+        >
+            <div className="mx_ToggleSwitch_ball" />
+        </AccessibleButton>
+    );
+};
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.checked !== this.state.checked) {
-            this.setState({checked: nextProps.checked});
-        }
-    }
+ToggleSwitch.propTypes = {
+    // Whether or not this toggle is in the 'on' position.
+    checked: PropTypes.bool.isRequired,
 
-    _onClick = (e) => {
-        e.stopPropagation();
-        e.preventDefault();
+    // Whether or not the user can interact with the switch
+    disabled: PropTypes.bool,
 
-        if (this.props.disabled) return;
+    // Called when the checked state changes. First argument will be the new state.
+    onChange: PropTypes.func.isRequired,
+};
 
-        const newState = !this.state.checked;
-        this.setState({checked: newState});
-        if (this.props.onChange) {
-            this.props.onChange(newState);
-        }
-    };
-
-    render() {
-        const classes = classNames({
-            "mx_ToggleSwitch": true,
-            "mx_ToggleSwitch_on": this.state.checked,
-            "mx_ToggleSwitch_enabled": !this.props.disabled,
-        });
-        return (
-            <div className={classes} onClick={this._onClick}>
-                <div className="mx_ToggleSwitch_ball" />
-            </div>
-        );
-    }
-}
+export default ToggleSwitch;

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,21 +29,35 @@ limitations under the License.
 
 .mx_VerificationShowSas_emojiSas {
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 25px 0;
 }
 
 .mx_VerificationShowSas_emojiSas_block {
     display: inline-block;
-    margin-left: 15px;
-    margin-right: 15px;
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    position: relative;
+    width: 52px;
+}
+
+.mx_Dialog .mx_VerificationShowSas_emojiSas_block,
+.mx_AuthPage_modal .mx_VerificationShowSas_emojiSas_block {
+    width: 60px;
 }
 
 .mx_VerificationShowSas_emojiSas_emoji {
-    font-size: 48px;
+    font-size: 32px;
 }
 
 .mx_VerificationShowSas_emojiSas_label {
-    text-align: center;
-    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px;
+}
+
+.mx_VerificationShowSas_emojiSas_break {
+    flex-basis: 100%;
 }

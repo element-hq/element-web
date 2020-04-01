@@ -17,7 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { KeyCode } from '../../../Keyboard';
+import {Key} from '../../../Keyboard';
 
 /**
  * AccessibleButton is a generic wrapper for any element that should be treated
@@ -40,23 +40,23 @@ export default function AccessibleButton(props) {
         // Browsers handle space and enter keypresses differently and we are only adjusting to the
         // inconsistencies here
         restProps.onKeyDown = function(e) {
-            if (e.keyCode === KeyCode.ENTER) {
+            if (e.key === Key.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
                 return onClick(e);
             }
-            if (e.keyCode === KeyCode.SPACE) {
+            if (e.key === Key.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();
             }
         };
         restProps.onKeyUp = function(e) {
-            if (e.keyCode === KeyCode.SPACE) {
+            if (e.key === Key.SPACE) {
                 e.stopPropagation();
                 e.preventDefault();
                 return onClick(e);
             }
-            if (e.keyCode === KeyCode.ENTER) {
+            if (e.key === Key.ENTER) {
                 e.stopPropagation();
                 e.preventDefault();
             }
@@ -67,10 +67,7 @@ export default function AccessibleButton(props) {
     restProps.ref = restProps.inputRef;
     delete restProps.inputRef;
 
-    restProps.tabIndex = restProps.tabIndex || "0";
-    restProps.role = "button";
-    restProps.className = (restProps.className ? restProps.className + " " : "") +
-                          "mx_AccessibleButton";
+    restProps.className = (restProps.className ? restProps.className + " " : "") + "mx_AccessibleButton";
 
     if (kind) {
         // We apply a hasKind class to maintain backwards compatibility with
@@ -80,6 +77,7 @@ export default function AccessibleButton(props) {
 
     if (disabled) {
         restProps.className += " mx_AccessibleButton_disabled";
+        restProps["aria-disabled"] = true;
     }
 
     return React.createElement(element, restProps, children);
@@ -93,19 +91,30 @@ export default function AccessibleButton(props) {
  */
 AccessibleButton.propTypes = {
     children: PropTypes.node,
-    inputRef: PropTypes.func,
+    inputRef: PropTypes.oneOfType([
+        // Either a function
+        PropTypes.func,
+        // Or the instance of a DOM native element
+        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    ]),
     element: PropTypes.string,
     onClick: PropTypes.func.isRequired,
 
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
     kind: PropTypes.string,
+    // The ARIA role
+    role: PropTypes.string,
+    // The tabIndex
+    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
     disabled: PropTypes.bool,
 };
 
 AccessibleButton.defaultProps = {
     element: 'div',
+    role: 'button',
+    tabIndex: "0",
 };
 
 AccessibleButton.displayName = "AccessibleButton";

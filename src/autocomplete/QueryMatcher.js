@@ -71,6 +71,7 @@ export default class QueryMatcher {
             }
 
             for (const keyValue of keyValues) {
+                if (!keyValue) continue; // skip falsy keyValues
                 const key = stripDiacritics(keyValue).toLowerCase();
                 if (!this._items.has(key)) {
                     this._items.set(key, []);

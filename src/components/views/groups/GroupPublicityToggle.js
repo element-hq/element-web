@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
 import ToggleSwitch from "../elements/ToggleSwitch";
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'GroupPublicityToggle',
 
     propTypes: {
@@ -31,7 +32,7 @@ export default React.createClass({
         return {
             busy: false,
             ready: false,
-            isGroupPublicised: null,
+            isGroupPublicised: false, // assume false as <ToggleSwitch /> expects a boolean
         };
     },
 
@@ -42,7 +43,7 @@ export default React.createClass({
     _initGroupStore: function(groupId) {
         this._groupStoreToken = GroupStore.registerListener(groupId, () => {
             this.setState({
-                isGroupPublicised: GroupStore.getGroupPublicity(groupId),
+                isGroupPublicised: Boolean(GroupStore.getGroupPublicity(groupId)),
                 ready: GroupStore.isStateReady(groupId, GroupStore.STATE_KEY.Summary),
             });
         });

@@ -20,17 +20,16 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
-import isEqual from 'lodash/isEqual';
-import sdk from '../../../index';
 import type {Completion} from '../../../autocomplete/Autocompleter';
-import Promise from 'bluebird';
 import { Room } from 'matrix-js-sdk';
 
-import {getCompletions} from '../../../autocomplete/Autocompleter';
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
+import {sleep} from "../../../utils/promise";
 
 const COMPOSER_SELECTED = 0;
+
+export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
 
 export default class Autocomplete extends React.Component {
     constructor(props) {
@@ -106,13 +105,11 @@ export default class Autocomplete extends React.Component {
             autocompleteDelay = 0;
         }
 
-        const deferred = Promise.defer();
-        this.debounceCompletionsRequest = setTimeout(() => {
-            this.processQuery(query, selection).then(() => {
-                deferred.resolve();
-            });
-        }, autocompleteDelay);
-        return deferred.promise;
+        return new Promise((resolve) => {
+            this.debounceCompletionsRequest = setTimeout(() => {
+                resolve(this.processQuery(query, selection));
+            }, autocompleteDelay);
+        });
     }
 
     processQuery(query, selection) {
@@ -162,31 +159,22 @@ export default class Autocomplete extends React.Component {
         });
     }
 
+    hasSelection(): bool {
+        return this.countCompletions() > 0 && this.state.selectionOffset !== 0;
+    }
+
     countCompletions(): number {
         return this.state.completionList.length;
     }
 
     // called from MessageComposerInput
-    onUpArrow(): ?Completion {
+    moveSelection(delta): ?Completion {
         const completionCount = this.countCompletions();
-        // completionCount + 1, since 0 means composer is selected
-        const selectionOffset = (completionCount + 1 + this.state.selectionOffset - 1)
-            % (completionCount + 1);
-        if (!completionCount) {
-            return null;
-        }
-        this.setSelection(selectionOffset);
-    }
+        if (completionCount === 0) return; // there are no items to move the selection through
 
-    // called from MessageComposerInput
-    onDownArrow(): ?Completion {
-        const completionCount = this.countCompletions();
-        // completionCount + 1, since 0 means composer is selected
-        const selectionOffset = (this.state.selectionOffset + 1) % (completionCount + 1);
-        if (!completionCount) {
-            return null;
-        }
-        this.setSelection(selectionOffset);
+        // Note: selectionOffset 0 represents the unsubstituted text, while 1 means first pill selected
+        const index = (this.state.selectionOffset + delta + completionCount + 1) % (completionCount + 1);
+        this.setSelection(index);
     }
 
     onEscape(e): boolean {
@@ -207,16 +195,16 @@ export default class Autocomplete extends React.Component {
     }
 
     forceComplete() {
-        const done = Promise.defer();
-        this.setState({
-            forceComplete: true,
-            hide: false,
-        }, () => {
-            this.complete(this.props.query, this.props.selection).then(() => {
-                done.resolve(this.countCompletions());
+        return new Promise((resolve) => {
+            this.setState({
+                forceComplete: true,
+                hide: false,
+            }, () => {
+                this.complete(this.props.query, this.props.selection).then(() => {
+                    resolve(this.countCompletions());
+                });
             });
         });
-        return done.promise;
     }
 
     onCompletionClicked(selectionOffset: number): boolean {
@@ -233,7 +221,7 @@ export default class Autocomplete extends React.Component {
     setSelection(selectionOffset: number) {
         this.setState({selectionOffset, hide: false});
         if (this.props.onSelectionChange) {
-            this.props.onSelectionChange(this.state.completionList[selectionOffset - 1]);
+            this.props.onSelectionChange(this.state.completionList[selectionOffset - 1], selectionOffset - 1);
         }
     }
 
@@ -259,9 +247,8 @@ export default class Autocomplete extends React.Component {
         let position = 1;
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
             const completions = completionResult.completions.map((completion, i) => {
-                const className = classNames('mx_Autocomplete_Completion', {
-                    'selected': position === this.state.selectionOffset,
-                });
+                const selected = position === this.state.selectionOffset;
+                const className = classNames('mx_Autocomplete_Completion', {selected});
                 const componentPosition = position;
                 position++;
 
@@ -270,10 +257,12 @@ export default class Autocomplete extends React.Component {
                 };
 
                 return React.cloneElement(completion.component, {
-                    key: i,
-                    ref: `completion${position - 1}`,
+                    "key": i,
+                    "ref": `completion${componentPosition}`,
+                    "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
                     className,
                     onClick,
+                    "aria-selected": selected,
                 });
             });
 

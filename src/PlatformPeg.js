@@ -47,4 +47,4 @@ class PlatformPeg {
 if (!global.mxPlatformPeg) {
     global.mxPlatformPeg = new PlatformPeg();
 }
-module.exports = global.mxPlatformPeg;
+export default global.mxPlatformPeg;

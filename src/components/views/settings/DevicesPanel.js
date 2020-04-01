@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,14 +19,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 export default class DevicesPanel extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             devices: undefined,
@@ -51,7 +52,7 @@ export default class DevicesPanel extends React.Component {
     }
 
     _loadDevices() {
-        MatrixClientPeg.get().getDevices().done(
+        MatrixClientPeg.get().getDevices().then(
             (resp) => {
                 if (this._unmounted) { return; }
                 this.setState({devices: resp.devices || []});
@@ -61,10 +62,10 @@ export default class DevicesPanel extends React.Component {
                 let errtxt;
                 if (error.httpStatus == 404) {
                     // 404 probably means the HS doesn't yet support the API.
-                    errtxt = _t("Your homeserver does not support device management.");
+                    errtxt = _t("Your homeserver does not support session management.");
                 } else {
-                    console.error("Error loading devices:", error);
-                    errtxt = _t("Unable to load device list");
+                    console.error("Error loading sessions:", error);
+                    errtxt = _t("Unable to load session list");
                 }
                 this.setState({deviceLoadError: errtxt});
             },
@@ -129,7 +130,7 @@ export default class DevicesPanel extends React.Component {
                 makeRequest: this._makeDeleteRequest.bind(this),
             });
         }).catch((e) => {
-            console.error("Error deleting devices", e);
+            console.error("Error deleting sessions", e);
             if (this._unmounted) { return; }
         }).finally(() => {
             this.setState({
@@ -186,19 +187,19 @@ export default class DevicesPanel extends React.Component {
 
         const deleteButton = this.state.deleting ?
             <Spinner w={22} h={22} /> :
-            <AccessibleButton className="mx_textButton" onClick={this._onDeleteClick}>
-               { _t("Delete %(count)s devices", {count: this.state.selectedDevices.length}) }
+            <AccessibleButton onClick={this._onDeleteClick} kind="danger_sm">
+               { _t("Delete %(count)s sessions", {count: this.state.selectedDevices.length}) }
             </AccessibleButton>;
 
         const classes = classNames(this.props.className, "mx_DevicesPanel");
         return (
             <div className={classes}>
                 <div className="mx_DevicesPanel_header">
-                    <div className="mx_DevicesPanel_deviceId">{ _t("Device ID") }</div>
-                    <div className="mx_DevicesPanel_deviceName">{ _t("Device Name") }</div>
+                    <div className="mx_DevicesPanel_deviceId">{ _t("ID") }</div>
+                    <div className="mx_DevicesPanel_deviceName">{ _t("Public Name") }</div>
                     <div className="mx_DevicesPanel_deviceLastSeen">{ _t("Last seen") }</div>
                     <div className="mx_DevicesPanel_deviceButtons">
-                        { this.state.selectedDevices.length > 0 ? deleteButton : _t('Select devices') }
+                        { this.state.selectedDevices.length > 0 ? deleteButton : null }
                     </div>
                 </div>
                 { devices.map(this._renderDevice) }
@@ -207,7 +208,6 @@ export default class DevicesPanel extends React.Component {
     }
 }
 
-DevicesPanel.displayName = 'MemberDeviceInfo';
 DevicesPanel.propTypes = {
     className: PropTypes.string,
 };

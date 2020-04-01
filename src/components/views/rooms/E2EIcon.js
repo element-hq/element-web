@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,32 +15,102 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, {useState} from "react";
+import PropTypes from "prop-types";
 import classNames from 'classnames';
-import { _t } from '../../../languageHandler';
-import AccessibleButton from '../elements/AccessibleButton';
 
-export default function(props) {
-    const isWarning = props.status === "warning";
-    const isVerified = props.status === "verified";
-    const e2eIconClasses = classNames({
+import {_t, _td} from '../../../languageHandler';
+import {useFeatureEnabled} from "../../../hooks/useSettings";
+import AccessibleButton from "../elements/AccessibleButton";
+import Tooltip from "../elements/Tooltip";
+
+export const E2E_STATE = {
+    VERIFIED: "verified",
+    WARNING: "warning",
+    UNKNOWN: "unknown",
+    NORMAL: "normal",
+};
+
+const crossSigningUserTitles = {
+    [E2E_STATE.WARNING]: _td("This user has not verified all of their sessions."),
+    [E2E_STATE.NORMAL]: _td("You have not verified this user."),
+    [E2E_STATE.VERIFIED]: _td("You have verified this user. This user has verified all of their sessions."),
+};
+const crossSigningRoomTitles = {
+    [E2E_STATE.WARNING]: _td("Someone is using an unknown session"),
+    [E2E_STATE.NORMAL]: _td("This room is end-to-end encrypted"),
+    [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
+};
+
+const legacyUserTitles = {
+    [E2E_STATE.WARNING]: _td("Some sessions for this user are not trusted"),
+    [E2E_STATE.VERIFIED]: _td("All sessions for this user are trusted"),
+};
+const legacyRoomTitles = {
+    [E2E_STATE.WARNING]: _td("Some sessions in this encrypted room are not trusted"),
+    [E2E_STATE.VERIFIED]: _td("All sessions in this encrypted room are trusted"),
+};
+
+const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
+    const [hover, setHover] = useState(false);
+
+    const classes = classNames({
         mx_E2EIcon: true,
-        mx_E2EIcon_warning: isWarning,
-        mx_E2EIcon_verified: isVerified,
-    }, props.className);
+        mx_E2EIcon_warning: status === E2E_STATE.WARNING,
+        mx_E2EIcon_normal: status === E2E_STATE.NORMAL,
+        mx_E2EIcon_verified: status === E2E_STATE.VERIFIED,
+    }, className);
+
     let e2eTitle;
-    if (isWarning) {
-        e2eTitle = props.isUser ?
-            _t("Some devices for this user are not trusted") :
-            _t("Some devices in this encrypted room are not trusted");
-    } else if (isVerified) {
-        e2eTitle = props.isUser ?
-            _t("All devices for this user are trusted") :
-            _t("All devices in this encrypted room are trusted");
+    const crossSigning = useFeatureEnabled("feature_cross_signing");
+    if (crossSigning && isUser) {
+        e2eTitle = crossSigningUserTitles[status];
+    } else if (crossSigning && !isUser) {
+        e2eTitle = crossSigningRoomTitles[status];
+    } else if (!crossSigning && isUser) {
+        e2eTitle = legacyUserTitles[status];
+    } else if (!crossSigning && !isUser) {
+        e2eTitle = legacyRoomTitles[status];
     }
-    const icon = (<div className={e2eIconClasses} title={e2eTitle} />);
-    if (props.onClick) {
-        return (<AccessibleButton onClick={props.onClick}>{ icon }</AccessibleButton>);
-    } else {
-        return icon;
+
+    let style;
+    if (size) {
+        style = {width: `${size}px`, height: `${size}px`};
     }
-}
+
+    const onMouseOver = () => setHover(true);
+    const onMouseOut = () => setHover(false);
+
+    let tip;
+    if (hover && !hideTooltip) {
+        tip = <Tooltip label={e2eTitle ? _t(e2eTitle) : ""} />;
+    }
+
+    if (onClick) {
+        return (
+            <AccessibleButton
+                onClick={onClick}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+                className={classes}
+                style={style}
+            >
+                { tip }
+            </AccessibleButton>
+        );
+    }
+
+    return <div onMouseOver={onMouseOver} onMouseOut={onMouseOut} className={classes} style={style}>
+        { tip }
+    </div>;
+};
+
+E2EIcon.propTypes = {
+    isUser: PropTypes.bool,
+    status: PropTypes.oneOf(Object.values(E2E_STATE)),
+    className: PropTypes.string,
+    size: PropTypes.number,
+    onClick: PropTypes.func,
+};
+
+export default E2EIcon;

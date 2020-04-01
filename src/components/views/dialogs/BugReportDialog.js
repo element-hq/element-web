@@ -1,6 +1,8 @@
 /*
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,14 +18,16 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import PropTypes from 'prop-types';
+import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import sendBugReport from '../../../rageshake/submit-rageshake';
 
 export default class BugReportDialog extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             sendLogs: true,
             busy: false,
@@ -50,6 +54,13 @@ export default class BugReportDialog extends React.Component {
     }
 
     _onSubmit(ev) {
+        if ((!this.state.text || !this.state.text.trim()) && (!this.state.issueUrl || !this.state.issueUrl.trim())) {
+            this.setState({
+                err: _t("Please tell us what went wrong or, better, create a GitHub issue that describes the problem."),
+            });
+            return;
+        }
+
         const userText =
             (this.state.text.length > 0 ? this.state.text + '\n\n': '') + 'Issue: ' +
             (this.state.issueUrl.length > 0 ? this.state.issueUrl : 'No issue link given');
@@ -57,31 +68,30 @@ export default class BugReportDialog extends React.Component {
         this.setState({ busy: true, progress: null, err: null });
         this._sendProgressCallback(_t("Preparing to send logs"));
 
-        require(['../../../rageshake/submit-rageshake'], (s) => {
-            s(SdkConfig.get().bug_report_endpoint_url, {
-                userText,
-                sendLogs: true,
-                progressCallback: this._sendProgressCallback,
-            }).then(() => {
-                if (!this._unmounted) {
-                    this.props.onFinished(false);
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    // N.B. first param is passed to piwik and so doesn't want i18n
-                    Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
-                        title: _t('Logs sent'),
-                        description: _t('Thank you!'),
-                        hasCancelButton: false,
-                    });
-                }
-            }, (err) => {
-                if (!this._unmounted) {
-                    this.setState({
-                        busy: false,
-                        progress: null,
-                        err: _t("Failed to send logs: ") + `${err.message}`,
-                    });
-                }
-            });
+        sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+            userText,
+            sendLogs: true,
+            progressCallback: this._sendProgressCallback,
+            label: this.props.label,
+        }).then(() => {
+            if (!this._unmounted) {
+                this.props.onFinished(false);
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                // N.B. first param is passed to piwik and so doesn't want i18n
+                Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
+                    title: _t('Logs sent'),
+                    description: _t('Thank you!'),
+                    hasCancelButton: false,
+                });
+            }
+        }, (err) => {
+            if (!this._unmounted) {
+                this.setState({
+                    busy: false,
+                    progress: null,
+                    err: _t("Failed to send logs: ") + `${err.message}`,
+                });
+            }
         });
     }
 
@@ -93,7 +103,7 @@ export default class BugReportDialog extends React.Component {
         this.setState({ issueUrl: ev.target.value });
     }
 
-   _onSendLogsChange(ev) {
+    _onSendLogsChange(ev) {
         this.setState({ sendLogs: ev.target.checked });
     }
 
@@ -156,7 +166,6 @@ export default class BugReportDialog extends React.Component {
                         ) }
                     </b></p>
                     <Field
-                        id="mx_BugReportDialog_issueUrl"
                         type="text"
                         className="mx_BugReportDialog_field_input"
                         label={_t("GitHub issue")}
@@ -193,5 +202,5 @@ export default class BugReportDialog extends React.Component {
 }
 
 BugReportDialog.propTypes = {
-    onFinished: React.PropTypes.func.isRequired,
+    onFinished: PropTypes.func.isRequired,
 };

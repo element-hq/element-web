@@ -23,7 +23,11 @@ limitations under the License.
     cursor: default !important;
 }
 
-.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button, .mx_DevTools_RoomStateExplorer_query {
+.mx_DevTools_RoomStateExplorer_query {
+    margin-bottom: 10px;
+}
+
+.mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button {
     margin-bottom: 10px;
     width: 100%;
 }
@@ -41,13 +45,11 @@ limitations under the License.
     border-bottom: 1px solid #e5e5e5;
 }
 
-.mx_DevTools_inputRow
-{
+.mx_DevTools_inputRow {
     display: table-row;
 }
 
-.mx_DevTools_inputLabelCell
-{
+.mx_DevTools_inputLabelCell {
     display: table-cell;
     font-weight: bold;
     padding-right: 24px;
@@ -58,8 +60,7 @@ limitations under the License.
     width: 240px;
 }
 
-.mx_DevTools_inputCell input
-{
+.mx_DevTools_inputCell input {
     display: inline-block;
     border: 0;
     border-bottom: 1px solid $input-underline-color;
@@ -75,11 +76,6 @@ limitations under the License.
     max-width: 684px;
     min-height: 250px;
     padding: 10px;
-    width: 100%;
-}
-
-.mx_DevTools_content .mx_Field_input {
-    display: inline-block;
 }
 
 .mx_DevTools_eventTypeStateKeyGroup {
@@ -96,11 +92,11 @@ limitations under the License.
 
     // add default box-sizing for this scope
     &,
-    &:after,
-    &:before,
+    &::after,
+    &::before,
     & *,
-    & *:after,
-    & *:before,
+    & *::after,
+    & *::before,
     & + .mx_DevTools_tgl-btn {
         box-sizing: border-box;
         &::selection {
@@ -116,8 +112,8 @@ limitations under the License.
         position: relative;
         cursor: pointer;
         user-select: none;
-        &:after,
-        &:before {
+        &::after,
+        &::before {
             position: relative;
             display: block;
             content: "";
@@ -125,16 +121,16 @@ limitations under the License.
             height: 100%;
         }
 
-        &:after {
+        &::after {
             left: 0;
         }
 
-        &:before {
+        &::before {
             display: none;
         }
     }
 
-    &:checked + .mx_DevTools_tgl-btn:after {
+    &:checked + .mx_DevTools_tgl-btn::after {
         left: 50%;
     }
 }
@@ -145,8 +141,8 @@ limitations under the License.
         transition: all .2s ease;
         font-family: sans-serif;
         perspective: 100px;
-        &:after,
-        &:before {
+        &::after,
+        &::before {
             display: inline-block;
             transition: all .4s ease;
             width: 100%;
@@ -161,35 +157,69 @@ limitations under the License.
             border-radius: 4px;
         }
 
-        &:after {
+        &::after {
             content: attr(data-tg-on);
-            background: #02C66F;
+            background: #02c66f;
             transform: rotateY(-180deg);
         }
 
-        &:before {
-            background: #FF3A19;
+        &::before {
+            background: #ff3a19;
             content: attr(data-tg-off);
         }
 
-        &:active:before {
+        &:active::before {
             transform: rotateY(-20deg);
         }
     }
 
     &:checked + .mx_DevTools_tgl-btn {
-        &:before {
+        &::before {
             transform: rotateY(180deg);
         }
 
-        &:after {
+        &::after {
             transform: rotateY(0);
             left: 0;
-            background: #7FC6A6;
+            background: #7fc6a6;
         }
 
-        &:active:after {
+        &:active::after {
             transform: rotateY(20deg);
         }
+    }
+}
+
+.mx_DevTools_VerificationRequest {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    font-family: $monospace-font-family;
+
+    dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        margin: 0;
+    }
+
+    dd {
+        grid-column-start: 2;
+    }
+
+    dd:empty {
+        color: #666666;
+        &::after {
+            content: "(empty)";
+        }
+    }
+
+    dt {
+        font-weight: bold;
+        grid-column-start: 1;
+    }
+
+    dt::after {
+        content: ":";
     }
 }

@@ -1,6 +1,7 @@
 /*
 Copyright 2017 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-import Promise from 'bluebird';
 
 // This module contains all the code needed to log the console, persist it to
 // disk and submit bug reports. Rationale is as follows:
@@ -76,8 +75,22 @@ class ConsoleLogger {
         args = args.map((arg) => {
             if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
-            } else if (typeof(arg) === 'object') {
-                return JSON.stringify(arg);
+            } else if (typeof (arg) === 'object') {
+                try {
+                    return JSON.stringify(arg);
+                } catch (e) {
+                    // In development, it can be useful to log complex cyclic
+                    // objects to the console for inspection. This is fine for
+                    // the console, but default `stringify` can't handle that.
+                    // We workaround this by using a special replacer function
+                    // to only log values of the root object and avoid cycles.
+                    return JSON.stringify(arg, (key, value) => {
+                        if (key && typeof value === "object") {
+                            return "<object>";
+                        }
+                        return value;
+                    });
+                }
             } else {
                 return arg;
             }
@@ -88,7 +101,9 @@ class ConsoleLogger {
         // run.
         // Example line:
         // 2017-01-18T11:23:53.214Z W Failed to set badge count
-        const line = `${ts} ${level} ${args.join(' ')}\n`;
+        let line = `${ts} ${level} ${args.join(' ')}\n`;
+        // Do some cleanup
+        line = line.replace(/token=[a-zA-Z0-9-]+/gm, 'token=xxxxx');
         // Using + really is the quickest way in JS
         // http://jsperf.com/concat-vs-plus-vs-join
         this.logs += line;
@@ -119,6 +134,8 @@ class IndexedDBLogStore {
         this.id = "instance-" + Math.random() + Date.now();
         this.index = 0;
         this.db = null;
+
+        // these promises are cleared as soon as fulfilled
         this.flushPromise = null;
         // set if flush() is called whilst one is ongoing
         this.flushAgainPromise = null;
@@ -191,16 +208,16 @@ class IndexedDBLogStore {
      */
     flush() {
         // check if a flush() operation is ongoing
-        if (this.flushPromise && this.flushPromise.isPending()) {
-            if (this.flushAgainPromise && this.flushAgainPromise.isPending()) {
-                // this is the 3rd+ time we've called flush() : return the same
-                // promise.
+        if (this.flushPromise) {
+            if (this.flushAgainPromise) {
+                // this is the 3rd+ time we've called flush() : return the same promise.
                 return this.flushAgainPromise;
             }
-            // queue up a flush to occur immediately after the pending one
-            // completes.
+            // queue up a flush to occur immediately after the pending one completes.
             this.flushAgainPromise = this.flushPromise.then(() => {
                 return this.flush();
+            }).then(() => {
+                this.flushAgainPromise = null;
             });
             return this.flushAgainPromise;
         }
@@ -208,8 +225,7 @@ class IndexedDBLogStore {
         // a brand new one, destroying the chain which may have been built up.
         this.flushPromise = new Promise((resolve, reject) => {
             if (!this.db) {
-                // not connected yet or user rejected access for us to r/w to
-                // the db.
+                // not connected yet or user rejected access for us to r/w to the db.
                 reject(new Error("No connected database"));
                 return;
             }
@@ -234,6 +250,8 @@ class IndexedDBLogStore {
             objStore.add(this._generateLogEntry(lines));
             const lastModStore = txn.objectStore("logslastmod");
             lastModStore.put(this._generateLastModifiedTime());
+        }).then(() => {
+            this.flushPromise = null;
         });
         return this.flushPromise;
     }
@@ -252,11 +270,12 @@ class IndexedDBLogStore {
         const db = this.db;
 
         // Returns: a string representing the concatenated logs for this ID.
-        function fetchLogs(id) {
+        // Stops adding log fragments when the size exceeds maxSize
+        function fetchLogs(id, maxSize) {
             const objectStore = db.transaction("logs", "readonly").objectStore("logs");
 
             return new Promise((resolve, reject) => {
-                const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), 'next');
+                const query = objectStore.index("id").openCursor(IDBKeyRange.only(id), 'prev');
                 let lines = '';
                 query.onerror = (event) => {
                     reject(new Error("Query failed: " + event.target.errorCode));
@@ -267,8 +286,8 @@ class IndexedDBLogStore {
                         resolve(lines);
                         return; // end of results
                     }
-                    lines += cursor.value.lines;
-                    if (lines.length >= MAX_LOG_SIZE) {
+                    lines = cursor.value.lines + lines;
+                    if (lines.length >= maxSize) {
                         resolve(lines);
                     } else {
                         cursor.continue();
@@ -334,22 +353,25 @@ class IndexedDBLogStore {
         const logs = [];
         let size = 0;
         for (let i = 0; i < allLogIds.length; i++) {
-            const lines = await fetchLogs(allLogIds[i]);
+            const lines = await fetchLogs(allLogIds[i], MAX_LOG_SIZE - size);
 
-            // always include at least one log file, but only include
-            // subsequent ones if they won't take us over the MAX_LOG_SIZE
-            if (i > 0 && size + lines.length > MAX_LOG_SIZE) {
+            // always add the log file: fetchLogs will truncate once the maxSize we give it is
+            // exceeded, so we'll go over the max but only by one fragment's worth.
+            logs.push({
+                lines: lines,
+                id: allLogIds[i],
+            });
+            size += lines.length;
+
+            // If fetchLogs truncated we'll now be at or over the size limit,
+            // in which case we should stop and remove the rest of the log files.
+            if (size >= MAX_LOG_SIZE) {
                 // the remaining log IDs should be removed. If we go out of
                 // bounds this is just []
                 removeLogIds = allLogIds.slice(i + 1);
                 break;
             }
 
-            logs.push({
-                lines: lines,
-                id: allLogIds[i],
-            });
-            size += lines.length;
         }
         if (removeLogIds.length > 0) {
             console.log("Removing logs: ", removeLogIds);
@@ -410,77 +432,73 @@ function selectQuery(store, keyRange, resultMapper) {
     });
 }
 
-
-module.exports = {
-
-    /**
-     * Configure rage shaking support for sending bug reports.
-     * Modifies globals.
-     * @return {Promise} Resolves when set up.
-     */
-    init: function() {
-        if (global.mx_rage_initPromise) {
-            return global.mx_rage_initPromise;
-        }
-        global.mx_rage_logger = new ConsoleLogger();
-        global.mx_rage_logger.monkeyPatch(window.console);
-
-        // just *accessing* indexedDB throws an exception in firefox with
-        // indexeddb disabled.
-        let indexedDB;
-        try {
-            indexedDB = window.indexedDB;
-        } catch (e) {}
-
-        if (indexedDB) {
-            global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
-            global.mx_rage_initPromise = global.mx_rage_store.connect();
-            return global.mx_rage_initPromise;
-        }
-        global.mx_rage_initPromise = Promise.resolve();
+/**
+ * Configure rage shaking support for sending bug reports.
+ * Modifies globals.
+ * @return {Promise} Resolves when set up.
+ */
+export function init() {
+    if (global.mx_rage_initPromise) {
         return global.mx_rage_initPromise;
-    },
+    }
+    global.mx_rage_logger = new ConsoleLogger();
+    global.mx_rage_logger.monkeyPatch(window.console);
 
-    flush: function() {
-        if (!global.mx_rage_store) {
-            return;
-        }
-        global.mx_rage_store.flush();
-    },
+    // just *accessing* indexedDB throws an exception in firefox with
+    // indexeddb disabled.
+    let indexedDB;
+    try {
+        indexedDB = window.indexedDB;
+    } catch (e) {}
 
-    /**
-     * Clean up old logs.
-     * @return Promise Resolves if cleaned logs.
-     */
-    cleanup: async function() {
-        if (!global.mx_rage_store) {
-            return;
-        }
-        await global.mx_rage_store.consume();
-    },
+    if (indexedDB) {
+        global.mx_rage_store = new IndexedDBLogStore(indexedDB, global.mx_rage_logger);
+        global.mx_rage_initPromise = global.mx_rage_store.connect();
+        return global.mx_rage_initPromise;
+    }
+    global.mx_rage_initPromise = Promise.resolve();
+    return global.mx_rage_initPromise;
+}
 
-    /**
-     * Get a recent snapshot of the logs, ready for attaching to a bug report
-     *
-     * @return {Array<{lines: string, id, string}>}  list of log data
-     */
-    getLogsForReport: async function() {
-        if (!global.mx_rage_logger) {
-            throw new Error(
-                "No console logger, did you forget to call init()?",
-            );
-        }
-        // If in incognito mode, store is null, but we still want bug report
-        // sending to work going off the in-memory console logs.
-        if (global.mx_rage_store) {
-            // flush most recent logs
-            await global.mx_rage_store.flush();
-            return await global.mx_rage_store.consume();
-        } else {
-            return [{
-                lines: global.mx_rage_logger.flush(true),
-                id: "-",
-            }];
-        }
-    },
-};
+export function flush() {
+    if (!global.mx_rage_store) {
+        return;
+    }
+    global.mx_rage_store.flush();
+}
+
+/**
+ * Clean up old logs.
+ * @return Promise Resolves if cleaned logs.
+ */
+export async function cleanup() {
+    if (!global.mx_rage_store) {
+        return;
+    }
+    await global.mx_rage_store.consume();
+}
+
+/**
+ * Get a recent snapshot of the logs, ready for attaching to a bug report
+ *
+ * @return {Array<{lines: string, id, string}>}  list of log data
+ */
+export async function getLogsForReport() {
+    if (!global.mx_rage_logger) {
+        throw new Error(
+            "No console logger, did you forget to call init()?",
+        );
+    }
+    // If in incognito mode, store is null, but we still want bug report
+    // sending to work going off the in-memory console logs.
+    if (global.mx_rage_store) {
+        // flush most recent logs
+        await global.mx_rage_store.flush();
+        return await global.mx_rage_store.consume();
+    } else {
+        return [{
+            lines: global.mx_rage_logger.flush(true),
+            id: "-",
+        }];
+    }
+}

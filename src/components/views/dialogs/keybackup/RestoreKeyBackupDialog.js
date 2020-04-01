@@ -1,5 +1,6 @@
 /*
 Copyright 2018, 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,24 +16,40 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../../index';
-import MatrixClientPeg from '../../../../MatrixClientPeg';
-import Modal from '../../../../Modal';
-
+import PropTypes from 'prop-types';
+import * as sdk from '../../../../index';
+import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
-
+import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
+import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
+const RESTORE_TYPE_SECRET_STORAGE = 2;
 
-/**
+/*
  * Dialog for restoring e2e keys from a backup and the user's recovery key
  */
-export default React.createClass({
-    getInitialState: function() {
-        return {
+export default class RestoreKeyBackupDialog extends React.PureComponent {
+    static propTypes = {
+        // if false, will close the dialog as soon as the restore completes succesfully
+        // default: true
+        showSummary: PropTypes.bool,
+        // If specified, gather the key from the user but then call the function with the backup
+        // key rather than actually (necessarily) restoring the backup.
+        keyCallback: PropTypes.func,
+    };
+
+    static defaultProps = {
+        showSummary: true,
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
             backupInfo: null,
+            backupKeyStored: null,
             loading: false,
             loadError: null,
             restoreError: null,
@@ -43,27 +60,27 @@ export default React.createClass({
             passPhrase: '',
             restoreType: null,
         };
-    },
+    }
 
-    componentWillMount: function() {
+    componentDidMount() {
         this._loadBackupStatus();
-    },
+    }
 
-    _onCancel: function() {
+    _onCancel = () => {
         this.props.onFinished(false);
-    },
+    }
 
-    _onDone: function() {
+    _onDone = () => {
         this.props.onFinished(true);
-    },
+    }
 
-    _onUseRecoveryKeyClick: function() {
+    _onUseRecoveryKeyClick = () => {
         this.setState({
             forceRecoveryKey: true,
         });
-    },
+    }
 
-    _onResetRecoveryClick: function() {
+    _onResetRecoveryClick = () => {
         this.props.onFinished(false);
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
             import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
@@ -71,27 +88,40 @@ export default React.createClass({
                 onFinished: () => {
                     this._loadBackupStatus();
                 },
-            },
+            }, null, /* priority = */ false, /* static = */ true,
         );
-    },
+    }
 
-    _onRecoveryKeyChange: function(e) {
+    _onRecoveryKeyChange = (e) => {
         this.setState({
             recoveryKey: e.target.value,
             recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
         });
-    },
+    }
 
-    _onPassPhraseNext: async function() {
+    _onPassPhraseNext = async () => {
         this.setState({
             loading: true,
             restoreError: null,
             restoreType: RESTORE_TYPE_PASSPHRASE,
         });
         try {
+            // We do still restore the key backup: we must ensure that the key backup key
+            // is the right one and restoring it is currently the only way we can do this.
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
                 this.state.passPhrase, undefined, undefined, this.state.backupInfo,
             );
+            if (this.props.keyCallback) {
+                const key = await MatrixClientPeg.get().keyBackupKeyFromPassword(
+                    this.state.passPhrase, this.state.backupInfo,
+                );
+                this.props.keyCallback(key);
+            }
+
+            if (!this.props.showSummary) {
+                this.props.onFinished(true);
+                return;
+            }
             this.setState({
                 loading: false,
                 recoverInfo,
@@ -103,9 +133,11 @@ export default React.createClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onRecoveryKeyNext: async function() {
+    _onRecoveryKeyNext = async () => {
+        if (!this.state.recoveryKeyValid) return;
+
         this.setState({
             loading: true,
             restoreError: null,
@@ -115,6 +147,14 @@ export default React.createClass({
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
             );
+            if (this.props.keyCallback) {
+                const key = MatrixClientPeg.get().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                this.props.keyCallback(key);
+            }
+            if (!this.props.showSummary) {
+                this.props.onFinished(true);
+                return;
+            }
             this.setState({
                 loading: false,
                 recoverInfo,
@@ -126,37 +166,88 @@ export default React.createClass({
                 restoreError: e,
             });
         }
-    },
+    }
 
-    _onPassPhraseChange: function(e) {
+    _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
         });
-    },
+    }
 
-    _onPassPhraseKeyPress: function(e) {
-        if (e.key === "Enter") {
-            this._onPassPhraseNext();
+    async _restoreWithSecretStorage() {
+        this.setState({
+            loading: true,
+            restoreError: null,
+            restoreType: RESTORE_TYPE_SECRET_STORAGE,
+        });
+        try {
+            // `accessSecretStorage` may prompt for storage access as needed.
+            const recoverInfo = await accessSecretStorage(async () => {
+                return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
+                    this.state.backupInfo,
+                );
+            });
+            this.setState({
+                loading: false,
+                recoverInfo,
+            });
+        } catch (e) {
+            console.log("Error restoring backup", e);
+            this.setState({
+                restoreError: e,
+                loading: false,
+            });
         }
-    },
+    }
 
-    _onRecoveryKeyKeyPress: function(e) {
-        if (e.key === "Enter" && this.state.recoveryKeyValid) {
-            this._onRecoveryKeyNext();
+    async _restoreWithCachedKey(backupInfo) {
+        if (!backupInfo) return false;
+        try {
+            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithCache(
+                undefined, /* targetRoomId */
+                undefined, /* targetSessionId */
+                backupInfo,
+            );
+            this.setState({
+                recoverInfo,
+            });
+            return true;
+        } catch (e) {
+            console.log("restoreWithCachedKey failed:", e);
+            return false;
         }
-    },
+    }
 
-    _loadBackupStatus: async function() {
+    async _loadBackupStatus() {
         this.setState({
             loading: true,
             loadError: null,
         });
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            this.setState({
+                backupInfo,
+                backupKeyStored,
+            });
+
+            const gotCache = await this._restoreWithCachedKey(backupInfo);
+            if (gotCache) {
+                console.log("RestoreKeyBackupDialog: found cached backup key");
+                this.setState({
+                    loading: false,
+                });
+                return;
+            }
+
+            // If the backup key is stored, we can proceed directly to restore.
+            if (backupKeyStored) {
+                return this._restoreWithSecretStorage();
+            }
+
             this.setState({
                 loadError: null,
                 loading: false,
-                backupInfo,
             });
         } catch (e) {
             console.log("Error loading backup status", e);
@@ -165,9 +256,9 @@ export default React.createClass({
                 loading: false,
             });
         }
-    },
+    }
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent("elements.Spinner");
 
@@ -189,7 +280,7 @@ export default React.createClass({
         } else if (this.state.restoreError) {
             if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
                 if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
-                    title = _t("Recovery Key Mismatch");
+                    title = _t("Recovery key mismatch");
                     content = <div>
                         <p>{_t(
                             "Backup could not be decrypted with this key: " +
@@ -197,7 +288,7 @@ export default React.createClass({
                         )}</p>
                     </div>;
                 } else {
-                    title = _t("Incorrect Recovery Passphrase");
+                    title = _t("Incorrect recovery passphrase");
                     content = <div>
                         <p>{_t(
                             "Backup could not be decrypted with this passphrase: " +
@@ -213,7 +304,8 @@ export default React.createClass({
             title = _t("Error");
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
-            title = _t("Backup Restored");
+            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+            title = _t("Backup restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
@@ -224,11 +316,16 @@ export default React.createClass({
             content = <div>
                 <p>{_t("Restored %(sessionCount)s session keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
+                <DialogButtons primaryButton={_t('OK')}
+                    onPrimaryButtonClick={this._onDone}
+                    hasCancel={false}
+                    focus={true}
+                />
             </div>;
         } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-            title = _t("Enter Recovery Passphrase");
+            title = _t("Enter recovery passphrase");
             content = <div>
                 <p>{_t(
                     "<b>Warning</b>: you should only set up key backup " +
@@ -240,21 +337,22 @@ export default React.createClass({
                     "messaging by entering your recovery passphrase.",
                 )}</p>
 
-                <div className="mx_RestoreKeyBackupDialog_primaryContainer">
+                <form className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input type="password"
                         className="mx_RestoreKeyBackupDialog_passPhraseInput"
                         onChange={this._onPassPhraseChange}
-                        onKeyPress={this._onPassPhraseKeyPress}
                         value={this.state.passPhrase}
                         autoFocus={true}
                     />
-                    <DialogButtons primaryButton={_t('Next')}
+                    <DialogButtons
+                        primaryButton={_t('Next')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
+                        primaryIsSubmit={true}
                         hasCancel={true}
                         onCancel={this._onCancel}
                         focus={false}
                     />
-                </div>
+                </form>
                 {_t(
                     "If you've forgotten your recovery passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
@@ -275,7 +373,7 @@ export default React.createClass({
                 })}
             </div>;
         } else {
-            title = _t("Enter Recovery Key");
+            title = _t("Enter recovery key");
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
@@ -294,7 +392,7 @@ export default React.createClass({
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: you should only set up key backup " +
+                    "<b>Warning</b>: You should only set up key backup " +
                     "from a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
@@ -306,7 +404,6 @@ export default React.createClass({
                 <div className="mx_RestoreKeyBackupDialog_primaryContainer">
                     <input className="mx_RestoreKeyBackupDialog_recoveryKeyInput"
                         onChange={this._onRecoveryKeyChange}
-                        onKeyPress={this._onRecoveryKeyKeyPress}
                         value={this.state.recoveryKey}
                         autoFocus={true}
                     />
@@ -320,7 +417,7 @@ export default React.createClass({
                     />
                 </div>
                 {_t(
-                    "If you've forgotten your recovery passphrase you can "+
+                    "If you've forgotten your recovery key you can "+
                     "<button>set up new recovery options</button>"
                 , {}, {
                     button: s => <AccessibleButton className="mx_linkButton"
@@ -343,5 +440,5 @@ export default React.createClass({
             </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

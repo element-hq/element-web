@@ -1,7 +1,8 @@
 /*
 Copyright 2016 OpenMarket Ltd
 Copyright 2017 Travis Ralston
-Copyright 2018-2019 New Vector Ltd
+Copyright 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +17,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const React = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const sdk = require("../../../index");
+import createReactClass from 'create-react-class';
+import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'UrlPreviewSettings',
 
     propTypes: {

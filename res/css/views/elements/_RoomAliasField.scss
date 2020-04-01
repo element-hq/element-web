@@ -1,0 +1,56 @@
+/*
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomAliasField {
+    // if parent is a flex container, this allows the
+    // width to be as wide as needed, and not 100%
+    flex: 0 1 auto;
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    max-width: 100%;
+
+    input {
+        width: 150px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    input::placeholder {
+        color: $greyed-fg-color;
+        font-weight: normal;
+    }
+
+    .mx_Field_prefix, .mx_Field_postfix {
+        color: $greyed-fg-color;
+        border-left: none;
+        border-right: none;
+        font-weight: 600;
+        padding: 9px 10px;
+        flex: 0 0 auto;
+    }
+
+    .mx_Field_postfix {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        // this allows the domain name to show
+        // as long as it doesn't make the input shrink
+        // if it's too big, it shows an ellipsis
+        // 180: 28 for prefix, 152 for input
+        max-width: calc(100% - 180px);
+    }
+}

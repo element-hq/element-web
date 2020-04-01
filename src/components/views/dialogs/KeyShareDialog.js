@@ -16,10 +16,14 @@ limitations under the License.
 
 import Modal from '../../../Modal';
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 import { _t, _td } from '../../../languageHandler';
+
+// TODO: We can remove this once cross-signing is the only way.
+// https://github.com/vector-im/riot-web/issues/11908
 
 /**
  * Dialog which asks the user whether they want to share their keys with
@@ -29,7 +33,7 @@ import { _t, _td } from '../../../languageHandler';
  * should not, and `undefined` if the dialog is cancelled. (In other words:
  * truthy: do the key share. falsy: don't share the keys).
  */
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         matrixClient: PropTypes.object.isRequired,
         userId: PropTypes.string.isRequired,
@@ -56,7 +60,7 @@ export default React.createClass({
             const deviceInfo = r[userId][deviceId];
 
             if (!deviceInfo) {
-                console.warn(`No details found for device ${userId}:${deviceId}`);
+                console.warn(`No details found for session ${userId}:${deviceId}`);
 
                 this.props.onFinished(false);
                 return;
@@ -77,7 +81,7 @@ export default React.createClass({
                     true,
                 );
             }
-        }).done();
+        });
     },
 
     componentWillUnmount: function() {
@@ -98,7 +102,7 @@ export default React.createClass({
                     this.props.onFinished(true);
                 }
             },
-        });
+        }, null, /* priority = */ false, /* static = */ true);
     },
 
     _onShareClicked: function() {
@@ -117,10 +121,10 @@ export default React.createClass({
 
         let text;
         if (this.state.wasNewDevice) {
-            text = _td("You added a new device '%(displayName)s', which is"
+            text = _td("You added a new session '%(displayName)s', which is"
                 + " requesting encryption keys.");
         } else {
-            text = _td("Your unverified device '%(displayName)s' is requesting"
+            text = _td("Your unverified session '%(displayName)s' is requesting"
                 + " encryption keys.");
         }
         text = _t(text, {displayName: displayName});
@@ -155,7 +159,7 @@ export default React.createClass({
         } else {
             content = (
                 <div id='mx_Dialog_content'>
-                    <p>{ _t('Loading device info...') }</p>
+                    <p>{ _t('Loading session info...') }</p>
                     <Spinner />
                 </div>
             );

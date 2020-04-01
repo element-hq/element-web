@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'RoomUpgradeWarningBar',
 
     propTypes: {
@@ -97,20 +98,22 @@ module.exports = React.createClass({
 
         return (
             <div className="mx_RoomUpgradeWarningBar">
-                <div className="mx_RoomUpgradeWarningBar_header">
-                    {_t(
-                        "This room is running room version <roomVersion />, which this homeserver has " +
-                        "marked as <i>unstable</i>.",
-                        {},
-                        {
-                            "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
-                            "i": (sub) => <i>{sub}</i>,
-                        },
-                    )}
-                </div>
-                {doUpgradeWarnings}
-                <div className="mx_RoomUpgradeWarningBar_small">
-                    {_t("Only room administrators will see this warning")}
+                <div className="mx_RoomUpgradeWarningBar_wrapped">
+                    <div className="mx_RoomUpgradeWarningBar_header">
+                        {_t(
+                            "This room is running room version <roomVersion />, which this homeserver has " +
+                            "marked as <i>unstable</i>.",
+                            {},
+                            {
+                                "roomVersion": () => <code>{this.props.room.getVersion()}</code>,
+                                "i": (sub) => <i>{sub}</i>,
+                            },
+                        )}
+                    </div>
+                    {doUpgradeWarnings}
+                    <div className="mx_RoomUpgradeWarningBar_small">
+                        {_t("Only room administrators will see this warning")}
+                    </div>
                 </div>
             </div>
         );

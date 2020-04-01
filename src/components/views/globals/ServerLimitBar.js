@@ -16,11 +16,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import { _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 
-export default React.createClass({
+export default createReactClass({
     propTypes: {
         // 'hard' if the logged in user has been locked out, 'soft' if they haven't
         kind: PropTypes.string,

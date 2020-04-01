@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,16 +16,17 @@ limitations under the License.
 */
 
 import React from "react";
+import PropTypes from "prop-types";
 import Matrix from "matrix-js-sdk";
-import MatrixClientPeg from "../../MatrixClientPeg";
-import sdk from "../../index";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 
 export default class UserView extends React.Component {
     static get propTypes() {
         return {
-            userId: React.PropTypes.string,
+            userId: PropTypes.string,
         };
     }
 

@@ -16,28 +16,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-import React from 'react';
+import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
-import sdk from '../../../index';
-import ScalarAuthClient from '../../../ScalarAuthClient';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import * as ContextualMenu from '../../structures/ContextualMenu';
+import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
-import PushProcessor from 'matrix-js-sdk/lib/pushprocessor';
 import ReplyThread from "../elements/ReplyThread";
-import {host as matrixtoHost} from '../../../matrix-to';
+import {pillifyLinks, unmountPills} from '../../../utils/pillify';
+import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
+import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
+import {toRightOf} from "../../structures/ContextMenu";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'TextualBody',
 
     propTypes: {
@@ -88,19 +86,26 @@ module.exports = React.createClass({
         return successful;
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._content = createRef();
+    },
+
     componentDidMount: function() {
         this._unmounted = false;
-        if (!this.props.isEditing) {
+        this._pills = [];
+        if (!this.props.editState) {
             this._applyFormatting();
         }
     },
 
     _applyFormatting() {
+        this.activateSpoilers([this._content.current]);
+
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        this.pillifyLinks(this.refs.content.children);
-        HtmlUtils.linkifyElement(this.refs.content);
+        pillifyLinks([this._content.current], this.props.mxEvent, this._pills);
+        HtmlUtils.linkifyElement(this._content.current);
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
@@ -131,8 +136,8 @@ module.exports = React.createClass({
     },
 
     componentDidUpdate: function(prevProps) {
-        if (!this.props.isEditing) {
-            const stoppedEditing = prevProps.isEditing && !this.props.isEditing;
+        if (!this.props.editState) {
+            const stoppedEditing = prevProps.editState && !this.props.editState;
             const messageWasEdited = prevProps.replacingEventId !== this.props.replacingEventId;
             if (messageWasEdited || stoppedEditing) {
                 this._applyFormatting();
@@ -142,10 +147,11 @@ module.exports = React.createClass({
 
     componentWillUnmount: function() {
         this._unmounted = true;
+        unmountPills(this._pills);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
-        //console.log("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        //console.info("shouldComponentUpdate: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         // exploit that events are immutable :)
         return (nextProps.mxEvent.getId() !== this.props.mxEvent.getId() ||
@@ -153,17 +159,18 @@ module.exports = React.createClass({
                 nextProps.replacingEventId !== this.props.replacingEventId ||
                 nextProps.highlightLink !== this.props.highlightLink ||
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
-                nextProps.isEditing !== this.props.isEditing ||
+                nextProps.editState !== this.props.editState ||
                 nextState.links !== this.state.links ||
                 nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
     },
 
     calculateUrlPreview: function() {
-        //console.log("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
+        //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
-            let links = this.findLinks(this.refs.content.children);
+            // pass only the first child which is the event tile otherwise this recurses on edited events
+            let links = this.findLinks([this._content.current]);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -184,92 +191,28 @@ module.exports = React.createClass({
         }
     },
 
-    pillifyLinks: function(nodes) {
-        const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
+    activateSpoilers: function(nodes) {
         let node = nodes[0];
         while (node) {
-            let pillified = false;
+            if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
+                const spoilerContainer = document.createElement('span');
 
-            if (node.tagName === "A" && node.getAttribute("href")) {
-                const href = node.getAttribute("href");
+                const reason = node.getAttribute("data-mx-spoiler");
+                const Spoiler = sdk.getComponent('elements.Spoiler');
+                node.removeAttribute("data-mx-spoiler"); // we don't want to recurse
+                const spoiler = <Spoiler
+                    reason={reason}
+                    contentHtml={node.outerHTML}
+                />;
 
-                // If the link is a (localised) matrix.to link, replace it with a pill
-                const Pill = sdk.getComponent('elements.Pill');
-                if (Pill.isMessagePillUrl(href)) {
-                    const pillContainer = document.createElement('span');
+                ReactDOM.render(spoiler, spoilerContainer);
+                node.parentNode.replaceChild(spoilerContainer, node);
 
-                    const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                    const pill = <Pill
-                        url={href}
-                        inMessage={true}
-                        room={room}
-                        shouldShowPillAvatar={shouldShowPillAvatar}
-                    />;
-
-                    ReactDOM.render(pill, pillContainer);
-                    node.parentNode.replaceChild(pillContainer, node);
-                    // Pills within pills aren't going to go well, so move on
-                    pillified = true;
-
-                    // update the current node with one that's now taken its place
-                    node = pillContainer;
-                }
-            } else if (node.nodeType === Node.TEXT_NODE) {
-                const Pill = sdk.getComponent('elements.Pill');
-
-                let currentTextNode = node;
-                const roomNotifTextNodes = [];
-
-                // Take a textNode and break it up to make all the instances of @room their
-                // own textNode, adding those nodes to roomNotifTextNodes
-                while (currentTextNode !== null) {
-                    const roomNotifPos = Pill.roomNotifPos(currentTextNode.textContent);
-                    let nextTextNode = null;
-                    if (roomNotifPos > -1) {
-                        let roomTextNode = currentTextNode;
-
-                        if (roomNotifPos > 0) roomTextNode = roomTextNode.splitText(roomNotifPos);
-                        if (roomTextNode.textContent.length > Pill.roomNotifLen()) {
-                            nextTextNode = roomTextNode.splitText(Pill.roomNotifLen());
-                        }
-                        roomNotifTextNodes.push(roomTextNode);
-                    }
-                    currentTextNode = nextTextNode;
-                }
-
-                if (roomNotifTextNodes.length > 0) {
-                    const pushProcessor = new PushProcessor(MatrixClientPeg.get());
-                    const atRoomRule = pushProcessor.getPushRuleById(".m.rule.roomnotif");
-                    if (atRoomRule && pushProcessor.ruleMatchesEvent(atRoomRule, this.props.mxEvent)) {
-                        // Now replace all those nodes with Pills
-                        for (const roomNotifTextNode of roomNotifTextNodes) {
-                            // Set the next node to be processed to the one after the node
-                            // we're adding now, since we've just inserted nodes into the structure
-                            // we're iterating over.
-                            // Note we've checked roomNotifTextNodes.length > 0 so we'll do this at least once
-                            node = roomNotifTextNode.nextSibling;
-
-                            const pillContainer = document.createElement('span');
-                            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-                            const pill = <Pill
-                                type={Pill.TYPE_AT_ROOM_MENTION}
-                                inMessage={true}
-                                room={room}
-                                shouldShowPillAvatar={true}
-                            />;
-
-                            ReactDOM.render(pill, pillContainer);
-                            roomNotifTextNode.parentNode.replaceChild(pillContainer, roomNotifTextNode);
-                        }
-                        // Nothing else to do for a text node (and we don't need to advance
-                        // the loop pointer because we did it above)
-                        continue;
-                    }
-                }
+                node = spoilerContainer;
             }
 
-            if (node.childNodes && node.childNodes.length && !pillified) {
-                this.pillifyLinks(node.childNodes);
+            if (node.childNodes && node.childNodes.length) {
+                this.activateSpoilers(node.childNodes);
             }
 
             node = node.nextSibling;
@@ -313,10 +256,10 @@ module.exports = React.createClass({
             const url = node.getAttribute("href");
             const host = url.match(/^https?:\/\/(.*?)(\/|$)/)[1];
 
-            // never preview matrix.to links (if anything we should give a smart
+            // never preview permalinks (if anything we should give a smart
             // preview of the room/user they point to: nobody needs to be reminded
             // what the matrix.to site looks like).
-            if (host === matrixtoHost) return false;
+            if (isPermalinkHost(host)) return false;
 
             if (node.textContent.toLowerCase().trim().startsWith(host.toLowerCase())) {
                 // it's a "foo.pl" style link
@@ -337,18 +280,12 @@ module.exports = React.createClass({
                 const copyCode = button.parentNode.getElementsByTagName("code")[0];
                 const successful = this.copyToClipboard(copyCode.textContent);
 
-                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const buttonRect = e.target.getBoundingClientRect();
-
-                // The window X and Y offsets are to adjust position when zoomed in to page
-                const x = buttonRect.right + window.pageXOffset;
-                const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-                const {close} = ContextualMenu.createMenu(GenericTextContextMenu, {
-                    chevronOffset: 10,
-                    left: x,
-                    top: y,
+                const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
+                const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
+                    ...toRightOf(buttonRect, 2),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
-                }, false);
+                });
                 e.target.onmouseleave = close;
             };
 
@@ -395,10 +332,6 @@ module.exports = React.createClass({
                     global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
                 }
             },
-
-            getInnerText: () => {
-                return this.refs.content.innerText;
-            },
         };
     },
 
@@ -411,12 +344,19 @@ module.exports = React.createClass({
         // which requires the user to click through and THEN we can open the link in a new tab because
         // the window.open command occurs in the same stack frame as the onClick callback.
 
+        const managers = IntegrationManagers.sharedInstance();
+        if (!managers.hasManager()) {
+            managers.openNoManagerDialog();
+            return;
+        }
+
         // Go fetch a scalar token
-        const scalarClient = new ScalarAuthClient();
+        const integrationManager = managers.getPrimaryManager();
+        const scalarClient = integrationManager.getScalarClient();
         scalarClient.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const integrationsUrl = SdkConfig.get().integrations_ui_url;
+            const integrationsUrl = integrationManager.uiUrl;
             Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
@@ -434,7 +374,9 @@ module.exports = React.createClass({
                     const height = window.screen.height > 800 ? 800 : window.screen.height;
                     const left = (window.screen.width - width) / 2;
                     const top = (window.screen.height - height) / 2;
-                    window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
+                    const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
+                    const wnd = window.open(completeUrl, '_blank', features);
+                    wnd.opener = null;
                 },
             });
         });
@@ -448,30 +390,41 @@ module.exports = React.createClass({
         this.setState({editedMarkerHovered: false});
     },
 
+    _openHistoryDialog: async function() {
+        const MessageEditHistoryDialog = sdk.getComponent("views.dialogs.MessageEditHistoryDialog");
+        Modal.createDialog(MessageEditHistoryDialog, {mxEvent: this.props.mxEvent});
+    },
+
     _renderEditedMarker: function() {
         let editedTooltip;
         if (this.state.editedMarkerHovered) {
             const Tooltip = sdk.getComponent('elements.Tooltip');
-            const editEvent = this.props.mxEvent.replacingEvent();
-            const date = editEvent && formatDate(editEvent.getDate());
+            const date = this.props.mxEvent.replacingEventDate();
+            const dateString = date && formatDate(date);
             editedTooltip = <Tooltip
                 tooltipClassName="mx_Tooltip_timeline"
-                label={_t("Edited at %(date)s", {date})}
+                label={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
             />;
         }
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
-            <div
-                key="editedMarker" className="mx_EventTile_edited"
+            <AccessibleButton
+                key="editedMarker"
+                className="mx_EventTile_edited"
+                onClick={this._openHistoryDialog}
                 onMouseEnter={this._onMouseEnterEditedMarker}
                 onMouseLeave={this._onMouseLeaveEditedMarker}
-            >{editedTooltip}<span>{`(${_t("edited")})`}</span></div>
+            >
+                { editedTooltip }<span>{`(${_t("edited")})`}</span>
+            </AccessibleButton>
         );
     },
 
     render: function() {
-        if (this.props.isEditing) {
-            const MessageEditor = sdk.getComponent('elements.MessageEditor');
-            return <MessageEditor event={this.props.mxEvent} className="mx_EventTile_content" />;
+        if (this.props.editState) {
+            const EditMessageComposer = sdk.getComponent('rooms.EditMessageComposer');
+            return <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />;
         }
         const mxEvent = this.props.mxEvent;
         const content = mxEvent.getContent();
@@ -481,6 +434,7 @@ module.exports = React.createClass({
             disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
+            ref: this._content,
         });
         if (this.props.replacingEventId) {
             body = [body, this._renderEditedMarker()];
@@ -507,15 +461,14 @@ module.exports = React.createClass({
 
         switch (content.msgtype) {
             case "m.emote":
-                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
-                    <span ref="content" className="mx_MEmoteBody mx_EventTile_content">
+                    <span className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
-                            { name }
+                            { mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender() }
                         </span>
                         &nbsp;
                         { body }
@@ -524,14 +477,14 @@ module.exports = React.createClass({
                 );
             case "m.notice":
                 return (
-                    <span ref="content" className="mx_MNoticeBody mx_EventTile_content">
+                    <span className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>
                 );
             default: // including "m.text"
                 return (
-                    <span ref="content" className="mx_MTextBody mx_EventTile_content">
+                    <span className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>

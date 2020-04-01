@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-import React from 'react';
+import React, {createRef} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 
 import SettingsStore from "../../../settings/SettingsStore";
@@ -35,7 +35,7 @@ function getFullScreenElement() {
     );
 }
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'VideoView',
 
     propTypes: {
@@ -50,6 +50,11 @@ module.exports = React.createClass({
         onResize: PropTypes.func,
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._local = createRef();
+        this._remote = createRef();
+    },
+
     componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
@@ -59,7 +64,7 @@ module.exports = React.createClass({
     },
 
     getRemoteVideoElement: function() {
-        return ReactDOM.findDOMNode(this.refs.remote);
+        return ReactDOM.findDOMNode(this._remote.current);
     },
 
     getRemoteAudioElement: function() {
@@ -75,7 +80,7 @@ module.exports = React.createClass({
     },
 
     getLocalVideoElement: function() {
-        return ReactDOM.findDOMNode(this.refs.local);
+        return ReactDOM.findDOMNode(this._local.current);
     },
 
     setContainer: function(c) {
@@ -126,11 +131,11 @@ module.exports = React.createClass({
         return (
             <div className="mx_VideoView" ref={this.setContainer} onClick={this.props.onClick}>
                 <div className="mx_VideoView_remoteVideoFeed">
-                    <VideoFeed ref="remote" onResize={this.props.onResize}
+                    <VideoFeed ref={this._remote} onResize={this.props.onResize}
                         maxHeight={maxVideoHeight} />
                 </div>
                 <div className={localVideoFeedClasses}>
-                    <VideoFeed ref="local" />
+                    <VideoFeed ref={this._local} />
                 </div>
             </div>
         );

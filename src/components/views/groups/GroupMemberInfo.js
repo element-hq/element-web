@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,22 +16,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PropTypes from 'prop-types';
 import React from 'react';
-import { MatrixClient } from 'matrix-js-sdk';
+import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'GroupMemberInfo',
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     propTypes: {
@@ -84,7 +87,7 @@ module.exports = React.createClass({
     _onKick: function() {
         const ConfirmUserActionDialog = sdk.getComponent("dialogs.ConfirmUserActionDialog");
         Modal.createDialog(ConfirmUserActionDialog, {
-            matrixClient: this.context.matrixClient,
+            matrixClient: this.context,
             groupMember: this.props.groupMember,
             action: this.state.isUserInvited ? _t('Disinvite') : _t('Remove from community'),
             title: this.state.isUserInvited ? _t('Disinvite this user from community?')
@@ -94,7 +97,7 @@ module.exports = React.createClass({
                 if (!proceed) return;
 
                 this.setState({removingUser: true});
-                this.context.matrixClient.removeUserFromGroup(
+                this.context.removeUserFromGroup(
                     this.props.groupId, this.props.groupMember.userId,
                 ).then(() => {
                     // return to the user list
@@ -170,7 +173,7 @@ module.exports = React.createClass({
         const avatarUrl = this.props.groupMember.avatarUrl;
         let avatarElement;
         if (avatarUrl) {
-            const httpUrl = this.context.matrixClient.mxcUrlToHttp(avatarUrl, 800, 800);
+            const httpUrl = this.context.mxcUrlToHttp(avatarUrl, 800, 800);
             avatarElement = (<div className="mx_MemberInfo_avatar">
                             <img src={httpUrl} />
                         </div>);
@@ -180,10 +183,9 @@ module.exports = React.createClass({
             this.props.groupMember.displayname || this.props.groupMember.userId
         );
 
-        const GeminiScrollbarWrapper = sdk.getComponent('elements.GeminiScrollbarWrapper');
         return (
-            <div className="mx_MemberInfo">
-                <GeminiScrollbarWrapper autoshow={true}>
+            <div className="mx_MemberInfo" role="tabpanel">
+                <AutoHideScrollbar>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
@@ -197,7 +199,7 @@ module.exports = React.createClass({
                     </div>
 
                     { adminTools }
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
             </div>
         );
     },

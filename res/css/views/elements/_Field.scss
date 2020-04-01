@@ -18,6 +18,8 @@ limitations under the License.
 
 .mx_Field {
     display: flex;
+    flex: 1;
+    min-width: 0;
     position: relative;
     margin: 1em 0;
     border-radius: 4px;
@@ -27,6 +29,10 @@ limitations under the License.
 
 .mx_Field_prefix {
     border-right: 1px solid $input-border-color;
+}
+
+.mx_Field_postfix {
+    border-left: 1px solid $input-border-color;
 }
 
 .mx_Field input,
@@ -42,6 +48,8 @@ limitations under the License.
     padding: 8px 9px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
+    flex: 1;
+    min-width: 0;
 }
 
 .mx_Field select {
@@ -107,12 +115,12 @@ limitations under the License.
     max-width: calc(100% - 20px); // 100% of parent minus margin and padding
 }
 
+.mx_Field_labelAlwaysTopLeft label,
+.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
 .mx_Field input:focus + label,
 .mx_Field input:not(:placeholder-shown) + label,
 .mx_Field textarea:focus + label,
-.mx_Field textarea:not(:placeholder-shown) + label,
-.mx_Field select + label /* Always show a select's label on top to not collide with the value */,
-.mx_Field_labelAlwaysTopLeft label {
+.mx_Field textarea:not(:placeholder-shown) + label {
     transition:
         font-size 0.25s ease-out 0s,
         color 0.25s ease-out 0s,

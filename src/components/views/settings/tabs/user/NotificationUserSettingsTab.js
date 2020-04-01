@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
-const sdk = require("../../../../..");
+import * as sdk from "../../../../../index";
 
 export default class NotificationUserSettingsTab extends React.Component {
     constructor() {

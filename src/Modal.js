@@ -15,88 +15,15 @@ limitations under the License.
 */
 
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require('react-dom');
-import PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import Analytics from './Analytics';
-import sdk from './index';
 import dis from './dispatcher';
-import { _t } from './languageHandler';
+import {defer} from './utils/promise';
+import AsyncWrapper from './AsyncWrapper';
 
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
-
-/**
- * Wrap an asynchronous loader function with a react component which shows a
- * spinner until the real component loads.
- */
-const AsyncWrapper = React.createClass({
-    propTypes: {
-        /** A promise which resolves with the real component
-         */
-        prom: PropTypes.object.isRequired,
-    },
-
-    getInitialState: function() {
-        return {
-            component: null,
-            error: null,
-        };
-    },
-
-    componentWillMount: function() {
-        this._unmounted = false;
-        // XXX: temporary logging to try to diagnose
-        // https://github.com/vector-im/riot-web/issues/3148
-        console.log('Starting load of AsyncWrapper for modal');
-        this.props.prom.then((result) => {
-            if (this._unmounted) {
-                return;
-            }
-            // Take the 'default' member if it's there, then we support
-            // passing in just an import()ed module, since ES6 async import
-            // always returns a module *namespace*.
-            const component = result.default ? result.default : result;
-            this.setState({component});
-        }).catch((e) => {
-            console.warn('AsyncWrapper promise failed', e);
-            this.setState({error: e});
-        });
-    },
-
-    componentWillUnmount: function() {
-        this._unmounted = true;
-    },
-
-    _onWrapperCancelClick: function() {
-        this.props.onFinished(false);
-    },
-
-    render: function() {
-        if (this.state.component) {
-            const Component = this.state.component;
-            return <Component {...this.props} />;
-        } else if (this.state.error) {
-            const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            return <BaseDialog onFinished={this.props.onFinished}
-                title={_t("Error")}
-            >
-                {_t("Unable to load! Check your network connectivity and try again.")}
-                <DialogButtons primaryButton={_t("Dismiss")}
-                    onPrimaryButtonClick={this._onWrapperCancelClick}
-                    hasCancel={false}
-                />
-            </BaseDialog>;
-        } else {
-            // show a spinner until the component is loaded.
-            const Spinner = sdk.getComponent("elements.Spinner");
-            return <Spinner />;
-        }
-    },
-});
 
 class ModalManager {
     constructor() {
@@ -120,7 +47,7 @@ class ModalManager {
                } */
         ];
 
-        this.closeAll = this.closeAll.bind(this);
+        this.onBackgroundClick = this.onBackgroundClick.bind(this);
     }
 
     hasDialogs() {
@@ -156,14 +83,98 @@ class ModalManager {
         return this.createDialog(...rest);
     }
 
+    appendTrackedDialog(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialog(...rest);
+    }
+
     createDialog(Element, ...rest) {
         return this.createDialogAsync(Promise.resolve(Element), ...rest);
+    }
+
+    appendDialog(Element, ...rest) {
+        return this.appendDialogAsync(Promise.resolve(Element), ...rest);
     }
 
     createTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
         return this.createDialogAsync(...rest);
     }
+
+    appendTrackedDialogAsync(analyticsAction, analyticsInfo, ...rest) {
+        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
+        return this.appendDialogAsync(...rest);
+    }
+
+    _buildModal(prom, props, className, options) {
+        const modal = {};
+
+        // never call this from onFinished() otherwise it will loop
+        const [closeDialog, onFinishedProm] = this._getCloseFn(modal, props);
+
+        // don't attempt to reuse the same AsyncWrapper for different dialogs,
+        // otherwise we'll get confused.
+        const modalCount = this._counter++;
+
+        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
+        // property set here so you can't close the dialog from a button click!
+        modal.elem = (
+            <AsyncWrapper key={modalCount} prom={prom} {...props}
+                          onFinished={closeDialog} />
+        );
+        modal.onFinished = props ? props.onFinished : null;
+        modal.className = className;
+        modal.onBeforeClose = options.onBeforeClose;
+        modal.beforeClosePromise = null;
+        modal.close = closeDialog;
+        modal.closeReason = null;
+
+        return {modal, closeDialog, onFinishedProm};
+    }
+
+    _getCloseFn(modal, props) {
+        const deferred = defer();
+        return [async (...args) => {
+            if (modal.beforeClosePromise) {
+                await modal.beforeClosePromise;
+            } else if (modal.onBeforeClose) {
+                modal.beforeClosePromise = modal.onBeforeClose(modal.closeReason);
+                const shouldClose = await modal.beforeClosePromise;
+                modal.beforeClosePromise = null;
+                if (!shouldClose) {
+                    return;
+                }
+            }
+            deferred.resolve(args);
+            if (props && props.onFinished) props.onFinished.apply(null, args);
+            const i = this._modals.indexOf(modal);
+            if (i >= 0) {
+                this._modals.splice(i, 1);
+            }
+
+            if (this._priorityModal === modal) {
+                this._priorityModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            if (this._staticModal === modal) {
+                this._staticModal = null;
+
+                // XXX: This is destructive
+                this._modals = [];
+            }
+
+            this._reRender();
+        }, deferred.promise];
+    }
+
+    /**
+     * @callback onBeforeClose
+     * @param {string?} reason either "backgroundClick" or null
+     * @return {Promise<bool>} whether the dialog should close
+     */
 
     /**
      * Open a modal view.
@@ -192,50 +203,12 @@ class ModalManager {
      *                                 also be removed from the stack. This is not compatible
      *                                 with being a priority modal. Only one modal can be
      *                                 static at a time.
+     * @param {Object} options? extra options for the dialog
+     * @param {onBeforeClose} options.onBeforeClose a callback to decide whether to close the dialog
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
-    createDialogAsync(prom, props, className, isPriorityModal, isStaticModal) {
-        const modal = {};
-
-        // never call this from onFinished() otherwise it will loop
-        //
-        const closeDialog = (...args) => {
-            if (props && props.onFinished) props.onFinished.apply(null, args);
-            const i = this._modals.indexOf(modal);
-            if (i >= 0) {
-                this._modals.splice(i, 1);
-            }
-
-            if (this._priorityModal === modal) {
-                this._priorityModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            if (this._staticModal === modal) {
-                this._staticModal = null;
-
-                // XXX: This is destructive
-                this._modals = [];
-            }
-
-            this._reRender();
-        };
-
-        // don't attempt to reuse the same AsyncWrapper for different dialogs,
-        // otherwise we'll get confused.
-        const modalCount = this._counter++;
-
-        // FIXME: If a dialog uses getDefaultProps it clobbers the onFinished
-        // property set here so you can't close the dialog from a button click!
-        modal.elem = (
-            <AsyncWrapper key={modalCount} prom={prom} {...props}
-                onFinished={closeDialog} />
-        );
-        modal.onFinished = props ? props.onFinished : null;
-        modal.className = className;
-
+    createDialogAsync(prom, props, className, isPriorityModal, isStaticModal, options = {}) {
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className, options);
         if (isPriorityModal) {
             // XXX: This is destructive
             this._priorityModal = modal;
@@ -247,27 +220,39 @@ class ModalManager {
         }
 
         this._reRender();
-        return {close: closeDialog};
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
     }
 
-    closeAll() {
-        const modalsToClose = [...this._modals, this._priorityModal];
-        this._modals = [];
-        this._priorityModal = null;
+    appendDialogAsync(prom, props, className) {
+        const {modal, closeDialog, onFinishedProm} = this._buildModal(prom, props, className, {});
 
-        if (this._staticModal && modalsToClose.length === 0) {
-            modalsToClose.push(this._staticModal);
-            this._staticModal = null;
-        }
-
-        for (let i = 0; i < modalsToClose.length; i++) {
-            const m = modalsToClose[i];
-            if (m && m.onFinished) {
-                m.onFinished(false);
-            }
-        }
-
+        this._modals.push(modal);
         this._reRender();
+        return {
+            close: closeDialog,
+            finished: onFinishedProm,
+        };
+    }
+
+    onBackgroundClick() {
+        const modal = this._getCurrentModal();
+        if (!modal) {
+            return;
+        }
+        // we want to pass a reason to the onBeforeClose
+        // callback, but close is currently defined to
+        // pass all number of arguments to the onFinished callback
+        // so, pass the reason to close through a member variable
+        modal.closeReason = "backgroundClick";
+        modal.close();
+        modal.closeReason = null;
+    }
+
+    _getCurrentModal() {
+        return this._priorityModal ? this._priorityModal : (this._modals[0] || this._staticModal);
     }
 
     _reRender() {
@@ -298,7 +283,7 @@ class ModalManager {
                     <div className="mx_Dialog">
                         { this._staticModal.elem }
                     </div>
-                    <div className="mx_Dialog_background mx_Dialog_staticBackground" onClick={this.closeAll}></div>
+                    <div className="mx_Dialog_background mx_Dialog_staticBackground" onClick={this.onBackgroundClick}></div>
                 </div>
             );
 
@@ -308,8 +293,8 @@ class ModalManager {
             ReactDOM.unmountComponentAtNode(this.getOrCreateStaticContainer());
         }
 
-        const modal = this._priorityModal ? this._priorityModal : this._modals[0];
-        if (modal) {
+        const modal = this._getCurrentModal();
+        if (modal !== this._staticModal) {
             const classes = "mx_Dialog_wrapper "
                 + (this._staticModal ? "mx_Dialog_wrapperWithStaticUnder " : '')
                 + (modal.className ? modal.className : '');
@@ -319,7 +304,7 @@ class ModalManager {
                     <div className="mx_Dialog">
                         {modal.elem}
                     </div>
-                    <div className="mx_Dialog_background" onClick={this.closeAll}></div>
+                    <div className="mx_Dialog_background" onClick={this.onBackgroundClick}></div>
                 </div>
             );
 

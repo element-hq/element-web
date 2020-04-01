@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018, 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +17,16 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
-import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import classNames from 'classnames';
+import AuthPage from "../../views/auth/AuthPage";
 
 // Phases
 // Show controls to configure server details
@@ -36,7 +40,7 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
@@ -53,7 +57,48 @@ module.exports = React.createClass({
             password: "",
             password2: "",
             errorText: null,
+
+            // We perform liveliness checks later, but for now suppress the errors.
+            // We also track the server dead errors independently of the regular errors so
+            // that we can render it differently, and override any other error the user may
+            // be seeing.
+            serverIsAlive: true,
+            serverErrorIsFatal: false,
+            serverDeadError: "",
+            serverRequiresIdServer: null,
         };
+    },
+
+    componentWillMount: function() {
+        this.reset = null;
+        this._checkServerLiveliness(this.props.serverConfig);
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
+            newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
+
+        // Do a liveliness check on the new URLs
+        this._checkServerLiveliness(newProps.serverConfig);
+    },
+
+    _checkServerLiveliness: async function(serverConfig) {
+        try {
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
+                serverConfig.hsUrl,
+                serverConfig.isUrl,
+            );
+
+            const pwReset = new PasswordReset(serverConfig.hsUrl, serverConfig.isUrl);
+            const serverRequiresIdServer = await pwReset.doesServerRequireIdServerParam();
+
+            this.setState({
+                serverIsAlive: true,
+                serverRequiresIdServer,
+            });
+        } catch (e) {
+            this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
+        }
     },
 
     submitPasswordReset: function(email, password) {
@@ -61,7 +106,7 @@ module.exports = React.createClass({
             phase: PHASE_SENDING_EMAIL,
         });
         this.reset = new PasswordReset(this.props.serverConfig.hsUrl, this.props.serverConfig.isUrl);
-        this.reset.resetPassword(email, password).done(() => {
+        this.reset.resetPassword(email, password).then(() => {
             this.setState({
                 phase: PHASE_EMAIL_SENT,
             });
@@ -73,21 +118,25 @@ module.exports = React.createClass({
         });
     },
 
-    onVerify: function(ev) {
+    onVerify: async function(ev) {
         ev.preventDefault();
         if (!this.reset) {
             console.error("onVerify called before submitPasswordReset!");
             return;
         }
-        this.reset.checkEmailLinkClicked().done((res) => {
+        try {
+            await this.reset.checkEmailLinkClicked();
             this.setState({ phase: PHASE_DONE });
-        }, (err) => {
+        } catch (err) {
             this.showErrorDialog(err.message);
-        });
+        }
     },
 
-    onSubmitForm: function(ev) {
+    onSubmitForm: async function(ev) {
         ev.preventDefault();
+
+        // refresh the server errors, just in case the server came back online
+        await this._checkServerLiveliness(this.props.serverConfig);
 
         if (!this.state.email) {
             this.showErrorDialog(_t('The email address linked to your account must be entered.'));
@@ -103,8 +152,8 @@ module.exports = React.createClass({
                     <div>
                         { _t(
                             "Changing your password will reset any end-to-end encryption keys " +
-                            "on all of your devices, making encrypted chat history unreadable. Set up " +
-                            "Key Backup or export your room keys from another device before resetting your " +
+                            "on all of your sessions, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another session before resetting your " +
                             "password.",
                         ) }
                     </div>,
@@ -163,6 +212,7 @@ module.exports = React.createClass({
             serverConfig={this.props.serverConfig}
             onServerConfigChange={this.props.onServerConfigChange}
             delayTimeMs={0}
+            showIdentityServerIfRequiredByHomeserver={true}
             onAfterSubmit={this.onServerDetailsNextPhaseClick}
             submitText={_t("Next")}
             submitClass="mx_Login_submit"
@@ -173,9 +223,23 @@ module.exports = React.createClass({
         const Field = sdk.getComponent('elements.Field');
 
         let errorText = null;
-        const err = this.state.errorText || this.props.defaultServerDiscoveryError;
+        const err = this.state.errorText;
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
+        }
+
+        let serverDeadSection;
+        if (!this.state.serverIsAlive) {
+            const classes = classNames({
+                "mx_Login_error": true,
+                "mx_Login_serverError": true,
+                "mx_Login_serverErrorNonFatal": !this.state.serverErrorIsFatal,
+            });
+            serverDeadSection = (
+                <div className={classes}>
+                    {this.state.serverDeadError}
+                </div>
+            );
         }
 
         let yourMatrixAccountText = _t('Your Matrix account on %(serverName)s', {
@@ -206,16 +270,32 @@ module.exports = React.createClass({
             </a>;
         }
 
+        if (!this.props.serverConfig.isUrl && this.state.serverRequiresIdServer) {
+            return <div>
+                <h3>
+                    {yourMatrixAccountText}
+                    {editLink}
+                </h3>
+                {_t(
+                    "No identity server is configured: " +
+                    "add one in server settings to reset your password.",
+                )}
+                <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
+                    {_t('Sign in instead')}
+                </a>
+            </div>;
+        }
+
         return <div>
+            {errorText}
+            {serverDeadSection}
             <h3>
                 {yourMatrixAccountText}
                 {editLink}
             </h3>
-            {errorText}
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_email"
                         name="reset_email" // define a name so browser's password autofill gets less confused
                         type="text"
                         label={_t('Email')}
@@ -226,7 +306,6 @@ module.exports = React.createClass({
                 </div>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_password"
                         name="reset_password"
                         type="password"
                         label={_t('Password')}
@@ -234,7 +313,6 @@ module.exports = React.createClass({
                         onChange={this.onInputChanged.bind(this, "password")}
                     />
                     <Field
-                        id="mx_ForgotPassword_passwordConfirm"
                         name="reset_password_confirm"
                         type="password"
                         label={_t('Confirm')}
@@ -246,7 +324,11 @@ module.exports = React.createClass({
                     'A verification email will be sent to your inbox to confirm ' +
                     'setting your new password.',
                 )}</span>
-                <input className="mx_Login_submit" type="submit" value={_t('Send Reset Email')} />
+                <input
+                    className="mx_Login_submit"
+                    type="submit"
+                    value={_t('Send Reset Email')}
+                />
             </form>
             <a className="mx_AuthBody_changeFlow" onClick={this.onLoginClick} href="#">
                 {_t('Sign in instead')}
@@ -273,7 +355,7 @@ module.exports = React.createClass({
         return <div>
             <p>{_t("Your password has been reset.")}</p>
             <p>{_t(
-                "You have been logged out of all devices and will no longer receive " +
+                "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
             )}</p>
@@ -283,7 +365,6 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
 

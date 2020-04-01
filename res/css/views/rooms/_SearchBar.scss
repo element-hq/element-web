@@ -37,6 +37,10 @@ limitations under the License.
         mask-position: center;
     }
 
+    .mx_SearchBar_buttons {
+        display: inherit;
+    }
+
     .mx_SearchBar_button {
         border: 0;
         margin: 0 0 0 22px;

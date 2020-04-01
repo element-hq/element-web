@@ -49,10 +49,14 @@ limitations under the License.
 }
 
 .mx_InteractiveAuthEntryComponents_termsSubmit:disabled {
-    background-color: $accent-color-50pct;
+    background-color: $accent-color-darker;
     cursor: default;
 }
 
 .mx_InteractiveAuthEntryComponents_termsPolicy {
     display: block;
+}
+
+.mx_InteractiveAuthEntryComponents_passwordSection {
+    width: 300px;
 }

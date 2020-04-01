@@ -24,8 +24,8 @@ export default class SyntaxHighlight extends React.Component {
         children: PropTypes.node,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._ref = this._ref.bind(this);
     }

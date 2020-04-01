@@ -43,6 +43,8 @@ limitations under the License.
 
 .mx_MemberInfo_name h2 {
     flex: 1;
+    overflow-x: auto;
+    max-height: 50px;
 }
 
 .mx_MemberInfo h2 {
@@ -78,9 +80,6 @@ limitations under the License.
     max-height: 30vh;
     object-fit: contain;
     display: block;
-}
-
-.mx_MemberInfo_avatar .mx_BaseAvatar {
 }
 
 .mx_MemberInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
@@ -124,7 +123,7 @@ limitations under the License.
 }
 
 .mx_MemberInfo_createRoom_label {
-    width: initial ! important;
+    width: initial !important;
     cursor: pointer;
 }
 

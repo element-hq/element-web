@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,18 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import { _t } from '../../../languageHandler';
 import React from 'react';
+import createReactClass from 'create-react-class';
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'AuthFooter',
 
     render: function() {
         return (
             <div className="mx_AuthFooter">
-                <a href="https://matrix.org" target="_blank" rel="noopener">{ _t("powered by Matrix") }</a>
+                <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t("powered by Matrix") }</a>
             </div>
         );
     },

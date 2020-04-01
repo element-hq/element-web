@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 
 export default class StatusMessageContextMenu extends React.Component {
@@ -27,8 +27,8 @@ export default class StatusMessageContextMenu extends React.Component {
         user: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             message: this.comittedStatusMessage,

@@ -18,8 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import { _t } from '../../../languageHandler';
+import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
@@ -27,6 +29,8 @@ export default class ReactionsRowButton extends React.PureComponent {
         mxEvent: PropTypes.object.isRequired,
         // The reaction content / key / emoji
         content: PropTypes.string.isRequired,
+        // The count of votes for this key
+        count: PropTypes.number.isRequired,
         // A Set of Martix reaction events for this key
         reactionEvents: PropTypes.object.isRequired,
         // A possible Matrix event if the current user has voted for this type
@@ -77,12 +81,7 @@ export default class ReactionsRowButton extends React.PureComponent {
     render() {
         const ReactionsRowButtonTooltip =
             sdk.getComponent('messages.ReactionsRowButtonTooltip');
-        const { content, reactionEvents, myReactionEvent } = this.props;
-
-        const count = reactionEvents.size;
-        if (!count) {
-            return null;
-        }
+        const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({
             mx_ReactionsRowButton: true,
@@ -99,13 +98,48 @@ export default class ReactionsRowButton extends React.PureComponent {
             />;
         }
 
-        return <span className={classes}
+        const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
+        let label;
+        if (room) {
+            const senders = [];
+            for (const reactionEvent of reactionEvents) {
+                const member = room.getMember(reactionEvent.getSender());
+                const name = member ? member.name : reactionEvent.getSender();
+                senders.push(name);
+            }
+            label = _t(
+                "<reactors/><reactedWith> reacted with %(content)s</reactedWith>",
+                {
+                    content,
+                },
+                {
+                    reactors: () => {
+                        return formatCommaSeparatedList(senders, 6);
+                    },
+                    reactedWith: (sub) => {
+                        if (!content) {
+                            return null;
+                        }
+                        return sub;
+                    },
+                },
+            );
+        }
+
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return <AccessibleButton className={classes}
+            aria-label={label}
             onClick={this.onClick}
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
         >
-            {content} {count}
+            <span className="mx_ReactionsRowButton_content" aria-hidden="true">
+                {content}
+            </span>
+            <span className="mx_ReactionsRowButton_count" aria-hidden="true">
+                {count}
+            </span>
             {tooltip}
-        </span>;
+        </AccessibleButton>;
     }
 }

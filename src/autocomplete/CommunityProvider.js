@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import sdk from '../index';
+import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
-import {makeGroupPermalink} from "../matrix-to";
+import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import type {Completion, SelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 
@@ -46,7 +46,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
@@ -84,6 +84,7 @@ export default class CommunityProvider extends AutocompleteProvider {
             ]).map(({avatarUrl, groupId, name}) => ({
                 completion: groupId,
                 suffix: ' ',
+                type: "community",
                 href: makeGroupPermalink(groupId),
                 component: (
                     <PillCompletion initialComponent={
@@ -104,8 +105,14 @@ export default class CommunityProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate">
-            { completions }
-        </div>;
+        return (
+            <div
+                className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
+                role="listbox"
+                aria-label={_t("Community Autocomplete")}
+            >
+                { completions }
+            </div>
+        );
     }
 }

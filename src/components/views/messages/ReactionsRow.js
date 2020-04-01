@@ -17,9 +17,13 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
+import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+
+// The maximum number of reactions to initially show on a message.
+const MAX_ITEMS_WHEN_LIMITED = 8;
 
 export default class ReactionsRow extends React.PureComponent {
     static propTypes = {
@@ -40,6 +44,7 @@ export default class ReactionsRow extends React.PureComponent {
 
         this.state = {
             myReactions: this.getMyReactions(),
+            showAll: false,
         };
     }
 
@@ -93,16 +98,22 @@ export default class ReactionsRow extends React.PureComponent {
         return [...myReactions.values()];
     }
 
+    onShowAllClick = () => {
+        this.setState({
+            showAll: true,
+        });
+    }
+
     render() {
         const { mxEvent, reactions } = this.props;
-        const { myReactions } = this.state;
+        const { myReactions, showAll } = this.state;
 
         if (!reactions || !isContentActionable(mxEvent)) {
             return null;
         }
 
         const ReactionsRowButton = sdk.getComponent('messages.ReactionsRowButton');
-        const items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
+        let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
             const count = events.size;
             if (!count) {
                 return null;
@@ -116,14 +127,35 @@ export default class ReactionsRow extends React.PureComponent {
             return <ReactionsRowButton
                 key={content}
                 content={content}
+                count={count}
                 mxEvent={mxEvent}
                 reactionEvents={events}
                 myReactionEvent={myReactionEvent}
             />;
-        });
+        }).filter(item => !!item);
 
-        return <div className="mx_ReactionsRow">
+        // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
+        // The "+ 1" ensure that the "show all" reveals something that takes up
+        // more space than the button itself.
+        let showAllButton;
+        if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
+            items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
+            showAllButton = <a
+                className="mx_ReactionsRow_showAll"
+                href="#"
+                onClick={this.onShowAllClick}
+            >
+                {_t("Show all")}
+            </a>;
+        }
+
+        return <div
+            className="mx_ReactionsRow"
+            role="toolbar"
+            aria-label={_t("Reactions")}
+        >
             {items}
+            {showAllButton}
         </div>;
     }
 }

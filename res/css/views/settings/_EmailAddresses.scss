@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +16,8 @@ limitations under the License.
 */
 
 .mx_ExistingEmailAddress {
+    display: flex;
+    align-items: center;
     margin-bottom: 5px;
 }
 
@@ -24,20 +27,12 @@ limitations under the License.
     vertical-align: middle;
 }
 
-.mx_ExistingEmailAddress_email {
-    vertical-align: middle;
-}
-
+.mx_ExistingEmailAddress_email,
 .mx_ExistingEmailAddress_promptText {
+    flex: 1;
     margin-right: 10px;
 }
 
 .mx_ExistingEmailAddress_confirmBtn {
-    margin-right: 5px;
-}
-
-.mx_EmailAddresses_new .mx_Field input {
-    // Use 100% of the space available for the input, but don't let the 10px
-    // padding on either side of the input to push it out of alignment.
-    width: calc(100% - 20px);
+    margin-left: 5px;
 }

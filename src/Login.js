@@ -2,6 +2,8 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +20,6 @@ limitations under the License.
 
 import Matrix from "matrix-js-sdk";
 
-import url from 'url';
-
 export default class Login {
     constructor(hsUrl, isUrl, fallbackHsUrl, opts) {
         this._hsUrl = hsUrl;
@@ -28,6 +28,7 @@ export default class Login {
         this._currentFlowIndex = 0;
         this._flows = [];
         this._defaultDeviceDisplayName = opts.defaultDeviceDisplayName;
+        this._tempClient = null; // memoize
     }
 
     getHomeserverUrl() {
@@ -39,10 +40,12 @@ export default class Login {
     }
 
     setHomeserverUrl(hsUrl) {
+        this._tempClient = null; // clear memoization
         this._hsUrl = hsUrl;
     }
 
     setIdentityServerUrl(isUrl) {
+        this._tempClient = null; // clear memoization
         this._isUrl = isUrl;
     }
 
@@ -51,8 +54,9 @@ export default class Login {
      * requests.
      * @returns {MatrixClient}
      */
-    _createTemporaryClient() {
-        return Matrix.createClient({
+    createTemporaryClient() {
+        if (this._tempClient) return this._tempClient; // use memoization
+        return this._tempClient = Matrix.createClient({
             baseUrl: this._hsUrl,
             idBaseUrl: this._isUrl,
         });
@@ -60,7 +64,7 @@ export default class Login {
 
     getFlows() {
         const self = this;
-        const client = this._createTemporaryClient();
+        const client = this.createTemporaryClient();
         return client.loginFlows().then(function(result) {
             self._flows = result.flows;
             self._currentFlowIndex = 0;
@@ -87,30 +91,21 @@ export default class Login {
         const isEmail = username.indexOf("@") > 0;
 
         let identifier;
-        let legacyParams; // parameters added to support old HSes
         if (phoneCountry && phoneNumber) {
             identifier = {
                 type: 'm.id.phone',
                 country: phoneCountry,
                 number: phoneNumber,
             };
-            // No legacy support for phone number login
         } else if (isEmail) {
             identifier = {
                 type: 'm.id.thirdparty',
                 medium: 'email',
                 address: username,
             };
-            legacyParams = {
-                medium: 'email',
-                address: username,
-            };
         } else {
             identifier = {
                 type: 'm.id.user',
-                user: username,
-            };
-            legacyParams = {
                 user: username,
             };
         }
@@ -120,7 +115,6 @@ export default class Login {
             identifier: identifier,
             initial_device_display_name: this._defaultDeviceDisplayName,
         };
-        Object.assign(loginParams, legacyParams);
 
         const tryFallbackHs = (originalError) => {
             return sendLoginRequest(
@@ -147,21 +141,6 @@ export default class Login {
             console.log("Login failed", error);
             throw error;
         });
-    }
-
-    getSsoLoginUrl(loginType) {
-      const client = this._createTemporaryClient();
-      const parsedUrl = url.parse(window.location.href, true);
-
-      // XXX: at this point, the fragment will always be #/login, which is no
-      // use to anyone. Ideally, we would get the intended fragment from
-      // MatrixChat.screenAfterLogin so that you could follow #/room links etc
-      // through an SSO login.
-      parsedUrl.hash = "";
-
-      parsedUrl.query["homeserver"] = client.getHomeserverUrl();
-      parsedUrl.query["identityServer"] = client.getIdentityServerUrl();
-      return client.getSsoLoginUrl(url.format(parsedUrl), loginType);
     }
 }
 

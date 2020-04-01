@@ -122,6 +122,7 @@ class CustomRoomTagStore extends EventEmitter {
                 }
             }
             break;
+            case 'on_client_not_viable':
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
                 this._state = {tags: {}};

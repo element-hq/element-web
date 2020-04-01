@@ -5,17 +5,11 @@ import * as languageHandler from '../../src/languageHandler';
 const testUtils = require('../test-utils');
 
 describe('languageHandler', function() {
-    let sandbox;
-
     beforeEach(function(done) {
-        testUtils.beforeEach(this);
-        sandbox = testUtils.stubClient();
+        testUtils.stubClient();
 
-        languageHandler.setLanguage('en').done(done);
-    });
-
-    afterEach(function() {
-        sandbox.restore();
+        languageHandler.setLanguage('en').then(done);
+        languageHandler.setMissingEntryGenerator(key => key.split("|", 2)[1]);
     });
 
     it('translates a string to german', function() {
@@ -69,5 +63,16 @@ describe('languageHandler', function() {
     it('replacements in the wrong order', function() {
         const text = '%(var1)s %(var2)s';
         expect(languageHandler._t(text, { var2: 'val2', var1: 'val1' })).toBe('val1 val2');
+    });
+
+    it('multiple replacements of the same variable', function() {
+        const text = '%(var1)s %(var1)s';
+        expect(languageHandler.substitute(text, { var1: 'val1' })).toBe('val1 val1');
+    });
+
+    it('multiple replacements of the same tag', function() {
+        const text = '<a>Click here</a> to join the discussion! <a>or here</a>';
+        expect(languageHandler.substitute(text, {}, { 'a': (sub) => `x${sub}x` }))
+            .toBe('xClick herex to join the discussion! xor herex');
     });
 });

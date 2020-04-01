@@ -17,12 +17,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import WhoIsTyping from '../../../WhoIsTyping';
+import createReactClass from 'create-react-class';
+import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'WhoIsTypingTile',
 
     propTypes: {
@@ -212,7 +213,7 @@ module.exports = React.createClass({
         }
 
         return (
-            <li className="mx_WhoIsTypingTile">
+            <li className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
                     { this._renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit) }
                 </div>

@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from 'matrix-js-sdk';
+
 import {_td} from '../languageHandler';
 import {
     AudioNotificationsEnabledController,
@@ -23,10 +26,13 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
-import LowBandwidthController from "./controllers/LowBandwidthController";
+import PushToMatrixClientController from './controllers/PushToMatrixClientController';
+import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
+import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
+const LEVELS_ROOM_OR_ACCOUNT = ['room-account', 'account'];
 const LEVELS_ROOM_SETTINGS_WITH_ROOM = ['device', 'room-device', 'room-account', 'account', 'config', 'room'];
 const LEVELS_ACCOUNT_SETTINGS = ['device', 'account', 'config'];
 const LEVELS_FEATURE = ['device', 'config'];
@@ -101,12 +107,6 @@ export const SETTINGS = {
         default: false,
         controller: new CustomStatusController(),
     },
-    "feature_room_breadcrumbs": {
-        isFeature: true,
-        displayName: _td("Show recent room avatars above the room list"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_tags": {
         isFeature: true,
         displayName: _td("Group & filter rooms by custom tags (refresh to apply changes)"),
@@ -119,17 +119,61 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_message_editing": {
+    "feature_many_integration_managers": {
         isFeature: true,
-        displayName: _td("Edit messages after they have been sent (refresh to apply changes)"),
+        displayName: _td("Multiple integration managers"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_reactions": {
+    "feature_mjolnir": {
         isFeature: true,
-        displayName: _td("React to messages with emoji (refresh to apply changes)"),
+        displayName: _td("Try out new ways to ignore people (experimental)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+    },
+    "feature_presence_in_room_list": {
+        isFeature: true,
+        displayName: _td("Show a presence dot next to DMs in the room list"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_custom_themes": {
+        isFeature: true,
+        displayName: _td("Support adding custom themes"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "mjolnirRooms": {
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "mjolnirPersonalRoom": {
+        supportedLevels: ['account'],
+        default: null,
+    },
+    "feature_cross_signing": {
+        isFeature: true,
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_event_indexing": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
+        default: false,
+    },
+    "feature_bridge_state": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show info about bridges in room settings"),
+        default: false,
+    },
+    "feature_invite_only_padlocks": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show padlocks on invite only rooms"),
+        default: true,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -228,6 +272,11 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'dontSendTypingNotifications',
     },
+    "showTypingNotifications": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show typing notifications"),
+        default: true,
+    },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),
@@ -248,6 +297,15 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: "light",
         controller: new ThemeController(),
+    },
+    "custom_themes": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: [],
+    },
+    "use_system_theme": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: true,
+        displayName: _td("Match system theme"),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -275,6 +333,18 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "room_directory_servers": {
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "integrationProvisioning": {
+        supportedLevels: ['account'],
+        default: true,
+    },
+    "allowedWidgets": {
+        supportedLevels: ['room-account'],
+        default: {}, // none allowed
+    },
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Send analytics data'),
@@ -288,14 +358,22 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: 200,
     },
+    "readMarkerInViewThresholdMs": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: 3000,
+    },
+    "readMarkerOutOfViewThresholdMs": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: 30000,
+    },
     "blacklistUnverifiedDevices": {
         // We specifically want to have room-device > device so that users may set a device default
         // with a per-room override.
         supportedLevels: ['room-device', 'device'],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td('Never send encrypted messages to unverified devices from this device'),
-            "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),
+            "default": _td('Never send encrypted messages to unverified sessions from this session'),
+            "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
     },
@@ -327,6 +405,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
         controller: new NotificationsEnabledController(),
+    },
+    "notificationSound": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
     },
     "notificationBodyEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -364,9 +446,19 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    "RoomList.orderAlphabetically": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Order rooms by name"),
+        default: false,
+    },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        displayName: _td("Show rooms with unread notifications first"),
+        default: true,
+    },
+    "breadcrumbs": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
@@ -378,6 +470,70 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Low bandwidth mode'),
         default: false,
-        controller: new LowBandwidthController(),
+        controller: new ReloadOnChangeController(),
+    },
+    "fallbackICEServerAllowed": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td(
+            "Allow fallback call assist server turn.matrix.org when your homeserver " +
+            "does not offer one (your IP address would be shared during a call)",
+        ),
+        // This is a tri-state value, where `null` means "prompt the user".
+        default: null,
+    },
+    "sendReadReceipts": {
+        supportedLevels: LEVELS_ROOM_SETTINGS,
+        displayName: _td(
+            "Send read receipts for messages (requires compatible homeserver to disable)",
+        ),
+        default: true,
+    },
+    "showImages": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show previews/thumbnails for images"),
+        default: true,
+    },
+    "showRightPanelInRoom": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "showRightPanelInGroup": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+    },
+    "lastRightPanelPhaseForRoom": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: RIGHT_PANEL_PHASES.RoomMemberInfo,
+    },
+    "lastRightPanelPhaseForGroup": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: RIGHT_PANEL_PHASES.GroupMemberList,
+    },
+    "enableEventIndexing": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Enable message search in encrypted rooms"),
+        default: true,
+    },
+    "keepSecretStoragePassphraseForSession": {
+         supportedLevels: ['device', 'config'],
+         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         default: false,
+    },
+    "crawlerSleepTime": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("How fast should messages be downloaded."),
+        default: 3000,
+    },
+    "showCallButtonsInComposer": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+    },
+    "e2ee.manuallyVerifyAllSessions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Manually verify all remote sessions"),
+        default: false,
+        controller: new PushToMatrixClientController(
+            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+        ),
     },
 };

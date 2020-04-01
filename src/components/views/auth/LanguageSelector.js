@@ -18,7 +18,7 @@ import SdkConfig from "../../../SdkConfig";
 import {getCurrentLanguage} from "../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import React from 'react';
 
 function onChange(newLang) {

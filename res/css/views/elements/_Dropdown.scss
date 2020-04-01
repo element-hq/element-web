@@ -51,18 +51,18 @@ limitations under the License.
     background: $primary-fg-color;
 }
 
-.mx_Dropdown_input > .mx_Dropdown_option {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-}
-
 .mx_Dropdown_option {
     height: 35px;
     line-height: 35px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.mx_Dropdown_input > .mx_Dropdown_option {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
 }
 
 .mx_Dropdown_option div {

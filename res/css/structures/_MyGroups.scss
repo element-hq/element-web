@@ -67,9 +67,6 @@ limitations under the License.
     }
 }
 
-
-
-
 .mx_MyGroups_headerCard_header {
     font-weight: bold;
     margin-bottom: 10px;
@@ -98,6 +95,11 @@ limitations under the License.
 
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
+}
+
+.mx_MyGroups_scrollable {
+    overflow-y: inherit;
 }
 
 .mx_MyGroups_placeholder {

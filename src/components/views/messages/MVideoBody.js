@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import createReactClass from 'create-react-class';
 import MFileBody from './MFileBody';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
-import Promise from 'bluebird';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'MVideoBody',
 
     propTypes: {
@@ -90,7 +89,7 @@ module.exports = React.createClass({
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
-            if (content.info.thumbnail_file) {
+            if (content.info && content.info.thumbnail_file) {
                 thumbnailPromise = decryptFile(
                     content.info.thumbnail_file,
                 ).then(function(blob) {
@@ -116,7 +115,7 @@ module.exports = React.createClass({
                 this.setState({
                     error: err,
                 });
-            }).done();
+            });
         }
     },
 
@@ -134,7 +133,7 @@ module.exports = React.createClass({
 
         if (this.state.error !== null) {
             return (
-                <span className="mx_MVideoBody" ref="body">
+                <span className="mx_MVideoBody">
                     <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
                     { _t("Error decrypting video") }
                 </span>
@@ -146,8 +145,8 @@ module.exports = React.createClass({
             // The attachment is decrypted in componentDidMount.
             // For now add an img tag with a spinner.
             return (
-                <span className="mx_MVideoBody" ref="body">
-                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner" ref="image">
+                <span className="mx_MVideoBody">
+                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner">
                         <img src={require("../../../../res/img/spinner.gif")} alt={content.body} width="16" height="16" />
                     </div>
                 </span>

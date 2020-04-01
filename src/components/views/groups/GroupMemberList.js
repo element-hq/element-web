@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd.
 Copyright 2017 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,19 +16,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import dis from '../../../dispatcher';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import TintableSvg from '../elements/TintableSvg';
-import RightPanel from '../../structures/RightPanel';
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'GroupMemberList',
 
     propTypes: {
@@ -162,15 +165,14 @@ export default React.createClass({
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             dis.dispatch({
-                action: 'view_right_panel_phase',
-                phase: RightPanel.Phase.GroupMemberList,
+                action: 'set_right_panel_phase',
+                phase: RIGHT_PANEL_PHASES.GroupMemberList,
                 groupId: this.props.groupId,
             });
         });
     },
 
     render: function() {
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
@@ -221,12 +223,12 @@ export default React.createClass({
         }
 
         return (
-            <div className="mx_MemberList">
+            <div className="mx_MemberList" role="tabpanel">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     { joined }
                     { invited }
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
                 { inputBox }
             </div>
         );

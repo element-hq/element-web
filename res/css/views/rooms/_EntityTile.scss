@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,15 @@ limitations under the License.
     align-items: center;
     color: $primary-fg-color;
     cursor: pointer;
+
+    .mx_E2EIcon {
+        margin: 0;
+        position: absolute;
+        bottom: 2px;
+        right: 7px;
+        height: 15px;
+        width: 15px;
+    }
 }
 
 .mx_EntityTile:hover {
@@ -30,7 +40,7 @@ limitations under the License.
     content: "";
     position: absolute;
     top: calc(50% - 8px); // center
-    right: 10px;
+    right: -8px;
     mask: url('$(res)/img/member_chevron.png');
     mask-repeat: no-repeat;
     width: 16px;
@@ -64,14 +74,6 @@ limitations under the License.
     position: relative;
 }
 
-.mx_EntityTile_power {
-    position: absolute;
-    width: 16px;
-    height: 17px;
-    top: 0px;
-    right: 6px;
-}
-
 .mx_EntityTile_name,
 .mx_GroupRoomTile_name {
     flex: 1 1 0;
@@ -83,10 +85,7 @@ limitations under the License.
 
 .mx_EntityTile_details {
     overflow: hidden;
-}
-
-.mx_EntityTile:not(.mx_EntityTile_noHover):hover .mx_EntityTile_name {
-    font-size: 13px;
+    flex: 1;
 }
 
 .mx_EntityTile_ellipsis .mx_EntityTile_name {
@@ -102,20 +101,17 @@ limitations under the License.
 .mx_EntityTile_unavailable .mx_EntityTile_avatar,
 .mx_EntityTile_unavailable .mx_EntityTile_name,
 .mx_EntityTile_offline_beenactive .mx_EntityTile_avatar,
-.mx_EntityTile_offline_beenactive .mx_EntityTile_name
-{
+.mx_EntityTile_offline_beenactive .mx_EntityTile_name {
     opacity: 0.5;
 }
 
 .mx_EntityTile_offline_neveractive .mx_EntityTile_avatar,
-.mx_EntityTile_offline_neveractive .mx_EntityTile_name
-{
+.mx_EntityTile_offline_neveractive .mx_EntityTile_name {
     opacity: 0.25;
 }
 
 .mx_EntityTile_unknown .mx_EntityTile_avatar,
-.mx_EntityTile_unknown .mx_EntityTile_name
-{
+.mx_EntityTile_unknown .mx_EntityTile_name {
     opacity: 0.25;
 }
 
@@ -125,4 +121,18 @@ limitations under the License.
     overflow: hidden;
     white-space: nowrap;
     text-overflow: clip;
+}
+
+.mx_EntityTile_power {
+    padding-inline-start: 6px;
+    font-size: 10px;
+    color: $notice-secondary-color;
+    max-width: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mx_EntityTile:hover .mx_EntityTile_power {
+    display: none;
 }

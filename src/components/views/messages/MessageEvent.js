@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-const sdk = require('../../../index');
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
+import SettingsStore from "../../../settings/SettingsStore";
+import {Mjolnir} from "../../../mjolnir/Mjolnir";
 
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'MessageEvent',
 
     propTypes: {
@@ -46,8 +47,16 @@ module.exports = React.createClass({
         maxImageHeight: PropTypes.number,
     },
 
+    UNSAFE_componentWillMount: function() {
+        this._body = createRef();
+    },
+
     getEventTileOps: function() {
-        return this.refs.body && this.refs.body.getEventTileOps ? this.refs.body.getEventTileOps() : null;
+        return this._body.current && this._body.current.getEventTileOps ? this._body.current.getEventTileOps() : null;
+    },
+
+    onTileUpdate: function() {
+        this.forceUpdate();
     },
 
     render: function() {
@@ -82,15 +91,33 @@ module.exports = React.createClass({
             }
         }
 
+        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+            const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
+            const allowRender = localStorage.getItem(key) === "true";
+
+            if (!allowRender) {
+                const userDomain = this.props.mxEvent.getSender().split(':').slice(1).join(':');
+                const userBanned = Mjolnir.sharedInstance().isUserBanned(this.props.mxEvent.getSender());
+                const serverBanned = Mjolnir.sharedInstance().isServerBanned(userDomain);
+
+                if (userBanned || serverBanned) {
+                    BodyType = sdk.getComponent('messages.MjolnirBody');
+                }
+            }
+        }
+
         return <BodyType
-            ref="body" mxEvent={this.props.mxEvent}
+            ref={this._body}
+            mxEvent={this.props.mxEvent}
             highlights={this.props.highlights}
             highlightLink={this.props.highlightLink}
             showUrlPreview={this.props.showUrlPreview}
             tileShape={this.props.tileShape}
             maxImageHeight={this.props.maxImageHeight}
             replacingEventId={this.props.replacingEventId}
-            isEditing={this.props.isEditing}
-            onHeightChanged={this.props.onHeightChanged} />;
+            editState={this.props.editState}
+            onHeightChanged={this.props.onHeightChanged}
+            onMessageAllowed={this.onTileUpdate}
+        />;
     },
 });

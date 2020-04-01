@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
-import 'whatwg-fetch';
 
 import {TextualCompletion} from './Components';
 import type {SelectionRange} from "./Autocompleter";
@@ -37,7 +36,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean = false) {
+    async getCompletions(query: string, selection: SelectionRange, force: boolean = false) {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
@@ -97,8 +96,14 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
     }
 
     renderCompletions(completions: [React.Component]): ?React.Component {
-        return <div className="mx_Autocomplete_Completion_container_block">
-            { completions }
-        </div>;
+        return (
+            <div
+                className="mx_Autocomplete_Completion_container_block"
+                role="listbox"
+                aria-label={_t("DuckDuckGo Results")}
+            >
+                { completions }
+            </div>
+        );
     }
 }

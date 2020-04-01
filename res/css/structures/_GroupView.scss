@@ -44,21 +44,29 @@ limitations under the License.
 }
 
 .mx_GroupHeader_button {
+    position: relative;
     margin-left: 5px;
     margin-right: 5px;
     cursor: pointer;
     height: 20px;
     width: 20px;
-    background-color: $groupheader-button-color;
-    mask-repeat: no-repeat;
-    mask-size: contain;
+
+    &::before {
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        background-color: $groupheader-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
 }
 
-.mx_GroupHeader_editButton {
-    mask-image: url('$(res)/img/icons-settings-room.svg');
+.mx_GroupHeader_editButton::before {
+    mask-image: url('$(res)/img/feather-customised/settings.svg');
 }
 
-.mx_GroupHeader_shareButton {
+.mx_GroupHeader_shareButton::before {
     mask-image: url('$(res)/img/icons-share.svg');
 }
 
@@ -170,10 +178,6 @@ limitations under the License.
     max-width: 80%;
     vertical-align: 0.1em;
     line-height: 2em;
-}
-
-.mx_GroupView > .mx_MainSplit {
-    flex: 1;
 }
 
 .mx_GroupView_body {
@@ -333,8 +337,8 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_body .gm-scroll-view > * {
-    margin: 11px 50px 0px 68px;
+.mx_GroupView_body .mx_AutoHideScrollbar > * {
+    margin: 11px 50px 50px 68px;
 }
 
 .mx_GroupView_groupDesc textarea {
@@ -362,7 +366,7 @@ limitations under the License.
     padding: 40px 20px;
 }
 
-.mx_GroupView .mx_MemberInfo .gm-scroll-view > :not(.mx_MemberInfo_avatar) {
+.mx_GroupView .mx_MemberInfo .mx_AutoHideScrollbar > :not(.mx_MemberInfo_avatar) {
     padding-left: 16px;
     padding-right: 16px;
 }

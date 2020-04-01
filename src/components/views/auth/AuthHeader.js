@@ -15,12 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import React from 'react';
+import createReactClass from 'create-react-class';
+import * as sdk from '../../../index';
 
-const React = require('react');
-import sdk from '../../../index';
-
-module.exports = React.createClass({
+export default createReactClass({
     displayName: 'AuthHeader',
 
     render: function() {

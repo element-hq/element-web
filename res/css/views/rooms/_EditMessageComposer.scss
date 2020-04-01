@@ -1,0 +1,63 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EditMessageComposer {
+
+    padding: 3px;
+    // this is to try not make the text move but still have some
+    // padding around and in the editor.
+    // Actual values from fiddling around in inspector
+    margin: -7px -10px -5px -10px;
+    overflow: visible !important;   // override mx_EventTile_content
+
+
+    .mx_BasicMessageComposer_input {
+        border-radius: 4px;
+        border: solid 1px $primary-hairline-color;
+        background-color: $primary-bg-color;
+        max-height: 200px;
+        padding: 3px 6px;
+
+        &:focus {
+            border-color: $accent-color-50pct;
+        }
+    }
+
+    .mx_EditMessageComposer_buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        padding: 5px;
+        position: absolute;
+        left: 0;
+        background: $header-panel-bg-color;
+        z-index: 100;
+        right: 0;
+        margin: 0 -110px 0 0;
+        padding-right: 147px;
+
+        .mx_AccessibleButton {
+            margin-left: 5px;
+            padding: 5px 40px;
+        }
+    }
+}
+
+.mx_EventTile_last .mx_EditMessageComposer_buttons {
+    position: static;
+    margin-right: -147px;
+}

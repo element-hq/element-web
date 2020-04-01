@@ -1,5 +1,6 @@
 /*
 Copyright 2015 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-const React = require('react');
-const ReactDOM = require("react-dom");
+import React from 'react';
 import PropTypes from 'prop-types';
-const Tinter = require("../../../Tinter");
+import createReactClass from 'create-react-class';
+import Tinter from "../../../Tinter";
 
-var TintableSvg = React.createClass({
+const TintableSvg = createReactClass({
     displayName: 'TintableSvg',
 
     propTypes: {
@@ -85,4 +84,4 @@ Tinter.registerTintable(function() {
     }
 });
 
-module.exports = TintableSvg;
+export default TintableSvg;

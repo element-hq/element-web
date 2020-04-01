@@ -15,13 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
-export default React.createClass({
+export default createReactClass({
     displayName: 'RoomUpgradeDialog',
 
     propTypes: {
@@ -92,7 +93,7 @@ export default React.createClass({
                 <p>
                     {_t(
                         "Upgrading this room requires closing down the current " +
-                        "instance of the room and creating a new room it its place. " +
+                        "instance of the room and creating a new room in its place. " +
                         "To give room members the best possible experience, we will:",
                     )}
                 </p>

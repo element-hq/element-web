@@ -59,3 +59,42 @@ limitations under the License.
     color: $imagebody-giflabel-color;
     pointer-events: none;
 }
+
+.mx_HiddenImagePlaceholder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    // To center the text in the middle of the frame
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    cursor: pointer;
+    background-color: $header-panel-bg-color;
+
+    .mx_HiddenImagePlaceholder_button {
+        color: $accent-color;
+
+        span.mx_HiddenImagePlaceholder_eye {
+            margin-right: 8px;
+
+            background-color: $accent-color;
+            mask-image: url('$(res)/img/feather-customised/eye.svg');
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+        }
+
+        span:not(.mx_HiddenImagePlaceholder_eye) {
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_HiddenImagePlaceholder {
+    background-color: $primary-bg-color;
+}
