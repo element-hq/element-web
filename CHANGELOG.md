@@ -1,3 +1,19 @@
+Changes in [1.5.15](https://github.com/vector-im/riot-web/releases/tag/v1.5.15) (2020-04-01)
+============================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14...v1.5.15)
+
+## Security notice
+
+The `jitsi.html` widget wrapper introduced in Riot 1.5.14 could be used to extract user data by tricking the user into adding a custom widget or opening a link in the browser used to run Riot. Jitsi widgets created through Riot UI do not pose a risk and do not need to be recreated.
+
+It is important to purge any copies of Riot 1.5.14 so that the vulnerable `jitsi.html` wrapper from that version is no longer accessible.
+
+## All changes
+
+ * Upgrade React SDK to 2.3.1 for Jitsi fixes
+ * Fix popout support for jitsi widgets
+   [\#12980](https://github.com/vector-im/riot-web/pull/12980)
+
 Changes in [1.5.14](https://github.com/vector-im/riot-web/releases/tag/v1.5.14) (2020-03-30)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14-rc.1...v1.5.14)
