@@ -118,7 +118,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, put this in the constructor.
+    UNSAFE_componentWillMount: function() {
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();

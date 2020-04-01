@@ -202,7 +202,8 @@ const TimelinePanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         debuglog("TimelinePanel: mounting");
 
         this.lastRRSentEventId = undefined;

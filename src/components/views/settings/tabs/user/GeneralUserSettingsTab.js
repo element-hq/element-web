@@ -68,7 +68,8 @@ export default class GeneralUserSettingsTab extends React.Component {
         this.dispatcherRef = dis.register(this._onAction);
     }
 
-    async componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    async UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const cli = MatrixClientPeg.get();
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();

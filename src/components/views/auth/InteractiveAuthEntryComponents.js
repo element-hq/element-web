@@ -264,6 +264,7 @@ export const TermsAuthEntry = createReactClass({
         this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
+    // TODO: [REACT-WARNING] Move this to constructor
     componentWillMount: function() {
         // example stageParams:
         //
@@ -701,7 +702,8 @@ export const FallbackAuthEntry = createReactClass({
         this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // we have to make the user click a button, as browsers will block
         // the popup if we open it immediately.
         this._popupWindow = null;

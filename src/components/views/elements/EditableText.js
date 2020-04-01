@@ -71,7 +71,8 @@ export default createReactClass({
         }
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // we track value as an JS object field rather than in React state
         // as React doesn't play nice with contentEditable.
         this.value = '';
