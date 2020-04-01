@@ -2294,5 +2294,19 @@
     "Self signing private key:": "自行簽章私鑰：",
     "cached locally": "本機快取",
     "not found locally": "在本機找不到",
-    "User signing private key:": "使用者簽章私鑰："
+    "User signing private key:": "使用者簽章私鑰：",
+    "Unverified login. Was this you?": "未驗證的登入。是您嗎？",
+    "Manually verify all remote sessions": "手動驗證所有遠端工作階段",
+    "Update your secure storage": "更新您的安全儲存空間",
+    "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "單獨驗證使用者使用的每個工作階段以將其標記為受信任，而非信任交叉簽章的裝置。",
+    "In encrypted rooms, your messages are secured and only you and the recipient have the unique keys to unlock them.": "在已加密的聊天室中，您的訊息相當安全，只有您與接收者有獨一無二的金鑰可以將其解鎖。",
+    "Verify all users in a room to ensure it's secure.": "驗證所有在聊天室中的使用者以確保其安全。",
+    "In encrypted rooms, verify all users to ensure it’s secure.": "在已加密的聊天室中，驗證所有使用者以確保其安全。",
+    "Verified": "已驗證",
+    "Verification cancelled": "驗證已取消",
+    "Compare emoji": "比較顏文字",
+    "Session backup key:": "工作階段備份金鑰：",
+    "Sends a message as html, without interpreting it as markdown": "以 html 形式傳送訊息，不將其翻譯為 markdown",
+    "Cancel replying to a message": "取消回覆訊息",
+    "Sign in with SSO": "使用單一登入系統登入"
 }
