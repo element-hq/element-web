@@ -289,6 +289,7 @@ export default createReactClass({
                     dis.dispatch({
                         action: 'view_room',
                         room_id: room.roomId,
+                        show_room_tile: true, // to make sure the room gets scrolled into view
                     });
                 }
                 break;

@@ -126,7 +126,7 @@ export default class RoomSubList extends React.PureComponent {
                 break;
 
             case 'view_room':
-                if (this.state.hidden && !this.props.forceExpand &&
+                if (this.state.hidden && !this.props.forceExpand && payload.show_room_tile &&
                     this.props.list.some((r) => r.roomId === payload.room_id)
                 ) {
                     this.toggle();
@@ -193,6 +193,7 @@ export default class RoomSubList extends React.PureComponent {
     onRoomTileClick = (roomId, ev) => {
         dis.dispatch({
             action: 'view_room',
+            show_room_tile: true, // to make sure the room gets scrolled into view
             room_id: roomId,
             clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
         });
