@@ -95,7 +95,7 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move into better lifecycle position
-    UNSAFE_componentWillUpdate(prevProps) {
+    UNSAFE_componentWillUpdate(prevProps) { // eslint-disable-line camelcase
         if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
