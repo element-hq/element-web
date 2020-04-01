@@ -88,9 +88,6 @@ For a good example, see https://riot.im/develop/config.json.
     1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
        to `jitsi.riot.im`. This is used whenever a user clicks on the voice/video
        call buttons - integration managers may use a different domain.
-    1. `externalApiUrl`: The URL to the Jitsi Meet API script. This is required
-       for showing any Jitsi widgets, no matter the source. Defaults to
-       `https://jitsi.riot.im/libs/external_api.min.js`.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
