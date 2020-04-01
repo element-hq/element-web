@@ -428,12 +428,11 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
         this._matrixClient.on("Group.myMembership", this._onGroupMyMembership);
 
-        this._changeAvatarComponent = null;
         this._initGroupStore(this.props.groupId, true);
 
         this._dispatcherRef = dis.register(this._onAction);

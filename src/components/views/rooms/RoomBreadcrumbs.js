@@ -49,7 +49,7 @@ export default class RoomBreadcrumbs extends React.Component {
         this._scroller = createRef();
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._dispatcherRef = dis.register(this.onAction);
 
         const storedRooms = SettingsStore.getValue("breadcrumb_rooms");

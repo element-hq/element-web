@@ -99,7 +99,7 @@ export async function legacyVerifyUser(user) {
         return;
     }
     const cli = MatrixClientPeg.get();
-    const verificationRequestPromise = cli.beginKeyVerification(user.userId);
+    const verificationRequestPromise = cli.requestVerification(user.userId);
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,

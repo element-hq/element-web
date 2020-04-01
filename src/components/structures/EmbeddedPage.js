@@ -58,7 +58,7 @@ export default class EmbeddedPage extends React.PureComponent {
         return sanitizeHtml(_t(s));
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
 
         if (!this.props.url) {

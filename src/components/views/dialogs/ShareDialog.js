@@ -121,7 +121,7 @@ export default class ShareDialog extends React.Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (this.props.target instanceof Room) {
             const permalinkCreator = new RoomPermalinkCreator(this.props.target);
             permalinkCreator.load();
