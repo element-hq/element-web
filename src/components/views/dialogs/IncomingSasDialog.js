@@ -196,7 +196,8 @@ export default class IncomingSasDialog extends React.Component {
             sas={this._showSasEvent.sas}
             onCancel={this._onCancelClick}
             onDone={this._onSasMatchesClick}
-            isSelf={this.props.verifier.userId == MatrixClientPeg.get().getUserId()}
+            isSelf={this.props.verifier.userId === MatrixClientPeg.get().getUserId()}
+            inDialog={true}
         />;
     }
 

@@ -245,6 +245,7 @@ export default class VerificationPanel extends React.PureComponent {
                             sas={this.state.sasEvent.sas}
                             onCancel={this._onSasMismatchesClick}
                             onDone={this._onSasMatchesClick}
+                            inDialog={this.props.inDialog}
                         />
                     </div>;
                 } else {
