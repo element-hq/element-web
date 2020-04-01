@@ -266,7 +266,7 @@ limitations under the License.
         }
     }
 
-    .mx_AccessibleButton {
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
         padding: 8px 18px;
 
         &.mx_AccessibleButton_kind_primary {
