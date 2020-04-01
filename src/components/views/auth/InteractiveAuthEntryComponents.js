@@ -455,10 +455,6 @@ export const MsisdnAuthEntry = createReactClass({
         onPhaseChange: PropTypes.func.isRequired,
     },
 
-    componentDidMount: function() {
-        this.props.onPhaseChange(DEFAULT_PHASE);
-    },
-
     getInitialState: function() {
         return {
             token: '',
@@ -467,6 +463,8 @@ export const MsisdnAuthEntry = createReactClass({
     },
 
     componentDidMount: function() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
+
         this._submitUrl = null;
         this._sid = null;
         this._msisdn = null;
