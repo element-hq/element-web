@@ -97,6 +97,11 @@ function joinConference() { // event handler bound in HTML
     // noinspection JSIgnoredPromiseFromCall
     if (widgetApi) widgetApi.setAlwaysOnScreen(true); // ignored promise because we don't care if it works
 
+    console.warn(
+        "[Jitsi Widget] The next few errors about failing to parse URL parameters are fine if " +
+        "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
+        "our fragment values and not recognizing the options.",
+    );
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, {
         width: "100%",
         height: "100%",
