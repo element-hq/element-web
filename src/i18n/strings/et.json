@@ -1,0 +1,7 @@
+{
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Sinu Rioti seadetes on vigane JSON. Palun, tee see korda ja laadi leht uuesti!",
+    "The message from the parser is: %(message)s": "Sõnum parserist on: %(message)s",
+    "Invalid JSON": "Vigane JSON",
+    "Your Riot is misconfigured": "Sinu Riot on valesti seadistatud",
+    "Unknown device": "Tundmatu seade"
+}
