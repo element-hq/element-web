@@ -50,7 +50,8 @@ export class PhoneNumber extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) {
         const { bound } = nextProps.msisdn;
         this.setState({ bound });
     }

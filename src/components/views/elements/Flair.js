@@ -81,7 +81,8 @@ export default class Flair extends React.Component {
         this._unmounted = true;
     }
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         this._generateAvatars(newProps.groups);
     }
 

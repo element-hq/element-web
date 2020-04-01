@@ -450,8 +450,9 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(newProps) {
-        if (this.props.groupId != newProps.groupId) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
+        if (this.props.groupId !== newProps.groupId) {
             this.setState({
                 summary: null,
                 error: null,

@@ -283,7 +283,8 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(props) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(props) {
         // XXX: This could be a lot better - this makes the assumption that
         // the notification count may have changed when the properties of
         // the room tile change.

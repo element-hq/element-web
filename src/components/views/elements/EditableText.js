@@ -62,7 +62,8 @@ export default createReactClass({
         };
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.value = nextProps.initialValue;
             if (this._editable_div.current) {

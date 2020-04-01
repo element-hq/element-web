@@ -82,7 +82,8 @@ const Pill = createReactClass({
         };
     },
 
-    async componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
 
@@ -158,7 +159,7 @@ const Pill = createReactClass({
     componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
-        this.componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
+        this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     },
 
     componentWillUnmount() {
