@@ -1066,5 +1066,8 @@
     "Esc": "Esc",
     "Enter": "Send",
     "Space": "Mellomrom",
-    "End": "Slutt"
+    "End": "Slutt",
+    "If you run into any bugs or have feedback you'd like to share, please let us know on GitHub.": "Hvis du støter på noen programfeil eller har tilbakemeldinger som du vil dele, vennligst fortell oss om det på GitHub.",
+    "To help avoid duplicate issues, please <existingIssuesLink>view existing issues</existingIssuesLink> first (and add a +1) or <newIssueLink>create a new issue</newIssueLink> if you can't find it.": "For å unngå å lage duplikatrapporter, vennligst <existingIssuesLink>sjekk gjennom de eksisterende sakene</existingIssuesLink> først (og gi en tommel opp), eller <newIssueLink>opprett en ny saksrapport</newIssueLink> dersom du ikke finner noen tilsvarende saker.",
+    "Report bugs & give feedback": "Meld ifra om feil og gi tilbakemeldinger"
 }
