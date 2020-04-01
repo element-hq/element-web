@@ -83,7 +83,7 @@ const Pill = createReactClass({
     },
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    async UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line new-cap
+    async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
 
@@ -159,6 +159,8 @@ const Pill = createReactClass({
     componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
+
+        // eslint-disable-next-line new-cap
         this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     },
 
