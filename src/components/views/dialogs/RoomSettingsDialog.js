@@ -72,7 +72,7 @@ export default class RoomSettingsDialog extends React.Component {
         ));
         tabs.push(new Tab(
             _td("Notifications"),
-            "mx_RoomSettingsDialog_rolesIcon",
+            "mx_RoomSettingsDialog_notificationsIcon",
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
 

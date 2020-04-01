@@ -29,6 +29,10 @@ limitations under the License.
     mask-image: url('$(res)/img/feather-customised/users-sm.svg');
 }
 
+.mx_RoomSettingsDialog_notificationsIcon::before {
+    mask-image: url('$(res)/img/feather-customised/notifications.svg');
+}
+
 .mx_RoomSettingsDialog_bridgesIcon::before {
     // This icon is pants, please improve :)
     mask-image: url('$(res)/img/feather-customised/bridge.svg');
