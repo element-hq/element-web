@@ -116,7 +116,7 @@
     "%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s": "для %(userId)s с %(fromPowerLevel)s на %(toPowerLevel)s",
     "click to reveal": "нажмите для открытия",
     "%(senderName)s invited %(targetName)s.": "%(senderName)s приглашает %(targetName)s.",
-    "%(targetName)s joined the room.": "%(targetName)s вошел(-ла) в комнату.",
+    "%(targetName)s joined the room.": "К комнате присоединяется %(targetName)s.",
     "%(senderName)s kicked %(targetName)s.": "%(senderName)s выгнал(а) %(targetName)s.",
     "%(targetName)s left the room.": "%(targetName)s покинул комнату.",
     "%(senderName)s made future room history visible to all room members, from the point they are invited.": "%(senderName)s сделал(а) историю разговора видимой для всех собеседников с момента их приглашения.",
