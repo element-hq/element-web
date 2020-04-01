@@ -1323,7 +1323,7 @@
     "Edit message": "Редактировать сообщение",
     "Power level": "Уровень прав",
     "Unable to find profiles for the Matrix IDs listed below - would you like to invite them anyway?": "Не удалось найти профили для перечисленных ниже Matrix ID. Вы всё равно хотите их пригласить?",
-    "Invite anyway": "Все равно пригласить",
+    "Invite anyway": "Всё равно пригласить",
     "GitHub issue": "GitHub вопрос",
     "Notes": "Заметка",
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Если есть дополнительный контекст, который может помочь в анализе проблемы, такой как то, что вы делали в то время, ID комнат, ID пользователей и т. д., пожалуйста, включите эти данные.",
