@@ -92,7 +92,7 @@ export default class WidgetMessaging {
      * @return {Promise} To be resolved with screenshot data when it has been generated
      */
     getScreenshot() {
-        console.warn('Requesting screenshot for', this.widgetId);
+        console.log('Requesting screenshot for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "screenshot",
@@ -106,12 +106,12 @@ export default class WidgetMessaging {
      * @return {Promise} To be resolved with an array of requested widget capabilities
      */
     getCapabilities() {
-        console.warn('Requesting capabilities for', this.widgetId);
+        console.log('Requesting capabilities for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "capabilities",
             }).then((response) => {
-                console.warn('Got capabilities for', this.widgetId, response.capabilities);
+                console.log('Got capabilities for', this.widgetId, response.capabilities);
                 return response.capabilities;
             });
     }

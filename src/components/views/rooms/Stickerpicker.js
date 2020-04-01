@@ -84,11 +84,11 @@ export default class Stickerpicker extends React.Component {
 
     async _removeStickerpickerWidgets() {
         const scalarClient = await this._acquireScalarClient();
-        console.warn('Removing Stickerpicker widgets');
+        console.log('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
             if (scalarClient) {
                 scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
-                    console.warn('Assets disabled');
+                    console.log('Assets disabled');
                 }).catch((err) => {
                     console.error('Failed to disable assets');
                 });

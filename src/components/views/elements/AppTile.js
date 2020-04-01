@@ -319,7 +319,7 @@ export default class AppTile extends React.Component {
     }
 
     _onSnapshotClick() {
-        console.warn("Requesting widget snapshot");
+        console.log("Requesting widget snapshot");
         ActiveWidgetStore.getWidgetMessaging(this.props.app.id).getScreenshot()
             .catch((err) => {
                 console.error("Failed to get screenshot", err);
@@ -423,7 +423,7 @@ export default class AppTile extends React.Component {
                 }, this.props.whitelistCapabilities);
 
                 if (requestedWhitelistCapabilies.length > 0 ) {
-                    console.warn(`Widget ${this.props.app.id} allowing requested, whitelisted properties: ` +
+                    console.log(`Widget ${this.props.app.id} allowing requested, whitelisted properties: ` +
                         requestedWhitelistCapabilies,
                     );
                 }

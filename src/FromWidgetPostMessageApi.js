@@ -165,7 +165,7 @@ export default class FromWidgetPostMessageApi {
         const action = event.data.action;
         const widgetId = event.data.widgetId;
         if (action === 'content_loaded') {
-            console.warn('Widget reported content loaded for', widgetId);
+            console.log('Widget reported content loaded for', widgetId);
             dis.dispatch({
                 action: 'widget_content_loaded',
                 widgetId: widgetId,
