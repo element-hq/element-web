@@ -87,7 +87,7 @@ export default createReactClass({
         onSend: PropTypes.func.isRequired,
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on("deviceVerificationChanged", this._onDeviceVerificationChanged);
     },
 

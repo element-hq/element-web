@@ -166,14 +166,12 @@ export default class AppTile extends React.Component {
         return false;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // Only fetch IM token on mount if we're showing and have permission to load
         if (this.props.show && this.state.hasPermissionToLoad) {
             this.setScalarToken();
         }
-    }
 
-    componentDidMount() {
         // Widget action listeners
         this.dispatcherRef = dis.register(this._onAction);
     }

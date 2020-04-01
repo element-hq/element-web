@@ -108,7 +108,7 @@ export default class RightPanel extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);

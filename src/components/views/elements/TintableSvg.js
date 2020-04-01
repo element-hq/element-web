@@ -36,11 +36,9 @@ const TintableSvg = createReactClass({
         idSequence: 0,
     },
 
-    componentWillMount: function() {
-        this.fixups = [];
-    },
-
     componentDidMount: function() {
+        this.fixups = [];
+
         this.id = TintableSvg.idSequence++;
         TintableSvg.mounts[this.id] = this;
     },

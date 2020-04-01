@@ -428,7 +428,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
         this._matrixClient.on("Group.myMembership", this._onGroupMyMembership);

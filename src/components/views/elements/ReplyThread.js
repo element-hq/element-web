@@ -184,7 +184,7 @@ export default class ReplyThread extends React.Component {
             ref={ref} permalinkCreator={permalinkCreator} />;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
         this.room.on("Room.redaction", this.onRoomRedaction);

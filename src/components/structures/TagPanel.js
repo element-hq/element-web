@@ -44,7 +44,7 @@ const TagPanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.unmounted = false;
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);

@@ -36,7 +36,7 @@ export default class RoomSettingsDialog extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this._dispatcherRef = dis.register(this._onAction);
     }
 

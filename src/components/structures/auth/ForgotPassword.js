@@ -69,7 +69,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.reset = null;
         this._checkServerLiveliness(this.props.serverConfig);
     },

@@ -37,7 +37,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         // There is some assymetry between ChangeDisplayName and ChangeAvatar,
         // as ChangeDisplayName will auto-get the name but ChangeAvatar expects
         // the URL to be passed to you (because it's also used for room avatars).

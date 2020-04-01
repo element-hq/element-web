@@ -155,7 +155,7 @@ const Pill = createReactClass({
         this.setState({resourceId, pillType, member, group, room});
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
         this.componentWillReceiveProps(this.props);
