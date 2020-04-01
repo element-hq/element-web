@@ -430,7 +430,7 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    const confId = `JitsiConference_${generateHumanReadableId()}`;
+    const confId = `JitsiConference${generateHumanReadableId()}`;
     const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
 
     let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
