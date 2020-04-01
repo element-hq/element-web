@@ -109,6 +109,7 @@ export default class EventIndex extends EventEmitter {
                 roomId: room.roomId,
                 token: token,
                 direction: "b",
+                fullCrawl: true,
             };
 
             const forwardCheckpoint = {
