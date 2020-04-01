@@ -21,5 +21,7 @@
     "Your Riot is misconfigured": "Riot är felkonfigurerat",
     "Unexpected error preparing the app. See console for details.": "Oväntat fel vid appstart. Se konsollen för mer information.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ogilitiga inställningar: enbart möjligt att specificera en default_config, default_server, eller default_hs_url.",
-    "Invalid configuration: no default server specified.": "Ogilitiga inställningar: ingen standardserver specificerad."
+    "Invalid configuration: no default server specified.": "Ogilitiga inställningar: ingen standardserver specificerad.",
+    "Open user settings": "Öppna användarinställningar",
+    "Go to your browser to complete Sign In": "Gå till din webbläsare för att slutföra inloggningen"
 }
