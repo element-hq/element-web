@@ -22,6 +22,7 @@ import {makeType} from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
 
 const LIVELINESS_DISCOVERY_ERRORS = [
+    AutoDiscovery.ERROR_INVALID,
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
@@ -232,8 +233,8 @@ export default class AutoDiscoveryUtils {
         const preferredHomeserverUrl = hsResult["base_url"];
         let preferredHomeserverName = serverName ? serverName : hsResult["server_name"];
 
-        const url = new URL(preferredHomeserverUrl);
-        if (!preferredHomeserverName) preferredHomeserverName = url.hostname;
+        const url = preferredHomeserverUrl ? new URL(preferredHomeserverUrl) : null;
+        if (!preferredHomeserverName && url) preferredHomeserverName = url.hostname;
 
         // It should have been set by now, so check it
         if (!preferredHomeserverName) {
@@ -241,10 +242,12 @@ export default class AutoDiscoveryUtils {
             throw newTranslatableError(_td("Unexpected error resolving homeserver configuration"));
         }
 
+        const hsNameIsDifferent = url ? (url.hostname !== preferredHomeserverName) : null;
+
         return makeType(ValidatedServerConfig, {
             hsUrl: preferredHomeserverUrl,
             hsName: preferredHomeserverName,
-            hsNameIsDifferent: url.hostname !== preferredHomeserverName,
+            hsNameIsDifferent,
             isUrl: preferredIdentityUrl,
             isDefault: false,
             warning: hsResult.error,
