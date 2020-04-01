@@ -5691,7 +5691,7 @@ mathml-tag-names@^2.0.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "5.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/223d37ffce674a23ca73702f04b9ba31cfd84196"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/934ed37fdc90948273d7da3ec9f8728195c78a63"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
