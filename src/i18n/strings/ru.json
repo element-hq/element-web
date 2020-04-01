@@ -1297,7 +1297,7 @@
     "Never lose encrypted messages": "Никогда не теряйте зашифрованные сообщения",
     "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Сообщения в этой комнате защищены сквозным шифрованием. Только у вас и получателя(ей) есть ключи для чтения этих сообщений.",
     "Securely back up your keys to avoid losing them. <a>Learn more.</a>": "Надежно сохраните резервную копию ключей, чтобы не потерять их. <a>Подробнее</a>",
-    "Don't ask me again": "Не спрашивай меня больше",
+    "Don't ask me again": "Больше не спрашивать",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Обновление этой комнаты отключит текущий экземпляр комнаты и создаст обновлённую комнату с тем же именем.",
     "This room has already been upgraded.": "Эта комната уже была обновлена.",
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Эта комната работает под управлением версии комнаты <roomVersion />, которую этот сервер пометил как <i>unstable</i>.",
