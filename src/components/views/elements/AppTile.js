@@ -591,7 +591,13 @@ export default class AppTile extends React.Component {
     }
 
     _getPopoutUrl() {
-        return this._templatedUrl(this._getSafeUrl(this.props.app.url));
+        if (this.props.app.type === 'jitsi') {
+            return WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false});
+        } else {
+            // use app.url, not state.widgetUrl, because we want the one without
+            // the wURL params for the popped-out version.
+            return this._templatedUrl(this._getSafeUrl(this.props.app.url));
+        }
     }
 
     _getSafeUrl(u) {
