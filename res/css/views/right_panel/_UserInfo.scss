@@ -153,7 +153,8 @@ limitations under the License.
             }
 
             .mx_E2EIcon {
-                margin: 4px 4px 4px 0; // no left-margin to improve visual centering
+                margin-top: 3px; // visual vertical centering to the top line of text
+                margin-right: 4px; // margin from displyname
                 min-width: 18px; // convince flexbox to not collapse it
             }
         }
