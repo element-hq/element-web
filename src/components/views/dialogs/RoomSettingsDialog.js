@@ -41,7 +41,7 @@ export default class RoomSettingsDialog extends React.Component {
     }
 
     componentWillUnmount() {
-        dis.unregister(this._dispatcherRef);
+        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
     }
 
     _onAction = (payload) => {

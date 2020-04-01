@@ -158,7 +158,7 @@ const Pill = createReactClass({
     componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
-        this.componentWillReceiveProps(this.props);
+        this.componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     },
 
     componentWillUnmount() {

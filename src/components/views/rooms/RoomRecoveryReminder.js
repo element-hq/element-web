@@ -61,7 +61,6 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                 loading: false,
                 error: e,
             });
-            return;
         }
     }
 

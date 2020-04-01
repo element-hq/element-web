@@ -178,7 +178,7 @@ export default class AppTile extends React.Component {
 
     componentWillUnmount() {
         // Widget action listeners
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.app.id)) {
