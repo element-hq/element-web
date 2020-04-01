@@ -52,7 +52,6 @@ let widgetApi: WidgetApi;
         // Set this up as early as possible because Riot will be hitting it almost immediately.
         widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
             Capability.AlwaysOnScreen,
-            Capability.GetRiotWebConfig,
         ]);
         widgetApi.expectingExplicitReady = true;
 
@@ -65,14 +64,6 @@ let widgetApi: WidgetApi;
 
         await widgetApi.waitReady();
         await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
-
-        const riotConfig = await widgetApi.getRiotConfig();
-
-        // Get the Jitsi Meet API loaded up as fast as possible, but ensure that the widget's postMessage
-        // receiver (WidgetApi) is up and running first.
-        const scriptTag = document.createElement("script");
-        scriptTag.src = riotConfig['jitsi']['externalApiUrl'];
-        document.body.appendChild(scriptTag);
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
