@@ -24,8 +24,7 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
-import {Capability, KnownWidgetActions} from "./widgets/WidgetApi";
-import SdkConfig from "./SdkConfig";
+import {Capability} from "./widgets/WidgetApi";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [

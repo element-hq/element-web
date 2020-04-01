@@ -541,6 +541,8 @@ export default class AppTile extends React.Component {
     /**
      * Replace the widget template variables in a url with their values
      *
+     * @param {string} u The URL with template variables
+     *
      * @returns {string} url with temlate variables replaced
      */
     _templatedUrl(u) {
