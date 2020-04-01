@@ -404,7 +404,6 @@ export default class WidgetUtils {
         // widgets from at all, but it probably makes sense for sanity.
         if (appType === 'jitsi') {
             capWhitelist.push(Capability.AlwaysOnScreen);
-            capWhitelist.push(Capability.GetRiotWebConfig);
         }
 
         return capWhitelist;

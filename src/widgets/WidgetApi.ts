@@ -23,7 +23,6 @@ export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
-    GetRiotWebConfig = "im.vector.web.riot_config",
 }
 
 export enum KnownWidgetActions {
@@ -34,7 +33,6 @@ export enum KnownWidgetActions {
     UpdateVisibility = "visibility",
     ReceiveOpenIDCredentials = "openid_credentials",
     SetAlwaysOnScreen = "set_always_on_screen",
-    GetRiotWebConfig = "im.vector.web.riot_config",
     ClientReady = "im.vector.ready",
 }
 
@@ -155,14 +153,6 @@ export class WidgetApi {
         return new Promise<any>(resolve => {
             this.callAction(KnownWidgetActions.SetAlwaysOnScreen, {value: onScreen}, null);
             resolve(); // SetAlwaysOnScreen is currently fire-and-forget, but that could change.
-        });
-    }
-
-    public getRiotConfig(): Promise<any> {
-        return new Promise<any>(resolve => {
-            this.callAction(KnownWidgetActions.GetRiotWebConfig, {}, response => {
-                resolve(response.response.config);
-            });
         });
     }
 }

@@ -220,13 +220,6 @@ export default class FromWidgetPostMessageApi {
             }
         } else if (action === 'get_openid') {
             // Handled by caller
-        } else if (action === KnownWidgetActions.GetRiotWebConfig) {
-            if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.GetRiotWebConfig)) {
-                this.sendResponse(event, {
-                    api: INBOUND_API_NAME,
-                    config: SdkConfig.get(),
-                });
-            }
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});
