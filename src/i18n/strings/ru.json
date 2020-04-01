@@ -1330,7 +1330,7 @@
     "Unable to load commit detail: %(msg)s": "Невозможно загрузить детали: %(msg)s",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "Чтобы не потерять историю чата, вы должны экспортировать ключи от комнаты перед выходом из системы. Для этого вам нужно будет вернуться к более новой версии Riot",
     "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "Ранее вы использовали более новую версию Riot на %(host)s. Чтобы снова использовать эту версию с сквозным шифрованием, вам нужно выйти и снова войти. ",
-    "Waiting for partner to accept...": "В ожидании партнера, чтобы принять ...",
+    "Waiting for partner to accept...": "Ожидание подтверждения партнера",
     "Nothing appearing? Not all clients support interactive verification yet. <button>Use legacy verification</button>.": "Ничего не появляется? Еще не все клиенты поддерживают интерактивную верификацию. <button> Использовать устаревшую проверку</button>.",
     "Waiting for %(userId)s to confirm...": "Ожидание %(userId)s для подтверждения ...",
     "Use two-way text verification": "Использовать двустороннюю проверку текста",
