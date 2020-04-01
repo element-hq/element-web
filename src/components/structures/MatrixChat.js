@@ -221,7 +221,8 @@ export default createReactClass({
         return {serverConfig: props};
     },
 
-    componentDidMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
         // Used by _viewRoom before getting state from sync

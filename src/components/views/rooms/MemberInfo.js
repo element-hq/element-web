@@ -79,7 +79,8 @@ export default createReactClass({
         contextType: MatrixClientContext,
     },
 
-    componentDidMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._cancelDeviceList = null;
         const cli = this.context;
 
