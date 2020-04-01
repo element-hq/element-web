@@ -583,17 +583,17 @@ export default class AppTile extends React.Component {
             url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
             url = this._addWurlParams(url);
         } else {
-            url = this._getSafeUrl();
+            url = this._getSafeUrl(this.state.widgetUrl);
         }
         return this._templatedUrl(url);
     }
 
     _getPopoutUrl() {
-        return this._templatedUrl(this._getSafeUrl());
+        return this._templatedUrl(this._getSafeUrl(this.props.app.url));
     }
 
-    _getSafeUrl() {
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl, true);
+    _getSafeUrl(u) {
+        const parsedWidgetUrl = url.parse(u, true);
         if (ENABLE_REACT_PERF) {
             parsedWidgetUrl.search = null;
             parsedWidgetUrl.query.react_perf = true;
