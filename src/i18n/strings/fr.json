@@ -2306,5 +2306,8 @@
     "In encrypted rooms, verify all users to ensure it’s secure.": "Dans les salons chiffrés, vérifiez tous les utilisateurs pour vous assurer qu’il est sécurisé.",
     "Verified": "Vérifié",
     "Verification cancelled": "Vérification annulée",
-    "Compare emoji": "Comparer des émojis"
+    "Compare emoji": "Comparer des émojis",
+    "Sends a message as html, without interpreting it as markdown": "Envoie un message en HTML, sans l’interpréter comme du Markdown",
+    "Sign in with SSO": "Se connecter avec l’authentification unique",
+    "Cancel replying to a message": "Annuler la réponse à un message"
 }
