@@ -33,6 +33,7 @@ export default class VerificationShowSas extends React.Component {
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
         isSelf: PropTypes.bool,
+        inDialog: PropTypes.bool, // whether this component is being shown in a dialog and to use DialogButtons
     };
 
     constructor(props) {
@@ -112,7 +113,7 @@ export default class VerificationShowSas extends React.Component {
                 text = _t("Cancelling…");
             }
             confirm = <PendingActionSpinner text={text} />;
-        } else {
+        } else if (this.props.inDialog) {
             // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
@@ -122,6 +123,15 @@ export default class VerificationShowSas extends React.Component {
                 onCancel={this.onDontMatchClick}
                 cancelButtonClass="mx_UserInfo_wideButton"
             />;
+        } else {
+            confirm = <React.Fragment>
+                <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                    { _t("They match") }
+                </AccessibleButton>
+                <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
+                    { _t("They don't match") }
+                </AccessibleButton>
+            </React.Fragment>;
         }
 
         return <div className="mx_VerificationShowSas">

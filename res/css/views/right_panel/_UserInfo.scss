@@ -266,12 +266,29 @@ limitations under the License.
         }
     }
 
+    .mx_AccessibleButton {
+        &.mx_AccessibleButton_kind_primary {
+            color: $accent-color;
+            background-color: $accent-bg-color;
+        }
+
+        &.mx_AccessibleButton_kind_danger {
+            color: $notice-primary-color;
+            background-color: $notice-primary-bg-color;
+        }
+    }
+
+    .mx_VerificationShowSas .mx_AccessibleButton,
     .mx_UserInfo_wideButton {
         display: block;
-        margin: 16px 0;
+        margin: 16px 0 8px;
     }
-    button.mx_UserInfo_wideButton {
-        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
+
+
+    .mx_VerificationShowSas {
+        .mx_AccessibleButton + .mx_AccessibleButton {
+            margin: 8px 0; // space between buttons
+        }
     }
 }
 
