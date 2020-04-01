@@ -23,7 +23,7 @@ import * as QRCode from "qrcode";
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
 export default class VerificationQRCode extends React.PureComponent {
     static propTypes = {
-        qrCodeData: PropTypes.Object.isRequired,
+        qrCodeData: PropTypes.object.isRequired,
     };
 
     constructor(props) {
