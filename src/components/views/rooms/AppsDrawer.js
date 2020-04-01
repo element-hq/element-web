@@ -160,11 +160,7 @@ export default createReactClass({
 
             return (<AppTile
                 key={app.id}
-                id={app.id}
-                eventId={app.eventId}
-                url={app.url}
-                name={app.name}
-                type={app.type}
+                app={app}
                 fullWidth={arr.length<2 ? true : false}
                 room={this.props.room}
                 userId={this.props.userId}
