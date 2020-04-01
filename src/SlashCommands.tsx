@@ -412,17 +412,20 @@ export const Commands = [
                                     button: _t("Continue"),
                                 },
                             ));
+
+                            finished = finished.then(([useDefault]: any) => {
+                                if (useDefault) {
+                                    useDefaultIdentityServer();
+                                    return;
+                                }
+                                throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
+                            });
                         } else {
                             return reject(_t("Use an identity server to invite by email. Manage in Settings."));
                         }
                     }
                     const inviter = new MultiInviter(roomId);
-                    return success(finished.then(([useDefault]: any) => {
-                        if (useDefault) {
-                            useDefaultIdentityServer();
-                        } else if (useDefault === false) {
-                            throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
-                        }
+                    return success(finished.then(() => {
                         return inviter.invite([address]);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
