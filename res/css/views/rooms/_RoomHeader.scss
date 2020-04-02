@@ -77,9 +77,9 @@ limitations under the License.
 }
 
 .mx_RoomHeader_simpleHeader {
-    line-height: 52px;
+    line-height: $font-52px;
     color: $roomheader-color;
-    font-size: 18px;
+    font-size: $font-18px;
     font-weight: 600;
     overflow: hidden;
     margin-left: 63px;
@@ -102,7 +102,7 @@ limitations under the License.
     overflow: hidden;
     color: $roomheader-color;
     font-weight: 600;
-    font-size: 18px;
+    font-size: $font-18px;
     margin: 0 7px;
     border-bottom: 1px solid transparent;
     display: flex;
@@ -161,7 +161,7 @@ limitations under the License.
     flex: 1;
     color: $roomtopic-color;
     font-weight: 400;
-    font-size: 13px;
+    font-size: $font-13px;
     margin: 0 7px;
     margin-top: 4px; // to align baseline of topic with room name
     overflow: hidden;

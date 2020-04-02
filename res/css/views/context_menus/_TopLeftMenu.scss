@@ -19,12 +19,12 @@ limitations under the License.
     border-radius: 4px;
 
     .mx_TopLeftMenu_greyedText {
-        font-size: 12px;
+        font-size: $font-12px;
         opacity: 0.5;
     }
 
     .mx_TopLeftMenu_upgradeLink {
-        font-size: 12px;
+        font-size: $font-12px;
 
         img {
             margin-left: 5px;
