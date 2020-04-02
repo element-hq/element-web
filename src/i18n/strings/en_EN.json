@@ -1212,6 +1212,7 @@
     "URL previews are disabled by default for participants in this room.": "URL previews are disabled by default for participants in this room.",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.",
     "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.": "When someone puts a URL in their message, a URL preview can be shown to give more information about that link such as the title, description, and an image from the website.",
+    "Waiting for you to accept on your other session…": "Waiting for you to accept on your other session…",
     "Waiting for %(displayName)s to accept…": "Waiting for %(displayName)s to accept…",
     "Accepting…": "Accepting…",
     "Start Verification": "Start Verification",
