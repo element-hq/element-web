@@ -30,10 +30,14 @@ limitations under the License.
         right: 14px;
     }
 
-    .mx_VerificationPanel_verified_section .mx_E2EIcon {
-        // Override general user info margin
-        margin: 0 auto !important;
+    .mx_VerificationPanel_verified_section,
+    .mx_VerificationPanel_reciprocate_section {
+        .mx_E2EIcon {
+            // Override general user info margin
+            margin: 20px auto !important;
+        }
     }
+
 
     .mx_VerificationPanel_qrCode {
         padding: 4px 4px 0 4px;
@@ -49,6 +53,16 @@ limitations under the License.
             height: auto !important;
             width: 100% !important;
             max-width: 240px;
+        }
+    }
+
+    .mx_VerificationPanel_reciprocate_section {
+        .mx_FormButton {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            display: block;
+            margin: 10px 0;
         }
     }
 }

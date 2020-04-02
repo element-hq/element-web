@@ -1252,7 +1252,7 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "If you can't scan the code above, verify by comparing unique emoji.",
     "Verify by comparing unique emoji.": "Verify by comparing unique emoji.",
     "Verify by emoji": "Verify by emoji",
-    "Almost there! Is %(displayName)s show the same shield?": "Almost there! Is %(displayName)s show the same shield?",
+    "Almost there! Is %(displayName)s showing the same shield?": "Almost there! Is %(displayName)s showing the same shield?",
     "No": "No",
     "Yes": "Yes",
     "Verify all users in a room to ensure it's secure.": "Verify all users in a room to ensure it's secure.",

@@ -156,13 +156,13 @@ export default class VerificationPanel extends React.PureComponent {
                         displayName: member.displayName || member.name || member.userId,
                     })}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
-                <p><FormButton label={_t("No")} kind="danger" onClick={this.state.reciprocateQREvent.cancel} /></p>
-                <p><FormButton label={_t("Yes")} onClick={this.state.reciprocateQREvent.confirm} /></p>
+                <FormButton label={_t("No")} kind="danger" onClick={this.state.reciprocateQREvent.cancel} />
+                <FormButton label={_t("Yes")} onClick={this.state.reciprocateQREvent.confirm} />
             </React.Fragment>;
         } else {
             body = <p><Spinner/></p>;
         }
-        return <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
+        return <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">
             <h3>{_t("Verify by scanning")}</h3>
             { body }
         </div>;
