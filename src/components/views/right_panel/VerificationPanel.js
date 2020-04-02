@@ -275,6 +275,7 @@ export default class VerificationPanel extends React.PureComponent {
                                 onCancel={this._onSasMismatchesClick}
                                 onDone={this._onSasMatchesClick}
                                 inDialog={this.props.inDialog}
+                                isSelf={request.isSelfVerification}
                             /> : <Spinner />;
                         return <div className="mx_UserInfo_container">
                             <h3>{_t("Compare emoji")}</h3>
