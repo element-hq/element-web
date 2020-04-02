@@ -844,7 +844,7 @@
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|other": "<resendText>すべて再送信</resendText>または<cancelText>すべてキャンセル</cancelText>。個々のメッセージを選択して、再送信またはキャンセルすることもできます。",
     "%(count)s <resendText>Resend all</resendText> or <cancelText>cancel all</cancelText> now. You can also select individual messages to resend or cancel.|one": "<resendText>メッセージ再送信</resendText>または<cancelText>メッセージキャンセル</cancelText>。",
     "Connectivity to the server has been lost.": "サーバーへの接続が失われました。",
-    "Sent messages will be stored until your connection has returned.": "送信されたメッセージは、接続が返されるまで保存されます。",
+    "Sent messages will be stored until your connection has returned.": "送信されたメッセージは、接続が復旧するまで保存されます。",
     "Active call": "アクティブコール",
     "There's no one else here! Would you like to <inviteText>invite others</inviteText> or <nowarnText>stop warning about the empty room</nowarnText>?": "他に誰もいません! <inviteText>他のユーザーを招待</inviteText>または<nowarnText>空の部屋に関する警告を停止しますか</nowarnText>?",
     "You seem to be uploading files, are you sure you want to quit?": "ファイルをアップロードしているようですが、中止しますか?",
