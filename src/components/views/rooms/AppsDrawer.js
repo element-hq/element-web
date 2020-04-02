@@ -71,7 +71,8 @@ export default createReactClass({
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         // Room has changed probably, update apps
         this._updateApps();
     },

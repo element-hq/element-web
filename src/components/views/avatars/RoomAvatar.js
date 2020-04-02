@@ -63,7 +63,8 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         this.setState({
             urls: this.getImageUrls(newProps),
         });

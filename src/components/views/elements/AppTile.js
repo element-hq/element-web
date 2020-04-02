@@ -262,7 +262,8 @@ export default class AppTile extends React.Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (nextProps.app.url !== this.props.app.url) {
             this._getNewState(nextProps);
             // Fetch IM token for new URL if we're showing and have permission to load

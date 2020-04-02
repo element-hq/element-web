@@ -100,7 +100,7 @@ export default class FromWidgetPostMessageApi {
             console.warn('Add FromWidgetPostMessageApi - Endpoint already registered');
             return;
         } else {
-            console.warn(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
+            console.log(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
             this.widgetMessagingEndpoints.push(endpoint);
         }
     }

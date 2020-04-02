@@ -74,7 +74,8 @@ export default createReactClass({
         this.context.removeListener('sync', this.onClientSync);
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         // work out if we need to call setState (if the image URLs array has changed)
         const newState = this._getState(nextProps);
         const newImageUrls = newState.imageUrls;

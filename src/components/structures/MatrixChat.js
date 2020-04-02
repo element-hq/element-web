@@ -360,7 +360,8 @@ export default createReactClass({
         if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
     },
 
-    componentWillUpdate: function(props, state) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
+    UNSAFE_componentWillUpdate: function(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
         }
@@ -381,7 +382,7 @@ export default createReactClass({
         // Tor doesn't support performance
         if (!performance || !performance.mark) return null;
 
-        // This shouldn't happen because componentWillUpdate and componentDidUpdate
+        // This shouldn't happen because UNSAFE_componentWillUpdate and componentDidUpdate
         // are used.
         if (this._pageChanging) {
             console.warn('MatrixChat.startPageChangeTimer: timer already started');
