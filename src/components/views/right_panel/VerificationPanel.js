@@ -155,12 +155,8 @@ export default class VerificationPanel extends React.PureComponent {
         this.state.reciprocateQREvent.cancel();
     };
 
-    get _isSelfVerification() {
-        return this.props.request.otherUserId === MatrixClientPeg.get().getUserId();
-    }
-
     renderQRReciprocatePhase() {
-        const {member} = this.props;
+        const {member, request} = this.props;
         let Button;
         // a bit of a hack, but the FormButton should only be used in the right panel
         // they should probably just be the same component with a css class applied to it?
@@ -169,7 +165,7 @@ export default class VerificationPanel extends React.PureComponent {
         } else {
             Button = sdk.getComponent("elements.FormButton");
         }
-        const description = this._isSelfVerification ?
+        const description = request.isSelfVerification ?
             _t("Almost there! Is your other session showing the same shield?") :
             _t("Almost there! Is %(displayName)s showing the same shield?", {
                 displayName: member.displayName || member.name || member.userId,
