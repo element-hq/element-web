@@ -144,6 +144,16 @@ export default class VerificationPanel extends React.PureComponent {
         </React.Fragment>;
     }
 
+    _onReciprocateYesClick = () => {
+        this.setState({reciprocateButtonClicked: true});
+        this.state.reciprocateQREvent.confirm();
+    };
+
+    _onReciprocateNoClick = () => {
+        this.setState({reciprocateButtonClicked: true});
+        this.state.reciprocateQREvent.cancel();
+    };
+
     renderQRReciprocatePhase() {
         const {member} = this.props;
         const FormButton = sdk.getComponent("elements.FormButton");
@@ -152,15 +162,25 @@ export default class VerificationPanel extends React.PureComponent {
         if (this.state.reciprocateQREvent) {
             // riot web doesn't support scanning yet, so assume here we're the client being scanned.
             body = <React.Fragment>
-                <p>{_t("Almost there! Is %(displayName)s show the same shield?", {
+                <p>{_t("Almost there! Is %(displayName)s showing the same shield?", {
                         displayName: member.displayName || member.name || member.userId,
                     })}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
-                <FormButton label={_t("No")} kind="danger" onClick={this.state.reciprocateQREvent.cancel} />
-                <FormButton label={_t("Yes")} onClick={this.state.reciprocateQREvent.confirm} />
+                <div className="mx_VerificationPanel_reciprocateButtons">
+                    <FormButton
+                        label={_t("No")} kind="danger"
+                        disabled={this.state.reciprocateButtonClicked}
+                        onClick={this._onReciprocateNoClick}
+                    />
+                    <FormButton
+                        label={_t("Yes")}
+                        disabled={this.state.reciprocateButtonClicked}
+                        onClick={this._onReciprocateYesClick}
+                    />
+                </div>
             </React.Fragment>;
         } else {
-            body = <p><Spinner/></p>;
+            body = <p><Spinner /></p>;
         }
         return <div className="mx_UserInfo_container mx_VerificationPanel_reciprocate_section">
             <h3>{_t("Verify by scanning")}</h3>

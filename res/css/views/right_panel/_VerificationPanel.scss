@@ -132,4 +132,19 @@ limitations under the License.
             float: right;
         }
     }
+
+    .mx_VerificationPanel_reciprocate_section {
+        .mx_FormButton {
+            margin: 0 10px;
+            padding: 10px;
+            flex: 1;
+        }
+
+        // show Yes/No buttons next to each other
+        .mx_VerificationPanel_reciprocateButtons {
+            display: flex;
+            flex-direction: row;
+        }
+    }
+
 }
