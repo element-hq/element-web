@@ -162,6 +162,8 @@ export default class VerificationPanel extends React.PureComponent {
     renderQRReciprocatePhase() {
         const {member} = this.props;
         let Button;
+        // a bit of a hack, but the FormButton should only be used in the right panel
+        // they should probably just be the same component with a css class applied to it?
         if (this.props.inDialog) {
             Button = sdk.getComponent("elements.AccessibleButton");
         } else {
@@ -175,6 +177,9 @@ export default class VerificationPanel extends React.PureComponent {
         let body;
         if (this.state.reciprocateQREvent) {
             // riot web doesn't support scanning yet, so assume here we're the client being scanned.
+            //
+            // we're passing both a label and a child string to Button as
+            // FormButton and AccessibleButton expect this differently
             body = <React.Fragment>
                 <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
