@@ -1257,5 +1257,20 @@
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s が部屋名を %(oldRoomName)s から %(newRoomName)s に変更しました。",
     "Unknown Command": "不明なコマンド",
     "Unrecognised command: %(commandText)s": "認識されていないコマンド: %(commandText)s",
-    "Send as message": "メッセージとして送信"
+    "Send as message": "メッセージとして送信",
+    "Confirm": "確認",
+    "Enable audible notifications for this session": "このセッションでは音声通知を有効にする",
+    "Enable encryption?": "暗号化を有効にしますか？",
+    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "一度有効にした部屋の暗号化は無効にすることはできません。暗号化された部屋で送信されたメッセージは、サーバーからは見ることができず、その部屋の参加者だけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。<a>暗号化についての詳細はこちらをご覧ください</a>。",
+    "Enter username": "ユーザー名を入力",
+    "Email (optional)": "メールアドレス (任意)",
+    "Phone (optional)": "電話番号 (任意)",
+    "Create your Matrix account on %(serverName)s": "あなたの Matrix アカウントを %(serverName)s に作成",
+    "Create your Matrix account on <underlinedServerName />": "あなたの Matrix アカウントを <underlinedServerName /> に作成",
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "アカウント回復のためのメールアドレスを設定できます。また、メールアドレスや電話番号を既存の知り合いにこのアカウントを発見してもらうために使うこともできます。",
+    "Set an email for account recovery. Use email to optionally be discoverable by existing contacts.": "アカウント回復のためのメールアドレスを設定できます。また、メールアドレスを既存の知り合いにこのアカウントを発見してもらうために使うこともできます。",
+    "Enter your custom homeserver URL <a>What does this mean?</a>": "独自のホームサーバー URL を入力 <a>詳細情報</a>",
+    "Homeserver URL": "ホームサーバー URL",
+    "Sign in instead": "サインインする",
+    "Create your account": "アカウントの作成"
 }
