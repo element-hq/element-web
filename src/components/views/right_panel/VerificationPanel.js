@@ -282,7 +282,7 @@ export default class VerificationPanel extends React.PureComponent {
 
     _updateVerifierState = () => {
         const {request} = this.props;
-        const {sasEvent, reciprocateQREvent} = request;
+        const {sasEvent, reciprocateQREvent} = request.verifier;
         request.verifier.off('show_sas', this._updateVerifierState);
         request.verifier.off('show_reciprocate_qr', this._updateVerifierState);
         this.setState({sasEvent, reciprocateQREvent});
@@ -310,7 +310,7 @@ export default class VerificationPanel extends React.PureComponent {
         request.on("change", this._onRequestChange);
         if (request.verifier) {
             const {request} = this.props;
-            const {sasEvent, reciprocateQREvent} = request;
+            const {sasEvent, reciprocateQREvent} = request.verifier;
             this.setState({sasEvent, reciprocateQREvent});
         }
         this._onRequestChange();
