@@ -2306,5 +2306,17 @@
     "Compare emoji": "Confronta emoji",
     "Cancel replying to a message": "Annulla la risposta a un messaggio",
     "Sends a message as html, without interpreting it as markdown": "Invia un messaggio come html, senza interpretarlo come markdown",
-    "Sign in with SSO": "Accedi con SSO"
+    "Sign in with SSO": "Accedi con SSO",
+    "Use Single Sign On to continue": "Usa Single Sign On per continuare",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Conferma aggiungendo questa email usando Single Sign On per provare la tua identità.",
+    "Single Sign On": "Single Sign On",
+    "Confirm adding email": "Conferma aggiungendo email",
+    "Click the button below to confirm adding this email address.": "Clicca il pulsante sotto per confermare l'aggiunta di questa email.",
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Conferma aggiungendo questo numero di telefono usando Single Sign On per provare la tua identità.",
+    "Confirm adding phone number": "Conferma aggiungendo un numero di telefono",
+    "Click the button below to confirm adding this phone number.": "Clicca il pulsante sotto per confermare l'aggiunta di questo numero di telefono.",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.": "Conferma eliminando queste sessioni usando Single Sign On per provare la tua identità.",
+    "Confirm deleting these sessions": "Conferma eliminando queste sessioni",
+    "Click the button below to confirm deleting these sessions.": "Clicca il pulsante sotto per confermare l'eliminazione di queste sessioni.",
+    "Delete sessions": "Elimina sessioni"
 }
