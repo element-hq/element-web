@@ -18,6 +18,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
@@ -154,29 +155,38 @@ export default class VerificationPanel extends React.PureComponent {
         this.state.reciprocateQREvent.cancel();
     };
 
+    get _isSelfVerification() {
+        return this.props.request.otherUserId === MatrixClientPeg.get().getUserId();
+    }
+
     renderQRReciprocatePhase() {
         const {member} = this.props;
-        const FormButton = sdk.getComponent("elements.FormButton");
-
+        let Button;
+        if (this.props.inDialog) {
+            Button = sdk.getComponent("elements.AccessibleButton");
+        } else {
+            Button = sdk.getComponent("elements.FormButton");
+        }
+        const description = this._isSelfVerification ?
+            _t("Almost there! Is your other session showing the same shield?") :
+            _t("Almost there! Is %(displayName)s showing the same shield?", {
+                displayName: member.displayName || member.name || member.userId,
+            });
         let body;
         if (this.state.reciprocateQREvent) {
             // riot web doesn't support scanning yet, so assume here we're the client being scanned.
             body = <React.Fragment>
-                <p>{_t("Almost there! Is %(displayName)s showing the same shield?", {
-                        displayName: member.displayName || member.name || member.userId,
-                    })}</p>
+                <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <div className="mx_VerificationPanel_reciprocateButtons">
-                    <FormButton
+                    <Button
                         label={_t("No")} kind="danger"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this._onReciprocateNoClick}
-                    />
-                    <FormButton
-                        label={_t("Yes")}
+                        onClick={this._onReciprocateNoClick}>{_t("No")}</Button>
+                    <Button
+                        label={_t("Yes")} kind="primary"
                         disabled={this.state.reciprocateButtonClicked}
-                        onClick={this._onReciprocateYesClick}
-                    />
+                        onClick={this._onReciprocateYesClick}>{_t("Yes")}</Button>
                 </div>
             </React.Fragment>;
         } else {

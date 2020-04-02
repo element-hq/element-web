@@ -13,6 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+*
+
+.mx_VerificationPanel_verified_section,
+.mx_VerificationPanel_reciprocate_section {
+    // center the big shield icon
+    .mx_E2EIcon {
+        // Override general user info margin
+        margin: 20px auto !important;
+    }
+}
+
 
 .mx_UserInfo {
     .mx_EncryptionPanel_cancel {
@@ -29,15 +40,6 @@ limitations under the License.
         top: 14px;
         right: 14px;
     }
-
-    .mx_VerificationPanel_verified_section,
-    .mx_VerificationPanel_reciprocate_section {
-        .mx_E2EIcon {
-            // Override general user info margin
-            margin: 20px auto !important;
-        }
-    }
-
 
     .mx_VerificationPanel_qrCode {
         padding: 4px 4px 0 4px;
@@ -123,10 +125,6 @@ limitations under the License.
 
     // EncryptionPanel when verification is done
     .mx_VerificationPanel_verified_section {
-        // center the big shield icon
-        .mx_E2EIcon {
-            margin: 0 auto;
-        }
         // right align the "Got it" button
         .mx_AccessibleButton {
             float: right;
@@ -134,16 +132,15 @@ limitations under the License.
     }
 
     .mx_VerificationPanel_reciprocate_section {
-        .mx_FormButton {
-            margin: 0 10px;
-            padding: 10px;
-            flex: 1;
+        .mx_AccessibleButton {
+            margin-left: 10px;
+            padding: 7px 40px;
         }
 
-        // show Yes/No buttons next to each other
         .mx_VerificationPanel_reciprocateButtons {
             display: flex;
             flex-direction: row;
+            justify-content: flex-end;
         }
     }
 }
