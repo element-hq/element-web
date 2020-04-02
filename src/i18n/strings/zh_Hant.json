@@ -2308,5 +2308,17 @@
     "Session backup key:": "工作階段備份金鑰：",
     "Sends a message as html, without interpreting it as markdown": "以 html 形式傳送訊息，不將其翻譯為 markdown",
     "Cancel replying to a message": "取消回覆訊息",
-    "Sign in with SSO": "使用單一登入系統登入"
+    "Sign in with SSO": "使用單一登入系統登入",
+    "Use Single Sign On to continue": "使用單一登入繼續",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "透過使用單一登入來證明您的身份以確認新增此電子郵件地址。",
+    "Single Sign On": "單一登入",
+    "Confirm adding email": "確任新增電子郵件",
+    "Click the button below to confirm adding this email address.": "點擊下方按鈕以確認新增此電子郵件地址。",
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "透過使用單一登入來證明您的身份以確認新增此電話號碼。",
+    "Confirm adding phone number": "確任新增電話號碼",
+    "Click the button below to confirm adding this phone number.": "點擊下方按鈕以確認新增此電話號碼。",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.": "透過使用單一登入來證明您的身份以確認刪除這些工作階段。",
+    "Confirm deleting these sessions": "確認刪除這些工作階段",
+    "Click the button below to confirm deleting these sessions.": "點擊下方按鈕以確認刪除這些工作階段。",
+    "Delete sessions": "刪除工作階段"
 }
