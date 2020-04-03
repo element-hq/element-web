@@ -18,7 +18,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
@@ -200,13 +199,15 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     renderVerifiedPhase() {
-        const {member} = this.props;
+        const {member, request} = this.props;
 
         let text;
-        if (this.props.isRoomEncrypted) {
-            text = _t("Verify all users in a room to ensure it's secure.");
-        } else {
-            text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
+        if (!request.isSelfVerification) {
+            if (this.props.isRoomEncrypted) {
+                text = _t("Verify all users in a room to ensure it's secure.");
+            } else {
+                text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
+            }
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -224,8 +225,7 @@ export default class VerificationPanel extends React.PureComponent {
                 <h3>{_t("Verified")}</h3>
                 <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
-                <p>{ text }</p>
-
+                { text ? <p>{ text }</p> : null }
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
@@ -238,15 +238,27 @@ export default class VerificationPanel extends React.PureComponent {
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
+        let startAgainInstruction;
+        if (request.isSelfVerification) {
+            startAgainInstruction = _t("Start verification again from the notification.");
+        } else {
+            startAgainInstruction = _t("Start verification again from their profile.");
+        }
+
         let text;
         if (request.cancellationCode === "m.timeout") {
-            text = _t("Verification timed out. Start verification again from their profile.");
+            text = _t("Verification timed out.") + ` ${startAgainInstruction}`;
         } else if (request.cancellingUserId === request.otherUserId) {
-            text = _t("%(displayName)s cancelled verification. Start verification again from their profile.", {
-                displayName: member.displayName || member.name || member.userId,
-            });
+            if (request.isSelfVerification) {
+                text = _t("You cancelled verification on your other session.");
+            } else {
+                text = _t("%(displayName)s cancelled verification.", {
+                    displayName: member.displayName || member.name || member.userId,
+                });
+            }
+            text = `${text} ${startAgainInstruction}`;
         } else {
-            text = _t("You cancelled verification. Start verification again from their profile.");
+            text = _t("You cancelled verification.") + ` ${startAgainInstruction}`;
         }
 
         return (
