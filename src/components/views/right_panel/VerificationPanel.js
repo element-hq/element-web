@@ -18,7 +18,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import * as sdk from '../../../index';
-import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
@@ -155,12 +154,8 @@ export default class VerificationPanel extends React.PureComponent {
         this.state.reciprocateQREvent.cancel();
     };
 
-    get _isSelfVerification() {
-        return this.props.request.otherUserId === MatrixClientPeg.get().getUserId();
-    }
-
     renderQRReciprocatePhase() {
-        const {member} = this.props;
+        const {member, request} = this.props;
         let Button;
         // a bit of a hack, but the FormButton should only be used in the right panel
         // they should probably just be the same component with a css class applied to it?
@@ -169,7 +164,7 @@ export default class VerificationPanel extends React.PureComponent {
         } else {
             Button = sdk.getComponent("elements.FormButton");
         }
-        const description = this._isSelfVerification ?
+        const description = request.isSelfVerification ?
             _t("Almost there! Is your other session showing the same shield?") :
             _t("Almost there! Is %(displayName)s showing the same shield?", {
                 displayName: member.displayName || member.name || member.userId,
@@ -204,25 +199,33 @@ export default class VerificationPanel extends React.PureComponent {
     }
 
     renderVerifiedPhase() {
-        const {member} = this.props;
+        const {member, request} = this.props;
 
         let text;
-        if (this.props.isRoomEncrypted) {
-            text = _t("Verify all users in a room to ensure it's secure.");
-        } else {
-            text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
+        if (!request.isSelfVerification) {
+            if (this.props.isRoomEncrypted) {
+                text = _t("Verify all users in a room to ensure it's secure.");
+            } else {
+                text = _t("In encrypted rooms, verify all users to ensure it’s secure.");
+            }
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const description = request.isSelfVerification ?
+            _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
+                deviceName: this.props.device.getDisplayName(),
+                deviceId: this.props.device.deviceId,
+            }):
+            _t("You've successfully verified %(displayName)s!", {
+                displayName: member.displayName || member.name || member.userId,
+            });
+
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
                 <h3>{_t("Verified")}</h3>
-                <p>{_t("You've successfully verified %(displayName)s!", {
-                    displayName: member.displayName || member.name || member.userId,
-                })}</p>
+                <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
-                <p>{ text }</p>
-
+                { text ? <p>{ text }</p> : null }
                 <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={this.props.onClose}>
                     {_t("Got it")}
                 </AccessibleButton>
@@ -235,15 +238,27 @@ export default class VerificationPanel extends React.PureComponent {
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
+        let startAgainInstruction;
+        if (request.isSelfVerification) {
+            startAgainInstruction = _t("Start verification again from the notification.");
+        } else {
+            startAgainInstruction = _t("Start verification again from their profile.");
+        }
+
         let text;
         if (request.cancellationCode === "m.timeout") {
-            text = _t("Verification timed out. Start verification again from their profile.");
+            text = _t("Verification timed out.") + ` ${startAgainInstruction}`;
         } else if (request.cancellingUserId === request.otherUserId) {
-            text = _t("%(displayName)s cancelled verification. Start verification again from their profile.", {
-                displayName: member.displayName || member.name || member.userId,
-            });
+            if (request.isSelfVerification) {
+                text = _t("You cancelled verification on your other session.");
+            } else {
+                text = _t("%(displayName)s cancelled verification.", {
+                    displayName: member.displayName || member.name || member.userId,
+                });
+            }
+            text = `${text} ${startAgainInstruction}`;
         } else {
-            text = _t("You cancelled verification. Start verification again from their profile.");
+            text = _t("You cancelled verification.") + ` ${startAgainInstruction}`;
         }
 
         return (
@@ -279,6 +294,8 @@ export default class VerificationPanel extends React.PureComponent {
                                 onCancel={this._onSasMismatchesClick}
                                 onDone={this._onSasMatchesClick}
                                 inDialog={this.props.inDialog}
+                                isSelf={request.isSelfVerification}
+                                device={this.props.device}
                             /> : <Spinner />;
                         return <div className="mx_UserInfo_container">
                             <h3>{_t("Compare emoji")}</h3>

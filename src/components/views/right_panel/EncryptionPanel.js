@@ -22,6 +22,7 @@ import VerificationPanel from "./VerificationPanel";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import {useAsyncMemo} from "../../../hooks/useAsyncMemo";
 import Modal from "../../../Modal";
 import {PHASE_REQUESTED, PHASE_UNSENT} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import * as sdk from "../../../index";
@@ -44,6 +45,12 @@ const EncryptionPanel = (props) => {
             setPhase(verificationRequest.phase);
         }
     }, [verificationRequest]);
+
+    const deviceId = request && request.channel.deviceId;
+    const device = useAsyncMemo(() => {
+        const cli = MatrixClientPeg.get();
+        return cli.getStoredDevice(cli.getUserId(), deviceId);
+    }, [deviceId]);
 
     useEffect(() => {
         async function awaitPromise() {
@@ -112,6 +119,9 @@ const EncryptionPanel = (props) => {
     const requested =
         (!request && isRequesting) ||
         (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
+    const isSelfVerification = request ?
+        request.isSelfVerification :
+        member.userId === MatrixClientPeg.get().getUserId();
     if (!request || requested) {
         const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
         return (<React.Fragment>
@@ -120,8 +130,10 @@ const EncryptionPanel = (props) => {
                 isRoomEncrypted={isRoomEncrypted}
                 onStartVerification={onStartVerification}
                 member={member}
+                isSelfVerification={isSelfVerification}
                 waitingForOtherParty={requested && initiatedByMe}
-                waitingForNetwork={requested && !initiatedByMe} />
+                waitingForNetwork={requested && !initiatedByMe}
+                inDialog={inDialog} />
         </React.Fragment>);
     } else {
         return (<React.Fragment>
@@ -134,7 +146,8 @@ const EncryptionPanel = (props) => {
                 request={request}
                 key={request.channel.transactionId}
                 inDialog={inDialog}
-                phase={phase} />
+                phase={phase}
+                device={device} />
         </React.Fragment>);
     }
 };

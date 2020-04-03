@@ -75,6 +75,7 @@ limitations under the License.
         margin-top: 10px;
         margin-bottom: 10px;
         align-items: stretch;
+        justify-content: center;
 
         > .mx_VerificationPanel_QRPhase_betweenText {
             width: 50px;
@@ -90,10 +91,12 @@ limitations under the License.
             border-radius: 10px;
             flex: 1;
             display: flex;
-            padding: 10px;
+            padding: 20px;
             align-items: center;
             flex-direction: column;
             position: relative;
+            max-width: 310px;
+            justify-content: space-between;
 
             canvas, .mx_VerificationPanel_QRPhase_noQR {
                 width: 220px !important;
@@ -106,18 +109,14 @@ limitations under the License.
             }
 
             > p {
+                margin-top: 0;
                 font-weight: 700;
             }
 
             .mx_VerificationPanel_QRPhase_helpText {
                 font-size: $font-14px;
-                margin-top: 71px;
+                margin: 30px 0;
                 text-align: center;
-            }
-
-            .mx_AccessibleButton {
-                position: absolute;
-                bottom: 30px;
             }
         }
     }

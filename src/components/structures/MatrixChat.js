@@ -1521,7 +1521,7 @@ export default createReactClass({
             } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: 'verifreq_' + request.channel.transactionId,
-                    title: _t("Verification Request"),
+                    title: request.isSelfVerification ? _t("Self-verification request") : _t("Verification Request"),
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
