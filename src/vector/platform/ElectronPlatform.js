@@ -36,17 +36,6 @@ import React from "react";
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
-// register Mac specific shortcuts
-if (isMac) {
-    registerShortcut(Categories.NAVIGATION, {
-        keybinds: [{
-            modifiers: [Modifiers.COMMAND],
-            key: Key.COMMA,
-        }],
-        description: _td("Open user settings"),
-    });
-}
-
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
     if (navigator.userAgent.includes('Macintosh')) {
@@ -228,6 +217,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+
+        // register Mac specific shortcuts
+        if (isMac) {
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.COMMA,
+                }],
+                description: _td("Open user settings"),
+            });
+        }
     }
 
     async getConfig(): Promise<{}> {
