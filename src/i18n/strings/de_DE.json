@@ -65,7 +65,7 @@
     "Guests cannot join this room even if explicitly invited.": "Gäste können diesem Raum nicht beitreten, auch wenn sie explizit eingeladen wurden.",
     "Hangup": "Auflegen",
     "Homeserver is": "Der Heimserver ist",
-    "Identity Server is": "Identitätsserver:",
+    "Identity Server is": "Identitätsserver ist",
     "I have verified my email address": "Ich habe meine E-Mail-Adresse verifiziert",
     "Import E2E room keys": "E2E-Raum-Schlüssel importieren",
     "Invalid Email Address": "Ungültige E-Mail-Adresse",
