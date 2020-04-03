@@ -68,7 +68,14 @@ if (argv["help"]) {
     app.exit();
 }
 
-if (argv['profile-dir']) {
+// check if we are passed a profile in the SSO callback url
+const deeplinkUrl = argv["_"].find(arg => arg.startsWith('riot://'));
+if (deeplinkUrl && deeplinkUrl.includes('riot-desktop-user-data-path')) {
+    const parsedUrl = new URL(deeplinkUrl);
+    if (parsedUrl.protocol === 'riot:') {
+        app.setPath('userData', parsedUrl.searchParams.get('riot-desktop-user-data-path'));
+    }
+} else if (argv['profile-dir']) {
     app.setPath('userData', argv['profile-dir']);
 } else if (argv['profile']) {
     app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
@@ -232,6 +239,11 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             break;
         case 'getConfig':
             ret = vectorConfig;
+            break;
+        case 'getUserDataPath':
+            if (argv['profile-dir'] || argv['profile']) {
+                ret = app.getPath('userData');
+            }
             break;
 
         default:
