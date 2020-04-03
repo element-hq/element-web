@@ -210,12 +210,19 @@ export default class VerificationPanel extends React.PureComponent {
         }
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const description = request.isSelfVerification ?
+            _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
+                deviceName: this.props.device.getDisplayName(),
+                deviceId: this.props.device.deviceId,
+            }):
+            _t("You've successfully verified %(displayName)s!", {
+                displayName: member.displayName || member.name || member.userId,
+            });
+
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
                 <h3>{_t("Verified")}</h3>
-                <p>{_t("You've successfully verified %(displayName)s!", {
-                    displayName: member.displayName || member.name || member.userId,
-                })}</p>
+                <p>{description}</p>
                 <E2EIcon isUser={true} status="verified" size={128} hideTooltip={true} />
                 <p>{ text }</p>
 
@@ -276,6 +283,7 @@ export default class VerificationPanel extends React.PureComponent {
                                 onDone={this._onSasMatchesClick}
                                 inDialog={this.props.inDialog}
                                 isSelf={request.isSelfVerification}
+                                device={this.props.device}
                             /> : <Spinner />;
                         return <div className="mx_UserInfo_container">
                             <h3>{_t("Compare emoji")}</h3>
