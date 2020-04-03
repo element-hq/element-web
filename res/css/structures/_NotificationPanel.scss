@@ -39,7 +39,7 @@ limitations under the License.
 
 .mx_NotificationPanel .mx_EventTile_roomName {
     font-weight: bold;
-    font-size: 14px;
+    font-size: $font-14px;
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a {
@@ -54,7 +54,7 @@ limitations under the License.
 .mx_NotificationPanel .mx_EventTile .mx_SenderProfile,
 .mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
     color: $primary-fg-color;
-    font-size: 12px;
+    font-size: $font-12px;
     display: inline;
     padding-left: 0px;
 }

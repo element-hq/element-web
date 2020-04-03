@@ -32,7 +32,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_callBar {
     height: 50px;
-    line-height: 50px;
+    line-height: $font-50px;
 }
 
 .mx_RoomStatusBar_placeholderIndicator span {
@@ -94,7 +94,7 @@ limitations under the License.
     border-radius: 40px;
     width: 24px;
     height: 24px;
-    line-height: 24px;
+    line-height: $font-24px;
     font-size: 0.8em;
     vertical-align: top;
     text-align: center;
@@ -132,7 +132,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_connectionLostBar_desc {
     color: $primary-fg-color;
-    font-size: 13px;
+    font-size: $font-13px;
     opacity: 0.5;
     padding-bottom: 20px;
 }
@@ -145,7 +145,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_typingBar {
     height: 50px;
-    line-height: 50px;
+    line-height: $font-50px;
 
     color: $primary-fg-color;
     opacity: 0.5;
@@ -155,7 +155,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_isAlone {
     height: 50px;
-    line-height: 50px;
+    line-height: $font-50px;
 
     color: $primary-fg-color;
     opacity: 0.5;
@@ -174,11 +174,11 @@ limitations under the License.
 
     .mx_RoomStatusBar_callBar {
         height: 40px;
-        line-height: 40px;
+        line-height: $font-40px;
     }
 
     .mx_RoomStatusBar_typingBar {
         height: 40px;
-        line-height: 40px;
+        line-height: $font-40px;
     }
 }
