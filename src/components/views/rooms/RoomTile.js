@@ -203,7 +203,7 @@ export default createReactClass({
 
             case 'view_room':
                 // when the room is selected make sure its tile is visible, for breadcrumbs/keyboard shortcut access
-                if (payload.room_id === this.props.room.roomId) {
+                if (payload.room_id === this.props.room.roomId && payload.show_room_tile) {
                     this._scrollIntoView();
                 }
                 break;
@@ -224,6 +224,7 @@ export default createReactClass({
         });
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._roomTile = createRef();
     },
@@ -282,7 +283,8 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(props) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(props) {
         // XXX: This could be a lot better - this makes the assumption that
         // the notification count may have changed when the properties of
         // the room tile change.

@@ -35,7 +35,7 @@ export default class UserView extends React.Component {
         this.state = {};
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (this.props.userId) {
             this._loadProfileInfo();
         }

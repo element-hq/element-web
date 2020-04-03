@@ -30,8 +30,6 @@ export const DEFAULTS: ConfigOptions = {
     jitsi: {
         // Default conference domain
         preferredDomain: "jitsi.riot.im",
-        // Default Jitsi Meet API location
-        externalApiUrl: "https://jitsi.riot.im/libs/external_api.min.js",
     },
 };
 

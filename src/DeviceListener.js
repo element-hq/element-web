@@ -165,6 +165,9 @@ export default class DeviceListener {
                     props: {kind: 'upgrade_ssss'},
                     component: sdk.getComponent("toasts.SetupEncryptionToast"),
                 });
+            } else {
+                // cross-signing is ready, and we don't need to upgrade encryption
+                ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
             }
         }
 

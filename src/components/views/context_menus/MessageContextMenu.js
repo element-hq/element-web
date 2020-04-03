@@ -61,7 +61,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
         this._checkPermissions();
     },

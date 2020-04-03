@@ -58,8 +58,8 @@ limitations under the License.
     z-index: 4000; // Higher than dialogs so tooltips can be used in dialogs
     padding: 10px;
     pointer-events: none;
-    line-height: 14px;
-    font-size: 12px;
+    line-height: $font-14px;
+    font-size: $font-12px;
     font-weight: 600;
     color: $primary-fg-color;
     max-width: 200px;
@@ -82,7 +82,7 @@ limitations under the License.
     text-align: center;
     border: none;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: $font-14px;
     line-height: 1.2;
     padding: 6px 8px;
 

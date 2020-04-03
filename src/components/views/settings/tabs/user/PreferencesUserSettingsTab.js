@@ -81,7 +81,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();

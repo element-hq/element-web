@@ -56,7 +56,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
@@ -89,9 +90,7 @@ export default createReactClass({
                 ),
             });
         });
-    },
 
-    componentDidMount: function() {
         this.refreshRoomList();
     },
 

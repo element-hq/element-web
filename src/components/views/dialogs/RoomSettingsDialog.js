@@ -36,12 +36,12 @@ export default class RoomSettingsDialog extends React.Component {
         onFinished: PropTypes.func.isRequired,
     };
 
-    componentWillMount() {
+    componentDidMount() {
         this._dispatcherRef = dis.register(this._onAction);
     }
 
     componentWillUnmount() {
-        dis.unregister(this._dispatcherRef);
+        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
     }
 
     _onAction = (payload) => {
@@ -72,7 +72,7 @@ export default class RoomSettingsDialog extends React.Component {
         ));
         tabs.push(new Tab(
             _td("Notifications"),
-            "mx_RoomSettingsDialog_rolesIcon",
+            "mx_RoomSettingsDialog_notificationsIcon",
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
 

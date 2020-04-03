@@ -134,7 +134,7 @@ describe.skip('RoomSettings', () => {
         });
     });
 
-    // XXX: Can't test this because we `getRoomDirectoryVisibility` in `componentWillMount`
+    // XXX: Can't test this because we `getRoomDirectoryVisibility` in `componentDidMount`
     xit('should set room directory publicity when set to true', (done) => {
         const isRoomPublished = true;
         roomSettings.setState({

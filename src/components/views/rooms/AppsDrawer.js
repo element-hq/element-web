@@ -55,13 +55,10 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
-    },
-
-    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
 
@@ -71,10 +68,11 @@ export default createReactClass({
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         // Room has changed probably, update apps
         this._updateApps();
     },
@@ -160,11 +158,7 @@ export default createReactClass({
 
             return (<AppTile
                 key={app.id}
-                id={app.id}
-                eventId={app.eventId}
-                url={app.url}
-                name={app.name}
-                type={app.type}
+                app={app}
                 fullWidth={arr.length<2 ? true : false}
                 room={this.props.room}
                 userId={this.props.userId}

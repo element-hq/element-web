@@ -38,7 +38,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         const cli = MatrixClientPeg.get();
         cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
     },

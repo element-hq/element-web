@@ -62,11 +62,13 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
+        // TODO: [REACT-WARNING] Move this to class constructor
         this._initStateFromProps(this.props);
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         this._initStateFromProps(newProps);
     },
 

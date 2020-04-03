@@ -118,7 +118,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, put this in the constructor.
+    UNSAFE_componentWillMount: function() {
         this.mounted = false;
 
         const cli = MatrixClientPeg.get();
@@ -289,6 +290,7 @@ export default createReactClass({
                     dis.dispatch({
                         action: 'view_room',
                         room_id: room.roomId,
+                        show_room_tile: true, // to make sure the room gets scrolled into view
                     });
                 }
                 break;
