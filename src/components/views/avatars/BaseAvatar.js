@@ -164,9 +164,9 @@ export default createReactClass({
             const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
                 <span className="mx_BaseAvatar_initial" aria-hidden="true"
-                    style={{ fontSize: (width * 0.65) + "px",
-                    width: width + "px",
-                    lineHeight: height + "px" }}
+                    style={{ fontSize: (width * 0.65) / 15 + "rem",
+                    width: width / 15 + "rem",
+                    lineHeight: height / 15 + "rem" }}
                 >
                     { initialLetter }
                 </span>
@@ -174,7 +174,11 @@ export default createReactClass({
             const imgNode = (
                 <img className="mx_BaseAvatar_image" src={imageUrl}
                     alt="" title={title} onError={this.onError}
-                    width={width} height={height} aria-hidden="true" />
+                    aria-hidden="true"
+                    style={{
+                        width: width/15 + "rem",
+                        height: height/15 + "rem"
+                    }} />
             );
             if (onClick != null) {
                 return (
@@ -202,7 +206,10 @@ export default createReactClass({
                     src={imageUrl}
                     onClick={onClick}
                     onError={this.onError}
-                    width={width} height={height}
+                    style={{
+                        width: width/15 + "rem",
+                        height: height/15 + "rem"
+                    }}
                     title={title} alt=""
                     inputRef={inputRef}
                     {...otherProps} />
@@ -213,7 +220,10 @@ export default createReactClass({
                     className="mx_BaseAvatar mx_BaseAvatar_image"
                     src={imageUrl}
                     onError={this.onError}
-                    width={width} height={height}
+                    style={{
+                        width: width/15 + "rem",
+                        height: height/15 + "rem"
+                    }}
                     title={title} alt=""
                     ref={inputRef}
                     {...otherProps} />
