@@ -35,7 +35,7 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
-const protocolInit = require('./protocol');
+const {getProfileFromDeeplink, protocolInit} = require('./protocol');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
@@ -69,12 +69,9 @@ if (argv["help"]) {
 }
 
 // check if we are passed a profile in the SSO callback url
-const deeplinkUrl = argv["_"].find(arg => arg.startsWith('riot://'));
-if (deeplinkUrl && deeplinkUrl.includes('riot-desktop-user-data-path')) {
-    const parsedUrl = new URL(deeplinkUrl);
-    if (parsedUrl.protocol === 'riot:') {
-        app.setPath('userData', parsedUrl.searchParams.get('riot-desktop-user-data-path'));
-    }
+const userDataPathInProtocol = getProfileFromDeeplink(argv["_"]);
+if (userDataPathInProtocol) {
+    app.setPath('userData', userDataPathInProtocol);
 } else if (argv['profile-dir']) {
     app.setPath('userData', argv['profile-dir']);
 } else if (argv['profile']) {
