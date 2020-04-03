@@ -64,7 +64,7 @@
     "For security, this session has been signed out. Please sign in again.": "Aus Sicherheitsgründen wurde diese Sitzung beendet. Bitte melde dich erneut an.",
     "Guests cannot join this room even if explicitly invited.": "Gäste können diesem Raum nicht beitreten, auch wenn sie explizit eingeladen wurden.",
     "Hangup": "Auflegen",
-    "Homeserver is": "Heimserver:",
+    "Homeserver is": "Heimserver ist",
     "Identity Server is": "Identitätsserver:",
     "I have verified my email address": "Ich habe meine E-Mail-Adresse verifiziert",
     "Import E2E room keys": "E2E-Raum-Schlüssel importieren",
