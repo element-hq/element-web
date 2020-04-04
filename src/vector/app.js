@@ -23,7 +23,6 @@ import React from 'react';
 // access via the console
 global.React = React;
 
-import ReactDOM from 'react-dom';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
@@ -235,11 +234,7 @@ export async function loadApp() {
         );
 
         const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-        window.matrixChat = ReactDOM.render(
-            <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-            document.getElementById('matrixchat'),
-        );
-        return;
+        return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
     }
 
     const validBrowser = checkBrowserFeatures();
@@ -249,31 +244,29 @@ export async function loadApp() {
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
     if (configError) {
-        window.matrixChat = ReactDOM.render(<div className="error">
+        return <div className="error">
             Unable to load config file: please refresh the page to try again.
-        </div>, document.getElementById('matrixchat'));
+        </div>;
     } else if (validBrowser || acceptInvalidBrowser) {
         platform.startUpdater();
 
-        // Don't bother loading the app until the config is verified
-        verifyServerConfig().then((newConfig) => {
+        try {
+            // Don't bother loading the app until the config is verified
+            const config = await verifyServerConfig();
             const MatrixChat = sdk.getComponent('structures.MatrixChat');
-            window.matrixChat = ReactDOM.render(
-                <MatrixChat
-                    onNewScreen={onNewScreen}
-                    makeRegistrationUrl={makeRegistrationUrl}
-                    ConferenceHandler={VectorConferenceHandler}
-                    config={newConfig}
-                    realQueryParams={params}
-                    startingFragmentQueryParams={fragparts.params}
-                    enableGuest={!SdkConfig.get().disable_guests}
-                    onTokenLoginCompleted={onTokenLoginCompleted}
-                    initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                    defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-                />,
-                document.getElementById('matrixchat'),
-            );
-        }).catch(err => {
+            return <MatrixChat
+                onNewScreen={onNewScreen}
+                makeRegistrationUrl={makeRegistrationUrl}
+                ConferenceHandler={VectorConferenceHandler}
+                config={config}
+                realQueryParams={params}
+                startingFragmentQueryParams={fragparts.params}
+                enableGuest={!config.disable_guests}
+                onTokenLoginCompleted={onTokenLoginCompleted}
+                initialScreenAfterLogin={getScreenFromLocation(window.location)}
+                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+            />;
+        } catch (err) {
             console.error(err);
 
             let errorMessage = err.translatedMessage
@@ -282,23 +275,17 @@ export async function loadApp() {
 
             // Like the compatibility page, AWOOOOOGA at the user
             const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-            window.matrixChat = ReactDOM.render(
-                <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />,
-                document.getElementById('matrixchat'),
-            );
-        });
+            return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
+        }
     } else {
         console.error("Browser is missing required features.");
         // take to a different landing page to AWOOOOOGA at the user
         const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
-        window.matrixChat = ReactDOM.render(
-            <CompatibilityPage onAccept={function() {
-                if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-                console.log("User accepts the compatibility risks.");
-                loadApp();
-            }} />,
-            document.getElementById('matrixchat'),
-        );
+        return <CompatibilityPage onAccept={function() {
+            if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
+            console.log("User accepts the compatibility risks.");
+            loadApp();
+        }} />;
     }
 }
 
@@ -383,7 +370,6 @@ async function verifyServerConfig() {
             throw e;
         }
     }
-
 
     validatedConfig.isDefault = true;
 

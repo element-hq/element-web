@@ -20,6 +20,7 @@ limitations under the License.
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
+import * as ReactDOM from "react-dom";
 
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -142,5 +143,5 @@ export async function loadApp() {
         /* webpackChunkName: "riot-web-app" */
         /* webpackPreload: true */
         "./app");
-    await module.loadApp();
+    window.matrixChat = ReactDOM.render(await module.loadApp(), document.getElementById('matrixchat'));
 }
