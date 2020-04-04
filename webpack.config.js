@@ -31,7 +31,7 @@ module.exports = (env, argv) => {
         ...development,
 
         entry: {
-            "bundle": "./src/vector/index.js",
+            "bundle": "./src/vector/index.ts",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
             "jitsi": "./src/vector/jitsi/index.ts",

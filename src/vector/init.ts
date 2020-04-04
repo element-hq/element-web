@@ -138,11 +138,12 @@ export async function loadSkin() {
     console.log("Skin loaded!");
 }
 
-export async function loadApp() {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "riot-web-app" */
         /* webpackPreload: true */
         "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(), document.getElementById('matrixchat'));
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams, acceptBrowser),
+        document.getElementById('matrixchat'));
 }

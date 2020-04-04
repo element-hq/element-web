@@ -44,41 +44,6 @@ import {loadConfig, preparePlatform, loadLanguage, loadOlm} from "./init";
 
 let lastLocationHashSet = null;
 
-function checkBrowserFeatures() {
-    if (!window.Modernizr) {
-        console.error("Cannot check features - Modernizr global is missing.");
-        return false;
-    }
-
-    // custom checks atop Modernizr because it doesn't have ES2018/ES2019 checks in it for some features we depend on,
-    // Modernizr requires rules to be lowercase with no punctuation:
-    // ES2018: http://www.ecma-international.org/ecma-262/9.0/#sec-promise.prototype.finally
-    window.Modernizr.addTest("promiseprototypefinally", () =>
-        window.Promise && window.Promise.prototype && typeof window.Promise.prototype.finally === "function");
-    // ES2019: http://www.ecma-international.org/ecma-262/10.0/#sec-object.fromentries
-    window.Modernizr.addTest("objectfromentries", () =>
-        window.Object && typeof window.Object.fromEntries === "function");
-
-    const featureList = Object.keys(window.Modernizr);
-
-    let featureComplete = true;
-    for (let i = 0; i < featureList.length; i++) {
-        if (window.Modernizr[featureList[i]] === undefined) {
-            console.error(
-                "Looked for feature '%s' but Modernizr has no results for this. " +
-                "Has it been configured correctly?", featureList[i],
-            );
-            return false;
-        }
-        if (window.Modernizr[featureList[i]] === false) {
-            console.error("Browser missing feature: '%s'", featureList[i]);
-            // toggle flag rather than return early so we log all missing features rather than just the first.
-            featureComplete = false;
-        }
-    }
-    return featureComplete;
-}
-
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
 function getScreenFromLocation(location) {
@@ -163,7 +128,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp() {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -191,25 +156,7 @@ export async function loadApp() {
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
 
-    const fragparts = parseQsFromFragment(window.location);
     const params = parseQs(window.location);
-
-    // don't try to redirect to the native apps if we're
-    // verifying a 3pid (but after we've loaded the config)
-    // or if the user is following a deep link
-    // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
-
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location = "mobile_guide/";
-                return;
-            }
-        }
-    }
 
     // as quickly as we possibly can, set a default theme...
     await setTheme();
@@ -237,17 +184,13 @@ export async function loadApp() {
         return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
     }
 
-    const validBrowser = checkBrowserFeatures();
-
-    const acceptInvalidBrowser = window.localStorage && window.localStorage.getItem('mx_accepts_unsupported_browser');
-
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
     if (configError) {
         return <div className="error">
             Unable to load config file: please refresh the page to try again.
         </div>;
-    } else if (validBrowser || acceptInvalidBrowser) {
+    } else if (acceptBrowser) {
         platform.startUpdater();
 
         try {
@@ -260,7 +203,7 @@ export async function loadApp() {
                 ConferenceHandler={VectorConferenceHandler}
                 config={config}
                 realQueryParams={params}
-                startingFragmentQueryParams={fragparts.params}
+                startingFragmentQueryParams={fragParams}
                 enableGuest={!config.disable_guests}
                 onTokenLoginCompleted={onTokenLoginCompleted}
                 initialScreenAfterLogin={getScreenFromLocation(window.location)}

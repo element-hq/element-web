@@ -14,12 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-type ReactNode = import("react").ReactNode;
+import {ReactNode} from "react";
+import "modernizr";
 
-interface Window {
-    Olm: {
-        init: () => Promise<void>;
-    };
-    mxSendRageshake: (text: string, withLogs?: boolean) => void;
-    matrixChat: ReactNode;
+declare global {
+    interface Window {
+        Modernizr: ModernizrAPI & FeatureDetects;
+        Olm: {
+            init: () => Promise<void>;
+        };
+
+        mxSendRageshake: (text: string, withLogs?: boolean) => void;
+        matrixChat: ReactNode;
+    }
+
+    // workaround for https://github.com/microsoft/TypeScript/issues/30933
+    interface ObjectConstructor {
+        fromEntries?(xs: [string|number|symbol, any][]): object
+    }
 }
