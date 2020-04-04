@@ -32,7 +32,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
-async function settled(prom) {
+async function settled(prom: Promise<any>) {
     try {
         await prom;
     } catch (e) {

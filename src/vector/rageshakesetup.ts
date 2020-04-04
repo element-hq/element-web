@@ -31,7 +31,8 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
 export function initRageshake() {
-    rageshake.init().then(() => {
+    const prom = rageshake.init();
+    prom.then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
             "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
@@ -46,6 +47,7 @@ export function initRageshake() {
     }, (err) => {
         console.error("Failed to initialise rageshake: " + err);
     });
+    return prom;
 }
 
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
