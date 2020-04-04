@@ -30,7 +30,7 @@ import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
-function initRageshake() {
+export function initRageshake() {
     rageshake.init().then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
@@ -47,8 +47,6 @@ function initRageshake() {
         console.error("Failed to initialise rageshake: " + err);
     });
 }
-
-initRageshake();
 
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     if (withLogs === undefined) withLogs = true;

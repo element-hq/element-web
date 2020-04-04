@@ -21,13 +21,17 @@ limitations under the License.
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
 
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import WebPlatform from "./platform/WebPlatform";
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
+import { initRageshake } from "./rageshakesetup";
+
+
+export const rageshakePromise = initRageshake();
 
 export function preparePlatform() {
     if ((<any>window).ipcRenderer) {

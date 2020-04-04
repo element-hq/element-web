@@ -25,7 +25,6 @@ require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
 // These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import './rageshakesetup';
 import './modernizr';
 
 // load service worker if available on this platform
@@ -33,15 +32,25 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
+async function settled(prom) {
+    try {
+        await prom;
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 // React depends on Map & Set which we check for using modernizr's es6collections
 // if modernizr fails we may not have a functional react to show the error message.
 // try in react but fallback to an `alert`
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
-    const {loadSkin, loadApp} = await import(
+    const {rageshakePromise, loadSkin, loadApp} = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init");
+
+    await settled(rageshakePromise); // give rageshake a chance to load/fail
 
     await loadSkin();
     await loadApp();
