@@ -131,6 +131,7 @@ export async function loadSkin() {
         import(
             /* webpackChunkName: "riot-web-component-index" */
             /* webpackPreload: true */
+            // @ts-ignore - this module is generated so may fail lint
             "../component-index"),
     ]);
     sdk.loadSkin(skin);
