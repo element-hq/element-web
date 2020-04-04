@@ -121,6 +121,7 @@ export async function loadSkin() {
     // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
     // the SDK until we have to in imports.
     console.log("Loading skin...");
+    // load these async so that its code is not executed immediately and we can catch any exceptions
     const [sdk, skin] = await Promise.all([
         import(
             /* webpackChunkName: "matrix-react-sdk" */
@@ -136,15 +137,10 @@ export async function loadSkin() {
 }
 
 export async function loadApp() {
-    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-    // import and thus running before the skin can load.
+    // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "riot-web-app" */
         /* webpackPreload: true */
         "./app");
     await module.loadApp();
 }
-
-// throw new Error("foobar");
-window.Map = undefined;

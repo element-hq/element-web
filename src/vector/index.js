@@ -53,12 +53,18 @@ async function start() {
     await settled(rageshakePromise); // give rageshake a chance to load/fail
 
     await loadSkin();
+
+    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
+    // import and thus running before the skin can load.
     await loadApp();
 }
 start().catch(err => {
     // try show the error in React
+    console.log("Show React error page");
     console.error(err);
 }).catch(err => {
     // fall back to showing the error in an alert
+    console.log("Show fallback error page");
     console.error(err);
 });
