@@ -2321,5 +2321,20 @@
     "Confirm deleting these sessions by using Single Sign On to prove your identity.": "Confirmez la suppression de ces sessions en utilisant l’authentification unique pour prouver votre identité.",
     "Confirm deleting these sessions": "Confirmer la suppression de ces sessions",
     "Click the button below to confirm deleting these sessions.": "Cliquez sur le bouton ci-dessous pour confirmer la suppression de ces sessions.",
-    "Delete sessions": "Supprimer les sessions"
+    "Delete sessions": "Supprimer les sessions",
+    "Confirm the emoji below are displayed on both sessions, in the same order:": "Confirmez que les émojis ci-dessous s’affichent dans les deux sessions et dans le même ordre :",
+    "Verify this session by confirming the following number appears on its screen.": "Vérifiez cette session en confirmant que le nombre suivant s’affiche sur son écran.",
+    "Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…": "Dans l’attente que votre autre session, %(deviceName)s (%(deviceId)s), vérifie…",
+    "From %(deviceName)s (%(deviceId)s)": "Depuis %(deviceName)s (%(deviceId)s)",
+    "Waiting for you to accept on your other session…": "Dans l’attente que vous acceptiez dans votre autre session…",
+    "Almost there! Is your other session showing the same shield?": "On y est presque ! Est-ce que votre autre session affiche le même bouclier ?",
+    "Almost there! Is %(displayName)s showing the same shield?": "On y est presque ! Est-ce que %(displayName)s affiche le même bouclier ?",
+    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Vous avez bien vérifié %(deviceName)s (%(deviceId)s) !",
+    "Start verification again from the notification.": "Recommencer la vérification depuis la notification.",
+    "Start verification again from their profile.": "Recommencer la vérification depuis son profil.",
+    "Verification timed out.": "La vérification a expiré.",
+    "You cancelled verification on your other session.": "Vous avez annulé la vérification dans votre autre session.",
+    "%(displayName)s cancelled verification.": "%(displayName)s a annulé la vérification.",
+    "You cancelled verification.": "Vous avez annulé la vérification.",
+    "Self-verification request": "Demande d’auto-vérification"
 }
