@@ -112,3 +112,35 @@ export async function loadLanguage() {
         console.error("Unable to set language", e);
     }
 }
+
+export async function loadSkin() {
+    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
+    // the SDK until we have to in imports.
+    console.log("Loading skin...");
+    const [sdk, skin] = await Promise.all([
+        import(
+            /* webpackChunkName: "matrix-react-sdk" */
+            /* webpackPreload: true */
+            "matrix-react-sdk"),
+        import(
+            /* webpackChunkName: "riot-web-component-index" */
+            /* webpackPreload: true */
+            "../component-index"),
+    ]);
+    sdk.loadSkin(skin);
+    console.log("Skin loaded!");
+}
+
+export async function loadApp() {
+    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
+    // import and thus running before the skin can load.
+    const module = await import(
+        /* webpackChunkName: "riot-web-app" */
+        /* webpackPreload: true */
+        "./app");
+    await module.loadApp();
+}
+
+// throw new Error("foobar");
+window.Map = undefined;

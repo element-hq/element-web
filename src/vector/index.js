@@ -33,15 +33,23 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
-// Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
-// the SDK until we have to in imports.
-console.log("Loading skin...");
-import * as sdk from 'matrix-react-sdk';
-import * as skin from "../component-index";
-sdk.loadSkin(skin);
-console.log("Skin loaded!");
+// React depends on Map & Set which we check for using modernizr's es6collections
+// if modernizr fails we may not have a functional react to show the error message.
+// try in react but fallback to an `alert`
+async function start() {
+    // load init.ts async so that its code is not executed immediately and we can catch any exceptions
+    const {loadSkin, loadApp} = await import(
+        /* webpackChunkName: "init" */
+        /* webpackPreload: true */
+        "./init");
 
-// Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-// run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-// import and thus running before the skin can load.
-require("./app").loadApp();
+    await loadSkin();
+    await loadApp();
+}
+start().catch(err => {
+    // try show the error in React
+    console.error(err);
+}).catch(err => {
+    // fall back to showing the error in an alert
+    console.error(err);
+});
