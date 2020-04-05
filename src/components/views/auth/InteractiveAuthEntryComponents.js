@@ -650,7 +650,7 @@ export class SSOAuthEntry extends React.Component {
     };
 
     onConfirmClick = () => {
-        this.props.submitAuthDict({});
+        this.props.submitAuthDict(null);
     };
 
     render() {
@@ -740,7 +740,7 @@ export const FallbackAuthEntry = createReactClass({
             event.data === "authDone" &&
             event.origin === this.props.matrixClient.getHomeserverUrl()
         ) {
-            this.props.submitAuthDict({});
+            this.props.submitAuthDict(null);
         }
     },
 

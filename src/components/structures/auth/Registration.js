@@ -243,7 +243,7 @@ export default createReactClass({
             });
         };
         try {
-            await this._makeRegisterRequest({});
+            await this._makeRegisterRequest(null);
             // This should never succeed since we specified an empty
             // auth object.
             console.log("Expecting 401 from register request but got success!");
