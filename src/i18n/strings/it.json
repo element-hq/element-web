@@ -2320,5 +2320,18 @@
     "Click the button below to confirm deleting these sessions.": "Clicca il pulsante sotto per confermare l'eliminazione di queste sessioni.",
     "Delete sessions": "Elimina sessioni",
     "Almost there! Is your other session showing the same shield?": "Quasi fatto! L'altra tua sessione sta mostrando lo stesso scudo?",
-    "Almost there! Is %(displayName)s showing the same shield?": "Quasi fatto! %(displayName)s sta mostrando lo stesso scudo?"
+    "Almost there! Is %(displayName)s showing the same shield?": "Quasi fatto! %(displayName)s sta mostrando lo stesso scudo?",
+    "Confirm the emoji below are displayed on both sessions, in the same order:": "Conferma che gli emoji sottostanti sono mostrati in entrambe le sessioni, nello stesso ordine:",
+    "Verify this session by confirming the following number appears on its screen.": "Verifica questa sessione confermando che il seguente numero compare nel suo schermo.",
+    "Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…": "In attesa che la tua altra sessione, %(deviceName)s (%(deviceId)s), verifichi…",
+    "From %(deviceName)s (%(deviceId)s)": "Da %(deviceName)s (%(deviceId)s)",
+    "Waiting for you to accept on your other session…": "In attesa che tu accetti nella tua altra sessione…",
+    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Hai verificato %(deviceName)s (%(deviceId)s) correttamente!",
+    "Start verification again from the notification.": "Inizia di nuovo la verifica dalla notifica.",
+    "Start verification again from their profile.": "Inizia di nuovo la verifica dal suo profilo.",
+    "Verification timed out.": "Verifica scaduta.",
+    "You cancelled verification on your other session.": "Hai annullato la verifica nell'altra sessione.",
+    "%(displayName)s cancelled verification.": "%(displayName)s ha annullato la verifica.",
+    "You cancelled verification.": "Hai annullato la verifica.",
+    "Self-verification request": "Richiesta di auto-verifica"
 }
