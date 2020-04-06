@@ -174,7 +174,6 @@ export default class DeactivateAccountDialog extends React.Component {
 
                         <p>{ _t("To continue, please enter your password:") }</p>
                         <Field
-                            id="mx_DeactivateAccountDialog_password"
                             type="password"
                             label={_t('Password')}
                             onChange={this._onPasswordFieldChange}

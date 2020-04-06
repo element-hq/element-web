@@ -22,7 +22,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { Key, isOnlyCtrlOrCmdKeyEvent } from '../../Keyboard';
+import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
@@ -94,7 +94,8 @@ const LoggedInView = createReactClass({
         this._loadResizerPreferences();
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // stash the MatrixClient in case we log out before we are unmounted
         this._matrixClient = this.props.matrixClient;
 
@@ -380,7 +381,7 @@ const LoggedInView = createReactClass({
                 break;
 
             case Key.SLASH:
-                if (ctrlCmdOnly) {
+                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev)) {
                     KeyboardShortcuts.toggleDialog();
                     handled = true;
                 }

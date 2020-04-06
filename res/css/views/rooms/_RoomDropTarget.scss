@@ -28,7 +28,7 @@ limitations under the License.
 }
 
 .mx_RoomDropTarget {
-    font-size: 13px;
+    font-size: $font-13px;
     padding-top: 5px;
     padding-bottom: 5px;
     border: 1px dashed $accent-color;
@@ -41,7 +41,7 @@ limitations under the License.
 .mx_RoomDropTarget_label {
     position: relative;
     margin-top: 3px;
-    line-height: 21px;
+    line-height: $font-21px;
     z-index: 1;
     text-align: center;
 }

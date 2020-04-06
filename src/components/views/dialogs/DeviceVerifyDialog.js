@@ -279,6 +279,7 @@ export default class DeviceVerifyDialog extends React.Component {
             onDone={this._onSasMatchesClick}
             isSelf={MatrixClientPeg.get().getUserId() === this.props.userId}
             onStartEmoji={this._onUseSasClick}
+            inDialog={true}
         />;
     }
 

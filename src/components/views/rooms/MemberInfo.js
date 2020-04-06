@@ -79,7 +79,8 @@ export default createReactClass({
         contextType: MatrixClientContext,
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._cancelDeviceList = null;
         const cli = this.context;
 
@@ -98,13 +99,12 @@ export default createReactClass({
         cli.on("accountData", this.onAccountData);
 
         this._checkIgnoreState();
-    },
 
-    componentDidMount: function() {
         this._updateStateForNewMember(this.props.member);
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         if (this.props.member.userId !== newProps.member.userId) {
             this._updateStateForNewMember(newProps.member);
         }

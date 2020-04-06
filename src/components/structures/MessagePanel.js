@@ -844,14 +844,16 @@ class CreationGrouper {
         // events that we include in the group but then eject out and place
         // above the group.
         this.ejectedEvents = [];
-        this.readMarker = panel._readMarkerForEvent(createEvent.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            createEvent.getId(),
+            createEvent === lastShownEvent,
+        );
     }
 
     shouldGroup(ev) {
         const panel = this.panel;
         const createEvent = this.createEvent;
         if (!panel._shouldShowEvent(ev)) {
-            this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
             return true;
         }
         if (panel._wantsDateSeparator(this.createEvent, ev.getDate())) {
@@ -869,7 +871,10 @@ class CreationGrouper {
 
     add(ev) {
         const panel = this.panel;
-        this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
+        this.readMarker = this.readMarker || panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         if (!panel._shouldShowEvent(ev)) {
             return;
         }
@@ -956,7 +961,10 @@ class MemberGrouper {
 
     constructor(panel, ev, prevEvent, lastShownEvent) {
         this.panel = panel;
-        this.readMarker = panel._readMarkerForEvent(ev.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            ev.getId(),
+            ev === lastShownEvent,
+        );
         this.events = [ev];
         this.prevEvent = prevEvent;
         this.lastShownEvent = lastShownEvent;
@@ -977,7 +985,10 @@ class MemberGrouper {
             const renderText = textForEvent(ev);
             if (!renderText || renderText.trim().length === 0) return; // quietly ignore
         }
-        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
+        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         this.events.push(ev);
     }
 

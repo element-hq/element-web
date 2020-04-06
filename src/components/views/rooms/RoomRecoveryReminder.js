@@ -44,7 +44,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._loadBackupStatus();
     }
 
@@ -61,7 +61,6 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                 loading: false,
                 error: e,
             });
-            return;
         }
     }
 

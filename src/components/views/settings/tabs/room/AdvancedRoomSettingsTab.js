@@ -38,7 +38,8 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         };
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         room.getRecommendedVersion().then((v) => {

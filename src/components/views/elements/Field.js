@@ -23,10 +23,16 @@ import { debounce } from 'lodash';
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
 
+const BASE_ID = "mx_Field";
+let count = 1;
+function getId() {
+    return `${BASE_ID}_${count++}`;
+}
+
 export default class Field extends React.PureComponent {
     static propTypes = {
-        // The field's ID, which binds the input and label together.
-        id: PropTypes.string.isRequired,
+        // The field's ID, which binds the input and label together. Immutable.
+        id: PropTypes.string,
         // The element to create. Defaults to "input".
         // To define options for a select, use <Field><option ... /></Field>
         element: PropTypes.oneOf(["input", "select", "textarea"]),
@@ -63,13 +69,15 @@ export default class Field extends React.PureComponent {
         // All other props pass through to the <input>.
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             valid: undefined,
             feedback: undefined,
             focused: false,
         };
+
+        this.id = this.props.id || getId();
     }
 
     onFocus = (ev) => {
@@ -167,6 +175,7 @@ export default class Field extends React.PureComponent {
         inputProps.type = inputProps.type || "text";
         inputProps.ref = input => this.input = input;
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
+        inputProps.id = this.id; // this overwrites the id from props
 
         inputProps.onFocus = this.onFocus;
         inputProps.onChange = this.onChange;
@@ -211,7 +220,7 @@ export default class Field extends React.PureComponent {
         return <div className={fieldClasses}>
             {prefixContainer}
             {fieldInput}
-            <label htmlFor={this.props.id}>{this.props.label}</label>
+            <label htmlFor={this.id}>{this.props.label}</label>
             {postfixContainer}
             {fieldTooltip}
         </div>;

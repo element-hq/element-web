@@ -221,7 +221,8 @@ export default createReactClass({
         return {serverConfig: props};
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         SdkConfig.put(this.props.config);
 
         // Used by _viewRoom before getting state from sync
@@ -261,9 +262,7 @@ export default createReactClass({
 
         this._accountPassword = null;
         this._accountPasswordTimer = null;
-    },
 
-    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
         this._themeWatcher = new ThemeWatcher();
         this._themeWatcher.start();
@@ -361,7 +360,8 @@ export default createReactClass({
         if (this._accountPasswordTimer !== null) clearTimeout(this._accountPasswordTimer);
     },
 
-    componentWillUpdate: function(props, state) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
+    UNSAFE_componentWillUpdate: function(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
         }
@@ -382,7 +382,7 @@ export default createReactClass({
         // Tor doesn't support performance
         if (!performance || !performance.mark) return null;
 
-        // This shouldn't happen because componentWillUpdate and componentDidUpdate
+        // This shouldn't happen because UNSAFE_componentWillUpdate and componentDidUpdate
         // are used.
         if (this._pageChanging) {
             console.warn('MatrixChat.startPageChangeTimer: timer already started');
@@ -657,6 +657,7 @@ export default createReactClass({
                     collapseLhs: true,
                 });
                 break;
+            case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
@@ -1520,7 +1521,7 @@ export default createReactClass({
             } else if (request.pending) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: 'verifreq_' + request.channel.transactionId,
-                    title: _t("Verification Request"),
+                    title: request.isSelfVerification ? _t("Self-verification request") : _t("Verification Request"),
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
@@ -2021,7 +2022,7 @@ export default createReactClass({
             }
         } else if (this.state.view === VIEWS.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome />;
+            view = <Welcome {...this.getServerProperties()} />;
         } else if (this.state.view === VIEWS.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (

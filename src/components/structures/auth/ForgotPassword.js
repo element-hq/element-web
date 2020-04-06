@@ -69,12 +69,13 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.reset = null;
         this._checkServerLiveliness(this.props.serverConfig);
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -296,7 +297,6 @@ export default createReactClass({
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_email"
                         name="reset_email" // define a name so browser's password autofill gets less confused
                         type="text"
                         label={_t('Email')}
@@ -307,7 +307,6 @@ export default createReactClass({
                 </div>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_password"
                         name="reset_password"
                         type="password"
                         label={_t('Password')}
@@ -315,7 +314,6 @@ export default createReactClass({
                         onChange={this.onInputChanged.bind(this, "password")}
                     />
                     <Field
-                        id="mx_ForgotPassword_passwordConfirm"
                         name="reset_password_confirm"
                         type="password"
                         label={_t('Confirm')}

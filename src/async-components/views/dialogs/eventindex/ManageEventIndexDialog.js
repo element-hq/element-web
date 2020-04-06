@@ -30,7 +30,7 @@ import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 export default class ManageEventIndexDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -82,7 +82,7 @@ export default class ManageEventIndexDialog extends React.Component {
         }
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         let eventIndexSize = 0;
         let crawlingRoomsCount = 0;
         let roomCount = 0;
@@ -126,16 +126,12 @@ export default class ManageEventIndexDialog extends React.Component {
             import("./DisableEventIndexDialog"),
             null, null, /* priority = */ false, /* static = */ true,
         );
-    }
-
-    _onDone = () => {
-        this.props.onFinished(true);
-    }
+    };
 
     _onCrawlerSleepTimeChange = (e) => {
         this.setState({crawlerSleepTime: e.target.value});
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
-    }
+    };
 
     render() {
         let crawlerState;
@@ -168,7 +164,6 @@ export default class ManageEventIndexDialog extends React.Component {
                         totalRooms: formatCountLong(this.state.roomCount),
                     })} <br />
                     <Field
-                        id={"crawlerSleepTimeMs"}
                         label={_t('Message downloading sleep time(ms)')}
                         type='number'
                         value={this.state.crawlerSleepTime}

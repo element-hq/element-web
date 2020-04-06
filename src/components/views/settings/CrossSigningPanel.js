@@ -34,6 +34,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage: false,
             selfSigningPrivateKeyCached: false,
             userSigningPrivateKeyCached: false,
+            sessionBackupKeyCached: false,
             secretStorageKeyInAccount: false,
             secretStorageKeyNeedsUpgrade: null,
         };
@@ -80,6 +81,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const selfSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"));
         const userSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"));
+        const sessionBackupKeyCached = !!(await cli._crypto.getSessionBackupPrivateKey());
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
@@ -91,6 +93,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
+            sessionBackupKeyCached,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -105,12 +108,12 @@ export default class CrossSigningPanel extends React.PureComponent {
      * 2. Access existing secret storage by requesting passphrase and accessing
      *    cross-signing keys as needed.
      * 3. All keys are loaded and there's nothing to do.
-     * @param {bool} [force] Bootstrap again even if keys already present
+     * @param {bool} [forceReset] Bootstrap again even if keys already present
      */
-    _bootstrapSecureSecretStorage = async (force=false) => {
+    _bootstrapSecureSecretStorage = async (forceReset=false) => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(() => undefined, force);
+            await accessSecretStorage(() => undefined, forceReset);
         } catch (e) {
             this.setState({ error: e });
             console.error("Error bootstrapping secret storage", e);
@@ -139,6 +142,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPrivateKeysInStorage,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
+            sessionBackupKeyCached,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -225,6 +229,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("User signing private key:")}</td>
                             <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Session backup key:")}</td>
+                            <td>{sessionBackupKeyCached ? _t("cached locally") : _t("not found locally")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Secret storage public key:")}</td>

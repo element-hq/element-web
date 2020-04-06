@@ -49,7 +49,8 @@ export default createReactClass({
         }
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {

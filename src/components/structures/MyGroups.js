@@ -38,7 +38,7 @@ export default createReactClass({
         contextType: MatrixClientContext,
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._fetch();
     },
 

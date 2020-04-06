@@ -24,7 +24,7 @@ limitations under the License.
     background-color: $interactive-tooltip-bg-color;
     color: $interactive-tooltip-fg-color;
     position: absolute;
-    font-size: 10px;
+    font-size: $font-10px;
     font-weight: 600;
     padding: 6px;
     z-index: 5001;

@@ -37,7 +37,7 @@ export default createReactClass({
         return { device: null };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         const client = MatrixClientPeg.get();
 
@@ -79,7 +79,7 @@ export default createReactClass({
     },
 
     onDeviceVerificationChanged: function(userId, device) {
-        if (userId == this.props.event.getSender()) {
+        if (userId === this.props.event.getSender()) {
             this.refreshDevice().then((dev) => {
                 this.setState({ device: dev });
             });

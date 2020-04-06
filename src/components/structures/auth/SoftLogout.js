@@ -54,7 +54,7 @@ export default class SoftLogout extends React.Component {
 
         this.state = {
             loginView: LOGIN_VIEW.LOADING,
-            keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
+            keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
 
             busy: false,
             password: "",
@@ -213,7 +213,6 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     {error}
                     <Field
-                        id="softlogout_password"
                         type="password"
                         label={_t("Password")}
                         onChange={this.onPasswordChange}

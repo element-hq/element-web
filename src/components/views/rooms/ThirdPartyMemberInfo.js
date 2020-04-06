@@ -51,7 +51,7 @@ export default class ThirdPartyMemberInfo extends React.Component {
         };
     }
 
-    componentWillMount(): void {
+    componentDidMount(): void {
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     }
 

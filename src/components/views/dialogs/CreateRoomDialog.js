@@ -174,7 +174,7 @@ export default createReactClass({
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
-                    <RoomAliasField id="alias" ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
+                    <RoomAliasField ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
                 </div>
             );
         } else {
@@ -188,8 +188,8 @@ export default createReactClass({
             >
                 <form onSubmit={this.onOk} onKeyDown={this._onKeyDown}>
                     <div className="mx_Dialog_content">
-                        <Field id="name" ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
-                        <Field id="topic" label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
+                        <Field ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
+                        <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
                         <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
                         { privateLabel }
                         { publicLabel }

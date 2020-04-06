@@ -267,7 +267,8 @@ class FilteredList extends React.PureComponent {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
         this.setState({
             filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),
@@ -302,7 +303,7 @@ class FilteredList extends React.PureComponent {
     render() {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
-            <Field id="DevtoolsDialog_FilteredList_filter" label={_t('Filter results')} autoFocus={true} size={64}
+            <Field label={_t('Filter results')} autoFocus={true} size={64}
                    type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                    // force re-render so that autoFocus is applied when this component is re-used
