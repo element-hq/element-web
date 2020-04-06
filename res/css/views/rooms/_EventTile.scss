@@ -665,6 +665,13 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     color: red;
     text-align: center;
 
+    // Remove some of the default tile padding so that the error is centered
+    margin-right: 0;
+    .mx_EventTile_line {
+        padding-left: 0;
+        margin-right: 0;
+    }
+
     .mx_EventTile_line span {
         padding: 4px 8px;
     }
