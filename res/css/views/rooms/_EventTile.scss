@@ -310,6 +310,8 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 .mx_EventTile_readAvatars .mx_BaseAvatar {
     position: absolute;
     display: inline-block;
+    height: $font-14px;
+    width: $font-14px;
 }
 
 .mx_EventTile_readAvatarRemainder {
