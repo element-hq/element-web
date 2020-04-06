@@ -125,6 +125,7 @@
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.",
     "Only continue if you trust the owner of the server.": "Only continue if you trust the owner of the server.",
     "Trust": "Trust",
+    "%(name)s is requesting verification": "%(name)s is requesting verification",
     "Riot does not have permission to send you notifications - please check your browser settings": "Riot does not have permission to send you notifications - please check your browser settings",
     "Riot was not given permission to send notifications - please try again": "Riot was not given permission to send notifications - please try again",
     "Unable to enable Notifications": "Unable to enable Notifications",
