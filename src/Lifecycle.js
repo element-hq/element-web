@@ -637,6 +637,10 @@ async function _clearStorage() {
         window.localStorage.clear();
     }
 
+    if (window.sessionStorage) {
+        window.sessionStorage.clear();
+    }
+
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({
         // we'll never make any requests, so can pass a bogus HS URL
