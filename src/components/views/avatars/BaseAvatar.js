@@ -24,6 +24,7 @@ import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import toRem from "../../../utils/rem";
 
 export default createReactClass({
     displayName: 'BaseAvatar',
@@ -164,9 +165,9 @@ export default createReactClass({
             const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
                 <span className="mx_BaseAvatar_initial" aria-hidden="true"
-                    style={{ fontSize: (width * 0.65) / 15 + "rem",
-                    width: width / 15 + "rem",
-                    lineHeight: height / 15 + "rem" }}
+                    style={{ fontSize: toRem(width * 0.65),
+                    width: toRem(width),
+                    lineHeight: toRem(height) }}
                 >
                     { initialLetter }
                 </span>
@@ -176,8 +177,8 @@ export default createReactClass({
                     alt="" title={title} onError={this.onError}
                     aria-hidden="true"
                     style={{
-                        width: width/15 + "rem",
-                        height: height/15 + "rem"
+                        width: toRem(width),
+                        height: toRem(height)
                     }} />
             );
             if (onClick != null) {
@@ -207,8 +208,8 @@ export default createReactClass({
                     onClick={onClick}
                     onError={this.onError}
                     style={{
-                        width: width/15 + "rem",
-                        height: height/15 + "rem"
+                        width: toRem(width),
+                        height: toRem(height)
                     }}
                     title={title} alt=""
                     inputRef={inputRef}
@@ -221,8 +222,8 @@ export default createReactClass({
                     src={imageUrl}
                     onError={this.onError}
                     style={{
-                        width: width/15 + "rem",
-                        height: height/15 + "rem"
+                        width: toRem(width),
+                        height: toRem(height)
                     }}
                     title={title} alt=""
                     ref={inputRef}
