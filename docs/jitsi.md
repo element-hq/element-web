@@ -4,15 +4,15 @@ Riot uses [Jitsi](https://jitsi.org/) for conference calls, which provides optio
 self-hosting your own server and supports most major platforms.
 
 1:1 calls, or calls between you and one other person, do not use Jitsi. Instead, those
-calls work through a TURN server configured on your respective homeservers.
+calls work directly between clients or via TURN servers configured on the respective 
+homeservers.
 
 There's a number of ways to start a Jitsi call: the easiest way is to click on the 
 voice or video buttons near the message composer in a room with more than 2 people. This
 will add a Jitsi widget which allows anyone in the room to join.
 
 Integration managers (available through the 4 squares in the top right of the room) may
-provide their own approaches for adding Jitsi widgets, though these are now considered
-legacy and should only be used in specific circumstances.
+provide their own approaches for adding Jitsi widgets.
 
 ## Configuring Riot to use your self-hosted Jitsi server
 
@@ -44,4 +44,4 @@ domain will appear later in the URL as a configuration parameter.
 Currently the Riot mobile apps do not support custom Jitsi servers and will instead
 use the default `jitsi.riot.im` server. When users on the mobile apps join the call,
 they will be joining a different conference which has the same name, but not the same
-participants.
+participants. This is a known bug and which needs to be fixed.

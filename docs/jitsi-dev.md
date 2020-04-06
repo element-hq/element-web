@@ -50,7 +50,9 @@ communication layer with the client (all widgets *should* be talking to the clie
 over `postMessage`, even if they aren't going to be using the widget APIs).
 
 Widgets added with the `/addwidget` command will *not* be wrapped as they are not going
-through an integration manager.
+through an integration manager. The widgets themselves *should* also work outside of
+Riot. Widgets currently have a "pop out" button which opens them in a new tab and
+therefore have no connection back to Riot.
 
 ## Jitsi widgets from integration managers
 
@@ -67,7 +69,9 @@ will generate one for the user.
 
 When the user clicks on the call buttons by the composer, the integration manager is
 not involved in the slightest. Instead, Riot itself generates a widget event, this time
-using the config.json parameters, and publishes that to the room. 
+using the config.json parameters, and publishes that to the room. If there's only two
+people in the room, a plain WebRTC call is made instead of using a widget at all - these
+are defined in the Matrix specification.
 
 The Jitsi widget created by Riot uses a local `jitsi.html` wrapper (or one hosted by
 `https://riot.im/app` for desktop users or those on non-https domains) as the widget
