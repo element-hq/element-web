@@ -40,6 +40,7 @@ import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
+import {Jitsi} from "./widgets/Jitsi";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -603,6 +604,9 @@ async function startMatrixClient(startSyncing=true) {
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start();
+
+    // Now that we have a MatrixClientPeg, update the Jitsi info
+    await Jitsi.getInstance().update();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.

@@ -66,6 +66,7 @@ import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
 import {generateHumanReadableId} from "./utils/NamingUtils";
+import {Jitsi} from "./widgets/Jitsi";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -431,7 +432,7 @@ async function _startCallApp(roomId, type) {
     }
 
     const confId = `JitsiConference${generateHumanReadableId()}`;
-    const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
+    const jitsiDomain = Jitsi.getInstance().preferredDomain;
 
     let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
