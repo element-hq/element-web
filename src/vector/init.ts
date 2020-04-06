@@ -123,10 +123,17 @@ export async function loadSkin() {
     // the SDK until we have to in imports.
     console.log("Loading skin...");
     // load these async so that its code is not executed immediately and we can catch any exceptions
-    const {sdk, skin} = await import(
-        /* webpackChunkName: "skin" */
-        /* webpackPreload: true */
-        "./skin");
+    const [sdk, skin] = await Promise.all([
+        import(
+            /* webpackChunkName: "matrix-react-sdk" */
+            /* webpackPreload: true */
+            "matrix-react-sdk"),
+        import(
+            /* webpackChunkName: "riot-web-component-index" */
+            /* webpackPreload: true */
+            // @ts-ignore - this module is generated so may fail lint
+            "../component-index"),
+    ]);
     sdk.loadSkin(skin);
     console.log("Skin loaded!");
 }
