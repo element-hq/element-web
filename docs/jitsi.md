@@ -39,6 +39,16 @@ should start a new conference on your Jitsi server.
 **Note**: The widget URL will point to a `jitsi.html` page hosted by Riot. The Jitsi
 domain will appear later in the URL as a configuration parameter.
 
+**Hint**: If you want everyone on your homeserver to use the same Jitsi server by
+default, set the following on your homeserver's `/.well-known/matrix/client` config:
+```json
+{
+  "im.vector.riot.jitsi": {
+    "preferredDomain": "your.jitsi.example.org"
+  }
+}
+```
+
 ## Mobile app support
 
 Currently the Riot mobile apps do not support custom Jitsi servers and will instead
