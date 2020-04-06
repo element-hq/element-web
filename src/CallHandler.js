@@ -60,7 +60,6 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher';
-import SdkConfig from './SdkConfig';
 import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
