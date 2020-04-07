@@ -30,8 +30,9 @@ import * as rageshake from "matrix-react-sdk/src/rageshake/rageshake";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import sendBugReport from "matrix-react-sdk/src/rageshake/submit-rageshake";
 
-function initRageshake() {
-    rageshake.init().then(() => {
+export function initRageshake() {
+    const prom = rageshake.init();
+    prom.then(() => {
         console.log("Initialised rageshake.");
         console.log("To fix line numbers in Chrome: " +
             "Meatball menu → Settings → Blackboxing → Add /rageshake\\.js$");
@@ -46,9 +47,8 @@ function initRageshake() {
     }, (err) => {
         console.error("Failed to initialise rageshake: " + err);
     });
+    return prom;
 }
-
-initRageshake();
 
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
     if (withLogs === undefined) withLogs = true;

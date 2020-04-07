@@ -32,7 +32,7 @@ export function parseQsFromFragment(location: Location) {
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: {},
+        params: <qs.ParsedUrlQuery>{},
     };
 
     if (hashparts.length > 1) {
