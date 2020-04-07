@@ -1430,7 +1430,7 @@
     "Sign in instead": "Войдите, вместо этого",
     "Your password has been reset.": "Ваш пароль был сброшен.",
     "Set a new password": "Установить новый пароль",
-    "Invalid homeserver discovery response": "Неверное обнаружения сервера",
+    "Invalid homeserver discovery response": "Неверный ответ при попытке обнаружения домашнего сервера",
     "Failed to get autodiscovery configuration from server": "Не удалось получить конфигурацию автообнаружения с сервера",
     "Show recently visited rooms above the room list": "Показать недавно посещённые комнаты над списком комнат",
     "Invalid base_url for m.homeserver": "Неверный base_url для m.homeserver",
