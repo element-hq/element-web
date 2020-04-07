@@ -32,7 +32,7 @@ limitations under the License.
     }
 
     img {
-        width: 40px;
+        height: 48px;
     }
 
     h1 {
@@ -62,6 +62,7 @@ limitations under the License.
             position: relative;
             display: inline-block;
             border-radius: 8px;
+            vertical-align: top;
 
             font-weight: 600;
             font-size: $font-15px;
