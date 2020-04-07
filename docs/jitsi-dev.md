@@ -78,6 +78,9 @@ The Jitsi widget created by Riot uses a local `jitsi.html` wrapper (or one hoste
 `url`. The wrapper has some basic functionality for talking to Riot to ensure the
 required `postMessage` calls are fulfilled.
 
+**Note**: Per [jitsi.md](./jitsi.md) the `preferredDomain` can also come from the server's
+client .well-known data. 
+
 ## The Jitsi wrapper in Riot
 
 Whenever Riot sees a Jitsi widget, it ditches the `url` and instead replaces it with
@@ -92,3 +95,6 @@ call.
 Critically, when the widget URL is reconstructed it does *not* take into account the
 config.json's `preferredDomain` for Jitsi. If it did this, users would end up on different
 conference servers and therefore different calls entirely. 
+
+**Note**: Per [jitsi.md](./jitsi.md) the `preferredDomain` can also come from the server's
+client .well-known data.
