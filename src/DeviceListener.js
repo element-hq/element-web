@@ -90,8 +90,15 @@ export default class DeviceListener {
     }
 
     _onAccountData = (ev) => {
-        // User may have migrated SSSS to symmetric, in which case we can dismiss that toast
-        if (ev.getType().startsWith('m.secret_storage.key.')) {
+        // User may have:
+        // * migrated SSSS to symmetric
+        // * uploaded keys to secret storage
+        // * completed secret storage creation
+        // which result in account data changes affecting checks below.
+        if (
+            ev.getType().startsWith('m.secret_storage.') ||
+            ev.getType().startsWith('m.cross_signing.')
+        ) {
             this._recheck();
         }
     }
