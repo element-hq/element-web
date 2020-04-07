@@ -19,7 +19,9 @@
     "Invalid JSON": "Błędny JSON",
     "Your Riot is misconfigured": "Twój Riot jest źle skonfigurowany",
     "Unexpected error preparing the app. See console for details.": "Niespodziewany błąd podczas przygotowywania aplikacji. Otwórz konsolę po szczegóły.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Błędna konfiguracja. Można sprecyzować tylko jedno z: default_server_config, default_server_name, lub default_hs_url.",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Błędna konfiguracja. Akceptowalne wartości to: default_server_config, default_server_name, default_hs_url.",
     "Invalid configuration: no default server specified.": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Możesz użyć Niestandardowych Opcji Serwera by zalogować się do innych serwerów Matrix poprzez podanie URL innego serwera głównego. Dzięki temu możesz używać Riot z istniejącym kontem z innego serwera głównego."
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Możesz użyć Niestandardowych Opcji Serwera by zalogować się do innych serwerów Matrix poprzez podanie URL innego serwera głównego. Dzięki temu możesz używać Riot z istniejącym kontem z innego serwera głównego.",
+    "Open user settings": "Otwórz ustawienia użytkownika",
+    "Go to your browser to complete Sign In": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki"
 }
