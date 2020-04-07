@@ -578,9 +578,6 @@ async function startMatrixClient(startSyncing=true) {
     UserActivity.sharedInstance().start();
     TypingStore.sharedInstance().reset(); // just in case
     ToastStore.sharedInstance().reset();
-    if (!SettingsStore.getValue("lowBandwidth")) {
-        Presence.start();
-    }
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
@@ -603,6 +600,11 @@ async function startMatrixClient(startSyncing=true) {
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start();
+    // Similarly, don't start sending presence updates until we've started
+    // the client
+    if (!SettingsStore.getValue("lowBandwidth")) {
+        Presence.start();
+    }
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
