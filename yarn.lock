@@ -8969,6 +8969,13 @@ postcss-gap-properties@^2.0.0:
   dependencies:
     postcss "^7.0.2"
 
+postcss-hexrgba@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-hexrgba/-/postcss-hexrgba-2.0.0.tgz#1bdae7640047470b6935d8b0e5369f4acc987eb5"
+  integrity sha512-qZmURatbgathSg00kCAKG4h6iUwKnRbhMMWNN6V5u4NTKjuTplxi+CrhbHvQ8BNulTA4B51/RIWnNIoulJIDlg==
+  dependencies:
+    postcss "^7.0.14"
+
 postcss-html@^0.36.0:
   version "0.36.0"
   resolved "https://registry.yarnpkg.com/postcss-html/-/postcss-html-0.36.0.tgz#b40913f94eaacc2453fd30a1327ad6ee1f88b204"
