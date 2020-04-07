@@ -32,7 +32,6 @@ import sessionStore from '../../stores/SessionStore';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
-import { getHomePageUrl } from '../../utils/pages';
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -539,7 +538,6 @@ const LoggedInView = createReactClass({
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
-        const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
