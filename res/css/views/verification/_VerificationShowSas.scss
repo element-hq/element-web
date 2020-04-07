@@ -61,3 +61,21 @@ limitations under the License.
 .mx_VerificationShowSas_emojiSas_break {
     flex-basis: 100%;
 }
+
+.mx_VerificationShowSas {
+    .mx_Dialog_buttons {
+        // this is more specific than the DialogButtons css so gets preference
+        button.mx_VerificationShowSas_matchButton {
+            color: $accent-color;
+            background-color: $accent-bg-color;
+            border: none;
+        }
+
+        // this is more specific than the DialogButtons css so gets preference
+        button.mx_VerificationShowSas_noMatchButton {
+            color: $notice-primary-color;
+            background-color: $notice-primary-bg-color;
+            border: none;
+        }
+    }
+}
