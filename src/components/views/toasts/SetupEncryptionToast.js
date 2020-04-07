@@ -63,7 +63,9 @@ export default class SetupEncryptionToast extends React.PureComponent {
                 {}, null, /* priority = */ false, /* static = */ true);
         } else {
             const Spinner = sdk.getComponent("elements.Spinner");
-            const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+            const modal = Modal.createDialog(
+                Spinner, null, 'mx_Dialog_spinner', /* priority */ false, /* static */ true,
+            );
             try {
                 await accessSecretStorage();
                 await this._waitForCompletion();
