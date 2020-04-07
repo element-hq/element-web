@@ -124,21 +124,21 @@ export default class DevicesPanel extends React.Component {
             // pop up an interactive auth dialog
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
-            const singularDevice = this.state.selectedDevices.length === 1;
+            const numDevices = this.state.selectedDevices.length;
             const dialogAesthetics = {
                 [SSOAuthEntry.PHASE_PREAUTH]: {
                     title: _t("Use Single Sign On to continue"),
-                    body: singularDevice
-                        ? _t("Confirm deleting this session by using Single Sign On to prove your identity.")
-                        : _t("Confirm deleting these sessions by using Single Sign On to prove your identity."),
+                    body: _t("Confirm deleting these sessions by using Single Sign On to prove your identity.", {
+                        count: numDevices,
+                    }),
                     continueText: _t("Single Sign On"),
                     continueKind: "primary",
                 },
                 [SSOAuthEntry.PHASE_POSTAUTH]: {
                     title: _t("Confirm deleting these sessions"),
-                    body: singularDevice
-                        ? _t("Click the button below to confirm deleting this session.")
-                        : _t("Click the button below to confirm deleting these sessions."),
+                    body: _t("Click the button below to confirm deleting these sessions.", {
+                        count: numDevices,
+                    }),
                     continueText: _t("Delete sessions"),
                     continueKind: "danger",
                 },
