@@ -81,7 +81,9 @@ export default class CrossSigningPanel extends React.PureComponent {
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
         const selfSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"));
         const userSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"));
-        const sessionBackupKeyCached = !!(await cli._crypto.getSessionBackupPrivateKey());
+        const sessionBackupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
+        const sessionBackupKeyCached = !!(sessionBackupKeyFromCache);
+        const sessionBackupKeyWellFormed = sessionBackupKeyFromCache instanceof Uint8Array;
         const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
@@ -94,6 +96,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
             sessionBackupKeyCached,
+            sessionBackupKeyWellFormed,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -143,6 +146,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
             sessionBackupKeyCached,
+            sessionBackupKeyWellFormed,
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
@@ -208,6 +212,16 @@ export default class CrossSigningPanel extends React.PureComponent {
             );
         }
 
+        let sessionBackupKeyWellFormedText = "";
+        if (sessionBackupKeyCached) {
+            sessionBackupKeyWellFormedText = ", ";
+            if (sessionBackupKeyWellFormed) {
+                sessionBackupKeyWellFormedText += _t("well formed");
+            } else {
+                sessionBackupKeyWellFormedText += _t("unexpected type");
+            }
+        }
+
         return (
             <div>
                 {summarisedStatus}
@@ -232,7 +246,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>{_t("Session backup key:")}</td>
-                            <td>{sessionBackupKeyCached ? _t("cached locally") : _t("not found locally")}</td>
+                            <td>
+                                {sessionBackupKeyCached ? _t("cached locally") : _t("not found locally")}
+                                {sessionBackupKeyWellFormedText}
+                            </td>
                         </tr>
                         <tr>
                             <td>{_t("Secret storage public key:")}</td>
