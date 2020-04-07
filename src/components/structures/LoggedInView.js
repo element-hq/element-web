@@ -40,6 +40,7 @@ import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, CollapseDistributor} from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
+import HomePage from "./HomePage";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -577,13 +578,7 @@ const LoggedInView = createReactClass({
                 break;
 
             case PageTypes.HomePage:
-                {
-                    const pageUrl = getHomePageUrl(this.props.config);
-                    pageElement = <EmbeddedPage className="mx_HomePage"
-                        url={pageUrl}
-                        scrollbar={true}
-                    />;
-                }
+                pageElement = <HomePage />;
                 break;
 
             case PageTypes.UserView:
