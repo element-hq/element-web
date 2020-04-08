@@ -592,6 +592,8 @@
     "Cross-signing and secret storage are not yet set up.": "Cross-signing and secret storage are not yet set up.",
     "Reset cross-signing and secret storage": "Reset cross-signing and secret storage",
     "Bootstrap cross-signing and secret storage": "Bootstrap cross-signing and secret storage",
+    "well formed": "well formed",
+    "unexpected type": "unexpected type",
     "Cross-signing public keys:": "Cross-signing public keys:",
     "in memory": "in memory",
     "not found": "not found",
