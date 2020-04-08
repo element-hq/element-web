@@ -102,49 +102,60 @@ async function start() {
         /* webpackPreload: true */
         "./init");
 
-    await settled(rageshakePromise); // give rageshake a chance to load/fail
+    try {
+        await settled(rageshakePromise); // give rageshake a chance to load/fail
 
-    const fragparts = parseQsFromFragment(window.location);
+        const fragparts = parseQsFromFragment(window.location);
 
-    // don't try to redirect to the native apps if we're
-    // verifying a 3pid (but after we've loaded the config)
-    // or if the user is following a deep link
-    // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+        // don't try to redirect to the native apps if we're
+        // verifying a 3pid (but after we've loaded the config)
+        // or if the user is following a deep link
+        // (https://github.com/vector-im/riot-web/issues/7378)
+        const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
 
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location.href = "mobile_guide/";
-                return;
+        if (!preventRedirect) {
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+            if (isIos || isAndroid) {
+                if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+                    window.location.href = "mobile_guide/";
+                    return;
+                }
             }
         }
-    }
 
-    const loadOlmPromise = loadOlm();
-    // set the platform for react sdk
-    preparePlatform();
-    // load config requires the platform to be ready
-    const loadConfigPromise = loadConfig();
+        const loadOlmPromise = loadOlm();
+        // set the platform for react sdk
+        preparePlatform();
+        // load config requires the platform to be ready
+        const loadConfigPromise = loadConfig();
 
-    // await config here
-    const configError = await loadConfigPromise;
-    // Load language after loading config.json so that settingsDefaults.language can be applied
-    const loadLanguagePromise = loadLanguage();
-    // as quickly as we possibly can, set a default theme...
-    const loadThemePromise = loadTheme();
-    const loadSkinPromise = loadSkin();
+        let configError;
+        try {
+            // await config here
+            await loadConfigPromise;
+        } catch (err) {
+            configError = err;
+        }
 
-    // await things starting successfully
-    await loadOlmPromise;
-    await settled(loadSkinPromise);
-    await loadThemePromise;
-    await loadLanguagePromise;
+        // Load language after loading config.json so that settingsDefaults.language can be applied
+        const loadLanguagePromise = loadLanguage();
+        // as quickly as we possibly can, set a default theme...
+        const loadThemePromise = loadTheme();
+        const loadSkinPromise = loadSkin();
+
+        // await things starting successfully
+        await loadOlmPromise;
+        await settled(loadSkinPromise);
+        await loadThemePromise;
+        await loadLanguagePromise;
 
     // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
     // run on the components.
     await loadApp(fragparts.params, acceptBrowser, configError);
 }
-start();
+start().catch(err => {
+    if (!acceptBrowser) {
+        alert("Incompatible browser");
+    }
+});

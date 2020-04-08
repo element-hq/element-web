@@ -47,20 +47,11 @@ export function preparePlatform() {
 }
 
 export async function loadConfig(): Promise<Error | void> {
-    const platform = PlatformPeg.get();
-
-    let configJson;
-    try {
-        configJson = await platform.getConfig();
-    } catch (e) {
-        return e;
-    } finally {
-        // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-        // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-        //
-        // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-        SdkConfig.put(configJson || {});
-    }
+    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
+    //
+    // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
+    SdkConfig.put(PlatformPeg.get().getConfig() || {});
 }
 
 export function loadOlm(): Promise<void> {
