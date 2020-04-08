@@ -144,8 +144,6 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
 
     window.addEventListener('hashchange', onHashChange);
 
-    // set the platform for react sdk
-    preparePlatform();
     const platform = PlatformPeg.get();
 
     // Load the config from the platform

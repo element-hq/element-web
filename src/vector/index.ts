@@ -21,6 +21,8 @@ limitations under the License.
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
+import {preparePlatform} from "./init";
+
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
@@ -81,7 +83,7 @@ function checkBrowserFeatures() {
 // try in react but fallback to an `alert`
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
-    const {rageshakePromise, loadOlm, loadSkin, loadApp} = await import(
+    const {rageshakePromise, preparePlatform, loadOlm, loadSkin, loadApp} = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init");
@@ -108,6 +110,9 @@ async function start() {
             }
         }
     }
+
+    // set the platform for react sdk
+    preparePlatform();
 
     await loadSkin();
 
