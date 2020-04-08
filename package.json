@@ -68,7 +68,7 @@
     "favico.js": "^0.3.10",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-js-sdk": "5.3.0-rc.1",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
