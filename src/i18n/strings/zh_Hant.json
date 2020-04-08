@@ -2335,5 +2335,14 @@
     "You cancelled verification on your other session.": "您已在其他工作階段取消驗證。",
     "%(displayName)s cancelled verification.": "%(displayName)s 取消驗證。",
     "You cancelled verification.": "您取消了驗證。",
-    "Self-verification request": "自我驗證請求"
+    "Self-verification request": "自我驗證請求",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|other": "透過使用單一登入系統來證明您的身份以確認刪除這些工作階段。",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "透過使用單一登入系統來證明您的身份以確認刪除此工作階段。",
+    "Click the button below to confirm deleting these sessions.|other": "點擊下方按鈕以確認刪除這些工作階段。",
+    "Click the button below to confirm deleting these sessions.|one": "點擊下方按鈕以確認刪除此工作階段。",
+    "Welcome to %(appName)s": "歡迎使用 %(appName)s",
+    "Liberate your communication": "讓您的通訊自由",
+    "Send a Direct Message": "傳送直接訊息",
+    "Explore Public Rooms": "探索公開聊天室",
+    "Create a Group Chat": "建立群組聊天"
 }
