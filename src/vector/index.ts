@@ -191,17 +191,13 @@ async function start() {
         // run on the components.
         await loadApp(fragparts.params);
     } catch (err) {
-        console.trace(err);
-        const { showError } = await import(
-            /* webpackChunkName: "init" */
-            /* webpackPreload: true */
-            "./init");
+        console.error(err);
         await showError(err);
     }
 }
 start().catch(err => {
     console.error(err);
     if (!acceptBrowser) {
-        alert("Incompatible browser");
+        // TODO redirect to static incompatible browser page
     }
 });
