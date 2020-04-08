@@ -24,6 +24,7 @@ import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
+import SettingsStore from "../../../settings/SettingsStore";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -35,6 +36,7 @@ export default createReactClass({
         const config = SdkConfig.get();
         return {
             isPublic: false,
+            isEncrypted: true,
             name: "",
             topic: "",
             alias: "",
@@ -62,6 +64,11 @@ export default createReactClass({
         if (this.state.noFederate) {
             createOpts.creation_content = {'m.federate': false};
         }
+
+        if (!this.state.isPublic && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            createOpts.encryption = this.state.isEncrypted;
+        }
+
         return opts;
     },
 
@@ -127,6 +134,10 @@ export default createReactClass({
         this.setState({isPublic});
     },
 
+    onEncryptedChange(isEncrypted) {
+        this.setState({isEncrypted});
+    },
+
     onAliasChange(alias) {
         this.setState({alias});
     },
@@ -181,6 +192,14 @@ export default createReactClass({
             privateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
         }
 
+        let e2eeSection;
+        if (!this.state.isPublic && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            e2eeSection = <React.Fragment>
+                <LabelledToggleSwitch label={ _t("Enable end-to-end encryption")} onChange={this.onEncryptedChange} value={this.state.isEncrypted} />
+                { _t("Bridges and most bots will not function in end-to-end encrypted rooms.") }
+            </React.Fragment>;
+        }
+
         const title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
@@ -191,6 +210,7 @@ export default createReactClass({
                         <Field ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
                         <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
                         <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
+                        { e2eeSection }
                         { privateLabel }
                         { publicLabel }
                         { aliasField }
