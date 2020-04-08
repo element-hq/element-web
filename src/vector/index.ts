@@ -131,6 +131,28 @@ async function start() {
         preparePlatform();
         // load config requires the platform to be ready
         const loadConfigPromise = loadConfig();
+        await settled(loadConfigPromise); // wait for it to settle
+        // keep initialising so that we can show any possible error with as many features (theme, i18n) as possible
+
+        // Load language after loading config.json so that settingsDefaults.language can be applied
+        const loadLanguagePromise = loadLanguage();
+        // as quickly as we possibly can, set a default theme...
+        const loadThemePromise = loadTheme();
+        const loadSkinPromise = loadSkin();
+
+        // await things settling so that any errors we have to render have features like i18n running
+        await settled(loadSkinPromise);
+        await settled(loadThemePromise);
+        await settled(loadLanguagePromise);
+
+        // ##########################
+        // error handling begins here
+        // ##########################
+        if (!acceptBrowser) {
+            await new Promise(resolve => {
+                // todo
+            });
+        }
 
         try {
             // await config here
@@ -146,33 +168,20 @@ async function start() {
             return showError(_t("Unable to load config file: please refresh the page to try again."));
         }
 
-        // Load language after loading config.json so that settingsDefaults.language can be applied
-        const loadLanguagePromise = loadLanguage();
-        // as quickly as we possibly can, set a default theme...
-        const loadThemePromise = loadTheme();
-        const loadSkinPromise = loadSkin();
-
+        // ##################################
+        // app load critical path starts here
         // await things starting successfully
+        // ##################################
         await loadOlmPromise;
         await settled(loadSkinPromise);
         await loadThemePromise;
         await loadLanguagePromise;
-
-        if (!acceptBrowser) {
-            await new Promise(resolve => {
-                // todo
-            });
-        }
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
         await loadApp(fragparts.params, acceptBrowser);
     } catch (err) {
         console.trace(err);
-        // check errors in this order:
-        // Browser Compatibility (skippable)
-        // config.json
-        // runtime errors
         const { showError } = await import(
             /* webpackChunkName: "init" */
             /* webpackPreload: true */
@@ -181,6 +190,7 @@ async function start() {
     }
 }
 start().catch(err => {
+    console.error(err);
     if (!acceptBrowser) {
         alert("Incompatible browser");
     }

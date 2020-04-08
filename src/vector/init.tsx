@@ -150,15 +150,7 @@ export async function showError(title: string, messages?: string[]) {
         /* webpackChunkName: "error-view" */
         /* webpackPreload: true */
         "../components/structures/ErrorView")).default;
-    const message = <div>
-        {messages && messages.map(msg => <p key={msg}>
-            {languageHandler._t(
-                "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.",
-            )}
-        </p>)}
-    </div>;
-
-    window.matrixChat = ReactDOM.render(<ErrorView title={title} message={message} />,
+    window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
         document.getElementById('matrixchat'));
 }
 

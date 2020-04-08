@@ -17,23 +17,29 @@ limitations under the License.
 import * as React from "react";
 import * as PropTypes from "prop-types";
 
+import { _t } from "matrix-react-sdk/src/languageHandler";
+
 interface IProps {
-    title: React.ReactNode;
-    message: React.ReactNode;
+    title: string;
+    messages?: string[];
 }
 
-const ErrorView: React.FC<IProps> = ({title, message}) => {
+const ErrorView: React.FC<IProps> = ({title, messages}) => {
     return <div className="mx_GenericErrorPage">
         <div className="mx_GenericErrorPage_box">
-            <h1>{ title }</h1>
-            <p>{ message }</p>
+            <h1>{title}</h1>
+            <div>
+                {messages && messages.map(msg => <p key={msg}>
+                    { _t(msg) }
+                </p>)}
+            </div>
         </div>
     </div>;
 };
 
 ErrorView.propTypes = {
-    title: PropTypes.object.isRequired, // jsx for title
-    message: PropTypes.object.isRequired, // jsx to display
+    title: PropTypes.string.isRequired,
+    messages: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default ErrorView;
