@@ -77,6 +77,10 @@ limitations under the License.
         width: 450px;
     }
 
+    .mx_Dialog_content {
+        margin-bottom: 40px;
+    }
+
     p,
     .mx_Field_input label {
         color: $muted-fg-color;
@@ -102,11 +106,12 @@ limitations under the License.
     }
 
     .mx_Dialog_content > .mx_SettingsFlag {
-        margin-top: 20px;
+        margin-top: 12px;
     }
 
     p {
         margin: 0 85px 0 0;
+        font-size: $font-12px;
         line-height: $font-24px;
     }
 }

@@ -195,7 +195,7 @@ export default createReactClass({
         if (!this.state.isPublic && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch label={ _t("Enable end-to-end encryption")} onChange={this.onEncryptedChange} value={this.state.isEncrypted} />
-                <p>{ _t("You can’t disable this later. Bridges & most bots currently won’t work.") }</p>
+                <p>{ _t("You can’t disable this later. Bridges & most bots won’t work yet.") }</p>
             </React.Fragment>;
         }
 
