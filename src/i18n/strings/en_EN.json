@@ -1556,7 +1556,7 @@
     "Set a room alias to easily share your room with other people.": "Set a room alias to easily share your room with other people.",
     "This room is private, and can only be joined by invitation.": "This room is private, and can only be joined by invitation.",
     "Enable end-to-end encryption": "Enable end-to-end encryption",
-    "Bridges and most bots will not function in end-to-end encrypted rooms.": "Bridges and most bots will not function in end-to-end encrypted rooms.",
+    "You can’t disable this later. Bridges & most bots currently won’t work.": "You can’t disable this later. Bridges & most bots currently won’t work.",
     "Create a public room": "Create a public room",
     "Create a private room": "Create a private room",
     "Name": "Name",

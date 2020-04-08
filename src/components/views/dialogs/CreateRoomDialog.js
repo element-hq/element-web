@@ -177,11 +177,10 @@ export default createReactClass({
         const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
         const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
 
-        let privateLabel;
-        let publicLabel;
+        let publicPrivateLabel;
         let aliasField;
         if (this.state.isPublic) {
-            publicLabel = (<p>{_t("Set a room alias to easily share your room with other people.")}</p>);
+            publicPrivateLabel = (<p>{_t("Set a room alias to easily share your room with other people.")}</p>);
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
@@ -189,14 +188,14 @@ export default createReactClass({
                 </div>
             );
         } else {
-            privateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
+            publicPrivateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
         }
 
         let e2eeSection;
         if (!this.state.isPublic && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch label={ _t("Enable end-to-end encryption")} onChange={this.onEncryptedChange} value={this.state.isEncrypted} />
-                { _t("Bridges and most bots will not function in end-to-end encrypted rooms.") }
+                <p>{ _t("You can’t disable this later. Bridges & most bots currently won’t work.") }</p>
             </React.Fragment>;
         }
 
@@ -208,11 +207,10 @@ export default createReactClass({
                 <form onSubmit={this.onOk} onKeyDown={this._onKeyDown}>
                     <div className="mx_Dialog_content">
                         <Field ref={ref => this._nameFieldRef = ref} label={ _t('Name') } onChange={this.onNameChange} onValidate={this.onNameValidate} value={this.state.name} className="mx_CreateRoomDialog_name" />
-                        <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} />
+                        <Field label={ _t('Topic (optional)') } onChange={this.onTopicChange} value={this.state.topic} className="mx_CreateRoomDialog_topic" />
                         <LabelledToggleSwitch label={ _t("Make this room public")} onChange={this.onPublicChange} value={this.state.isPublic} />
+                        { publicPrivateLabel }
                         { e2eeSection }
-                        { privateLabel }
-                        { publicLabel }
                         { aliasField }
                         <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
