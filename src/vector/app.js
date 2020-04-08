@@ -126,7 +126,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
+export async function loadApp(fragParams: {}) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -148,45 +148,35 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
 
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (acceptBrowser) {
-        platform.startUpdater();
 
-        try {
-            // Don't bother loading the app until the config is verified
-            const config = await verifyServerConfig();
-            const MatrixChat = sdk.getComponent('structures.MatrixChat');
-            return <MatrixChat
-                onNewScreen={onNewScreen}
-                makeRegistrationUrl={makeRegistrationUrl}
-                ConferenceHandler={VectorConferenceHandler}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParams}
-                enableGuest={!config.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-            />;
-        } catch (err) {
-            console.error(err);
+    platform.startUpdater();
 
-            let errorMessage = err.translatedMessage
-                || _t("Unexpected error preparing the app. See console for details.");
-            errorMessage = <span>{errorMessage}</span>;
+    try {
+        // Don't bother loading the app until the config is verified
+        const config = await verifyServerConfig();
+        const MatrixChat = sdk.getComponent('structures.MatrixChat');
+        return <MatrixChat
+            onNewScreen={onNewScreen}
+            makeRegistrationUrl={makeRegistrationUrl}
+            ConferenceHandler={VectorConferenceHandler}
+            config={config}
+            realQueryParams={params}
+            startingFragmentQueryParams={fragParams}
+            enableGuest={!config.disable_guests}
+            onTokenLoginCompleted={onTokenLoginCompleted}
+            initialScreenAfterLogin={getScreenFromLocation(window.location)}
+            defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+        />;
+    } catch (err) {
+        console.error(err);
 
-            // Like the compatibility page, AWOOOOOGA at the user
-            const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-            return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
-        }
-    } else {
-        console.error("Browser is missing required features.");
-        // take to a different landing page to AWOOOOOGA at the user
-        const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
-        return <CompatibilityPage onAccept={function() {
-            if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-            console.log("User accepts the compatibility risks.");
-            loadApp();
-        }} />;
+        let errorMessage = err.translatedMessage
+            || _t("Unexpected error preparing the app. See console for details.");
+        errorMessage = <span>{errorMessage}</span>;
+
+        // Like the compatibility page, AWOOOOOGA at the user
+        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
+        return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
     }
 }
 

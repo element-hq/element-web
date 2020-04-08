@@ -100,6 +100,7 @@ async function start() {
         loadTheme,
         loadApp,
         showError,
+        showIncompatibleBrowser,
         _t,
     } = await import(
         /* webpackChunkName: "init" */
@@ -148,9 +149,18 @@ async function start() {
         // ##########################
         // error handling begins here
         // ##########################
+        console.log("DEBUG", acceptBrowser);
         if (!acceptBrowser) {
             await new Promise(resolve => {
-                // todo
+                console.error("Browser is missing required features.");
+                // take to a different landing page to AWOOOOOGA at the user
+                showIncompatibleBrowser(() => {
+                    if (window.localStorage) {
+                        window.localStorage.setItem('mx_accepts_unsupported_browser', String(true));
+                    }
+                    console.log("User accepts the compatibility risks.");
+                    resolve();
+                });
             });
         }
 
@@ -170,7 +180,7 @@ async function start() {
 
         // ##################################
         // app load critical path starts here
-        // await things starting successfully
+        // assert things started successfully
         // ##################################
         await loadOlmPromise;
         await loadSkinPromise;
@@ -179,7 +189,7 @@ async function start() {
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
-        await loadApp(fragparts.params, acceptBrowser);
+        await loadApp(fragparts.params);
     } catch (err) {
         console.trace(err);
         const { showError } = await import(

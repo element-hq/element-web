@@ -135,13 +135,13 @@ export async function loadTheme() {
     setTheme();
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
+export async function loadApp(fragParams: {}) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "riot-web-app" */
         /* webpackPreload: true */
         "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams, acceptBrowser),
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
         document.getElementById('matrixchat'));
 }
 
@@ -151,6 +151,15 @@ export async function showError(title: string, messages?: string[]) {
         /* webpackPreload: true */
         "../components/structures/ErrorView")).default;
     window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
+        document.getElementById('matrixchat'));
+}
+
+export async function showIncompatibleBrowser(onAccept) {
+    const CompatibilityPage = (await import(
+        /* webpackChunkName: "compatibility-page" */
+        /* webpackPreload: true */
+        "matrix-react-sdk/src/components/structures/CompatibilityPage")).default;
+    window.matrixChat = ReactDOM.render(<CompatibilityPage onAccept={onAccept} />,
         document.getElementById('matrixchat'));
 }
 
