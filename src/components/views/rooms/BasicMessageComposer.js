@@ -94,8 +94,7 @@ export default class BasicMessageEditor extends React.Component {
         this._emoticonSettingHandle = null;
     }
 
-    // TODO: [REACT-WARNING] Move into better lifecycle position
-    UNSAFE_componentWillUpdate(prevProps) { // eslint-disable-line camelcase
+    componentDidUpdate(prevProps) {
         if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
