@@ -46,12 +46,12 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<Error | void> {
+export async function loadConfig() {
     // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(PlatformPeg.get().getConfig() || {});
+    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
 }
 
 export function loadOlm(): Promise<void> {
