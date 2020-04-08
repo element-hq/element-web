@@ -90,7 +90,6 @@ async function start() {
 
     await settled(rageshakePromise); // give rageshake a chance to load/fail
 
-    const loadOlmPromise = loadOlm();
 
     const fragparts = parseQsFromFragment(window.location);
 
@@ -113,6 +112,8 @@ async function start() {
 
     // set the platform for react sdk
     preparePlatform();
+
+    const loadOlmPromise = loadOlm();
 
     await loadSkin();
 
