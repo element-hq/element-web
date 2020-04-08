@@ -33,11 +33,13 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
-async function settled(prom: Promise<any>) {
-    try {
-        await prom;
-    } catch (e) {
-        console.error(e);
+async function settled(...promises: Array<Promise<any>>) {
+    for (const prom of promises) {
+        try {
+            await prom;
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 
@@ -141,9 +143,7 @@ async function start() {
         const loadSkinPromise = loadSkin();
 
         // await things settling so that any errors we have to render have features like i18n running
-        await settled(loadSkinPromise);
-        await settled(loadThemePromise);
-        await settled(loadLanguagePromise);
+        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
 
         // ##########################
         // error handling begins here
@@ -173,7 +173,7 @@ async function start() {
         // await things starting successfully
         // ##################################
         await loadOlmPromise;
-        await settled(loadSkinPromise);
+        await loadSkinPromise;
         await loadThemePromise;
         await loadLanguagePromise;
 
