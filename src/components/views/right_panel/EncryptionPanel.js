@@ -32,7 +32,7 @@ import {_t} from "../../../languageHandler";
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
 const EncryptionPanel = (props) => {
-    const {verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted, inDialog} = props;
+    const {verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted} = props;
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
     // before we have a request
@@ -133,7 +133,7 @@ const EncryptionPanel = (props) => {
                 isSelfVerification={isSelfVerification}
                 waitingForOtherParty={requested && initiatedByMe}
                 waitingForNetwork={requested && !initiatedByMe}
-                inDialog={inDialog} />
+                inDialog={layout === "dialog"} />
         </React.Fragment>);
     } else {
         return (<React.Fragment>
@@ -145,7 +145,7 @@ const EncryptionPanel = (props) => {
                 member={member}
                 request={request}
                 key={request.channel.transactionId}
-                inDialog={inDialog}
+                inDialog={layout === "dialog"}
                 phase={phase}
                 device={device} />
         </React.Fragment>);
