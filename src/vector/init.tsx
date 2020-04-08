@@ -21,6 +21,7 @@ limitations under the License.
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
 import * as ReactDOM from "react-dom";
+import * as React from "react";
 
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -134,12 +135,31 @@ export async function loadTheme() {
     setTheme();
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error|void) {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "riot-web-app" */
         /* webpackPreload: true */
         "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams, acceptBrowser, configError),
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams, acceptBrowser),
         document.getElementById('matrixchat'));
 }
+
+export async function showError(title: string, messages?: string[]) {
+    const ErrorView = (await import(
+        /* webpackChunkName: "error-view" */
+        /* webpackPreload: true */
+        "../components/structures/ErrorView")).default;
+    const message = <div>
+        {messages && messages.map(msg => <p key={msg}>
+            {languageHandler._t(
+                "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.",
+            )}
+        </p>)}
+    </div>;
+
+    window.matrixChat = ReactDOM.render(<ErrorView title={title} message={message} />,
+        document.getElementById('matrixchat'));
+}
+
+export const _t = languageHandler._t;

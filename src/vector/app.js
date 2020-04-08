@@ -126,7 +126,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error|void) {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -146,36 +146,9 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean, configErro
 
     const params = parseQs(window.location);
 
-    // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configError && configError.err && configError.err instanceof SyntaxError) {
-        const errorMessage = (
-            <div>
-                <p>
-                    {_t(
-                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
-                        "and reload the page.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "The message from the parser is: %(message)s",
-                        {message: configError.err.message || _t("Invalid JSON")},
-                    )}
-                </p>
-            </div>
-        );
-
-        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-        return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
-    }
-
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configError) {
-        return <div className="error">
-            Unable to load config file: please refresh the page to try again.
-        </div>;
-    } else if (acceptBrowser) {
+    if (acceptBrowser) {
         platform.startUpdater();
 
         try {

@@ -97,6 +97,8 @@ async function start() {
         loadLanguage,
         loadTheme,
         loadApp,
+        showError,
+        _t,
     } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
@@ -130,12 +132,18 @@ async function start() {
         // load config requires the platform to be ready
         const loadConfigPromise = loadConfig();
 
-        let configError;
         try {
             // await config here
             await loadConfigPromise;
-        } catch (err) {
-            configError = err;
+        } catch (error) {
+            // Now that we've loaded the theme (CSS), display the config syntax error if needed.
+            if (error.err && error.err instanceof SyntaxError) {
+                return showError(_t("Your Riot is misconfigured"), [
+                    _t("Your Riot configuration contains invalid JSON. Please correct the problem and reload the page."),
+                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON")}),
+                ]);
+            }
+            return showError(_t("Unable to load config file: please refresh the page to try again."));
         }
 
         // Load language after loading config.json so that settingsDefaults.language can be applied
@@ -150,9 +158,27 @@ async function start() {
         await loadThemePromise;
         await loadLanguagePromise;
 
-    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-    // run on the components.
-    await loadApp(fragparts.params, acceptBrowser, configError);
+        if (!acceptBrowser) {
+            await new Promise(resolve => {
+                // todo
+            });
+        }
+
+        // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+        // run on the components.
+        await loadApp(fragparts.params, acceptBrowser);
+    } catch (err) {
+        console.trace(err);
+        // check errors in this order:
+        // Browser Compatibility (skippable)
+        // config.json
+        // runtime errors
+        const { showError } = await import(
+            /* webpackChunkName: "init" */
+            /* webpackPreload: true */
+            "./init");
+        await showError(err);
+    }
 }
 start().catch(err => {
     if (!acceptBrowser) {
