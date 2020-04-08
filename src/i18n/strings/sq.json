@@ -2325,5 +2325,16 @@
     "You cancelled verification.": "Anuluat verifikimin.",
     "Sign in with SSO": "Hyni me HNj",
     "Self-verification request": "Kërkesë vetë-verifikimi",
-    "Cancel replying to a message": "Anulo përgjigjen te një mesazh"
+    "Cancel replying to a message": "Anulo përgjigjen te një mesazh",
+    "%(name)s is requesting verification": "%(name)s po kërkon verifikim",
+    "unexpected type": "lloj i papritur",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|other": "Ripohoni fshirjen e këtyre sesioneve duke përdorur Hyrje Njëshe për të dëshmuar identitetin tuaj.",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "Ripohoni fshirjen e këtij sesioni duke përdorur Hyrje Njëshe për të dëshmuar identitetin tuaj.",
+    "Click the button below to confirm deleting these sessions.|other": "Klikoni butonin më poshtë që të ripohoni fshirjen e këtyre sesioneve.",
+    "Click the button below to confirm deleting these sessions.|one": "Klikoni mbi butonin më poshtë që të ripohoni fshirjen e këtij sesioni.",
+    "Welcome to %(appName)s": "Mirë se vini te %(appName)s",
+    "Liberate your communication": "Çlironi komunikimin tuaj",
+    "Send a Direct Message": "Dërgoni Mesazh të Drejtpërdrejtë",
+    "Explore Public Rooms": "Eksploroni Dhoma Publike",
+    "Create a Group Chat": "Krijoni një Fjalosje Grupi"
 }
