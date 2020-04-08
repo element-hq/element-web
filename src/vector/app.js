@@ -37,10 +37,8 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
-import {loadConfig, preparePlatform, loadLanguage} from "./init";
 
 let lastLocationHashSet = null;
 
@@ -128,7 +126,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error) {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error|void) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -146,13 +144,7 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean, configErro
 
     const platform = PlatformPeg.get();
 
-    // Load language after loading config.json so that settingsDefaults.language can be applied
-    await loadLanguage();
-
     const params = parseQs(window.location);
-
-    // as quickly as we possibly can, set a default theme...
-    await setTheme();
 
     // Now that we've loaded the theme (CSS), display the config syntax error if needed.
     if (configError && configError.err && configError.err instanceof SyntaxError) {

@@ -21,8 +21,6 @@ limitations under the License.
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-import {loadConfig, preparePlatform} from "./init";
-
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
@@ -83,7 +81,16 @@ function checkBrowserFeatures() {
 // try in react but fallback to an `alert`
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
-    const {rageshakePromise, preparePlatform, loadOlm, loadSkin, loadApp} = await import(
+    const {
+        rageshakePromise,
+        preparePlatform,
+        loadOlm,
+        loadConfig,
+        loadSkin,
+        loadLanguage,
+        loadTheme,
+        loadApp,
+    } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init");
@@ -110,11 +117,11 @@ async function start() {
         }
     }
 
+    const loadOlmPromise = loadOlm();
     // set the platform for react sdk
     preparePlatform();
     // load config requires the platform to be ready
     const loadConfigPromise = loadConfig();
-    const loadOlmPromise = loadOlm();
 
     await loadSkin();
 
@@ -123,11 +130,17 @@ async function start() {
         acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
     }
 
+    // await config here
+    const configError = await loadConfigPromise;
+    // Load language after loading config.json so that settingsDefaults.language can be applied
+    const loadLanguagePromise = loadLanguage();
+    // as quickly as we possibly can, set a default theme...
+    const loadThemePromise = loadTheme();
+
     // await things starting successfully
     await loadOlmPromise;
-
-
-    const configError = await loadConfigPromise;
+    await loadThemePromise;
+    await loadLanguagePromise;
 
     // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
     // run on the components.

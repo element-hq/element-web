@@ -28,6 +28,7 @@ import ElectronPlatform from "./platform/ElectronPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import {setTheme} from "matrix-react-sdk/src/theme";
 
 import { initRageshake } from "./rageshakesetup";
 
@@ -138,7 +139,11 @@ export async function loadSkin() {
     console.log("Skin loaded!");
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error) {
+export async function loadTheme() {
+    setTheme();
+}
+
+export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error|void) {
     // load app.js async so that its code is not executed immediately and we can catch any exceptions
     const module = await import(
         /* webpackChunkName: "riot-web-app" */
