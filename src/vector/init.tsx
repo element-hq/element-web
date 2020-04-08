@@ -36,7 +36,7 @@ import { initRageshake } from "./rageshakesetup";
 export const rageshakePromise = initRageshake();
 
 export function preparePlatform() {
-    if ((<any>window).ipcRenderer) {
+    if (window.ipcRenderer) {
         console.log("Using Electron platform");
         const plaf = new ElectronPlatform();
         PlatformPeg.set(plaf);

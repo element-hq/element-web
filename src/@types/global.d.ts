@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {ReactNode} from "react";
 import "modernizr";
+import {Renderer} from "react-dom";
 
 declare global {
     interface Window {
@@ -25,7 +25,10 @@ declare global {
         };
 
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
-        matrixChat: ReactNode;
+        matrixChat: ReturnType<Renderer>;
+
+        // electron-only
+        ipcRenderer: any;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
