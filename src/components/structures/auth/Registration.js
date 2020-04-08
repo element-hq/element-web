@@ -244,8 +244,7 @@ export default createReactClass({
         };
         try {
             await this._makeRegisterRequest(null);
-            // This should never succeed since we specified an empty
-            // auth object.
+            // This should never succeed since we're doing UIA
             console.log("Expecting 401 from register request but got success!");
         } catch (e) {
             if (e.httpStatus === 401) {
