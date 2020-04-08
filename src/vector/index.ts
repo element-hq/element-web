@@ -21,7 +21,7 @@ limitations under the License.
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-import {preparePlatform} from "./init";
+import {loadConfig, preparePlatform} from "./init";
 
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
@@ -112,7 +112,8 @@ async function start() {
 
     // set the platform for react sdk
     preparePlatform();
-
+    // load config requires the platform to be ready
+    const loadConfigPromise = loadConfig();
     const loadOlmPromise = loadOlm();
 
     await loadSkin();
@@ -125,8 +126,11 @@ async function start() {
     // await things starting successfully
     await loadOlmPromise;
 
+
+    const configError = await loadConfigPromise;
+
     // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
     // run on the components.
-    await loadApp(fragparts.params, acceptBrowser);
+    await loadApp(fragparts.params, acceptBrowser, configError);
 }
 start();

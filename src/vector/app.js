@@ -128,7 +128,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
+export async function loadApp(fragParams: {}, acceptBrowser: boolean, configError: Error) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -145,9 +145,6 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
     window.addEventListener('hashchange', onHashChange);
 
     const platform = PlatformPeg.get();
-
-    // Load the config from the platform
-    const configError = await loadConfig();
 
     // Load language after loading config.json so that settingsDefaults.language can be applied
     await loadLanguage();
