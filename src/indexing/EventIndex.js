@@ -530,6 +530,10 @@ export default class EventIndex extends EventEmitter {
                                 "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
+                    if (eventsAlreadyAdded === true) {
+                        console.log("EventIndex: Checkpoint had already all events",
+                                    "added, but continuing due to a full crawl", checkpoint);
+                    }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
