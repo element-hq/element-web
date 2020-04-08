@@ -136,22 +136,21 @@ export default class AppTile extends React.Component {
      * If url can not be parsed, it is returned unmodified.
      */
     _addWurlParams(urlString) {
-        const u = url.parse(urlString);
-        if (!u) {
-            console.error("_addWurlParams", "Invalid URL", urlString);
-            return url;
+        try {
+            const parsed = new URL(urlString);
+
+            // TODO: Replace these with proper widget params
+            // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
+            parsed.searchParams.set('widgetId', this.props.app.id);
+            parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
+
+            // Replace the encoded dollar signs back to dollar signs. They have no special meaning
+            // in HTTP, but URL parsers encode them anyways.
+            return parsed.toString().replace(/%24/g, '$');
+        } catch (e) {
+            console.error("Failed to add widget URL params:", e);
+            return urlString;
         }
-
-        const params = qs.parse(u.query);
-        // Append widget ID to query parameters
-        params.widgetId = this.props.app.id;
-        // Append current / parent URL, minus the hash because that will change when
-        // we view a different room (ie. may change for persistent widgets)
-        params.parentUrl = window.location.href.split('#', 2)[0];
-        u.search = undefined;
-        u.query = params;
-
-        return u.format();
     }
 
     isMixedContent() {
