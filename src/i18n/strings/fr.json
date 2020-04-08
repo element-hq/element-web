@@ -2336,5 +2336,14 @@
     "You cancelled verification on your other session.": "Vous avez annulé la vérification dans votre autre session.",
     "%(displayName)s cancelled verification.": "%(displayName)s a annulé la vérification.",
     "You cancelled verification.": "Vous avez annulé la vérification.",
-    "Self-verification request": "Demande d’auto-vérification"
+    "Self-verification request": "Demande d’auto-vérification",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|other": "Confirmez la suppression de ces sessions en utilisant l’authentification unique pour prouver votre identité.",
+    "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "Confirmez la suppression de cette session en utilisant l’authentification unique pour prouver votre identité.",
+    "Click the button below to confirm deleting these sessions.|other": "Cliquez sur le bouton ci-dessous pour confirmer la suppression de ces sessions.",
+    "Click the button below to confirm deleting these sessions.|one": "Cliquez sur le bouton ci-dessous pour confirmer la suppression de cette session.",
+    "Welcome to %(appName)s": "Bienvenue sur %(appName)s",
+    "Liberate your communication": "Libérez votre communication",
+    "Send a Direct Message": "Envoyez un message direct",
+    "Explore Public Rooms": "Explorez les salons publics",
+    "Create a Group Chat": "Créez une discussion de groupe"
 }
