@@ -76,6 +76,11 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
+let acceptBrowser = checkBrowserFeatures();
+if (!acceptBrowser && window.localStorage) {
+    acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
+}
+
 // React depends on Map & Set which we check for using modernizr's es6collections
 // if modernizr fails we may not have a functional react to show the error message.
 // try in react but fallback to an `alert`
@@ -124,22 +129,17 @@ async function start() {
     // load config requires the platform to be ready
     const loadConfigPromise = loadConfig();
 
-    await loadSkin();
-
-    let acceptBrowser = checkBrowserFeatures();
-    if (!acceptBrowser && window.localStorage) {
-        acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
-    }
-
     // await config here
     const configError = await loadConfigPromise;
     // Load language after loading config.json so that settingsDefaults.language can be applied
     const loadLanguagePromise = loadLanguage();
     // as quickly as we possibly can, set a default theme...
     const loadThemePromise = loadTheme();
+    const loadSkinPromise = loadSkin();
 
     // await things starting successfully
     await loadOlmPromise;
+    await settled(loadSkinPromise);
     await loadThemePromise;
     await loadLanguagePromise;
 
