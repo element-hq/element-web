@@ -81,12 +81,14 @@ function checkBrowserFeatures() {
 // try in react but fallback to an `alert`
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
-    const {rageshakePromise, loadSkin, loadApp} = await import(
+    const {rageshakePromise, loadOlm, loadSkin, loadApp} = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init");
 
     await settled(rageshakePromise); // give rageshake a chance to load/fail
+
+    const loadOlmPromise = loadOlm();
 
     const fragparts = parseQsFromFragment(window.location);
 
@@ -114,9 +116,11 @@ async function start() {
         acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
     }
 
+    // await things starting successfully
+    await loadOlmPromise;
+
     // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-    // import and thus running before the skin can load.
+    // run on the components.
     await loadApp(fragparts.params, acceptBrowser);
 }
 start();
