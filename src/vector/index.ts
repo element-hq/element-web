@@ -79,6 +79,8 @@ function checkBrowserFeatures() {
 // React depends on Map & Set which we check for using modernizr's es6collections
 // if modernizr fails we may not have a functional react to show the error message.
 // try in react but fallback to an `alert`
+// We start loading stuff but don't block on it until as late as possible to allow
+// the browser to use as much parallelism as it can.
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
     const {
@@ -96,7 +98,6 @@ async function start() {
         "./init");
 
     await settled(rageshakePromise); // give rageshake a chance to load/fail
-
 
     const fragparts = parseQsFromFragment(window.location);
 
