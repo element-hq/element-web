@@ -1179,7 +1179,7 @@
     "%(names)s and %(count)s others are typing …|one": "%(names)s i jedna osoba pisze…",
     "Cannot reach homeserver": "Błąd połączenia z serwerem domowym",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Upewnij się, że posiadasz stabilne połączenie internetowe lub skontaktuj się z administratorem serwera",
-    "Your Riot is misconfigured": "Twój Riot jest źle skonfigurowany",
+    "Your Riot is misconfigured": " Twój Riot jest źle skonfigurowany",
     "Unexpected error resolving homeserver configuration": "Nieoczekiwany błąd przy ustalaniu konfiguracji serwera domowego",
     "Unexpected error resolving identity server configuration": "Nieoczekiwany błąd przy ustalaniu konfiguracji serwera tożsamości",
     "User %(userId)s is already in the room": "Użytkownik %(userId)s jest już w pokoju",
