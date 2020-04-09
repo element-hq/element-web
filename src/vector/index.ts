@@ -21,8 +21,6 @@ limitations under the License.
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
-import React from "react";
-
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
