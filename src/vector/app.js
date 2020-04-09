@@ -26,7 +26,7 @@ global.React = React;
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
-import {_t, _td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
+import {_td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
@@ -37,10 +37,8 @@ import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
-import {loadConfig, preparePlatform, loadLanguage, loadOlm} from "./init";
 
 let lastLocationHashSet = null;
 
@@ -128,7 +126,7 @@ function onTokenLoginCompleted() {
     window.location.href = formatted;
 }
 
-export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
+export async function loadApp(fragParams: {}) {
     // XXX: the way we pass the path to the worker script from webpack via html in body's dataset is a hack
     // but alternatives seem to require changing the interface to passing Workers to js-sdk
     const vectorIndexeddbWorkerScript = document.body.dataset.vectorIndexeddbWorkerScript;
@@ -137,99 +135,37 @@ export async function loadApp(fragParams: {}, acceptBrowser: boolean) {
         // the bundling. The js-sdk will just fall back to accessing
         // indexeddb directly with no worker script, but we want to
         // make sure the indexeddb script is present, so fail hard.
-        throw new Error("Missing indexeddb worker script!");
+        throw newTranslatableError(_td("Missing indexeddb worker script!"));
     }
     MatrixClientPeg.setIndexedDbWorkerScript(vectorIndexeddbWorkerScript);
     CallHandler.setConferenceHandler(VectorConferenceHandler);
 
     window.addEventListener('hashchange', onHashChange);
 
-    await loadOlm();
-
-    // set the platform for react sdk
-    preparePlatform();
     const platform = PlatformPeg.get();
-
-    // Load the config from the platform
-    const configError = await loadConfig();
-
-    // Load language after loading config.json so that settingsDefaults.language can be applied
-    await loadLanguage();
 
     const params = parseQs(window.location);
 
-    // as quickly as we possibly can, set a default theme...
-    await setTheme();
-
-    // Now that we've loaded the theme (CSS), display the config syntax error if needed.
-    if (configError && configError.err && configError.err instanceof SyntaxError) {
-        const errorMessage = (
-            <div>
-                <p>
-                    {_t(
-                        "Your Riot configuration contains invalid JSON. Please correct the problem " +
-                        "and reload the page.",
-                    )}
-                </p>
-                <p>
-                    {_t(
-                        "The message from the parser is: %(message)s",
-                        {message: configError.err.message || _t("Invalid JSON")},
-                    )}
-                </p>
-            </div>
-        );
-
-        const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-        return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
-    }
-
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
-    if (configError) {
-        return <div className="error">
-            Unable to load config file: please refresh the page to try again.
-        </div>;
-    } else if (acceptBrowser) {
-        platform.startUpdater();
 
-        try {
-            // Don't bother loading the app until the config is verified
-            const config = await verifyServerConfig();
-            const MatrixChat = sdk.getComponent('structures.MatrixChat');
-            return <MatrixChat
-                onNewScreen={onNewScreen}
-                makeRegistrationUrl={makeRegistrationUrl}
-                ConferenceHandler={VectorConferenceHandler}
-                config={config}
-                realQueryParams={params}
-                startingFragmentQueryParams={fragParams}
-                enableGuest={!config.disable_guests}
-                onTokenLoginCompleted={onTokenLoginCompleted}
-                initialScreenAfterLogin={getScreenFromLocation(window.location)}
-                defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
-            />;
-        } catch (err) {
-            console.error(err);
+    platform.startUpdater();
 
-            let errorMessage = err.translatedMessage
-                || _t("Unexpected error preparing the app. See console for details.");
-            errorMessage = <span>{errorMessage}</span>;
-
-            // Like the compatibility page, AWOOOOOGA at the user
-            const GenericErrorPage = sdk.getComponent("structures.GenericErrorPage");
-            return <GenericErrorPage message={errorMessage} title={_t("Your Riot is misconfigured")} />;
-        }
-    } else {
-        console.error("Browser is missing required features.");
-        // take to a different landing page to AWOOOOOGA at the user
-        const CompatibilityPage = sdk.getComponent("structures.CompatibilityPage");
-        return <CompatibilityPage onAccept={function() {
-            if (window.localStorage) window.localStorage.setItem('mx_accepts_unsupported_browser', true);
-            console.log("User accepts the compatibility risks.");
-            loadApp();
-        }} />;
-    }
+    // Don't bother loading the app until the config is verified
+    const config = await verifyServerConfig();
+    const MatrixChat = sdk.getComponent('structures.MatrixChat');
+    return <MatrixChat
+        onNewScreen={onNewScreen}
+        makeRegistrationUrl={makeRegistrationUrl}
+        ConferenceHandler={VectorConferenceHandler}
+        config={config}
+        realQueryParams={params}
+        startingFragmentQueryParams={fragParams}
+        enableGuest={!config.disable_guests}
+        onTokenLoginCompleted={onTokenLoginCompleted}
+        initialScreenAfterLogin={getScreenFromLocation(window.location)}
+        defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+    />;
 }
 
 async function verifyServerConfig() {

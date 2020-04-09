@@ -33,11 +33,13 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js');
 }
 
-async function settled(prom: Promise<any>) {
-    try {
-        await prom;
-    } catch (e) {
-        console.error(e);
+async function settled(...promises: Array<Promise<any>>) {
+    for (const prom of promises) {
+        try {
+            await prom;
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 
@@ -76,47 +78,130 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
+let acceptBrowser = checkBrowserFeatures();
+if (!acceptBrowser && window.localStorage) {
+    acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
+}
+
 // React depends on Map & Set which we check for using modernizr's es6collections
 // if modernizr fails we may not have a functional react to show the error message.
 // try in react but fallback to an `alert`
+// We start loading stuff but don't block on it until as late as possible to allow
+// the browser to use as much parallelism as it can.
+// Load parallelism is based on research in https://github.com/vector-im/riot-web/issues/12253
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
-    const {rageshakePromise, loadSkin, loadApp} = await import(
+    const {
+        rageshakePromise,
+        preparePlatform,
+        loadOlm,
+        loadConfig,
+        loadSkin,
+        loadLanguage,
+        loadTheme,
+        loadApp,
+        showError,
+        showIncompatibleBrowser,
+        _t,
+    } = await import(
         /* webpackChunkName: "init" */
         /* webpackPreload: true */
         "./init");
 
-    await settled(rageshakePromise); // give rageshake a chance to load/fail
+    try {
+        await settled(rageshakePromise); // give rageshake a chance to load/fail
 
-    const fragparts = parseQsFromFragment(window.location);
+        const fragparts = parseQsFromFragment(window.location);
 
-    // don't try to redirect to the native apps if we're
-    // verifying a 3pid (but after we've loaded the config)
-    // or if the user is following a deep link
-    // (https://github.com/vector-im/riot-web/issues/7378)
-    const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
+        // don't try to redirect to the native apps if we're
+        // verifying a 3pid (but after we've loaded the config)
+        // or if the user is following a deep link
+        // (https://github.com/vector-im/riot-web/issues/7378)
+        const preventRedirect = fragparts.params.client_secret || fragparts.location.length > 0;
 
-    if (!preventRedirect) {
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isAndroid = /Android/.test(navigator.userAgent);
-        if (isIos || isAndroid) {
-            if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
-                window.location.href = "mobile_guide/";
-                return;
+        if (!preventRedirect) {
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(navigator.userAgent);
+            if (isIos || isAndroid) {
+                if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+                    window.location.href = "mobile_guide/";
+                    return;
+                }
             }
         }
+
+        const loadOlmPromise = loadOlm();
+        // set the platform for react sdk
+        preparePlatform();
+        // load config requires the platform to be ready
+        const loadConfigPromise = loadConfig();
+        await settled(loadConfigPromise); // wait for it to settle
+        // keep initialising so that we can show any possible error with as many features (theme, i18n) as possible
+
+        // Load language after loading config.json so that settingsDefaults.language can be applied
+        const loadLanguagePromise = loadLanguage();
+        // as quickly as we possibly can, set a default theme...
+        const loadThemePromise = loadTheme();
+        const loadSkinPromise = loadSkin();
+
+        // await things settling so that any errors we have to render have features like i18n running
+        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
+
+        // ##########################
+        // error handling begins here
+        // ##########################
+        if (!acceptBrowser) {
+            await new Promise(resolve => {
+                console.error("Browser is missing required features.");
+                // take to a different landing page to AWOOOOOGA at the user
+                showIncompatibleBrowser(() => {
+                    if (window.localStorage) {
+                        window.localStorage.setItem('mx_accepts_unsupported_browser', String(true));
+                    }
+                    console.log("User accepts the compatibility risks.");
+                    resolve();
+                });
+            });
+        }
+
+        try {
+            // await config here
+            await loadConfigPromise;
+        } catch (error) {
+            // Now that we've loaded the theme (CSS), display the config syntax error if needed.
+            if (error.err && error.err instanceof SyntaxError) {
+                return showError(_t("Your Riot is misconfigured"), [
+                    _t("Your Riot configuration contains invalid JSON. Please correct the problem and reload the page."),
+                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON")}),
+                ]);
+            }
+            return showError(_t("Unable to load config file: please refresh the page to try again."));
+        }
+
+        // ##################################
+        // app load critical path starts here
+        // assert things started successfully
+        // ##################################
+        await rageshakePromise;
+        await loadOlmPromise;
+        await loadSkinPromise;
+        await loadThemePromise;
+        await loadLanguagePromise;
+
+        // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
+        // run on the components.
+        await loadApp(fragparts.params);
+    } catch (err) {
+        console.error(err);
+        // Like the compatibility page, AWOOOOOGA at the user
+        await showError(_t("Your Riot is misconfigured"), [
+            err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
+        ]);
     }
-
-    await loadSkin();
-
-    let acceptBrowser = checkBrowserFeatures();
-    if (!acceptBrowser && window.localStorage) {
-        acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
-    }
-
-    // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
-    // run on the components. We use `require` here to make sure webpack doesn't optimize this into an async
-    // import and thus running before the skin can load.
-    await loadApp(fragparts.params, acceptBrowser);
 }
-start();
+start().catch(err => {
+    console.error(err);
+    if (!acceptBrowser) {
+        // TODO redirect to static incompatible browser page
+    }
+});
