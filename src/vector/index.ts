@@ -181,6 +181,7 @@ async function start() {
         // app load critical path starts here
         // assert things started successfully
         // ##################################
+        await rageshakePromise;
         await loadOlmPromise;
         await loadSkinPromise;
         await loadThemePromise;
