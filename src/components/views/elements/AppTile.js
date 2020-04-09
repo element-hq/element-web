@@ -269,7 +269,9 @@ export default class AppTile extends React.Component {
             if (this.props.show && this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.show && !this.props.show) {
+        }
+
+        if (nextProps.show && !this.props.show) {
             // We assume that persisted widgets are loaded and don't need a spinner.
             if (this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey)) {
                 this.setState({
@@ -280,7 +282,9 @@ export default class AppTile extends React.Component {
             if (this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+        }
+
+        if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
@@ -332,6 +336,28 @@ export default class AppTile extends React.Component {
             });
     }
 
+    /**
+     * Ends all widget interaction, such as cancelling calls and disabling webcams.
+     * @private
+     */
+    _endWidgetActions() {
+        // HACK: This is a really dirty way to ensure that Jitsi cleans up
+        // its hold on the webcam. Without this, the widget holds a media
+        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+        if (this._appFrame.current) {
+            // In practice we could just do `+= ''` to trick the browser
+            // into thinking the URL changed, however I can foresee this
+            // being optimized out by a browser. Instead, we'll just point
+            // the iframe at a page that is reasonably safe to use in the
+            // event the iframe doesn't wink away.
+            // This is relative to where the Riot instance is located.
+            this._appFrame.current.src = 'about:blank';
+        }
+
+        // Delete the widget from the persisted store for good measure.
+        PersistedElement.destroyElement(this._persistKey);
+    }
+
     /* If user has permission to modify widgets, delete the widget,
      * otherwise revoke access for the widget to load in the user's browser
     */
@@ -353,18 +379,7 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    // HACK: This is a really dirty way to ensure that Jitsi cleans up
-                    // its hold on the webcam. Without this, the widget holds a media
-                    // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-                    if (this._appFrame.current) {
-                        // In practice we could just do `+= ''` to trick the browser
-                        // into thinking the URL changed, however I can foresee this
-                        // being optimized out by a browser. Instead, we'll just point
-                        // the iframe at a page that is reasonably safe to use in the
-                        // event the iframe doesn't wink away.
-                        // This is relative to where the Riot instance is located.
-                        this._appFrame.current.src = 'about:blank';
-                    }
+                    this._endWidgetActions();
 
                     WidgetUtils.setRoomWidget(
                         this.props.room.roomId,
@@ -529,6 +544,10 @@ export default class AppTile extends React.Component {
         if (this.props.userWidget) {
             this._onMinimiseClick();
         } else {
+            if (this.props.show) {
+                // if we were being shown, end the widget as we're about to be minimized.
+                this._endWidgetActions();
+            }
             dis.dispatch({
                 action: 'appsDrawer',
                 show: !this.props.show,
