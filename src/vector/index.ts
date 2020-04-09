@@ -88,6 +88,7 @@ if (!acceptBrowser && window.localStorage) {
 // try in react but fallback to an `alert`
 // We start loading stuff but don't block on it until as late as possible to allow
 // the browser to use as much parallelism as it can.
+// Load parallelism is based on research in https://github.com/vector-im/riot-web/issues/12253
 async function start() {
     // load init.ts async so that its code is not executed immediately and we can catch any exceptions
     const {
