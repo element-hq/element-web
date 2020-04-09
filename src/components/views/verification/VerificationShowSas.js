@@ -125,10 +125,10 @@ export default class VerificationShowSas extends React.Component {
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
                 onPrimaryButtonClick={this.onMatchClick}
-                primaryButtonClass="mx_UserInfo_wideButton"
+                primaryButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_matchButton"
                 cancelButton={_t("They don't match")}
                 onCancel={this.onDontMatchClick}
-                cancelButtonClass="mx_UserInfo_wideButton"
+                cancelButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_noMatchButton"
             />;
         } else {
             confirm = <React.Fragment>

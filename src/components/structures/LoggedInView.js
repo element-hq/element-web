@@ -32,7 +32,6 @@ import sessionStore from '../../stores/SessionStore';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
-import { getHomePageUrl } from '../../utils/pages';
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -40,6 +39,7 @@ import ResizeHandle from '../views/elements/ResizeHandle';
 import {Resizer, CollapseDistributor} from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
+import HomePage from "./HomePage";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -538,7 +538,6 @@ const LoggedInView = createReactClass({
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
-        const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
@@ -577,13 +576,7 @@ const LoggedInView = createReactClass({
                 break;
 
             case PageTypes.HomePage:
-                {
-                    const pageUrl = getHomePageUrl(this.props.config);
-                    pageElement = <EmbeddedPage className="mx_HomePage"
-                        url={pageUrl}
-                        scrollbar={true}
-                    />;
-                }
+                pageElement = <HomePage />;
                 break;
 
             case PageTypes.UserView:

@@ -140,5 +140,7 @@ export class SetupEncryptionStore extends EventEmitter {
     done() {
         this.phase = PHASE_FINISHED;
         this.emit("update");
+        // async - ask other clients for keys, if necessary
+        MatrixClientPeg.get()._crypto.cancelAndResendAllOutgoingKeyRequests();
     }
 }
