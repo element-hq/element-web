@@ -136,6 +136,13 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         } catch (e) {}
     }
 
+    if (window.Modernizr) {
+        const missingFeatures = Object.keys(window.Modernizr).filter(key => window.Modernizr[key] === false);
+        if (missingFeatures.length > 0) {
+            body.append("modernizr_missing_features", missingFeatures.join(", "));
+        }
+    }
+
     if (opts.sendLogs) {
         progressCallback(_t("Collecting logs"));
         const logs = await rageshake.getLogsForReport();
