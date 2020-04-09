@@ -11,7 +11,7 @@
     "Chat with Riot Bot": "Chat med Riot Bot",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruke instillinger for «egendefinert tjener» til å logge inn på andre Matrix-tjenere ved å spesifisere en annen URL. Dette lar deg bruke Riot med en eksisterende Matrix-konto på en annen hjemmetjener.",
     "Sign In": "Logg inn",
-    "Create Account": "Lag konto",
+    "Create Account": "Opprett konto",
     "Need help?": "Trenger du hjelp?",
     "Room Directory": "Alle rom",
     "Explore rooms": "Se alle rom",
@@ -21,5 +21,7 @@
     "Your Riot is misconfigured": "Riot er feilkonfigurert",
     "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
     "Unexpected error preparing the app. See console for details.": "Uventet feil oppsto mens appen ble gjort klar. Se konsollen for detaljer.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url."
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url.",
+    "Open user settings": "Åpne brukerinnstillinger",
+    "Go to your browser to complete Sign In": "Gå til nettleseren din for å fullføre innloggingen"
 }

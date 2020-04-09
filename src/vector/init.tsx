@@ -20,17 +20,24 @@ limitations under the License.
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
+import * as ReactDOM from "react-dom";
+import * as React from "react";
 
-import * as languageHandler from 'matrix-react-sdk/src/languageHandler';
+import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import ElectronPlatform from "./platform/ElectronPlatform";
 import WebPlatform from "./platform/WebPlatform";
-import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import {setTheme} from "matrix-react-sdk/src/theme";
 
+import { initRageshake } from "./rageshakesetup";
+
+
+export const rageshakePromise = initRageshake();
 
 export function preparePlatform() {
-    if ((<any>window).ipcRenderer) {
+    if (window.ipcRenderer) {
         console.log("Using Electron platform");
         const plaf = new ElectronPlatform();
         PlatformPeg.set(plaf);
@@ -40,21 +47,12 @@ export function preparePlatform() {
     }
 }
 
-export async function loadConfig(): Promise<Error | void> {
-    const platform = PlatformPeg.get();
-
-    let configJson;
-    try {
-        configJson = await platform.getConfig();
-    } catch (e) {
-        return e;
-    } finally {
-        // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
-        // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
-        //
-        // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-        SdkConfig.put(configJson || {});
-    }
+export async function loadConfig() {
+    // XXX: We call this twice, once here and once in MatrixChat as a prop. We call it here to ensure
+    // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
+    //
+    // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
+    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
 }
 
 export function loadOlm(): Promise<void> {
@@ -112,3 +110,57 @@ export async function loadLanguage() {
         console.error("Unable to set language", e);
     }
 }
+
+export async function loadSkin() {
+    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
+    // the SDK until we have to in imports.
+    console.log("Loading skin...");
+    // load these async so that its code is not executed immediately and we can catch any exceptions
+    const [sdk, skin] = await Promise.all([
+        import(
+            /* webpackChunkName: "matrix-react-sdk" */
+            /* webpackPreload: true */
+            "matrix-react-sdk"),
+        import(
+            /* webpackChunkName: "riot-web-component-index" */
+            /* webpackPreload: true */
+            // @ts-ignore - this module is generated so may fail lint
+            "../component-index"),
+    ]);
+    sdk.loadSkin(skin);
+    console.log("Skin loaded!");
+}
+
+export async function loadTheme() {
+    setTheme();
+}
+
+export async function loadApp(fragParams: {}) {
+    // load app.js async so that its code is not executed immediately and we can catch any exceptions
+    const module = await import(
+        /* webpackChunkName: "riot-web-app" */
+        /* webpackPreload: true */
+        "./app");
+    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
+        document.getElementById('matrixchat'));
+}
+
+export async function showError(title: string, messages?: string[]) {
+    const ErrorView = (await import(
+        /* webpackChunkName: "error-view" */
+        /* webpackPreload: true */
+        "../components/structures/ErrorView")).default;
+    window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
+        document.getElementById('matrixchat'));
+}
+
+export async function showIncompatibleBrowser(onAccept) {
+    const CompatibilityPage = (await import(
+        /* webpackChunkName: "compatibility-page" */
+        /* webpackPreload: true */
+        "matrix-react-sdk/src/components/structures/CompatibilityPage")).default;
+    window.matrixChat = ReactDOM.render(<CompatibilityPage onAccept={onAccept} />,
+        document.getElementById('matrixchat'));
+}
+
+export const _t = languageHandler._t;
