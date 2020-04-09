@@ -230,8 +230,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
 
         // we assume this happens before any SSO actions occur but do not block.
-        this._ipcCall('getUserDataPath').then(userDataPath => {
-            this.userDataPath = userDataPath;
+        this._ipcCall('getRiotDesktopSsoArgs').then(riotDesktopSsoArgs => {
+            this.riotDesktopSsoArgs = riotDesktopSsoArgs;
         });
     }
 
@@ -429,8 +429,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
     getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
         const url = super.getSSOCallbackUrl(hsUrl, isUrl);
         url.protocol = "riot";
-        if (this.userDataPath) {
-            url.searchParams.set("riot-desktop-user-data-path", this.userDataPath);
+        if (this.riotDesktopSsoArgs) {
+            url.searchParams.set("riot-desktop-args", this.riotDesktopSsoArgs);
         }
         return url;
     }

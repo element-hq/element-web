@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {app} = require('electron');
+const {app} = require("electron");
+const crypto = require("crypto");
 
 const PROTOCOL = "riot://";
-const SEARCH_PARAM = "riot-desktop-user-data-path";
+const SEARCH_PARAM = "riot-desktop-args";
 
 const processUrl = (url) => {
     if (!global.mainWindow) return;
@@ -25,7 +26,35 @@ const processUrl = (url) => {
     global.mainWindow.loadURL(url.replace(PROTOCOL, "vector://"));
 };
 
+const algorithm = "aes-192-cbc";
+
+const getKeyIv = () => ({
+    key: crypto.scryptSync(app.getPath("exe"), "salt", 24),
+    iv: Buffer.alloc(16, 0),
+});
+
+const encrypt = (plaintext) => {
+    const {key, iv} = getKeyIv();
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let ciphertext = cipher.update(plaintext, "utf8", "hex");
+    ciphertext += cipher.final("hex");
+    return ciphertext;
+};
+
+const decrypt = (ciphertext) => {
+    const {key, iv} = getKeyIv();
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let plaintext = decipher.update(ciphertext, "hex", "utf8");
+    plaintext += decipher.final("utf8");
+    return plaintext;
+};
+
 module.exports = {
+    getArgs: (argv) => {
+        if (argv['profile-dir'] || argv['profile']) {
+            return encrypt(app.getPath('userData'));
+        }
+    },
     getProfileFromDeeplink: (args) => {
         // check if we are passed a profile in the SSO callback url
         const deeplinkUrl = args.find(arg => arg.startsWith('riot://'));
@@ -34,7 +63,7 @@ module.exports = {
             if (parsedUrl.protocol === 'riot:') {
                 const profile = parsedUrl.searchParams.get(SEARCH_PARAM);
                 console.log("Forwarding to profile: ", profile);
-                return profile;
+                return decrypt(profile);
             }
         }
     },
