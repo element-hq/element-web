@@ -1907,13 +1907,19 @@ export default createReactClass({
         }
 
         // Test for the master cross-signing key in SSSS as a quick proxy for
-        // whether cross-signing has been set up on the account.
-        let masterKeyInStorage = false;
-        try {
-            masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
-        } catch (e) {
-            if (e.errcode !== "M_NOT_FOUND") {
-                console.warn("Secret storage account data check failed", e);
+        // whether cross-signing has been set up on the account. We can't
+        // really continue until we know whether it's there or not so retry
+        // if this fails.
+        let masterKeyInStorage;
+        while (masterKeyInStorage === undefined) {
+            try {
+                masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
+            } catch (e) {
+                if (e.errcode === "M_NOT_FOUND") {
+                    masterKeyInStorage = false;
+                } else {
+                    console.warn("Secret storage account data check failed: retrying...", e);
+                }
             }
         }
 
