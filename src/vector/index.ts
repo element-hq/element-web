@@ -149,7 +149,6 @@ async function start() {
         // ##########################
         // error handling begins here
         // ##########################
-        console.log("DEBUG", acceptBrowser);
         if (!acceptBrowser) {
             await new Promise(resolve => {
                 console.error("Browser is missing required features.");
