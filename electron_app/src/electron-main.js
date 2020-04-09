@@ -35,7 +35,7 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
-const {getProfileFromDeeplink, protocolInit, getArgs} = require('./protocol');
+const {getProfileFromDeeplink, protocolInit, recordSSOSession} = require('./protocol');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
@@ -237,8 +237,8 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'getConfig':
             ret = vectorConfig;
             break;
-        case 'getRiotDesktopSsoArgs':
-            ret = getArgs(argv);
+        case 'startSSOFlow':
+            recordSSOSession(args[0]);
             break;
 
         default:

@@ -15,10 +15,15 @@ limitations under the License.
 */
 
 const {app} = require("electron");
-const crypto = require("crypto");
+const path = require("path");
+const fs = require("fs");
 
 const PROTOCOL = "riot://";
-const SEARCH_PARAM = "riot-desktop-args";
+const SEARCH_PARAM = "riot-desktop-ssoid";
+const STORE_FILE_NAME = "sso-sessions.json";
+
+// we getPath userData before electron-main changes it, so this is the default value
+const storePath = path.join(app.getPath("userData"), STORE_FILE_NAME);
 
 const processUrl = (url) => {
     if (!global.mainWindow) return;
@@ -26,36 +31,33 @@ const processUrl = (url) => {
     global.mainWindow.loadURL(url.replace(PROTOCOL, "vector://"));
 };
 
-// we encrypt anything that we expose to be passed back to our callback protocol
-// so that homeservers don't see our directory paths and have the ability to manipulate them.
-const algorithm = "aes-192-cbc";
-
-const getKeyIv = () => ({
-    key: crypto.scryptSync(app.getPath("exe"), "salt", 24),
-    iv: Buffer.alloc(16, 0),
-});
-
-const encrypt = (plaintext) => {
-    const {key, iv} = getKeyIv();
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-    let ciphertext = cipher.update(plaintext, "utf8", "hex");
-    ciphertext += cipher.final("hex");
-    return ciphertext;
+const readStore = () => {
+    try {
+        const s = fs.readFileSync(storePath, { encoding: "utf8" });
+        const o = JSON.parse(s);
+        return typeof o === "object" ? o : {};
+    } catch (e) {
+        return {};
+    }
 };
 
-const decrypt = (ciphertext) => {
-    const {key, iv} = getKeyIv();
-    const decipher = crypto.createDecipheriv(algorithm, key, iv);
-    let plaintext = decipher.update(ciphertext, "hex", "utf8");
-    plaintext += decipher.final("utf8");
-    return plaintext;
+const writeStore = (data) => {
+    fs.writeFileSync(storePath, JSON.stringify(data));
 };
 
 module.exports = {
-    getArgs: (argv) => {
-        if (argv['profile-dir'] || argv['profile']) {
-            return encrypt(app.getPath('userData'));
+    recordSSOSession: (sessionID) => {
+        const userDataPath = app.getPath('userData');
+        const store = readStore();
+        for (const key in store) {
+            // ensure each instance only has one (the latest) session ID to prevent the file growing unbounded
+            if (store[key] === userDataPath) {
+                delete store[key];
+                break;
+            }
         }
+        store[sessionID] = userDataPath;
+        writeStore(store);
     },
     getProfileFromDeeplink: (args) => {
         // check if we are passed a profile in the SSO callback url
@@ -63,9 +65,10 @@ module.exports = {
         if (deeplinkUrl && deeplinkUrl.includes(SEARCH_PARAM)) {
             const parsedUrl = new URL(deeplinkUrl);
             if (parsedUrl.protocol === 'riot:') {
-                const profile = parsedUrl.searchParams.get(SEARCH_PARAM);
-                console.log("Forwarding to profile: ", profile);
-                return decrypt(profile);
+                const ssoID = parsedUrl.searchParams.get(SEARCH_PARAM);
+                const store = readStore();
+                console.log("Forwarding to profile: ", store[ssoID]);
+                return store[ssoID];
             }
         }
     },

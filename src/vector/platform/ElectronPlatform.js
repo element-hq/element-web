@@ -32,6 +32,7 @@ import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
 import {Categories, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
 import {Key} from "matrix-react-sdk/src/Keyboard";
 import React from "react";
+import {randomString} from "matrix-js-sdk/src/randomstring";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -229,10 +230,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         }
 
-        // we assume this happens before any SSO actions occur but do not block.
-        this._ipcCall('getRiotDesktopSsoArgs').then(riotDesktopSsoArgs => {
-            this.riotDesktopSsoArgs = riotDesktopSsoArgs;
-        });
+        // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
+        this.ssoID = randomString(32);
+        this._ipcCall("startSSOFlow", this.ssoID);
     }
 
     async getConfig(): Promise<{}> {
@@ -429,9 +429,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
         const url = super.getSSOCallbackUrl(hsUrl, isUrl);
         url.protocol = "riot";
-        if (this.riotDesktopSsoArgs) {
-            url.searchParams.set("riot-desktop-args", this.riotDesktopSsoArgs);
-        }
+        url.searchParams.set("riot-desktop-ssoid", this.ssoID);
         return url;
     }
 
