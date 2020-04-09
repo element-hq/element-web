@@ -26,6 +26,8 @@ const processUrl = (url) => {
     global.mainWindow.loadURL(url.replace(PROTOCOL, "vector://"));
 };
 
+// we encrypt anything that we expose to be passed back to our callback protocol
+// so that homeservers don't see our directory paths and have the ability to manipulate them.
 const algorithm = "aes-192-cbc";
 
 const getKeyIv = () => ({
