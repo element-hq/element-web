@@ -2345,5 +2345,14 @@
     "Liberate your communication": "Libérez votre communication",
     "Send a Direct Message": "Envoyez un message direct",
     "Explore Public Rooms": "Explorez les salons publics",
-    "Create a Group Chat": "Créez une discussion de groupe"
+    "Create a Group Chat": "Créez une discussion de groupe",
+    "%(name)s is requesting verification": "%(name)s demande une vérification",
+    "well formed": "bien formée",
+    "unexpected type": "type inattendu",
+    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirmez la désactivation de votre compte en utilisant l’authentification unique pour prouver votre identité.",
+    "Are you sure you want to deactivate your account? This is irreversible.": "Voulez-vous vraiment désactiver votre compte ? Ceci est irréversible.",
+    "Confirm account deactivation": "Confirmez la désactivation de votre compte",
+    "Server did not require any authentication": "Le serveur n’a pas demandé d’authentification",
+    "Server did not return valid authentication information.": "Le serveur n’a pas renvoyé des informations d’authentification valides.",
+    "There was a problem communicating with the server. Please try again.": "Un problème est survenu en essayant de communiquer avec le serveur. Veuillez réessayer."
 }
