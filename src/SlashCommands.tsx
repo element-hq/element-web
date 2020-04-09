@@ -35,6 +35,7 @@ import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
+import { WidgetType } from "./widgets/WidgetType";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -775,7 +776,7 @@ export const Commands = [
                 const nowMs = (new Date()).getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
                 return success(WidgetUtils.setRoomWidget(
-                    roomId, widgetId, "m.custom", args, "Custom Widget", {}));
+                    roomId, widgetId, WidgetType.CUSTOM, args, "Custom Widget", {}));
             } else {
                 return reject(_t("You cannot modify widgets in this room."));
             }

@@ -38,6 +38,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
+import {WidgetType} from "../../../widgets/WidgetType";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -454,7 +455,7 @@ export default class AppTile extends React.Component {
 
             // We only tell Jitsi widgets that we're ready because they're realistically the only ones
             // using this custom extension to the widget API.
-            if (this.props.app.type === 'jitsi') {
+            if (WidgetType.JITSI.matches(this.props.app.type)) {
                 widgetMessaging.flagReadyToContinue();
             }
         }).catch((err) => {
@@ -597,7 +598,7 @@ export default class AppTile extends React.Component {
     _getRenderedUrl() {
         let url;
 
-        if (this.props.app.type === 'jitsi') {
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
             console.log("Replacing Jitsi widget URL with local wrapper");
             url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
             url = this._addWurlParams(url);
@@ -608,7 +609,7 @@ export default class AppTile extends React.Component {
     }
 
     _getPopoutUrl() {
-        if (this.props.app.type === 'jitsi') {
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
                 WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
             );

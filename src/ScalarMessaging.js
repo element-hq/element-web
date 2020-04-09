@@ -239,6 +239,7 @@ import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import {WidgetType} from "./widgets/WidgetType";
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -290,7 +291,7 @@ function inviteUser(event, roomId, userId) {
 
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
-    const widgetType = event.data.type;
+    let widgetType = event.data.type;
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
@@ -321,6 +322,9 @@ function setWidget(event, roomId) {
             return;
         }
     }
+
+    // convert the widget type to a known widget type
+    widgetType = WidgetType.fromString(widgetType);
 
     if (userWidget) {
         WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
