@@ -182,6 +182,7 @@ export default createReactClass({
         this.context.on("crypto.keyBackupStatus", this.onKeyBackupStatus);
         this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
+        this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
@@ -504,6 +505,7 @@ export default createReactClass({
             this.context.removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+            this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -803,6 +805,13 @@ export default createReactClass({
             return;
         }
         this._updateE2EStatus(room);
+    },
+
+    onCrossSigningKeysChanged: function() {
+        const room = this.state.room;
+        if (room) {
+            this._updateE2EStatus(room);
+        }
     },
 
     _updateE2EStatus: async function(room) {
