@@ -1495,5 +1495,17 @@
     "Restore": "Przywróć",
     "Copy": "Kopiuj",
     "Success!": "Sukces!",
-    "Disable": "Wyłącz"
+    "Disable": "Wyłącz",
+    "Verify": "Weryfikuj",
+    "Manage integrations": "Zarządzaj integracjami",
+    "%(count)s verified sessions|other": "%(count)s zweryfikowanych sesji",
+    "%(count)s verified sessions|one": "1 zweryfikowana sesja",
+    "Hide verified sessions": "Ukryj zweryfikowane sesje",
+    "%(count)s sessions|other": "%(count)s sesji",
+    "%(count)s sessions|one": "%(count)s sesja",
+    "Hide sessions": "Ukryj sesje",
+    "Direct message": "Wiadomość bezpośrednia",
+    "Security": "Bezpieczeństwo",
+    "Integrations are disabled": "Integracje są wyłączone",
+    "Enable 'Manage Integrations' in Settings to do this.": "Włącz „Zarządzaj integracjami” w ustawieniach, aby to zrobić."
 }
