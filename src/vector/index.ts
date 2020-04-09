@@ -21,6 +21,8 @@ limitations under the License.
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
+import React from "react";
+
 require('gfm.css/gfm.css');
 require('highlight.js/styles/github.css');
 
@@ -192,7 +194,10 @@ async function start() {
         await loadApp(fragparts.params);
     } catch (err) {
         console.error(err);
-        await showError(err);
+        // Like the compatibility page, AWOOOOOGA at the user
+        await showError(_t("Your Riot is misconfigured"), [
+            err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
+        ]);
     }
 }
 start().catch(err => {
