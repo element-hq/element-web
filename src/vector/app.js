@@ -135,7 +135,7 @@ export async function loadApp(fragParams: {}) {
         // the bundling. The js-sdk will just fall back to accessing
         // indexeddb directly with no worker script, but we want to
         // make sure the indexeddb script is present, so fail hard.
-        throw new Error("Missing indexeddb worker script!");
+        throw newTranslatableError(_td("Missing indexeddb worker script!"));
     }
     MatrixClientPeg.setIndexedDbWorkerScript(vectorIndexeddbWorkerScript);
     CallHandler.setConferenceHandler(VectorConferenceHandler);

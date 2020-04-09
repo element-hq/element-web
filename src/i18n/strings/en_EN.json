@@ -1,4 +1,5 @@
 {
+    "Missing indexeddb worker script!": "Missing indexeddb worker script!",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.",
     "Invalid configuration: no default server specified.": "Invalid configuration: no default server specified.",
     "Your Riot is misconfigured": "Your Riot is misconfigured",
