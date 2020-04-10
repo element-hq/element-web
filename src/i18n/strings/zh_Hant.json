@@ -2344,5 +2344,18 @@
     "Liberate your communication": "讓您的通訊自由",
     "Send a Direct Message": "傳送直接訊息",
     "Explore Public Rooms": "探索公開聊天室",
-    "Create a Group Chat": "建立群組聊天"
+    "Create a Group Chat": "建立群組聊天",
+    "%(name)s is requesting verification": "%(name)s 正在要求驗證",
+    "well formed": "結構良好",
+    "unexpected type": "預料之外的類型",
+    "Confirm your account deactivation by using Single Sign On to prove your identity.": "透過使用單一登入系統來證您的身份以確認刪除您的帳號。",
+    "Are you sure you want to deactivate your account? This is irreversible.": "您確定您想要停用您的帳號嗎？此為不可逆的操作。",
+    "Confirm account deactivation": "確認停用帳號",
+    "Server did not require any authentication": "伺服器不需要任何驗證",
+    "Server did not return valid authentication information.": "伺服器沒有回傳有效的驗證資訊。",
+    "There was a problem communicating with the server. Please try again.": "與伺服器通訊時發生問題。請再試一次。",
+    "Delete sessions|other": "刪除工作階段",
+    "Delete sessions|one": "刪除工作階段",
+    "Enable end-to-end encryption": "啟用端到端加密",
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "您無法在稍後停用此功能。橋接與大多數機器人也尚無法運作。"
 }
