@@ -132,11 +132,11 @@ export default class VerificationShowSas extends React.Component {
             />;
         } else {
             confirm = <React.Fragment>
-                <AccessibleButton onClick={this.onMatchClick} kind="primary">
-                    { _t("They match") }
-                </AccessibleButton>
                 <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
                     { _t("They don't match") }
+                </AccessibleButton>
+                <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                    { _t("They match") }
                 </AccessibleButton>
             </React.Fragment>;
         }
