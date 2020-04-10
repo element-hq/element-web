@@ -61,7 +61,6 @@ export default class VerificationRequestDialog extends React.Component {
                 verificationRequestPromise={this.props.verificationRequestPromise}
                 onClose={this.props.onFinished}
                 member={member}
-                inDialog={true}
             />
         </BaseDialog>;
     }
