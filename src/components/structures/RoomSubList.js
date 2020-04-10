@@ -111,21 +111,30 @@ export default class RoomSubList extends React.PureComponent {
     }
 
     onAction = (payload) => {
-        // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
-        // but this is no longer true, so we must do it here (and can apply the small
-        // optimisation of checking that we care about the room being read).
-        //
-        // Ultimately we need to transition to a state pushing flow where something
-        // explicitly notifies the components concerned that the notif count for a room
-        // has change (e.g. a Flux store).
-        if (payload.action === 'on_room_read' &&
-            this.props.list.some((r) => r.roomId === payload.roomId)
-        ) {
-            this.forceUpdate();
+        switch (payload.action) {
+            case 'on_room_read':
+                // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
+                // but this is no longer true, so we must do it here (and can apply the small
+                // optimisation of checking that we care about the room being read).
+                //
+                // Ultimately we need to transition to a state pushing flow where something
+                // explicitly notifies the components concerned that the notif count for a room
+                // has change (e.g. a Flux store).
+                if (this.props.list.some((r) => r.roomId === payload.roomId)) {
+                    this.forceUpdate();
+                }
+                break;
+
+            case 'view_room':
+                if (this.state.hidden && !this.props.forceExpand && payload.show_room_tile &&
+                    this.props.list.some((r) => r.roomId === payload.room_id)
+                ) {
+                    this.toggle();
+                }
         }
     };
 
-    onClick = (ev) => {
+    toggle = () => {
         if (this.isCollapsibleOnClick()) {
             // The header isCollapsible, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
@@ -136,6 +145,10 @@ export default class RoomSubList extends React.PureComponent {
             // The header is stuck, so the click is to be interpreted as a scroll to the header
             this.props.onHeaderClick(this.state.hidden, this._header.current.dataset.originalPosition);
         }
+    };
+
+    onClick = (ev) => {
+        this.toggle();
     };
 
     onHeaderKeyDown = (ev) => {
@@ -180,6 +193,7 @@ export default class RoomSubList extends React.PureComponent {
     onRoomTileClick = (roomId, ev) => {
         dis.dispatch({
             action: 'view_room',
+            show_room_tile: true, // to make sure the room gets scrolled into view
             room_id: roomId,
             clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
         });

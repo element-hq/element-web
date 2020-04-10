@@ -106,7 +106,8 @@ export default class ModularServerConfig extends ServerConfig {
                 )}
                 <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
                     <div className="mx_ServerConfig_fields">
-                        <Field id="mx_ServerConfig_hsUrl"
+                        <Field
+                            id="mx_ServerConfig_hsUrl"
                             label={_t("Server Name")}
                             placeholder={this.props.serverConfig.hsUrl}
                             value={this.state.hsUrl}

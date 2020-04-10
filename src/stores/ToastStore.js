@@ -20,6 +20,9 @@ import EventEmitter from 'events';
  * Holds the active toasts
  */
 export default class ToastStore extends EventEmitter {
+    static PRIORITY_REALTIME = 1;
+    static PRIORITY_DEFAULT = 0;
+
     static sharedInstance() {
         if (!global.mx_ToastStore) global.mx_ToastStore = new ToastStore();
         return global.mx_ToastStore;
@@ -36,9 +39,16 @@ export default class ToastStore extends EventEmitter {
     }
 
     addOrReplaceToast(newToast) {
+        if (newToast.priority === undefined) newToast.priority = ToastStore.PRIORITY_DEFAULT;
+
         const oldIndex = this._toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
-            this._toasts.push(newToast);
+            // we only have two priorities so just push realtime ones onto the front
+            if (newToast.priority) {
+                this._toasts.unshift(newToast);
+            } else {
+                this._toasts.push(newToast);
+            }
         } else {
             this._toasts[oldIndex] = newToast;
         }

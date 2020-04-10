@@ -16,14 +16,14 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../languageHandler";
-import {CommandCategories, CommandMap} from "../../../SlashCommands";
+import {CommandCategories, Commands} from "../../../SlashCommands";
 import * as sdk from "../../../index";
 
 export default ({onFinished}) => {
     const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
 
     const categories = {};
-    Object.values(CommandMap).forEach(cmd => {
+    Commands.forEach(cmd => {
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
         }
@@ -41,7 +41,7 @@ export default ({onFinished}) => {
 
         categories[category].forEach(cmd => {
             rows.push(<tr key={cmd.command}>
-                <td><strong>{cmd.command}</strong></td>
+                <td><strong>{cmd.getCommand()}</strong></td>
                 <td>{cmd.args}</td>
                 <td>{cmd.description}</td>
             </tr>);

@@ -34,7 +34,7 @@ All code lands on the `develop` branch - `master` is only used for stable releas
 **Please file PRs against `develop`!!**
 
 Please follow the standard Matrix contributor's guide:
-https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
+https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.rst
 
 Please follow the Matrix JS/React code style as per:
 https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
@@ -45,7 +45,7 @@ Code should be committed as follows:
    * In practice, `matrix-react-sdk` is still evolving so fast that the maintenance
      burden of customising and overriding these components for Riot can seriously
      impede development.  So right now, there should be very few (if any) customisations for Riot.
- * CSS: https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/matrix-react-sdk
+ * CSS: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css
  * Theme specific CSS & resources: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
 
 React components in matrix-react-sdk are come in two different flavours:

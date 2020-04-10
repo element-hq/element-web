@@ -22,6 +22,7 @@ export const Key = {
     PAGE_UP: "PageUp",
     PAGE_DOWN: "PageDown",
     BACKSPACE: "Backspace",
+    DELETE: "Delete",
     ARROW_UP: "ArrowUp",
     ARROW_DOWN: "ArrowDown",
     ARROW_LEFT: "ArrowLeft",
@@ -36,10 +37,12 @@ export const Key = {
     CONTEXT_MENU: "ContextMenu",
 
     COMMA: ",",
+    PERIOD: ".",
     LESS_THAN: "<",
     GREATER_THAN: ">",
     BACKTICK: "`",
     SPACE: " ",
+    SLASH: "/",
     A: "a",
     B: "b",
     C: "c",
@@ -68,8 +71,9 @@ export const Key = {
     Z: "z",
 };
 
+export const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
 export function isOnlyCtrlOrCmdKeyEvent(ev) {
-    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     if (isMac) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
     } else {
@@ -78,7 +82,6 @@ export function isOnlyCtrlOrCmdKeyEvent(ev) {
 }
 
 export function isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) {
-    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     if (isMac) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey;
     } else {

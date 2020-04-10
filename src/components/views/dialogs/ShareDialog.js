@@ -70,9 +70,16 @@ export default class ShareDialog extends React.Component {
         this.onCopyClick = this.onCopyClick.bind(this);
         this.onLinkSpecificEventCheckboxClick = this.onLinkSpecificEventCheckboxClick.bind(this);
 
+        let permalinkCreator: RoomPermalinkCreator = null;
+        if (props.target instanceof Room) {
+            permalinkCreator = new RoomPermalinkCreator(props.target);
+            permalinkCreator.load();
+        }
+
         this.state = {
             // MatrixEvent defaults to share linkSpecificEvent
             linkSpecificEvent: this.props.target instanceof MatrixEvent,
+            permalinkCreator,
         };
 
         this._link = createRef();
@@ -119,14 +126,6 @@ export default class ShareDialog extends React.Component {
         this.setState({
             linkSpecificEvent: !this.state.linkSpecificEvent,
         });
-    }
-
-    componentWillMount() {
-        if (this.props.target instanceof Room) {
-            const permalinkCreator = new RoomPermalinkCreator(this.props.target);
-            permalinkCreator.load();
-            this.setState({permalinkCreator});
-        }
     }
 
     componentWillUnmount() {

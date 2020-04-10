@@ -45,7 +45,7 @@ limitations under the License.
 
     .mx_cryptoEvent_title {
         font-weight: 600;
-        font-size: 15px;
+        font-size: $font-15px;
         grid-column: 2;
         grid-row: 1;
     }
@@ -56,7 +56,7 @@ limitations under the License.
     }
 
     .mx_cryptoEvent_state, .mx_cryptoEvent_subtitle {
-        font-size: 12px;
+        font-size: $font-12px;
     }
 
     .mx_cryptoEvent_state, .mx_cryptoEvent_buttons {

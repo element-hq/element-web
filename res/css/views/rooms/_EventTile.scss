@@ -19,7 +19,7 @@ limitations under the License.
     max-width: 100%;
     clear: both;
     padding-top: 18px;
-    font-size: 14px;
+    font-size: $font-14px;
     position: relative;
 }
 
@@ -64,7 +64,7 @@ limitations under the License.
 
 .mx_EventTile .mx_SenderProfile {
     color: $primary-fg-color;
-    font-size: 14px;
+    font-size: $font-14px;
     display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow: hidden;
     cursor: pointer;
@@ -72,7 +72,7 @@ limitations under the License.
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
-    line-height: 17px;
+    line-height: $font-17px;
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -111,15 +111,23 @@ limitations under the License.
 }
 
 .mx_EventTile_line, .mx_EventTile_reply {
+    clear: both;
     position: relative;
-    /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-    margin-right: 110px;
     padding-left: 65px; /* left gutter */
     padding-top: 4px;
     padding-bottom: 2px;
     border-radius: 4px;
     min-height: 24px;
-    line-height: 22px;
+    line-height: $font-22px;
+}
+
+.mx_RoomView_timeline_rr_enabled,
+// on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
+.mx_EventListSummary {
+    .mx_EventTile_line, .mx_EventTile_reply {
+        /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
+        margin-right: 110px;
+    }
 }
 
 .mx_EventTile_bubbleContainer {
@@ -307,7 +315,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 .mx_EventTile_readAvatarRemainder {
     color: $event-timestamp-color;
-    font-size: 11px;
+    font-size: $font-11px;
     position: absolute;
 }
 
@@ -336,7 +344,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 .mx_EventTile_spoiler_reason {
     color: $event-timestamp-color;
-    font-size: 11px;
+    font-size: $font-11px;
 }
 
 .mx_EventTile_spoiler_content {
@@ -388,7 +396,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 }
 
 .mx_EventTile_keyRequestInfo {
-    font-size: 12px;
+    font-size: $font-12px;
 }
 
 .mx_EventTile_keyRequestInfo_text {
@@ -466,7 +474,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
 
 .mx_EventTile_content .mx_EventTile_edited {
     user-select: none;
-    font-size: 12px;
+    font-size: $font-12px;
     color: $roomtopic-color;
     display: inline-block;
     margin-left: 9px;
@@ -484,7 +492,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     white-space: normal !important;
     line-height: inherit !important;
     color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
-    font-size: 14px;
+    font-size: $font-14px;
 
     pre, code {
         font-family: $monospace-font-family !important;
@@ -584,9 +592,9 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     .mx_EventTile.mx_EventTile_info {
         // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
         padding-top: 0px;
-        font-size: 13px;
+        font-size: $font-13px;
         .mx_EventTile_line, .mx_EventTile_reply {
-            line-height: 20px;
+            line-height: $font-20px;
         }
         .mx_EventTile_avatar {
             top: 4px;
@@ -594,7 +602,7 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
     }
 
     .mx_EventTile .mx_SenderProfile {
-        font-size: 13px;
+        font-size: $font-13px;
     }
 
     .mx_EventTile.mx_EventTile_emote {

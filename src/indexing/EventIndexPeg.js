@@ -135,7 +135,7 @@ class EventIndexPeg {
      */
     async unset() {
         if (this.index === null) return;
-        this.index.close();
+        await this.index.close();
         this.index = null;
     }
 
@@ -151,7 +151,7 @@ class EventIndexPeg {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {
-            this.unset();
+            await this.unset();
             console.log("EventIndex: Deleting event index.");
             await indexManager.deleteEventIndex();
         }

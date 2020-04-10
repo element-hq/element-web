@@ -61,6 +61,7 @@ export default class EventIndex extends EventEmitter {
         client.on('Room.timeline', this.onRoomTimeline);
         client.on('Event.decrypted', this.onEventDecrypted);
         client.on('Room.timelineReset', this.onTimelineReset);
+        client.on('Room.redaction', this.onRedaction);
     }
 
     /**
@@ -74,6 +75,7 @@ export default class EventIndex extends EventEmitter {
         client.removeListener('Room.timeline', this.onRoomTimeline);
         client.removeListener('Event.decrypted', this.onEventDecrypted);
         client.removeListener('Room.timelineReset', this.onTimelineReset);
+        client.removeListener('Room.redaction', this.onRedaction);
     }
 
     /**
@@ -107,6 +109,7 @@ export default class EventIndex extends EventEmitter {
                 roomId: room.roomId,
                 token: token,
                 direction: "b",
+                fullCrawl: true,
             };
 
             const forwardCheckpoint = {
@@ -208,6 +211,23 @@ export default class EventIndex extends EventEmitter {
         if (!this.liveEventsForIndex.delete(eventId)) return;
         if (err) return;
         await this.addLiveEventToIndex(ev);
+    }
+
+    /*
+     * The Room.redaction listener.
+     *
+     * Removes a redacted event from our event index.
+     */
+    onRedaction = async (ev, room) => {
+        // We only index encrypted rooms locally.
+        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+
+        try {
+            await indexManager.deleteEvent(ev.getAssociatedId());
+        } catch (e) {
+            console.log("EventIndex: Error deleting event from index", e);
+        }
     }
 
     /*
@@ -373,6 +393,21 @@ export default class EventIndex extends EventEmitter {
                     checkpoint.roomId, checkpoint.token, this._eventsPerCrawl,
                     checkpoint.direction);
             } catch (e) {
+                if (e.httpStatus === 403) {
+                    console.log("EventIndex: Removing checkpoint as we don't have ",
+                                "permissions to fetch messages from this room.", checkpoint);
+                    try {
+                        await indexManager.removeCrawlerCheckpoint(checkpoint);
+                    } catch (e) {
+                        console.log("EventIndex: Error removing checkpoint", checkpoint, e);
+                        // We don't push the checkpoint here back, it will
+                        // hopefully be removed after a restart. But let us
+                        // ignore it for now as we don't want to hammer the
+                        // endpoint.
+                    }
+                    continue;
+                }
+
                 console.log("EventIndex: Error crawling events:", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
@@ -431,11 +466,19 @@ export default class EventIndex extends EventEmitter {
             // Let us wait for all the events to get decrypted.
             await Promise.all(decryptionPromises);
 
-
             // TODO if there are no events at this point we're missing a lot
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
+            const undecryptableEvents = matrixEvents.filter((ev) => {
+                return ev.isDecryptionFailure();
+            });
+
+            // Collect the redaction events so we can delete the redacted events
+            // from the index.
+            const redactionEvents = matrixEvents.filter((ev) => {
+                return ev.getType() === "m.room.redaction";
+            });
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
@@ -464,10 +507,18 @@ export default class EventIndex extends EventEmitter {
             console.log(
                 "EventIndex: Crawled room",
                 client.getRoom(checkpoint.roomId).name,
-                "and fetched", events.length, "events.",
+                "and fetched total", matrixEvents.length, "events of which",
+                events.length, "are being added,", redactionEvents.length,
+                "are redacted,", matrixEvents.length - events.length,
+                "are being skipped, undecryptable", undecryptableEvents.length,
             );
 
             try {
+                for (let i = 0; i < redactionEvents.length; i++) {
+                    const ev = redactionEvents[i];
+                    await indexManager.deleteEvent(ev.getAssociatedId());
+                }
+
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(
                     events, newCheckpoint, checkpoint);
                 // If all events were already indexed we assume that we catched
@@ -479,6 +530,10 @@ export default class EventIndex extends EventEmitter {
                                 "added, stopping the crawl", checkpoint);
                     await indexManager.removeCrawlerCheckpoint(newCheckpoint);
                 } else {
+                    if (eventsAlreadyAdded === true) {
+                        console.log("EventIndex: Checkpoint had already all events",
+                                    "added, but continuing due to a full crawl", checkpoint);
+                    }
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
@@ -520,7 +575,8 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         this.removeListeners();
         this.stopCrawler();
-        return indexManager.closeEventIndex();
+        await indexManager.closeEventIndex();
+        return;
     }
 
     /**
@@ -671,14 +727,20 @@ export default class EventIndex extends EventEmitter {
             }
         });
 
+        let ret = false;
+        let paginationToken = "";
+
         // Set the pagination token to the oldest event that we retrieved.
         if (matrixEvents.length > 0) {
-            timeline.setPaginationToken(matrixEvents[matrixEvents.length - 1].getId(), EventTimeline.BACKWARDS);
-            return true;
-        } else {
-            timeline.setPaginationToken("", EventTimeline.BACKWARDS);
-            return false;
+            paginationToken = matrixEvents[matrixEvents.length - 1].getId();
+            ret = true;
         }
+
+        console.log("EventIndex: Populating file panel with", matrixEvents.length,
+                    "events and setting the pagination token to", paginationToken);
+
+        timeline.setPaginationToken(paginationToken, EventTimeline.BACKWARDS);
+        return ret;
     }
 
     /**

@@ -50,6 +50,7 @@ export default createReactClass({
         overrideEventTypes: PropTypes.object,
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._body = createRef();
     },

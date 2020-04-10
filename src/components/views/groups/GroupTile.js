@@ -55,7 +55,7 @@ const GroupTile = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
             this.setState({profile});
         }).catch((err) => {

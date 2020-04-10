@@ -9,11 +9,14 @@
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,
+    "jsx": "react",
     "types": [
-      "node"
+      "node",
+      "react"
     ]
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
   ]
 }

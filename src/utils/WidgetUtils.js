@@ -28,26 +28,7 @@ const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
-
-/**
- * Encodes a URI according to a set of template variables. Variables will be
- * passed through encodeURIComponent.
- * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
- * @param {Object} variables The key/value pairs to replace the template
- * variables with. E.g. { '$bar': 'baz' }.
- * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
- */
-function encodeUri(pathTemplate, variables) {
-    for (const key in variables) {
-        if (!variables.hasOwnProperty(key)) {
-            continue;
-        }
-        pathTemplate = pathTemplate.replace(
-            key, encodeURIComponent(variables[key]),
-        );
-    }
-    return pathTemplate;
-}
+import {Capability} from "../widgets/WidgetApi";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -401,18 +382,6 @@ export default class WidgetUtils {
     }
 
     static makeAppConfig(appId, app, senderUserId, roomId, eventId) {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const user = MatrixClientPeg.get().getUser(myUserId);
-        const params = {
-            '$matrix_user_id': myUserId,
-            '$matrix_room_id': roomId,
-            '$matrix_display_name': user ? user.displayName : myUserId,
-            '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
-
-            // TODO: Namespace themes through some standard
-            '$theme': SettingsStore.getValue("theme"),
-        };
-
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");
         }
@@ -422,28 +391,20 @@ export default class WidgetUtils {
         app.eventId = eventId;
         app.name = app.name || app.type;
 
-        if (app.data) {
-            Object.keys(app.data).forEach((key) => {
-                params['$' + key] = app.data[key];
-            });
-
-            app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
-        }
-
-        app.url = encodeUri(app.url, params);
-
         return app;
     }
 
     static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
+        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
-        if (appType == 'jitsi') capWhitelist.push("m.always_on_screen");
+        if (appType === 'jitsi') {
+            capWhitelist.push(Capability.AlwaysOnScreen);
+        }
 
         return capWhitelist;
     }
@@ -467,5 +428,29 @@ export default class WidgetUtils {
         }
 
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
+    }
+
+    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean}={}) {
+        // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
+        const queryString = [
+            'conferenceDomain=$domain',
+            'conferenceId=$conferenceId',
+            'isAudioOnly=$isAudioOnly',
+            'displayName=$matrix_display_name',
+            'avatarUrl=$matrix_avatar_url',
+            'userId=$matrix_user_id',
+        ].join('&');
+
+        let baseUrl = window.location;
+        if (window.location.protocol !== "https:" && !opts.forLocalRender) {
+            // Use an external wrapper if we're not locally rendering the widget. This is usually
+            // the URL that will end up in the widget event, so we want to make sure it's relatively
+            // safe to send.
+            // We'll end up using a local render URL when we see a Jitsi widget anyways, so this is
+            // really just for backwards compatibility and to appease the spec.
+            baseUrl = "https://riot.im/app/";
+        }
+        const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
+        return url.href;
     }
 }

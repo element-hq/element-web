@@ -523,7 +523,8 @@ export default class MessagePanel extends React.Component {
         // if there is a previous event and it has the same sender as this event
         // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
         if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
-            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
+            // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
+            haveTileForEvent(prevEvent) && (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
             (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
             continuation = true;
         }
@@ -837,14 +838,16 @@ class CreationGrouper {
         // events that we include in the group but then eject out and place
         // above the group.
         this.ejectedEvents = [];
-        this.readMarker = panel._readMarkerForEvent(createEvent.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            createEvent.getId(),
+            createEvent === lastShownEvent,
+        );
     }
 
     shouldGroup(ev) {
         const panel = this.panel;
         const createEvent = this.createEvent;
         if (!panel._shouldShowEvent(ev)) {
-            this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
             return true;
         }
         if (panel._wantsDateSeparator(this.createEvent, ev.getDate())) {
@@ -862,7 +865,10 @@ class CreationGrouper {
 
     add(ev) {
         const panel = this.panel;
-        this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
+        this.readMarker = this.readMarker || panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         if (!panel._shouldShowEvent(ev)) {
             return;
         }
@@ -949,7 +955,10 @@ class MemberGrouper {
 
     constructor(panel, ev, prevEvent, lastShownEvent) {
         this.panel = panel;
-        this.readMarker = panel._readMarkerForEvent(ev.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            ev.getId(),
+            ev === lastShownEvent,
+        );
         this.events = [ev];
         this.prevEvent = prevEvent;
         this.lastShownEvent = lastShownEvent;
@@ -970,7 +979,10 @@ class MemberGrouper {
             const renderText = textForEvent(ev);
             if (!renderText || renderText.trim().length === 0) return; // quietly ignore
         }
-        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
+        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         this.events.push(ev);
     }
 

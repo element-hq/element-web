@@ -108,7 +108,7 @@ export default class RightPanel extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
@@ -123,7 +123,8 @@ export default class RightPanel extends React.Component {
         this._unregisterGroupStore(this.props.groupId);
     }
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
@@ -182,6 +183,7 @@ export default class RightPanel extends React.Component {
                 member: payload.member,
                 event: payload.event,
                 verificationRequest: payload.verificationRequest,
+                verificationRequestPromise: payload.verificationRequestPromise,
             });
         }
     }
@@ -231,6 +233,7 @@ export default class RightPanel extends React.Component {
                         onClose={onClose}
                         phase={this.state.phase}
                         verificationRequest={this.state.verificationRequest}
+                        verificationRequestPromise={this.state.verificationRequestPromise}
                     />;
                 } else {
                     panel = <MemberInfo

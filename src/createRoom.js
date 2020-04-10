@@ -174,6 +174,9 @@ export function findDMForUser(client, userId) {
             return member && (member.membership === "invite" || member.membership === "join");
         }
         return false;
+    }).sort((r1, r2) => {
+        return r2.getLastActiveTimestamp() -
+            r1.getLastActiveTimestamp();
     });
     if (suitableDMRooms.length) {
         return suitableDMRooms[0];

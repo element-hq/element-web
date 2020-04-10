@@ -42,7 +42,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this._updateRelatedGroups();
 

@@ -68,7 +68,7 @@ limitations under the License.
     text-transform: uppercase;
     color: $roomsublist-label-fg-color;
     font-weight: 700;
-    font-size: 12px;
+    font-size: $font-12px;
     margin-left: 8px;
 }
 
@@ -76,7 +76,7 @@ limitations under the License.
     flex: 0 0 auto;
     border-radius: 8px;
     font-weight: 600;
-    font-size: 12px;
+    font-size: $font-12px;
     padding: 0 5px;
     color: $roomtile-badge-fg-color;
     background-color: $roomtile-name-color;
@@ -166,41 +166,22 @@ limitations under the License.
 
 // overflow indicators
 .mx_RoomSubList:not(.resized-all) > .mx_RoomSubList_scroll {
-    &.mx_IndicatorScrollbar_topOverflow::before,
-    &.mx_IndicatorScrollbar_bottomOverflow::after {
+    &.mx_IndicatorScrollbar_topOverflow::before {
         position: sticky;
+        content: "";
+        top: 0;
         left: 0;
         right: 0;
         height: 8px;
-        content: "";
-        display: block;
         z-index: 100;
+        display: block;
         pointer-events: none;
-    }
-
-    &.mx_IndicatorScrollbar_topOverflow > .mx_AutoHideScrollbar_offset {
-        margin-top: -8px;
-    }
-    &.mx_IndicatorScrollbar_bottomOverflow > .mx_AutoHideScrollbar_offset {
-        margin-bottom: -8px;
-    }
-
-    &.mx_IndicatorScrollbar_topOverflow::before {
-        top: 0;
         transition: background-image 0.1s ease-in;
         background: linear-gradient(to top, $panel-gradient);
     }
 
-    /*
-    // for now, we remove the bottomOverflow entirely as we don't want to
-    // lose the screen real-estate due to a bg-colored gradient, but we also
-    // don't want to use drop shadows and risk a confusing hierarchy of cards.
-    // so, instead, we hard-clip at the bottom but soft-clip at the top.
-    &.mx_IndicatorScrollbar_bottomOverflow::after {
-        bottom: 0;
-        transition: background-image 0.1s ease-in;
-        margin: 0px -8px;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.0));
+
+    &.mx_IndicatorScrollbar_topOverflow {
+        margin-top: -8px;
     }
-    */
 }

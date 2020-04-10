@@ -27,6 +27,7 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetUtils from "./utils/WidgetUtils";
+import {KnownWidgetActions} from "./widgets/WidgetApi";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -76,11 +77,22 @@ export default class WidgetMessaging {
     }
 
     /**
+     * Tells the widget that the client is ready to handle further widget requests.
+     * @returns {Promise<*>} Resolves after the widget has acknowledged the ready message.
+     */
+    flagReadyToContinue() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.ClientReady,
+        });
+    }
+
+    /**
      * Request a screenshot from a widget
      * @return {Promise} To be resolved with screenshot data when it has been generated
      */
     getScreenshot() {
-        console.warn('Requesting screenshot for', this.widgetId);
+        console.log('Requesting screenshot for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "screenshot",
@@ -94,12 +106,12 @@ export default class WidgetMessaging {
      * @return {Promise} To be resolved with an array of requested widget capabilities
      */
     getCapabilities() {
-        console.warn('Requesting capabilities for', this.widgetId);
+        console.log('Requesting capabilities for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "capabilities",
             }).then((response) => {
-                console.warn('Got capabilities for', this.widgetId, response.capabilities);
+                console.log('Got capabilities for', this.widgetId, response.capabilities);
                 return response.capabilities;
             });
     }

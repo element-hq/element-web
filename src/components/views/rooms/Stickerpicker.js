@@ -84,11 +84,11 @@ export default class Stickerpicker extends React.Component {
 
     async _removeStickerpickerWidgets() {
         const scalarClient = await this._acquireScalarClient();
-        console.warn('Removing Stickerpicker widgets');
+        console.log('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
             if (scalarClient) {
                 scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
-                    console.warn('Assets disabled');
+                    console.log('Assets disabled');
                 }).catch((err) => {
                     console.error('Failed to disable assets');
                 });
@@ -240,6 +240,15 @@ export default class Stickerpicker extends React.Component {
             // Set default name
             stickerpickerWidget.content.name = stickerpickerWidget.name || _t("Stickerpack");
 
+            // FIXME: could this use the same code as other apps?
+            const stickerApp = {
+                id: stickerpickerWidget.id,
+                url: stickerpickerWidget.content.url,
+                name: stickerpickerWidget.content.name,
+                type: stickerpickerWidget.content.type,
+                data: stickerpickerWidget.content.data,
+            };
+
             stickersContent = (
                 <div className='mx_Stickers_content_container'>
                     <div
@@ -253,11 +262,8 @@ export default class Stickerpicker extends React.Component {
                     >
                     <PersistedElement persistKey={PERSISTED_ELEMENT_KEY} style={{zIndex: STICKERPICKER_Z_INDEX}}>
                         <AppTile
-                            id={stickerpickerWidget.id}
-                            url={stickerpickerWidget.content.url}
-                            name={stickerpickerWidget.content.name}
+                            app={stickerApp}
                             room={this.props.room}
-                            type={stickerpickerWidget.content.type}
                             fullWidth={true}
                             userId={MatrixClientPeg.get().credentials.userId}
                             creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}

@@ -49,7 +49,8 @@ export default class RoomBreadcrumbs extends React.Component {
         this._scroller = createRef();
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         this._dispatcherRef = dis.register(this.onAction);
 
         const storedRooms = SettingsStore.getValue("breadcrumb_rooms");

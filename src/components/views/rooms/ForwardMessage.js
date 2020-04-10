@@ -30,22 +30,18 @@ export default createReactClass({
         onCancelClick: PropTypes.func.isRequired,
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            rightDisabled: true,
             middleDisabled: true,
         });
-    },
 
-    componentDidMount: function() {
         document.addEventListener('keydown', this._onKeyDown);
     },
 
     componentWillUnmount: function() {
         dis.dispatch({
             action: 'panel_disable',
-            sideDisabled: false,
             middleDisabled: false,
         });
         document.removeEventListener('keydown', this._onKeyDown);

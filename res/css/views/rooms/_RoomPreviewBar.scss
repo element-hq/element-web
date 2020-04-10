@@ -23,7 +23,7 @@ limitations under the License.
     -webkit-align-items: center;
 
     h3 {
-        font-size: 18px;
+        font-size: $font-18px;
         font-weight: 600;
 
         &.mx_RoomPreviewBar_spinnerTitle {
@@ -31,6 +31,13 @@ limitations under the License.
             flex-direction: row;
             align-items: center;
         }
+    }
+
+    h3,
+    .mx_RoomPreviewBar_message p {
+        // break-word, with fallback to break-all, which is wider supported
+        word-break: break-all;
+        word-break: break-word;
     }
 
     .mx_Spinner {
@@ -41,8 +48,8 @@ limitations under the License.
     }
 
     .mx_RoomPreviewBar_footer {
-        font-size: 12px;
-        line-height: 20px;
+        font-size: $font-12px;
+        line-height: $font-20px;
 
         .mx_Spinner {
             vertical-align: middle;

@@ -18,7 +18,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import('../../../VelocityBounce');
+import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
@@ -87,6 +87,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._avatar = createRef();
     },
