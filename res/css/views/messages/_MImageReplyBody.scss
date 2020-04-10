@@ -16,9 +16,10 @@ limitations under the License.
 
 .mx_MImageReplyBody {
     display: grid;
-    grid-template: "image sender"   20px
-                   "image filename" 20px
-                  / 44px  auto;
+    grid-template:
+        "image sender"   20px
+        "image filename" 20px
+        / 44px  auto;
     grid-gap: 4px;
 }
 
