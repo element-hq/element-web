@@ -1,5 +1,5 @@
 /*
-Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 Tulir Asokan <tulir@maunium.net>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-const classNames = require("classnames");
+import classNames from 'classnames';
 import { _t, _td } from '../../../languageHandler';
 
-const sdk = require('../../../index');
+import * as sdk from '../../../index';
 
 import dis from '../../../dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixClient} from 'matrix-js-sdk';
 
-const ObjectUtils = require('../../../ObjectUtils');
+import * as ObjectUtils from '../../../ObjectUtils';
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -230,4 +230,4 @@ class ReplyTile extends React.Component {
     }
 }
 
-module.exports = ReplyTile;
+export default ReplyTile;
