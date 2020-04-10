@@ -35,6 +35,8 @@ limitations under the License.
     $reply-lines: 2;
     $line-height: 22px;
 
+    pointer-events: none;
+
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
