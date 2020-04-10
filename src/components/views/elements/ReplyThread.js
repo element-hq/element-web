@@ -25,7 +25,7 @@ import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks
 import SettingsStore from "../../../settings/SettingsStore";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { getUserNameColorClass } from "../../../utils/FormattingUtils"
+import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
