@@ -184,7 +184,7 @@ class ReplyTile extends React.Component {
         }
 
         let sender;
-        const needsSenderProfile = tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
+        const needsSenderProfile = msgtype !== 'm.image' && tileHandler !== 'messages.RoomCreate' && !isInfoMessage;
 
         if (needsSenderProfile) {
             let text = null;
