@@ -2354,5 +2354,9 @@
     "Confirm account deactivation": "Confirmez la désactivation de votre compte",
     "Server did not require any authentication": "Le serveur n’a pas demandé d’authentification",
     "Server did not return valid authentication information.": "Le serveur n’a pas renvoyé des informations d’authentification valides.",
-    "There was a problem communicating with the server. Please try again.": "Un problème est survenu en essayant de communiquer avec le serveur. Veuillez réessayer."
+    "There was a problem communicating with the server. Please try again.": "Un problème est survenu en essayant de communiquer avec le serveur. Veuillez réessayer.",
+    "Delete sessions|other": "Supprimer les sessions",
+    "Delete sessions|one": "Supprimer la session",
+    "Enable end-to-end encryption": "Activer le chiffrement de bout en bout",
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "Vous ne pourrez pas le désactiver plus tard. Les passerelles et la plupart des bots ne fonctionneront pas pour le moment."
 }
