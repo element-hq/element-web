@@ -914,7 +914,7 @@ export const Commands = [
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
     new Command({
-        command: 'me',
+        command: "me",
         args: '<message>',
         description: _td('Displays action'),
         category: CommandCategories.messages,
@@ -931,16 +931,7 @@ Commands.forEach(cmd => {
     });
 });
 
-
-/**
- * Process the given text for /commands and return a bound method to perform them.
- * @param {string} roomId The room in which the command was performed.
- * @param {string} input The raw text input by the user.
- * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
- * processing the command, or 'promise' if a request was sent out.
- * Returns null if the input didn't match a command.
- */
-export function getCommand(roomId, input) {
+export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -955,6 +946,20 @@ export function getCommand(roomId, input) {
     } else {
         cmd = input;
     }
+
+    return {cmd, args};
+}
+
+/**
+ * Process the given text for /commands and return a bound method to perform them.
+ * @param {string} roomId The room in which the command was performed.
+ * @param {string} input The raw text input by the user.
+ * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
+ * processing the command, or 'promise' if a request was sent out.
+ * Returns null if the input didn't match a command.
+ */
+export function getCommand(roomId, input) {
+    const {cmd, args} = parseCommandString(input);
 
     if (CommandMap.has(cmd)) {
         return () => CommandMap.get(cmd).run(roomId, args, cmd);

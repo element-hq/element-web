@@ -39,6 +39,7 @@ import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 import * as sdk from '../../../index';
 import {Key} from "../../../Keyboard";
 import {EMOTICON_TO_EMOJI} from "../../../emoji";
+import {CommandCategories, CommandMap, parseCommandString} from "../../../SlashCommands";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -162,7 +163,16 @@ export default class BasicMessageEditor extends React.Component {
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
-        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
+
+        let isTyping = !this.props.model.isEmpty;
+        // If the user is entering a command, only consider them typing if it is one which sends a message into the room
+        if (isTyping && this.props.model.parts[0].type === "command") {
+            const {cmd} = parseCommandString(this.props.model.parts[0].text);
+            if (CommandMap.get(cmd).category !== CommandCategories.messages) {
+                isTyping = false;
+            }
+        }
+        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, isTyping);
 
         if (this.props.onChange) {
             this.props.onChange();
