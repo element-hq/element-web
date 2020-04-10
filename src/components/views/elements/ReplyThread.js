@@ -25,6 +25,7 @@ import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks
 import SettingsStore from "../../../settings/SettingsStore";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { getUserNameColorClass } from "../../../utils/FormattingUtils"
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -285,6 +286,10 @@ export default class ReplyThread extends React.Component {
         dis.dispatch({action: 'focus_composer'});
     }
 
+    getReplyThreadColorClass(ev) {
+        return getUserNameColorClass(ev.getSender()).replace("Username", "ReplyThread");
+    }
+
     render() {
         let header = null;
 
@@ -299,7 +304,7 @@ export default class ReplyThread extends React.Component {
             const ev = this.state.loadedEv;
             const Pill = sdk.getComponent('elements.Pill');
             const room = this.context.getRoom(ev.getRoomId());
-            header = <blockquote className="mx_ReplyThread">
+            header = <blockquote className={`mx_ReplyThread ${this.getReplyThreadColorClass(ev)}`}>
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
                         'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
@@ -315,7 +320,7 @@ export default class ReplyThread extends React.Component {
 
         const ReplyTile = sdk.getComponent('views.rooms.ReplyTile');
         const evTiles = this.state.events.map((ev) => {
-            return <blockquote className="mx_ReplyThread" key={ev.getId()}>
+            return <blockquote className={`mx_ReplyThread ${this.getReplyThreadColorClass(ev)}`} key={ev.getId()}>
                 <ReplyTile
                     mxEvent={ev}
                     onHeightChanged={this.props.onHeightChanged}
