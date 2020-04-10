@@ -82,6 +82,7 @@ class ReplyTile extends React.Component {
         super(props, context);
         this.state = {};
         this.onClick = this.onClick.bind(this);
+        this._onDecrypted = this._onDecrypted.bind(this);
     }
 
     componentDidMount() {
@@ -102,6 +103,9 @@ class ReplyTile extends React.Component {
 
     _onDecrypted() {
         this.forceUpdate();
+        if (this.props.onHeightChanged) {
+            this.props.onHeightChanged();
+        }
     }
 
     _propsEqual(objA, objB) {
