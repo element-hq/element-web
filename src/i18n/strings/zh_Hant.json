@@ -2353,5 +2353,9 @@
     "Confirm account deactivation": "確認停用帳號",
     "Server did not require any authentication": "伺服器不需要任何驗證",
     "Server did not return valid authentication information.": "伺服器沒有回傳有效的驗證資訊。",
-    "There was a problem communicating with the server. Please try again.": "與伺服器通訊時發生問題。請再試一次。"
+    "There was a problem communicating with the server. Please try again.": "與伺服器通訊時發生問題。請再試一次。",
+    "Delete sessions|other": "刪除工作階段",
+    "Delete sessions|one": "刪除工作階段",
+    "Enable end-to-end encryption": "啟用端到端加密",
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "您無法在稍後停用此功能。橋接與大多數機器人也尚無法運作。"
 }
