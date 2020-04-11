@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import QRCode from 'qrcode-react';
+import QRCode from "../elements/QRCode";
 import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import * as ContextMenu from "../../structures/ContextMenu";
 import {toRightOf} from "../../structures/ContextMenu";
@@ -213,7 +213,7 @@ export default class ShareDialog extends React.Component {
 
                 <div className="mx_ShareDialog_split">
                     <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
+                        <QRCode data={matrixToUrl} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         {
