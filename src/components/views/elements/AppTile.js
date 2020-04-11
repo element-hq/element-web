@@ -671,6 +671,17 @@ export default class AppTile extends React.Component {
     }
 
     _onPopoutWidgetClick() {
+        // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
+        // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
+            this._endWidgetActions().then(() => {
+                if (this._appFrame.current) {
+                    // Reload iframe
+                    this._appFrame.current.src = this._getRenderedUrl();
+                    this.setState({});
+                }
+            });
+        }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
