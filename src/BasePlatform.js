@@ -188,4 +188,8 @@ export default class BasePlatform {
         const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl());
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
+
+    onKeyDown(ev: KeyboardEvent): boolean {
+        return false; // no shortcuts implemented
+    }
 }
