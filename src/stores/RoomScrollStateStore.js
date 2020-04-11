@@ -32,15 +32,15 @@ class RoomScrollStateStore {
         //
         //    pixelOffset: the number of pixels the window is scrolled down
         //        from the focussedEvent.
-        this._scrollStateMap = {};
+        this._RoomViewScrollStateMap = {};
     }
 
-    getScrollState(roomId) {
-        return this._scrollStateMap[roomId];
+    getRoomViewScrollState(roomId) {
+        return this._RoomViewScrollStateMap[roomId];
     }
 
-    setScrollState(roomId, scrollState) {
-        this._scrollStateMap[roomId] = scrollState;
+    setRoomViewScrollState(roomId, scrollState) {
+        this._RoomViewScrollStateMap[roomId] = scrollState;
     }
 }
 
