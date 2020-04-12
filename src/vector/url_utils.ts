@@ -14,8 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+interface IParamsObject {
+    [key: string]: string;
+}
+
 function searchParamsToObject(params: URLSearchParams) {
-    return Object.fromEntries([...params.entries()]);
+    return <IParamsObject>Object.fromEntries([...params.entries()]);
 }
 
 // We want to support some name / value pairs in the fragment
@@ -34,7 +38,7 @@ export function parseQsFromFragment(location: Location) {
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: {},
+        params: <IParamsObject>{},
     };
 
     if (hashparts.length > 1) {
