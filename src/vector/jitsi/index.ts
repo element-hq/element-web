@@ -17,7 +17,7 @@ limitations under the License.
 // We have to trick webpack into loading our CSS for us.
 require("./index.scss");
 
-import * as qs from 'querystring';
+import { parseQs, parseQsFromFragment } from "../url_utils";
 import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
@@ -40,8 +40,8 @@ let widgetApi: WidgetApi;
     try {
         // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
         // spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
-        const widgetQuery = qs.parse(window.location.hash.substring(1));
-        const query = Object.assign({}, qs.parse(window.location.search.substring(1)), widgetQuery);
+        const widgetQuery = parseQsFromFragment(window.location);
+        const query = Object.assign({}, parseQs(window.location), widgetQuery.params);
         const qsParam = (name: string, optional = false): string => {
             if (!optional && (!query[name] || typeof (query[name]) !== 'string')) {
                 throw new Error(`Expected singular ${name} in query string`);

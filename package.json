@@ -96,6 +96,7 @@
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
+    "@types/jest": "^25.2.1",
     "@types/modernizr": "^3.5.3",
     "@types/react": "16.9",
     "@types/react-dom": "^16.9.4",
@@ -208,7 +209,7 @@
     ],
     "testEnvironment": "jest-environment-jsdom-fourteen",
     "testMatch": [
-      "<rootDir>/test/**/*-test.js"
+      "<rootDir>/test/**/*-test.*"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"

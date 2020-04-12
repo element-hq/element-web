@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as qs from 'querystring';
+function searchParamsToObject(params: URLSearchParams) {
+    return Object.fromEntries([...params.entries()]);
+}
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
@@ -32,15 +34,15 @@ export function parseQsFromFragment(location: Location) {
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: <qs.ParsedUrlQuery>{},
+        params: {},
     };
 
     if (hashparts.length > 1) {
-        result.params = qs.parse(hashparts[1]);
+        result.params = searchParamsToObject(new URLSearchParams(hashparts[1]));
     }
     return result;
 }
 
 export function parseQs(location: Location) {
-    return qs.parse(location.search.substring(1));
+    return searchParamsToObject(new URLSearchParams(location.search));
 }
