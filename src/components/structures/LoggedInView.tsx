@@ -16,9 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from 'matrix-js-sdk';
-import React, {createRef, PureComponent} from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
@@ -28,7 +29,7 @@ import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import {MatrixClientPeg, MatrixClientCreds} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "../../stores/RoomListStore";
 
@@ -39,6 +40,7 @@ import {Resizer, CollapseDistributor} from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 import HomePage from "./HomePage";
+import ResizeNotifier from "../../utils/ResizeNotifier";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -51,6 +53,52 @@ function canElementReceiveInput(el) {
         !!el.getAttribute("contenteditable");
 }
 
+interface IProps {
+    matrixClient: MatrixClient;
+    onRegistered: (credentials: MatrixClientCreds) => Promise<MatrixClient>;
+    viaServers?: string[];
+    hideToSRUsers: boolean;
+    resizeNotifier: ResizeNotifier;
+    middleDisabled: boolean;
+    initialEventPixelOffset: number;
+    leftDisabled: boolean;
+    rightDisabled: boolean;
+    showCookieBar: boolean;
+    hasNewVersion: boolean;
+    userHasGeneratedPassword: boolean;
+    showNotifierToolbar: boolean;
+    page_type: string;
+    autoJoin: boolean;
+    thirdPartyInvite?: object;
+    roomOobData?: object;
+    currentRoomId: string;
+    ConferenceHandler?: object;
+    collapseLhs: boolean;
+    checkingForUpdate: boolean;
+    config: {
+        piwik: {
+            policyUrl: string;
+        },
+        [key: string]: any,
+    };
+    currentUserId?: string;
+    currentGroupId?: string;
+    currentGroupIsNew?: boolean;
+    version?: string;
+    newVersion?: string;
+    newVersionReleaseNotes?: string;
+}
+interface IState {
+    mouseDown?: {
+        x: number;
+        y: number;
+    };
+    syncErrorData: any;
+    useCompactLayout: boolean;
+    serverNoticeEvents: MatrixEvent[];
+    userHasGeneratedPassword: boolean;
+}
+
 /**
  * This is what our MatrixChat shows when we are logged in. The precise view is
  * determined by the page_type property.
@@ -60,7 +108,7 @@ function canElementReceiveInput(el) {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-class LoggedInView extends PureComponent {
+class LoggedInView extends React.PureComponent<IProps, IState> {
     static displayName = 'LoggedInView';
 
     static propTypes = {
@@ -78,10 +126,20 @@ class LoggedInView extends PureComponent {
         // and lots and lots of other stuff.
     };
 
+    private readonly _matrixClient: MatrixClient;
+    private readonly _roomView: React.RefObject<any>;
+    private readonly _resizeContainer: React.RefObject<ResizeHandle>;
+    private readonly _sessionStore: sessionStore;
+    private readonly _sessionStoreToken: { remove: () => void };
+    private resizer: Resizer;
+
     constructor(props, context) {
         super(props, context);
 
         this.state = {
+            mouseDown: undefined,
+            syncErrorData: undefined,
+            userHasGeneratedPassword: false,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
             // any currently active server notice events
@@ -109,7 +167,8 @@ class LoggedInView extends PureComponent {
 
         fixupColorFonts();
 
-        this._roomView = createRef();
+        this._roomView = React.createRef();
+        this._resizeContainer = React.createRef();
     }
 
     componentDidMount() {
@@ -118,12 +177,12 @@ class LoggedInView extends PureComponent {
         this._loadResizerPreferences();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         // attempt to guess when a banner was opened or closed
         if (
             (prevProps.showCookieBar !== this.props.showCookieBar) ||
             (prevProps.hasNewVersion !== this.props.hasNewVersion) ||
-            (prevProps.userHasGeneratedPassword !== this.props.userHasGeneratedPassword) ||
+            (prevState.userHasGeneratedPassword !== this.state.userHasGeneratedPassword) ||
             (prevProps.showNotifierToolbar !== this.props.showNotifierToolbar)
         ) {
             this.props.resizeNotifier.notifyBannersChanged();
@@ -186,7 +245,7 @@ class LoggedInView extends PureComponent {
             },
         };
         const resizer = new Resizer(
-            this.resizeContainer,
+            this._resizeContainer.current,
             CollapseDistributor,
             collapseConfig);
         resizer.setClassNames(classNames);
@@ -194,10 +253,8 @@ class LoggedInView extends PureComponent {
     }
 
     _loadResizerPreferences() {
-        let lhsSize = window.localStorage.getItem("mx_lhs_size");
-        if (lhsSize !== null) {
-            lhsSize = parseInt(lhsSize, 10);
-        } else {
+        let lhsSize = parseInt(window.localStorage.getItem("mx_lhs_size"), 10);
+        if (isNaN(lhsSize)) {
             lhsSize = 350;
         }
         this.resizer.forHandleAt(0).resize(lhsSize);
@@ -528,10 +585,6 @@ class LoggedInView extends PureComponent {
         this.setState({mouseDown: null});
     };
 
-    _setResizeContainerRef = (div) => {
-        this.resizeContainer = div;
-    };
-
     render() {
         const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
@@ -645,7 +698,7 @@ class LoggedInView extends PureComponent {
                     { topBar }
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>
-                        <div ref={this._setResizeContainerRef} className={bodyClasses}>
+                        <div ref={this._resizeContainer} className={bodyClasses}>
                             <LeftPanel
                                 resizeNotifier={this.props.resizeNotifier}
                                 collapsed={this.props.collapseLhs || false}
