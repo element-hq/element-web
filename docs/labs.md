@@ -1,6 +1,7 @@
 # Labs features
 
-Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
+If Labs is enabled in the [Riot config](config.md), you can enable some of these features by going
+to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#riot-web:matrix.org](https://matrix.to/#/#riot-web:matrix.org) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
