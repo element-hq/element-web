@@ -315,8 +315,8 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
             const pinnedEventIds = pinStateEvent.getContent().pinned.slice(0, MAX_PINNED_NOTICES_PER_ROOM);
             for (const eventId of pinnedEventIds) {
                 const timeline = await this._matrixClient.getEventTimeline(room.getUnfilteredTimelineSet(), eventId, 0);
-                const ev = timeline.getEvents().find(ev => ev.getId() === eventId);
-                if (ev) pinnedEvents.push(ev);
+                const event = timeline.getEvents().find(ev => ev.getId() === eventId);
+                if (event) pinnedEvents.push(event);
             }
         }
         this.setState({
