@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import url from "url";
+import * as url from "url";
+
+export function urlSearchParamsToObject<T extends {}>(params: URLSearchParams) {
+    return <T>Object.fromEntries([...params.entries()]);
+}
 
 /**
  * If a url has no path component, etc. abbreviate it to just the hostname
