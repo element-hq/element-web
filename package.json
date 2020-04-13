@@ -87,7 +87,6 @@
     "prop-types": "^15.5.8",
     "qrcode": "^1.4.4",
     "qrcode-react": "^0.1.16",
-    "qs": "^6.6.0",
     "react": "^16.9.0",
     "react-addons-css-transition-group": "15.6.2",
     "react-beautiful-dnd": "^4.0.1",

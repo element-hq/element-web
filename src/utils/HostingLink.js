@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import url from 'url';
-import qs from 'qs';
 
 import SdkConfig from '../SdkConfig';
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import {urlSearchParamsToObject} from "./UrlUtils";
 
 export function getHostingLink(campaign) {
     const hostingLink = SdkConfig.get().hosting_signup_link;
@@ -29,7 +29,7 @@ export function getHostingLink(campaign) {
 
     try {
         const hostingUrl = url.parse(hostingLink);
-        const params = qs.parse(hostingUrl.query);
+        const params = urlSearchParamsToObject(new URLSearchParams(hostingUrl.query));
         params.utm_campaign = campaign;
         hostingUrl.search = undefined;
         hostingUrl.query = params;

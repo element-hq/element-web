@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import url from 'url';
-import qs from 'qs';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -38,6 +37,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
+import {urlSearchParamsToObject} from "../../../utils/UrlUtils";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -234,7 +234,7 @@ export default class AppTile extends React.Component {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
             const u = url.parse(this._addWurlParams(this.props.app.url));
-            const params = qs.parse(u.query);
+            const params = urlSearchParamsToObject(new URLSearchParams(u.query));
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
                 // u.search must be set to undefined, so that u.format() uses query parameters - https://nodejs.org/docs/latest/api/url.html#url_url_format_url_options
