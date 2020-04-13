@@ -126,12 +126,12 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         // and lots and lots of other stuff.
     };
 
-    private readonly _matrixClient: MatrixClient;
-    private readonly _roomView: React.RefObject<any>;
-    private readonly _resizeContainer: React.RefObject<ResizeHandle>;
-    private readonly _sessionStore: sessionStore;
-    private readonly _sessionStoreToken: { remove: () => void };
-    private resizer: Resizer;
+    protected readonly _matrixClient: MatrixClient;
+    protected readonly _roomView: React.RefObject<any>;
+    protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
+    protected readonly _sessionStore: sessionStore;
+    protected readonly _sessionStoreToken: { remove: () => void };
+    protected resizer: Resizer;
 
     constructor(props, context) {
         super(props, context);
