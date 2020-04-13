@@ -31,8 +31,6 @@ import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 
-import url from 'url';
-
 import {parseQs, parseQsFromFragment} from './url_utils';
 
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
@@ -118,11 +116,10 @@ function onTokenLoginCompleted() {
     // if we did a token login, we're now left with the token, hs and is
     // url as query params in the url; a little nasty but let's redirect to
     // clear them.
-    const parsedUrl = url.parse(window.location.href);
+    const parsedUrl = new URL(window.location);
     parsedUrl.search = "";
-    const formatted = url.format(parsedUrl);
-    console.log("Redirecting to " + formatted + " to drop loginToken " +
-        "from queryparams");
+    const formatted = parsedUrl.toString();
+    console.log("Redirecting to " + formatted + " to drop loginToken from queryparams");
     window.location.href = formatted;
 }
 

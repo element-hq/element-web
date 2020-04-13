@@ -22,7 +22,6 @@ import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher.js';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 
-import url from 'url';
 import UAParser from 'ua-parser-js';
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
@@ -179,15 +178,15 @@ export default class WebPlatform extends VectorBasePlatform {
 
     getDefaultDeviceDisplayName(): string {
         // strip query-string and fragment from uri
-        const u = url.parse(window.location.href);
+        const u = new URL(window.location);
         u.search = "";
         u.hash = "";
-        const appName = u.format();
+        const appName = u.toString();
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
         const osName = ua.getOS().name || "unknown os";
-        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
+        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName, browserName, osName});
     }
 
     screenCaptureErrorString(): ?string {
