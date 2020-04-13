@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {urlSearchParamsToObject} from "matrix-react-sdk/src/utils/UrlUtils";
+
 interface IParamsObject {
     [key: string]: string;
-}
-
-function searchParamsToObject(params: URLSearchParams) {
-    return <IParamsObject>Object.fromEntries([...params.entries()]);
 }
 
 // We want to support some name / value pairs in the fragment
@@ -42,11 +40,11 @@ export function parseQsFromFragment(location: Location) {
     };
 
     if (hashparts.length > 1) {
-        result.params = searchParamsToObject(new URLSearchParams(hashparts[1]));
+        result.params = urlSearchParamsToObject<IParamsObject>(new URLSearchParams(hashparts[1]));
     }
     return result;
 }
 
 export function parseQs(location: Location) {
-    return searchParamsToObject(new URLSearchParams(location.search));
+    return urlSearchParamsToObject<IParamsObject>(new URLSearchParams(location.search));
 }
