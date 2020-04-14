@@ -108,14 +108,13 @@ export default class SetupEncryptionBody extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
-            const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+            const ButtonPlaceholder = sdk.getComponent("elements.ButtonPlaceholder");
             return (
                 <div>
                     <p>{_t(
-                        "Open an existing session & use it to verify this one, " +
+                        "Use an existing session to verify this one, " +
                         "granting it access to encrypted messages.",
                     )}</p>
-                    <p className="mx_CompleteSecurity_waiting"><InlineSpinner />{_t("Waiting…")}</p>
                     <p>{_t(
                         "If you can’t access one, <button>use your recovery key or passphrase.</button>",
                     {}, {
@@ -133,6 +132,7 @@ export default class SetupEncryptionBody extends React.Component {
                         >
                             {_t("Skip")}
                         </AccessibleButton>
+                        <ButtonPlaceholder>{_t("Use your other device to continue…")}</ButtonPlaceholder>
                     </div>
                 </div>
             );

@@ -172,6 +172,7 @@ Request:
 Response:
 [
     {
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         type: "im.vector.modular.widgets",
         state_key: "wid1",
         content: {
@@ -190,6 +191,7 @@ Example:
     room_id: "!foo:bar",
     response: [
         {
+            // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
             type: "im.vector.modular.widgets",
             state_key: "wid1",
             content: {

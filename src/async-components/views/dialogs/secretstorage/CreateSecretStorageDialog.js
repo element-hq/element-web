@@ -70,6 +70,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this._recoveryKey = null;
         this._recoveryKeyNode = null;
         this._setZxcvbnResultTimeout = null;
+        this._backupKey = null;
 
         this.state = {
             phase: PHASE_LOADING,
@@ -243,7 +244,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     createSecretStorageKey: async () => this._recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
-                    getKeyBackupPassphrase: promptForBackupPassphrase,
+                    getKeyBackupPassphrase: () => {
+                        // We may already have the backup key if we earlier went
+                        // through the restore backup path, so pass it along
+                        // rather than prompting again.
+                        if (this._backupKey) {
+                            return this._backupKey;
+                        }
+                        return promptForBackupPassphrase();
+                    },
                 });
             }
             this.setState({
@@ -272,10 +281,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _restoreBackup = async () => {
+        // It's possible we'll need the backup key later on for bootstrapping,
+        // so let's stash it here, rather than prompting for it twice.
+        const keyCallback = k => this._backupKey = k;
+
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
-            /* priority = */ false, /* static = */ false,
+            'Restore Backup', '', RestoreKeyBackupDialog,
+            {
+                showSummary: false,
+                keyCallback,
+            },
+            null, /* priority = */ false, /* static = */ false,
         );
 
         await finished;
