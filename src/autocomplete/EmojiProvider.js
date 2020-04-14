@@ -101,9 +101,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             // then sort by score (Infinity if matchedString not in shortname)
             sorters.push((c) => score(matchedString, c.shortname));
             // then sort by max score of all shortcodes, trim off the `:`
-            sorters.push((c) => {
-                return Math.min.apply(null, c.emoji.shortcodes.map(s => score(matchedString.substring(1), s)));
-            });
+            sorters.push((c) => Math.min(...c.emoji.shortcodes.map(s => score(matchedString.substring(1), s))));
             // If the matchedString is not empty, sort by length of shortname. Example:
             //  matchedString = ":bookmark"
             //  completions = [":bookmark:", ":bookmark_tabs:", ...]
