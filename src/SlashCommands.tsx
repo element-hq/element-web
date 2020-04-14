@@ -350,7 +350,7 @@ export const Commands = [
                 return success(cli.setRoomTopic(roomId, args));
             }
             const room = cli.getRoom(roomId);
-            if (!room) return reject('Bad room ID: ' + roomId);
+            if (!room) return reject(_t("Failed to set topic"));
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents && topicEvents.getContent().topic;
@@ -721,9 +721,10 @@ export const Commands = [
                     if (!isNaN(powerLevel)) {
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
-                        if (!room) return reject('Bad room ID: ' + roomId);
+                        if (!room) return reject(_t("Command failed"));
 
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
@@ -742,9 +743,10 @@ export const Commands = [
                 if (matches) {
                     const cli = MatrixClientPeg.get();
                     const room = cli.getRoom(roomId);
-                    if (!room) return reject('Bad room ID: ' + roomId);
+                    if (!room) return reject(_t("Command failed"));
 
                     const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                    if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                     return success(cli.setPowerLevel(roomId, args, undefined, powerLevelEvent));
                 }
             }
