@@ -29,6 +29,7 @@ import ThemeController from './controllers/ThemeController';
 import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
+import FontSizeController from './controllers/FontSizeController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -94,6 +95,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "font_size": {
+        displayName: _td("Font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 16,
+        controller: new FontSizeController(),
+    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
