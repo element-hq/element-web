@@ -2336,5 +2336,10 @@
     "Liberate your communication": "Çlironi komunikimin tuaj",
     "Send a Direct Message": "Dërgoni Mesazh të Drejtpërdrejtë",
     "Explore Public Rooms": "Eksploroni Dhoma Publike",
-    "Create a Group Chat": "Krijoni një Fjalosje Grupi"
+    "Create a Group Chat": "Krijoni një Fjalosje Grupi",
+    "Failed to set topic": "S’u arrit të caktohej temë",
+    "Command failed": "Urdhri dështoi",
+    "Could not find user in room": "S’u gjet përdorues në dhomë",
+    "well formed": "e mirëformuar",
+    "Delete sessions|other": "Fshiji sesionet"
 }
