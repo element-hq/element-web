@@ -46,7 +46,7 @@ $AppsDrawerBodyHeight: 273px;
     padding: 0;
     margin: 5px auto 5px auto;
     color: $accent-color;
-    font-size: 12px;
+    font-size: $font-12px;
 }
 
 .mx_AddWidget_button_full_width {
@@ -59,7 +59,7 @@ $AppsDrawerBodyHeight: 273px;
     padding: 9px;
     color: $primary-hairline-color;
     background-color: $primary-bg-color;
-    font-size: 15px;
+    font-size: $font-15px;
 }
 
 .mx_AppTile {
@@ -102,7 +102,7 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppTileMenuBar {
     margin: 0;
-    font-size: 12px;
+    font-size: $font-12px;
     background-color: $widget-menu-bar-bg-color;
     display: flex;
     flex-direction: row;
@@ -272,7 +272,7 @@ form.mx_Custom_Widget_Form div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: $font-16px;
 }
 
 .mx_AppPermissionWarning_row {
@@ -280,7 +280,7 @@ form.mx_Custom_Widget_Form div {
 }
 
 .mx_AppPermissionWarning_smallText {
-    font-size: 12px;
+    font-size: $font-12px;
 }
 
 .mx_AppPermissionWarning_bolder {

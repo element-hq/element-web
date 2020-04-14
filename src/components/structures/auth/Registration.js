@@ -120,12 +120,13 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._replaceClient();
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -462,7 +463,7 @@ export default createReactClass({
             initial_device_display_name: this.props.defaultDeviceDisplayName,
         };
         if (auth) registerParams.auth = auth;
-        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibitLogin = inhibitLogin;
+        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
         return this.state.matrixClient.registerRequest(registerParams);
     },
 

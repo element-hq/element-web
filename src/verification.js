@@ -99,7 +99,7 @@ export async function legacyVerifyUser(user) {
         return;
     }
     const cli = MatrixClientPeg.get();
-    const verificationRequestPromise = cli.beginKeyVerification(user.userId);
+    const verificationRequestPromise = cli.requestVerification(user.userId);
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,
@@ -111,12 +111,7 @@ export async function verifyUser(user) {
     if (!await enable4SIfNeeded()) {
         return;
     }
-    const cli = MatrixClientPeg.get();
-    const dmRoom = findDMForUser(cli, user.userId);
-    let existingRequest;
-    if (dmRoom) {
-        existingRequest = cli.findVerificationRequestDMInProgress(dmRoom.roomId);
-    }
+    const existingRequest = pendingVerificationRequestForUser(user);
     dis.dispatch({
         action: "set_right_panel_phase",
         phase: RIGHT_PANEL_PHASES.EncryptionPanel,
@@ -125,4 +120,12 @@ export async function verifyUser(user) {
             verificationRequest: existingRequest,
         },
     });
+}
+
+export function pendingVerificationRequestForUser(user) {
+    const cli = MatrixClientPeg.get();
+    const dmRoom = findDMForUser(cli, user.userId);
+    if (dmRoom) {
+        return cli.findVerificationRequestDMInProgress(dmRoom.roomId);
+    }
 }

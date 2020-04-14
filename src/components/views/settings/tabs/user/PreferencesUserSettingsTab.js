@@ -81,7 +81,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
@@ -195,19 +195,16 @@ export default class PreferencesUserSettingsTab extends React.Component {
                     {autoHideMenuOption}
                     {autoLaunchOption}
                     <Field
-                        id={"autocompleteDelay"}
                         label={_t('Autocomplete delay (ms)')}
                         type='number'
                         value={this.state.autocompleteDelay}
                         onChange={this._onAutocompleteDelayChange} />
                     <Field
-                        id={"readMarkerInViewThresholdMs"}
                         label={_t('Read Marker lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerInViewThresholdMs}
                         onChange={this._onReadMarkerInViewThresholdMs} />
                     <Field
-                        id={"readMarkerOutOfViewThresholdMs"}
                         label={_t('Read Marker off-screen lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerOutOfViewThresholdMs}

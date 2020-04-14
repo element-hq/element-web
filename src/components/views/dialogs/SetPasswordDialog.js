@@ -75,8 +75,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
-        console.info('SetPasswordDialog component will mount');
+    componentDidMount: function() {
+        console.info('SetPasswordDialog component did mount');
     },
 
     _onPasswordChanged: function(res) {

@@ -55,6 +55,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._field = createRef();
     },
@@ -116,7 +117,6 @@ export default createReactClass({
                         </div>
                         <div>
                             <Field
-                                id="mx_TextInputDialog_field"
                                 className="mx_TextInputDialog_input"
                                 ref={this._field}
                                 type="text"

@@ -47,11 +47,12 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._initGroupStore(this.props.groupId);
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);

@@ -64,7 +64,7 @@ limitations under the License.
 
 .mx_RoomTile_subtext {
     display: inline-block;
-    font-size: 11px;
+    font-size: $font-11px;
     padding: 0 0 0 7px;
     margin: 0;
     overflow: hidden;
@@ -112,7 +112,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_name {
-    font-size: 14px;
+    font-size: $font-14px;
     padding: 0 4px;
     color: $roomtile-name-color;
     white-space: nowrap;
@@ -126,7 +126,7 @@ limitations under the License.
     padding: 0 0.4em;
     color: $roomtile-badge-fg-color;
     font-weight: 600;
-    font-size: 12px;
+    font-size: $font-12px;
 }
 
 .collapsed {

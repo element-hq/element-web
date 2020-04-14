@@ -116,7 +116,8 @@ export default class Dropdown extends React.Component {
         };
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         this._button = createRef();
         // Listen for all clicks on the document so we can close the
         // menu when the user clicks somewhere else
@@ -127,7 +128,8 @@ export default class Dropdown extends React.Component {
         document.removeEventListener('click', this._onDocumentClick, false);
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (!nextProps.children || nextProps.children.length === 0) {
             return;
         }

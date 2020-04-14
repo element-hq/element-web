@@ -40,7 +40,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this._onAction);
     },

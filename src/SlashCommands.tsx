@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,8 @@ limitations under the License.
 */
 
 
-import React from 'react';
+import * as React from 'react';
+
 import {MatrixClientPeg} from './MatrixClientPeg';
 import dis from './dispatcher';
 import * as sdk from './index';
@@ -34,11 +36,16 @@ import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/I
 import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
 
-const singleMxcUpload = async () => {
+// XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
+interface HTMLInputEvent extends Event {
+    target: HTMLInputElement & EventTarget;
+}
+
+const singleMxcUpload = async (): Promise<any> => {
     return new Promise((resolve) => {
         const fileSelector = document.createElement('input');
         fileSelector.setAttribute('type', 'file');
-        fileSelector.onchange = (ev) => {
+        fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files[0];
 
             const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
@@ -62,28 +69,49 @@ export const CommandCategories = {
     "other": _td("Other"),
 };
 
+type RunFn = ((roomId: string, args: string, cmd: string) => {error: any} | {promise: Promise<any>});
+
+interface ICommandOpts {
+    command: string;
+    aliases?: string[];
+    args?: string;
+    description: string;
+    runFn?: RunFn;
+    category: string;
+    hideCompletionAfterSpace?: boolean;
+}
+
 class Command {
-    constructor({name, args='', description, runFn, category=CommandCategories.other, hideCompletionAfterSpace=false}) {
-        this.command = '/' + name;
-        this.args = args;
-        this.description = description;
-        this.runFn = runFn;
-        this.category = category;
-        this.hideCompletionAfterSpace = hideCompletionAfterSpace;
+    command: string;
+    aliases: string[];
+    args: undefined | string;
+    description: string;
+    runFn: undefined | RunFn;
+    category: string;
+    hideCompletionAfterSpace: boolean;
+
+    constructor(opts: ICommandOpts) {
+        this.command = opts.command;
+        this.aliases = opts.aliases || [];
+        this.args = opts.args || "";
+        this.description = opts.description;
+        this.runFn = opts.runFn;
+        this.category = opts.category || CommandCategories.other;
+        this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
     }
 
     getCommand() {
-        return this.command;
+        return `/${this.command}`;
     }
 
     getCommandWithArgs() {
         return this.getCommand() + " " + this.args;
     }
 
-    run(roomId, args) {
+    run(roomId: string, args: string, cmd: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
         if (!this.runFn) return;
-        return this.runFn.bind(this)(roomId, args);
+        return this.runFn.bind(this)(roomId, args, cmd);
     }
 
     getUsage() {
@@ -95,7 +123,7 @@ function reject(error) {
     return {error};
 }
 
-function success(promise) {
+function success(promise?: Promise<any>) {
     return {promise};
 }
 
@@ -103,11 +131,9 @@ function success(promise) {
  * functions are called with `this` bound to the Command instance.
  */
 
-/* eslint-disable babel/no-invalid-this */
-
-export const CommandMap = {
-    shrug: new Command({
-        name: 'shrug',
+export const Commands = [
+    new Command({
+        command: 'shrug',
         args: '<message>',
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
         runFn: function(roomId, args) {
@@ -119,8 +145,8 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-    plain: new Command({
-        name: 'plain',
+    new Command({
+        command: 'plain',
         args: '<message>',
         description: _td('Sends a message as plain text, without interpreting it as markdown'),
         runFn: function(roomId, messages) {
@@ -128,11 +154,20 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-    ddg: new Command({
-        name: 'ddg',
+    new Command({
+        command: 'html',
+        args: '<message>',
+        description: _td('Sends a message as html, without interpreting it as markdown'),
+        runFn: function(roomId, messages) {
+            return success(MatrixClientPeg.get().sendHtmlMessage(roomId, messages, messages));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'ddg',
         args: '<query>',
         description: _td('Searches DuckDuckGo for results'),
-        runFn: function(roomId, args) {
+        runFn: function() {
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             // TODO Don't explain this away, actually show a search UI here.
             Modal.createTrackedDialog('Slash Commands', '/ddg is not a command', ErrorDialog, {
@@ -144,9 +179,8 @@ export const CommandMap = {
         category: CommandCategories.actions,
         hideCompletionAfterSpace: true,
     }),
-
-    upgraderoom: new Command({
-        name: 'upgraderoom',
+    new Command({
+        command: 'upgraderoom',
         args: '<new_version>',
         description: _td('Upgrades a room to a new version'),
         runFn: function(roomId, args) {
@@ -215,9 +249,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    nick: new Command({
-        name: 'nick',
+    new Command({
+        command: 'nick',
         args: '<display_name>',
         description: _td('Changes your display nickname'),
         runFn: function(roomId, args) {
@@ -228,9 +261,9 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    myroomnick: new Command({
-        name: 'myroomnick',
+    new Command({
+        command: 'myroomnick',
+        aliases: ['roomnick'],
         args: '<display_name>',
         description: _td('Changes your display nickname in the current room only'),
         runFn: function(roomId, args) {
@@ -247,9 +280,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    roomavatar: new Command({
-        name: 'roomavatar',
+    new Command({
+        command: 'roomavatar',
         args: '[<mxc_url>]',
         description: _td('Changes the avatar of the current room'),
         runFn: function(roomId, args) {
@@ -265,9 +297,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    myroomavatar: new Command({
-        name: 'myroomavatar',
+    new Command({
+        command: 'myroomavatar',
         args: '[<mxc_url>]',
         description: _td('Changes your avatar in this current room only'),
         runFn: function(roomId, args) {
@@ -292,9 +323,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    myavatar: new Command({
-        name: 'myavatar',
+    new Command({
+        command: 'myavatar',
         args: '[<mxc_url>]',
         description: _td('Changes your avatar in all rooms'),
         runFn: function(roomId, args) {
@@ -310,9 +340,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    topic: new Command({
-        name: 'topic',
+    new Command({
+        command: 'topic',
         args: '[<topic>]',
         description: _td('Gets or sets the room topic'),
         runFn: function(roomId, args) {
@@ -321,7 +350,7 @@ export const CommandMap = {
                 return success(cli.setRoomTopic(roomId, args));
             }
             const room = cli.getRoom(roomId);
-            if (!room) return reject('Bad room ID: ' + roomId);
+            if (!room) return reject(_t("Failed to set topic"));
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents && topicEvents.getContent().topic;
@@ -336,9 +365,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    roomname: new Command({
-        name: 'roomname',
+    new Command({
+        command: 'roomname',
         args: '<name>',
         description: _td('Sets the room name'),
         runFn: function(roomId, args) {
@@ -349,9 +377,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    invite: new Command({
-        name: 'invite',
+    new Command({
+        command: 'invite',
         args: '<user-id>',
         description: _td('Invites user with given id to current room'),
         runFn: function(roomId, args) {
@@ -385,17 +412,20 @@ export const CommandMap = {
                                     button: _t("Continue"),
                                 },
                             ));
+
+                            finished = finished.then(([useDefault]: any) => {
+                                if (useDefault) {
+                                    useDefaultIdentityServer();
+                                    return;
+                                }
+                                throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
+                            });
                         } else {
                             return reject(_t("Use an identity server to invite by email. Manage in Settings."));
                         }
                     }
                     const inviter = new MultiInviter(roomId);
-                    return success(finished.then(([useDefault] = []) => {
-                        if (useDefault) {
-                            useDefaultIdentityServer();
-                        } else if (useDefault === false) {
-                            throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
-                        }
+                    return success(finished.then(() => {
                         return inviter.invite([address]);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
@@ -408,12 +438,12 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    join: new Command({
-        name: 'join',
+    new Command({
+        command: 'join',
+        aliases: ['j', 'goto'],
         args: '<room-alias>',
         description: _td('Joins room with given alias'),
-        runFn: function(roomId, args) {
+        runFn: function(_, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
                 // the public-facing one for most users and the other is a
@@ -521,9 +551,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    part: new Command({
-        name: 'part',
+    new Command({
+        command: 'part',
         args: '[<room-alias>]',
         description: _td('Leave room'),
         runFn: function(roomId, args) {
@@ -569,9 +598,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    kick: new Command({
-        name: 'kick',
+    new Command({
+        command: 'kick',
         args: '<user-id> [reason]',
         description: _td('Kicks user with given id'),
         runFn: function(roomId, args) {
@@ -585,10 +613,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    // Ban a user from the room with an optional reason
-    ban: new Command({
-        name: 'ban',
+    new Command({
+        command: 'ban',
         args: '<user-id> [reason]',
         description: _td('Bans user with given id'),
         runFn: function(roomId, args) {
@@ -602,10 +628,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    // Unban a user from ythe room
-    unban: new Command({
-        name: 'unban',
+    new Command({
+        command: 'unban',
         args: '<user-id>',
         description: _td('Unbans user with given ID'),
         runFn: function(roomId, args) {
@@ -620,9 +644,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    ignore: new Command({
-        name: 'ignore',
+    new Command({
+        command: 'ignore',
         args: '<user-id>',
         description: _td('Ignores a user, hiding their messages from you'),
         runFn: function(roomId, args) {
@@ -651,9 +674,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    unignore: new Command({
-        name: 'unignore',
+    new Command({
+        command: 'unignore',
         args: '<user-id>',
         description: _td('Stops ignoring a user, showing their messages going forward'),
         runFn: function(roomId, args) {
@@ -683,10 +705,8 @@ export const CommandMap = {
         },
         category: CommandCategories.actions,
     }),
-
-    // Define the power level of a user
-    op: new Command({
-        name: 'op',
+    new Command({
+        command: 'op',
         args: '<user-id> [<power-level>]',
         description: _td('Define the power level of a user'),
         runFn: function(roomId, args) {
@@ -696,14 +716,15 @@ export const CommandMap = {
                 if (matches) {
                     const userId = matches[1];
                     if (matches.length === 4 && undefined !== matches[3]) {
-                        powerLevel = parseInt(matches[3]);
+                        powerLevel = parseInt(matches[3], 10);
                     }
                     if (!isNaN(powerLevel)) {
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
-                        if (!room) return reject('Bad room ID: ' + roomId);
+                        if (!room) return reject(_t("Command failed"));
 
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
@@ -712,10 +733,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    // Reset the power level of a user
-    deop: new Command({
-        name: 'deop',
+    new Command({
+        command: 'deop',
         args: '<user-id>',
         description: _td('Deops user with given id'),
         runFn: function(roomId, args) {
@@ -724,9 +743,10 @@ export const CommandMap = {
                 if (matches) {
                     const cli = MatrixClientPeg.get();
                     const room = cli.getRoom(roomId);
-                    if (!room) return reject('Bad room ID: ' + roomId);
+                    if (!room) return reject(_t("Command failed"));
 
                     const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                    if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                     return success(cli.setPowerLevel(roomId, args, undefined, powerLevelEvent));
                 }
             }
@@ -734,9 +754,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    devtools: new Command({
-        name: 'devtools',
+    new Command({
+        command: 'devtools',
         description: _td('Opens the Developer Tools dialog'),
         runFn: function(roomId) {
             const DevtoolsDialog = sdk.getComponent('dialogs.DevtoolsDialog');
@@ -745,9 +764,8 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
-
-    addwidget: new Command({
-        name: 'addwidget',
+    new Command({
+        command: 'addwidget',
         args: '<url>',
         description: _td('Adds a custom widget by URL to the room'),
         runFn: function(roomId, args) {
@@ -766,10 +784,8 @@ export const CommandMap = {
         },
         category: CommandCategories.admin,
     }),
-
-    // Verify a user, device, and pubkey tuple
-    verify: new Command({
-        name: 'verify',
+    new Command({
+        command: 'verify',
         args: '<user-id> <device-id> <device-signing-key>',
         description: _td('Verifies a user, session, and pubkey tuple'),
         runFn: function(roomId, args) {
@@ -834,20 +850,8 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
-
-    // Command definitions for autocompletion ONLY:
-
-    // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
-    me: new Command({
-        name: 'me',
-        args: '<message>',
-        description: _td('Displays action'),
-        category: CommandCategories.messages,
-        hideCompletionAfterSpace: true,
-    }),
-
-    discardsession: new Command({
-        name: 'discardsession',
+    new Command({
+        command: 'discardsession',
         description: _td('Forces the current outbound group session in an encrypted room to be discarded'),
         runFn: function(roomId) {
             try {
@@ -859,9 +863,8 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
-
-    rainbow: new Command({
-        name: "rainbow",
+    new Command({
+        command: "rainbow",
         description: _td("Sends the given message coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
@@ -870,9 +873,8 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-
-    rainbowme: new Command({
-        name: "rainbowme",
+    new Command({
+        command: "rainbowme",
         description: _td("Sends the given emote coloured as a rainbow"),
         args: '<message>',
         runFn: function(roomId, args) {
@@ -881,9 +883,8 @@ export const CommandMap = {
         },
         category: CommandCategories.messages,
     }),
-
-    help: new Command({
-        name: "help",
+    new Command({
+        command: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
             const SlashCommandHelpDialog = sdk.getComponent('dialogs.SlashCommandHelpDialog');
@@ -893,18 +894,16 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
-
-    whois: new Command({
-        name: "whois",
+    new Command({
+        command: "whois",
         description: _td("Displays information about a user"),
-        args: '<user-id>',
+        args: "<user-id>",
         runFn: function(roomId, userId) {
             if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
                 return reject(this.getUsage());
             }
 
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
-
             dis.dispatch({
                 action: 'view_user',
                 member: member || {userId},
@@ -913,28 +912,28 @@ export const CommandMap = {
         },
         category: CommandCategories.advanced,
     }),
-};
-/* eslint-enable babel/no-invalid-this */
 
+    // Command definitions for autocompletion ONLY:
+    // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
+    new Command({
+        command: "me",
+        args: '<message>',
+        description: _td('Displays action'),
+        category: CommandCategories.messages,
+        hideCompletionAfterSpace: true,
+    }),
+];
 
-// helpful aliases
-const aliases = {
-    j: "join",
-    newballsplease: "discardsession",
-    goto: "join", // because it handles event permalinks magically
-    roomnick: "myroomnick",
-};
+// build a map from names and aliases to the Command objects.
+export const CommandMap = new Map();
+Commands.forEach(cmd => {
+    CommandMap.set(cmd.command, cmd);
+    cmd.aliases.forEach(alias => {
+        CommandMap.set(alias, cmd);
+    });
+});
 
-
-/**
- * Process the given text for /commands and return a bound method to perform them.
- * @param {string} roomId The room in which the command was performed.
- * @param {string} input The raw text input by the user.
- * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
- * processing the command, or 'promise' if a request was sent out.
- * Returns null if the input didn't match a command.
- */
-export function getCommand(roomId, input) {
+export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -950,10 +949,21 @@ export function getCommand(roomId, input) {
         cmd = input;
     }
 
-    if (aliases[cmd]) {
-        cmd = aliases[cmd];
-    }
-    if (CommandMap[cmd]) {
-        return () => CommandMap[cmd].run(roomId, args);
+    return {cmd, args};
+}
+
+/**
+ * Process the given text for /commands and return a bound method to perform them.
+ * @param {string} roomId The room in which the command was performed.
+ * @param {string} input The raw text input by the user.
+ * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
+ * processing the command, or 'promise' if a request was sent out.
+ * Returns null if the input didn't match a command.
+ */
+export function getCommand(roomId, input) {
+    const {cmd, args} = parseCommandString(input);
+
+    if (CommandMap.has(cmd)) {
+        return () => CommandMap.get(cmd).run(roomId, args, cmd);
     }
 }

@@ -24,6 +24,7 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
+import {Capability} from "./widgets/WidgetApi";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -99,7 +100,7 @@ export default class FromWidgetPostMessageApi {
             console.warn('Add FromWidgetPostMessageApi - Endpoint already registered');
             return;
         } else {
-            console.warn(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
+            console.log(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
             this.widgetMessagingEndpoints.push(endpoint);
         }
     }
@@ -164,7 +165,7 @@ export default class FromWidgetPostMessageApi {
         const action = event.data.action;
         const widgetId = event.data.widgetId;
         if (action === 'content_loaded') {
-            console.warn('Widget reported content loaded for', widgetId);
+            console.log('Widget reported content loaded for', widgetId);
             dis.dispatch({
                 action: 'widget_content_loaded',
                 widgetId: widgetId,
@@ -213,7 +214,7 @@ export default class FromWidgetPostMessageApi {
             const data = event.data.data;
             const val = data.value;
 
-            if (ActiveWidgetStore.widgetHasCapability(widgetId, 'm.always_on_screen')) {
+            if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.AlwaysOnScreen)) {
                 ActiveWidgetStore.setWidgetPersistence(widgetId, val);
             }
         } else if (action === 'get_openid') {

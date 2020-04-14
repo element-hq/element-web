@@ -156,9 +156,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
-        this._fillRequestWhileRunning = false;
-        this._isFilling = false;
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._pendingFillRequests = {b: null, f: null};
 
         if (this.props.resizeNotifier) {

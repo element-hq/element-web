@@ -50,6 +50,7 @@ export default createReactClass({
         onResize: PropTypes.func,
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._local = createRef();
         this._remote = createRef();

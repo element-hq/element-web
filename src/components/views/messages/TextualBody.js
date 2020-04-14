@@ -86,6 +86,7 @@ export default createReactClass({
         return successful;
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._content = createRef();
     },
@@ -277,7 +278,7 @@ export default createReactClass({
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
             button.onclick = (e) => {
-                const copyCode = button.parentNode.getElementsByTagName("code")[0];
+                const copyCode = button.parentNode.getElementsByTagName("pre")[0];
                 const successful = this.copyToClipboard(copyCode.textContent);
 
                 const buttonRect = e.target.getBoundingClientRect();

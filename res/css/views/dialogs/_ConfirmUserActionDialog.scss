@@ -26,22 +26,22 @@ limitations under the License.
 }
 
 .mx_ConfirmUserActionDialog_name {
-    font-size: 18px;
+    font-size: $font-18px;
 }
 
 .mx_ConfirmUserActionDialog_userId {
-    font-size: 13px;
+    font-size: $font-13px;
 }
 
 .mx_ConfirmUserActionDialog_reasonField {
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $primary-fg-color;
     background-color: $primary-bg-color;
 
     border-radius: 3px;
     border: solid 1px $input-border-color;
-    line-height: 36px;
+    line-height: $font-36px;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 1px;

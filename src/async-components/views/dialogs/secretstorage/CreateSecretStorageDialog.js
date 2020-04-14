@@ -67,10 +67,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this._keyInfo = null;
-        this._encodedRecoveryKey = null;
+        this._recoveryKey = null;
         this._recoveryKeyNode = null;
         this._setZxcvbnResultTimeout = null;
+        this._backupKey = null;
 
         this.state = {
             phase: PHASE_LOADING,
@@ -180,7 +180,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onDownloadClick = () => {
-        const blob = new Blob([this._encodedRecoveryKey], {
+        const blob = new Blob([this._recoveryKey.encodedPrivateKey], {
             type: 'text/plain;charset=us-ascii',
         });
         FileSaver.saveAs(blob, 'recovery-key.txt');
@@ -234,17 +234,25 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             if (force) {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    createSecretStorageKey: async () => this._keyInfo,
+                    createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
             } else {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    createSecretStorageKey: async () => this._keyInfo,
+                    createSecretStorageKey: async () => this._recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
-                    getKeyBackupPassphrase: promptForBackupPassphrase,
+                    getKeyBackupPassphrase: () => {
+                        // We may already have the backup key if we earlier went
+                        // through the restore backup path, so pass it along
+                        // rather than prompting again.
+                        if (this._backupKey) {
+                            return this._backupKey;
+                        }
+                        return promptForBackupPassphrase();
+                    },
                 });
             }
             this.setState({
@@ -273,10 +281,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _restoreBackup = async () => {
+        // It's possible we'll need the backup key later on for bootstrapping,
+        // so let's stash it here, rather than prompting for it twice.
+        const keyCallback = k => this._backupKey = k;
+
         const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, {showSummary: false}, null,
-            /* priority = */ false, /* static = */ false,
+            'Restore Backup', '', RestoreKeyBackupDialog,
+            {
+                showSummary: false,
+                keyCallback,
+            },
+            null, /* priority = */ false, /* static = */ false,
         );
 
         await finished;
@@ -299,10 +315,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onSkipPassPhraseClick = async () => {
-        const [keyInfo, encodedRecoveryKey] =
+        this._recoveryKey =
             await MatrixClientPeg.get().createRecoveryKeyFromPassphrase();
-        this._keyInfo = keyInfo;
-        this._encodedRecoveryKey = encodedRecoveryKey;
         this.setState({
             copied: false,
             downloaded: false,
@@ -335,10 +349,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         if (this.state.passPhrase !== this.state.passPhraseConfirm) return;
 
-        const [keyInfo, encodedRecoveryKey] =
+        this._recoveryKey =
             await MatrixClientPeg.get().createRecoveryKeyFromPassphrase(this.state.passPhrase);
-        this._keyInfo = keyInfo;
-        this._encodedRecoveryKey = encodedRecoveryKey;
         this.setState({
             copied: false,
             downloaded: false,
@@ -412,7 +424,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field
                     type="password"
-                    id="mx_CreateSecretStorage_accountPassword"
                     label={_t("Password")}
                     value={this.state.accountPassword}
                     onChange={this._onAccountPasswordChange}
@@ -497,7 +508,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
                     type="password"
-                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
                     value={this.state.passPhrase}
@@ -574,7 +584,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
                     type="password"
-                    id="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseConfirmChange}
                     value={this.state.passPhraseConfirm}
                     className="mx_CreateSecretStorageDialog_passPhraseField"
@@ -616,7 +625,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 </div>
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKey">
-                        <code ref={this._collectRecoveryKeyNode}>{this._encodedRecoveryKey}</code>
+                        <code ref={this._collectRecoveryKeyNode}>{this._recoveryKey.encodedPrivateKey}</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
                         <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>

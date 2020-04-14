@@ -107,14 +107,15 @@ export default class EditMessageComposer extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.model = null;
         this._editorRef = null;
 
         this.state = {
             saveDisabled: true,
         };
+        this._createEditorModel();
     }
 
     _setEditorRef = ref => {
@@ -221,10 +222,6 @@ export default class EditMessageComposer extends React.Component {
         // then when mounting the editor again with the same editor state,
         // it will set the cursor at the end.
         this.props.editState.setEditorState(caret, parts);
-    }
-
-    componentWillMount() {
-        this._createEditorModel();
     }
 
     _createEditorModel() {

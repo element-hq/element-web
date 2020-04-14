@@ -28,26 +28,7 @@ const WIDGET_WAIT_TIME = 20000;
 import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
-
-/**
- * Encodes a URI according to a set of template variables. Variables will be
- * passed through encodeURIComponent.
- * @param {string} pathTemplate The path with template variables e.g. '/foo/$bar'.
- * @param {Object} variables The key/value pairs to replace the template
- * variables with. E.g. { '$bar': 'baz' }.
- * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
- */
-function encodeUri(pathTemplate, variables) {
-    for (const key in variables) {
-        if (!variables.hasOwnProperty(key)) {
-            continue;
-        }
-        pathTemplate = pathTemplate.replace(
-            key, encodeURIComponent(variables[key]),
-        );
-    }
-    return pathTemplate;
-}
+import {Capability} from "../widgets/WidgetApi";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -401,18 +382,6 @@ export default class WidgetUtils {
     }
 
     static makeAppConfig(appId, app, senderUserId, roomId, eventId) {
-        const myUserId = MatrixClientPeg.get().credentials.userId;
-        const user = MatrixClientPeg.get().getUser(myUserId);
-        const params = {
-            '$matrix_user_id': myUserId,
-            '$matrix_room_id': roomId,
-            '$matrix_display_name': user ? user.displayName : myUserId,
-            '$matrix_avatar_url': user ? MatrixClientPeg.get().mxcUrlToHttp(user.avatarUrl) : '',
-
-            // TODO: Namespace themes through some standard
-            '$theme': SettingsStore.getValue("theme"),
-        };
-
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");
         }
@@ -422,44 +391,20 @@ export default class WidgetUtils {
         app.eventId = eventId;
         app.name = app.name || app.type;
 
-        if (app.type === 'jitsi') {
-            console.log("Replacing Jitsi widget URL with local wrapper");
-            if (!app.data || !app.data.conferenceId) {
-                // Assumed to be a v1 widget: add a data object for visibility on the wrapper
-                // TODO: Remove this once mobile supports v2 widgets
-                console.log("Replacing v1 Jitsi widget with v2 equivalent");
-                const parsed = new URL(app.url);
-                app.data = {
-                    conferenceId: parsed.searchParams.get("confId"),
-                    domain: "jitsi.riot.im", // v1 widgets have this hardcoded
-                };
-            }
-
-            app.url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
-        }
-
-        if (app.data) {
-            Object.keys(app.data).forEach((key) => {
-                params['$' + key] = app.data[key];
-            });
-
-            app.waitForIframeLoad = (app.data.waitForIframeLoad === 'false' ? false : true);
-        }
-
-        app.url = encodeUri(app.url, params);
-
         return app;
     }
 
     static getCapWhitelistForAppTypeInRoomId(appType, roomId) {
         const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
 
-        const capWhitelist = enableScreenshots ? ["m.capability.screenshot"] : [];
+        const capWhitelist = enableScreenshots ? [Capability.Screenshot] : [];
 
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
-        if (appType == 'jitsi') capWhitelist.push("m.always_on_screen");
+        if (appType === 'jitsi') {
+            capWhitelist.push(Capability.AlwaysOnScreen);
+        }
 
         return capWhitelist;
     }

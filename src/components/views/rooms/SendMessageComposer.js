@@ -131,8 +131,13 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, false);
         } else if (this._prepareToEncrypt) {
             this._prepareToEncrypt();
+        } else if (event.key === Key.ESCAPE) {
+            dis.dispatch({
+                action: 'reply_to_event',
+                event: null,
+            });
         }
-    }
+    };
 
     onVerticalArrow(e, up) {
         // arrows from an initial-caret composer navigates recent messages to edit
@@ -326,7 +331,8 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);

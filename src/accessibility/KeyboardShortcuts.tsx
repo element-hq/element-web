@@ -118,6 +118,11 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 key: Key.ARROW_DOWN,
             }],
             description: _td("Navigate composer history"),
+        }, {
+            keybinds: [{
+                key: Key.ESCAPE,
+            }],
+            description: _td("Cancel replying to a message"),
         },
     ],
 
