@@ -10,10 +10,9 @@
     align-items: center;
     vertical-align: middle;
     border-radius: $font-16px;
-    height: $font-16px;
-    line-height: $font-20px;
+    line-height: $font-15px;
     padding-left: 0;
-    padding-right: 0.5rem;
+    padding-right: $font-5px;
 }
 
 a.mx_Pill {
@@ -22,11 +21,10 @@ a.mx_Pill {
     overflow: hidden;
     vertical-align: text-bottom;
     max-width: calc(100% - 1ch);
-    height: $font-24px;
 }
 
 .mx_Pill {
-    padding: $font-5px;
+    padding: $font-1px;
 }
 
 /* More specific to override `.markdown-body a` color */
