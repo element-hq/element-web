@@ -66,6 +66,7 @@ import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
+import { FontWatcher } from '../../fontSize';
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -265,7 +266,9 @@ export default createReactClass({
 
         this.dispatcherRef = dis.register(this.onAction);
         this._themeWatcher = new ThemeWatcher();
+        this._fontWatcher = new FontWatcher(10, 20);
         this._themeWatcher.start();
+        this._fontWatcher.start();
 
         this.focusComposer = false;
 
@@ -353,6 +356,7 @@ export default createReactClass({
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         this._themeWatcher.stop();
+        this._fontWatcher.stop();
         window.removeEventListener("focus", this.onFocus);
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this._dispatchTimelineResize);
