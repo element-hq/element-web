@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import PropTypes from 'prop-types';
-import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import {Room} from "matrix-js-sdk/src/models/room";
+import {User} from "matrix-js-sdk/src/models/user";
+import {Group} from "matrix-js-sdk/src/models/group";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
@@ -53,7 +58,18 @@ const socials = [
     },
 ];
 
-export default class ShareDialog extends React.Component {
+interface IProps {
+    onFinished: () => void;
+    target: Room | User | Group | RoomMember | MatrixEvent;
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+interface IState {
+    linkSpecificEvent: boolean;
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+export default class ShareDialog extends React.PureComponent<IProps, IState> {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         target: PropTypes.oneOfType([
@@ -64,6 +80,8 @@ export default class ShareDialog extends React.Component {
             PropTypes.instanceOf(MatrixEvent),
         ]).isRequired,
     };
+
+    protected closeCopiedTooltip: () => void;
 
     constructor(props) {
         super(props);
@@ -206,17 +224,18 @@ export default class ShareDialog extends React.Component {
                         <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
-                        {
-                            socials.map((social) => <a rel="noreferrer noopener"
-                                                       target="_blank"
-                                                       key={social.name}
-                                                       name={social.name}
-                                                       href={social.url(encodedUrl)}
-                                                       className="mx_ShareDialog_social_icon"
+                        { socials.map((social) => (
+                            <a
+                                rel="noreferrer noopener"
+                                target="_blank"
+                                key={social.name}
+                                title={social.name}
+                                href={social.url(encodedUrl)}
+                                className="mx_ShareDialog_social_icon"
                             >
                                 <img src={social.img} alt={social.name} height={64} width={64} />
-                            </a>)
-                        }
+                            </a>
+                        )) }
                     </div>
                 </div>
             </div>
