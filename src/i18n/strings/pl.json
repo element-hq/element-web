@@ -17,7 +17,7 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Twojego Riot zawiera błędny plik JSON. Popraw swoją konfigurację i odśwież stronę.",
     "The message from the parser is: %(message)s": "Wiadomość od parsera to: %(message)s",
     "Invalid JSON": "Błędny JSON",
-    "Your Riot is misconfigured": "Twój Riot jest źle skonfigurowany",
+    "Your Riot is misconfigured": " Twój Riot jest źle skonfigurowany",
     "Unexpected error preparing the app. See console for details.": "Niespodziewany błąd podczas przygotowywania aplikacji. Otwórz konsolę po szczegóły.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Błędna konfiguracja. Akceptowalne wartości to: default_server_config, default_server_name, default_hs_url.",
     "Invalid configuration: no default server specified.": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
