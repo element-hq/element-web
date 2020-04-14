@@ -24,6 +24,7 @@ import FileSaver from 'file-saver';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
+import {copyNode} from "../../../../utils/strings";
 
 const PHASE_LOADING = 0;
 const PHASE_MIGRATE = 1;
@@ -37,16 +38,6 @@ const PHASE_CONFIRM_SKIP = 8;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
-
-// XXX: copied from ShareDialog: factor out into utils
-function selectText(target) {
-    const range = document.createRange();
-    range.selectNodeContents(target);
-
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-}
 
 /*
  * Walks the user through the process of creating a passphrase to guard Secure
@@ -169,8 +160,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onCopyClick = () => {
-        selectText(this._recoveryKeyNode);
-        const successful = document.execCommand('copy');
+        const successful = copyNode(this._recoveryKeyNode);
         if (successful) {
             this.setState({
                 copied: true,
