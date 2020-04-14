@@ -29,6 +29,13 @@ a.mx_Pill {
     padding: $font-5px;
 }
 
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_GroupPill {
+    color: $accent-fg-color;
+    background-color: $rte-group-pill-color;
+}
+
 /* More specific to override `.markdown-body a` text-decoration */
 .mx_EventTile_content .markdown-body a.mx_Pill {
     text-decoration: none;
