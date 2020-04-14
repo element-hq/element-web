@@ -219,7 +219,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
 
-        // register Mac specific shortcuts
+        // register OS-specific shortcuts
         if (isMac) {
             registerShortcut(Categories.NAVIGATION, {
                 keybinds: [{
@@ -227,6 +227,28 @@ export default class ElectronPlatform extends VectorBasePlatform {
                     key: Key.COMMA,
                 }],
                 description: _td("Open user settings"),
+            });
+
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.SQUARE_BRACKET_LEFT,
+                }, {
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.SQUARE_BRACKET_RIGHT,
+                }],
+                description: _td("Previous/next recently visited room or community"),
+            });
+        } else {
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.ALT],
+                    key: Key.ARROW_LEFT,
+                }, {
+                    modifiers: [Modifiers.ALT],
+                    key: Key.ARROW_RIGHT,
+                }],
+                description: _td("Previous/next recently visited room or community"),
             });
         }
 
@@ -439,5 +461,33 @@ export default class ElectronPlatform extends VectorBasePlatform {
             title: _t("Go to your browser to complete Sign In"),
             description: <Spinner />,
         });
+    }
+
+    _navigateForwardBack(back: boolean) {
+        this._ipcCall(back ? "navigateBack" : "navigateForward");
+    }
+
+    onKeyDown(ev: KeyboardEvent): boolean {
+        let handled = false;
+
+        switch (ev.key) {
+            case Key.SQUARE_BRACKET_LEFT:
+            case Key.SQUARE_BRACKET_RIGHT:
+                if (isMac && ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey) {
+                    this._navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
+                    handled = true;
+                }
+                break;
+
+            case Key.ARROW_LEFT:
+            case Key.ARROW_RIGHT:
+                if (!isMac && ev.altKey && !ev.metaKey && !ev.ctrlKey && !ev.shiftKey) {
+                    this._navigateForwardBack(ev.key === Key.ARROW_LEFT);
+                    handled = true;
+                }
+                break;
+        }
+
+        return handled;
     }
 }

@@ -237,6 +237,16 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'getConfig':
             ret = vectorConfig;
             break;
+        case 'navigateBack':
+            if (mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            }
+            break;
+        case 'navigateForward':
+            if (mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+            break;
         case 'startSSOFlow':
             recordSSOSession(args[0]);
             break;
