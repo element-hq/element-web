@@ -41,6 +41,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import PlatformPeg from "../../PlatformPeg";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -462,6 +463,11 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                     });
                     handled = true;
                 }
+                break;
+
+            default:
+                // if we do not have a handler for it, pass it to the platform which might
+                handled = PlatformPeg.get().onKeyDown(ev);
         }
 
         if (handled) {
