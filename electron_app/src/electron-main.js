@@ -233,6 +233,16 @@ ipcMain.on('ipcCall', async function(ev, payload) {
         case 'getConfig':
             ret = vectorConfig;
             break;
+        case 'navigateBack':
+            if (mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            }
+            break;
+        case 'navigateForward':
+            if (mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+            break;
 
         default:
             mainWindow.webContents.send('ipcReply', {

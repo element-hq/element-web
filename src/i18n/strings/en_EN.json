@@ -9,6 +9,7 @@
     "Unable to load config file: please refresh the page to try again.": "Unable to load config file: please refresh the page to try again.",
     "Unexpected error preparing the app. See console for details.": "Unexpected error preparing the app. See console for details.",
     "Open user settings": "Open user settings",
+    "Previous/next recently visited room or community": "Previous/next recently visited room or community",
     "Riot Desktop on %(platformName)s": "Riot Desktop on %(platformName)s",
     "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
     "Unknown device": "Unknown device",
