@@ -132,10 +132,10 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
         }
         case "OL":
             state.listIndex.push((<HTMLOListElement>n).start || 1);
-            // fallthrough
+            /* falls through */
         case "UL":
             state.listDepth = (state.listDepth || 0) + 1;
-            // fallthrough
+            /* falls through */
         default:
             // don't textify block nodes we'll descend into
             if (!checkDescendInto(n)) {
@@ -244,7 +244,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
                 break;
             case "OL":
                 state.listIndex.pop();
-                // fallthrough
+                /* falls through */
             case "UL":
                 state.listDepth -= 1;
                 break;
@@ -259,7 +259,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
 
 export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage: boolean) {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
-    const parts = lines.reduce((parts, line, i) => {
+    return lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
             parts.push(partCreator.plain(QUOTE_LINE_PREFIX));
         }
@@ -270,7 +270,6 @@ export function parsePlainTextMessage(body: string, partCreator: PartCreator, is
         }
         return parts;
     }, []);
-    return parts;
 }
 
 export function parseEvent(event: MatrixEvent, partCreator: PartCreator, {isQuotedMessage = false} = {}) {
