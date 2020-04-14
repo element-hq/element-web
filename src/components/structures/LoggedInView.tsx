@@ -41,7 +41,6 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { replaceableComponent } from '../../utils/replaceableComponent';
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -109,7 +108,6 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-@replaceableComponent("structures.LoggedInView")
 class LoggedInView extends React.PureComponent<IProps, IState> {
     static displayName = 'LoggedInView';
 
