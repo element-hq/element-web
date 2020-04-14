@@ -109,7 +109,8 @@ async function start() {
         "./init");
 
     try {
-        await settled(rageshakePromise); // give rageshake a chance to load/fail
+        // give rageshake a chance to load/fail, we don't actually assert rageshake loads, we allow it to fail if no IDB
+        await settled(rageshakePromise);
 
         const fragparts = parseQsFromFragment(window.location);
 
@@ -182,7 +183,6 @@ async function start() {
         // app load critical path starts here
         // assert things started successfully
         // ##################################
-        await rageshakePromise;
         await loadOlmPromise;
         await loadSkinPromise;
         await loadThemePromise;
