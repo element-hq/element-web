@@ -84,7 +84,7 @@ export default class MjolnirUserSettingsTab extends React.Component {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
                 title: _t('Error subscribing to list'),
-                description: _t('Please verify the room ID or alias and try again.'),
+                description: _t('Please verify the room ID or address and try again.'),
             });
         } finally {
             this.setState({busy: false});
@@ -305,7 +305,7 @@ export default class MjolnirUserSettingsTab extends React.Component {
                         <form onSubmit={this._onSubscribeList} autoComplete="off">
                             <Field
                                 type="text"
-                                label={_t("Room ID or alias of ban list")}
+                                label={_t("Room ID or address of ban list")}
                                 value={this.state.newList}
                                 onChange={this._onNewListChanged}
                             />

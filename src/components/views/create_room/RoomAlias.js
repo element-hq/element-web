@@ -98,7 +98,7 @@ export default createReactClass({
 
     render: function() {
         return (
-            <input type="text" className="mx_RoomAlias" placeholder={_t("Alias (optional)")}
+            <input type="text" className="mx_RoomAlias" placeholder={_t("Address (optional)")}
                 onChange={this.onValueChanged} onFocus={this.onFocus} onBlur={this.onBlur}
                 value={this.props.alias} />
         );

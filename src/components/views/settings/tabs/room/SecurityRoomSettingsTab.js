@@ -247,7 +247,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 <div className='mx_SecurityRoomSettingsTab_warning'>
                     <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
                     <span>
-                        {_t("To link to this room, please add an alias.")}
+                        {_t("To link to this room, please add an address.")}
                     </span>
                 </div>
             );
