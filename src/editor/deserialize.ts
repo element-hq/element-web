@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
-import {getPrimaryPermalinkEntity} from "../utils/permalinks/Permalinks";
+import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
+import { PartCreator } from "./parts";
 
-function parseAtRoomMentions(text, partCreator) {
+function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     const ATROOM = "@room";
     const parts = [];
     text.split(ATROOM).forEach((textPart, i, arr) => {
@@ -37,7 +40,7 @@ function parseAtRoomMentions(text, partCreator) {
     return parts;
 }
 
-function parseLink(a, partCreator) {
+function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
     const {href} = a;
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
     const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
@@ -56,11 +59,11 @@ function parseLink(a, partCreator) {
     }
 }
 
-function parseCodeBlock(n, partCreator) {
+function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     const parts = [];
     let language = "";
     if (n.firstChild && n.firstChild.nodeName === "CODE") {
-        for (const className of n.firstChild.classList) {
+        for (const className of (<HTMLElement>n.firstChild).classList) {
             if (className.startsWith("language-")) {
                 language = className.substr("language-".length);
                 break;
@@ -77,12 +80,17 @@ function parseCodeBlock(n, partCreator) {
     return parts;
 }
 
-function parseHeader(el, partCreator) {
+function parseHeader(el: HTMLElement, partCreator: PartCreator) {
     const depth = parseInt(el.nodeName.substr(1), 10);
     return partCreator.plain("#".repeat(depth) + " ");
 }
 
-function parseElement(n, partCreator, lastNode, state) {
+interface IState {
+    listIndex: number[];
+    listDepth?: number;
+}
+
+function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLElement | undefined, state: IState) {
     switch (n.nodeName) {
         case "H1":
         case "H2":
@@ -92,7 +100,7 @@ function parseElement(n, partCreator, lastNode, state) {
         case "H6":
             return parseHeader(n, partCreator);
         case "A":
-            return parseLink(n, partCreator);
+            return parseLink(<HTMLAnchorElement>n, partCreator);
         case "BR":
             return partCreator.newline();
         case "EM":
@@ -123,7 +131,7 @@ function parseElement(n, partCreator, lastNode, state) {
             break;
         }
         case "OL":
-            state.listIndex.push(n.start || 1);
+            state.listIndex.push((<HTMLOListElement>n).start || 1);
             // fallthrough
         case "UL":
             state.listDepth = (state.listDepth || 0) + 1;
@@ -174,7 +182,7 @@ function prefixQuoteLines(isFirstNode, parts, partCreator) {
     }
 }
 
-function parseHtmlMessage(html, partCreator, isQuotedMessage) {
+function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessage: boolean) {
     // no nodes from parsing here should be inserted in the document,
     // as scripts in event handlers, etc would be executed then.
     // we're only taking text, so that is fine
@@ -182,7 +190,7 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     const parts = [];
     let lastNode;
     let inQuote = isQuotedMessage;
-    const state = {
+    const state: IState = {
         listIndex: [],
     };
 
@@ -249,7 +257,7 @@ function parseHtmlMessage(html, partCreator, isQuotedMessage) {
     return parts;
 }
 
-export function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
+export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage: boolean) {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     const parts = lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {
@@ -265,7 +273,7 @@ export function parsePlainTextMessage(body, partCreator, isQuotedMessage) {
     return parts;
 }
 
-export function parseEvent(event, partCreator, {isQuotedMessage = false} = {}) {
+export function parseEvent(event: MatrixEvent, partCreator: PartCreator, {isQuotedMessage = false} = {}) {
     const content = event.getContent();
     let parts;
     if (content.format === "org.matrix.custom.html") {
