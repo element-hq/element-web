@@ -2341,5 +2341,6 @@
     "Command failed": "Urdhri dështoi",
     "Could not find user in room": "S’u gjet përdorues në dhomë",
     "well formed": "e mirëformuar",
-    "Delete sessions|other": "Fshiji sesionet"
+    "Delete sessions|other": "Fshiji sesionet",
+    "Delete sessions|one": "Fshije sesionin"
 }
