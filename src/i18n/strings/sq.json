@@ -2342,5 +2342,13 @@
     "Could not find user in room": "S’u gjet përdorues në dhomë",
     "well formed": "e mirëformuar",
     "Delete sessions|other": "Fshiji sesionet",
-    "Delete sessions|one": "Fshije sesionin"
+    "Delete sessions|one": "Fshije sesionin",
+    "Enable end-to-end encryption": "Aktivizo fshehtëzim skaj-më-skaj",
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "Këtë s’mund ta çaktivizoni më vonë. Urat & shumica e robotëve ende s’do të funksionojnë.",
+    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Ripohoni çaktivizimin e llogarisë tuaj duke përdorur Hyrje Njëshe që të dëshmoni identitetin tuaj.",
+    "Are you sure you want to deactivate your account? This is irreversible.": "Jeni i sigurt se doni të çaktivizohet llogaria juaj? Kjo është e pakthyeshme.",
+    "Confirm account deactivation": "Ripohoni çaktivizim llogarie",
+    "Server did not require any authentication": "Shërbyesi s’kërkoi ndonjë mirëfilltësim",
+    "Server did not return valid authentication information.": "Shërbyesi s’ktheu ndonjë të dhënë të vlefshme mirëfilltësimi.",
+    "There was a problem communicating with the server. Please try again.": "Pati një problem në komunikimin me shërbyesin. Ju lutemi, riprovoni."
 }
