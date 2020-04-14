@@ -139,7 +139,7 @@ export default class DevicesPanel extends React.Component {
                     body: _t("Click the button below to confirm deleting these sessions.", {
                         count: numDevices,
                     }),
-                    continueText: _t("Delete sessions"),
+                    continueText: _t("Delete sessions", {count: numDevices}),
                     continueKind: "danger",
                 },
             };
