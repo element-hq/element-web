@@ -149,7 +149,7 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({type: "plain", text: "!"});
         });
         it('user pill with displayname containing backslash', function() {
-            const html = "Hi <a href=\"https://matrix.to/#/@alice:hs.tld\">Alice\</a>!";
+            const html = "Hi <a href=\"https://matrix.to/#/@alice:hs.tld\">Alice\\</a>!";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(3);
             expect(parts[0]).toStrictEqual({type: "plain", text: "Hi "});
