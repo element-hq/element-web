@@ -89,7 +89,6 @@
     "qrcode-react": "^0.1.16",
     "qs": "^6.6.0",
     "react": "^16.9.0",
-    "react-addons-css-transition-group": "15.6.2",
     "react-beautiful-dnd": "^4.0.1",
     "react-dom": "^16.9.0",
     "react-focus-lock": "^2.2.1",

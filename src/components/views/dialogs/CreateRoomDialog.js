@@ -66,7 +66,7 @@ export default createReactClass({
         }
 
         if (!this.state.isPublic && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            createOpts.encryption = this.state.isEncrypted;
+            opts.encryption = this.state.isEncrypted;
         }
 
         return opts;
