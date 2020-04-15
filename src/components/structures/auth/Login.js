@@ -687,7 +687,7 @@ export default createReactClass({
 
         return (
             <AuthPage>
-                <AuthHeader />
+                <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
                 <AuthBody>
                     <h2>
                         {_t('Sign in')}
