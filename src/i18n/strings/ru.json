@@ -2103,5 +2103,8 @@
     "Session name": "Название сессии",
     "Session key": "Ключ сессии",
     "Backup key stored in secret storage, but this feature is not enabled on this session. Please enable cross-signing in Labs to modify key backup state.": "Резервная копия ключа сохранена в хранилище секретов",
-    "Backup key stored: ": "Резервная копия ключа сохранена: "
+    "Backup key stored: ": "Резервная копия ключа сохранена: ",
+    "Command failed": "Не удалось выполнить команду",
+    "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Чтобы сообщить о проблеме безопасности Matrix, пожалуйста, прочитайте <a>Политику раскрытия информации</a> Matrix.org.",
+    "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "Установить адрес этой комнаты, чтобы пользователи могли найти ее на вашем сервере (%(localDomain)s)"
 }
