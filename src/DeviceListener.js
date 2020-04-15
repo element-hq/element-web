@@ -124,7 +124,7 @@ export default class DeviceListener {
         const cli = MatrixClientPeg.get();
 
         if (
-            !SettingsStore.isFeatureEnabled("feature_cross_signing") ||
+            !SettingsStore.getValue("feature_cross_signing") ||
             !await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
         ) return;
 

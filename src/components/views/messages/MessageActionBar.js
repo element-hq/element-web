@@ -49,7 +49,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         };
 
         let e2eInfoCallback = null;
-        if (mxEvent.isEncrypted() && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (mxEvent.isEncrypted() && !SettingsStore.getValue("feature_cross_signing")) {
             e2eInfoCallback = onCryptoClick;
         }
 

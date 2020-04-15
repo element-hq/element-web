@@ -152,10 +152,10 @@ export const SETTINGS = {
         default: null,
     },
     "feature_cross_signing": {
-        isFeature: true,
+        //isFeature: true,
         displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
     },
     "feature_event_indexing": {
         isFeature: true,

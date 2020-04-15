@@ -62,6 +62,7 @@ export default class LabsUserSettingsTab extends React.Component {
                 </div>
                 <div className="mx_SettingsTab_section">
                     {flags}
+                    <SettingsFlag name={"feature_cross_signing"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"enableWidgetScreenshots"} level={SettingLevel.ACCOUNT} />
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
