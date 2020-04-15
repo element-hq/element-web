@@ -49,7 +49,7 @@ export async function copyPlaintext(text: string): Promise<boolean> {
             return successful;
         }
     } catch (e) {
-        console.error(e);
+        console.error("copyPlaintext failed", e);
     }
     return false;
 }
