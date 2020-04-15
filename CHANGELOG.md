@@ -1,3 +1,33 @@
+Changes in [1.5.16-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.16-rc.1) (2020-04-08)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.15...v1.5.16-rc.1)
+
+ * Upgrade React SDK to 2.4.0-rc.1 and JS SDK to 5.3.0-rc.1
+ * Update from Weblate
+   [\#13078](https://github.com/vector-im/riot-web/pull/13078)
+ * Mention Jitsi support at the .well-known level in Jitsi docs
+   [\#13047](https://github.com/vector-im/riot-web/pull/13047)
+ * Add new default home page fallback
+   [\#13049](https://github.com/vector-im/riot-web/pull/13049)
+ * App load order tweaks for code splitting
+   [\#13032](https://github.com/vector-im/riot-web/pull/13032)
+ * Add some docs about Jitsi widgets and Jitsi configuration
+   [\#13027](https://github.com/vector-im/riot-web/pull/13027)
+ * Bump minimist from 1.2.2 to 1.2.3 in /electron_app
+   [\#13030](https://github.com/vector-im/riot-web/pull/13030)
+ * Fix Electron mac-specific shortcut being registered on Web too.
+   [\#13020](https://github.com/vector-im/riot-web/pull/13020)
+ * Add a console warning that errors from Jitsi Meet are fine
+   [\#12968](https://github.com/vector-im/riot-web/pull/12968)
+ * Fix popout support for jitsi widgets
+   [\#12975](https://github.com/vector-im/riot-web/pull/12975)
+ * Some grammar and clarifications
+   [\#12925](https://github.com/vector-im/riot-web/pull/12925)
+ * Don't immediately remove notifications from notification trays
+   [\#12861](https://github.com/vector-im/riot-web/pull/12861)
+ * Remove welcome user from config
+   [\#12894](https://github.com/vector-im/riot-web/pull/12894)
+
 Changes in [1.5.15](https://github.com/vector-im/riot-web/releases/tag/v1.5.15) (2020-04-01)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14...v1.5.15)
