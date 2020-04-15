@@ -2357,5 +2357,10 @@
     "Delete sessions|other": "刪除工作階段",
     "Delete sessions|one": "刪除工作階段",
     "Enable end-to-end encryption": "啟用端到端加密",
-    "You can’t disable this later. Bridges & most bots won’t work yet.": "您無法在稍後停用此功能。橋接與大多數機器人也尚無法運作。"
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "您無法在稍後停用此功能。橋接與大多數機器人也尚無法運作。",
+    "Failed to set topic": "設定主題失敗",
+    "Command failed": "指令失敗",
+    "Could not find user in room": "在聊天室中找不到使用者",
+    "Use an existing session to verify this one, granting it access to encrypted messages.": "使用既有的工作階段來驗證這個，授予其對加密訊息的存取權限。",
+    "Use your other device to continue…": "使用您其他的裝置繼續……"
 }
