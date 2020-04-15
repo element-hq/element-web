@@ -1,3 +1,29 @@
+Changes in [1.6.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.1) (2020-04-15)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.16-rc.1...v1.6.0-rc.1)
+
+ * Enable cross-signing / E2EE by default for DM on release
+   [\#13179](https://github.com/vector-im/riot-web/pull/13179)
+ * Upgrade to React SDK 2.5.0-rc.1 and JS SDK 5.3.1-rc.1
+ * Add instruction to resolve the inotify watch limit issue
+   [\#13128](https://github.com/vector-im/riot-web/pull/13128)
+ * docs: labs: add a pointer to config.md
+   [\#13149](https://github.com/vector-im/riot-web/pull/13149)
+ * Fix Electron SSO handling to support multiple profiles
+   [\#13028](https://github.com/vector-im/riot-web/pull/13028)
+ * Add riot-desktop shortcuts for forward/back matching browsers&slack
+   [\#13133](https://github.com/vector-im/riot-web/pull/13133)
+ * Allow rageshake to fail in init
+   [\#13164](https://github.com/vector-im/riot-web/pull/13164)
+ * Fix broken yarn install link in README.md
+   [\#13125](https://github.com/vector-im/riot-web/pull/13125)
+ * fix build:jitsi scripts crash caused by a missing folder
+   [\#13122](https://github.com/vector-im/riot-web/pull/13122)
+ * App load order changes to catch errors better
+   [\#13095](https://github.com/vector-im/riot-web/pull/13095)
+ * Upgrade deps
+   [\#13080](https://github.com/vector-im/riot-web/pull/13080)
+
 Changes in [1.5.16-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.16-rc.1) (2020-04-08)
 ======================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.15...v1.5.16-rc.1)
