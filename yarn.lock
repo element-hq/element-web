@@ -7609,9 +7609,25 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "5.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/84637c6ebd442346623bce562b441e1093d40270"
+matrix-js-sdk@5.3.0-rc.1:
+  version "5.3.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.3.0-rc.1.tgz#9a962a0c821266e02e214591e9cbe58b102945a0"
+  integrity sha512-k/4xw114zk2ugAUkKDL51tN7bmddvNPYek0nttnipgnooU7HLnojRiMvTzSROkqNwic+8iRx7F2xn/hPCKGTvg==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.2"
+    loglevel "^1.6.4"
+    qs "^6.5.2"
+    request "^2.88.0"
+    unhomoglyph "^1.0.2"
+
+matrix-js-sdk@5.3.1-rc.1:
+  version "5.3.1-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.3.1-rc.1.tgz#12f9434b2fc09e014371bc9a75dc2bc9bc35fe33"
+  integrity sha512-HP47NvGFrK4gG8ToZRurb6/pRHhJAOhixwoNT6P/FTZNZLJX4DDPY84uNR0jtmiiZXI+/wHRST0K9P6A2bgBXA==
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -7631,9 +7647,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "2.3.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/a26a3f58624d5e135104029a8bc9799df3962414"
+matrix-react-sdk@2.4.0-rc.1:
+  version "2.4.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.4.0-rc.1.tgz#df3aa2e0b80d74b0415558bd8d5dc56541d81660"
+  integrity sha512-/7xzNmH6TrLUOFPffhdAi78WHGjxn43Ggb8oRsNGV76yZ7g55/AO7uy4PvOLgAYBreuKowxjVmzboEIaHuP26g==
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -8190,22 +8207,6 @@ node-notifier@^5.4.2:
     semver "^5.5.0"
     shellwords "^0.1.1"
     which "^1.3.0"
-
-node-pre-gyp@*:
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.14.0.tgz#9a0596533b877289bcad4e143982ca3d904ddc83"
-  integrity sha512-+CvDC7ZttU/sSt9rFjix/P05iS43qHCOOGzcr3Ry99bXG7VX953+vFyEuph/tfqoYu8dttBkE86JSKBO2OzcxA==
-  dependencies:
-    detect-libc "^1.0.2"
-    mkdirp "^0.5.1"
-    needle "^2.2.1"
-    nopt "^4.0.1"
-    npm-packlist "^1.1.6"
-    npmlog "^4.0.2"
-    rc "^1.2.7"
-    rimraf "^2.6.1"
-    semver "^5.3.0"
-    tar "^4.4.2"
 
 node-pre-gyp@^0.11.0:
   version "0.11.0"
@@ -11693,7 +11694,7 @@ tar-stream@^2.1.0:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-tar@^4, tar@^4.4.2:
+tar@^4:
   version "4.4.13"
   resolved "https://registry.yarnpkg.com/tar/-/tar-4.4.13.tgz#43b364bc52888d555298637b10d60790254ab525"
   integrity sha512-w2VwSrBoHa5BsSyH+KxEqeQBAllHhccyMFVHtGtdMpF4W7IRWfZjFiQceJPChOeTsSDVUpER2T8FA93pr0L+QA==
