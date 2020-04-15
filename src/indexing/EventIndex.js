@@ -383,7 +383,7 @@ export default class EventIndex extends EventEmitter {
 
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper();
+            const eventMapper = client.getEventMapper({preventReEmit: true});
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;
