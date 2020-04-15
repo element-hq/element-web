@@ -1,3 +1,77 @@
+Changes in [2.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.1) (2020-04-15)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.4.0-rc.1...v2.5.0-rc.1)
+
+ * Upgrade to JS SDK 5.3.1-rc.1
+ * null-guard MatrixClientPeg in RoomViewStore
+   [\#4415](https://github.com/matrix-org/matrix-react-sdk/pull/4415)
+ * Fix: prevent spurious notifications from indexer
+   [\#4414](https://github.com/matrix-org/matrix-react-sdk/pull/4414)
+ * Login block on initialSync with spinners
+   [\#4413](https://github.com/matrix-org/matrix-react-sdk/pull/4413)
+ * Allow network dropdown to be scrollable and fix context menu padding calc
+   [\#4408](https://github.com/matrix-org/matrix-react-sdk/pull/4408)
+ * Remove end-to-end message info option when cross-signing is used
+   [\#4412](https://github.com/matrix-org/matrix-react-sdk/pull/4412)
+ * Minimize widgets by default
+   [\#4378](https://github.com/matrix-org/matrix-react-sdk/pull/4378)
+ * Add comments to highlight where we'll need m.widget support
+   [\#4380](https://github.com/matrix-org/matrix-react-sdk/pull/4380)
+ * Fix: dont try to enable 4S if cross-signing is disabled
+   [\#4407](https://github.com/matrix-org/matrix-react-sdk/pull/4407)
+ * Fix: don't confuse user with spinner during complete security step
+   [\#4406](https://github.com/matrix-org/matrix-react-sdk/pull/4406)
+ *  Fix: avoid potential crash during certain verification paths
+   [\#4405](https://github.com/matrix-org/matrix-react-sdk/pull/4405)
+ * Add riot-desktop shortcuts for forward/back matching browsers&slack
+   [\#4392](https://github.com/matrix-org/matrix-react-sdk/pull/4392)
+ * Convert LoggedInView to an ES6 PureComponent Class & TypeScript
+   [\#4398](https://github.com/matrix-org/matrix-react-sdk/pull/4398)
+ * Fix width of MVideoBody in FilePanel
+   [\#4396](https://github.com/matrix-org/matrix-react-sdk/pull/4396)
+ * Remove unused react-addons-css-transition-group
+   [\#4397](https://github.com/matrix-org/matrix-react-sdk/pull/4397)
+ * Fix emoji tooltip flickering
+   [\#4395](https://github.com/matrix-org/matrix-react-sdk/pull/4395)
+ * Pass along key backup for bootstrap
+   [\#4374](https://github.com/matrix-org/matrix-react-sdk/pull/4374)
+ * Fix create room dialog e2ee private room setting
+   [\#4403](https://github.com/matrix-org/matrix-react-sdk/pull/4403)
+ * Sort emoji by shortcodes for autocomplete primarily for :-1 and :+1
+   [\#4391](https://github.com/matrix-org/matrix-react-sdk/pull/4391)
+ * Fix invalid commands when figuring out whether to set isTyping
+   [\#4390](https://github.com/matrix-org/matrix-react-sdk/pull/4390)
+ * op/deop return error if trying to affect an unknown user
+   [\#4389](https://github.com/matrix-org/matrix-react-sdk/pull/4389)
+ * Composer pills respect showPillAvatar setting
+   [\#4384](https://github.com/matrix-org/matrix-react-sdk/pull/4384)
+ * Only send typing notification when composing commands which send messages
+   [\#4385](https://github.com/matrix-org/matrix-react-sdk/pull/4385)
+ * Reverse order of they match/they don't match buttons
+   [\#4386](https://github.com/matrix-org/matrix-react-sdk/pull/4386)
+ * Use singular text on 'delete sessions' button for SSO
+   [\#4383](https://github.com/matrix-org/matrix-react-sdk/pull/4383)
+ * Pass widget data through from sticker picker
+   [\#4377](https://github.com/matrix-org/matrix-react-sdk/pull/4377)
+ * Obliterate widgets when they are minimized
+   [\#4376](https://github.com/matrix-org/matrix-react-sdk/pull/4376)
+ * Fix image thumbnail width when read receipts are hidden
+   [\#4370](https://github.com/matrix-org/matrix-react-sdk/pull/4370)
+ * Add toggle for e2ee when creating private room
+   [\#4362](https://github.com/matrix-org/matrix-react-sdk/pull/4362)
+ * Fix logging for failed searches
+   [\#4372](https://github.com/matrix-org/matrix-react-sdk/pull/4372)
+ * Ensure UI is updated when cross-signing gets disabled
+   [\#4369](https://github.com/matrix-org/matrix-react-sdk/pull/4369)
+ * Retry the request for the master key from SSSS on login
+   [\#4371](https://github.com/matrix-org/matrix-react-sdk/pull/4371)
+ * Upgrade deps
+   [\#4365](https://github.com/matrix-org/matrix-react-sdk/pull/4365)
+ * App load tweaks, i18n and localStorage
+   [\#4367](https://github.com/matrix-org/matrix-react-sdk/pull/4367)
+ * Fix encoding of widget arguments
+   [\#4366](https://github.com/matrix-org/matrix-react-sdk/pull/4366)
+
 Changes in [2.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.4.0-rc.1) (2020-04-08)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.3.1...v2.4.0-rc.1)
