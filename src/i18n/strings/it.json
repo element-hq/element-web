@@ -2355,5 +2355,10 @@
     "Liberate your communication": "Libera le tue comunicazioni",
     "Send a Direct Message": "Invia un messaggio diretto",
     "Explore Public Rooms": "Esplora le stanze pubbliche",
-    "Create a Group Chat": "Crea una chat di gruppo"
+    "Create a Group Chat": "Crea una chat di gruppo",
+    "Failed to set topic": "Impostazione argomento fallita",
+    "Command failed": "Comando fallito",
+    "Could not find user in room": "Utente non trovato nella stanza",
+    "Use an existing session to verify this one, granting it access to encrypted messages.": "Usa una sessione esistente per verificare questa, dandole l'accesso ai messaggi cifrati.",
+    "Use your other device to continue…": "Usa il tuo altro dispositivo per continuare…"
 }
