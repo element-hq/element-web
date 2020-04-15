@@ -43,6 +43,7 @@ export default class PasswordLogin extends React.Component {
         onPasswordChanged: PropTypes.func,
         loginIncorrect: PropTypes.bool,
         disableSubmit: PropTypes.bool,
+        hideSubmit: PropTypes.bool,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
     };
 
@@ -332,11 +333,11 @@ export default class PasswordLogin extends React.Component {
                         disabled={this.props.disableSubmit}
                     />
                     {forgotPasswordJsx}
-                    <input className="mx_Login_submit"
+                    { !this.props.hideSubmit && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
                         disabled={this.props.disableSubmit}
-                    />
+                    /> }
                 </form>
             </div>
         );

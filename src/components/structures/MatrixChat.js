@@ -1906,23 +1906,12 @@ export default createReactClass({
             this._onLoggedIn();
         }
 
-        // Test for the master cross-signing key in SSSS as a quick proxy for
-        // whether cross-signing has been set up on the account. We can't
-        // really continue until we know whether it's there or not so retry
-        // if this fails.
-        let masterKeyInStorage;
-        while (masterKeyInStorage === undefined) {
-            try {
-                masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
-            } catch (e) {
-                if (e.errcode === "M_NOT_FOUND") {
-                    masterKeyInStorage = false;
-                } else {
-                    console.warn("Secret storage account data check failed: retrying...", e);
-                }
-            }
-        }
+        this.setState({ pendingInitialSync: true });
+        await this.firstSyncPromise.promise;
 
+        // Test for the master cross-signing key in SSSS as a quick proxy for
+        // whether cross-signing has been set up on the account.
+        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
         if (masterKeyInStorage) {
             // Auto-enable cross-signing for the new session when key found in
             // secret storage.
@@ -1939,6 +1928,7 @@ export default createReactClass({
         } else {
             this._onLoggedIn();
         }
+        this.setState({ pendingInitialSync: false });
 
         return setLoggedInPromise;
     },
@@ -2060,6 +2050,7 @@ export default createReactClass({
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
+                    isSyncing={this.state.pendingInitialSync}
                     onLoggedIn={this.onUserCompletedLoginFlow}
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}
