@@ -31,7 +31,7 @@ export function mdSerialize(model: EditorModel) {
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `[${part.text.replace(/[\\\]]/, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
+                return html + `[${part.text.replace(/[[\\\]]/, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
         }
     }, "");
 }

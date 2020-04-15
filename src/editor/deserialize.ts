@@ -53,7 +53,7 @@ function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
             if (href === a.textContent) {
                 return partCreator.plain(a.textContent);
             } else {
-                return partCreator.plain(`[${a.textContent.replace(/[\\\]]/, c => "\\" + c)}](${href})`);
+                return partCreator.plain(`[${a.textContent.replace(/[[\\\]]/, c => "\\" + c)}](${href})`);
             }
         }
     }
