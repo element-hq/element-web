@@ -51,9 +51,9 @@ describe('editor/serialize', function() {
     });
     it('displaynames containing an opening square bracket work', function() {
         const pc = createPartCreator();
-        const model = new EditorModel([pc.userPill("Displayname[", "@user:server")]);
+        const model = new EditorModel([pc.userPill("Displayname[[", "@user:server")]);
         const html = htmlSerializeIfNeeded(model, {});
-        expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname[</a>");
+        expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname[[</a>");
     });
     it('displaynames containing a closing square bracket work', function() {
         const pc = createPartCreator();
