@@ -2358,5 +2358,10 @@
     "Delete sessions|other": "Supprimer les sessions",
     "Delete sessions|one": "Supprimer la session",
     "Enable end-to-end encryption": "Activer le chiffrement de bout en bout",
-    "You can’t disable this later. Bridges & most bots won’t work yet.": "Vous ne pourrez pas le désactiver plus tard. Les passerelles et la plupart des bots ne fonctionneront pas pour le moment."
+    "You can’t disable this later. Bridges & most bots won’t work yet.": "Vous ne pourrez pas le désactiver plus tard. Les passerelles et la plupart des bots ne fonctionneront pas pour le moment.",
+    "Failed to set topic": "Échec du changement de sujet",
+    "Command failed": "La commande a échoué",
+    "Could not find user in room": "Impossible de trouver l’utilisateur dans le salon",
+    "Use an existing session to verify this one, granting it access to encrypted messages.": "Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.",
+    "Use your other device to continue…": "Utilisez votre autre appareil pour continuer…"
 }
