@@ -1902,12 +1902,18 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
         // because the client hasn't been started yet.
-        if (!isCryptoAvailable()) {
+        const cryptoAvailable = isCryptoAvailable();
+        if (!cryptoAvailable) {
             this._onLoggedIn();
         }
 
         this.setState({ pendingInitialSync: true });
         await this.firstSyncPromise.promise;
+
+        if (!cryptoAvailable) {
+            this.setState({ pendingInitialSync: false });
+            return setLoggedInPromise;
+        }
 
         // Test for the master cross-signing key in SSSS as a quick proxy for
         // whether cross-signing has been set up on the account.
