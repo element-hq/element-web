@@ -23,6 +23,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AccessibleButton from "../elements/AccessibleButton";
 
 /**
  * A pure UI component which displays a username/password form.
@@ -43,8 +44,8 @@ export default class PasswordLogin extends React.Component {
         onPasswordChanged: PropTypes.func,
         loginIncorrect: PropTypes.bool,
         disableSubmit: PropTypes.bool,
-        hideSubmit: PropTypes.bool,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        busy: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -266,12 +267,16 @@ export default class PasswordLogin extends React.Component {
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = <span>
                 {_t('Not sure of your password? <a>Set a new one</a>', {}, {
-                    a: sub => <a className="mx_Login_forgot"
-                        onClick={this.onForgotPasswordClick}
-                        href="#"
-                    >
-                        {sub}
-                    </a>,
+                    a: sub => (
+                        <AccessibleButton
+                            className="mx_Login_forgot"
+                            disabled={this.props.busy}
+                            kind="link"
+                            onClick={this.onForgotPasswordClick}
+                        >
+                            {sub}
+                        </AccessibleButton>
+                    ),
                 })}
             </span>;
         }
@@ -333,7 +338,7 @@ export default class PasswordLogin extends React.Component {
                         disabled={this.props.disableSubmit}
                     />
                     {forgotPasswordJsx}
-                    { !this.props.hideSubmit && <input className="mx_Login_submit"
+                    { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
                         disabled={this.props.disableSubmit}

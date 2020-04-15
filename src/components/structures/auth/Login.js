@@ -599,7 +599,7 @@ export default createReactClass({
                loginIncorrect={this.state.loginIncorrect}
                serverConfig={this.props.serverConfig}
                disableSubmit={this.isBusy()}
-               hideSubmit={this.props.isSyncing || this.state.busyLoggingIn}
+               busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
     },
