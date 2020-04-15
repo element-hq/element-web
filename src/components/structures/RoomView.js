@@ -822,7 +822,7 @@ export default createReactClass({
             });
             return;
         }
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
                 this.setState({
                     e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
