@@ -18,9 +18,8 @@ import SettingController from "./SettingController";
 import dis from "../../dispatcher";
 
 export default class FontSizeController extends SettingController {
-
     constructor() {
-        super()
+        super();
     }
 
     onChange(level, roomId, newValue) {

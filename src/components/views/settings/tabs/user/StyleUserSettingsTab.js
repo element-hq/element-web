@@ -21,6 +21,8 @@ import * as sdk from "../../../../../index";
 import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import Field from "../../../elements/Field";
 import FontSlider from "../../../../structures/FontSlider";
+import AccessibleButton from "../../../elements/AccessibleButton";
+import dis from "../../../../../dispatcher";
 
 export default class StyleUserSettingsTab extends React.Component {
     constructor() {
@@ -31,7 +33,8 @@ export default class StyleUserSettingsTab extends React.Component {
             ...this._calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
-        }
+
+        };
     }
 
     _calculateThemeState() {
@@ -95,9 +98,9 @@ export default class StyleUserSettingsTab extends React.Component {
     };
 
     _onFontSizeChanged = (size) => {
-        let parsed_size = isNaN(parseInt(size))?SettingsStore.getDefaultValue("font_size"):parseFloat(size);
-        this.setState({fontSize: parsed_size})
-        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, parsed_size)
+        const parsedSize = isNaN(parseInt(size))?SettingsStore.getDefaultValue("font_size"):parseFloat(size);
+        this.setState({fontSize: parsedSize});
+        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, parsedSize);
     };
 
     _onAddCustomTheme = async () => {
@@ -221,7 +224,7 @@ export default class StyleUserSettingsTab extends React.Component {
         return <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <FontSlider
-                values={[12,14,16,18,20]}
+                values={[12, 14, 16, 18, 20]}
                 value={this.state.fontSize}
                 updateFontSize={this._onFontSizeChanged}
                 displayFunc={value => value + 'px'}
@@ -235,7 +238,6 @@ export default class StyleUserSettingsTab extends React.Component {
                 id="font_size_field"
                 onChange={(ev) => this._onFontSizeChanged(ev.target.value)}
             />
-        </div>
+        </div>;
     }
-
 }

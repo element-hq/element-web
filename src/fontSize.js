@@ -18,9 +18,9 @@ import dis from './dispatcher';
 import SettingsStore from './settings/SettingsStore';
 
 export class FontWatcher {
-    constructor(min_size, max_size) {
-        this._min_size = min_size;
-        this._max_size = max_size;
+    constructor(minSize, maxSize) {
+        this._min_size = minSize;
+        this._max_size = maxSize;
         this._dispatcherRef = null;
     }
 
@@ -43,7 +43,7 @@ export class FontWatcher {
         let fontSize = this._min_size < size?size:this._min_size;
         fontSize = fontSize < this._max_size?fontSize:this._max_size;
         if (fontSize != size) {
-            SettingsStore.setValue("font_size", null, fontSize)
+            SettingsStore.setValue("font_size", null, fontSize);
         }
         document.querySelector(":root").style.fontSize = fontSize + "px";
     }
