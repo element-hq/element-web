@@ -15,12 +15,29 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Slider extends React.Component {
+
+    static propTypes = {
+        // A callback for the new value onclick
+        updateFontSize: PropTypes.func,
+
+        // The current value of the slider
+        value: PropTypes.number,
+
+        // The range and values of the slider
+        // Currently only supports an ascending, constant interval range
+        values: PropTypes.arrayOf(PropTypes.number),
+
+        // A function for formatting the the values
+        displayFunc: PropTypes.func,
+    };
+
     render() {
         let dots = this.props.values.map(v => 
             <Dot active={v<=this.props.value} 
-                 value={this.props.displayFunc(v)} 
+                 label={this.props.displayFunc(v)} 
                  onClick={() => this.props.updateFontSize(v)}
                  key={v}
             />);
@@ -42,20 +59,32 @@ export default class Slider extends React.Component {
             </div>
         </div>
     }
-        
+
     offset(values, value) {
         return  (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
     }
 }
 
 class Dot extends React.Component {
+
+    static propTypes = {
+        // Callback for behaviour onclick
+        onClick: PropTypes.func,
+
+        // Whether the dot should appear active
+        active: PropTypes.bool,
+
+        // The label on the dot
+        label: PropTypes.string,
+    }
+
     render () {
         let className = "mx_fontSlider_dot" + (this.props.active? " mx_fontSlider_dotActive": "");
 
         return <span onClick={this.props.onClick} className="mx_fontSlider_dotValue">
             <div className={className} />
             <div>
-                {this.props.value}
+                {this.props.label}
             </div>
         </span>
     }
