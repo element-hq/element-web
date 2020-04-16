@@ -75,7 +75,7 @@ export default class KeyBackupPanel extends React.PureComponent {
     async _checkKeyBackupStatus() {
         try {
             const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
-            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            const backupKeyStored = Boolean(await MatrixClientPeg.get().isKeyBackupKeyStored());
             this.setState({
                 backupInfo,
                 backupSigStatus: trustInfo,
