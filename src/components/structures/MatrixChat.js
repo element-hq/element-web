@@ -66,6 +66,7 @@ import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
+import { fixupColorFonts } from '../../utils/FontManager';
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
@@ -244,6 +245,8 @@ export default createReactClass({
 
         this._pageChanging = false;
 
+        // load emoji font
+        fixupColorFonts();
         // check we have the right tint applied for this theme.
         // N.B. we don't call the whole of setTheme() here as we may be
         // racing with the theme CSS download finishing from index.js
