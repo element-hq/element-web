@@ -219,7 +219,7 @@ export default class RightPanel extends React.Component {
                 break;
             case RIGHT_PANEL_PHASES.RoomMemberInfo:
             case RIGHT_PANEL_PHASES.EncryptionPanel:
-                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                if (SettingsStore.getValue("feature_cross_signing")) {
                     const onClose = () => {
                         dis.dispatch({
                             action: "view_user",
@@ -246,7 +246,7 @@ export default class RightPanel extends React.Component {
                 panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
                 break;
             case RIGHT_PANEL_PHASES.GroupMemberInfo:
-                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                if (SettingsStore.getValue("feature_cross_signing")) {
                     const onClose = () => {
                         dis.dispatch({
                             action: "view_user",

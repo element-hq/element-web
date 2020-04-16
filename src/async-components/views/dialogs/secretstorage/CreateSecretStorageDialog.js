@@ -614,7 +614,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                         <code ref={this._collectRecoveryKeyNode}>{this._recoveryKey.encodedPrivateKey}</code>
                     </div>
                     <div className="mx_CreateSecretStorageDialog_recoveryKeyButtons">
-                        <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onCopyClick}>
+                        <AccessibleButton
+                            kind='primary'
+                            className="mx_Dialog_primary mx_CreateSecretStorageDialog_recoveryKeyButtons_copyBtn"
+                            onClick={this._onCopyClick}
+                        >
                             {_t("Copy")}
                         </AccessibleButton>
                         <AccessibleButton kind='primary' className="mx_Dialog_primary" onClick={this._onDownloadClick}>

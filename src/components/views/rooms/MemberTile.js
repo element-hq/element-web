@@ -56,7 +56,7 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             const { roomId } = this.props.member;
             if (roomId) {
                 const isRoomEncrypted = cli.isRoomEncrypted(roomId);
