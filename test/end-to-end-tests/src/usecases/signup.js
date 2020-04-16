@@ -84,12 +84,14 @@ module.exports = async function signup(session, username, password, homeserver) 
     const xsigningPassphrase = 'a7eaXcjpa9!Yl7#V^h$B^%dovHUVX'; // https://xkcd.com/221/
     let passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
     await session.replaceInputText(passphraseField, xsigningPassphrase);
+    await session.delay(1000); // give it a second to analyze our passphrase for security
     let xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
     //repeat passphrase entry
     passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
     await session.replaceInputText(passphraseField, xsigningPassphrase);
+    await session.delay(1000); // give it a second to analyze our passphrase for security
     xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
