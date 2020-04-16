@@ -25,6 +25,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
+import { fixupColorFonts } from '../../utils/FontManager';
 import * as sdk from '../../index';
 import dis from '../../dispatcher';
 import sessionStore from '../../stores/SessionStore';
@@ -164,6 +165,8 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         this._matrixClient.on("accountData", this.onAccountData);
         this._matrixClient.on("sync", this.onSync);
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+
+        fixupColorFonts();
 
         this._roomView = React.createRef();
         this._resizeContainer = React.createRef();
