@@ -2362,5 +2362,8 @@
     "Command failed": "指令失敗",
     "Could not find user in room": "在聊天室中找不到使用者",
     "Use an existing session to verify this one, granting it access to encrypted messages.": "使用既有的工作階段來驗證這個，授予其對加密訊息的存取權限。",
-    "Use your other device to continue…": "使用您其他的裝置繼續……"
+    "Use your other device to continue…": "使用您其他的裝置繼續……",
+    "Syncing...": "正在同步……",
+    "Signing In...": "正在登入……",
+    "If you've joined lots of rooms, this might take a while": "如果您已加入很多聊天室，這可能需要一點時間"
 }
