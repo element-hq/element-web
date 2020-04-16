@@ -2183,7 +2183,7 @@
     "Great! This recovery passphrase looks strong enough.": "Great! This recovery passphrase looks strong enough.",
     "Set a recovery passphrase to secure encrypted information and recover it if you log out. This should be different to your account password:": "Set a recovery passphrase to secure encrypted information and recover it if you log out. This should be different to your account password:",
     "Enter a recovery passphrase": "Enter a recovery passphrase",
-    "Back up encryption keys": "Back up encryption keys",
+    "Back up encrypted message keys": "Back up encrypted message keys",
     "Set up with a recovery key": "Set up with a recovery key",
     "That matches!": "That matches!",
     "That doesn't match.": "That doesn't match.",

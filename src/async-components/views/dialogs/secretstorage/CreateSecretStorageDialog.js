@@ -518,7 +518,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             </div>
 
             <LabelledToggleSwitch
-                label={ _t("Back up encryption keys")}
+                label={ _t("Back up encrypted message keys")}
                 onChange={this._onUseKeyBackupChange} value={this.state.useKeyBackup}
             />
 
