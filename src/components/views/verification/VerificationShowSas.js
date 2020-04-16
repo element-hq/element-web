@@ -20,6 +20,7 @@ import { _t, _td } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
+import { fixupColorFonts } from '../../../utils/FontManager';
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -42,6 +43,13 @@ export default class VerificationShowSas extends React.Component {
         this.state = {
             pending: false,
         };
+    }
+
+    componentWillMount() {
+        // As this component is also used before login (during complete security),
+        // also make sure we have a working emoji font to display the SAS emojis here.
+        // This is also done from LoggedInView.
+        fixupColorFonts();
     }
 
     onMatchClick = () => {
