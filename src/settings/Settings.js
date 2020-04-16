@@ -95,6 +95,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_font_scaling": {
+        isFeature: true,
+        displayName: _td("Font scaling"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false
+    },
     "font_size": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
