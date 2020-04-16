@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import {_t, _td} from '../../../languageHandler';
-import {useFeatureEnabled, useSettingValue} from "../../../hooks/useSettings";
+import {useSettingValue} from "../../../hooks/useSettings";
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
 
