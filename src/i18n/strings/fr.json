@@ -2363,5 +2363,8 @@
     "Command failed": "La commande a échoué",
     "Could not find user in room": "Impossible de trouver l’utilisateur dans le salon",
     "Use an existing session to verify this one, granting it access to encrypted messages.": "Utilisez une session existante pour vérifier celle-ci, ce qui lui permettra d’avoir accès aux messages chiffrés.",
-    "Use your other device to continue…": "Utilisez votre autre appareil pour continuer…"
+    "Use your other device to continue…": "Utilisez votre autre appareil pour continuer…",
+    "Syncing...": "Synchronisation…",
+    "Signing In...": "Authentification…",
+    "If you've joined lots of rooms, this might take a while": "Si vous avez rejoint beaucoup de salons, cela peut prendre du temps"
 }
