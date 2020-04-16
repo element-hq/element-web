@@ -1,3 +1,15 @@
+Changes in [2.5.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.2) (2020-04-16)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.1...v2.5.0-rc.2)
+
+ * Upgrade to JS SDK 5.3.1-rc.2
+ * [Release] Convert cross-signing flag to a setting
+   [\#4429](https://github.com/matrix-org/matrix-react-sdk/pull/4429)
+ * Iterate cross-signing copy
+   [\#4426](https://github.com/matrix-org/matrix-react-sdk/pull/4426)
+ * Fix: ensure twemoji font is loaded when showing SAS emojis
+   [\#4423](https://github.com/matrix-org/matrix-react-sdk/pull/4423)
+
 Changes in [2.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.1) (2020-04-15)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.4.0-rc.1...v2.5.0-rc.1)
