@@ -2340,5 +2340,9 @@
     "Explore Public Rooms": "Nyilvános szobák felderítése",
     "Create a Group Chat": "Készíts Csoportos Beszélgetést",
     "Self-verification request": "Ön ellenőrzés kérése",
-    "Cancel replying to a message": "Üzenet válasz megszakítása"
+    "Cancel replying to a message": "Üzenet válasz megszakítása",
+    "Confirm adding email": "E-mail hozzáadásának megerősítése",
+    "Click the button below to confirm adding this email address.": "Az e-mail cím hozzáadásának megerősítéséhez kattints a gombra lent.",
+    "Confirm adding phone number": "Telefonszám hozzáadásának megerősítése",
+    "Click the button below to confirm adding this phone number.": "Az telefonszám hozzáadásának megerősítéséhez kattints a gombra lent."
 }
