@@ -516,7 +516,7 @@ export const SETTINGS = {
     },
     "keepSecretStoragePassphraseForSession": {
          supportedLevels: ['device', 'config'],
-         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         displayName: _td("Keep recovery passphrase in memory for this session"),
          default: false,
     },
     "crawlerSleepTime": {

@@ -24,6 +24,7 @@ import FileSaver from 'file-saver';
 import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
+import {copyNode} from "../../../../utils/strings";
 
 const PHASE_LOADING = 0;
 const PHASE_MIGRATE = 1;
@@ -37,16 +38,6 @@ const PHASE_CONFIRM_SKIP = 8;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
-
-// XXX: copied from ShareDialog: factor out into utils
-function selectText(target) {
-    const range = document.createRange();
-    range.selectNodeContents(target);
-
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-}
 
 /*
  * Walks the user through the process of creating a passphrase to guard Secure
@@ -169,8 +160,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onCopyClick = () => {
-        selectText(this._recoveryKeyNode);
-        const successful = document.execCommand('copy');
+        const successful = copyNode(this._recoveryKeyNode);
         if (successful) {
             this.setState({
                 copied: true,
@@ -472,7 +462,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         let helpText;
         if (this.state.zxcvbnResult) {
             if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
-                helpText = _t("Great! This passphrase looks strong enough.");
+                helpText = _t("Great! This recovery passphrase looks strong enough.");
             } else {
                 // We take the warning from zxcvbn or failing that, the first
                 // suggestion. In practice The first is generally the most relevant
@@ -497,12 +487,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
-                "Set up encryption on this session to allow it to verify other sessions, " +
-                "granting them access to encrypted messages and marking them as trusted for other users.",
-            )}</p>
-            <p>{_t(
-                "Secure your encryption keys with a passphrase. For maximum security " +
-                "this should be different to your account password:",
+                "Set a recovery passphrase to secure encrypted information and recover it if you log out. " +
+                "This should be different to your account password:",
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
@@ -511,7 +497,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
                     value={this.state.passPhrase}
-                    label={_t("Enter a passphrase")}
+                    label={_t("Enter a recovery passphrase")}
                     autoFocus={true}
                     autoComplete="new-password"
                 />
@@ -522,7 +508,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             </div>
 
             <LabelledToggleSwitch
-                label={ _t("Back up my encryption keys, securing them with the same passphrase")}
+                label={ _t("Back up encrypted message keys")}
                 onChange={this._onUseKeyBackupChange} value={this.state.useKeyBackup}
             />
 
@@ -579,7 +565,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Enter your passphrase a second time to confirm it.",
+                "Enter your recovery passphrase a second time to confirm it.",
             )}</p>
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
                 <Field
@@ -587,7 +573,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onChange={this._onPassPhraseConfirmChange}
                     value={this.state.passPhraseConfirm}
                     className="mx_CreateSecretStorageDialog_passPhraseField"
-                    label={_t("Confirm your passphrase")}
+                    label={_t("Confirm your recovery passphrase")}
                     autoFocus={true}
                     autoComplete="new-password"
                 />
@@ -614,7 +600,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         return <div>
             <p>{_t(
                 "Your recovery key is a safety net - you can use it to restore " +
-                "access to your encrypted messages if you forget your passphrase.",
+                "access to your encrypted messages if you forget your recovery passphrase.",
             )}</p>
             <p>{_t(
                 "Keep a copy of it somewhere secure, like a password manager or even a safe.",
@@ -713,7 +699,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_PASSPHRASE:
                 return _t('Set up encryption');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm passphrase');
+                return _t('Confirm recovery passphrase');
             case PHASE_CONFIRM_SKIP:
                 return _t('Are you sure?');
             case PHASE_SHOWKEY:
