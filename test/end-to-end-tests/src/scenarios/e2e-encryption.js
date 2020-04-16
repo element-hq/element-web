@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 // TODO: Update test for cross signing
+// https://github.com/vector-im/riot-web/issues/13226
 
 module.exports = async function() {
     console.log(" this is supposed to be an e2e test, but it's broken");
