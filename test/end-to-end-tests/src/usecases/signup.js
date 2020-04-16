@@ -84,13 +84,13 @@ module.exports = async function signup(session, username, password, homeserver) 
     const xsigningPassphrase = 'a7eaXcjpa9!Yl7#V^h$B^%dovHUVX'; // https://xkcd.com/221/
     let passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
     await session.replaceInputText(passphraseField, xsigningPassphrase);
-    let xsignContButton = await session.query('.mx_CreateSecretStorageDialog_passPhraseContainer .mx_Dialog_primary');
+    let xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
     //repeat passphrase entry
     passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
     await session.replaceInputText(passphraseField, xsigningPassphrase);
-    xsignContButton = await session.query('.mx_CreateSecretStorageDialog_passPhraseContainer .mx_Dialog_primary');
+    xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
     //ignore the recovery key
