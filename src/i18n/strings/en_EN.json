@@ -399,7 +399,7 @@
     "Try out new ways to ignore people (experimental)": "Try out new ways to ignore people (experimental)",
     "Show a presence dot next to DMs in the room list": "Show a presence dot next to DMs in the room list",
     "Support adding custom themes": "Support adding custom themes",
-    "Enable cross-signing to verify per-user instead of per-session (in development)": "Enable cross-signing to verify per-user instead of per-session (in development)",
+    "Enable cross-signing to verify per-user instead of per-session": "Enable cross-signing to verify per-user instead of per-session",
     "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Show padlocks on invite only rooms": "Show padlocks on invite only rooms",
