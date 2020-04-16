@@ -287,7 +287,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             )}</p>
             <p>{_t(
                 "We'll store an encrypted copy of your keys on our server. " +
-                "Protect your backup with a recovery passphrase to keep it secure.",
+                "Secure your backup with a recovery passphrase.",
             )}</p>
             <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
