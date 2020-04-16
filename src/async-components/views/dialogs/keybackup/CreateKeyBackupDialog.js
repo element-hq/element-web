@@ -262,7 +262,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         let helpText;
         if (this.state.zxcvbnResult) {
             if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
-                helpText = _t("Great! This passphrase looks strong enough.");
+                helpText = _t("Great! This recovery passphrase looks strong enough.");
             } else {
                 const suggestions = [];
                 for (let i = 0; i < this.state.zxcvbnResult.feedback.suggestions.length; ++i) {
@@ -287,7 +287,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
             )}</p>
             <p>{_t(
                 "We'll store an encrypted copy of your keys on our server. " +
-                "Protect your backup with a passphrase to keep it secure.",
+                "Secure your backup with a recovery passphrase.",
             )}</p>
             <p>{_t("For maximum security, this should be different from your account password.")}</p>
 
@@ -297,7 +297,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                         onChange={this._onPassPhraseChange}
                         value={this.state.passPhrase}
                         className="mx_CreateKeyBackupDialog_passPhraseInput"
-                        placeholder={_t("Enter a passphrase...")}
+                        placeholder={_t("Enter a recovery passphrase...")}
                         autoFocus={true}
                     />
                     <div className="mx_CreateKeyBackupDialog_passPhraseHelp">
@@ -354,7 +354,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <form onSubmit={this._onPassPhraseConfirmNextClick}>
             <p>{_t(
-                "Please enter your passphrase a second time to confirm.",
+                "Please enter your recovery passphrase a second time to confirm.",
             )}</p>
             <div className="mx_CreateKeyBackupDialog_primaryContainer">
                 <div className="mx_CreateKeyBackupDialog_passPhraseContainer">
@@ -363,7 +363,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                             onChange={this._onPassPhraseConfirmChange}
                             value={this.state.passPhraseConfirm}
                             className="mx_CreateKeyBackupDialog_passPhraseInput"
-                            placeholder={_t("Repeat your passphrase...")}
+                            placeholder={_t("Repeat your recovery passphrase...")}
                             autoFocus={true}
                         />
                     </div>
@@ -383,7 +383,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
         return <div>
             <p>{_t(
                 "Your recovery key is a safety net - you can use it to restore " +
-                "access to your encrypted messages if you forget your passphrase.",
+                "access to your encrypted messages if you forget your recovery passphrase.",
             )}</p>
             <p>{_t(
                 "Keep a copy of it somewhere secure, like a password manager or even a safe.",
@@ -477,9 +477,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     _titleForPhase(phase) {
         switch (phase) {
             case PHASE_PASSPHRASE:
-                return _t('Secure your backup with a passphrase');
+                return _t('Secure your backup with a recovery passphrase');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm your passphrase');
+                return _t('Confirm your recovery passphrase');
             case PHASE_OPTOUT_CONFIRM:
                 return _t('Warning!');
             case PHASE_SHOWKEY:
