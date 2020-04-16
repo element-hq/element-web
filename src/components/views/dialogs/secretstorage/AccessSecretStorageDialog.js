@@ -134,8 +134,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: You should only access secret storage " +
-                    "from a trusted computer.", {},
+                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
                 <p>{_t(
@@ -207,8 +206,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: You should only access secret storage " +
-                    "from a trusted computer.", {},
+                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
                 <p>{_t(
