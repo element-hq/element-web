@@ -487,7 +487,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
     _titleForPhase(phase) {
         switch (phase) {
             case PHASE_PASSPHRASE:
-                return _t('Secure your backup with a passphrase');
+                return _t('Secure your backup with a recovery passphrase');
             case PHASE_PASSPHRASE_CONFIRM:
                 return _t('Confirm your recovery passphrase');
             case PHASE_OPTOUT_CONFIRM:
