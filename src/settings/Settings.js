@@ -99,7 +99,7 @@ export const SETTINGS = {
         isFeature: true,
         displayName: _td("Font scaling"),
         supportedLevels: LEVELS_FEATURE,
-        default: false
+        default: false,
     },
     "font_size": {
         displayName: _td("Font size"),
