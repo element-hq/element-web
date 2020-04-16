@@ -19,6 +19,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 
 :root {
+    transition: font-size 0.25s;
     font-size: 15px;
 }
 
