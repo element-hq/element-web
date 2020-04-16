@@ -22,7 +22,7 @@ import {_t, _td} from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
-import StyleUserSettingsTab from "../settings/tabs/user/StyleUserSettingsTab";
+import AppearanceUserSettingsTab from "../settings/tabs/user/AppearanceUserSettingsTab";
 import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
 import NotificationUserSettingsTab from "../settings/tabs/user/NotificationUserSettingsTab";
 import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSettingsTab";
@@ -68,9 +68,9 @@ export default class UserSettingsDialog extends React.Component {
             <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         tabs.push(new Tab(
-            _td("Style"),
+            _td("Appearance"),
             "mx_userSettingsDialog_styleIcon",
-            <StyleUserSettingsTab />,
+            <AppearanceUserSettingsTab />,
         ));
         tabs.push(new Tab(
             _td("Flair"),
