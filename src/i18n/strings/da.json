@@ -561,5 +561,7 @@
     "Could not find user in room": "Kunne ikke finde bruger i rum",
     "Verifies a user, session, and pubkey tuple": "Verificerer en bruger, session og pubkey tuple",
     "Unknown (user, session) pair:": "Ukendt (bruger, session) par:",
-    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!"
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!",
+    "Session already verified!": "Sessionen er allerede verificeret!",
+    "WARNING: Session already verified, but keys do NOT MATCH!": "ADVARSEL: Sessionen er allerede verificeret, men nøglerne MATCHER IKKE."
 }
