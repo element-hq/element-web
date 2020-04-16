@@ -199,7 +199,7 @@ export default class StyleUserSettingsTab extends React.Component {
             .sort((a, b) => a.name.localeCompare(b.name));
         const orderedThemes = [...builtInThemes, ...customThemes];
         return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
+            <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
                 <Field id="theme" label={_t("Theme")} element="select"
@@ -217,7 +217,7 @@ export default class StyleUserSettingsTab extends React.Component {
     }
 
     _renderFontSection() {
-        return <div className="mx_SettingsTab_section">
+        return <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <Field
                 type="text"

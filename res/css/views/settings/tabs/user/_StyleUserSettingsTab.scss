@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,24 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsTab_changePassword .mx_Field,
 .mx_StyleUserSettingsTab_themeSection .mx_Field,
 .mx_StyleUserSettingsTab_fontScaling .mx_Field {
     @mixin mx_Settings_fullWidthField;
-}
-
-.mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
-    margin-top: 0;
-}
-
-.mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
-.mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
-.mx_GeneralUserSettingsTab_discovery .mx_ExistingEmailAddress,
-.mx_GeneralUserSettingsTab_discovery .mx_ExistingPhoneNumber,
-.mx_GeneralUserSettingsTab_languageInput {
-    @mixin mx_Settings_fullWidthField;
-}
-
-.mx_GeneralUserSettingsTab_warningIcon {
-    vertical-align: middle;
 }
