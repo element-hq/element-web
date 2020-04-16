@@ -497,12 +497,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
-                "Set up encryption on this session to allow it to verify other sessions, " +
-                "granting them access to encrypted messages and marking them as trusted for other users.",
-            )}</p>
-            <p>{_t(
-                "Secure your encryption keys with a recovery passphrase. For maximum security " +
-                "this should be different to your account password:",
+                "Set a recovery passphrase to secure encrypted information and recover it if you log out. " +
+                "This should be different to your account password:",
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
@@ -522,7 +518,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             </div>
 
             <LabelledToggleSwitch
-                label={ _t("Back up my encryption keys, securing them with the same recovery passphrase")}
+                label={ _t("Back up encryption keys")}
                 onChange={this._onUseKeyBackupChange} value={this.state.useKeyBackup}
             />
 
