@@ -563,5 +563,10 @@
     "Unknown (user, session) pair:": "Ukendt (bruger, session) par:",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "ADVARSEL: NØGLEVERIFIKATIONEN FEJLEDE! Underskriftsnøglen for %(userId)s og session %(deviceId)s er %(fprint)s som ikke matcher den supplerede nøgle \"%(fingerprint)s\". Dette kunne betyde at jeres kommunikation er infiltreret!",
     "Session already verified!": "Sessionen er allerede verificeret!",
-    "WARNING: Session already verified, but keys do NOT MATCH!": "ADVARSEL: Sessionen er allerede verificeret, men nøglerne MATCHER IKKE."
+    "WARNING: Session already verified, but keys do NOT MATCH!": "ADVARSEL: Sessionen er allerede verificeret, men nøglerne MATCHER IKKE.",
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "",
+    "Displays information about a user": "Viser information om en bruger",
+    "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s ændrede rumnavnet fra %(oldRoomName)s til %(newRoomName)s.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
 }
