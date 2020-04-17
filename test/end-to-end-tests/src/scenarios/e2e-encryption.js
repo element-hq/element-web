@@ -17,7 +17,6 @@ limitations under the License.
 
 const sendMessage = require('../usecases/send-message');
 const acceptInvite = require('../usecases/accept-invite');
-const invite = require('../usecases/invite');
 const {receiveMessage} = require('../usecases/timeline');
 const {createDm} = require('../usecases/create-room');
 const {checkRoomSettings} = require('../usecases/room-settings');
