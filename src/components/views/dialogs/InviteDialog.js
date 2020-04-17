@@ -574,7 +574,7 @@ export default class InviteDialog extends React.PureComponent {
 
         const createRoomOptions = {inlineErrors: true};
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
             const client = MatrixClientPeg.get();

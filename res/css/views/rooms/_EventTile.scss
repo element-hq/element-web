@@ -111,6 +111,7 @@ limitations under the License.
 }
 
 .mx_EventTile_line, .mx_EventTile_reply {
+    clear: both;
     position: relative;
     padding-left: 65px; /* left gutter */
     padding-top: 4px;
@@ -658,5 +659,25 @@ div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
         p, ul, ol, dl, blockquote, pre, table {
             margin-bottom: 4px; // 1/4 of the non-compact margin-bottom
         }
+    }
+}
+
+.mx_EventTile_tileError {
+    color: red;
+    text-align: center;
+
+    // Remove some of the default tile padding so that the error is centered
+    margin-right: 0;
+    .mx_EventTile_line {
+        padding-left: 0;
+        margin-right: 0;
+    }
+
+    .mx_EventTile_line span {
+        padding: 4px 8px;
+    }
+
+    a {
+        margin-left: 1em;
     }
 }

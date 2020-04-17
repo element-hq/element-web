@@ -26,6 +26,7 @@ import { getHostingLink } from '../../../utils/HostingLink';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
 import * as sdk from "../../../index";
+import {getHomePageUrl} from "../../../utils/pages";
 
 export default class TopLeftMenu extends React.Component {
     static propTypes = {
@@ -47,15 +48,7 @@ export default class TopLeftMenu extends React.Component {
     }
 
     hasHomePage() {
-        const config = SdkConfig.get();
-        const pagesConfig = config.embeddedPages;
-        if (pagesConfig && pagesConfig.homeUrl) {
-            return true;
-        }
-        // This is a deprecated config option for the home page
-        // (despite the name, given we also now have a welcome
-        // page, which is not the same).
-        return !!config.welcomePageUrl;
+        return !!getHomePageUrl(SdkConfig.get());
     }
 
     render() {

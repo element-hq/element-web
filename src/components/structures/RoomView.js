@@ -49,7 +49,6 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
-import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -182,6 +181,7 @@ export default createReactClass({
         this.context.on("crypto.keyBackupStatus", this.onKeyBackupStatus);
         this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
+        this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
@@ -405,13 +405,9 @@ export default createReactClass({
         const hideWidgetDrawer = localStorage.getItem(
             room.roomId + "_hide_widget_drawer");
 
-        if (hideWidgetDrawer === "true") {
-            return false;
-        }
-
-        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
-
-        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
+        // This is confusing, but it means to say that we default to the tray being
+        // hidden unless the user clicked to open it.
+        return hideWidgetDrawer === "false";
     },
 
     componentDidMount: function() {
@@ -504,6 +500,7 @@ export default createReactClass({
             this.context.removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+            this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -805,6 +802,13 @@ export default createReactClass({
         this._updateE2EStatus(room);
     },
 
+    onCrossSigningKeysChanged: function() {
+        const room = this.state.room;
+        if (room) {
+            this._updateE2EStatus(room);
+        }
+    },
+
     _updateE2EStatus: async function(room) {
         if (!this.context.isRoomEncrypted(room.roomId)) {
             return;
@@ -818,7 +822,7 @@ export default createReactClass({
             });
             return;
         }
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
                 this.setState({
                     e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
@@ -1203,7 +1207,7 @@ export default createReactClass({
             });
         }, function(error) {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            console.error("Search failed: " + error);
+            console.error("Search failed", error);
             Modal.createTrackedDialog('Search failed', '', ErrorDialog, {
                 title: _t("Search failed"),
                 description: ((error && error.message) ? error.message : _t("Server may be unavailable, overloaded, or search timed out :(")),

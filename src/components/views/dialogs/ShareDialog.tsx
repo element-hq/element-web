@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +15,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import PropTypes from 'prop-types';
-import {Room, User, Group, RoomMember, MatrixEvent} from 'matrix-js-sdk';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
+import {Room} from "matrix-js-sdk/src/models/room";
+import {User} from "matrix-js-sdk/src/models/user";
+import {Group} from "matrix-js-sdk/src/models/group";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import QRCode from 'qrcode-react';
 import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import * as ContextMenu from "../../structures/ContextMenu";
 import {toRightOf} from "../../structures/ContextMenu";
+import {copyPlaintext, selectText} from "../../../utils/strings";
 
 const socials = [
     {
@@ -52,7 +58,18 @@ const socials = [
     },
 ];
 
-export default class ShareDialog extends React.Component {
+interface IProps {
+    onFinished: () => void;
+    target: Room | User | Group | RoomMember | MatrixEvent;
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+interface IState {
+    linkSpecificEvent: boolean;
+    permalinkCreator: RoomPermalinkCreator;
+}
+
+export default class ShareDialog extends React.PureComponent<IProps, IState> {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
         target: PropTypes.oneOfType([
@@ -64,55 +81,45 @@ export default class ShareDialog extends React.Component {
         ]).isRequired,
     };
 
+    protected closeCopiedTooltip: () => void;
+
     constructor(props) {
         super(props);
 
         this.onCopyClick = this.onCopyClick.bind(this);
         this.onLinkSpecificEventCheckboxClick = this.onLinkSpecificEventCheckboxClick.bind(this);
 
+        let permalinkCreator: RoomPermalinkCreator = null;
+        if (props.target instanceof Room) {
+            permalinkCreator = new RoomPermalinkCreator(props.target);
+            permalinkCreator.load();
+        }
+
         this.state = {
             // MatrixEvent defaults to share linkSpecificEvent
             linkSpecificEvent: this.props.target instanceof MatrixEvent,
+            permalinkCreator,
         };
-
-        this._link = createRef();
-    }
-
-    static _selectText(target) {
-        const range = document.createRange();
-        range.selectNodeContents(target);
-
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
     }
 
     static onLinkClick(e) {
         e.preventDefault();
-        const {target} = e;
-        ShareDialog._selectText(target);
+        selectText(e.target);
     }
 
-    onCopyClick(e) {
+    async onCopyClick(e) {
         e.preventDefault();
+        const target = e.target; // copy target before we go async and React throws it away
 
-        ShareDialog._selectText(this._link.current);
-
-        let successful;
-        try {
-            successful = document.execCommand('copy');
-        } catch (err) {
-            console.error('Failed to copy: ', err);
-        }
-
-        const buttonRect = e.target.getBoundingClientRect();
+        const successful = await copyPlaintext(this.getUrl());
+        const buttonRect = target.getBoundingClientRect();
         const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
         const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
             ...toRightOf(buttonRect, 2),
             message: successful ? _t('Copied!') : _t('Failed to copy'),
         });
         // Drop a reference to this close handler for componentWillUnmount
-        this.closeCopiedTooltip = e.target.onmouseleave = close;
+        this.closeCopiedTooltip = target.onmouseleave = close;
     }
 
     onLinkSpecificEventCheckboxClick() {
@@ -121,24 +128,38 @@ export default class ShareDialog extends React.Component {
         });
     }
 
-    componentDidMount() {
-        if (this.props.target instanceof Room) {
-            const permalinkCreator = new RoomPermalinkCreator(this.props.target);
-            permalinkCreator.load();
-            this.setState({permalinkCreator});
-        }
-    }
-
     componentWillUnmount() {
         // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
         // the tooltip otherwise, such as pressing Escape or clicking X really quickly
         if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
-    render() {
-        let title;
+    getUrl() {
         let matrixToUrl;
 
+        if (this.props.target instanceof Room) {
+            if (this.state.linkSpecificEvent) {
+                const events = this.props.target.getLiveTimeline().getEvents();
+                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
+            } else {
+                matrixToUrl = this.state.permalinkCreator.forRoom();
+            }
+        } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
+            matrixToUrl = makeUserPermalink(this.props.target.userId);
+        } else if (this.props.target instanceof Group) {
+            matrixToUrl = makeGroupPermalink(this.props.target.groupId);
+        } else if (this.props.target instanceof MatrixEvent) {
+            if (this.state.linkSpecificEvent) {
+                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
+            } else {
+                matrixToUrl = this.props.permalinkCreator.forRoom();
+            }
+        }
+        return matrixToUrl;
+    }
+
+    render() {
+        let title;
         let checkbox;
 
         if (this.props.target instanceof Room) {
@@ -156,18 +177,10 @@ export default class ShareDialog extends React.Component {
                     </label>
                 </div>;
             }
-
-            if (this.state.linkSpecificEvent) {
-                matrixToUrl = this.state.permalinkCreator.forEvent(events[events.length - 1].getId());
-            } else {
-                matrixToUrl = this.state.permalinkCreator.forRoom();
-            }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             title = _t('Share User');
-            matrixToUrl = makeUserPermalink(this.props.target.userId);
         } else if (this.props.target instanceof Group) {
             title = _t('Share Community');
-            matrixToUrl = makeGroupPermalink(this.props.target.groupId);
         } else if (this.props.target instanceof MatrixEvent) {
             title = _t('Share Room Message');
             checkbox = <div>
@@ -179,14 +192,9 @@ export default class ShareDialog extends React.Component {
                     { _t('Link to selected message') }
                 </label>
             </div>;
-
-            if (this.state.linkSpecificEvent) {
-                matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
-            } else {
-                matrixToUrl = this.props.permalinkCreator.forRoom();
-            }
         }
 
+        const matrixToUrl = this.getUrl();
         const encodedUrl = encodeURIComponent(matrixToUrl);
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
@@ -197,8 +205,7 @@ export default class ShareDialog extends React.Component {
         >
             <div className="mx_ShareDialog_content">
                 <div className="mx_ShareDialog_matrixto">
-                    <a ref={this._link}
-                       href={matrixToUrl}
+                    <a href={matrixToUrl}
                        onClick={ShareDialog.onLinkClick}
                        className="mx_ShareDialog_matrixto_link"
                     >
@@ -217,17 +224,18 @@ export default class ShareDialog extends React.Component {
                         <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
-                        {
-                            socials.map((social) => <a rel="noreferrer noopener"
-                                                       target="_blank"
-                                                       key={social.name}
-                                                       name={social.name}
-                                                       href={social.url(encodedUrl)}
-                                                       className="mx_ShareDialog_social_icon"
+                        { socials.map((social) => (
+                            <a
+                                rel="noreferrer noopener"
+                                target="_blank"
+                                key={social.name}
+                                title={social.name}
+                                href={social.url(encodedUrl)}
+                                className="mx_ShareDialog_social_icon"
                             >
                                 <img src={social.img} alt={social.name} height={64} width={64} />
-                            </a>)
-                        }
+                            </a>
+                        )) }
                     </div>
                 </div>
             </div>
