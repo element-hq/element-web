@@ -51,7 +51,7 @@ async function confirmToDismiss(name) {
     } else if (name === "m.cross_signing.self_signing") {
         description = _t("If you cancel now, you won't complete verifying your other session.");
     } else {
-        description = _t("If you cancel now, you won't complete your secret storage operation.");
+        description = _t("If you cancel now, you won't complete your operation.");
     }
 
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -185,7 +185,7 @@ export async function promptForBackupPassphrase() {
 
     const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
     const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
-            showSummary: false, keyCallback: k => key = k,
+        showSummary: false, keyCallback: k => key = k,
     }, null, /* priority = */ false, /* static = */ true);
 
     const success = await finished;

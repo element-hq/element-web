@@ -29,8 +29,12 @@ limitations under the License.
     position: relative;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
-    font-size: 12px;
+    font-size: $font-12px;
     user-select: none;
+}
+
+.mx_Dropdown_input.mx_AccessibleButton_disabled {
+    cursor: not-allowed;
 }
 
 .mx_Dropdown_input:focus {
@@ -53,7 +57,7 @@ limitations under the License.
 
 .mx_Dropdown_option {
     height: 35px;
-    line-height: 35px;
+    line-height: $font-35px;
     padding-left: 8px;
     padding-right: 8px;
 }

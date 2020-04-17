@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@ limitations under the License.
 
 import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
+import EditorModel from "./model";
 
-export function mdSerialize(model) {
+export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
         switch (part.type) {
             case "newline":
@@ -30,12 +31,12 @@ export function mdSerialize(model) {
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `[${part.text}](${makeGenericPermalink(part.resourceId)})`;
+                return html + `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
         }
     }, "");
 }
 
-export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
+export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
     const md = mdSerialize(model);
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
@@ -43,7 +44,7 @@ export function htmlSerializeIfNeeded(model, {forceHTML = false} = {}) {
     }
 }
 
-export function textSerialize(model) {
+export function textSerialize(model: EditorModel) {
     return model.parts.reduce((text, part) => {
         switch (part.type) {
             case "newline":
@@ -60,11 +61,11 @@ export function textSerialize(model) {
     }, "");
 }
 
-export function containsEmote(model) {
+export function containsEmote(model: EditorModel) {
     return startsWith(model, "/me ");
 }
 
-export function startsWith(model, prefix) {
+export function startsWith(model: EditorModel, prefix: string) {
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
@@ -73,18 +74,18 @@ export function startsWith(model, prefix) {
         firstPart.text.startsWith(prefix);
 }
 
-export function stripEmoteCommand(model) {
+export function stripEmoteCommand(model: EditorModel) {
     // trim "/me "
     return stripPrefix(model, "/me ");
 }
 
-export function stripPrefix(model, prefix) {
+export function stripPrefix(model: EditorModel, prefix: string) {
     model = model.clone();
     model.removeText({index: 0, offset: 0}, prefix.length);
     return model;
 }
 
-export function unescapeMessage(model) {
+export function unescapeMessage(model: EditorModel) {
     const {parts} = model;
     if (parts.length) {
         const firstPart = parts[0];

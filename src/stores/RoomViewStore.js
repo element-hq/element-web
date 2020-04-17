@@ -159,7 +159,7 @@ class RoomViewStore extends Store {
             }
             case 'sync_state':
                 this._setState({
-                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
+                    matrixClientIsReady: MatrixClientPeg.get() && MatrixClientPeg.get().isInitialSyncComplete(),
                 });
                 break;
         }

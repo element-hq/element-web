@@ -146,10 +146,11 @@ export const SETTINGS = {
         default: null,
     },
     "feature_cross_signing": {
-        isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
+        // XXX: We shouldn't be using the feature prefix for non-feature settings. There is an exception
+        // for this case though as we're converting a feature to a setting for a temporary safety net.
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session"),
+        supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
+        default: true,
     },
     "feature_event_indexing": {
         isFeature: true,
@@ -510,7 +511,7 @@ export const SETTINGS = {
     },
     "keepSecretStoragePassphraseForSession": {
          supportedLevels: ['device', 'config'],
-         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         displayName: _td("Keep recovery passphrase in memory for this session"),
          default: false,
     },
     "crawlerSleepTime": {

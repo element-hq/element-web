@@ -49,7 +49,7 @@ limitations under the License.
     border-radius: 40px;
     width: 24px;
     height: 24px;
-    line-height: 24px;
+    line-height: $font-24px;
     font-size: 0.8em;
     vertical-align: top;
     text-align: center;
@@ -57,7 +57,7 @@ limitations under the License.
 
 .mx_WhoIsTypingTile_label {
     flex: 1;
-    font-size: 14px;
+    font-size: $font-14px;
     font-weight: 600;
     color: $eventtile-meta-color;
 }

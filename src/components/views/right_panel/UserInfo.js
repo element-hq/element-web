@@ -63,7 +63,7 @@ const _disambiguateDevices = (devices) => {
 };
 
 export const getE2EStatus = (cli, userId, devices) => {
-    if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+    if (!SettingsStore.getValue("feature_cross_signing")) {
         const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
         return hasUnverifiedDevice ? "warning" : "verified";
     }
@@ -111,7 +111,7 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+    if (SettingsStore.getValue("feature_cross_signing")) {
         // Check whether all users have uploaded device keys before.
         // If so, enable encryption in the new room.
         const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
@@ -166,7 +166,7 @@ function DeviceItem({userId, device}) {
     // cross-signing so that other users can then safely trust you.
     // For other people's devices, the more general verified check that
     // includes locally verified devices can be used.
-    const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+    const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
         deviceTrust.isCrossSigningVerified() :
         deviceTrust.isVerified();
 
@@ -237,7 +237,7 @@ function DevicesSection({devices, userId, loading}) {
             // cross-signing so that other users can then safely trust you.
             // For other people's devices, the more general verified check that
             // includes locally verified devices can be used.
-            const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+            const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
                 deviceTrust.isCrossSigningVerified() :
                 deviceTrust.isVerified();
 
@@ -1298,7 +1298,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cli.checkUserTrust(member.userId);
     const userVerified = userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+    const canVerify = SettingsStore.getValue("feature_cross_signing") &&
                         homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
@@ -1444,9 +1444,11 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
         <div className="mx_UserInfo_container mx_UserInfo_separator">
             <div className="mx_UserInfo_profile">
                 <div>
-                    <h2 aria-label={displayName}>
+                    <h2>
                         { e2eIcon }
-                        { displayName }
+                        <span title={displayName} aria-label={displayName}>
+                            { displayName }
+                        </span>
                     </h2>
                 </div>
                 <div>{ member.userId }</div>

@@ -270,7 +270,7 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             if (this.state.isQuoting) {
                 if (this.props.e2eStatus) {
                     return _t('Send an encrypted reply…');

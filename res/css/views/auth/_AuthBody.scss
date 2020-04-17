@@ -17,7 +17,7 @@ limitations under the License.
 
 .mx_AuthBody {
     width: 500px;
-    font-size: 12px;
+    font-size: $font-12px;
     color: $authpage-secondary-color;
     background-color: $authpage-body-bg-color;
     border-radius: 0 4px 4px 0;
@@ -25,14 +25,14 @@ limitations under the License.
     box-sizing: border-box;
 
     h2 {
-        font-size: 24px;
+        font-size: $font-24px;
         font-weight: 600;
         margin-top: 8px;
         color: $authpage-primary-color;
     }
 
     h3 {
-        font-size: 14px;
+        font-size: $font-14px;
         font-weight: 600;
         color: $authpage-primary-color;
     }
@@ -98,7 +98,7 @@ limitations under the License.
 
 .mx_AuthBody_editServerDetails {
     padding-left: 1em;
-    font-size: 12px;
+    font-size: $font-12px;
     font-weight: normal;
 }
 
@@ -117,6 +117,24 @@ limitations under the License.
 
 .mx_AuthBody_fieldRow > .mx_Field:last-child {
     margin-right: 0;
+}
+
+.mx_AuthBody_paddedFooter {
+    height: 80px; // height of the submit button + register link
+    padding-top: 28px;
+    text-align: center;
+
+    .mx_AuthBody_paddedFooter_title {
+        margin-top: 16px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+    }
+
+    .mx_AuthBody_paddedFooter_subtitle {
+        margin-top: 8px;
+        font-size: $font-10px;
+        line-height: $font-14px;
+    }
 }
 
 .mx_AuthBody_changeFlow {

@@ -130,6 +130,10 @@ export default createReactClass({
         this._updateE2eStatus();
     },
 
+    onCrossSigningKeysChanged: function() {
+        this._updateE2eStatus();
+    },
+
     onRoomTimeline: function(ev, room) {
         if (!room) return;
         if (room.roomId != this.props.room.roomId) return;
@@ -142,7 +146,7 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("userTrustStatusChanged", this.onUserVerificationChanged);
-
+        cli.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         this._updateE2eStatus();
     },
 
@@ -151,7 +155,7 @@ export default createReactClass({
         if (!cli.isRoomEncrypted(this.props.room.roomId)) {
             return;
         }
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             return;
         }
 
@@ -267,6 +271,7 @@ export default createReactClass({
             cli.removeListener("RoomState.events", this.onJoinRule);
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+            cli.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
             cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
@@ -511,7 +516,7 @@ export default createReactClass({
         }
 
         let privateIcon = null;
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             if (this.state.joinRule == "invite" && !dmUserId) {
                 privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
             }
