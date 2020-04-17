@@ -1813,5 +1813,6 @@
     "Ask this user to verify their session, or manually verify it below.": "Bitte diese/n Nutzer!n, seine/ihre Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
     "Enable local event indexing and E2EE search (requires restart)": "Aktiviere lokale Ereignis-Indizierung und E2EE-Suche (erfordert Neustart)",
     "a few seconds from now": "in ein paar Sekunden",
-    "Show a presence dot next to DMs in the room list": "Verfügbarkeitspunkt neben den Direktnachrichten in der Raumliste anzeigen"
+    "Show a presence dot next to DMs in the room list": "Verfügbarkeitspunkt neben den Direktnachrichten in der Raumliste anzeigen",
+    "Show padlocks on invite only rooms": "Vorhängeschlösser an Nur-Einladen-Räumen anzeigen"
 }
