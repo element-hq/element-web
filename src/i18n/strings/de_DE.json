@@ -1802,5 +1802,6 @@
     "Command failed": "Befehl fehlgeschlagen",
     "Could not find user in room": "Der Benutzer konnte im Raum nicht gefunden werden",
     "Click the button below to confirm adding this email address.": "Klicken Sie auf die Schaltfläche unten, um das Hinzufügen dieser E-Mail-Adresse zu bestätigen.",
-    "Confirm adding phone number": "Bestätigen Sie das Hinzufügen der Telefonnummer."
+    "Confirm adding phone number": "Bestätigen Sie das Hinzufügen der Telefonnummer.",
+    "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel, für Server von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s"
 }
