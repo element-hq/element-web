@@ -1528,6 +1528,7 @@
     "Logs sent": "Logs sent",
     "Thank you!": "Thank you!",
     "Failed to send logs: ": "Failed to send logs: ",
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Reminder: Your browser is unsupported, so your experience may be unpredictable.",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
     "GitHub issue": "GitHub issue",
