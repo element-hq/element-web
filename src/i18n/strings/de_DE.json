@@ -1823,5 +1823,7 @@
     "How fast should messages be downloaded.": "Wie schnell sollten Nachrichten heruntergeladen werden?",
     "Compare a unique set of emoji if you don't have a camera on either device": "Vergleiche eine einmalige Reihe von Emoji, sofern du an keinem Gerät eine Kamera hast",
     "Waiting for %(displayName)s to verify…": "Warte darauf, dass %(displayName)s bestätigt…",
-    "Cancelling…": "Abbrechen…"
+    "Cancelling…": "Abbrechen…",
+    "They match": "Sie passen zueinander",
+    "They don't match": "Sie passen nicht zueinander"
 }
