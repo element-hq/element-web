@@ -17,7 +17,8 @@ a.mx_Pill {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 100%;
+    vertical-align: text-bottom;
+    max-width: calc(100% - 1ch);
 }
 
 /* More specific to override `.markdown-body a` text-decoration */
