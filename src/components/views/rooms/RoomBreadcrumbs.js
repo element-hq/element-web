@@ -363,17 +363,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 badge = <div className={badgeClasses}>{r.formattedCount}</div>;
             }
 
-            let dmIndicator;
-            if (this._isDmRoom(r.room) && !SettingsStore.getValue("feature_cross_signing")) {
-                dmIndicator = <img
-                    src={require("../../../../res/img/icon_person.svg")}
-                    className="mx_RoomBreadcrumbs_dmIndicator"
-                    width="13"
-                    height="15"
-                    alt={_t("Direct Chat")}
-                />;
-            }
-
             return (
                 <AccessibleButton
                     className={classes}
@@ -385,7 +374,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
-                    {dmIndicator}
                     {tooltip}
                 </AccessibleButton>
             );

@@ -484,26 +484,10 @@ export default createReactClass({
 
         let ariaLabel = name;
 
-        let dmIndicator;
         let dmOnline;
-        /* Post-cross-signing we don't show DM indicators at all, instead relying on user
-           context to let them know when that is. */
-        if (dmUserId && !SettingsStore.getValue("feature_cross_signing")) {
-            dmIndicator = <img
-                src={require("../../../../res/img/icon_person.svg")}
-                className="mx_RoomTile_dm"
-                width="11"
-                height="13"
-                alt="dm"
-            />;
-        }
-
         const { room } = this.props;
         const member = room.getMember(dmUserId);
-        if (
-            member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
-            SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
-        ) {
+        if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
             const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
             dmOnline = <UserOnlineDot userId={dmUserId} />;
         }
@@ -562,7 +546,6 @@ export default createReactClass({
                         <div className={avatarClasses}>
                             <div className="mx_RoomTile_avatar_container">
                                 <RoomAvatar room={this.props.room} width={24} height={24} />
-                                { dmIndicator }
                                 { e2eIcon }
                             </div>
                         </div>
