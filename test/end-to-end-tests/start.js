@@ -93,7 +93,13 @@ async function writeLogs(sessions, dir) {
     for (let i = 0; i < sessions.length; ++i) {
         const session = sessions[i];
         const userLogDir = `${dir}/${session.username}`;
-        fs.mkdirSync(userLogDir);
+        try {
+            fs.mkdirSync(userLogDir);
+        } catch (e) {
+            // typically this will be EEXIST. If it's something worse, the next few
+            // lines will fail too.
+            console.warn(`non-fatal error creating ${userLogDir} :`, e.message);
+        }
         const consoleLogName = `${userLogDir}/console.log`;
         const networkLogName = `${userLogDir}/network.log`;
         const appHtmlName = `${userLogDir}/app.html`;
