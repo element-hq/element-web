@@ -1825,5 +1825,6 @@
     "Waiting for %(displayName)s to verify…": "Warte darauf, dass %(displayName)s bestätigt…",
     "Cancelling…": "Abbrechen…",
     "They match": "Sie passen zueinander",
-    "They don't match": "Sie passen nicht zueinander"
+    "They don't match": "Sie passen nicht zueinander",
+    "To be secure, do this in person or use a trusted way to communicate.": "Um sicher zu gehen, tu dies persönlich oder verwende eine vertrauenswürdige Art der Kommunikation."
 }
