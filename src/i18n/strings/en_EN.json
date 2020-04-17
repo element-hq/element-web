@@ -1657,7 +1657,7 @@
     "Riot encountered an error during upload of:": "Riot encountered an error during upload of:",
     "Upload completed": "Upload completed",
     "Cancelled signature upload": "Cancelled signature upload",
-    "Unabled to upload": "Unabled to upload",
+    "Unable to upload": "Unable to upload",
     "Signature upload success": "Signature upload success",
     "Signature upload failed": "Signature upload failed",
     "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.": "You've previously used Riot on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, Riot needs to resync your account.",
