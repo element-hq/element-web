@@ -1800,5 +1800,7 @@
     "%(name)s is requesting verification": "%(name)s fordert eine Verifizierung an",
     "Failed to set topic": "Das Festlegen des Themas ist fehlgeschlagen",
     "Command failed": "Befehl fehlgeschlagen",
-    "Could not find user in room": "Der Benutzer konnte im Raum nicht gefunden werden"
+    "Could not find user in room": "Der Benutzer konnte im Raum nicht gefunden werden",
+    "Click the button below to confirm adding this email address.": "Klicken Sie auf die Schaltfläche unten, um das Hinzufügen dieser E-Mail-Adresse zu bestätigen.",
+    "Confirm adding phone number": "Bestätigen Sie das Hinzufügen der Telefonnummer."
 }
