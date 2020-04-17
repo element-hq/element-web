@@ -1308,8 +1308,9 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
     if (canVerify) {
+        // Note: mx_UserInfo_verifyButton is for the end-to-end tests
         verifyButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
+            <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
                 if (hasCrossSigningKeys) {
                     verifyUser(member);
                 } else {
