@@ -568,5 +568,7 @@
     "Displays information about a user": "Viser information om en bruger",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s ændrede rumnavnet fra %(oldRoomName)s til %(newRoomName)s.",
     "%(senderName)s added the alternative addresses %(addresses)s for this room.|other": "%(senderName)s tilføjede de alternative adresser %(addresses)s til dette rum.",
-    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum."
+    "%(senderName)s added the alternative addresses %(addresses)s for this room.|one": "%(senderName)s tilføjede alternative adresser %(addresses)s til dette rum.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|other": "%(senderName)s fjernede de alternative adresser %(addresses)s til dette rum.",
+    "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s fjernede alternative adresser %(addresses)s til dette rum."
 }
