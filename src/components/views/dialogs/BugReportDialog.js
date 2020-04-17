@@ -140,7 +140,7 @@ export default class BugReportDialog extends React.Component {
         let warning;
         if (window.Modernizr && Object.values(window.Modernizr).some(support => support === false)) {
             warning = <p><b>
-                { _t("Your browser is unsupported, you accepted that things may not work.") }
+                { _t("Reminder: Your browser is unsupported, so your experience may be unpredictable.") }
             </b></p>;
         }
 
