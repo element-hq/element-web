@@ -1811,5 +1811,6 @@
     "Support adding custom themes": "Unterstütze das Hinzufügen von benutzerdefinierten Designs",
     "Enable cross-signing to verify per-user instead of per-session": "Aktiviere Cross-Signing um pro Benutzer statt pro Sitzung zu verifizieren",
     "Ask this user to verify their session, or manually verify it below.": "Bitte diese/n Nutzer!n, seine/ihre Sitzung zu verifizieren, oder verifiziere diese unten manuell.",
-    "Enable local event indexing and E2EE search (requires restart)": "Aktiviere lokale Ereignis-Indizierung und E2EE suche (erfordert Neustart)"
+    "Enable local event indexing and E2EE search (requires restart)": "Aktiviere lokale Ereignis-Indizierung und E2EE suche (erfordert Neustart)",
+    "a few seconds from now": "in ein paar Sekunden"
 }
