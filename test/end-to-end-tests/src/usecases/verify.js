@@ -18,11 +18,6 @@ limitations under the License.
 const assert = require('assert');
 const {openMemberInfo} = require("./memberlist");
 
-async function assertVerified(session) {
-    const dialogSubTitle = await session.innerText(await session.query(".mx_Dialog h2"));
-    assert(dialogSubTitle, "Verified!");
-}
-
 async function startVerification(session, name) {
     session.log.step("opens their opponent's profile and starts verification");
     await openMemberInfo(session, name);
