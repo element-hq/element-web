@@ -30,7 +30,7 @@ export default class VectorAuthPage extends React.PureComponent {
         let backgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
         if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
             if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                backgroundUrl = brandingConfig.welcomeBackgroundUrl[ Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length)];
+                backgroundUrl = brandingConfig.welcomeBackgroundUrl[Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length)];
             } else {
                 backgroundUrl = brandingConfig.welcomeBackgroundUrl;
             }
