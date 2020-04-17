@@ -1789,5 +1789,6 @@
     "Unverified login. Was this you?": "Nicht verifizierte Anmeldung. Bist du es gewesen?",
     "Sends a message as html, without interpreting it as markdown": "Verschickt eine Nachricht im html-Format, ohne sie in Markdown zu formatieren",
     "Show rooms with unread notifications first": "Räume mit nicht gelesenen Benachrichtungen zuerst zeigen",
-    "Show shortcuts to recently viewed rooms above the room list": "Kurzbefehlezu den kürzlich gesichteteten Räumen über der Raumliste anzeigen"
+    "Show shortcuts to recently viewed rooms above the room list": "Kurzbefehlezu den kürzlich gesichteteten Räumen über der Raumliste anzeigen",
+    "Use Single Sign On to continue": "Benutze „Single Sign-On“ (Einmalanmeldung) um fortzufahren"
 }
