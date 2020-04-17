@@ -350,7 +350,7 @@ export const Commands = [
                 return success(cli.setRoomTopic(roomId, args));
             }
             const room = cli.getRoom(roomId);
-            if (!room) return reject('Bad room ID: ' + roomId);
+            if (!room) return reject(_t("Failed to set topic"));
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents && topicEvents.getContent().topic;
@@ -721,9 +721,10 @@ export const Commands = [
                     if (!isNaN(powerLevel)) {
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
-                        if (!room) return reject('Bad room ID: ' + roomId);
+                        if (!room) return reject(_t("Command failed"));
 
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
@@ -742,9 +743,10 @@ export const Commands = [
                 if (matches) {
                     const cli = MatrixClientPeg.get();
                     const room = cli.getRoom(roomId);
-                    if (!room) return reject('Bad room ID: ' + roomId);
+                    if (!room) return reject(_t("Command failed"));
 
                     const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
+                    if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                     return success(cli.setPowerLevel(roomId, args, undefined, powerLevelEvent));
                 }
             }
@@ -914,7 +916,7 @@ export const Commands = [
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
     new Command({
-        command: 'me',
+        command: "me",
         args: '<message>',
         description: _td('Displays action'),
         category: CommandCategories.messages,
@@ -931,16 +933,7 @@ Commands.forEach(cmd => {
     });
 });
 
-
-/**
- * Process the given text for /commands and return a bound method to perform them.
- * @param {string} roomId The room in which the command was performed.
- * @param {string} input The raw text input by the user.
- * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
- * processing the command, or 'promise' if a request was sent out.
- * Returns null if the input didn't match a command.
- */
-export function getCommand(roomId, input) {
+export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -955,6 +948,20 @@ export function getCommand(roomId, input) {
     } else {
         cmd = input;
     }
+
+    return {cmd, args};
+}
+
+/**
+ * Process the given text for /commands and return a bound method to perform them.
+ * @param {string} roomId The room in which the command was performed.
+ * @param {string} input The raw text input by the user.
+ * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
+ * processing the command, or 'promise' if a request was sent out.
+ * Returns null if the input didn't match a command.
+ */
+export function getCommand(roomId, input) {
+    const {cmd, args} = parseCommandString(input);
 
     if (CommandMap.has(cmd)) {
         return () => CommandMap.get(cmd).run(roomId, args, cmd);

@@ -96,12 +96,14 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         body.append('device_id', client.deviceId);
     }
 
-    const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
-    if (client.getDeviceCurve25519Key) {
-        keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+    if (client.isCryptoEnabled()) {
+        const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
+        if (client.getDeviceCurve25519Key) {
+            keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+        }
+        body.append('device_keys', keys.join(', '));
+        body.append('cross_signing_key', client.getCrossSigningId());
     }
-    body.append('device_keys', keys.join(', '));
-    body.append('cross_signing_key', client.getCrossSigningId());
 
     if (opts.label) {
         body.append('label', opts.label);
@@ -134,6 +136,13 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
                 });
             }
         } catch (e) {}
+    }
+
+    if (window.Modernizr) {
+        const missingFeatures = Object.keys(window.Modernizr).filter(key => window.Modernizr[key] === false);
+        if (missingFeatures.length > 0) {
+            body.append("modernizr_missing_features", missingFeatures.join(", "));
+        }
     }
 
     if (opts.sendLogs) {

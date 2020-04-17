@@ -50,6 +50,7 @@ export default class DeviceListener {
         MatrixClientPeg.get().on('crypto.devicesUpdated', this._onDevicesUpdated);
         MatrixClientPeg.get().on('deviceVerificationChanged', this._onDeviceVerificationChanged);
         MatrixClientPeg.get().on('userTrustStatusChanged', this._onUserTrustStatusChanged);
+        MatrixClientPeg.get().on('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
         MatrixClientPeg.get().on('accountData', this._onAccountData);
         this._recheck();
     }
@@ -59,6 +60,7 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('crypto.devicesUpdated', this._onDevicesUpdated);
             MatrixClientPeg.get().removeListener('deviceVerificationChanged', this._onDeviceVerificationChanged);
             MatrixClientPeg.get().removeListener('userTrustStatusChanged', this._onUserTrustStatusChanged);
+            MatrixClientPeg.get().removeListener('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
             MatrixClientPeg.get().removeListener('accountData', this._onAccountData);
         }
         this._dismissed.clear();
@@ -89,9 +91,20 @@ export default class DeviceListener {
         this._recheck();
     }
 
+    _onCrossSingingKeysChanged = () => {
+        this._recheck();
+    }
+
     _onAccountData = (ev) => {
-        // User may have migrated SSSS to symmetric, in which case we can dismiss that toast
-        if (ev.getType().startsWith('m.secret_storage.key.')) {
+        // User may have:
+        // * migrated SSSS to symmetric
+        // * uploaded keys to secret storage
+        // * completed secret storage creation
+        // which result in account data changes affecting checks below.
+        if (
+            ev.getType().startsWith('m.secret_storage.') ||
+            ev.getType().startsWith('m.cross_signing.')
+        ) {
             this._recheck();
         }
     }
@@ -111,7 +124,7 @@ export default class DeviceListener {
         const cli = MatrixClientPeg.get();
 
         if (
-            !SettingsStore.isFeatureEnabled("feature_cross_signing") ||
+            !SettingsStore.getValue("feature_cross_signing") ||
             !await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
         ) return;
 

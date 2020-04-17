@@ -20,7 +20,7 @@ async function openRoomDirectory(session) {
     await roomDirectoryButton.click();
 }
 
-async function createRoom(session, roomName) {
+async function createRoom(session, roomName, encrypted=false) {
     session.log.step(`creates room "${roomName}"`);
 
     const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
@@ -33,9 +33,13 @@ async function createRoom(session, roomName) {
     const addRoomButton = await roomsHeader.$(".mx_RoomSubList_addRoom");
     await addRoomButton.click();
 
-
     const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');
     await session.replaceInputText(roomNameInput, roomName);
+
+    if (!encrypted) {
+        const encryptionToggle = await session.query('.mx_CreateRoomDialog_e2eSwitch .mx_ToggleSwitch');
+        await encryptionToggle.click();
+    }
 
     const createButton = await session.query('.mx_Dialog_primary');
     await createButton.click();

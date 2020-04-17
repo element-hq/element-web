@@ -31,13 +31,13 @@ export function isContentActionable(mxEvent) {
     // status is SENT before remote-echo, null after
     const isSent = !eventStatus || eventStatus === EventStatus.SENT;
 
-    if (isSent && mxEvent.getType() === 'm.room.message') {
-        const content = mxEvent.getContent();
-        if (
-            content.msgtype &&
-            content.msgtype !== 'm.bad.encrypted' &&
-            content.hasOwnProperty('body')
-        ) {
+    if (isSent) {
+        if (mxEvent.getType() === 'm.room.message') {
+            const content = mxEvent.getContent();
+            if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
+                return true;
+            }
+        } else if (mxEvent.getType() === 'm.sticker') {
             return true;
         }
     }

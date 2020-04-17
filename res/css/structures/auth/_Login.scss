@@ -89,3 +89,13 @@ limitations under the License.
 .mx_Login_underlinedServerName {
     border-bottom: 1px dashed $accent-color;
 }
+
+div.mx_AccessibleButton_kind_link.mx_Login_forgot {
+    // style it as a link
+    font-size: inherit;
+    padding: 0;
+
+    &.mx_AccessibleButton_disabled {
+        cursor: not-allowed;
+    }
+}

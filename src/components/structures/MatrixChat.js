@@ -1506,7 +1506,7 @@ export default createReactClass({
         });
 
         cli.on("crypto.verification.request", request => {
-            const isFlagOn = SettingsStore.isFeatureEnabled("feature_cross_signing");
+            const isFlagOn = SettingsStore.getValue("feature_cross_signing");
 
             if (!isFlagOn && !request.channel.deviceId) {
                 request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
@@ -1556,7 +1556,7 @@ export default createReactClass({
             // changing colour. More advanced behaviour will come once
             // we implement more settings.
             cli.setGlobalErrorOnUnknownDevices(
-                !SettingsStore.isFeatureEnabled("feature_cross_signing"),
+                !SettingsStore.getValue("feature_cross_signing"),
             );
         }
     },
@@ -1902,28 +1902,29 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
         // because the client hasn't been started yet.
-        if (!isCryptoAvailable()) {
+        const cryptoAvailable = isCryptoAvailable();
+        if (!cryptoAvailable) {
             this._onLoggedIn();
+        }
+
+        this.setState({ pendingInitialSync: true });
+        await this.firstSyncPromise.promise;
+
+        if (!cryptoAvailable) {
+            this.setState({ pendingInitialSync: false });
+            return setLoggedInPromise;
         }
 
         // Test for the master cross-signing key in SSSS as a quick proxy for
         // whether cross-signing has been set up on the account.
-        let masterKeyInStorage = false;
-        try {
-            masterKeyInStorage = !!await cli.getAccountDataFromServer("m.cross_signing.master");
-        } catch (e) {
-            if (e.errcode !== "M_NOT_FOUND") {
-                console.warn("Secret storage account data check failed", e);
-            }
-        }
-
+        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
         if (masterKeyInStorage) {
             // Auto-enable cross-signing for the new session when key found in
             // secret storage.
-            SettingsStore.setFeatureEnabled("feature_cross_signing", true);
+            SettingsStore.setValue("feature_cross_signing", null, SettingLevel.DEVICE, true);
             this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
         } else if (
-            SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+            SettingsStore.getValue("feature_cross_signing") &&
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
         ) {
             // This will only work if the feature is set to 'enable' in the config,
@@ -1933,6 +1934,7 @@ export default createReactClass({
         } else {
             this._onLoggedIn();
         }
+        this.setState({ pendingInitialSync: false });
 
         return setLoggedInPromise;
     },
@@ -2054,6 +2056,7 @@ export default createReactClass({
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
+                    isSyncing={this.state.pendingInitialSync}
                     onLoggedIn={this.onUserCompletedLoginFlow}
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}

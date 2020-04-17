@@ -246,6 +246,7 @@ export default class Stickerpicker extends React.Component {
                 url: stickerpickerWidget.content.url,
                 name: stickerpickerWidget.content.name,
                 type: stickerpickerWidget.content.type,
+                data: stickerpickerWidget.content.data,
             };
 
             stickersContent = (

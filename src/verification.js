@@ -27,7 +27,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
-    if (!cli.isCryptoEnabled() || !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+    if (!cli.isCryptoEnabled() || !SettingsStore.getValue("feature_cross_signing")) {
         return false;
     }
     const usk = cli.getCrossSigningId("user_signing");
@@ -61,15 +61,18 @@ function UntrustedDeviceDialog(props) {
 }
 
 export async function verifyDevice(user, device) {
-    if (!await enable4SIfNeeded()) {
-        return;
+    const cli = MatrixClientPeg.get();
+    // if cross-signing is not explicitly disabled, check if it should be enabled first.
+    if (cli.getCryptoTrustCrossSignedDevices()) {
+        if (!await enable4SIfNeeded()) {
+            return;
+        }
     }
     Modal.createTrackedDialog("Verification warning", "unverified session", UntrustedDeviceDialog, {
         user,
         device,
         onFinished: async (action) => {
             if (action === "sas") {
-                const cli = MatrixClientPeg.get();
                 const verificationRequestPromise = cli.legacyDeviceVerification(
                     user.userId,
                     device.deviceId,
@@ -95,10 +98,13 @@ export async function verifyDevice(user, device) {
 }
 
 export async function legacyVerifyUser(user) {
-    if (!await enable4SIfNeeded()) {
-        return;
-    }
     const cli = MatrixClientPeg.get();
+    // if cross-signing is not explicitly disabled, check if it should be enabled first.
+    if (cli.getCryptoTrustCrossSignedDevices()) {
+        if (!await enable4SIfNeeded()) {
+            return;
+        }
+    }
     const verificationRequestPromise = cli.requestVerification(user.userId);
     dis.dispatch({
         action: "set_right_panel_phase",

@@ -111,6 +111,7 @@ limitations under the License.
 }
 
 .mx_EventTile_line, .mx_EventTile_reply {
+    clear: both;
     position: relative;
     padding-left: 65px; /* left gutter */
     padding-top: 4px;

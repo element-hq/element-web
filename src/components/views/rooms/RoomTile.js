@@ -130,6 +130,10 @@ export default createReactClass({
         this._updateE2eStatus();
     },
 
+    onCrossSigningKeysChanged: function() {
+        this._updateE2eStatus();
+    },
+
     onRoomTimeline: function(ev, room) {
         if (!room) return;
         if (room.roomId != this.props.room.roomId) return;
@@ -142,7 +146,7 @@ export default createReactClass({
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("userTrustStatusChanged", this.onUserVerificationChanged);
-
+        cli.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
         this._updateE2eStatus();
     },
 
@@ -151,7 +155,7 @@ export default createReactClass({
         if (!cli.isRoomEncrypted(this.props.room.roomId)) {
             return;
         }
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             return;
         }
 
@@ -267,6 +271,7 @@ export default createReactClass({
             cli.removeListener("RoomState.events", this.onJoinRule);
             cli.removeListener("RoomState.members", this.onRoomStateMember);
             cli.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
+            cli.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
             cli.removeListener("Room.timeline", this.onRoomTimeline);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this._onActiveRoomChange);
@@ -479,26 +484,10 @@ export default createReactClass({
 
         let ariaLabel = name;
 
-        let dmIndicator;
         let dmOnline;
-        /* Post-cross-signing we don't show DM indicators at all, instead relying on user
-           context to let them know when that is. */
-        if (dmUserId && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            dmIndicator = <img
-                src={require("../../../../res/img/icon_person.svg")}
-                className="mx_RoomTile_dm"
-                width="11"
-                height="13"
-                alt="dm"
-            />;
-        }
-
         const { room } = this.props;
         const member = room.getMember(dmUserId);
-        if (
-            member && member.membership === "join" && room.getJoinedMemberCount() === 2 &&
-            SettingsStore.isFeatureEnabled("feature_presence_in_room_list")
-        ) {
+        if (member && member.membership === "join" && room.getJoinedMemberCount() === 2) {
             const UserOnlineDot = sdk.getComponent('rooms.UserOnlineDot');
             dmOnline = <UserOnlineDot userId={dmUserId} />;
         }
@@ -527,7 +516,7 @@ export default createReactClass({
         }
 
         let privateIcon = null;
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             if (this.state.joinRule == "invite" && !dmUserId) {
                 privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
             }
@@ -557,7 +546,6 @@ export default createReactClass({
                         <div className={avatarClasses}>
                             <div className="mx_RoomTile_avatar_container">
                                 <RoomAvatar room={this.props.room} width={24} height={24} />
-                                { dmIndicator }
                                 { e2eIcon }
                             </div>
                         </div>
