@@ -1804,5 +1804,10 @@
     "Click the button below to confirm adding this email address.": "Klicken Sie auf die Schaltfläche unten, um das Hinzufügen dieser E-Mail-Adresse zu bestätigen.",
     "Confirm adding phone number": "Bestätigen Sie das Hinzufügen der Telefonnummer.",
     "%(senderName)s changed a rule that was banning servers matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel für Server von %(oldGlob)s nach %(newGlob)s wegen %(reason)s",
-    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erneuert eine Ausschluss-Regel von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s"
+    "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s erneuert eine Ausschluss-Regel von %(oldGlob)s nach %(newGlob)s wegen %(reason)s",
+    "Not Trusted": "Nicht vertrauenswürdig",
+    "Manually Verify by Text": "Verifiziere manuell mit einem Text",
+    "Interactively verify by Emoji": "Verifiziere interaktiv mit Emojis",
+    "Support adding custom themes": "Unterstütze das Hinzufügen von benutzerdefinierten Designs",
+    "Enable cross-signing to verify per-user instead of per-session": "Aktiviere Cross-Signing um pro Benutzer statt pro Sitzung zu verifizieren"
 }
