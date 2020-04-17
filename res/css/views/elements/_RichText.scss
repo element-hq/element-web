@@ -14,8 +14,10 @@
 }
 
 a.mx_Pill {
-    word-break: break-all;
-    display: inline;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 /* More specific to override `.markdown-body a` text-decoration */
