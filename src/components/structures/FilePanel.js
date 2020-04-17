@@ -209,10 +209,10 @@ const FilePanel = createReactClass({
     },
 
     _getScrollState: function() {
-        const messagePanel = this._messagePanel;
-        const scrollState = messagePanel.getScrollState();
+        const timelinePanel = this._timelinePanel;
+        const scrollState = timelinePanel.getScrollState();
 
-        if (!messagePanel) return null;
+        if (!timelinePanel) return null;
 
         if (!scrollState || scrollState.stuckAtBottom) {
             return null;
@@ -225,7 +225,7 @@ const FilePanel = createReactClass({
     },
 
     _getTimelinePanelRef: function(ref) {
-        this._messagePanel = ref;
+        this._timelinePanel = ref;
     },
 
     render: function() {
