@@ -58,8 +58,8 @@ async function createDm(session, invitees) {
         throw new Error("could not find room list section that contains 'direct messages' in header");
     }
     const dmsHeader = roomListHeaders[dmsIndex];
-    const addRoomButton = await dmsHeader.$(".mx_RoomSubList_addRoom");
-    await addRoomButton.click();
+    const startChatButton = await dmsHeader.$(".mx_RoomSubList_addRoom");
+    await startChatButton.click();
 
     const inviteesEditor = await session.query('.mx_InviteDialog_editor textarea');
     for (const target of invitees) {
