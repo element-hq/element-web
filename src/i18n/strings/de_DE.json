@@ -1822,5 +1822,6 @@
     "Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…": "Warte auf deine andere Sitzung,%(deviceName)s /%(deviceId)s), um zu verfizieren…",
     "How fast should messages be downloaded.": "Wie schnell sollten Nachrichten heruntergeladen werden?",
     "Compare a unique set of emoji if you don't have a camera on either device": "Vergleiche eine einmalige Reihe von Emoji, sofern du an keinem Gerät eine Kamera hast",
-    "Waiting for %(displayName)s to verify…": "Warte, dass %(displayName)s bestätigt…"
+    "Waiting for %(displayName)s to verify…": "Warte darauf, dass %(displayName)s bestätigt…",
+    "Cancelling…": "Abbrechen…"
 }
