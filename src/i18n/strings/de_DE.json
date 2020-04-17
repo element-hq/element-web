@@ -1814,5 +1814,10 @@
     "Enable local event indexing and E2EE search (requires restart)": "Aktiviere lokale Ereignis-Indizierung und E2EE-Suche (erfordert Neustart)",
     "a few seconds from now": "in ein paar Sekunden",
     "Show a presence dot next to DMs in the room list": "Verfügbarkeitspunkt neben den Direktnachrichten in der Raumliste anzeigen",
-    "Show padlocks on invite only rooms": "Vorhängeschlösser an Nur-Einladen-Räumen anzeigen"
+    "Show padlocks on invite only rooms": "Zeige Schlösser an Räumen, welchen nur mit Einladung beigetreten werden kann",
+    "Keep recovery passphrase in memory for this session": "Behalte die Wiederherstellungspassphrase für diese Sitzung im Speicher",
+    "Manually verify all remote sessions": "Verifiziere alle Remotesitzungen",
+    "Confirm the emoji below are displayed on both sessions, in the same order:": "Bestätige, dass die unten angezeigten Emojis auf beiden Sitzungen in der selben Reihenfolge angezeigt werden:",
+    "Verify this session by confirming the following number appears on its screen.": "Verfiziere diese Sitzung, indem du bestätigst, dass die folgende Nummer auf ihrem Bildschirm erscheint.",
+    "Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…": "Warte auf deine andere Sitzung,%(deviceName)s /%(deviceId)s), um zu verfizieren…"
 }
