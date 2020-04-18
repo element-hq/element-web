@@ -2390,5 +2390,9 @@
     "Enter a recovery passphrase...": "Saisir une phrase secrète de récupération…",
     "Please enter your recovery passphrase a second time to confirm.": "Saisissez à nouveau votre phrase secrète de récupération pour la confirmer.",
     "Repeat your recovery passphrase...": "Répéter votre phrase secrète de récupération…",
-    "Secure your backup with a recovery passphrase": "Protégez votre sauvegarde avec une phrase secrète de récupération"
+    "Secure your backup with a recovery passphrase": "Protégez votre sauvegarde avec une phrase secrète de récupération",
+    "Can't load this message": "Impossible de charger ce message",
+    "Submit logs": "Envoyer les journaux",
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rappel : Votre navigateur n’est pas pris en charge donc votre expérience pourrait être imprévisible.",
+    "Unable to upload": "Envoi impossible"
 }
