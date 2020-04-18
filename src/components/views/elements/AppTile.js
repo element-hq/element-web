@@ -39,6 +39,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
+import {sleep} from "../../../utils/promise";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -344,10 +345,9 @@ export default class AppTile extends React.Component {
      */
     _endWidgetActions() {
         const timeout = 2000;
-        const timeoutPromise = new Promise(resolve => setTimeout(resolve, timeout));
         const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
 
-        return Promise.race([messaging.terminate(), timeoutPromise]).finally(() => {
+        return Promise.race([messaging.terminate(), sleep(timeout)]).finally(() => {
             // HACK: This is a really dirty way to ensure that Jitsi cleans up
             // its hold on the webcam. Without this, the widget holds a media
             // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
@@ -552,18 +552,13 @@ export default class AppTile extends React.Component {
         if (this.props.userWidget) {
             this._onMinimiseClick();
         } else {
-            let promise;
             if (this.props.show) {
                 // if we were being shown, end the widget as we're about to be minimized.
-                promise = this._endWidgetActions();
-            } else {
-                promise = Promise.resolve();
+                this._endWidgetActions();
             }
-            promise.then(() => {
-                dis.dispatch({
-                    action: 'appsDrawer',
-                    show: !this.props.show,
-                });
+            dis.dispatch({
+                action: 'appsDrawer',
+                show: !this.props.show,
             });
         }
     }
