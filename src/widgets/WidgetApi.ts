@@ -23,6 +23,7 @@ export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
+    ReceiveTerminate = "m.receive_terminate",
 }
 
 export enum KnownWidgetActions {

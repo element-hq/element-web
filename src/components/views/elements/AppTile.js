@@ -344,10 +344,18 @@ export default class AppTile extends React.Component {
      * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
     _endWidgetActions() {
-        const timeout = 2000;
-        const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
+        let promise;
 
-        return Promise.race([messaging.terminate(), sleep(timeout)]).finally(() => {
+        if (this._hasCapability('m.receive_terminate')) {
+            // Wait for widget to terminate within a timeout
+            const timeout = 2000;
+            const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
+            promise = Promise.race([messaging.terminate(), sleep(timeout)]);
+        } else {
+            promise = Promise.resolve();
+        }
+
+        return promise.finally(() => {
             // HACK: This is a really dirty way to ensure that Jitsi cleans up
             // its hold on the webcam. Without this, the widget holds a media
             // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351

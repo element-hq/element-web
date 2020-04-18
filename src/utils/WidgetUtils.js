@@ -420,6 +420,7 @@ export default class WidgetUtils {
         if (WidgetType.JITSI.matches(appType)) {
             capWhitelist.push(Capability.AlwaysOnScreen);
         }
+        capWhitelist.push(Capability.ReceiveTerminate);
 
         return capWhitelist;
     }
