@@ -53,15 +53,16 @@ limitations under the License.
         font-weight: 600;
         line-height: $font-20px;
         margin-bottom: 4px;
+        position: relative;
 
         // remove server button
         .mx_AccessibleButton {
             position: absolute;
             display: inline;
-            right: 12px;
+            right: 10px;
             height: 16px;
             width: 16px;
-            margin-top: 4px;
+            margin-top: 2px;
 
             &::after {
                 content: "";
