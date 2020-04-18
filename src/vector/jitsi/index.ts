@@ -35,6 +35,7 @@ let avatarUrl: string;
 let userId: string;
 
 let widgetApi: WidgetApi;
+let terminateMeeting: any;
 
 (async function () {
     try {
@@ -59,6 +60,7 @@ let widgetApi: WidgetApi;
         if (parentUrl && widgetId) {
             widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
                 Capability.AlwaysOnScreen,
+                Capability.ReceiveTerminate,
             ]);
             widgetApi.expectingExplicitReady = true;
         }
@@ -74,6 +76,12 @@ let widgetApi: WidgetApi;
             await widgetApi.waitReady();
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
         }
+
+        widgetApi.addTerminateCallback(() => {
+            if (terminateMeeting) {
+                return terminateMeeting();
+            }
+        });
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
@@ -118,12 +126,25 @@ function joinConference() { // event handler bound in HTML
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
 
-    meetApi.on("readyToClose", () => {
-        switchVisibleContainers();
+    let meetingClosed = new Promise(resolve => {
+        meetApi.on("readyToClose", () => {
+            switchVisibleContainers();
 
-        // noinspection JSIgnoredPromiseFromCall
-        if (widgetApi) widgetApi.setAlwaysOnScreen(false); // ignored promise because we don't care if it works
+            // noinspection JSIgnoredPromiseFromCall
+            if (widgetApi) widgetApi.setAlwaysOnScreen(false); // ignored promise because we don't care if it works
+            meetApi.dispose();
 
-        document.getElementById("jitsiContainer").innerHTML = "";
+            document.getElementById("jitsiContainer").innerHTML = "";
+
+            resolve();
+        });
     });
+
+    terminateMeeting = () => {
+        // Hangup before the client terminates the widget. Don't show
+        // the feedback dialog.
+        meetApi.executeCommand("hangup", false);
+        terminateMeeting = undefined;
+        return meetingClosed;
+    }
 }
