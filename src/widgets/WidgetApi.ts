@@ -34,6 +34,7 @@ export enum KnownWidgetActions {
     ReceiveOpenIDCredentials = "openid_credentials",
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
+    Terminate = "im.vector.terminate",
 }
 
 export type WidgetAction = KnownWidgetActions | string;
@@ -68,6 +69,8 @@ export class WidgetApi {
     private inFlightRequests: { [requestId: string]: (reply: FromWidgetRequest) => void } = {};
     private readyPromise: Promise<any>;
     private readyPromiseResolve: () => void;
+    private terminatePromise: Promise<any>;
+    private terminatePromiseResolve: () => void;
 
     /**
      * Set this to true if your widget is expecting a ready message from the client. False otherwise (default).
@@ -78,6 +81,7 @@ export class WidgetApi {
         this.origin = new URL(currentUrl).origin;
 
         this.readyPromise = new Promise<any>(resolve => this.readyPromiseResolve = resolve);
+        this.terminatePromise = new Promise<any>(resolve => this.terminatePromiseResolve = resolve);
 
         window.addEventListener("message", event => {
             if (event.origin !== this.origin) return; // ignore: invalid origin
@@ -98,6 +102,12 @@ export class WidgetApi {
 
                     // Automatically acknowledge so we can move on
                     this.replyToRequest(<ToWidgetRequest>payload, {});
+                } else if (payload.action === KnownWidgetActions.Terminate) {
+                    // Reply after resolving
+                    this.terminatePromise.then(() => {
+                        this.replyToRequest(<ToWidgetRequest>payload, {});
+                    });
+                    this.terminatePromiseResolve();
                 } else {
                     console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }
@@ -114,6 +124,10 @@ export class WidgetApi {
 
     public waitReady(): Promise<any> {
         return this.readyPromise;
+    }
+
+    public addTerminateCallback(action) {
+        this.terminatePromise = this.terminatePromise.then(action);
     }
 
     private replyToRequest(payload: ToWidgetRequest, reply: any) {

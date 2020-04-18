@@ -88,6 +88,19 @@ export default class WidgetMessaging {
     }
 
     /**
+     * Tells the widget that it should terminate now.
+     * It is not necessarily called in all instances before the widget is removed,
+     * and the client may force termination with a timeout.
+     * @returns {Promise<*>} Resolves when widget has acknowledged the message.
+     */
+    terminate() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.Terminate,
+        });
+    }
+
+    /**
      * Request a screenshot from a widget
      * @return {Promise} To be resolved with screenshot data when it has been generated
      */
