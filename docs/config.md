@@ -89,6 +89,18 @@ For a good example, see https://riot.im/develop/config.json.
     1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
        to `jitsi.riot.im`. This is used whenever a user clicks on the voice/video
        call buttons - integration managers may use a different domain.
+1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
+    and its value defines whether to enable/disable the presence status display
+    from that homeserver. If no options are configurd, presence is shown for all
+    homeservers.
+1. `disable_guests`: Disables guest access tokens and auto-guest registrations.
+    Defaults to false (guests are allowed).
+1. `disable_login_language_selector`: Disables the login language selector. Defaults
+    to false (language selector is shown).
+1. `disable_3pid_login`: Disables 3rd party identity options on login and registration form
+    Defaults to false (3rd party identity options are shown).
+1. `default_federate`: Default option for room federation when creating a room
+    Defaults to false (room federation enabled).
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
