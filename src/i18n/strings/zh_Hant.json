@@ -2389,5 +2389,9 @@
     "Enter a recovery passphrase...": "輸入復原通關密語……",
     "Please enter your recovery passphrase a second time to confirm.": "請再次輸入您的復原通關密語以確認。",
     "Repeat your recovery passphrase...": "再次輸入您的復原通關密語……",
-    "Secure your backup with a recovery passphrase": "使用復原通關密語保護您的備份"
+    "Secure your backup with a recovery passphrase": "使用復原通關密語保護您的備份",
+    "Can't load this message": "無法載入此訊息",
+    "Submit logs": "遞交紀錄檔",
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "注意：您的瀏覽器不受支援，所以您的使用體驗可能無法預測。",
+    "Unable to upload": "無法上傳"
 }
