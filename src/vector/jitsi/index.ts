@@ -33,6 +33,7 @@ let conferenceId: string;
 let displayName: string;
 let avatarUrl: string;
 let userId: string;
+let joinImmediately: string;
 
 let widgetApi: WidgetApi;
 let terminateMeeting: any;
@@ -71,6 +72,7 @@ let terminateMeeting: any;
         displayName = qsParam('displayName', true);
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
+        joinImmediately = qsParam('joinImmediately', true);
 
         if (widgetApi) {
             await widgetApi.waitReady();
@@ -86,6 +88,10 @@ let terminateMeeting: any;
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
         document.getElementById("joinButton").onclick = () => joinConference();
+
+        if (joinImmediately == "true") {
+            joinConference();
+        }
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
         document.getElementById("jitsiContainer").innerText = "Failed to load Jitsi widget";
@@ -126,6 +132,10 @@ function joinConference() { // event handler bound in HTML
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
 
+    const hashQuery = qs.parse(window.location.hash);
+    hashQuery.joinImmediately = "true";
+    window.location.hash = "#" + qs.stringify(hashQuery);
+
     let meetingClosed = new Promise(resolve => {
         meetApi.on("readyToClose", () => {
             switchVisibleContainers();
@@ -135,6 +145,10 @@ function joinConference() { // event handler bound in HTML
             meetApi.dispose();
 
             document.getElementById("jitsiContainer").innerHTML = "";
+
+            const hashQuery = qs.parse(window.location.hash);
+            delete hashQuery.joinImmediately;
+            window.location.hash = "#" + qs.stringify(hashQuery);
 
             resolve();
         });
