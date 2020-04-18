@@ -340,23 +340,30 @@ export default class AppTile extends React.Component {
     /**
      * Ends all widget interaction, such as cancelling calls and disabling webcams.
      * @private
+     * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
     _endWidgetActions() {
-        // HACK: This is a really dirty way to ensure that Jitsi cleans up
-        // its hold on the webcam. Without this, the widget holds a media
-        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-        if (this._appFrame.current) {
-            // In practice we could just do `+= ''` to trick the browser
-            // into thinking the URL changed, however I can foresee this
-            // being optimized out by a browser. Instead, we'll just point
-            // the iframe at a page that is reasonably safe to use in the
-            // event the iframe doesn't wink away.
-            // This is relative to where the Riot instance is located.
-            this._appFrame.current.src = 'about:blank';
-        }
+        const timeout = 2000;
+        const timeoutPromise = new Promise(resolve => setTimeout(resolve, timeout));
+        const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
 
-        // Delete the widget from the persisted store for good measure.
-        PersistedElement.destroyElement(this._persistKey);
+        return Promise.race([messaging.terminate(), timeoutPromise]).finally(() => {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+            if (this._appFrame.current) {
+                // In practice we could just do `+= ''` to trick the browser
+                // into thinking the URL changed, however I can foresee this
+                // being optimized out by a browser. Instead, we'll just point
+                // the iframe at a page that is reasonably safe to use in the
+                // event the iframe doesn't wink away.
+                // This is relative to where the Riot instance is located.
+                this._appFrame.current.src = 'about:blank';
+            }
+
+            // Delete the widget from the persisted store for good measure.
+            PersistedElement.destroyElement(this._persistKey);
+        });
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -380,21 +387,21 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    this._endWidgetActions();
+                    this._endWidgetActions().then(() => {
+                        WidgetUtils.setRoomWidget(
+                            this.props.room.roomId,
+                            this.props.app.id,
+                        ).catch((e) => {
+                            console.error('Failed to delete widget', e);
+                            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-                    WidgetUtils.setRoomWidget(
-                        this.props.room.roomId,
-                        this.props.app.id,
-                    ).catch((e) => {
-                        console.error('Failed to delete widget', e);
-                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
-                        Modal.createTrackedDialog('Failed to remove widget', '', ErrorDialog, {
-                            title: _t('Failed to remove widget'),
-                            description: _t('An error ocurred whilst trying to remove the widget from the room'),
+                            Modal.createTrackedDialog('Failed to remove widget', '', ErrorDialog, {
+                                title: _t('Failed to remove widget'),
+                                description: _t('An error ocurred whilst trying to remove the widget from the room'),
+                            });
+                        }).finally(() => {
+                            this.setState({deleting: false});
                         });
-                    }).finally(() => {
-                        this.setState({deleting: false});
                     });
                 },
             });
@@ -545,13 +552,18 @@ export default class AppTile extends React.Component {
         if (this.props.userWidget) {
             this._onMinimiseClick();
         } else {
+            let promise;
             if (this.props.show) {
                 // if we were being shown, end the widget as we're about to be minimized.
-                this._endWidgetActions();
+                promise = this._endWidgetActions();
+            } else {
+                promise = Promise.resolve();
             }
-            dis.dispatch({
-                action: 'appsDrawer',
-                show: !this.props.show,
+            promise.then(() => {
+                dis.dispatch({
+                    action: 'appsDrawer',
+                    show: !this.props.show,
+                });
             });
         }
     }
