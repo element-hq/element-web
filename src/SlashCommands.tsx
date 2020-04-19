@@ -920,10 +920,18 @@ export const Commands = [
         description: _td("Send a bug report with logs"),
         args: "<description>",
         runFn: function(roomId, args) {
-            return success(sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
-                userText: args,
-                sendLogs: true,
-            }));
+            return success(
+                sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+                    userText: args,
+                    sendLogs: true,
+                }).then(() => {
+                    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+                    Modal.createTrackedDialog('Slash Commands', 'Rageshake sent', InfoDialog, {
+                        title: _t('Logs sent'),
+                        description: _t('Thank you!'),
+                    });
+                }),
+            );
         },
         category: CommandCategories.advanced,
     }),
