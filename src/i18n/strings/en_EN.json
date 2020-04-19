@@ -2239,7 +2239,7 @@
     "If disabled, messages from encrypted rooms won't appear in search results.": "If disabled, messages from encrypted rooms won't appear in search results.",
     "Disable": "Disable",
     "Not currently indexing messages for any room.": "Not currently indexing messages for any room.",
-    "Currently indexing: %(currentRoom)s.": "Currently indexing: %(currentRoom)s.",
+    "Currently indexing: %(currentRoom)s": "Currently indexing: %(currentRoom)s",
     "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot is securely caching encrypted messages locally for them to appear in search results:",
     "Space used:": "Space used:",
     "Indexed messages:": "Indexed messages:",
