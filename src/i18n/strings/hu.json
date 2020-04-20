@@ -2387,5 +2387,6 @@
     "Please enter your recovery passphrase a second time to confirm.": "A megerősítéshez kérlek add meg a visszaállítási jelmondatot még egyszer.",
     "Repeat your recovery passphrase...": "Ismételd meg a visszaállítási jelmondatot…",
     "Secure your backup with a recovery passphrase": "Védd a mentést a visszaállítási jelmondattal",
-    "Currently indexing: %(currentRoom)s": "Indexelés alatt: %(currentRoom)s"
+    "Currently indexing: %(currentRoom)s": "Indexelés alatt: %(currentRoom)s",
+    "Send a bug report with logs": "Hibajelentés beküldése naplóval"
 }
