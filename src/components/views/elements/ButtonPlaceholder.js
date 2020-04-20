@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 export default function ButtonPlaceholder(props) {
-    return <div class="mx_ButtonPlaceholder">{props.children}</div>;
+    return <div className="mx_ButtonPlaceholder">{props.children}</div>;
 }
