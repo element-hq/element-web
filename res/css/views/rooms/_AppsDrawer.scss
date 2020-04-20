@@ -16,17 +16,14 @@ limitations under the License.
 */
 
 /*
-the tile title bar is 5 (top border) + 12 (title, buttons) + 5 (bottom padding) px = 22px
-the body is assumed to be 300px (assumed by at least the sticker pickerm, perhaps elsewhere),
-so the body height would be 300px - 22px (room for title bar) = 278px
-BUT! the sticker picker also assumes it's a little less high than that because the iframe
-for the sticker picker doesn't have any padding or margin on it's bottom.
-so subtracking another 5px, which brings us at 273px.
+ Minimum size for usual AppTiles and fixed size for mini-tiles.
 */
-$AppsDrawerBodyHeight: 273px;
+$AppTileMinHeight: 300px;
+$MiniAppTileHeight: 114px;
 
 .mx_AppsDrawer {
     margin: 5px;
+    display: block;
 }
 
 .mx_AppsDrawer_hidden {
@@ -36,7 +33,7 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
 }
 
@@ -44,7 +41,7 @@ $AppsDrawerBodyHeight: 273px;
     order: 2;
     cursor: pointer;
     padding: 0;
-    margin: 5px auto 5px auto;
+    margin: 5px auto 5px 0px;
     color: $accent-color;
     font-size: $font-12px;
 }
@@ -68,6 +65,9 @@ $AppsDrawerBodyHeight: 273px;
     margin-right: 5px;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    min-height: $AppTileMinHeight;
 }
 
 .mx_AppTile:last-child {
@@ -77,27 +77,40 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AppTileFullWidth {
     max-width: 960px;
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    min-height: $AppTileMinHeight;
 }
 
 .mx_AppTile_mini {
     max-width: 960px;
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: $MiniAppTileHeight;
 }
 
-.mx_AppTile_persistedWrapper {
-    height: $AppsDrawerBodyHeight;
+.mx_AppTile.mx_AppTile_minimised,
+.mx_AppTileFullWidth.mx_AppTile_minimised,
+.mx_AppTile_mini.mx_AppTile_minimised {
+    min-height: inherit;
 }
 
+.mx_AppTile .mx_AppTile_persistedWrapper,
+.mx_AppTileFullWidth .mx_AppTile_persistedWrapper,
 .mx_AppTile_mini .mx_AppTile_persistedWrapper {
-    height: 114px;
+    flex: 1;
+}
+
+.mx_AppTile_persistedWrapper div {
+    width: 100%;
+    height: 100%;
 }
 
 .mx_AppTileMenuBar {
@@ -109,6 +122,7 @@ $AppsDrawerBodyHeight: 273px;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    width: 100%;
 }
 
 .mx_AppTileMenuBar_expanded {
@@ -171,7 +185,7 @@ $AppsDrawerBodyHeight: 273px;
 }
 
 .mx_AppTileBody {
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
     width: 100%;
     overflow: hidden;
 }
@@ -182,6 +196,13 @@ $AppsDrawerBodyHeight: 273px;
     overflow: hidden;
 }
 
+.mx_AppTile .mx_AppTileBody,
+.mx_AppTileFullWidth .mx_AppTileBody,
+.mx_AppTile_mini .mx_AppTileBody_mini {
+    height: inherit;
+    flex: 1;
+}
+
 .mx_AppTileBody_mini iframe {
     border: none;
     width: 100%;
@@ -190,7 +211,7 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
     overflow: hidden;
     border: none;
     padding: 0;
@@ -330,7 +351,7 @@ form.mx_Custom_Widget_Form div {
     align-items: center;
     font-weight: bold;
     position: relative;
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
 }
 
 .mx_AppLoading .mx_Spinner {
