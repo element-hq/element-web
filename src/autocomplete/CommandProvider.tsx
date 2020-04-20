@@ -17,17 +17,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import * as React from 'react';
 import {_t} from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import {TextualCompletion} from './Components';
-import type {Completion, SelectionRange} from "./Autocompleter";
-import {Commands, CommandMap} from '../SlashCommands';
+import {ICompletion, ISelectionRange} from "./Autocompleter";
+import {Command, Commands, CommandMap} from '../SlashCommands';
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;
 
 export default class CommandProvider extends AutocompleteProvider {
+    matcher: QueryMatcher<Command>;
+
     constructor() {
         super(COMMAND_RE);
         this.matcher = new QueryMatcher(Commands, {
@@ -36,7 +38,7 @@ export default class CommandProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!command) return [];
 
@@ -85,7 +87,7 @@ export default class CommandProvider extends AutocompleteProvider {
         return '*️⃣ ' + _t('Commands');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div className="mx_Autocomplete_Completion_container_block" role="listbox" aria-label={_t("Command Autocomplete")}>
                 { completions }

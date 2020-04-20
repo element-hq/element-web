@@ -84,7 +84,7 @@ interface ICommandOpts {
     hideCompletionAfterSpace?: boolean;
 }
 
-class Command {
+export class Command {
     command: string;
     aliases: string[];
     args: undefined | string;

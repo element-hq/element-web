@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -24,7 +24,21 @@ something that is not entirely possible with stateless functional components. On
 presumably wrap them in a <div> before rendering but I think this is the better way to do it.
  */
 
-export class TextualCompletion extends React.Component {
+interface ITextualCompletionProps {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    className?: string;
+}
+
+export class TextualCompletion extends React.PureComponent<ITextualCompletionProps> {
+    static propTypes = {
+        title: PropTypes.string,
+        subtitle: PropTypes.string,
+        description: PropTypes.string,
+        className: PropTypes.string,
+    };
+
     render() {
         const {
             title,
@@ -42,14 +56,24 @@ export class TextualCompletion extends React.Component {
         );
     }
 }
-TextualCompletion.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    description: PropTypes.string,
-    className: PropTypes.string,
-};
 
-export class PillCompletion extends React.Component {
+interface IPillCompletionProps {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    initialComponent?: React.ReactNode,
+    className?: string;
+}
+
+export class PillCompletion extends React.PureComponent<IPillCompletionProps> {
+    static propTypes = {
+        title: PropTypes.string,
+        subtitle: PropTypes.string,
+        description: PropTypes.string,
+        initialComponent: PropTypes.element,
+        className: PropTypes.string,
+    };
+
     render() {
         const {
             title,
@@ -69,10 +93,3 @@ export class PillCompletion extends React.Component {
         );
     }
 }
-PillCompletion.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
-    description: PropTypes.string,
-    initialComponent: PropTypes.element,
-    className: PropTypes.string,
-};

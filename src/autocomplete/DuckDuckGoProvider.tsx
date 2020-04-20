@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import * as React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 
 import {TextualCompletion} from './Components';
-import type {SelectionRange} from "./Autocompleter";
+import {ICompletion, ISelectionRange} from "./Autocompleter";
 
 const DDG_REGEX = /\/ddg\s+(.+)$/g;
 const REFERRER = 'vector';
@@ -31,12 +31,12 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
         super(DDG_REGEX);
     }
 
-    static getQueryUri(query: String) {
+    static getQueryUri(query: string) {
         return `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}`
          + `&format=json&no_redirect=1&no_html=1&t=${encodeURIComponent(REFERRER)}`;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force: boolean = false) {
+    async getCompletions(query: string, selection: ISelectionRange, force= false): Promise<ICompletion[]> {
         const {command, range} = this.getCurrentCommand(query, selection);
         if (!query || !command) {
             return [];
@@ -95,7 +95,7 @@ export default class DuckDuckGoProvider extends AutocompleteProvider {
         return '🔍 ' + _t('Results from DuckDuckGo');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_block"

@@ -14,23 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import * as React from 'react';
+import Room from "matrix-js-sdk/src/models/room";
 import AutocompleteProvider from './AutocompleteProvider';
 import { _t } from '../languageHandler';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
-import type {Completion, SelectionRange} from "./Autocompleter";
+import {ICompletion, ISelectionRange} from "./Autocompleter";
 
 const AT_ROOM_REGEX = /@\S*/g;
 
 export default class NotifProvider extends AutocompleteProvider {
+    room: Room;
+
     constructor(room) {
         super(AT_ROOM_REGEX);
         this.room = room;
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force:boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force= false): Promise<ICompletion[]> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();
@@ -57,7 +60,7 @@ export default class NotifProvider extends AutocompleteProvider {
         return '❗️ ' + _t('Room Notification');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"

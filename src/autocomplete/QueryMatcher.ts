@@ -1,4 +1,3 @@
-//@flow
 /*
 Copyright 2017 Aviral Dasgupta
 Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
@@ -26,6 +25,13 @@ function stripDiacritics(str: string): string {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
+interface IOptions<T extends {}> {
+    keys: Array<string | keyof T>;
+    funcs?: Array<(T) => string>;
+    shouldMatchWordsOnly?: boolean;
+    shouldMatchPrefix?: boolean;
+}
+
 /**
  * Simple search matcher that matches any results with the query string anywhere
  * in the search string. Returns matches in the order the query string appears
@@ -39,8 +45,13 @@ function stripDiacritics(str: string): string {
  * @param {function[]} options.funcs List of functions that when called with the
  *     object as an arg will return a string to use as an index
  */
-export default class QueryMatcher {
-    constructor(objects: Array<Object>, options: {[Object]: Object} = {}) {
+export default class QueryMatcher<T> {
+    private _options: IOptions<T>;
+    private _keys: IOptions<T>["keys"];
+    private _funcs: Required<IOptions<T>["funcs"]>;
+    private _items: Map<string, T[]>;
+
+    constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
         this._options = options;
         this._keys = options.keys;
         this._funcs = options.funcs || [];
@@ -60,7 +71,7 @@ export default class QueryMatcher {
         }
     }
 
-    setObjects(objects: Array<Object>) {
+    setObjects(objects: T[]) {
         this._items = new Map();
 
         for (const object of objects) {
@@ -81,7 +92,7 @@ export default class QueryMatcher {
         }
     }
 
-    match(query: String): Array<Object> {
+    match(query: string): T[] {
         query = stripDiacritics(query).toLowerCase();
         if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');

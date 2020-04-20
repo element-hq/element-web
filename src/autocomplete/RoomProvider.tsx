@@ -17,7 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import * as React from 'react';
+import Room from "matrix-js-sdk/src/models/room";
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {MatrixClientPeg} from '../MatrixClientPeg';
@@ -26,7 +27,7 @@ import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
-import type {Completion, SelectionRange} from "./Autocompleter";
+import {ICompletion, ISelectionRange} from "./Autocompleter";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -48,6 +49,8 @@ function matcherObject(room, displayedAlias, matchName = "") {
 }
 
 export default class RoomProvider extends AutocompleteProvider {
+    matcher: QueryMatcher<Room>;
+
     constructor() {
         super(ROOM_REGEX);
         this.matcher = new QueryMatcher([], {
@@ -55,7 +58,7 @@ export default class RoomProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         const RoomAvatar = sdk.getComponent('views.avatars.RoomAvatar');
 
         const client = MatrixClientPeg.get();
@@ -115,7 +118,7 @@ export default class RoomProvider extends AutocompleteProvider {
         return '💬 ' + _t('Rooms');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"
