@@ -269,7 +269,7 @@ export default createReactClass({
             // If an event ID wasn't specified, default to the one saved for this room
             // in the scroll state store. Assume initialEventPixelOffset should be set.
             if (!newState.initialEventId) {
-                const roomScrollState = RoomScrollStateStore.getRoomViewScrollState(newState.roomId);
+                const roomScrollState = RoomScrollStateStore.getScrollState(newState.roomId);
                 if (roomScrollState) {
                     newState.initialEventId = roomScrollState.focussedEvent;
                     newState.initialEventPixelOffset = roomScrollState.pixelOffset;
@@ -466,7 +466,7 @@ export default createReactClass({
 
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
-            RoomScrollStateStore.setRoomViewScrollState(this.state.roomId, this._getScrollState());
+            RoomScrollStateStore.setScrollState(this.state.roomId, this._getScrollState());
         }
 
         if (this.state.shouldPeek) {

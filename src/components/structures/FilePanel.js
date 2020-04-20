@@ -25,8 +25,6 @@ import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 
-import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
-
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
@@ -43,8 +41,6 @@ const FilePanel = createReactClass({
     getInitialState: function() {
         return {
             timelineSet: null,
-            initialEventId: null,
-            initialEventPixelOffset: null,
         };
     },
 
@@ -88,16 +84,6 @@ const FilePanel = createReactClass({
 
         await this.updateTimelineSet(this.props.roomId);
 
-        if (this.props.roomId) {
-            const filePanelScrollState = RoomScrollStateStore.getFilePanelScrollState(this.props.roomId);
-            if (filePanelScrollState) {
-                this.setState({
-                    initialEventId: filePanelScrollState.focussedEvent,
-                    initialEventPixelOffset: filePanelScrollState.pixelOffset,
-                });
-            }
-        }
-
         if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
 
         // The timelineSets filter makes sure that encrypted events that contain
@@ -115,10 +101,6 @@ const FilePanel = createReactClass({
     },
 
     componentWillUnmount() {
-        if (this.props.roomId) {
-            RoomScrollStateStore.setFilePanelScrollState(this.props.roomId, this._getScrollState());
-        }
-
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
@@ -208,26 +190,6 @@ const FilePanel = createReactClass({
         }
     },
 
-    _getScrollState: function() {
-        const timelinePanel = this._timelinePanel;
-        const scrollState = timelinePanel.getScrollState();
-
-        if (!timelinePanel) return null;
-
-        if (!scrollState || scrollState.stuckAtBottom) {
-            return null;
-        }
-
-        return {
-            focussedEvent: scrollState.trackedScrollToken,
-            pixelOffset: scrollState.pixelOffset,
-        };
-    },
-
-    _getTimelinePanelRef: function(ref) {
-        this._timelinePanel = ref;
-    },
-
     render: function() {
         if (MatrixClientPeg.get().isGuest()) {
             return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
@@ -253,15 +215,11 @@ const FilePanel = createReactClass({
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
                 <div className="mx_FilePanel" role="tabpanel">
-                    <TimelinePanel
-                        ref={this._getTimelinePanelRef}
-                        key={"filepanel_" + this.props.roomId}
+                    <TimelinePanel key={"filepanel_" + this.props.roomId}
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state.timelineSet}
                         showUrlPreview = {false}
-                        eventId={this.state.initialEventId}
-                        eventPixelOffset={this.state.initialEventPixelOffset}
                         onPaginationRequest={this.onPaginationRequest}
                         tileShape="file_grid"
                         resizeNotifier={this.props.resizeNotifier}
