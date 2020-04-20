@@ -771,7 +771,7 @@ export const Commands = [
     }),
     new Command({
         command: 'addwidget',
-        args: '<url | embed code | jitsi url>',
+        args: '<url | embed code | Jitsi url>',
         description: _td('Adds a custom widget by URL to the room'),
         runFn: function(roomId, widgetUrl) {
             if (!widgetUrl) {
