@@ -33,6 +33,13 @@ if (!TextEncoder) {
     TextEncoder = TextEncodingUtf8.TextEncoder;
 }
 
+interface IOpts {
+    label?: string;
+    userText?: string;
+    sendLogs?: boolean;
+    progressCallback?: (string) => void;
+}
+
 /**
  * Send a bug report.
  *
@@ -48,7 +55,7 @@ if (!TextEncoder) {
  *
  * @return {Promise} Resolved when the bug report is sent.
  */
-export default async function sendBugReport(bugReportEndpoint, opts) {
+export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts) {
     if (!bugReportEndpoint) {
         throw new Error("No bug report endpoint has been set.");
     }
@@ -70,13 +77,13 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     let installedPWA = "UNKNOWN";
     try {
         // Known to work at least for desktop Chrome
-        installedPWA = window.matchMedia('(display-mode: standalone)').matches;
-    } catch (e) { }
+        installedPWA = String(window.matchMedia('(display-mode: standalone)').matches);
+    } catch (e) {}
 
     let touchInput = "UNKNOWN";
     try {
         // MDN claims broad support across browsers
-        touchInput = window.matchMedia('(pointer: coarse)').matches;
+        touchInput = String(window.matchMedia('(pointer: coarse)').matches);
     } catch (e) { }
 
     const client = MatrixClientPeg.get();
@@ -96,12 +103,14 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
         body.append('device_id', client.deviceId);
     }
 
-    const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
-    if (client.getDeviceCurve25519Key) {
-        keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+    if (client.isCryptoEnabled()) {
+        const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
+        if (client.getDeviceCurve25519Key) {
+            keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+        }
+        body.append('device_keys', keys.join(', '));
+        body.append('cross_signing_key', client.getCrossSigningId());
     }
-    body.append('device_keys', keys.join(', '));
-    body.append('cross_signing_key', client.getCrossSigningId());
 
     if (opts.label) {
         body.append('label', opts.label);
@@ -116,24 +125,31 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
         try {
-            body.append("storageManager_persisted", await navigator.storage.persisted());
+            body.append("storageManager_persisted", String(await navigator.storage.persisted()));
         } catch (e) {}
     } else if (document.hasStorageAccess) { // Safari
         try {
-            body.append("storageManager_persisted", await document.hasStorageAccess());
+            body.append("storageManager_persisted", String(await document.hasStorageAccess()));
         } catch (e) {}
     }
     if (navigator.storage && navigator.storage.estimate) {
         try {
             const estimate = await navigator.storage.estimate();
-            body.append("storageManager_quota", estimate.quota);
-            body.append("storageManager_usage", estimate.usage);
+            body.append("storageManager_quota", String(estimate.quota));
+            body.append("storageManager_usage", String(estimate.usage));
             if (estimate.usageDetails) {
                 Object.keys(estimate.usageDetails).forEach(k => {
-                    body.append(`storageManager_usage_${k}`, estimate.usageDetails[k]);
+                    body.append(`storageManager_usage_${k}`, String(estimate.usageDetails[k]));
                 });
             }
         } catch (e) {}
+    }
+
+    if (window.Modernizr) {
+        const missingFeatures = Object.keys(window.Modernizr).filter(key => window.Modernizr[key] === false);
+        if (missingFeatures.length > 0) {
+            body.append("modernizr_missing_features", missingFeatures.join(", "));
+        }
     }
 
     if (opts.sendLogs) {
@@ -154,7 +170,7 @@ export default async function sendBugReport(bugReportEndpoint, opts) {
     await _submitReport(bugReportEndpoint, body, progressCallback);
 }
 
-function _submitReport(endpoint, body, progressCallback) {
+function _submitReport(endpoint: string, body: FormData, progressCallback: (string) => void) {
     return new Promise((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);

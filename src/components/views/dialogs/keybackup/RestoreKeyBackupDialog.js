@@ -283,7 +283,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     title = _t("Recovery key mismatch");
                     content = <div>
                         <p>{_t(
-                            "Backup could not be decrypted with this key: " +
+                            "Backup could not be decrypted with this recovery key: " +
                             "please verify that you entered the correct recovery key.",
                         )}</p>
                     </div>;
@@ -291,7 +291,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     title = _t("Incorrect recovery passphrase");
                     content = <div>
                         <p>{_t(
-                            "Backup could not be decrypted with this passphrase: " +
+                            "Backup could not be decrypted with this recovery passphrase: " +
                             "please verify that you entered the correct recovery passphrase.",
                         )}</p>
                     </div>;

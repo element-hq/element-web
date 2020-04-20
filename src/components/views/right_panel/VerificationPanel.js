@@ -123,10 +123,17 @@ export default class VerificationPanel extends React.PureComponent {
             const sasLabel = showQR ?
                 _t("If you can't scan the code above, verify by comparing unique emoji.") :
                 _t("Verify by comparing unique emoji.");
+
+            // Note: mx_VerificationPanel_verifyByEmojiButton is for the end-to-end tests
             sasBlock = <div className="mx_UserInfo_container">
                 <h3>{_t("Verify by emoji")}</h3>
                 <p>{sasLabel}</p>
-                <AccessibleButton disabled={disabled} kind="primary" className="mx_UserInfo_wideButton" onClick={this._startSAS}>
+                <AccessibleButton
+                    disabled={disabled}
+                    kind="primary"
+                    className="mx_UserInfo_wideButton mx_VerificationPanel_verifyByEmojiButton"
+                    onClick={this._startSAS}
+                >
                     {_t("Verify by emoji")}
                 </AccessibleButton>
             </div>;

@@ -14,8 +14,11 @@
 }
 
 a.mx_Pill {
-    word-break: break-all;
-    display: inline;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: text-bottom;
+    max-width: calc(100% - 1ch);
 }
 
 /* More specific to override `.markdown-body a` text-decoration */

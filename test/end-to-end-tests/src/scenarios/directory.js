@@ -20,7 +20,7 @@ const join = require('../usecases/join');
 const sendMessage = require('../usecases/send-message');
 const {receiveMessage} = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
-const changeRoomSettings = require('../usecases/room-settings');
+const {changeRoomSettings} = require('../usecases/room-settings');
 
 module.exports = async function roomDirectoryScenarios(alice, bob) {
     console.log(" creating a public room and join through directory:");

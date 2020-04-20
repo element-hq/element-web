@@ -275,6 +275,7 @@ export default class EventIndex extends EventEmitter {
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
+        let hasContentValue = true;
 
         if (ev.getType() === "m.room.message" && !ev.isRedacted()) {
             // Expand this if there are more invalid msgtypes.
@@ -282,9 +283,15 @@ export default class EventIndex extends EventEmitter {
 
             if (!msgtype) validMsgType = false;
             else validMsgType = !msgtype.startsWith("m.key.verification");
+
+            if (!ev.getContent().body) hasContentValue = false;
+        } else if (ev.getType() === "m.room.topic" && !ev.isRedacted()) {
+            if (!ev.getContent().topic) hasContentValue = false;
+        } else if (ev.getType() === "m.room.name" && !ev.isRedacted()) {
+            if (!ev.getContent().name) hasContentValue = false;
         }
 
-        return validEventType && validMsgType;
+        return validEventType && validMsgType && hasContentValue;
     }
 
     /**
@@ -383,7 +390,7 @@ export default class EventIndex extends EventEmitter {
 
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper();
+            const eventMapper = client.getEventMapper({preventReEmit: true});
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;
