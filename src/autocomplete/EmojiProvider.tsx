@@ -27,25 +27,14 @@ import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
+import { EMOJI, IEmoji } from '../emoji';
 
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import * as EMOJIBASE from 'emojibase-data/en/compact.json';
 
 const LIMIT = 20;
 
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
 const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
-
-interface IEmoji {
-    annotation: string;
-    group: number;
-    hexcode: string;
-    order: number;
-    shortcodes: string[];
-    tags: string[];
-    unicode: string;
-    emoticon: string;
-}
 
 interface IEmojiShort {
     emoji: IEmoji;
@@ -53,10 +42,7 @@ interface IEmojiShort {
     _orderBy: number;
 }
 
-// XXX: it's very unclear why we bother with this generated emojidata file.
-// all it means is that we end up bloating the bundle with precomputed stuff
-// which would be trivial to calculate and cache on demand.
-const EMOJI_SHORTNAMES: IEmojiShort[] = (EMOJIBASE as IEmoji[]).sort((a, b) => {
+const EMOJI_SHORTNAMES: IEmojiShort[] = EMOJI.sort((a, b) => {
     if (a.group === b.group) {
         return a.order - b.order;
     }
