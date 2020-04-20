@@ -1,4 +1,6 @@
 // This is a JS script so that the directory is created in-process on Windows.
+// If the script isn't run in-process, there's a risk of it racing or never running
+// due to file associations in Windows.
 // Sorry.
 
 const fs = require("fs");
