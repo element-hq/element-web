@@ -32,7 +32,7 @@ For a good example, see https://riot.im/develop/config.json.
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
     1. `welcomeBackgroundUrl`: An image to use as a wallpaper outside the app
-       during authentication flows
+       during authentication flows. If an array is passed, an image is chosen randomly for each visit.
     1. `authHeaderLogoUrl`: An logo image that is shown in the header during
        authentication flows
     1. `authFooterLinks`: a list of links to show in the authentication page footer:
