@@ -33,6 +33,10 @@ limitations under the License.
     user-select: none;
 }
 
+.mx_Dropdown_input.mx_AccessibleButton_disabled {
+    cursor: not-allowed;
+}
+
 .mx_Dropdown_input:focus {
     border-color: $input-focused-border-color;
 }

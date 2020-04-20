@@ -116,7 +116,7 @@ export default class SetupEncryptionBody extends React.Component {
                         "granting it access to encrypted messages.",
                     )}</p>
                     <p>{_t(
-                        "If you can’t access one, <button>use your recovery key or passphrase.</button>",
+                        "If you can’t access one, <button>use your recovery key or recovery passphrase.</button>",
                     {}, {
                         button: sub => <AccessibleButton element="span"
                             className="mx_linkButton"

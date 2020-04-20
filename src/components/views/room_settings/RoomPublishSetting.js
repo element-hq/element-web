@@ -18,7 +18,9 @@ import React from 'react';
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import {replaceableComponent} from "../../../utils/replaceableComponent";
 
+@replaceableComponent("views.room_settings.RoomPublishSetting")
 export default class RoomPublishSetting extends React.PureComponent {
     constructor(props) {
         super(props);
