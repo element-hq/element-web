@@ -26,14 +26,15 @@ import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 
 const PHASE_LOADING = 0;
-const PHASE_MIGRATE = 1;
-const PHASE_PASSPHRASE = 2;
-const PHASE_PASSPHRASE_CONFIRM = 3;
-const PHASE_SHOWKEY = 4;
-const PHASE_KEEPITSAFE = 5;
-const PHASE_STORING = 6;
-const PHASE_DONE = 7;
-const PHASE_CONFIRM_SKIP = 8;
+const PHASE_LOADERROR = 1;
+const PHASE_MIGRATE = 2;
+const PHASE_PASSPHRASE = 3;
+const PHASE_PASSPHRASE_CONFIRM = 4;
+const PHASE_SHOWKEY = 5;
+const PHASE_KEEPITSAFE = 6;
+const PHASE_STORING = 7;
+const PHASE_DONE = 8;
+const PHASE_CONFIRM_SKIP = 9;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
@@ -104,25 +105,29 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     async _fetchBackupInfo() {
-        const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-        const backupSigStatus = (
-            // we may not have started crypto yet, in which case we definitely don't trust the backup
-            MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
-        );
+        try {
+            const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
+            const backupSigStatus = (
+                // we may not have started crypto yet, in which case we definitely don't trust the backup
+                MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
+            );
 
-        const { force } = this.props;
-        const phase = (backupInfo && !force) ? PHASE_MIGRATE : PHASE_PASSPHRASE;
+            const { force } = this.props;
+            const phase = (backupInfo && !force) ? PHASE_MIGRATE : PHASE_PASSPHRASE;
 
-        this.setState({
-            phase,
-            backupInfo,
-            backupSigStatus,
-        });
+            this.setState({
+                phase,
+                backupInfo,
+                backupSigStatus,
+            });
 
-        return {
-            backupInfo,
-            backupSigStatus,
-        };
+            return {
+                backupInfo,
+                backupSigStatus,
+            };
+        } catch (e) {
+            this.setState({phase: PHASE_LOADERROR});
+        }
     }
 
     async _queryKeyUploadAuth() {
@@ -133,8 +138,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // no keys which would be a no-op.
             console.log("uploadDeviceSigningKeys unexpectedly succeeded without UI auth!");
         } catch (error) {
-            if (!error.data.flows) {
+            if (!error.data || !error.data.flows) {
                 console.log("uploadDeviceSigningKeys advertised no flows!");
+                return;
             }
             const canUploadKeysWithPasswordOnly = error.data.flows.some(f => {
                 return f.stages.length === 1 && f.stages[0] === 'm.login.password';
@@ -304,6 +310,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         ) {
             this._bootstrapSecretStorage();
         }
+    }
+
+    _onLoadRetryClick = () => {
+        this.setState({phase: PHASE_LOADING});
+        this._fetchBackupInfo();
     }
 
     _onSkipSetupClick = () => {
@@ -676,6 +687,20 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         </div>;
     }
 
+    _renderPhaseLoadError() {
+        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+        return <div>
+            <p>{_t("Unable to query secret storage status")}</p>
+            <div className="mx_Dialog_buttons">
+                <DialogButtons primaryButton={_t('Retry')}
+                    onPrimaryButtonClick={this._onLoadRetryClick}
+                    hasCancel={true}
+                    onCancel={this._onCancel}
+                />
+            </div>
+        </div>;
+    }
+
     _renderPhaseDone() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
@@ -748,6 +773,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             switch (this.state.phase) {
                 case PHASE_LOADING:
                     content = this._renderBusyPhase();
+                    break;
+                case PHASE_LOADERROR:
+                    content = this._renderPhaseLoadError();
                     break;
                 case PHASE_MIGRATE:
                     content = this._renderPhaseMigrate();
