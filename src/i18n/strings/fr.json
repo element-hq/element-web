@@ -2394,5 +2394,6 @@
     "Can't load this message": "Impossible de charger ce message",
     "Submit logs": "Envoyer les journaux",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rappel : Votre navigateur n’est pas pris en charge donc votre expérience pourrait être imprévisible.",
-    "Unable to upload": "Envoi impossible"
+    "Unable to upload": "Envoi impossible",
+    "Currently indexing: %(currentRoom)s": "En train d’indexer : %(currentRoom)s"
 }
