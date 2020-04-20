@@ -31,7 +31,7 @@ import {ICompletion, ISelectionRange} from "./Autocompleter";
 
 const ROOM_REGEX = /\B#\S*/g;
 
-function score(query, space) {
+function score(query: string, space: string) {
     const index = space.indexOf(query);
     if (index === -1) {
         return Infinity;
@@ -40,7 +40,7 @@ function score(query, space) {
     }
 }
 
-function matcherObject(room, displayedAlias, matchName = "") {
+function matcherObject(room: Room, displayedAlias: string, matchName = "") {
     return {
         room,
         matchName,
