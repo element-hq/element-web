@@ -312,7 +312,6 @@ describe('loading:', function() {
 
         it('shows the last known room by default', function() {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp();
 
@@ -332,7 +331,6 @@ describe('loading:', function() {
             localStorage.removeItem("mx_last_room_id");
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp();
 
@@ -350,7 +348,6 @@ describe('loading:', function() {
 
         it('shows a room view if we followed a room link', function() {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp({
                 uriFragment: "#/room/!room:id",
@@ -663,7 +660,6 @@ describe('loading:', function() {
             return sleep(1);
         }).then(() => {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             return expectAndAwaitSync().catch((e) => {
                 throw new Error("Never got /sync after login: did the client start?");
             });
