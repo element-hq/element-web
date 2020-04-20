@@ -65,7 +65,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     autocompleter: Autocompleter;
     queryRequested: string;
     debounceCompletionsRequest: NodeJS.Timeout;
-    container: React.RefObject<HTMLDivElement>;
+    containerRef: React.RefObject<HTMLDivElement>;
 
     constructor(props) {
         super(props);
@@ -90,7 +90,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
             forceComplete: false,
         };
 
-        this.container = React.createRef();
+        this.containerRef = React.createRef();
     }
 
     componentDidMount() {
@@ -268,12 +268,12 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this._applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`];
-        if (selectedCompletion && this.container.current) {
+        if (selectedCompletion && this.containerRef.current) {
             const domNode = ReactDOM.findDOMNode(selectedCompletion);
             const offsetTop = domNode && domNode.offsetTop;
-            if (offsetTop > this.container.current.scrollTop + this.container.current.offsetHeight ||
-                offsetTop < this.container.current.scrollTop) {
-                this.container.current.scrollTop = offsetTop - this.container.current.offsetTop;
+            if (offsetTop > this.containerRef.current.scrollTop + this.containerRef.current.offsetHeight ||
+                offsetTop < this.containerRef.current.scrollTop) {
+                this.containerRef.current.scrollTop = offsetTop - this.containerRef.current.offsetTop;
             }
         }
     }
@@ -311,7 +311,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }).filter((completion) => !!completion);
 
         return !this.state.hide && renderedCompletions.length > 0 ? (
-            <div className="mx_Autocomplete" ref={this.container}>
+            <div className="mx_Autocomplete" ref={this.containerRef}>
                 { renderedCompletions }
             </div>
         ) : null;
