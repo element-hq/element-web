@@ -2,7 +2,6 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2016",
