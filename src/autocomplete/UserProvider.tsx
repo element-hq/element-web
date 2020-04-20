@@ -98,14 +98,14 @@ export default class UserProvider extends AutocompleteProvider {
         this.users = null;
     };
 
-    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
+    async getCompletions(rawQuery: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher
         if (this.users === null) this._makeUsers();
 
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const {command, range} = this.getCurrentCommand(rawQuery, selection, force);
 
         if (!command) return completions;
 

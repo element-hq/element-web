@@ -64,14 +64,14 @@ export default class AutocompleteProvider {
             commandRegex = this.forcedCommandRegex || /\S+/g;
         }
 
-        if (commandRegex == null) {
+        if (commandRegex === null) {
             return null;
         }
 
         commandRegex.lastIndex = 0;
 
         let match;
-        while ((match = commandRegex.exec(query)) != null) {
+        while ((match = commandRegex.exec(query)) !== null) {
             const start = match.index;
             const end = start + match[0].length;
             if (selection.start <= end && selection.end >= start) {

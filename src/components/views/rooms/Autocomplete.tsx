@@ -281,7 +281,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     render() {
         let position = 1;
         const renderedCompletions = this.state.completions.map((completionResult, i) => {
-            const completions = completionResult.completions.map((completion, i) => {
+            const completions = completionResult.completions.map((completion, j) => {
                 const selected = position === this.state.selectionOffset;
                 const className = classNames('mx_Autocomplete_Completion', {selected});
                 const componentPosition = position;
@@ -292,7 +292,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 };
 
                 return React.cloneElement(completion.component, {
-                    "key": i,
+                    "key": j,
                     "ref": `completion${componentPosition}`,
                     "id": generateCompletionDomId(componentPosition - 1), // 0 index the completion IDs
                     className,

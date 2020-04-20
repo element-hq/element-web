@@ -49,7 +49,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: ISelectionRange, force: boolean = false): Promise<ICompletion[]> {
+    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
