@@ -115,7 +115,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.autocompleter.destroy();
     }
 
-    complete(query, selection) {
+    complete(query: string, selection: ISelectionRange) {
         this.queryRequested = query;
         if (this.debounceCompletionsRequest) {
             clearTimeout(this.debounceCompletionsRequest);
@@ -146,7 +146,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processQuery(query, selection) {
+    processQuery(query: string, selection: ISelectionRange) {
         return this.autocompleter.getCompletions(
             query, selection, this.state.forceComplete,
         ).then((completions) => {
@@ -158,7 +158,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         });
     }
 
-    processCompletions(completions) {
+    processCompletions(completions: IProviderCompletions[]) {
         const completionList = flatMap(completions, (provider) => provider.completions);
 
         // Reset selection when completion list becomes empty.
@@ -202,7 +202,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     // called from MessageComposerInput
-    moveSelection(delta): ICompletion | undefined {
+    moveSelection(delta: number) {
         const completionCount = this.countCompletions();
         if (completionCount === 0) return; // there are no items to move the selection through
 
@@ -211,7 +211,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         this.setSelection(index);
     }
 
-    onEscape(e): boolean {
+    onEscape(e: KeyboardEvent): boolean {
         const completionCount = this.countCompletions();
         if (completionCount === 0) {
             // autocomplete is already empty, so don't preventDefault
@@ -264,7 +264,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: IProps) {
         this._applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`];
