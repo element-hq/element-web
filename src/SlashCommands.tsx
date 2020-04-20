@@ -35,6 +35,8 @@ import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
+import sendBugReport from "./rageshake/submit-rageshake";
+import SdkConfig from "./SdkConfig";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -909,6 +911,27 @@ export const Commands = [
                 member: member || {userId},
             });
             return success();
+        },
+        category: CommandCategories.advanced,
+    }),
+    new Command({
+        command: "rageshake",
+        aliases: ["bugreport"],
+        description: _td("Send a bug report with logs"),
+        args: "<description>",
+        runFn: function(roomId, args) {
+            return success(
+                sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+                    userText: args,
+                    sendLogs: true,
+                }).then(() => {
+                    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
+                    Modal.createTrackedDialog('Slash Commands', 'Rageshake sent', InfoDialog, {
+                        title: _t('Logs sent'),
+                        description: _t('Thank you!'),
+                    });
+                }),
+            );
         },
         category: CommandCategories.advanced,
     }),
