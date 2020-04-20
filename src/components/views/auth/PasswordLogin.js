@@ -185,7 +185,7 @@ export default class PasswordLogin extends React.Component {
         this.props.onPasswordChanged(ev.target.value);
     }
 
-    renderLoginField(loginType) {
+    renderLoginField(loginType, autoFocus) {
         const Field = sdk.getComponent('elements.Field');
 
         const classes = {};
@@ -204,7 +204,7 @@ export default class PasswordLogin extends React.Component {
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.error = this.props.loginIncorrect && !this.state.username;
@@ -218,7 +218,7 @@ export default class PasswordLogin extends React.Component {
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -242,7 +242,7 @@ export default class PasswordLogin extends React.Component {
                     onChange={this.onPhoneNumberChanged}
                     onBlur={this.onPhoneNumberBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             }
         }
@@ -285,7 +285,10 @@ export default class PasswordLogin extends React.Component {
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
 
-        const loginField = this.renderLoginField(this.state.loginType);
+        // If login is empty, autoFocus login, otherwise autoFocus password.
+        // this is for when auto server discovery remounts us when the user tries to tab from username to password
+        const autoFocusPassword = !this.isLoginEmpty();
+        const loginField = this.renderLoginField(this.state.loginType, !autoFocusPassword);
 
         let loginType;
         if (!SdkConfig.get().disable_3pid_login) {
@@ -336,6 +339,7 @@ export default class PasswordLogin extends React.Component {
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
                         disabled={this.props.disableSubmit}
+                        autoFocus={autoFocusPassword}
                     />
                     {forgotPasswordJsx}
                     { !this.props.busy && <input className="mx_Login_submit"
