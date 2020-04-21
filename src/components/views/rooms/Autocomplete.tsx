@@ -94,10 +94,10 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     componentDidMount() {
-        this._applyNewProps();
+        this.applyNewProps();
     }
 
-    _applyNewProps(oldQuery?: string, oldRoom?: Room) {
+    private applyNewProps(oldQuery?: string, oldRoom?: Room) {
         if (oldRoom && this.props.room.roomId !== oldRoom.roomId) {
             this.autocompleter.destroy();
             this.autocompleter = new Autocompleter(this.props.room);
@@ -265,7 +265,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     componentDidUpdate(prevProps: IProps) {
-        this._applyNewProps(prevProps.query, prevProps.room);
+        this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`];
         if (selectedCompletion && this.containerRef.current) {

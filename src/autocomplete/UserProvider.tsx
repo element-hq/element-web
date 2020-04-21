@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
+import React from 'react';
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
@@ -60,18 +60,18 @@ export default class UserProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
 
-        MatrixClientPeg.get().on("Room.timeline", this._onRoomTimeline);
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomStateMember);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
     }
 
     destroy() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room.timeline", this._onRoomTimeline);
-            MatrixClientPeg.get().removeListener("RoomState.members", this._onRoomStateMember);
+            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
     }
 
-    _onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean,
+    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean,
                        data: IRoomTimelineData) => {
         if (!room) return;
         if (removed) return;
@@ -88,7 +88,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.onUserSpoke(ev.sender);
     };
 
-    _onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
         // ignore members in other rooms
         if (member.roomId !== this.room.roomId) {
             return;

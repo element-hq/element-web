@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
+import React from 'react';
 import Room from "matrix-js-sdk/src/models/room";
 import AutocompleteProvider from './AutocompleteProvider';
 import { _t } from '../languageHandler';
