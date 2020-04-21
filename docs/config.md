@@ -100,7 +100,7 @@ For a good example, see https://riot.im/develop/config.json.
 1. `disable_3pid_login`: Disables 3rd party identity options on login and registration form
     Defaults to false (3rd party identity options are shown).
 1. `default_federate`: Default option for room federation when creating a room
-    Defaults to false (room federation enabled).
+    Defaults to true (room federation enabled).
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
