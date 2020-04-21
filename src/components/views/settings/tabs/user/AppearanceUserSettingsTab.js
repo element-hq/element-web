@@ -20,7 +20,7 @@ import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore
 import * as sdk from "../../../../../index";
 import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import Field from "../../../elements/Field";
-import FontSlider from "../../../../structures/FontSlider";
+import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
 
@@ -223,7 +223,7 @@ export default class StyleUserSettingsTab extends React.Component {
     _renderFontSection() {
         return <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
-            <FontSlider
+            <Slider
                 values={[12, 14, 16, 18, 20]}
                 value={this.state.fontSize}
                 updateFontSize={this._onFontSizeChanged}

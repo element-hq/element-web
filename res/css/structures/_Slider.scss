@@ -39,7 +39,7 @@ limitations under the License.
 
 .mx_Slider_bar > hr {
     width: 100%;
-    border: 0.2rem solid $fontSlider-background-color;
+    border: 0.2rem solid $Slider-background-color;
 }
 
 .mx_Slider_selection {
@@ -55,7 +55,7 @@ limitations under the License.
     position: absolute;
     width: 1.1rem;
     height: 1.1rem;
-    background-color: $fontSlider-selection-color;
+    background-color: $Slider-selection-color;
     border-radius: 50%;
     box-shadow: 0 0 6px lightgrey;
     z-index: 10;
@@ -64,7 +64,7 @@ limitations under the License.
 .mx_Slider_selection > hr {
     transition: width 0.25s;
     margin: 0;
-    border: 0.2rem solid $fontSlider-selection-color;
+    border: 0.2rem solid $Slider-selection-color;
 }
 
 .mx_Slider_dot {
@@ -72,18 +72,18 @@ limitations under the License.
     height: 1rem;
     width: 1rem;
     border-radius: 50%;
-    background-color: $fontSlider-background-color;
+    background-color: $Slider-background-color;
     margin-bottom: 5px;
     z-index: 0;
 }
 
 .mx_Slider_dotActive {
-    background-color: $fontSlider-selection-color;
+    background-color: $Slider-selection-color;
 }
 
 .mx_Slider_dotValue {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: $fontSlider-background-color;
+    color: $Slider-background-color;
 }

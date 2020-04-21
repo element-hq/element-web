@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import { replaceableComponent } from '../../../utils/replaceableComponent';
 
 type SliderProps = {
         // A callback for the selected value
@@ -93,6 +94,7 @@ type DotProps = {
     label: string,
 }
 
+@replaceableComponent("views.elements.Dot")
 class Dot extends React.Component<DotProps> {
     static propTypes = {
         // Callback for behaviour onclick
