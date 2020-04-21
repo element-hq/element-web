@@ -99,7 +99,7 @@ export default class StyleUserSettingsTab extends React.Component {
     };
 
     _onFontSizeChanged = (size) => {
-        const parsedSize = isNaN(parseInt(size))?SettingsStore.getDefaultValue("font_size"):parseFloat(size);
+        const parsedSize = isNaN(parseInt(size)) ? SettingsStore.getDefaultValue("font_size") : parseFloat(size);
         this.setState({fontSize: parsedSize});
         SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, parsedSize);
     };
