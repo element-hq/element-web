@@ -35,6 +35,10 @@ export default class Slider extends React.Component {
 
     };
 
+    _offset(values, value) {
+        return (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
+    }
+
     render() {
         const dots = this.props.values.map(v =>
             <Dot active={v<=this.props.value}
@@ -43,7 +47,7 @@ export default class Slider extends React.Component {
                  key={v}
             />);
 
-        const offset = this.offset(this.props.values, this.props.value);
+        const offset = this._offset(this.props.values, this.props.value);
 
         return <div className="mx_fontSlider">
             <div>
@@ -59,10 +63,6 @@ export default class Slider extends React.Component {
                 </div>
             </div>
         </div>;
-    }
-
-    offset(values, value) {
-        return (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
     }
 }
 
