@@ -2395,5 +2395,7 @@
     "Submit logs": "Envoyer les journaux",
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Rappel : Votre navigateur n’est pas pris en charge donc votre expérience pourrait être imprévisible.",
     "Unable to upload": "Envoi impossible",
-    "Currently indexing: %(currentRoom)s": "En train d’indexer : %(currentRoom)s"
+    "Currently indexing: %(currentRoom)s": "En train d’indexer : %(currentRoom)s",
+    "Please supply a widget URL or embed code": "Veuillez fournir l’URL ou le code d’intégration du widget",
+    "Send a bug report with logs": "Envoyer un rapport d’anomalie avec les journaux"
 }
