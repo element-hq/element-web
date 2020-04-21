@@ -89,13 +89,13 @@ export default class SecurityUserSettingsTab extends React.Component {
         // Don't use this.state to get the ignored user list as it might be
         // ever so slightly outdated. Instead, prefer to get a fresh list and
         // update that.
-        const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-        const index = ignoredUsers.indexOf(userId);
+        const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
+        const index = ignoredUserIds.indexOf(userId);
         if (index !== -1) {
-            ignoredUsers.splice(index, 1);
-            MatrixClientPeg.get().setIgnoredUsers(ignoredUsers);
+            ignoredUserIds.splice(index, 1);
+            MatrixClientPeg.get().setIgnoredUsers(ignoredUserIds);
         }
-        this.setState({ignoredUsers});
+        this.setState({ignoredUserIds});
     };
 
     _getInvitedRooms = () => {
