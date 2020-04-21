@@ -8,8 +8,8 @@ dropped. Ask in the room if you are unclear about any details here.**
 
 ## Font scaling (`feature_font_scaling`)
 
-Enables font scaling options for accessibility and breaks out all appearance
-related settings into their own tab.
+Enables font scaling options for accessibility. To alter the scale check the
+appearance tab in settings.
 
 ## Message pinning (`feature_pinning`)
 
