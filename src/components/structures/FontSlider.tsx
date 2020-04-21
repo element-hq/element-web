@@ -18,8 +18,8 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
 type SliderProps = {
-        // A callback for the new value onclick
-        updateFontSize: (size: number) => null;
+        // A callback for the selected value
+        onSelectionChange: (value: number) => null;
 
         // The current value of the slider
         value: number;
@@ -37,7 +37,7 @@ export default class Slider extends React.Component<SliderProps> {
     static propTypes = {
 
         // A callback for the new value onclick
-        updateFontSize: PropTypes.func,
+        onSelectionChange: PropTypes.func,
 
         // The current value of the slider
         value: PropTypes.number,
@@ -59,22 +59,22 @@ export default class Slider extends React.Component<SliderProps> {
         const dots = this.props.values.map(v =>
             <Dot active={v<=this.props.value}
                  label={this.props.displayFunc(v)}
-                 onClick={() => this.props.updateFontSize(v)}
+                 onClick={() => this.props.onSelectionChange(v)}
                  key={v}
             />);
 
         const offset = this._offset(this.props.values, this.props.value);
 
-        return <div className="mx_fontSlider">
+        return <div className="mx_Slider">
             <div>
-                <div className="mx_fontSlider_bar">
+                <div className="mx_Slider_bar">
                     <hr />
-                    <div className="mx_fontSlider_selection">
-                        <div className="mx_fontSlider_selectionDot" style={{left: "calc(-0.55rem + " + offset + "%)"}} />
+                    <div className="mx_Slider_selection">
+                        <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55rem + " + offset + "%)"}} />
                         <hr style={{width: offset + "%"}} />
                     </div>
                 </div>
-                <div className="mx_fontSlider_dotContainer">
+                <div className="mx_Slider_dotContainer">
                     {dots}
                 </div>
             </div>
@@ -106,9 +106,9 @@ class Dot extends React.Component<DotProps> {
     }
 
     render(): React.ReactNode {
-        const className = "mx_fontSlider_dot" + (this.props.active? " mx_fontSlider_dotActive": "");
+        const className = "mx_Slider_dot" + (this.props.active? " mx_Slider_dotActive": "");
 
-        return <span onClick={this.props.onClick} className="mx_fontSlider_dotValue">
+        return <span onClick={this.props.onClick} className="mx_Slider_dotValue">
             <div className={className} />
             <div>
                 {this.props.label}

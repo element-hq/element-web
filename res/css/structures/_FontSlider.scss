@@ -14,20 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_fontSlider {
+.mx_Slider {
     position: relative;
     margin: 0px;
 
     @mixin mx_Settings_fullWidthField;
 }
 
-.mx_fontSlider_dotContainer {
+.mx_Slider_dotContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.mx_fontSlider_bar {
+.mx_Slider_bar {
     display: flex;
     box-sizing: border-box;
     position: absolute;
@@ -37,12 +37,12 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_fontSlider_bar > hr {
+.mx_Slider_bar > hr {
     width: 100%;
     border: 0.2rem solid $fontSlider-background-color;
 }
 
-.mx_fontSlider_selection {
+.mx_Slider_selection {
     display: flex;
     align-items: center;
     width: calc(100% - 2.2rem);
@@ -50,7 +50,7 @@ limitations under the License.
     position: absolute;
 }
 
-.mx_fontSlider_selectionDot {
+.mx_Slider_selectionDot {
     transition: left 0.25s;
     position: absolute;
     width: 1.1rem;
@@ -61,13 +61,13 @@ limitations under the License.
     z-index: 10;
 }
 
-.mx_fontSlider_selection > hr {
+.mx_Slider_selection > hr {
     transition: width 0.25s;
     margin: 0;
     border: 0.2rem solid $fontSlider-selection-color;
 }
 
-.mx_fontSlider_dot {
+.mx_Slider_dot {
     transition: background-color 0.2s ease-in;
     height: 1rem;
     width: 1rem;
@@ -77,11 +77,11 @@ limitations under the License.
     z-index: 0;
 }
 
-.mx_fontSlider_dotActive {
+.mx_Slider_dotActive {
     background-color: $fontSlider-selection-color;
 }
 
-.mx_fontSlider_dotValue {
+.mx_Slider_dotValue {
     display: flex;
     flex-direction: column;
     align-items: center;
