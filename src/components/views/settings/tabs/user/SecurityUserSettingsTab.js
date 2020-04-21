@@ -25,6 +25,7 @@ import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
+import dis from "../../../../../dispatcher"
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -61,6 +62,23 @@ export default class SecurityUserSettingsTab extends React.Component {
             managingInvites: false,
             invitedRoomAmt: invitedRooms.length,
         };
+
+        this._onAction = this._onAction.bind(this);
+    }
+
+    _onAction({action}) {
+        if (action === "ignore_state_changed"){
+            const ignoredUserIds =  MatrixClientPeg.get().getIgnoredUsers();
+            this.setState({ignoredUserIds})
+        }
+    }
+
+    componentDidMount() {
+        this.dispatcherRef = dis.register(this._onAction)
+    }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
     }
 
     _updateBlacklistDevicesFlag = (checked) => {
@@ -89,13 +107,13 @@ export default class SecurityUserSettingsTab extends React.Component {
         // Don't use this.state to get the ignored user list as it might be
         // ever so slightly outdated. Instead, prefer to get a fresh list and
         // update that.
-        const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
+        const ignoredUserIds = this.state.ignoredUserIds;
         const index = ignoredUserIds.indexOf(userId);
         if (index !== -1) {
             ignoredUserIds.splice(index, 1);
             MatrixClientPeg.get().setIgnoredUsers(ignoredUserIds);
         }
-        this.setState({ignoredUserIds});
+        
     };
 
     _getInvitedRooms = () => {
