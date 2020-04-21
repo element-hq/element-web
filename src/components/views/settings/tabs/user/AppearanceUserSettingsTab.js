@@ -2,6 +2,7 @@
 Copyright 2019 New Vector Ltd
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -21,7 +22,7 @@ import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore
 import * as sdk from "../../../../../index";
 import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import Field from "../../../elements/Field";
-import FontSlider from "../../../../structures/FontSlider";
+import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
 
@@ -204,7 +205,7 @@ export default class StyleUserSettingsTab extends React.Component {
             .sort((a, b) => a.name.localeCompare(b.name));
         const orderedThemes = [...builtInThemes, ...customThemes];
         return (
-            <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_themeSection">
+            <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
                 <Field id="theme" label={_t("Theme")} element="select"
@@ -222,9 +223,9 @@ export default class StyleUserSettingsTab extends React.Component {
     }
 
     _renderFontSection() {
-        return <div className="mx_SettingsTab_section mx_StyleUserSettingsTab_fontScaling">
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
-            <FontSlider
+            <Slider
                 values={[12, 14, 16, 18, 20]}
                 value={this.state.fontSize}
                 updateFontSize={this._onFontSizeChanged}
