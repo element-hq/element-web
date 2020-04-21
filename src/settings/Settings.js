@@ -101,12 +101,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "font_size": {
-        displayName: _td("Font size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: 16,
-        controller: new FontSizeController(),
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -176,6 +170,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show padlocks on invite only rooms"),
         default: true,
+    },
+    "font_size": {
+        displayName: _td("Font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 16,
+        controller: new FontSizeController(),
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
