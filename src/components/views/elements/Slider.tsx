@@ -58,7 +58,7 @@ export default class Slider extends React.Component<SliderProps> {
 
     render(): React.ReactNode {
         const dots = this.props.values.map(v =>
-            <Dot active={v<=this.props.value}
+            <Dot active={v <= this.props.value}
                  label={this.props.displayFunc(v)}
                  onClick={() => this.props.onSelectionChange(v)}
                  key={v}
@@ -108,7 +108,7 @@ class Dot extends React.Component<DotProps> {
     }
 
     render(): React.ReactNode {
-        const className = "mx_Slider_dot" + (this.props.active? " mx_Slider_dotActive": "");
+        const className = "mx_Slider_dot" + (this.props.active ? " mx_Slider_dotActive" : "");
 
         return <span onClick={this.props.onClick} className="mx_Slider_dotValue">
             <div className={className} />
