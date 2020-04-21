@@ -210,9 +210,9 @@ export default class WidgetUtils {
         });
     }
 
-    static setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+    static setUserWidget(widgetId, widgetType: WidgetType, widgetUrl, widgetName, widgetData) {
         const content = {
-            type: widgetType,
+            type: widgetType.preferred,
             url: widgetUrl,
             name: widgetName,
             data: widgetData,
@@ -369,7 +369,7 @@ export default class WidgetUtils {
     static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
         return WidgetUtils.setUserWidget(
             "integration_manager_" + (new Date().getTime()),
-            "m.integration_manager",
+            WidgetType.INTEGRATION_MANAGER,
             uiUrl,
             "Integration Manager: " + name,
             {"api_url": apiUrl},
