@@ -15,9 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import flatMap from 'lodash/flatMap';
 import {ICompletion, ISelectionRange, IProviderCompletions} from '../../../autocomplete/Autocompleter';
@@ -31,10 +30,14 @@ const COMPOSER_SELECTED = 0;
 export const generateCompletionDomId = (number) => `mx_Autocomplete_Completion_${number}`;
 
 interface IProps {
+    // the query string for which to show autocomplete suggestions
     query: string;
+    // method invoked with range and text content when completion is confirmed
     onConfirm: (ICompletion) => void;
+    // method invoked when selected (if any) completion changes
     onSelectionChange?: (ICompletion, number) => void;
     selection: ISelectionRange;
+    // The room in which we're autocompleting
     room: Room;
 }
 
@@ -48,20 +51,6 @@ interface IState {
 }
 
 export default class Autocomplete extends React.PureComponent<IProps, IState> {
-    static propTypes = {
-        // the query string for which to show autocomplete suggestions
-        query: PropTypes.string.isRequired,
-
-        // method invoked with range and text content when completion is confirmed
-        onConfirm: PropTypes.func.isRequired,
-
-        // method invoked when selected (if any) completion changes
-        onSelectionChange: PropTypes.func,
-
-        // The room in which we're autocompleting
-        room: PropTypes.instanceOf(Room),
-    };
-
     autocompleter: Autocompleter;
     queryRequested: string;
     debounceCompletionsRequest: NodeJS.Timeout;
