@@ -6,6 +6,11 @@ Some notes on the features you can enable by going to `Settings->Labs`. Not exha
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
+## Font scaling (`feature_font_scaling`)
+
+Enables font scaling options for accessibility and breaks out all appearance
+related settings into their own tab.
+
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
