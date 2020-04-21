@@ -153,8 +153,7 @@ export default class PhoneNumbers extends React.Component {
 
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const phoneNumber = this.state.newPhoneNumber;
-        // const phoneCountry = this.state.phoneCountry;
-        const phoneCountry = "XK";
+        const phoneCountry = this.state.phoneCountry;
 
         const task = new AddThreepid();
         this.setState({verifying: true, continueDisabled: true, addTask: task});
