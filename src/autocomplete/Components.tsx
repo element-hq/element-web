@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -32,13 +31,6 @@ interface ITextualCompletionProps {
 }
 
 export class TextualCompletion extends React.PureComponent<ITextualCompletionProps> {
-    static propTypes = {
-        title: PropTypes.string,
-        subtitle: PropTypes.string,
-        description: PropTypes.string,
-        className: PropTypes.string,
-    };
-
     render() {
         const {
             title,
@@ -66,14 +58,6 @@ interface IPillCompletionProps {
 }
 
 export class PillCompletion extends React.PureComponent<IPillCompletionProps> {
-    static propTypes = {
-        title: PropTypes.string,
-        subtitle: PropTypes.string,
-        description: PropTypes.string,
-        initialComponent: PropTypes.element,
-        className: PropTypes.string,
-    };
-
     render() {
         const {
             title,
