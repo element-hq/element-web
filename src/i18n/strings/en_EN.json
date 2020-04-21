@@ -202,6 +202,7 @@
     "Deops user with given id": "Deops user with given id",
     "Opens the Developer Tools dialog": "Opens the Developer Tools dialog",
     "Adds a custom widget by URL to the room": "Adds a custom widget by URL to the room",
+    "Please supply a widget URL or embed code": "Please supply a widget URL or embed code",
     "Please supply a https:// or http:// widget URL": "Please supply a https:// or http:// widget URL",
     "You cannot modify widgets in this room.": "You cannot modify widgets in this room.",
     "Verifies a user, session, and pubkey tuple": "Verifies a user, session, and pubkey tuple",

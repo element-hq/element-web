@@ -36,6 +36,8 @@ import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/I
 import {isPermalinkHost, parsePermalink} from "./utils/permalinks/Permalinks";
 import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
+import { Jitsi } from "./widgets/Jitsi";
+import { parseFragment as parseHtml } from "parse5";
 import sendBugReport from "./rageshake/submit-rageshake";
 import SdkConfig from "./SdkConfig";
 
@@ -769,18 +771,50 @@ export const Commands = [
     }),
     new Command({
         command: 'addwidget',
-        args: '<url>',
+        args: '<url | embed code | Jitsi url>',
         description: _td('Adds a custom widget by URL to the room'),
-        runFn: function(roomId, args) {
-            if (!args || (!args.startsWith("https://") && !args.startsWith("http://"))) {
+        runFn: function(roomId, widgetUrl) {
+            if (!widgetUrl) {
+                return reject(_t("Please supply a widget URL or embed code"));
+            }
+
+            // Try and parse out a widget URL from iframes
+            if (widgetUrl.toLowerCase().startsWith("<iframe ")) {
+                // We use parse5, which doesn't render/create a DOM node. It instead runs
+                // some superfast regex over the text so we don't have to.
+                const embed = parseHtml(widgetUrl);
+                if (embed && embed.childNodes && embed.childNodes.length === 1) {
+                    const iframe = embed.childNodes[0];
+                    if (iframe.tagName.toLowerCase() === 'iframe' && iframe.attrs) {
+                        const srcAttr = iframe.attrs.find(a => a.name === 'src');
+                        console.log("Pulling URL out of iframe (embed code)");
+                        widgetUrl = srcAttr.value;
+                    }
+                }
+            }
+
+            if (!widgetUrl.startsWith("https://") && !widgetUrl.startsWith("http://")) {
                 return reject(_t("Please supply a https:// or http:// widget URL"));
             }
             if (WidgetUtils.canUserModifyWidgets(roomId)) {
                 const userId = MatrixClientPeg.get().getUserId();
                 const nowMs = (new Date()).getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
-                return success(WidgetUtils.setRoomWidget(
-                    roomId, widgetId, WidgetType.CUSTOM, args, "Custom Widget", {}));
+                let type = WidgetType.CUSTOM;
+                let name = "Custom Widget";
+                let data = {};
+
+                // Make the widget a Jitsi widget if it looks like a Jitsi widget
+                const jitsiData = Jitsi.getInstance().parsePreferredConferenceUrl(widgetUrl);
+                if (jitsiData) {
+                    console.log("Making /addwidget widget a Jitsi conference");
+                    type = WidgetType.JITSI;
+                    name = "Jitsi Conference";
+                    data = jitsiData;
+                    widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
+                }
+
+                return success(WidgetUtils.setRoomWidget(roomId, widgetId, type, widgetUrl, name, data));
             } else {
                 return reject(_t("You cannot modify widgets in this room."));
             }
