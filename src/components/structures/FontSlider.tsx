@@ -14,10 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 
-export default class Slider extends React.Component {
+type SliderProps = {
+        // A callback for the new value onclick
+        updateFontSize: (size: number) => null;
+
+        // The current value of the slider
+        value: number;
+
+        // The range and values of the slider
+        // Currently only supports an ascending, constant interval range
+        values: number[];
+
+        // A function for formatting the the values
+        displayFunc: (value: number) => string;
+
+}
+
+export default class Slider extends React.Component<SliderProps> {
     static propTypes = {
 
         // A callback for the new value onclick
@@ -35,11 +51,11 @@ export default class Slider extends React.Component {
 
     };
 
-    _offset(values, value) {
+    _offset(values: number[], value: number): number {
         return (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
     }
 
-    render() {
+    render(): React.ReactNode {
         const dots = this.props.values.map(v =>
             <Dot active={v<=this.props.value}
                  label={this.props.displayFunc(v)}
@@ -66,7 +82,18 @@ export default class Slider extends React.Component {
     }
 }
 
-class Dot extends React.Component {
+type DotProps = {
+    // Callback for behaviour onclick
+    onClick: () => null,
+
+    // Whether the dot should appear active
+    active: boolean,
+
+    // The label on the dot
+    label: string,
+}
+
+class Dot extends React.Component<DotProps> {
     static propTypes = {
         // Callback for behaviour onclick
         onClick: PropTypes.func,
@@ -78,7 +105,7 @@ class Dot extends React.Component {
         label: PropTypes.string,
     }
 
-    render() {
+    render(): React.ReactNode {
         const className = "mx_fontSlider_dot" + (this.props.active? " mx_fontSlider_dotActive": "");
 
         return <span onClick={this.props.onClick} className="mx_fontSlider_dotValue">
