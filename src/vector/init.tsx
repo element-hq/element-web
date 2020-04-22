@@ -148,7 +148,6 @@ export async function loadApp(fragParams: {}) {
 export async function showError(title: string, messages?: string[]) {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
-        /* webpackPreload: true */
         "../components/structures/ErrorView")).default;
     window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
         document.getElementById('matrixchat'));
