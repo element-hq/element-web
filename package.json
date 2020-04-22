@@ -215,6 +215,7 @@
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
     ],
     "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/__mocks__/cssMock.js",
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
       "^browser-request$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/browser-request.js",
