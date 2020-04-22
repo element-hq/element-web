@@ -68,15 +68,12 @@ export default class SecurityUserSettingsTab extends React.Component {
         this._onAction = this._onAction.bind(this);
     }
 
+
+
     _onAction({action}) {
         if (action === "ignore_state_changed"){
             const ignoredUserIds =  MatrixClientPeg.get().getIgnoredUsers();
             const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e))
-            console.log("-------------")
-            console.log("Got new ignored users", ignoredUserIds)
-            console.log("We were waiting for", this.state.waitingUnignored)
-            console.log("Now we wait for", newWaitingUnignored)
-            console.log("-------------")
             this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored})
         }
     }
@@ -114,17 +111,12 @@ export default class SecurityUserSettingsTab extends React.Component {
     _onUserUnignored = async (userId) => {
         
         const {ignoredUserIds, waitingUnignored} = this.state
-        console.log("--------GO IGNORE---")
-        console.log("ignored:", ignoredUserIds)
-        console.log("waiting for:", waitingUnignored)
         const currentlyIgnoredUserIds = ignoredUserIds.filter(e=> !waitingUnignored.includes(e));
-        console.log("currentlyIgnored:", currentlyIgnoredUserIds)
 
         const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
             this.setState(({waitingUnignored})=>({waitingUnignored:[...waitingUnignored, userId]}))
-            console.log("Sending to server", currentlyIgnoredUserIds)
             MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
         
@@ -236,10 +228,6 @@ export default class SecurityUserSettingsTab extends React.Component {
         const {waitingUnignored, ignoredUserIds} = this.state;
 
         if (!ignoredUserIds || ignoredUserIds.length === 0) return null;
-
-
-        console.log("Rendering, waiting", waitingUnignored)
-        console.log("Rendering, ignored", ignoredUserIds)
 
         const userIds = ignoredUserIds
             .map((u) => <IgnoredUser userId={u} onUnignored={this._onUserUnignored} key={u} inProgress={waitingUnignored.includes(u)} />);
