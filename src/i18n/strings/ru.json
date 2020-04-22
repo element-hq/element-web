@@ -10,8 +10,8 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализованный, шифрованный чат и совместное рабочее пространство на основе [matrix]",
     "Chat with Riot Bot": "Чат с ботом Riot",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Вы можете изменить параметры для входа на другие Matrix серверы, указав другой URL.\nЭто позволит использовать Riot с учетной записью Matrix, существующей на другом сервере.",
-    "Sign In": "Войти в систему",
-    "Create Account": "Создать аккаунт",
+    "Sign In": "Войти",
+    "Create Account": "Создать учётную запись",
     "Need help?": "Помочь?",
     "Room Directory": "Каталог комнат",
     "Explore rooms": "Исследуйте комнаты",
@@ -23,5 +23,8 @@
     "The message from the parser is: %(message)s": "Сообщение из парсера: %(message)s",
     "Invalid JSON": "Нерабочий JSON",
     "Go to your browser to complete Sign In": "Перейдите в браузер для завершения входа",
-    "Open user settings": "Открыть настройки пользователя"
+    "Open user settings": "Открыть настройки пользователя",
+    "Missing indexeddb worker script!": "Отсутствует скрипт воркера для indexeddb!",
+    "Unable to load config file: please refresh the page to try again.": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
+    "Previous/next recently visited room or community": "Предыдущая/следующая недавно посещённая комната или сообщество"
 }
