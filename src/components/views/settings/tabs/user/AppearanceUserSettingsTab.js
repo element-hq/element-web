@@ -25,6 +25,7 @@ import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
+import _range from "lodash/range";
 
 export default class StyleUserSettingsTab extends React.Component {
     constructor() {
@@ -225,12 +226,17 @@ export default class StyleUserSettingsTab extends React.Component {
     _renderFontSection() {
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
-            <Slider
-                values={[12, 14, 16, 18, 20]}
-                value={this.state.fontSize}
-                onSelectionChange={this._onFontSizeChanged}
-                displayFunc={value => {}}
-            />
+            <div className="mx_AppearanceUserSettingsTab_fontSlider">
+                <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
+                <Slider
+                    values={_range(SettingsStore.getValue("font_size_min"), SettingsStore.getValue("font_size_max"), 2)}
+                    value={this.state.fontSize}
+                    onSelectionChange={this._onFontSizeChanged}
+                    displayFunc={value => {}}
+                    disabled={false}
+                />
+                <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
+            </div>
             <Field
                 type="text"
                 label={_t("Font size")}

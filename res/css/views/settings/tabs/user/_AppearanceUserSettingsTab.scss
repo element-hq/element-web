@@ -14,7 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_AppearanceUserSettingsTab_fontSlider,
 .mx_AppearanceUserSettingsTab_themeSection .mx_Field,
 .mx_AppearanceUserSettingsTab_fontScaling .mx_Field {
     @mixin mx_Settings_fullWidthField;
+}
+
+.mx_AppearanceUserSettingsTab_fontSlider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+.mx_AppearanceUserSettingsTab_fontSlider_smallText {
+    font-size: 15px;
+    padding-right: 10px;
+}
+
+.mx_AppearanceUserSettingsTab_fontSlider_largeText {
+    font-size: 18px;
+    padding-left: 10px;
 }
