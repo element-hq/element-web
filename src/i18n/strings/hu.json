@@ -23,5 +23,8 @@
     "The message from the parser is: %(message)s": "A feldolgozó algoritmus üzenete: %(message)s",
     "Invalid JSON": "Érvénytelen JSON",
     "Go to your browser to complete Sign In": "A böngészőben fejezd be a bejelentkezést",
-    "Open user settings": "Felhasználói beállítások megnyitása"
+    "Open user settings": "Felhasználói beállítások megnyitása",
+    "Missing indexeddb worker script!": "Indexeddb worker szkript hiányzik!",
+    "Unable to load config file: please refresh the page to try again.": "A konfigurációs fájlt nem sikerült betölteni: frissítsd az oldalt és próbáld meg újra.",
+    "Previous/next recently visited room or community": "Előző/következő nemrég meglátogatott szobák vagy közösségek"
 }
