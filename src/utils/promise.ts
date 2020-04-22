@@ -33,7 +33,7 @@ export async function timeout<T>(promise: Promise<T>, timeoutValue: T, ms: numbe
 }
 
 export interface IDeferred<T> {
-    resolve: (T) => void;
+    resolve: (value: T) => void;
     reject: (any) => void;
     promise: Promise<T>;
 }
