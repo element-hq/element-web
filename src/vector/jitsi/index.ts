@@ -35,7 +35,6 @@ let avatarUrl: string;
 let userId: string;
 
 let widgetApi: WidgetApi;
-let terminateMeeting: any;
 
 (async function () {
     try {
@@ -76,12 +75,6 @@ let terminateMeeting: any;
             await widgetApi.waitReady();
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
         }
-
-        widgetApi.addTerminateCallback(() => {
-            if (terminateMeeting) {
-                return terminateMeeting();
-            }
-        });
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
@@ -140,11 +133,11 @@ function joinConference() { // event handler bound in HTML
         });
     });
 
-    terminateMeeting = () => {
+    widgetApi.once('terminate', (wait) => {
         // Hangup before the client terminates the widget. Don't show
         // the feedback dialog.
+        console.log("[Jitsi Widget] Client asks to terminate, hanging up");
         meetApi.executeCommand("hangup", false);
-        terminateMeeting = undefined;
-        return meetingClosed;
-    }
+        wait(meetingClosed);
+    });
 }
