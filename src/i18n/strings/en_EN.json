@@ -403,7 +403,6 @@
     "Try out new ways to ignore people (experimental)": "Try out new ways to ignore people (experimental)",
     "Support adding custom themes": "Support adding custom themes",
     "Enable cross-signing to verify per-user instead of per-session": "Enable cross-signing to verify per-user instead of per-session",
-    "Enable local event indexing and E2EE search (requires restart)": "Enable local event indexing and E2EE search (requires restart)",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Show padlocks on invite only rooms": "Show padlocks on invite only rooms",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
