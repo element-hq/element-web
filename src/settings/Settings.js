@@ -158,12 +158,6 @@ export const SETTINGS = {
         supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
         default: true,
     },
-    "feature_event_indexing": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
-        default: false,
-    },
     "feature_bridge_state": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
