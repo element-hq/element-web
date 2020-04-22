@@ -2395,5 +2395,7 @@
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "注意：您的瀏覽器不受支援，所以您的使用體驗可能無法預測。",
     "Unable to upload": "無法上傳",
     "Currently indexing: %(currentRoom)s": "目前正在建立索引：%(currentRoom)s",
-    "Send a bug report with logs": "傳送有紀錄檔的臭蟲回報"
+    "Send a bug report with logs": "傳送有紀錄檔的臭蟲回報",
+    "Please supply a widget URL or embed code": "請提供小工具 URL 或嵌入程式碼",
+    "Unable to query secret storage status": "無法查詢秘密儲存空間狀態"
 }
