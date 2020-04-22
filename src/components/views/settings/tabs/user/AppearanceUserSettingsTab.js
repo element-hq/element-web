@@ -229,7 +229,7 @@ export default class StyleUserSettingsTab extends React.Component {
                 values={[12, 14, 16, 18, 20]}
                 value={this.state.fontSize}
                 onSelectionChange={this._onFontSizeChanged}
-                displayFunc={value => value + 'px'}
+                displayFunc={value => {}}
             />
             <Field
                 type="text"
