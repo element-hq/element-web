@@ -18,12 +18,13 @@ limitations under the License.
 // https://github.com/turt2live/matrix-dimension/blob/4f92d560266635e5a3c824606215b84e8c0b19f5/web/app/shared/services/scalar/scalar-widget.api.ts
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import { EventEmitter } from "events";
 
 export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
-    ReceiveTerminate = "m.receive_terminate",
+    ReceiveTerminate = "im.vector.receive_terminate",
 }
 
 export enum KnownWidgetActions {
@@ -64,14 +65,17 @@ export interface FromWidgetRequest extends WidgetRequest {
 
 /**
  * Handles Riot <--> Widget interactions for embedded/standalone widgets.
+ *
+ * Emitted events:
+ * - terminate(wait): client requested the widget to terminate.
+ *   Call the argument 'wait(promise)' to postpone the finalization until
+ *   the given promise resolves.
  */
-export class WidgetApi {
+export class WidgetApi extends EventEmitter {
     private origin: string;
     private inFlightRequests: { [requestId: string]: (reply: FromWidgetRequest) => void } = {};
     private readyPromise: Promise<any>;
     private readyPromiseResolve: () => void;
-    private terminatePromise: Promise<any>;
-    private terminatePromiseResolve: () => void;
 
     /**
      * Set this to true if your widget is expecting a ready message from the client. False otherwise (default).
@@ -79,10 +83,11 @@ export class WidgetApi {
     public expectingExplicitReady = false;
 
     constructor(currentUrl: string, private widgetId: string, private requestedCapabilities: string[]) {
+        super();
+
         this.origin = new URL(currentUrl).origin;
 
         this.readyPromise = new Promise<any>(resolve => this.readyPromiseResolve = resolve);
-        this.terminatePromise = new Promise<any>(resolve => this.terminatePromiseResolve = resolve);
 
         window.addEventListener("message", event => {
             if (event.origin !== this.origin) return; // ignore: invalid origin
@@ -104,11 +109,15 @@ export class WidgetApi {
                     // Automatically acknowledge so we can move on
                     this.replyToRequest(<ToWidgetRequest>payload, {});
                 } else if (payload.action === KnownWidgetActions.Terminate) {
-                    // Reply after resolving
-                    this.terminatePromise.then(() => {
+                    // Finalization needs to be async, so postpone with a promise
+                    let finalizePromise = Promise.resolve();
+                    const wait = promise => {
+                        finalizePromise = finalizePromise.then(value => promise);
+                    }
+                    this.emit('terminate', wait);
+                    Promise.resolve(finalizePromise).then(() => {
                         this.replyToRequest(<ToWidgetRequest>payload, {});
                     });
-                    this.terminatePromiseResolve();
                 } else {
                     console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }
@@ -125,10 +134,6 @@ export class WidgetApi {
 
     public waitReady(): Promise<any> {
         return this.readyPromise;
-    }
-
-    public addTerminateCallback(action) {
-        this.terminatePromise = this.terminatePromise.then(action);
     }
 
     private replyToRequest(payload: ToWidgetRequest, reply: any) {

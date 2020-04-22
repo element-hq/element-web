@@ -346,7 +346,7 @@ export default class AppTile extends React.Component {
     _endWidgetActions() {
         let promise;
 
-        if (this._hasCapability('m.receive_terminate')) {
+        if (this._hasCapability('im.vector.receive_terminate')) {
             // Wait for widget to terminate within a timeout
             const timeout = 2000;
             const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
@@ -396,20 +396,20 @@ export default class AppTile extends React.Component {
                     this.setState({deleting: true});
 
                     this._endWidgetActions().then(() => {
-                        WidgetUtils.setRoomWidget(
+                        return WidgetUtils.setRoomWidget(
                             this.props.room.roomId,
                             this.props.app.id,
-                        ).catch((e) => {
-                            console.error('Failed to delete widget', e);
-                            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                        );
+                    }).catch((e) => {
+                        console.error('Failed to delete widget', e);
+                        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-                            Modal.createTrackedDialog('Failed to remove widget', '', ErrorDialog, {
-                                title: _t('Failed to remove widget'),
-                                description: _t('An error ocurred whilst trying to remove the widget from the room'),
-                            });
-                        }).finally(() => {
-                            this.setState({deleting: false});
+                        Modal.createTrackedDialog('Failed to remove widget', '', ErrorDialog, {
+                            title: _t('Failed to remove widget'),
+                            description: _t('An error ocurred whilst trying to remove the widget from the room'),
                         });
+                    }).finally(() => {
+                        this.setState({deleting: false});
                     });
                 },
             });

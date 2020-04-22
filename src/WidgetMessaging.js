@@ -89,8 +89,6 @@ export default class WidgetMessaging {
 
     /**
      * Tells the widget that it should terminate now.
-     * It is not necessarily called in all instances before the widget is removed,
-     * and the client may force termination with a timeout.
      * @returns {Promise<*>} Resolves when widget has acknowledged the message.
      */
     terminate() {
