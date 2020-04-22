@@ -26,30 +26,6 @@ import { _t } from '../../../languageHandler';
 import InteractiveAuth, {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
 import {DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
 
-const dialogAesthetics = {
-    [SSOAuthEntry.PHASE_PREAUTH]: {
-        body: _t("Confirm your account deactivation by using Single Sign On to prove your identity."),
-        continueText: _t("Single Sign On"),
-        continueKind: "danger",
-    },
-    [SSOAuthEntry.PHASE_POSTAUTH]: {
-        body: _t("Are you sure you want to deactivate your account? This is irreversible."),
-        continueText: _t("Confirm account deactivation"),
-        continueKind: "danger",
-    },
-};
-
-// This is the same as aestheticsForStagePhases in InteractiveAuthDialog minus the `title`
-const DEACTIVATE_AESTHETICS = {
-    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-    [PasswordAuthEntry.LOGIN_TYPE]: {
-        [DEFAULT_PHASE]: {
-            body: _t("To continue, please enter your password:"),
-        },
-    },
-};
-
 export default class DeactivateAccountDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -84,6 +60,30 @@ export default class DeactivateAccountDialog extends React.Component {
     }
 
     _onStagePhaseChange = (stage, phase) => {
+        const dialogAesthetics = {
+            [SSOAuthEntry.PHASE_PREAUTH]: {
+                body: _t("Confirm your account deactivation by using Single Sign On to prove your identity."),
+                continueText: _t("Single Sign On"),
+                continueKind: "danger",
+            },
+            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                body: _t("Are you sure you want to deactivate your account? This is irreversible."),
+                continueText: _t("Confirm account deactivation"),
+                continueKind: "danger",
+            },
+        };
+
+        // This is the same as aestheticsForStagePhases in InteractiveAuthDialog minus the `title`
+        const DEACTIVATE_AESTHETICS = {
+            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+            [PasswordAuthEntry.LOGIN_TYPE]: {
+                [DEFAULT_PHASE]: {
+                    body: _t("To continue, please enter your password:"),
+                },
+            },
+        };
+
         const aesthetics = DEACTIVATE_AESTHETICS[stage];
         let bodyText = null;
         let continueText = null;
