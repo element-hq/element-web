@@ -34,6 +34,17 @@ type IProps = {
 
 export default class Slider extends React.Component<IProps> {
     _offset(values: number[], value: number): number {
+        const lowest = values[0];
+        const highest = values[values.length - 1];
+
+        if (value < lowest) {
+            return 0;
+        }
+
+        if (value > highest) {
+            return 100;
+        }
+
         return (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
     }
 
