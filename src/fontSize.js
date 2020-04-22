@@ -40,8 +40,8 @@ export class FontWatcher {
     };
 
     _setRootFontSize = size => {
-        let fontSize = this._min_size < size?size:this._min_size;
-        fontSize = fontSize < this._max_size?fontSize:this._max_size;
+        let fontSize = this._min_size < size ? size : this._min_size;
+        fontSize = fontSize < this._max_size ? fontSize : this._max_size;
         if (fontSize != size) {
             SettingsStore.setValue("font_size", null, fontSize);
         }
