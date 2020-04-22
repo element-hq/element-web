@@ -109,7 +109,7 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _onUserUnignored = async (userId) => {
         const {ignoredUserIds, waitingUnignored} = this.state;
-        const currentlyIgnoredUserIds = ignoredUserIds.filter(e=> !waitingUnignored.includes(e));
+        const currentlyIgnoredUserIds = ignoredUserIds.filter(e => !waitingUnignored.includes(e));
 
         const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
