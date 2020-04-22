@@ -19,9 +19,9 @@ limitations under the License.
 */
 
 import React from 'react';
-// add React and ReactPerf to the global namespace, to make them easier to
-// access via the console
-global.React = React;
+// add React and ReactPerf to the global namespace, to make them easier to access via the console
+// this incidentally means we can forget our React imports in JSX files without penalty.
+window.React = React;
 
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
@@ -40,11 +40,11 @@ import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
-let lastLocationHashSet = null;
+let lastLocationHashSet: string = null;
 
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
-function getScreenFromLocation(location) {
+function getScreenFromLocation(location: Location) {
     const fragparts = parseQsFromFragment(location);
     return {
         screen: fragparts.location.substring(1),
@@ -54,7 +54,7 @@ function getScreenFromLocation(location) {
 
 // Here, we do some crude URL analysis to allow
 // deep-linking.
-function routeUrl(location) {
+function routeUrl(location: Location) {
     if (!window.matrixChat) return;
 
     console.log("Routing URL ", location.href);
@@ -62,7 +62,7 @@ function routeUrl(location) {
     window.matrixChat.showScreen(s.screen, s.params);
 }
 
-function onHashChange(ev) {
+function onHashChange(ev: HashChangeEvent) {
     if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
         // we just set this: no need to route it!
         return;
@@ -72,8 +72,8 @@ function onHashChange(ev) {
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
-function onNewScreen(screen) {
-    console.log("newscreen "+screen);
+function onNewScreen(screen: string) {
+    console.log("newscreen " + screen);
     const hash = '#/' + screen;
     lastLocationHashSet = hash;
     window.location.hash = hash;
@@ -88,7 +88,7 @@ function onNewScreen(screen) {
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
-function makeRegistrationUrl(params) {
+function makeRegistrationUrl(params: object) {
     let url;
     if (window.location.protocol === "vector:") {
         url = 'https://riot.im/app/#/register';
@@ -121,8 +121,7 @@ function onTokenLoginCompleted() {
     const parsedUrl = url.parse(window.location.href);
     parsedUrl.search = "";
     const formatted = url.format(parsedUrl);
-    console.log("Redirecting to " + formatted + " to drop loginToken " +
-        "from queryparams");
+    console.log(`Redirecting to ${formatted} to drop loginToken from queryparams`);
     window.location.href = formatted;
 }
 
