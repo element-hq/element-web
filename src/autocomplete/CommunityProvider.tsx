@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import Group from "matrix-js-sdk/src/models/group";
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import {MatrixClientPeg} from '../MatrixClientPeg';
@@ -24,7 +25,7 @@ import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import _sortBy from 'lodash/sortBy';
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
-import type {Completion, SelectionRange} from "./Autocompleter";
+import {ICompletion, ISelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 
 const COMMUNITY_REGEX = /\B\+\S*/g;
@@ -39,6 +40,8 @@ function score(query, space) {
 }
 
 export default class CommunityProvider extends AutocompleteProvider {
+    matcher: QueryMatcher<Group>;
+
     constructor() {
         super(COMMUNITY_REGEX);
         this.matcher = new QueryMatcher([], {
@@ -46,7 +49,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
@@ -104,7 +107,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         return '💬 ' + _t('Communities');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div
                 className="mx_Autocomplete_Completion_container_pill mx_Autocomplete_Completion_container_truncate"

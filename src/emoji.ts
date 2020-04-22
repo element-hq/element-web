@@ -14,12 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// @ts-ignore - import * as EMOJIBASE actually breaks this
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 
+export interface IEmoji {
+    annotation: string;
+    group: number;
+    hexcode: string;
+    order: number;
+    shortcodes: string[];
+    tags: string[];
+    unicode: string;
+    emoticon?: string;
+}
+
+interface IEmojiWithFilterString extends IEmoji {
+    filterString?: string;
+}
+
 // The unicode is stored without the variant selector
-const UNICODE_TO_EMOJI = new Map(); // not exported as gets for it are handled by getEmojiFromUnicode
-export const EMOTICON_TO_EMOJI = new Map();
-export const SHORTCODE_TO_EMOJI = new Map();
+const UNICODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>(); // not exported as gets for it are handled by getEmojiFromUnicode
+export const EMOTICON_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
+export const SHORTCODE_TO_EMOJI = new Map<string, IEmojiWithFilterString>();
 
 export const getEmojiFromUnicode = unicode => UNICODE_TO_EMOJI.get(stripVariation(unicode));
 
@@ -48,7 +64,7 @@ export const DATA_BY_CATEGORY = {
 };
 
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
-EMOJIBASE.forEach(emoji => {
+EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
     if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
         DATA_BY_CATEGORY[categoryId].push(emoji);
@@ -89,3 +105,5 @@ EMOJIBASE.forEach(emoji => {
 function stripVariation(str) {
     return str.replace(/[\uFE00-\uFE0F]$/, "");
 }
+
+export const EMOJI: IEmoji[] = EMOJIBASE;

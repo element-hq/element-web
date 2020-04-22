@@ -17,9 +17,20 @@ limitations under the License.
 */
 
 import React from 'react';
-import type {Completion, SelectionRange} from './Autocompleter';
+import type {ICompletion, ISelectionRange} from './Autocompleter';
+
+export interface ICommand {
+    command: string | null;
+    range: {
+        start: number;
+        end: number;
+    };
+}
 
 export default class AutocompleteProvider {
+    commandRegex: RegExp;
+    forcedCommandRegex: RegExp;
+
     constructor(commandRegex?: RegExp, forcedCommandRegex?: RegExp) {
         if (commandRegex) {
             if (!commandRegex.global) {
@@ -42,25 +53,25 @@ export default class AutocompleteProvider {
     /**
      * Of the matched commands in the query, returns the first that contains or is contained by the selection, or null.
      * @param {string} query The query string
-     * @param {SelectionRange} selection Selection to search
+     * @param {ISelectionRange} selection Selection to search
      * @param {boolean} force True if the user is forcing completion
      * @return {object} { command, range } where both objects fields are null if no match
      */
-    getCurrentCommand(query: string, selection: SelectionRange, force: boolean = false) {
+    getCurrentCommand(query: string, selection: ISelectionRange, force = false) {
         let commandRegex = this.commandRegex;
 
         if (force && this.shouldForceComplete()) {
             commandRegex = this.forcedCommandRegex || /\S+/g;
         }
 
-        if (commandRegex == null) {
+        if (commandRegex === null) {
             return null;
         }
 
         commandRegex.lastIndex = 0;
 
         let match;
-        while ((match = commandRegex.exec(query)) != null) {
+        while ((match = commandRegex.exec(query)) !== null) {
             const start = match.index;
             const end = start + match[0].length;
             if (selection.start <= end && selection.end >= start) {
@@ -82,7 +93,7 @@ export default class AutocompleteProvider {
         };
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         return [];
     }
 
@@ -90,7 +101,7 @@ export default class AutocompleteProvider {
         return 'Default Provider';
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode | null {
         console.error('stub; should be implemented in subclasses');
         return null;
     }

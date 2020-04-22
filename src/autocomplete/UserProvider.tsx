@@ -1,4 +1,3 @@
-//@flow
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2017 Vector Creations Ltd
@@ -27,9 +26,13 @@ import QueryMatcher from './QueryMatcher';
 import _sortBy from 'lodash/sortBy';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
-import type {MatrixEvent, Room, RoomMember, RoomState} from 'matrix-js-sdk';
+import MatrixEvent from "matrix-js-sdk/src/models/event";
+import Room from "matrix-js-sdk/src/models/room";
+import RoomMember from "matrix-js-sdk/src/models/room-member";
+import RoomState from "matrix-js-sdk/src/models/room-state";
+import EventTimeline from "matrix-js-sdk/src/models/event-timeline";
 import {makeUserPermalink} from "../utils/permalinks/Permalinks";
-import type {Completion, SelectionRange} from "./Autocompleter";
+import {ICompletion, ISelectionRange} from "./Autocompleter";
 
 const USER_REGEX = /\B@\S*/g;
 
@@ -37,9 +40,15 @@ const USER_REGEX = /\B@\S*/g;
 // to allow you to tab-complete /mat into /(matthew)
 const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
 
+interface IRoomTimelineData {
+    timeline: EventTimeline;
+    liveEvent?: boolean;
+}
+
 export default class UserProvider extends AutocompleteProvider {
-    users: Array<RoomMember> = null;
-    room: Room = null;
+    matcher: QueryMatcher<RoomMember>;
+    users: RoomMember[];
+    room: Room;
 
     constructor(room: Room) {
         super(USER_REGEX, FORCED_USER_REGEX);
@@ -51,21 +60,19 @@ export default class UserProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
 
-        this._onRoomTimelineBound = this._onRoomTimeline.bind(this);
-        this._onRoomStateMemberBound = this._onRoomStateMember.bind(this);
-
-        MatrixClientPeg.get().on("Room.timeline", this._onRoomTimelineBound);
-        MatrixClientPeg.get().on("RoomState.members", this._onRoomStateMemberBound);
+        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
+        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
     }
 
     destroy() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room.timeline", this._onRoomTimelineBound);
-            MatrixClientPeg.get().removeListener("RoomState.members", this._onRoomStateMemberBound);
+            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
         }
     }
 
-    _onRoomTimeline(ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean, data: Object) {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean,
+                       data: IRoomTimelineData) => {
         if (!room) return;
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
@@ -79,9 +86,9 @@ export default class UserProvider extends AutocompleteProvider {
 
         // TODO: lazyload if we have no ev.sender room member?
         this.onUserSpoke(ev.sender);
-    }
+    };
 
-    _onRoomStateMember(ev: MatrixEvent, state: RoomState, member: RoomMember) {
+    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
         // ignore members in other rooms
         if (member.roomId !== this.room.roomId) {
             return;
@@ -89,16 +96,16 @@ export default class UserProvider extends AutocompleteProvider {
 
         // blow away the users cache
         this.users = null;
-    }
+    };
 
-    async getCompletions(query: string, selection: SelectionRange, force: boolean = false): Array<Completion> {
+    async getCompletions(rawQuery: string, selection: ISelectionRange, force = false): Promise<ICompletion[]> {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher
         if (this.users === null) this._makeUsers();
 
         let completions = [];
-        const {command, range} = this.getCurrentCommand(query, selection, force);
+        const {command, range} = this.getCurrentCommand(rawQuery, selection, force);
 
         if (!command) return completions;
 
@@ -163,7 +170,7 @@ export default class UserProvider extends AutocompleteProvider {
         this.matcher.setObjects(this.users);
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("User Autocomplete")}>
                 { completions }

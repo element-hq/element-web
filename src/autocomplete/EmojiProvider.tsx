@@ -22,36 +22,37 @@ import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
-import type {Completion, SelectionRange} from './Autocompleter';
+import {ICompletion, ISelectionRange} from './Autocompleter';
 import _uniq from 'lodash/uniq';
 import _sortBy from 'lodash/sortBy';
 import SettingsStore from "../settings/SettingsStore";
 import { shortcodeToUnicode } from '../HtmlUtils';
+import { EMOJI, IEmoji } from '../emoji';
 
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 
 const LIMIT = 20;
 
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
 const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
 
-// XXX: it's very unclear why we bother with this generated emojidata file.
-// all it means is that we end up bloating the bundle with precomputed stuff
-// which would be trivial to calculate and cache on demand.
-const EMOJI_SHORTNAMES = EMOJIBASE.sort((a, b) => {
+interface IEmojiShort {
+    emoji: IEmoji;
+    shortname: string;
+    _orderBy: number;
+}
+
+const EMOJI_SHORTNAMES: IEmojiShort[] = EMOJI.sort((a, b) => {
     if (a.group === b.group) {
         return a.order - b.order;
     }
     return a.group - b.group;
-}).map((emoji, index) => {
-    return {
-        emoji,
-        shortname: `:${emoji.shortcodes[0]}:`,
-        // Include the index so that we can preserve the original order
-        _orderBy: index,
-    };
-});
+}).map((emoji, index) => ({
+    emoji,
+    shortname: `:${emoji.shortcodes[0]}:`,
+    // Include the index so that we can preserve the original order
+    _orderBy: index,
+}));
 
 function score(query, space) {
     const index = space.indexOf(query);
@@ -63,6 +64,9 @@ function score(query, space) {
 }
 
 export default class EmojiProvider extends AutocompleteProvider {
+    matcher: QueryMatcher<IEmojiShort>;
+    nameMatcher: QueryMatcher<IEmojiShort>;
+
     constructor() {
         super(EMOJI_REGEX);
         this.matcher = new QueryMatcher(EMOJI_SHORTNAMES, {
@@ -80,7 +84,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         });
     }
 
-    async getCompletions(query: string, selection: SelectionRange, force?: boolean): Array<Completion> {
+    async getCompletions(query: string, selection: ISelectionRange, force?: boolean): Promise<ICompletion[]> {
         if (!SettingsStore.getValue("MessageComposerInput.suggestEmoji")) {
             return []; // don't give any suggestions if the user doesn't want them
         }
@@ -132,7 +136,7 @@ export default class EmojiProvider extends AutocompleteProvider {
         return '😃 ' + _t('Emoji');
     }
 
-    renderCompletions(completions: [React.Component]): ?React.Component {
+    renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
             <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("Emoji Autocomplete")}>
                 { completions }
