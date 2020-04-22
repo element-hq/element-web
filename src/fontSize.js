@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import dis from './dispatcher';
-import SettingsStore from './settings/SettingsStore';
+import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 export class FontWatcher {
     constructor(minSize, maxSize) {
@@ -43,7 +43,7 @@ export class FontWatcher {
         let fontSize = this._min_size < size ? size : this._min_size;
         fontSize = fontSize < this._max_size ? fontSize : this._max_size;
         if (fontSize != size) {
-            SettingsStore.setValue("font_size", null, fontSize);
+            SettingsStore.setValue("font_size", null, SettingLevel.Device, fontSize);
         }
         document.querySelector(":root").style.fontSize = fontSize + "px";
     }
