@@ -92,7 +92,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         };
 
         this._fetchBackupInfo();
-        this._queryKeyUploadAuth();
+        if (this.state.accountPassword) {
+            // If we have an account password in memory, let's simplify and
+            // assume it means password auth is also supported for device
+            // signing key upload as well. This avoids hitting the server to
+            // test auth flows, which may be slow under high load.
+            this.state.canUploadKeysWithPasswordOnly = true;
+        } else {
+            this._queryKeyUploadAuth();
+        }
 
         MatrixClientPeg.get().on('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
     }
