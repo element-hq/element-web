@@ -102,7 +102,7 @@ export default class UserProvider extends AutocompleteProvider {
         const MemberAvatar = sdk.getComponent('views.avatars.MemberAvatar');
 
         // lazy-load user list into matcher
-        if (this.users === null) this._makeUsers();
+        if (!this.users) this._makeUsers();
 
         let completions = [];
         const {command, range} = this.getCurrentCommand(rawQuery, selection, force);
@@ -158,7 +158,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     onUserSpoke(user: RoomMember) {
-        if (this.users === null) return;
+        if (!this.users) return;
         if (!user) return;
         if (user.userId === MatrixClientPeg.get().credentials.userId) return;
 
