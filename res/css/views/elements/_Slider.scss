@@ -17,6 +17,7 @@ limitations under the License.
 .mx_Slider {
     position: relative;
     margin: 0px;
+    flex-grow: 1;
 }
 
 .mx_Slider_dotContainer {
@@ -71,7 +72,6 @@ limitations under the License.
     width: 1rem;
     border-radius: 50%;
     background-color: $Slider-background-color;
-    margin-bottom: 5px;
     z-index: 0;
 }
 
