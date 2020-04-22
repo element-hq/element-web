@@ -25,13 +25,13 @@ import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
-import dis from "../../../../../dispatcher"
+import dis from "../../../../../dispatcher";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
         onUnignored: PropTypes.func.isRequired,
-        inProgress: PropTypes.bool.isRequired
+        inProgress: PropTypes.bool.isRequired,
     };
 
     _onUnignoreClicked = (e) => {
@@ -69,17 +69,16 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
 
-
     _onAction({action}) {
-        if (action === "ignore_state_changed"){
-            const ignoredUserIds =  MatrixClientPeg.get().getIgnoredUsers();
-            const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e))
-            this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored})
+        if (action === "ignore_state_changed") {
+            const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
+            const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e));
+            this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored});
         }
     }
 
     componentDidMount() {
-        this.dispatcherRef = dis.register(this._onAction)
+        this.dispatcherRef = dis.register(this._onAction);
     }
 
     componentWillUnmount() {
@@ -109,17 +108,15 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onUserUnignored = async (userId) => {
-        
-        const {ignoredUserIds, waitingUnignored} = this.state
+        const {ignoredUserIds, waitingUnignored} = this.state;
         const currentlyIgnoredUserIds = ignoredUserIds.filter(e=> !waitingUnignored.includes(e));
 
         const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
-            this.setState(({waitingUnignored})=>({waitingUnignored:[...waitingUnignored, userId]}))
+            this.setState(({waitingUnignored})=>({waitingUnignored: [...waitingUnignored, userId]}));
             MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
-        
     };
 
     _getInvitedRooms = () => {
@@ -230,7 +227,12 @@ export default class SecurityUserSettingsTab extends React.Component {
         if (!ignoredUserIds || ignoredUserIds.length === 0) return null;
 
         const userIds = ignoredUserIds
-            .map((u) => <IgnoredUser userId={u} onUnignored={this._onUserUnignored} key={u} inProgress={waitingUnignored.includes(u)} />);
+            .map((u) => <IgnoredUser
+             userId={u}
+             onUnignored={this._onUserUnignored}
+             key={u}
+             inProgress={waitingUnignored.includes(u)}
+             />);
 
         return (
             <div className='mx_SettingsTab_section'>
