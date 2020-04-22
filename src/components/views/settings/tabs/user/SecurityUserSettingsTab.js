@@ -114,7 +114,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
             currentlyIgnoredUserIds.splice(index, 1);
-            this.setState(({waitingUnignored})=>({waitingUnignored: [...waitingUnignored, userId]}));
+            this.setState(({waitingUnignored}) => ({waitingUnignored: [...waitingUnignored, userId]}));
             MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
     };
