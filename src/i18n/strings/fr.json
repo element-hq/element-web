@@ -2397,5 +2397,6 @@
     "Unable to upload": "Envoi impossible",
     "Currently indexing: %(currentRoom)s": "En train d’indexer : %(currentRoom)s",
     "Please supply a widget URL or embed code": "Veuillez fournir l’URL ou le code d’intégration du widget",
-    "Send a bug report with logs": "Envoyer un rapport d’anomalie avec les journaux"
+    "Send a bug report with logs": "Envoyer un rapport d’anomalie avec les journaux",
+    "Unable to query secret storage status": "Impossible de demander le statut du coffre secret"
 }
