@@ -642,7 +642,8 @@ enable_registration: true
 # Explicitly disable asking for MSISDNs from the registration
 # flow (overrides registrations_require_3pid if MSISDNs are set as required)
 #
-#disable_msisdn_registration: true
+disable_msisdn_registration: false
+threepid_behaviour_email: "local"
 
 # Mandate that users are only allowed to associate certain formats of
 # 3PIDs with accounts on this server.
