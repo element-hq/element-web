@@ -254,7 +254,7 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>
         );
 
-        let eventIndex = (
+        const eventIndex = (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
                 <EventIndexPanel />
