@@ -142,7 +142,7 @@ function useIsEncrypted(cli, room) {
 function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
     return useAsyncMemo(async () => {
         if (!canVerify) {
-            return false;
+            return undefined;
         }
         setUpdating(true);
         try {
@@ -153,7 +153,7 @@ function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
         } finally {
             setUpdating(false);
         }
-    }, [cli, member, canVerify], false);
+    }, [cli, member, canVerify], undefined);
 }
 
 function DeviceItem({userId, device}) {
@@ -1307,18 +1307,28 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const hasCrossSigningKeys =
         useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
+    const showDeviceListSpinner = devices === undefined;
     if (canVerify) {
-        verifyButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
-                if (hasCrossSigningKeys) {
-                    verifyUser(member);
-                } else {
-                    legacyVerifyUser(member);
-                }
-            }}>
-                {_t("Verify")}
-            </AccessibleButton>
-        );
+        if (hasCrossSigningKeys !== undefined) {
+            // Note: mx_UserInfo_verifyButton is for the end-to-end tests
+            verifyButton = (
+                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
+                    if (hasCrossSigningKeys) {
+                        verifyUser(member);
+                    } else {
+                        legacyVerifyUser(member);
+                    }
+                }}>
+                    {_t("Verify")}
+                </AccessibleButton>
+            );
+        } else if (!showDeviceListSpinner) {
+            // HACK: only show a spinner if the device section spinner is not shown,
+            // to avoid showing a double spinner
+            // We should ask for a design that includes all the different loading states here
+            const Spinner = sdk.getComponent('elements.Spinner');
+            verifyButton = <Spinner />;
+        }
     }
 
     const securitySection = (
@@ -1327,7 +1337,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
             <p>{ text }</p>
             { verifyButton }
             <DevicesSection
-                loading={devices === undefined}
+                loading={showDeviceListSpinner}
                 devices={devices}
                 userId={member.userId} />
         </div>
