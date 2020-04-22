@@ -25,11 +25,13 @@ import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
+import dis from "../../../../../dispatcher";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
         onUnignored: PropTypes.func.isRequired,
+        inProgress: PropTypes.bool.isRequired,
     };
 
     _onUnignoreClicked = (e) => {
@@ -40,7 +42,7 @@ export class IgnoredUser extends React.Component {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
-                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id}>
+                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id} disabled={this.props.inProgress}>
                     { _t('Unignore') }
                 </AccessibleButton>
                 <span id={id}>{ this.props.userId }</span>
@@ -58,9 +60,29 @@ export default class SecurityUserSettingsTab extends React.Component {
 
         this.state = {
             ignoredUserIds: MatrixClientPeg.get().getIgnoredUsers(),
+            waitingUnignored: [],
             managingInvites: false,
             invitedRoomAmt: invitedRooms.length,
         };
+
+        this._onAction = this._onAction.bind(this);
+    }
+
+
+    _onAction({action}) {
+        if (action === "ignore_state_changed") {
+            const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
+            const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e));
+            this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored});
+        }
+    }
+
+    componentDidMount() {
+        this.dispatcherRef = dis.register(this._onAction);
+    }
+
+    componentWillUnmount() {
+        dis.unregister(this.dispatcherRef);
     }
 
     _updateBlacklistDevicesFlag = (checked) => {
@@ -86,16 +108,15 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onUserUnignored = async (userId) => {
-        // Don't use this.state to get the ignored user list as it might be
-        // ever so slightly outdated. Instead, prefer to get a fresh list and
-        // update that.
-        const ignoredUsers = MatrixClientPeg.get().getIgnoredUsers();
-        const index = ignoredUsers.indexOf(userId);
+        const {ignoredUserIds, waitingUnignored} = this.state;
+        const currentlyIgnoredUserIds = ignoredUserIds.filter(e => !waitingUnignored.includes(e));
+
+        const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
-            ignoredUsers.splice(index, 1);
-            MatrixClientPeg.get().setIgnoredUsers(ignoredUsers);
+            currentlyIgnoredUserIds.splice(index, 1);
+            this.setState(({waitingUnignored}) => ({waitingUnignored: [...waitingUnignored, userId]}));
+            MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
-        this.setState({ignoredUsers});
     };
 
     _getInvitedRooms = () => {
@@ -201,10 +222,17 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     _renderIgnoredUsers() {
-        if (!this.state.ignoredUserIds || this.state.ignoredUserIds.length === 0) return null;
+        const {waitingUnignored, ignoredUserIds} = this.state;
 
-        const userIds = this.state.ignoredUserIds
-            .map((u) => <IgnoredUser userId={u} onUnignored={this._onUserUnignored} key={u} />);
+        if (!ignoredUserIds || ignoredUserIds.length === 0) return null;
+
+        const userIds = ignoredUserIds
+            .map((u) => <IgnoredUser
+             userId={u}
+             onUnignored={this._onUserUnignored}
+             key={u}
+             inProgress={waitingUnignored.includes(u)}
+             />);
 
         return (
             <div className='mx_SettingsTab_section'>
