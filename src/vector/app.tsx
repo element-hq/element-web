@@ -30,6 +30,7 @@ import {_td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
+import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 
 import url from 'url';
 
@@ -59,7 +60,7 @@ function routeUrl(location: Location) {
 
     console.log("Routing URL ", location.href);
     const s = getScreenFromLocation(location);
-    window.matrixChat.showScreen(s.screen, s.params);
+    (window.matrixChat as MatrixChatType).showScreen(s.screen, s.params);
 }
 
 function onHashChange(ev: HashChangeEvent) {

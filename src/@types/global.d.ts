@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import "matrix-react-sdk/src/@types/global"; // load matrix-react-sdk's type extensions first
-import type MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
+import type {Renderer} from "react-dom";
 
 declare global {
     interface Window {
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
-        matrixChat: MatrixChat;
+        matrixChat: ReturnType<Renderer>;
 
         // electron-only
         ipcRenderer: any;
