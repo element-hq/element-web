@@ -87,8 +87,10 @@ class Dot extends React.Component<DotIProps> {
 
         return <span onClick={this.props.onClick} className="mx_Slider_dotValue">
             <div className={className} />
-            <div>
+            <div className="mx_Slider_labelContainer">
+                <div className="mx_Slider_label">
                 {this.props.label}
+            </div>
             </div>
         </span>;
     }
