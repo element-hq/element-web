@@ -66,7 +66,7 @@ import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import {defer, IDeferred} from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
-import type LoggedInView from "./LoggedInView";
+import type LoggedInViewType from "./LoggedInView";
 
 /** constants for MatrixChat.state.view */
 export enum VIEWS {
@@ -214,7 +214,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private focusComposer: boolean;
     private subTitleStatus: string;
 
-    private readonly loggedInView: React.RefObject<LoggedInView>;
+    private readonly loggedInView: React.RefObject<LoggedInViewType>;
     private readonly dispatcherRef: any;
     private readonly themeWatcher: ThemeWatcher;
 
@@ -823,7 +823,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         let roomIndex = -1;
         for (let i = 0; i < allRooms.length; ++i) {
-            if (allRooms[i].roomId == this.state.currentRoomId) {
+            if (allRooms[i].roomId === this.state.currentRoomId) {
                 roomIndex = i;
                 break;
             }
@@ -1194,7 +1194,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // the saved sync to be loaded).
             const saveWelcomeUser = (ev) => {
                 if (
-                    ev.getType() == 'm.direct' &&
+                    ev.getType() === 'm.direct' &&
                     ev.getContent() &&
                     ev.getContent()[this.props.config.welcomeUserId]
                 ) {
@@ -1482,12 +1482,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
-                            "Data from an older version of Riot has been detected. "+
-                            "This will have caused end-to-end cryptography to malfunction "+
-                            "in the older version. End-to-end encrypted messages exchanged "+
-                            "recently whilst using the older version may not be decryptable "+
-                            "in this version. This may also cause messages exchanged with this "+
-                            "version to fail. If you experience problems, log out and back in "+
+                            "Data from an older version of Riot has been detected. " +
+                            "This will have caused end-to-end cryptography to malfunction " +
+                            "in the older version. End-to-end encrypted messages exchanged " +
+                            "recently whilst using the older version may not be decryptable " +
+                            "in this version. This may also cause messages exchanged with this " +
+                            "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
                         ),
                     });
@@ -1590,17 +1590,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     showScreen(screen: string, params?: {[key: string]: any}) {
-        if (screen == 'register') {
+        if (screen === 'register') {
             dis.dispatch({
                 action: 'start_registration',
                 params: params,
             });
-        } else if (screen == 'login') {
+        } else if (screen === 'login') {
             dis.dispatch({
                 action: 'start_login',
                 params: params,
             });
-        } else if (screen == 'forgot_password') {
+        } else if (screen === 'forgot_password') {
             dis.dispatch({
                 action: 'start_password_recovery',
                 params: params,
@@ -1616,32 +1616,32 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     params: params,
                 });
             }
-        } else if (screen == 'new') {
+        } else if (screen === 'new') {
             dis.dispatch({
                 action: 'view_create_room',
             });
-        } else if (screen == 'settings') {
+        } else if (screen === 'settings') {
             dis.dispatch({
                 action: 'view_user_settings',
             });
-        } else if (screen == 'welcome') {
+        } else if (screen === 'welcome') {
             dis.dispatch({
                 action: 'view_welcome_page',
             });
-        } else if (screen == 'home') {
+        } else if (screen === 'home') {
             dis.dispatch({
                 action: 'view_home_page',
             });
-        } else if (screen == 'start') {
+        } else if (screen === 'start') {
             this.showScreen('home');
             dis.dispatch({
                 action: 'require_registration',
             });
-        } else if (screen == 'directory') {
+        } else if (screen === 'directory') {
             dis.dispatch({
                 action: 'view_room_directory',
             });
-        } else if (screen == 'groups') {
+        } else if (screen === 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',
             });
@@ -1649,11 +1649,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({
                 action: 'start_complete_security',
             });
-        } else if (screen == 'post_registration') {
+        } else if (screen === 'post_registration') {
             dis.dispatch({
                 action: 'start_post_registration',
             });
-        } else if (screen.indexOf('room/') == 0) {
+        } else if (screen.indexOf('room/') === 0) {
             // Rooms can have the following formats:
             // #room_alias:domain or !opaque_id:domain
             const room = screen.substring(5);
@@ -1710,21 +1710,21 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 room_alias: undefined,
                 room_id: undefined,
             };
-            if (roomString[0] == '#') {
+            if (roomString[0] === '#') {
                 payload.room_alias = roomString;
             } else {
                 payload.room_id = roomString;
             }
 
             dis.dispatch(payload);
-        } else if (screen.indexOf('user/') == 0) {
+        } else if (screen.indexOf('user/') === 0) {
             const userId = screen.substring(5);
             dis.dispatch({
                 action: 'view_user_info',
                 userId: userId,
                 subAction: params.action,
             });
-        } else if (screen.indexOf('group/') == 0) {
+        } else if (screen.indexOf('group/') === 0) {
             const groupId = screen.substring(6);
 
             // TODO: Check valid group ID
@@ -1853,7 +1853,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private setPageSubtitle(subtitle='') {
+    private setPageSubtitle(subtitle = '') {
         if (this.state.currentRoomId) {
             const client = MatrixClientPeg.get();
             const room = client && client.getRoom(this.state.currentRoomId);
