@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// import font-size variables manually, ideally this scss would get loaded by the theme which has all variables in context
+@import "../../../node_modules/matrix-react-sdk/res/css/_font-sizes.scss";
+
 .mx_ErrorView {
     background: #c5e0f7;
     background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
@@ -33,7 +36,7 @@ limitations under the License.
     .mx_Button {
         border: 0;
         border-radius: 4px;
-        font-size: 18px;
+        font-size: $font-18px;
         margin-left: 4px;
         margin-right: 4px;
         min-width: 80px;
@@ -56,12 +59,12 @@ limitations under the License.
         justify-content: center;
     }
 
-    font-size: 1.067rem; // 16px
+    font-size: $font-16px;
     h1 {
-        font-size: 2.133rem; // 32px
+        font-size: $font-32px;
     }
     h2 {
-        font-size: 1.600rem; // 24px
+        font-size: $font-24px;
         color: #000;
     }
 
