@@ -72,6 +72,7 @@ export default class WidgetUtils {
         return room.currentState.maySendStateEvent('im.vector.modular.widgets', me);
     }
 
+    // TODO: Generify the name of this function. It's not just scalar.
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
      * @param  {[type]}  testUrlString URL to check
