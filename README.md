@@ -78,7 +78,7 @@ Riot is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
 
 1. Install or update `node.js` so that your `node` is at least v10.x.
 1. Install `yarn` if not present already.
@@ -288,6 +288,7 @@ yarn install
 yarn start
 ```
 
+
 Wait a few seconds for the initial build to finish; you should see something like:
 ```
 Hash: b0af76309dd56d7275c8
@@ -309,6 +310,23 @@ modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
+**Note**: The build script uses inotify by default on Linux to monitor directories 
+for changes. If the inotify watch limit is too low your build will silently fail.
+To avoid this issue, we recommend a limit of at least 128M.
+
+To set a new inotify watch limit, execute:
+
+```
+$ sudo sysctl fs.inotify.max_user_watches=131072
+$ sudo sysctl -p
+```
+
+If you wish, you can make this new limit permanent, by executing:
+
+```
+$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+$ sudo sysctl -p
+```
 ___
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be

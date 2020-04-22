@@ -35,7 +35,7 @@ const tray = require('./tray');
 const vectorMenu = require('./vectormenu');
 const webContentsHandler = require('./webcontents-handler');
 const updater = require('./updater');
-const protocolInit = require('./protocol');
+const {getProfileFromDeeplink, protocolInit, recordSSOSession} = require('./protocol');
 
 const windowStateKeeper = require('electron-window-state');
 const Store = require('electron-store');
@@ -68,7 +68,11 @@ if (argv["help"]) {
     app.exit();
 }
 
-if (argv['profile-dir']) {
+// check if we are passed a profile in the SSO callback url
+const userDataPathInProtocol = getProfileFromDeeplink(argv["_"]);
+if (userDataPathInProtocol) {
+    app.setPath('userData', userDataPathInProtocol);
+} else if (argv['profile-dir']) {
     app.setPath('userData', argv['profile-dir']);
 } else if (argv['profile']) {
     app.setPath('userData', `${app.getPath('userData')}-${argv['profile']}`);
@@ -232,6 +236,19 @@ ipcMain.on('ipcCall', async function(ev, payload) {
             break;
         case 'getConfig':
             ret = vectorConfig;
+            break;
+        case 'navigateBack':
+            if (mainWindow.webContents.canGoBack()) {
+                mainWindow.webContents.goBack();
+            }
+            break;
+        case 'navigateForward':
+            if (mainWindow.webContents.canGoForward()) {
+                mainWindow.webContents.goForward();
+            }
+            break;
+        case 'startSSOFlow':
+            recordSSOSession(args[0]);
             break;
 
         default:

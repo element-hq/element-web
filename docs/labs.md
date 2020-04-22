@@ -1,6 +1,7 @@
 # Labs features
 
-Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
+If Labs is enabled in the [Riot config](config.md), you can enable some of these features by going
+to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#riot-web:matrix.org](https://matrix.to/#/#riot-web:matrix.org) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
@@ -66,13 +67,24 @@ An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/224
 
 This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
 
-## Cross-signing (in development) (`feature_cross_signing`)
+## Cross-signing
 
 Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
 improves the device verification experience by allowing you to verify a user
 instead of verifying each of their devices.
 
-This feature is still in development and will be landing in several chunks.
+The feature is enabled by default and does not follow a traditional labs flag
+at the moment. If something goes wrong, add this to your config to disable it:
+```json
+{
+  "settingDefaults": {
+    "feature_cross_signing": false  
+  }
+}
+```
+
+The setting will be removed in a future release, enabling it non-optionally for
+all users.
 
 ## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
 

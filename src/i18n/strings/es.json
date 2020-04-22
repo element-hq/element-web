@@ -21,5 +21,7 @@
     "Invalid configuration: no default server specified.": "Configuración errónea: no se ha especificado servidor.",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Tu configuración de Riot contiene JSON inválido. Por favor corrige el error y recarga la página.",
     "The message from the parser is: %(message)s": "El mensaje del parser es: %(message)s",
-    "Invalid JSON": "JSON inválido"
+    "Invalid JSON": "JSON inválido",
+    "Open user settings": "Abrir opciones de usuario",
+    "Go to your browser to complete Sign In": "Abre tu navegador web para completar el registro"
 }
