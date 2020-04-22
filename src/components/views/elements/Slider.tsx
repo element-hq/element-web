@@ -30,6 +30,8 @@ type IProps = {
         // A function for formatting the the values
         displayFunc: (value: number) => string;
 
+        // Whether the slider is disabled
+        disabled: boolean;
 }
 
 export default class Slider extends React.Component<IProps> {
@@ -47,8 +49,9 @@ export default class Slider extends React.Component<IProps> {
         const dots = this.props.values.map(v =>
             <Dot active={v <= this.props.value}
                  label={this.props.displayFunc(v)}
-                 onClick={() => this.props.onSelectionChange(v)}
+                 onClick={this.props.disabled ? () => {} : () => this.props.onSelectionChange(v)}
                  key={v}
+                 disabled={this.props.disabled}
             />);
 
         const offset = this._offset(this.props.values, this.props.value);
@@ -57,10 +60,13 @@ export default class Slider extends React.Component<IProps> {
             <div>
                 <div className="mx_Slider_bar">
                     <hr />
-                    <div className="mx_Slider_selection">
-                        <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55rem + " + offset + "%)"}} />
-                        <hr style={{width: offset + "%"}} />
-                    </div>
+                    { this.props.disabled ?
+                        null :
+                        <div className="mx_Slider_selection">
+                            <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55rem + " + offset + "%)"}} />
+                            <hr style={{width: offset + "%"}} />
+                        </div>
+                    }
                 </div>
                 <div className="mx_Slider_dotContainer">
                     {dots}
@@ -79,18 +85,24 @@ type DotIProps = {
 
     // The label on the dot
     label: string,
+
+    // Whether the slider is disabled
+    disabled: boolean;
 }
 
 class Dot extends React.Component<DotIProps> {
     render(): React.ReactNode {
-        const className = "mx_Slider_dot" + (this.props.active ? " mx_Slider_dotActive" : "");
+        let className = "mx_Slider_dot"
+        if (!this.props.disabled && this.props.active) {
+            className += " mx_Slider_dotActive";
+        }
 
         return <span onClick={this.props.onClick} className="mx_Slider_dotValue">
             <div className={className} />
             <div className="mx_Slider_labelContainer">
                 <div className="mx_Slider_label">
-                {this.props.label}
-            </div>
+                    {this.props.label}
+                </div>
             </div>
         </span>;
     }
