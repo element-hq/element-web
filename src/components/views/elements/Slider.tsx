@@ -15,12 +15,10 @@ limitations under the License.
 */
 
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import { replaceableComponent } from '../../../utils/replaceableComponent';
 
-type SliderProps = {
+type IProps = {
         // A callback for the selected value
-        onSelectionChange: (value: number) => null;
+        onSelectionChange: (value: number) => void;
 
         // The current value of the slider
         value: number;
@@ -34,24 +32,7 @@ type SliderProps = {
 
 }
 
-export default class Slider extends React.Component<SliderProps> {
-    static propTypes = {
-
-        // A callback for the new value onclick
-        onSelectionChange: PropTypes.func,
-
-        // The current value of the slider
-        value: PropTypes.number,
-
-        // The range and values of the slider
-        // Currently only supports an ascending, constant interval range
-        values: PropTypes.arrayOf(PropTypes.number),
-
-        // A function for formatting the the values
-        displayFunc: PropTypes.func,
-
-    };
-
+export default class Slider extends React.Component<IProps> {
     _offset(values: number[], value: number): number {
         return (value - values[0]) / (values[values.length - 1] - values[0]) * 100;
     }
@@ -83,9 +64,9 @@ export default class Slider extends React.Component<SliderProps> {
     }
 }
 
-type DotProps = {
-    // Callback for behaviour onclick
-    onClick: () => null,
+type DotIProps = {
+    // Callback for behavior onclick
+    onClick: () => void,
 
     // Whether the dot should appear active
     active: boolean,
@@ -94,19 +75,7 @@ type DotProps = {
     label: string,
 }
 
-@replaceableComponent("views.elements.Dot")
-class Dot extends React.Component<DotProps> {
-    static propTypes = {
-        // Callback for behaviour onclick
-        onClick: PropTypes.func,
-
-        // Whether the dot should appear active
-        active: PropTypes.bool,
-
-        // The label on the dot
-        label: PropTypes.string,
-    }
-
+class Dot extends React.Component<DotIProps> {
     render(): React.ReactNode {
         const className = "mx_Slider_dot" + (this.props.active ? " mx_Slider_dotActive" : "");
 
