@@ -108,31 +108,35 @@ export default class SetupEncryptionBody extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
-            const ButtonPlaceholder = sdk.getComponent("elements.ButtonPlaceholder");
             return (
                 <div>
                     <p>{_t(
-                        "Use an existing session to verify this one, " +
+                        "Confirm your identity by verifying this login from one of your other sessions, " +
                         "granting it access to encrypted messages.",
                     )}</p>
                     <p>{_t(
-                        "If you can’t access one, <button>use your recovery key or recovery passphrase.</button>",
-                    {}, {
-                        button: sub => <AccessibleButton element="span"
-                            className="mx_linkButton"
-                            onClick={this._onUsePassphraseClick}
-                        >
-                            {sub}
-                        </AccessibleButton>,
-                    })}</p>
+                        "This requires the latest Riot on your other devices:",
+                    )}</p>
+
+                    <div className="mx_CompleteSecurity_clients">
+                        <div className="mx_CompleteSecurity_clients_desktop">
+                            <div>Riot Web</div>
+                            <div>Riot Desktop</div>
+                        </div>
+                        <div className="mx_CompleteSecurity_clients_mobile">
+                            <div>Riot iOS</div>
+                            <div>Riot X for Android</div>
+                        </div>
+                        <p>{_t("or another cross-signing capable Matrix client")}</p>
+                    </div>
+
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton
-                            kind="danger"
-                            onClick={this.onSkipClick}
-                        >
+                        <AccessibleButton kind="link" onClick={this.onSkipClick}>
+                            {_t("Use Recovery Passphrase or Key")}
+                        </AccessibleButton>
+                        <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
                         </AccessibleButton>
-                        <ButtonPlaceholder>{_t("Use your other device to continue…")}</ButtonPlaceholder>
                     </div>
                 </div>
             );
@@ -150,7 +154,7 @@ export default class SetupEncryptionBody extends React.Component {
             }
             return (
                 <div>
-                    <div className="mx_CompleteSecurity_heroIcon mx_E2EIcon_verified"></div>
+                    <div className="mx_CompleteSecurity_heroIcon mx_E2EIcon_verified" />
                     {message}
                     <div className="mx_CompleteSecurity_actionRow">
                         <AccessibleButton
