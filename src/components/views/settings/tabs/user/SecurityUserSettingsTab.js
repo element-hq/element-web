@@ -31,6 +31,7 @@ export class IgnoredUser extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
         onUnignored: PropTypes.func.isRequired,
+        inProgress: PropTypes.bool.isRequired
     };
 
     _onUnignoreClicked = (e) => {
@@ -41,7 +42,7 @@ export class IgnoredUser extends React.Component {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
-                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id}>
+                <AccessibleButton onClick={this._onUnignoreClicked} kind='primary_sm' aria-describedby={id} disabled={this.props.inProgress}>
                     { _t('Unignore') }
                 </AccessibleButton>
                 <span id={id}>{ this.props.userId }</span>
@@ -59,6 +60,7 @@ export default class SecurityUserSettingsTab extends React.Component {
 
         this.state = {
             ignoredUserIds: MatrixClientPeg.get().getIgnoredUsers(),
+            waitingUnignored: [],
             managingInvites: false,
             invitedRoomAmt: invitedRooms.length,
         };
@@ -69,7 +71,13 @@ export default class SecurityUserSettingsTab extends React.Component {
     _onAction({action}) {
         if (action === "ignore_state_changed"){
             const ignoredUserIds =  MatrixClientPeg.get().getIgnoredUsers();
-            this.setState({ignoredUserIds})
+            const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e))
+            console.log("-------------")
+            console.log("Got new ignored users", ignoredUserIds)
+            console.log("We were waiting for", this.state.waitingUnignored)
+            console.log("Now we wait for", newWaitingUnignored)
+            console.log("-------------")
+            this.setState({ignoredUserIds, waitingUnignored: newWaitingUnignored})
         }
     }
 
@@ -104,14 +112,20 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onUserUnignored = async (userId) => {
-        // Don't use this.state to get the ignored user list as it might be
-        // ever so slightly outdated. Instead, prefer to get a fresh list and
-        // update that.
-        const ignoredUserIds = this.state.ignoredUserIds;
-        const index = ignoredUserIds.indexOf(userId);
+        
+        const {ignoredUserIds, waitingUnignored} = this.state
+        console.log("--------GO IGNORE---")
+        console.log("ignored:", ignoredUserIds)
+        console.log("waiting for:", waitingUnignored)
+        const currentlyIgnoredUserIds = ignoredUserIds.filter(e=> !waitingUnignored.includes(e));
+        console.log("currentlyIgnored:", currentlyIgnoredUserIds)
+
+        const index = currentlyIgnoredUserIds.indexOf(userId);
         if (index !== -1) {
-            ignoredUserIds.splice(index, 1);
-            MatrixClientPeg.get().setIgnoredUsers(ignoredUserIds);
+            currentlyIgnoredUserIds.splice(index, 1);
+            this.setState(({waitingUnignored})=>({waitingUnignored:[...waitingUnignored, userId]}))
+            console.log("Sending to server", currentlyIgnoredUserIds)
+            MatrixClientPeg.get().setIgnoredUsers(currentlyIgnoredUserIds);
         }
         
     };
@@ -219,10 +233,16 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     _renderIgnoredUsers() {
-        if (!this.state.ignoredUserIds || this.state.ignoredUserIds.length === 0) return null;
+        const {waitingUnignored, ignoredUserIds} = this.state;
 
-        const userIds = this.state.ignoredUserIds
-            .map((u) => <IgnoredUser userId={u} onUnignored={this._onUserUnignored} key={u} />);
+        if (!ignoredUserIds || ignoredUserIds.length === 0) return null;
+
+
+        console.log("Rendering, waiting", waitingUnignored)
+        console.log("Rendering, ignored", ignoredUserIds)
+
+        const userIds = ignoredUserIds
+            .map((u) => <IgnoredUser userId={u} onUnignored={this._onUserUnignored} key={u} inProgress={waitingUnignored.includes(u)} />);
 
         return (
             <div className='mx_SettingsTab_section'>
