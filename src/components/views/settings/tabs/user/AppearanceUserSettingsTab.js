@@ -228,7 +228,7 @@ export default class StyleUserSettingsTab extends React.Component {
             <Slider
                 values={[12, 14, 16, 18, 20]}
                 value={this.state.fontSize}
-                updateFontSize={this._onFontSizeChanged}
+                onSelectionChange={this._onFontSizeChanged}
                 displayFunc={value => value + 'px'}
             />
             <Field
