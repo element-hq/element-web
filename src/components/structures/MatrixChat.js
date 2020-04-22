@@ -266,7 +266,7 @@ export default createReactClass({
 
         this.dispatcherRef = dis.register(this.onAction);
         this._themeWatcher = new ThemeWatcher();
-        this._fontWatcher = new FontWatcher(10, 20);
+        this._fontWatcher = new FontWatcher();
         this._themeWatcher.start();
         this._fontWatcher.start();
 

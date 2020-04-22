@@ -177,6 +177,16 @@ export const SETTINGS = {
         default: 16,
         controller: new FontSizeController(),
     },
+    "font_size_min": {
+        displayName: _td("Min font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 14,
+    },
+    "font_size_max": {
+        displayName: _td("Max font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 24,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
