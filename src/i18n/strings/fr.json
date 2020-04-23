@@ -2398,5 +2398,10 @@
     "Currently indexing: %(currentRoom)s": "En train d’indexer : %(currentRoom)s",
     "Please supply a widget URL or embed code": "Veuillez fournir l’URL ou le code d’intégration du widget",
     "Send a bug report with logs": "Envoyer un rapport d’anomalie avec les journaux",
-    "Unable to query secret storage status": "Impossible de demander le statut du coffre secret"
+    "Unable to query secret storage status": "Impossible de demander le statut du coffre secret",
+    "Verify this login": "Vérifier cette connexion",
+    "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "Confirmez votre identité en vérifiant cette connexion depuis une de vos autres sessions, cela lui permettra d’avoir accès aux messages chiffrés.",
+    "This requires the latest Riot on your other devices:": "Ceci nécessite la dernière version de Riot sur vos autres appareils :",
+    "or another cross-signing capable Matrix client": "ou un autre client Matrix compatible avec la signature croisée",
+    "Use Recovery Passphrase or Key": "Utiliser la phrase secrète ou la clé de récupération"
 }
