@@ -12,6 +12,10 @@ dropped. Ask in the room if you are unclear about any details here.**
 Enables font scaling options for accessibility. To alter the scale check the
 appearance tab in settings.
 
+## Alternate message layouts (`feature_alternate_message_layouts`)
+
+Enables options in rooms settings to switch between message layouts such as the default and "irc-like" layouts.
+
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
