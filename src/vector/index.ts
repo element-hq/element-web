@@ -199,9 +199,21 @@ async function start() {
         ]);
     }
 }
+
 start().catch(err => {
     console.error(err);
-    if (!acceptBrowser) {
-        // TODO redirect to static incompatible browser page
-    }
+    // show the static error in an iframe to not lose any context / console data
+    // with some basic styling to make the iframe full page
+    delete document.body.style.height;
+    const iframe = document.createElement("iframe");
+    iframe.src = acceptBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.position = "absolute";
+    iframe.style.top = "0";
+    iframe.style.left = "0";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.border = "0";
+    document.getElementById("matrixchat").appendChild(iframe);
 });
