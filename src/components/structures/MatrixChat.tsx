@@ -69,7 +69,7 @@ import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
 
 /** constants for MatrixChat.state.view */
-export enum VIEWS {
+export enum Views {
     // a special initial state which is only used at startup, while we are
     // trying to re-animate a matrix client or register as a guest.
     LOADING = 0,
@@ -152,7 +152,7 @@ interface IProps { // TODO type things better
 
 interface IState {
     // the master view we are showing.
-    view: VIEWS;
+    view: Views;
     // What the LoggedInView would be showing if visible
     page_type?: PageTypes;
     // The ID of the room we're viewing. This is either populated directly
@@ -193,7 +193,6 @@ interface IState {
 }
 
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
-    static VIEWS = VIEWS; // we export this so that the integration tests can use it :-S
     static displayName = "MatrixChat";
 
     static defaultProps = {
@@ -222,7 +221,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         super(props, context);
 
         this.state = {
-            view: VIEWS.LOADING,
+            view: Views.LOADING,
             collapseLhs: false,
             leftDisabled: false,
             middleDisabled: false,
@@ -538,7 +537,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     this.screenAfterLogin = payload.screenAfterLogin;
                 }
                 this.setStateForNewView({
-                    view: VIEWS.LOGIN,
+                    view: Views.LOGIN,
                 });
                 this.notifyNewScreen('login');
                 ThemeController.isLogin = true;
@@ -546,12 +545,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'start_post_registration':
                 this.setState({
-                    view: VIEWS.POST_REGISTRATION,
+                    view: Views.POST_REGISTRATION,
                 });
                 break;
             case 'start_password_recovery':
                 this.setStateForNewView({
-                    view: VIEWS.FORGOT_PASSWORD,
+                    view: Views.FORGOT_PASSWORD,
                 });
                 this.notifyNewScreen('forgot_password');
                 break;
@@ -706,10 +705,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'on_logged_in':
                 if (
                     !Lifecycle.isSoftLogout() &&
-                    this.state.view !== VIEWS.LOGIN &&
-                    this.state.view !== VIEWS.REGISTER &&
-                    this.state.view !== VIEWS.COMPLETE_SECURITY &&
-                    this.state.view !== VIEWS.E2E_SETUP
+                    this.state.view !== Views.LOGIN &&
+                    this.state.view !== Views.REGISTER &&
+                    this.state.view !== Views.COMPLETE_SECURITY &&
+                    this.state.view !== Views.E2E_SETUP
                 ) {
                     this.onLoggedIn();
                 }
@@ -781,7 +780,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private async startRegistration(params: {[key: string]: string}) {
         const newState: Partial<IState> = {
-            view: VIEWS.REGISTER,
+            view: Views.REGISTER,
         };
 
         // Only honour params if they are all present, otherwise we reset
@@ -914,7 +913,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 presentedId += "/" + roomInfo.event_id;
             }
             this.setState({
-                view: VIEWS.LOGGED_IN,
+                view: Views.LOGGED_IN,
                 currentRoomId: roomInfo.room_id || null,
                 page_type: PageTypes.RoomView,
                 thirdPartyInvite: roomInfo.third_party_invite,
@@ -938,7 +937,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private viewSomethingBehindModal() {
-        if (this.state.view !== VIEWS.LOGGED_IN) {
+        if (this.state.view !== Views.LOGGED_IN) {
             this.viewWelcome();
             return;
         }
@@ -949,7 +948,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private viewWelcome() {
         this.setStateForNewView({
-            view: VIEWS.WELCOME,
+            view: Views.WELCOME,
         });
         this.notifyNewScreen('welcome');
         ThemeController.isLogin = true;
@@ -959,7 +958,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private viewHome() {
         // The home page requires the "logged in" view, so we'll set that.
         this.setStateForNewView({
-            view: VIEWS.LOGGED_IN,
+            view: Views.LOGGED_IN,
         });
         this.setPage(PageTypes.HomePage);
         this.notifyNewScreen('home');
@@ -1216,7 +1215,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private async onLoggedIn() {
         ThemeController.isLogin = false;
-        this.setStateForNewView({ view: VIEWS.LOGGED_IN });
+        this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
         if (this.screenAfterLogin && this.screenAfterLogin.screen) {
@@ -1285,7 +1284,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onLoggedOut() {
         this.notifyNewScreen('login');
         this.setStateForNewView({
-            view: VIEWS.LOGIN,
+            view: Views.LOGIN,
             ready: false,
             collapseLhs: false,
             currentRoomId: null,
@@ -1302,7 +1301,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private onSoftLogout() {
         this.notifyNewScreen('soft_logout');
         this.setStateForNewView({
-            view: VIEWS.SOFT_LOGOUT,
+            view: Views.SOFT_LOGOUT,
             ready: false,
             collapseLhs: false,
             currentRoomId: null,
@@ -1824,7 +1823,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     onFinishPostRegistration = () => {
         // Don't confuse this with "PageType" which is the middle window to show
         this.setState({
-            view: VIEWS.LOGGED_IN,
+            view: Views.LOGGED_IN,
         });
         this.showScreen("settings");
     };
@@ -1948,7 +1947,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // Auto-enable cross-signing for the new session when key found in
             // secret storage.
             SettingsStore.setValue("feature_cross_signing", null, SettingLevel.DEVICE, true);
-            this.setStateForNewView({ view: VIEWS.COMPLETE_SECURITY });
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (
             SettingsStore.getValue("feature_cross_signing") &&
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
@@ -1956,7 +1955,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // This will only work if the feature is set to 'enable' in the config,
             // since it's too early in the lifecycle for users to have turned the
             // labs flag on.
-            this.setStateForNewView({ view: VIEWS.E2E_SETUP });
+            this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
         }
@@ -1975,21 +1974,21 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         let view;
 
-        if (this.state.view === VIEWS.LOADING) {
+        if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
             view = (
                 <div className="mx_MatrixChat_splash">
                     <Spinner />
                 </div>
             );
-        } else if (this.state.view === VIEWS.COMPLETE_SECURITY) {
+        } else if (this.state.view === Views.COMPLETE_SECURITY) {
             const CompleteSecurity = sdk.getComponent('structures.auth.CompleteSecurity');
             view = (
                 <CompleteSecurity
                     onFinished={this.onCompleteSecurityE2eSetupFinished}
                 />
             );
-        } else if (this.state.view === VIEWS.E2E_SETUP) {
+        } else if (this.state.view === Views.E2E_SETUP) {
             const E2eSetup = sdk.getComponent('structures.auth.E2eSetup');
             view = (
                 <E2eSetup
@@ -1997,14 +1996,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     accountPassword={this.accountPassword}
                 />
             );
-        } else if (this.state.view === VIEWS.POST_REGISTRATION) {
+        } else if (this.state.view === Views.POST_REGISTRATION) {
             // needs to be before normal PageTypes as you are logged in technically
             const PostRegistration = sdk.getComponent('structures.auth.PostRegistration');
             view = (
                 <PostRegistration
                     onComplete={this.onFinishPostRegistration} />
             );
-        } else if (this.state.view === VIEWS.LOGGED_IN) {
+        } else if (this.state.view === Views.LOGGED_IN) {
             // store errors stop the client syncing and require user intervention, so we'll
             // be showing a dialog. Don't show anything else.
             const isStoreError = this.state.syncError && this.state.syncError instanceof InvalidStoreError;
@@ -2019,15 +2018,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                  */
                 const LoggedInView = sdk.getComponent('structures.LoggedInView');
                 view = (
-                    <LoggedInView ref={this.loggedInView}
-                                  matrixClient={MatrixClientPeg.get()}
-                                  onRoomCreated={this.onRoomCreated}
-                                  onCloseAllSettings={this.onCloseAllSettings}
-                                  onRegistered={this.onRegistered}
-                                  currentRoomId={this.state.currentRoomId}
-                                  showCookieBar={this.state.showCookieBar}
-                                  {...this.props}
-                                  {...this.state}
+                    <LoggedInView
+                        {...this.props}
+                        {...this.state}
+                        ref={this.loggedInView}
+                        matrixClient={MatrixClientPeg.get()}
+                        onRoomCreated={this.onRoomCreated}
+                        onCloseAllSettings={this.onCloseAllSettings}
+                        onRegistered={this.onRegistered}
+                        currentRoomId={this.state.currentRoomId}
+                        showCookieBar={this.state.showCookieBar}
                     />
                 );
             } else {
@@ -2049,10 +2049,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     </div>
                 );
             }
-        } else if (this.state.view === VIEWS.WELCOME) {
+        } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome {...this.getServerProperties()} />;
-        } else if (this.state.view === VIEWS.REGISTER) {
+        } else if (this.state.view === Views.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (
                 <Registration
@@ -2069,7 +2069,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === VIEWS.FORGOT_PASSWORD) {
+        } else if (this.state.view === Views.FORGOT_PASSWORD) {
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             view = (
                 <ForgotPassword
@@ -2079,7 +2079,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === VIEWS.LOGIN) {
+        } else if (this.state.view === Views.LOGIN) {
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
@@ -2093,7 +2093,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === VIEWS.SOFT_LOGOUT) {
+        } else if (this.state.view === Views.SOFT_LOGOUT) {
             const SoftLogout = sdk.getComponent('structures.auth.SoftLogout');
             view = (
                 <SoftLogout
