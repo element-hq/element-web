@@ -27,6 +27,8 @@ import SdkConfig from "./SdkConfig";
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
 
+// TODO: Generify the name of this class and all components within - it's not just for Scalar.
+
 export default class ScalarAuthClient {
     constructor(apiUrl, uiUrl) {
         this.apiUrl = apiUrl;

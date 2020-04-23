@@ -188,13 +188,14 @@ export default class AppTile extends React.Component {
         }
     }
 
+    // TODO: Generify the name of this function. It's not just scalar tokens.
     /**
      * Adds a scalar token to the widget URL, if required
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
         if (!WidgetUtils.isScalarUrl(this.props.app.url)) {
-            console.warn('Non-scalar widget, not setting scalar token!', url);
+            console.warn('Widget does not match integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
@@ -218,7 +219,7 @@ export default class AppTile extends React.Component {
 
         const defaultManager = managers.getPrimaryManager();
         if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
-            console.warn('Non-scalar manager, not setting scalar token!', url);
+            console.warn('Unknown integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
