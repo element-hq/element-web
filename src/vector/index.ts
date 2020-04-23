@@ -208,7 +208,7 @@ start().catch(err => {
     // with some basic styling to make the iframe full page
     delete document.body.style.height;
     const iframe = document.createElement("iframe");
-    iframe.src = acceptBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
+    iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.position = "absolute";
