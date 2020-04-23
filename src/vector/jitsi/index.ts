@@ -49,12 +49,19 @@ let widgetApi: WidgetApi;
             return <string>query[name];
         };
 
+        // If we have these params, expect a widget API to be available (ie. to be in an iframe
+        // inside a matrix client). Otherwise, assume we're on our own, eg. have been popped
+        // out into a browser.
+        const parentUrl = qsParam('parentUrl', true);
+        const widgetId = qsParam('widgetId', true);
+
         // Set this up as early as possible because Riot will be hitting it almost immediately.
-        widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
-            Capability.AlwaysOnScreen,
-            Capability.GetRiotWebConfig,
-        ]);
-        widgetApi.expectingExplicitReady = true;
+        if (parentUrl && widgetId) {
+            widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
+                Capability.AlwaysOnScreen,
+            ]);
+            widgetApi.expectingExplicitReady = true;
+        }
 
         // Populate the Jitsi params now
         jitsiDomain = qsParam('conferenceDomain');
@@ -63,16 +70,10 @@ let widgetApi: WidgetApi;
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
 
-        await widgetApi.waitReady();
-        await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
-
-        const riotConfig = await widgetApi.getRiotConfig();
-
-        // Get the Jitsi Meet API loaded up as fast as possible, but ensure that the widget's postMessage
-        // receiver (WidgetApi) is up and running first.
-        const scriptTag = document.createElement("script");
-        scriptTag.src = riotConfig['jitsi']['externalApiUrl'];
-        document.body.appendChild(scriptTag);
+        if (widgetApi) {
+            await widgetApi.waitReady();
+            await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
+        }
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
@@ -94,8 +95,13 @@ function joinConference() { // event handler bound in HTML
     switchVisibleContainers();
 
     // noinspection JSIgnoredPromiseFromCall
-    widgetApi.setAlwaysOnScreen(true); // ignored promise because we don't care if it works
+    if (widgetApi) widgetApi.setAlwaysOnScreen(true); // ignored promise because we don't care if it works
 
+    console.warn(
+        "[Jitsi Widget] The next few errors about failing to parse URL parameters are fine if " +
+        "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
+        "our fragment values and not recognizing the options.",
+    );
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, {
         width: "100%",
         height: "100%",
@@ -116,7 +122,7 @@ function joinConference() { // event handler bound in HTML
         switchVisibleContainers();
 
         // noinspection JSIgnoredPromiseFromCall
-        widgetApi.setAlwaysOnScreen(false); // ignored promise because we don't care if it works
+        if (widgetApi) widgetApi.setAlwaysOnScreen(false); // ignored promise because we don't care if it works
 
         document.getElementById("jitsiContainer").innerHTML = "";
     });

@@ -13,6 +13,7 @@
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
+        "feature_cross_signing": "enable"
     },
     "piwik": {
         "url": "https://piwik.riot.im/",

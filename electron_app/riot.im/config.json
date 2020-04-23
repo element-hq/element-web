@@ -23,14 +23,8 @@
         "siteId": 1,
         "policyUrl": "https://matrix.org/legal/riot-im-cookie-policy"
     },
-    "phasedRollOut": {
-        "feature_lazyloading": {
-            "offset": 1539684000000,
-            "period": 604800000
-        }
-    },
     "features": {
-        "feature_lazyloading": "enable"
+        "feature_cross_signing": "enable"
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false,
