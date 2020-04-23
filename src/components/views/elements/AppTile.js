@@ -569,12 +569,14 @@ export default class AppTile extends React.Component {
      *
      * @returns {string} url with temlate variables replaced
      */
-    _templatedUrl(u) {
+    _templatedUrl(u, widgetType: string) {
+        const targetData = {};
+        if (WidgetType.JITSI.matches(widgetType)) {
+            targetData['domain'] = 'jitsi.riot.im'; // v1 jitsi widgets have this hardcoded
+        }
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const myUser = MatrixClientPeg.get().getUser(myUserId);
-        const vars = Object.assign({
-            domain: "jitsi.riot.im", // v1 widgets have this hardcoded
-        }, this.props.app.data, {
+        const vars = Object.assign(targetData, this.props.app.data, {
             'matrix_user_id': myUserId,
             'matrix_room_id': this.props.room.roomId,
             'matrix_display_name': myUser ? myUser.displayName : myUserId,
@@ -611,18 +613,19 @@ export default class AppTile extends React.Component {
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
         }
-        return this._templatedUrl(url);
+        return this._templatedUrl(url, this.props.app.type);
     }
 
     _getPopoutUrl() {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
                 WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                this.props.app.type
             );
         } else {
             // use app.url, not state.widgetUrl, because we want the one without
             // the wURL params for the popped-out version.
-            return this._templatedUrl(this._getSafeUrl(this.props.app.url));
+            return this._templatedUrl(this._getSafeUrl(this.props.app.url), this.props.app.type);
         }
     }
 
