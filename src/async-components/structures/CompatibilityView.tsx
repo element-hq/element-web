@@ -25,7 +25,7 @@ interface IProps {
     onAccept: () => void;
 }
 
-const CompatibilityPage: React.FC<IProps> = ({ onAccept }) => {
+const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
     return <div className="mx_ErrorView">
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">
@@ -404,5 +404,5 @@ const CompatibilityPage: React.FC<IProps> = ({ onAccept }) => {
     </div>;
 };
 
-export default CompatibilityPage;
+export default CompatibilityView;
 

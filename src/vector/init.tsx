@@ -148,16 +148,16 @@ export async function loadApp(fragParams: {}) {
 export async function showError(title: string, messages?: string[]) {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
-        "../components/structures/ErrorView")).default;
+        "../async-components/structures/ErrorView")).default;
     window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
         document.getElementById('matrixchat'));
 }
 
 export async function showIncompatibleBrowser(onAccept) {
-    const CompatibilityPage = (await import(
-        /* webpackChunkName: "compatibility-page" */
-        "../components/structures/CompatibilityPage")).default;
-    window.matrixChat = ReactDOM.render(<CompatibilityPage onAccept={onAccept} />,
+    const CompatibilityView = (await import(
+        /* webpackChunkName: "compatibility-view" */
+        "../async-components/structures/CompatibilityView")).default;
+    window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
         document.getElementById('matrixchat'));
 }
 
