@@ -30,6 +30,9 @@ import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
+import classNames from 'classnames';
+import ResizeHandle from '../elements/ResizeHandle';
+import {Resizer, FixedDistributor} from '../../../resizer';
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -60,6 +63,7 @@ export default createReactClass({
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
         this.dispatcherRef = dis.register(this.onAction);
+        this._createResizer();
     },
 
     componentWillUnmount: function() {
@@ -69,6 +73,10 @@ export default createReactClass({
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
+        if (this.resizer) {
+            this.resizer.detach();
+            this.resizer = null;
+        }
     },
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -154,6 +162,30 @@ export default createReactClass({
         this._launchManageIntegrations();
     },
 
+    _createResizer: function() {
+        if (!this.resizeContainer) {
+            return;
+        }
+
+        const classNames = {
+            handle: "mx_ResizeHandle",
+            vertical: "mx_ResizeHandle_vertical",
+            resizing: "mx_AppsDrawer_resizing",
+        };
+        const resizer = new Resizer(
+            this.resizeContainer,
+            FixedDistributor,
+            {},
+        );
+        resizer.setClassNames(classNames);
+        resizer.attach();
+        this.resizer = resizer;
+    },
+
+    _setResizeContainerRef: function(div) {
+        this.resizeContainer = div;
+    },
+
     render: function() {
         const apps = this.state.apps.map((app, index, arr) => {
             const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
@@ -191,6 +223,13 @@ export default createReactClass({
             </AccessibleButton>;
         }
 
+        const containerStyle = {
+            maxHeight: Math.max(this.props.maxHeight - 50, 300),
+        };
+        if (!this.props.showApps && this.resizer) {
+            this.resizer.forHandleAt(0).item.clearSize();
+        }
+
         let spinner;
         if (
             apps.length === 0 && WidgetEchoStore.roomHasPendingWidgets(
@@ -202,12 +241,20 @@ export default createReactClass({
             spinner = <Loader />;
         }
 
+        const classes = classNames({
+            "mx_AppsDrawer": true,
+            "mx_AppsDrawer_hidden": this.props.hide,
+            "mx_AppsDrawer_fullWidth": apps.length < 2,
+            "mx_AppsDrawer_minimised": !this.props.showApps,
+        });
+
         return (
-            <div className={'mx_AppsDrawer' + (this.props.hide ? ' mx_AppsDrawer_hidden' : '')}>
-                <div id='apps' className='mx_AppsContainer'>
+            <div className={classes} ref={this._setResizeContainerRef}>
+                <div id='apps' className='mx_AppsContainer' style={containerStyle}>
                     { apps }
                     { spinner }
                 </div>
+                <ResizeHandle vertical={true} />
                 { this._canUserModify() && addWidget }
             </div>
         );

@@ -16,9 +16,10 @@ limitations under the License.
 */
 
 /*
- Minimum size for usual AppTiles and fixed size for mini-tiles.
+ Size settings
 */
-$AppTileMinHeight: 300px;
+$AppsDrawerMinHeight: 50px;
+$AppsDrawerDefaultHeight: 300px;
 $MiniAppTileHeight: 114px;
 
 .mx_AppsDrawer {
@@ -35,6 +36,13 @@ $MiniAppTileHeight: 114px;
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
+    min-height: $AppsDrawerMinHeight;
+    height: $AppsDrawerDefaultHeight;
+}
+
+.mx_AppsDrawer_minimised .mx_AppsContainer {
+    min-height: inherit;
+    height: inherit;
 }
 
 .mx_AddWidget_button {
@@ -67,7 +75,6 @@ $MiniAppTileHeight: 114px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
-    min-height: $AppTileMinHeight;
 }
 
 .mx_AppTile:last-child {
@@ -83,7 +90,6 @@ $MiniAppTileHeight: 114px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
-    min-height: $AppTileMinHeight;
 }
 
 .mx_AppTile_mini {
@@ -377,4 +383,28 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppLoading iframe {
     display: none;
+}
+
+/* Hidden resize handle (Apptile bottom serves as indicator) */
+.mx_AppsDrawer .mx_ResizeHandle > div {
+    background: inherit;
+}
+
+.mx_AppsDrawer_fullWidth .mx_ResizeHandle {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mx_AppsDrawer_minimised .mx_ResizeHandle {
+    display: none;
+}
+
+/* Avoid apptile iframes capturing mouse event focus when resizing */
+.mx_AppsDrawer_resizing iframe {
+    pointer-events: none;
+}
+
+.mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {
+    z-index: 1;
 }
