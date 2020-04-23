@@ -636,7 +636,10 @@ export default class AppTile extends React.Component {
         if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol)) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
-        return safeWidgetUrl;
+
+        // Replace all the dollar signs back to dollar signs as they don't affect HTTP at all.
+        // We also need the dollar signs in-tact for variable substitution.
+        return safeWidgetUrl.replace(/%24/g, '$');
     }
 
     _getTileTitle() {
