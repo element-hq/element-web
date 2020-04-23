@@ -39,12 +39,10 @@ const CompatibilityPage: React.FC<IProps> = ({ onAccept }) => {
             <div className="mx_HomePage_col">
                 <div className="mx_HomePage_row">
                     <div>
-                        <h2 id="step1_heading">{ _t("Use Riot in a browser") }</h2>
-                        <p>{ _t("Sorry, your browser is <b>not</b> able to run Riot.", {}, { 'b': (sub) => <b>{sub}</b> }) } </p>
+                        <h2 id="step1_heading">{ _t("Your browser can't run Riot") }</h2>
                         <p>
                             { _t(
-                                "Riot uses many advanced browser features, some of which are not available " +
-                                "or experimental in your current browser.",
+                                "Riot uses advanced browser features which aren't supported by your current browser.",
                             ) }
                         </p>
                         <p>
@@ -61,10 +59,8 @@ const CompatibilityPage: React.FC<IProps> = ({ onAccept }) => {
                         </p>
                         <p>
                             { _t(
-                                "With your current browser, the look and feel of the application may be " +
-                                "completely incorrect, and some or all features may not function. " +
-                                "If you want to try it anyway you can continue, but you are on your own in terms " +
-                                "of any issues you may encounter!",
+                                "You can continue using your current browser, but some or all features may not work " +
+                                "and the look and feel of the application may be incorrect.",
                             ) }
                         </p>
                         <button onClick={onAccept}>
