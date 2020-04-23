@@ -156,8 +156,7 @@ export async function showError(title: string, messages?: string[]) {
 export async function showIncompatibleBrowser(onAccept) {
     const CompatibilityPage = (await import(
         /* webpackChunkName: "compatibility-page" */
-        /* webpackPreload: true */
-        "matrix-react-sdk/src/components/structures/CompatibilityPage")).default;
+        "../components/structures/CompatibilityPage")).default;
     window.matrixChat = ReactDOM.render(<CompatibilityPage onAccept={onAccept} />,
         document.getElementById('matrixchat'));
 }
