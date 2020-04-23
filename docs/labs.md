@@ -86,14 +86,6 @@ at the moment. If something goes wrong, add this to your config to disable it:
 The setting will be removed in a future release, enabling it non-optionally for
 all users.
 
-## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
-
-Adds support for search in E2E encrypted rooms. This enables an event indexer
-that downloads, stores, and indexes room messages for E2E encrypted rooms.
-
-The existing search will transparently work for encrypted rooms just like it
-does for non-encrypted.
-
 ## Bridge info tab (`feature_bridge_state`)
 
 Adds a "Bridge Info" tab to the Room Settings dialog, if a compatible bridge is
