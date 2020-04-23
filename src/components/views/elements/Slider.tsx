@@ -35,14 +35,40 @@ type IProps = {
 }
 
 export default class Slider extends React.Component<IProps> {
+    // offset is a terrible inverse approximation.
+    // if the values represents some function f(x) = y where x is the 
+    // index of the array and y = values[x] then offset(f, y) = x
+    // s.t f(x) = y.
+    // it assumes a monotonic function and interpolates linearly between
+    // y values.
+    // Offset is used for finding the location of a value on a
+    // non linear slider.
     _offset(values: number[], value: number): number {
-        const min = values[0];
-        const max = values[values.length - 1];
+        // the index of the first number greater than value.
+        let closest = values.reduce((prev, curr) => {
+            return (value > curr ? prev + 1 : prev);
+          }, 0);
 
-        // Clamp value between min and max
-        value = Math.min(Math.max(value, min), max);
+        // Off the left
+        if (closest == 0) {
+            return 0;
+        }
 
-        return (value - min) / (max - min) * 100;
+        // Off the right
+        if (closest == values.length) {
+            return 100;
+        }
+
+        // Now 
+        const closestLessValue = values[closest - 1];
+        const closestGreaterValue = values[closest];
+
+        const intervalWidth = 1 / (values.length - 1);
+
+        const linearInterpolation = (value - closestLessValue) / (closestGreaterValue - closestLessValue)
+
+        return 100 * (closest - 1 + linearInterpolation) * intervalWidth
+
     }
 
     render(): React.ReactNode {
