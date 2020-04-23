@@ -36,7 +36,7 @@ export default class StyleUserSettingsTab extends React.Component {
             ...this._calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
-
+            useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
         };
     }
 
@@ -224,6 +224,7 @@ export default class StyleUserSettingsTab extends React.Component {
     }
 
     _renderFontSection() {
+        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
@@ -233,10 +234,15 @@ export default class StyleUserSettingsTab extends React.Component {
                     value={this.state.fontSize}
                     onSelectionChange={this._onFontSizeChanged}
                     displayFunc={value => {}}
-                    disabled={false}
+                    disabled={this.state.useCustomFontSize}
                 />
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
             </div>
+            <SettingsFlag
+                name="useCustomFontSize"
+                level={SettingLevel.ACCOUNT}
+                onChange={(checked)=> this.setState({useCustomFontSize: checked})}
+            />
             <Field
                 type="text"
                 label={_t("Font size")}
@@ -245,6 +251,7 @@ export default class StyleUserSettingsTab extends React.Component {
                 value={this.state.fontSize}
                 id="font_size_field"
                 onChange={(ev) => this._onFontSizeChanged(ev.target.value)}
+                disabled={!this.state.useCustomFontSize}
             />
         </div>;
     }

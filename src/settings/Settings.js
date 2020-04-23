@@ -187,6 +187,11 @@ export const SETTINGS = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: 24,
     },
+    "useCustomFontSize": {
+        displayName: _td("Custom font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
+    },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable Emoji suggestions while typing'),
