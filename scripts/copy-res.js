@@ -67,6 +67,7 @@ const COPY_LIST = [
     ["node_modules/olm/olm_legacy.js", "webapp", { directwatch: 1 }],
     ["./config.json", "webapp", { directwatch: 1 }],
     ["contribute.json", "webapp"],
+    ["node_modules/matrix-react-sdk/res/decoder-ring/**", "webapp/decoder-ring"],
 ];
 
 const parseArgs = require('minimist');
