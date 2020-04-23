@@ -2390,5 +2390,10 @@
     "Currently indexing: %(currentRoom)s": "Indexelés alatt: %(currentRoom)s",
     "Send a bug report with logs": "Hibajelentés beküldése naplóval",
     "Please supply a widget URL or embed code": "Add meg a kisalkalmazás URL-jét vagy a beágyazott kódot",
-    "Verify this login": "Belépés ellenőrzése"
+    "Verify this login": "Belépés ellenőrzése",
+    "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.",
+    "This requires the latest Riot on your other devices:": "A Riot legújabb kliensére van ehhez szükséged a többi eszközödön:",
+    "or another cross-signing capable Matrix client": "vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre",
+    "Use Recovery Passphrase or Key": "Használd a Visszaállítási Jelmondatot vagy Kulcsot",
+    "Unable to query secret storage status": "A biztonsági tároló állapotát nem lehet lekérdezni"
 }
