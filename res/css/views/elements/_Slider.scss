@@ -30,30 +30,30 @@ limitations under the License.
     display: flex;
     box-sizing: border-box;
     position: absolute;
-    height: 1rem;
+    height: 1em;
     width: 100%;
-    padding: 0 0.5rem; // half the width of a dot.
+    padding: 0 0.5em; // half the width of a dot.
     align-items: center;
 }
 
 .mx_Slider_bar > hr {
     width: 100%;
-    border: 0.2rem solid $Slider-background-color;
+    border: 0.2em solid $Slider-background-color;
 }
 
 .mx_Slider_selection {
     display: flex;
     align-items: center;
-    width: calc(100% - 1rem); // 2 * half the width of a dot
-    height: 1rem;
+    width: calc(100% - 1em); // 2 * half the width of a dot
+    height: 1em;
     position: absolute;
 }
 
 .mx_Slider_selectionDot {
     transition: left 0.25s;
     position: absolute;
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1.1em;
+    height: 1.1em;
     background-color: $Slider-selection-color;
     border-radius: 50%;
     box-shadow: 0 0 6px lightgrey;
@@ -63,13 +63,13 @@ limitations under the License.
 .mx_Slider_selection > hr {
     transition: width 0.25s;
     margin: 0;
-    border: 0.2rem solid $Slider-selection-color;
+    border: 0.2em solid $Slider-selection-color;
 }
 
 .mx_Slider_dot {
     transition: background-color 0.2s ease-in;
-    height: 1rem;
-    width: 1rem;
+    height: 1em;
+    width: 1em;
     border-radius: 50%;
     background-color: $Slider-background-color;
     z-index: 0;
@@ -89,7 +89,7 @@ limitations under the License.
 // The following is a hack to center the labels without adding
 // any width to the slider's dots.
 .mx_Slider_labelContainer {
-    width: 1rem;
+    width: 1em;
 }
 
 .mx_Slider_label {

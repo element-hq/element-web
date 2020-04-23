@@ -89,7 +89,7 @@ export default class Slider extends React.Component<IProps> {
                     { this.props.disabled ?
                         null :
                         <div className="mx_Slider_selection">
-                            <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55rem + " + offset + "%)"}} />
+                            <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55em + " + offset + "%)"}} />
                             <hr style={{width: offset + "%"}} />
                         </div>
                     }
