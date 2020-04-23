@@ -2388,5 +2388,7 @@
     "Repeat your recovery passphrase...": "Ismételd meg a visszaállítási jelmondatot…",
     "Secure your backup with a recovery passphrase": "Védd a mentést a visszaállítási jelmondattal",
     "Currently indexing: %(currentRoom)s": "Indexelés alatt: %(currentRoom)s",
-    "Send a bug report with logs": "Hibajelentés beküldése naplóval"
+    "Send a bug report with logs": "Hibajelentés beküldése naplóval",
+    "Please supply a widget URL or embed code": "Add meg a kisalkalmazás URL-jét vagy a beágyazott kódot",
+    "Verify this login": "Belépés ellenőrzése"
 }
