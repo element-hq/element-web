@@ -254,15 +254,12 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>
         );
 
-        let eventIndex;
-        if (SettingsStore.isFeatureEnabled("feature_event_indexing")) {
-            eventIndex = (
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
-                    <EventIndexPanel />
-                </div>
-            );
-        }
+        const eventIndex = (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
+                <EventIndexPanel />
+            </div>
+        );
 
         // XXX: There's no such panel in the current cross-signing designs, but
         // it's useful to have for testing the feature. If there's no interest
