@@ -23,5 +23,8 @@
     "The message from the parser is: %(message)s": "從解析器而來的訊息為：%(message)s",
     "Invalid JSON": "無效的 JSON",
     "Go to your browser to complete Sign In": "到您的瀏覽器完成登入",
-    "Open user settings": "開啟使用者設定"
+    "Open user settings": "開啟使用者設定",
+    "Missing indexeddb worker script!": "缺少 indexeddb 輔助指令稿！",
+    "Unable to load config file: please refresh the page to try again.": "無法載入設定檔：請重新整理頁面以再試一次。",
+    "Previous/next recently visited room or community": "上一個／下一個最近造訪的聊天室或社群"
 }
