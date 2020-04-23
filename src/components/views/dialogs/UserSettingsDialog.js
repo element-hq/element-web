@@ -69,7 +69,7 @@ export default class UserSettingsDialog extends React.Component {
         ));
         tabs.push(new Tab(
             _td("Appearance"),
-            "mx_userSettingsDialog_styleIcon",
+            "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
         ));
         tabs.push(new Tab(
