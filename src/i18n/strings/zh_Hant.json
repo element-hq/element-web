@@ -2397,5 +2397,10 @@
     "Currently indexing: %(currentRoom)s": "目前正在建立索引：%(currentRoom)s",
     "Send a bug report with logs": "傳送有紀錄檔的臭蟲回報",
     "Please supply a widget URL or embed code": "請提供小工具 URL 或嵌入程式碼",
-    "Unable to query secret storage status": "無法查詢秘密儲存空間狀態"
+    "Unable to query secret storage status": "無法查詢秘密儲存空間狀態",
+    "Verify this login": "驗證此登入",
+    "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "透過驗證這個從您的其他工作階段而來的登入來確認您的身份，並授予其對加密訊息的存取權限。",
+    "This requires the latest Riot on your other devices:": "這需要在您的其他裝置上使用最新的 Riot：",
+    "or another cross-signing capable Matrix client": "或另一個有交叉簽章功能的 Matrix 客戶端",
+    "Use Recovery Passphrase or Key": "使用復原通關密語或金鑰"
 }
