@@ -1,3 +1,25 @@
+Changes in [2.5.0-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.4) (2020-04-23)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.3...v2.5.0-rc.4)
+
+ * Upgrade to JS SDK 5.3.1-rc.4
+ * Take encrypted message search out of labs for release
+   [\#4468](https://github.com/matrix-org/matrix-react-sdk/pull/4468)
+ * Update login security copy and design to match Figma [to release]
+   [\#4474](https://github.com/matrix-org/matrix-react-sdk/pull/4474)
+ * Fix i18n of SSO UIA copy in Deactivate Account Dialog on release
+   [\#4473](https://github.com/matrix-org/matrix-react-sdk/pull/4473)
+ * Skip auth flow test for signing upload when password present
+   [\#4465](https://github.com/matrix-org/matrix-react-sdk/pull/4465)
+ * Fix: wait until cross-signing keys are fetched to show verify button
+   [\#4457](https://github.com/matrix-org/matrix-react-sdk/pull/4457)
+ * Handle load error in create secret storage dialog
+   [\#4454](https://github.com/matrix-org/matrix-react-sdk/pull/4454)
+ * Don't recheck DeviceListener until after initial sync is finished
+   [\#4450](https://github.com/matrix-org/matrix-react-sdk/pull/4450)
+ * EventIndex: Filter out events that don't have a propper content value.
+   [\#4447](https://github.com/matrix-org/matrix-react-sdk/pull/4447)
+
 Changes in [2.5.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.3) (2020-04-17)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.2...v2.5.0-rc.3)
