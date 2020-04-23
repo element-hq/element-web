@@ -28,7 +28,7 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
+import {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher';
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
@@ -679,7 +679,7 @@ function assertAtLoadingSpinner(matrixChat) {
 }
 
 function awaitLoggedIn(matrixChat) {
-    if (matrixChat.state.view === VIEWS.LOGGED_IN) {
+    if (matrixChat.state.view === Views.LOGGED_IN) {
         return Promise.resolve();
     }
     return new Promise(resolve => {
@@ -704,7 +704,7 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.view !== VIEWS.LOGGED_IN || !matrixChat.state.ready) {
+    if (matrixChat.state.view !== Views.LOGGED_IN || !matrixChat.state.ready) {
         console.log(Date.now() + " Awaiting room view: not ready yet.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not ready after " +
