@@ -36,7 +36,7 @@ type IProps = {
 
 export default class Slider extends React.Component<IProps> {
     // offset is a terrible inverse approximation.
-    // if the values represents some function f(x) = y where x is the 
+    // if the values represents some function f(x) = y where x is the
     // index of the array and y = values[x] then offset(f, y) = x
     // s.t f(x) = y.
     // it assumes a monotonic function and interpolates linearly between
@@ -50,16 +50,16 @@ export default class Slider extends React.Component<IProps> {
           }, 0);
 
         // Off the left
-        if (closest == 0) {
+        if (closest === 0) {
             return 0;
         }
 
         // Off the right
-        if (closest == values.length) {
+        if (closest === values.length) {
             return 100;
         }
 
-        // Now 
+        // Now
         const closestLessValue = values[closest - 1];
         const closestGreaterValue = values[closest];
 
