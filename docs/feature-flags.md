@@ -51,7 +51,7 @@ When starting work on a feature, we should create a matching feature flag:
 ```
 3. Add the feature to the set of labs on
    [develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json)
-   and [nightly](https://github.com/vector-im/riot-desktop/blob/master/riot.im/nightly/config.json):
+   and [nightly](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/nightly/config.json):
 ```json
     "features": {
         "feature_cats": "labs"
@@ -70,7 +70,7 @@ The following lists a few common options.
 Set the feature to `enable` in the
 [develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json)
 and
-[nightly](https://github.com/vector-im/riot-desktop/blob/master/riot.im/nightly/config.json)
+[nightly](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/nightly/config.json)
 configs:
 
 ```json
@@ -84,7 +84,7 @@ configs:
 Set the feature to `enable` in the
 [staging / app](https://github.com/vector-im/riot-web/blob/develop/riot.im/app/config.json)
 and
-[release](https://github.com/vector-im/riot-desktop/blob/master/riot.im/release/config.json)
+[release](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/release/config.json)
 configs.
 
 **Warning:** While this does mean the feature is enabled by default for
@@ -104,10 +104,10 @@ Once we're confident that a feature is working well, we should remove the flag:
 3. Remove the feature from the [labs documentation](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md)
 4. Remove feature state from
    [develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json),
-   [nightly](https://github.com/vector-im/riot-desktop/blob/master/riot.im/nightly/config.json),
+   [nightly](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/nightly/config.json),
    [staging / app](https://github.com/vector-im/riot-web/blob/develop/riot.im/app/config.json),
    and
-   [release](https://github.com/vector-im/riot-desktop/blob/master/riot.im/release/config.json)
+   [release](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/release/config.json)
    configs
 5. Celebrate! 🥳
 
@@ -128,8 +128,8 @@ regular setting:
 3. Remove the feature from the [labs documentation](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md)
 4. Remove feature state from
    [develop](https://github.com/vector-im/riot-web/blob/develop/riot.im/develop/config.json),
-   [nightly](https://github.com/vector-im/riot-desktop/blob/master/riot.im/nightly/config.json),
+   [nightly](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/nightly/config.json),
    [staging / app](https://github.com/vector-im/riot-web/blob/develop/riot.im/app/config.json),
    and
-   [release](https://github.com/vector-im/riot-desktop/blob/master/riot.im/release/config.json)
+   [release](https://github.com/vector-im/riot-desktop/blob/develop/riot.im/release/config.json)
    configs
