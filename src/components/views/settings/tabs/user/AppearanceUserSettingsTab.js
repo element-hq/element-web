@@ -117,11 +117,11 @@ export default class StyleUserSettingsTab extends React.Component {
             return {valid: false, feedback: _t("Size must be a number")};
         }
 
-        console.log({min});
-        console.log({max});
-        console.log({parsedSize});
         if (!(min <= parsedSize && parsedSize <= max)) {
-            return {valid: false, feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', {min, max})};
+            return {
+                valid: false,
+                feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', {min, max}),
+            };
         }
 
         SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, value);
@@ -252,7 +252,11 @@ export default class StyleUserSettingsTab extends React.Component {
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
-                    values={_range(SettingsStore.getValue("font_size_min"), SettingsStore.getValue("font_size_max") + 2, 2.5)}
+                    values={_range(
+                        SettingsStore.getValue("font_size_min"),
+                        SettingsStore.getValue("font_size_max")+ 2,
+                        2.5,
+                    )}
                     value={this.state.fontSize}
                     onSelectionChange={this._onFontSizeChanged}
                     displayFunc={value => {}}
