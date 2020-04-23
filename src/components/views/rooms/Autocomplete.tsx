@@ -259,7 +259,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
         const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`];
         if (selectedCompletion && this.containerRef.current) {
             const domNode = ReactDOM.findDOMNode(selectedCompletion);
-            const offsetTop = domNode && domNode.offsetTop;
+            const offsetTop = domNode && (domNode as HTMLElement).offsetTop;
             if (offsetTop > this.containerRef.current.scrollTop + this.containerRef.current.offsetHeight ||
                 offsetTop < this.containerRef.current.scrollTop) {
                 this.containerRef.current.scrollTop = offsetTop - this.containerRef.current.offsetTop;

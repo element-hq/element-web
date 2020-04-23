@@ -64,7 +64,7 @@ export default class AutocompleteProvider {
             commandRegex = this.forcedCommandRegex || /\S+/g;
         }
 
-        if (commandRegex === null) {
+        if (!commandRegex) {
             return null;
         }
 
