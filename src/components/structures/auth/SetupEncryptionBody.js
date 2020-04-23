@@ -131,7 +131,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="link" onClick={this.onSkipClick}>
+                        <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
                             {_t("Use Recovery Passphrase or Key")}
                         </AccessibleButton>
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
