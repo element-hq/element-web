@@ -103,6 +103,22 @@ export enum Views {
     SOFT_LOGOUT = 9,
 }
 
+export enum Screens {
+    REGISTER = "register",
+    LOGIN = "login",
+    FORGOT_PASSWORD = "forgot_password",
+    SOFT_LOGOUT = "soft_logout",
+    NEW = "new", // new room
+    SETTINGS = "settings",
+    WELCOME = "welcome",
+    HOME = "home",
+    START = "start",
+    DIRECTORY = "directory",
+    GROUPS = "groups",
+    COMPLETE_SECURITY = "complete_security",
+    POST_REGISTRATION = "post_registration",
+}
+
 // Actions that are redirected through the onboarding process prior to being
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
@@ -114,7 +130,7 @@ const ONBOARDING_FLOW_STARTERS = [
 ];
 
 interface IScreen {
-    screen: string;
+    screen: Screens | string;
     params?: object;
 }
 
@@ -323,9 +339,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // the old creds, but rather go straight to the relevant page
                 const firstScreen = this.screenAfterLogin ? this.screenAfterLogin.screen : null;
 
-                if (firstScreen === 'login' ||
-                    firstScreen === 'register' ||
-                    firstScreen === 'forgot_password') {
+                if (firstScreen === Screens.LOGIN ||
+                    firstScreen === Screens.REGISTER ||
+                    firstScreen === Screens.FORGOT_PASSWORD) {
                     this.showScreenAfterLogin();
                     return;
                 }
@@ -539,7 +555,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.setStateForNewView({
                     view: Views.LOGIN,
                 });
-                this.notifyNewScreen('login');
+                this.notifyNewScreen(Screens.LOGIN);
                 ThemeController.isLogin = true;
                 this.themeWatcher.recheck();
                 break;
@@ -552,7 +568,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.setStateForNewView({
                     view: Views.FORGOT_PASSWORD,
                 });
-                this.notifyNewScreen('forgot_password');
+                this.notifyNewScreen(Screens.FORGOT_PASSWORD);
                 break;
             case 'start_chat':
                 createRoom({
@@ -803,7 +819,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setStateForNewView(newState);
         ThemeController.isLogin = true;
         this.themeWatcher.recheck();
-        this.notifyNewScreen('register');
+        this.notifyNewScreen(Screens.REGISTER);
     }
 
     // TODO: Move to RoomViewStore
@@ -1282,7 +1298,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when the session is logged out
      */
     private onLoggedOut() {
-        this.notifyNewScreen('login');
+        this.notifyNewScreen(Screens.LOGIN);
         this.setStateForNewView({
             view: Views.LOGIN,
             ready: false,
@@ -1299,7 +1315,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      * Called when the session is softly logged out
      */
     private onSoftLogout() {
-        this.notifyNewScreen('soft_logout');
+        this.notifyNewScreen(Screens.SOFT_LOGOUT);
         this.setStateForNewView({
             view: Views.SOFT_LOGOUT,
             ready: false,
@@ -1588,152 +1604,168 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    showScreen(screen: string, params?: {[key: string]: any}) {
-        if (screen === 'register') {
-            dis.dispatch({
-                action: 'start_registration',
-                params: params,
-            });
-        } else if (screen === 'login') {
-            dis.dispatch({
-                action: 'start_login',
-                params: params,
-            });
-        } else if (screen === 'forgot_password') {
-            dis.dispatch({
-                action: 'start_password_recovery',
-                params: params,
-            });
-        } else if (screen === 'soft_logout') {
-            if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId() && !Lifecycle.isSoftLogout()) {
-                // Logged in - visit a room
-                this.viewLastRoom();
-            } else {
-                // Ultimately triggers soft_logout if needed
+    showScreen(screen: Screens | string, params?: {[key: string]: any}) {
+        switch (screen) {
+            case Screens.REGISTER:
+                dis.dispatch({
+                    action: 'start_registration',
+                    params: params,
+                });
+                break;
+            case Screens.LOGIN:
                 dis.dispatch({
                     action: 'start_login',
                     params: params,
                 });
-            }
-        } else if (screen === 'new') {
-            dis.dispatch({
-                action: 'view_create_room',
-            });
-        } else if (screen === 'settings') {
-            dis.dispatch({
-                action: 'view_user_settings',
-            });
-        } else if (screen === 'welcome') {
-            dis.dispatch({
-                action: 'view_welcome_page',
-            });
-        } else if (screen === 'home') {
-            dis.dispatch({
-                action: 'view_home_page',
-            });
-        } else if (screen === 'start') {
-            this.showScreen('home');
-            dis.dispatch({
-                action: 'require_registration',
-            });
-        } else if (screen === 'directory') {
-            dis.dispatch({
-                action: 'view_room_directory',
-            });
-        } else if (screen === 'groups') {
-            dis.dispatch({
-                action: 'view_my_groups',
-            });
-        } else if (screen === 'complete_security') {
-            dis.dispatch({
-                action: 'start_complete_security',
-            });
-        } else if (screen === 'post_registration') {
-            dis.dispatch({
-                action: 'start_post_registration',
-            });
-        } else if (screen.indexOf('room/') === 0) {
-            // Rooms can have the following formats:
-            // #room_alias:domain or !opaque_id:domain
-            const room = screen.substring(5);
-            const domainOffset = room.indexOf(':') + 1; // 0 in case room does not contain a :
-            let eventOffset = room.length;
-            // room aliases can contain slashes only look for slash after domain
-            if (room.substring(domainOffset).indexOf('/') > -1) {
-                eventOffset = domainOffset + room.substring(domainOffset).indexOf('/');
-            }
-            const roomString = room.substring(0, eventOffset);
-            let eventId = room.substring(eventOffset + 1); // empty string if no event id given
+                break;
+            case Screens.FORGOT_PASSWORD:
+                dis.dispatch({
+                    action: 'start_password_recovery',
+                    params: params,
+                });
+                break;
+            case Screens.SOFT_LOGOUT:
+                if (MatrixClientPeg.get() && MatrixClientPeg.get().getUserId() && !Lifecycle.isSoftLogout()) {
+                    // Logged in - visit a room
+                    this.viewLastRoom();
+                } else {
+                    // Ultimately triggers soft_logout if needed
+                    dis.dispatch({
+                        action: 'start_login',
+                        params: params,
+                    });
+                }
+                break;
+            case Screens.NEW:
+                dis.dispatch({
+                    action: 'view_create_room',
+                });
+                break;
+            case Screens.SETTINGS:
+                dis.dispatch({
+                    action: 'view_user_settings',
+                });
+                break;
+            case Screens.WELCOME:
+                dis.dispatch({
+                    action: 'view_welcome_page',
+                });
+                break;
+            case Screens.HOME:
+                dis.dispatch({
+                    action: 'view_home_page',
+                });
+                break;
+            case Screens.START:
+                this.showScreen(Screens.HOME);
+                dis.dispatch({
+                    action: 'require_registration',
+                });
+                break;
+            case Screens.DIRECTORY:
+                dis.dispatch({
+                    action: 'view_room_directory',
+                });
+                break;
+            case Screens.GROUPS:
+                dis.dispatch({
+                    action: 'view_my_groups',
+                });
+                break;
+            case Screens.COMPLETE_SECURITY:
+                dis.dispatch({
+                    action: 'start_complete_security',
+                });
+                break;
+            case Screens.POST_REGISTRATION:
+                dis.dispatch({
+                    action: 'start_post_registration',
+                });
+                break;
+            default:
+                if (screen.startsWith('room/')) {
+                    // Rooms can have the following formats:
+                    // #room_alias:domain or !opaque_id:domain
+                    const room = screen.substring(5);
+                    const domainOffset = room.indexOf(':') + 1; // 0 in case room does not contain a :
+                    let eventOffset = room.length;
+                    // room aliases can contain slashes only look for slash after domain
+                    if (room.substring(domainOffset).indexOf('/') > -1) {
+                        eventOffset = domainOffset + room.substring(domainOffset).indexOf('/');
+                    }
+                    const roomString = room.substring(0, eventOffset);
+                    let eventId = room.substring(eventOffset + 1); // empty string if no event id given
 
-            // Previously we pulled the eventID from the segments in such a way
-            // where if there was no eventId then we'd get undefined. However, we
-            // now do a splice and join to handle v3 event IDs which results in
-            // an empty string. To maintain our potential contract with the rest
-            // of the app, we coerce the eventId to be undefined where applicable.
-            if (!eventId) eventId = undefined;
+                    // Previously we pulled the eventID from the segments in such a way
+                    // where if there was no eventId then we'd get undefined. However, we
+                    // now do a splice and join to handle v3 event IDs which results in
+                    // an empty string. To maintain our potential contract with the rest
+                    // of the app, we coerce the eventId to be undefined where applicable.
+                    if (!eventId) eventId = undefined;
 
-            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
+                    // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
 
-            // FIXME: sort_out caseConsistency
-            const thirdPartyInvite = {
-                inviteSignUrl: params.signurl,
-                invitedEmail: params.email,
-            };
-            const oobData = {
-                name: params.room_name,
-                avatarUrl: params.room_avatar_url,
-                inviterName: params.inviter_name,
-            };
+                    // FIXME: sort_out caseConsistency
+                    const thirdPartyInvite = {
+                        inviteSignUrl: params.signurl,
+                        invitedEmail: params.email,
+                    };
+                    const oobData = {
+                        name: params.room_name,
+                        avatarUrl: params.room_avatar_url,
+                        inviterName: params.inviter_name,
+                    };
 
-            // on our URLs there might be a ?via=matrix.org or similar to help
-            // joins to the room succeed. We'll pass these through as an array
-            // to other levels. If there's just one ?via= then params.via is a
-            // single string. If someone does something like ?via=one.com&via=two.com
-            // then params.via is an array of strings.
-            let via = [];
-            if (params.via) {
-                if (typeof(params.via) === 'string') via = [params.via];
-                else via = params.via;
-            }
+                    // on our URLs there might be a ?via=matrix.org or similar to help
+                    // joins to the room succeed. We'll pass these through as an array
+                    // to other levels. If there's just one ?via= then params.via is a
+                    // single string. If someone does something like ?via=one.com&via=two.com
+                    // then params.via is an array of strings.
+                    let via = [];
+                    if (params.via) {
+                        if (typeof(params.via) === 'string') via = [params.via];
+                        else via = params.via;
+                    }
 
-            const payload = {
-                action: 'view_room',
-                event_id: eventId,
-                via_servers: via,
-                // If an event ID is given in the URL hash, notify RoomViewStore to mark
-                // it as highlighted, which will propagate to RoomView and highlight the
-                // associated EventTile.
-                highlighted: Boolean(eventId),
-                third_party_invite: thirdPartyInvite,
-                oob_data: oobData,
-                room_alias: undefined,
-                room_id: undefined,
-            };
-            if (roomString[0] === '#') {
-                payload.room_alias = roomString;
-            } else {
-                payload.room_id = roomString;
-            }
+                    const payload = {
+                        action: 'view_room',
+                        event_id: eventId,
+                        via_servers: via,
+                        // If an event ID is given in the URL hash, notify RoomViewStore to mark
+                        // it as highlighted, which will propagate to RoomView and highlight the
+                        // associated EventTile.
+                        highlighted: Boolean(eventId),
+                        third_party_invite: thirdPartyInvite,
+                        oob_data: oobData,
+                        room_alias: undefined,
+                        room_id: undefined,
+                    };
+                    if (roomString[0] === '#') {
+                        payload.room_alias = roomString;
+                    } else {
+                        payload.room_id = roomString;
+                    }
 
-            dis.dispatch(payload);
-        } else if (screen.indexOf('user/') === 0) {
-            const userId = screen.substring(5);
-            dis.dispatch({
-                action: 'view_user_info',
-                userId: userId,
-                subAction: params.action,
-            });
-        } else if (screen.indexOf('group/') === 0) {
-            const groupId = screen.substring(6);
+                    dis.dispatch(payload);
+                } else if (screen.startsWith('user/')) {
+                    const userId = screen.substring(5);
+                    dis.dispatch({
+                        action: 'view_user_info',
+                        userId: userId,
+                        subAction: params.action,
+                    });
+                } else if (screen.startsWith('group/')) {
+                    const groupId = screen.substring(6);
 
-            // TODO: Check valid group ID
+                    // TODO: Check valid group ID
 
-            dis.dispatch({
-                action: 'view_group',
-                group_id: groupId,
-            });
-        } else {
-            console.info("Ignoring showScreen for '%s'", screen);
+                    dis.dispatch({
+                        action: 'view_group',
+                        group_id: groupId,
+                    });
+                } else {
+                    console.info("Ignoring showScreen for '%s'", screen);
+                }
         }
     }
 
@@ -1800,15 +1832,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     onRegisterClick = () => {
-        this.showScreen("register");
+        this.showScreen(Screens.REGISTER);
     };
 
     onLoginClick = () => {
-        this.showScreen("login");
+        this.showScreen(Screens.LOGIN);
     };
 
     onForgotPasswordClick = () => {
-        this.showScreen("forgot_password");
+        this.showScreen(Screens.FORGOT_PASSWORD);
     };
 
     onRegisterFlowComplete = (credentials: object, password: string) => {
@@ -1825,7 +1857,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState({
             view: Views.LOGGED_IN,
         });
-        this.showScreen("settings");
+        this.showScreen(Screens.SETTINGS);
     };
 
     onVersion(current: string, latest: string, releaseNotes?: string) {
