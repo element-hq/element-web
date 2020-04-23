@@ -101,10 +101,32 @@ export default class StyleUserSettingsTab extends React.Component {
     };
 
     _onFontSizeChanged = (size) => {
-        const parsedSize = isNaN(parseInt(size)) ? SettingsStore.getDefaultValue("font_size") : parseFloat(size);
-        this.setState({fontSize: parsedSize});
-        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, parsedSize);
+        this.setState({fontSize: size});
+        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, size);
     };
+
+    _onValidateFontSize = ({value}) => {
+        console.log({value});
+        this.setState({fontSize: value});
+
+        const parsedSize = parseFloat(value);
+        const min = SettingsStore.getValue("font_size_min");
+        const max = SettingsStore.getValue("font_size_max");
+
+        if (isNaN(parsedSize)) {
+            return {valid: false, feedback: _t("Size must be a number")};
+        }
+
+        console.log({min});
+        console.log({max});
+        console.log({parsedSize});
+        if (!(min <= parsedSize && parsedSize <= max)) {
+            return {valid: false, feedback: _t('Custom font size can only be between %(min)s pt and %(max)s pt', {min, max})};
+        }
+
+        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, value);
+        return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
+    }
 
     _onAddCustomTheme = async () => {
         let currentThemes = SettingsStore.getValue("custom_themes");
@@ -247,10 +269,11 @@ export default class StyleUserSettingsTab extends React.Component {
                 type="text"
                 label={_t("Font size")}
                 autoComplete="off"
-                placeholder={SettingsStore.getValue("font_size", null).toString()}
+                placeholder={this.state.fontSize}
                 value={this.state.fontSize}
                 id="font_size_field"
-                onChange={(ev) => this._onFontSizeChanged(ev.target.value)}
+                onValidate={this._onValidateFontSize}
+                onChange={({value}) => this.setState({fontSize: value})}
                 disabled={!this.state.useCustomFontSize}
             />
         </div>;
