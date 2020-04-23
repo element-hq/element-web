@@ -1,1 +1,1 @@
-module.exports = "css-file-stub";
+module.exports = "wasm-file-stub";
