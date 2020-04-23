@@ -23,5 +23,8 @@
     "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
     "Invalid JSON": "JSON non valide",
     "Go to your browser to complete Sign In": "Utilisez votre navigateur pour terminer la connexion",
-    "Open user settings": "Ouvrir les paramètres utilisateur"
+    "Open user settings": "Ouvrir les paramètres utilisateur",
+    "Missing indexeddb worker script!": "Script du worker IndexedDB manquant !",
+    "Unable to load config file: please refresh the page to try again.": "Impossible de charger le fichier de configuration : rafraichissez la page pour réessayer.",
+    "Previous/next recently visited room or community": "Salon ou communauté visité récemment précédent/suivant"
 }
