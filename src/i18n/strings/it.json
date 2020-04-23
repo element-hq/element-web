@@ -2395,5 +2395,10 @@
     "Please enter your recovery passphrase a second time to confirm.": "Inserisci di nuovo la password di ripristino per confermarla.",
     "Repeat your recovery passphrase...": "Ripeti la password di ripristino...",
     "Secure your backup with a recovery passphrase": "Proteggi il backup con una password di ripristino",
-    "Currently indexing: %(currentRoom)s": "Attualmente si indicizzano: %(currentRoom)s"
+    "Currently indexing: %(currentRoom)s": "Attualmente si indicizzano: %(currentRoom)s",
+    "Verify this login": "Verifica questo accesso",
+    "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "Conferma la tua identità verificando questo accesso da una delle tue altre sessioni, dandogli l'accesso ai messaggi cifrati.",
+    "This requires the latest Riot on your other devices:": "È richiesta l'ultima versione di Riot sui tuoi altri dispositivi:",
+    "or another cross-signing capable Matrix client": "o un altro client Matrix che supporti la firma incrociata",
+    "Use Recovery Passphrase or Key": "Usa la password di ripristino o la chiave"
 }
