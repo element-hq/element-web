@@ -24,7 +24,7 @@ limitations under the License.
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px;
+    padding: 15px;
     background: #FFFFFF;
     border-radius: 10px;
     font-size: 10px;
@@ -32,10 +32,12 @@ limitations under the License.
 
 .mx_AppearanceUserSettingsTab_fontSlider_smallText {
     font-size: 15px;
-    padding-right: 10px;
+    padding-right: 20px;
+    padding-left: 5px;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider_largeText {
     font-size: 18px;
-    padding-left: 10px;
+    padding-left: 20px;
+    padding-right: 5px;
 }
