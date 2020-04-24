@@ -20,6 +20,7 @@ import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
+import RedactedBody from "./RedactedBody";
 
 export default createReactClass({
     displayName: 'MessageEvent',
@@ -61,8 +62,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const UnknownBody = sdk.getComponent('messages.UnknownBody');
-
         const bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
@@ -79,7 +78,7 @@ export default createReactClass({
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType = UnknownBody;
+        let BodyType = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (type && evTypes[type]) {
