@@ -66,6 +66,9 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('sync', this._onSync);
         }
         this._dismissed.clear();
+        this._dismissedThisDeviceToast = false;
+        this._keyBackupInfo = null;
+        this._keyBackupFetchedAt = null;
     }
 
     dismissVerification(deviceId) {
@@ -146,6 +149,8 @@ export default class DeviceListener {
             ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
         } else {
             if (!crossSigningReady) {
+                // make sure our keys are finished downlaoding
+                await cli.downloadKeys([cli.getUserId()]);
                 // cross signing isn't enabled - nag to enable it
                 // There are 3 different toasts for:
                 if (cli.getStoredCrossSigningForUser(cli.getUserId())) {
