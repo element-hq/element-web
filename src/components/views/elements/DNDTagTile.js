@@ -17,55 +17,29 @@ limitations under the License.
 
 import TagTile from './TagTile';
 
-import React, {createRef} from 'react';
+import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import {ContextMenu, toRightOf} from "../../structures/ContextMenu";
+import {ContextMenu, toRightOf, useContextMenu} from "../../structures/ContextMenu";
 import * as sdk from '../../../index';
 
-export default class DNDTagTile extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            menuDisplayed: false,
-        };
+export default function DNDTagTile(props) {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
-        this.openMenu = this.openMenu.bind(this);
-        this.closeMenu = this.closeMenu.bind(this);
-    }
-
-    componentDidMount() {
-        this._contextMenuButton = createRef();
-    }
-
-    openMenu() {
-        this.setState({
-            menuDisplayed: true,
-        });
-    }
-
-    closeMenu() {
-        console.log("Closig menu");
-        this.setState({
-            menuDisplayed: false,
-        });
-    }
-
-    getContextMenu() {
-        const elementRect = this._contextMenuButton.current.getBoundingClientRect();
+    let contextMenu = null;
+    if (menuDisplayed && handle.current) {
+        const elementRect = handle.current.getBoundingClientRect();
         const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
-        return (
-            <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
-                <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
+        contextMenu = (
+            <ContextMenu {...toRightOf(elementRect)} onFinished={closeMenu}>
+                <TagTileContextMenu tag={props.tag} onFinished={closeMenu} />
             </ContextMenu>
         );
     }
-
-    render(props) {
         return <div>
             <Draggable
-                key={this.props.tag}
-                draggableId={this.props.tag}
-                index={this.props.index}
+                key={props.tag}
+                draggableId={props.tag}
+                index={props.index}
                 type="draggable-TagTile"
             >
                 { (provided, snapshot) => (
@@ -76,17 +50,16 @@ export default class DNDTagTile extends React.Component {
                             {...provided.dragHandleProps}
                         >
                            <TagTile
-                            {...this.props}
-                               contextMenuButtonRef= {this._contextMenuButton}
-                               menuDisplayed={this.state.menuDisplayed}
-                               openMenu={this.openMenu}
+                            {...props}
+                               contextMenuButtonRef= {handle}
+                               menuDisplayed={menuDisplayed}
+                               openMenu={openMenu}
                             />
                         </div>
                         { provided.placeholder }
                     </div>
                 ) }
             </Draggable>
-                    {this.state.menuDisplayed && this.getContextMenu()}
+                    {contextMenu}
         </div>;
-    }
 }
