@@ -38,8 +38,11 @@ export default class SetupEncryptionDialog extends React.Component {
         super();
 
         this.store = SetupEncryptionStore.sharedInstance();
-        this.store.on("update", this._onStoreUpdate);
         this.state = {icon: iconFromPhase(this.store.phase)};
+    }
+
+    componentDidMount() {
+        this.store.on("update", this._onStoreUpdate);
     }
 
     componentWillUnmount() {
