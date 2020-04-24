@@ -566,6 +566,7 @@ export default class AppTile extends React.Component {
      * Replace the widget template variables in a url with their values
      *
      * @param {string} u The URL with template variables
+     * @param {string} widgetType The widget's type
      *
      * @returns {string} url with temlate variables replaced
      */
@@ -620,7 +621,7 @@ export default class AppTile extends React.Component {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
                 WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
-                this.props.app.type
+                this.props.app.type,
             );
         } else {
             // use app.url, not state.widgetUrl, because we want the one without
