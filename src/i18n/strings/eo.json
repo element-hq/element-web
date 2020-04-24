@@ -2289,5 +2289,10 @@
     "In encrypted rooms, verify all users to ensure it’s secure.": "En ĉifritaj ĉambroj, kontroli ĉiujn uzantojn por certigi, ke ili sekuras.",
     "Verified": "Kontrolita",
     "Verification cancelled": "Kontrolo nuliĝis",
-    "Compare emoji": "Kompari bildsignojn"
+    "Compare emoji": "Kompari bildsignojn",
+    "Use Single Sign On to continue": "Daŭrigi per ununura saluto",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Konfirmi aldonon de ĉi tiu retpoŝtadreso, uzante ununuran saluton por pruvi vian identecon.",
+    "Single Sign On": "Ununura saluto",
+    "Confirm adding email": "Konfirmi aldonon de retpoŝtadreso",
+    "Click the button below to confirm adding this email address.": "Klaku la ĉi-suban butonon por konfirmi aldonon de ĉi tiu retpoŝtadreso."
 }
