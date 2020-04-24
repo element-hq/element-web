@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
@@ -28,7 +28,6 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
-import {ContextMenu, toRightOf} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
@@ -43,6 +42,9 @@ export default createReactClass({
         // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
         // For now, only group IDs are handled.
         tag: PropTypes.string,
+        contextMenuButtonRef: PropTypes.object,
+        openMenu: PropTypes.func,
+        menuDisplayed: PropTypes.bool,
     },
 
     statics: {
@@ -55,14 +57,10 @@ export default createReactClass({
             hover: false,
             // The profile data of the group if this.props.tag is a group ID
             profile: null,
-            // Whether or not the context menu is open
-            menuDisplayed: false,
         };
     },
 
     componentDidMount() {
-        this._contextMenuButton = createRef();
-
         this.unmounted = false;
         if (this.props.tag[0] === '+') {
             FlairStore.addListener('updateGroupProfile', this._onFlairStoreUpdated);
@@ -124,17 +122,8 @@ export default createReactClass({
         // Prevent the TagTile onClick event firing as well
         e.stopPropagation();
         e.preventDefault();
-
-        this.setState({
-            menuDisplayed: true,
-            hover: false,
-        });
-    },
-
-    closeMenu: function() {
-        this.setState({
-            menuDisplayed: false,
-        });
+        this.setState({hover: false});
+        this.props.openMenu();
     },
 
     render: function() {
@@ -163,26 +152,25 @@ export default createReactClass({
         }
 
         // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
-        const contextButton = this.state.hover || this.state.menuDisplayed ?
-            <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this._contextMenuButton}>
+        const contextButton = this.state.hover || this.props.menuDisplayed ?
+            <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this.props.contextMenuButtonRef}>
                 { "\u00B7\u00B7\u00B7" }
-            </div> : <div ref={this._contextMenuButton} />;
-
-        let contextMenu;
-        if (this.state.menuDisplayed) {
-            const elementRect = this._contextMenuButton.current.getBoundingClientRect();
-            const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
-            contextMenu = (
-                <ContextMenu {...toRightOf(elementRect)} onFinished={this.closeMenu}>
-                    <TagTileContextMenu tag={this.props.tag} onFinished={this.closeMenu} />
-                </ContextMenu>
-            );
-        }
+            </div> : <div ref={this.props.contextMenuButtonRef} />;
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
-        return <React.Fragment>
-            <AccessibleTooltipButton className={className} onClick={this.onClick} onContextMenu={this.openMenu} title={name}>
-                <div className="mx_TagTile_avatar" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut}>
+
+        return <div>
+            <AccessibleTooltipButton
+                className={className}
+                onClick={this.onClick}
+                onContextMenu={this.openMenu}
+                title={name}
+            >
+                <div
+                    className="mx_TagTile_avatar"
+                    onMouseOver={this.onMouseOver}
+                    onMouseOut={this.onMouseOut}
+                >
                     <BaseAvatar
                         name={name}
                         idName={this.props.tag}
@@ -194,8 +182,6 @@ export default createReactClass({
                     { badgeElement }
                 </div>
             </AccessibleTooltipButton>
-
-            { contextMenu }
-        </React.Fragment>;
+        </div>;
     },
 });
