@@ -1109,7 +1109,7 @@
     "%(name)s accepted": "%(name)s aksepterte",
     "%(name)s declined": "%(name)s avslo",
     "%(name)s cancelled": "%(name)s avbrøt",
-    "%(name)s wants to verify": "%(name) ønsker å verifisere",
+    "%(name)s wants to verify": "%(name)s ønsker å verifisere",
     "Failed to copy": "Mislyktes i å kopiere",
     "Submit logs": "Send inn loggføringer",
     "Failed to remove widget": "Mislyktes i å fjerne modulen",
