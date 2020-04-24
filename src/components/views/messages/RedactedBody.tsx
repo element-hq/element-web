@@ -32,7 +32,7 @@ const RedactedBody = React.forwardRef<any, IProps>(({mxEvent}, ref) => {
     if (redactedBecauseUserId !== cli.getUserId()) {
         const room = cli.getRoom(mxEvent.getRoomId());
         const sender = room && room.getMember(redactedBecauseUserId);
-        text = _t("Message deleted by %(user)s", { user: sender.name || redactedBecauseUserId });
+        text = _t("Message deleted by %(name)s", { name: sender ? sender.name : redactedBecauseUserId });
     }
 
     return (
