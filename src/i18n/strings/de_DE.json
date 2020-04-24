@@ -1832,5 +1832,11 @@
     "This bridge is managed by <user />.": "Diese Brücke wird von <user /> verwaltet.",
     "Workspace: %(networkName)s": "Arbeitsbereich: %(networkName)s",
     "Channel: %(channelName)s": "Kanal: %(channelName)s",
-    "Show less": "Weniger zeigen"
+    "Show less": "Weniger zeigen",
+    "<b>Warning</b>: You should only do this on a trusted computer.": "<b>Achtung</b>: Du solltest das nur auf einem vertrauenswürdigen Gerät tun.",
+    "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Achtung</b>: Du solltest die Schlüsselsicherung nur auf einem vertrauenswürdigen Gerät einrichten.",
+    "Regain access to your account and recover encryption keys stored in this session. Without them, you won’t be able to read all of your secure messages in any session.": "Melde dich an um die ausschließlich in dieser Sitzung gespeicherten Verschlüsselungsschlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten in jeder Sitzung zu lesen.",
+    "Forgotten your password?": "Passwort vergessen?",
+    "You're signed out": "Du wurdest abgemeldet",
+    "Warning: Your personal data (including encryption keys) is still stored in this session. Clear it if you're finished using this session, or want to sign in to another account.": "Achtung: Deine persönlichen Daten (inclusive der Verschlüsselungsschlüssel) sind noch in dieser Sitzung gespeichert. Lösche diese Daten wenn du die Sitzung nicht mehr benötigst oder dich mit einem anderen Konto anmelden möchtest."
 }
