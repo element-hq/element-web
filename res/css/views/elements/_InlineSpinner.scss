@@ -21,4 +21,12 @@ limitations under the License.
 .mx_InlineSpinner img {
     margin: 0px 6px;
     vertical-align: -3px;
+
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }

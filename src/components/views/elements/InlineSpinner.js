@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import createReactClass from 'create-react-class';
+import {_t} from "../../../languageHandler";
 
 export default createReactClass({
     displayName: 'InlineSpinner',
@@ -24,10 +25,17 @@ export default createReactClass({
         const w = this.props.w || 16;
         const h = this.props.h || 16;
         const imgClass = this.props.imgClassName || "";
+        const alt = this.props.alt || _t("Loading...");
 
         return (
             <div className="mx_InlineSpinner">
-                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
+                <img
+                    src={require("../../../../res/img/spinner.svg")}
+                    width={w}
+                    height={h}
+                    className={imgClass}
+                    alt={alt}
+                />
             </div>
         );
     },
