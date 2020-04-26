@@ -40,7 +40,8 @@ should start a new conference on your Jitsi server.
 domain will appear later in the URL as a configuration parameter.
 
 **Hint**: If you want everyone on your homeserver to use the same Jitsi server by
-default, set the following on your homeserver's `/.well-known/matrix/client` config:
+default, and you are using riot-web 1.6 or newer, set the following on your homeserver's 
+`/.well-known/matrix/client` config:
 ```json
 {
   "im.vector.riot.jitsi": {

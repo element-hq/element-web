@@ -14,25 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "modernizr";
+import "matrix-react-sdk/src/@types/global"; // load matrix-react-sdk's type extensions first
 import {Renderer} from "react-dom";
 
 declare global {
     interface Window {
-        Modernizr: ModernizrAPI & FeatureDetects;
-        Olm: {
-            init: () => Promise<void>;
-        };
-
         mxSendRageshake: (text: string, withLogs?: boolean) => void;
         matrixChat: ReturnType<Renderer>;
 
         // electron-only
         ipcRenderer: any;
-    }
-
-    // workaround for https://github.com/microsoft/TypeScript/issues/30933
-    interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object
     }
 }
