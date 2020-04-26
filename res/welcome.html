@@ -165,22 +165,26 @@ we don't have an account and should hide them. No account == no guest account ei
         <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
     </a>
     <h1 class="mx_Header_title">_t("Welcome to Riot.im")</h1>
-    <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
+    <!-- <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp;
+      collaboration powered by [matrix]")</h4> -->
     <div class="mx_ButtonGroup">
         <div class="mx_ButtonRow">
-            <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
+            <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn
+              mx_Button_iconSignIn" style="margin: 0 auto">
                 <div class="mx_ButtonLabel">_t("Sign In")</div>
             </a>
+            <!--
             <a href="#/register" class="mx_ButtonParent mx_ButtonCreateAccount mx_Button_iconCreateAccount">
                 <div class="mx_ButtonLabel">_t("Create Account")</div>
             </a>
+            -->
         </div>
         <!-- The comments below are meant to be used by Ansible as a quick way
              to strip out the marked content when desired.
              See https://github.com/vector-im/riot-web/issues/8622.
              TODO: Strip out these comments and rely on the guest flag -->
         <!-- BEGIN Ansible: Remove these lines when guest access is disabled -->
-        <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
+        <!-- <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
             <div>
                 <div class="mx_ButtonWrapperText">_t("Need help?")</div>
                 <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconHelp">
@@ -193,7 +197,7 @@ we don't have an account and should hide them. No account == no guest account ei
                     <div class="mx_ButtonLabel">_t("Room Directory")</div>
                 </a>
             </div>
-        </div>
+        </div> -->
         <!-- END Ansible: Remove these lines when guest access is disabled -->
     </div>
 </div>
