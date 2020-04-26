@@ -1353,7 +1353,7 @@
     "Want more than a community? <a>Get your own server</a>": "Komunitate bat baino gehiago nahi duzu? <a>Eskuratu zure zerbitzari propioa</a>",
     "Could not load user profile": "Ezin izan da erabiltzaile-profila kargatu",
     "You cannot modify widgets in this room.": "Ezin dituzu gela honetako trepetak aldatu.",
-    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s erabiltzaileak %(targetDisplayName)s geñara elkartzeko gonbidapena errefusatu du.",
+    "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s erabiltzaileak %(targetDisplayName)s gelara elkartzeko gonbidapena errefusatu du.",
     "Upgrade this room to the recommended room version": "Bertsio-berritu gela hau aholkatutako bertsiora",
     "Upgrading this room will shut down the current instance of the room and create an upgraded room with the same name.": "Gela hau bertsio-berritzeak gelaren oraingo instantzia itzaliko du eta izen bereko beste gela berri bat sortuko du.",
     "Failed to revoke invite": "Gonbidapena indargabetzeak huts egin du",
