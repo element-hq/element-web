@@ -148,6 +148,7 @@ function setCustomThemeVars(customTheme) {
             style.setProperty(`--${name}`, hexColor);
             // uses #rrggbbaa to define the color with alpha values at 0% and 50%
             style.setProperty(`--${name}-0pct`, hexColor + "00");
+            style.setProperty(`--${name}-15pct`, hexColor + "26");
             style.setProperty(`--${name}-50pct`, hexColor + "7F");
         }
     }
