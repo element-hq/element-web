@@ -39,6 +39,7 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
+import {Capability} from "../../../widgets/WidgetApi";
 import {sleep} from "../../../utils/promise";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
@@ -344,18 +345,18 @@ export default class AppTile extends React.Component {
      * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
     _endWidgetActions() {
-        let promise;
+        let terminationPromise;
 
-        if (this._hasCapability('im.vector.receive_terminate')) {
+        if (this._hasCapability(Capability.ReceiveTerminate)) {
             // Wait for widget to terminate within a timeout
             const timeout = 2000;
             const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
-            promise = Promise.race([messaging.terminate(), sleep(timeout)]);
+            terminationPromise = Promise.race([messaging.terminate(), sleep(timeout)]);
         } else {
-            promise = Promise.resolve();
+            terminationPromise = Promise.resolve();
         }
 
-        return promise.finally(() => {
+        return terminationPromise.finally(() => {
             // HACK: This is a really dirty way to ensure that Jitsi cleans up
             // its hold on the webcam. Without this, the widget holds a media
             // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351

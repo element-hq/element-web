@@ -111,11 +111,12 @@ export class WidgetApi extends EventEmitter {
                 } else if (payload.action === KnownWidgetActions.Terminate) {
                     // Finalization needs to be async, so postpone with a promise
                     let finalizePromise = Promise.resolve();
-                    const wait = promise => {
+                    const wait = (promise) => {
                         finalizePromise = finalizePromise.then(value => promise);
-                    }
+                    };
                     this.emit('terminate', wait);
                     Promise.resolve(finalizePromise).then(() => {
+                        // Acknowledge that we're shut down now
                         this.replyToRequest(<ToWidgetRequest>payload, {});
                     });
                 } else {
