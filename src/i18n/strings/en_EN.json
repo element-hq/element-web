@@ -1488,8 +1488,6 @@
     "%(oneUser)smade no changes %(count)s times|one": "%(oneUser)smade no changes",
     "Power level": "Power level",
     "Custom level": "Custom level",
-    "%(count)s messages deleted|other": "%(count)s messages deleted",
-    "%(count)s messages deleted by %(name)s|other": "%(count)s messages deleted by %(name)s",
     "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.": "Unable to load event that was replied to, it either does not exist or you do not have permission to view it.",
     "<a>In reply to</a> <pill>": "<a>In reply to</a> <pill>",
     "Room alias": "Room alias",

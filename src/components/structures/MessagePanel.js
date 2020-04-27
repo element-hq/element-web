@@ -29,7 +29,6 @@ import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
-import RedactionEventListSummary from "../views/elements/RedactionEventListSummary";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];

@@ -22,8 +22,7 @@ import {MatrixEvent, RoomMember} from "matrix-js-sdk";
 import {useStateToggle} from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
 
-const EventListSummary = (props) => {
-    const {events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText, summary} = props;
+const EventListSummary = ({events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText}) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
     // Whenever expanded changes call onToggle
@@ -50,8 +49,6 @@ const EventListSummary = (props) => {
             <div className="mx_EventListSummary_line">&nbsp;</div>
             { children }
         </React.Fragment>;
-    } else if (summary) {
-        body = summary;
     } else {
         const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
         body = (
@@ -90,9 +87,6 @@ EventListSummary.propTypes = {
     // Whether or not to begin with state.expanded=true
     startExpanded: PropTypes.bool,
 
-    // The node to render as a summary when the summary is not collapsed,
-    // alternately summaryMembers and summaryText can be provided.
-    summary: PropTypes.node,
     // The list of room members for which to show avatars next to the summary, ignored if summary is provided
     summaryMembers: PropTypes.arrayOf(PropTypes.instanceOf(RoomMember)),
     // The text to show as the summary of this event list, ignored if summary is provided
