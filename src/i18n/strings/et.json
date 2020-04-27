@@ -1,7 +1,16 @@
 {
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Sinu Rioti seadetes on vigane JSON. Palun, tee see korda ja laadi leht uuesti!",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Sinu Rioti seadetes on vigane JSON. Palun, tee see korda ja laadi leht uuesti.",
     "The message from the parser is: %(message)s": "Sõnum parserist on: %(message)s",
     "Invalid JSON": "Vigane JSON",
     "Your Riot is misconfigured": "Sinu Riot on valesti seadistatud",
-    "Unknown device": "Tundmatu seade"
+    "Unknown device": "Tundmatu seade",
+    "Invalid configuration: no default server specified.": "Vigane seadistus: vaikimisi server on määramata.",
+    "Unable to load config file: please refresh the page to try again.": "Seadistuste faili laadimine ei õnnestunud: uuesti proovimiseks palun lae leht uuesti.",
+    "Unexpected error preparing the app. See console for details.": "Rakenduse ettevalmistamisel tekkis ootamatu viga. Täpsema teabe leiad konsoolist.",
+    "Open user settings": "Ava kasutaja seadistused",
+    "Go to your browser to complete Sign In": "Sisselogimiseks ava oma brauser",
+    "Dismiss": "Loobu",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Matrix'i protokollil põhinev hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus",
+    "Chat with Riot Bot": "Vestle Riot'i robotiga",
+    "Explore rooms": "Uuri jututubasid"
 }
