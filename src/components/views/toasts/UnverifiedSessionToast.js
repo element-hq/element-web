@@ -15,13 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import Modal from "../../../Modal";
 import dis from "../../../dispatcher";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import DeviceListener from '../../../DeviceListener';
-import NewSessionReviewDialog from '../dialogs/NewSessionReviewDialog';
 import FormButton from '../elements/FormButton';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 
@@ -41,8 +38,6 @@ export default class UnverifiedSessionToast extends React.PureComponent {
     };
 
     render() {
-        const { device } = this.props;
-
         return (<div>
             <div className="mx_Toast_description">
                 {_t("Verify your other sessions")}
