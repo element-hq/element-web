@@ -208,6 +208,8 @@ start().catch(err => {
     // with some basic styling to make the iframe full page
     delete document.body.style.height;
     const iframe = document.createElement("iframe");
+    // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
+    iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
     iframe.style.width = "100%";
     iframe.style.height = "100%";
