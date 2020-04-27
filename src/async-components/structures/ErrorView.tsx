@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import * as React from "react";
-import * as PropTypes from "prop-types";
 import { _t } from "matrix-react-sdk/src/languageHandler";
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
@@ -50,17 +49,12 @@ const ErrorView: React.FC<IProps> = ({title, messages}) => {
             <div className="mx_HomePage_row mx_Center mx_Spacer">
                 <p className="mx_Spacer">
                     <a href="https://riot.im" target="_blank" className="mx_FooterLink">
-                        Go to Riot.im
+                        { _t("Go to Riot.im") }
                     </a>
                 </p>
             </div>
         </div>
     </div>;
-};
-
-ErrorView.propTypes = {
-    title: PropTypes.string.isRequired,
-    messages: PropTypes.arrayOf(PropTypes.string.isRequired),
 };
 
 export default ErrorView;
