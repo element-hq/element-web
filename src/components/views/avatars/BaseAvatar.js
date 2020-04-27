@@ -165,9 +165,11 @@ export default createReactClass({
             const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
                 <span className="mx_BaseAvatar_initial" aria-hidden="true"
-                    style={{ fontSize: toRem(width * 0.65),
-                    width: toRem(width),
-                    lineHeight: toRem(height) }}
+                    style={{
+                        fontSize: toRem(width * 0.65),
+                        width: toRem(width),
+                        lineHeight: toRem(height),
+                    }}
                 >
                     { initialLetter }
                 </span>
@@ -223,7 +225,7 @@ export default createReactClass({
                     onError={this.onError}
                     style={{
                         width: toRem(width),
-                        height: toRem(height)
+                        height: toRem(height),
                     }}
                     title={title} alt=""
                     ref={inputRef}
