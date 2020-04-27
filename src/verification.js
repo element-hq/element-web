@@ -92,7 +92,8 @@ export async function verifyDevice(user, device) {
                         refireParams: {member: user, verificationRequestPromise},
                     });
                 } else if (action === "legacy") {
-                    const ManualDeviceKeyVerificationDialog = sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
+                    const ManualDeviceKeyVerificationDialog =
+                        sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
                     Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
                         ManualDeviceKeyVerificationDialog,
                         {

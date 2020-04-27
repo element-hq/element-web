@@ -26,7 +26,6 @@ import dis from '../../dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
-import RoomViewStore from '../../stores/RoomViewStore';
 import SettingsStore from "../../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
@@ -239,7 +238,8 @@ export default class RightPanel extends React.Component {
                             // or the member list if we were in the member panel... phew.
                             dis.dispatch({
                                 action: "view_user",
-                                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
+                                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ?
+                                    this.state.member : null,
                             });
                         }
                     };
