@@ -22,7 +22,7 @@ import { _t } from "matrix-react-sdk/src/languageHandler";
 import "../../../res/css/structures/ErrorView.scss";
 
 interface IProps {
-    onAccept: () => void;
+    onAccept(): void;
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
@@ -103,4 +103,3 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
 };
 
 export default CompatibilityView;
-
