@@ -329,8 +329,8 @@ export default class SecurityUserSettingsTab extends React.Component {
                             {
                                 a: sub => <a href={"#/user/" + MatrixClientPeg.get().getUserId()}
                                     onClick={this._onGoToUserProfileClick}
-                                >{sub}</a>
-                            }
+                                >{sub}</a>,
+                            },
                         )}
                     </span>
                     <div className='mx_SettingsTab_subsectionText'>
