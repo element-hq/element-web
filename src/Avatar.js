@@ -77,7 +77,9 @@ export function defaultAvatarUrlForString(s) {
     }
     const colorIndex = total % defaultColors.length;
     // overwritten color value in custom themes
-    const color = defaultColors[colorIndex];
+    const cssVariable = `--avatar-background-colors_${colorIndex}`;
+    const cssValue = document.body.style.getPropertyValue(cssVariable);
+    const color = cssValue || defaultColors[colorIndex];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
         dataUrl = urlForColor(color);
