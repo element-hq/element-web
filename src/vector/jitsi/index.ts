@@ -119,7 +119,7 @@ function joinConference() { // event handler bound in HTML
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
 
-    let meetingClosed = new Promise(resolve => {
+    const meetingClosed = new Promise(resolve => {
         meetApi.on("readyToClose", () => {
             switchVisibleContainers();
 
