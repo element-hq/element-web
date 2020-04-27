@@ -59,6 +59,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             forceRecoveryKey: false,
             passPhrase: '',
             restoreType: null,
+            progress: { stage: "prefetch" },
         };
     }
 
@@ -77,6 +78,12 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
     _onUseRecoveryKeyClick = () => {
         this.setState({
             forceRecoveryKey: true,
+        });
+    }
+
+    _progressCallback = (data) => {
+        this.setState({
+            progress: data,
         });
     }
 
@@ -110,6 +117,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             // is the right one and restoring it is currently the only way we can do this.
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
                 this.state.passPhrase, undefined, undefined, this.state.backupInfo,
+                { progressCallback: this._progressCallback },
             );
             if (this.props.keyCallback) {
                 const key = await MatrixClientPeg.get().keyBackupKeyFromPassword(
@@ -146,6 +154,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
+                { progressCallback: this._progressCallback },
             );
             if (this.props.keyCallback) {
                 const key = MatrixClientPeg.get().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
@@ -185,6 +194,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             const recoverInfo = await accessSecretStorage(async () => {
                 return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
                     this.state.backupInfo,
+                    { progressCallback: this._progressCallback },
                 );
             });
             this.setState({
@@ -207,6 +217,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 undefined, /* targetRoomId */
                 undefined, /* targetSessionId */
                 backupInfo,
+                { progressCallback: this._progressCallback },
             );
             this.setState({
                 recoverInfo,
@@ -273,7 +284,19 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         let title;
         if (this.state.loading) {
             title = _t("Loading...");
-            content = <Spinner />;
+            let details;
+            if (this.state.progress.stage === "fetch") {
+                details = _t("Downloading from server...");
+            } else if (this.state.progress.stage === "load_keys") {
+                const { total, successes, failures } = this.state.progress;
+                details = _t("Loaded %(completed)s of %(total)s", { total, completed: successes + failures });
+            } else if (this.state.progress.stage === "prefetch") {
+                details = _t("Requesting from server...");
+            }
+            content = <div>
+                <div>{details}</div>
+                <Spinner />
+            </div>;
         } else if (this.state.loadError) {
             title = _t("Error");
             content = _t("Unable to load backup status");
