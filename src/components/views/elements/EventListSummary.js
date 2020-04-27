@@ -87,9 +87,9 @@ EventListSummary.propTypes = {
     // Whether or not to begin with state.expanded=true
     startExpanded: PropTypes.bool,
 
-    // The list of room members for which to show avatars next to the summary, ignored if summary is provided
+    // The list of room members for which to show avatars next to the summary
     summaryMembers: PropTypes.arrayOf(PropTypes.instanceOf(RoomMember)),
-    // The text to show as the summary of this event list, ignored if summary is provided
+    // The text to show as the summary of this event list
     summaryText: PropTypes.string,
 };
 
