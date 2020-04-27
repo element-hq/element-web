@@ -110,8 +110,11 @@ limitations under the License.
     user-select: none;
 }
 
-.mx_EventTile_line, .mx_EventTile_reply {
+.mx_EventTile_continuation .mx_EventTile_line {
     clear: both;
+}
+
+.mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: 65px; /* left gutter */
     padding-top: 4px;
