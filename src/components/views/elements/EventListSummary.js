@@ -22,7 +22,8 @@ import {MatrixEvent, RoomMember} from "matrix-js-sdk";
 import {useStateToggle} from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
 
-const EventListSummary = ({events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText}) => {
+const EventListSummary = (props) => {
+    const {events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText, summary} = props;
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
     // Whenever expanded changes call onToggle
@@ -49,6 +50,8 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
             <div className="mx_EventListSummary_line">&nbsp;</div>
             { children }
         </React.Fragment>;
+    } else if (summary) {
+        body = summary;
     } else {
         const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
         body = (
@@ -66,12 +69,12 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
     }
 
     return (
-        <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+        <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
             <AccessibleButton className="mx_EventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
                 { expanded ? _t('collapse') : _t('expand') }
             </AccessibleButton>
             { body }
-        </div>
+        </li>
     );
 };
 
@@ -87,10 +90,13 @@ EventListSummary.propTypes = {
     // Whether or not to begin with state.expanded=true
     startExpanded: PropTypes.bool,
 
-    // The list of room members for which to show avatars next to the summary
+    // The node to render as a summary when the summary is not collapsed,
+    // alternately summaryMembers and summaryText can be provided.
+    summary: PropTypes.node,
+    // The list of room members for which to show avatars next to the summary, ignored if summary is provided
     summaryMembers: PropTypes.arrayOf(PropTypes.instanceOf(RoomMember)),
-    // The text to show as the summary of this event list
-    summaryText: PropTypes.string.isRequired,
+    // The text to show as the summary of this event list, ignored if summary is provided
+    summaryText: PropTypes.string,
 };
 
 export default EventListSummary;
