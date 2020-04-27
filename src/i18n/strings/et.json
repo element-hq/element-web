@@ -144,5 +144,13 @@
     "Explore rooms": "Uuri jututubasid",
     "If you've joined lots of rooms, this might take a while": "Kui oled liitunud paljude jututubadega, siis see võib natuke aega võtta",
     "If disabled, messages from encrypted rooms won't appear in search results.": "Kui see seadistus pole kasutusel, siis krüptitud jututubade sõnumeid otsing ei vaata.",
-    "Indexed rooms:": "Indekseeritud jututoad:"
+    "Indexed rooms:": "Indekseeritud jututoad:",
+    "Remove": "Eemalda",
+    "You should <b>remove your personal data</b> from identity server <idserver /> before disconnecting. Unfortunately, identity server <idserver /> is currently offline or cannot be reached.": "Sa peaksid enne ühenduse katkestamisst <b>eemaldama isiklikud andmed</b> id-serverist <idserver />. Kahjuks id-server <idserver /> ei ole hetkel võrgus või pole kättesaadav.",
+    "We recommend that you remove your email addresses and phone numbers from the identity server before disconnecting.": "Me soovitame, et eemaldad enne ühenduse katkestamist oma e-posti aadressi ja telefoninumbrid id-serverist.",
+    "Remove messages": "Kustuta sõnumid",
+    "Unable to remove contact information": "Kontaktiinfo eemaldamine ebaõnnestus",
+    "Remove %(email)s?": "Eemalda %(email)s?",
+    "Remove %(phone)s?": "Eemalda %(phone)s?",
+    "Remove recent messages by %(user)s": "Eemalda %(user)s hiljutised sõnumid"
 }
