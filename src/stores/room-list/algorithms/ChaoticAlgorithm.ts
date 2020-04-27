@@ -65,7 +65,6 @@ export class ChaoticAlgorithm implements IAlgorithm {
         }
 
         // TODO: Remove logging
-        console.log('setting known rooms - regen in progress');
         console.log({alg: this.representativeAlgorithm});
 
         // Step through each room and determine which tags it should be in.

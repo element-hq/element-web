@@ -19,6 +19,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "./RoomListStore2";
 import OldRoomListStore from "../RoomListStore";
+import { ITagMap } from "./algorithms/IAlgorithm";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 /**
  * Temporary RoomListStore proxy. Should be replaced with RoomListStore2 when
@@ -33,13 +35,13 @@ export class RoomListStoreTempProxy {
 
     public static addListener(handler: () => void) {
         if (RoomListStoreTempProxy.isUsingNewStore()) {
-            return RoomListStore.instance.addListener(handler);
+            return RoomListStore.instance.on(UPDATE_EVENT, handler);
         } else {
             return OldRoomListStore.addListener(handler);
         }
     }
 
-    public static getRoomLists(): {[tagId in TagID]: Room[]} {
+    public static getRoomLists(): ITagMap {
         if (RoomListStoreTempProxy.isUsingNewStore()) {
             return RoomListStore.instance.orderedLists;
         } else {

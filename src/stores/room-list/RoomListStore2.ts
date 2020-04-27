@@ -15,15 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Store} from 'flux/utils';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {MatrixClient} from "matrix-js-sdk/src/client";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import { ActionPayload, defaultDispatcher } from "../../dispatcher-types";
 import SettingsStore from "../../settings/SettingsStore";
-import { OrderedDefaultTagIDs, DefaultTagID, TagID } from "./models";
+import { DefaultTagID, OrderedDefaultTagIDs, TagID } from "./models";
 import { IAlgorithm, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/IAlgorithm";
 import TagOrderStore from "../TagOrderStore";
 import { getAlgorithmInstance } from "./algorithms";
+import { AsyncStore } from "../AsyncStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -32,8 +31,13 @@ interface IState {
     preferredAlgorithm?: ListAlgorithm;
 }
 
-class _RoomListStore extends Store<ActionPayload> {
-    private state: IState = {};
+/**
+ * The event/channel which is called when the room lists have been changed. Raised
+ * with one argument: the instance of the store.
+ */
+export const LISTS_UPDATE_EVENT = "lists_update";
+
+class _RoomListStore extends AsyncStore<ActionPayload> {
     private matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
@@ -49,7 +53,6 @@ class _RoomListStore extends Store<ActionPayload> {
         super(defaultDispatcher);
 
         this.checkEnabled();
-        this.reset();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
     }
 
@@ -66,17 +69,11 @@ class _RoomListStore extends Store<ActionPayload> {
         }
     }
 
-    private reset(): void {
-        // We don't call setState() because it'll cause changes to emitted which could
-        // crash the app during logout/signin/etc.
-        this.state = {};
-    }
-
-    private readAndCacheSettingsFromStore() {
+    private async readAndCacheSettingsFromStore() {
         const tagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
         const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
         const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
-        this.setState({
+        await this.updateState({
             tagsEnabled,
             preferredSort: orderAlphabetically ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent,
             preferredAlgorithm: orderByImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural,
@@ -84,23 +81,23 @@ class _RoomListStore extends Store<ActionPayload> {
         this.setAlgorithmClass();
     }
 
-    protected __onDispatch(payload: ActionPayload): void {
+    protected async onDispatch(payload: ActionPayload) {
         if (payload.action === 'MatrixActions.sync') {
             // Filter out anything that isn't the first PREPARED sync.
             if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
                 return;
             }
 
+            // TODO: Remove this once the RoomListStore becomes default
             this.checkEnabled();
             if (!this.enabled) return;
 
             this.matrixClient = payload.matrixClient;
 
             // Update any settings here, as some may have happened before we were logically ready.
-            this.readAndCacheSettingsFromStore();
-
-            // noinspection JSIgnoredPromiseFromCall
-            this.regenerateAllLists();
+            console.log("Regenerating room lists: Startup");
+            await this.readAndCacheSettingsFromStore();
+            await this.regenerateAllLists();
         }
 
         // TODO: Remove this once the RoomListStore becomes default
@@ -109,7 +106,7 @@ class _RoomListStore extends Store<ActionPayload> {
         if (payload.action === 'on_client_not_viable' || payload.action === 'on_logged_out') {
             // Reset state without causing updates as the client will have been destroyed
             // and downstream code will throw NPE errors.
-            this.reset();
+            this.reset(null, true);
             this.matrixClient = null;
             this.initialListsGenerated = false; // we'll want to regenerate them
         }
@@ -120,14 +117,15 @@ class _RoomListStore extends Store<ActionPayload> {
 
         if (payload.action === 'setting_updated') {
             if (this.watchedSettings.includes(payload.settingName)) {
-                this.readAndCacheSettingsFromStore();
+                console.log("Regenerating room lists: Settings changed");
+                await this.readAndCacheSettingsFromStore();
 
-                // noinspection JSIgnoredPromiseFromCall
-                this.regenerateAllLists(); // regenerate the lists now
+                await this.regenerateAllLists(); // regenerate the lists now
             }
         } else if (payload.action === 'MatrixActions.Room.receipt') {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
+            // noinspection JSObjectNullOrUndefined - this.matrixClient can't be null by this point in the lifecycle
             const myUserId = this.matrixClient.getUserId();
             for (const eventId of Object.keys(payload.event.getContent())) {
                 const receiptUsers = Object.keys(payload.event.getContent()[eventId]['m.read'] || {});
@@ -167,11 +165,10 @@ class _RoomListStore extends Store<ActionPayload> {
         }
     }
 
-    private setState(newState: IState) {
+    protected async updateState(newState: IState) {
         if (!this.enabled) return;
 
-        this.state = Object.assign(this.state, newState);
-        this.__emitChange();
+        await super.updateState(newState);
     }
 
     private setAlgorithmClass() {
@@ -179,7 +176,7 @@ class _RoomListStore extends Store<ActionPayload> {
     }
 
     private async regenerateAllLists() {
-        console.log("REGEN");
+        console.warn("Regenerating all room lists");
         const tags: ITagSortingMap = {};
         for (const tagId of OrderedDefaultTagIDs) {
             tags[tagId] = this.getSortAlgorithmFor(tagId);
@@ -196,7 +193,7 @@ class _RoomListStore extends Store<ActionPayload> {
 
         this.initialListsGenerated = true;
 
-        // TODO: How do we asynchronously update the store's state? or do we just give in and make it all sync?
+        this.emit(LISTS_UPDATE_EVENT, this);
     }
 }
 

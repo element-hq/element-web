@@ -21,7 +21,7 @@ import { _t } from "../../../languageHandler";
 import { Layout } from '../../../resizer/distributors/roomsublist2';
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -56,8 +56,8 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        RoomListStore.instance.addListener(() => {
-            console.log(RoomListStore.instance.orderedLists);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store) => {
+            console.log("new lists", store.orderedLists);
         });
     }
 
