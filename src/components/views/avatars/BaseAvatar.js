@@ -208,8 +208,8 @@ export default createReactClass({
                     onClick={onClick}
                     onError={this.onError}
                     style={{
-                        width: toRem(width),
-                        height: toRem(height)
+                        width: {width},
+                        height: {height},
                     }}
                     title={title} alt=""
                     inputRef={inputRef}
