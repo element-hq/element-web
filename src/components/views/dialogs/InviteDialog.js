@@ -1067,9 +1067,8 @@ export default class InviteDialog extends React.PureComponent {
         let buttonText;
         let goButtonFn;
 
+        const userId = MatrixClientPeg.get().getUserId();
         if (this.props.kind === KIND_DM) {
-            const userId = MatrixClientPeg.get().getUserId();
-
             title = _t("Direct Messages");
             helpText = _t(
                 "Start a conversation with someone using their name, username (like <userId/>) or email address.",
@@ -1083,12 +1082,11 @@ export default class InviteDialog extends React.PureComponent {
         } else { // KIND_INVITE
             title = _t("Invite to this room");
             helpText = _t(
-                "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
-                "<a>share this room</a>.", {},
-                {
-                    a: (sub) =>
-                        <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
-                },
+                "Invite someone using their name, username (like <userId/>) or email address.",
+                {},
+                {userId: () => {
+                    return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
+                }},
             );
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
