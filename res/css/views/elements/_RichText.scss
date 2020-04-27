@@ -12,7 +12,6 @@
     border-radius: $font-16px;
     line-height: $font-15px;
     padding-left: 0;
-    padding-right: $font-5px;
 }
 
 a.mx_Pill {
@@ -25,7 +24,7 @@ a.mx_Pill {
 
 .mx_Pill {
     padding: $font-1px;
-    padding-right: $font-6px;
+    padding-right: 0.4em;
 }
 
 /* More specific to override `.markdown-body a` color */
