@@ -81,4 +81,4 @@ eg. in config.json:
     }
 ```
 
-`username-colors` is expected to contain 8 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme.
+`username-colors` is expected to contain 8 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme. These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
