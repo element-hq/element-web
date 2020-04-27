@@ -53,13 +53,37 @@ export function avatarUrlForUser(user, width, height, resizeMethod) {
     return url;
 }
 
+function urlForColor(color) {
+    const size = 40;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, size, size);
+    return canvas.toDataURL();
+}
+
+// XXX: Ideally we'd clear this cache when the theme changes
+// but since this function is at global scope, it's a bit
+// hard to install a listener here, even if there were a clear event to listen to
+const colorToDataURLCache = new Map();
+
 export function defaultAvatarUrlForString(s) {
-    const images = ['03b381', '368bd6', 'ac3ba8'];
+    const defaultColors = ['#03b381', '#368bd6', '#ac3ba8'];
     let total = 0;
     for (let i = 0; i < s.length; ++i) {
         total += s.charCodeAt(i);
     }
-    return require('../res/img/' + images[total % images.length] + '.png');
+    const colorIndex = total % defaultColors.length;
+    // overwritten color value in custom themes
+    const color = defaultColors[colorIndex];
+    let dataUrl = colorToDataURLCache.get(color);
+    if (!dataUrl) {
+        dataUrl = urlForColor(color);
+        colorToDataURLCache.set(color, dataUrl);
+    }
+    return dataUrl;
 }
 
 /**
