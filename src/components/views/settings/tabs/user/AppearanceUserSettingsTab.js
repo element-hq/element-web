@@ -168,7 +168,7 @@ export default class StyleUserSettingsTab extends React.Component {
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Appearance")}</div>
                 {this._renderThemeSection()}
-                {SettingsStore.getValue("feature_font_scaling") ? this._renderFontSection() : null}
+                {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this._renderFontSection() : null}
             </div>
         );
     }
