@@ -463,5 +463,6 @@
     "Couldn't find a matching Matrix room": "Ei leidnud vastavat Matrix'i jututuba",
     "Find a room…": "Leia jututuba…",
     "Find a room… (e.g. %(exampleRoom)s)": "Otsi jututuba… (näiteks %(exampleRoom)s)",
-    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida."
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida.",
+    "Options": "Valikud"
 }
