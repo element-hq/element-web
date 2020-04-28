@@ -320,5 +320,9 @@
     "Filter": "Filtreeri",
     "Clear filter": "Eemalda filter",
     "Copy": "Kopeeri",
-    "Clear room list filter field": "Tühjenda jututubade filtriväli"
+    "Clear room list filter field": "Tühjenda jututubade filtriväli",
+    "Mute": "Summuta",
+    "Settings": "Seadistused",
+    "You're not currently a member of any communities.": "Sa ei ole hetkel ainsamagi kogukonna liige.",
+    "Create a new community": "Loo uus kogukond"
 }
