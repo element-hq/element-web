@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import dis from "../../../dispatcher";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -22,14 +23,18 @@ import DeviceListener from '../../../DeviceListener';
 import FormButton from '../elements/FormButton';
 import { replaceableComponent } from '../../../utils/replaceableComponent';
 
-@replaceableComponent("views.toasts.UnverifiedSessionToast")
-export default class UnverifiedSessionToast extends React.PureComponent {
+@replaceableComponent("views.toasts.BulkUnverifiedSessionsToast")
+export default class BulkUnverifiedSessionsToast extends React.PureComponent {
+    static propTypes = {
+        deviceIds: PropTypes.array,
+    }
+
     _onLaterClick = () => {
-        DeviceListener.sharedInstance().dismissVerifications();
+        DeviceListener.sharedInstance().dismissUnverifiedSessions(this.props.deviceIds);
     };
 
     _onReviewClick = async () => {
-        DeviceListener.sharedInstance().dismissVerifications();
+        DeviceListener.sharedInstance().dismissUnverifiedSessions(this.props.deviceIds);
 
         dis.dispatch({
             action: 'view_user_info',
