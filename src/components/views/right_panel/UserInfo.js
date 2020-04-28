@@ -181,9 +181,7 @@ function DeviceItem({userId, device}) {
     });
 
     const onDeviceClick = () => {
-        if (!isVerified) {
-            verifyDevice(cli.getUser(userId), device);
-        }
+        verifyDevice(cli.getUser(userId), device);
     };
 
     const deviceName = device.ambiguous ?
