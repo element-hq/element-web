@@ -577,10 +577,13 @@ export default class InviteDialog extends React.PureComponent {
         if (SettingsStore.getValue("feature_cross_signing")) {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
-            const client = MatrixClientPeg.get();
-            const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
-            if (allHaveDeviceKeys) {
-                createRoomOptions.encryption = true;
+            const containsNonMatrixUsers = targets.some(t => !(t instanceof DirectoryMember));
+            if (!containsNonMatrixUsers) {
+                const client = MatrixClientPeg.get();
+                const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
+                if (allHaveDeviceKeys) {
+                    createRoomOptions.encryption = true;
+                }
             }
         }
 
