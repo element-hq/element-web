@@ -53,6 +53,13 @@ export function avatarUrlForUser(user, width, height, resizeMethod) {
     return url;
 }
 
+function isValidHexColor(color) {
+    return typeof color === "string" &&
+        (color.length === 7 || color.lengh === 9) &&
+        color.charAt(0) === "#" &&
+        !color.substr(1).split("").some(c => isNaN(parseInt(c, 16)));
+}
+
 function urlForColor(color) {
     const size = 40;
     const canvas = document.createElement("canvas");
@@ -86,8 +93,14 @@ export function defaultAvatarUrlForString(s) {
     const color = cssValue || defaultColors[colorIndex];
     let dataUrl = colorToDataURLCache.get(color);
     if (!dataUrl) {
-        dataUrl = urlForColor(color);
-        colorToDataURLCache.set(color, dataUrl);
+        // validate color as this can come from account_data
+        // with custom theming
+        if (isValidHexColor(color)) {
+            dataUrl = urlForColor(color);
+            colorToDataURLCache.set(color, dataUrl);
+        } else {
+            dataUrl = "";
+        }
     }
     return dataUrl;
 }
