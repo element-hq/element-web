@@ -15,8 +15,6 @@ limitations under the License.
 */
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field,
-.mx_StyleUserSettingsTab_themeSection .mx_Field,
-.mx_StyleUserSettingsTab_fontScaling .mx_Field {
     @mixin mx_Settings_fullWidthField;
 }
 
