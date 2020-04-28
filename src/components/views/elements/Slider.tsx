@@ -16,22 +16,22 @@ limitations under the License.
 
 import * as React from 'react';
 
-type IProps = {
-        // A callback for the selected value
-        onSelectionChange: (value: number) => void;
+interface IProps {
+    // A callback for the selected value
+    onSelectionChange: (value: number) => void;
 
-        // The current value of the slider
-        value: number;
+    // The current value of the slider
+    value: number;
 
-        // The range and values of the slider
-        // Currently only supports an ascending, constant interval range
-        values: number[];
+    // The range and values of the slider
+    // Currently only supports an ascending, constant interval range
+    values: number[];
 
-        // A function for formatting the the values
-        displayFunc: (value: number) => string;
+    // A function for formatting the the values
+    displayFunc: (value: number) => string;
 
-        // Whether the slider is disabled
-        disabled: boolean;
+    // Whether the slider is disabled
+    disabled: boolean;
 }
 
 export default class Slider extends React.Component<IProps> {
