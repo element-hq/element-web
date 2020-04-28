@@ -43,7 +43,7 @@ export default class Slider extends React.Component<IProps> {
     // y values.
     // Offset is used for finding the location of a value on a
     // non linear slider.
-    _offset(values: number[], value: number): number {
+    private offset(values: number[], value: number): number {
         // the index of the first number greater than value.
         let closest = values.reduce((prev, curr) => {
             return (value > curr ? prev + 1 : prev);
@@ -80,19 +80,21 @@ export default class Slider extends React.Component<IProps> {
                  disabled={this.props.disabled}
             />);
 
-        const offset = this._offset(this.props.values, this.props.value);
+        let selection = null;
+
+        if (this.props.disabled) {
+            const offset = this.offset(this.props.values, this.props.value);
+            selection = <div className="mx_Slider_selection">
+                <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55em + " + offset + "%)"}} />
+                <hr style={{width: offset + "%"}} />
+            </div>
+        }
 
         return <div className="mx_Slider">
             <div>
                 <div className="mx_Slider_bar">
                     <hr />
-                    { this.props.disabled ?
-                        null :
-                        <div className="mx_Slider_selection">
-                            <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55em + " + offset + "%)"}} />
-                            <hr style={{width: offset + "%"}} />
-                        </div>
-                    }
+                    { selection }
                 </div>
                 <div className="mx_Slider_dotContainer">
                     {dots}
@@ -102,7 +104,7 @@ export default class Slider extends React.Component<IProps> {
     }
 }
 
-type DotIProps = {
+interface IDotProps {
     // Callback for behavior onclick
     onClick: () => void,
 
@@ -116,7 +118,7 @@ type DotIProps = {
     disabled: boolean;
 }
 
-class Dot extends React.PureComponent<DotIProps> {
+class Dot extends React.PureComponent<IDotProps> {
     render(): React.ReactNode {
         let className = "mx_Slider_dot"
         if (!this.props.disabled && this.props.active) {
