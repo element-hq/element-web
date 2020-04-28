@@ -66,7 +66,7 @@ import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
-import { FontWatcher } from '../../fontSize';
+import { FontWatcher } from '../../FontWatcher';
 
 /** constants for MatrixChat.state.view */
 export const VIEWS = {
