@@ -1110,7 +1110,7 @@ export const useDevices = (userId) => {
         async function _downloadDeviceList() {
             try {
                 await cli.downloadKeys([userId], true);
-                const devices = await cli.getStoredDevicesForUser(userId);
+                const devices = cli.getStoredDevicesForUser(userId);
 
                 if (cancelled) {
                     // we got cancelled - presumably a different user now
@@ -1135,7 +1135,7 @@ export const useDevices = (userId) => {
     useEffect(() => {
         let cancel = false;
         const updateDevices = async () => {
-            const newDevices = await cli.getStoredDevicesForUser(userId);
+            const newDevices = cli.getStoredDevicesForUser(userId);
             if (cancel) return;
             setDevices(newDevices);
         };

@@ -160,13 +160,10 @@ export default createReactClass({
             // no need to re-download the whole thing; just update our copy of
             // the list.
 
-            // Promise.resolve to handle transition from static result to promise; can be removed
-            // in future
-            Promise.resolve(this.context.getStoredDevicesForUser(userId)).then((devices) => {
-                this.setState({
-                    devices: devices,
-                    e2eStatus: this._getE2EStatus(devices),
-                });
+            const devices = this.context.getStoredDevicesForUser(userId);
+            this.setState({
+                devices: devices,
+                e2eStatus: this._getE2EStatus(devices),
             });
         }
     },

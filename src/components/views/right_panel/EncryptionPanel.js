@@ -22,7 +22,6 @@ import VerificationPanel from "./VerificationPanel";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {ensureDMExists} from "../../../createRoom";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import {useAsyncMemo} from "../../../hooks/useAsyncMemo";
 import Modal from "../../../Modal";
 import {PHASE_REQUESTED, PHASE_UNSENT} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import * as sdk from "../../../index";
@@ -47,10 +46,7 @@ const EncryptionPanel = (props) => {
     }, [verificationRequest]);
 
     const deviceId = request && request.channel.deviceId;
-    const device = useAsyncMemo(() => {
-        const cli = MatrixClientPeg.get();
-        return cli.getStoredDevice(cli.getUserId(), deviceId);
-    }, [deviceId]);
+    const device = MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
 
     useEffect(() => {
         async function awaitPromise() {
