@@ -18,6 +18,7 @@ import { IAlgorithm, ITagMap, ITagSortingMap, ListAlgorithm } from "./IAlgorithm
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { DefaultTagID } from "../models";
+import { splitRoomsByMembership } from "../membership";
 
 /**
  * A demonstration/temporary algorithm to verify the API surface works.
@@ -65,7 +66,8 @@ export class ChaoticAlgorithm implements IAlgorithm {
         }
 
         // TODO: Remove logging
-        console.log({alg: this.representativeAlgorithm});
+        const memberships = splitRoomsByMembership(rooms);
+        console.log({alg: this.representativeAlgorithm, memberships});
 
         // Step through each room and determine which tags it should be in.
         // We don't care about ordering or sorting here - we're simply organizing things.
