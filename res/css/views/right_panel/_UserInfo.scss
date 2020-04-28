@@ -98,8 +98,8 @@ limitations under the License.
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar_initial {
@@ -109,7 +109,7 @@ limitations under the License.
         justify-content: center;
 
         // override the calculated sizes so that the letter isn't HUGE
-        font-size: 56px !important;
+        font-size: 6rem !important;
         width: 100% !important;
         transition: font-size 0.5s;
     }

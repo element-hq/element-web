@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageComposer_avatar .mx_BaseAvatar {
-    padding: 2px;
-    border: 1px solid transparent;
-    border-radius: 100%;
-}
-
-.mx_MessageComposer_avatar .mx_BaseAvatar_initial {
-    left: 2px;
-}
-
-.mx_MemberStatusMessageAvatar_hasStatus .mx_BaseAvatar {
-    border-color: $accent-color;
+// converts a pixel value to rem.
+export default function(pixelVal) {
+  return pixelVal / 15 + "rem";
 }
