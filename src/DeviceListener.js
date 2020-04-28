@@ -200,7 +200,7 @@ export default class DeviceListener {
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
         if (crossSigningReady) {
-            const unverifiedDeviceIds = new Set();
+            const haveUnverifiedDevices = false;
 
             const devices = await cli.getStoredDevicesForUser(cli.getUserId());
             for (const device of devices) {
@@ -208,11 +208,12 @@ export default class DeviceListener {
 
                 const deviceTrust = await cli.checkDeviceTrust(cli.getUserId(), device.deviceId);
                 if (!deviceTrust.isCrossSigningVerified() && !this._dismissed.has(device.deviceId)) {
-                    unverifiedDeviceIds.add(device.deviceId);
+                    haveUnverifiedDevices = true;
+                    break;
                 }
             }
 
-            if (unverifiedDeviceIds.size > 0) {
+            if (haveUnverifiedDevices) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: OTHER_DEVICES_TOAST_KEY,
                     title: _t("Review where you’re logged in"),
