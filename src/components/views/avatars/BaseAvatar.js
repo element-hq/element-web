@@ -24,7 +24,7 @@ import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import toRem from "../../../utils/rem";
+import {toRem} from "../../../utils/rem";
 
 export default createReactClass({
     displayName: 'BaseAvatar',

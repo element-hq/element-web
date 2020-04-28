@@ -32,7 +32,7 @@ import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
 import {RovingTabIndexWrapper} from "../../accessibility/RovingTabIndex";
-import toRem from "../../utils/rem";
+import {toRem} from "../../utils/rem";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
