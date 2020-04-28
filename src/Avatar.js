@@ -59,6 +59,10 @@ function urlForColor(color) {
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext("2d");
+    // bail out when using jsdom in unit tests
+    if (!ctx) {
+        return "";
+    }
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, size, size);
     return canvas.toDataURL();
