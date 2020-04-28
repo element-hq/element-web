@@ -200,7 +200,7 @@ export default class DeviceListener {
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
         if (crossSigningReady) {
-            const haveUnverifiedDevices = false;
+            let haveUnverifiedDevices = false;
 
             const devices = await cli.getStoredDevicesForUser(cli.getUserId());
             for (const device of devices) {
