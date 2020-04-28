@@ -451,5 +451,17 @@
     "This room": "See jututuba",
     "Joining room …": "Liitun jututoaga …",
     "Loading …": "Laen …",
-    "Device ID": "Seadme tunnus"
+    "Device ID": "Seadme tunnus",
+    "e.g. %(exampleValue)s": "näiteks %(exampleValue)s",
+    "Could not find user in room": "Jututoast ei leidnud kasutajat",
+    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Näita ajatempleid 12-tunnises vomingus (näiteks 2:30pl)",
+    "New published address (e.g. #alias:server)": "Uus avaldatud aadess (näiteks #alias:server)",
+    "New community ID (e.g. +foo:%(localDomain)s)": "Uus kogukonna tunnus (näiteks +midagi:%(localDomain)s)",
+    "e.g. my-room": "näiteks minu-jututuba",
+    "Can't find this server or its room list": "Ei leia seda serverit ega tema jututubade loendit",
+    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "Kui sa ei leia kedagi, siis küsi tema kasutajanime (näiteks @kasutaja:server.ee) või <a>jaga seda jututuba</a>.",
+    "Couldn't find a matching Matrix room": "Ei leidnud vastavat Matrix'i jututuba",
+    "Find a room…": "Leia jututuba…",
+    "Find a room… (e.g. %(exampleRoom)s)": "Otsi jututuba… (näiteks %(exampleRoom)s)",
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida."
 }
