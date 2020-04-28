@@ -27,7 +27,7 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
 import _range from "lodash/range";
 
-export default class StyleUserSettingsTab extends React.Component {
+export default class AppearanceUserSettingsTab extends React.Component {
     constructor() {
         super();
 
@@ -231,9 +231,10 @@ export default class StyleUserSettingsTab extends React.Component {
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <Field id="theme" label={_t("Theme")} element="select"
-                       value={this.state.theme} onChange={this._onThemeChange}
-                       disabled={this.state.useSystemTheme}
+                <Field
+                    id="theme" label={_t("Theme")} element="select"
+                    value={this.state.theme} onChange={this._onThemeChange}
+                    disabled={this.state.useSystemTheme}
                 >
                     {orderedThemes.map(theme => {
                         return <option key={theme.id} value={theme.id}>{theme.name}</option>;
