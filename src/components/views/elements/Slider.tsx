@@ -116,7 +116,7 @@ type DotIProps = {
     disabled: boolean;
 }
 
-class Dot extends React.Component<DotIProps> {
+class Dot extends React.PureComponent<DotIProps> {
     render(): React.ReactNode {
         let className = "mx_Slider_dot"
         if (!this.props.disabled && this.props.active) {
