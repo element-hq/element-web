@@ -14,7 +14,8 @@ appearance tab in settings.
 
 ## Alternate message layouts (`feature_alternate_message_layouts`)
 
-Enables options in rooms settings to switch between message layouts such as the default and "irc-like" layouts.
+Enables options in appearance settings to switch between message layouts such as
+the default and "irc-like" layouts.
 
 ## Message pinning (`feature_pinning`)
 
