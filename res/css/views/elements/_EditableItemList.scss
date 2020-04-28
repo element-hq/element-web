@@ -53,6 +53,9 @@ limitations under the License.
 .mx_EditableItem_item {
     flex: auto 1 0;
     order: 1;
+    width: calc(100% - 14px); // leave space for the remove button
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .mx_EditableItemList_label {

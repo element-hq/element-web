@@ -165,12 +165,6 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "feature_invite_only_padlocks": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show padlocks on invite only rooms"),
-        default: true,
-    },
     "font_size": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

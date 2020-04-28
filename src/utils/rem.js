@@ -15,6 +15,6 @@ limitations under the License.
 */
 
 // converts a pixel value to rem.
-export function toRem(pixelVal) {
-    return pixelVal / 15 + "rem";
+export function toRem(pixelValue) {
+    return pixelValue / 15 + "rem";
 }

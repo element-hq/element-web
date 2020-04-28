@@ -53,13 +53,56 @@ export function avatarUrlForUser(user, width, height, resizeMethod) {
     return url;
 }
 
+function isValidHexColor(color) {
+    return typeof color === "string" &&
+        (color.length === 7 || color.lengh === 9) &&
+        color.charAt(0) === "#" &&
+        !color.substr(1).split("").some(c => isNaN(parseInt(c, 16)));
+}
+
+function urlForColor(color) {
+    const size = 40;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    // bail out when using jsdom in unit tests
+    if (!ctx) {
+        return "";
+    }
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, size, size);
+    return canvas.toDataURL();
+}
+
+// XXX: Ideally we'd clear this cache when the theme changes
+// but since this function is at global scope, it's a bit
+// hard to install a listener here, even if there were a clear event to listen to
+const colorToDataURLCache = new Map();
+
 export function defaultAvatarUrlForString(s) {
-    const images = ['03b381', '368bd6', 'ac3ba8'];
+    const defaultColors = ['#03b381', '#368bd6', '#ac3ba8'];
     let total = 0;
     for (let i = 0; i < s.length; ++i) {
         total += s.charCodeAt(i);
     }
-    return require('../res/img/' + images[total % images.length] + '.png');
+    const colorIndex = total % defaultColors.length;
+    // overwritten color value in custom themes
+    const cssVariable = `--avatar-background-colors_${colorIndex}`;
+    const cssValue = document.body.style.getPropertyValue(cssVariable);
+    const color = cssValue || defaultColors[colorIndex];
+    let dataUrl = colorToDataURLCache.get(color);
+    if (!dataUrl) {
+        // validate color as this can come from account_data
+        // with custom theming
+        if (isValidHexColor(color)) {
+            dataUrl = urlForColor(color);
+            colorToDataURLCache.set(color, dataUrl);
+        } else {
+            dataUrl = "";
+        }
+    }
+    return dataUrl;
 }
 
 /**
