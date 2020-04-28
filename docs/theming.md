@@ -54,7 +54,9 @@ eg. in config.json:
                     "timeline-background-color": "#ffffff",
                     "timeline-text-color": "#2e2f32",
                     "timeline-text-secondary-color": "#61708b",
-                    "timeline-highlights-color": "#f3f8fd"
+                    "timeline-highlights-color": "#f3f8fd",
+                    "username-colors": ["#ff0000", ...]
+                    "avatar-background-colors": ["#cc0000", ...]
                 }
             }, {
                 "name": "Deep Purple",
@@ -78,3 +80,7 @@ eg. in config.json:
         ]
     }
 ```
+
+`username-colors` is expected to contain 8 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme.
+
+These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
