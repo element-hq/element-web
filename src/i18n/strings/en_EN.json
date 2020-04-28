@@ -1794,7 +1794,7 @@
     "Not a valid recovery key": "Not a valid recovery key",
     "Access your secure message history and your cross-signing identity for verifying other sessions by entering your recovery key.": "Access your secure message history and your cross-signing identity for verifying other sessions by entering your recovery key.",
     "If you've forgotten your recovery key you can <button>set up new recovery options</button>.": "If you've forgotten your recovery key you can <button>set up new recovery options</button>.",
-    "Downloading from server": "Downloading from server",
+    "Downloading from server...": "Downloading from server...",
     "Loaded %(completed)s of %(total)s": "Loaded %(completed)s of %(total)s",
     "Requesting from server...": "Requesting from server...",
     "Unable to load backup status": "Unable to load backup status",
