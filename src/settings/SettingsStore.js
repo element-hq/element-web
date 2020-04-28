@@ -373,7 +373,7 @@ export default class SettingsStore {
     /**
      * Gets the default value of a setting.
      * @param {string} settingName The name of the setting to read the value of.
-     * @return {*} The value, or null if not found
+     * @return {*} The default value
      */
     static getDefaultValue(settingName, roomId = null, excludeDefault = false) {
         // Verify that the setting is actually a setting
