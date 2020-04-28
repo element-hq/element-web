@@ -112,7 +112,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onGoToUserProfileClick = () => {
-        // close the settings dialog & let the default action run (ie. navigate to the link)
+        window.location.href = "#/user/" + MatrixClientPeg.get().getUserId();
         this.props.closeSettingsFn();
     }
 
@@ -327,9 +327,9 @@ export default class SecurityUserSettingsTab extends React.Component {
                             "Manage the names of and sign out of your sessions below or " +
                             "<a>verify them in your User Profile</a>.", {},
                             {
-                                a: sub => <a href={"#/user/" + MatrixClientPeg.get().getUserId()}
-                                    onClick={this._onGoToUserProfileClick}
-                                >{sub}</a>,
+                                a: sub => <AccessibleButton kind="link" onClick={this._onGoToUserProfileClick}>
+                                    {sub}
+                                </AccessibleButton>,
                             },
                         )}
                     </span>
