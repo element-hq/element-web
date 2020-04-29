@@ -274,8 +274,8 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 type="text"
                 label={_t("Font size")}
                 autoComplete="off"
-                placeholder={this.state.fontSize}
-                value={this.state.fontSize}
+                placeholder={toString(this.state.fontSize)}
+                value={toString(this.state.fontSize)}
                 id="font_size_field"
                 onValidate={this._onValidateFontSize}
                 onChange={({value}) => this.setState({fontSize: value})}
