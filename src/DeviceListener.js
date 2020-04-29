@@ -107,7 +107,12 @@ export default class DeviceListener {
         }
     }
 
-    _onWillUpdateDevices = async (users) => {
+    _onWillUpdateDevices = async (users, initialFetch) => {
+        // If we didn't know about *any* devices before (ie. it's fresh login),
+        // then they are all pre-existing devices, so ignore this and set the
+        // devicesAtStart list to the devices that we see after the fetch.
+        if (initialFetch) return;
+
         const myUserId = MatrixClientPeg.get().getUserId();
         if (users.includes(myUserId)) this._ensureDeviceIdsAtStartPopulated();
 
@@ -179,8 +184,6 @@ export default class DeviceListener {
 
         const crossSigningReady = await cli.isCrossSigningReady();
 
-        this._ensureDeviceIdsAtStartPopulated();
-
         if (this._dismissedThisDeviceToast) {
             ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
         } else {
@@ -234,6 +237,10 @@ export default class DeviceListener {
                 ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
             }
         }
+
+        // This needs to be done after awaiting on downloadKeys() above, so
+        // we make sure we get the devices after the fetch is done.
+        this._ensureDeviceIdsAtStartPopulated();
 
         // Unverified devices that were there last time the app ran
         // (technically could just be a boolean: we don't actually

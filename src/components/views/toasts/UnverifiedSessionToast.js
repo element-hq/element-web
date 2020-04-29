@@ -27,7 +27,7 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 @replaceableComponent("views.toasts.UnverifiedSessionToast")
 export default class UnverifiedSessionToast extends React.PureComponent {
     static propTypes = {
-        deviceId: PropTypes.object,
+        deviceId: PropTypes.string,
     }
 
     _onLaterClick = () => {
