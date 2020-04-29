@@ -108,7 +108,7 @@ export default class DeviceListener {
     }
 
     _onWillUpdateDevices = async (users, initialFetch) => {
-        // We we didn't know about *any* devices before (ie. it's fresh login),
+        // If we didn't know about *any* devices before (ie. it's fresh login),
         // then they are all pre-existing devices, so ignore this and set the
         // devicesAtStart list to the devices that we see after the fetch.
         if (initialFetch) return;
