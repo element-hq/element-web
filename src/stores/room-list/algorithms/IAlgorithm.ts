@@ -84,5 +84,5 @@ export interface IAlgorithm {
      * depending on whether or not getOrderedRooms() should be called after
      * processing.
      */
-    handleRoomUpdate(room: Room): Promise<boolean>;
+    handleRoomUpdate(room: Room): Promise<boolean>; // TODO: Take a ReasonForChange to better predict the behaviour?
 }
