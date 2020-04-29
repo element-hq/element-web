@@ -27,6 +27,7 @@ $right-padding: 5px;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
+        padding-top: 0;
 
         > * {
             margin-right: $right-padding;
