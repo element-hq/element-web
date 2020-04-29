@@ -49,9 +49,6 @@ export default class UnverifiedSessionToast extends React.PureComponent {
     };
 
     render() {
-        const cli = MatrixClientPeg.get();
-        const device = cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
-
         return (<div>
             <div className="mx_Toast_description">
                 {_t("Verify the identity of the new login accessing your account & messages")}
