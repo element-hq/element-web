@@ -14,38 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DefaultTagID, TagID } from "../models";
+import { DefaultTagID, TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import { EffectiveMembership, splitRoomsByMembership } from "../membership";
-
-export enum SortAlgorithm {
-    Manual = "MANUAL",
-    Alphabetic = "ALPHABETIC",
-    Recent = "RECENT",
-}
-
-export enum ListAlgorithm {
-    // Orders Red > Grey > Bold > Idle
-    Importance = "IMPORTANCE",
-
-    // Orders however the SortAlgorithm decides
-    Natural = "NATURAL",
-}
-
-export interface ITagSortingMap {
-    // @ts-ignore - TypeScript really wants this to be [tagId: string] but we know better.
-    [tagId: TagID]: SortAlgorithm;
-}
-
-export interface ITagMap {
-    // @ts-ignore - TypeScript really wants this to be [tagId: string] but we know better.
-    [tagId: TagID]: Room[];
-}
+import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
+import { ITagMap, ITagSortingMap } from "../models";
 
 // TODO: Add locking support to avoid concurrent writes?
 // TODO: EventEmitter support? Might not be needed.
 
+/**
+ * Represents a list ordering algorithm. This class will take care of tag
+ * management (which rooms go in which tags) and ask the implementation to
+ * deal with ordering mechanics.
+ */
 export abstract class Algorithm {
     protected cached: ITagMap = {};
     protected sortAlgorithms: ITagSortingMap;
@@ -160,6 +142,7 @@ export abstract class Algorithm {
      * @param {Room[]} rooms The rooms within the tag, unordered.
      * @returns {Promise<Room[]>} Resolves to the ordered rooms in the tag.
      */
+    // TODO: Do we need this?
     protected abstract regenerateTag(tagId: TagID, rooms: Room[]): Promise<Room[]>;
 
     /**
@@ -173,6 +156,6 @@ export abstract class Algorithm {
      * processing.
      */
     // TODO: Take a ReasonForChange to better predict the behaviour?
-    // TODO: Intercept here and handle tag changes automatically
+    // TODO: Intercept here and handle tag changes automatically? May be best to let the impl do that.
     public abstract handleRoomUpdate(room: Room): Promise<boolean>;
 }

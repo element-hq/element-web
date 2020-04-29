@@ -19,7 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "./RoomListStore2";
 import OldRoomListStore from "../RoomListStore";
-import { ITagMap } from "./algorithms/Algorithm";
+import { ITagMap } from "./algorithms/models";
 import { UPDATE_EVENT } from "../AsyncStore";
 
 /**

@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm, ITagMap } from "./Algorithm";
-import { DefaultTagID } from "../models";
+import { Algorithm } from "./Algorithm";
+import { DefaultTagID } from "../../models";
+import { ITagMap } from "../models";
 
 /**
  * A demonstration/temporary algorithm to verify the API surface works.

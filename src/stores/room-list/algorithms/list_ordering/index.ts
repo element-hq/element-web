@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm, ListAlgorithm } from "./Algorithm";
+import { Algorithm } from "./Algorithm";
 import { ChaoticAlgorithm } from "./ChaoticAlgorithm";
 import { ImportanceAlgorithm } from "./ImportanceAlgorithm";
+import { ListAlgorithm } from "../models";
 
 const ALGORITHM_FACTORIES: { [algorithm in ListAlgorithm]: () => Algorithm } = {
-    [ListAlgorithm.Natural]: () => new ChaoticAlgorithm(ListAlgorithm.Natural),
+    [ListAlgorithm.Natural]: () => new ChaoticAlgorithm(),
     [ListAlgorithm.Importance]: () => new ImportanceAlgorithm(),
 };
 
@@ -28,7 +29,7 @@ const ALGORITHM_FACTORIES: { [algorithm in ListAlgorithm]: () => Algorithm } = {
  * @param {ListAlgorithm} algorithm The algorithm to get an instance of.
  * @returns {Algorithm} The algorithm instance.
  */
-export function getAlgorithmInstance(algorithm: ListAlgorithm): Algorithm {
+export function getListAlgorithmInstance(algorithm: ListAlgorithm): Algorithm {
     if (!ALGORITHM_FACTORIES[algorithm]) {
         throw new Error(`${algorithm} is not a known algorithm`);
     }

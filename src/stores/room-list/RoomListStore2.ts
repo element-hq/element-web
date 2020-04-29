@@ -19,10 +19,11 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { ActionPayload, defaultDispatcher } from "../../dispatcher-types";
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, TagID } from "./models";
-import { Algorithm, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/Algorithm";
+import { Algorithm } from "./algorithms/list_ordering/Algorithm";
 import TagOrderStore from "../TagOrderStore";
-import { getAlgorithmInstance } from "./algorithms";
+import { getListAlgorithmInstance } from "./algorithms/list_ordering";
 import { AsyncStore } from "../AsyncStore";
+import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -172,7 +173,7 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
     }
 
     private setAlgorithmClass() {
-        this.algorithm = getAlgorithmInstance(this.state.preferredAlgorithm);
+        this.algorithm = getListAlgorithmInstance(this.state.preferredAlgorithm);
     }
 
     private async regenerateAllLists() {

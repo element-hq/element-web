@@ -1,4 +1,5 @@
 /*
+Copyright 2018, 2019 New Vector Ltd
 Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm, ITagMap, ITagSortingMap } from "./Algorithm";
+import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import { DefaultTagID, TagID } from "../models";
-import { splitRoomsByMembership } from "../membership";
+import { DefaultTagID, TagID } from "../../models";
+import { ITagMap, SortAlgorithm } from "../models";
+import { getSortingAlgorithmInstance, sortRoomsWithAlgorithm } from "../tag_sorting";
+import * as Unread from '../../../../Unread';
 
 /**
  * The determined category of a room.
@@ -42,6 +44,11 @@ export enum Category {
      * The room has no relevant unread messages within.
      */
     Idle = "IDLE",
+}
+
+interface ICategorizedRoomMap {
+    // @ts-ignore - TS wants this to be a string, but we know better
+    [category: Category]: Room[];
 }
 
 /**
@@ -119,8 +126,72 @@ export class ImportanceAlgorithm extends Algorithm {
         console.log("Constructed an ImportanceAlgorithm");
     }
 
+    // noinspection JSMethodCanBeStatic
+    private categorizeRooms(rooms: Room[]): ICategorizedRoomMap {
+        const map: ICategorizedRoomMap = {
+            [Category.Red]: [],
+            [Category.Grey]: [],
+            [Category.Bold]: [],
+            [Category.Idle]: [],
+        };
+        for (const room of rooms) {
+            const category = this.getRoomCategory(room);
+            console.log(`[DEBUG] "${room.name}" (${room.roomId}) is a ${category} room`);
+            map[category].push(room);
+        }
+        return map;
+    }
+
+    // noinspection JSMethodCanBeStatic
+    private getRoomCategory(room: Room): Category {
+        // Function implementation borrowed from old RoomListStore
+
+        const mentions = room.getUnreadNotificationCount('highlight') > 0;
+        if (mentions) {
+            return Category.Red;
+        }
+
+        let unread = room.getUnreadNotificationCount() > 0;
+        if (unread) {
+            return Category.Grey;
+        }
+
+        unread = Unread.doesRoomHaveUnreadMessages(room);
+        if (unread) {
+            return Category.Bold;
+        }
+
+        return Category.Idle;
+    }
+
     protected async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
-        return Promise.resolve();
+        for (const tagId of Object.keys(updatedTagMap)) {
+            const unorderedRooms = updatedTagMap[tagId];
+
+            const sortBy = this.sortAlgorithms[tagId];
+            if (!sortBy) throw new Error(`${tagId} does not have a sorting algorithm`);
+
+            if (sortBy === SortAlgorithm.Manual) {
+                // Manual tags essentially ignore the importance algorithm, so don't do anything
+                // special about them.
+                updatedTagMap[tagId] = await sortRoomsWithAlgorithm(unorderedRooms, tagId, sortBy);
+            } else {
+                // Every other sorting type affects the categories, not the whole tag.
+                const categorized = this.categorizeRooms(unorderedRooms);
+                for (const category of Object.keys(categorized)) {
+                    const roomsToOrder = categorized[category];
+                    categorized[category] = await sortRoomsWithAlgorithm(roomsToOrder, tagId, sortBy);
+                }
+
+                // TODO: Update positions of categories in cache
+                updatedTagMap[tagId] = [
+                    ...categorized[Category.Red],
+                    ...categorized[Category.Grey],
+                    ...categorized[Category.Bold],
+                    ...categorized[Category.Idle],
+                ];
+            }
+        }
     }
 
     protected async regenerateTag(tagId: string | DefaultTagID, rooms: []): Promise<[]> {
