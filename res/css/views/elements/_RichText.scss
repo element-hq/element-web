@@ -18,13 +18,14 @@ a.mx_Pill {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    vertical-align: text-bottom;
     max-width: calc(100% - 1ch);
 }
 
 .mx_Pill {
     padding: $font-1px;
     padding-right: 0.4em;
+    vertical-align: text-top;
+    line-height: $font-17px;
 }
 
 /* More specific to override `.markdown-body a` color */
