@@ -508,5 +508,8 @@
     "Search failed": "Otsing ebaõnnestus",
     "Server may be unavailable, overloaded, or search timed out :(": "Server kas pole leitav, on üle koormatud või otsing aegus :(",
     "No more results": "Rohkem otsingutulemusi pole",
-    "Riot is securely caching encrypted messages locally for them to appear in search results:": "Otsingus kasutamiseks Riot puhverdab turvaliselt kohalikku arvutisse krüptitud sõnumeid:"
+    "Riot is securely caching encrypted messages locally for them to appear in search results:": "Otsingus kasutamiseks Riot puhverdab turvaliselt kohalikku arvutisse krüptitud sõnumeid:",
+    "Riot does not have permission to send you notifications - please check your browser settings": "Riot'il puudub luba sulle teavituste kuvamiseks - palun kontrolli oma brauseri seadistusi",
+    "Riot was not given permission to send notifications - please try again": "Riot ei saanud luba teavituste kuvamiseks - palun proovi uuesti",
+    "Room Notification": "Jututoa teavitus"
 }
