@@ -2404,5 +2404,7 @@
     "or another cross-signing capable Matrix client": "或另一個有交叉簽章功能的 Matrix 客戶端",
     "Use Recovery Passphrase or Key": "使用復原通關密語或金鑰",
     "Where you’re logged in": "您登入的地方",
-    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "在下方管理您工作階段的名稱與登入或<a>在您的使用者檔案中驗證它們</a>。"
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "在下方管理您工作階段的名稱與登入或<a>在您的使用者檔案中驗證它們</a>。",
+    "Review where you’re logged in": "審閱您的登入位置",
+    "Verify your other sessions": "驗證您其他的工作階段"
 }
