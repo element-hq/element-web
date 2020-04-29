@@ -1186,6 +1186,7 @@ export default createReactClass({
      */
     _onLoggedIn: async function() {
         ThemeController.isLogin = false;
+        this._themeWatcher.recheck();
         this.setStateForNewView({ view: VIEWS.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.
