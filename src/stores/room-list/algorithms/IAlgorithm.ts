@@ -32,13 +32,6 @@ export enum ListAlgorithm {
     Natural = "NATURAL",
 }
 
-export enum Category {
-    Red = "RED",
-    Grey = "GREY",
-    Bold = "BOLD",
-    Idle = "IDLE",
-}
-
 export interface ITagSortingMap {
     // @ts-ignore - TypeScript really wants this to be [tagId: string] but we know better.
     [tagId: TagID]: SortAlgorithm;
@@ -50,7 +43,7 @@ export interface ITagMap {
 }
 
 // TODO: Convert IAlgorithm to an abstract class?
-// TODO: Add locking support to avoid concurrent writes
+// TODO: Add locking support to avoid concurrent writes?
 // TODO: EventEmitter support
 
 /**

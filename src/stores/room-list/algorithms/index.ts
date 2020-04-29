@@ -16,10 +16,11 @@ limitations under the License.
 
 import { IAlgorithm, ListAlgorithm } from "./IAlgorithm";
 import { ChaoticAlgorithm } from "./ChaoticAlgorithm";
+import { ImportanceAlgorithm } from "./ImportanceAlgorithm";
 
 const ALGORITHM_FACTORIES: { [algorithm in ListAlgorithm]: () => IAlgorithm } = {
     [ListAlgorithm.Natural]: () => new ChaoticAlgorithm(ListAlgorithm.Natural),
-    [ListAlgorithm.Importance]: () => new ChaoticAlgorithm(ListAlgorithm.Importance),
+    [ListAlgorithm.Importance]: () => new ImportanceAlgorithm(),
 };
 
 /**

@@ -31,6 +31,7 @@ export class ChaoticAlgorithm implements IAlgorithm {
     private rooms: Room[] = [];
 
     constructor(private representativeAlgorithm: ListAlgorithm) {
+        console.log("Constructed a ChaoticAlgorithm");
     }
 
     getOrderedRooms(): ITagMap {
