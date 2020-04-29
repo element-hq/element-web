@@ -45,7 +45,7 @@ export default class BulkUnverifiedSessionsToast extends React.PureComponent {
     render() {
         return (<div>
             <div className="mx_Toast_description">
-                {_t("Verify your other sessions")}
+                {_t("Unverified sessions currently have access to your account & messages")}
             </div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
