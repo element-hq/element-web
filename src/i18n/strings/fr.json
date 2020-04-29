@@ -39,7 +39,7 @@
     "Banned users": "Utilisateurs bannis",
     "Bans user with given id": "Bannit l'utilisateur à partir de son identifiant",
     "Blacklisted": "Sur liste noire",
-    "Call Timeout": "Délai d’appel expiré",
+    "Call Timeout": "L’appel a dépassé le délai d'attente maximal",
     "Can't connect to homeserver via HTTP when an HTTPS URL is in your browser bar. Either use HTTPS or <a>enable unsafe scripts</a>.": "Impossible de se connecter au serveur d'accueil en HTTP si l'URL dans la barre de votre explorateur est en HTTPS. Utilisez HTTPS ou <a>activez le support des scripts non-vérifiés</a>.",
     "Change Password": "Changer le mot de passe",
     "%(senderName)s changed their profile picture.": "%(senderName)s a changé son image de profil.",
