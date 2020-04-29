@@ -117,6 +117,7 @@ export default class MessagePanel extends React.Component {
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
+            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -169,6 +170,8 @@ export default class MessagePanel extends React.Component {
 
         this._showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
+
+        this._layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
     }
 
     componentDidMount() {
@@ -178,6 +181,7 @@ export default class MessagePanel extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
+        SettingsStore.unwatchSetting(this._layoutWatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -195,6 +199,12 @@ export default class MessagePanel extends React.Component {
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
         });
     };
+
+    onLayoutChange = () => {
+        this.setState({
+            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+        });
+    }
 
     /* get the DOM node representing the given event */
     getNodeForEventId(eventId) {
@@ -779,6 +789,8 @@ export default class MessagePanel extends React.Component {
             this.props.className,
             {
                 "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
+                "mx_IRCLayout": this.state.useIRCLayout,
+                "mx_GroupLayout": !this.state.useIRCLayout,
             },
         );
 
