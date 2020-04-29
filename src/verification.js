@@ -23,7 +23,6 @@ import {RIGHT_PANEL_PHASES} from "./stores/RightPanelStorePhases";
 import {findDMForUser} from './createRoom';
 import {accessSecretStorage} from './CrossSigningManager';
 import SettingsStore from './settings/SettingsStore';
-import NewSessionReviewDialog from './components/views/dialogs/NewSessionReviewDialog';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 
 async function enable4SIfNeeded() {
@@ -70,41 +69,34 @@ export async function verifyDevice(user, device) {
         }
     }
 
-    if (user.userId === cli.getUserId()) {
-        Modal.createTrackedDialog('New Session Review', 'Starting dialog', NewSessionReviewDialog, {
-            userId: user.userId,
-            device,
-        });
-    } else {
-        Modal.createTrackedDialog("Verification warning", "unverified session", UntrustedDeviceDialog, {
-            user,
-            device,
-            onFinished: async (action) => {
-                if (action === "sas") {
-                    const verificationRequestPromise = cli.legacyDeviceVerification(
-                        user.userId,
-                        device.deviceId,
-                        verificationMethods.SAS,
-                    );
-                    dis.dispatch({
-                        action: "set_right_panel_phase",
-                        phase: RIGHT_PANEL_PHASES.EncryptionPanel,
-                        refireParams: {member: user, verificationRequestPromise},
-                    });
-                } else if (action === "legacy") {
-                    const ManualDeviceKeyVerificationDialog =
-                        sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
-                    Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
-                        ManualDeviceKeyVerificationDialog,
-                        {
-                            userId: user.userId,
-                            device,
-                        },
-                    );
-                }
-            },
-        });
-    }
+    Modal.createTrackedDialog("Verification warning", "unverified session", UntrustedDeviceDialog, {
+        user,
+        device,
+        onFinished: async (action) => {
+            if (action === "sas") {
+                const verificationRequestPromise = cli.legacyDeviceVerification(
+                    user.userId,
+                    device.deviceId,
+                    verificationMethods.SAS,
+                );
+                dis.dispatch({
+                    action: "set_right_panel_phase",
+                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                    refireParams: {member: user, verificationRequestPromise},
+                });
+            } else if (action === "legacy") {
+                const ManualDeviceKeyVerificationDialog =
+                    sdk.getComponent("dialogs.ManualDeviceKeyVerificationDialog");
+                Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
+                    ManualDeviceKeyVerificationDialog,
+                    {
+                        userId: user.userId,
+                        device,
+                    },
+                );
+            }
+        },
+    });
 }
 
 export async function legacyVerifyUser(user) {
