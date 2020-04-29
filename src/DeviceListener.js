@@ -267,6 +267,7 @@ export default class DeviceListener {
                 key: OTHER_DEVICES_TOAST_KEY,
                 title: _t("Review where you’re logged in"),
                 icon: "verification_warning",
+                priority: ToastStore.PRIORITY_LOW,
                 props: {
                     deviceIds: oldUnverifiedDeviceIds,
                 },
