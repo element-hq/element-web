@@ -109,9 +109,10 @@ all kinds of filtering.
 
 ## Class breakdowns
 
-The `RoomListStore` is the major coordinator of various `IAlgorithm` implementations, which take care 
-of the various `ListAlgorithm` and `SortingAlgorithm` options. A `TagManager` is responsible for figuring 
-out which tags get which rooms, as Matrix specifies them as a reverse map: tags are defined on rooms and 
-are not defined as a collection of rooms (unlike how they are presented to the user). Various list-specific 
-utilities are also included, though they are expected to move somewhere more general when needed. For 
-example, the `membership` utilities could easily be moved elsewhere as needed.
+The `RoomListStore` is the major coordinator of various `Algorithm` implementations, which take care 
+of the various `ListAlgorithm` and `SortingAlgorithm` options. The `Algorithm` superclass is also 
+responsible for figuring out which tags get which rooms, as Matrix specifies them as a reverse map: 
+tags are defined on rooms and are not defined as a collection of rooms (unlike how they are presented 
+to the user). Various list-specific utilities are also included, though they are expected to move 
+somewhere more general when needed. For example, the `membership` utilities could easily be moved 
+elsewhere as needed.

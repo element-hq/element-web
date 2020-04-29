@@ -19,7 +19,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { ActionPayload, defaultDispatcher } from "../../dispatcher-types";
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, TagID } from "./models";
-import { IAlgorithm, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/IAlgorithm";
+import { Algorithm, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/Algorithm";
 import TagOrderStore from "../TagOrderStore";
 import { getAlgorithmInstance } from "./algorithms";
 import { AsyncStore } from "../AsyncStore";
@@ -41,7 +41,7 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
     private matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
-    private algorithm: IAlgorithm;
+    private algorithm: Algorithm;
 
     private readonly watchedSettings = [
         'RoomList.orderAlphabetically',
