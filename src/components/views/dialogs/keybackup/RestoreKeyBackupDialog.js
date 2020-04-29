@@ -283,15 +283,15 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         let content;
         let title;
         if (this.state.loading) {
-            title = _t("Loading...");
+            title = _t("Restoring keys from backup");
             let details;
             if (this.state.progress.stage === "fetch") {
-                details = _t("Downloading from server...");
+                details = _t("Fetching keys from server...");
             } else if (this.state.progress.stage === "load_keys") {
                 const { total, successes, failures } = this.state.progress;
-                details = _t("Loaded %(completed)s of %(total)s", { total, completed: successes + failures });
+                details = _t("%(completed)s of %(total)s keys restored", { total, completed: successes + failures });
             } else if (this.state.progress.stage === "prefetch") {
-                details = _t("Requesting from server...");
+                details = _t("Fetching keys from server...");
             }
             content = <div>
                 <div>{details}</div>
@@ -328,7 +328,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            title = _t("Backup restored");
+            title = _t("Keys restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
@@ -337,7 +337,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 )}</p>;
             }
             content = <div>
-                <p>{_t("Restored %(sessionCount)s session keys", {sessionCount: this.state.recoverInfo.imported})}</p>
+                <p>{_t("Successfully restored %(sessionCount)s keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
                 <DialogButtons primaryButton={_t('OK')}
                     onPrimaryButtonClick={this._onDone}
