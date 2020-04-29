@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import {makeUserPermalink} from "../../../utils/permalinks/Permalinks";
+import {makeRoomPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import {RoomMember} from "matrix-js-sdk/src/matrix";
 import SdkConfig from "../../../SdkConfig";
@@ -1082,11 +1082,14 @@ export default class InviteDialog extends React.PureComponent {
         } else { // KIND_INVITE
             title = _t("Invite to this room");
             helpText = _t(
-                "Invite someone using their name, username (like <userId/>) or email address.",
+                "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
                 {},
-                {userId: () => {
-                    return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
-                }},
+                {
+                    userId: () =>
+                        <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                    a: (sub) =>
+                        <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                },
             );
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
