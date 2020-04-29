@@ -645,5 +645,15 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Tühikuklahv",
-    "End": "End"
+    "End": "End",
+    "Unable to add email address": "E-posti aadressi lisamine ebaõnnestus",
+    "Add": "Lisa",
+    "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Sinu aadressi kontrollimiseks saatsime sulle e-kirja. Palun järgi kirjas näidatud juhendit ja siis klõpsi alljärgnevat nuppu.",
+    "Email Address": "E-posti aadress",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Saatsime tekstisõnumi numbrile +%(msisdn)s. Palun sisesta seal kuvatud kontrollkood.",
+    "Phone Number": "Telefoni number",
+    "Cannot add any more widgets": "Rohkem vidinaid ei õnnestu lisada",
+    "The maximum permitted number of widgets have already been added to this room.": "Suurim lubatud vidinate arv on siia jututuppa juba lisatud.",
+    "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Liitu kas <voiceText>häälkõnega</voiceText> või <videoText>videokõnega</videoText>.",
+    "Ongoing conference call%(supportedText)s.": "Toimuv rühmavestlus %(supportedText)s."
 }
