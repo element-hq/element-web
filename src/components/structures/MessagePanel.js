@@ -607,6 +607,7 @@ export default class MessagePanel extends React.Component {
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
+                        useIRCLayout={this.state.useIRCLayout}
                     />
                 </TileErrorBoundary>
             </li>,

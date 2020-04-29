@@ -1,0 +1,124 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+$name-width: 50px;
+$icon-width: 14px;
+$timestamp-width: 45px;
+$right-padding: 5px;
+
+.mx_IRCLayout {
+
+    line-height: $font-22px !important;
+
+    .mx_EventTile {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+
+        > * {
+            margin-right: $right-padding;
+        }
+
+        > .mx_EventTile_msgOption {
+            order: 4;
+            flex-shrink: 0;
+        }
+
+        > .mx_SenderProfile {
+            order: 2;
+            flex-shrink: 0;
+            width: $name-width;
+            text-overflow: ellipsis;
+            text-align: right;
+            display: flex;
+            align-items: center;
+        }
+
+        > .mx_EventTile_line {
+            order: 3;
+            flex-grow: 1;
+        }
+
+        > .mx_EventTile_avatar {
+            order: 1;
+            position: relative;
+            top: 0;
+            left: 0;
+            flex-shrink: 0;
+            height: 22px;
+            display: flex;
+            align-items: center;
+
+            > .mx_BaseAvatar {
+                height: 1rem;
+                width: 1rem;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            font-size: $font-10px;
+            width: $timestamp-width;
+            text-align: right;
+        }
+
+        .mx_EventTile_line, .mx_EventTile_reply {
+            padding: 0;
+        }
+
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            right: unset;
+            left: unset;
+            top: -2px;
+            padding: 0;
+        }
+
+        .mx_EventTile_line > * {
+            display: inline-block;
+        }
+    }
+
+    .mx_EventListSummary {
+        > .mx_EventTile_line {
+            padding-left: calc($name-width + $icon-width + $timestamp-width + 3 * $right-padding); // 15 px of padding
+        }
+    }
+
+    .mx_EventTile.mx_EventTile_info {
+        .mx_EventTile_avatar {
+            left: calc($name-width + 10px + $icon-width);
+            top: 0;
+        }
+
+        .mx_EventTile_line {
+            left: calc($name-width + 10px + $icon-width);
+        }
+
+        .mx_TextualEvent {
+            line-height: $font-22px;
+        }
+    }
+
+    .mx_EventTile_continuation:not(.mx_EventTile_info) {
+        .mx_EventTile_avatar {
+            visibility: hidden;
+        }
+
+        .mx_SenderProfile {
+            visibility: hidden;
+        }
+    }
+}

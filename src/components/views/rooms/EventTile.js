@@ -206,6 +206,9 @@ export default createReactClass({
 
         // whether to show reactions for this event
         showReactions: PropTypes.bool,
+
+        // whether to use the irc layout
+        useIRCLayout: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -653,6 +656,8 @@ export default createReactClass({
         const classes = classNames({
             mx_EventTile_bubbleContainer: isBubbleMessage,
             mx_EventTile: true,
+            mx_EventTile_irc: this.props.useIRCLayout,
+            mx_EventTile_group: !this.props.useIRCLayout,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,
@@ -696,6 +701,9 @@ export default createReactClass({
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
+        } else if (this.props.useIRCLayout) {
+            avatarSize = 14;
+            needsSenderProfile = true;
         } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
             // no avatar or sender profile for continuation messages
             avatarSize = 0;
@@ -879,21 +887,29 @@ export default createReactClass({
                     this.props.permalinkCreator,
                     this._replyThread,
                 );
+
+                const linkedTimestamp = <a
+                        href={permalink}
+                        onClick={this.onPermalinkClicked}
+                        aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+                    >
+                        { timestamp }
+                    </a>;
+
+                const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
+                const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
+
+
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     <div className={classes} tabIndex={-1}>
+                        { ircTimestamp }
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
                         { sender }
                         <div className="mx_EventTile_line">
-                            <a
-                                href={permalink}
-                                onClick={this.onPermalinkClicked}
-                                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-                            >
-                                { timestamp }
-                            </a>
+                            { groupTimestamp }
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
                             <EventTileType ref={this._tile}
