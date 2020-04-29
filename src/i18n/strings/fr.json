@@ -215,7 +215,7 @@
     "Unable to verify email address.": "Impossible de vérifier l’adresse e-mail.",
     "Unban": "Révoquer le bannissement",
     "%(senderName)s unbanned %(targetName)s.": "%(senderName)s a révoqué le bannissement de %(targetName)s.",
-    "Unable to capture screen": "Impossible de capturer l'écran",
+    "Unable to capture screen": "Impossible de faire une capture d'écran",
     "Unable to enable Notifications": "Impossible d'activer les notifications",
     "unencrypted": "non chiffré",
     "unknown device": "appareil inconnu",
