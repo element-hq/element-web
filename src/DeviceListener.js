@@ -20,12 +20,9 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import ToastStore from './stores/ToastStore';
 
-function toastKey(deviceId) {
-    return 'unverified_session_' + deviceId;
-}
-
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 const THIS_DEVICE_TOAST_KEY = 'setupencryption';
+const OTHER_DEVICES_TOAST_KEY = 'reviewsessions';
 
 export default class DeviceListener {
     static sharedInstance() {
@@ -34,8 +31,6 @@ export default class DeviceListener {
     }
 
     constructor() {
-        // set of device IDs we're currently showing toasts for
-        this._activeNagToasts = new Set();
         // device IDs for which the user has dismissed the verify toast ('Later')
         this._dismissed = new Set();
         // has the user dismissed any of the various nag toasts to setup encryption on this device?
@@ -71,8 +66,11 @@ export default class DeviceListener {
         this._keyBackupFetchedAt = null;
     }
 
-    dismissVerification(deviceId) {
-        this._dismissed.add(deviceId);
+    async dismissVerifications() {
+        const cli = MatrixClientPeg.get();
+        const devices = await cli.getStoredDevicesForUser(cli.getUserId());
+        this._dismissed = new Set(devices.filter(d => d.deviceId !== cli.deviceId).map(d => d.deviceId));
+
         this._recheck();
     }
 
@@ -202,33 +200,29 @@ export default class DeviceListener {
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
         if (crossSigningReady) {
-            const newActiveToasts = new Set();
+            let haveUnverifiedDevices = false;
 
             const devices = await cli.getStoredDevicesForUser(cli.getUserId());
             for (const device of devices) {
                 if (device.deviceId == cli.deviceId) continue;
 
                 const deviceTrust = await cli.checkDeviceTrust(cli.getUserId(), device.deviceId);
-                if (deviceTrust.isCrossSigningVerified() || this._dismissed.has(device.deviceId)) {
-                    ToastStore.sharedInstance().dismissToast(toastKey(device.deviceId));
-                } else {
-                    this._activeNagToasts.add(device.deviceId);
-                    ToastStore.sharedInstance().addOrReplaceToast({
-                        key: toastKey(device.deviceId),
-                        title: _t("Unverified login. Was this you?"),
-                        icon: "verification_warning",
-                        props: { device },
-                        component: sdk.getComponent("toasts.UnverifiedSessionToast"),
-                    });
-                    newActiveToasts.add(device.deviceId);
+                if (!deviceTrust.isCrossSigningVerified() && !this._dismissed.has(device.deviceId)) {
+                    haveUnverifiedDevices = true;
+                    break;
                 }
             }
 
-            // clear any other outstanding toasts (eg. logged out devices)
-            for (const deviceId of this._activeNagToasts) {
-                if (!newActiveToasts.has(deviceId)) ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
+            if (haveUnverifiedDevices) {
+                ToastStore.sharedInstance().addOrReplaceToast({
+                    key: OTHER_DEVICES_TOAST_KEY,
+                    title: _t("Review where you’re logged in"),
+                    icon: "verification_warning",
+                    component: sdk.getComponent("toasts.UnverifiedSessionToast"),
+                });
+            } else {
+                ToastStore.sharedInstance().dismissToast(OTHER_DEVICES_TOAST_KEY);
             }
-            this._activeNagToasts = newActiveToasts;
         }
     }
 }

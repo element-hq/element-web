@@ -181,9 +181,7 @@ function DeviceItem({userId, device}) {
     });
 
     const onDeviceClick = () => {
-        if (!isVerified) {
-            verifyDevice(cli.getUser(userId), device);
-        }
+        verifyDevice(cli.getUser(userId), device);
     };
 
     const deviceName = device.ambiguous ?
@@ -191,17 +189,29 @@ function DeviceItem({userId, device}) {
             device.getDisplayName();
     let trustedLabel = null;
     if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
-    return (
-        <AccessibleButton
-            className={classes}
-            title={device.deviceId}
-            onClick={onDeviceClick}
-        >
-            <div className={iconClasses} />
-            <div className="mx_UserInfo_device_name">{deviceName}</div>
-            <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-        </AccessibleButton>
-    );
+
+
+    if (isVerified) {
+        return (
+            <div className={classes} title={device.deviceId} >
+                <div className={iconClasses} />
+                <div className="mx_UserInfo_device_name">{deviceName}</div>
+                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+            </div>
+        );
+    } else {
+        return (
+            <AccessibleButton
+                className={classes}
+                title={device.deviceId}
+                onClick={onDeviceClick}
+            >
+                <div className={iconClasses} />
+                <div className="mx_UserInfo_device_name">{deviceName}</div>
+                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+            </AccessibleButton>
+        );
+    }
 }
 
 function DevicesSection({devices, userId, loading}) {
