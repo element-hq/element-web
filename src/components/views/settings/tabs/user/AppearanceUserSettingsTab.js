@@ -107,7 +107,6 @@ export default class AppearanceUserSettingsTab extends React.Component {
 
     _onValidateFontSize = ({value}) => {
         console.log({value});
-        this.setState({fontSize: value});
 
         const parsedSize = parseFloat(value);
         const min = SettingsStore.getValue("font_size_min");
@@ -274,11 +273,11 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 type="text"
                 label={_t("Font size")}
                 autoComplete="off"
-                placeholder={toString(this.state.fontSize)}
-                value={toString(this.state.fontSize)}
+                placeholder={this.state.fontSize.toString()}
+                value={this.state.fontSize.toString()}
                 id="font_size_field"
                 onValidate={this._onValidateFontSize}
-                onChange={({value}) => this.setState({fontSize: value})}
+                onChange={(value) => this.setState({fontSize: value.target.value})}
                 disabled={!this.state.useCustomFontSize}
             />
         </div>;
