@@ -277,7 +277,7 @@ export default class DeviceListener {
         for (const deviceId of newUnverifiedDeviceIds) {
             ToastStore.sharedInstance().addOrReplaceToast({
                 key: toastKey(deviceId),
-                title: _t("Unverified login. Was this you?"),
+                title: _t("New login. Was this you?"),
                 icon: "verification_warning",
                 props: { deviceId },
                 component: sdk.getComponent("toasts.UnverifiedSessionToast"),
