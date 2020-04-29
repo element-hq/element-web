@@ -2405,5 +2405,7 @@
     "or another cross-signing capable Matrix client": "ou un autre client Matrix compatible avec la signature croisée",
     "Use Recovery Passphrase or Key": "Utiliser la phrase secrète ou la clé de récupération",
     "Where you’re logged in": "Où vous vous êtes connecté",
-    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gérez les noms et déconnectez-vous de vos sessions ci-dessous ou <a>vérifiez-les dans votre profil utilisateur</a>."
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gérez les noms et déconnectez-vous de vos sessions ci-dessous ou <a>vérifiez-les dans votre profil utilisateur</a>.",
+    "Review where you’re logged in": "Vérifier où vous vous êtes connecté",
+    "Verify your other sessions": "Vérifier vos autres sessions"
 }
