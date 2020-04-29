@@ -578,7 +578,7 @@ export default class InviteDialog extends React.PureComponent {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
             const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
-            if (has3PidMembers) {
+            if (!has3PidMembers) {
                 const client = MatrixClientPeg.get();
                 const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
                 if (allHaveDeviceKeys) {
