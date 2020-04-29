@@ -2403,5 +2403,11 @@
     "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "Confirmez votre identité en vérifiant cette connexion depuis une de vos autres sessions, cela lui permettra d’avoir accès aux messages chiffrés.",
     "This requires the latest Riot on your other devices:": "Ceci nécessite la dernière version de Riot sur vos autres appareils :",
     "or another cross-signing capable Matrix client": "ou un autre client Matrix compatible avec la signature croisée",
-    "Use Recovery Passphrase or Key": "Utiliser la phrase secrète ou la clé de récupération"
+    "Use Recovery Passphrase or Key": "Utiliser la phrase secrète ou la clé de récupération",
+    "Where you’re logged in": "Où vous vous êtes connecté",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gérez les noms et déconnectez-vous de vos sessions ci-dessous ou <a>vérifiez-les dans votre profil utilisateur</a>.",
+    "Review where you’re logged in": "Vérifier où vous vous êtes connecté",
+    "Verify your other sessions": "Vérifier vos autres sessions",
+    "Unverified sessions currently have access to your account & messages": "Des sessions non vérifiées ont accès à votre compte et messages",
+    "Verify the identity of the new login accessing your account & messages": "Vérifiez l'identité de la nouvelle connexion accédant à votre compte et messages"
 }
