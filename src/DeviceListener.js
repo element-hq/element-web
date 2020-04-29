@@ -112,7 +112,7 @@ export default class DeviceListener {
         if (users.includes(myUserId)) this._ensureDeviceIdsAtStartPopulated();
 
         // No need to do a recheck here: we just need to get a snapshot of our devices
-        // before we download asny new ones.
+        // before we download any new ones.
     }
 
     _onDevicesUpdated = (users) => {
