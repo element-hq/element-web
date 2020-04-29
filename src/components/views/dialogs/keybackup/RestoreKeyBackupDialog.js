@@ -293,10 +293,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             } else if (this.state.progress.stage === "prefetch") {
                 details = _t("Fetching keys from server...");
             }
-            content = <div>
+            content = <>
                 <div>{details}</div>
                 <Spinner />
-            </div>;
+            </>;
         } else if (this.state.loadError) {
             title = _t("Error");
             content = _t("Unable to load backup status");
@@ -304,20 +304,20 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             if (this.state.restoreError.errcode === MatrixClient.RESTORE_BACKUP_ERROR_BAD_KEY) {
                 if (this.state.restoreType === RESTORE_TYPE_RECOVERYKEY) {
                     title = _t("Recovery key mismatch");
-                    content = <div>
+                    content = <>
                         <p>{_t(
                             "Backup could not be decrypted with this recovery key: " +
                             "please verify that you entered the correct recovery key.",
                         )}</p>
-                    </div>;
+                    </>;
                 } else {
                     title = _t("Incorrect recovery passphrase");
-                    content = <div>
+                    content = <>
                         <p>{_t(
                             "Backup could not be decrypted with this recovery passphrase: " +
                             "please verify that you entered the correct recovery passphrase.",
                         )}</p>
-                    </div>;
+                    </>;
                 }
             } else {
                 title = _t("Error");
@@ -336,7 +336,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     {failedCount: this.state.recoverInfo.total - this.state.recoverInfo.imported},
                 )}</p>;
             }
-            content = <div>
+            content = <>
                 <p>{_t("Successfully restored %(sessionCount)s keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
                 <DialogButtons primaryButton={_t('OK')}
@@ -344,12 +344,12 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     hasCancel={false}
                     focus={true}
                 />
-            </div>;
+            </>;
         } else if (backupHasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Enter recovery passphrase");
-            content = <div>
+            content = <>
                 <p>{_t(
                     "<b>Warning</b>: you should only set up key backup " +
                     "from a trusted computer.", {},
@@ -394,7 +394,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         {s}
                     </AccessibleButton>,
                 })}
-            </div>;
+            </>;
         } else {
             title = _t("Enter recovery key");
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
@@ -413,7 +413,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 </div>;
             }
 
-            content = <div>
+            content = <>
                 <p>{_t(
                     "<b>Warning</b>: You should only set up key backup " +
                     "from a trusted computer.", {},
@@ -450,7 +450,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                         {s}
                     </AccessibleButton>,
                 })}
-            </div>;
+            </>;
         }
 
         return (
@@ -458,7 +458,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={title}
             >
-            <div>
+            <div className='mx_RestoreKeyBackupDialog_content'>
                 {content}
             </div>
             </BaseDialog>
