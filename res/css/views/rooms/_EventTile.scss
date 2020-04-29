@@ -68,11 +68,9 @@ limitations under the License.
     display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow: hidden;
     cursor: pointer;
-    padding-left: 65px; /* left gutter */
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
-    line-height: $font-17px;
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -101,12 +99,9 @@ limitations under the License.
 
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
-    visibility: hidden;
     white-space: nowrap;
     left: 0px;
-    width: 46px; /* 8 + 30 (avatar) + 8 */
     text-align: center;
-    position: absolute;
     user-select: none;
 }
 
@@ -117,10 +112,7 @@ limitations under the License.
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: 65px; /* left gutter */
-    padding-top: 3px;
-    padding-bottom: 3px;
     border-radius: 4px;
-    line-height: $font-22px;
 }
 
 .mx_RoomView_timeline_rr_enabled,
@@ -149,10 +141,6 @@ limitations under the License.
 
 .mx_EventTile_reply {
     margin-right: 10px;
-}
-
-.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 83px;
 }
 
 /* HACK to override line-height which is already marked important elsewhere */
