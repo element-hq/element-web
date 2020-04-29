@@ -51,7 +51,7 @@ export default class UnverifiedSessionToast extends React.PureComponent {
     render() {
         return (<div>
             <div className="mx_Toast_description">
-                {_t("Verify the identity of the new login accessing your account & messages")}
+                {_t("Verify the new login accessing your account & messages")}
             </div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
