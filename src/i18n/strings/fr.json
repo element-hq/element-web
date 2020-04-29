@@ -2407,5 +2407,7 @@
     "Where you’re logged in": "Où vous vous êtes connecté",
     "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gérez les noms et déconnectez-vous de vos sessions ci-dessous ou <a>vérifiez-les dans votre profil utilisateur</a>.",
     "Review where you’re logged in": "Vérifier où vous vous êtes connecté",
-    "Verify your other sessions": "Vérifier vos autres sessions"
+    "Verify your other sessions": "Vérifier vos autres sessions",
+    "Unverified sessions currently have access to your account & messages": "Des sessions non vérifiées ont accès à votre compte et messages",
+    "Verify the identity of the new login accessing your account & messages": "Vérifiez l'identité de la nouvelle connexion accédant à votre compte et messages"
 }
