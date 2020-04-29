@@ -543,5 +543,13 @@
     "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Alusta vestlust kasutades teise osapoole nime, kasutajanime (näiteks <userId/>) või e-posti aadressi.",
     "Go": "Mine",
     "Your message wasn't sent because this homeserver has hit its Monthly Active User Limit. Please <a>contact your service administrator</a> to continue using the service.": "Sinu sõnumit ei saadetud, kuna see koduserver on saavutanud igakuise aktiivsete kasutajate piiri. Teenuse kasutamiseks palun <a>võta ühendust serveri haldajaga</a>.",
-    "Add room": "LIsa jututuba"
+    "Add room": "LIsa jututuba",
+    "%(senderName)s invited %(targetName)s.": "%(senderName)s kutsus vestlema kasutajat %(targetName)s.",
+    "%(targetName)s joined the room.": "%(targetName)s liitus jututoaga.",
+    "%(senderName)s answered the call.": "%(senderName)s vastas kõnele.",
+    "%(senderName)s ended the call.": "%(senderName)s lõpetas kõne.",
+    "%(senderName)s placed a voice call.": "%(senderName)s alustas häälkõnet.",
+    "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s alustas häälkõnet. (sellel brauseril puudub niisuguste kõnede tugi)",
+    "%(senderName)s placed a video call.": "%(senderName)s alustas videokõnet.",
+    "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s alustas videokõnet. (sellel brauseril puudub niisuguste kõnede tugi)"
 }
