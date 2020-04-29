@@ -39,6 +39,15 @@ export default class ToastStore extends EventEmitter {
         this._toasts = [];
     }
 
+    /**
+     * Add or replace a toast
+     * If a toast with the same toastKey already exists, the given toast will replace it
+     * Toasts are always added underneath any toasts of the same priority, so existing
+     * toasts stay at the top unless a higher priority one arrives (better to not change the
+     * toast unless necessary).
+     *
+     * @param {boject} newToast The new toast
+     */
     addOrReplaceToast(newToast) {
         if (newToast.priority === undefined) newToast.priority = ToastStore.PRIORITY_DEFAULT;
 
