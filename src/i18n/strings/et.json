@@ -464,5 +464,10 @@
     "Find a room…": "Leia jututuba…",
     "Find a room… (e.g. %(exampleRoom)s)": "Otsi jututuba… (näiteks %(exampleRoom)s)",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Üritasin laadida teatud hetke selle jututoa ajajoonelt, kuid ei suutnud seda leida.",
-    "Options": "Valikud"
+    "Options": "Valikud",
+    "Searches DuckDuckGo for results": "Otsi DuckDuckGo abil",
+    "Securely cache encrypted messages locally for them to appear in search results, using ": "Turvaliselt puhverda krüptitud sõnumeid kohalikus arvutis selleks, et nad oleks otsitavad kasutades ",
+    "this room": "see jututuba",
+    "Quote": "Tsiteeri",
+    "This Room": "See jututuba"
 }
