@@ -1,3 +1,49 @@
+Changes in [2.5.0-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.5) (2020-04-30)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.4...v2.5.0-rc.5)
+
+ * Upgrade to JS SDK 6.0.0-rc.1
+ * Fix device verification toasts not disappearing
+   [\#4533](https://github.com/matrix-org/matrix-react-sdk/pull/4533)
+ * Allow resetting storage from the access dialog
+   [\#4526](https://github.com/matrix-org/matrix-react-sdk/pull/4526)
+ * Update toast copy again
+   [\#4530](https://github.com/matrix-org/matrix-react-sdk/pull/4530)
+ * Reduce maximum width of toasts & allow multiple lines
+   [\#4528](https://github.com/matrix-org/matrix-react-sdk/pull/4528)
+ * Treat sessions that are there when we log in as old
+   [\#4527](https://github.com/matrix-org/matrix-react-sdk/pull/4527)
+ * Update (bulk) unverified device toast copy
+   [\#4523](https://github.com/matrix-org/matrix-react-sdk/pull/4523)
+ * Make new device toasts appear above review toasts
+   [\#4520](https://github.com/matrix-org/matrix-react-sdk/pull/4520)
+ * Separate toasts for existing & new device verification
+   [\#4517](https://github.com/matrix-org/matrix-react-sdk/pull/4517)
+ * Aggregate device verify toasts
+   [\#4516](https://github.com/matrix-org/matrix-react-sdk/pull/4516)
+ * Fix set up encryption toast to use "set up" as action
+   [\#4515](https://github.com/matrix-org/matrix-react-sdk/pull/4515)
+ * Fix internal link styling in Security Settings
+   [\#4512](https://github.com/matrix-org/matrix-react-sdk/pull/4512)
+ *  Don't enable e2ee when inviting a 3pid
+   [\#4513](https://github.com/matrix-org/matrix-react-sdk/pull/4513)
+ * only clear on continuations where the clear isn't done by SenderProfile
+   [\#4505](https://github.com/matrix-org/matrix-react-sdk/pull/4505)
+ * cap width of editable item list item to leave space for its X button
+   [\#4504](https://github.com/matrix-org/matrix-react-sdk/pull/4504)
+ * Add a link from settings / devices to your user profile
+   [\#4499](https://github.com/matrix-org/matrix-react-sdk/pull/4499)
+ * Make icon change in SetupEncryptionDialog
+   [\#4490](https://github.com/matrix-org/matrix-react-sdk/pull/4490)
+ * Remove invite only padlocks feature flag for release
+   [\#4488](https://github.com/matrix-org/matrix-react-sdk/pull/4488)
+ * Fix incorrect toast if security setup skipped
+   [\#4489](https://github.com/matrix-org/matrix-react-sdk/pull/4489)
+ * Revert "Update emojibase for fixed emoji codepoints and Emoji 13 support"
+   [\#4483](https://github.com/matrix-org/matrix-react-sdk/pull/4483)
+ * Fix recovery link on login verification flow
+   [\#4480](https://github.com/matrix-org/matrix-react-sdk/pull/4480)
+
 Changes in [2.5.0-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.4) (2020-04-23)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.3...v2.5.0-rc.4)
