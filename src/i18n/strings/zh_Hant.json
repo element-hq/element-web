@@ -2402,5 +2402,12 @@
     "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "透過驗證這個從您的其他工作階段而來的登入來確認您的身份，並授予其對加密訊息的存取權限。",
     "This requires the latest Riot on your other devices:": "這需要在您的其他裝置上使用最新的 Riot：",
     "or another cross-signing capable Matrix client": "或另一個有交叉簽章功能的 Matrix 客戶端",
-    "Use Recovery Passphrase or Key": "使用復原通關密語或金鑰"
+    "Use Recovery Passphrase or Key": "使用復原通關密語或金鑰",
+    "Where you’re logged in": "您登入的地方",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "在下方管理您工作階段的名稱與登入或<a>在您的使用者檔案中驗證它們</a>。",
+    "Review where you’re logged in": "審閱您的登入位置",
+    "Verify your other sessions": "驗證您其他的工作階段",
+    "New login. Was this you?": "新登入。這是您嗎？",
+    "Unverified sessions currently have access to your account & messages": "未驗證的工作階段目前正在存取您的帳號與訊息",
+    "Verify the identity of the new login accessing your account & messages": "驗證存取您帳號與訊息的新登入身份"
 }

@@ -1506,5 +1506,18 @@
     "Something went wrong. Please try again or view your console for hints.": "Niečo sa nepodarilo. Prosím, skúste znovu neskôr alebo si prečítajte ďalšie usmernenia zobrazením konzoly.",
     "Error subscribing to list": "Chyba pri prihlasovaní sa do zoznamu",
     "Please verify the room ID or alias and try again.": "Prosím, overte platnosť ID miestnosti alebo alias a skúste znovu.\nPlease verify the room ID or alias and try again.",
-    "Error removing ignored user/server": "Chyba pri odstraňovaní ignorovaného používateľa / servera"
+    "Error removing ignored user/server": "Chyba pri odstraňovaní ignorovaného používateľa / servera",
+    "Use Single Sign On to continue": "Pokračovať pomocou Jednotného prihlásenia",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": "Potvrďte pridanie tejto adresy pomocou Jednotného prihlásenia.",
+    "Single Sign On": "Jednotné prihlásenie",
+    "Confirm adding email": "Potvrdiť pridanie emailu",
+    "Click the button below to confirm adding this email address.": "Kliknutím na tlačítko potvrdíte pridanie emailovej adresy.",
+    "Confirm adding this phone number by using Single Sign On to prove your identity.": "Potvrďte pridanie telefónneho čísla pomocou Jednotného prihlásenia.",
+    "Confirm adding phone number": "Potvrdiť pridanie telefónneho čísla",
+    "Click the button below to confirm adding this phone number.": "Kliknutím na tlačítko potvrdíte pridanie telefónneho čísla.",
+    "The version of Riot": "Verzia Riotu",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Či používate Riot na zariadení, ktorého hlavným vstupným mechanizmom je dotyk (mobil, tablet,...)",
+    "Whether you're using Riot as an installed Progressive Web App": "Či používate Riot ako nainštalovanú Progresívnu Webovú Aplikáciu",
+    "Your user agent": "Identifikátor vášho prehliadača",
+    "The information being sent to us to help make Riot better includes:": "Informácie, ktoré nám posielate, aby sme zlepšili Riot, zahŕňajú:"
 }
