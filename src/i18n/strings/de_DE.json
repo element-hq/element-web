@@ -1855,5 +1855,8 @@
     "Enter your recovery passphrase a second time to confirm it.": "Gib deine Wiederherstellungspassphrase zur Bestätigung erneut ein.",
     "Confirm your recovery passphrase": "Bestätige deine Wiederherstellungspassphrase",
     "Confirm recovery passphrase": "Bestätige die Wiederherstellungspassphrase",
-    "Please enter your recovery passphrase a second time to confirm.": "Bitte gib deine Wiederherstellungspassphrase ein zweites Mal ein um sie zu bestätigen."
+    "Please enter your recovery passphrase a second time to confirm.": "Bitte gib deine Wiederherstellungspassphrase ein zweites Mal ein um sie zu bestätigen.",
+    "Review where you’re logged in": "Überprüfe, wo du eingeloggt bist",
+    "New login. Was this you?": "Neue Anmeldung. Warst du das?",
+    "Please supply a widget URL or embed code": "Bitte gib eine Widget-URL oder einen Einbettungscode an"
 }
