@@ -49,9 +49,13 @@ export default class UnverifiedSessionToast extends React.PureComponent {
     };
 
     render() {
+        const cli = MatrixClientPeg.get();
+        const device = cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
+
         return (<div>
             <div className="mx_Toast_description">
-                {_t("Verify the new login accessing your account & messages")}
+                {_t(
+                    "Verify the new login accessing your account: %(name)s", { name: device.getDisplayName()})}
             </div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />

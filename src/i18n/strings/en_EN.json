@@ -565,7 +565,7 @@
     "Set up": "Set up",
     "Upgrade": "Upgrade",
     "Verify": "Verify",
-    "Verify the new login accessing your account & messages": "Verify the new login accessing your account & messages",
+    "Verify the new login accessing your account: %(name)s": "Verify the new login accessing your account: %(name)s",
     "From %(deviceName)s (%(deviceId)s)": "From %(deviceName)s (%(deviceId)s)",
     "Decline (%(counter)s)": "Decline (%(counter)s)",
     "Accept <policyLink /> to continue:": "Accept <policyLink /> to continue:",
