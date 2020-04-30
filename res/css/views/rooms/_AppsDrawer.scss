@@ -386,6 +386,11 @@ form.mx_Custom_Widget_Form div {
 }
 
 /* Hidden resize handle (Apptile bottom serves as indicator) */
+.mx_AppsDrawer .mx_ResizeHandle {
+    position: relative;
+    z-index: 1;
+}
+
 .mx_AppsDrawer .mx_ResizeHandle > div {
     background: inherit;
 }
