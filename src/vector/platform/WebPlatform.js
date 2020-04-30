@@ -186,7 +186,9 @@ export default class WebPlatform extends VectorBasePlatform {
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
-        const osName = ua.getOS().name || "unknown os";
+        let osName = ua.getOS().name || "unknown OS";
+        // Stylise the value from the parser to match Apple's current branding.
+        if (osName === "Mac OS") osName = "macOS";
         return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
