@@ -17,11 +17,18 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from "../../../languageHandler";
+import { _t, _td } from "../../../languageHandler";
 import { Layout } from '../../../resizer/distributors/roomsublist2';
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
+import { ITagMap } from "../../../stores/room-list/algorithms/models";
+import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { Dispatcher } from "flux";
+import { ActionPayload } from "../../../dispatcher-types";
+import dis from "../../../dispatcher";
+import { RoomSublist2 } from "./RoomSublist2";
+import { isNullOrUndefined } from "matrix-js-sdk/lib/src/utils";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -33,13 +40,82 @@ interface IProps {
 }
 
 interface IState {
+    sublists: ITagMap;
 }
 
-// TODO: Actually write stub
-export class RoomSublist2 extends React.Component<any, any> {
-    public setHeight(size: number) {
-    }
+const TAG_ORDER: TagID[] = [
+    // -- Community Invites Placeholder --
+
+    DefaultTagID.Invite,
+    DefaultTagID.Favourite,
+    DefaultTagID.DM,
+    DefaultTagID.Untagged,
+
+    // -- Custom Tags Placeholder --
+
+    DefaultTagID.LowPriority,
+    DefaultTagID.ServerNotice,
+    DefaultTagID.Archived,
+];
+const COMMUNITY_TAGS_BEFORE_TAG = DefaultTagID.Invite;
+const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
+const ALWAYS_VISIBLE_TAGS: TagID[] = [
+    DefaultTagID.DM,
+    DefaultTagID.Untagged,
+];
+
+interface ITagAesthetics {
+    sectionLabel: string;
+    addRoomLabel?: string;
+    onAddRoom?: (dispatcher: Dispatcher<ActionPayload>) => void;
+    isInvite: boolean;
+    defaultHidden: boolean;
 }
+
+const TAG_AESTHETICS: {
+    // @ts-ignore - TS wants this to be a string but we know better
+    [tagId: TagID]: ITagAesthetics;
+} = {
+    [DefaultTagID.Invite]: {
+        sectionLabel: _td("Invites"),
+        isInvite: true,
+        defaultHidden: false,
+    },
+    [DefaultTagID.Favourite]: {
+        sectionLabel: _td("Favourites"),
+        isInvite: false,
+        defaultHidden: false,
+    },
+    [DefaultTagID.DM]: {
+        sectionLabel: _td("Direct Messages"),
+        isInvite: false,
+        defaultHidden: false,
+        addRoomLabel: _td("Start chat"),
+        onAddRoom: (dispatcher: Dispatcher<ActionPayload>) => dispatcher.dispatch({action: 'view_create_chat'}),
+    },
+    [DefaultTagID.Untagged]: {
+        sectionLabel: _td("Rooms"),
+        isInvite: false,
+        defaultHidden: false,
+        addRoomLabel: _td("Create room"),
+        onAddRoom: (dispatcher: Dispatcher<ActionPayload>) => dispatcher.dispatch({action: 'view_create_room'}),
+    },
+    [DefaultTagID.LowPriority]: {
+        sectionLabel: _td("Low priority"),
+        isInvite: false,
+        defaultHidden: false,
+    },
+    [DefaultTagID.ServerNotice]: {
+        sectionLabel: _td("System Alerts"),
+        isInvite: false,
+        defaultHidden: false,
+    },
+    [DefaultTagID.Archived]: {
+        sectionLabel: _td("Historical"),
+        isInvite: false,
+        defaultHidden: true,
+    },
+};
 
 export default class RoomList2 extends React.Component<IProps, IState> {
     private sublistRefs: { [tagId: string]: React.RefObject<RoomSublist2> } = {};
@@ -51,6 +127,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
+        this.state = {sublists: {}};
         this.loadSublistSizes();
         this.prepareLayouts();
     }
@@ -58,6 +135,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     public componentDidMount(): void {
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store) => {
             console.log("new lists", store.orderedLists);
+            this.setState({sublists: store.orderedLists});
         });
     }
 
@@ -108,7 +186,47 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         }
     }
 
+    private renderSublists(): React.ReactElement[] {
+        const components: React.ReactElement[] = [];
+
+        for (const orderedTagId of TAG_ORDER) {
+            if (COMMUNITY_TAGS_BEFORE_TAG === orderedTagId) {
+                // Populate community invites if we have the chance
+                // TODO
+            }
+            if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
+                // Populate custom tags if needed
+                // TODO
+            }
+
+            const orderedRooms = this.state.sublists[orderedTagId] || [];
+            if (orderedRooms.length === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
+                continue; // skip tag - not needed
+            }
+
+            const aesthetics: ITagAesthetics = TAG_AESTHETICS[orderedTagId];
+            if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
+
+            const onAddRoomFn = () => {
+                if (!aesthetics.onAddRoom) return;
+                aesthetics.onAddRoom(dis);
+            };
+            components.push(<RoomSublist2
+                forRooms={true}
+                rooms={orderedRooms}
+                startAsHidden={aesthetics.defaultHidden}
+                label={_t(aesthetics.sectionLabel)}
+                onAddRoom={onAddRoomFn}
+                addRoomLabel={aesthetics.addRoomLabel}
+                isInvite={aesthetics.isInvite}
+            />);
+        }
+
+        return components;
+    }
+
     public render() {
+        const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
                 {({onKeyDownHandler}) => (
@@ -122,7 +240,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         // Firefox sometimes makes this element focusable due to
                         // overflow:scroll;, so force it out of tab order.
                         tabIndex={-1}
-                    >{_t("TODO")}</div>
+                    >{sublists}</div>
                 )}
             </RovingTabIndexProvider>
         );
