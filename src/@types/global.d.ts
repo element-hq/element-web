@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import "matrix-react-sdk/src/@types/global"; // load matrix-react-sdk's type extensions first
-import {Renderer} from "react-dom";
+import type {Renderer} from "react-dom";
 
 declare global {
     interface Window {

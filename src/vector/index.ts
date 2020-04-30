@@ -78,10 +78,7 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
-let acceptBrowser = checkBrowserFeatures();
-if (!acceptBrowser && window.localStorage) {
-    acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
-}
+const supportedBrowser = checkBrowserFeatures();
 
 // React depends on Map & Set which we check for using modernizr's es6collections
 // if modernizr fails we may not have a functional react to show the error message.
@@ -148,6 +145,11 @@ async function start() {
         // await things settling so that any errors we have to render have features like i18n running
         await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
 
+        let acceptBrowser = supportedBrowser;
+        if (!acceptBrowser && window.localStorage) {
+            acceptBrowser = Boolean(window.localStorage.getItem("mx_accepts_unsupported_browser"));
+        }
+
         // ##########################
         // error handling begins here
         // ##########################
@@ -199,9 +201,23 @@ async function start() {
         ]);
     }
 }
+
 start().catch(err => {
     console.error(err);
-    if (!acceptBrowser) {
-        // TODO redirect to static incompatible browser page
-    }
+    // show the static error in an iframe to not lose any context / console data
+    // with some basic styling to make the iframe full page
+    delete document.body.style.height;
+    const iframe = document.createElement("iframe");
+    // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
+    iframe["sandbox"] = "";
+    iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.position = "absolute";
+    iframe.style.top = "0";
+    iframe.style.left = "0";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.border = "0";
+    document.getElementById("matrixchat").appendChild(iframe);
 });
