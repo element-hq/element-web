@@ -19,6 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
 import { ITagMap, ITagSortingMap } from "../models";
+import DMRoomMap from "../../../../utils/DMRoomMap";
 
 // TODO: Add locking support to avoid concurrent writes?
 // TODO: EventEmitter support? Might not be needed.
@@ -100,13 +101,21 @@ export abstract class Algorithm {
 
         // Now process all the joined rooms. This is a bit more complicated
         for (const room of memberships[EffectiveMembership.Join]) {
-            const tags = Object.keys(room.tags || {});
+            let tags = Object.keys(room.tags || {});
+
+            if (tags.length === 0) {
+                // Check to see if it's a DM if it isn't anything else
+                if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                    tags = [DefaultTagID.DM];
+                }
+            }
 
             let inTag = false;
             if (tags.length > 0) {
                 for (const tag of tags) {
+                    console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged as ${tag}`);
                     if (!isNullOrUndefined(newTags[tag])) {
-                        console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged as ${tag}`);
+                        console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged with VALID tag ${tag}`);
                         newTags[tag].push(room);
                         inTag = true;
                     }
