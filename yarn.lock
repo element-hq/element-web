@@ -4148,15 +4148,15 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-emojibase-data@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-5.0.1.tgz#ce6fe36b4affd3578e0be8779211018a2fdae960"
-  integrity sha512-rYWlogJ2q5P78U8Xx1vhsXHcYKu1wFnr7+o6z9QHssZ1SsJLTCkJINZIPHRFWuDreAUK457TkqHpdOXElu0fzA==
+emojibase-data@^4.0.2:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-4.2.1.tgz#3d1f0c69ddbb2ca7b7014f5e34654190802a40df"
+  integrity sha512-O0vxoPMgVkRq/uII/gdAjz9RwNv6ClJrd3J9QCCRC4btZRmeut/qohC/Fi+NNXUcjY08RWNTvxSnq/vij8hvrw==
 
-emojibase-regex@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-4.0.1.tgz#a2cd4bbb42825422da9ec72f15e970bc2c90b46a"
-  integrity sha512-S42UHkFfz15i4NNz+wi9iMKFo+B6Kalc6PJLpYX0BUANViXw4vSyYZMFdBGRLduSabWHuEcTLZl9xOa2YP3eJw==
+emojibase-regex@^3.0.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/emojibase-regex/-/emojibase-regex-3.2.1.tgz#122935958c9a49c96bb29ac69ccbbac0b2e7022d"
+  integrity sha512-VAX2Rc2U/alu5q6P2cET2alzC63o1Uarm6Ea/b3ab+KOzxZT4JKmB0tCU1sTZvfNKa16KMLCK2k7hJBHJq4vWQ==
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -7597,21 +7597,6 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-matrix-js-sdk@5.3.1-rc.4:
-  version "5.3.1-rc.4"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-5.3.1-rc.4.tgz#f0e6d512540aa04dfdc311c854fd9efb53287071"
-  integrity sha512-IIuUzP4ee5rw7gtuA2mT7i/jXehl0OrdBMUSAruqixl5DUvBSWjPyFbS4zclVN+DNf75j+7RWMH8Q8BLfdvLeA==
-  dependencies:
-    "@babel/runtime" "^7.8.3"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.2"
-    loglevel "^1.6.4"
-    qs "^6.5.2"
-    request "^2.88.0"
-    unhomoglyph "^1.0.2"
-
 matrix-js-sdk@6.0.0-rc.1:
   version "6.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.0.0-rc.1.tgz#afdee9d49fe0a1040d56fc1b5014e628cc15b5a4"
@@ -7635,10 +7620,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@2.5.0-rc.4:
-  version "2.5.0-rc.4"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.5.0-rc.4.tgz#7420efaa9fbdaa2d2dd2653f9c5f3973515a5b86"
-  integrity sha512-9iQITsTRb1KADrPMxWlgkBYvig47dfF88OHzfU9RcvORfJs0BXgcRTc2O7I4Rm0k73VFQoZZ7I82Akx1mtHqTg==
+matrix-react-sdk@2.5.0-rc.5:
+  version "2.5.0-rc.5"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-2.5.0-rc.5.tgz#3b6c8dd05069a201a7fdd4265a8f20b3f1afeaca"
+  integrity sha512-CO8S6C3wfvCsgS7h48KPx/9yGFLS5O4HZjRfUsbhAD+/16rUy7f9t+8w1Z320xH+X/LMQsb47Y6C6TDZ4KIdlQ==
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7650,8 +7635,8 @@ matrix-react-sdk@2.5.0-rc.4:
     create-react-class "^15.6.0"
     diff-dom "^4.1.3"
     diff-match-patch "^1.0.4"
-    emojibase-data "^5.0.1"
-    emojibase-regex "^4.0.1"
+    emojibase-data "^4.0.2"
+    emojibase-regex "^3.0.0"
     escape-html "^1.0.3"
     file-saver "^1.3.3"
     filesize "3.5.6"
@@ -7665,7 +7650,7 @@ matrix-react-sdk@2.5.0-rc.4:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "5.3.1-rc.4"
+    matrix-js-sdk "6.0.0-rc.1"
     minimist "^1.2.0"
     pako "^1.0.5"
     png-chunks-extract "^1.0.0"

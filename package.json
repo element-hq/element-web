@@ -69,7 +69,7 @@
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
     "matrix-js-sdk": "6.0.0-rc.1",
-    "matrix-react-sdk": "2.5.0-rc.4",
+    "matrix-react-sdk": "2.5.0-rc.5",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
     "prop-types": "^15.7.2",
