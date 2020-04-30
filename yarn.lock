@@ -7612,6 +7612,21 @@ matrix-js-sdk@5.3.1-rc.4:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
+matrix-js-sdk@6.0.0-rc.1:
+  version "6.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-6.0.0-rc.1.tgz#afdee9d49fe0a1040d56fc1b5014e628cc15b5a4"
+  integrity sha512-m3xkRFmf6VLXxDVeHPrIWFp9tvc8lGIZSlJ/ObY+mdn4gIGFjV77A+3gcuMynj0yb6DJtkexPlqP2G9wmMyQuQ==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.2"
+    loglevel "^1.6.4"
+    qs "^6.5.2"
+    request "^2.88.0"
+    unhomoglyph "^1.0.2"
+
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
