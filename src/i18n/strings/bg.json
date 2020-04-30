@@ -23,5 +23,8 @@
     "The message from the parser is: %(message)s": "Грешката от парсъра е: %(message)s",
     "Invalid JSON": "Невалиден JSON",
     "Open user settings": "Отвори потребителските настройки",
-    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането"
+    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането",
+    "Missing indexeddb worker script!": "Липсва indexdb worker скриптът!",
+    "Unable to load config file: please refresh the page to try again.": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
+    "Previous/next recently visited room or community": "Предишна/следваща наскоро-посетена стая или общност"
 }
