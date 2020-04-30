@@ -2165,5 +2165,8 @@
     "To report a Matrix-related security issue, please read the Matrix.org <a>Security Disclosure Policy</a>.": "Bekijk eerst het <a>beveiligingsopenbaarmakingsbeleid</a> van Matrix.org als u een probleem met de beveiliging van Matrix wilt melden.",
     "Not currently indexing messages for any room.": "Er worden momenteel voor geen enkel gesprek berichten geïndexeerd.",
     "Currently indexing: %(currentRoom)s.": "Wordt geïndexeerd: %(currentRoom)s.",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s van %(totalRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s van %(totalRooms)s",
+    "Unverified login. Was this you?": "Ongeverifieerde aanmelding. Was u dit?",
+    "Where you’re logged in": "Waar u aangemeld bent",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Beheer hieronder de namen van uw sessies en meld ze af. <a>Of verifieer ze in uw gebruikersprofiel</a>."
 }
