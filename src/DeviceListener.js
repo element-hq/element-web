@@ -223,7 +223,6 @@ export default class DeviceListener {
                         });
                     }
                 }
-                return;
             } else if (await cli.secretStorageKeyNeedsUpgrade()) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: THIS_DEVICE_TOAST_KEY,
