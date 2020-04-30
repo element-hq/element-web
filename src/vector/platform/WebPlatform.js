@@ -3,6 +3,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
+Copyright 2017-2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -186,7 +187,9 @@ export default class WebPlatform extends VectorBasePlatform {
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
-        const osName = ua.getOS().name || "unknown os";
+        let osName = ua.getOS().name || "unknown OS";
+        // Stylise the value from the parser to match Apple's current branding.
+        if (osName === "Mac OS") osName = "macOS";
         return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
     }
 
