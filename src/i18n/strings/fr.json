@@ -2409,5 +2409,7 @@
     "Review where you’re logged in": "Vérifier où vous vous êtes connecté",
     "Verify your other sessions": "Vérifier vos autres sessions",
     "Unverified sessions currently have access to your account & messages": "Des sessions non vérifiées ont accès à votre compte et messages",
-    "Verify the identity of the new login accessing your account & messages": "Vérifiez l'identité de la nouvelle connexion accédant à votre compte et messages"
+    "Verify the identity of the new login accessing your account & messages": "Vérifiez l'identité de la nouvelle connexion accédant à votre compte et messages",
+    "New login. Was this you?": "Nouvelle connexion. Était-ce vous ?",
+    "Verify all your sessions to ensure your account & messages are safe": "Vérifiez toutes vos sessions pour vous assurer que votre compte et messages sont sécurisés"
 }
