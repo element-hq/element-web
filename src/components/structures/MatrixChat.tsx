@@ -1215,6 +1215,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
      */
     private async onLoggedIn() {
         ThemeController.isLogin = false;
+        this.themeWatcher.recheck();
         this.setStateForNewView({ view: Views.LOGGED_IN });
         // If a specific screen is set to be shown after login, show that above
         // all else, as it probably means the user clicked on something already.

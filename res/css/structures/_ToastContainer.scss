@@ -91,9 +91,8 @@ limitations under the License.
         }
 
         .mx_Toast_description {
-            max-width: 400px;
+            max-width: 272px;
             overflow: hidden;
-            white-space: nowrap;
             text-overflow: ellipsis;
             margin: 4px 0 11px 0;
             font-size: $font-12px;

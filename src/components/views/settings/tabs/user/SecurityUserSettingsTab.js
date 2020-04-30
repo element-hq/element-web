@@ -52,6 +52,10 @@ export class IgnoredUser extends React.Component {
 }
 
 export default class SecurityUserSettingsTab extends React.Component {
+    static propTypes = {
+        closeSettingsFn: PropTypes.func.isRequired,
+    };
+
     constructor() {
         super();
 
@@ -106,6 +110,11 @@ export default class SecurityUserSettingsTab extends React.Component {
             {matrixClient: MatrixClientPeg.get()},
         );
     };
+
+    _onGoToUserProfileClick = () => {
+        window.location.href = "#/user/" + MatrixClientPeg.get().getUserId();
+        this.props.closeSettingsFn();
+    }
 
     _onUserUnignored = async (userId) => {
         const {ignoredUserIds, waitingUnignored} = this.state;
@@ -282,15 +291,12 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>
         );
 
-        let eventIndex;
-        if (SettingsStore.isFeatureEnabled("feature_event_indexing")) {
-            eventIndex = (
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
-                    <EventIndexPanel />
-                </div>
-            );
-        }
+        const eventIndex = (
+            <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Message search")}</span>
+                <EventIndexPanel />
+            </div>
+        );
 
         // XXX: There's no such panel in the current cross-signing designs, but
         // it's useful to have for testing the feature. If there's no interest
@@ -315,7 +321,18 @@ export default class SecurityUserSettingsTab extends React.Component {
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Sessions")}</span>
+                    <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>
+                    <span>
+                        {_t(
+                            "Manage the names of and sign out of your sessions below or " +
+                            "<a>verify them in your User Profile</a>.", {},
+                            {
+                                a: sub => <AccessibleButton kind="link" onClick={this._onGoToUserProfileClick}>
+                                    {sub}
+                                </AccessibleButton>,
+                            },
+                        )}
+                    </span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t("A session's public name is visible to people you communicate with")}
                         <DevicesPanel />

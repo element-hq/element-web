@@ -23,6 +23,7 @@ import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
 import * as sdk from "../../../index";
+import toRem from "../../../utils/rem";
 
 let bounce = false;
 try {
@@ -148,7 +149,7 @@ export default createReactClass({
             // start at the old height and in the old h pos
 
             startStyles.push({ top: startTopOffset+"px",
-                               left: oldInfo.left+"px" });
+                               left: toRem(oldInfo.left) });
 
             const reorderTransitionOpts = {
                 duration: 100,
@@ -181,7 +182,7 @@ export default createReactClass({
         }
 
         const style = {
-            left: this.props.leftOffset+'px',
+            left: toRem(this.props.leftOffset),
             top: '0px',
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };

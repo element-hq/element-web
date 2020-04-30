@@ -252,7 +252,11 @@ class RoomPillPart extends PillPart {
 
     setAvatar(node) {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
+        let avatarUrl = Avatar.avatarUrlForRoom(
+            this._room,
+            16 * window.devicePixelRatio,
+            16 * window.devicePixelRatio,
+            "crop");
         if (!avatarUrl) {
             initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
             avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId)}`;
@@ -290,7 +294,8 @@ class UserPillPart extends PillPart {
         let avatarUrl = Avatar.avatarUrlForMember(
             this._member,
             16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio);
+            16 * window.devicePixelRatio,
+            "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
             // the url from defaultAvatarUrlForString is meant to go in an img element,

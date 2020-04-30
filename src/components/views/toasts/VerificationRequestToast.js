@@ -51,7 +51,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
-            this.setState({device: await cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
+            this.setState({device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
         }
     }
 
