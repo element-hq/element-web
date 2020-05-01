@@ -2043,5 +2043,11 @@
     "Connect this session to Key Backup": "Свържи тази сесия с резервно копие на ключовете",
     "Backup has a signature from <verify>unknown</verify> session with ID %(deviceId)s": "Резервното копие има подпис от <verify>непозната</verify> сесия с идентификатор %(deviceId)s",
     "Backup has a <validity>valid</validity> signature from this session": "Резервното копие има <validity>валиден</validity> подпис от тази сесия",
-    "Backup has an <validity>invalid</validity> signature from this session": "Резервното копие има <validity>невалиден</validity> подпис от тази сесия"
+    "Backup has an <validity>invalid</validity> signature from this session": "Резервното копие има <validity>невалиден</validity> подпис от тази сесия",
+    "Verify all your sessions to ensure your account & messages are safe": "Верифицирайте всички свой сесии за да подсигурите, че профила и съобщенията ви са защитени",
+    "Verify the new login accessing your account: %(name)s": "Верифицирайте новия вход достъпващ профила ви: %(name)s",
+    "Backup has a <validity>valid</validity> signature from <verify>verified</verify> session <device></device>": "Резервното копие има <validity>валиден</validity> подпис от <verify>потвърдена</verify> сесия <device></device>",
+    "Backup has a <validity>valid</validity> signature from <verify>unverified</verify> session <device></device>": "Резервното копие има <validity>валиден</validity> подпис от <verify>непотвърдена</verify> сесия <device></device>",
+    "Backup has an <validity>invalid</validity> signature from <verify>verified</verify> session <device></device>": "Резервното копие има <validity>невалиден</validity> подпис от <verify>потвърдена</verify> сесия <device></device>",
+    "Backup has an <validity>invalid</validity> signature from <verify>unverified</verify> session <device></device>": "Резервното копие има <validity>невалиден</validity> подпис от <verify>непотвърдена</verify> сесия <device></device>"
 }
