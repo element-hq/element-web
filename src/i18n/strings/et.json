@@ -690,5 +690,17 @@
     "Room Name": "Jututoa nimi",
     "Room Topic": "Jututoa teema",
     "Room Settings - %(roomName)s": "Jututoa seadistused - %(roomName)s",
-    "General failure": "Üldine viga"
+    "General failure": "Üldine viga",
+    "Where you’re logged in": "Kus sa oled võrku loginud",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Halda alljärgnevas oma sessioonide nimesid, logi neist välja või <a>verifitseeri neid oma kasutajaprofiilis</a>.",
+    "A session's public name is visible to people you communicate with": "Sessiooni avalik nimi on nähtav neile, kellega sa suhtled",
+    "Riot collects anonymous analytics to allow us to improve the application.": "Võimaldamaks meil rakendust parandada kogub Riot anonüümset analüütikat.",
+    "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privaatsus on meile oluline ning seega me ei kogu ei isiklikke ega isikustatavaid andmeid.",
+    "Learn more about how we use analytics.": "Loe lisaks kuidas me kasutama analüütikat.",
+    "No media permissions": "Meediaõigused puuduvad",
+    "You may need to manually permit Riot to access your microphone/webcam": "Sa võib-olla pead andma Riot'ile loa mikrofoni ja veebikaamera kasutamiseks",
+    "Missing media permissions, click the button below to request.": "Meediaga seotud õigused puuduvad. Nende nõutamiseks klõpsi järgnevat nuppu.",
+    "Request media permissions": "Nõuta meediaõigusi",
+    "Frequently Used": "Enamkasutatud",
+    "Smileys & People": "Vigurnäod ja inimesed"
 }
