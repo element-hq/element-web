@@ -78,6 +78,8 @@ export default class DeviceListener {
         this._dismissedThisDeviceToast = false;
         this._keyBackupInfo = null;
         this._keyBackupFetchedAt = null;
+        this._ourDeviceIdsAtStart = null;
+        this._displayingToastsForDeviceIds = new Set();
     }
 
     /**
