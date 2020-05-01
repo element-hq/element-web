@@ -19,6 +19,8 @@ module.exports = (env, argv) => {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
         development['devtool'] = 'eval-source-map';
+    } else {
+        development['devtool'] = 'nosources-source-map';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
