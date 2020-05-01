@@ -1,3 +1,13 @@
+Changes in [2.5.0-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.6) (2020-05-01)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.5...v2.5.0-rc.6)
+
+ * Upgrade to JS SDK 6.0.0-rc.2
+ * Wait for user to be verified in e2e setup
+   [\#4538](https://github.com/matrix-org/matrix-react-sdk/pull/4538)
+ * Add device name to unverified session toast
+   [\#4536](https://github.com/matrix-org/matrix-react-sdk/pull/4536)
+
 Changes in [2.5.0-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.5) (2020-04-30)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.4...v2.5.0-rc.5)
