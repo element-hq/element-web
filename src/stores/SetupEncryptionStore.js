@@ -126,7 +126,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
     }
 
-    onVerificationRequestChange = () => {
+    onVerificationRequestChange = async () => {
         if (this.verificationRequest.cancelled) {
             this.verificationRequest.off("change", this.onVerificationRequestChange);
             this.verificationRequest = null;
@@ -136,8 +136,9 @@ export class SetupEncryptionStore extends EventEmitter {
             this.verificationRequest = null;
             // At this point, the verification has finished, we just need to wait for
             // cross signing to be ready to use, so wait for the user trust status to
-            // change.
-            this.phase = PHASE_BUSY;
+            // change (or change to DONE if it's already ready).
+            const crossSigningReady = await MatrixClientPeg.get().isCrossSigningReady();
+            this.phase = crossSigningReady ? PHASE_DONE : PHASE_BUSY;
             this.emit("update");
         }
     }
