@@ -780,7 +780,7 @@
     "Explore Account Data": "Esplora dati account",
     "All messages (noisy)": "Tutti i messaggi (rumoroso)",
     "Saturday": "Sabato",
-    "I understand the risks and wish to continue": "Sono consapevole dei rischi e vorrei continuare",
+    "I understand the risks and wish to continue": "Capisco i rischi e desidero continuare",
     "Direct Chat": "Chat Diretta",
     "The server may be unavailable or overloaded": "Il server potrebbe essere non disponibile o sovraccarico",
     "Reject": "Rifiuta",
@@ -1321,7 +1321,7 @@
     "Premium hosting for organisations <a>Learn more</a>": "Hosting premium per organizzazioni <a>Maggior informazioni</a>",
     "Other": "Altro",
     "Find other public servers or use a custom server": "Trova altri server pubblici o usane uno personale",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Ti suggeriamo di installare <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> o <safariLink>Safari</safariLink> per la migliore esperienza.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Installa <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, o <safariLink>Safari</safariLink> per una migliore esperienza.",
     "Couldn't load page": "Caricamento pagina fallito",
     "Want more than a community? <a>Get your own server</a>": "Vuoi più di una comunità? <a>Ottieni il tuo server personale</a>",
     "This homeserver does not support communities": "Questo homeserver non supporta le comunità",
@@ -2404,5 +2404,13 @@
     "Review where you’re logged in": "Controlla dove hai fatto l'accesso",
     "Verify your other sessions": "Verifica le tue altre sessioni",
     "Where you’re logged in": "Dove hai fatto l'accesso",
-    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gestisci i nomi e disconnettiti dalle tue sessioni sotto o <a>verificale nel tuo profilo utente</a>."
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Gestisci i nomi e disconnettiti dalle tue sessioni sotto o <a>verificale nel tuo profilo utente</a>.",
+    "New login. Was this you?": "Nuovo accesso. Eri tu?",
+    "Verify all your sessions to ensure your account & messages are safe": "Verifica tutte le tue sessioni per assicurarti che il tuo account e i messaggi siano protetti",
+    "Verify the new login accessing your account: %(name)s": "Verifica il nuovo accesso entrando nel tuo account: %(name)s",
+    "Restoring keys from backup": "Ripristino delle chiavi dal backup",
+    "Fetching keys from server...": "Ricezione delle chiavi dal server...",
+    "%(completed)s of %(total)s keys restored": "%(completed)s di %(total)s chiavi ripristinate",
+    "Keys restored": "Chiavi ripristinate",
+    "Successfully restored %(sessionCount)s keys": "Ripristinate %(sessionCount)s chiavi correttamente"
 }
