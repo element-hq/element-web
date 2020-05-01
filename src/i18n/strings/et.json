@@ -702,5 +702,22 @@
     "Missing media permissions, click the button below to request.": "Meediaga seotud õigused puuduvad. Nende nõutamiseks klõpsi järgnevat nuppu.",
     "Request media permissions": "Nõuta meediaõigusi",
     "Frequently Used": "Enamkasutatud",
-    "Smileys & People": "Vigurnäod ja inimesed"
+    "Smileys & People": "Vigurnäod ja inimesed",
+    "Animals & Nature": "Loomad ja loodus",
+    "Food & Drink": "Toit ja jook",
+    "Activities": "Tegevused",
+    "Travel & Places": "Reisimine ja kohad",
+    "Objects": "Esemed",
+    "Symbols": "Sümbolid",
+    "Flags": "Lipud",
+    "Quick Reactions": "Reageeri lennult",
+    "Unknown Address": "Teadmata aadress",
+    "Any of the following data may be shared:": "Järgnevaid andmeid võib jagada:",
+    "Your display name": "Sinu kuvatav nimi",
+    "Your avatar URL": "Sinu avatari aadress",
+    "Your user ID": "Sinu kasutajatunnus",
+    "Your theme": "Sinu teema",
+    "Riot URL": "Riot'i aadress",
+    "Room ID": "Jututoa tunnus",
+    "Widget ID": "Vidina tunnus"
 }
