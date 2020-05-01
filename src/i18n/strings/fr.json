@@ -2411,5 +2411,11 @@
     "Unverified sessions currently have access to your account & messages": "Des sessions non vérifiées ont accès à votre compte et messages",
     "Verify the identity of the new login accessing your account & messages": "Vérifiez l'identité de la nouvelle connexion accédant à votre compte et messages",
     "New login. Was this you?": "Nouvelle connexion. Était-ce vous ?",
-    "Verify all your sessions to ensure your account & messages are safe": "Vérifiez toutes vos sessions pour vous assurer que votre compte et messages sont sécurisés"
+    "Verify all your sessions to ensure your account & messages are safe": "Vérifiez toutes vos sessions pour vous assurer que votre compte et messages sont sécurisés",
+    "Verify the new login accessing your account: %(name)s": "Vérifiez la nouvelle connexion accédant à votre compte : %(name)s",
+    "Restoring keys from backup": "Restauration des clés depuis la sauvegarde",
+    "Fetching keys from server...": "Récupération des clés depuis le serveur…",
+    "%(completed)s of %(total)s keys restored": "%(completed)s clés sur %(total)s restaurées",
+    "Keys restored": "Clés restaurées",
+    "Successfully restored %(sessionCount)s keys": "%(sessionCount)s clés ont été restaurées avec succès"
 }
