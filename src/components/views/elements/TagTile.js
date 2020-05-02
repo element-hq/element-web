@@ -84,7 +84,7 @@ export default createReactClass({
             this.props.tag,
         ).then((profile) => {
             if (this.unmounted) return;
-            this.setState({profile});
+            this.setState({ profile });
         }).catch((err) => {
             console.warn('Could not fetch group profile for ' + this.props.tag, err);
         });
@@ -111,18 +111,18 @@ export default createReactClass({
     },
 
     onMouseOver: function() {
-        this.setState({hover: true});
+        this.setState({ hover: true });
     },
 
     onMouseOut: function() {
-        this.setState({hover: false});
+        this.setState({ hover: false });
     },
 
     openMenu: function(e) {
         // Prevent the TagTile onClick event firing as well
         e.stopPropagation();
         e.preventDefault();
-        this.setState({hover: false});
+        this.setState({ hover: false });
         this.props.openMenu();
     },
 
@@ -154,32 +154,32 @@ export default createReactClass({
         // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
         const contextButton = this.state.hover || this.props.menuDisplayed ?
             <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this.props.contextMenuButtonRef}>
-                { "\u00B7\u00B7\u00B7" }
+                {"\u00B7\u00B7\u00B7"}
             </div> : <div ref={this.props.contextMenuButtonRef} />;
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
 
         return <AccessibleTooltipButton
-                className={className}
-                onClick={this.onClick}
-                onContextMenu={this.openMenu}
-                title={name}
+            className={className}
+            onClick={this.onClick}
+            onContextMenu={this.openMenu}
+            title={name}
+        >
+            <div
+                className="mx_TagTile_avatar"
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
             >
-                <div
-                    className="mx_TagTile_avatar"
-                    onMouseOver={this.onMouseOver}
-                    onMouseOut={this.onMouseOut}
-                >
-                    <BaseAvatar
-                        name={name}
-                        idName={this.props.tag}
-                        url={httpUrl}
-                        width={avatarHeight}
-                        height={avatarHeight}
-                    />
-                    { contextButton }
-                    { badgeElement }
-                </div>
-            </AccessibleTooltipButton>;
+                <BaseAvatar
+                    name={name}
+                    idName={this.props.tag}
+                    url={httpUrl}
+                    width={avatarHeight}
+                    height={avatarHeight}
+                />
+                {contextButton}
+                {badgeElement}
+            </div>
+        </AccessibleTooltipButton>;
     },
 });

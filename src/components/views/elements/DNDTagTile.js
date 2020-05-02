@@ -19,7 +19,7 @@ import TagTile from './TagTile';
 
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import {ContextMenu, toRightOf, useContextMenu} from "../../structures/ContextMenu";
+import { ContextMenu, toRightOf, useContextMenu } from "../../structures/ContextMenu";
 import * as sdk from '../../../index';
 
 export default function DNDTagTile(props) {
@@ -35,28 +35,28 @@ export default function DNDTagTile(props) {
             </ContextMenu>
         );
     }
-        return <div>
-            <Draggable
-                key={props.tag}
-                draggableId={props.tag}
-                index={props.index}
-                type="draggable-TagTile"
-            >
-                { (provided, snapshot) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                        >
-                           <TagTile
-                            {...props}
-                               contextMenuButtonRef= {handle}
-                               menuDisplayed={menuDisplayed}
-                               openMenu={openMenu}
-                            />
-                        </div>
-                ) }
-            </Draggable>
-                    {contextMenu}
-        </div>;
+    return <div>
+        <Draggable
+            key={props.tag}
+            draggableId={props.tag}
+            index={props.index}
+            type="draggable-TagTile"
+        >
+            {(provided, snapshot) => (
+                <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                >
+                    <TagTile
+                        {...props}
+                        contextMenuButtonRef={handle}
+                        menuDisplayed={menuDisplayed}
+                        openMenu={openMenu}
+                    />
+                </div>
+            )}
+        </Draggable>
+        {contextMenu}
+    </div>;
 }
