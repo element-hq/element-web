@@ -54,7 +54,6 @@ export default function DNDTagTile(props) {
                                menuDisplayed={menuDisplayed}
                                openMenu={openMenu}
                             />
-                        { provided.placeholder }
                         </div>
                 ) }
             </Draggable>
