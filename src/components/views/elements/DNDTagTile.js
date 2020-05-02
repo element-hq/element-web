@@ -43,7 +43,6 @@ export default function DNDTagTile(props) {
                 type="draggable-TagTile"
             >
                 { (provided, snapshot) => (
-                    <div>
                         <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -55,9 +54,8 @@ export default function DNDTagTile(props) {
                                menuDisplayed={menuDisplayed}
                                openMenu={openMenu}
                             />
-                        </div>
                         { provided.placeholder }
-                    </div>
+                        </div>
                 ) }
             </Draggable>
                     {contextMenu}

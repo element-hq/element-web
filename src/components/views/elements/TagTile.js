@@ -159,8 +159,7 @@ export default createReactClass({
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
 
-        return <div>
-            <AccessibleTooltipButton
+        return <AccessibleTooltipButton
                 className={className}
                 onClick={this.onClick}
                 onContextMenu={this.openMenu}
@@ -181,7 +180,6 @@ export default createReactClass({
                     { contextButton }
                     { badgeElement }
                 </div>
-            </AccessibleTooltipButton>
-        </div>;
+            </AccessibleTooltipButton>;
     },
 });
