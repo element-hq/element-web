@@ -143,7 +143,7 @@ export default createReactClass({
 
         const badge = TagOrderStore.getGroupBadge(this.props.tag);
         let badgeElement;
-        if (badge && !this.state.hover) {
+        if (badge && !this.state.hover && !this.props.menuDisplayed) {
             const badgeClasses = classNames({
                 "mx_TagTile_badge": true,
                 "mx_TagTile_badgeHighlight": badge.highlight,
