@@ -37,4 +37,17 @@ declare global {
     interface StorageEstimate {
         usageDetails?: {[key: string]: number};
     }
+
+    export interface ISettledFulfilled<T> {
+        status: "fulfilled";
+        value: T;
+    }
+    export interface ISettledRejected {
+        status: "rejected";
+        reason: any;
+    }
+
+    interface PromiseConstructor {
+        allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
+    }
 }

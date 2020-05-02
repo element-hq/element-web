@@ -90,6 +90,7 @@ export default class SetupEncryptionToast extends React.PureComponent {
     getSetupCaption() {
         switch (this.props.kind) {
             case 'set_up_encryption':
+                return _t('Set up');
             case 'upgrade_encryption':
             case 'upgrade_ssss':
                 return _t('Upgrade');

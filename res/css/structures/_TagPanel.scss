@@ -69,7 +69,7 @@ limitations under the License.
     height: 100%;
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
-    height: 40px;
+    height: $font-40px;
     padding: 10px 0 9px 0;
 }
 
@@ -110,13 +110,13 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
     content: '';
-    height: 56px;
+    height: calc(100% + 16px);
     background-color: $accent-color;
     width: 5px;
     position: absolute;
     left: -15px;
     border-radius: 0 3px 3px 0;
-    top: -8px; // (56 - 40)/2
+    top: -8px; // (16px / 2)
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {

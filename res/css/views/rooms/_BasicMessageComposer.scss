@@ -46,22 +46,19 @@ limitations under the License.
 
         &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
             span.mx_UserPill, span.mx_RoomPill {
-                padding-left: 21px;
                 position: relative;
 
                 // avatar psuedo element
                 &::before {
-                    position: absolute;
-                    left: 2px;
-                    top: 2px;
                     content: var(--avatar-letter);
-                    width: 16px;
-                    height: 16px;
+                    width: $font-16px;
+                    height: $font-16px;
+                    margin-right: 0.24rem;
                     background: var(--avatar-background), $avatar-bg-color;
                     color: $avatar-initial-color;
                     background-repeat: no-repeat;
-                    background-size: 16px;
-                    border-radius: 8px;
+                    background-size: $font-16px;
+                    border-radius: $font-16px;
                     text-align: center;
                     font-weight: normal;
                     line-height: $font-16px;

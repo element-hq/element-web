@@ -1,5 +1,5 @@
 /*
-Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,26 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomRecoveryReminder {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    background-color: $room-warning-bg-color;
-    padding: 20px;
-    border: 1px solid $primary-hairline-color;
-    border-bottom: unset;
-}
-
-.mx_RoomRecoveryReminder_header {
-    font-weight: bold;
-    margin-bottom: 1em;
-}
-
-.mx_RoomRecoveryReminder_body {
-    margin-bottom: 1em;
-}
-
-.mx_RoomRecoveryReminder_secondary {
-    font-size: 90%;
-    margin-top: 1em;
+// converts a pixel value to rem.
+export default function(pixelVal) {
+  return pixelVal / 15 + "rem";
 }

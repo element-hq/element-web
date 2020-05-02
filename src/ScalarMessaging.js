@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Generify the name of this and all components within - it's not just for scalar.
+
 /*
 Listens for incoming postMessage requests from the integrations UI URL. The following API is exposed:
 {

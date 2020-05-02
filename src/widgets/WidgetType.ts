@@ -16,6 +16,8 @@ limitations under the License.
 
 export class WidgetType {
     public static readonly JITSI = new WidgetType("m.jitsi", "jitsi");
+    public static readonly STICKERPICKER = new WidgetType("m.stickerpicker", "m.stickerpicker");
+    public static readonly INTEGRATION_MANAGER = new WidgetType("m.integration_manager", "m.integration_manager");
     public static readonly CUSTOM = new WidgetType("m.custom", "m.custom");
 
     constructor(public readonly preferred: string, public readonly legacy: string) {

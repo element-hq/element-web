@@ -67,6 +67,8 @@ limitations under the License.
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 1;
+    display: inline-flex;
+    align-items: center;
 }
 
 .mx_Dropdown_option div {

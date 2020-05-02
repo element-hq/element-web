@@ -188,13 +188,14 @@ export default class AppTile extends React.Component {
         }
     }
 
+    // TODO: Generify the name of this function. It's not just scalar tokens.
     /**
      * Adds a scalar token to the widget URL, if required
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
         if (!WidgetUtils.isScalarUrl(this.props.app.url)) {
-            console.warn('Non-scalar widget, not setting scalar token!', url);
+            console.warn('Widget does not match integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
@@ -218,7 +219,7 @@ export default class AppTile extends React.Component {
 
         const defaultManager = managers.getPrimaryManager();
         if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
-            console.warn('Non-scalar manager, not setting scalar token!', url);
+            console.warn('Unknown integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
@@ -423,8 +424,13 @@ export default class AppTile extends React.Component {
     _setupWidgetMessaging() {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
+
+        // We use the app's URL over the rendered URL so that anything the widget does which could
+        // lead to requesting a "security key" will pass accordingly. The only other thing this URL
+        // is used for is to determine the origin we're talking to, and therefore we don't need the
+        // fully templated URL.
         const widgetMessaging = new WidgetMessaging(
-            this.props.app.id, this._getRenderedUrl(), this.props.userWidget, this._appFrame.current.contentWindow);
+            this.props.app.id, this.props.app.url, this.props.userWidget, this._appFrame.current.contentWindow);
         ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);
@@ -560,15 +566,18 @@ export default class AppTile extends React.Component {
      * Replace the widget template variables in a url with their values
      *
      * @param {string} u The URL with template variables
+     * @param {string} widgetType The widget's type
      *
      * @returns {string} url with temlate variables replaced
      */
-    _templatedUrl(u) {
+    _templatedUrl(u, widgetType: string) {
+        const targetData = {};
+        if (WidgetType.JITSI.matches(widgetType)) {
+            targetData['domain'] = 'jitsi.riot.im'; // v1 jitsi widgets have this hardcoded
+        }
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const myUser = MatrixClientPeg.get().getUser(myUserId);
-        const vars = Object.assign({
-            domain: "jitsi.riot.im", // v1 widgets have this hardcoded
-        }, this.props.app.data, {
+        const vars = Object.assign(targetData, this.props.app.data, {
             'matrix_user_id': myUserId,
             'matrix_room_id': this.props.room.roomId,
             'matrix_display_name': myUser ? myUser.displayName : myUserId,
@@ -605,18 +614,19 @@ export default class AppTile extends React.Component {
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
         }
-        return this._templatedUrl(url);
+        return this._templatedUrl(url, this.props.app.type);
     }
 
     _getPopoutUrl() {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
                 WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                this.props.app.type,
             );
         } else {
             // use app.url, not state.widgetUrl, because we want the one without
             // the wURL params for the popped-out version.
-            return this._templatedUrl(this._getSafeUrl(this.props.app.url));
+            return this._templatedUrl(this._getSafeUrl(this.props.app.url), this.props.app.type);
         }
     }
 
@@ -630,7 +640,10 @@ export default class AppTile extends React.Component {
         if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol)) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
-        return safeWidgetUrl;
+
+        // Replace all the dollar signs back to dollar signs as they don't affect HTTP at all.
+        // We also need the dollar signs in-tact for variable substitution.
+        return safeWidgetUrl.replace(/%24/g, '$');
     }
 
     _getTileTitle() {
