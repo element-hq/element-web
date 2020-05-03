@@ -794,9 +794,21 @@
     "Enable widget screenshots on supported widgets": "Kui vidin seda toetab, siis luba tal teha ekraanitõmmiseid",
     "Prompt before sending invites to potentially invalid matrix IDs": "Hoiata enne kutse saatmist võimalikule vigasele Matrix'i kasutajatunnusele",
     "Show developer tools": "Näita arendaja tööriistu",
-    "Show hidden events in timeline": "Näita ajajoonel peidetud sündmusi",
+    "Show hidden events in timeline": "Näita peidetud sündmusi ajajoonel",
     "Low bandwidth mode": "Vähese ribalaiusega režiim",
     "Composer": "Sõnumite kirjutamine",
     "Jump to start/end of the composer": "Hüppa sõnumite kirjutamise algusesse või lõppu",
-    "Navigate composer history": "Vaata sõnumite kirjutamise ajalugu"
+    "Navigate composer history": "Vaata sõnumite kirjutamise ajalugu",
+    "Show previews/thumbnails for images": "Näita piltide eelvaateid või väikepilte",
+    "Collecting logs": "Kogun logisid",
+    "Waiting for response from server": "Ootan serverilt vastust",
+    "Messages containing my username": "Sõnumid, mis sisaldavad minu kasutajatunnust",
+    "Messages containing @room": "Sõnumid, mis sisaldavad sõna @room",
+    "Messages in one-to-one chats": "Kahepoolsete vestluste sõnumid",
+    "Encrypted messages in one-to-one chats": "Kahepoolsete vestluste krüptitud sõnumid",
+    "Messages in group chats": "Rühmavestluste sõnumid",
+    "Encrypted messages in group chats": "Rühmavestluste krüptitud sõnumid",
+    "When I'm invited to a room": "Kui mind kutsutakse jututuppa",
+    "Call invitation": "Kõnekutse",
+    "Messages sent by bot": "Robotite saadetud sõnumid"
 }
