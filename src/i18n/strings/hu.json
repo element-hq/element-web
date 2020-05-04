@@ -26,5 +26,15 @@
     "Open user settings": "Felhasználói beállítások megnyitása",
     "Missing indexeddb worker script!": "Indexeddb worker szkript hiányzik!",
     "Unable to load config file: please refresh the page to try again.": "A konfigurációs fájlt nem sikerült betölteni: frissítsd az oldalt és próbáld meg újra.",
-    "Previous/next recently visited room or community": "Előző/következő nemrég meglátogatott szobák vagy közösségek"
+    "Previous/next recently visited room or community": "Előző/következő nemrég meglátogatott szobák vagy közösségek",
+    "Riot Desktop (%(platformName)s)": "Asztali Riot (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "A böngésző nem támogatott",
+    "Your browser can't run Riot": "A böngésződ nem tudja futtatni a Riotot",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot fejlett böngésző technológiát használ amit a jelenlegi böngésződ nem támogat.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "A legjobb élmény eléréséhez kérlek telepíts <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Folytathatod a jelenlegi böngésződdel de néhány vagy az összes funkció is használhatatlan lehet vagy az alkalmazás kinézete viselkedése lesz hibás.",
+    "I understand the risks and wish to continue": "Megértettem a kockázatot és folytatom",
+    "Go to Riot.im": "Irány a Riot.im",
+    "Failed to start": "Az indítás sikertelen"
 }

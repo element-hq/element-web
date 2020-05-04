@@ -3,6 +3,7 @@
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
+Copyright 2017-2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -180,14 +181,27 @@ export default class WebPlatform extends VectorBasePlatform {
     getDefaultDeviceDisplayName(): string {
         // strip query-string and fragment from uri
         const u = url.parse(window.location.href);
+        u.protocol = "";
         u.search = "";
         u.hash = "";
-        const appName = u.format();
+        // Remove trailing slash if present
+        u.pathname = u.pathname.replace(/\/$/, "");
+
+        let appName = u.format();
+        // Remove leading slashes if present
+        appName = appName.replace(/^\/\//, "");
+        // `appName` is now in the format `riot.im/develop`.
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
-        const osName = ua.getOS().name || "unknown os";
-        return _t('%(appName)s via %(browserName)s on %(osName)s', {appName: appName, browserName: browserName, osName: osName});
+        let osName = ua.getOS().name || "unknown OS";
+        // Stylise the value from the parser to match Apple's current branding.
+        if (osName === "Mac OS") osName = "macOS";
+        return _t('%(appName)s (%(browserName)s, %(osName)s)', {
+            appName,
+            browserName,
+            osName,
+        });
     }
 
     screenCaptureErrorString(): ?string {

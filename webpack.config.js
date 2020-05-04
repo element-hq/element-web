@@ -19,6 +19,8 @@ module.exports = (env, argv) => {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
         development['devtool'] = 'eval-source-map';
+    } else {
+        development['devtool'] = 'nosources-source-map';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -333,6 +335,20 @@ module.exports = (env, argv) => {
                 filename: 'mobile_guide/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['mobileguide'],
+            }),
+
+            // These are the static error pages for when the javascript env is *really unsupported*
+            new HtmlWebpackPlugin({
+                template: './src/vector/static/unable-to-load.html',
+                filename: 'static/unable-to-load.html',
+                minify: argv.mode === 'production',
+                chunks: [],
+            }),
+            new HtmlWebpackPlugin({
+                template: './src/vector/static/incompatible-browser.html',
+                filename: 'static/incompatible-browser.html',
+                minify: argv.mode === 'production',
+                chunks: [],
             }),
 
             // This is the usercontent sandbox's entry point (separate for iframing)

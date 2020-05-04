@@ -20,5 +20,11 @@
     "The message from the parser is: %(message)s": "Správa z parsera je: %(message)s",
     "Invalid JSON": "Neplatný JSON",
     "Unexpected error preparing the app. See console for details.": "Neočakávaná chyba počas pripravovania aplikácie. Pre podrobnosti pozri konzolu.",
-    "Invalid configuration: no default server specified.": "Neplatné nastavenie: nebol určený východiskový server."
+    "Invalid configuration: no default server specified.": "Neplatné nastavenie: nebol určený východiskový server.",
+    "Missing indexeddb worker script!": "Chýba indexovaný databázový skript pracovníka!",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Neplatná konfigurácia: je možné špecifikovať len jednu možnosť z default_server_config, default_server_name, or default_hs_url.",
+    "Unable to load config file: please refresh the page to try again.": "Nemožno načítať konfiguračný súbor: prosím, obnovte stránku a skúste to znova.",
+    "Open user settings": "Otvoriť používateľské nastavenia",
+    "Previous/next recently visited room or community": "Predchádzajúca/ďalšia nedávno navštívená miestnosť alebo komunita",
+    "Go to your browser to complete Sign In": "Prejdite do prehliadača a dokončite prihlásenie"
 }
