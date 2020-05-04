@@ -41,7 +41,7 @@ interface IState {
 }
 
 // TODO: Actually write stub
-export class RoomSublist2 extends React.Component<IProps, IState> {
+export default class RoomSublist2 extends React.Component<IProps, IState> {
     public setHeight(size: number) {
     }
 

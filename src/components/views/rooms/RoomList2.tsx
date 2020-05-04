@@ -27,7 +27,7 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
 import { ActionPayload } from "../../../dispatcher-types";
 import dis from "../../../dispatcher";
-import { RoomSublist2 } from "./RoomSublist2";
+import  RoomSublist2 from "./RoomSublist2";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
