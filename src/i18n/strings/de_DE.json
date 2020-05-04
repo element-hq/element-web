@@ -783,7 +783,7 @@
     "Explore Account Data": "Konto-Daten erkunden",
     "All messages (noisy)": "Alle Nachrichten (laut)",
     "Saturday": "Samstag",
-    "I understand the risks and wish to continue": "Ich verstehe das Risiko und möchte fortfahren",
+    "I understand the risks and wish to continue": "Ich verstehe die Risiken und möchte fortfahren",
     "Direct Chat": "Direkt-Chat",
     "The server may be unavailable or overloaded": "Der Server ist vermutlich nicht erreichbar oder überlastet",
     "Reject": "Ablehnen",
@@ -1348,7 +1348,7 @@
     "Share Permalink": "Teile permanenten Link",
     "Sign in to your Matrix account on %(serverName)s": "Melde dich mit deinem Matrixkonto auf %(serverName)s an",
     "Create your Matrix account on %(serverName)s": "Erstelle ein Matrixkonto auf %(serverName)s",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Bitte installiere <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, oder <safariLink>Safari</safariLink> für die beste Erfahrung.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": " Bitte installiere <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, oder <safariLink>Safari</safariLink> für das beste Erlebnis.",
     "Want more than a community? <a>Get your own server</a>": "Du möchtest mehr als eine Community? <a>Hol dir deinen eigenen Server</a>",
     "Could not load user profile": "Konnte Nutzerprofil nicht laden",
     "Your Matrix account on %(serverName)s": "Dein Matrixkonto auf %(serverName)s",
@@ -1878,5 +1878,5 @@
     "Room ID or alias of ban list": "Raum-ID oder -Alias der Sperrliste",
     "Subscribe": "Abonnieren",
     "Always show the window menu bar": "Fenstermenüleiste immer anzeigen",
-    "Show tray icon and minimize window to it on close": "Tray-Symbol anzeigen und Fenster beim Schließen minimieren"
+    "Show tray icon and minimize window to it on close": "Taskleistensymbol anzeigen und Fenster beim Schließen dorthin minimieren"
 }
