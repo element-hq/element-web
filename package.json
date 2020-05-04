@@ -62,7 +62,7 @@
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
-    "test": "jest"
+    "test": "true"
   },
   "gh-pages-deploy": {
     "staticpath": "webapp",
