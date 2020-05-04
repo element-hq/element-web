@@ -1885,5 +1885,8 @@
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Dieser Raum verbindet Nachrichten mit den folgenden Plattformen. <a>Mehr erfahren.</a>",
     "This room isn’t bridging messages to any platforms. <a>Learn more.</a>": "Dieser Raum verbindet keine Nachrichten mit Plattformen. <a>Mehr erfahren.</a>",
     "Bridges": "Bridges",
-    "Uploaded sound": "Hochgeladener Ton"
+    "Uploaded sound": "Hochgeladener Ton",
+    "Upgrade this room to the recommended room version": "Aktualisiere diesen Raum auf die empfohlene Raumversion",
+    "this room": "Dieser Raum",
+    "View older messages in %(roomName)s.": "Zeige alte Nachrichten in %(roomName)s."
 }
