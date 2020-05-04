@@ -28,7 +28,6 @@ import { Dispatcher } from "flux";
 import { ActionPayload } from "../../../dispatcher-types";
 import dis from "../../../dispatcher";
 import { RoomSublist2 } from "./RoomSublist2";
-import { isNullOrUndefined } from "matrix-js-sdk/lib/src/utils";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;

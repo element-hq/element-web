@@ -34,3 +34,8 @@ export const OrderedDefaultTagIDs = [
 ];
 
 export type TagID = string | DefaultTagID;
+
+export enum RoomUpdateCause {
+    Timeline = "TIMELINE",
+    RoomRead = "ROOM_READ",
+}

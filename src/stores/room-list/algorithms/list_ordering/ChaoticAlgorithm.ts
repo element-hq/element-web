@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { Algorithm } from "./Algorithm";
-import { DefaultTagID } from "../../models";
 import { ITagMap } from "../models";
 
 /**
@@ -33,11 +32,7 @@ export class ChaoticAlgorithm extends Algorithm {
         return Promise.resolve();
     }
 
-    protected async regenerateTag(tagId: string | DefaultTagID, rooms: []): Promise<[]> {
-        return Promise.resolve(rooms);
-    }
-
-    public async handleRoomUpdate(room): Promise<boolean> {
+    public async handleRoomUpdate(room, cause): Promise<boolean> {
         return Promise.resolve(false);
     }
 }

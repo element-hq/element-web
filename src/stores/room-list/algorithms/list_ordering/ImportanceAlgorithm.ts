@@ -17,9 +17,9 @@ limitations under the License.
 
 import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { DefaultTagID, TagID } from "../../models";
+import { DefaultTagID, RoomUpdateCause, TagID } from "../../models";
 import { ITagMap, SortAlgorithm } from "../models";
-import { getSortingAlgorithmInstance, sortRoomsWithAlgorithm } from "../tag_sorting";
+import { sortRoomsWithAlgorithm } from "../tag_sorting";
 import * as Unread from '../../../../Unread';
 
 /**
@@ -194,11 +194,12 @@ export class ImportanceAlgorithm extends Algorithm {
         }
     }
 
-    protected async regenerateTag(tagId: string | DefaultTagID, rooms: []): Promise<[]> {
-        return Promise.resolve(rooms);
-    }
-
-    public async handleRoomUpdate(room): Promise<boolean> {
-        return Promise.resolve(false);
+    public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        const tags = this.roomIdsToTags[room.roomId];
+        if (!tags) {
+            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
+            return false;
+        }
+        return false;
     }
 }

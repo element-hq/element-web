@@ -18,12 +18,14 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { ActionPayload, defaultDispatcher } from "../../dispatcher-types";
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, OrderedDefaultTagIDs, TagID } from "./models";
+import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import { Algorithm } from "./algorithms/list_ordering/Algorithm";
 import TagOrderStore from "../TagOrderStore";
 import { getListAlgorithmInstance } from "./algorithms/list_ordering";
 import { AsyncStore } from "../AsyncStore";
 import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -123,7 +125,14 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
 
                 await this.regenerateAllLists(); // regenerate the lists now
             }
-        } else if (payload.action === 'MatrixActions.Room.receipt') {
+        }
+
+        if (!this.algorithm) {
+            // This shouldn't happen because `initialListsGenerated` implies we have an algorithm.
+            throw new Error("Room list store has no algorithm to process dispatcher update with");
+        }
+
+        if (payload.action === 'MatrixActions.Room.receipt') {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
             // noinspection JSObjectNullOrUndefined - this.matrixClient can't be null by this point in the lifecycle
@@ -132,23 +141,45 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
                 const receiptUsers = Object.keys(payload.event.getContent()[eventId]['m.read'] || {});
                 if (receiptUsers.includes(myUserId)) {
                     // TODO: Update room now that it's been read
+                    console.log(payload);
                     return;
                 }
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
             // TODO: Update room from tags
-        } else if (payload.action === 'MatrixActions.room.timeline') {
-            // TODO: Update room from new events
+            console.log(payload);
+        } else if (payload.action === 'MatrixActions.Room.timeline') {
+            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+
+            // Ignore non-live events (backfill)
+            if (!eventPayload.isLiveEvent || !payload.isLiveUnfilteredRoomTimelineEvent) return;
+
+            const roomId = eventPayload.event.getRoomId();
+            const room = this.matrixClient.getRoom(roomId);
+            await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.Event.decrypted') {
             // TODO: Update room from decrypted event
+            console.log(payload);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             // TODO: Update DMs
+            console.log(payload);
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
             // TODO: Update room from membership change
-        } else if (payload.action === 'MatrixActions.room') {
+            console.log(payload);
+        } else if (payload.action === 'MatrixActions.Room') {
             // TODO: Update room from creation/join
+            console.log(payload);
         } else if (payload.action === 'view_room') {
             // TODO: Update sticky room
+            console.log(payload);
+        }
+    }
+
+    private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
+        const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
+        if (shouldUpdate) {
+            console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
+            this.emit(LISTS_UPDATE_EVENT, this);
         }
     }
 

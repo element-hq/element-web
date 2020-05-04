@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DefaultTagID, TagID } from "../../models";
+import { DefaultTagID, RoomUpdateCause, TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
@@ -33,9 +33,8 @@ export abstract class Algorithm {
     protected cached: ITagMap = {};
     protected sortAlgorithms: ITagSortingMap;
     protected rooms: Room[] = [];
-    protected roomsByTag: {
-        // @ts-ignore - TS wants this to be a string but we know better
-        [tagId: TagID]: Room[];
+    protected roomIdsToTags: {
+        [roomId: string]: TagID[];
     } = {};
 
     protected constructor() {
@@ -132,6 +131,25 @@ export abstract class Algorithm {
         await this.generateFreshTags(newTags);
 
         this.cached = newTags;
+        this.updateTagsFromCache();
+    }
+
+    /**
+     * Updates the roomsToTags map
+     */
+    protected updateTagsFromCache() {
+        const newMap = {};
+
+        const tags = Object.keys(this.cached);
+        for (const tagId of tags) {
+            const rooms = this.cached[tagId];
+            for (const room of rooms) {
+                if (!newMap[room.roomId]) newMap[room.roomId] = [];
+                newMap[room.roomId].push(tagId);
+            }
+        }
+
+        this.roomIdsToTags = newMap;
     }
 
     /**
@@ -145,26 +163,15 @@ export abstract class Algorithm {
     protected abstract generateFreshTags(updatedTagMap: ITagMap): Promise<any>;
 
     /**
-     * Called when the Algorithm wants a whole tag to be reordered. Typically this will
-     * be done whenever the tag's scope changes (added/removed rooms).
-     * @param {TagID} tagId The tag ID which changed.
-     * @param {Room[]} rooms The rooms within the tag, unordered.
-     * @returns {Promise<Room[]>} Resolves to the ordered rooms in the tag.
-     */
-    // TODO: Do we need this?
-    protected abstract regenerateTag(tagId: TagID, rooms: Room[]): Promise<Room[]>;
-
-    /**
      * Asks the Algorithm to update its knowledge of a room. For example, when
      * a user tags a room, joins/creates a room, or leaves a room the Algorithm
      * should be told that the room's info might have changed. The Algorithm
      * may no-op this request if no changes are required.
      * @param {Room} room The room which might have affected sorting.
+     * @param {RoomUpdateCause} cause The reason for the update being triggered.
      * @returns {Promise<boolean>} A promise which resolve to true or false
      * depending on whether or not getOrderedRooms() should be called after
      * processing.
      */
-    // TODO: Take a ReasonForChange to better predict the behaviour?
-    // TODO: Intercept here and handle tag changes automatically? May be best to let the impl do that.
-    public abstract handleRoomUpdate(room: Room): Promise<boolean>;
+    public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean>;
 }
