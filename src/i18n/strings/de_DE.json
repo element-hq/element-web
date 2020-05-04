@@ -1862,5 +1862,14 @@
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Gibt den per SMS an +%(msisdn)s gesendeten Bestätigungscode ein.",
     "Someone is using an unknown session": "Jemand verwendet eine unbekannte Sitzung",
     "This room is end-to-end encrypted": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
-    "You are not subscribed to any lists": "Du hast keine Listen abonniert"
+    "You are not subscribed to any lists": "Du hast keine Listen abonniert",
+    "Error adding ignored user/server": "Fehler beim Hinzufügen eines ignorierten Nutzers/Servers",
+    "None": "Keine",
+    "Ban list rules - %(roomName)s": "Verbotslistenregeln - %(roomName)s",
+    "Add users and servers you want to ignore here. Use asterisks to have Riot match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Füge hier Benutzer!nnen und Server hinzu, die du ignorieren willst. Verwende Sternchen, damit Riot mit beliebigen Zeichen übereinstimmt. Bspw. würde <code>@bot: *</code> alle Benutzer!nnen ignorieren, die auf einem Server den Namen 'bot' haben.",
+    "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.": "Ignorieren von Personen erfolgt über Sperrlisten. Wenn eine Sperrliste abonniert wird, werden die von dieser Liste blockierten Benutzer!nnen/Server ausgeblendet.",
+    "Personal ban list": "Persönliche Sperrliste",
+    "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.": "Deine persönliche Sperrliste enthält alle Benutzer!nnen/Server, von denen du persönlich keine Nachrichten sehen willst. Nachdem du den ersten Benutzer/Server ignoriert hast, wird in der Raumliste \"Meine Sperrliste\" angezeigt - bleibe in diesem Raum, um die Sperrliste aufrecht zu halten.",
+    "Server or user ID to ignore": "Zu ignorierende Server- oder Benutzer-ID",
+    "eg: @bot:* or example.org": "z.B.  @bot:* oder example.org"
 }
