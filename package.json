@@ -51,6 +51,7 @@
     "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
     "build:types": "tsc --emitDeclarationOnly --jsx react",
     "install:electron": "electron-builder install-app-deps",
+    "deploy": "gh-pages-deploy",
     "dist": "scripts/package.sh",
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
@@ -62,6 +63,17 @@
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest"
+  },
+  "gh-pages-deploy": {
+    "staticpath": "webapp",
+    "cname": "bol.navgurukul.org",
+    "prep": [
+      "build"
+    ],
+    "post": [
+      "clean"
+    ],
+    "noprompt": true
   },
   "dependencies": {
     "browser-request": "^0.3.3",
