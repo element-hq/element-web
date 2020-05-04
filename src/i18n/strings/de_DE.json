@@ -1751,7 +1751,7 @@
     "Read Marker lifetime (ms)": "Gültigkeitsdauer der Gelesen-Markierung (ms)",
     "Read Marker off-screen lifetime (ms)": "Gültigkeitsdauer der Gelesen-Markierung außerhalb des Bildschirms (ms)",
     "Session key:": "Sitzungsschlüssel:",
-    "A session's public name is visible to people you communicate with": "Der Sitzungsname ist sichtbar für die Personen mit denen du kommunizierst",
+    "A session's public name is visible to people you communicate with": "Der öffentliche Sitzungsname ist sichtbar für Personen, mit denen du kommunizierst",
     "Sounds": "Töne",
     "Upgrade the room": "Raum hochstufen",
     "Enable room encryption": "Verschlüsselung aktivieren",
@@ -1878,5 +1878,12 @@
     "Room ID or alias of ban list": "Raum-ID oder -Alias der Sperrliste",
     "Subscribe": "Abonnieren",
     "Always show the window menu bar": "Fenstermenüleiste immer anzeigen",
-    "Show tray icon and minimize window to it on close": "Taskleistensymbol anzeigen und Fenster beim Schließen dorthin minimieren"
+    "Show tray icon and minimize window to it on close": "Taskleistensymbol anzeigen und Fenster beim Schließen dorthin minimieren",
+    "Session ID:": "Sitzungs-ID:",
+    "Message search": "Nachrichtensuche",
+    "Cross-signing": "Cross-Signing",
+    "This room is bridging messages to the following platforms. <a>Learn more.</a>": "Dieser Raum verbindet Nachrichten mit den folgenden Plattformen. <a>Mehr erfahren.</a>",
+    "This room isn’t bridging messages to any platforms. <a>Learn more.</a>": "Dieser Raum verbindet keine Nachrichten mit Plattformen. <a>Mehr erfahren.</a>",
+    "Bridges": "Bridges",
+    "Uploaded sound": "Hochgeladener Ton"
 }
