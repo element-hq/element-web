@@ -227,7 +227,7 @@ export default class RightPanel extends React.Component {
                         if (this.props.user) {
                             // If we have a user prop then we're displaying a user from the 'user' page type
                             // in LoggedInView, so need to change the page type to close the panel (we switch
-                            // to the home page which is not obviosuly the correct thing to do, but I'm not sure
+                            // to the home page which is not obviously the correct thing to do, but I'm not sure
                             // anything else is - we could hide the close button altogether?)
                             dis.dispatch({
                                 action: "view_home_page",
