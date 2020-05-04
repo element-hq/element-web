@@ -1871,5 +1871,9 @@
     "Personal ban list": "Persönliche Sperrliste",
     "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.": "Deine persönliche Sperrliste enthält alle Benutzer!nnen/Server, von denen du persönlich keine Nachrichten sehen willst. Nachdem du den ersten Benutzer/Server ignoriert hast, wird in der Raumliste \"Meine Sperrliste\" angezeigt - bleibe in diesem Raum, um die Sperrliste aufrecht zu halten.",
     "Server or user ID to ignore": "Zu ignorierende Server- oder Benutzer-ID",
-    "eg: @bot:* or example.org": "z.B. @bot:* oder example.org"
+    "eg: @bot:* or example.org": "z.B. @bot:* oder example.org",
+    "Subscribed lists": "Abonnierte Listen",
+    "Subscribing to a ban list will cause you to join it!": "Eine Verbotsliste abonnieren bedeutet ihr beizutreten!",
+    "If this isn't what you want, please use a different tool to ignore users.": "Wenn dies nicht das ist, was du willst, verwende ein anderes Tool, um Benutzer!nnen zu ignorieren.",
+    "Room ID or alias of ban list": "Raum-ID oder Alias ​​der Sperrliste"
 }
