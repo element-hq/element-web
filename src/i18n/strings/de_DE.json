@@ -1888,5 +1888,7 @@
     "Uploaded sound": "Hochgeladener Ton",
     "Upgrade this room to the recommended room version": "Aktualisiere diesen Raum auf die empfohlene Raumversion",
     "this room": "Dieser Raum",
-    "View older messages in %(roomName)s.": "Zeige alte Nachrichten in %(roomName)s."
+    "View older messages in %(roomName)s.": "Zeige alte Nachrichten in %(roomName)s.",
+    "Send a bug report with logs": "Sende Fehlermeldung mit Protokoll",
+    "Verify all your sessions to ensure your account & messages are safe": "Verifiziere alle deine Sitzungen, um dein Konto und deine Nachrichten zu schützen"
 }
