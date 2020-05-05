@@ -432,9 +432,8 @@ export default createReactClass({
         });
 
         let name = this.state.roomName;
-        if (name == undefined || name == null) name = '';
+        if (typeof name !== 'string') name = '';
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
-
 
         let badge;
         if (badges) {
