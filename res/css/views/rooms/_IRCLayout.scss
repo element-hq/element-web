@@ -90,8 +90,15 @@ $right-padding: 5px;
             padding: 0;
         }
 
-        .mx_EventTile_line > * {
+        .mx_EventTile_line .mx_EventTile_content,
+        .mx_EventTile_line .mx_EventTile_e2eIcon,
+        .mx_eventTile_line > div {
             display: inline-block;
+        }
+
+        .mx_EvenTile_line .mx_MessageActionBar,
+        .mx_EvenTile_line .mx_ReplyThread_wrapper {
+            display: block;
         }
 
         .mx_EventTile_reply {

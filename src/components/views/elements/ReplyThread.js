@@ -338,7 +338,7 @@ export default class ReplyThread extends React.Component {
             </blockquote>;
         });
 
-        return <div>
+        return <div className="mx_ReplyThread_wrapper">
             <div>{ header }</div>
             <div>{ evTiles }</div>
         </div>;
