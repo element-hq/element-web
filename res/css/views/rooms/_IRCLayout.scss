@@ -63,9 +63,12 @@ $right-padding: 5px;
             display: flex;
             align-items: center;
 
-            > .mx_BaseAvatar {
-                height: 1rem;
-                width: 1rem;
+            // Need to use important to override the js provided height and width values.
+            > .mx_BaseAvatar, .mx_BaseAvatar > * {
+                height: $font-14px !important;
+                width: $font-14px !important;
+                font-size: $font-10px !important;
+                line-height: $font-14px !important;
             }
         }
 
@@ -89,6 +92,10 @@ $right-padding: 5px;
 
         .mx_EventTile_line > * {
             display: inline-block;
+        }
+
+        .mx_EventTile_reply {
+            order: 3;
         }
     }
 

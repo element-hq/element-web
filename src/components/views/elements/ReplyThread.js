@@ -37,6 +37,8 @@ export default class ReplyThread extends React.Component {
         // called when the ReplyThread contents has changed, including EventTiles thereof
         onHeightChanged: PropTypes.func.isRequired,
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
+        // Specifies which layout to use.
+        useIRCLayout: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -176,12 +178,12 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return <div />;
         }
         return <ReplyThread parentEv={parentEv} onHeightChanged={onHeightChanged}
-            ref={ref} permalinkCreator={permalinkCreator} />;
+            ref={ref} permalinkCreator={permalinkCreator} useIRCLayout={useIRCLayout} />;
     }
 
     componentDidMount() {
@@ -331,7 +333,8 @@ export default class ReplyThread extends React.Component {
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
                     isRedacted={ev.isRedacted()}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
+                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                    useIRCLayout={this.props.useIRCLayout} />
             </blockquote>;
         });
 

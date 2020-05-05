@@ -795,6 +795,17 @@ export default createReactClass({
             />;
         }
 
+        const linkedTimestamp = <a
+                href={permalink}
+                onClick={this.onPermalinkClicked}
+                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+            >
+                { timestamp }
+            </a>;
+
+        const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
+        const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
+
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
@@ -862,12 +873,11 @@ export default createReactClass({
                 }
                 return (
                     <div className={classes}>
+                        { ircTimestamp }
                         { avatar }
                         { sender }
                         <div className="mx_EventTile_reply">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { timestamp }
-                            </a>
+                            { groupTimestamp }
                             { !isBubbleMessage && this._renderE2EPadlock() }
                             { thread }
                             <EventTileType ref={this._tile}
@@ -886,19 +896,8 @@ export default createReactClass({
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
                     this._replyThread,
+                    this.props.useIRCLayout,
                 );
-
-                const linkedTimestamp = <a
-                        href={permalink}
-                        onClick={this.onPermalinkClicked}
-                        aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-                    >
-                        { timestamp }
-                    </a>;
-
-                const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
-                const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
-
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
