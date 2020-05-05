@@ -46,7 +46,7 @@ const afs = fs.promises;
 let Seshat = null;
 
 try {
-    Seshat = require('matrix-seshat');
+    Seshat = require('matrix-seshat').Seshat;
 } catch (e) {
     if (e.code === "MODULE_NOT_FOUND") {
         console.log("Seshat isn't installed, event indexing is disabled.");
