@@ -1,3 +1,17 @@
+Changes in [2.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0) (2020-05-05)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.6...v2.5.0)
+
+ * Upgrade to JS SDK 6.0.0
+ * EventIndex: Reduce the logging the event index is producing.
+   [\#4551](https://github.com/matrix-org/matrix-react-sdk/pull/4551)
+ *  Differentiate copy for own untrusted device dialog
+   [\#4550](https://github.com/matrix-org/matrix-react-sdk/pull/4550)
+ * More detailed progress for key backup progress
+   [\#4545](https://github.com/matrix-org/matrix-react-sdk/pull/4545)
+ *  Increase rageshake size limit to 5mb
+   [\#4544](https://github.com/matrix-org/matrix-react-sdk/pull/4544)
+
 Changes in [2.5.0-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.6) (2020-05-01)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.5...v2.5.0-rc.6)
