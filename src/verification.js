@@ -43,14 +43,26 @@ function UntrustedDeviceDialog(props) {
     const {device, user, onFinished} = props;
     const BaseDialog = sdk.getComponent("dialogs.BaseDialog");
     const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+    let askToVerifyText;
+    let newSessionText;
+
+    if (MatrixClientPeg.get().getUserId() === user.userId) {
+        newSessionText = _t("You signed in to a new session without verifying it:");
+        askToVerifyText = _t("Verify your other session using one of the options below.");
+    } else {
+        newSessionText = _t("%(name)s (%(userId)s) signed in to a new session without verifying it:",
+            {name: user.displayName, userId: user.userId});
+        askToVerifyText = _t("Ask this user to verify their session, or manually verify it below.");
+    }
+
     return <BaseDialog
         onFinished={onFinished}
         headerImage={require("../res/img/e2e/warning.svg")}
         title={_t("Not Trusted")}>
         <div className="mx_Dialog_content" id='mx_Dialog_content'>
-            <p>{_t("%(name)s (%(userId)s) signed in to a new session without verifying it:", {name: user.displayName, userId: user.userId})}</p>
+            <p>{newSessionText}</p>
             <p>{device.getDisplayName()} ({device.deviceId})</p>
-            <p>{_t("Ask this user to verify their session, or manually verify it below.")}</p>
+            <p>{askToVerifyText}</p>
         </div>
         <div className='mx_Dialog_buttons'>
             <AccessibleButton element="button" kind="secondary" onClick={() => onFinished("legacy")}>{_t("Manually Verify by Text")}</AccessibleButton>
