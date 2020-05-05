@@ -1,3 +1,10 @@
+Changes in [1.6.0](https://github.com/vector-im/riot-web/releases/tag/v1.6.0) (2020-05-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.6...v1.6.0)
+
+ * Cross-signing and E2EE by default for DMs and private rooms enabled
+ * Upgrade to React SDK 2.5.0 and JS SDK 6.0.0
+
 Changes in [1.6.0-rc.6](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.6) (2020-05-01)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.5...v1.6.0-rc.6)
