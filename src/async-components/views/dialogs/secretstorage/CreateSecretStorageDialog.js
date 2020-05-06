@@ -25,6 +25,7 @@ import { _t } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 import {copyNode} from "../../../../utils/strings";
+import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -209,12 +210,32 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             });
         } else {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+            const dialogAesthetics = {
+                [SSOAuthEntry.PHASE_PREAUTH]: {
+                    title: _t("Use Single Sign On to continue"),
+                    body: _t("To continue, use Single Sign On to prove your identity."),
+                    continueText: _t("Single Sign On"),
+                    continueKind: "primary",
+                },
+                [SSOAuthEntry.PHASE_POSTAUTH]: {
+                    title: _t("Confirm encryption setup"),
+                    body: _t("Click the button below to confirm setting up encryption."),
+                    continueText: _t("Confirm"),
+                    continueKind: "primary",
+                },
+            };
+
             const { finished } = Modal.createTrackedDialog(
                 'Cross-signing keys dialog', '', InteractiveAuthDialog,
                 {
                     title: _t("Setting up keys"),
                     matrixClient: MatrixClientPeg.get(),
                     makeRequest,
+                    aestheticsForStagePhases: {
+                        [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                        [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                    },
                 },
             );
             const [confirmed] = await finished;

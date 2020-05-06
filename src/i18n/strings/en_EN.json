@@ -2193,6 +2193,8 @@
     "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.": "The export file will be protected with a passphrase. You should enter the passphrase here, to decrypt the file.",
     "File to import": "File to import",
     "Import": "Import",
+    "Confirm encryption setup": "Confirm encryption setup",
+    "Click the button below to confirm setting up encryption.": "Click the button below to confirm setting up encryption.",
     "Enter your account password to confirm the upgrade:": "Enter your account password to confirm the upgrade:",
     "Restore your key backup to upgrade your encryption": "Restore your key backup to upgrade your encryption",
     "Restore": "Restore",
