@@ -810,5 +810,7 @@
     "Encrypted messages in group chats": "Rühmavestluste krüptitud sõnumid",
     "When I'm invited to a room": "Kui mind kutsutakse jututuppa",
     "Call invitation": "Kõnekutse",
-    "Messages sent by bot": "Robotite saadetud sõnumid"
+    "Messages sent by bot": "Robotite saadetud sõnumid",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",
+    "I understand the risks and wish to continue": "Ma mõistan riske ja soovin jätkata"
 }
