@@ -2416,5 +2416,7 @@
     "Fetching keys from server...": "正在從伺服器擷取金鑰……",
     "%(completed)s of %(total)s keys restored": "%(total)s 中的 %(completed)s 金鑰已復原",
     "Keys restored": "金鑰已復原",
-    "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰"
+    "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰",
+    "You signed in to a new session without verifying it:": "您已登入新的工作階段但未驗證：",
+    "Verify your other session using one of the options below.": "使用下方的其中一個選項來驗證您其他的工作階段。"
 }
