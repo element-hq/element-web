@@ -23,6 +23,12 @@ limitations under the License.
     margin-top: 0;
 }
 
+.mx_GeneralUserSettingsTab_accountSection .mx_Spinner,
+.mx_GeneralUserSettingsTab_discovery .mx_Spinner {
+    // Move the spinner to the left side of the container (default center)
+    justify-content: left;
+}
+
 .mx_GeneralUserSettingsTab_accountSection .mx_EmailAddresses,
 .mx_GeneralUserSettingsTab_accountSection .mx_PhoneNumbers,
 .mx_GeneralUserSettingsTab_discovery .mx_ExistingEmailAddress,
