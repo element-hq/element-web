@@ -1,3 +1,99 @@
+Changes in [1.6.0](https://github.com/vector-im/riot-web/releases/tag/v1.6.0) (2020-05-05)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.6...v1.6.0)
+
+ * Cross-signing and E2EE by default for DMs and private rooms enabled
+ * Upgrade to React SDK 2.5.0 and JS SDK 6.0.0
+
+Changes in [1.6.0-rc.6](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.6) (2020-05-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.5...v1.6.0-rc.6)
+
+ * Upgrade to React SDK 2.5.0-rc.6 and JS SDK 6.0.0-rc.2
+
+Changes in [1.6.0-rc.5](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.5) (2020-04-30)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.4...v1.6.0-rc.5)
+
+ * Upgrade to React SDK 2.5.0-rc.5 and JS SDK 6.0.0-rc.1
+ * Remove feature flag docs from docs on release
+   [\#13375](https://github.com/vector-im/riot-web/pull/13375)
+
+Changes in [1.6.0-rc.4](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.4) (2020-04-23)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.3...v1.6.0-rc.4)
+
+ * Upgrade to React SDK 2.5.0-rc.4 and JS SDK 5.3.1-rc.4
+
+Changes in [1.6.0-rc.3](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.3) (2020-04-17)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.2...v1.6.0-rc.3)
+
+ * Upgrade to React SDK 2.5.0-rc.3 and JS SDK 5.3.1-rc.3
+
+Changes in [1.6.0-rc.2](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.2) (2020-04-16)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.0-rc.1...v1.6.0-rc.2)
+
+ * Upgrade to React SDK 2.5.0-rc.2 and JS SDK 5.3.1-rc.2
+ * Enable cross-signing / E2EE by default for DM without config changes
+
+Changes in [1.6.0-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.0-rc.1) (2020-04-15)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.16-rc.1...v1.6.0-rc.1)
+
+ * Enable cross-signing / E2EE by default for DM on release
+   [\#13179](https://github.com/vector-im/riot-web/pull/13179)
+ * Upgrade to React SDK 2.5.0-rc.1 and JS SDK 5.3.1-rc.1
+ * Add instruction to resolve the inotify watch limit issue
+   [\#13128](https://github.com/vector-im/riot-web/pull/13128)
+ * docs: labs: add a pointer to config.md
+   [\#13149](https://github.com/vector-im/riot-web/pull/13149)
+ * Fix Electron SSO handling to support multiple profiles
+   [\#13028](https://github.com/vector-im/riot-web/pull/13028)
+ * Add riot-desktop shortcuts for forward/back matching browsers&slack
+   [\#13133](https://github.com/vector-im/riot-web/pull/13133)
+ * Allow rageshake to fail in init
+   [\#13164](https://github.com/vector-im/riot-web/pull/13164)
+ * Fix broken yarn install link in README.md
+   [\#13125](https://github.com/vector-im/riot-web/pull/13125)
+ * fix build:jitsi scripts crash caused by a missing folder
+   [\#13122](https://github.com/vector-im/riot-web/pull/13122)
+ * App load order changes to catch errors better
+   [\#13095](https://github.com/vector-im/riot-web/pull/13095)
+ * Upgrade deps
+   [\#13080](https://github.com/vector-im/riot-web/pull/13080)
+
+Changes in [1.5.16-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.5.16-rc.1) (2020-04-08)
+======================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.15...v1.5.16-rc.1)
+
+ * Upgrade React SDK to 2.4.0-rc.1 and JS SDK to 5.3.0-rc.1
+ * Update from Weblate
+   [\#13078](https://github.com/vector-im/riot-web/pull/13078)
+ * Mention Jitsi support at the .well-known level in Jitsi docs
+   [\#13047](https://github.com/vector-im/riot-web/pull/13047)
+ * Add new default home page fallback
+   [\#13049](https://github.com/vector-im/riot-web/pull/13049)
+ * App load order tweaks for code splitting
+   [\#13032](https://github.com/vector-im/riot-web/pull/13032)
+ * Add some docs about Jitsi widgets and Jitsi configuration
+   [\#13027](https://github.com/vector-im/riot-web/pull/13027)
+ * Bump minimist from 1.2.2 to 1.2.3 in /electron_app
+   [\#13030](https://github.com/vector-im/riot-web/pull/13030)
+ * Fix Electron mac-specific shortcut being registered on Web too.
+   [\#13020](https://github.com/vector-im/riot-web/pull/13020)
+ * Add a console warning that errors from Jitsi Meet are fine
+   [\#12968](https://github.com/vector-im/riot-web/pull/12968)
+ * Fix popout support for jitsi widgets
+   [\#12975](https://github.com/vector-im/riot-web/pull/12975)
+ * Some grammar and clarifications
+   [\#12925](https://github.com/vector-im/riot-web/pull/12925)
+ * Don't immediately remove notifications from notification trays
+   [\#12861](https://github.com/vector-im/riot-web/pull/12861)
+ * Remove welcome user from config
+   [\#12894](https://github.com/vector-im/riot-web/pull/12894)
+
 Changes in [1.5.15](https://github.com/vector-im/riot-web/releases/tag/v1.5.15) (2020-04-01)
 ============================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.5.14...v1.5.15)
