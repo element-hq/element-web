@@ -2408,5 +2408,6 @@
     "Keys restored": "Kulcsok visszaállítva",
     "Successfully restored %(sessionCount)s keys": "Kulcsok (%(sessionCount)s) sikeresen visszaállítva",
     "You signed in to a new session without verifying it:": "Ellenőrzés nélkül jelentkeztél be egy új munkamenetbe:",
-    "Verify your other session using one of the options below.": "Ellenőrizd a másik munkameneted a lenti lehetőségek egyikével."
+    "Verify your other session using one of the options below.": "Ellenőrizd a másik munkameneted a lenti lehetőségek egyikével.",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Hívj meg valakit a nevével, felhasználónevével (mint <userId/>), e-mail címével vagy <a>oszd meg ezt a szobát</a>."
 }
