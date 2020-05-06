@@ -1301,5 +1301,11 @@
     "Create a Group Chat": "グループチャットを作成",
     "Go Back": "戻る",
     "Messages in this room are end-to-end encrypted.": "この部屋内でのメッセージの送受信はエンドツーエンド暗号化されています。",
-    "Messages in this room are not end-to-end encrypted.": "この部屋内でのメッセージの送受信はエンドツーエンド暗号化されていません。"
+    "Messages in this room are not end-to-end encrypted.": "この部屋内でのメッセージの送受信はエンドツーエンド暗号化されていません。",
+    "You signed in to a new session without verifying it:": "あなたのこのセッションはまだ検証されていません：",
+    "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) のこのセッションはまだ検証されていません：",
+    "Recent Conversations": "最近会話したユーザー",
+    "Suggestions": "提案",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address.": "相手の名前、( <userId/> のような)ユーザー名、メールアドレスを使って会話を開始できます。",
+    "Go": "続行"
 }
