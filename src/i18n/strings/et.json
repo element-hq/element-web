@@ -26,5 +26,15 @@
     "Sign In": "Logi sisse",
     "Create Account": "Loo konto",
     "Need help?": "Kas vajad abi?",
-    "Room Directory": "Jututubade loend"
+    "Room Directory": "Jututubade loend",
+    "Riot Desktop (%(platformName)s)": "Riot'i töölauaversioon (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Sellele brauserile puudub tugi",
+    "Your browser can't run Riot": "Riot ei tööta sinu brauseris",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot eeldab brauseritelt tänapäevaseid funktsionaalsusi ning sinu pragune brauser neid võimalusi ei toeta.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Sa võid jätkata praeguse brauseri kasutamist, kuid mõned või kõik funktsionaalsused ei pruugi toimida ning rakenduse välimus võib vigane olla.",
+    "I understand the risks and wish to continue": "Ma mõistan riske ja soovin jätkata",
+    "Go to Riot.im": "Mine Riot.im lehele",
+    "Failed to start": "Käivitamine ei õnnestunud"
 }
