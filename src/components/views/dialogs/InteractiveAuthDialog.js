@@ -101,7 +101,7 @@ export default createReactClass({
         return {
             [SSOAuthEntry.LOGIN_TYPE]: ssoAesthetics,
             [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: ssoAesthetics,
-        }
+        };
     },
 
     _onAuthFinished: function(success, result) {
