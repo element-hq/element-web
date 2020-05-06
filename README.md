@@ -108,40 +108,7 @@ Riot can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from https://riot.im/download/desktop/ or, if you prefer,
 build it yourself.
 
-To build it yourself, follow the instructions below.
-
-1. Follow the instructions in 'Building From Source' above, but run
-   `yarn build` instead of `yarn dist` (since we don't need the tarball).
-2. Install Electron and run it:
-
-   ```bash
-   yarn electron
-   ```
-
-To build packages, use `electron-builder`. This is configured to output:
- * `dmg` + `zip` for macOS
- * `exe` + `nupkg` for Windows
- * `deb` for Linux
-But this can be customised by editing the `build` section of package.json
-as per https://github.com/electron-userland/electron-builder/wiki/Options
-
-See https://github.com/electron-userland/electron-builder/wiki/Multi-Platform-Build
-for dependencies required for building packages for various platforms.
-
-The only platform that can build packages for all three platforms is macOS:
-```bash
-brew install mono
-yarn install
-yarn build:electron
-```
-
-For other packages, use `electron-builder` manually. For example, to build a
-package for 64 bit Linux:
-
- 1. Follow the instructions in 'Building From Source' above
- 2. `node_modules/.bin/build -l --x64`
-
-All Electron packages go into `electron_app/dist/`
+To build it yourself, follow the instructions at https://github.com/vector-im/riot-desktop.
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
@@ -310,7 +277,7 @@ modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
 
-**Note**: The build script uses inotify by default on Linux to monitor directories 
+**Note**: The build script uses inotify by default on Linux to monitor directories
 for changes. If the inotify watch limit is too low your build will silently fail.
 To avoid this issue, we recommend a limit of at least 128M.
 
