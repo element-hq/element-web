@@ -1650,7 +1650,7 @@
     "Recently Direct Messaged": "Recently Direct Messaged",
     "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Start a conversation with someone using their name, username (like <userId/>) or email address.",
     "Go": "Go",
-    "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.": "If you can't find someone, ask them for their username (e.g. @user:server.com) or <a>share this room</a>.",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
     "You added a new session '%(displayName)s', which is requesting encryption keys.": "You added a new session '%(displayName)s', which is requesting encryption keys.",
     "Your unverified session '%(displayName)s' is requesting encryption keys.": "Your unverified session '%(displayName)s' is requesting encryption keys.",
     "Start verification": "Start verification",
