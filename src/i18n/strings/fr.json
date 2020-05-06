@@ -2417,5 +2417,7 @@
     "Fetching keys from server...": "Récupération des clés depuis le serveur…",
     "%(completed)s of %(total)s keys restored": "%(completed)s clés sur %(total)s restaurées",
     "Keys restored": "Clés restaurées",
-    "Successfully restored %(sessionCount)s keys": "%(sessionCount)s clés ont été restaurées avec succès"
+    "Successfully restored %(sessionCount)s keys": "%(sessionCount)s clés ont été restaurées avec succès",
+    "You signed in to a new session without verifying it:": "Vous vous êtes connecté·e à une nouvelle session sans la vérifier :",
+    "Verify your other session using one of the options below.": "Vérifiez votre autre session en utilisant une des options ci-dessous."
 }
