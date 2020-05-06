@@ -812,5 +812,10 @@
     "Call invitation": "Kõnekutse",
     "Messages sent by bot": "Robotite saadetud sõnumid",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Parima kasutuskogemuse jaoks palun paigalda <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> või <safariLink>Safari</safariLink>.",
-    "I understand the risks and wish to continue": "Ma mõistan riske ja soovin jätkata"
+    "I understand the risks and wish to continue": "Ma mõistan riske ja soovin jätkata",
+    "URL Previews": "URL'ide eelvaated",
+    "You have <a>enabled</a> URL previews by default.": "Vaikimisi oled URL'ide eelvaated <a>võtnud kasutusele</a>.",
+    "You have <a>disabled</a> URL previews by default.": "Vaikimisi oled URL'ide eelvaated <a>lülitanud välja</a>.",
+    "URL previews are enabled by default for participants in this room.": "URL'ide eelvaated on vaikimisi kasutusel selles jututoas osalejate jaoks.",
+    "URL previews are disabled by default for participants in this room.": "URL'ide eelvaated on vaikimisi lülitatud välja selles jututoas osalejate jaoks."
 }
