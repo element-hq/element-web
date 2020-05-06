@@ -180,7 +180,7 @@ export default class ReplyThread extends React.Component {
 
     static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout) {
         if (!ReplyThread.getParentEventId(parentEv)) {
-            return <div />;
+            return <div className="mx_ReplyThread_wrapper_empty" />;
         }
         return <ReplyThread parentEv={parentEv} onHeightChanged={onHeightChanged}
             ref={ref} permalinkCreator={permalinkCreator} useIRCLayout={useIRCLayout} />;
