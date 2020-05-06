@@ -165,18 +165,18 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "font_size": {
+    "fontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: 16,
         controller: new FontSizeController(),
     },
-    "font_size_min": {
+    "fontSizeMin": {
         displayName: _td("Min font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: 14,
     },
-    "font_size_max": {
+    "fontSizeMax": {
         displayName: _td("Max font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: 24,

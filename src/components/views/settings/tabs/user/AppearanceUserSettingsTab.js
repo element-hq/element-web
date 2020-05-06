@@ -32,7 +32,7 @@ export default class AppearanceUserSettingsTab extends React.Component {
         super();
 
         this.state = {
-            fontSize: SettingsStore.getValue("font_size", null),
+            fontSize: SettingsStore.getValue("fontSize", null),
             ...this._calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
@@ -102,15 +102,15 @@ export default class AppearanceUserSettingsTab extends React.Component {
 
     _onFontSizeChanged = (size) => {
         this.setState({fontSize: size});
-        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, size);
+        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, size);
     };
 
     _onValidateFontSize = ({value}) => {
         console.log({value});
 
         const parsedSize = parseFloat(value);
-        const min = SettingsStore.getValue("font_size_min");
-        const max = SettingsStore.getValue("font_size_max");
+        const min = SettingsStore.getValue("fontSizeMin");
+        const max = SettingsStore.getValue("fontSizeMax");
 
         if (isNaN(parsedSize)) {
             return {valid: false, feedback: _t("Size must be a number")};
@@ -123,7 +123,7 @@ export default class AppearanceUserSettingsTab extends React.Component {
             };
         }
 
-        SettingsStore.setValue("font_size", null, SettingLevel.DEVICE, value);
+        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, value);
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
     }
 
@@ -253,8 +253,8 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
                     values={_range(
-                        SettingsStore.getValue("font_size_min"),
-                        SettingsStore.getValue("font_size_max")+ 2,
+                        SettingsStore.getValue("fontSizeMin"),
+                        SettingsStore.getValue("fontSizeMax")+ 2,
                         2.5,
                     )}
                     value={this.state.fontSize}

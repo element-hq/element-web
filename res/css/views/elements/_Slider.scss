@@ -38,7 +38,7 @@ limitations under the License.
 
 .mx_Slider_bar > hr {
     width: 100%;
-    border: 0.2em solid $Slider-background-color;
+    border: 0.2em solid $slider-background-color;
 }
 
 .mx_Slider_selection {
@@ -54,7 +54,7 @@ limitations under the License.
     position: absolute;
     width: 1.1em;
     height: 1.1em;
-    background-color: $Slider-selection-color;
+    background-color: $slider-selection-color;
     border-radius: 50%;
     box-shadow: 0 0 6px lightgrey;
     z-index: 10;
@@ -63,7 +63,7 @@ limitations under the License.
 .mx_Slider_selection > hr {
     transition: width 0.25s;
     margin: 0;
-    border: 0.2em solid $Slider-selection-color;
+    border: 0.2em solid $slider-selection-color;
 }
 
 .mx_Slider_dot {
@@ -71,19 +71,19 @@ limitations under the License.
     height: 1em;
     width: 1em;
     border-radius: 50%;
-    background-color: $Slider-background-color;
+    background-color: $slider-background-color;
     z-index: 0;
 }
 
 .mx_Slider_dotActive {
-    background-color: $Slider-selection-color;
+    background-color: $slider-selection-color;
 }
 
 .mx_Slider_dotValue {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: $Slider-background-color;
+    color: $slider-background-color;
 }
 
 // The following is a hack to center the labels without adding

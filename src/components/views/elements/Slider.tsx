@@ -47,7 +47,7 @@ export default class Slider extends React.Component<IProps> {
         // the index of the first number greater than value.
         let closest = values.reduce((prev, curr) => {
             return (value > curr ? prev + 1 : prev);
-          }, 0);
+        }, 0);
 
         // Off the left
         if (closest === 0) {

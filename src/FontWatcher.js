@@ -23,7 +23,7 @@ export class FontWatcher {
     }
 
     start() {
-        this._setRootFontSize(SettingsStore.getValue("font_size"));
+        this._setRootFontSize(SettingsStore.getValue("fontSize"));
         this._dispatcherRef = dis.register(this._onAction);
     }
 
@@ -37,15 +37,15 @@ export class FontWatcher {
         }
     };
 
-    _setRootFontSize = size => {
-        const min = SettingsStore.getValue("font_size_min");
-        const max = SettingsStore.getValue("font_size_max");
+    _setRootFontSize = (size) => {
+        const min = SettingsStore.getValue("fontSizeMin");
+        const max = SettingsStore.getValue("fontSizeMax");
 
         const fontSize = Math.max(Math.min(max, size), min);
 
         if (fontSize != size) {
-            SettingsStore.setValue("font_size", null, SettingLevel.Device, fontSize);
+            SettingsStore.setValue("fontSize", null, SettingLevel.Device, fontSize);
         }
         document.querySelector(":root").style.fontSize = fontSize + "px";
-    }
+    };
 }
