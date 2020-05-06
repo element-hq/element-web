@@ -2380,5 +2380,18 @@
     "Great! This recovery passphrase looks strong enough.": "Bonege! Ĉi tiu rehava pasfrazo ŝajnas sufiĉe forta.",
     "Set a recovery passphrase to secure encrypted information and recover it if you log out. This should be different to your account password:": "Agordu rehavan pasfrazon por sekurigi ĉifritajn informojn kaj rehavi ilin post adiaŭo. Ĝi malsamu al la pasvorto de via konto:",
     "Enter a recovery passphrase": "Enigu rehavan pasfrazon",
-    "Back up encrypted message keys": "Savkopii ŝlosilojn al ĉifritaj mesaĝoj"
+    "Back up encrypted message keys": "Savkopii ŝlosilojn al ĉifritaj mesaĝoj",
+    "Access your secure message history and your cross-signing identity for verifying other sessions by entering your recovery passphrase.": "Atingu vian sekuran historion de mesaĝoj kaj vian transire subskriban identecon per enigo de via rehava pasfrazo.",
+    "Enter your recovery passphrase a second time to confirm it.": "Enigu vian rehavan pasfrazon duafoje por konfirmi ĝin.",
+    "Confirm your recovery passphrase": "Konfirmi vian rehavan pasfrazon",
+    "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your recovery passphrase.": "Via rehava ŝlosilo asekuras vin – vi povas ĝin uzi por rehavi aliron al viaj ĉifritaj mesaĝoj se vi forgesas vian rehavan pasfrazon.",
+    "Unable to query secret storage status": "Ne povis peti staton de sekreta deponejo",
+    "Confirm recovery passphrase": "Konfirmi rehavan pasfrazon",
+    "We'll store an encrypted copy of your keys on our server. Secure your backup with a recovery passphrase.": "Ni deponos ĉifritan kopion de viaj ŝlosiloj en nia servilo. Sekurigu vian savkopion per rehava pasfrazo.",
+    "Enter a recovery passphrase...": "Enigu rehavan pasfrazon…",
+    "Please enter your recovery passphrase a second time to confirm.": "Bonvolu enigi vian rehavan pasfrazon duafoje por konfirmi.",
+    "Repeat your recovery passphrase...": "Ripetu vian rehavan pasfrazon…",
+    "Secure your backup with a recovery passphrase": "Sekurigu vian savkopion per rehava pasfrazo",
+    "Currently indexing: %(currentRoom)s": "Nun indeksante: %(currentRoom)s",
+    "Cancel replying to a message": "Nuligi respondon al mesaĝo"
 }
