@@ -2414,5 +2414,6 @@
     "Keys restored": "Chiavi ripristinate",
     "Successfully restored %(sessionCount)s keys": "Ripristinate %(sessionCount)s chiavi correttamente",
     "You signed in to a new session without verifying it:": "Hai fatto l'accesso ad una nuova sessione senza verificarla:",
-    "Verify your other session using one of the options below.": "Verifica la tua altra sessione usando una delle opzioni sotto."
+    "Verify your other session using one of the options below.": "Verifica la tua altra sessione usando una delle opzioni sotto.",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invita qualcuno usando il suo nome, nome utente (come <userId/>), indirizzo email o <a>condividi questa stanza</a>."
 }
