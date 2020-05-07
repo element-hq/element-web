@@ -39,6 +39,8 @@ export default class ReplyThread extends React.Component {
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
         // Specifies which layout to use.
         useIRCLayout: PropTypes.bool,
+        // Specifies whether to display avatars.
+        displayAvatars: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -178,12 +180,12 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout, displayAvatars) {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return <div className="mx_ReplyThread_wrapper_empty" />;
         }
         return <ReplyThread parentEv={parentEv} onHeightChanged={onHeightChanged}
-            ref={ref} permalinkCreator={permalinkCreator} useIRCLayout={useIRCLayout} />;
+            ref={ref} permalinkCreator={permalinkCreator} useIRCLayout={useIRCLayout} displayAvatars={displayAvatars} />;
     }
 
     componentDidMount() {
@@ -334,7 +336,9 @@ export default class ReplyThread extends React.Component {
                     permalinkCreator={this.props.permalinkCreator}
                     isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
-                    useIRCLayout={this.props.useIRCLayout} />
+                    useIRCLayout={this.props.useIRCLayout}
+                    displayAvatars={this.props.displayAvatars}
+                />
             </blockquote>;
         });
 

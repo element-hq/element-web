@@ -117,7 +117,8 @@ export default class MessagePanel extends React.Component {
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+            displayAvatars: SettingsStore.getValue("feature_no_timeline_avatars"),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -171,7 +172,8 @@ export default class MessagePanel extends React.Component {
         this._showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
 
-        this._layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
+        this._layoutWatcherRef = SettingsStore.watchSetting("feature_irc_ui", null, this.onLayoutChange);
+        this._displayAvatarsWatcherRef = SettingsStore.watchSetting("feature_no_timeline_avatars", null, this.onDisplayAvatarsChange);
     }
 
     componentDidMount() {
@@ -182,6 +184,7 @@ export default class MessagePanel extends React.Component {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
         SettingsStore.unwatchSetting(this._layoutWatcherRef);
+        SettingsStore.unwatchSetting(this._displayAvatarsWatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -202,7 +205,13 @@ export default class MessagePanel extends React.Component {
 
     onLayoutChange = () => {
         this.setState({
-            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
+            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+        });
+    }
+
+    onDisplayAvatarsChange = () => {
+        this.setState({
+            displayAvatars: SettingsStore.getValue("feature_no_timeline_avatars"),
         });
     }
 
@@ -608,6 +617,7 @@ export default class MessagePanel extends React.Component {
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
                         useIRCLayout={this.state.useIRCLayout}
+                        displayAvatars={this.state.displayAvatars}
                     />
                 </TileErrorBoundary>
             </li>,

@@ -143,6 +143,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_irc_ui": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Use IRC layout'),
+        default: false,
+        isFeature: true,
+    },
+    "feature_no_timeline_avatars": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Display user avatars on messages'),
+        default: true,
+        isFeature: true,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
@@ -169,11 +181,6 @@ export const SETTINGS = {
         displayName: _td('Enable Emoji suggestions while typing'),
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
-    },
-    "useIRCLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use IRC layout'),
-        default: false,
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

@@ -131,7 +131,10 @@ export default createReactClass({
 
         return (
             <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
+                <div className="mx_SenderProfile_hover">
+                    { content }
                 { content }
+                </div>
             </div>
         );
     },

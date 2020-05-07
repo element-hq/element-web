@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$name-width: 50px;
+$name-width: 70px;
 $icon-width: 14px;
 $timestamp-width: 45px;
 $right-padding: 5px;
 
 .mx_IRCLayout {
 
-    line-height: $font-22px !important;
+    line-height: $font-20px !important;
 
     .mx_EventTile {
         display: flex;
@@ -46,11 +46,13 @@ $right-padding: 5px;
             text-align: right;
             display: flex;
             align-items: center;
+            overflow: visible;
         }
 
         > .mx_EventTile_line {
             order: 3;
             flex-grow: 1;
+            margin-bottom: -6px;
         }
 
         > .mx_EventTile_avatar {
@@ -90,10 +92,13 @@ $right-padding: 5px;
             padding: 0;
         }
 
-        .mx_EventTile_line .mx_EventTile_content,
-        .mx_EventTile_line .mx_EventTile_e2eIcon,
-        .mx_EventTile_line .mx_ReplyThread_wrapper_empty {
-            display: inline-block;
+        .mx_EventTile_line {
+            .mx_EventTile_e2eIcon,
+            .mx_TextualEvent,
+            .mx_MTextBody,
+            .mx_ReplyThread_wrapper_empty {
+                display: inline-block;
+            }
         }
 
         .mx_EvenTile_line .mx_MessageActionBar,
@@ -103,6 +108,10 @@ $right-padding: 5px;
 
         .mx_EventTile_reply {
             order: 3;
+        }
+
+        .mx_EditMessageComposer_buttons {
+            position: relative;
         }
     }
 
@@ -143,5 +152,18 @@ $right-padding: 5px;
     .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
         padding-left: 0;
         border-left: 0;
+    }
+
+    .mx_SenderProfile_hover {
+        background-color: $primary-bg-color;
+        overflow: hidden;
+        width: $name-width;
+        transition: width 2s;
+    }
+
+    .mx_SenderProfile_hover:hover {
+        overflow: visible;
+        width: auto;
+        z-index: 10;
     }
 }

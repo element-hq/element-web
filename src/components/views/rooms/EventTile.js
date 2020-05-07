@@ -209,6 +209,9 @@ export default createReactClass({
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether to display avatars
+        displayAvatars: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -713,7 +716,7 @@ export default createReactClass({
             needsSenderProfile = true;
         }
 
-        if (this.props.mxEvent.sender && avatarSize) {
+        if (this.props.mxEvent.sender && avatarSize && this.props.displayAvatars) {
             avatar = (
                     <div className="mx_EventTile_avatar">
                         <MemberAvatar member={this.props.mxEvent.sender}
@@ -897,6 +900,7 @@ export default createReactClass({
                     this.props.permalinkCreator,
                     this._replyThread,
                     this.props.useIRCLayout,
+                    this.props.displayAvatars,
                 );
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers

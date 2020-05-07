@@ -409,6 +409,7 @@
     "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use IRC layout": "Use IRC layout",
+    "Display user avatars on messages": "Display user avatars on messages",
     "Use compact timeline layout": "Use compact timeline layout",
     "Show a placeholder for removed messages": "Show a placeholder for removed messages",
     "Show join/leave messages (invites/kicks/bans unaffected)": "Show join/leave messages (invites/kicks/bans unaffected)",
