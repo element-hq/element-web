@@ -136,24 +136,11 @@ If none of these sources have an identity server set, then Riot will prompt the
 user to set an identity server first when attempting to use features that
 require one.
 
-Currently the only two public identity servers are https://vector.im and
+Currently, the only two public identity servers are https://vector.im and
 https://matrix.org, however in the future identity servers will be
 decentralised.
 
 Desktop app configuration
 =========================
 
-To run multiple instances of the desktop app for different accounts, you can
-launch the executable with the `--profile` argument followed by a unique
-identifier, e.g `riot-web --profile Work` for it to run a separate profile and
-not interfere with the default one.
-
-Alternatively, a custom location for the profile data can be specified using the
-`--profile-dir` flag followed by the desired path.
-
-+ `%APPDATA%\$NAME\config.json` on Windows
-+ `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
-+ `~Library/Application Support/$NAME/config.json` on macOS
-
-In the paths above, `$NAME` is typically `Riot`, unless you use `--profile
-$PROFILE` in which case it becomes `Riot-$PROFILE`.
+See https://github.com/vector-im/riot-desktop#user-specified-configjson
