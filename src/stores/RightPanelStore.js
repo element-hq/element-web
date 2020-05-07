@@ -139,7 +139,7 @@ export default class RightPanelStore extends Store {
                 let targetPhase = payload.phase;
                 let refireParams = payload.refireParams;
                 // redirect to EncryptionPanel if there is an ongoing verification request
-                if (targetPhase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+                if (targetPhase === RIGHT_PANEL_PHASES.RoomMemberInfo && payload.refireParams) {
                     const {member} = payload.refireParams;
                     const pendingRequest = pendingVerificationRequestForUser(member);
                     if (pendingRequest) {
