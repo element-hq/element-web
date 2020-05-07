@@ -184,8 +184,13 @@ export default class ReplyThread extends React.Component {
         if (!ReplyThread.getParentEventId(parentEv)) {
             return <div className="mx_ReplyThread_wrapper_empty" />;
         }
-        return <ReplyThread parentEv={parentEv} onHeightChanged={onHeightChanged}
-            ref={ref} permalinkCreator={permalinkCreator} useIRCLayout={useIRCLayout} displayAvatars={displayAvatars} />;
+        return <ReplyThread
+            parentEv={parentEv}
+            onHeightChanged={onHeightChanged}
+            ref={ref}
+            permalinkCreator={permalinkCreator}
+            useIRCLayout={useIRCLayout}
+            displayAvatars={displayAvatars} />;
     }
 
     componentDidMount() {

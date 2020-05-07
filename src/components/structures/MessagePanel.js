@@ -173,7 +173,11 @@ export default class MessagePanel extends React.Component {
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
 
         this._layoutWatcherRef = SettingsStore.watchSetting("feature_irc_ui", null, this.onLayoutChange);
-        this._displayAvatarsWatcherRef = SettingsStore.watchSetting("feature_no_timeline_avatars", null, this.onDisplayAvatarsChange);
+        this._displayAvatarsWatcherRef = SettingsStore.watchSetting(
+            "feature_no_timeline_avatars",
+            null,
+            this.onDisplayAvatarsChange,
+        );
     }
 
     componentDidMount() {
