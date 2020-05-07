@@ -76,7 +76,7 @@ export default createReactClass({
             email: this.props.defaultEmail || "",
             phoneNumber: this.props.defaultPhoneNumber || "",
             password: this.props.defaultPassword || "",
-            passwordConfirm: "",
+            passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
             passwordSafe: false,
         };
