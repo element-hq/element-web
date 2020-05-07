@@ -24,6 +24,10 @@ const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 const THIS_DEVICE_TOAST_KEY = 'setupencryption';
 const OTHER_DEVICES_TOAST_KEY = 'reviewsessions';
 
+function toastKey(deviceId) {
+    return "unverified_session_" + deviceId;
+}
+
 export default class DeviceListener {
     static sharedInstance() {
         if (!global.mx_DeviceListener) global.mx_DeviceListener = new DeviceListener();
@@ -39,9 +43,18 @@ export default class DeviceListener {
         // cache of the key backup info
         this._keyBackupInfo = null;
         this._keyBackupFetchedAt = null;
+
+        // We keep a list of our own device IDs so we can batch ones that were already
+        // there the last time the app launched into a single toast, but display new
+        // ones in their own toasts.
+        this._ourDeviceIdsAtStart = null;
+
+        // The set of device IDs we're currently displaying toasts for
+        this._displayingToastsForDeviceIds = new Set();
     }
 
     start() {
+        MatrixClientPeg.get().on('crypto.willUpdateDevices', this._onWillUpdateDevices);
         MatrixClientPeg.get().on('crypto.devicesUpdated', this._onDevicesUpdated);
         MatrixClientPeg.get().on('deviceVerificationChanged', this._onDeviceVerificationChanged);
         MatrixClientPeg.get().on('userTrustStatusChanged', this._onUserTrustStatusChanged);
@@ -53,6 +66,7 @@ export default class DeviceListener {
 
     stop() {
         if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener('crypto.willUpdateDevices', this._onWillUpdateDevices);
             MatrixClientPeg.get().removeListener('crypto.devicesUpdated', this._onDevicesUpdated);
             MatrixClientPeg.get().removeListener('deviceVerificationChanged', this._onDeviceVerificationChanged);
             MatrixClientPeg.get().removeListener('userTrustStatusChanged', this._onUserTrustStatusChanged);
@@ -64,12 +78,19 @@ export default class DeviceListener {
         this._dismissedThisDeviceToast = false;
         this._keyBackupInfo = null;
         this._keyBackupFetchedAt = null;
+        this._ourDeviceIdsAtStart = null;
+        this._displayingToastsForDeviceIds = new Set();
     }
 
-    async dismissVerifications() {
-        const cli = MatrixClientPeg.get();
-        const devices = await cli.getStoredDevicesForUser(cli.getUserId());
-        this._dismissed = new Set(devices.filter(d => d.deviceId !== cli.deviceId).map(d => d.deviceId));
+    /**
+     * Dismiss notifications about our own unverified devices
+     *
+     * @param {String[]} deviceIds List of device IDs to dismiss notifications for
+     */
+    async dismissUnverifiedSessions(deviceIds) {
+        for (const d of deviceIds) {
+            this._dismissed.add(d);
+        }
 
         this._recheck();
     }
@@ -77,6 +98,28 @@ export default class DeviceListener {
     dismissEncryptionSetup() {
         this._dismissedThisDeviceToast = true;
         this._recheck();
+    }
+
+    _ensureDeviceIdsAtStartPopulated() {
+        if (this._ourDeviceIdsAtStart === null) {
+            const cli = MatrixClientPeg.get();
+            this._ourDeviceIdsAtStart = new Set(
+                cli.getStoredDevicesForUser(cli.getUserId()).map(d => d.deviceId),
+            );
+        }
+    }
+
+    _onWillUpdateDevices = async (users, initialFetch) => {
+        // If we didn't know about *any* devices before (ie. it's fresh login),
+        // then they are all pre-existing devices, so ignore this and set the
+        // devicesAtStart list to the devices that we see after the fetch.
+        if (initialFetch) return;
+
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (users.includes(myUserId)) this._ensureDeviceIdsAtStartPopulated();
+
+        // No need to do a recheck here: we just need to get a snapshot of our devices
+        // before we download any new ones.
     }
 
     _onDevicesUpdated = (users) => {
@@ -182,7 +225,6 @@ export default class DeviceListener {
                         });
                     }
                 }
-                return;
             } else if (await cli.secretStorageKeyNeedsUpgrade()) {
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key: THIS_DEVICE_TOAST_KEY,
@@ -197,32 +239,70 @@ export default class DeviceListener {
             }
         }
 
+        // This needs to be done after awaiting on downloadKeys() above, so
+        // we make sure we get the devices after the fetch is done.
+        this._ensureDeviceIdsAtStartPopulated();
+
+        // Unverified devices that were there last time the app ran
+        // (technically could just be a boolean: we don't actually
+        // need to remember the device IDs, but for the sake of
+        // symmetry...).
+        const oldUnverifiedDeviceIds = new Set();
+        // Unverified devices that have appeared since then
+        const newUnverifiedDeviceIds = new Set();
+
         // as long as cross-signing isn't ready,
         // you can't see or dismiss any device toasts
         if (crossSigningReady) {
-            let haveUnverifiedDevices = false;
-
-            const devices = await cli.getStoredDevicesForUser(cli.getUserId());
+            const devices = cli.getStoredDevicesForUser(cli.getUserId());
             for (const device of devices) {
                 if (device.deviceId == cli.deviceId) continue;
 
                 const deviceTrust = await cli.checkDeviceTrust(cli.getUserId(), device.deviceId);
                 if (!deviceTrust.isCrossSigningVerified() && !this._dismissed.has(device.deviceId)) {
-                    haveUnverifiedDevices = true;
-                    break;
+                    if (this._ourDeviceIdsAtStart.has(device.deviceId)) {
+                        oldUnverifiedDeviceIds.add(device.deviceId);
+                    } else {
+                        newUnverifiedDeviceIds.add(device.deviceId);
+                    }
                 }
             }
+        }
 
-            if (haveUnverifiedDevices) {
-                ToastStore.sharedInstance().addOrReplaceToast({
-                    key: OTHER_DEVICES_TOAST_KEY,
-                    title: _t("Review where you’re logged in"),
-                    icon: "verification_warning",
-                    component: sdk.getComponent("toasts.UnverifiedSessionToast"),
-                });
-            } else {
-                ToastStore.sharedInstance().dismissToast(OTHER_DEVICES_TOAST_KEY);
+        // Display or hide the batch toast for old unverified sessions
+        if (oldUnverifiedDeviceIds.size > 0) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: OTHER_DEVICES_TOAST_KEY,
+                title: _t("Review where you’re logged in"),
+                icon: "verification_warning",
+                priority: ToastStore.PRIORITY_LOW,
+                props: {
+                    deviceIds: oldUnverifiedDeviceIds,
+                },
+                component: sdk.getComponent("toasts.BulkUnverifiedSessionsToast"),
+            });
+        } else {
+            ToastStore.sharedInstance().dismissToast(OTHER_DEVICES_TOAST_KEY);
+        }
+
+        // Show toasts for new unverified devices if they aren't already there
+        for (const deviceId of newUnverifiedDeviceIds) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: toastKey(deviceId),
+                title: _t("New login. Was this you?"),
+                icon: "verification_warning",
+                props: { deviceId },
+                component: sdk.getComponent("toasts.UnverifiedSessionToast"),
+            });
+        }
+
+        // ...and hide any we don't need any more
+        for (const deviceId of this._displayingToastsForDeviceIds) {
+            if (!newUnverifiedDeviceIds.has(deviceId)) {
+                ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
             }
         }
+
+        this._displayingToastsForDeviceIds = newUnverifiedDeviceIds;
     }
 }

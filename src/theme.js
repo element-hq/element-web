@@ -242,6 +242,10 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
+            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            if (bodyStyles.backgroundColor) {
+                document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
+            }
             Tinter.setTheme(theme);
             resolve();
         };

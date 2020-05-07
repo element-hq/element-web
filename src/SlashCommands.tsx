@@ -836,7 +836,7 @@ export const Commands = [
                     const fingerprint = matches[3];
 
                     return success((async () => {
-                        const device = await cli.getStoredDevice(userId, deviceId);
+                        const device = cli.getStoredDevice(userId, deviceId);
                         if (!device) {
                             throw new Error(_t('Unknown (user, session) pair:') + ` (${userId}, ${deviceId})`);
                         }

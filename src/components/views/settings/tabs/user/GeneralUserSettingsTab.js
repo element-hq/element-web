@@ -36,6 +36,7 @@ import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
+import Spinner from "../../../elements/Spinner";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -58,6 +59,10 @@ export default class GeneralUserSettingsTab extends React.Component {
             },
             emails: [],
             msisdns: [],
+            loading3pids: true, // whether or not the emails and msisdns have been loaded
+            ...this._calculateThemeState(),
+            customThemeUrl: "",
+            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
@@ -120,8 +125,11 @@ export default class GeneralUserSettingsTab extends React.Component {
             );
             console.warn(e);
         }
-        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
-        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
+        this.setState({
+            emails: threepids.filter((a) => a.medium === 'email'),
+            msisdns: threepids.filter((a) => a.medium === 'msisdn'),
+            loading3pids: false,
+        });
     }
 
     async _checkTerms() {
@@ -225,7 +233,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
-        const Spinner = sdk.getComponent("views.elements.Spinner");
 
         let passwordChangeForm = (
             <ChangePassword
@@ -244,18 +251,24 @@ export default class GeneralUserSettingsTab extends React.Component {
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
         if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
-            threepidSection = <div>
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses
+            const emails = this.state.loading3pids || true
+                ? <Spinner />
+                : <EmailAddresses
                     emails={this.state.emails}
                     onEmailsChange={this._onEmailsChange}
-                />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers
+                />;
+            const msisdns = this.state.loading3pids
+                ? <Spinner />
+                : <PhoneNumbers
                     msisdns={this.state.msisdns}
                     onMsisdnsChange={this._onMsisdnsChange}
-                />
+                />;
+            threepidSection = <div>
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                {emails}
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                {msisdns}
             </div>;
         } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
@@ -320,12 +333,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
 
+        const emails = this.state.loading3pids ? <Spinner /> : <EmailAddresses emails={this.state.emails} />;
+        const msisdns = this.state.loading3pids ? <Spinner /> : <PhoneNumbers msisdns={this.state.msisdns} />;
+
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-            <EmailAddresses emails={this.state.emails} />
+            {emails}
 
             <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-            <PhoneNumbers msisdns={this.state.msisdns} />
+            {msisdns}
         </div> : null;
 
         return (

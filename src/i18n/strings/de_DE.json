@@ -1855,5 +1855,12 @@
     "Enter your recovery passphrase a second time to confirm it.": "Gib deine Wiederherstellungspassphrase zur Bestätigung erneut ein.",
     "Confirm your recovery passphrase": "Bestätige deine Wiederherstellungspassphrase",
     "Confirm recovery passphrase": "Bestätige die Wiederherstellungspassphrase",
-    "Please enter your recovery passphrase a second time to confirm.": "Bitte gib deine Wiederherstellungspassphrase ein zweites Mal ein um sie zu bestätigen."
+    "Please enter your recovery passphrase a second time to confirm.": "Bitte gib deine Wiederherstellungspassphrase ein zweites Mal ein um sie zu bestätigen.",
+    "Review where you’re logged in": "Überprüfe, wo du eingeloggt bist",
+    "New login. Was this you?": "Neue Anmeldung. Warst du das?",
+    "Please supply a widget URL or embed code": "Bitte gib eine Widget-URL oder einen Einbettungscode an",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Gibt den per SMS an +%(msisdn)s gesendeten Bestätigungscode ein.",
+    "Someone is using an unknown session": "Jemand verwendet eine unbekannte Sitzung",
+    "This room is end-to-end encrypted": "Dieser Raum ist Ende-zu-Ende verschlüsselt",
+    "You are not subscribed to any lists": "Du hast keine Listen abonniert"
 }

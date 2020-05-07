@@ -32,3 +32,9 @@ limitations under the License.
     padding: 10px;
 }
 
+.mx_RestoreKeyBackupDialog_content > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px; /* Empirically measured */
+}

@@ -53,7 +53,6 @@ $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
 //
 // --roomlist-background-color
-$event-selected-color: var(--roomlist-background-color);
 $header-panel-bg-color: var(--roomlist-background-color);
 $reaction-row-button-bg-color: var(--roomlist-background-color);
 $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
@@ -134,3 +133,6 @@ $username-variant5-color: var(--username-colors_5, $username-variant5-color);
 $username-variant6-color: var(--username-colors_6, $username-variant6-color);
 $username-variant7-color: var(--username-colors_7, $username-variant7-color);
 $username-variant8-color: var(--username-colors_8, $username-variant8-color);
+
+$event-selected-color: var(--timeline-highlights-color);
+$event-highlight-bg-color: var(--timeline-highlights-color);

@@ -425,7 +425,7 @@ export default createReactClass({
         }
         this.onResize();
 
-        document.addEventListener("keydown", this.onKeyDown);
+        document.addEventListener("keydown", this.onNativeKeyDown);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -508,7 +508,7 @@ export default createReactClass({
             this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
         }
 
-        document.removeEventListener("keydown", this.onKeyDown);
+        document.removeEventListener("keydown", this.onNativeKeyDown);
 
         // Remove RoomStore listener
         if (this._roomStoreToken) {
@@ -550,7 +550,8 @@ export default createReactClass({
         }
     },
 
-    onKeyDown: function(ev) {
+    // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
+    onNativeKeyDown: function(ev) {
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
@@ -565,6 +566,25 @@ export default createReactClass({
             case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    },
+
+    onReactKeyDown: function(ev) {
+        let handled = false;
+
+        switch (ev.key) {
+            case Key.ESCAPE:
+                if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
+                    this._messagePanel.forgetReadMarker();
+                    this.jumpToLiveTimeline();
                     handled = true;
                 }
                 break;
@@ -1768,7 +1788,7 @@ export default createReactClass({
         const showRoomRecoveryReminder = (
             SettingsStore.getValue("showRoomRecoveryReminder") &&
             this.context.isRoomEncrypted(this.state.room.roomId) &&
-            !this.context.getKeyBackupEnabled()
+            this.context.getKeyBackupEnabled() === false
         );
 
         const hiddenHighlightCount = this._getHiddenHighlightCount();
@@ -2008,9 +2028,13 @@ export default createReactClass({
             mx_RoomView_timeline_rr_enabled: this.state.showReadReceipts,
         });
 
+        const mainClasses = classNames("mx_RoomView", {
+            mx_RoomView_inCall: inCall,
+        });
+
         return (
             <RoomContext.Provider value={this.state}>
-                <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
+                <main className={mainClasses} ref={this._roomView} onKeyDown={this.onReactKeyDown}>
                     <ErrorBoundary>
                         <RoomHeader
                             room={this.state.room}

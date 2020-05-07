@@ -19,8 +19,22 @@ import TagTile from './TagTile';
 
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { ContextMenu, toRightOf, useContextMenu } from "../../structures/ContextMenu";
+import * as sdk from '../../../index';
 
 export default function DNDTagTile(props) {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu = null;
+    if (menuDisplayed && handle.current) {
+        const elementRect = handle.current.getBoundingClientRect();
+        const TagTileContextMenu = sdk.getComponent('context_menus.TagTileContextMenu');
+        contextMenu = (
+            <ContextMenu {...toRightOf(elementRect)} onFinished={closeMenu}>
+                <TagTileContextMenu tag={props.tag} onFinished={closeMenu} />
+            </ContextMenu>
+        );
+    }
     return <div>
         <Draggable
             key={props.tag}
@@ -28,18 +42,21 @@ export default function DNDTagTile(props) {
             index={props.index}
             type="draggable-TagTile"
         >
-            { (provided, snapshot) => (
-                <div>
-                    <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                    >
-                        <TagTile {...props} />
-                    </div>
-                    { provided.placeholder }
+            {(provided, snapshot) => (
+                <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                >
+                    <TagTile
+                        {...props}
+                        contextMenuButtonRef={handle}
+                        menuDisplayed={menuDisplayed}
+                        openMenu={openMenu}
+                    />
                 </div>
-            ) }
+            )}
         </Draggable>
+        {contextMenu}
     </div>;
 }
