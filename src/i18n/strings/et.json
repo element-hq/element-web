@@ -935,5 +935,8 @@
     "Show less": "Näita vähem",
     "Show more": "Näita rohkem",
     "Warning!": "Hoiatus!",
-    "Do you want to set an email address?": "Kas sa soovid seadistada e-posti aadressi?"
+    "Do you want to set an email address?": "Kas sa soovid seadistada e-posti aadressi?",
+    "Close dialog": "Sulge dialoog",
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Meeldetuletus: sinu brauser ei ole toetatud ja seega rakenduse kasutuskogemus võib olla ennustamatu.",
+    "Toggle this dialog": "Lülita see dialoog sisse/välja"
 }
