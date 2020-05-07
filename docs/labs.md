@@ -12,11 +12,6 @@ dropped. Ask in the room if you are unclear about any details here.**
 Enables font scaling options for accessibility. To alter the scale check the
 appearance tab in settings.
 
-## Alternate message layouts (`feature_alternate_message_layouts`)
-
-Enables options in appearance settings to switch between message layouts such as
-the default and "irc-like" layouts.
-
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
@@ -127,5 +122,16 @@ Custom themes are possible through Riot's [theme support](./theming.md), though
 normally these themes need to be defined in the config for Riot. This labs flag
 adds an ability for end users to add themes themselves by using a URL to the JSON
 theme definition.
+
+## IRC message layout (`feature_irc_ui`)
+
+Adds an option to change the message layout to an IRC style ` timestamp | avatar
+| name | message `
+
+## Remove timeline avatars (`feature_no_timeline_avatars`)
+
+Adds the option to remove the avatars in the message layout. This is intended to
+be used in conjunction with the irc layout however it available for both
+layouts.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
