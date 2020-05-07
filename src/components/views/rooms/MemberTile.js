@@ -129,7 +129,7 @@ export default createReactClass({
             return;
         }
 
-        const devices = await cli.getStoredDevicesForUser(userId);
+        const devices = cli.getStoredDevicesForUser(userId);
         const anyDeviceUnverified = devices.some(device => {
             const { deviceId } = device;
             // For your own devices, we use the stricter check of cross-signing

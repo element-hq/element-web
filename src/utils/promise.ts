@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// @flow
-
 // Returns a promise which resolves with a given value after the given number of ms
-export const sleep = (ms: number, value: any): Promise => new Promise((resolve => { setTimeout(resolve, ms, value); }));
+export function sleep<T>(ms: number, value: T): Promise<T> {
+    return new Promise((resolve => { setTimeout(resolve, ms, value); }));
+}
 
 // Returns a promise which resolves when the input promise resolves with its value
 // or when the timeout of ms is reached with the value of given timeoutValue
-export async function timeout(promise: Promise, timeoutValue: any, ms: number): Promise {
-    const timeoutPromise = new Promise((resolve) => {
+export async function timeout<T>(promise: Promise<T>, timeoutValue: T, ms: number): Promise<T> {
+    const timeoutPromise = new Promise<T>((resolve) => {
         const timeoutId = setTimeout(resolve, ms, timeoutValue);
         promise.then(() => {
             clearTimeout(timeoutId);
@@ -32,12 +32,18 @@ export async function timeout(promise: Promise, timeoutValue: any, ms: number): 
     return Promise.race([promise, timeoutPromise]);
 }
 
+export interface IDeferred<T> {
+    resolve: (value: T) => void;
+    reject: (any) => void;
+    promise: Promise<T>;
+}
+
 // Returns a Deferred
-export function defer(): {resolve: () => {}, reject: () => {}, promise: Promise} {
+export function defer<T>(): IDeferred<T> {
     let resolve;
     let reject;
 
-    const promise = new Promise((_resolve, _reject) => {
+    const promise = new Promise<T>((_resolve, _reject) => {
         resolve = _resolve;
         reject = _reject;
     });
@@ -46,11 +52,12 @@ export function defer(): {resolve: () => {}, reject: () => {}, promise: Promise}
 }
 
 // Promise.allSettled polyfill until browser support is stable in Firefox
-export function allSettled(promises: Promise[]): {status: string, value?: any, reason?: any}[] {
+export function allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>> {
     if (Promise.allSettled) {
-        return Promise.allSettled(promises);
+        return Promise.allSettled<T>(promises);
     }
 
+    // @ts-ignore - typescript isn't smart enough to see the disjoint here
     return Promise.all(promises.map((promise) => {
         return promise.then(value => ({
             status: "fulfilled",

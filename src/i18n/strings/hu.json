@@ -1351,7 +1351,7 @@
     "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Ha egyszer engedélyezve lett, a szoba titkosítását nem lehet kikapcsolni. A titkosított szobákban küldött üzenetek a szerver számára nem, csak a szoba tagjai számára láthatók. A titkosítás bekapcsolása megakadályoz sok botot és hidat a megfelelő működésben. <a>Tudj meg többet a titkosításról.</a>",
     "Power level": "Hozzáférési szint",
     "Want more than a community? <a>Get your own server</a>": "Többet szeretnél, mint egy közösség? <a>Szerezz saját szervert</a>",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Kérlek telepíts <chromeLink>Chrome</chromeLink>ot, <firefoxLink>Firefox</firefoxLink>ot vagy <safariLink>Safari</safariLink>t a jegjobb élményhez.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "A legjobb élmény eléréséhez kérlek telepíts <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
     "<b>Warning</b>: Upgrading a room will <i>not automatically migrate room members to the new version of the room.</i> We'll post a link to the new room in the old version of the room - room members will have to click this link to join the new room.": "<b>Figyelmeztetés</b>: A szoba frissítése <i>nem fogja automatikusan átvinni a szoba résztvevőit az új verziójú szobába.</i> A régi szobába bekerül egy link az új szobához - a tagoknak rá kell kattintani a linkre az új szobába való belépéshez.",
     "Adds a custom widget by URL to the room": "Egyedi kisalkalmazás hozzáadása a szobához URL-lel",
     "Please supply a https:// or http:// widget URL": "Kérlek add meg a https:// vagy http:// kisalkalmazás URL-t",
@@ -2395,5 +2395,16 @@
     "This requires the latest Riot on your other devices:": "A Riot legújabb kliensére van ehhez szükséged a többi eszközödön:",
     "or another cross-signing capable Matrix client": "vagy másik eszközök közötti hitelesítésre alkalmas Matrix kliensre",
     "Use Recovery Passphrase or Key": "Használd a Visszaállítási Jelmondatot vagy Kulcsot",
-    "Unable to query secret storage status": "A biztonsági tároló állapotát nem lehet lekérdezni"
+    "Unable to query secret storage status": "A biztonsági tároló állapotát nem lehet lekérdezni",
+    "Review where you’re logged in": "Tekintsd át hol vagy bejelentkezve",
+    "New login. Was this you?": "Új bejelentkezés. Te voltál?",
+    "Verify all your sessions to ensure your account & messages are safe": "Ellenőrizd minden munkamenetedet, hogy a fiókod és az üzeneteid biztonságban legyenek",
+    "Verify the new login accessing your account: %(name)s": "Ellenőrizd ezt az új bejelentkezést ami hozzáfér a fiókodhoz: %(name)s",
+    "Where you’re logged in": "Ahol be vagy jelentkezve",
+    "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Állítsd be a munkameneteid neveit, jelentkezz ki vagy <a>ellenőrizd őket a Felhasználói Beállításokban</a>.",
+    "Restoring keys from backup": "Kulcsok visszaállítása mentésből",
+    "Fetching keys from server...": "Kulcsok lekérdezése a szerverről…",
+    "%(completed)s of %(total)s keys restored": "%(completed)s/%(total)s kulcs visszaállítva",
+    "Keys restored": "Kulcsok visszaállítva",
+    "Successfully restored %(sessionCount)s keys": "Kulcsok (%(sessionCount)s) sikeresen visszaállítva"
 }
