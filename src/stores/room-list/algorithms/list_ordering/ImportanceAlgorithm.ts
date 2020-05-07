@@ -207,15 +207,12 @@ export class ImportanceAlgorithm extends Algorithm {
             const taggedRooms = this.cached[tag];
             const indicies = this.indices[tag];
             let roomIdx = taggedRooms.indexOf(room);
-            let inList = true;
             if (roomIdx === -1) {
                 console.warn(`Degrading performance to find missing room in "${tag}": ${room.roomId}`);
                 roomIdx = taggedRooms.findIndex(r => r.roomId === room.roomId);
             }
             if (roomIdx === -1) {
-                console.warn(`Room ${room.roomId} has no index in ${tag} - assuming end of list`);
-                roomIdx = taggedRooms.length;
-                inList = false; // used so we don't splice the dead room out
+                throw new Error(`Room ${room.roomId} has no index in ${tag}`);
             }
 
             // Try to avoid doing array operations if we don't have to: only move rooms within
