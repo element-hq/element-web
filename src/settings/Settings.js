@@ -94,12 +94,6 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
-    "feature_alternate_message_layouts": {
-        isFeature: true,
-        displayName: _td("Alternate message layouts"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
