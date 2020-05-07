@@ -18,7 +18,7 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-konfigurasjonen din inneholder ugyldig JSON. Vennligst fiks problemet og oppdater siden.",
     "The message from the parser is: %(message)s": "Meldingen fra parseren er: %(message)s",
     "Invalid JSON": "Ugyldig JSON",
-    "Your Riot is misconfigured": "Riot er feilkonfigurert",
+    "Your Riot is misconfigured": "Ditt Riot-oppsett er feiloppsatt",
     "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
     "Unexpected error preparing the app. See console for details.": "Uventet feil oppsto mens appen ble gjort klar. Se konsollen for detaljer.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url.",
