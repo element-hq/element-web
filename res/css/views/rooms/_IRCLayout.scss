@@ -21,7 +21,7 @@ $right-padding: 5px;
 
 .mx_IRCLayout {
 
-    line-height: $font-20px !important;
+    line-height: $font-18px !important;
 
     .mx_EventTile {
         display: flex;
@@ -52,7 +52,6 @@ $right-padding: 5px;
         > .mx_EventTile_line {
             order: 3;
             flex-grow: 1;
-            margin-bottom: -6px;
         }
 
         > .mx_EventTile_avatar {
