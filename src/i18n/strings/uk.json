@@ -549,5 +549,17 @@
     "Send cross-signing keys to homeserver": "Надсилання ключей підпису на домашній сервер",
     "Custom (%(level)s)": "Власний (%(level)s)",
     "Error upgrading room": "Помилка оновлення кімнати",
-    "Double check that your server supports the room version chosen and try again.": "Перевірте, чи підримує ваш сервер вказану версію кімнати та спробуйте ще."
+    "Double check that your server supports the room version chosen and try again.": "Перевірте, чи підримує ваш сервер вказану версію кімнати та спробуйте ще.",
+    "Liberate your communication": "Вивільни своє спілкування",
+    "Send a Direct Message": "Надіслати особисте повідомлення",
+    "Explore Public Rooms": "Дослідити прилюдні кімнати",
+    "Create a Group Chat": "Створити групову балачку",
+    "Explore": "Дослідити",
+    "Filter": "Фільтрувати",
+    "Filter rooms…": "Фільтрувати кімнати…",
+    "Failed to reject invitation": "Не вдалось відхилити запрошення",
+    "This room is not public. You will not be able to rejoin without an invite.": "Ця кімната не є прилюдною. Ви не зможете перепід'єднатись без запрошення.",
+    "Failed to leave room": "Не вдалось залишити кімнату",
+    "Can't leave Server Notices room": "Неможливо залишити кімнату Оголошення Сервера",
+    "This room is used for important messages from the Homeserver, so you cannot leave it.": "Ця кімната використовується для важливих повідомлень з домашнього сервера, тож ви не можете її залишити."
 }
