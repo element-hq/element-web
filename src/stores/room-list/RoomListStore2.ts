@@ -156,10 +156,21 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
 
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
+            console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${roomId}`);
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.Event.decrypted') {
-            // TODO: Update room from decrypted event
-            console.log(payload);
+            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+            const roomId = eventPayload.event.getRoomId();
+            const room = this.matrixClient.getRoom(roomId);
+            if (!room) {
+                console.warn(`Event ${eventPayload.event.getId()} was decrypted in an unknown room ${roomId}`);
+                return;
+            }
+            console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
+            // TODO: Check that e2e rooms are calculated correctly on initial load.
+            // It seems like when viewing the room the timeline is decrypted, rather than at startup. This could
+            // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
+            await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             // TODO: Update DMs
             console.log(payload);
