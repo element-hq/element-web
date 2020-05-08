@@ -2393,5 +2393,6 @@
     "Repeat your recovery passphrase...": "Ripetu vian rehavan pasfrazon…",
     "Secure your backup with a recovery passphrase": "Sekurigu vian savkopion per rehava pasfrazo",
     "Currently indexing: %(currentRoom)s": "Nun indeksante: %(currentRoom)s",
-    "Cancel replying to a message": "Nuligi respondon al mesaĝo"
+    "Cancel replying to a message": "Nuligi respondon al mesaĝo",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invitu iun per ĝia nomo, uzantonomo (kiel <userId/>), retpoŝtadreso, aŭ <a>kunhavigu la ĉambron</a>."
 }
