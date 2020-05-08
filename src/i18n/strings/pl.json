@@ -1588,5 +1588,6 @@
     "Toggle Bold": "Przełącz pogrubienie",
     "Toggle Italics": "Przełącz kursywę",
     "Toggle Quote": "Przełącz cytowanie",
-    "Cancel autocomplete": "Anuluj autouzupełnienie"
+    "Cancel autocomplete": "Anuluj autouzupełnienie",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania."
 }
