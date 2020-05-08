@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
+import UnknownBody from "./UnknownBody";
 
 export default createReactClass({
     displayName: 'MessageEvent',
@@ -88,6 +89,9 @@ export default createReactClass({
             } else if (content.url) {
                 // Fallback to MFileBody if there's a content URL
                 BodyType = bodyTypes['m.file'];
+            } else {
+                // Fallback to UnknownBody otherwise if not redacted
+                BodyType = UnknownBody;
             }
         }
 
