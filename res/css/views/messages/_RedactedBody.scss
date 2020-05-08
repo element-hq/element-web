@@ -1,5 +1,6 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -11,6 +12,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_UnknownBody {
+.mx_RedactedBody {
     white-space: pre-wrap;
+    color: $muted-fg-color;
+    vertical-align: middle;
+
+    padding-left: 20px;
+    position: relative;
+
+    &::before {
+        height: 14px;
+        width: 14px;
+        background-color: $muted-fg-color;
+        mask-image: url('$(res)/img/feather-customised/trash (custom).svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 0;
+    }
 }

@@ -244,34 +244,6 @@ limitations under the License.
     color: $event-notsent-color;
 }
 
-.mx_EventTile_redacted .mx_EventTile_line .mx_UnknownBody,
-.mx_EventTile_redacted .mx_EventTile_reply .mx_UnknownBody {
-    --lozenge-color: $event-redacted-fg-color;
-    --lozenge-border-color: $event-redacted-border-color;
-    display: block;
-    height: 22px;
-    width: 250px;
-    border-radius: 11px;
-    background:
-        repeating-linear-gradient(
-            -45deg,
-            var(--lozenge-color),
-            var(--lozenge-color) 3px,
-            transparent 3px,
-            transparent 6px
-        );
-    box-shadow: 0px 0px 3px var(--lozenge-border-color) inset;
-}
-
-.mx_EventTile_sending.mx_EventTile_redacted .mx_UnknownBody {
-    opacity: 0.4;
-}
-
-div.mx_EventTile_notSent.mx_EventTile_redacted .mx_UnknownBody {
-    --lozenge-color: $event-notsent-color;
-    --lozenge-border-color: $event-notsent-color;
-}
-
 .mx_EventTile_contextual {
     opacity: 0.4;
 }

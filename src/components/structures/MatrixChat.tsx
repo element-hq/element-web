@@ -1339,7 +1339,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // this if we are not scrolled up in the view. To find out, delegate to
             // the timeline panel. If the timeline panel doesn't exist, then we assume
             // it is safe to reset the timeline.
-            if (!this.loggedInView.current || !this.loggedInView.current) {
+            if (!this.loggedInView.current) {
                 return true;
             }
             return this.loggedInView.current.canResetTimelineInRoom(roomId);
