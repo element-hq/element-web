@@ -156,7 +156,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             const sublist = this.sublistRefs[tagId];
             if (sublist) sublist.current.setHeight(height);
 
-            // TODO: Check overflow
+            // TODO: Check overflow (see old impl)
 
             // Don't store a height for collapsed sublists
             if (!this.sublistCollapseStates[tagId]) {
@@ -178,6 +178,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     private collectSublistRef(tagId: string, ref: React.RefObject<RoomSublist2>) {
+        // TODO: Is this needed?
         if (!ref) {
             delete this.sublistRefs[tagId];
         } else {
@@ -206,11 +207,9 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             const aesthetics: ITagAesthetics = TAG_AESTHETICS[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
-            const onAddRoomFn = () => {
-                if (!aesthetics.onAddRoom) return;
-                aesthetics.onAddRoom(dis);
-            };
+            const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
             components.push(<RoomSublist2
+                key={`sublist-${orderedTagId}`}
                 forRooms={true}
                 rooms={orderedRooms}
                 startAsHidden={aesthetics.defaultHidden}
