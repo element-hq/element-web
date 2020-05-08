@@ -212,17 +212,7 @@ export async function _waitForMember(client, roomId, userId, opts = { timeout: 1
  * can encrypt to.
  */
 export async function canEncryptToAllUsers(client, userIds) {
-    let usersDeviceMap;
-    try {
-        usersDeviceMap = await client.downloadKeys(userIds);
-    } catch (ex) {
-       if (ex.httpStatus === 404) {
-            // The endpoint to fetch keys doesn't exist: force unencrypted.
-            // See: https://github.com/vector-im/riot-web/issues/13598
-            return false;
-       }
-       throw ex;
-    }
+    const usersDeviceMap = await client.downloadKeys(userIds);
     // { "@user:host": { "DEVICE": {...}, ... }, ... }
     return Object.values(usersDeviceMap).every((userDevices) =>
         // { "DEVICE": {...}, ... }
