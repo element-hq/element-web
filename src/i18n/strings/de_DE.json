@@ -1890,5 +1890,6 @@
     "this room": "Dieser Raum",
     "View older messages in %(roomName)s.": "Zeige alte Nachrichten in %(roomName)s.",
     "Send a bug report with logs": "Sende Fehlermeldung mit Protokoll",
-    "Verify all your sessions to ensure your account & messages are safe": "Verifiziere alle deine Sitzungen, um dein Konto und deine Nachrichten zu schützen"
+    "Verify all your sessions to ensure your account & messages are safe": "Verifiziere alle deine Sitzungen, um dein Konto und deine Nachrichten zu schützen",
+    "Verify your other session using one of the options below.": "Verifiziere deine andere Sitzung mit einer der folgenden Optionen."
 }
