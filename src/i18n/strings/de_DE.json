@@ -2201,5 +2201,5 @@
     "Resend edit": "Bearbeitung erneut senden",
     "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s Reaktion(en) erneut senden",
     "Resend removal": "Entfernen erneut senden",
-    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Fehlender öffentlicher Captcha-Schlüssel in der Heimserver-Konfiguration. Bitte melde dies deiner Heimserver-Administration."
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Fehlender öffentlicher Captcha-Schlüssel in der Heimserver-Konfiguration. Bitte melde dies deinem Heimserver-Administrator."
 }
