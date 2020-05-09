@@ -2289,5 +2289,7 @@
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Dein neues Konto (%(newAccountId)s) ist registriert, aber du hast dich bereits in mit einem anderen Konto (%(loggedInUserId)s) angemeldet.",
     "This requires the latest Riot on your other devices:": "Dies benötigt die neuste Version von Riot auf deinen anderen Geräten:",
     "Use Recovery Passphrase or Key": "Benutze deine Wiederherstellungspassphrase oder den Wiederherstellungsschlüssel",
-    "Failed to re-authenticate due to a homeserver problem": "Erneute Authentifizierung aufgrund eines Problems im Heimserver fehlgeschlagen"
+    "Failed to re-authenticate due to a homeserver problem": "Erneute Authentifizierung aufgrund eines Problems im Heimserver fehlgeschlagen",
+    "Failed to re-authenticate": "Erneute Authentifizierung fehlgeschlagen",
+    "Command Autocomplete": "Auto-Vervollständigung anordnen"
 }
