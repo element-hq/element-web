@@ -2272,5 +2272,5 @@
     "Message edits": "Nachrichtenänderungen",
     "Your account is not secure": "Dein Konto ist nicht sicher",
     "Upgrading this room requires closing down the current instance of the room and creating a new room in its place. To give room members the best possible experience, we will:": "Um diesen Raum zu aktualisieren, muss die aktuelle Instanz des Raums geschlossen und an ihrer Stelle ein neuer Raum erstellt werden. Um den Raummitgliedern die bestmögliche Erfahrung zu bieten, werden wir:",
-    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Einen Raum zu aktualizieren ist eine fortgeschrittene Aktion und wird normalerweise empfohlen, wenn ein Raum aufgrund von Fehlern, fehlenden Funktionen oder Sicherheitslücken instabil ist."
+    "Upgrading a room is an advanced action and is usually recommended when a room is unstable due to bugs, missing features or security vulnerabilities.": "Einen Raum zu aktualisieren ist eine komplexe Aktion und wird normalerweise empfohlen, wenn ein Raum aufgrund von Fehlern, fehlenden Funktionen oder Sicherheitslücken instabil ist."
 }
