@@ -2178,5 +2178,7 @@
     "Upload files (%(current)s of %(total)s)": "Dateien hochladen (%(current)s von %(total)s)",
     "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": "Die Datei ist <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s, aber diese Datei ist %(sizeOfThisFile)s groß.",
     "These files are <b>too large</b> to upload. The file size limit is %(limit)s.": "Die Datei ist <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
-    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Einige Dateien sind <b>zu groß</b>, um hochgeladen zu werden. Das Dateigrößenlimit ist %(limit)s."
+    "Some files are <b>too large</b> to be uploaded. The file size limit is %(limit)s.": "Einige Dateien sind <b>zu groß</b>, um hochgeladen zu werden. Die maximale Dateigröße ist %(limit)s.",
+    "Verify other session": "Andere Sitzung verifizieren",
+    "Verification Request": "Verifikationsanfrage"
 }
