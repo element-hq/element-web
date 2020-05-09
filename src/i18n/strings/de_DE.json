@@ -2211,5 +2211,8 @@
     "Sign in with SSO": "Mit Single-Sign-On anmelden",
     "Welcome to %(appName)s": "Willkommen bei %(appName)s",
     "Send a Direct Message": "Sende eine Direktnachricht",
-    "Create a Group Chat": "Erstelle einen Gruppenchat"
+    "Create a Group Chat": "Erstelle einen Gruppenchat",
+    "Use lowercase letters, numbers, dashes and underscores only": "Verwende nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche",
+    "Enter your custom identity server URL <a>What does this mean?</a>": "URL deines benutzerdefinierten Identitätsservers eingeben <a>Was bedeutet das?</a>",
+    "Riot failed to get the public room list.": "Riot konnte die Liste der öffentlichen Räume nicht erhalten."
 }
