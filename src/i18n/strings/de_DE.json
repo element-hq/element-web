@@ -2201,5 +2201,9 @@
     "Resend edit": "Bearbeitung erneut senden",
     "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s Reaktion(en) erneut senden",
     "Resend removal": "Entfernen erneut senden",
-    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Fehlender öffentlicher Captcha-Schlüssel in der Heimserver-Konfiguration. Bitte melde dies deinem Heimserver-Administrator."
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Fehlender öffentlicher Captcha-Schlüssel in der Heimserver-Konfiguration. Bitte melde dies deinem Heimserver-Administrator.",
+    "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Da kein Identitätsserver konfiguriert ist, kannst du keine E-Mail-Adresse hinzufügen, um dein Kennwort in Zukunft zurückzusetzen.",
+    "Use an email address to recover your account": "Verwende eine E-Mail-Adresse, um dein Konto wiederherzustellen",
+    "Enter email address (required on this homeserver)": "E-Mail-Adresse eingeben (auf diesem Heimserver erforderlich)",
+    "Doesn't look like a valid email address": "Sieht nicht nach einer gültigen E-Mail-Adresse aus"
 }
