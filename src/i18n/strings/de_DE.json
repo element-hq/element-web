@@ -2207,5 +2207,9 @@
     "Enter email address (required on this homeserver)": "E-Mail-Adresse eingeben (auf diesem Heimserver erforderlich)",
     "Doesn't look like a valid email address": "Das sieht nicht nach einer gültigen E-Mail-Adresse aus",
     "Enter phone number (required on this homeserver)": "Telefonnummer eingeben (auf diesem Heimserver erforderlich)",
-    "Doesn't look like a valid phone number": "Sieht nicht nach einer gültigen Telefonnummer aus"
+    "Doesn't look like a valid phone number": "Das sieht nicht nach einer gültigen Telefonnummer aus",
+    "Sign in with SSO": "Mit Single-Sign-On anmelden",
+    "Welcome to %(appName)s": "Willkommen bei %(appName)s",
+    "Send a Direct Message": "Sende eine Direktnachricht",
+    "Create a Group Chat": "Erstelle einen Gruppenchat"
 }
