@@ -2205,5 +2205,7 @@
     "No identity server is configured so you cannot add an email address in order to reset your password in the future.": "Da kein Identitätsserver konfiguriert ist, kannst du keine E-Mail-Adresse hinzufügen, um dein Kennwort in Zukunft zurückzusetzen.",
     "Use an email address to recover your account": "Verwende eine E-Mail-Adresse, um dein Konto wiederherzustellen",
     "Enter email address (required on this homeserver)": "E-Mail-Adresse eingeben (auf diesem Heimserver erforderlich)",
-    "Doesn't look like a valid email address": "Das sieht nicht nach einer gültigen E-Mail-Adresse aus"
+    "Doesn't look like a valid email address": "Das sieht nicht nach einer gültigen E-Mail-Adresse aus",
+    "Enter phone number (required on this homeserver)": "Telefonnummer eingeben (auf diesem Heimserver erforderlich)",
+    "Doesn't look like a valid phone number": "Sieht nicht nach einer gültigen Telefonnummer aus"
 }
