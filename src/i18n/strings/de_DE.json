@@ -2214,5 +2214,8 @@
     "Create a Group Chat": "Erstelle einen Gruppenchat",
     "Use lowercase letters, numbers, dashes and underscores only": "Verwende nur Kleinbuchstaben, Zahlen, Bindestriche und Unterstriche",
     "Enter your custom identity server URL <a>What does this mean?</a>": "URL deines benutzerdefinierten Identitätsservers eingeben <a>Was bedeutet das?</a>",
-    "Riot failed to get the public room list.": "Riot konnte die Liste der öffentlichen Räume nicht erhalten."
+    "Riot failed to get the public room list.": "Riot konnte die Liste der öffentlichen Räume nicht laden.",
+    "Verify this login": "Diese Anmeldung verifizieren",
+    "Syncing...": "Synchronisiere...",
+    "Signing In...": "Melde an..."
 }
