@@ -2327,11 +2327,15 @@
     "Cancel autocomplete": "Deaktiviere Auto-Vervollständigung",
     "Unable to revoke sharing for email address": "Das Teilen der E-Mail-Adresse kann nicht widerrufen werden",
     "Unable to validate homeserver/identity server": "Heimserver/Identitätsserver nicht validierbar",
-    "Without completing security on this session, it won’t have access to encrypted messages.": "Ohne Abschluss der Sicherungseinrichtung in dieser Sitzung hat sie keinen Zugriff auf verschlüsselte Nachrichten.",
+    "Without completing security on this session, it won’t have access to encrypted messages.": "Ohne Abschluss der Sicherungseinrichtung in dieser Sitzung wird sie keinen Zugriff auf verschlüsselte Nachrichten erhalten.",
     "Disable": "Deaktivieren",
     "Not currently indexing messages for any room.": "Derzeit werden keine Nachrichten für Räume indiziert.",
     "Space used:": "Speicherplatzbedarf:",
     "Indexed messages:": "Indizierte Nachrichten:",
     "Indexed rooms:": "Indizierte Räume:",
-    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s von %(totalRooms)s"
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s von %(totalRooms)s",
+    "Set a recovery passphrase to secure encrypted information and recover it if you log out. This should be different to your account password:": "Setze eine Wiederherstellungspassphrase um deine verschlüsselten Nachrichten nach dem Abmelden wiederherstellen zu können. Diese sollte sich von deinem Kontopasswort unterscheiden:",
+    "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your recovery passphrase.": "Der Wiederherstellungsschlüssel ist ein Sicherheitsnetz - du kannst damit deine verschlüsselten Nachrichten wiederherstellen wenn du deine Wiederherstellungspassphrase vergessen hast.",
+    "Unable to query secret storage status": "Status des sicheren Speichers kann nicht gelesen werden",
+    "We'll store an encrypted copy of your keys on our server. Secure your backup with a recovery passphrase.": "Wir werden eine verschlüsselte Kopie deiner Schlüssel auf unserem Server speichern. Schütze deine Sicherung mit einer Wiederherstellungspassphrase."
 }
