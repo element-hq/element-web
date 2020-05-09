@@ -2286,5 +2286,7 @@
     "If you've joined lots of rooms, this might take a while": "Du bist einer Menge Räumen beigetreten, das kann eine Weile dauern",
     "Riot failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "Riot konnte die Protokollliste nicht vom Heimserver abrufen. Der Heimserver ist möglicherweise zu alt, um Netzwerke von Drittanbietern zu unterstützen.",
     "No identity server is configured: add one in server settings to reset your password.": "Kein Identitätsserver konfiguriert: Füge einen in den Servereinstellungen hinzu, um dein Kennwort zurückzusetzen.",
-    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Dein neues Konto (%(newAccountId)s) ist registriert, aber du bist bereits in ein anderes Konto (%(loggedInUserId)s) angemeldet."
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Dein neues Konto (%(newAccountId)s) ist registriert, aber du hast dich bereits in mit einem anderen Konto (%(loggedInUserId)s) angemeldet.",
+    "This requires the latest Riot on your other devices:": "Dies benötigt die neuste Version von Riot auf deinen anderen Geräten:",
+    "Use Recovery Passphrase or Key": "Benutze deine Wiederherstellungspassphrase oder den Wiederherstellungsschlüssel"
 }
