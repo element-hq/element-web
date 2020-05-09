@@ -2307,5 +2307,8 @@
     "You can now verify your other devices, and other users to keep your chats safe.": "Du kannst jetzt deine anderen Geräte und andere Benutzer verifizieren, um deine Chats zu schützen.",
     "Upgrade your encryption": "Deine Verschlüsselung aktualisieren",
     "You're done!": "Du bist fertig!",
-    "Unable to set up secret storage": "Geheimer Speicher kann nicht eingerichtet werden"
+    "Unable to set up secret storage": "Sicherer Speicher kann nicht eingerichtet werden",
+    "Enter a recovery passphrase...": "Gib eine Wiederherstellungspassphrase ein...",
+    "Repeat your recovery passphrase...": "Gib die Wiederherstellungspassphrase erneut ein...",
+    "Secure your backup with a recovery passphrase": "Verschlüssele deine Sicherung mit einer Wiederherstellungspassphrase"
 }
