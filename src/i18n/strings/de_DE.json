@@ -2231,5 +2231,5 @@
     "Identity server URL does not appear to be a valid identity server": "Die Identitätsserver-URL scheint kein gültiger Identitätsserver zu sein",
     "This account has been deactivated.": "Dieses Konto wurde deaktiviert.",
     "Continue with previous account": "Mit vorherigen Konto fortfahren",
-    "<a>Log in</a> to your new account.": "Bei deinem neuen Konto <a>anmelden</a>."
+    "<a>Log in</a> to your new account.": "Mit deinem neuen Konto <a>anmelden</a>."
 }
