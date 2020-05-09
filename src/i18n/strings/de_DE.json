@@ -2164,5 +2164,8 @@
     "Use this session to verify your new one, granting it access to encrypted messages:": "Verwende diese Sitzung, um deine neue Sitzung zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren:",
     "If you didn’t sign in to this session, your account may be compromised.": "Wenn du dich nicht bei dieser Sitzung angemeldet hast, ist dein Konto möglicherweise gefährdet.",
     "This wasn't me": "Das war ich nicht",
-    "Please fill why you're reporting.": "Bitte gib an, weshalb du Bericht erstattest."
+    "Please fill why you're reporting.": "Bitte gib an, weshalb du einen Fehler meldest.",
+    "Automatically invite users": "Benutzer automatisch einladen",
+    "Upgrade private room": "Privaten Raum hochstufen",
+    "Upgrade public room": "Öffentlichen Raum hochstufen"
 }
