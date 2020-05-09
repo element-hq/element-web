@@ -2168,5 +2168,10 @@
     "Automatically invite users": "Benutzer automatisch einladen",
     "Upgrade private room": "Privaten Raum hochstufen",
     "Upgrade public room": "Öffentlichen Raum hochstufen",
-    "This usually only affects how the room is processed on the server. If you're having problems with your Riot, please <a>report a bug</a>.": "Dies wirkt sich normalerweise nur darauf aus, wie der Raum auf dem Server verarbeitet wird. Wenn du Probleme mit deinem Riot hast, <a>melde bitte einen Bug</a>."
+    "This usually only affects how the room is processed on the server. If you're having problems with your Riot, please <a>report a bug</a>.": "Dies wirkt sich normalerweise nur darauf aus, wie der Raum auf dem Server verarbeitet wird. Wenn du Probleme mit deinem Riot hast, <a>melde bitte einen Bug</a>.",
+    "You'll upgrade this room from <oldVersion /> to <newVersion />.": "Du wirst diesen Raum von <oldVersion /> zu <newVersion /> aktualisieren.",
+    "Missing session data": "Fehlende Sitzungsdaten",
+    "Your browser likely removed this data when running low on disk space.": "Dein Browser hat diese Daten wahrscheinlich entfernt als der Festplattenspeicher knapp wurde.",
+    "Integration Manager": " Integrationsverwaltung",
+    "Find others by phone or email": "Finde andere per Telefon oder E-Mail"
 }
