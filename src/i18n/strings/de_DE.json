@@ -2293,5 +2293,8 @@
     "Failed to re-authenticate": "Erneute Authentifizierung fehlgeschlagen",
     "Command Autocomplete": "Auto-Vervollständigung aktivieren",
     "Community Autocomplete": "Community-Auto-Vervollständigung",
-    "DuckDuckGo Results": "DuckDuckGo Resultate"
+    "DuckDuckGo Results": "DuckDuckGo Ergebnisse",
+    "Great! This recovery passphrase looks strong enough.": "Super! Diese Wiederherstellungspassphrase sieht stark genug aus.",
+    "Enter a recovery passphrase": "Gib eine Wiederherstellungspassphrase ein",
+    "Back up encrypted message keys": "Sichere die Verschlüsselungsschlüssel"
 }
