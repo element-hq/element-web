@@ -2248,5 +2248,5 @@
     "Unable to revoke sharing for phone number": "Widerrufen der geteilten Telefonnummer nicht möglich",
     "Unable to share phone number": "Teilen der Telefonnummer nicht möglich",
     "%(severalUsers)smade no changes %(count)s times|other": "%(severalUsers)s haben %(count)s mal nichts geändert",
-    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Das Löschen von Cross-Signing-Schlüsseln ist dauerhaft. Jede/r, mit dem du dich verifiziert hast, sieht Sicherheitswarnungen. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du ein Cross-Signing durchführen kannst."
+    "Deleting cross-signing keys is permanent. Anyone you have verified with will see security alerts. You almost certainly don't want to do this, unless you've lost every device you can cross-sign from.": "Das Löschen von Cross-Signing-Schlüsseln ist dauerhaft. Jeder, mit dem du dich verifiziert hast, bekommt Sicherheitswarnungen angezeigt. Du möchtest dies mit ziemlicher Sicherheit nicht tun, es sei denn, du hast jedes Gerät verloren, von dem aus du ein Cross-Signing durchführen kannst."
 }
