@@ -2256,5 +2256,16 @@
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Verifiziere dieses Gerät und es wird es als vertrauenswürdig markiert. Benutzer, die sich bei dir verifiziert haben, werden diesem Gerät auch vertrauen.",
     "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "Dein Riot erlaubt dir nicht, eine Integrationsverwaltung zu verwenden, um dies zu tun. Bitte kontaktiere einen Administrator.",
     "We couldn't create your DM. Please check the users you want to invite and try again.": "Wir konnten deine Direktnachricht nicht erstellen. Bitte überprüfe den Benutzer, den du einladen möchtest, und versuche es erneut.",
-    "We couldn't invite those users. Please check the users you want to invite and try again.": "Wir konnten diese Nutzer!nnen nicht einladen. Bitte überprüfe diese und versuche es erneut."
+    "We couldn't invite those users. Please check the users you want to invite and try again.": "Wir konnten diese Benutzer nicht einladen. Bitte überprüfe sie und versuche es erneut.",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Starte eine Unterhaltung mit jemandem indem du seinen Namen, Benutzernamen (z.B. <userId/>) oder E-Mail-Adresse eingibst.",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Lade jemanden mit seinem Namen, Benutzernamen (z.B. <userId/>) oder E-Mail-Adresse ein oder <a>teile diesen Raum</a>.",
+    "Riot encountered an error during upload of:": "Es trat ein Fehler auf beim Hochladen von:",
+    "Upload completed": "Hochladen abgeschlossen",
+    "Cancelled signature upload": "Hochladen der Signatur abgebrochen",
+    "Unable to upload": "Hochladen nicht möglich",
+    "Signature upload success": "Signatur erfolgreich hochgeladen",
+    "Signature upload failed": "Hochladen der Signatur fehlgeschlagen",
+    "Confirm by comparing the following with the User Settings in your other session:": "Bestätige indem du das folgende mit deinen Benutzereinstellungen in deiner anderen Sitzung vergleichst:",
+    "Confirm this user's session by comparing the following with their User Settings:": "Bestätige die Sitzung dieses Benutzers indem du das folgende mit seinen Benutzereinstellungen vergleichst:",
+    "If they don't match, the security of your communication may be compromised.": "Wenn sie nicht übereinstimmen kann die Sicherheit eurer Kommunikation kompromittiert sein."
 }
