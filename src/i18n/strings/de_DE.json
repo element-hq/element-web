@@ -2291,5 +2291,5 @@
     "Use Recovery Passphrase or Key": "Benutze deine Wiederherstellungspassphrase oder den Wiederherstellungsschlüssel",
     "Failed to re-authenticate due to a homeserver problem": "Erneute Authentifizierung aufgrund eines Problems im Heimserver fehlgeschlagen",
     "Failed to re-authenticate": "Erneute Authentifizierung fehlgeschlagen",
-    "Command Autocomplete": "Auto-Vervollständigung anordnen"
+    "Command Autocomplete": "Auto-Vervollständigung aktivieren"
 }
