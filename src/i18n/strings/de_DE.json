@@ -2324,5 +2324,14 @@
     "Toggle video on/off": "Schalte Video an/aus",
     "Jump to room search": "Springe zur Raumsuche",
     "Close dialog or context menu": "Schließe Dialog oder Kontextmenü",
-    "Cancel autocomplete": "Deaktiviere Auto-Vervollständigung"
+    "Cancel autocomplete": "Deaktiviere Auto-Vervollständigung",
+    "Unable to revoke sharing for email address": "Das Teilen der E-Mail-Adresse kann nicht widerrufen werden",
+    "Unable to validate homeserver/identity server": "Heimserver/Identitätsserver nicht validierbar",
+    "Without completing security on this session, it won’t have access to encrypted messages.": "Ohne Abschluss der Sicherungseinrichtung in dieser Sitzung hat sie keinen Zugriff auf verschlüsselte Nachrichten.",
+    "Disable": "Deaktivieren",
+    "Not currently indexing messages for any room.": "Derzeit werden keine Nachrichten für Räume indiziert.",
+    "Space used:": "Speicherplatzbedarf:",
+    "Indexed messages:": "Indizierte Nachrichten:",
+    "Indexed rooms:": "Indizierte Räume:",
+    "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s von %(totalRooms)s"
 }
