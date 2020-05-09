@@ -2156,5 +2156,10 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Leertaste",
-    "End": "Ende"
+    "End": "Ende",
+    "Enable 'Manage Integrations' in Settings to do this.": "Aktiviere hierzu in den Einstellungen \"Integrationen verwalten\".",
+    "The internet connection either session is using": "Die Internetverbindung, die eine der beiden Sitzung verwendet",
+    "We recommend you change your password and recovery key in Settings immediately": "Wir empfehlen, dein Passwort und deine Wiederherstellungsschlüssel sofort in den Einstellungen zu ändern",
+    "New session": "Neue Sitzung",
+    "Use this session to verify your new one, granting it access to encrypted messages:": "Verwende diese Sitzung, um deine neue zu verifizieren und ihr Zugriff auf verschlüsselte Nachrichten zu gewähren:"
 }
