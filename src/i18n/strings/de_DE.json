@@ -2193,5 +2193,13 @@
     "Reload": "Neu laden",
     "Take picture": "Foto machen",
     "User Status": "Benutzerstatus",
-    "Country Dropdown": "Landauswahl"
+    "Country Dropdown": "Landauswahl",
+    "If you've forgotten your recovery key you can <button>set up new recovery options</button>.": "Wenn du deinen Wiederherstellungsschlüssel vergessen hast, kannst du <button>neue Wiederherstellungsoptionen einrichten</button>.",
+    "Recovery key mismatch": "Nicht übereinstimmende Wiederherstellungsschlüssel",
+    "Incorrect recovery passphrase": "Falsche Wiederherstellungspassphrase",
+    "If you've forgotten your recovery key you can <button>set up new recovery options</button>": "Wenn du deine Wiederherstellungsschlüssel vergessen hast, kannst du <button>neue Wiederherstellungsoptionen einrichten</button>",
+    "Resend edit": "Bearbeitung erneut senden",
+    "Resend %(unsentCount)s reaction(s)": "%(unsentCount)s Reaktion(en) erneut senden",
+    "Resend removal": "Entfernen erneut senden",
+    "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Fehlender öffentlicher Captcha-Schlüssel in der Heimserver-Konfiguration. Bitte melde dies deiner Heimserver-Administration."
 }
