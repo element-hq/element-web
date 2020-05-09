@@ -2167,5 +2167,6 @@
     "Please fill why you're reporting.": "Bitte gib an, weshalb du einen Fehler meldest.",
     "Automatically invite users": "Benutzer automatisch einladen",
     "Upgrade private room": "Privaten Raum hochstufen",
-    "Upgrade public room": "Öffentlichen Raum hochstufen"
+    "Upgrade public room": "Öffentlichen Raum hochstufen",
+    "This usually only affects how the room is processed on the server. If you're having problems with your Riot, please <a>report a bug</a>.": "Dies wirkt sich normalerweise nur darauf aus, wie der Raum auf dem Server verarbeitet wird. Wenn du Probleme mit deinem Riot hast, bitte <a>melde einen Bug</a>."
 }
