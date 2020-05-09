@@ -2255,5 +2255,6 @@
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Verifiziere dieses Gerät, um es als vertrauenswürdig zu markieren. Das Vertrauen in dieses Gerät gibt dir und anderen Benutzern zusätzliche Sicherheit, wenn ihr Ende-zu-Ende verschlüsselte Nachrichten verwendet.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Verifiziere dieses Gerät und es wird es als vertrauenswürdig markiert. Benutzer, die sich bei dir verifiziert haben, werden diesem Gerät auch vertrauen.",
     "Your Riot doesn't allow you to use an Integration Manager to do this. Please contact an admin.": "Dein Riot erlaubt dir nicht, eine Integrationsverwaltung zu verwenden, um dies zu tun. Bitte kontaktiere einen Administrator.",
-    "We couldn't create your DM. Please check the users you want to invite and try again.": "Wir konnten deine Direktnachricht nicht erstellen. Bitte überprüfe den Benutzer, den du einladen möchtest, und versuche es erneut."
+    "We couldn't create your DM. Please check the users you want to invite and try again.": "Wir konnten deine Direktnachricht nicht erstellen. Bitte überprüfe den Benutzer, den du einladen möchtest, und versuche es erneut.",
+    "We couldn't invite those users. Please check the users you want to invite and try again.": "Wir konnten diese Nutzer!nnen nicht einladen. Bitte überprüfe diese und versuche es erneut."
 }
