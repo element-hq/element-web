@@ -2296,5 +2296,13 @@
     "DuckDuckGo Results": "DuckDuckGo Ergebnisse",
     "Great! This recovery passphrase looks strong enough.": "Super! Diese Wiederherstellungspassphrase sieht stark genug aus.",
     "Enter a recovery passphrase": "Gib eine Wiederherstellungspassphrase ein",
-    "Back up encrypted message keys": "Sichere die Verschlüsselungsschlüssel"
+    "Back up encrypted message keys": "Sichere die Verschlüsselungsschlüssel",
+    "Emoji Autocomplete": "Emoji-Auto-Vervollständigung",
+    "Room Autocomplete": "Raum-Auto-Vervollständigung",
+    "User Autocomplete": "Nutzer-Auto-Vervollständigung",
+    "Restore your key backup to upgrade your encryption": "Schlüsselsicherung wiederherstellen, um deine Verschlüsselung zu aktualisieren",
+    "Restore": "Wiederherstellen",
+    "Your recovery key has been <b>copied to your clipboard</b>, paste it to:": "Dein Wiederherstellungsschlüssel wurde <b>in die Zwischenablage kopiert</b>. Füge ihn ein in:",
+    "Your recovery key is in your <b>Downloads</b> folder.": "Dein Wiederherstellungsschlüssel ist in deinem <b>Download-Ordner</b>.",
+    "You can now verify your other devices, and other users to keep your chats safe.": "Du kannst jetzt deine anderen Geräte und andere Nutzer!nnen verifizieren, um deine Chats zu schützen."
 }
