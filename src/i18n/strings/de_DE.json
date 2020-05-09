@@ -2310,5 +2310,8 @@
     "Unable to set up secret storage": "Sicherer Speicher kann nicht eingerichtet werden",
     "Enter a recovery passphrase...": "Gib eine Wiederherstellungspassphrase ein...",
     "Repeat your recovery passphrase...": "Gib die Wiederherstellungspassphrase erneut ein...",
-    "Secure your backup with a recovery passphrase": "Verschlüssele deine Sicherung mit einer Wiederherstellungspassphrase"
+    "Secure your backup with a recovery passphrase": "Verschlüssele deine Sicherung mit einer Wiederherstellungspassphrase",
+    "Create key backup": "Schlüsselsicherung erstellen",
+    "This session is encrypting history using the new recovery method.": "Diese Sitzung verschlüsselt den Verlauf mit der neuen Wiederherstellungsmethode.",
+    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "Diese Sitzung hat festgestellt, dass deine Wiederherstellungspassphrase und dein Schlüssel für gesicherte Nachrichten entfernt wurden."
 }
