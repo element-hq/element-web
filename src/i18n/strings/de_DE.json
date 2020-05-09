@@ -2313,5 +2313,16 @@
     "Secure your backup with a recovery passphrase": "Verschlüssele deine Sicherung mit einer Wiederherstellungspassphrase",
     "Create key backup": "Schlüsselsicherung erstellen",
     "This session is encrypting history using the new recovery method.": "Diese Sitzung verschlüsselt den Verlauf mit der neuen Wiederherstellungsmethode.",
-    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "Diese Sitzung hat festgestellt, dass deine Wiederherstellungspassphrase und dein Schlüssel für gesicherte Nachrichten entfernt wurden."
+    "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "Diese Sitzung hat festgestellt, dass deine Wiederherstellungspassphrase und dein Schlüssel für sichere Nachrichten entfernt wurden.",
+    "Currently indexing: %(currentRoom)s": "Indiziere: %(currentRoom)s",
+    "Navigation": "Navigation",
+    "Calls": "Anrufe",
+    "Room List": "Raumliste",
+    "Autocomplete": "Auto-Vervollständigung",
+    "Alt": "Alt",
+    "Toggle microphone mute": "Schalte Mikrophon stumm",
+    "Toggle video on/off": "Schalte Video an/aus",
+    "Jump to room search": "Springe zur Raumsuche",
+    "Close dialog or context menu": "Schließe Dialog oder Kontextmenü",
+    "Cancel autocomplete": "Deaktiviere Auto-Vervollständigung"
 }
