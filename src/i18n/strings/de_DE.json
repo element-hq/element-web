@@ -2173,5 +2173,8 @@
     "Missing session data": "Fehlende Sitzungsdaten",
     "Your browser likely removed this data when running low on disk space.": "Dein Browser hat diese Daten wahrscheinlich entfernt als der Festplattenspeicher knapp wurde.",
     "Integration Manager": " Integrationsverwaltung",
-    "Find others by phone or email": "Finde Andere per Telefon oder E-Mail"
+    "Find others by phone or email": "Finde Andere per Telefon oder E-Mail",
+    "Be found by phone or email": "Sei per Telefon oder E-Mail auffindbar",
+    "Upload files (%(current)s of %(total)s)": "Dateien hochladen (%(current)s von %(total)s)",
+    "This file is <b>too large</b> to upload. The file size limit is %(limit)s but this file is %(sizeOfThisFile)s.": " Die Datei ist <b>zu groß</b>, um hochgeladen zu werden. Das Dateigrößenmaximum ist %(limit)s, aber diese Datei ist %(sizeOfThisFile)s."
 }
