@@ -2184,5 +2184,14 @@
     "Upload %(count)s other files|other": "%(count)s andere Dateien hochladen",
     "Upload %(count)s other files|one": "%(count)s andere Datei hochladen",
     "A widget would like to verify your identity": "Ein Widget möchte deine Identität verifizieren",
-    "Remember my selection for this widget": "Erinnere meine Auswahl für dieses Widget"
+    "Remember my selection for this widget": "Speichere meine Auswahl für dieses Widget",
+    "Restoring keys from backup": "Schlüssel aus der Sicherung wiederherstellen",
+    "Fetching keys from server...": "Lade Schlüssel vom Server...",
+    "%(completed)s of %(total)s keys restored": "%(completed)s von %(total)s Schlüsseln wiederhergestellt",
+    "Keys restored": "Schlüssel wiederhergestellt",
+    "Successfully restored %(sessionCount)s keys": "%(sessionCount)s Schlüssel erfolgreich wiederhergestellt",
+    "Reload": "Neu laden",
+    "Take picture": "Foto machen",
+    "User Status": "Benutzerstatus",
+    "Country Dropdown": "Landauswahl"
 }
