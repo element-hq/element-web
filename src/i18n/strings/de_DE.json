@@ -2304,5 +2304,8 @@
     "Restore": "Wiederherstellen",
     "Your recovery key has been <b>copied to your clipboard</b>, paste it to:": "Dein Wiederherstellungsschlüssel wurde <b>in die Zwischenablage kopiert</b>. Füge ihn ein in:",
     "Your recovery key is in your <b>Downloads</b> folder.": "Dein Wiederherstellungsschlüssel ist in deinem <b>Download-Ordner</b>.",
-    "You can now verify your other devices, and other users to keep your chats safe.": "Du kannst jetzt deine anderen Geräte und andere Benutzer verifizieren, um deine Chats zu schützen."
+    "You can now verify your other devices, and other users to keep your chats safe.": "Du kannst jetzt deine anderen Geräte und andere Benutzer verifizieren, um deine Chats zu schützen.",
+    "Upgrade your encryption": "Deine Verschlüsselung aktualisieren",
+    "You're done!": "Du bist fertig!",
+    "Unable to set up secret storage": "Geheimer Speicher kann nicht eingerichtet werden"
 }
