@@ -1831,5 +1831,5 @@
     "You can still join it because this is a public room.": "Todavía puedes unirte, ya que es una sala pública.",
     "Join the discussion": "Unirse a la discusión",
     "Do you want to chat with %(user)s?": "¿Quieres chatear con %(user)s?",
-    "Do you want to join %(roomName)s?": "¿Quieres unirte a %(roomName)s?"
+    "Do you want to join %(roomName)s?": "¿Quieres unirte a la sala %(roomName)s?"
 }
