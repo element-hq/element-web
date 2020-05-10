@@ -1820,5 +1820,10 @@
     "Rejecting invite …": "Rechazando invitación ...",
     "Join the conversation with an account": "Unirse a la conversación con una cuenta",
     "Sign Up": "Registrarse",
-    "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s te ha explusado de la sala %(roomName)s"
+    "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s te ha explusado de la sala %(roomName)s",
+    "Reason: %(reason)s": "Razón: %(reason)s",
+    "Forget this room": "Olvidar esta sala",
+    "Re-join": "Re-entrar",
+    "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s te ha expulsado de %(roomName)s",
+    "Something went wrong with your invite to %(roomName)s": "Algo ha ido mal con tu invitación a  %(roomName)s"
 }
