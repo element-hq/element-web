@@ -1820,5 +1820,5 @@
     "Rejecting invite …": "Rechazando invitación ...",
     "Join the conversation with an account": "Unirse a la conversación con una cuenta",
     "Sign Up": "Registrarse",
-    "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s te ha explusado de %(roomName)s"
+    "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s te ha explusado de la sala %(roomName)s"
 }
