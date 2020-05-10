@@ -2344,5 +2344,11 @@
     "If you've forgotten your recovery passphrase you can <button1>use your recovery key</button1> or <button2>set up new recovery options</button2>.": "Wenn du deine Wiederherstellungspassphrase vergessen hast kannst du <button1>deinen Wiederherstellungsschlüssel verwenden</button1> oder <button2>neue Wiederherstellungsoptionen anlegen</button2>.",
     "Self-verification request": "Selbstverifikationsanfrage",
     "or another cross-signing capable Matrix client": "oder einen anderen Matrix Client der Cross-signing fähig ist",
-    "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot speichert verschlüsselte Nachrichten sicher lokal zwischen, damit sie in den Suchergebnissen angezeigt werden:"
+    "Riot is securely caching encrypted messages locally for them to appear in search results:": "Riot verwendet einen sicheren Zwischenspeicher für verschlüsselte Nachrichten, damit sie in den Suchergebnissen angezeigt werden:",
+    "Access your secure message history and your cross-signing identity for verifying other sessions by entering your recovery passphrase.": "Erhalte Zugriff auf deine verschlüsselten Nachrichten und deine Cross-Signing Identität um andere Sitzungen zu verifizieren indem du deine Wiederherstellungspassphrase eingibst.",
+    "Liberate your communication": "Liberate your communication",
+    "Message downloading sleep time(ms)": "Wartezeit zwischen dem Herunterladen von Nachrichten (ms)",
+    "Navigate recent messages to edit": "Letzte Nachrichten zur Bearbeitung ansehen",
+    "Jump to start/end of the composer": "Springe zum Anfang/Ende der Nachrichteneingabe",
+    "Navigate composer history": "Verlauf der Nachrichteneingabe durchsuchen"
 }
