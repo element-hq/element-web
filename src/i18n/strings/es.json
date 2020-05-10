@@ -1831,5 +1831,8 @@
     "You can still join it because this is a public room.": "Todavía puedes unirte, ya que es una sala pública.",
     "Join the discussion": "Unirse a la discusión",
     "Do you want to chat with %(user)s?": "¿Quieres chatear con %(user)s?",
-    "Do you want to join %(roomName)s?": "¿Quieres unirte a la sala %(roomName)s?"
+    "Do you want to join %(roomName)s?": "¿Quieres unirte a la sala %(roomName)s?",
+    "<userName/> invited you": "<userName/> te ha invitado",
+    "You're previewing %(roomName)s. Want to join it?": "Estás previsualizando %(roomName)s. ¿Quieres unirte?",
+    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s no se puede previsualizar. ¿Quieres unirte?"
 }
