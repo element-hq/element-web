@@ -1826,5 +1826,6 @@
     "Re-join": "Re-entrar",
     "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s te ha expulsado de %(roomName)s",
     "Something went wrong with your invite to %(roomName)s": "Algo salió a mal invitando a %(roomName)s",
-    "You can only join it with a working invite.": "Sólo puedes unirte con una invitación que funciona."
+    "You can only join it with a working invite.": "Sólo puedes unirte con una invitación que funciona.",
+    "Try to join anyway": "Unirse de todas formas"
 }
