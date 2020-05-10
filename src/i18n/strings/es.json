@@ -1813,5 +1813,12 @@
     "a device cross-signing signature": "una firma para la  firma cruzada de dispositivos",
     "a key signature": "un firma de clave",
     "Riot encountered an error during upload of:": "Riot encontró un error durante la carga de:",
-    "End": "Fin"
+    "End": "Fin",
+    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Una vez habilitado, el cifrado de una sala no puede deshabilitarse. Los mensajes enviados a una sala cifrada no pueden ser vistos por el servidor, sólo lo verán los participantes de la sala. Habilitar el cifrado puede hacer que muchos bots y bridges no funcionen correctamente. <a>Aprende más de cifrado</a>",
+    "Joining room …": "Uniéndose a sala ...",
+    "Loading …": "Cargando ...",
+    "Rejecting invite …": "Rechazando invitación ...",
+    "Join the conversation with an account": "Unirse a la conversación con una cuenta",
+    "Sign Up": "Registrarse",
+    "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s te ha explusado de %(roomName)s"
 }
