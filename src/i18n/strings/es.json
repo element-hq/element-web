@@ -1836,5 +1836,6 @@
     "You're previewing %(roomName)s. Want to join it?": "Estás previsualizando %(roomName)s. ¿Quieres unirte?",
     "%(roomName)s can't be previewed. Do you want to join it?": "La sala %(roomName)s no permite previsualización. ¿Quieres unirte?",
     "This room doesn't exist. Are you sure you're at the right place?": "Esta sala no existe. ¿Está seguro de estar en el lugar correcto?",
-    "Try again later, or ask a room admin to check if you have access.": "Inténtalo más tarde, o pide que un administrador de la sala compruebe si tienes acceso."
+    "Try again later, or ask a room admin to check if you have access.": "Inténtalo más tarde, o pide que un administrador de la sala compruebe si tienes acceso.",
+    "%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "%(errcode)s fue devuelto al intentar acceder a la sala. Si crees que no deberías ver el mensaje de error, por favor <issueLink>comunícanos el bug</issueLink>."
 }
