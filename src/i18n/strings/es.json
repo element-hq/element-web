@@ -1834,5 +1834,6 @@
     "Do you want to join %(roomName)s?": "¿Quieres unirte a la sala %(roomName)s?",
     "<userName/> invited you": "<userName/> te ha invitado",
     "You're previewing %(roomName)s. Want to join it?": "Estás previsualizando %(roomName)s. ¿Quieres unirte?",
-    "%(roomName)s can't be previewed. Do you want to join it?": "La sala %(roomName)s no permite previsualización. ¿Quieres unirte?"
+    "%(roomName)s can't be previewed. Do you want to join it?": "La sala %(roomName)s no permite previsualización. ¿Quieres unirte?",
+    "This room doesn't exist. Are you sure you're at the right place?": "Esta sala no existe. ¿Está seguro de que la sala es correcta?"
 }
