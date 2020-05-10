@@ -1828,5 +1828,5 @@
     "Something went wrong with your invite to %(roomName)s": "Algo salió a mal invitando a %(roomName)s",
     "You can only join it with a working invite.": "Sólo puedes unirte con una invitación que funciona.",
     "Try to join anyway": "Intentar unirse de todas formas",
-    "You can still join it because this is a public room.": "Puedes unirte porque es una sala pública."
+    "You can still join it because this is a public room.": "Todavía puedes unirte, ya que es una sala pública."
 }
