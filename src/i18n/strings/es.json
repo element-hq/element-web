@@ -1836,5 +1836,5 @@
     "You're previewing %(roomName)s. Want to join it?": "Estás previsualizando %(roomName)s. ¿Quieres unirte?",
     "%(roomName)s can't be previewed. Do you want to join it?": "La sala %(roomName)s no permite previsualización. ¿Quieres unirte?",
     "This room doesn't exist. Are you sure you're at the right place?": "Esta sala no existe. ¿Está seguro de estar en el lugar correcto?",
-    "Try again later, or ask a room admin to check if you have access.": "Inténtalo más tarde, o pide a algún administrador de la sala que compruebe si tienes acceso."
+    "Try again later, or ask a room admin to check if you have access.": "Inténtalo más tarde, o pide que un administrador de la sala compruebe si tienes acceso."
 }
