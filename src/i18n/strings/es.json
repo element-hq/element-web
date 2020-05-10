@@ -1825,5 +1825,5 @@
     "Forget this room": "Olvidar esta sala",
     "Re-join": "Re-entrar",
     "You were banned from %(roomName)s by %(memberName)s": "%(memberName)s te ha expulsado de %(roomName)s",
-    "Something went wrong with your invite to %(roomName)s": "Algo ha ido mal con tu invitación a  %(roomName)s"
+    "Something went wrong with your invite to %(roomName)s": "Algo salió a mal invitando a %(roomName)s"
 }
