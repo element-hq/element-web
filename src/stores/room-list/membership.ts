@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {Room} from "matrix-js-sdk/src/models/room";
-import {Event} from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 /**
  * Approximation of a membership status for a given room.

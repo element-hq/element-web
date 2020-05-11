@@ -19,7 +19,7 @@ import { SortAlgorithm } from "../models";
 import { ManualAlgorithm } from "./ManualAlgorithm";
 import { IAlgorithm } from "./IAlgorithm";
 import { TagID } from "../../models";
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 const ALGORITHM_INSTANCES: { [algorithm in SortAlgorithm]: IAlgorithm } = {
     [SortAlgorithm.Recent]: new ChaoticAlgorithm(),

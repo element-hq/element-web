@@ -21,11 +21,10 @@ import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import { Algorithm } from "./algorithms/list_ordering/Algorithm";
 import TagOrderStore from "../TagOrderStore";
-import { getListAlgorithmInstance } from "./algorithms/list_ordering";
 import { AsyncStore } from "../AsyncStore";
-import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
+import { getListAlgorithmInstance } from "./algorithms/list_ordering";
 
 interface IState {
     tagsEnabled?: boolean;

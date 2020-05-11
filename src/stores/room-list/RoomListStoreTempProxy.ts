@@ -14,13 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TagID } from "./models";
-import { Room } from "matrix-js-sdk/src/models/room";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore from "./RoomListStore2";
 import OldRoomListStore from "../RoomListStore";
-import { ITagMap } from "./algorithms/models";
 import { UPDATE_EVENT } from "../AsyncStore";
+import { ITagMap } from "./algorithms/models";
 
 /**
  * Temporary RoomListStore proxy. Should be replaced with RoomListStore2 when
