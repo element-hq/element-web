@@ -1588,5 +1588,22 @@
     "Toggle Bold": "Przełącz pogrubienie",
     "Toggle Italics": "Przełącz kursywę",
     "Toggle Quote": "Przełącz cytowanie",
-    "Cancel autocomplete": "Anuluj autouzupełnienie"
+    "Cancel autocomplete": "Anuluj autouzupełnienie",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
+    "Confirm adding email": "Potwierdź dodanie e-maila",
+    "Click the button below to confirm adding this email address.": "Naciśnij przycisk poniżej aby zatwierdzić dodawanie adresu e-mail.",
+    "Confirm adding phone number": "Potwierdź dodanie numeru telefonu",
+    "Click the button below to confirm adding this phone number.": "Naciśnij przycisk poniżej aby potwierdzić dodanie tego numeru telefonu.",
+    "The version of Riot": "Wersja Riota",
+    "Your user agent": "Twój user agent",
+    "The information being sent to us to help make Riot better includes:": "Informacje przesyłane do nas w celu poprawy jakości Riota zawierają:",
+    "Sends a message as html, without interpreting it as markdown": "Wysyła wiadomość w formacie html, bez interpretowania jej jako markdown",
+    "Error upgrading room": "Błąd podczas aktualizacji pokoju",
+    "Double check that your server supports the room version chosen and try again.": "Sprawdź ponownie czy Twój serwer wspiera wybraną wersję pokoju i spróbuj ponownie.",
+    "Could not find user in room": "Nie znaleziono użytkownika w pokoju",
+    "Session already verified!": "Sesja już zweryfikowana!",
+    "WARNING: Session already verified, but keys do NOT MATCH!": "OSTRZEŻENIE: Sesja już zweryfikowana, ale klucze do siebie NIE PASUJĄ!",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "OSTRZEŻENIE: WERYFIKACJA KLUCZY NIE POWIODŁA SIĘ! Klucz podpisujący dla %(userId)s oraz sesji %(deviceId)s to \"%(fprint)s\", nie pasuje on do podanego klucza \"%(fingerprint)s\". To może oznaczać że Twoja komunikacja jest przechwytywana!",
+    "Displays information about a user": "Pokazuje informacje na temat użytkownika",
+    "Send a bug report with logs": "Wyślij raport błędu z logami"
 }

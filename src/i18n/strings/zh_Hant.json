@@ -2416,5 +2416,10 @@
     "Fetching keys from server...": "正在從伺服器擷取金鑰……",
     "%(completed)s of %(total)s keys restored": "%(total)s 中的 %(completed)s 金鑰已復原",
     "Keys restored": "金鑰已復原",
-    "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰"
+    "Successfully restored %(sessionCount)s keys": "成功復原 %(sessionCount)s 金鑰",
+    "You signed in to a new session without verifying it:": "您已登入新的工作階段但未驗證：",
+    "Verify your other session using one of the options below.": "使用下方的其中一個選項來驗證您其他的工作階段。",
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）、電子郵件地址或<a>分享此聊天室</a>來邀請他們。",
+    "Message deleted": "訊息已刪除",
+    "Message deleted by %(name)s": "訊息已被 %(name)s 刪除"
 }
