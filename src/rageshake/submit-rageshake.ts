@@ -101,15 +101,15 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     if (client) {
         body.append('user_id', client.credentials.userId);
         body.append('device_id', client.deviceId);
-    }
 
-    if (client.isCryptoEnabled()) {
-        const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
-        if (client.getDeviceCurve25519Key) {
-            keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+        if (client.isCryptoEnabled()) {
+            const keys = [`ed25519:${client.getDeviceEd25519Key()}`];
+            if (client.getDeviceCurve25519Key) {
+                keys.push(`curve25519:${client.getDeviceCurve25519Key()}`);
+            }
+            body.append('device_keys', keys.join(', '));
+            body.append('cross_signing_key', client.getCrossSigningId());
         }
-        body.append('device_keys', keys.join(', '));
-        body.append('cross_signing_key', client.getCrossSigningId());
     }
 
     if (opts.label) {
