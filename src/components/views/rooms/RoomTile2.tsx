@@ -24,6 +24,8 @@ import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
 import Tooltip from "../../views/elements/Tooltip";
+import dis from '../../../dispatcher';
+import { Key } from "../../../Keyboard";
 
 interface IProps {
     room: Room;
@@ -31,7 +33,6 @@ interface IProps {
     // TODO: Allow faslifying counts (for invites and stuff)
     // TODO: Transparency?
     // TODO: Incoming call?
-    // TODO: onClick
 }
 
 interface IState {
@@ -68,6 +69,16 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     private onTileMouseLeave = () => {
         this.setState({hover: false});
+    };
+
+    private onTileClick = (ev: React.KeyboardEvent) => {
+        dis.dispatch({
+            action: 'view_room',
+            // TODO: Support show_room_tile in new room list
+            show_room_tile: true, // make sure the room is visible in the list
+            room_id: this.props.room.roomId,
+            clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
+        });
     };
 
     public render(): React.ReactElement {
@@ -122,6 +133,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             className={classes}
                             onMouseEnter={this.onTileMouseEnter}
                             onMouseLeave={this.onTileMouseLeave}
+                            onClick={this.onTileClick}
                             role="treeitem"
                         >
                             <div className={avatarClasses}>
