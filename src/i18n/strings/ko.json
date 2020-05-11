@@ -9,7 +9,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s 용 %(browserName)s에서 연 %(appName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "화면 공유 전화를 걸려면 HTTPS를 사용해야 합니다.",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "분산되고, 암호화된 대화 &amp; [matrix]의 지원으로 협력",
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "당신의 Riot 설정은 유효하지 않은 JSON을 포함하고 있습니다. 문제를 수정한 후, 페이지를 다시 로드해 주세요.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot 설정이 올바르지 않은 JSON을 포함하고 있습니다. 문제를 해결한 후, 페이지를 새로고침하세요.",
     "The message from the parser is: %(message)s": "파서에서 온 메시지: %(message)s",
     "Invalid JSON": "잘못된 JSON",
     "Your Riot is misconfigured": "Riot이 잘못 설정됨",
@@ -21,5 +21,6 @@
     "Create Account": "계정 만들기",
     "Need help?": "도움이 필요합니까?",
     "Explore rooms": "방 검색",
-    "Room Directory": "방 목록"
+    "Room Directory": "방 목록",
+    "Unable to load config file: please refresh the page to try again.": "설정 파일을 불러오는 데 실패: 페이지를 새로고침한 후에 다시 시도해주세요."
 }
