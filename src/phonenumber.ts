@@ -636,6 +636,11 @@ export const COUNTRIES = [
         "prefix": "686",
     },
     {
+        "iso2": "XK",
+        "name": "Kosovo",
+        "prefix": "383",
+    },
+    {
         "iso2": "KW",
         "name": "Kuwait",
         "prefix": "965",
