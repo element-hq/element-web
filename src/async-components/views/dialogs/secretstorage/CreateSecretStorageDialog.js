@@ -236,12 +236,20 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         try {
             if (force) {
+                console.log("Forcing secret storage reset"); // log something so we can debug this later
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._recoveryKey,
-                    setupNewKeyBackup: true,
+                    setupNewKeyBackup: this.state.useKeyBackup,
                     setupNewSecretStorage: true,
                 });
+                if (!this.state.useKeyBackup && this.state.backupInfo) {
+                    // If the user is resetting their cross-signing keys and doesn't want
+                    // key backup (but had it enabled before), delete the key backup as it's
+                    // no longer valid.
+                    console.log("Deleting invalid key backup (secrets have been reset; key backup not requested)");
+                    await cli.deleteKeyBackupVersion(this.state.backupInfo.version);
+                }
             } else {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
