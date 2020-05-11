@@ -390,7 +390,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        return _t('Riot Desktop on %(platformName)s', { platformName: platformFriendlyName() });
+        return _t('Riot Desktop (%(platformName)s)', { platformName: platformFriendlyName() });
     }
 
     screenCaptureErrorString(): ?string {

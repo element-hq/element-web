@@ -23,5 +23,18 @@
     "The message from the parser is: %(message)s": "Грешката от парсъра е: %(message)s",
     "Invalid JSON": "Невалиден JSON",
     "Open user settings": "Отвори потребителските настройки",
-    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането"
+    "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането",
+    "Missing indexeddb worker script!": "Липсва indexdb worker скриптът!",
+    "Unable to load config file: please refresh the page to try again.": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
+    "Previous/next recently visited room or community": "Предишна/следваща наскоро-посетена стая или общност",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Неподдържан браузър",
+    "Your browser can't run Riot": "Браузърът ви не може да подкара Riot",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot използва напредничави браузър функции, които не се поддържат от сегашния ви браузър.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Инсталирайте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> или <safariLink>Safari</safariLink> за най-добра работа.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Може да продължите да използвате сегашния си браузър, но някои или всички функции може да се окажат неработещи, или пък външния вид на приложението да изглежда неправилен.",
+    "I understand the risks and wish to continue": "Разбирам рисковете и желая да продължа",
+    "Go to Riot.im": "Отиди на Riot.im",
+    "Failed to start": "Неуспешно стартиране"
 }
