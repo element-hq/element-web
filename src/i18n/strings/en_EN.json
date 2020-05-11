@@ -221,6 +221,8 @@
     "Send a bug report with logs": "Send a bug report with logs",
     "Logs sent": "Logs sent",
     "Thank you!": "Thank you!",
+    "Opens chat with the given user": "Opens chat with the given user",
+    "Sends a message to the given user": "Sends a message to the given user",
     "Displays action": "Displays action",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
