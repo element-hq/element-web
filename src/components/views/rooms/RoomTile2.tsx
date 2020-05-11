@@ -23,6 +23,7 @@ import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
+import Tooltip from "../../views/elements/Tooltip";
 
 interface IProps {
     room: Room;
@@ -34,6 +35,7 @@ interface IProps {
 }
 
 interface IState {
+    hover: boolean;
 }
 
 // TODO: Finish stub
@@ -51,6 +53,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     // TODO: isSelected for hover effects
     // TODO: Context menu
     // TODO: a11y
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            hover: false,
+        };
+    }
+
+    private onTileMouseEnter = () => {
+        this.setState({hover: true});
+    };
+
+    private onTileMouseLeave = () => {
+        this.setState({hover: false});
+    };
 
     public render(): React.ReactElement {
         // TODO: Collapsed state
@@ -86,6 +104,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile_badgeShown': false,
         });
 
+        let tooltip = null;
+        if (false) { // isCollapsed
+            if (this.state.hover) {
+                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto"/>
+            }
+        }
+
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTile}>
@@ -95,6 +120,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
                             className={classes}
+                            onMouseEnter={this.onTileMouseEnter}
+                            onMouseLeave={this.onTileMouseLeave}
                             role="treeitem"
                         >
                             <div className={avatarClasses}>
@@ -109,6 +136,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                                     </div>
                                 </div>
                             </div>
+                            {tooltip}
                         </AccessibleButton>
                     }
                 </RovingTabIndexWrapper>
