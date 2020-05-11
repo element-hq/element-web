@@ -993,7 +993,7 @@ export const Commands = [
         command: "msg",
         description: _td("Sends a message to the given user"),
         args: "<user-id> <message>",
-        runFn: function(roomId, args) {
+        runFn: function(_, args) {
             if (args) {
                 const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
                 if (matches) {
