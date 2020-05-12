@@ -36,6 +36,7 @@ const COUNTRY_CODE_REGEX = /^[A-Z]{2}$/;
 
 export const getEmojiFlag = (countryCode: string) => {
     if (!COUNTRY_CODE_REGEX.test(countryCode)) return '';
+    // Rip the country code out of the emoji and use that
     return String.fromCodePoint(...countryCode.split('').map(l => UNICODE_BASE + l.charCodeAt(0)));
 };
 
