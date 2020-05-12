@@ -143,7 +143,7 @@ export default class DeactivateAccountDialog extends React.Component {
                 this.setState({errStr: _t("Server did not return valid authentication information.")});
             }
         });
-    };
+    }
 
     render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
