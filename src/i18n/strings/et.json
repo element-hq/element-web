@@ -1026,5 +1026,18 @@
     "Ed25519 fingerprint": "Ed25519 sõrmejälg",
     "User ID": "Kasutajatunnus",
     "Algorithm": "Algoritm",
-    "unencrypted": "krüptimata"
+    "unencrypted": "krüptimata",
+    "Terms and Conditions": "Kasutustingimused",
+    "Logout": "Logi välja",
+    "Your Communities": "Sinu kogukonnad",
+    "Error whilst fetching joined communities": "Viga nende kogukondade laadimisel, millega sa oled liitunud",
+    "You have no visible notifications": "Sul ei ole nähtavaid teavitusi",
+    "Riot failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "Riot'il ei õnnestunud koduserverist laadida toetatud protokollide loendit. Toetamaks kolmandate osapoolte võrke võib koduserver olla liiga vana.",
+    "Riot failed to get the public room list.": "Riot'il ei õnnestunud laadida avalike jututubade loendit.",
+    "The homeserver may be unavailable or overloaded.": "Koduserver pole kas saadaval või on üle koormatud.",
+    "Room not found": "Jututuba ei leidunud",
+    "Preview": "Eelvaade",
+    "View": "Näita",
+    "Message not sent due to unknown sessions being present": "Sõnum on saatmata, sest jutuoas on tundmatud sessioonid",
+    "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "Sa ei saa saata ühtego sõnumit enne, kui oled läbi lugenud ja nõustunud <consentLink>meie kasutustingimustega</consentLink>."
 }
