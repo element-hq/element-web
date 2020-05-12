@@ -26,6 +26,10 @@ import RoomAvatar from "../../views/avatars/RoomAvatar";
 import Tooltip from "../../views/elements/Tooltip";
 import dis from '../../../dispatcher';
 import { Key } from "../../../Keyboard";
+import * as RoomNotifs from '../../../RoomNotifs';
+import { EffectiveMembership, getEffectiveMembership } from "../../../stores/room-list/membership";
+import * as Unread from '../../../Unread';
+import * as FormattingUtils from "../../../utils/FormattingUtils";
 
 interface IProps {
     room: Room;
@@ -35,7 +39,14 @@ interface IProps {
     // TODO: Incoming call?
 }
 
-interface IState {
+interface IBadgeState {
+    showBadge: boolean; // if numUnread > 0 && !showBadge -> bold room
+    numUnread: number; // used only if showBadge or showBadgeHighlight is true
+    showBadgeHighlight: boolean; // make the badge red
+    isInvite: boolean; // show a `!` instead of a number
+}
+
+interface IState extends IBadgeState {
     hover: boolean;
 }
 
@@ -60,6 +71,35 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
+
+            ...this.getBadgeState(),
+        };
+    }
+
+    public componentWillUnmount() {
+
+    }
+
+    private updateBadgeCount() {
+        this.setState({...this.getBadgeState()});
+    }
+
+    private getBadgeState(): IBadgeState {
+        // TODO: Make this code path faster
+        const highlightCount = RoomNotifs.getUnreadNotificationCount(this.props.room, 'highlight');
+        const numUnread = RoomNotifs.getUnreadNotificationCount(this.props.room);
+        const showBadge = Unread.doesRoomHaveUnreadMessages(this.props.room);
+        const myMembership = getEffectiveMembership(this.props.room.getMyMembership());
+        const isInvite = myMembership === EffectiveMembership.Invite;
+        const notifState = RoomNotifs.getRoomNotifsState(this.props.room.roomId);
+        const shouldShowNotifBadge = RoomNotifs.shouldShowNotifBadge(notifState);
+        const shouldShowHighlightBadge = RoomNotifs.shouldShowMentionBadge(notifState);
+
+        return {
+            showBadge: (showBadge && shouldShowNotifBadge) || isInvite,
+            numUnread,
+            showBadgeHighlight: (highlightCount > 0 && shouldShowHighlightBadge) || isInvite,
+            isInvite,
         };
     }
 
@@ -90,12 +130,12 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const classes = classNames({
             'mx_RoomTile': true,
             // 'mx_RoomTile_selected': this.state.selected,
-            // 'mx_RoomTile_unread': this.props.unread,
-            // 'mx_RoomTile_unreadNotify': notifBadges,
-            // 'mx_RoomTile_highlight': mentionBadges,
-            // 'mx_RoomTile_invited': isInvite,
+            'mx_RoomTile_unread': this.state.numUnread > 0,
+            'mx_RoomTile_unreadNotify': this.state.showBadge,
+            'mx_RoomTile_highlight': this.state.showBadgeHighlight,
+            'mx_RoomTile_invited': this.state.isInvite,
             // 'mx_RoomTile_menuDisplayed': isMenuDisplayed,
-            'mx_RoomTile_noBadges': true, // !badges
+            'mx_RoomTile_noBadges': !this.state.showBadge,
             // 'mx_RoomTile_transparent': this.props.transparent,
             // 'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
         });
@@ -104,6 +144,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile_avatar': true,
         });
 
+
+        let badge;
+        if (this.state.showBadge) {
+            const badgeClasses = classNames({
+                'mx_RoomTile_badge': true,
+                'mx_RoomTile_badgeButton': false, // this.state.badgeHover || isMenuDisplayed
+            });
+            const formattedCount = this.state.isInvite ? `!` : FormattingUtils.formatCount(this.state.numUnread);
+            badge = <div className={badgeClasses}>{formattedCount}</div>;
+        }
+
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
         if (typeof name !== 'string') name = '';
@@ -111,8 +162,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         const nameClasses = classNames({
             'mx_RoomTile_name': true,
-            'mx_RoomTile_invite': false,
-            'mx_RoomTile_badgeShown': false,
+            'mx_RoomTile_invite': this.state.isInvite,
+            'mx_RoomTile_badgeShown': this.state.showBadge,
         });
 
         let tooltip = null;
@@ -147,6 +198,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                                         {name}
                                     </div>
                                 </div>
+                                {badge}
                             </div>
                             {tooltip}
                         </AccessibleButton>
