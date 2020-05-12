@@ -365,6 +365,7 @@ export const Commands = [
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
+                hasCloseButton: true,
             });
             return success();
         },
