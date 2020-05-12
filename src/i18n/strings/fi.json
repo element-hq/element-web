@@ -2157,5 +2157,15 @@
     "Syncing...": "Synkronoidaan...",
     "Signing In...": "Kirjaudutaan sisään...",
     "If you've joined lots of rooms, this might take a while": "Jos olet liittynyt moniin huoneisiin, tässä voi kestää hetken",
-    "Use your other device to continue…": "Jatka toisella laitteellasi…"
+    "Use your other device to continue…": "Jatka toisella laitteellasi…",
+    "Click the button below to confirm adding this email address.": "Klikkaa alapuolella olevaa painiketta lisätäksesi tämän sähköpostiosoitteen.",
+    "Click the button below to confirm adding this phone number.": "Klikkaa alapuolella olevaa painiketta lisätäksesi tämän puhelinnumeron.",
+    "If you cancel now, you won't complete your operation.": "Jos peruutat, toimintoa ei suoriteta loppuun.",
+    "Review where you’re logged in": "Tarkasta missä olet sisäänkirjautuneena",
+    "New login. Was this you?": "Uusi sisäänkirjautuminen. Olitko se sinä?",
+    "%(name)s is requesting verification": "%(name)s pyytää varmennusta",
+    "Sends a message as html, without interpreting it as markdown": "Lähettää viestin HTML-muodossa, tulkitsematta sitä Markdowniksi",
+    "Please supply a widget URL or embed code": "Anna sovelman osoite tai upotettava koodinpätkä",
+    "You signed in to a new session without verifying it:": "Olet kirjautunut uuteen istuntoon varmentamatta sitä:",
+    "Verify your other session using one of the options below.": "Varmenna toinen istuntosi käyttämällä yhtä seuraavista tavoista."
 }

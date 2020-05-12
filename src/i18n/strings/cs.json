@@ -2237,5 +2237,14 @@
     "Waiting for you to accept on your other session…": "Čekáme na vaše přijetí v druhé relaci…",
     "Almost there! Is your other session showing the same shield?": "Téměř hotovo! Je vaše druhá relace také ověřená?",
     "Almost there! Is %(displayName)s showing the same shield?": "Téměř hotovo! Je relace %(displayName)s také ověřená?",
-    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ověřili jste %(deviceName)s (%(deviceId)s)!"
+    "You've successfully verified %(deviceName)s (%(deviceId)s)!": "Ověřili jste %(deviceName)s (%(deviceId)s)!",
+    "If you cancel now, you won't complete your operation.": "Pokud teď akci stornujete, nebudete jí moci dokončit.",
+    "Review where you’re logged in": "Zobrazit kde jste přihlášení",
+    "New login. Was this you?": "Nové přihlášní. Jste to vy?",
+    "%(name)s is requesting verification": "%(name)s žádá o ověření",
+    "Failed to set topic": "Nepovedlo se nastavit téma",
+    "Command failed": "Příkaz selhal",
+    "Could not find user in room": "Nepovedlo se najít uživatele v místnosti",
+    "Please supply a widget URL or embed code": "Zadejte prosím URL widgetu nebo jeho kód",
+    "Send a bug report with logs": "Zaslat hlášení o chybě"
 }
