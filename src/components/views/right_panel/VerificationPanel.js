@@ -227,9 +227,9 @@ export default class VerificationPanel extends React.PureComponent {
         if (request.isSelfVerification) {
             const device = this._getDevice();
             if (!device) {
-                // This shouldn't happen, although rageshake would indicate that it is: log a warn
-                // and leave the message slightly broken (avoid adding a translatable string for a
-                // case that shouldn't be happening).
+                // This can happen if the device is logged out while we're still showing verification
+                // UI for it.
+                // Leave the message slightly broken for this edge case (avoid adding a translatable string)
                 console.warn("Verified device we don't know about: " + this.props.request.channel.deviceId);
             }
             description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
