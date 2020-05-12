@@ -40,6 +40,7 @@ import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml } from "parse5";
 import sendBugReport from "./rageshake/submit-rageshake";
 import SdkConfig from "./SdkConfig";
+import { ensureDMExists } from "./createRoom";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -969,6 +970,52 @@ export const Commands = [
             );
         },
         category: CommandCategories.advanced,
+    }),
+    new Command({
+        command: "query",
+        description: _td("Opens chat with the given user"),
+        args: "<user-id>",
+        runFn: function(roomId, userId) {
+            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+                return reject(this.getUsage());
+            }
+
+            return success((async () => {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                });
+            })());
+        },
+        category: CommandCategories.actions,
+    }),
+    new Command({
+        command: "msg",
+        description: _td("Sends a message to the given user"),
+        args: "<user-id> <message>",
+        runFn: function(_, args) {
+            if (args) {
+                // matches the first whitespace delimited group and then the rest of the string
+                const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
+                if (matches) {
+                    const [userId, msg] = matches.slice(1);
+                    if (msg && userId && userId.startsWith("@") && userId.includes(":")) {
+                        return success((async () => {
+                            const cli = MatrixClientPeg.get();
+                            const roomId = await ensureDMExists(cli, userId);
+                            dis.dispatch({
+                                action: 'view_room',
+                                room_id: roomId,
+                            });
+                            cli.sendTextMessage(roomId, msg);
+                        })());
+                    }
+                }
+            }
+
+            return reject(this.getUsage());
+        },
+        category: CommandCategories.actions,
     }),
 
     // Command definitions for autocompletion ONLY:
