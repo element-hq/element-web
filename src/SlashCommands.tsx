@@ -995,6 +995,7 @@ export const Commands = [
         args: "<user-id> <message>",
         runFn: function(_, args) {
             if (args) {
+                // matches the first whitespace delimited group and then the rest of the string
                 const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
                 if (matches) {
                     const [userId, msg] = matches.slice(1);
