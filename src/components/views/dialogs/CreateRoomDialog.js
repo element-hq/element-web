@@ -30,12 +30,13 @@ export default createReactClass({
     displayName: 'CreateRoomDialog',
     propTypes: {
         onFinished: PropTypes.func.isRequired,
+        defaultPublic: PropTypes.bool,
     },
 
     getInitialState() {
         const config = SdkConfig.get();
         return {
-            isPublic: false,
+            isPublic: this.props.defaultPublic || false,
             isEncrypted: true,
             name: "",
             topic: "",

@@ -367,7 +367,10 @@ export default createReactClass({
 
     onCreateRoomClick: function(room) {
         this.props.onFinished();
-        dis.dispatch({action: 'view_create_room'});
+        dis.dispatch({
+            action: 'view_create_room',
+            public: true,
+        });
     },
 
     showRoomAlias: function(alias, autoJoin=false) {
