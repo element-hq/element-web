@@ -523,7 +523,7 @@
     "Invite to this room": "이 방에 초대",
     "You cannot delete this message. (%(code)s)": "이 메시지를 삭제할 수 없습니다. (%(code)s)",
     "Thursday": "목요일",
-    "I understand the risks and wish to continue": "위험을 인지하고 계속하고 싶습니다",
+    "I understand the risks and wish to continue": "위험하다는 것을 이해했으며 계속하고 싶습니다",
     "Back": "돌아가기",
     "Failed to change settings": "설정 변경 실패",
     "Show message in desktop notification": "컴퓨터 알림에서 내용 보이기",
@@ -1799,5 +1799,7 @@
     "Session already verified!": "이미 검증된 세션입니다!",
     "WARNING: Session already verified, but keys do NOT MATCH!": "경고: 이미 검증된 세션이지만 키가 일치하지 않습니다!",
     "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "경고: 키 검증 실패! 제공된 키인 \"%(fingerprint)s\"가 사용자 %(userId)s와 %(deviceId)s 세션의 서명 키인 \"%(fprint)s\"와 일치하지 않습니다. 이는 통신이 탈취되고 있는 중일 수도 있다는 뜻입니다!",
-    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "사용자 %(userId)s의 세션 %(deviceId)s에서 받은 서명 키와 당신이 제공한 서명 키가 일치합니다. 세션이 검증되었습니다."
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "사용자 %(userId)s의 세션 %(deviceId)s에서 받은 서명 키와 당신이 제공한 서명 키가 일치합니다. 세션이 검증되었습니다.",
+    "Show more": "더 보기",
+    "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "비밀번호를 변경한다면 방의 암호화 키를 내보낸 후 다시 가져오지 않는 이상 모든 종단간 암호화 키는 초기화 될 것이고, 암호화된 대화 내역은 읽을 수 없게 될 것입니다. 이 문제는 추후에 개선될 것입니다."
 }
