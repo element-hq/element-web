@@ -229,13 +229,14 @@ export default class VerificationPanel extends React.PureComponent {
             if (!device) {
                 // This can happen if the device is logged out while we're still showing verification
                 // UI for it.
-                // Leave the message slightly broken for this edge case (avoid adding a translatable string)
                 console.warn("Verified device we don't know about: " + this.props.request.channel.deviceId);
+                description = _t("You've successfully verified your device!");
+            } else {
+                description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
+                    deviceName: device ? device.getDisplayName() : '',
+                    deviceId: this.props.request.channel.deviceId,
+                });
             }
-            description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
-                deviceName: device ? device.getDisplayName() : '',
-                deviceId: this.props.request.channel.deviceId,
-            });
         } else {
             description = _t("You've successfully verified %(displayName)s!", {
                 displayName: member.displayName || member.name || member.userId,

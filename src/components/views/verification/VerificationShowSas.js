@@ -117,12 +117,16 @@ export default class VerificationShowSas extends React.Component {
             let text;
             if (this.state.pending) {
                 if (this.props.isSelf) {
-                    // device shouldn't be null in this situation but it seems like it can be, so show
-                    // slightly broken text rather than soft-crashing (we've already logged in VerificationPanel).
-                    text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
-                        deviceName: this.props.device ? this.props.device.getDisplayName() : '',
-                        deviceId: this.props.device ? this.props.device.deviceId : '',
-                    });
+                    // device shouldn't be null in this situation but it can be, eg. if the device is
+                    // logged out during verification
+                    if (this.props.device) {
+                        text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
+                            deviceName: this.props.device ? this.props.device.getDisplayName() : '',
+                            deviceId: this.props.device ? this.props.device.deviceId : '',
+                        });
+                    } else {
+                        text = _t("Waiting for your other session to verify…");
+                    }
                 } else {
                     const {displayName} = this.props;
                     text = _t("Waiting for %(displayName)s to verify…", {displayName});
