@@ -131,8 +131,8 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     _destroySecureSecretStorage = () => {
-        const ConfirmDestoryCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
-        Modal.createDialog(ConfirmDestoryCrossSigningDialog, {
+        const ConfirmDestroyCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
+        Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
             onFinished: this.onDestroyStorage,
         });
     }

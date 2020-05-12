@@ -267,6 +267,7 @@ export default createReactClass({
                         dis.dispatch({action: 'start_login'});
                     } else {
                         this.setState({
+                            serverErrorIsFatal: true, // fatal because user cannot continue on this server
                             errorText: _t("Registration has been disabled on this homeserver."),
                             // add empty flows array to get rid of spinner
                             flows: [],

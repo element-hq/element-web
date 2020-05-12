@@ -364,7 +364,7 @@ export default createReactClass({
         let eventsToRedact = [];
         for (const timeline of timelineSet.getTimelines()) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
                     return events.concat(event);
                 } else {
                     return events;
