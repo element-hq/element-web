@@ -45,9 +45,6 @@ const EncryptionPanel = (props) => {
         }
     }, [verificationRequest]);
 
-    const deviceId = request && request.channel.deviceId;
-    const device = MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
-
     useEffect(() => {
         async function awaitPromise() {
             setRequesting(true);
@@ -143,7 +140,7 @@ const EncryptionPanel = (props) => {
                 key={request.channel.transactionId}
                 inDialog={layout === "dialog"}
                 phase={phase}
-                device={device} />
+            />
         </React.Fragment>);
     }
 };
