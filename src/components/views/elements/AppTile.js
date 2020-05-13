@@ -430,7 +430,7 @@ export default class AppTile extends React.Component {
         // is used for is to determine the origin we're talking to, and therefore we don't need the
         // fully templated URL.
         const widgetMessaging = new WidgetMessaging(
-            this.props.app.id, this.props.app.url, this.props.userWidget, this._appFrame.current.contentWindow);
+            this.props.app.id, this._getRenderedUrl(), this.props.userWidget, this._appFrame.current.contentWindow);
         ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);
