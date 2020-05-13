@@ -60,9 +60,6 @@ export default class GeneralUserSettingsTab extends React.Component {
             emails: [],
             msisdns: [],
             loading3pids: true, // whether or not the emails and msisdns have been loaded
-            ...this._calculateThemeState(),
-            customThemeUrl: "",
-            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
