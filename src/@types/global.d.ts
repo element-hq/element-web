@@ -24,5 +24,11 @@ declare global {
 
         // electron-only
         ipcRenderer: any;
+
+        // opera-only
+        opera: any;
+
+        // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
+        InstallTrigger: any;
     }
 }
