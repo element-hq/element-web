@@ -2289,5 +2289,9 @@
     "Are you sure you want to deactivate your account? This is irreversible.": "Opravdu chcete deaktivovat účet? Je to nevratné.",
     "Confirm account deactivation": "Potvrďte deaktivaci účtu",
     "There was a problem communicating with the server. Please try again.": "Došlo k potížím při komunikaci se serverem. Zkuste to prosím znovu.",
-    "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Začněte s někým konverzovat za pomocí jména, přihlašovacího jména (jako <userId/>) nebo emailu."
+    "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Začněte s někým konverzovat za pomocí jména, přihlašovacího jména (jako <userId/>) nebo emailu.",
+    "Opens chat with the given user": "Otevře konverzaci s tímto uživatelem",
+    "Sends a message to the given user": "Pošle zprávu danému uživateli",
+    "Waiting for your other session to verify…": "Čekáme na ověření od vaší druhé relace…",
+    "Verify all your sessions to ensure your account & messages are safe": "Ověřte všechny své relace, abyste zaručili, že jsou vaše zprávy a účet bezpečné"
 }
