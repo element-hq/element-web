@@ -43,7 +43,7 @@ limitations under the License.
     margin: 0 7px;
     mask: url('$(res)/img/feather-customised/dropdown-arrow.svg');
     mask-repeat: no-repeat;
-    width: 10px;
+    width: $font-22px;
     height: 6px;
     background-color: $roomsublist-label-fg-color;
 }
