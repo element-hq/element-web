@@ -50,7 +50,6 @@ limitations under the License.
 }
 
 .mx_Slider_selectionDot {
-    transition: left 0.25s;
     position: absolute;
     width: 1.1em;
     height: 1.1em;
@@ -61,13 +60,11 @@ limitations under the License.
 }
 
 .mx_Slider_selection > hr {
-    transition: width 0.25s;
     margin: 0;
     border: 0.2em solid $slider-selection-color;
 }
 
 .mx_Slider_dot {
-    transition: background-color 0.2s ease-in;
     height: 1em;
     width: 1em;
     border-radius: 50%;
