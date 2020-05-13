@@ -96,12 +96,28 @@ function checkBrowserFeatures() {
  * try to log in, which is also a fairly terrible failure mode).
  */
 function monkeyPatchForReact() {
+    function findAncestorWithClass(node) {
+        let depth = 0;
+        while (node) {
+            if (node.className) return [node, depth];
+            node = node.parentNode;
+            ++depth;
+        }
+        return [null, 0];
+    }
+
     const originalRemoveChild = Node.prototype.removeChild;
     Node.prototype.removeChild = function(...args) {
         try {
             return originalRemoveChild.apply(this, args);
         } catch (e) {
-            console.log("Caught exception from removeChild", e);
+            const [ancestor, depth] = findAncestorWithClass(args[0]);
+            console.log(
+                "Caught exception from removeChild, removing node of type " +
+                args[0].type + ". Closest ancestor with class is a " + ancestor.type +
+                " with class " + ancestor.className + " " + depth + " levels above. " +
+                "See https://github.com/vector-im/riot-web/issues/13557", e,
+            );
             return originalRemoveChild.apply(args[0].parentNode, args);
         }
     }
@@ -111,7 +127,13 @@ function monkeyPatchForReact() {
         try {
             return originalInsertBefore.apply(this, args);
         } catch (e) {
-            console.log("Caught exception from insertBefore", e);
+            const [ancestor, depth] = findAncestorWithClass(args[0]);
+            console.log(
+                "Caught exception from removeChild, removing " + args[0].type +
+                ". Closest ancestor with class is a " + ancestor.type +
+                " with class " + ancestor.class + " " + depth + " levels above. " +
+                "See https://github.com/vector-im/riot-web/issues/13557", e,
+            );
             // We could use appendChild instead, then the node would
             // be in the DOM but not necessarily in the right place?
             // For now, do nothing.
