@@ -86,7 +86,7 @@ function checkBrowserFeatures() {
  * React issue: https://github.com/facebook/react/issues/11538
  * Chromium issue: https://bugs.chromium.org/p/chromium/issues/detail?id=872770
  *
- * The workaround here is inspired by the one in a comment on the Readt bug
+ * The workaround here is inspired by the one in a comment on the React bug
  * (https://github.com/facebook/react/issues/11538#issuecomment-417504600)
  * except that we catch the exception rather than sanity checking every call,
  * and we remove the child from whatever its parent actually is rather than
