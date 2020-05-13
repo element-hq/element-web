@@ -78,6 +78,48 @@ function checkBrowserFeatures() {
     return featureComplete;
 }
 
+/**
+ * Monkey patch some browser methods to work around a fundamental
+ * incompatability between React and any browser extension or anything
+ * else that manipulates the DOM.
+ *
+ * React issue: https://github.com/facebook/react/issues/11538
+ * Chromium issue: https://bugs.chromium.org/p/chromium/issues/detail?id=872770
+ *
+ * The workaround here is inspired by the one in a comment on the Readt bug
+ * (https://github.com/facebook/react/issues/11538#issuecomment-417504600)
+ * except that we catch the exception rather than sanity checking every call,
+ * and we remove the child from whatever its parent actually is rather than
+ * doing nothing (the workaround in the comment leaves the element in the DOM,
+ * which in the case of https://github.com/vector-im/riot-web/issues/13557
+ * makes it fail by adding another submit button to the page every time you
+ * try to log in, which is also a fairly terrible failure mode).
+ */
+function monkeyPatchForReact() {
+    const originalRemoveChild = Node.prototype.removeChild;
+    Node.prototype.removeChild = function(...args) {
+        try {
+            return originalRemoveChild.apply(this, args);
+        } catch (e) {
+            console.log("Caught exception from removeChild", e);
+            return originalRemoveChild.apply(args[0].parentNode, args);
+        }
+    }
+
+    const originalInsertBefore = Node.prototype.insertBefore;
+    Node.prototype.insertBefore = function(...args) {
+        try {
+            return originalInsertBefore.apply(this, args);
+        } catch (e) {
+            console.log("Caught exception from insertBefore", e);
+            // We could use appendChild instead, then the node would
+            // be in the DOM but not necessarily in the right place?
+            // For now, do nothing.
+            return args[0];
+        }
+    }
+}
+
 const supportedBrowser = checkBrowserFeatures();
 
 // React depends on Map & Set which we check for using modernizr's es6collections
@@ -189,6 +231,8 @@ async function start() {
         await loadSkinPromise;
         await loadThemePromise;
         await loadLanguagePromise;
+
+        monkeyPatchForReact();
 
         // Finally, load the app. All of the other react-sdk imports are in this file which causes the skinner to
         // run on the components.
