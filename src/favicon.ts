@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Based upon https://github.com/ejci/favico.js/blob/master/favico.js [MIT license]
-
 interface IParams {
     // colour parameters
     bgColor: string;
@@ -41,6 +39,7 @@ const defaults: IParams = {
 
 // Allows dynamic rendering of a circular badge atop the loaded favicon
 // supports colour, font and basic positioning parameters.
+// Based upon https://github.com/ejci/favico.js/blob/master/favico.js [MIT license]
 export default class Favicon {
     private readonly browser = {
         ff: typeof window.InstallTrigger !== "undefined",
@@ -241,7 +240,6 @@ export default class Favicon {
     private static getIcons() {
         // get favicon link elements
         let elms = Favicon.getLinks();
-        // if link element
         if (elms.length === 0) {
             elms = [window.document.createElement("link")];
             elms[0].setAttribute("rel", "icon");
