@@ -29,6 +29,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
+import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -819,6 +820,11 @@ export default class MessagePanel extends React.Component {
             );
         }
 
+        let ircResizer = null;
+        if (this.state.useIRCLayout) {
+            ircResizer = <IRCTimelineProfileResizer minWidth={20} maxWidth={600} roomId={this.props.room.roomId} />;
+        }
+
         return (
             <ErrorBoundary>
                 <ScrollPanel
@@ -831,6 +837,7 @@ export default class MessagePanel extends React.Component {
                     style={style}
                     stickyBottom={this.props.stickyBottom}
                     resizeNotifier={this.props.resizeNotifier}
+                    fixedChildren={ircResizer}
                 >
                     { topSpinner }
                     { this._getEventTiles() }

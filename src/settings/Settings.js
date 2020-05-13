@@ -531,4 +531,11 @@ export const SETTINGS = {
             MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
         ),
     },
+    "ircDisplayNameWidth": {
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        displayName: _td("IRC display name width"),
+        default: 80,
+    },
 };
