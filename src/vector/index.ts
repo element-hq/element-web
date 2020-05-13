@@ -114,7 +114,7 @@ function monkeyPatchForReact() {
             const [ancestor, depth] = findAncestorWithClass(args[0]);
             console.log(
                 "Caught exception from removeChild, removing node of type " +
-                args[0].type + ". Closest ancestor with class is a " + ancestor.type +
+                args[0].type + ". Closest ancestor with class is a " + ancestor.nodeName +
                 " with class " + ancestor.className + " " + depth + " levels above. " +
                 "See https://github.com/vector-im/riot-web/issues/13557", e,
             );
@@ -129,7 +129,7 @@ function monkeyPatchForReact() {
         } catch (e) {
             const [ancestor, depth] = findAncestorWithClass(args[0]);
             console.log(
-                "Caught exception from removeChild, removing " + args[0].type +
+                "Caught exception from removeChild, removing " + args[0].nodeName +
                 ". Closest ancestor with class is a " + ancestor.type +
                 " with class " + ancestor.class + " " + depth + " levels above. " +
                 "See https://github.com/vector-im/riot-web/issues/13557", e,
