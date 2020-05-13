@@ -448,15 +448,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
-        const url = super.getSSOCallbackUrl(hsUrl, isUrl);
+    getSSOCallbackUrl(hsUrl: string, isUrl: string, fragmentAfterLogin: string): URL {
+        const url = super.getSSOCallbackUrl(hsUrl, isUrl, fragmentAfterLogin);
         url.protocol = "riot";
         url.searchParams.set("riot-desktop-ssoid", this.ssoID);
         return url;
     }
 
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas") {
-        super.startSingleSignOn(mxClient, loginType); // this will get intercepted by electron-main will-navigate
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
+        // this will get intercepted by electron-main will-navigate
+        super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin);
         Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
             title: _t("Go to your browser to complete Sign In"),
             description: <Spinner />,
