@@ -2422,5 +2422,9 @@
     "Verify your other session using one of the options below.": "Vérifiez votre autre session en utilisant une des options ci-dessous.",
     "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invitez quelqu’un en utilisant leur nom, leur nom d’utilisateur (comme <userId/>), leur adresse e-mail ou <a>partagez ce salon</a>.",
     "Message deleted": "Message supprimé",
-    "Message deleted by %(name)s": "Message supprimé par %(name)s"
+    "Message deleted by %(name)s": "Message supprimé par %(name)s",
+    "Opens chat with the given user": "Ouvre une discussion avec l’utilisateur fourni",
+    "Sends a message to the given user": "Envoie un message à l’utilisateur fourni",
+    "Waiting for your other session to verify…": "En attente de la vérification depuis votre autre session…",
+    "You've successfully verified your device!": "Vous avez bien vérifié votre appareil !"
 }
