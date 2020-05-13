@@ -25,9 +25,20 @@ const PHONE_NUMBER_REGEXP = /^[0-9 -.]+$/;
  *     a national-format number.
  * @return True if the number could be a valid phone number, otherwise false.
  */
-export function looksValid(phoneNumber) {
+export function looksValid(phoneNumber: string) {
     return PHONE_NUMBER_REGEXP.test(phoneNumber);
 }
+
+// Regional Indicator Symbol Letter A
+const UNICODE_BASE = 127462 - 'A'.charCodeAt(0);
+// Country code should be exactly 2 uppercase characters
+const COUNTRY_CODE_REGEX = /^[A-Z]{2}$/;
+
+export const getEmojiFlag = (countryCode: string) => {
+    if (!COUNTRY_CODE_REGEX.test(countryCode)) return '';
+    // Rip the country code out of the emoji and use that
+    return String.fromCodePoint(...countryCode.split('').map(l => UNICODE_BASE + l.charCodeAt(0)));
+};
 
 export const COUNTRIES = [
     {
@@ -624,6 +635,11 @@ export const COUNTRIES = [
         "iso2": "KI",
         "name": "Kiribati",
         "prefix": "686",
+    },
+    {
+        "iso2": "XK",
+        "name": "Kosovo",
+        "prefix": "383",
     },
     {
         "iso2": "KW",

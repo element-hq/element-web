@@ -77,10 +77,16 @@ limitations under the License.
     white-space: nowrap;
 }
 
-.mx_Dropdown_option img {
+.mx_Dropdown_option img,
+.mx_Dropdown_option .mx_Dropdown_option_emoji {
     margin: 5px;
     width: 16px;
     vertical-align: middle;
+}
+
+.mx_Dropdown_option_emoji {
+    font-size: $font-16px;
+    line-height: $font-16px;
 }
 
 input.mx_Dropdown_option,
