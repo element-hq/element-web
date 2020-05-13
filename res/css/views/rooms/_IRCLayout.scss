@@ -54,6 +54,7 @@ $irc-line-height: $font-18px;
             display: flex;
             align-items: center;
             overflow: visible;
+            justify-content: flex-end;
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
@@ -79,7 +80,7 @@ $irc-line-height: $font-18px;
                 height: $font-14px !important;
                 width: $font-14px !important;
                 font-size: $font-10px !important;
-                line-height: $font-14px !important;
+                line-height: $font-15px !important;
             }
         }
 
@@ -188,6 +189,10 @@ $irc-line-height: $font-18px;
         }
     }
 
+    .mx_SenderProfile:hover {
+        justify-content: flex-start;
+    }
+
     .mx_SenderProfile_hover:hover {
         overflow: visible;
         width: auto;
@@ -209,5 +214,11 @@ $irc-line-height: $font-18px;
         left: calc(80px + var(--name-width));
         cursor: col-resize;
         z-index: 100;
+    }
+
+    // Need to use important to override the js provided height and width values.
+    .mx_Flair > img {
+        height: $font-14px !important;
+        width: $font-14px !important;
     }
 }

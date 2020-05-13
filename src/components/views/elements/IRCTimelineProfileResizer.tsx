@@ -52,11 +52,11 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
 
         console.log({offset})
         // If we're trying to go smaller than min width, don't.
-        if (this.state.width <= this.props.minWidth && offset <= 0) {
+        if (newWidth < this.props.minWidth) {
             return location;
         }
 
-        if (this.state.width >= this.props.maxWidth && offset >= 0) {
+        if (newWidth > this.props.maxWidth) {
             return location;
         }
 
