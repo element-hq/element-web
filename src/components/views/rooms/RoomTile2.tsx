@@ -31,12 +31,21 @@ import { EffectiveMembership, getEffectiveMembership } from "../../../stores/roo
 import * as Unread from '../../../Unread';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 
+/*******************************************************************
+ *   CAUTION                                                       *
+ *******************************************************************
+ * This is a work in progress implementation and isn't complete or *
+ * even useful as a component. Please avoid using it until this    *
+ * warning disappears.                                             *
+ *******************************************************************
+ */
+
 interface IProps {
     room: Room;
 
-    // TODO: Allow faslifying counts (for invites and stuff)
-    // TODO: Transparency?
-    // TODO: Incoming call?
+    // TODO: Allow falsifying counts (for invites and stuff)
+    // TODO: Transparency? Was this ever used?
+    // TODO: Incoming call boxes?
 }
 
 interface IBadgeState {
@@ -51,13 +60,11 @@ interface IState extends IBadgeState {
     hover: boolean;
 }
 
-// TODO: Finish stub
 export default class RoomTile2 extends React.Component<IProps, IState> {
     private roomTile = createRef();
 
     // TODO: Custom status
     // TODO: Lock icon
-    // TODO: DM indicator
     // TODO: Presence indicator
     // TODO: e2e shields
     // TODO: Handle changes to room aesthetics (name, join rules, etc)
@@ -78,7 +85,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-
+        // TODO: Listen for changes to the badge count and update as needed
     }
 
     private updateBadgeCount() {
@@ -168,6 +175,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile_badgeShown': this.state.showBadge,
         });
 
+        // TODO: Support collapsed state properly
         let tooltip = null;
         if (false) { // isCollapsed
             if (this.state.hover) {

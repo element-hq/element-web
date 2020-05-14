@@ -29,6 +29,15 @@ import AccessibleTooltipButton from "../../views/elements/AccessibleTooltipButto
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import RoomTile2 from "./RoomTile2";
 
+/*******************************************************************
+ *   CAUTION                                                       *
+ *******************************************************************
+ * This is a work in progress implementation and isn't complete or *
+ * even useful as a component. Please avoid using it until this    *
+ * warning disappears.                                             *
+ *******************************************************************
+ */
+
 interface IProps {
     forRooms: boolean;
     rooms?: Room[];
@@ -50,12 +59,11 @@ interface IProps {
 interface IState {
 }
 
-// TODO: Finish stub
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef();
 
     public setHeight(size: number) {
-        // TODO: Do a thing
+        // TODO: Do a thing (maybe - height changes are different in FTUE)
     }
 
     private hasTiles(): boolean {
@@ -107,8 +115,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         return (
             <RovingTabIndexWrapper inputRef={this.headerButton}>
                 {({onFocus, isActive, ref}) => {
+                    // TODO: Use onFocus
                     const tabIndex = isActive ? 0 : -1;
 
+                    // TODO: Collapsed state
                     let badge;
                     if (true) { // !isCollapsed
                         const badgeClasses = classNames({
@@ -156,7 +166,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         );
                     }
 
-                    // TODO: a11y
+                    // TODO: a11y (see old component)
                     return (
                         <div className={"mx_RoomSubList_labelContainer"}>
                             <AccessibleButton

@@ -29,6 +29,15 @@ import { ActionPayload } from "../../../dispatcher-types";
 import dis from "../../../dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 
+/*******************************************************************
+ *   CAUTION                                                       *
+ *******************************************************************
+ * This is a work in progress implementation and isn't complete or *
+ * even useful as a component. Please avoid using it until this    *
+ * warning disappears.                                             *
+ *******************************************************************
+ */
+
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
@@ -152,6 +161,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     private prepareLayouts() {
+        // TODO: Change layout engine for FTUE support
         this.unfilteredLayout = new Layout((tagId: string, height: number) => {
             const sublist = this.sublistRefs[tagId];
             if (sublist) sublist.current.setHeight(height);
@@ -175,15 +185,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             allowWhitespace: false,
             handleHeight: 0,
         });
-    }
-
-    private collectSublistRef(tagId: string, ref: React.RefObject<RoomSublist2>) {
-        // TODO: Is this needed?
-        if (!ref) {
-            delete this.sublistRefs[tagId];
-        } else {
-            this.sublistRefs[tagId] = ref;
-        }
     }
 
     private renderSublists(): React.ReactElement[] {
