@@ -2426,5 +2426,10 @@
     "Opens chat with the given user": "Ouvre une discussion avec l’utilisateur fourni",
     "Sends a message to the given user": "Envoie un message à l’utilisateur fourni",
     "Waiting for your other session to verify…": "En attente de la vérification depuis votre autre session…",
-    "You've successfully verified your device!": "Vous avez bien vérifié votre appareil !"
+    "You've successfully verified your device!": "Vous avez bien vérifié votre appareil !",
+    "To continue, use Single Sign On to prove your identity.": "Pour continuer, utilisez l’authentification unique pour prouver votre identité.",
+    "Confirm to continue": "Confirmer pour continuer",
+    "Click the button below to confirm your identity.": "Cliquez sur le bouton ci-dessous pour confirmer votre identité.",
+    "Confirm encryption setup": "Confirmer la configuration du chiffrement",
+    "Click the button below to confirm setting up encryption.": "Cliquez sur le bouton ci-dessous pour confirmer la configuration du chiffrement."
 }
