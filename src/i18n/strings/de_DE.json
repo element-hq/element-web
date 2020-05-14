@@ -1029,7 +1029,7 @@
     "Please review and accept all of the homeserver's policies": "Bitte prüfen und akzeptieren Sie alle Richtlinien des Heimservers",
     "Failed to load group members": "Konnte Gruppenmitglieder nicht laden",
     "That doesn't look like a valid email address": "Sieht nicht nach einer validen E-Mail-Adresse aus",
-    "Unable to load commit detail: %(msg)s": "Konnte Commit-Details nicht laden: %(msg)s",
+    "Unable to load commit detail: %(msg)s": "Konnte Commit-Details nicht laden: %(msg)",
     "Checking...": "Überprüfe...",
     "Unable to load backup status": "Konnte Backupstatus nicht laden",
     "Failed to decrypt %(failedCount)s sessions!": "Konnte %(failedCount)s Sitzungen nicht entschlüsseln!",
