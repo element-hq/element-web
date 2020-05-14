@@ -14,16 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ChaoticAlgorithm } from "./ChaoticAlgorithm";
 import { SortAlgorithm } from "../models";
 import { ManualAlgorithm } from "./ManualAlgorithm";
 import { IAlgorithm } from "./IAlgorithm";
 import { TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RecentAlgorithm } from "./RecentAlgorithm";
+import { AlphabeticAlgorithm } from "./AlphabeticAlgorithm";
 
 const ALGORITHM_INSTANCES: { [algorithm in SortAlgorithm]: IAlgorithm } = {
-    [SortAlgorithm.Recent]: new ChaoticAlgorithm(),
-    [SortAlgorithm.Alphabetic]: new ChaoticAlgorithm(),
+    [SortAlgorithm.Recent]: new RecentAlgorithm(),
+    [SortAlgorithm.Alphabetic]: new AlphabeticAlgorithm(),
     [SortAlgorithm.Manual]: new ManualAlgorithm(),
 };
 

@@ -17,13 +17,16 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
+import { MatrixClientPeg } from "../../../../MatrixClientPeg";
+import * as Unread from "../../../../Unread";
 
 /**
- * A demonstration to test the API surface.
- * TODO: Remove this before landing
+ * Sorts rooms according to the browser's determination of alphabetic.
  */
-export class ChaoticAlgorithm implements IAlgorithm {
+export class AlphabeticAlgorithm implements IAlgorithm {
     public async sortRooms(rooms: Room[], tagId: TagID): Promise<Room[]> {
-        return rooms;
+        return rooms.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
     }
 }
