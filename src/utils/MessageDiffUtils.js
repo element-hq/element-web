@@ -77,8 +77,6 @@ function findRefNodes(root, route, isAddition) {
     const end = isAddition ? route.length - 1 : route.length;
     for (let i = 0; i < end; ++i) {
         refParentNode = refNode;
-        // Lists don't have appropriate child nodes we can use.
-        if (!refNode.childNodes[route[i]]) continue;
         refNode = refNode.childNodes[route[i]];
     }
     return {refNode, refParentNode};
@@ -190,10 +188,11 @@ function renderDifferenceInDOM(originalRootNode, diff, diffMathPatch) {
             break;
         }
         case "addTextElement": {
-            if (diff.value !== "\n") {
-                const insNode = wrapInsertion(stringAsTextNode(diff.value));
-                insertBefore(refParentNode, refNode, insNode);
-            }
+            // XXX: sometimes diffDOM says insert a newline when there shouldn't be one
+            // but we must insert the node anyway so that we don't break the route child IDs.
+            // See https://github.com/fiduswriter/diffDOM/issues/100
+            const insNode = wrapInsertion(stringAsTextNode(diff.value !== "\n" ? diff.value : ""));
+            insertBefore(refParentNode, refNode, insNode);
             break;
         }
         // e.g. when changing a the href of a link,
