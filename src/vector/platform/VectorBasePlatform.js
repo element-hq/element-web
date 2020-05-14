@@ -85,9 +85,7 @@ export default class VectorBasePlatform extends BasePlatform {
                 bgColor = "#f00";
             }
 
-            this.favicon.badge(notif, {
-                bgColor: bgColor,
-            });
+            this.favicon.badge(notif, { bgColor });
         } catch (e) {
             console.warn(`Failed to set badge count: ${e.message}`);
         }

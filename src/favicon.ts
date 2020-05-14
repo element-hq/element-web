@@ -89,7 +89,7 @@ export default class Favicon {
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    private options(n: number | string) {
+    private options(n: number | string, params: IParams) {
         const opt = {
             n: ((typeof n) === "number") ? Math.abs(n as number | 0) : n,
             len: ("" + n).length,
@@ -101,14 +101,14 @@ export default class Favicon {
         };
 
         // apply positional transformations
-        if (this.params.isUp) {
+        if (params.isUp) {
             if (opt.y < 0.6) {
                 opt.y = opt.y - 0.4;
             } else {
                 opt.y = opt.y - 2 * opt.y + (1 - opt.w);
             }
         }
-        if (this.params.isLeft) {
+        if (params.isLeft) {
             if (opt.x < 0.6) {
                 opt.x = opt.x - 0.4;
             } else {
@@ -124,8 +124,9 @@ export default class Favicon {
         return opt;
     }
 
-    private circle(n: number | string) {
-        const opt = this.options(n);
+    private circle(n: number | string, opts?: Partial<IParams>) {
+        const params = {...this.params, ...opts};
+        const opt = this.options(n, params);
 
         let more = false;
         if (opt.len === 2) {
@@ -142,7 +143,7 @@ export default class Favicon {
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
         this.context.beginPath();
         const fontSize = Math.floor(opt.h * (opt.n > 99 ? 0.85 : 1)) + "px";
-        this.context.font = `${this.params.fontWeight} ${fontSize} ${this.params.fontFamily}`;
+        this.context.font = `${params.fontWeight} ${fontSize} ${params.fontFamily}`;
         this.context.textAlign = "center";
 
         if (more) {
@@ -159,12 +160,12 @@ export default class Favicon {
             this.context.arc(opt.x + opt.w / 2, opt.y + opt.h / 2, opt.h / 2, 0, 2 * Math.PI);
         }
 
-        this.context.fillStyle = this.params.bgColor;
+        this.context.fillStyle = params.bgColor;
         this.context.fill();
         this.context.closePath();
         this.context.beginPath();
         this.context.stroke();
-        this.context.fillStyle = this.params.textColor;
+        this.context.fillStyle = params.textColor;
 
         if ((typeof opt.n) === "number" && opt.n > 999) {
             const count = ((opt.n > 9999) ? 9 : Math.floor(opt.n as number / 1000)) + "k+";
@@ -209,16 +210,16 @@ export default class Favicon {
         }
     }
 
-    public badge(content: number | string) {
+    public badge(content: number | string, opts?: Partial<IParams>) {
         if (!this.isReady) {
             this.readyCb = () => {
-                this.badge(content);
+                this.badge(content, opts);
             }
             return;
         }
 
         if (typeof content === "string" || content > 0) {
-            this.circle(content);
+            this.circle(content, opts);
         } else {
             this.reset();
         }
