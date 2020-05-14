@@ -2365,5 +2365,8 @@
     "Activate selected button": "Ausgewählten Button aktivieren",
     "Toggle right panel": "Rechtes Panel ein-/ausblenden",
     "Toggle this dialog": "Diesen Dialog ein-/ausblenden",
-    "Move autocomplete selection up/down": "Auto-Vervollständigung nach oben/unten verschieben"
+    "Move autocomplete selection up/down": "Auto-Vervollständigung nach oben/unten verschieben",
+    "Opens chat with the given user": "Öffnet einen Chat mit diesem Benutzer",
+    "Sends a message to the given user": "Sendet diesem Benutzer eine Nachricht",
+    "Waiting for your other session to verify…": "Warte auf die Verifikation deiner anderen Sitzungen…"
 }
