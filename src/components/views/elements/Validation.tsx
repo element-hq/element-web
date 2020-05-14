@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +16,34 @@ limitations under the License.
 */
 
 /* eslint-disable babel/no-invalid-this */
+import React from "react";
+import classNames from "classnames";
 
-import classNames from 'classnames';
+type Data = Pick<IValidateArgs, "value" | "allowEmpty">;
+
+interface IRule<T> {
+    key: string;
+    final?: boolean;
+    skip?(this: T, data: Data): boolean;
+    test(this: T, data: Data): boolean | Promise<boolean>;
+    valid?(this: T): string;
+    invalid?(this: T): string;
+}
+
+interface IArgs<T> {
+    rules: IRule<T>[];
+    description(): React.ReactChild;
+}
+
+interface IValidateArgs {
+    value: string;
+    focused: boolean;
+    allowEmpty: boolean;
+}
 
 /**
  * Creates a validation function from a set of rules describing what to validate.
+ * Generic T is the "this" type passed to the rule methods
  *
  * @param {Function} description
  *     Function that returns a string summary of the kind of value that will
@@ -37,8 +61,8 @@ import classNames from 'classnames';
  *     A validation function that takes in the current input value and returns
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
-export default function withValidation({ description, rules }) {
-    return async function onValidate({ value, focused, allowEmpty = true }) {
+export default function withValidation<T = undefined>({ description, rules }: IArgs<T>) {
+    return async function onValidate({ value, focused, allowEmpty = true }: IValidateArgs) {
         if (!value && allowEmpty) {
             return {
                 valid: null,
