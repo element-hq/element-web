@@ -21,7 +21,7 @@ limitations under the License.
 
 import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
-import dis from 'matrix-react-sdk/src/dispatcher';
+import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import {getVectorConfig} from "../getconfig";
 
 import Favico from 'favico.js';
