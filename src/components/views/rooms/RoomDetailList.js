@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import PropTypes from 'prop-types';

@@ -24,7 +24,7 @@ import createReactClass from 'create-react-class';
 import { _t, _td } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { addressTypes, getAddressType } from '../../../UserAddress.js';
 import GroupStore from '../../../stores/GroupStore';
 import * as Email from '../../../email';
@@ -33,6 +33,7 @@ import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../
 import { abbreviateUrl } from '../../../utils/UrlUtils';
 import {sleep} from "../../../utils/promise";
 import {Key} from "../../../Keyboard";
+import {Action} from "../../../dispatcher/actions";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -615,7 +616,7 @@ export default createReactClass({
 
     onManageSettingsClick(e) {
         e.preventDefault();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
         this.onCancel();
     },
 

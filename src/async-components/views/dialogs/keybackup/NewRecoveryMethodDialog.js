@@ -19,9 +19,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import * as sdk from "../../../../index";
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
-import dis from "../../../../dispatcher";
+import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
+import {Action} from "../../../../dispatcher/actions";
 
 export default class NewRecoveryMethodDialog extends React.PureComponent {
     static propTypes = {
@@ -36,7 +37,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
 
     onGoToSettingsClick = () => {
         this.props.onFinished();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
     }
 
     onSetupClick = async () => {

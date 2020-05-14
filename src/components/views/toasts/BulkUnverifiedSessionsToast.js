@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import DeviceListener from '../../../DeviceListener';
 import FormButton from '../elements/FormButton';

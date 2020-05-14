@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from "./dispatcher";
+import dis from "./dispatcher/dispatcher";
 import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';

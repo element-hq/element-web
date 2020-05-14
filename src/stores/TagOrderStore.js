@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {Store} from 'flux/utils';
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";

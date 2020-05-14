@@ -34,7 +34,7 @@ import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
 import CallHandler from '../../CallHandler';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';

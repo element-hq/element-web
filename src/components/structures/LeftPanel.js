@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Key } from '../../Keyboard';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import * as VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";

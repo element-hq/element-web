@@ -19,7 +19,7 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
-import dis from "./dispatcher";
+import dis from "./dispatcher/dispatcher";
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 import ThemeController from "./settings/controllers/ThemeController";
 
