@@ -26,6 +26,7 @@ import { accessSecretStorage } from '../../../../CrossSigningManager';
 import SettingsStore from '../../../../settings/SettingsStore';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import {copyNode} from "../../../../utils/strings";
+import ZxcvbnProgressBar from "../../../../components/views/elements/ZxcvbnProgressBar";
 
 const PHASE_PASSPHRASE = 0;
 const PHASE_PASSPHRASE_CONFIRM = 1;
@@ -276,7 +277,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent {
                 </div>;
             }
             strengthMeter = <div>
-                <progress max={PASSWORD_MIN_SCORE} value={this.state.zxcvbnResult.score} />
+                <ZxcvbnProgressBar value={this.state.zxcvbnResult.score} />
             </div>;
         }
 

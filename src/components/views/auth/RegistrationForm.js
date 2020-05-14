@@ -29,6 +29,7 @@ import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import ZxcvbnProgressBar from "../elements/ZxcvbnProgressBar";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -274,11 +275,7 @@ export default createReactClass({
         description: function() {
             const complexity = this.state.passwordComplexity;
             const score = complexity ? complexity.score : 0;
-            return <progress
-                className="mx_AuthBody_passwordScore"
-                max={PASSWORD_MIN_SCORE}
-                value={score}
-            />;
+            return <ZxcvbnProgressBar value={score} className="mx_AuthBody_passwordScore" />;
         },
         rules: [
             {

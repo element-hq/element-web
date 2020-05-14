@@ -26,6 +26,7 @@ import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 import {copyNode} from "../../../../utils/strings";
 import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
+import ZxcvbnProgressBar from "../../../../components/views/elements/ZxcvbnProgressBar";
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -529,7 +530,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 </div>;
             }
             strengthMeter = <div>
-                <progress max={PASSWORD_MIN_SCORE} value={this.state.zxcvbnResult.score} />
+                <ZxcvbnProgressBar value={this.state.zxcvbnResult.score} />
             </div>;
         }
 
