@@ -24,11 +24,12 @@ import {_t, _td} from "../../../languageHandler";
 import Field from "../elements/Field";
 
 interface IProps {
+    autoFocus?: boolean;
     id?: string;
     className?: string;
     minScore: 0 | 1 | 2 | 3 | 4;
     value: string;
-    fieldRef: RefCallback<Field> | RefObject<Field>;
+    fieldRef?: RefCallback<Field> | RefObject<Field>;
 
     label?: string;
     labelEnterPassword?: string;
@@ -50,6 +51,8 @@ class PassphraseField extends PureComponent<IProps, IState> {
         labelStrongPassword: _td("Nice, strong password!"),
         labelAllowedButUnsafe: _td("Password is allowed, but unsafe"),
     };
+
+    state = { complexity: null };
 
     public readonly validate = withValidation<this>({
         description: function() {
@@ -106,6 +109,7 @@ class PassphraseField extends PureComponent<IProps, IState> {
     render() {
         return <Field
             id={this.props.id}
+            autoFocus={this.props.autoFocus}
             className={classNames("mx_PassphraseField", this.props.className)}
             ref={this.props.fieldRef}
             type="password"
