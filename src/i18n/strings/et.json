@@ -6,7 +6,7 @@
     "Failed to verify email address: make sure you clicked the link in the email": "E-posti aadressi kontrollimine ei õnnestunud: palun vaata, et sa kindlasti klõpsisid saabunud kirjas olnud viidet",
     "The platform you're on": "Sinu kasutatav arvutisüsteem",
     "The version of Riot": "Riot'i versioon",
-    "Whether or not you're logged in (we don't record your username)": "Kas sa oled sisseloginud või  mitte (me ei salvesta sinu kasutajanime)",
+    "Whether or not you're logged in (we don't record your username)": "Kas sa oled sisseloginud või mitte (me ei salvesta sinu kasutajanime)",
     "Your language of choice": "Sinu keelevalik",
     "Your homeserver's URL": "Sinu koduserveri aadress",
     "e.g. <CurrentPageURL>": "näiteks <CurrentPageURL>",
