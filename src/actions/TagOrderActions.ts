@@ -90,8 +90,7 @@ export default class TagOrderActions {
         if (removedTags.includes(tag)) {
             // Return a thunk that doesn't do anything, we don't even need
             // an asynchronous action here, the tag is already removed.
-            return () => {
-            };
+            return new AsyncActionPayload(() => {});
         }
 
         removedTags.push(tag);

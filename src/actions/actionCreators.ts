@@ -44,12 +44,11 @@ import { AsyncActionPayload } from "../dispatcher/payloads";
  *                     result is the result of the promise returned by
  *                     `fn`.
  */
-export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () => any): AsyncActionPayload {
+export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () => any | null): AsyncActionPayload {
     const helper = (dispatch) => {
         dispatch({
             action: id + '.pending',
-            request:
-                typeof pendingFn === 'function' ? pendingFn() : undefined,
+            request: typeof pendingFn === 'function' ? pendingFn() : undefined,
         });
         fn().then((result) => {
             dispatch({action: id + '.success', result});
