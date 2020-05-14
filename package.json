@@ -118,6 +118,7 @@
     "@babel/register": "^7.7.4",
     "@peculiar/webcrypto": "^1.0.22",
     "@types/classnames": "^2.2.10",
+    "@types/flux": "^3.1.9",
     "@types/modernizr": "^3.5.3",
     "@types/react": "16.9",
     "babel-eslint": "^10.0.3",
