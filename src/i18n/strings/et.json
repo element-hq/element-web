@@ -1165,5 +1165,19 @@
     "This room is running room version <roomVersion />, which this homeserver has marked as <i>unstable</i>.": "Selle jututoa versioon on <roomVersion /> ning see koduserver on tema märkinud <i>ebastabiilseks</i>.",
     "Only room administrators will see this warning": "Vaid administraatorid näevad seda hoiatust",
     "You can use <code>/help</code> to list available commands. Did you mean to send this as a message?": "Kirjutades <code>/help</code> saad vaadata käskude loendit. Või soovisid seda saata sõnumina?",
-    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Vihje: kui soovid alustada sõnumit kaldkriipsuga, siis kirjuta <code>//</code>."
+    "Hint: Begin your message with <code>//</code> to start it with a slash.": "Vihje: kui soovid alustada sõnumit kaldkriipsuga, siis kirjuta <code>//</code>.",
+    "To link to this room, please add an alias.": "Viitamaks sellele jututoale, palun määra talle alias.",
+    "Only people who have been invited": "Vaid kutsutud kasutajad",
+    "Anyone who knows the room's link, apart from guests": "Kõik, kes teavad jututoa viidet, välja arvatud külalised",
+    "Anyone who knows the room's link, including guests": "Kõik, kes teavad jututoa viidet, kaasa arvatud külalised",
+    "Changes to who can read history will only apply to future messages in this room. The visibility of existing history will be unchanged.": "Kui muudad seda, kes saavad selle jututoa ajalugu lugeda, siis kehtib see vaid tulevaste sõnumite kohta. Senise ajaloo nähtavus sellega ei muutu.",
+    "Unable to revoke sharing for email address": "Ei õnnestu tagasi võtta otsust e-posti aadressi jagamise kohta",
+    "Unable to share email address": "Ei õnnestu jagada e-posti aadressi",
+    "Your email address hasn't been verified yet": "Sinu e-posti aadress pole veel verifitseeritud",
+    "Click the link in the email you received to verify and then click continue again.": "Klõpsi saabunud e-kirjas olevat verifitseerimisviidet ning seejärel klõpsi siin uuesti nuppu \"Jätka\".",
+    "Unable to verify email address.": "E-posti aadressi verifitseerimine ei õnnestunud.",
+    "Verify the link in your inbox": "Verifitseeri klõpsides viidet saabunud e-kirjas",
+    "Complete": "Valmis",
+    "Revoke": "Tühista",
+    "Share": "Jaga"
 }
