@@ -21,7 +21,7 @@ import PlatformPeg from './PlatformPeg';
 import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
 import * as Avatar from './Avatar';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';

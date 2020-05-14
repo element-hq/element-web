@@ -21,7 +21,7 @@ import React, {useCallback, useMemo, useState, useEffect, useContext} from 'reac
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';

@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 

@@ -23,7 +23,7 @@ import { _t } from '../languageHandler';
 import * as sdk from '../index';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { AsyncActionPayload } from "../dispatcher";
+import { AsyncActionPayload } from "../dispatcher/dispatcher";
 
 export default class RoomListActions {
     /**

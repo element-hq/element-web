@@ -18,7 +18,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
 import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";

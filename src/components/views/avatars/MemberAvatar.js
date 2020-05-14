@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as Avatar from '../../../Avatar';
 import * as sdk from "../../../index";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 
 export default createReactClass({
     displayName: 'MemberAvatar',

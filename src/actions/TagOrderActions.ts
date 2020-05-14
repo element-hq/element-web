@@ -18,7 +18,7 @@ limitations under the License.
 import Analytics from '../Analytics';
 import { asyncAction } from './actionCreators';
 import TagOrderStore from '../stores/TagOrderStore';
-import { AsyncActionPayload } from "../dispatcher";
+import { AsyncActionPayload } from "../dispatcher/dispatcher";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 export default class TagOrderActions {

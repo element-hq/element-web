@@ -20,7 +20,7 @@ limitations under the License.
 */
 
 import {MatrixClient} from "matrix-js-sdk";
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 
 /**

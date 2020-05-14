@@ -21,7 +21,7 @@ limitations under the License.
 import * as React from 'react';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';

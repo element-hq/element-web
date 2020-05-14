@@ -18,7 +18,7 @@ limitations under the License.
 'use strict';
 
 import extend from './extend';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import * as sdk from './index';
 import { _t } from './languageHandler';

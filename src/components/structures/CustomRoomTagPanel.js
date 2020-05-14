@@ -18,7 +18,7 @@ import React from 'react';
 import CustomRoomTagStore from '../../stores/CustomRoomTagStore';
 import AutoHideScrollbar from './AutoHideScrollbar';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 

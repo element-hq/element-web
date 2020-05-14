@@ -25,7 +25,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";

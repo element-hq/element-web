@@ -18,7 +18,7 @@ import React from 'react';
 import * as sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
 import {getCaretOffsetAndText} from '../../../editor/dom';
 import {htmlSerializeIfNeeded, textSerialize, containsEmote, stripEmoteCommand} from '../../../editor/serialize';
