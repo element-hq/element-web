@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import { Algorithm } from "./Algorithm";
-import { ChaoticAlgorithm } from "./ChaoticAlgorithm";
 import { ImportanceAlgorithm } from "./ImportanceAlgorithm";
 import { ListAlgorithm } from "../models";
+import { NaturalAlgorithm } from "./NaturalAlgorithm";
 
 const ALGORITHM_FACTORIES: { [algorithm in ListAlgorithm]: () => Algorithm } = {
-    [ListAlgorithm.Natural]: () => new ChaoticAlgorithm(),
+    [ListAlgorithm.Natural]: () => new NaturalAlgorithm(),
     [ListAlgorithm.Importance]: () => new ImportanceAlgorithm(),
 };
 
