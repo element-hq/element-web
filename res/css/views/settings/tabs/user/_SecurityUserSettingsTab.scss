@@ -55,3 +55,12 @@ limitations under the License.
 .mx_SecurityUserSettingsTab_ignoredUser .mx_AccessibleButton {
     margin-right: 10px;
 }
+
+.mx_SecurityUserSettingsTab {
+    .mx_SettingsTab_section {
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+            font-size: inherit;
+        }
+    }
+}

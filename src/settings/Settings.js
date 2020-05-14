@@ -131,12 +131,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_presence_in_room_list": {
-        isFeature: true,
-        displayName: _td("Show a presence dot next to DMs in the room list"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
@@ -152,28 +146,17 @@ export const SETTINGS = {
         default: null,
     },
     "feature_cross_signing": {
-        isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_event_indexing": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
-        default: false,
+        // XXX: We shouldn't be using the feature prefix for non-feature settings. There is an exception
+        // for this case though as we're converting a feature to a setting for a temporary safety net.
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session"),
+        supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
+        default: true,
     },
     "feature_bridge_state": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
-    },
-    "feature_invite_only_padlocks": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show padlocks on invite only rooms"),
-        default: true,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -516,7 +499,7 @@ export const SETTINGS = {
     },
     "keepSecretStoragePassphraseForSession": {
          supportedLevels: ['device', 'config'],
-         displayName: _td("Keep secret storage passphrase in memory for this session"),
+         displayName: _td("Keep recovery passphrase in memory for this session"),
          default: false,
     },
     "crawlerSleepTime": {

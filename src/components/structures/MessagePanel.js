@@ -503,6 +503,7 @@ export default class MessagePanel extends React.Component {
     }
 
     _getTilesForEvent(prevEvent, mxEv, last) {
+        const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
@@ -577,25 +578,27 @@ export default class MessagePanel extends React.Component {
                 ref={this._collectEventNode.bind(this, eventId)}
                 data-scroll-tokens={scrollToken}
             >
-                <EventTile mxEvent={mxEv}
-                    continuation={continuation}
-                    isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
-                    editState={isEditing && this.props.editState}
-                    onHeightChanged={this._onHeightChanged}
-                    readReceipts={readReceipts}
-                    readReceiptMap={this._readReceiptMap}
-                    showUrlPreview={this.props.showUrlPreview}
-                    checkUnmounting={this._isUnmounting.bind(this)}
-                    eventSendStatus={mxEv.getAssociatedStatus()}
-                    tileShape={this.props.tileShape}
-                    isTwelveHour={this.props.isTwelveHour}
-                    permalinkCreator={this.props.permalinkCreator}
-                    last={last}
-                    isSelectedEvent={highlight}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
-                    showReactions={this.props.showReactions}
-                />
+                <TileErrorBoundary mxEvent={mxEv}>
+                    <EventTile mxEvent={mxEv}
+                        continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
+                        replacingEventId={mxEv.replacingEventId()}
+                        editState={isEditing && this.props.editState}
+                        onHeightChanged={this._onHeightChanged}
+                        readReceipts={readReceipts}
+                        readReceiptMap={this._readReceiptMap}
+                        showUrlPreview={this.props.showUrlPreview}
+                        checkUnmounting={this._isUnmounting.bind(this)}
+                        eventSendStatus={mxEv.getAssociatedStatus()}
+                        tileShape={this.props.tileShape}
+                        isTwelveHour={this.props.isTwelveHour}
+                        permalinkCreator={this.props.permalinkCreator}
+                        last={last}
+                        isSelectedEvent={highlight}
+                        getRelationsForEvent={this.props.getRelationsForEvent}
+                        showReactions={this.props.showReactions}
+                    />
+                </TileErrorBoundary>
             </li>,
         );
 
@@ -757,6 +760,7 @@ export default class MessagePanel extends React.Component {
     }
 
     render() {
+        const ErrorBoundary = sdk.getComponent('elements.ErrorBoundary');
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
@@ -789,22 +793,24 @@ export default class MessagePanel extends React.Component {
         }
 
         return (
-            <ScrollPanel
-                ref={this._scrollPanel}
-                className={className}
-                onScroll={this.props.onScroll}
-                onResize={this.onResize}
-                onFillRequest={this.props.onFillRequest}
-                onUnfillRequest={this.props.onUnfillRequest}
-                style={style}
-                stickyBottom={this.props.stickyBottom}
-                resizeNotifier={this.props.resizeNotifier}
-            >
-                { topSpinner }
-                { this._getEventTiles() }
-                { whoIsTyping }
-                { bottomSpinner }
-            </ScrollPanel>
+            <ErrorBoundary>
+                <ScrollPanel
+                    ref={this._scrollPanel}
+                    className={className}
+                    onScroll={this.props.onScroll}
+                    onResize={this.onResize}
+                    onFillRequest={this.props.onFillRequest}
+                    onUnfillRequest={this.props.onUnfillRequest}
+                    style={style}
+                    stickyBottom={this.props.stickyBottom}
+                    resizeNotifier={this.props.resizeNotifier}
+                >
+                    { topSpinner }
+                    { this._getEventTiles() }
+                    { whoIsTyping }
+                    { bottomSpinner }
+                </ScrollPanel>
+            </ErrorBoundary>
         );
     }
 }

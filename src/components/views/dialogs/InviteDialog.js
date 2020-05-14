@@ -574,13 +574,16 @@ export default class InviteDialog extends React.PureComponent {
 
         const createRoomOptions = {inlineErrors: true};
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
-            const client = MatrixClientPeg.get();
-            const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
-            if (allHaveDeviceKeys) {
-                createRoomOptions.encryption = true;
+            const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
+            if (!has3PidMembers) {
+                const client = MatrixClientPeg.get();
+                const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
+                if (allHaveDeviceKeys) {
+                    createRoomOptions.encryption = true;
+                }
             }
         }
 
@@ -1067,9 +1070,8 @@ export default class InviteDialog extends React.PureComponent {
         let buttonText;
         let goButtonFn;
 
+        const userId = MatrixClientPeg.get().getUserId();
         if (this.props.kind === KIND_DM) {
-            const userId = MatrixClientPeg.get().getUserId();
-
             title = _t("Direct Messages");
             helpText = _t(
                 "Start a conversation with someone using their name, username (like <userId/>) or email address.",
@@ -1083,9 +1085,11 @@ export default class InviteDialog extends React.PureComponent {
         } else { // KIND_INVITE
             title = _t("Invite to this room");
             helpText = _t(
-                "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
-                "<a>share this room</a>.", {},
+                "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
+                {},
                 {
+                    userId: () =>
+                        <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
                     a: (sub) =>
                         <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
                 },

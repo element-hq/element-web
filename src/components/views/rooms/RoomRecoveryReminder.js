@@ -150,7 +150,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                     )}</p>
                 </div>
                 <div className="mx_RoomRecoveryReminder_buttons">
-                    <AccessibleButton className="mx_RoomRecoveryReminder_button"
+                    <AccessibleButton kind="primary"
                         onClick={this.onSetupClick}>
                         {setupCaption}
                     </AccessibleButton>

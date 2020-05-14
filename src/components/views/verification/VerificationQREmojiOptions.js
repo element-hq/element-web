@@ -20,8 +20,8 @@ import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
 import {replaceableComponent} from "../../../utils/replaceableComponent";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
-import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
+import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 @replaceableComponent("views.verification.VerificationQREmojiOptions")
 export default class VerificationQREmojiOptions extends React.Component {
@@ -31,31 +31,17 @@ export default class VerificationQREmojiOptions extends React.Component {
         onStartEmoji: PropTypes.func.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            qrProps: null,
-        };
-
-        this._prepareQrCode(props.request);
-    }
-
-    async _prepareQrCode(request: VerificationRequest) {
-        try {
-            const props = await VerificationQRCode.getPropsForRequest(request);
-            this.setState({qrProps: props});
-        } catch (e) {
-            console.error(e);
-            // We just won't show a QR code
-        }
-    }
-
     render() {
-        let qrCode = <div className='mx_VerificationQREmojiOptions_noQR'><Spinner /></div>;
-        if (this.state.qrProps) {
-            qrCode = <VerificationQRCode {...this.state.qrProps} />;
+        const {request} = this.props;
+        const showQR = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
+
+        let qrCode;
+        if (showQR) {
+            qrCode = <VerificationQRCode qrCodeData={request.qrCodeData} />;
+        } else {
+            qrCode = <div className='mx_VerificationQREmojiOptions_noQR'><Spinner /></div>;
         }
+
         return (
             <div>
                 {_t("Verify this session by completing one of the following:")}

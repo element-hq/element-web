@@ -219,12 +219,29 @@ export default class RightPanel extends React.Component {
                 break;
             case RIGHT_PANEL_PHASES.RoomMemberInfo:
             case RIGHT_PANEL_PHASES.EncryptionPanel:
-                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                if (SettingsStore.getValue("feature_cross_signing")) {
                     const onClose = () => {
-                        dis.dispatch({
-                            action: "view_user",
-                            member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
-                        });
+                        // XXX: There are three different ways of 'closing' this panel depending on what state
+                        // things are in... this knows far more than it should do about the state of the rest
+                        // of the app and is generally a bit silly.
+                        if (this.props.user) {
+                            // If we have a user prop then we're displaying a user from the 'user' page type
+                            // in LoggedInView, so need to change the page type to close the panel (we switch
+                            // to the home page which is not obviously the correct thing to do, but I'm not sure
+                            // anything else is - we could hide the close button altogether?)
+                            dis.dispatch({
+                                action: "view_home_page",
+                            });
+                        } else {
+                            // Otherwise we have got our user from RoomViewStore which means we're being shown
+                            // within a room, so go back to the member panel if we were in the encryption panel,
+                            // or the member list if we were in the member panel... phew.
+                            dis.dispatch({
+                                action: "view_user",
+                                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ?
+                                    this.state.member : null,
+                            });
+                        }
                     };
                     panel = <UserInfo
                         user={this.state.member}
@@ -246,7 +263,7 @@ export default class RightPanel extends React.Component {
                 panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
                 break;
             case RIGHT_PANEL_PHASES.GroupMemberInfo:
-                if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+                if (SettingsStore.getValue("feature_cross_signing")) {
                     const onClose = () => {
                         dis.dispatch({
                             action: "view_user",

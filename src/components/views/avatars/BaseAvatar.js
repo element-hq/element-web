@@ -24,6 +24,7 @@ import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import toRem from "../../../utils/rem";
 
 export default createReactClass({
     displayName: 'BaseAvatar',
@@ -164,9 +165,11 @@ export default createReactClass({
             const initialLetter = AvatarLogic.getInitialLetter(name);
             const textNode = (
                 <span className="mx_BaseAvatar_initial" aria-hidden="true"
-                    style={{ fontSize: (width * 0.65) + "px",
-                    width: width + "px",
-                    lineHeight: height + "px" }}
+                    style={{
+                        fontSize: toRem(width * 0.65),
+                        width: toRem(width),
+                        lineHeight: toRem(height),
+                    }}
                 >
                     { initialLetter }
                 </span>
@@ -174,7 +177,11 @@ export default createReactClass({
             const imgNode = (
                 <img className="mx_BaseAvatar_image" src={imageUrl}
                     alt="" title={title} onError={this.onError}
-                    width={width} height={height} aria-hidden="true" />
+                    aria-hidden="true"
+                    style={{
+                        width: toRem(width),
+                        height: toRem(height)
+                    }} />
             );
             if (onClick != null) {
                 return (
@@ -202,7 +209,10 @@ export default createReactClass({
                     src={imageUrl}
                     onClick={onClick}
                     onError={this.onError}
-                    width={width} height={height}
+                    style={{
+                        width: toRem(width),
+                        height: toRem(height),
+                    }}
                     title={title} alt=""
                     inputRef={inputRef}
                     {...otherProps} />
@@ -213,7 +223,10 @@ export default createReactClass({
                     className="mx_BaseAvatar mx_BaseAvatar_image"
                     src={imageUrl}
                     onError={this.onError}
-                    width={width} height={height}
+                    style={{
+                        width: toRem(width),
+                        height: toRem(height),
+                    }}
                     title={title} alt=""
                     ref={inputRef}
                     {...otherProps} />

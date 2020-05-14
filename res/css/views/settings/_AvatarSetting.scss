@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 .mx_AvatarSetting_avatar {
-    width: 88px;
-    height: 88px;
+    width: $font-88px;
+    height: $font-88px;
     margin-left: 13px;
     position: relative;
 
     & > * {
-        width: 88px;
+        width: $font-88px;
         box-sizing: border-box;
     }
 
@@ -63,7 +63,7 @@ limitations under the License.
     & > img,
     .mx_AvatarSetting_avatarPlaceholder {
         display: block;
-        height: 88px;
+        height: $font-88px;
         border-radius: 4px;
     }
 

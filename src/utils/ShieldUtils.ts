@@ -7,7 +7,7 @@ interface Client {
         isCrossSigningVerified: () => boolean
         wasCrossSigningVerified: () => boolean
     };
-    getStoredDevicesForUser: (userId: string) => Promise<[{ deviceId: string }]>;
+    getStoredDevicesForUser: (userId: string) => [{ deviceId: string }];
     checkDeviceTrust: (userId: string, deviceId: string) => {
         isVerified: () => boolean
     }
@@ -45,7 +45,7 @@ export async function shieldStatusForRoom(client: Client, room: Room): Promise<s
                         (members.length === 1);     // Do alarm for self if we're alone in a room
     const targets = includeUser ? [...verified, client.getUserId()] : verified;
     for (const userId of targets) {
-        const devices = await client.getStoredDevicesForUser(userId);
+        const devices = client.getStoredDevicesForUser(userId);
         const anyDeviceNotVerified = devices.some(({deviceId}) => {
             return !client.checkDeviceTrust(userId, deviceId).isVerified();
         });

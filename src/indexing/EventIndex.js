@@ -102,9 +102,6 @@ export default class EventIndex extends EventEmitter {
             const timeline = room.getLiveTimeline();
             const token = timeline.getPaginationToken("b");
 
-            console.log("EventIndex: Got token for indexer",
-                        room.roomId, token);
-
             const backCheckpoint = {
                 roomId: room.roomId,
                 token: token,
@@ -161,7 +158,6 @@ export default class EventIndex extends EventEmitter {
         if (prevState === "SYNCING" && state === "SYNCING") {
             // A sync was done, presumably we queued up some live events,
             // commit them now.
-            console.log("EventIndex: Committing events");
             await indexManager.commitLiveEvents();
             return;
         }
@@ -275,6 +271,7 @@ export default class EventIndex extends EventEmitter {
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
+        let hasContentValue = true;
 
         if (ev.getType() === "m.room.message" && !ev.isRedacted()) {
             // Expand this if there are more invalid msgtypes.
@@ -282,9 +279,15 @@ export default class EventIndex extends EventEmitter {
 
             if (!msgtype) validMsgType = false;
             else validMsgType = !msgtype.startsWith("m.key.verification");
+
+            if (!ev.getContent().body) hasContentValue = false;
+        } else if (ev.getType() === "m.room.topic" && !ev.isRedacted()) {
+            if (!ev.getContent().topic) hasContentValue = false;
+        } else if (ev.getType() === "m.room.name" && !ev.isRedacted()) {
+            if (!ev.getContent().name) hasContentValue = false;
         }
 
-        return validEventType && validMsgType;
+        return validEventType && validMsgType && hasContentValue;
     }
 
     /**
@@ -329,8 +332,6 @@ export default class EventIndex extends EventEmitter {
     async crawlerFunc() {
         let cancelled = false;
 
-        console.log("EventIndex: Started crawler function");
-
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
@@ -359,8 +360,6 @@ export default class EventIndex extends EventEmitter {
 
             await sleep(sleepTime);
 
-            console.log("EventIndex: Running the crawler loop.");
-
             if (cancelled) {
                 break;
             }
@@ -379,11 +378,9 @@ export default class EventIndex extends EventEmitter {
 
             idle = false;
 
-            console.log("EventIndex: crawling using checkpoint", checkpoint);
-
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper();
+            const eventMapper = client.getEventMapper({preventReEmit: true});
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;
@@ -470,9 +467,6 @@ export default class EventIndex extends EventEmitter {
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
-            const undecryptableEvents = matrixEvents.filter((ev) => {
-                return ev.isDecryptionFailure();
-            });
 
             // Collect the redaction events so we can delete the redacted events
             // from the index.
@@ -503,15 +497,6 @@ export default class EventIndex extends EventEmitter {
                 fullCrawl: checkpoint.fullCrawl,
                 direction: checkpoint.direction,
             };
-
-            console.log(
-                "EventIndex: Crawled room",
-                client.getRoom(checkpoint.roomId).name,
-                "and fetched total", matrixEvents.length, "events of which",
-                events.length, "are being added,", redactionEvents.length,
-                "are redacted,", matrixEvents.length - events.length,
-                "are being skipped, undecryptable", undecryptableEvents.length,
-            );
 
             try {
                 for (let i = 0; i < redactionEvents.length; i++) {
@@ -545,8 +530,6 @@ export default class EventIndex extends EventEmitter {
         }
 
         this._crawler = null;
-
-        console.log("EventIndex: Stopping crawler function");
     }
 
     /**
