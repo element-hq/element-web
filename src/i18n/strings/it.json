@@ -2417,5 +2417,14 @@
     "Verify your other session using one of the options below.": "Verifica la tua altra sessione usando una delle opzioni sotto.",
     "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invita qualcuno usando il suo nome, nome utente (come <userId/>), indirizzo email o <a>condividi questa stanza</a>.",
     "Message deleted": "Messaggio eliminato",
-    "Message deleted by %(name)s": "Messaggio eliminato da %(name)s"
+    "Message deleted by %(name)s": "Messaggio eliminato da %(name)s",
+    "Opens chat with the given user": "Apre una chat con l'utente specificato",
+    "Sends a message to the given user": "Invia un messaggio all'utente specificato",
+    "Waiting for your other session to verify…": "In attesa che la tua altra sessione verifichi…",
+    "You've successfully verified your device!": "Hai verificato correttamente il tuo dispositivo!",
+    "To continue, use Single Sign On to prove your identity.": "Per continuare, usa Single Sign On per provare la tua identità.",
+    "Confirm to continue": "Conferma per continuare",
+    "Click the button below to confirm your identity.": "Clicca il pulsante sotto per confermare la tua identità.",
+    "Confirm encryption setup": "Conferma impostazione cifratura",
+    "Click the button below to confirm setting up encryption.": "Clicca il pulsante sotto per confermare l'impostazione della cifratura."
 }
