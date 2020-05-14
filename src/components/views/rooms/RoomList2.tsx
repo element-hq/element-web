@@ -25,9 +25,9 @@ import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/Roo
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
-import { ActionPayload } from "../../../dispatcher-types";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
+import { ActionPayload } from "../../../dispatcher/payloads";
 
 /*******************************************************************
  *   CAUTION                                                       *

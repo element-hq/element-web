@@ -16,8 +16,8 @@ limitations under the License.
 
 import { EventEmitter } from 'events';
 import AwaitLock from 'await-lock';
-import { ActionPayload } from "../dispatcher-types";
 import { Dispatcher } from "flux";
+import { ActionPayload } from "../dispatcher/payloads";
 
 /**
  * The event/channel to listen for in an AsyncStore.

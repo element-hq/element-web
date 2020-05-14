@@ -24,7 +24,7 @@ import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
 import Tooltip from "../../views/elements/Tooltip";
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import * as RoomNotifs from '../../../RoomNotifs';
 import { EffectiveMembership, getEffectiveMembership } from "../../../stores/room-list/membership";
