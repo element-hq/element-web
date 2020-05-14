@@ -14,5 +14,16 @@
     "Create Account": "Înregistare",
     "Need help?": "Ai nevoie de ajutor?",
     "Explore rooms": "Explorează camerele",
-    "Room Directory": "Lista de camere"
+    "Room Directory": "Lista de camere",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratie invalida: se poate specifica doar una dintre default_server_config, default_server_name, or default_hs_url.",
+    "Your Riot is misconfigured": "Aplicatia ta Riot e gresit configurata",
+    "Invalid JSON": "JSON invalid",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Acest browser nu este suportat",
+    "Your browser can't run Riot": "Browserul tau nu poate rula Riot",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instalati va rog <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> pentru o experienta mai buna.",
+    "I understand the risks and wish to continue": "Inteleg riscul si doresc sa continui",
+    "Go to Riot.im": "Acceseaza Riot.im",
+    "Failed to start": "Nu reuseste sa porneasca"
 }
