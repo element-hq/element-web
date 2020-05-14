@@ -42,6 +42,7 @@ interface IProps {
 interface IBadgeState {
     showBadge: boolean; // if numUnread > 0 && !showBadge -> bold room
     numUnread: number; // used only if showBadge or showBadgeHighlight is true
+    hasUnread: number; // used to make the room bold
     showBadgeHighlight: boolean; // make the badge red
     isInvite: boolean; // show a `!` instead of a number
 }
@@ -98,6 +99,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return {
             showBadge: (showBadge && shouldShowNotifBadge) || isInvite,
             numUnread,
+            hasUnread: showBadge,
             showBadgeHighlight: (highlightCount > 0 && shouldShowHighlightBadge) || isInvite,
             isInvite,
         };
@@ -130,7 +132,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const classes = classNames({
             'mx_RoomTile': true,
             // 'mx_RoomTile_selected': this.state.selected,
-            'mx_RoomTile_unread': this.state.numUnread > 0,
+            'mx_RoomTile_unread': this.state.numUnread > 0 || this.state.hasUnread,
             'mx_RoomTile_unreadNotify': this.state.showBadge,
             'mx_RoomTile_highlight': this.state.showBadgeHighlight,
             'mx_RoomTile_invited': this.state.isInvite,
