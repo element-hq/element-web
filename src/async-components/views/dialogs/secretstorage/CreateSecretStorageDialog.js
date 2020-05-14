@@ -61,7 +61,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         this._recoveryKey = null;
         this._recoveryKeyNode = null;
-        this._setZxcvbnResultTimeout = null;
         this._backupKey = null;
 
         this.state = {
@@ -100,9 +99,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     componentWillUnmount() {
         MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
-        if (this._setZxcvbnResultTimeout !== null) {
-            clearTimeout(this._setZxcvbnResultTimeout);
-        }
     }
 
     async _fetchBackupInfo() {
@@ -504,7 +500,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onValidate={this._onPassPhraseValidate}
                     fieldRef={this._passphraseField}
                     autoFocus={true}
-
                     label={_td("Enter a recovery passphrase")}
                     labelEnterPassword={_td("Enter a recovery passphrase")}
                     labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
