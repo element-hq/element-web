@@ -221,7 +221,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
 
                 <div className="mx_ShareDialog_split">
                     <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode data={matrixToUrl} />
+                        <QRCode data={matrixToUrl} width={256} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         { socials.map((social) => (
