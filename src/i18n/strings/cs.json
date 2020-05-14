@@ -2293,5 +2293,6 @@
     "Opens chat with the given user": "Otevře konverzaci s tímto uživatelem",
     "Sends a message to the given user": "Pošle zprávu danému uživateli",
     "Waiting for your other session to verify…": "Čekáme na ověření od vaší druhé relace…",
-    "Verify all your sessions to ensure your account & messages are safe": "Ověřte všechny své relace, abyste zaručili, že jsou vaše zprávy a účet bezpečné"
+    "Verify all your sessions to ensure your account & messages are safe": "Ověřte všechny své relace, abyste zaručili, že jsou vaše zprávy a účet bezpečné",
+    "Verify the new login accessing your account: %(name)s": "Ověřte nové přihlášení na váš účet: %(name)s"
 }
