@@ -44,6 +44,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
+import {Action} from "../../../dispatcher/actions";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -841,7 +842,7 @@ const GroupAdminToolsSection = ({children, groupId, groupMember, startUpdating, 
             cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
                 // return to the user list
                 dis.dispatch({
-                    action: "view_user",
+                    action: Action.ViewUser,
                     member: null,
                 });
             }).catch((e) => {

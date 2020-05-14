@@ -48,6 +48,7 @@ import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberInfo',
@@ -724,7 +725,7 @@ export default createReactClass({
 
     onCancel: function(e) {
         dis.dispatch({
-            action: "view_user",
+            action: Action.ViewUser,
             member: null,
         });
     },

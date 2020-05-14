@@ -30,6 +30,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import {Action} from "../../dispatcher/actions";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -237,7 +238,7 @@ export default class RightPanel extends React.Component {
                             // within a room, so go back to the member panel if we were in the encryption panel,
                             // or the member list if we were in the member panel... phew.
                             dis.dispatch({
-                                action: "view_user",
+                                action: Action.ViewUser,
                                 member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ?
                                     this.state.member : null,
                             });
@@ -266,7 +267,7 @@ export default class RightPanel extends React.Component {
                 if (SettingsStore.getValue("feature_cross_signing")) {
                     const onClose = () => {
                         dis.dispatch({
-                            action: "view_user",
+                            action: Action.ViewUser,
                             member: null,
                         });
                     };

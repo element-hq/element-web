@@ -28,6 +28,7 @@ import GroupStore from '../../../stores/GroupStore';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'GroupMemberInfo',
@@ -103,7 +104,7 @@ export default createReactClass({
                 ).then(() => {
                     // return to the user list
                     dis.dispatch({
-                        action: "view_user",
+                        action: Action.ViewUser,
                         member: null,
                     });
                 }).catch((e) => {
@@ -124,7 +125,7 @@ export default createReactClass({
     _onCancel: function(e) {
         // Go back to the user list
         dis.dispatch({
-            action: "view_user",
+            action: Action.ViewUser,
             member: null,
         });
     },

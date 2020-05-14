@@ -17,12 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {InvalidStoreError} from "matrix-js-sdk/src/errors";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import React, { createRef } from 'react';
+import { InvalidStoreError } from "matrix-js-sdk/src/errors";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
-
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
@@ -30,7 +29,7 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
@@ -40,7 +39,7 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showStartChatInviteDialog, showRoomInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -52,21 +51,22 @@ import { getHomePageUrl } from '../../utils/pages';
 import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
-import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
-import {defer, IDeferred} from "../../utils/promise";
+import { defer, IDeferred } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
+import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
+import { Action } from "../../dispatcher/actions";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1755,8 +1755,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const member = new RoomMember(null, userId);
         if (!member) { return; }
-        dis.dispatch({
-            action: 'view_user',
+        dis.dispatch<ViewUserPayload>({
+            action: Action.ViewUser,
             member: member,
         });
     }

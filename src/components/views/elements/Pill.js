@@ -26,6 +26,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
@@ -191,7 +192,7 @@ const Pill = createReactClass({
 
     onUserPillClicked: function() {
         dis.dispatch({
-            action: 'view_user',
+            action: Action.ViewUser,
             member: this.state.member,
         });
     },

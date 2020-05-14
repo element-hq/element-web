@@ -19,5 +19,19 @@ export type DispatcherAction = Action | string;
 
 export enum Action {
     // TODO: Populate with actual actions
+    // This is lazily generated as it also includes fixing a bunch of references. Work
+    // that we don't really want to take on in a giant chunk. We should always define
+    // new actions here, and ideally when we touch existing ones we take some time to
+    // define them correctly.
+
+    // When defining a new action, please use lower_scored_case with an optional class
+    // name prefix. For example, `RoomListStore.view_room` or `view_user_settings`.
+    // New definitions should also receive an accompanying interface in the payloads
+    // directory.
+
+    /**
+     * View a user's profile. Should be used with a ViewUserPayload.
+     */
+    ViewUser = "view_user",
 }
 

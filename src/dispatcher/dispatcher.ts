@@ -32,7 +32,7 @@ export class MatrixDispatcher extends Dispatcher<ActionPayload> {
      *        an operation that the browser requires user interaction
      *        for. Default false (async).
      */
-    dispatch(payload: ActionPayload, sync = false) {
+    dispatch<T extends ActionPayload>(payload: T, sync = false) {
         if (payload instanceof AsyncActionPayload) {
             payload.fn((action: ActionPayload) => {
                 this.dispatch(action, sync);
