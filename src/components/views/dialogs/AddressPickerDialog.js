@@ -33,6 +33,7 @@ import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from '../../../
 import { abbreviateUrl } from '../../../utils/UrlUtils';
 import {sleep} from "../../../utils/promise";
 import {Key} from "../../../Keyboard";
+import {Action} from "../../../dispatcher/actions";
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -615,7 +616,7 @@ export default createReactClass({
 
     onManageSettingsClick(e) {
         e.preventDefault();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
         this.onCancel();
     },
 

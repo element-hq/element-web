@@ -107,7 +107,7 @@ export enum Views {
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [
-    'view_user_settings',
+    Action.ViewUserSettings,
     'view_create_chat',
     'view_create_room',
     'view_create_group',
@@ -613,7 +613,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_indexed_room':
                 this.viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings': {
+            case Action.ViewUserSettings: {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
                     /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -1621,9 +1621,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'view_create_room',
             });
         } else if (screen === 'settings') {
-            dis.dispatch({
-                action: 'view_user_settings',
-            });
+            dis.fire(Action.ViewUserSettings);
         } else if (screen === 'welcome') {
             dis.dispatch({
                 action: 'view_welcome_page',

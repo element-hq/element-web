@@ -36,6 +36,7 @@ import {inviteMultipleToRoom} from "../../../RoomInvite";
 import SettingsStore from '../../../settings/SettingsStore';
 import RoomListStore, {TAG_DM} from "../../../stores/RoomListStore";
 import {Key} from "../../../Keyboard";
+import {Action} from "../../../dispatcher/actions";
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -902,7 +903,7 @@ export default class InviteDialog extends React.PureComponent {
 
     _onManageSettingsClick = (e) => {
         e.preventDefault();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
         this.props.onFinished();
     };
 

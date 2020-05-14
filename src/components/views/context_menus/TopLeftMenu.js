@@ -27,6 +27,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
 import * as sdk from "../../../index";
 import {getHomePageUrl} from "../../../utils/pages";
+import {Action} from "../../../dispatcher/actions";
 
 export default class TopLeftMenu extends React.Component {
     static propTypes = {
@@ -134,7 +135,7 @@ export default class TopLeftMenu extends React.Component {
     }
 
     openSettings() {
-        dis.dispatch({action: 'view_user_settings'});
+        dis.fire(Action.ViewUserSettings);
         this.closeMenu();
     }
 

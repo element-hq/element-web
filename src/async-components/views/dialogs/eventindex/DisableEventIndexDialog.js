@@ -22,6 +22,7 @@ import { _t } from '../../../../languageHandler';
 
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
+import {Action} from "../../../../dispatcher/actions";
 
 /*
  * Allows the user to disable the Event Index.
@@ -47,7 +48,7 @@ export default class DisableEventIndexDialog extends React.Component {
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, false);
         await EventIndexPeg.deleteEventIndex();
         this.props.onFinished();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
     }
 
     render() {
