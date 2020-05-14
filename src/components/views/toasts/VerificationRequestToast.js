@@ -31,7 +31,7 @@ export default class VerificationRequestToast extends React.PureComponent {
         this.state = {counter: Math.ceil(props.request.timeout / 1000)};
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const {request} = this.props;
         if (request.timeout && request.timeout > 0) {
             this._intervalHandle = setInterval(() => {
@@ -48,6 +48,11 @@ export default class VerificationRequestToast extends React.PureComponent {
         // As a quick & dirty fix, check the toast is still relevant when it mounts (this prevents
         // a toast hanging around after logging in if you did a verification as part of login).
         this._checkRequestIsPending();
+
+        if (request.isSelfVerification) {
+            const cli = MatrixClientPeg.get();
+            this.setState({device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
+        }
     }
 
     componentWillUnmount() {
@@ -78,7 +83,6 @@ export default class VerificationRequestToast extends React.PureComponent {
         // no room id for to_device requests
         const cli = MatrixClientPeg.get();
         try {
-            await request.accept();
             if (request.channel.roomId) {
                 dis.dispatch({
                     action: 'view_room',
@@ -99,6 +103,7 @@ export default class VerificationRequestToast extends React.PureComponent {
                     verificationRequest: request,
                 }, null, /* priority = */ false, /* static = */ true);
             }
+            await request.accept();
         } catch (err) {
             console.error(err.message);
         }
@@ -107,15 +112,25 @@ export default class VerificationRequestToast extends React.PureComponent {
     render() {
         const FormButton = sdk.getComponent("elements.FormButton");
         const {request} = this.props;
-        const userId = request.otherUserId;
-        const roomId = request.channel.roomId;
-        let nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
-        // for legacy to_device verification requests
-        if (nameLabel === userId) {
-            const client = MatrixClientPeg.get();
-            const user = client.getUser(userId);
-            if (user && user.displayName) {
-                nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
+        let nameLabel;
+        if (request.isSelfVerification) {
+            if (this.state.device) {
+                nameLabel = _t("From %(deviceName)s (%(deviceId)s)", {
+                    deviceName: this.state.device.getDisplayName(),
+                    deviceId: this.state.device.deviceId,
+                });
+            }
+        } else {
+            const userId = request.otherUserId;
+            const roomId = request.channel.roomId;
+            nameLabel = roomId ? userLabelForEventRoom(userId, roomId) : userId;
+            // for legacy to_device verification requests
+            if (nameLabel === userId) {
+                const client = MatrixClientPeg.get();
+                const user = client.getUser(userId);
+                if (user && user.displayName) {
+                    nameLabel = _t("%(name)s (%(userId)s)", {name: user.displayName, userId});
+                }
             }
         }
         const declineLabel = this.state.counter == 0 ?

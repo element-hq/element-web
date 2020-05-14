@@ -61,7 +61,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
         this._checkPermissions();
     },
@@ -90,7 +90,8 @@ export default createReactClass({
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
         if (!pinnedEvent) return false;
-        return pinnedEvent.getContent().pinned.includes(this.props.mxEvent.getId());
+        const content = pinnedEvent.getContent();
+        return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     },
 
     onResendClick: function() {
@@ -129,22 +130,24 @@ export default createReactClass({
     },
 
     onViewSourceClick: function() {
+        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
-            content: this.props.mxEvent.event,
+            roomId: ev.getRoomId(),
+            eventId: ev.getId(),
+            content: ev.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     },
 
     onViewClearSourceClick: function() {
+        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
+            roomId: ev.getRoomId(),
+            eventId: ev.getId(),
             // FIXME: _clearEvent is private
-            content: this.props.mxEvent._clearEvent,
+            content: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     },
@@ -420,7 +423,7 @@ export default createReactClass({
                 onClick={this.onPermalinkClick}
                 href={permalink}
                 target="_blank"
-                rel="noopener"
+                rel="noreferrer noopener"
             >
                 { mxEvent.isRedacted() || mxEvent.getType() !== 'm.room.message'
                     ? _t('Share Permalink') : _t('Share Message') }
@@ -445,7 +448,7 @@ export default createReactClass({
                     element="a"
                     className="mx_MessageContextMenu_field"
                     target="_blank"
-                    rel="noopener"
+                    rel="noreferrer noopener"
                     onClick={this.closeMenu}
                     href={mxEvent.event.content.external_url}
                 >

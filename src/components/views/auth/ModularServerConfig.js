@@ -99,14 +99,15 @@ export default class ModularServerConfig extends ServerConfig {
                     "Enter the location of your Modular homeserver. It may use your own " +
                     "domain name or be a subdomain of <a>modular.im</a>.",
                     {}, {
-                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noopener">
+                        a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                             {sub}
                         </a>,
                     },
                 )}
                 <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
                     <div className="mx_ServerConfig_fields">
-                        <Field id="mx_ServerConfig_hsUrl"
+                        <Field
+                            id="mx_ServerConfig_hsUrl"
                             label={_t("Server Name")}
                             placeholder={this.props.serverConfig.hsUrl}
                             value={this.state.hsUrl}

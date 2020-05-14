@@ -69,8 +69,6 @@ limitations under the License.
     padding-right: 12px;
     padding-top: 4px;
     padding-bottom: 4px;
-    width: 36px;
-    height: 36px;
     position: relative;
 }
 
@@ -78,7 +76,7 @@ limitations under the License.
 .mx_GroupRoomTile_name {
     flex: 1 1 0;
     overflow: hidden;
-    font-size: 14px;
+    font-size: $font-14px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -116,7 +114,7 @@ limitations under the License.
 }
 
 .mx_EntityTile_subtext {
-    font-size: 11px;
+    font-size: $font-11px;
     opacity: 0.5;
     overflow: hidden;
     white-space: nowrap;
@@ -125,7 +123,7 @@ limitations under the License.
 
 .mx_EntityTile_power {
     padding-inline-start: 6px;
-    font-size: 10px;
+    font-size: $font-10px;
     color: $notice-secondary-color;
     max-width: 6em;
     overflow: hidden;

@@ -170,6 +170,7 @@ export default createReactClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url);
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._iframe = createRef();
         this._dummyLink = createRef();
@@ -247,6 +248,8 @@ export default createReactClass({
                     });
                 };
 
+                // This button should actually Download because usercontent/ will try to click itself
+                // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
@@ -269,6 +272,8 @@ export default createReactClass({
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
                     textContent: _t("Download %(text)s", { text: text }),
+                    // only auto-download if a user triggered this iframe explicitly
+                    auto: !this.props.decryptedBlob,
                 }, "*");
             };
 
@@ -290,14 +295,14 @@ export default createReactClass({
                             src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
                             onLoad={onIframeLoad}
                             ref={this._iframe}
-                            sandbox="allow-scripts allow-downloads" />
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
                     </div>
                 </span>
             );
         } else if (contentUrl) {
             const downloadProps = {
                 target: "_blank",
-                rel: "noopener",
+                rel: "noreferrer noopener",
 
                 // We set the href regardless of whether or not we intercept the download
                 // because we don't really want to convert the file to a blob eagerly, and

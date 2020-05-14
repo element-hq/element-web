@@ -40,7 +40,7 @@ export default class HeaderButtons extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
         this._dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }

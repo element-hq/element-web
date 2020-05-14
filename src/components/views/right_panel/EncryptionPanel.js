@@ -30,13 +30,33 @@ import {_t} from "../../../languageHandler";
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
+const EncryptionPanel = (props) => {
+    const {verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted} = props;
     const [request, setRequest] = useState(verificationRequest);
+    // state to show a spinner immediately after clicking "start verification",
+    // before we have a request
+    const [isRequesting, setRequesting] = useState(false);
+    const [phase, setPhase] = useState(request && request.phase);
     useEffect(() => {
         setRequest(verificationRequest);
+        if (verificationRequest) {
+            setRequesting(false);
+            setPhase(verificationRequest.phase);
+        }
     }, [verificationRequest]);
 
-    const [phase, setPhase] = useState(request && request.phase);
+    useEffect(() => {
+        async function awaitPromise() {
+            setRequesting(true);
+            const request = await verificationRequestPromise;
+            setRequesting(false);
+            setRequest(request);
+            setPhase(request.phase);
+        }
+        if (verificationRequestPromise) {
+            awaitPromise();
+        }
+    }, [verificationRequestPromise]);
     const changeHandler = useCallback(() => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
@@ -64,7 +84,24 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
     }, [onClose, request]);
     useEventEmitter(request, "change", changeHandler);
 
+    const onCancel = useCallback(function() {
+        if (request) {
+            request.cancel();
+        }
+    }, [request]);
+
+    let cancelButton;
+    if (layout !== "dialog" && request && request.pending) {
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        cancelButton = (<AccessibleButton
+            className="mx_EncryptionPanel_cancel"
+            onClick={onCancel}
+            title={_t('Cancel')}
+        ></AccessibleButton>);
+    }
+
     const onStartVerification = useCallback(async () => {
+        setRequesting(true);
         const cli = MatrixClientPeg.get();
         const roomId = await ensureDMExists(cli, member.userId);
         const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
@@ -72,19 +109,39 @@ const EncryptionPanel = ({verificationRequest, member, onClose, layout}) => {
         setPhase(verificationRequest.phase);
     }, [member.userId]);
 
-    const requested = request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined);
+    const requested =
+        (!request && isRequesting) ||
+        (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
+    const isSelfVerification = request ?
+        request.isSelfVerification :
+        member.userId === MatrixClientPeg.get().getUserId();
     if (!request || requested) {
-        return <EncryptionInfo onStartVerification={onStartVerification} member={member} pending={requested} />;
+        const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
+        return (<React.Fragment>
+            {cancelButton}
+            <EncryptionInfo
+                isRoomEncrypted={isRoomEncrypted}
+                onStartVerification={onStartVerification}
+                member={member}
+                isSelfVerification={isSelfVerification}
+                waitingForOtherParty={requested && initiatedByMe}
+                waitingForNetwork={requested && !initiatedByMe}
+                inDialog={layout === "dialog"} />
+        </React.Fragment>);
     } else {
-        return (
+        return (<React.Fragment>
+            {cancelButton}
             <VerificationPanel
+                isRoomEncrypted={isRoomEncrypted}
                 layout={layout}
                 onClose={onClose}
                 member={member}
                 request={request}
                 key={request.channel.transactionId}
-                phase={phase} />
-        );
+                inDialog={layout === "dialog"}
+                phase={phase}
+            />
+        </React.Fragment>);
     }
 };
 EncryptionPanel.propTypes = {
@@ -92,6 +149,7 @@ EncryptionPanel.propTypes = {
     onClose: PropTypes.func.isRequired,
     verificationRequest: PropTypes.object,
     layout: PropTypes.string,
+    inDialog: PropTypes.bool,
 };
 
 export default EncryptionPanel;

@@ -24,21 +24,7 @@ import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../../";
 import PlatformPeg from "../../../../../PlatformPeg";
-
-// Simple method to help prettify GH Release Tags and Commit Hashes.
-const semVerRegex = /^v?(\d+\.\d+\.\d+(?:-rc.+)?)(?:-(?:\d+-g)?([0-9a-fA-F]+))?(?:-dirty)?$/i;
-const ghVersionLabel = function(repo, token='') {
-    const match = token.match(semVerRegex);
-    let url;
-    if (match && match[1]) { // basic semVer string possibly with commit hash
-        url = (match.length > 1 && match[2])
-            ? `https://github.com/${repo}/commit/${match[2]}`
-            : `https://github.com/${repo}/releases/tag/v${match[1]}`;
-    } else {
-        url = `https://github.com/${repo}/commit/${token.split('-')[0]}`;
-    }
-    return <a target="_blank" rel="noopener" href={url}>{ token }</a>;
-};
+import * as KeyboardShortcuts from "../../../../../accessibility/KeyboardShortcuts";
 
 export default class HelpUserSettingsTab extends React.Component {
     static propTypes = {
@@ -54,7 +40,7 @@ export default class HelpUserSettingsTab extends React.Component {
         };
     }
 
-    componentWillMount(): void {
+    componentDidMount(): void {
         PlatformPeg.get().getAppVersion().then((ver) => this.setState({vectorVersion: ver})).catch((e) => {
             console.error("Error getting vector version: ", e);
         });
@@ -110,7 +96,7 @@ export default class HelpUserSettingsTab extends React.Component {
         const legalLinks = [];
         for (const tocEntry of SdkConfig.get().terms_and_conditions_links) {
             legalLinks.push(<div key={tocEntry.url}>
-                <a href={tocEntry.url} rel="noopener" target="_blank">{tocEntry.text}</a>
+                <a href={tocEntry.url} rel="noreferrer noopener" target="_blank">{tocEntry.text}</a>
             </div>);
         }
 
@@ -132,27 +118,27 @@ export default class HelpUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
                 <ul>
                     <li>
-                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noopener" target="_blank">
+                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noreferrer noopener" target="_blank">
                         default cover photo</a> is ©&nbsp;
-                        <a href="https://www.flickr.com/golan" rel="noopener" target="_blank">Jesús Roncero</a>{' '}
+                        <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">
+                        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noreferrer noopener" target="_blank">
                         CC-BY-SA 4.0</a>.
                     </li>
                     <li>
-                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noopener" target="_blank">
-                        twemoji-colr</a> font is ©&nbsp;
-                        <a href="https://mozilla.org" rel="noopener" target="_blank">Mozilla Foundation</a>{' '}
+                        The <a href="https://github.com/matrix-org/twemoji-colr" rel="noreferrer noopener"
+                               target="_blank"> twemoji-colr</a> font is ©&nbsp;
+                        <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">Mozilla Foundation</a>{' '}
                         used under the terms of&nbsp;
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noopener" target="_blank">
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">
                         Apache 2.0</a>.
                     </li>
                     <li>
-                        The <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">
+                        The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">
                         Twemoji</a> emoji art is ©&nbsp;
-                        <a href="https://twemoji.twitter.com/" rel="noopener" target="_blank">Twitter, Inc and other
+                        <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">Twitter, Inc and other
                         contributors</a> used under the terms of&nbsp;
-                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener" target="_blank">
+                        <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer noopener" target="_blank">
                         CC-BY 4.0</a>.
                     </li>
                 </ul>
@@ -162,7 +148,8 @@ export default class HelpUserSettingsTab extends React.Component {
 
     render() {
         let faqText = _t('For help with using Riot, click <a>here</a>.', {}, {
-            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noopener' target='_blank'>{sub}</a>,
+            'a': (sub) =>
+                <a href="https://about.riot.im/need-help/" rel="noreferrer noopener" target="_blank">{sub}</a>,
         });
         if (SdkConfig.get().welcomeUserId && getCurrentLanguage().startsWith('en')) {
             faqText = (
@@ -170,7 +157,7 @@ export default class HelpUserSettingsTab extends React.Component {
                     {
                         _t('For help with using Riot, click <a>here</a> or start a chat with our ' +
                             'bot using the button below.', {}, {
-                            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noopener'
+                            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noreferrer noopener'
                                              target='_blank'>{sub}</a>,
                         })
                     }
@@ -183,9 +170,7 @@ export default class HelpUserSettingsTab extends React.Component {
             );
         }
 
-        const vectorVersion = this.state.vectorVersion
-            ? ghVersionLabel('vector-im/riot-web', this.state.vectorVersion)
-            : 'unknown';
+        const vectorVersion = this.state.vectorVersion || 'unknown';
 
         let olmVersion = MatrixClientPeg.get().olmVersion;
         olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
@@ -224,6 +209,15 @@ export default class HelpUserSettingsTab extends React.Component {
                                 {_t("Clear cache and reload")}
                             </AccessibleButton>
                         </div>
+                        {
+                            _t( "To report a Matrix-related security issue, please read the Matrix.org " +
+                                "<a>Security Disclosure Policy</a>.", {},
+                                {
+                                    'a': (sub) =>
+                                        <a href="https://matrix.org/security-disclosure-policy/"
+                                        rel="noreferrer noopener" target="_blank">{sub}</a>,
+                                })
+                        }
                     </div>
                 </div>
                 <div className='mx_SettingsTab_section'>
@@ -231,6 +225,9 @@ export default class HelpUserSettingsTab extends React.Component {
                     <div className='mx_SettingsTab_subsectionText'>
                         {faqText}
                     </div>
+                    <AccessibleButton kind="primary" onClick={KeyboardShortcuts.toggleDialog}>
+                        { _t("Keyboard Shortcuts") }
+                    </AccessibleButton>
                 </div>
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>

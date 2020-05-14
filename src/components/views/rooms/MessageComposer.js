@@ -114,7 +114,18 @@ class UploadButton extends React.Component {
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
         this._uploadInput = createRef();
+        this._dispatcherRef = dis.register(this.onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    onAction = payload => {
+        if (payload.action === "upload_file") {
+            this.onUploadClick();
+        }
+    };
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
@@ -128,7 +139,7 @@ class UploadButton extends React.Component {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        // (Note it is a FileList: we can't use slice or sensible iteration).
         const tfiles = [];
         for (let i = 0; i < ev.target.files.length; ++i) {
             tfiles.push(ev.target.files[i]);
@@ -178,6 +189,7 @@ export default class MessageComposer extends React.Component {
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
+            showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
         };
     }
 
@@ -269,7 +281,7 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             if (this.state.isQuoting) {
                 if (this.props.e2eStatus) {
                     return _t('Send an encrypted reply…');
@@ -325,10 +337,20 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator} />,
                 <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
-                callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
-                callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
-                callInProgress ? null : <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
             );
+
+            if (this.state.showCallButtons) {
+                if (callInProgress) {
+                    controls.push(
+                        <HangupButton key="controls_hangup" roomId={this.props.room.roomId} />,
+                    );
+                } else {
+                    controls.push(
+                        <CallButton key="controls_call" roomId={this.props.room.roomId} />,
+                        <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
+                    );
+                }
+            }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 
@@ -341,7 +363,7 @@ export default class MessageComposer extends React.Component {
                 </a>
             ) : '';
 
-            controls.push(<div className="mx_MessageComposer_replaced_wrapper">
+            controls.push(<div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
                 <div className="mx_MessageComposer_replaced_valign">
                     <img className="mx_MessageComposer_roomReplaced_icon" src={require("../../../../res/img/room_replaced.svg")} />
                     <span className="mx_MessageComposer_roomReplaced_header">

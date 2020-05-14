@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import SettingsStore from '../../../settings/SettingsStore';
 
 export default class InviteOnlyIcon extends React.Component {
     constructor() {
@@ -37,16 +36,14 @@ export default class InviteOnlyIcon extends React.Component {
     };
 
     render() {
-        if (!SettingsStore.isFeatureEnabled("feature_invite_only_padlocks")) {
-            return null;
-        }
+        const classes = this.props.collapsedPanel ? "mx_InviteOnlyIcon_small": "mx_InviteOnlyIcon_large";
 
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let tooltip;
         if (this.state.hover) {
             tooltip = <Tooltip className="mx_InviteOnlyIcon_tooltip" label={_t("Invite only")} dir="auto" />;
         }
-        return (<div className="mx_InviteOnlyIcon"
+        return (<div className={classes}
           onMouseEnter={this.onHoverStart}
           onMouseLeave={this.onHoverEnd}
         >

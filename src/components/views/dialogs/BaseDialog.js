@@ -86,7 +86,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() {
         this._matrixClient = MatrixClientPeg.get();
     },
 

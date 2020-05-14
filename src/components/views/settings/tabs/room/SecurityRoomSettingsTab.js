@@ -41,7 +41,8 @@ export default class SecurityRoomSettingsTab extends React.Component {
         };
     }
 
-    async componentWillMount(): void {
+    // TODO: [REACT-WARNING] Move this to constructor
+    async UNSAFE_componentWillMount(): void { // eslint-disable-line camelcase
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
 
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
@@ -97,7 +98,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 {},
                 {
                     'a': (sub) => {
-                        return <a rel='noopener' target='_blank'
+                        return <a rel='noreferrer noopener' target='_blank'
                                   href='https://about.riot.im/help#end-to-end-encryption'>{sub}</a>;
                     },
                 },

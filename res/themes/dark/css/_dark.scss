@@ -147,6 +147,9 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 $button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
 
+// Toggle switch
+$togglesw-off-color: $room-highlight-color;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -164,6 +167,8 @@ $reaction-row-button-border-color: #616b7f;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
+
+$kbd-border-color: #000000;
 
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
@@ -183,7 +188,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
     border: 0px;
     border-radius: 4px;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $button-fg-color;
     background-color: $button-bg-color;
     width: auto;
@@ -216,10 +221,6 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
 .mx_filterFlipColor {
-    filter: invert(1);
-}
-
-.gm-scrollbar .thumb {
     filter: invert(1);
 }
 

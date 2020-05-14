@@ -24,6 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
+import toRem from "../../../utils/rem";
 
 const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
     const [imageUrls, setUrls] = useState([]);
@@ -104,9 +105,9 @@ const BaseAvatar = (props) => {
                 className="mx_BaseAvatar_initial"
                 aria-hidden="true"
                 style={{
-                    fontSize: (width * 0.65) + "px",
-                    width: width + "px",
-                    lineHeight: height + "px",
+                    fontSize: toRem(width * 0.65),
+                    width: toRem(width),
+                    lineHeight: toRem(height),
                 }}
             >
                 { initialLetter }
@@ -119,8 +120,10 @@ const BaseAvatar = (props) => {
                 alt=""
                 title={title}
                 onError={onError}
-                width={width}
-                height={height}
+                style={{
+                    width: toRem(width),
+                    height: toRem(height),
+                }}
                 aria-hidden="true" />
         );
 
@@ -155,7 +158,10 @@ const BaseAvatar = (props) => {
                 src={imageUrl}
                 onClick={onClick}
                 onError={onError}
-                width={width} height={height}
+                style={{
+                    width: toRem(width),
+                    height: toRem(height),
+                }}
                 title={title} alt=""
                 inputRef={inputRef}
                 {...otherProps} />
@@ -166,7 +172,10 @@ const BaseAvatar = (props) => {
                 className="mx_BaseAvatar mx_BaseAvatar_image"
                 src={imageUrl}
                 onError={onError}
-                width={width} height={height}
+                style={{
+                    width: toRem(width),
+                    height: toRem(height),
+                }}
                 title={title} alt=""
                 ref={inputRef}
                 {...otherProps} />

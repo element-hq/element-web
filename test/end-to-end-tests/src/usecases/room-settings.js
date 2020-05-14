@@ -30,18 +30,102 @@ async function setSettingsToggle(session, toggle, enabled) {
     }
 }
 
-module.exports = async function changeRoomSettings(session, settings) {
-    session.log.startGroup(`changes the room settings`);
+async function checkSettingsToggle(session, toggle, shouldBeEnabled) {
+    const className = await session.getElementProperty(toggle, "className");
+    const checked = className.includes("mx_ToggleSwitch_on");
+    if (checked === shouldBeEnabled) {
+        session.log.done('set as expected');
+    } else {
+        // other logs in the area should give more context as to what this means.
+        throw new Error("settings toggle value didn't match expectation");
+    }
+}
+
+async function findTabs(session) {
     /// XXX delay is needed here, possibly because the header is being rerendered
     /// click doesn't do anything otherwise
     await session.delay(1000);
     const settingsButton = await session.query(".mx_RoomHeader .mx_AccessibleButton[title=Settings]");
     await settingsButton.click();
+
     //find tabs
     const tabButtons = await session.queryAll(".mx_RoomSettingsDialog .mx_TabbedView_tabLabel");
     const tabLabels = await Promise.all(tabButtons.map(t => session.innerText(t)));
     const securityTabButton = tabButtons[tabLabels.findIndex(l => l.toLowerCase().includes("security"))];
 
+    return {securityTabButton};
+}
+
+async function checkRoomSettings(session, expectedSettings) {
+    session.log.startGroup(`checks the room settings`);
+
+    const {securityTabButton} = await findTabs(session);
+    const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
+    const isDirectory = generalSwitches[0];
+
+    if (typeof expectedSettings.directory === 'boolean') {
+        session.log.step(`checks directory listing is ${expectedSettings.directory}`);
+        await checkSettingsToggle(session, isDirectory, expectedSettings.directory);
+    }
+
+    if (expectedSettings.alias) {
+        session.log.step(`checks for local alias of ${expectedSettings.alias}`);
+        const summary = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings summary");
+        await summary.click();
+        const localAliases = await session.query('.mx_RoomSettingsDialog .mx_AliasSettings .mx_EditableItem_item');
+        const localAliasTexts = await Promise.all(localAliases.map(a => session.innerText(a)));
+        if (localAliasTexts.find(a => a.includes(expectedSettings.alias))) {
+            session.log.done("present");
+        } else {
+            throw new Error(`could not find local alias ${expectedSettings.alias}`);
+        }
+    }
+
+    securityTabButton.click();
+    await session.delay(500);
+    const securitySwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
+    const e2eEncryptionToggle = securitySwitches[0];
+
+    if (typeof expectedSettings.encryption === "boolean") {
+        session.log.step(`checks room e2e encryption is ${expectedSettings.encryption}`);
+        await checkSettingsToggle(session, e2eEncryptionToggle, expectedSettings.encryption);
+    }
+
+    if (expectedSettings.visibility) {
+        session.log.step(`checks visibility is ${expectedSettings.visibility}`);
+        const radios = await session.queryAll(".mx_RoomSettingsDialog input[type=radio]");
+        assert.equal(radios.length, 7);
+        const inviteOnly = radios[0];
+        const publicNoGuests = radios[1];
+        const publicWithGuests = radios[2];
+
+        let expectedRadio = null;
+        if (expectedSettings.visibility === "invite_only") {
+            expectedRadio = inviteOnly;
+        } else if (expectedSettings.visibility === "public_no_guests") {
+            expectedRadio = publicNoGuests;
+        } else if (expectedSettings.visibility === "public_with_guests") {
+            expectedRadio = publicWithGuests;
+        } else {
+            throw new Error(`unrecognized room visibility setting: ${expectedSettings.visibility}`);
+        }
+        if (await session.isChecked(expectedRadio)) {
+            session.log.done();
+        } else {
+            throw new Error("room visibility is not as expected");
+        }
+    }
+
+    const closeButton = await session.query(".mx_RoomSettingsDialog .mx_Dialog_cancelButton");
+    await closeButton.click();
+
+    session.log.endGroup();
+}
+
+async function changeRoomSettings(session, settings) {
+    session.log.startGroup(`changes the room settings`);
+
+    const {securityTabButton} = await findTabs(session);
     const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
     const isDirectory = generalSwitches[0];
 
@@ -52,9 +136,11 @@ module.exports = async function changeRoomSettings(session, settings) {
 
     if (settings.alias) {
         session.log.step(`sets alias to ${settings.alias}`);
-        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings input[type=text]");
+        const summary = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings summary");
+        await summary.click();
+        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details input[type=text]");
         await session.replaceInputText(aliasField, settings.alias.substring(1, settings.alias.lastIndexOf(":")));
-        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings .mx_AccessibleButton");
+        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details .mx_AccessibleButton");
         await addButton.click();
         await session.delay(10); // delay to give time for the validator to run and check the alias
         session.log.done();
@@ -98,4 +184,6 @@ module.exports = async function changeRoomSettings(session, settings) {
     await closeButton.click();
 
     session.log.endGroup();
-};
+}
+
+module.exports = {checkRoomSettings, changeRoomSettings};

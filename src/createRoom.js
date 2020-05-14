@@ -37,6 +37,8 @@ import SettingsStore from "./settings/SettingsStore";
  *     Default: True
  * @param {bool=} opts.encryption Whether to enable encryption.
  *     Default: False
+ * @param {bool=} opts.inlineErrors True to raise errors off the promise instead of resolving to null.
+ *     Default: False
  *
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
@@ -140,6 +142,9 @@ export default function createRoom(opts) {
         }
         return roomId;
     }, function(err) {
+        // Raise the error if the caller requested that we do so.
+        if (opts.inlineErrors) throw err;
+
         // We also failed to join the room (this sets joining to false in RoomViewStore)
         dis.dispatch({
             action: 'join_room_error',
@@ -169,6 +174,9 @@ export function findDMForUser(client, userId) {
             return member && (member.membership === "invite" || member.membership === "join");
         }
         return false;
+    }).sort((r1, r2) => {
+        return r2.getLastActiveTimestamp() -
+            r1.getLastActiveTimestamp();
     });
     if (suitableDMRooms.length) {
         return suitableDMRooms[0];
@@ -219,7 +227,7 @@ export async function ensureDMExists(client, userId) {
         roomId = existingDMRoom.roomId;
     } else {
         let encryption;
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             encryption = canEncryptToAllUsers(client, [userId]);
         }
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});

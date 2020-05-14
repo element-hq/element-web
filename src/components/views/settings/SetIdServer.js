@@ -403,8 +403,8 @@ export default class SetIdServer extends React.Component {
                 <span className="mx_SettingsTab_subsectionText">
                     {bodyText}
                 </span>
-                <Field label={_t("Enter a new identity server")}
-                    id="mx_SetIdServer_idServer"
+                <Field
+                    label={_t("Enter a new identity server")}
                     type="text"
                     autoComplete="off"
                     placeholder={this.state.defaultIdServer}

@@ -16,15 +16,21 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Modal from '../../../Modal';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import DeviceListener from '../../../DeviceListener';
+import SetupEncryptionDialog from "../dialogs/SetupEncryptionDialog";
 import { accessSecretStorage } from '../../../CrossSigningManager';
 
 export default class SetupEncryptionToast extends React.PureComponent {
     static propTypes = {
         toastKey: PropTypes.string.isRequired,
-        kind: PropTypes.oneOf(['set_up_encryption', 'verify_this_session', 'upgrade_encryption']).isRequired,
+        kind: PropTypes.oneOf([
+            'set_up_encryption',
+            'verify_this_session',
+            'upgrade_encryption',
+        ]).isRequired,
     };
 
     _onLaterClick = () => {
@@ -32,7 +38,20 @@ export default class SetupEncryptionToast extends React.PureComponent {
     };
 
     _onSetupClick = async () => {
-        accessSecretStorage();
+        if (this.props.kind === "verify_this_session") {
+            Modal.createTrackedDialog('Verify session', 'Verify session', SetupEncryptionDialog,
+                {}, null, /* priority = */ false, /* static = */ true);
+        } else {
+            const Spinner = sdk.getComponent("elements.Spinner");
+            const modal = Modal.createDialog(
+                Spinner, null, 'mx_Dialog_spinner', /* priority */ false, /* static */ true,
+            );
+            try {
+                await accessSecretStorage();
+            } finally {
+                modal.close();
+            }
+        }
     };
 
     getDescription() {
@@ -48,6 +67,7 @@ export default class SetupEncryptionToast extends React.PureComponent {
     getSetupCaption() {
         switch (this.props.kind) {
             case 'set_up_encryption':
+                return _t('Set up');
             case 'upgrade_encryption':
                 return _t('Upgrade');
             case 'verify_this_session':

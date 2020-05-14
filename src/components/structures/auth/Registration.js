@@ -31,6 +31,8 @@ import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
+import Login from "../../../Login";
+import dis from "../../../dispatcher";
 
 // Phases
 // Show controls to configure server details
@@ -118,12 +120,13 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._replaceClient();
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -232,6 +235,13 @@ export default createReactClass({
             serverRequiresIdServer,
             busy: false,
         });
+        const showGenericError = (e) => {
+            this.setState({
+                errorText: _t("Unable to query for supported registration methods."),
+                // add empty flows array to get rid of spinner
+                flows: [],
+            });
+        };
         try {
             await this._makeRegisterRequest({});
             // This should never succeed since we specified an empty
@@ -243,18 +253,33 @@ export default createReactClass({
                     flows: e.data.flows,
                 });
             } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
-                this.setState({
-                    errorText: _t("Registration has been disabled on this homeserver."),
-                    // add empty flows array to get rid of spinner
-                    flows: [],
-                });
+                // At this point registration is pretty much disabled, but before we do that let's
+                // quickly check to see if the server supports SSO instead. If it does, we'll send
+                // the user off to the login page to figure their account out.
+                try {
+                    const loginLogic = new Login(hsUrl, isUrl, null, {
+                        defaultDeviceDisplayName: "riot login check", // We shouldn't ever be used
+                    });
+                    const flows = await loginLogic.getFlows();
+                    const hasSsoFlow = flows.find(f => f.type === 'm.login.sso' || f.type === 'm.login.cas');
+                    if (hasSsoFlow) {
+                        // Redirect to login page - server probably expects SSO only
+                        dis.dispatch({action: 'start_login'});
+                    } else {
+                        this.setState({
+                            serverErrorIsFatal: true, // fatal because user cannot continue on this server
+                            errorText: _t("Registration has been disabled on this homeserver."),
+                            // add empty flows array to get rid of spinner
+                            flows: [],
+                        });
+                    }
+                } catch (e) {
+                    console.error("Failed to get login flows to check for SSO support", e);
+                    showGenericError(e);
+                }
             } else {
                 console.log("Unable to query for supported registration methods.", e);
-                this.setState({
-                    errorText: _t("Unable to query for supported registration methods."),
-                    // add empty flows array to get rid of spinner
-                    flows: [],
-                });
+                showGenericError(e);
             }
         }
     },
@@ -439,7 +464,7 @@ export default createReactClass({
             initial_device_display_name: this.props.defaultDeviceDisplayName,
         };
         if (auth) registerParams.auth = auth;
-        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibitLogin = inhibitLogin;
+        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
         return this.state.matrixClient.registerRequest(registerParams);
     },
 

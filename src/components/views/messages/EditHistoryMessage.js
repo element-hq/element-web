@@ -20,12 +20,13 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import {formatTime} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
-import {pillifyLinks} from '../../../utils/pillify';
+import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
+import RedactedBody from "./RedactedBody";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
@@ -53,6 +54,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         this.state = {canRedact, sendStatus: event.getAssociatedStatus()};
 
         this._content = createRef();
+        this._pills = [];
     }
 
     _onAssociatedStatusChanged = () => {
@@ -81,7 +83,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     pillifyLinks() {
         // not present for redacted events
         if (this._content.current) {
-            pillifyLinks(this._content.current.children, this.props.mxEvent);
+            pillifyLinks(this._content.current.children, this.props.mxEvent, this._pills);
         }
     }
 
@@ -90,6 +92,7 @@ export default class EditHistoryMessage extends React.PureComponent {
     }
 
     componentWillUnmount() {
+        unmountPills(this._pills);
         const event = this.props.mxEvent;
         if (event.localRedactionEvent()) {
             event.localRedactionEvent().off("status", this._onAssociatedStatusChanged);
@@ -130,8 +133,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            const UnknownBody = sdk.getComponent('messages.UnknownBody');
-            contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
+            contentContainer = <RedactedBody mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {
@@ -156,7 +158,6 @@ export default class EditHistoryMessage extends React.PureComponent {
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
-            "mx_EventTile_redacted": mxEvent.isRedacted(),
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });

@@ -27,6 +27,7 @@ import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 
 export default createReactClass({
@@ -219,7 +220,7 @@ export default createReactClass({
 
                 if (link) {
                     span = (
-                        <a href={link} target="_blank" rel="noopener">
+                        <a href={link} target="_blank" rel="noreferrer noopener">
                             { span }
                         </a>
                     );
@@ -264,14 +265,14 @@ export default createReactClass({
         }
 
         return (
-            <div className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style} >
                 { stateViews }
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }
                 { this.props.children }
-            </div>
+            </AutoHideScrollbar>
         );
     },
 });

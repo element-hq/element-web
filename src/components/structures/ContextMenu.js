@@ -245,7 +245,6 @@ export class ContextMenu extends React.Component {
         }
 
         const contextMenuRect = this.state.contextMenuElem ? this.state.contextMenuElem.getBoundingClientRect() : null;
-        const padding = 10;
 
         const chevronOffset = {};
         if (props.chevronFace) {
@@ -255,7 +254,7 @@ export class ContextMenu extends React.Component {
 
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
-        } else {
+        } else if (position.top !== undefined) {
             const target = position.top;
 
             // By default, no adjustment is made
@@ -264,7 +263,8 @@ export class ContextMenu extends React.Component {
             // If we know the dimensions of the context menu, adjust its position
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
+                const padding = 10;
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
             }
 
             position.top = adjusted;
@@ -350,7 +350,7 @@ export const ContextMenuButton = ({ label, isExpanded, children, ...props }) => 
 };
 ContextMenuButton.propTypes = {
     ...AccessibleButton.propTypes,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     isExpanded: PropTypes.bool.isRequired, // whether or not the context menu is currently open
 };
 
@@ -377,7 +377,6 @@ export const MenuGroup = ({children, label, ...props}) => {
     </div>;
 };
 MenuGroup.propTypes = {
-    ...AccessibleButton.propTypes,
     label: PropTypes.string.isRequired,
     className: PropTypes.string, // optional
 };

@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 .mx_FormButton {
-    line-height: 16px;
+    line-height: $font-16px;
     padding: 5px 15px;
-    font-size: 12px;
+    font-size: $font-12px;
     height: min-content;
 
     &:not(:last-child) {

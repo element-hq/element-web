@@ -20,6 +20,7 @@ import { _t, _td } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
+import { fixupColorFonts } from '../../../utils/FontManager';
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -29,10 +30,12 @@ export default class VerificationShowSas extends React.Component {
     static propTypes = {
         pending: PropTypes.bool,
         displayName: PropTypes.string, // required if pending is true
+        device: PropTypes.object,
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
         isSelf: PropTypes.bool,
+        inDialog: PropTypes.bool, // whether this component is being shown in a dialog and to use DialogButtons
     };
 
     constructor(props) {
@@ -43,9 +46,21 @@ export default class VerificationShowSas extends React.Component {
         };
     }
 
+    componentWillMount() {
+        // As this component is also used before login (during complete security),
+        // also make sure we have a working emoji font to display the SAS emojis here.
+        // This is also done from LoggedInView.
+        fixupColorFonts();
+    }
+
     onMatchClick = () => {
         this.setState({ pending: true });
         this.props.onDone();
+    };
+
+    onDontMatchClick = () => {
+        this.setState({ cancelling: true });
+        this.props.onCancel();
     };
 
     render() {
@@ -69,7 +84,7 @@ export default class VerificationShowSas extends React.Component {
             </div>;
             sasCaption = this.props.isSelf ?
                 _t(
-                    "Confirm the emoji below are displayed on both devices, in the same order:",
+                    "Confirm the emoji below are displayed on both sessions, in the same order:",
                 ):
                 _t(
                     "Verify this user by confirming the following emoji appear on their screen.",
@@ -83,7 +98,7 @@ export default class VerificationShowSas extends React.Component {
             </div>;
             sasCaption = this.props.isSelf ?
                 _t(
-                    "Verify this device by confirming the following number appears on its screen.",
+                    "Verify this session by confirming the following number appears on its screen.",
                 ):
                 _t(
                     "Verify this user by confirming the following number appears on their screen.",
@@ -98,20 +113,47 @@ export default class VerificationShowSas extends React.Component {
         }
 
         let confirm;
-        if (this.state.pending) {
-            const {displayName} = this.props;
-            const text = _t("Waiting for %(displayName)s to verify…", {displayName});
+        if (this.state.pending || this.state.cancelling) {
+            let text;
+            if (this.state.pending) {
+                if (this.props.isSelf) {
+                    // device shouldn't be null in this situation but it can be, eg. if the device is
+                    // logged out during verification
+                    if (this.props.device) {
+                        text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
+                            deviceName: this.props.device ? this.props.device.getDisplayName() : '',
+                            deviceId: this.props.device ? this.props.device.deviceId : '',
+                        });
+                    } else {
+                        text = _t("Waiting for your other session to verify…");
+                    }
+                } else {
+                    const {displayName} = this.props;
+                    text = _t("Waiting for %(displayName)s to verify…", {displayName});
+                }
+            } else {
+                text = _t("Cancelling…");
+            }
             confirm = <PendingActionSpinner text={text} />;
-        } else {
+        } else if (this.props.inDialog) {
             // FIXME: stop using DialogButtons here once this component is only used in the right panel verification
             confirm = <DialogButtons
                 primaryButton={_t("They match")}
                 onPrimaryButtonClick={this.onMatchClick}
-                primaryButtonClass="mx_UserInfo_wideButton"
+                primaryButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_matchButton"
                 cancelButton={_t("They don't match")}
-                onCancel={this.props.onCancel}
-                cancelButtonClass="mx_UserInfo_wideButton"
+                onCancel={this.onDontMatchClick}
+                cancelButtonClass="mx_UserInfo_wideButton mx_VerificationShowSas_noMatchButton"
             />;
+        } else {
+            confirm = <React.Fragment>
+                <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
+                    { _t("They don't match") }
+                </AccessibleButton>
+                <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                    { _t("They match") }
+                </AccessibleButton>
+            </React.Fragment>;
         }
 
         return <div className="mx_VerificationShowSas">

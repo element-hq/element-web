@@ -134,7 +134,7 @@ limitations under the License.
     overflow: hidden;
     color: $primary-fg-color;
     font-weight: bold;
-    font-size: 22px;
+    font-size: $font-22px;
     padding-left: 19px;
     padding-right: 16px;
     /* why isn't text-overflow working? */
@@ -148,7 +148,7 @@ limitations under the License.
     max-height: 42px;
     color: $settings-grey-fg-color;
     font-weight: 300;
-    font-size: 13px;
+    font-size: $font-13px;
     padding-left: 19px;
     margin-right: 16px;
     overflow: hidden;
@@ -180,10 +180,6 @@ limitations under the License.
     line-height: 2em;
 }
 
-.mx_GroupView > .mx_MainSplit {
-    flex: 1;
-}
-
 .mx_GroupView_body {
     flex-grow: 1;
 }
@@ -200,7 +196,7 @@ limitations under the License.
     text-transform: uppercase;
     color: $h3-color;
     font-weight: 600;
-    font-size: 13px;
+    font-size: $font-13px;
     margin-bottom: 10px;
 }
 
@@ -230,7 +226,7 @@ limitations under the License.
 .mx_GroupView_rooms_header_addRow_label {
     display: inline-block;
     vertical-align: top;
-    line-height: 24px;
+    line-height: $font-24px;
     padding-left: 28px;
     color: $accent-color;
 }
@@ -262,7 +258,7 @@ limitations under the License.
 
 .mx_GroupView_membershipSection_description {
     /* To match textButton */
-    line-height: 34px;
+    line-height: $font-34px;
 }
 
 .mx_GroupView_membershipSection_description .mx_BaseAvatar {
@@ -341,8 +337,8 @@ limitations under the License.
     display: none;
 }
 
-.mx_GroupView_body .gm-scroll-view > * {
-    margin: 11px 50px 0px 68px;
+.mx_GroupView_body .mx_AutoHideScrollbar > * {
+    margin: 11px 50px 50px 68px;
 }
 
 .mx_GroupView_groupDesc textarea {
@@ -370,7 +366,7 @@ limitations under the License.
     padding: 40px 20px;
 }
 
-.mx_GroupView .mx_MemberInfo .gm-scroll-view > :not(.mx_MemberInfo_avatar) {
+.mx_GroupView .mx_MemberInfo .mx_AutoHideScrollbar > :not(.mx_MemberInfo_avatar) {
     padding-left: 16px;
     padding-right: 16px;
 }

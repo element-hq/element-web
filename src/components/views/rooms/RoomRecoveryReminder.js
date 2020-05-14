@@ -44,7 +44,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._loadBackupStatus();
     }
 
@@ -61,7 +61,6 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                 loading: false,
                 error: e,
             });
-            return;
         }
     }
 
@@ -151,7 +150,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
                     )}</p>
                 </div>
                 <div className="mx_RoomRecoveryReminder_buttons">
-                    <AccessibleButton className="mx_RoomRecoveryReminder_button"
+                    <AccessibleButton kind="primary"
                         onClick={this.onSetupClick}>
                         {setupCaption}
                     </AccessibleButton>

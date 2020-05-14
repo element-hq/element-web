@@ -23,7 +23,6 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 // Controlled form component wrapping Field for inputting a room alias scoped to a given domain
 export default class RoomAliasField extends React.PureComponent {
     static propTypes = {
-        id: PropTypes.string.isRequired,
         domain: PropTypes.string.isRequired,
         onChange: PropTypes.func,
         value: PropTypes.string.isRequired,
@@ -50,7 +49,6 @@ export default class RoomAliasField extends React.PureComponent {
                     className="mx_RoomAliasField"
                     prefix={poundSign}
                     postfix={domain}
-                    id={this.props.id}
                     ref={ref => this._fieldRef = ref}
                     onValidate={this._onValidate}
                     placeholder={_t("e.g. my-room")}
@@ -92,6 +90,7 @@ export default class RoomAliasField extends React.PureComponent {
                 invalid: () => _t("Please provide a room alias"),
             }, {
                 key: "taken",
+                final: true,
                 test: async ({value}) => {
                     if (!value) {
                         return true;

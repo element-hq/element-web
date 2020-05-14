@@ -27,6 +27,8 @@ import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
+import SSOButton from "../../views/elements/SSOButton";
+import PlatformPeg from '../../../PlatformPeg';
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -82,11 +84,13 @@ export default createReactClass({
         onServerConfigChange: PropTypes.func.isRequired,
 
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        isSyncing: PropTypes.bool,
     },
 
     getInitialState: function() {
         return {
             busy: false,
+            busyLoggingIn: null,
             errorText: null,
             loginIncorrect: false,
             canTryLogin: true, // can we attempt to log in or are there validation errors?
@@ -111,7 +115,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
 
         // map from login step type to a function which will render a control
@@ -120,8 +125,8 @@ export default createReactClass({
             'm.login.password': this._renderPasswordStep,
 
             // CAS and SSO are the same thing, modulo the url we link to
-            'm.login.cas': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("cas")),
-            'm.login.sso': () => this._renderSsoStep(this._loginLogic.getSsoLoginUrl("sso")),
+            'm.login.cas': () => this._renderSsoStep("cas"),
+            'm.login.sso': () => this._renderSsoStep("sso"),
         };
 
         this._initLoginLogic();
@@ -131,7 +136,8 @@ export default createReactClass({
         this._unmounted = true;
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -165,6 +171,7 @@ export default createReactClass({
                 const componentState = AutoDiscoveryUtils.authComponentStateForError(e);
                 this.setState({
                     busy: false,
+                    busyLoggingIn: false,
                     ...componentState,
                 });
                 aliveAgain = !componentState.serverErrorIsFatal;
@@ -178,6 +185,7 @@ export default createReactClass({
 
         this.setState({
             busy: true,
+            busyLoggingIn: true,
             errorText: null,
             loginIncorrect: false,
         });
@@ -245,19 +253,14 @@ export default createReactClass({
             }
 
             this.setState({
+                busy: false,
+                busyLoggingIn: false,
                 errorText: errorText,
                 // 401 would be the sensible status code for 'incorrect password'
                 // but the login API gives a 403 https://matrix.org/jira/browse/SYN-744
                 // mentions this (although the bug is for UI auth which is not this)
                 // We treat both as an incorrect password
                 loginIncorrect: error.httpStatus === 401 || error.httpStatus === 403,
-            });
-        }).finally(() => {
-            if (this._unmounted) {
-                return;
-            }
-            this.setState({
-                busy: false,
             });
         });
     },
@@ -342,6 +345,22 @@ export default createReactClass({
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
+    },
+
+    onTryRegisterClick: function(ev) {
+        const step = this._getCurrentFlowStep();
+        if (step === 'm.login.sso' || step === 'm.login.cas') {
+            // If we're showing SSO it means that registration is also probably disabled,
+            // so intercept the click and instead pretend the user clicked 'Sign in with SSO'.
+            ev.preventDefault();
+            ev.stopPropagation();
+            const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
+            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind,
+                this.props.fragmentAfterLogin);
+        } else {
+            // Don't intercept - just go through to the register page
+            this.onRegisterClick(ev);
+        }
     },
 
     async onServerDetailsNextPhaseClick() {
@@ -481,7 +500,7 @@ export default createReactClass({
                         "Either use HTTPS or <a>enable unsafe scripts</a>.", {},
                         {
                             'a': (sub) => {
-                                return <a target="_blank" rel="noopener"
+                                return <a target="_blank" rel="noreferrer noopener"
                                     href="https://www.google.com/search?&q=enable%20unsafe%20scripts"
                                 >
                                     { sub }
@@ -496,11 +515,10 @@ export default createReactClass({
                         "<a>homeserver's SSL certificate</a> is trusted, and that a browser extension " +
                         "is not blocking requests.", {},
                         {
-                            'a': (sub) => {
-                                return <a target="_blank" rel="noopener" href={this.props.serverConfig.hsUrl}>
+                            'a': (sub) =>
+                                <a target="_blank" rel="noreferrer noopener" href={this.props.serverConfig.hsUrl}>
                                     { sub }
-                                </a>;
-                            },
+                                </a>,
                         },
                     ) }
                 </span>;
@@ -582,11 +600,12 @@ export default createReactClass({
                loginIncorrect={this.state.loginIncorrect}
                serverConfig={this.props.serverConfig}
                disableSubmit={this.isBusy()}
+               busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
     },
 
-    _renderSsoStep: function(url) {
+    _renderSsoStep: function(loginType) {
         const SignInToText = sdk.getComponent('views.auth.SignInToText');
 
         let onEditServerDetailsClick = null;
@@ -607,16 +626,23 @@ export default createReactClass({
                 <SignInToText serverConfig={this.props.serverConfig}
                     onEditServerDetailsClick={onEditServerDetailsClick} />
 
-                <a href={url} className="mx_Login_sso_link mx_Login_submit">{ _t('Sign in with single sign-on') }</a>
+                <SSOButton
+                    className="mx_Login_sso_link mx_Login_submit"
+                    matrixClient={this._loginLogic.createTemporaryClient()}
+                    loginType={loginType}
+                    fragmentAfterLogin={this.props.fragmentAfterLogin}
+                />
             </div>
         );
     },
 
     render: function() {
         const Loader = sdk.getComponent("elements.Spinner");
+        const InlineSpinner = sdk.getComponent("elements.InlineSpinner");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
-        const loader = this.isBusy() ? <div className="mx_Login_loader"><Loader /></div> : null;
+        const loader = this.isBusy() && !this.state.busyLoggingIn ?
+            <div className="mx_Login_loader"><Loader /></div> : null;
 
         const errorText = this.state.errorText;
 
@@ -643,9 +669,28 @@ export default createReactClass({
             );
         }
 
+        let footer;
+        if (this.props.isSyncing || this.state.busyLoggingIn) {
+            footer = <div className="mx_AuthBody_paddedFooter">
+                <div className="mx_AuthBody_paddedFooter_title">
+                    <InlineSpinner w={20} h={20} />
+                    { this.props.isSyncing ? _t("Syncing...") : _t("Signing In...") }
+                </div>
+                { this.props.isSyncing && <div className="mx_AuthBody_paddedFooter_subtitle">
+                    {_t("If you've joined lots of rooms, this might take a while")}
+                </div> }
+            </div>;
+        } else {
+            footer = (
+                <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
+                    { _t('Create account') }
+                </a>
+            );
+        }
+
         return (
             <AuthPage>
-                <AuthHeader />
+                <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
                 <AuthBody>
                     <h2>
                         {_t('Sign in')}
@@ -655,9 +700,7 @@ export default createReactClass({
                     { serverDeadSection }
                     { this.renderServerComponent() }
                     { this.renderLoginComponentForStep() }
-                    <a className="mx_AuthBody_changeFlow" onClick={this.onRegisterClick} href="#">
-                        { _t('Create account') }
-                    </a>
+                    { footer }
                 </AuthBody>
             </AuthPage>
         );

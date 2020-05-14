@@ -58,6 +58,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._topic = createRef();
     },
@@ -167,7 +168,7 @@ export default createReactClass({
         const joinRule = joinRules && joinRules.getContent().join_rule;
         let privateIcon;
         // Don't show an invite-only icon for DMs. Users know they're invite-only.
-        if (!dmUserId && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!dmUserId && SettingsStore.getValue("feature_cross_signing")) {
             if (joinRule == "invite") {
                 privateIcon = <InviteOnlyIcon />;
             }

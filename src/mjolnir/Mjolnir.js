@@ -65,14 +65,14 @@ export class Mjolnir {
     }
 
     stop() {
-        SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+        if (this._mjolnirWatchRef) {
+            SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+            this._mjolnirWatchRef = null;
+        }
 
-        try {
-            if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
-        } catch (e) {
-            console.error(e);
-            // Only the tests cause problems with this particular block of code. We should
-            // never be here in production.
+        if (this._dispatcherRef) {
+            dis.unregister(this._dispatcherRef);
+            this._dispatcherRef = null;
         }
 
         if (!MatrixClientPeg.get()) return;

@@ -76,7 +76,7 @@ export default createReactClass({
             email: this.props.defaultEmail || "",
             phoneNumber: this.props.defaultPhoneNumber || "",
             password: this.props.defaultPassword || "",
-            passwordConfirm: "",
+            passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
             passwordSafe: false,
         };
@@ -102,11 +102,15 @@ export default createReactClass({
                     "No identity server is configured so you cannot add an email address in order to " +
                     "reset your password in the future.",
                 );
-            } else {
+            } else if (this._showEmail()) {
                 desc = _t(
                     "If you don't specify an email address, you won't be able to reset your password. " +
                     "Are you sure?",
                 );
+            } else {
+                // user can't set an e-mail so don't prompt them to
+                self._doSubmit(ev);
+                return;
             }
 
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -470,7 +474,6 @@ export default createReactClass({
             _t("Email") :
             _t("Email (optional)");
         return <Field
-            id="mx_RegistrationForm_email"
             ref={field => this[FIELD_EMAIL] = field}
             type="text"
             label={emailPlaceholder}
@@ -524,7 +527,6 @@ export default createReactClass({
             onOptionChange={this.onPhoneCountryChange}
         />;
         return <Field
-            id="mx_RegistrationForm_phoneNumber"
             ref={field => this[FIELD_PHONE_NUMBER] = field}
             type="text"
             label={phoneLabel}

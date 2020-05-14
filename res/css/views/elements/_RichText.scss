@@ -6,11 +6,33 @@
 .mx_RoomPill,
 .mx_GroupPill,
 .mx_AtRoomPill {
-    border-radius: 16px;
-    display: inline-block;
-    height: 20px;
-    line-height: 20px;
-    padding-left: 5px;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    border-radius: $font-16px;
+    line-height: $font-15px;
+    padding-left: 0;
+}
+
+a.mx_Pill {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: calc(100% - 1ch);
+}
+
+.mx_Pill {
+    padding: $font-1px;
+    padding-right: 0.4em;
+    vertical-align: text-top;
+    line-height: $font-17px;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_GroupPill {
+    color: $accent-fg-color;
+    background-color: $rte-group-pill-color;
 }
 
 /* More specific to override `.markdown-body a` text-decoration */
@@ -23,7 +45,6 @@
 .mx_UserPill {
     color: $primary-fg-color;
     background-color: $other-user-pill-bg-color;
-    padding-right: 5px;
 }
 
 .mx_UserPill_selected {
@@ -37,7 +58,6 @@
 .mx_MessageComposer_input .mx_AtRoomPill {
     color: $accent-fg-color;
     background-color: $mention-user-pill-bg-color;
-    padding-right: 5px;
 }
 
 /* More specific to override `.markdown-body a` color */
@@ -47,15 +67,6 @@
 .mx_GroupPill {
     color: $accent-fg-color;
     background-color: $rte-room-pill-color;
-    padding-right: 5px;
-}
-
-/* More specific to override `.markdown-body a` color */
-.mx_EventTile_content .markdown-body a.mx_GroupPill,
-.mx_GroupPill {
-    color: $accent-fg-color;
-    background-color: $rte-group-pill-color;
-    padding-right: 5px;
 }
 
 .mx_EventTile_body .mx_UserPill,
@@ -69,8 +80,10 @@
 .mx_GroupPill .mx_BaseAvatar,
 .mx_AtRoomPill .mx_BaseAvatar {
     position: relative;
-    left: -3px;
-    top: 2px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10rem;
+    margin-right: 0.24rem;
 }
 
 .mx_Markdown_BOLD {

@@ -26,6 +26,7 @@ import Modal from '../../../Modal';
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
+import SettingsStore from '../../../settings/SettingsStore';
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -48,7 +49,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         };
 
         let e2eInfoCallback = null;
-        if (mxEvent.isEncrypted()) {
+        if (mxEvent.isEncrypted() && !SettingsStore.getValue("feature_cross_signing")) {
             e2eInfoCallback = onCryptoClick;
         }
 
@@ -121,15 +122,22 @@ export default class MessageActionBar extends React.PureComponent {
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.removeListener("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     onDecrypted = () => {
         // When an event decrypts, it is likely to change the set of available
         // actions, so we force an update to check again.
+        this.forceUpdate();
+    };
+
+    onBeforeRedaction = () => {
+        // When an event is redacted, we can't edit it so update the available actions.
         this.forceUpdate();
     };
 

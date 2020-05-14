@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 
 import * as sdk from '../../../index';
 
-import { COUNTRIES } from '../../../phonenumber';
+import {COUNTRIES, getEmojiFlag} from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
 
@@ -60,7 +60,7 @@ export default class CountryDropdown extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (!this.props.value) {
             // If no value is given, we start with the default
             // country selected, but our parent component
@@ -80,7 +80,7 @@ export default class CountryDropdown extends React.Component {
     }
 
     _flagImgForIso2(iso2) {
-        return <img src={require(`../../../../res/img/flags/${iso2}.png`)} />;
+        return <div className="mx_Dropdown_option_emoji">{ getEmojiFlag(iso2) }</div>;
     }
 
     _getShortOption(iso2) {

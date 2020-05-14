@@ -29,8 +29,12 @@ limitations under the License.
     position: relative;
     border-radius: 3px;
     border: 1px solid $strong-input-border-color;
-    font-size: 12px;
+    font-size: $font-12px;
     user-select: none;
+}
+
+.mx_Dropdown_input.mx_AccessibleButton_disabled {
+    cursor: not-allowed;
 }
 
 .mx_Dropdown_input:focus {
@@ -53,7 +57,7 @@ limitations under the License.
 
 .mx_Dropdown_option {
     height: 35px;
-    line-height: 35px;
+    line-height: $font-35px;
     padding-left: 8px;
     padding-right: 8px;
 }
@@ -63,6 +67,8 @@ limitations under the License.
     text-overflow: ellipsis;
     white-space: nowrap;
     flex: 1;
+    display: inline-flex;
+    align-items: center;
 }
 
 .mx_Dropdown_option div {
@@ -71,10 +77,16 @@ limitations under the License.
     white-space: nowrap;
 }
 
-.mx_Dropdown_option img {
+.mx_Dropdown_option img,
+.mx_Dropdown_option .mx_Dropdown_option_emoji {
     margin: 5px;
     width: 16px;
     vertical-align: middle;
+}
+
+.mx_Dropdown_option_emoji {
+    font-size: $font-16px;
+    line-height: $font-16px;
 }
 
 input.mx_Dropdown_option,

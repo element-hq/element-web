@@ -15,8 +15,7 @@ function remoteRender(event) {
 
     const a = document.createElement("a");
     a.id = "a";
-    a.rel = "noopener";
-    a.target = "_blank";
+    a.rel = "noreferrer noopener";
     a.download = data.download;
     a.style = data.style;
     a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
@@ -28,6 +27,10 @@ function remoteRender(event) {
     // Don't display scrollbars if the link takes more than one line to display.
     body.style = "margin: 0px; overflow: hidden";
     body.appendChild(a);
+
+    if (event.data.auto) {
+        a.click(); // try to trigger download automatically
+    }
 }
 
 function remoteSetTint(event) {

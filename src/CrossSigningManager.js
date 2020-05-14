@@ -21,6 +21,7 @@ import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 import SettingsStore from './settings/SettingsStore';
+import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -50,7 +51,7 @@ async function confirmToDismiss(name) {
     } else if (name === "m.cross_signing.self_signing") {
         description = _t("If you cancel now, you won't complete verifying your other session.");
     } else {
-        description = _t("If you cancel now, you won't complete your secret storage operation.");
+        description = _t("If you cancel now, you won't complete your operation.");
     }
 
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -96,7 +97,7 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
             keyInfo: info,
             checkPrivateKey: async (input) => {
                 const key = await inputToKey(input);
-                return MatrixClientPeg.get().checkSecretStoragePrivateKey(key, info.pubkey);
+                return await MatrixClientPeg.get().checkSecretStorageKey(key, info);
             },
         },
         /* className= */ null,
@@ -125,9 +126,73 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     return [name, key];
 }
 
+const onSecretRequested = async function({
+    user_id: userId,
+    device_id: deviceId,
+    request_id: requestId,
+    name,
+    device_trust: deviceTrust,
+}) {
+    console.log("onSecretRequested", userId, deviceId, requestId, name, deviceTrust);
+    const client = MatrixClientPeg.get();
+    if (userId !== client.getUserId()) {
+        return;
+    }
+    if (!deviceTrust || !deviceTrust.isVerified()) {
+        console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
+        return;
+    }
+    if (name.startsWith("m.cross_signing")) {
+        const callbacks = client.getCrossSigningCacheCallbacks();
+        if (!callbacks.getCrossSigningKeyCache) return;
+        /* Explicit enumeration here is deliberate – never share the master key! */
+        if (name === "m.cross_signing.self_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("self_signing");
+            if (!key) {
+                console.log(
+                    `self_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        } else if (name === "m.cross_signing.user_signing") {
+            const key = await callbacks.getCrossSigningKeyCache("user_signing");
+            if (!key) {
+                console.log(
+                    `user_signing requested by ${deviceId}, but not found in cache`,
+                );
+            }
+            return key && encodeBase64(key);
+        }
+    } else if (name === "m.megolm_backup.v1") {
+        const key = await client._crypto.getSessionBackupPrivateKey();
+        if (!key) {
+            console.log(
+                `session backup key requested by ${deviceId}, but not found in cache`,
+            );
+        }
+        return key && encodeBase64(key);
+    }
+    console.warn("onSecretRequested didn't recognise the secret named ", name);
+};
+
 export const crossSigningCallbacks = {
     getSecretStorageKey,
+    onSecretRequested,
 };
+
+export async function promptForBackupPassphrase() {
+    let key;
+
+    const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
+    const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
+        showSummary: false, keyCallback: k => key = k,
+    }, null, /* priority = */ false, /* static = */ true);
+
+    const success = await finished;
+    if (!success) throw new Error("Key backup prompt cancelled");
+
+    return key;
+}
 
 /**
  * This helper should be used whenever you need to access secret storage. It
@@ -148,19 +213,19 @@ export const crossSigningCallbacks = {
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
- * @param {bool} [force] Reset secret storage even if it's already set up
+ * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(func = async () => { }, force = false) {
+export async function accessSecretStorage(func = async () => { }, forceReset = false) {
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
     try {
-        if (!await cli.hasSecretStorageKey() || force) {
+        if (!await cli.hasSecretStorageKey() || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force,
+                    force: forceReset,
                 },
                 null, /* priority = */ false, /* static = */ true,
             );
@@ -185,6 +250,7 @@ export async function accessSecretStorage(func = async () => { }, force = false)
                         throw new Error("Cross-signing key upload auth canceled");
                     }
                 },
+                getBackupPassphrase: promptForBackupPassphrase,
             });
         }
 

@@ -34,6 +34,7 @@ import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
+import toRem from "../../../utils/rem";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -48,8 +49,6 @@ const eventTileTypes = {
 
 const stateEventTileTypes = {
     'm.room.encryption': 'messages.EncryptionEvent',
-    'm.room.aliases': 'messages.TextualEvent',
-    // 'm.room.aliases': 'messages.RoomAliasesEvent', // too complex
     'm.room.canonical_alias': 'messages.TextualEvent',
     'm.room.create': 'messages.RoomCreate',
     'm.room.member': 'messages.TextualEvent',
@@ -61,6 +60,7 @@ const stateEventTileTypes = {
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
     'm.room.server_acl': 'messages.TextualEvent',
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
@@ -97,6 +97,17 @@ export function getHandlerTile(ev) {
         const me = client && client.getUserId();
         if (ev.getSender() !== me) {
             return undefined;
+        }
+    }
+
+    // sometimes MKeyVerificationConclusion declines to render.  Jankily decline to render and
+    // fall back to showing hidden events, if we're viewing hidden events
+    // XXX: This is extremely a hack. Possibly these components should have an interface for
+    // declining to render?
+    if (type === "m.key.verification.cancel" && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+        const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
+        if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
+            return;
         }
     }
 
@@ -224,7 +235,8 @@ export default createReactClass({
         contextType: MatrixClientContext,
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
         this._verifyEvent(this.props.mxEvent);
@@ -244,7 +256,8 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         // re-check the sender verification as outgoing events progress through
         // the send process.
         if (nextProps.eventSendStatus !== this.props.eventSendStatus) {
@@ -311,7 +324,7 @@ export default createReactClass({
 
         // If cross-signing is off, the old behaviour is to scream at the user
         // as if they've done something wrong, which they haven't
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             this.setState({
                 verified: E2E_STATE.WARNING,
             }, this.props.onHeightChanged);
@@ -461,7 +474,7 @@ export default createReactClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ right: -(left - receiptOffset) }}>{ remainder }+
+                    style={{ right: "calc(" + toRem(-left) + " + " + receiptOffset + "px)" }}>{ remainder }+
                 </span>;
             }
         }
@@ -657,7 +670,6 @@ export default createReactClass({
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
-            mx_EventTile_redacted: isRedacted,
         });
 
         let permalink = "#";

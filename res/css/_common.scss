@@ -16,6 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+@import "./_font-sizes.scss";
+
+:root {
+    font-size: 15px;
+}
+
 html {
     /* hack to stop overscroll bounce on OSX and iOS.
        N.B. Breaks things when we have legitimate horizontal overscroll */
@@ -25,7 +31,7 @@ html {
 
 body {
     font-family: $font-family;
-    font-size: 15px;
+    font-size: $font-15px;
     background-color: $primary-bg-color;
     color: $primary-fg-color;
     border: 0px;
@@ -42,8 +48,13 @@ pre, code {
     font-size: 100% !important;
 }
 
-.error, .warning {
+.error, .warning,
+.text-error, .text-warning {
     color: $warning-color;
+}
+
+.text-success {
+    color: $accent-color;
 }
 
 b {
@@ -55,7 +66,7 @@ b {
 h2 {
     color: $primary-fg-color;
     font-weight: 400;
-    font-size: 18px;
+    font-size: $font-18px;
     margin-top: 16px;
     margin-bottom: 16px;
 }
@@ -71,7 +82,7 @@ input[type=search],
 input[type=password] {
     padding: 9px;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     font-weight: 600;
     min-width: 0;
 }
@@ -202,37 +213,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     transition: opacity 0.2s ease-in-out;
 }
 
-/* XXX: critical hack to GeminiScrollbar to allow them to work in FF 42 and Chrome 48.
-   Stop the scrollbar view from pushing out the container's overall sizing, which causes
-   flexbox to adapt to the new size and cause the view to keep growing.
- */
-.gm-scrollbar-container .gm-scroll-view {
-    position: absolute;
-}
-
-/* Expand thumbs on hoverover */
-.gm-scrollbar {
-    border-radius: 5px !important;
-}
-.gm-scrollbar.-vertical {
-    width: 6px;
-    transition: width 120ms ease-out !important;
-}
-.gm-scrollbar.-vertical:hover,
-.gm-scrollbar.-vertical:active {
-    width: 8px;
-    transition: width 120ms ease-out !important;
-}
-.gm-scrollbar.-horizontal {
-    height: 6px;
-    transition: height 120ms ease-out !important;
-}
-.gm-scrollbar.-horizontal:hover,
-.gm-scrollbar.-horizontal:active {
-    height: 8px;
-    transition: height 120ms ease-out !important;
-}
-
 // These are magic constants which are excluded from tinting, to let themes
 // (which only have CSS, unlike skins) tell the app what their non-tinted
 // colourscheme is by inspecting the stylesheet DOM.
@@ -279,7 +259,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     color: $light-fg-color;
     z-index: 4012;
     font-weight: 300;
-    font-size: 15px;
+    font-size: $font-15px;
     position: relative;
     padding: 25px 30px 30px 30px;
     max-height: 80%;
@@ -347,8 +327,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_title {
-    font-size: 22px;
-    line-height: 36px;
+    font-size: $font-22px;
+    line-height: $font-36px;
     color: $dialog-title-fg-color;
 }
 
@@ -376,7 +356,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_content {
     margin: 24px 0 68px;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $primary-fg-color;
     word-wrap: break-word;
 }
@@ -472,7 +452,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_TextInputDialog_input {
-    font-size: 15px;
+    font-size: $font-15px;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;

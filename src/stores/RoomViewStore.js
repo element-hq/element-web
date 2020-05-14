@@ -123,6 +123,9 @@ class RoomViewStore extends Store {
             case 'join_room_error':
                 this._joinRoomError(payload);
                 break;
+            case 'join_room_ready':
+                this._setState({ shouldPeek: false });
+                break;
             case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
@@ -156,7 +159,7 @@ class RoomViewStore extends Store {
             }
             case 'sync_state':
                 this._setState({
-                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
+                    matrixClientIsReady: MatrixClientPeg.get() && MatrixClientPeg.get().isInitialSyncComplete(),
                 });
                 break;
         }
@@ -259,11 +262,10 @@ class RoomViewStore extends Store {
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
         ).then(() => {
-            // We don't actually need to do anything here: we do *not*
-            // clear the 'joining' flag because the Room object and/or
-            // our 'joined' member event may not have come down the sync
-            // stream yet, and that's the point at which we'd consider
-            // the user joined to the room.
+            // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
+            // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
+            // room.
+            dis.dispatch({ action: 'join_room_ready' });
         }, (err) => {
             dis.dispatch({
                 action: 'join_room_error',

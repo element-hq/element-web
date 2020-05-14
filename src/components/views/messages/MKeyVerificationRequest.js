@@ -62,8 +62,8 @@ export default class MKeyVerificationRequest extends React.Component {
         const request = this.props.mxEvent.verificationRequest;
         if (request) {
             try {
-                await request.accept();
                 this._openRequest();
+                await request.accept();
             } catch (err) {
                 console.error(err.message);
             }
@@ -136,9 +136,9 @@ export default class MKeyVerificationRequest extends React.Component {
             } else if (request.cancelled) {
                 stateLabel = this._cancelledLabel(request.cancellingUserId);
             } else if (request.accepting) {
-                stateLabel = _t("accepting …");
+                stateLabel = _t("Accepting …");
             } else if (request.declining) {
-                stateLabel = _t("declining …");
+                stateLabel = _t("Declining …");
             }
             stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
         }

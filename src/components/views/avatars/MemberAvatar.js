@@ -51,7 +51,8 @@ export default createReactClass({
         return this._getState(this.props);
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         this.setState(this._getState(nextProps));
     },
 

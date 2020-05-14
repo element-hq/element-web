@@ -121,7 +121,7 @@ describe("<TextualBody />", () => {
             expect(wrapper.text()).toBe(ev.getContent().body);
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe('<span class="mx_EventTile_body" dir="auto">' +
-                'Visit <a href="https://matrix.org/" class="linkified" target="_blank" rel="noopener">' +
+                'Visit <a href="https://matrix.org/" class="linkified" target="_blank" rel="noreferrer noopener">' +
                 'https://matrix.org/</a></span>');
         });
     });
@@ -206,7 +206,8 @@ describe("<TextualBody />", () => {
                 'Hey <span>' +
                 '<a class="mx_Pill mx_UserPill" title="@user:server">' +
                 '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
-                'width="16" height="16" title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
+                'style="width: 1.0666666666666667rem; height: 1.0666666666666667rem;" ' +
+                'title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
                 '</span></span>');
         });
     });

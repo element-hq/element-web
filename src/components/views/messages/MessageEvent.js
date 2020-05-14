@@ -20,6 +20,8 @@ import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
+import RedactedBody from "./RedactedBody";
+import UnknownBody from "./UnknownBody";
 
 export default createReactClass({
     displayName: 'MessageEvent',
@@ -47,6 +49,7 @@ export default createReactClass({
         maxImageHeight: PropTypes.number,
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._body = createRef();
     },
@@ -60,8 +63,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const UnknownBody = sdk.getComponent('messages.UnknownBody');
-
         const bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
@@ -78,7 +79,7 @@ export default createReactClass({
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType = UnknownBody;
+        let BodyType = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (type && evTypes[type]) {
@@ -88,6 +89,9 @@ export default createReactClass({
             } else if (content.url) {
                 // Fallback to MFileBody if there's a content URL
                 BodyType = bodyTypes['m.file'];
+            } else {
+                // Fallback to UnknownBody otherwise if not redacted
+                BodyType = UnknownBody;
             }
         }
 

@@ -23,6 +23,7 @@ limitations under the License.
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    min-height: 0;
 }
 
 .mx_TagPanel_items_selected {
@@ -57,6 +58,7 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagPanel_scroller {
     flex-grow: 1;
+    width: 100%;
 }
 
 .mx_TagPanel .mx_TagPanel_tagTileContainer {
@@ -67,7 +69,7 @@ limitations under the License.
     height: 100%;
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
-    height: 40px;
+    height: $font-40px;
     padding: 10px 0 9px 0;
 }
 
@@ -108,13 +110,13 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
     content: '';
-    height: 56px;
+    height: calc(100% + 16px);
     background-color: $accent-color;
     width: 5px;
     position: absolute;
     left: -15px;
     border-radius: 0 3px 3px 0;
-    top: -8px; // (56 - 40)/2
+    top: -8px; // (16px / 2)
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -135,9 +137,9 @@ limitations under the License.
     top: -8px;
     border-radius: 8px;
     background-color: $neutral-badge-color;
-    color: #ffffff;
+    color: #000;
     font-weight: 600;
-    font-size: 10px;
+    font-size: $font-10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
@@ -155,7 +157,7 @@ limitations under the License.
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 14px;
+    font-size: $font-14px;
     padding: 0 5px;
     background-color: $roomtile-name-color;
 }

@@ -37,10 +37,6 @@ class EventIndexPeg {
      * EventIndex was successfully initialized, false otherwise.
      */
     async init() {
-        if (!SettingsStore.isFeatureEnabled("feature_event_indexing")) {
-            return false;
-        }
-
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!indexManager) {
             console.log("EventIndex: Platform doesn't support event indexing, not initializing.");
@@ -135,7 +131,7 @@ class EventIndexPeg {
      */
     async unset() {
         if (this.index === null) return;
-        this.index.close();
+        await this.index.close();
         this.index = null;
     }
 
@@ -151,7 +147,7 @@ class EventIndexPeg {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {
-            this.unset();
+            await this.unset();
             console.log("EventIndex: Deleting event index.");
             await indexManager.deleteEventIndex();
         }

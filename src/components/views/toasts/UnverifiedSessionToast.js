@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import Modal from "../../../Modal";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import Modal from '../../../Modal';
 import DeviceListener from '../../../DeviceListener';
 import NewSessionReviewDialog from '../dialogs/NewSessionReviewDialog';
 import FormButton from '../elements/FormButton';
@@ -27,38 +27,39 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 @replaceableComponent("views.toasts.UnverifiedSessionToast")
 export default class UnverifiedSessionToast extends React.PureComponent {
     static propTypes = {
-        toastKey: PropTypes.string.isRequired,
-        device: PropTypes.object.isRequired,
-    };
+        deviceId: PropTypes.string,
+    }
 
     _onLaterClick = () => {
-        const { device } = this.props;
-        DeviceListener.sharedInstance().dismissVerification(device.deviceId);
+        DeviceListener.sharedInstance().dismissUnverifiedSessions([this.props.deviceId]);
     };
 
     _onReviewClick = async () => {
-        const { device } = this.props;
-
+        const cli = MatrixClientPeg.get();
         Modal.createTrackedDialog('New Session Review', 'Starting dialog', NewSessionReviewDialog, {
-            userId: MatrixClientPeg.get().getUserId(),
-            device,
+            userId: cli.getUserId(),
+            device: cli.getStoredDevice(cli.getUserId(), this.props.deviceId),
+            onFinished: (r) => {
+                if (!r) {
+                    /* This'll come back false if the user clicks "this wasn't me" and saw a warning dialog */
+                    DeviceListener.sharedInstance().dismissUnverifiedSessions([this.props.deviceId]);
+                }
+            },
         }, null, /* priority = */ false, /* static = */ true);
     };
 
     render() {
-        const { device } = this.props;
+        const cli = MatrixClientPeg.get();
+        const device = cli.getStoredDevice(cli.getUserId(), this.props.deviceId);
 
         return (<div>
             <div className="mx_Toast_description">
-                <span className="mx_Toast_deviceName">
-                    {device.getDisplayName()}
-                </span> <span className="mx_Toast_deviceID">
-                    ({device.deviceId})
-                </span>
+                {_t(
+                    "Verify the new login accessing your account: %(name)s", { name: device.getDisplayName()})}
             </div>
             <div className="mx_Toast_buttons" aria-live="off">
                 <FormButton label={_t("Later")} kind="danger" onClick={this._onLaterClick} />
-                <FormButton label={_t("Review")} onClick={this._onReviewClick} />
+                <FormButton label={_t("Verify")} onClick={this._onReviewClick} />
             </div>
         </div>);
     }

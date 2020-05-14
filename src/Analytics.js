@@ -123,8 +123,8 @@ const LAST_VISIT_TS_KEY = "mx_Riot_Analytics_lvts";
 
 function getUid() {
     try {
-        let data = localStorage.getItem(UID_KEY);
-        if (!data) {
+        let data = localStorage && localStorage.getItem(UID_KEY);
+        if (!data && localStorage) {
             localStorage.setItem(UID_KEY, data = [...Array(16)].map(() => Math.random().toString(16)[2]).join(''));
         }
         return data;
@@ -145,14 +145,16 @@ class Analytics {
         this.firstPage = true;
         this._heartbeatIntervalID = null;
 
-        this.creationTs = localStorage.getItem(CREATION_TS_KEY);
-        if (!this.creationTs) {
+        this.creationTs = localStorage && localStorage.getItem(CREATION_TS_KEY);
+        if (!this.creationTs && localStorage) {
             localStorage.setItem(CREATION_TS_KEY, this.creationTs = new Date().getTime());
         }
 
-        this.lastVisitTs = localStorage.getItem(LAST_VISIT_TS_KEY);
-        this.visitCount = localStorage.getItem(VISIT_COUNT_KEY) || 0;
-        localStorage.setItem(VISIT_COUNT_KEY, parseInt(this.visitCount, 10) + 1);
+        this.lastVisitTs = localStorage && localStorage.getItem(LAST_VISIT_TS_KEY);
+        this.visitCount = localStorage && localStorage.getItem(VISIT_COUNT_KEY) || 0;
+        if (localStorage) {
+            localStorage.setItem(VISIT_COUNT_KEY, parseInt(this.visitCount, 10) + 1);
+        }
     }
 
     get disabled() {
@@ -260,7 +262,6 @@ class Analytics {
             });
         } catch (e) {
             console.error("Analytics error: ", e);
-            window.err = e;
         }
     }
 

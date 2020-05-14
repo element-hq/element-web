@@ -56,7 +56,7 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             const { roomId } = this.props.member;
             if (roomId) {
                 const isRoomEncrypted = cli.isRoomEncrypted(roomId);
@@ -65,6 +65,7 @@ export default createReactClass({
                 });
                 if (isRoomEncrypted) {
                     cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
+                    cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
                     this.updateE2EStatus();
                 } else {
                     // Listen for room to become encrypted
@@ -88,6 +89,7 @@ export default createReactClass({
         if (cli) {
             cli.removeListener("RoomState.events", this.onRoomStateEvents);
             cli.removeListener("userTrustStatusChanged", this.onUserTrustStatusChanged);
+            cli.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
         }
     },
 
@@ -110,19 +112,24 @@ export default createReactClass({
         this.updateE2EStatus();
     },
 
+    onDeviceVerificationChanged: function(userId, deviceId, deviceInfo) {
+        if (userId !== this.props.member.userId) return;
+        this.updateE2EStatus();
+    },
+
     updateE2EStatus: async function() {
         const cli = MatrixClientPeg.get();
         const { userId } = this.props.member;
         const isMe = userId === cli.getUserId();
-        const userVerified = cli.checkUserTrust(userId).isCrossSigningVerified();
-        if (!userVerified) {
+        const userTrust = cli.checkUserTrust(userId);
+        if (!userTrust.isCrossSigningVerified()) {
             this.setState({
-                e2eStatus: "normal",
+                e2eStatus: userTrust.wasCrossSigningVerified() ? "warning" : "normal",
             });
             return;
         }
 
-        const devices = await cli.getStoredDevicesForUser(userId);
+        const devices = cli.getStoredDevicesForUser(userId);
         const anyDeviceUnverified = devices.some(device => {
             const { deviceId } = device;
             // For your own devices, we use the stricter check of cross-signing
@@ -208,7 +215,7 @@ export default createReactClass({
         }
 
         const av = (
-            <MemberAvatar member={member} width={36} height={36} />
+            <MemberAvatar member={member} width={36} height={36} aria-hidden="true" />
         );
 
         if (member.user) {

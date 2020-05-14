@@ -252,10 +252,14 @@ class RoomPillPart extends PillPart {
 
     setAvatar(node) {
         let initialLetter = "";
-        let avatarUrl = Avatar.avatarUrlForRoom(this._room, 16 * window.devicePixelRatio, 16 * window.devicePixelRatio);
+        let avatarUrl = Avatar.avatarUrlForRoom(
+            this._room,
+            16 * window.devicePixelRatio,
+            16 * window.devicePixelRatio,
+            "crop");
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this._room.name);
-            avatarUrl = `../../${Avatar.defaultAvatarUrlForString(this._room.roomId)}`;
+            initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
+            avatarUrl = Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId);
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
@@ -287,17 +291,13 @@ class UserPillPart extends PillPart {
         }
         const name = this._member.name || this._member.userId;
         const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
-        let avatarUrl = Avatar.avatarUrlForMember(
+        const avatarUrl = Avatar.avatarUrlForMember(
             this._member,
             16 * window.devicePixelRatio,
-            16 * window.devicePixelRatio);
+            16 * window.devicePixelRatio,
+            "crop");
         let initialLetter = "";
         if (avatarUrl === defaultAvatarUrl) {
-            // the url from defaultAvatarUrlForString is meant to go in an img element,
-            // which has the base of the document. we're using it in css,
-            // which has the base of the theme css file, two levels deeper than the document,
-            // so go up to the level of the document.
-            avatarUrl = `../../${avatarUrl}`;
             initialLetter = Avatar.getInitialLetter(name);
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
@@ -422,14 +422,15 @@ export class PartCreator {
         return new PillCandidatePart(text, this._autoCompleteCreator);
     }
 
-    roomPill(alias) {
+    roomPill(alias, roomId) {
         let room;
-        if (alias[0] === '#') {
-            room = this._client.getRooms().find((r) => {
-                return r.getCanonicalAlias() === alias || r.getAliases().includes(alias);
-            });
+        if (roomId || alias[0] !== "#") {
+            room = this._client.getRoom(roomId || alias);
         } else {
-            room = this._client.getRoom(alias);
+            room = this._client.getRooms().find((r) => {
+                return r.getCanonicalAlias() === alias ||
+                       r.getAltAliases().includes(alias);
+            });
         }
         return new RoomPillPart(alias, room);
     }

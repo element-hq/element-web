@@ -272,7 +272,6 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onAddPersonalRule} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_personalAdd"
                                 type="text"
                                 label={_t("Server or user ID to ignore")}
                                 placeholder={_t("eg: @bot:* or example.org")}
@@ -305,7 +304,6 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onSubscribeList} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_subscriptionAdd"
                                 type="text"
                                 label={_t("Room ID or alias of ban list")}
                                 value={this.state.newList}

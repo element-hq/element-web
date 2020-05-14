@@ -14,69 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* This file has CSS for both native and non-native scrollbars in an order
- * that's fairly logical to read but duplicates a selector to separate the
- * hiding/showing from the sizing.
- */
-/* stylelint-disable no-duplicate-selectors */
-
-/*
-1. for browsers that support native overlay auto-hiding scrollbars
-*/
-.mx_AutoHideScrollbar {
-    overflow-x: hidden;
-    overflow-y: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-}
-/*
-2. webkit also supports overflow:overlay where the scrollbars don't take any space
-in the layout but they don't autohide, so do that only on hover
-*/
-body.mx_scrollbar_overlay_noautohide .mx_AutoHideScrollbar {
-    overflow-y: hidden;
-}
-
-body.mx_scrollbar_overlay_noautohide .mx_AutoHideScrollbar:hover {
-    overflow-y: overlay;
-}
-/*
-3. as a last fallback, compensate for the scrollbar taking up space in the layout
-by having giving the child element (.mx_AutoHideScrollbar_offset) a
-negative right margin of the width of the scrollbar when the container
-is overflowing. This is what Firefox ends up using. Overflow is detected
-in javascript, and adds the mx_AutoHideScrollbar_overflow class to the container.
-This only works in Firefox, which should be fine as this fallback is only needed there.
-*/
-body.mx_scrollbar_nooverlay {
-    .mx_AutoHideScrollbar {
-        overflow-y: hidden;
-    }
-
-    .mx_AutoHideScrollbar:hover {
-        overflow-y: auto;
-    }
-
-    /*
-    offset scrollbar width with negative margin-right
-
-    include before and after psuedo-elements here so they can
-    be used to do something interesting like scroll-indicating
-    gradients (see IndicatorScrollBar)
-    */
-    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow > .mx_AutoHideScrollbar_offset,
-    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::before,
-    .mx_AutoHideScrollbar:hover.mx_AutoHideScrollbar_overflow::after {
-        margin-right: calc(-1 * var(--scrollbar-width));
-    }
-}
-
-// style the native scrollbars ...
-// ... standard css scrollbars (firefox at time of writing)
-.mx_AutoHideScrollbar {
+// make any scrollbar grey and thin
+html {
     scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+}
+// scrollbar-width is not inherited (but -color is, why?!),
+// so declare it on every element
+* {
     scrollbar-width: thin;
 }
-// or fallback for webkit browsers
+
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -84,6 +31,37 @@ body.mx_scrollbar_nooverlay {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: $scrollbar-thumb-color;
     border-radius: 3px;
+    background-color: $scrollbar-thumb-color;
+}
+
+// make auto-hide scrollbars not transparent again on hover
+.mx_AutoHideScrollbar:hover {
+    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+
+    &::-webkit-scrollbar {
+        background-color: $scrollbar-track-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $scrollbar-thumb-color;
+    }
+}
+
+// make scrollbars transparent for autohide scrollbars
+.mx_AutoHideScrollbar {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-y: overlay;    // where supported
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+
+    &::-webkit-scrollbar {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+
+    scrollbar-color: transparent transparent;
 }

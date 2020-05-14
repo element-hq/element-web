@@ -24,8 +24,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 
 function languageMatchesSearchQuery(query, language) {
-    if (language.label.toUpperCase().indexOf(query.toUpperCase()) == 0) return true;
-    if (language.value.toUpperCase() == query.toUpperCase()) return true;
+    if (language.label.toUpperCase().includes(query.toUpperCase())) return true;
+    if (language.value.toUpperCase() === query.toUpperCase()) return true;
     return false;
 }
 
@@ -40,7 +40,7 @@ export default class LanguageDropdown extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         languageHandler.getAllLanguagesFromJson().then((langs) => {
             langs.sort(function(a, b) {
                 if (a.label < b.label) return -1;
@@ -114,6 +114,7 @@ export default class LanguageDropdown extends React.Component {
             searchEnabled={true}
             value={value}
             label={_t("Language Dropdown")}
+            disabled={this.props.disabled}
         >
             { options }
         </Dropdown>;

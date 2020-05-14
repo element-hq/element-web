@@ -20,6 +20,10 @@ import EventEmitter from 'events';
  * Holds the active toasts
  */
 export default class ToastStore extends EventEmitter {
+    static PRIORITY_REALTIME = 0;
+    static PRIORITY_DEFAULT = 1;
+    static PRIORITY_LOW = 2;
+
     static sharedInstance() {
         if (!global.mx_ToastStore) global.mx_ToastStore = new ToastStore();
         return global.mx_ToastStore;
@@ -35,10 +39,23 @@ export default class ToastStore extends EventEmitter {
         this._toasts = [];
     }
 
+    /**
+     * Add or replace a toast
+     * If a toast with the same toastKey already exists, the given toast will replace it
+     * Toasts are always added underneath any toasts of the same priority, so existing
+     * toasts stay at the top unless a higher priority one arrives (better to not change the
+     * toast unless necessary).
+     *
+     * @param {boject} newToast The new toast
+     */
     addOrReplaceToast(newToast) {
+        if (newToast.priority === undefined) newToast.priority = ToastStore.PRIORITY_DEFAULT;
+
         const oldIndex = this._toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
-            this._toasts.push(newToast);
+            let newIndex = this._toasts.length;
+            while (newIndex > 0 && this._toasts[newIndex - 1].priority > newToast.priority) --newIndex;
+            this._toasts.splice(newIndex, 0, newToast);
         } else {
             this._toasts[oldIndex] = newToast;
         }

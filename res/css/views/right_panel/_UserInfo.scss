@@ -20,7 +20,7 @@ limitations under the License.
     flex-direction: column;
     flex: 1;
     overflow-y: auto;
-    font-size: 12px;
+    font-size: $font-12px;
 
     .mx_UserInfo_cancel {
         cursor: pointer;
@@ -43,7 +43,7 @@ limitations under the License.
     }
 
     h2 {
-        font-size: 18px;
+        font-size: $font-18px;
         font-weight: 600;
         margin: 18px 0 0 0;
     }
@@ -98,8 +98,8 @@ limitations under the License.
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
     }
 
     .mx_UserInfo_avatar .mx_BaseAvatar_initial {
@@ -109,7 +109,7 @@ limitations under the License.
         justify-content: center;
 
         // override the calculated sizes so that the letter isn't HUGE
-        font-size: 56px !important;
+        font-size: 6rem !important;
         width: 100% !important;
         transition: font-size 0.5s;
     }
@@ -122,7 +122,7 @@ limitations under the License.
         text-transform: uppercase;
         color: $notice-secondary-color;
         font-weight: bold;
-        font-size: 12px;
+        font-size: $font-12px;
         margin: 4px 0;
     }
 
@@ -134,17 +134,28 @@ limitations under the License.
         text-align: center;
 
         h2 {
-            font-size: 18px;
-            line-height: 25px;
-            flex: 1;
-            overflow-x: auto;
-            max-height: 50px;
             display: flex;
+            font-size: $font-18px;
+            line-height: $font-25px;
+            flex: 1;
             justify-content: center;
-            align-items: center;
+
+            span {
+                // limit to 2 lines, show an ellipsis if it overflows
+                // this looks webkit specific but is supported by Firefox 68+
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+
+                overflow: hidden;
+                word-break: break-all;
+                text-overflow: ellipsis;
+            }
 
             .mx_E2EIcon {
-                margin: 5px;
+                margin-top: 3px; // visual vertical centering to the top line of text
+                margin-right: 4px; // margin from displyname
+                min-width: 18px; // convince flexbox to not collapse it
             }
         }
 
@@ -190,7 +201,7 @@ limitations under the License.
     .mx_UserInfo_field {
         cursor: pointer;
         color: $accent-color;
-        line-height: 16px;
+        line-height: $font-16px;
         margin: 8px 0;
 
         &.mx_UserInfo_destructive {
@@ -199,7 +210,7 @@ limitations under the License.
     }
 
     .mx_UserInfo_statusMessage {
-        font-size: 11px;
+        font-size: $font-11px;
         opacity: 0.5;
         overflow: hidden;
         white-space: nowrap;
@@ -259,12 +270,31 @@ limitations under the License.
         }
     }
 
+    .mx_AccessibleButton.mx_AccessibleButton_hasKind {
+        padding: 8px 18px;
+
+        &.mx_AccessibleButton_kind_primary {
+            color: $accent-color;
+            background-color: $accent-bg-color;
+        }
+
+        &.mx_AccessibleButton_kind_danger {
+            color: $notice-primary-color;
+            background-color: $notice-primary-bg-color;
+        }
+    }
+
+    .mx_VerificationShowSas .mx_AccessibleButton,
     .mx_UserInfo_wideButton {
         display: block;
-        margin: 16px 0;
+        margin: 16px 0 8px;
     }
-    button.mx_UserInfo_wideButton {
-        width: 100%; // FIXME get rid of this once we get rid of DialogButtons here
+
+
+    .mx_VerificationShowSas {
+        .mx_AccessibleButton + .mx_AccessibleButton {
+            margin: 8px 0; // space between buttons
+        }
     }
 }
 

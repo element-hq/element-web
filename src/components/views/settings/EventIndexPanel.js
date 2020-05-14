@@ -39,7 +39,15 @@ export default class EventIndexPanel extends React.Component {
 
     updateCurrentRoom = async (room) => {
         const eventIndex = EventIndexPeg.get();
-        const stats = await eventIndex.getStats();
+        let stats;
+
+        try {
+            stats = await eventIndex.getStats();
+        } catch {
+            // This call may fail if sporadically, not a huge issue as we will
+            // try later again and probably succeed.
+            return;
+        }
 
         this.setState({
             eventIndexSize: stats.size,
@@ -55,7 +63,7 @@ export default class EventIndexPanel extends React.Component {
         }
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         this.updateState();
     }
 
@@ -70,9 +78,15 @@ export default class EventIndexPanel extends React.Component {
         if (eventIndex !== null) {
             eventIndex.on("changedCheckpoint", this.updateCurrentRoom);
 
-            const stats = await eventIndex.getStats();
-            eventIndexSize = stats.size;
-            roomCount = stats.roomCount;
+            try {
+                const stats = await eventIndex.getStats();
+                eventIndexSize = stats.size;
+                roomCount = stats.roomCount;
+            } catch {
+                // This call may fail if sporadically, not a huge issue as we
+                // will try later again in the updateCurrentRoom call and
+                // probably succeed.
+            }
         }
 
         this.setState({
@@ -149,7 +163,7 @@ export default class EventIndexPanel extends React.Component {
             );
 
             eventIndexingSettings = (
-                <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     {
                         _t( "Riot is missing some components required for securely " +
                             "caching encrypted messages locally. If you'd like to " +
@@ -158,7 +172,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'nativeLink': (sub) => <a href={nativeLink} target="_blank"
-                                    rel="noopener">{sub}</a>,
+                                    rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }
@@ -166,7 +180,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else {
             eventIndexingSettings = (
-                <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     {
                         _t( "Riot can't securely cache encrypted messages locally " +
                             "while running in a web browser. Use <riotLink>Riot Desktop</riotLink> " +
@@ -174,7 +188,7 @@ export default class EventIndexPanel extends React.Component {
                             {},
                             {
                                 'riotLink': (sub) => <a href="https://riot.im/download/desktop"
-                                    target="_blank" rel="noopener">{sub}</a>,
+                                    target="_blank" rel="noreferrer noopener">{sub}</a>,
                             },
                         )
                     }

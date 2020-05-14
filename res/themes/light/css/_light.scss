@@ -5,9 +5,12 @@
    Arial empirically gets it right, hence prioritising Arial here. */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
-$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Arial, Helvetica, Sans-Serif;
+/* Noto Color Emoji contains digits, in fixed-width, therefore causing
+   digits in flowed text to stand out.
+   TODO: Consider putting all emoji fonts to the end rather than the front. */
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
 
-$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', Courier, monospace;
+$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
 
 // unified palette
 // try to use these colors when possible
@@ -287,6 +290,8 @@ $reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 $reaction-row-button-selected-border-color: $accent-color;
 
+$kbd-border-color: $reaction-row-button-border-color;
+
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
@@ -305,7 +310,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
     border: 0px;
     border-radius: 4px;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $button-fg-color;
     background-color: $button-bg-color;
     width: auto;
@@ -326,7 +331,7 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 @define-mixin mx_DialogButton_small {
     @mixin mx_DialogButton;
-    font-size: 15px;
+    font-size: $font-15px;
     padding: 0px 1.5em 0px 1.5em;
 }
 

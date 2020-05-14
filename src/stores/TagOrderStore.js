@@ -19,6 +19,7 @@ import GroupStore from './GroupStore';
 import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import SettingsStore from "../settings/SettingsStore";
 
 const INITIAL_STATE = {
     orderedTags: null,
@@ -40,6 +41,7 @@ class TagOrderStore extends Store {
 
         // Initialise state
         this._state = Object.assign({}, INITIAL_STATE);
+        SettingsStore.monitorSetting("TagPanel.enableTagPanel", null);
     }
 
     _setState(newState) {
@@ -166,9 +168,16 @@ class TagOrderStore extends Store {
             }
             break;
             case 'deselect_tags':
-                this._setState({
-                    selectedTags: [],
-                });
+                if (payload.tag) {
+                    // if a tag is passed, only deselect that tag
+                    this._setState({
+                        selectedTags: this._state.selectedTags.filter(tag => tag !== payload.tag),
+                    });
+                } else {
+                    this._setState({
+                        selectedTags: [],
+                    });
+                }
                 Analytics.trackEvent('FilterStore', 'deselect_tags');
             break;
             case 'on_client_not_viable':
@@ -178,6 +187,14 @@ class TagOrderStore extends Store {
                 this._state = Object.assign({}, INITIAL_STATE);
                 break;
             }
+            case 'setting_updated':
+                if (payload.settingName === 'TagPanel.enableTagPanel' && !payload.newValue) {
+                    this._setState({
+                        selectedTags: [],
+                    });
+                    Analytics.trackEvent('FilterStore', 'disable_tags');
+                }
+                break;
         }
     }
 

@@ -38,6 +38,7 @@ import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
+import Spinner from "../../../elements/Spinner";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -60,13 +61,17 @@ export default class GeneralUserSettingsTab extends React.Component {
             },
             emails: [],
             msisdns: [],
+            loading3pids: true, // whether or not the emails and msisdns have been loaded
             ...this._calculateThemeState(),
+            customThemeUrl: "",
+            customThemeMessage: {isError: false, text: ""},
         };
 
         this.dispatcherRef = dis.register(this._onAction);
     }
 
-    async componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    async UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const cli = MatrixClientPeg.get();
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
@@ -155,8 +160,11 @@ export default class GeneralUserSettingsTab extends React.Component {
             );
             console.warn(e);
         }
-        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
-        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
+        this.setState({
+            emails: threepids.filter((a) => a.medium === 'email'),
+            msisdns: threepids.filter((a) => a.medium === 'msisdn'),
+            loading3pids: false,
+        });
     }
 
     async _checkTerms() {
@@ -274,6 +282,41 @@ export default class GeneralUserSettingsTab extends React.Component {
         });
     };
 
+    _onAddCustomTheme = async () => {
+        let currentThemes = SettingsStore.getValue("custom_themes");
+        if (!currentThemes) currentThemes = [];
+        currentThemes = currentThemes.map(c => c); // cheap clone
+
+        if (this._themeTimer) {
+            clearTimeout(this._themeTimer);
+        }
+
+        try {
+            const r = await fetch(this.state.customThemeUrl);
+            const themeInfo = await r.json();
+            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
+                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
+                return;
+            }
+            currentThemes.push(themeInfo);
+        } catch (e) {
+            console.error(e);
+            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
+            return; // Don't continue on error
+        }
+
+        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
+        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
+
+        this._themeTimer = setTimeout(() => {
+            this.setState({customThemeMessage: {text: "", isError: false}});
+        }, 3000);
+    };
+
+    _onCustomThemeChange = (e) => {
+        this.setState({customThemeUrl: e.target.value});
+    };
+
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
@@ -287,7 +330,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
-        const Spinner = sdk.getComponent("views.elements.Spinner");
 
         let passwordChangeForm = (
             <ChangePassword
@@ -306,18 +348,24 @@ export default class GeneralUserSettingsTab extends React.Component {
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
         if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
-            threepidSection = <div>
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses
+            const emails = this.state.loading3pids
+                ? <Spinner />
+                : <EmailAddresses
                     emails={this.state.emails}
                     onEmailsChange={this._onEmailsChange}
-                />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers
+                />;
+            const msisdns = this.state.loading3pids
+                ? <Spinner />
+                : <PhoneNumbers
                     msisdns={this.state.msisdns}
                     onMsisdnsChange={this._onMsisdnsChange}
-                />
+                />;
+            threepidSection = <div>
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                {emails}
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                {msisdns}
             </div>;
         } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
@@ -368,18 +416,57 @@ export default class GeneralUserSettingsTab extends React.Component {
                 />
             </div>;
         }
+
+        let customThemeForm;
+        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+            let messageElement = null;
+            if (this.state.customThemeMessage.text) {
+                if (this.state.customThemeMessage.isError) {
+                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
+                } else {
+                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
+                }
+            }
+            customThemeForm = (
+                <div className='mx_SettingsTab_section'>
+                    <form onSubmit={this._onAddCustomTheme}>
+                        <Field
+                            label={_t("Custom theme URL")}
+                            type='text'
+                            autoComplete="off"
+                            onChange={this._onCustomThemeChange}
+                            value={this.state.customThemeUrl}
+                        />
+                        <AccessibleButton
+                            onClick={this._onAddCustomTheme}
+                            type="submit" kind="primary_sm"
+                            disabled={!this.state.customThemeUrl.trim()}
+                        >{_t("Add theme")}</AccessibleButton>
+                        {messageElement}
+                    </form>
+                </div>
+            );
+        }
+
+        const themes = Object.entries(enumerateThemes())
+            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
+        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
+        const customThemes = themes.filter(p => !builtInThemes.includes(p))
+            .sort((a, b) => a.name.localeCompare(b.name));
+        const orderedThemes = [...builtInThemes, ...customThemes];
         return (
             <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <Field id="theme" label={_t("Theme")} element="select"
+                <Field label={_t("Theme")} element="select"
                        value={this.state.theme} onChange={this._onThemeChange}
                        disabled={this.state.useSystemTheme}
                 >
-                    {Object.entries(enumerateThemes()).map(([theme, text]) => {
-                        return <option key={theme} value={theme}>{text}</option>;
+                    {orderedThemes.map(theme => {
+                        return <option key={theme.id} value={theme.id}>{theme.name}</option>;
                     })}
                 </Field>
+                {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
             </div>
         );
@@ -414,12 +501,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
 
+        const emails = this.state.loading3pids ? <Spinner /> : <EmailAddresses emails={this.state.emails} />;
+        const msisdns = this.state.loading3pids ? <Spinner /> : <PhoneNumbers msisdns={this.state.msisdns} />;
+
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-            <EmailAddresses emails={this.state.emails} />
+            {emails}
 
             <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-            <PhoneNumbers msisdns={this.state.msisdns} />
+            {msisdns}
         </div> : null;
 
         return (
