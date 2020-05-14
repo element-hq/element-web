@@ -29,9 +29,11 @@ export const UPDATE_EVENT = "update";
  * of everything needing to happen in a dispatch cycle, everything can
  * happen async to that cycle.
  *
- * The store's core principle is Object.assign(), therefore it is recommended
- * to break out your state to be as safe as possible. The state mutations are
- * also locked, preventing concurrent writes.
+ * The store operates by using Object.assign() to mutate state - it sends the
+ * state objects (current and new) through the function onto a new empty
+ * object. Because of this, it is recommended to break out your state to be as
+ * safe as possible. The state mutations are also locked, preventing concurrent
+ * writes.
  *
  * All updates to the store happen on the UPDATE_EVENT event channel with the
  * one argument being the instance of the store.
