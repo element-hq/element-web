@@ -1341,5 +1341,6 @@
     "You're done!": "Du har gjort alt klart!",
     "Enter a recovery passphrase...": "Skriv inn en gjenopprettingspassfrase …",
     "Please enter your recovery passphrase a second time to confirm.": "Skriv inn gjenopprettingspassfrasen din en andre gang for å bekrefte.",
-    "Repeat your recovery passphrase...": "Gjenta gjenopprettingspassfrasen din …"
+    "Repeat your recovery passphrase...": "Gjenta gjenopprettingspassfrasen din …",
+    "Other users may not trust it": "Andre brukere kan kanskje mistro den"
 }
