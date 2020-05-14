@@ -67,7 +67,7 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
     private checkEnabled() {
         this.enabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
         if (this.enabled) {
-            console.log("ENABLING NEW ROOM LIST STORE");
+            console.log("⚡ new room list store engaged");
         }
     }
 
@@ -225,7 +225,7 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
         }
 
         if (this.state.tagsEnabled) {
-            // TODO: Find a more reliable way to get tags
+            // TODO: Find a more reliable way to get tags (this doesn't work)
             const roomTags = TagOrderStore.getOrderedTags() || [];
             console.log("rtags", roomTags);
         }

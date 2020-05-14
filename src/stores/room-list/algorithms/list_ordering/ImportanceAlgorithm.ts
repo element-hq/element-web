@@ -79,7 +79,6 @@ const CATEGORY_ORDER = [Category.Red, Category.Grey, Category.Bold, Category.Idl
  */
 export class ImportanceAlgorithm extends Algorithm {
 
-    // TODO: Update documentation
     // HOW THIS WORKS
     // --------------
     //
@@ -93,19 +92,17 @@ export class ImportanceAlgorithm extends Algorithm {
     // can be found from `this.indices[tag][category]` and the sticky room information
     // from `this.stickyRoom`.
     //
-    // Room categories are constantly re-evaluated and tracked in the `this.categorized`
-    // object. Note that this doesn't track rooms by category but instead by room ID.
-    // The theory is that by knowing the previous position, new desired position, and
-    // category indices we can avoid tracking multiple complicated maps in memory.
-    //
     // The room list store is always provided with the `this.cached` results, which are
     // updated as needed and not recalculated often. For example, when a room needs to
     // move within a tag, the array in `this.cached` will be spliced instead of iterated.
+    // The `indices` help track the positions of each category to make splicing easier.
 
     private indices: {
         // @ts-ignore - TS wants this to be a string but we know better than it
         [tag: TagID]: ICategoryIndex;
     } = {};
+
+    // TODO: Use this (see docs above)
     private stickyRoom: {
         roomId: string;
         tag: TagID;
@@ -178,14 +175,14 @@ export class ImportanceAlgorithm extends Algorithm {
                 }
 
                 const newlyOrganized: Room[] = [];
-                const newIndicies: ICategoryIndex = {};
+                const newIndices: ICategoryIndex = {};
 
                 for (const category of CATEGORY_ORDER) {
-                    newIndicies[category] = newlyOrganized.length;
+                    newIndices[category] = newlyOrganized.length;
                     newlyOrganized.push(...categorized[category]);
                 }
 
-                this.indices[tagId] = newIndicies;
+                this.indices[tagId] = newIndices;
                 updatedTagMap[tagId] = newlyOrganized;
             }
         }
@@ -205,7 +202,7 @@ export class ImportanceAlgorithm extends Algorithm {
             }
 
             const taggedRooms = this.cached[tag];
-            const indicies = this.indices[tag];
+            const indices = this.indices[tag];
             let roomIdx = taggedRooms.indexOf(room);
             if (roomIdx === -1) {
                 console.warn(`Degrading performance to find missing room in "${tag}": ${room.roomId}`);
@@ -217,16 +214,16 @@ export class ImportanceAlgorithm extends Algorithm {
 
             // Try to avoid doing array operations if we don't have to: only move rooms within
             // the categories if we're jumping categories
-            const oldCategory = this.getCategoryFromIndicies(roomIdx, indicies);
+            const oldCategory = this.getCategoryFromIndices(roomIdx, indices);
             if (oldCategory !== category) {
-                // Move the room and update the indicies
-                this.moveRoomIndexes(1, oldCategory, category, indicies);
+                // Move the room and update the indices
+                this.moveRoomIndexes(1, oldCategory, category, indices);
                 taggedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
-                taggedRooms.splice(indicies[category], 0, room); // splice in the new room (pre-adjusted)
+                taggedRooms.splice(indices[category], 0, room); // splice in the new room (pre-adjusted)
                 // Note: if moveRoomIndexes() is called after the splice then the insert operation
                 // will happen in the wrong place. Because we would have already adjusted the index
                 // for the category, we don't need to determine how the room is moving in the list.
-                // If we instead tried to insert before updating the indicies, we'd have to determine
+                // If we instead tried to insert before updating the indices, we'd have to determine
                 // whether the room was moving later (towards IDLE) or earlier (towards RED) from its
                 // current position, as it'll affect the category's start index after we remove the
                 // room from the array.
@@ -240,8 +237,8 @@ export class ImportanceAlgorithm extends Algorithm {
             // array and slot the changed room in quickly.
             const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
                 ? Number.MAX_SAFE_INTEGER
-                : indicies[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
-            const startIdx = indicies[category];
+                : indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
+            const startIdx = indices[category];
             const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
             const unsortedSlice = taggedRooms.splice(startIdx, numSort);
             const sorted = await sortRoomsWithAlgorithm(unsortedSlice, tag, this.sortAlgorithms[tag]);
@@ -253,12 +250,12 @@ export class ImportanceAlgorithm extends Algorithm {
         return changed;
     }
 
-    private getCategoryFromIndicies(index: number, indicies: ICategoryIndex): Category {
+    private getCategoryFromIndices(index: number, indices: ICategoryIndex): Category {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
             const isLast = i === (CATEGORY_ORDER.length - 1);
-            const startIdx = indicies[category];
-            const endIdx = isLast ? Number.MAX_SAFE_INTEGER : indicies[CATEGORY_ORDER[i + 1]];
+            const startIdx = indices[category];
+            const endIdx = isLast ? Number.MAX_SAFE_INTEGER : indices[CATEGORY_ORDER[i + 1]];
             if (index >= startIdx && index < endIdx) {
                 return category;
             }
@@ -268,21 +265,21 @@ export class ImportanceAlgorithm extends Algorithm {
         throw new Error("Programming error: somehow you've ended up with an index that isn't in a category");
     }
 
-    private moveRoomIndexes(nRooms: number, fromCategory: Category, toCategory: Category, indicies: ICategoryIndex) {
+    private moveRoomIndexes(nRooms: number, fromCategory: Category, toCategory: Category, indices: ICategoryIndex) {
         // We have to update the index of the category *after* the from/toCategory variables
-        // in order to update the indicies correctly. Because the room is moving from/to those
+        // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
         // We also need to update subsequent categories as they'll all shift by nRooms, so we
         // loop over the order to achieve that.
 
         for (let i = CATEGORY_ORDER.indexOf(fromCategory) + 1; i < CATEGORY_ORDER.length; i++) {
             const nextCategory = CATEGORY_ORDER[i];
-            indicies[nextCategory] -= nRooms;
+            indices[nextCategory] -= nRooms;
         }
 
         for (let i = CATEGORY_ORDER.indexOf(toCategory) + 1; i < CATEGORY_ORDER.length; i++) {
             const nextCategory = CATEGORY_ORDER[i];
-            indicies[nextCategory] += nRooms;
+            indices[nextCategory] += nRooms;
         }
 
         // Do a quick check to see if we've completely broken the index
@@ -290,9 +287,9 @@ export class ImportanceAlgorithm extends Algorithm {
             const lastCat = CATEGORY_ORDER[i - 1];
             const thisCat = CATEGORY_ORDER[i];
 
-            if (indicies[lastCat] > indicies[thisCat]) {
+            if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
-                console.warn(`!! Room list index corruption: ${lastCat} (i:${indicies[lastCat]}) is greater than ${thisCat} (i:${indicies[thisCat]}) - category indicies are likely desynced from reality`);
+                console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
                 // TODO: Regenerate index when this happens
             }
