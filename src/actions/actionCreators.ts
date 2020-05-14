@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AsyncActionPayload } from "../dispatcher/dispatcher";
+import { AsyncActionPayload } from "../dispatcher/payloads";
 
 /**
  * Create an action thunk that will dispatch actions indicating the current
