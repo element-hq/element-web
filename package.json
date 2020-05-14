@@ -120,6 +120,7 @@
     "@types/classnames": "^2.2.10",
     "@types/modernizr": "^3.5.3",
     "@types/react": "16.9",
+    "@types/zxcvbn": "^4.4.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "chokidar": "^3.3.1",

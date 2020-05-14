@@ -19,7 +19,7 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-type Data = Pick<IValidateArgs, "value" | "allowEmpty">;
+type Data = Pick<IFieldState, "value" | "allowEmpty">;
 
 interface IRule<T> {
     key: string;
@@ -32,13 +32,18 @@ interface IRule<T> {
 
 interface IArgs<T> {
     rules: IRule<T>[];
-    description(): React.ReactChild;
+    description(this: T): React.ReactChild;
 }
 
-interface IValidateArgs {
+export interface IFieldState {
     value: string;
     focused: boolean;
     allowEmpty: boolean;
+}
+
+export interface IValidationResult {
+    valid?: boolean;
+    feedback?: React.ReactChild;
 }
 
 /**
@@ -62,7 +67,7 @@ interface IValidateArgs {
  *     the overall validity and a feedback UI that can be rendered for more detail.
  */
 export default function withValidation<T = undefined>({ description, rules }: IArgs<T>) {
-    return async function onValidate({ value, focused, allowEmpty = true }: IValidateArgs) {
+    return async function onValidate({ value, focused, allowEmpty = true }: IFieldState): Promise<IValidationResult> {
         if (!value && allowEmpty) {
             return {
                 valid: null,

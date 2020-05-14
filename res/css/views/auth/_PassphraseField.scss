@@ -18,6 +18,8 @@ $PassphraseStrengthHigh: $accent-color;
 $PassphraseStrengthMedium: $username-variant5-color;
 $PassphraseStrengthLow: $notice-primary-color;
 
+.mx_PassphraseField {}
+
 @define-mixin ProgressBarColour $colour {
     color: $colour;
     &::-moz-progress-bar {
@@ -28,10 +30,13 @@ $PassphraseStrengthLow: $notice-primary-color;
     }
 }
 
-progress.mx_ZxcvbnProgressBar {
+progress.mx_PassphraseField_progress {
     appearance: none;
     width: 100%;
     border: 0;
+    height: 4px;
+    position: absolute;
+    top: -12px;
 
     border-radius: 2px;
     &::-moz-progress-bar {
