@@ -41,7 +41,7 @@ import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
+import {isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -585,6 +585,18 @@ export default createReactClass({
                 if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
                     this._messagePanel.forgetReadMarker();
                     this.jumpToLiveTimeline();
+                    handled = true;
+                }
+                break;
+            case Key.PAGE_UP:
+                if (!ev.altKey && !ev.ctrlKey && ev.shiftKey && !ev.metaKey) {
+                    this.jumpToReadMarker();
+                    handled = true;
+                }
+                break;
+            case Key.U.toUpperCase():
+                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
+                    dis.dispatch({ action: "upload_file" })
                     handled = true;
                 }
                 break;

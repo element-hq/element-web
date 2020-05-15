@@ -24,7 +24,7 @@ import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import {MatrixEvent} from "matrix-js-sdk/src/models/event";
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import QRCode from 'qrcode-react';
+import QRCode from "../elements/QRCode";
 import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../../../utils/permalinks/Permalinks";
 import * as ContextMenu from "../../structures/ContextMenu";
 import {toRightOf} from "../../structures/ContextMenu";
@@ -221,7 +221,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
 
                 <div className="mx_ShareDialog_split">
                     <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode value={matrixToUrl} size={256} logoWidth={48} logo={require("../../../../res/img/matrix-m.svg")} />
+                        <QRCode data={matrixToUrl} width={256} />
                     </div>
                     <div className="mx_ShareDialog_social_container">
                         { socials.map((social) => (

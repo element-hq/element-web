@@ -244,7 +244,9 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     <SSOButton
                         matrixClient={MatrixClientPeg.get()}
-                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"} />
+                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"}
+                        fragmentAfterLogin={this.props.fragmentAfterLogin}
+                    />
                 </div>
             );
         }

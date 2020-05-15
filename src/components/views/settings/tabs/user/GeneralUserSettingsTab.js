@@ -348,7 +348,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
         if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
-            const emails = this.state.loading3pids || true
+            const emails = this.state.loading3pids
                 ? <Spinner />
                 : <EmailAddresses
                     emails={this.state.emails}
