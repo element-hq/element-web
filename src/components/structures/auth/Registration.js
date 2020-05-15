@@ -243,10 +243,15 @@ export default createReactClass({
             });
         };
         try {
-            await this._makeRegisterRequest({});
-            // This should never succeed since we specified an empty
-            // auth object.
-            console.log("Expecting 401 from register request but got success!");
+            // We do the first registration request ourselves to discover whether we need to
+            // do SSO instead. If we've already started the UI Auth process though, we don't
+            // need to.
+            if (!this.state.doingUIAuth) {
+                await this._makeRegisterRequest({});
+                // This should never succeed since we specified an empty
+                // auth object.
+                console.log("Expecting 401 from register request but got success!");
+            }
         } catch (e) {
             if (e.httpStatus === 401) {
                 this.setState({
