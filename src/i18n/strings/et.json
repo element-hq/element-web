@@ -262,7 +262,7 @@
     "Expand room list section": "Laienda jututubade loendi valikut",
     "Create Account": "Loo konto",
     "Sign In": "Logi sisse",
-    "Send a bug report with logs": "Saada veakirjeldus koos logidega",
+    "Send a bug report with logs": "Saada veakirjeldus koos logikirjetega",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Rühmita ja filtreeri jututubasid kohandatud siltide alusel (muudatuste rakendamiseks värskenda vaade)",
     "Try out new ways to ignore people (experimental)": "Proovi uusi kasutajate eiramise viise (katseline)",
     "Uploading report": "Laen üles veakirjeldust",
@@ -1179,5 +1179,17 @@
     "Verify the link in your inbox": "Verifitseeri klõpsides viidet saabunud e-kirjas",
     "Complete": "Valmis",
     "Revoke": "Tühista",
-    "Share": "Jaga"
+    "Share": "Jaga",
+    "Session already verified!": "Sessioon on juba verifitseeritud!",
+    "WARNING: Session already verified, but keys do NOT MATCH!": "HOIATUS: Sessioon on juba verifitseeritud, aga võtmed ei klapi!",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "HOIATUS: VÕTMETE VERIFITSEERIMINE EI ÕNNESTUNUD! Kasutaja %(userId)s ja sessiooni %(deviceId)s allkirjastamise võti on \"%(fprint)s\", aga see ei vasta antud sõrmejäljele \"%(fingerprint)s\". See võib tähendada, et sinu kasutatavad ühendused võivad olla kolmanda osapoole poolt vahelt lõigatud!",
+    "Verified key": "Verifitseeritud võti",
+    "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "Sinu antud allkirjavõti vastab allkirjavõtmele, mille sa said kasutaja %(userId)s sessioonist %(deviceId)s. Sessioon on märgitud verifitseerituks.",
+    "Sends the given message coloured as a rainbow": "Saadab selle sõnumi vikerkaarevärvilisena",
+    "Sends the given emote coloured as a rainbow": "Saadab antud emote vikerkaarevärvides",
+    "Displays list of commands with usages and descriptions": "Näitab käskude loendit koos kirjeldustega",
+    "Logs sent": "Logikirjed saadetud",
+    "Thank you!": "Suur tänu!",
+    "Opens chat with the given user": "Avab vestluse näidatud kasutajaga",
+    "Sends a message to the given user": "Saadab sõnumi näidatud kasutajale"
 }
