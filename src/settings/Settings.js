@@ -143,12 +143,6 @@ export const SETTINGS = {
         default: false,
         isFeature: true,
     },
-    "feature_no_timeline_avatars": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Display user avatars on messages'),
-        default: true,
-        isFeature: true,
-    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
