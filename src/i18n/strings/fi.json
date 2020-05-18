@@ -1,7 +1,7 @@
 {
     "Dismiss": "Hylkää",
     "Unknown device": "Tuntematon laite",
-    "Welcome to Riot.im": "Tervetuloa Riot.im-palveluun",
+    "Welcome to Riot.im": "Tervetuloa Riot.im-sovellukseen",
     "Custom Server Options": "Palvelinasetukset",
     "Riot Desktop on %(platformName)s": "Riot Desktop, %(platformName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Sinun täytyy käyttää HTTPS-yhteyttä, jotta voit jakaa ruudun puhelussa.",
@@ -22,5 +22,18 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-asetuksissasi on virheellistä JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
     "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
     "Invalid JSON": "Virheellinen JSON",
-    "Missing indexeddb worker script!": "Indexeddb-suorittajan skripti puuttuu!"
+    "Missing indexeddb worker script!": "Indexeddb-suorittajan skripti puuttuu!",
+    "Unable to load config file: please refresh the page to try again.": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
+    "Open user settings": "Avaa käyttäjäasetukset",
+    "Previous/next recently visited room or community": "Edellinen/seuraava hiljattain vierailtu huone tai yhteisö",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "Go to your browser to complete Sign In": "Tee kirjautuminen loppuun selaimessasi",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Selainta ei tueta",
+    "Your browser can't run Riot": "Riot ei toimi selaimellasi",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Asenna <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> tai <safariLink>Safari</safariLink>, jotta kaikki toimii parhaiten.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Voit käyttää edelleen nykyistä selaintasi, mutta jotkut tai kaikki ominaisuudet eivät ehkä toimi ja sovelluksen ulkoasu voi olla virheellinen.",
+    "I understand the risks and wish to continue": "Ymmärrän riskit ja haluan jatkaa",
+    "Failed to start": "Käynnistys ei onnistunut"
 }
