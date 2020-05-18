@@ -2409,5 +2409,20 @@
     "Successfully restored %(sessionCount)s keys": "Kulcsok (%(sessionCount)s) sikeresen visszaállítva",
     "You signed in to a new session without verifying it:": "Ellenőrzés nélkül jelentkeztél be egy új munkamenetbe:",
     "Verify your other session using one of the options below.": "Ellenőrizd a másik munkameneted a lenti lehetőségek egyikével.",
-    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Hívj meg valakit a nevével, felhasználónevével (mint <userId/>), e-mail címével vagy <a>oszd meg ezt a szobát</a>."
+    "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Hívj meg valakit a nevével, felhasználónevével (mint <userId/>), e-mail címével vagy <a>oszd meg ezt a szobát</a>.",
+    "Opens chat with the given user": "Beszélgetés megnyitása a megadott felhasználóval",
+    "Sends a message to the given user": "Üzenet küldése a megadott felhasználónak",
+    "Waiting for your other session to verify…": "A másik munkameneted ellenőrzésére várunk…",
+    "You've successfully verified your device!": "Sikeresen ellenőrizted az eszközödet!",
+    "Message deleted": "Üzenet törölve",
+    "Message deleted by %(name)s": "Üzenetet törölte: %(name)s",
+    "QR Code": "QR kód",
+    "To continue, use Single Sign On to prove your identity.": "A folytatáshoz a személyazonosságod megerősítéséhez használd az egyszeri bejelentkezést.",
+    "Confirm to continue": "Erősítsd meg a továbblépéshez",
+    "Click the button below to confirm your identity.": "A személyazonosságod megerősítéséhez kattints az alábbi gombra.",
+    "Confirm encryption setup": "Erősítsd meg a titkosítási beállításokat",
+    "Click the button below to confirm setting up encryption.": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
+    "Dismiss read marker and jump to bottom": "Az olvasottak jel eltűntetése és ugrás a végére",
+    "Jump to oldest unread message": "A legrégebbi olvasatlan üzenetre ugrás",
+    "Upload a file": "Fájl feltöltése"
 }
