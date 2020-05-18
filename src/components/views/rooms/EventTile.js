@@ -659,8 +659,6 @@ export default createReactClass({
         const classes = classNames({
             mx_EventTile_bubbleContainer: isBubbleMessage,
             mx_EventTile: true,
-            mx_EventTile_irc: this.props.useIRCLayout,
-            mx_EventTile_group: !this.props.useIRCLayout,
             mx_EventTile_isEditing: isEditing,
             mx_EventTile_info: isInfoMessage,
             mx_EventTile_12hr: this.props.isTwelveHour,

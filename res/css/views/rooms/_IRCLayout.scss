@@ -138,7 +138,7 @@ $irc-line-height: $font-18px;
 
         .mx_EventListSummary_avatars {
             padding: 0;
-            margin: 0;
+            margin: 0 9px 0 0;
         }
     }
 
@@ -185,7 +185,7 @@ $irc-line-height: $font-18px;
 
     .mx_SenderProfile_hover:hover {
         overflow: visible;
-        width: auto;
+        width: max(auto, 100%);
         z-index: 10;
     }
 

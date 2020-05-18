@@ -822,7 +822,7 @@ export default class MessagePanel extends React.Component {
 
         let ircResizer = null;
         if (this.state.useIRCLayout) {
-            ircResizer = <IRCTimelineProfileResizer minWidth={20} maxWidth={600} roomId={this.props.room.roomId} />;
+            ircResizer = <IRCTimelineProfileResizer minWidth={20} maxWidth={600} roomId={this.props.room ? this.props.roomroomId : null} />;
         }
 
         return (
