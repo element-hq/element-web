@@ -35,17 +35,6 @@ limitations under the License.
     align-items: flex-start;
 }
 
-.mx_CreateKeyBackupDialog_passPhraseHelp {
-    flex: 1;
-    height: 85px;
-    margin-left: 20px;
-    font-size: 80%;
-}
-
-.mx_CreateKeyBackupDialog_passPhraseHelp progress {
-    width: 100%;
-}
-
 .mx_CreateKeyBackupDialog_passPhraseInput {
     flex: none;
     width: 250px;
