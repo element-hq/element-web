@@ -730,7 +730,7 @@ export const Commands = [
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
                         const member = room.getMember(args);
-                        if (!member) return reject(_t("Could not find user in room"));
+                        if (!member || member.membership !== "join") return reject(_t("Could not find user in room"));
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
