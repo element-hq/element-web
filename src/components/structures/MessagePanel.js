@@ -119,7 +119,6 @@ export default class MessagePanel extends React.Component {
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
             useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
-            displayAvatars: SettingsStore.getValue("feature_no_timeline_avatars"),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
