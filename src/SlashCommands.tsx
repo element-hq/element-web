@@ -729,9 +729,9 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-
+                        const member = room.getMember(args);
+                        if (!member) return reject(_t("Could not find user in room"));
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
