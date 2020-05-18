@@ -785,6 +785,7 @@ export default createReactClass({
                 label: _t('Rooms'),
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'});},
+                addRoomLabel: _t("Create room"),
             },
         ];
         const tagSubLists = Object.keys(this.state.lists)
