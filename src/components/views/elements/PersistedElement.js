@@ -156,16 +156,70 @@ export default class PersistedElement extends React.Component {
         child.style.display = visible ? 'block' : 'none';
     }
 
+    /*
+     * Clip element bounding rectangle to that of the parent elements.
+     * This is not a full visibility check, but prevents the persisted
+     * element from overflowing parent containers when inside a scrolled
+     * area.
+     */
+    _getClippedBoundingClientRect(element) {
+        let parentElement = element.parentElement;
+        let rect = element.getBoundingClientRect();
+
+        rect = new DOMRect(rect.left, rect.top, rect.width, rect.height);
+
+        while (parentElement) {
+            const parentRect = parentElement.getBoundingClientRect();
+
+            if (parentRect.left > rect.left) {
+                rect.width = rect.width - (parentRect.left - rect.left);
+                rect.x = parentRect.x;
+            }
+
+            if (parentRect.top > rect.top) {
+                rect.height = rect.height - (parentRect.top - rect.top);
+                rect.y = parentRect.y;
+            }
+
+            if (parentRect.right < rect.right) {
+                rect.width = rect.width - (rect.right - parentRect.right);
+            }
+
+            if (parentRect.bottom < rect.bottom) {
+                rect.height = rect.height - (rect.bottom - parentRect.bottom);
+            }
+
+            parentElement = parentElement.parentElement;
+        }
+
+        if (rect.width < 0) rect.width = 0;
+        if (rect.height < 0) rect.height = 0;
+
+        return rect;
+    }
+
     updateChildPosition(child, parent) {
         if (!child || !parent) return;
 
         const parentRect = parent.getBoundingClientRect();
+        const clipRect = this._getClippedBoundingClientRect(parent);
+
+        Object.assign(child.parentElement.style, {
+            position: 'absolute',
+            top: clipRect.top + 'px',
+            left: clipRect.left + 'px',
+            width: clipRect.width + 'px',
+            height: clipRect.height + 'px',
+            overflow: "hidden",
+        });
+
         Object.assign(child.style, {
             position: 'absolute',
-            top: parentRect.top + 'px',
-            left: parentRect.left + 'px',
+            top: (parentRect.top - clipRect.top) + 'px',
+            left: (parentRect.left - clipRect.left) + 'px',
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
+            overflow: "hidden",
         });
     }
 
