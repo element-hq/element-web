@@ -133,7 +133,6 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
             body.append("cross_signing_supported_by_hs",
                 String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
-            body.append("ssss_key_needs_upgrade", String(await client.secretStorageKeyNeedsUpgrade()));
         }
     }
 
