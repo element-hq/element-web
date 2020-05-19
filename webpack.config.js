@@ -6,7 +6,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
-if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
+if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/opengraph.png';
 
 module.exports = (env, argv) => {
     if (process.env.CI_PACKAGE) {
@@ -216,10 +216,10 @@ module.exports = (env, argv) => {
                                     // Note that we use slightly different plugins for SCSS.
 
                                     require('postcss-import')(),
+                                    require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
                                     require("postcss-extend")(),
                                     require("postcss-nested")(),
-                                    require("postcss-mixins")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),

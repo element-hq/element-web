@@ -23,5 +23,18 @@
     "Invalid configuration: no default server specified.": "Błędna konfiguracja: nie wybrano domyślnego serwera.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Możesz użyć Niestandardowych Opcji Serwera by zalogować się do innych serwerów Matrix poprzez podanie URL innego serwera głównego. Dzięki temu możesz używać Riot z istniejącym kontem z innego serwera głównego.",
     "Open user settings": "Otwórz ustawienia użytkownika",
-    "Go to your browser to complete Sign In": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki"
+    "Go to your browser to complete Sign In": "Aby dokończyć proces rejestracji, przejdź do swojej przeglądarki",
+    "Missing indexeddb worker script!": "Brakujący skrypt workera indexeddb!",
+    "Unable to load config file: please refresh the page to try again.": "Nie udało się załadować pliku konfiguracyjnego: odśwież stronę aby spróbować ponownie.",
+    "Previous/next recently visited room or community": "Poprzedni/następny niedawno odwiedzony pokój lub społeczność",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Niewspierana przeglądarka",
+    "Your browser can't run Riot": "Twoja przeglądarka nie jest w stanie uruchomić Riota",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot używa zaawansowanych funkcji, które nie są dostępne na Twojej obecnej przeglądarce.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Możesz kontynuować używanie obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
+    "I understand the risks and wish to continue": "Rozumiem ryzyko i chcę kontynuować",
+    "Go to Riot.im": "Przejdź do Riot.im",
+    "Failed to start": "Nie udało się wystartować"
 }

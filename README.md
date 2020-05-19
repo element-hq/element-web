@@ -187,7 +187,7 @@ Development
 ===========
 
 Before attempting to develop on Riot you **must** read the [developer guide
-for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk), which
+for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
 also defines the design, architecture and style for Riot too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
