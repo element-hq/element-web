@@ -110,15 +110,16 @@ export default class MessagePanel extends React.Component {
         showReactions: PropTypes.bool,
     };
 
-    constructor() {
-        super();
+    // Force props to be loaded for useIRCLayout
+    constructor(props) {
+        super(props);
 
         this.state = {
             // previous positions the read marker has been in, so we can
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
-            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+            useIRCLayout: this.useIRCLayout(SettingsStore.getValue("feature_irc_ui")),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -203,8 +204,13 @@ export default class MessagePanel extends React.Component {
 
     onLayoutChange = () => {
         this.setState({
-            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+            useIRCLayout: this.useIRCLayout(SettingsStore.getValue("feature_irc_ui")),
         });
+    }
+
+    useIRCLayout(ircLayoutSelected) {
+        // if room is null we are not in a normal room list
+        return ircLayoutSelected && this.props.room;
     }
 
     /* get the DOM node representing the given event */
