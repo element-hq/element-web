@@ -101,6 +101,9 @@ For a good example, see https://riot.im/develop/config.json.
     Defaults to false (3rd party identity options are shown).
 1. `default_federate`: Default option for room federation when creating a room
     Defaults to true (room federation enabled).
+1. `e2ee_default_for_private_rooms`: Whether or not to enable End-to-End Encryption
+    by default in private rooms and Direct Messages.
+    Defaults to true (encryption enabled).
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
