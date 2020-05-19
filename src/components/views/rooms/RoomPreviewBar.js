@@ -266,9 +266,9 @@ export default createReactClass({
             params: {
                 email: this.props.invitedEmail,
                 signurl: this.props.signUrl,
-                room_name: this.props.oobData.room_name,
-                room_avatar_url: this.props.oobData.avatarUrl,
-                inviter_name: this.props.oobData.inviterName,
+                room_name: this.props.oobData ? this.props.oobData.room_name : null,
+                room_avatar_url: this.props.oobData ? this.props.oobData.avatarUrl : null,
+                inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
             }
         };
     },

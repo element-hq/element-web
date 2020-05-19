@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
@@ -161,6 +162,11 @@ export default class VerificationPanel extends React.PureComponent {
         this.state.reciprocateQREvent.cancel();
     };
 
+    _getDevice() {
+        const deviceId = this.props.request && this.props.request.channel.deviceId;
+        return MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
+    }
+
     renderQRReciprocatePhase() {
         const {member, request} = this.props;
         let Button;
@@ -217,16 +223,27 @@ export default class VerificationPanel extends React.PureComponent {
             }
         }
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const description = request.isSelfVerification ?
-            _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
-                deviceName: this.props.device.getDisplayName(),
-                deviceId: this.props.device.deviceId,
-            }):
-            _t("You've successfully verified %(displayName)s!", {
+        let description;
+        if (request.isSelfVerification) {
+            const device = this._getDevice();
+            if (!device) {
+                // This can happen if the device is logged out while we're still showing verification
+                // UI for it.
+                console.warn("Verified device we don't know about: " + this.props.request.channel.deviceId);
+                description = _t("You've successfully verified your device!");
+            } else {
+                description = _t("You've successfully verified %(deviceName)s (%(deviceId)s)!", {
+                    deviceName: device ? device.getDisplayName() : '',
+                    deviceId: this.props.request.channel.deviceId,
+                });
+            }
+        } else {
+            description = _t("You've successfully verified %(displayName)s!", {
                 displayName: member.displayName || member.name || member.userId,
             });
+        }
 
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_UserInfo_container mx_VerificationPanel_verified_section">
                 <h3>{_t("Verified")}</h3>
@@ -297,12 +314,12 @@ export default class VerificationPanel extends React.PureComponent {
                         const emojis = this.state.sasEvent ?
                             <VerificationShowSas
                                 displayName={displayName}
+                                device={this._getDevice()}
                                 sas={this.state.sasEvent.sas}
                                 onCancel={this._onSasMismatchesClick}
                                 onDone={this._onSasMatchesClick}
                                 inDialog={this.props.inDialog}
                                 isSelf={request.isSelfVerification}
-                                device={this.props.device}
                             /> : <Spinner />;
                         return <div className="mx_UserInfo_container">
                             <h3>{_t("Compare emoji")}</h3>

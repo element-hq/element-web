@@ -168,9 +168,16 @@ class TagOrderStore extends Store {
             }
             break;
             case 'deselect_tags':
-                this._setState({
-                    selectedTags: [],
-                });
+                if (payload.tag) {
+                    // if a tag is passed, only deselect that tag
+                    this._setState({
+                        selectedTags: this._state.selectedTags.filter(tag => tag !== payload.tag),
+                    });
+                } else {
+                    this._setState({
+                        selectedTags: [],
+                    });
+                }
                 Analytics.trackEvent('FilterStore', 'deselect_tags');
             break;
             case 'on_client_not_viable':

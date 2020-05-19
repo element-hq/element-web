@@ -112,7 +112,10 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onGoToUserProfileClick = () => {
-        window.location.href = "#/user/" + MatrixClientPeg.get().getUserId();
+        dis.dispatch({
+            action: 'view_user_info',
+            userId: MatrixClientPeg.get().getUserId(),
+        });
         this.props.closeSettingsFn();
     }
 

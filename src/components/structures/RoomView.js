@@ -1717,8 +1717,11 @@ export default createReactClass({
             } else {
                 const myUserId = this.context.credentials.userId;
                 const myMember = this.state.room.getMember(myUserId);
-                const inviteEvent = myMember.events.member;
-                var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
+                const inviteEvent = myMember ? myMember.events.member : null;
+                let inviterName = _t("Unknown");
+                if (inviteEvent) {
+                    inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
+                }
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.

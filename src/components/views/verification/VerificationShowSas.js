@@ -30,6 +30,7 @@ export default class VerificationShowSas extends React.Component {
     static propTypes = {
         pending: PropTypes.bool,
         displayName: PropTypes.string, // required if pending is true
+        device: PropTypes.object,
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
@@ -116,10 +117,16 @@ export default class VerificationShowSas extends React.Component {
             let text;
             if (this.state.pending) {
                 if (this.props.isSelf) {
-                    text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
-                        deviceName: this.props.device.getDisplayName(),
-                        deviceId: this.props.device.deviceId,
-                    });
+                    // device shouldn't be null in this situation but it can be, eg. if the device is
+                    // logged out during verification
+                    if (this.props.device) {
+                        text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
+                            deviceName: this.props.device ? this.props.device.getDisplayName() : '',
+                            deviceId: this.props.device ? this.props.device.deviceId : '',
+                        });
+                    } else {
+                        text = _t("Waiting for your other session to verify…");
+                    }
                 } else {
                     const {displayName} = this.props;
                     text = _t("Waiting for %(displayName)s to verify…", {displayName});
