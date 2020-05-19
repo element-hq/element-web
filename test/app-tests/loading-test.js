@@ -29,7 +29,7 @@ import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
-import dis from 'matrix-react-sdk/src/dispatcher';
+import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
