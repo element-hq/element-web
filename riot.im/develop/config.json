@@ -27,8 +27,7 @@
         "feature_bridge_state": "labs",
         "feature_presence_in_room_list": "labs",
         "feature_custom_themes": "labs",
-        "feature_irc_ui": "labs",
-        "feature_no_timeline_avatars": "labs"
+        "feature_irc_ui": "labs"
     },
     "piwik": {
         "url": "https://piwik.riot.im/",

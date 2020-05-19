@@ -123,15 +123,10 @@ normally these themes need to be defined in the config for Riot. This labs flag
 adds an ability for end users to add themes themselves by using a URL to the JSON
 theme definition.
 
+For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
+
 ## IRC message layout (`feature_irc_ui`)
 
 Adds an option to change the message layout to an IRC style ` timestamp | avatar
 | name | message `
 
-## Remove timeline avatars (`feature_no_timeline_avatars`)
-
-Adds the option to remove the avatars in the message layout. This is intended to
-be used in conjunction with the irc layout however it available for both
-layouts.
-
-For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
