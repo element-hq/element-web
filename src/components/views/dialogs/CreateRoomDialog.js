@@ -25,6 +25,7 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import SettingsStore from "../../../settings/SettingsStore";
+import {privateShouldBeEncrypted} from "../../../createRoom";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -37,7 +38,7 @@ export default createReactClass({
         const config = SdkConfig.get();
         return {
             isPublic: this.props.defaultPublic || false,
-            isEncrypted: true,
+            isEncrypted: privateShouldBeEncrypted(),
             name: "",
             topic: "",
             alias: "",

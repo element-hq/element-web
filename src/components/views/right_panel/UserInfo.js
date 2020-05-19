@@ -25,7 +25,7 @@ import dis from '../../../dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
+import createRoom, {privateShouldBeEncrypted} from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -111,7 +111,7 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    if (SettingsStore.getValue("feature_cross_signing")) {
+    if (privateShouldBeEncrypted()) {
         // Check whether all users have uploaded device keys before.
         // If so, enable encryption in the new room.
         const usersToDevicesMap = await matrixClient.downloadKeys([userId]);

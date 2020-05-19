@@ -24,6 +24,7 @@ import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
 import SettingsStore from "./settings/SettingsStore";
+import SdkConfig from "./SdkConfig";
 
 /**
  * Create a new room, and switch to it.
@@ -227,11 +228,15 @@ export async function ensureDMExists(client, userId) {
         roomId = existingDMRoom.roomId;
     } else {
         let encryption;
-        if (SettingsStore.getValue("feature_cross_signing")) {
+        if (privateShouldBeEncrypted()) {
             encryption = canEncryptToAllUsers(client, [userId]);
         }
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);
     }
     return roomId;
+}
+
+export function privateShouldBeEncrypted() {
+    return SettingsStore.getValue("feature_cross_signing") && SdkConfig.get().e2ee_default_for_private_rooms !== false;
 }
