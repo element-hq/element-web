@@ -106,3 +106,9 @@ adds an ability for end users to add themes themselves by using a URL to the JSO
 theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
+
+## IRC message layout (`feature_irc_ui`)
+
+Adds an option to change the message layout to an IRC style ` timestamp | avatar
+| name | message `
+
