@@ -1,0 +1,214 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+$icon-width: 14px;
+$timestamp-width: 45px;
+$right-padding: 5px;
+$irc-line-height: $font-18px;
+
+.mx_IRCLayout {
+    --name-width: 70px;
+
+    line-height: $irc-line-height !important;
+
+    .mx_EventTile {
+
+        // timestamps are links which shouldn't be underlined
+        > a {
+            text-decoration: none;
+        }
+
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding-top: 0;
+
+        > * {
+            margin-right: $right-padding;
+        }
+
+        > .mx_EventTile_msgOption {
+            order: 4;
+            flex-shrink: 0;
+        }
+
+        > .mx_SenderProfile {
+            order: 2;
+            flex-shrink: 0;
+            width: var(--name-width);
+            text-overflow: ellipsis;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            overflow: visible;
+            justify-content: flex-end;
+        }
+
+        .mx_EventTile_line, .mx_EventTile_reply {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            order: 3;
+            flex-grow: 1;
+        }
+
+        > .mx_EventTile_avatar {
+            order: 1;
+            position: relative;
+            top: 0;
+            left: 0;
+            flex-shrink: 0;
+            height: $irc-line-height;
+            display: flex;
+            align-items: center;
+
+            // Need to use important to override the js provided height and width values.
+            > .mx_BaseAvatar, .mx_BaseAvatar > * {
+                height: $font-14px !important;
+                width: $font-14px !important;
+                font-size: $font-10px !important;
+                line-height: $font-15px !important;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            font-size: $font-10px;
+            width: $timestamp-width;
+            text-align: right;
+        }
+
+        .mx_EventTile_e2eIcon {
+            position: relative;
+            right: unset;
+            left: unset;
+            top: -2px;
+            padding: 0;
+        }
+
+        .mx_EventTile_line {
+            .mx_EventTile_e2eIcon,
+            .mx_TextualEvent,
+            .mx_MTextBody,
+            .mx_ReplyThread_wrapper_empty {
+                display: inline-block;
+            }
+        }
+
+        .mx_EvenTile_line .mx_MessageActionBar,
+        .mx_EvenTile_line .mx_ReplyThread_wrapper {
+            display: block;
+        }
+
+        .mx_EventTile_reply {
+            order: 3;
+        }
+
+        .mx_EditMessageComposer_buttons {
+            position: relative;
+        }
+    }
+
+    .mx_EventTile_emote {
+        > .mx_EventTile_avatar {
+            margin-left: calc(var(--name-width) + $icon-width + $right-padding);
+        }
+    }
+
+    blockquote {
+        margin: 0;
+    }
+
+    .mx_EventListSummary {
+        > .mx_EventTile_line {
+            padding-left: calc(var(--name-width) + $icon-width + $timestamp-width + 3 * $right-padding); // 15 px of padding
+        }
+
+        .mx_EventListSummary_avatars {
+            padding: 0;
+            margin: 0 9px 0 0;
+        }
+    }
+
+    .mx_EventTile.mx_EventTile_info {
+        .mx_EventTile_avatar {
+            left: calc(var(--name-width) + 10px + $icon-width);
+            top: 0;
+        }
+
+        .mx_EventTile_line {
+            left: calc(var(--name-width) + 10px + $icon-width);
+        }
+
+        .mx_TextualEvent {
+            line-height: $irc-line-height;
+        }
+    }
+
+    // Suppress highlight thing from the normal Layout.
+    .mx_EventTile:hover.mx_EventTile_verified .mx_EventTile_line,
+    .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line,
+    .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
+        padding-left: 0;
+        border-left: 0;
+    }
+
+    .mx_SenderProfile_hover {
+        background-color: $primary-bg-color;
+        overflow: hidden;
+
+        > span {
+            display: flex;
+
+            > .mx_SenderProfile_name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    .mx_SenderProfile:hover {
+        justify-content: flex-start;
+    }
+
+    .mx_SenderProfile_hover:hover {
+        overflow: visible;
+        width: max(auto, 100%);
+        z-index: 10;
+    }
+
+    .mx_ReplyThread {
+        margin: 0;
+        .mx_SenderProfile {
+            width: unset;
+            max-width: var(--name-width);
+        }
+    }
+
+    .mx_ProfileResizer {
+        position: absolute;
+        height: 100%;
+        width: 15px;
+        left: calc(80px + var(--name-width));
+        cursor: col-resize;
+        z-index: 100;
+    }
+
+    // Need to use important to override the js provided height and width values.
+    .mx_Flair > img {
+        height: $font-14px !important;
+        width: $font-14px !important;
+    }
+}

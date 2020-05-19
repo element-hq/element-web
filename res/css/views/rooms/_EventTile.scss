@@ -37,7 +37,6 @@ limitations under the License.
 }
 
 .mx_EventTile_avatar {
-    position: absolute;
     top: 14px;
     left: 8px;
     cursor: pointer;
@@ -68,11 +67,9 @@ limitations under the License.
     display: inline-block; /* anti-zalgo, with overflow hidden */
     overflow: hidden;
     cursor: pointer;
-    padding-left: 65px; /* left gutter */
     padding-bottom: 0px;
     padding-top: 0px;
     margin: 0px;
-    line-height: $font-17px;
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -101,12 +98,9 @@ limitations under the License.
 
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
-    visibility: hidden;
     white-space: nowrap;
     left: 0px;
-    width: 46px; /* 8 + 30 (avatar) + 8 */
     text-align: center;
-    position: absolute;
     user-select: none;
 }
 
@@ -117,10 +111,7 @@ limitations under the License.
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
     padding-left: 65px; /* left gutter */
-    padding-top: 3px;
-    padding-bottom: 3px;
     border-radius: 4px;
-    line-height: $font-22px;
 }
 
 .mx_RoomView_timeline_rr_enabled,
@@ -149,10 +140,6 @@ limitations under the License.
 
 .mx_EventTile_reply {
     margin-right: 10px;
-}
-
-.mx_EventTile_info .mx_EventTile_line {
-    padding-left: 83px;
 }
 
 /* HACK to override line-height which is already marked important elsewhere */
@@ -559,84 +546,6 @@ limitations under the License.
 */
 
 /* end of overrides */
-
-.mx_MatrixChat_useCompactLayout {
-    .mx_EventTile {
-        padding-top: 4px;
-    }
-
-    .mx_EventTile.mx_EventTile_info {
-        // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
-        padding-top: 0px;
-        font-size: $font-13px;
-        .mx_EventTile_line, .mx_EventTile_reply {
-            line-height: $font-20px;
-        }
-        .mx_EventTile_avatar {
-            top: 4px;
-        }
-    }
-
-    .mx_EventTile .mx_SenderProfile {
-        font-size: $font-13px;
-    }
-
-    .mx_EventTile.mx_EventTile_emote {
-        // add a bit more space for emotes so that avatars don't collide
-        padding-top: 8px;
-        .mx_EventTile_avatar {
-            top: 2px;
-        }
-        .mx_EventTile_line, .mx_EventTile_reply {
-            padding-top: 0px;
-            padding-bottom: 1px;
-        }
-    }
-
-    .mx_EventTile.mx_EventTile_emote.mx_EventTile_continuation {
-        padding-top: 0;
-        .mx_EventTile_line, .mx_EventTile_reply {
-            padding-top: 0px;
-            padding-bottom: 0px;
-        }
-    }
-
-    .mx_EventTile_line, .mx_EventTile_reply {
-        padding-top: 0px;
-        padding-bottom: 0px;
-    }
-
-    .mx_EventTile_avatar {
-        top: 2px;
-    }
-
-    .mx_EventTile_e2eIcon {
-        top: 3px;
-    }
-
-    .mx_EventTile_readAvatars {
-        top: 27px;
-    }
-
-    .mx_EventTile_continuation .mx_EventTile_readAvatars,
-    .mx_EventTile_emote .mx_EventTile_readAvatars {
-        top: 5px;
-    }
-
-    .mx_EventTile_info .mx_EventTile_readAvatars {
-        top: 4px;
-    }
-
-    .mx_RoomView_MessageList h2 {
-        margin-top: 6px;
-    }
-
-    .mx_EventTile_content .markdown-body {
-        p, ul, ol, dl, blockquote, pre, table {
-            margin-bottom: 4px; // 1/4 of the non-compact margin-bottom
-        }
-    }
-}
 
 .mx_EventTile_tileError {
     color: red;

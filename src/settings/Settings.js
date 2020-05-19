@@ -137,6 +137,12 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_irc_ui": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Use IRC layout'),
+        default: false,
+        isFeature: true,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
@@ -518,5 +524,12 @@ export const SETTINGS = {
         controller: new PushToMatrixClientController(
             MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
         ),
+    },
+    "ircDisplayNameWidth": {
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        displayName: _td("IRC display name width"),
+        default: 80,
     },
 };
