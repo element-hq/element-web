@@ -21,7 +21,7 @@ import { getHomePageUrl } from "../../utils/pages";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import * as sdk from "../../index";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 
 const onClickSendDm = () => dis.dispatch({action: 'view_create_chat'});
 const onClickExplore = () => dis.dispatch({action: 'view_room_directory'});

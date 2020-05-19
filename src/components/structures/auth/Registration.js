@@ -32,7 +32,7 @@ import * as Lifecycle from '../../../Lifecycle';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
 import Login from "../../../Login";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 
 // Phases
 // Show controls to configure server details

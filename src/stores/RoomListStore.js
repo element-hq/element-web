@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {Store} from 'flux/utils';
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import DMRoomMap from '../utils/DMRoomMap';
 import * as Unread from '../Unread';
 import SettingsStore from "../settings/SettingsStore";

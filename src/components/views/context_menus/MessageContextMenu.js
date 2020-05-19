@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import {EventStatus} from 'matrix-js-sdk';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';

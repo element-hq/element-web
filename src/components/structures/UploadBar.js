@@ -19,7 +19,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ContentMessages from '../../ContentMessages';
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import filesize from "filesize";
 import { _t } from '../../languageHandler';
 

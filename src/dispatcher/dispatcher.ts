@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,25 +16,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import { Dispatcher } from "flux";
+import { Action } from "./actions";
+import { ActionPayload, AsyncActionPayload } from "./payloads";
 
-import flux from "flux";
-
-class MatrixDispatcher extends flux.Dispatcher {
+/**
+ * A dispatcher for ActionPayloads (the default within the SDK).
+ */
+export class MatrixDispatcher extends Dispatcher<ActionPayload> {
     /**
-     * @param {Object|function} payload Required. The payload to dispatch.
-     *        If an Object, must contain at least an 'action' key.
-     *        If a function, must have the signature (dispatch) => {...}.
-     * @param {boolean=} sync Optional. Pass true to dispatch
+     * Dispatches an event on the dispatcher's event bus.
+     * @param {ActionPayload} payload Required. The payload to dispatch.
+     * @param {boolean=false} sync Optional. Pass true to dispatch
      *        synchronously. This is useful for anything triggering
      *        an operation that the browser requires user interaction
-     *        for.
+     *        for. Default false (async).
      */
-    dispatch(payload, sync) {
-        // Allow for asynchronous dispatching by accepting payloads that have the
-        // type `function (dispatch) {...}`
-        if (typeof payload === 'function') {
-            payload((action) => {
+    dispatch<T extends ActionPayload>(payload: T, sync = false) {
+        if (payload instanceof AsyncActionPayload) {
+            payload.fn((action: ActionPayload) => {
                 this.dispatch(action, sync);
             });
             return;
@@ -50,9 +51,24 @@ class MatrixDispatcher extends flux.Dispatcher {
             setTimeout(super.dispatch.bind(this, payload), 0);
         }
     }
+
+    /**
+     * Shorthand for dispatch({action: Action.WHATEVER}, sync). No additional
+     * properties can be included with this version.
+     * @param {Action} action The action to dispatch.
+     * @param {boolean=false} sync Whether the dispatch should be sync or not.
+     * @see dispatch(action: ActionPayload, sync: boolean)
+     */
+    fire(action: Action, sync = false) {
+        this.dispatch({action}, sync);
+    }
 }
 
-if (global.mxDispatcher === undefined) {
-    global.mxDispatcher = new MatrixDispatcher();
+export const defaultDispatcher = new MatrixDispatcher();
+
+const anyGlobal = <any>global;
+if (!anyGlobal.mxDispatcher) {
+    anyGlobal.mxDispatcher = defaultDispatcher;
 }
-export default global.mxDispatcher;
+
+export default defaultDispatcher;

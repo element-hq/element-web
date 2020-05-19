@@ -1,5 +1,6 @@
 /*
 Copyright 2017 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { AsyncActionPayload } from "../dispatcher/payloads";
+
 /**
  * Create an action thunk that will dispatch actions indicating the current
  * status of the Promise returned by fn.
@@ -25,9 +28,9 @@ limitations under the License.
  * @param {function?} pendingFn a function that returns an object to assign
  *                              to the `request` key of the ${id}.pending
  *                              payload.
- * @returns {function} an action thunk - a function that uses its single
- *                     argument as a dispatch function to dispatch the
- *                     following actions:
+ * @returns {AsyncActionPayload} an async action payload. Includes a function
+ *                     that uses its single argument as a dispatch function
+ *                     to dispatch the following actions:
  *                         `${id}.pending` and either
  *                         `${id}.success` or
  *                         `${id}.failure`.
@@ -41,12 +44,11 @@ limitations under the License.
  *                     result is the result of the promise returned by
  *                     `fn`.
  */
-export function asyncAction(id, fn, pendingFn) {
-    return (dispatch) => {
+export function asyncAction(id: string, fn: () => Promise<any>, pendingFn: () => any | null): AsyncActionPayload {
+    const helper = (dispatch) => {
         dispatch({
             action: id + '.pending',
-            request:
-                typeof pendingFn === 'function' ? pendingFn() : undefined,
+            request: typeof pendingFn === 'function' ? pendingFn() : undefined,
         });
         fn().then((result) => {
             dispatch({action: id + '.success', result});
@@ -54,4 +56,5 @@ export function asyncAction(id, fn, pendingFn) {
             dispatch({action: id + '.failure', err});
         });
     };
+    return new AsyncActionPayload(helper);
 }

@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';

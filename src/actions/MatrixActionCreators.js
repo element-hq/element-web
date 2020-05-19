@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 
 // TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
 //       become dispatches in the same place.

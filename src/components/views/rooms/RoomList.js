@@ -35,7 +35,7 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 import CallHandler from "../../../CallHandler";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import * as sdk from "../../../index";
 import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';

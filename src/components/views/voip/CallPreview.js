@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 
 export default createReactClass({
