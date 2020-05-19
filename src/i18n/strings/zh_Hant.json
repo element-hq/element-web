@@ -2421,5 +2421,18 @@
     "Verify your other session using one of the options below.": "使用下方的其中一個選項來驗證您其他的工作階段。",
     "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）、電子郵件地址或<a>分享此聊天室</a>來邀請他們。",
     "Message deleted": "訊息已刪除",
-    "Message deleted by %(name)s": "訊息已被 %(name)s 刪除"
+    "Message deleted by %(name)s": "訊息已被 %(name)s 刪除",
+    "Opens chat with the given user": "開啟與指定使用者的聊天",
+    "Sends a message to the given user": "傳送訊息給指定的使用者",
+    "Waiting for your other session to verify…": "正在等待您的其他工作階段進行驗證……",
+    "You've successfully verified your device!": "您已成功驗證您的裝置！",
+    "To continue, use Single Sign On to prove your identity.": "要繼續，使用單一登入系統來證明您的身份。",
+    "Confirm to continue": "確認以繼續",
+    "Click the button below to confirm your identity.": "點擊下方按鈕以確認您的身份。",
+    "Confirm encryption setup": "確認加密設定",
+    "Click the button below to confirm setting up encryption.": "點擊下方按鈕以確認設定加密。",
+    "QR Code": "QR Code",
+    "Dismiss read marker and jump to bottom": "取消讀取標記並跳至底部",
+    "Jump to oldest unread message": "跳至最舊的未讀訊息",
+    "Upload a file": "上傳檔案"
 }

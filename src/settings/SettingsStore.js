@@ -24,7 +24,7 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import {WatchManager} from "./WatchManager";

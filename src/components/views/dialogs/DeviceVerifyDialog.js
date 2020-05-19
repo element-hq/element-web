@@ -25,7 +25,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {ensureDMExists} from "../../../createRoom";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from '../../../settings/SettingsStore';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import VerificationQREmojiOptions from "../verification/VerificationQREmojiOptions";

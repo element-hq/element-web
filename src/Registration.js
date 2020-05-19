@@ -20,7 +20,7 @@ limitations under the License.
  * registration code.
  */
 
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';

@@ -20,7 +20,7 @@ limitations under the License.
 */
 
 import {MatrixClient} from "matrix-js-sdk";
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 
 /**
@@ -167,13 +167,9 @@ export default class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
-    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
+    getSSOCallbackUrl(hsUrl: string, isUrl: string, fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);
-        // XXX: at this point, the fragment will always be #/login, which is no
-        // use to anyone. Ideally, we would get the intended fragment from
-        // MatrixChat.screenAfterLogin so that you could follow #/room links etc
-        // through an SSO login.
-        url.hash = "";
+        url.hash = fragmentAfterLogin || "";
         url.searchParams.set("homeserver", hsUrl);
         url.searchParams.set("identityServer", isUrl);
         return url;
@@ -183,9 +179,11 @@ export default class BasePlatform {
      * Begin Single Sign On flows.
      * @param {MatrixClient} mxClient the matrix client using which we should start the flow
      * @param {"sso"|"cas"} loginType the type of SSO it is, CAS/SSO.
+     * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
      */
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso"|"cas") {
-        const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl());
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
+        const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl(),
+            fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
 

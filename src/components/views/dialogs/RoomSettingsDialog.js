@@ -27,7 +27,7 @@ import NotificationSettingsTab from "../settings/tabs/room/NotificationSettingsT
 import BridgeSettingsTab from "../settings/tabs/room/BridgeSettingsTab";
 import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 
 export default class RoomSettingsDialog extends React.Component {

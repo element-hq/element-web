@@ -35,7 +35,7 @@ import GroupStore from '../../../stores/GroupStore';
 import RoomSubList from '../../structures/RoomSubList';
 import ResizeHandle from '../elements/ResizeHandle';
 import CallHandler from "../../../CallHandler";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import * as sdk from "../../../index";
 import * as Receipt from "../../../utils/Receipt";
 import {Resizer} from '../../../resizer';
@@ -785,6 +785,7 @@ export default createReactClass({
                 label: _t('Rooms'),
                 incomingCall: incomingCallIfTaggedAs('im.vector.fake.recent'),
                 onAddRoom: () => {dis.dispatch({action: 'view_create_room'});},
+                addRoomLabel: _t("Create room"),
             },
         ];
         const tagSubLists = Object.keys(this.state.lists)
