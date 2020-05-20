@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 export class FontWatcher {
@@ -42,7 +42,7 @@ export class FontWatcher {
     };
 
     _setRootFontSize = (size) => {
-        const fontSize = Math.max(Math.min(this.maxSize, size), this.minSize);
+        const fontSize = Math.max(Math.min(FontWatcher.maxSize, size), FontWatcher.minSize);
 
         if (fontSize != size) {
             SettingsStore.setValue("fontSize", null, SettingLevel.Device, fontSize);

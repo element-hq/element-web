@@ -24,7 +24,7 @@ import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 import { FontWatcher } from "../../../../../FontWatcher";
 
 export default class AppearanceUserSettingsTab extends React.Component {

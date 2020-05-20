@@ -412,8 +412,6 @@
     "Enable cross-signing to verify per-user instead of per-session": "Enable cross-signing to verify per-user instead of per-session",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Font size": "Font size",
-    "Min font size": "Min font size",
-    "Max font size": "Max font size",
     "Custom font size": "Custom font size",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
     "Use compact timeline layout": "Use compact timeline layout",
