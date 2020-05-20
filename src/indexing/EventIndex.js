@@ -518,7 +518,7 @@ export default class EventIndex extends EventEmitter {
                 if (!newCheckpoint) {
                     console.log("EventIndex: The server didn't return a valid ",
                                 "new checkpoint, not continuing the crawl.", checkpoint);
-                    continue
+                    continue;
                 }
 
                 // If all events were already indexed we assume that we catched
