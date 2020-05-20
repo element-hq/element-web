@@ -73,6 +73,7 @@ export default class ImageView extends React.Component {
         Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
+                this.props.onFinished();
                 MatrixClientPeg.get().redactEvent(
                     this.props.mxEvent.getRoomId(), this.props.mxEvent.getId(),
                 ).catch(function(e) {

@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import {EventStatus} from 'matrix-js-sdk';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
@@ -130,22 +130,24 @@ export default createReactClass({
     },
 
     onViewSourceClick: function() {
+        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
-            content: this.props.mxEvent.event,
+            roomId: ev.getRoomId(),
+            eventId: ev.getId(),
+            content: ev.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     },
 
     onViewClearSourceClick: function() {
+        const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
-            roomId: this.props.mxEvent.getRoomId(),
-            eventId: this.props.mxEvent.getId(),
+            roomId: ev.getRoomId(),
+            eventId: ev.getId(),
             // FIXME: _clearEvent is private
-            content: this.props.mxEvent._clearEvent,
+            content: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
     },

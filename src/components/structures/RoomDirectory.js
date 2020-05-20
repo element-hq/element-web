@@ -20,7 +20,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
@@ -367,7 +367,10 @@ export default createReactClass({
 
     onCreateRoomClick: function(room) {
         this.props.onFinished();
-        dis.dispatch({action: 'view_create_room'});
+        dis.dispatch({
+            action: 'view_create_room',
+            public: true,
+        });
     },
 
     showRoomAlias: function(alias, autoJoin=false) {

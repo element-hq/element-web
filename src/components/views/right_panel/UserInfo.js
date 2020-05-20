@@ -21,7 +21,7 @@ import React, {useCallback, useMemo, useState, useEffect, useContext} from 'reac
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -44,6 +44,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
+import {Action} from "../../../dispatcher/actions";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -557,7 +558,7 @@ const RedactMessagesButton = ({member}) => {
         let eventsToRedact = [];
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
                     return events.concat(event);
                 } else {
                     return events;
@@ -841,7 +842,7 @@ const GroupAdminToolsSection = ({children, groupId, groupMember, startUpdating, 
             cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
                 // return to the user list
                 dis.dispatch({
-                    action: "view_user",
+                    action: Action.ViewUser,
                     member: null,
                 });
             }).catch((e) => {

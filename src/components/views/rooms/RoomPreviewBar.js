@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import IdentityAuthClient from '../../../IdentityAuthClient';
@@ -266,9 +266,9 @@ export default createReactClass({
             params: {
                 email: this.props.invitedEmail,
                 signurl: this.props.signUrl,
-                room_name: this.props.oobData.room_name,
-                room_avatar_url: this.props.oobData.avatarUrl,
-                inviter_name: this.props.oobData.inviterName,
+                room_name: this.props.oobData ? this.props.oobData.room_name : null,
+                room_avatar_url: this.props.oobData ? this.props.oobData.avatarUrl : null,
+                inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
             }
         };
     },

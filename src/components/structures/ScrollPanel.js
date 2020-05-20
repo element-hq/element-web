@@ -144,6 +144,11 @@ export default createReactClass({
         /* resizeNotifier: ResizeNotifier to know when middle column has changed size
          */
         resizeNotifier: PropTypes.object,
+
+        /* fixedChildren: allows for children to be passed which are rendered outside
+         * of the wrapper
+         */
+        fixedChildren: PropTypes.node,
     },
 
     getDefaultProps: function() {
@@ -881,6 +886,7 @@ export default createReactClass({
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
+                    { this.props.fixedChildren }
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
                             { this.props.children }

@@ -15,16 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
-import { scorePassword } from '../../../../utils/PasswordScorer';
 import FileSaver from 'file-saver';
-import { _t } from '../../../../languageHandler';
+import {_t, _td} from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 import {copyNode} from "../../../../utils/strings";
+import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
+import PassphraseField from "../../../../components/views/auth/PassphraseField";
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -38,7 +39,6 @@ const PHASE_DONE = 8;
 const PHASE_CONFIRM_SKIP = 9;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
-const PASSPHRASE_FEEDBACK_DELAY = 500; // How long after keystroke to offer passphrase feedback, ms.
 
 /*
  * Walks the user through the process of creating a passphrase to guard Secure
@@ -61,16 +61,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         this._recoveryKey = null;
         this._recoveryKeyNode = null;
-        this._setZxcvbnResultTimeout = null;
         this._backupKey = null;
 
         this.state = {
             phase: PHASE_LOADING,
             passPhrase: '',
+            passPhraseValid: false,
             passPhraseConfirm: '',
             copied: false,
             downloaded: false,
-            zxcvbnResult: null,
             backupInfo: null,
             backupSigStatus: null,
             // does the server offer a UI auth flow with just m.login.password
@@ -81,6 +80,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // status of the key backup toggle switch
             useKeyBackup: true,
         };
+
+        this._passphraseField = createRef();
 
         this._fetchBackupInfo();
         if (this.state.accountPassword) {
@@ -98,9 +99,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     componentWillUnmount() {
         MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this._onKeyBackupStatusChange);
-        if (this._setZxcvbnResultTimeout !== null) {
-            clearTimeout(this._setZxcvbnResultTimeout);
-        }
     }
 
     async _fetchBackupInfo() {
@@ -209,12 +207,32 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             });
         } else {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
+
+            const dialogAesthetics = {
+                [SSOAuthEntry.PHASE_PREAUTH]: {
+                    title: _t("Use Single Sign On to continue"),
+                    body: _t("To continue, use Single Sign On to prove your identity."),
+                    continueText: _t("Single Sign On"),
+                    continueKind: "primary",
+                },
+                [SSOAuthEntry.PHASE_POSTAUTH]: {
+                    title: _t("Confirm encryption setup"),
+                    body: _t("Click the button below to confirm setting up encryption."),
+                    continueText: _t("Confirm"),
+                    continueKind: "primary",
+                },
+            };
+
             const { finished } = Modal.createTrackedDialog(
                 'Cross-signing keys dialog', '', InteractiveAuthDialog,
                 {
                     title: _t("Setting up keys"),
                     matrixClient: MatrixClientPeg.get(),
                     makeRequest,
+                    aestheticsForStagePhases: {
+                        [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                        [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                    },
                 },
             );
             const [confirmed] = await finished;
@@ -236,12 +254,20 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         try {
             if (force) {
+                console.log("Forcing secret storage reset"); // log something so we can debug this later
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._recoveryKey,
-                    setupNewKeyBackup: true,
+                    setupNewKeyBackup: this.state.useKeyBackup,
                     setupNewSecretStorage: true,
                 });
+                if (!this.state.useKeyBackup && this.state.backupInfo) {
+                    // If the user is resetting their cross-signing keys and doesn't want
+                    // key backup (but had it enabled before), delete the key backup as it's
+                    // no longer valid.
+                    console.log("Deleting invalid key backup (secrets have been reset; key backup not requested)");
+                    await cli.deleteKeyBackupVersion(this.state.backupInfo.version);
+                }
             } else {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
@@ -335,22 +361,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _onPassPhraseNextClick = async (e) => {
         e.preventDefault();
+        if (!this._passphraseField.current) return; // unmounting
 
-        // If we're waiting for the timeout before updating the result at this point,
-        // skip ahead and do it now, otherwise we'll deny the attempt to proceed
-        // even if the user entered a valid passphrase
-        if (this._setZxcvbnResultTimeout !== null) {
-            clearTimeout(this._setZxcvbnResultTimeout);
-            this._setZxcvbnResultTimeout = null;
-            await new Promise((resolve) => {
-                this.setState({
-                    zxcvbnResult: scorePassword(this.state.passPhrase),
-                }, resolve);
-            });
+        await this._passphraseField.current.validate({ allowEmpty: false });
+        if (!this._passphraseField.current.state.valid) {
+            this._passphraseField.current.focus();
+            this._passphraseField.current.validate({ allowEmpty: false, focused: true });
+            return;
         }
-        if (this._passPhraseIsValid()) {
-            this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
-        }
+
+        this.setState({phase: PHASE_PASSPHRASE_CONFIRM});
     };
 
     _onPassPhraseConfirmNextClick = async (e) => {
@@ -370,9 +390,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _onSetAgainClick = () => {
         this.setState({
             passPhrase: '',
+            passPhraseValid: false,
             passPhraseConfirm: '',
             phase: PHASE_PASSPHRASE,
-            zxcvbnResult: null,
         });
     }
 
@@ -382,33 +402,22 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _onPassPhraseValidate = (result) => {
+        this.setState({
+            passPhraseValid: result.valid,
+        });
+    };
+
     _onPassPhraseChange = (e) => {
         this.setState({
             passPhrase: e.target.value,
         });
-
-        if (this._setZxcvbnResultTimeout !== null) {
-            clearTimeout(this._setZxcvbnResultTimeout);
-        }
-        this._setZxcvbnResultTimeout = setTimeout(() => {
-            this._setZxcvbnResultTimeout = null;
-            this.setState({
-                // precompute this and keep it in state: zxcvbn is fast but
-                // we use it in a couple of different places so no point recomputing
-                // it unnecessarily.
-                zxcvbnResult: scorePassword(this.state.passPhrase),
-            });
-        }, PASSPHRASE_FEEDBACK_DELAY);
     }
 
     _onPassPhraseConfirmChange = (e) => {
         this.setState({
             passPhraseConfirm: e.target.value,
         });
-    }
-
-    _passPhraseIsValid() {
-        return this.state.zxcvbnResult && this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE;
     }
 
     _onAccountPasswordChange = (e) => {
@@ -473,36 +482,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhasePassPhrase() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const Field = sdk.getComponent('views.elements.Field');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
-
-        let strengthMeter;
-        let helpText;
-        if (this.state.zxcvbnResult) {
-            if (this.state.zxcvbnResult.score >= PASSWORD_MIN_SCORE) {
-                helpText = _t("Great! This recovery passphrase looks strong enough.");
-            } else {
-                // We take the warning from zxcvbn or failing that, the first
-                // suggestion. In practice The first is generally the most relevant
-                // and it's probably better to present the user with one thing to
-                // improve about their password than a whole collection - it can
-                // spit out a warning and multiple suggestions which starts getting
-                // very information-dense.
-                const suggestion = (
-                    this.state.zxcvbnResult.feedback.warning ||
-                    this.state.zxcvbnResult.feedback.suggestions[0]
-                );
-                const suggestionBlock = <div>{suggestion || _t("Keep going...")}</div>;
-
-                helpText = <div>
-                    {suggestionBlock}
-                </div>;
-            }
-            strengthMeter = <div>
-                <progress max={PASSWORD_MIN_SCORE} value={this.state.zxcvbnResult.score} />
-            </div>;
-        }
 
         return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
@@ -511,19 +492,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
-                <Field
-                    type="password"
+                <PassphraseField
                     className="mx_CreateSecretStorageDialog_passPhraseField"
                     onChange={this._onPassPhraseChange}
+                    minScore={PASSWORD_MIN_SCORE}
                     value={this.state.passPhrase}
-                    label={_t("Enter a recovery passphrase")}
+                    onValidate={this._onPassPhraseValidate}
+                    fieldRef={this._passphraseField}
                     autoFocus={true}
-                    autoComplete="new-password"
+                    label={_td("Enter a recovery passphrase")}
+                    labelEnterPassword={_td("Enter a recovery passphrase")}
+                    labelStrongPassword={_td("Great! This recovery passphrase looks strong enough.")}
+                    labelAllowedButUnsafe={_td("Great! This recovery passphrase looks strong enough.")}
                 />
-                <div className="mx_CreateSecretStorageDialog_passPhraseHelp">
-                    {strengthMeter}
-                    {helpText}
-                </div>
             </div>
 
             <LabelledToggleSwitch
@@ -535,7 +516,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
                 hasCancel={false}
-                disabled={!this._passPhraseIsValid()}
+                disabled={!this.state.passPhraseValid}
             >
                 <button type="button"
                     onClick={this._onSkipSetupClick}

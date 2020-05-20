@@ -36,7 +36,6 @@ export default class CrossSigningPanel extends React.PureComponent {
             userSigningPrivateKeyCached: false,
             sessionBackupKeyCached: false,
             secretStorageKeyInAccount: false,
-            secretStorageKeyNeedsUpgrade: null,
         };
     }
 
@@ -88,7 +87,6 @@ export default class CrossSigningPanel extends React.PureComponent {
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
         const crossSigningReady = await cli.isCrossSigningReady();
-        const secretStorageKeyNeedsUpgrade = await cli.secretStorageKeyNeedsUpgrade();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
@@ -100,7 +98,6 @@ export default class CrossSigningPanel extends React.PureComponent {
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
-            secretStorageKeyNeedsUpgrade,
         });
     }
 
@@ -131,8 +128,8 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     _destroySecureSecretStorage = () => {
-        const ConfirmDestoryCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
-        Modal.createDialog(ConfirmDestoryCrossSigningDialog, {
+        const ConfirmDestroyCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
+        Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
             onFinished: this.onDestroyStorage,
         });
     }
@@ -150,7 +147,6 @@ export default class CrossSigningPanel extends React.PureComponent {
             secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
-            secretStorageKeyNeedsUpgrade,
         } = this.state;
 
         let errorSection;
@@ -258,10 +254,6 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("Homeserver feature support:")}</td>
                             <td>{homeserverSupportsCrossSigning ? _t("exists") : _t("not found")}</td>
-                        </tr>
-                        <tr>
-                            <td>{_t("Secret Storage key format:")}</td>
-                            <td>{secretStorageKeyNeedsUpgrade ? _t("outdated") : _t("up to date")}</td>
                         </tr>
                    </tbody></table>
                 </details>

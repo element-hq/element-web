@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';

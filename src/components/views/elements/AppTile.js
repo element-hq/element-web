@@ -31,7 +31,7 @@ import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
@@ -424,13 +424,13 @@ export default class AppTile extends React.Component {
     _setupWidgetMessaging() {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
-
-        // We use the app's URL over the rendered URL so that anything the widget does which could
-        // lead to requesting a "security key" will pass accordingly. The only other thing this URL
-        // is used for is to determine the origin we're talking to, and therefore we don't need the
-        // fully templated URL.
         const widgetMessaging = new WidgetMessaging(
-            this.props.app.id, this.props.app.url, this.props.userWidget, this._appFrame.current.contentWindow);
+            this.props.app.id,
+            this.props.app.url,
+            this._getRenderedUrl(),
+            this.props.userWidget,
+            this._appFrame.current.contentWindow,
+        );
         ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);

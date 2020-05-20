@@ -17,12 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {InvalidStoreError} from "matrix-js-sdk/src/errors";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import React, { createRef } from 'react';
+import { InvalidStoreError } from "matrix-js-sdk/src/errors";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
-
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
@@ -30,17 +29,17 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showStartChatInviteDialog, showRoomInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -52,22 +51,23 @@ import { getHomePageUrl } from '../../utils/pages';
 import createRoom from "../../createRoom";
 import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
-import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
 import { FontWatcher } from '../../FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
-import {defer, IDeferred} from "../../utils/promise";
+import { defer, IDeferred } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
+import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
+import { Action } from "../../dispatcher/actions";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -108,7 +108,7 @@ export enum Views {
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [
-    'view_user_settings',
+    Action.ViewUserSettings,
     'view_create_chat',
     'view_create_room',
     'view_create_group',
@@ -619,7 +619,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_indexed_room':
                 this.viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings': {
+            case Action.ViewUserSettings: {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
                     /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -629,7 +629,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case 'view_create_room':
-                this.createRoom();
+                this.createRoom(payload.public);
                 break;
             case 'view_create_group': {
                 const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
@@ -1018,9 +1018,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }).close;
     }
 
-    private async createRoom() {
+    private async createRoom(defaultPublic = false) {
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
-        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog);
+        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, { defaultPublic });
 
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
@@ -1345,7 +1345,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // this if we are not scrolled up in the view. To find out, delegate to
             // the timeline panel. If the timeline panel doesn't exist, then we assume
             // it is safe to reset the timeline.
-            if (!this.loggedInView.current || !this.loggedInView.current) {
+            if (!this.loggedInView.current) {
                 return true;
             }
             return this.loggedInView.current.canResetTimelineInRoom(roomId);
@@ -1627,9 +1627,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'view_create_room',
             });
         } else if (screen === 'settings') {
-            dis.dispatch({
-                action: 'view_user_settings',
-            });
+            dis.fire(Action.ViewUserSettings);
         } else if (screen === 'welcome') {
             dis.dispatch({
                 action: 'view_welcome_page',
@@ -1761,8 +1759,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const member = new RoomMember(null, userId);
         if (!member) { return; }
-        dis.dispatch({
-            action: 'view_user',
+        dis.dispatch<ViewUserPayload>({
+            action: Action.ViewUser,
             member: member,
         });
     }
@@ -1979,6 +1977,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     render() {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
+        let fragmentAfterLogin = "";
+        if (this.props.initialScreenAfterLogin) {
+            fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
+        }
+
         let view;
 
         if (this.state.view === Views.LOADING) {
@@ -2058,7 +2061,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome {...this.getServerProperties()} />;
+            view = <Welcome {...this.getServerProperties()} fragmentAfterLogin={fragmentAfterLogin} />;
         } else if (this.state.view === Views.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (
@@ -2097,6 +2100,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
                     onForgotPasswordClick={this.onForgotPasswordClick}
                     onServerConfigChange={this.onServerConfigChange}
+                    fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
                 />
             );
@@ -2106,6 +2110,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 <SoftLogout
                     realQueryParams={this.props.realQueryParams}
                     onTokenLoginCompleted={this.props.onTokenLoginCompleted}
+                    fragmentAfterLogin={fragmentAfterLogin}
                 />
             );
         } else {

@@ -30,7 +30,7 @@ import PlatformPeg from "../../../../../PlatformPeg";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
@@ -248,7 +248,7 @@ export default class GeneralUserSettingsTab extends React.Component {
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
         if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
-            const emails = this.state.loading3pids || true
+            const emails = this.state.loading3pids
                 ? <Spinner />
                 : <EmailAddresses
                     emails={this.state.emails}

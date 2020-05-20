@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from '../../../Modal';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import DeviceListener from '../../../DeviceListener';
@@ -31,31 +30,12 @@ export default class SetupEncryptionToast extends React.PureComponent {
             'set_up_encryption',
             'verify_this_session',
             'upgrade_encryption',
-            'upgrade_ssss',
         ]).isRequired,
     };
 
     _onLaterClick = () => {
         DeviceListener.sharedInstance().dismissEncryptionSetup();
     };
-
-    async _waitForCompletion() {
-        if (this.props.kind === 'upgrade_ssss') {
-            return new Promise(resolve => {
-                const recheck = async () => {
-                    const needsUpgrade = await MatrixClientPeg.get().secretStorageKeyNeedsUpgrade();
-                    if (!needsUpgrade) {
-                        MatrixClientPeg.get().removeListener('accountData', recheck);
-                        resolve();
-                    }
-                };
-                MatrixClientPeg.get().on('accountData', recheck);
-                recheck();
-            });
-        } else {
-            return;
-        }
-    }
 
     _onSetupClick = async () => {
         if (this.props.kind === "verify_this_session") {
@@ -68,7 +48,6 @@ export default class SetupEncryptionToast extends React.PureComponent {
             );
             try {
                 await accessSecretStorage();
-                await this._waitForCompletion();
             } finally {
                 modal.close();
             }
@@ -82,8 +61,6 @@ export default class SetupEncryptionToast extends React.PureComponent {
                 return _t('Verify yourself & others to keep your chats safe');
             case 'verify_this_session':
                 return _t('Other users may not trust it');
-            case 'upgrade_ssss':
-                return _t('Update your secure storage');
         }
     }
 
@@ -92,7 +69,6 @@ export default class SetupEncryptionToast extends React.PureComponent {
             case 'set_up_encryption':
                 return _t('Set up');
             case 'upgrade_encryption':
-            case 'upgrade_ssss':
                 return _t('Upgrade');
             case 'verify_this_session':
                 return _t('Verify');
