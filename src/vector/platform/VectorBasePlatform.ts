@@ -1,9 +1,7 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
-Copyright 2018 New Vector Ltd
+Copyright 2018, 2020 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +22,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import {getVectorConfig} from "../getconfig";
 
-import Favico from '../../favicon';
+import Favicon from "../../favicon";
 
 export const updateCheckStatusEnum = {
     CHECKING: 'CHECKING',
@@ -38,13 +36,8 @@ export const updateCheckStatusEnum = {
  * Vector-specific extensions to the BasePlatform template
  */
 export default class VectorBasePlatform extends BasePlatform {
-    constructor() {
-        super();
-
-        this.showUpdateCheck = false;
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
-    }
+    protected showUpdateCheck: boolean = false;
+    protected _favicon: Favicon;
 
     async getConfig(): Promise<{}> {
         return getVectorConfig();
@@ -55,40 +48,27 @@ export default class VectorBasePlatform extends BasePlatform {
     }
 
     /**
-     * Delay creating the `Favico` instance until first use (on the first notification) as
-     * it uses canvas, which can trigger a permission prompt in Firefox's resist
-     * fingerprinting mode.
+     * Delay creating the `Favicon` instance until first use (on the first notification) as
+     * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
      * See https://github.com/vector-im/riot-web/issues/9605.
      */
     get favicon() {
         if (this._favicon) {
             return this._favicon;
         }
-        // The 'animations' are really low framerate and look terrible.
-        // Also it re-starts the animation every time you set the badge,
-        // and we set the state each time, even if the value hasn't changed,
-        // so we'd need to fix that if enabling the animation.
-        this._favicon = new Favico({ animation: 'none' });
-        return this._favicon;
+        return this._favicon = new Favicon();
     }
 
     _updateFavicon() {
-        try {
-            // This needs to be in in a try block as it will throw
-            // if there are more than 100 badge count changes in
-            // its internal queue
-            let bgColor = "#d00";
-            let notif = this.notificationCount;
+        let bgColor = "#d00";
+        let notif: string | number = this.notificationCount;
 
-            if (this.errorDidOccur) {
-                notif = notif || "×";
-                bgColor = "#f00";
-            }
-
-            this.favicon.badge(notif, { bgColor });
-        } catch (e) {
-            console.warn(`Failed to set badge count: ${e.message}`);
+        if (this.errorDidOccur) {
+            notif = notif || "×";
+            bgColor = "#f00";
         }
+
+        this.favicon.badge(notif, { bgColor });
     }
 
     setNotificationCount(count: number) {
@@ -112,25 +92,25 @@ export default class VectorBasePlatform extends BasePlatform {
     /**
      * Whether we can call checkForUpdate on this platform build
      */
-    async canSelfUpdate(): boolean {
+    async canSelfUpdate(): Promise<boolean> {
         return false;
     }
 
-    startUpdateCheck() {
+    startUpdateCheck = () => {
         this.showUpdateCheck = true;
         dis.dispatch({
             action: 'check_updates',
             value: { status: updateCheckStatusEnum.CHECKING },
         });
-    }
+    };
 
-    stopUpdateCheck() {
+    stopUpdateCheck = () => {
         this.showUpdateCheck = false;
         dis.dispatch({
             action: 'check_updates',
             value: false,
         });
-    }
+    };
 
     getUpdateCheckStatusEnum() {
         return updateCheckStatusEnum;

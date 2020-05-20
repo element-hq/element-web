@@ -32,3 +32,10 @@ declare global {
         InstallTrigger: any;
     }
 }
+
+// add method which is missing from the node typing
+declare module "url" {
+    interface Url {
+        format(): string;
+    }
+}

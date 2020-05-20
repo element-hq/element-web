@@ -1,5 +1,3 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
@@ -21,11 +19,20 @@ limitations under the License.
 */
 
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
-import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
+import BaseEventIndexManager, {
+    MatrixEvent,
+    MatrixProfile,
+    SearchConfig,
+    SearchResult,
+    HistoricEvent,
+    CrawlerCheckpoint,
+    EventAndProfile,
+} from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
-import {MatrixClient} from "matrix-js-sdk";
+import {MatrixClient} from "matrix-js-sdk/src/client";
+import {Room} from "matrix-js-sdk/src/models/room";
 import Modal from "matrix-react-sdk/src/Modal";
 import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
 import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
@@ -34,6 +41,7 @@ import {Key} from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
+import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -57,7 +65,7 @@ function platformFriendlyName(): string {
     }
 }
 
-function _onAction(payload: Object) {
+function _onAction(payload: ActionPayload) {
     // Whitelist payload actions, no point sending most across
     if (['call_state'].includes(payload.action)) {
         ipcRenderer.send('app_onAction', payload);
@@ -77,53 +85,60 @@ function getUpdateCheckStatus(status) {
     }
 }
 
+interface IPCPayload {
+    id?: number;
+    error?: string;
+    reply?: any;
+}
+
 class SeshatIndexManager extends BaseEventIndexManager {
+    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
+    private nextIpcCallId: number = 0;
+
     constructor() {
         super();
 
-        this._pendingIpcCalls = {};
-        this._nextIpcCallId = 0;
-        ipcRenderer.on('seshatReply', this._onIpcReply.bind(this));
+        ipcRenderer.on('seshatReply', this._onIpcReply);
     }
 
-    async _ipcCall(name: string, ...args: []): Promise<{}> {
+    async _ipcCall(name: string, ...args: any[]): Promise<any> {
         // TODO this should be moved into the preload.js file.
-        const ipcCallId = ++this._nextIpcCallId;
+        const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this._pendingIpcCalls[ipcCallId] = {resolve, reject};
+            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
             window.ipcRenderer.send('seshat', {id: ipcCallId, name, args});
         });
     }
 
-    _onIpcReply(ev: {}, payload: {}) {
+    _onIpcReply = (ev: {}, payload: IPCPayload) => {
         if (payload.id === undefined) {
             console.warn("Ignoring IPC reply with no ID");
             return;
         }
 
-        if (this._pendingIpcCalls[payload.id] === undefined) {
+        if (this.pendingIpcCalls[payload.id] === undefined) {
             console.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
-        const callbacks = this._pendingIpcCalls[payload.id];
-        delete this._pendingIpcCalls[payload.id];
+        const callbacks = this.pendingIpcCalls[payload.id];
+        delete this.pendingIpcCalls[payload.id];
         if (payload.error) {
             callbacks.reject(payload.error);
         } else {
             callbacks.resolve(payload.reply);
         }
-    }
+    };
 
     async supportsEventIndexing(): Promise<boolean> {
         return this._ipcCall('supportsEventIndexing');
     }
 
-    async initEventIndex(): Promise<> {
+    async initEventIndex(): Promise<void> {
         return this._ipcCall('initEventIndex');
     }
 
-    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<> {
+    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<void> {
         return this._ipcCall('addEventToIndex', ev, profile);
     }
 
@@ -135,7 +150,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('isEventIndexEmpty');
     }
 
-    async commitLiveEvents(): Promise<> {
+    async commitLiveEvents(): Promise<void> {
         return this._ipcCall('commitLiveEvents');
     }
 
@@ -147,15 +162,15 @@ class SeshatIndexManager extends BaseEventIndexManager {
         events: [HistoricEvent],
         checkpoint: CrawlerCheckpoint | null,
         oldCheckpoint: CrawlerCheckpoint | null,
-    ): Promise<> {
+    ): Promise<boolean> {
         return this._ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
     }
 
-    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async addCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         return this._ipcCall('addCrawlerCheckpoint', checkpoint);
     }
 
-    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<> {
+    async removeCrawlerCheckpoint(checkpoint: CrawlerCheckpoint): Promise<void> {
         return this._ipcCall('removeCrawlerCheckpoint', checkpoint);
     }
 
@@ -167,26 +182,28 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('loadCheckpoints');
     }
 
-    async closeEventIndex(): Promise<> {
+    async closeEventIndex(): Promise<void> {
         return this._ipcCall('closeEventIndex');
     }
 
-    async getStats(): Promise<> {
+    async getStats(): Promise<void> {
         return this._ipcCall('getStats');
     }
 
-    async deleteEventIndex(): Promise<> {
+    async deleteEventIndex(): Promise<void> {
         return this._ipcCall('deleteEventIndex');
     }
 }
 
 export default class ElectronPlatform extends VectorBasePlatform {
+    private eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
+    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
+    private nextIpcCallId: number = 0;
+    // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
+    private ssoID: string = randomString(32);
+
     constructor() {
         super();
-
-        this._pendingIpcCalls = {};
-        this._nextIpcCallId = 0;
-        this.eventIndexManager = new SeshatIndexManager();
 
         dis.register(_onAction);
         /*
@@ -216,9 +233,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.on('preferences', () => {
             dis.fire(Action.ViewUserSettings);
         });
-
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
 
         // register OS-specific shortcuts
         if (isMac) {
@@ -253,8 +267,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         }
 
-        // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-        this.ssoID = randomString(32);
         this._ipcCall("startSSOFlow", this.ssoID);
     }
 
@@ -290,7 +302,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Object): Notification {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Room): Notification {
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
@@ -307,14 +319,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
             silent: true, // we play our own sounds
         };
         if (avatarUrl) notifBody['icon'] = avatarUrl;
-        const notification = new global.Notification(title, notifBody);
+        const notification = new window.Notification(title, notifBody);
 
         notification.onclick = () => {
             dis.dispatch({
                 action: 'view_room',
                 room_id: room.roomId,
             });
-            global.focus();
+            window.focus();
             this._ipcCall('focusWindow');
         };
 
@@ -337,11 +349,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    async getAutoLaunchEnabled(): boolean {
+    async getAutoLaunchEnabled(): Promise<boolean> {
         return this._ipcCall('getAutoLaunchEnabled');
     }
 
-    async setAutoLaunchEnabled(enabled: boolean): void {
+    async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
         return this._ipcCall('setAutoLaunchEnabled', enabled);
     }
 
@@ -350,11 +362,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return !isMac;
     }
 
-    async getAutoHideMenuBarEnabled(): boolean {
+    async getAutoHideMenuBarEnabled(): Promise<boolean> {
         return this._ipcCall('getAutoHideMenuBarEnabled');
     }
 
-    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+    async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
         return this._ipcCall('setAutoHideMenuBarEnabled', enabled);
     }
 
@@ -363,25 +375,25 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return !isMac;
     }
 
-    async getMinimizeToTrayEnabled(): boolean {
+    async getMinimizeToTrayEnabled(): Promise<boolean> {
         return this._ipcCall('getMinimizeToTrayEnabled');
     }
 
-    async setMinimizeToTrayEnabled(enabled: boolean): void {
+    async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
         return this._ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
-    async canSelfUpdate(): boolean {
+    async canSelfUpdate(): Promise<boolean> {
         const feedUrl = await this._ipcCall('getUpdateFeedUrl');
         return Boolean(feedUrl);
     }
 
-    startUpdateCheck() {
+    startUpdateCheck = () => {
         if (this.showUpdateCheck) return;
         super.startUpdateCheck();
 
         ipcRenderer.send('check_updates');
-    }
+    };
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
@@ -394,7 +406,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return _t('Riot Desktop (%(platformName)s)', { platformName: platformFriendlyName() });
     }
 
-    screenCaptureErrorString(): ?string {
+    screenCaptureErrorString(): string | null {
         return null;
     }
 
@@ -409,10 +421,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.location.reload(false);
     }
 
-    async _ipcCall(name, ...args) {
-        const ipcCallId = ++this._nextIpcCallId;
+    async _ipcCall(name: string, ...args: any[]): Promise<any> {
+        const ipcCallId = ++this.nextIpcCallId;
         return new Promise((resolve, reject) => {
-            this._pendingIpcCalls[ipcCallId] = {resolve, reject};
+            this.pendingIpcCalls[ipcCallId] = {resolve, reject};
             window.ipcRenderer.send('ipcCall', {id: ipcCallId, name, args});
             // Maybe add a timeout to these? Probably not necessary.
         });
@@ -424,13 +436,13 @@ export default class ElectronPlatform extends VectorBasePlatform {
             return;
         }
 
-        if (this._pendingIpcCalls[payload.id] === undefined) {
+        if (this.pendingIpcCalls[payload.id] === undefined) {
             console.warn("Unknown IPC payload ID: " + payload.id);
             return;
         }
 
-        const callbacks = this._pendingIpcCalls[payload.id];
-        delete this._pendingIpcCalls[payload.id];
+        const callbacks = this.pendingIpcCalls[payload.id];
+        delete this.pendingIpcCalls[payload.id];
         if (payload.error) {
             callbacks.reject(payload.error);
         } else {
