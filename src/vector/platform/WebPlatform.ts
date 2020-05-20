@@ -124,14 +124,14 @@ export default class WebPlatform extends VectorBasePlatform {
 
     startUpdater() {
         this.pollForUpdate();
-        setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
+        setInterval(this.pollForUpdate, POKE_RATE_MS);
     }
 
     async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate() {
+    pollForUpdate = () => {
         return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
@@ -152,7 +152,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
             };
         });
-    }
+    };
 
     startUpdateCheck = () => {
         if (this.showUpdateCheck) return;
