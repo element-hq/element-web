@@ -38,7 +38,9 @@ limitations under the License.
 
 .mx_Slider_bar > hr {
     width: 100%;
-    border: 0.2em solid $slider-background-color;
+    height: 0.4em;
+    background-color: $slider-background-color;
+    border: 0;
 }
 
 .mx_Slider_selection {
@@ -47,6 +49,7 @@ limitations under the License.
     width: calc(100% - 1em); // 2 * half the width of a dot
     height: 1em;
     position: absolute;
+    pointer-events: none;
 }
 
 .mx_Slider_selectionDot {

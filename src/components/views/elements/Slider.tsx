@@ -93,7 +93,7 @@ export default class Slider extends React.Component<IProps> {
         return <div className="mx_Slider">
             <div>
                 <div className="mx_Slider_bar">
-                    <hr />
+                    <hr onClick={this.props.disabled ? () => {} : this.onClick.bind(this)}/>
                     { selection }
                 </div>
                 <div className="mx_Slider_dotContainer">
@@ -101,6 +101,15 @@ export default class Slider extends React.Component<IProps> {
                 </div>
             </div>
         </div>;
+    }
+
+    onClick(event: React.MouseEvent) {
+        const width = (event.target as HTMLElement).clientWidth;
+        // nativeEvent is safe to use because https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/offsetX
+        // is supported by all modern browsers
+        const relativeClick = (event.nativeEvent.offsetX / width);
+        const nearestValue = this.props.values[Math.round(relativeClick * (this.props.values.length - 1))];
+        this.props.onSelectionChange(nearestValue);
     }
 }
 
