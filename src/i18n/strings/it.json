@@ -2430,5 +2430,8 @@
     "QR Code": "Codice QR",
     "Dismiss read marker and jump to bottom": "Scarta il segno di lettura e salta alla fine",
     "Jump to oldest unread message": "Salta al messaggio non letto più vecchio",
-    "Upload a file": "Invia un file"
+    "Upload a file": "Invia un file",
+    "Use IRC layout": "Usa il layout IRC",
+    "IRC display name width": "Larghezza nome di IRC",
+    "Create room": "Crea stanza"
 }

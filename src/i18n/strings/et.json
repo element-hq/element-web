@@ -1236,5 +1236,11 @@
     "Nothing appearing? Not all clients support interactive verification yet. <button>Use legacy verification</button>.": "Mitte midagi ei kuvata? Kõik Matrix'i kliendid ei toeta veel interaktiivset verifitseerimist. <button>Kasuta vana  kooli verifitseerimismeetodit</button>.",
     "Waiting for %(userId)s to confirm...": "Ootan kinnitust kasutajalt %(userId)s…",
     "Skip": "Jäta vahele",
-    "Token incorrect": "Vigane tunnusluba"
+    "Token incorrect": "Vigane tunnusluba",
+    "%(oneUser)schanged their name %(count)s times|one": "Kasutaja %(oneUser)s muutis oma nime",
+    "Are you sure you want to deactivate your account? This is irreversible.": "Kas sa oled kindel, et soovid oma konto sulgeda? Seda tegevust ei saa hiljem tagasi pöörata.",
+    "Confirm account deactivation": "Kinnita konto sulgemine",
+    "There was a problem communicating with the server. Please try again.": "Serveriühenduses tekkis viga. Palun proovi uuesti.",
+    "Server did not return valid authentication information.": "Serveri saadetud vastuses ei olnud kehtivat autentimisteavet.",
+    "Please fill why you're reporting.": "Palun kirjelda veateate põhjust."
 }
