@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GeneralUserSettingsTab_changePassword .mx_Field,
-.mx_GeneralUserSettingsTab_themeSection .mx_Field {
+.mx_GeneralUserSettingsTab_changePassword .mx_Field {
     @mixin mx_Settings_fullWidthField;
 }
 

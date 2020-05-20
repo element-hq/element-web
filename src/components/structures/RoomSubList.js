@@ -32,7 +32,7 @@ import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
 import {RovingTabIndexWrapper} from "../../accessibility/RovingTabIndex";
-import toRem from "../../utils/rem";
+import {toPx} from "../../utils/units";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
@@ -420,7 +420,7 @@ export default class RoomSubList extends React.PureComponent {
 
     setHeight = (height) => {
         if (this._subList.current) {
-            this._subList.current.style.height = toRem(height);
+            this._subList.current.style.height = toPx(height);
         }
         this._updateLazyRenderHeight(height);
     };

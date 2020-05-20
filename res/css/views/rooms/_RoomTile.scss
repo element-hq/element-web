@@ -20,7 +20,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    height: $font-34px;
+    height: 32px;
     margin: 0;
     padding: 0 8px 0 10px;
     position: relative;
@@ -81,6 +81,7 @@ limitations under the License.
 
 .mx_RoomTile_avatar_container {
     position: relative;
+    display: flex;
 }
 
 .mx_RoomTile_avatar {

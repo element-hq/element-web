@@ -81,7 +81,7 @@ export class ThemeWatcher {
     }
 
     getEffectiveTheme() {
-        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
+        // Dev note: Much of this logic is replicated in the AppearanceUserSettingsTab
 
         // XXX: checking the isLight flag here makes checking it in the ThemeController
         // itself completely redundant since we just override the result here and we're

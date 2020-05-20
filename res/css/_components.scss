@@ -115,6 +115,7 @@
 @import "./views/elements/_RichText.scss";
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_RoomAliasField.scss";
+@import "./views/elements/_Slider.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
 @import "./views/elements/_TextWithTooltip.scss";
@@ -206,6 +207,7 @@
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_RolesRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_SecurityRoomSettingsTab.scss";
+@import "./views/settings/tabs/user/_AppearanceUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_GeneralUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_HelpUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_MjolnirUserSettingsTab.scss";

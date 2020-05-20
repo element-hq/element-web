@@ -24,7 +24,7 @@ import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import toRem from "../../../utils/rem";
+import {toPx} from "../../../utils/units";
 
 export default createReactClass({
     displayName: 'BaseAvatar',
@@ -166,9 +166,9 @@ export default createReactClass({
             const textNode = (
                 <span className="mx_BaseAvatar_initial" aria-hidden="true"
                     style={{
-                        fontSize: toRem(width * 0.65),
-                        width: toRem(width),
-                        lineHeight: toRem(height),
+                        fontSize: toPx(width * 0.65),
+                        width: toPx(width),
+                        lineHeight: toPx(height),
                     }}
                 >
                     { initialLetter }
@@ -179,8 +179,8 @@ export default createReactClass({
                     alt="" title={title} onError={this.onError}
                     aria-hidden="true"
                     style={{
-                        width: toRem(width),
-                        height: toRem(height)
+                        width: toPx(width),
+                        height: toPx(height)
                     }} />
             );
             if (onClick != null) {
@@ -210,8 +210,8 @@ export default createReactClass({
                     onClick={onClick}
                     onError={this.onError}
                     style={{
-                        width: toRem(width),
-                        height: toRem(height),
+                        width: toPx(width),
+                        height: toPx(height),
                     }}
                     title={title} alt=""
                     inputRef={inputRef}
@@ -224,8 +224,8 @@ export default createReactClass({
                     src={imageUrl}
                     onError={this.onError}
                     style={{
-                        width: toRem(width),
-                        height: toRem(height),
+                        width: toPx(width),
+                        height: toPx(height),
                     }}
                     title={title} alt=""
                     ref={inputRef}

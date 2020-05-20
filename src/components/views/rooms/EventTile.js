@@ -34,7 +34,7 @@ import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
-import toRem from "../../../utils/rem";
+import {toRem} from "../../../utils/units";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
