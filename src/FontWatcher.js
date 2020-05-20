@@ -18,7 +18,6 @@ import dis from './dispatcher/dispatcher';
 import SettingsStore, {SettingLevel} from './settings/SettingsStore';
 
 export class FontWatcher {
-
     static minSize = 13;
     static maxSize = 20;
 
