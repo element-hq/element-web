@@ -25,7 +25,7 @@ import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher";
-import _range from "lodash/range";
+import { FontWatcher } from "../../../../../FontWatcher";
 
 export default class AppearanceUserSettingsTab extends React.Component {
     constructor() {
@@ -109,8 +109,8 @@ export default class AppearanceUserSettingsTab extends React.Component {
         console.log({value});
 
         const parsedSize = parseFloat(value);
-        const min = SettingsStore.getValue("fontSizeMin");
-        const max = SettingsStore.getValue("fontSizeMax");
+        const min = FontWatcher.minSize;
+        const max = FontWatcher.maxSize;
 
         if (isNaN(parsedSize)) {
             return {valid: false, feedback: _t("Size must be a number")};

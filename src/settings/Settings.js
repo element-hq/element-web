@@ -171,16 +171,6 @@ export const SETTINGS = {
         default: 16,
         controller: new FontSizeController(),
     },
-    "fontSizeMin": {
-        displayName: _td("Min font size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: 13,
-    },
-    "fontSizeMax": {
-        displayName: _td("Max font size"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: 20,
-    },
     "useCustomFontSize": {
         displayName: _td("Custom font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
