@@ -206,7 +206,7 @@ describe("<TextualBody />", () => {
                 'Hey <span>' +
                 '<a class="mx_Pill mx_UserPill" title="@user:server">' +
                 '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
-                'style="width: 1.0666666666666667rem; height: 1.0666666666666667rem;" ' +
+                'style="width: 16px; height: 16px;" ' +
                 'title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
                 '</span></span>');
         });
