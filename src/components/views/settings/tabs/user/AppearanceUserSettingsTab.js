@@ -109,8 +109,8 @@ export default class AppearanceUserSettingsTab extends React.Component {
         console.log({value});
 
         const parsedSize = parseFloat(value);
-        const min = FontWatcher.minSize;
-        const max = FontWatcher.maxSize;
+        const min = FontWatcher.MIN_SIZE;
+        const max = FontWatcher.MAX_SIZE;
 
         if (isNaN(parsedSize)) {
             return {valid: false, feedback: _t("Size must be a number")};
