@@ -2434,5 +2434,8 @@
     "QR Code": "QR Code",
     "Dismiss read marker and jump to bottom": "取消讀取標記並跳至底部",
     "Jump to oldest unread message": "跳至最舊的未讀訊息",
-    "Upload a file": "上傳檔案"
+    "Upload a file": "上傳檔案",
+    "Use IRC layout": "使用 IRC 佈局",
+    "IRC display name width": "IRC 顯示名稱寬度",
+    "Create room": "建立聊天室"
 }
