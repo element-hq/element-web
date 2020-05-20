@@ -2410,5 +2410,7 @@
     "Dismiss read marker and jump to bottom": "Forigi legomarkon kaj iri al fundo",
     "Jump to oldest unread message": "Iri al plej malnova nelegita mesaĝo",
     "Upload a file": "Alŝuti dosieron",
-    "Create room": "Krei ĉambron"
+    "Create room": "Krei ĉambron",
+    "Use IRC layout": "Uzi aranĝon de IRC",
+    "IRC display name width": "Larĝo de vidiga nomo de IRC"
 }
