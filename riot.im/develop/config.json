@@ -13,6 +13,7 @@
     "hosting_signup_link": "https://modular.im/?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
+        "feature_font_scaling": "labs",
         "feature_pinning": "labs",
         "feature_custom_status": "labs",
         "feature_custom_tags": "labs",
@@ -23,7 +24,8 @@
         "feature_bridge_state": "labs",
         "feature_presence_in_room_list": "labs",
         "feature_custom_themes": "labs",
-        "feature_new_room_list": "labs"
+        "feature_new_room_list": "labs",
+        "feature_irc_ui": "labs"
     },
     "piwik": {
         "url": "https://piwik.riot.im/",

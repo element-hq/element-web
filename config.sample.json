@@ -26,10 +26,12 @@
     "defaultCountryCode": "GB",
     "showLabsSettings": false,
     "features": {
+        "feature_font_scaling": "labs",
         "feature_pinning": "labs",
         "feature_custom_status": "labs",
         "feature_custom_tags": "labs",
-        "feature_state_counters": "labs"
+        "feature_state_counters": "labs",
+        "feature_irc_ui": "labs"
     },
     "default_federate": true,
     "default_theme": "light",

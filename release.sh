@@ -45,6 +45,8 @@ do
     fi
 done
 
+./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
+
 release="${1#v}"
 tag="v${release}"
 prerelease=0
@@ -53,16 +55,6 @@ prerelease=0
 # but semver doesn't support postreleases so anything
 # with a hyphen is a prerelease.
 echo $release | grep -q '-' && prerelease=1
-
-# bump Electron's package.json first
-echo "electron yarn version"
-cd electron_app
-yarn version --no-git-tag-version --new-version "$release"
-git commit package.json -m "$tag"
-
-cd ..
-
-./node_modules/matrix-js-sdk/release.sh -u vector-im -z "$orig_args"
 
 if [ $prerelease -eq 0 ]
 then

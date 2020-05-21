@@ -4284,11 +4284,6 @@ fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-favico.js@^0.3.10:
-  version "0.3.10"
-  resolved "https://registry.yarnpkg.com/favico.js/-/favico.js-0.3.10.tgz#80586e27a117f24a8d51c18a99bdc714d4339301"
-  integrity sha1-gFhuJ6EX8kqNUcGKmb3HFNQzkwE=
-
 faye-websocket@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/faye-websocket/-/faye-websocket-0.10.0.tgz#4e492f8d04dfb6f89003507f6edbf2d501e7c6f4"
@@ -6942,8 +6937,8 @@ mathml-tag-names@^2.1.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "6.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f120533fadb309ac5dc8b2bcb6882e784ba93f18"
+  version "6.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3c6a0e1a08a3812ba988e60eb5a2a013bb27404"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -6964,8 +6959,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "2.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/aa0c6f1f71a6122579c74f3cba3a7925f35131ac"
+  version "2.6.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/833eccf5cd901d04ddfcc06a7f95e2e2ebe6f5d5"
   dependencies:
     "@babel/runtime" "^7.8.3"
     blueimp-canvas-to-blob "^3.5.0"
@@ -7000,7 +6995,6 @@ matrix-mock-request@^1.2.3:
     project-name-generator "^2.1.7"
     prop-types "^15.5.8"
     qrcode "^1.4.4"
-    qrcode-react "^0.1.16"
     qs "^6.6.0"
     react "^16.9.0"
     react-beautiful-dnd "^4.0.1"
@@ -9195,18 +9189,6 @@ q@^1.1.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
-
-qr.js@0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/qr.js/-/qr.js-0.0.0.tgz#cace86386f59a0db8050fa90d9b6b0e88a1e364f"
-  integrity sha1-ys6GOG9ZoNuAUPqQ2baw6IoeNk8=
-
-qrcode-react@^0.1.16:
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/qrcode-react/-/qrcode-react-0.1.16.tgz#d064999d510ffc3e55a9ca3ffcf6c203c69f1517"
-  integrity sha512-FK+QCfFqCQMSxUE1byzglERJQkwKqXYvYMCS+/Ad2zACJOfoHkHHtRqsQQPji7lfb1y1qCXLvL+3eP1hAfg8Ng==
-  dependencies:
-    qr.js "0.0.0"
 
 qrcode@^1.4.4:
   version "1.4.4"

@@ -24,7 +24,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import {getVectorConfig} from "../getconfig";
 
-import Favico from 'favico.js';
+import Favico from '../../favicon';
 
 export const updateCheckStatusEnum = {
     CHECKING: 'CHECKING',
@@ -85,29 +85,7 @@ export default class VectorBasePlatform extends BasePlatform {
                 bgColor = "#f00";
             }
 
-            const doUpdate = () => {
-                this.favicon.badge(notif, {
-                    bgColor: bgColor,
-                });
-            };
-
-            doUpdate();
-
-            // HACK: Workaround for Chrome 78+ and dependency incompatibility.
-            // The library we use doesn't appear to work in Chrome 78, likely due to their
-            // changes surrounding tab behaviour. Tabs went through a bit of a redesign and
-            // restructuring in Chrome 78, so it's not terribly surprising that the library
-            // doesn't work correctly. The library we use hasn't been updated in years and
-            // does not look easy to fix/fork ourselves - we might as well write our own that
-            // doesn't include animation/webcam/etc support. However, that's a bit difficult
-            // so for now we'll just trigger the update twice.
-            //
-            // Note that trying to reproduce the problem in isolation doesn't seem to work:
-            // see https://gist.github.com/turt2live/5ab87919918adbfd7cfb8f1ad10f2409 for
-            // an example (you'll need your own web server to host that).
-            if (window.chrome) {
-                doUpdate();
-            }
+            this.favicon.badge(notif, { bgColor });
         } catch (e) {
             console.warn(`Failed to set badge count: ${e.message}`);
         }

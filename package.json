@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -58,7 +58,6 @@
   },
   "dependencies": {
     "browser-request": "^0.3.3",
-    "favico.js": "^0.3.10",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
