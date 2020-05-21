@@ -22,11 +22,11 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import BaseEventIndexManager, {
     MatrixEvent,
     MatrixProfile,
-    SearchConfig,
     SearchResult,
-    HistoricEvent,
     CrawlerCheckpoint,
     EventAndProfile,
+    SearchArgs,
+    IndexStats
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
@@ -154,12 +154,12 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('commitLiveEvents');
     }
 
-    async searchEventIndex(searchConfig: SearchConfig): Promise<SearchResult> {
+    async searchEventIndex(searchConfig: SearchArgs): Promise<SearchResult> {
         return this._ipcCall('searchEventIndex', searchConfig);
     }
 
     async addHistoricEvents(
-        events: [HistoricEvent],
+        events: [EventAndProfile],
         checkpoint: CrawlerCheckpoint | null,
         oldCheckpoint: CrawlerCheckpoint | null,
     ): Promise<boolean> {
@@ -186,7 +186,7 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('closeEventIndex');
     }
 
-    async getStats(): Promise<void> {
+    async getStats(): Promise<IndexStats> {
         return this._ipcCall('getStats');
     }
 
