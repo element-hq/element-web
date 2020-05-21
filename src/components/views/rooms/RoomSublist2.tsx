@@ -35,8 +35,7 @@ import RoomTile2 from "./RoomTile2";
  * This is a work in progress implementation and isn't complete or *
  * even useful as a component. Please avoid using it until this    *
  * warning disappears.                                             *
- *******************************************************************
- */
+ *******************************************************************/
 
 interface IProps {
     forRooms: boolean;

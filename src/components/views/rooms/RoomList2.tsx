@@ -35,8 +35,7 @@ import { ActionPayload } from "../../../dispatcher/payloads";
  * This is a work in progress implementation and isn't complete or *
  * even useful as a component. Please avoid using it until this    *
  * warning disappears.                                             *
- *******************************************************************
- */
+ *******************************************************************/
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;

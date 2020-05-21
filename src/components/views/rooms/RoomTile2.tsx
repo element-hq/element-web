@@ -37,8 +37,7 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
  * This is a work in progress implementation and isn't complete or *
  * even useful as a component. Please avoid using it until this    *
  * warning disappears.                                             *
- *******************************************************************
- */
+ *******************************************************************/
 
 interface IProps {
     room: Room;
