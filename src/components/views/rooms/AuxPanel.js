@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
@@ -139,6 +139,15 @@ export default createReactClass({
         }
 
         return counters;
+    },
+
+    _onScroll: function(rect) {
+        if (this.props.onResize) {
+            this.props.onResize();
+        }
+
+        /* Force refresh of PersistedElements which may be partially hidden */
+        window.dispatchEvent(new Event('resize'));
     },
 
     render: function() {
@@ -265,7 +274,7 @@ export default createReactClass({
         }
 
         return (
-            <AutoHideScrollbar className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style} onScroll={this._onScroll}>
                 { stateViews }
                 { appsDrawer }
                 { fileDropTarget }

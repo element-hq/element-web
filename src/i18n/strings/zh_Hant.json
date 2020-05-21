@@ -2430,5 +2430,9 @@
     "Confirm to continue": "確認以繼續",
     "Click the button below to confirm your identity.": "點擊下方按鈕以確認您的身份。",
     "Confirm encryption setup": "確認加密設定",
-    "Click the button below to confirm setting up encryption.": "點擊下方按鈕以確認設定加密。"
+    "Click the button below to confirm setting up encryption.": "點擊下方按鈕以確認設定加密。",
+    "QR Code": "QR Code",
+    "Dismiss read marker and jump to bottom": "取消讀取標記並跳至底部",
+    "Jump to oldest unread message": "跳至最舊的未讀訊息",
+    "Upload a file": "上傳檔案"
 }

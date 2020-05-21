@@ -355,7 +355,8 @@ export default createReactClass({
             ev.preventDefault();
             ev.stopPropagation();
             const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
-            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
+            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind,
+                this.props.fragmentAfterLogin);
         } else {
             // Don't intercept - just go through to the register page
             this.onRegisterClick(ev);
@@ -628,7 +629,9 @@ export default createReactClass({
                 <SSOButton
                     className="mx_Login_sso_link mx_Login_submit"
                     matrixClient={this._loginLogic.createTemporaryClient()}
-                    loginType={loginType} />
+                    loginType={loginType}
+                    fragmentAfterLogin={this.props.fragmentAfterLogin}
+                />
             </div>
         );
     },

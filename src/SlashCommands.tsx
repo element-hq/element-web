@@ -21,7 +21,7 @@ limitations under the License.
 import * as React from 'react';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
@@ -41,6 +41,8 @@ import { parseFragment as parseHtml } from "parse5";
 import sendBugReport from "./rageshake/submit-rageshake";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
+import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { Action } from "./dispatcher/actions";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -943,8 +945,10 @@ export const Commands = [
             }
 
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
-            dis.dispatch({
-                action: 'view_user',
+            dis.dispatch<ViewUserPayload>({
+                action: Action.ViewUser,
+                // XXX: We should be using a real member object and not assuming what the
+                // receiver wants.
                 member: member || {userId},
             });
             return success();

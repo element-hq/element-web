@@ -24,7 +24,7 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import {WatchManager} from "./WatchManager";
@@ -368,6 +368,21 @@ export default class SettingsStore {
         }
 
         return SettingsStore._getFinalValue(setting, level, roomId, null, null);
+    }
+
+    /**
+     * Gets the default value of a setting.
+     * @param {string} settingName The name of the setting to read the value of.
+     * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @return {*} The default value
+     */
+    static getDefaultValue(settingName) {
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        return SETTINGS[settingName].default;
     }
 
     static _getFinalValue(setting, level, roomId, calculatedValue, calculatedAtLevel) {

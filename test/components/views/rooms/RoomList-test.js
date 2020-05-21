@@ -9,7 +9,7 @@ import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import dis from '../../../../src/dispatcher';
+import dis from '../../../../src/dispatcher/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap.js';
 import GroupStore from '../../../../src/stores/GroupStore.js';
 

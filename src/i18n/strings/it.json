@@ -2426,5 +2426,9 @@
     "Confirm to continue": "Conferma per continuare",
     "Click the button below to confirm your identity.": "Clicca il pulsante sotto per confermare la tua identità.",
     "Confirm encryption setup": "Conferma impostazione cifratura",
-    "Click the button below to confirm setting up encryption.": "Clicca il pulsante sotto per confermare l'impostazione della cifratura."
+    "Click the button below to confirm setting up encryption.": "Clicca il pulsante sotto per confermare l'impostazione della cifratura.",
+    "QR Code": "Codice QR",
+    "Dismiss read marker and jump to bottom": "Scarta il segno di lettura e salta alla fine",
+    "Jump to oldest unread message": "Salta al messaggio non letto più vecchio",
+    "Upload a file": "Invia un file"
 }

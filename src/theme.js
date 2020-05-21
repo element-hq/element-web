@@ -19,7 +19,7 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
-import dis from "./dispatcher";
+import dis from "./dispatcher/dispatcher";
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 import ThemeController from "./settings/controllers/ThemeController";
 
@@ -81,7 +81,7 @@ export class ThemeWatcher {
     }
 
     getEffectiveTheme() {
-        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
+        // Dev note: Much of this logic is replicated in the AppearanceUserSettingsTab
 
         // XXX: checking the isLight flag here makes checking it in the ThemeController
         // itself completely redundant since we just override the result here and we're

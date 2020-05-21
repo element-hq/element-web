@@ -45,7 +45,8 @@ export default class Welcome extends React.PureComponent {
             idBaseUrl: isUrl,
         });
         const plaf = PlatformPeg.get();
-        const callbackUrl = plaf.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl());
+        const callbackUrl = plaf.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl(),
+            this.props.fragmentAfterLogin);
 
         return (
             <AuthPage>

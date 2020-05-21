@@ -96,6 +96,10 @@ $AppsDrawerBodyHeight: 273px;
     height: $AppsDrawerBodyHeight;
 }
 
+.mx_AppTile_persistedWrapper > div {
+    height: 100%;
+}
+
 .mx_AppTile_mini .mx_AppTile_persistedWrapper {
     height: 114px;
 }
