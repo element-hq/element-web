@@ -50,7 +50,11 @@ export default class ToastContainer extends React.Component {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
             });
-            const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
+
+            let countIndicator;
+            if (isStacked) {
+                countIndicator = `1/${totalCount}`;
+            }
 
             const toastProps = Object.assign({}, props, {
                 key,

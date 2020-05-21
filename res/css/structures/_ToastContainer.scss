@@ -99,9 +99,10 @@ limitations under the License.
             }
 
             span {
+                padding-left: 8px;
                 float: right;
                 font-size: $font-12px;
-                line-height: $font-21px;
+                line-height: $font-22px;
                 color: $muted-fg-color;
             }
         }
