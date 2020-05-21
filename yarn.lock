@@ -1847,6 +1847,11 @@ autoprefixer@^9.0.0:
     postcss "^7.0.27"
     postcss-value-parser "^4.0.3"
 
+await-lock@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/await-lock/-/await-lock-2.0.1.tgz#b3f65fdf66e08f7538260f79b46c15bcfc18cadd"
+  integrity sha512-ntLi9fzlMT/vWjC1wwVI11/cSRJ3nTS35qVekNc9WnaoMOP2eWH0RvIqwLQkDjX4a4YynsKEv+Ere2VONp9wxg==
+
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"

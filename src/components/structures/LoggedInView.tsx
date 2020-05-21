@@ -31,7 +31,6 @@ import dis from '../../dispatcher/dispatcher';
 import sessionStore from '../../stores/SessionStore';
 import {MatrixClientPeg, MatrixClientCreds} from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStore from "../../stores/RoomListStore";
 
 import TagOrderActions from '../../actions/TagOrderActions';
 import RoomListActions from '../../actions/RoomListActions';
@@ -42,6 +41,8 @@ import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
+import { RoomListStoreTempProxy } from "../../stores/room-list/RoomListStoreTempProxy";
+import { DefaultTagID } from "../../stores/room-list/models";
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -297,18 +298,18 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     };
 
     onRoomStateEvents = (ev, state) => {
-        const roomLists = RoomListStore.getRoomLists();
-        if (roomLists['m.server_notice'] && roomLists['m.server_notice'].some(r => r.roomId === ev.getRoomId())) {
+        const roomLists = RoomListStoreTempProxy.getRoomLists();
+        if (roomLists[DefaultTagID.ServerNotice] && roomLists[DefaultTagID.ServerNotice].some(r => r.roomId === ev.getRoomId())) {
             this._updateServerNoticeEvents();
         }
     };
 
     _updateServerNoticeEvents = async () => {
-        const roomLists = RoomListStore.getRoomLists();
-        if (!roomLists['m.server_notice']) return [];
+        const roomLists = RoomListStoreTempProxy.getRoomLists();
+        if (!roomLists[DefaultTagID.ServerNotice]) return [];
 
         const pinnedEvents = [];
-        for (const room of roomLists['m.server_notice']) {
+        for (const room of roomLists[DefaultTagID.ServerNotice]) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
