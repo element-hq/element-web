@@ -2437,5 +2437,12 @@
     "Upload a file": "上傳檔案",
     "Use IRC layout": "使用 IRC 佈局",
     "IRC display name width": "IRC 顯示名稱寬度",
-    "Create room": "建立聊天室"
+    "Create room": "建立聊天室",
+    "Font scaling": "字型縮放",
+    "Font size": "字型大小",
+    "Custom font size": "自訂字型大小",
+    "Size must be a number": "大小必須為數字",
+    "Custom font size can only be between %(min)s pt and %(max)s pt": "自訂字型大小僅能為 %(min)s 點至 %(max)s 點間",
+    "Use between %(min)s pt and %(max)s pt": "使用 %(min)s 點至 %(max)s 點間",
+    "Appearance": "外觀"
 }
