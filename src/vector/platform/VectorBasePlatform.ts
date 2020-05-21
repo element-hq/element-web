@@ -35,7 +35,7 @@ export const updateCheckStatusEnum = {
 /**
  * Vector-specific extensions to the BasePlatform template
  */
-export default class VectorBasePlatform extends BasePlatform {
+export default abstract class VectorBasePlatform extends BasePlatform {
     protected showUpdateCheck: boolean = false;
     protected _favicon: Favicon;
 
