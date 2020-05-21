@@ -270,6 +270,15 @@ async function loadApp() {
         }
     }
 
+    if (window.localStorage && window.localStorage.getItem("mx_user_id")) {
+        let locationHash = window.location.hash;
+        if (locationHash.startsWith("#/welcome") ||
+            locationHash.startsWith("#/login") ||
+            locationHash.startsWith("#/register")) {
+            window.location.replace(window.location.origin);
+        }
+    }
+
     // as quickly as we possibly can, set a default theme...
     let a;
     const theme = SettingsStore.getValue("theme");
