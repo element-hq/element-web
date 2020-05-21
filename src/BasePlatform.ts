@@ -29,8 +29,8 @@ import {ActionPayload} from "./dispatcher/payloads";
  * Instances of this class are provided by the application.
  */
 export default abstract class BasePlatform {
-    protected notificationCount: number = 0;
-    protected errorDidOccur: boolean = false;
+    protected notificationCount = 0;
+    protected errorDidOccur = false;
 
     constructor() {
         dis.register(this.onAction);
