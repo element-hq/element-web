@@ -201,7 +201,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             // `accessSecretStorage` may prompt for storage access as needed.
             const recoverInfo = await accessSecretStorage(async () => {
                 return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
+                    this.state.backupInfo, undefined, undefined,
                     { progressCallback: this._progressCallback },
                 );
             });
