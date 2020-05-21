@@ -106,7 +106,7 @@ put the sticky room in a position where it's had to decrease N will not increase
 
 ## Responsibilities of the store
 
-The store is responsible for the ordering, upkeep, and tracking of all rooms. The component simply gets 
+The store is responsible for the ordering, upkeep, and tracking of all rooms. The room list component simply gets 
 an object containing the tags it needs to worry about and the rooms within. The room list component will 
 decide which tags need rendering (as it commonly filters out empty tags in most cases), and will deal with 
 all kinds of filtering.
