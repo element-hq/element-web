@@ -112,6 +112,12 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
 
+## New room list (`feature_new_room_list`) (in development)
+
+A complete rewrite of the room list is underway to increase performance, stability,
+and general usability. This is expected to take a while to complete and as such might
+be missing critical features - please use at your own risk, though do report bugs!
+
 ## IRC message layout (`feature_irc_ui`)
 
 Adds an option to change the message layout to an IRC style ` timestamp | avatar
