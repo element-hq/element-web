@@ -418,7 +418,7 @@
     "A new password must be entered.": "Privalo būti įvestas naujas slaptažodis.",
     "New passwords must match each other.": "Nauji slaptažodžiai privalo sutapti.",
     "I have verified my email address": "Aš patvirtinau savo el. pašto adresą",
-    "Return to login screen": "Grįžti į prisijungimo ekraną",
+    "Return to login screen": "Grįžti į prisijungimą",
     "Send Reset Email": "Siųsti atstatymo el. laišką",
     "Incorrect username and/or password.": "Neteisingas vartotojo vardas ir/arba slaptažodis.",
     "Please note you are logging into the %(hs)s server, not matrix.org.": "Turėkite omenyje, kad jūs prisijungiate prie %(hs)s serverio, o ne matrix.org.",
@@ -1153,5 +1153,10 @@
     "<b>Copy it</b> to your personal cloud storage": "<b>Nukopijuoti jį</b> į savo asmeninę debesų saugyklą",
     "You can now verify your other devices, and other users to keep your chats safe.": "Jūs dabar galite patvirtinti kitus savo įrenginius ir kitus vartotojus, kad jūsų pokalbiai būtų saugūs.",
     "Confirm recovery passphrase": "Patvirtinkite atgavimo slaptafrazę",
-    "You're done!": "Atlikta!"
+    "You're done!": "Atlikta!",
+    "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Slaptažodžio keitimas šiuo metu anuliuos visapusio šifravimo ranktus visose sesijose, tad šifruotų pokalbių istorija taps neperskaitoma, nebent jūs eksportuosite savo kambarių raktus ir po to importuosite juos atgal. Ateityje ši funkcija bus pataisyta.",
+    "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Jūsų slaptažodis buvo sėkmingai pakeistas. Jūs nematysite pranešimų kitose sesijose kol iš naujo prie jų neprisijungsite",
+    "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "El. laiškas buvo išsiųstas į %(emailAddress)s. Kai paspausite jame esančią nuorodą, tada spauskite žemiau.",
+    "Your password has been reset.": "Jūsų slaptažodis buvo iš naujo nustatytas.",
+    "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Jūs buvote atjungtas iš visų sesijų ir nebegausite pranešimų. Tam, kad vėl aktyvuotumėte pranešimus, prisijunkite iš naujo kiekviename įrenginyje."
 }
