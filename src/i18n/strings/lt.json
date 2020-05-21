@@ -1158,5 +1158,8 @@
     "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Jūsų slaptažodis buvo sėkmingai pakeistas. Jūs nematysite pranešimų kitose sesijose kol iš naujo prie jų neprisijungsite",
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "El. laiškas buvo išsiųstas į %(emailAddress)s. Kai paspausite jame esančią nuorodą, tada spauskite žemiau.",
     "Your password has been reset.": "Jūsų slaptažodis buvo iš naujo nustatytas.",
-    "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Jūs buvote atjungtas iš visų sesijų ir nebegausite pranešimų. Tam, kad vėl aktyvuotumėte pranešimus, prisijunkite iš naujo kiekviename įrenginyje."
+    "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Jūs buvote atjungtas iš visų sesijų ir nebegausite pranešimų. Tam, kad vėl aktyvuotumėte pranešimus, prisijunkite iš naujo kiekviename įrenginyje.",
+    "Show more": "Rodyti daugiau",
+    "<a>Log in</a> to your new account.": "<a>Prisijunkite</a> į savo naują paskyrą.",
+    "Registration Successful": "Registracija sėkminga"
 }
