@@ -52,7 +52,7 @@ export default class ToastContainer extends React.Component {
 
             let countIndicator;
             if (isStacked) {
-                countIndicator = `1/${totalCount}`;
+                countIndicator = `(1/${totalCount})`;
             }
 
             const toastProps = Object.assign({}, props, {
