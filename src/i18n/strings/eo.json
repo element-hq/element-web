@@ -2419,5 +2419,6 @@
     "Size must be a number": "Grando devas esti nombro",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Propra grando de tiparo povas interi nur %(min)s punktojn kaj %(max)s punktojn",
     "Use between %(min)s pt and %(max)s pt": "Uzi inter %(min)s punktoj kaj %(max)s punktoj",
-    "Appearance": "Aspekto"
+    "Appearance": "Aspekto",
+    "Use the improved room list (in development - refresh to apply changes)": "Uzi la plibonigitan liston de ĉambroj (ankoraŭ evoluigate – aktualigu la paĝon por efektivigi ŝanĝojn)"
 }
