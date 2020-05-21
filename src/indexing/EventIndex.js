@@ -182,6 +182,14 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
+        if (ev.getType() === "m.room.encryption") {
+            console.log("EventIndex: Adding checkpoint for newly encrypted room",
+                        room.roomId);
+
+            this.addRoomCheckpoint(room.roomId, true);
+            return;
+        }
+
         // If the event is not yet decrypted mark it for the
         // Event.decrypted callback.
         if (ev.isBeingDecrypted()) {
@@ -234,26 +242,12 @@ export default class EventIndex extends EventEmitter {
      */
     onTimelineReset = async (room, timelineSet, resetAllTimelines) => {
         if (room === null) return;
-
-        const indexManager = PlatformPeg.get().getEventIndexingManager();
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
-
-        const timeline = room.getLiveTimeline();
-        const token = timeline.getPaginationToken("b");
-
-        const backwardsCheckpoint = {
-            roomId: room.roomId,
-            token: token,
-            fullCrawl: false,
-            direction: "b",
-        };
 
         console.log("EventIndex: Added checkpoint because of a limited timeline",
             backwardsCheckpoint);
 
-        await indexManager.addCrawlerCheckpoint(backwardsCheckpoint);
-
-        this.crawlerCheckpoints.push(backwardsCheckpoint);
+        this.addRoomCheckpoint(room.roomId, false);
     }
 
     /**
@@ -317,6 +311,51 @@ export default class EventIndex extends EventEmitter {
      */
     emitNewCheckpoint() {
         this.emit("changedCheckpoint", this.currentRoom());
+    }
+
+    async addEventsFromLiveTimeline(timeline) {
+        let events = timeline.getEvents();
+
+        for (let i = 0; i < events.length; i++) {
+            const ev = events[i];
+            await this.addLiveEventToIndex(ev);
+        }
+    }
+
+    async addRoomCheckpoint(roomId, fullCrawl = false) {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        const client = MatrixClientPeg.get();
+        const room = client.getRoom(roomId);
+
+        if (!room) return;
+
+        const timeline = room.getLiveTimeline();
+        let token = timeline.getPaginationToken("b");
+
+        if(!token) {
+            // The room doesn't contain any tokens, meaning the live timeline
+            // contains all the events, add those to the index.
+            await this.addEventsFromLiveTimeline(timeline);
+            return;
+        }
+
+        const checkpoint = {
+            roomId: room.roomId,
+            token: token,
+            fullCrawl: fullCrawl,
+            direction: "b",
+        };
+
+        console.log("EventIndex: Adding checkpoint", checkpoint);
+
+        try{
+            await indexManager.addCrawlerCheckpoint(checkpoint);
+        } catch (e) {
+            console.log("EventIndex: Error adding new checkpoint for room",
+                        room.roomId, checkpoint, e);
+        }
+
+        this.crawlerCheckpoints.push(checkpoint);
     }
 
     /**
