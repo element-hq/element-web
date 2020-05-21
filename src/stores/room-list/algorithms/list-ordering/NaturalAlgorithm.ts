@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Algorithm } from "./Algorithm";
 import { ITagMap } from "../models";
-import { sortRoomsWithAlgorithm } from "../tag_sorting";
+import { sortRoomsWithAlgorithm } from "../tag-sorting";
 
 /**
  * Uses the natural tag sorting algorithm order to determine tag ordering. No

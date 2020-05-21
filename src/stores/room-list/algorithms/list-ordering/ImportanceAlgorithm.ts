@@ -19,7 +19,7 @@ import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { ITagMap, SortAlgorithm } from "../models";
-import { sortRoomsWithAlgorithm } from "../tag_sorting";
+import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import * as Unread from '../../../../Unread';
 
 /**

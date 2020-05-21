@@ -18,12 +18,12 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
-import { Algorithm } from "./algorithms/list_ordering/Algorithm";
+import { Algorithm } from "./algorithms/list-ordering/Algorithm";
 import TagOrderStore from "../TagOrderStore";
 import { AsyncStore } from "../AsyncStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { getListAlgorithmInstance } from "./algorithms/list_ordering";
+import { getListAlgorithmInstance } from "./algorithms/list-ordering";
 import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 
