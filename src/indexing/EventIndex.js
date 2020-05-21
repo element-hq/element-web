@@ -302,7 +302,7 @@ export default class EventIndex extends EventEmitter {
             avatar_url: ev.sender.getMxcAvatarUrl(),
         };
 
-        indexManager.addEventToIndex(e, profile);
+        await indexManager.addEventToIndex(e, profile);
     }
 
     /**
