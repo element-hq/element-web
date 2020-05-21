@@ -244,8 +244,8 @@ export default class EventIndex extends EventEmitter {
         if (room === null) return;
         if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
 
-        console.log("EventIndex: Added checkpoint because of a limited timeline",
-            backwardsCheckpoint);
+        console.log("EventIndex: Adding a checkpoint because of a limited timeline",
+            room.roomId);
 
         this.addRoomCheckpoint(room.roomId, false);
     }
@@ -314,7 +314,7 @@ export default class EventIndex extends EventEmitter {
     }
 
     async addEventsFromLiveTimeline(timeline) {
-        let events = timeline.getEvents();
+        const events = timeline.getEvents();
 
         for (let i = 0; i < events.length; i++) {
             const ev = events[i];
@@ -330,9 +330,9 @@ export default class EventIndex extends EventEmitter {
         if (!room) return;
 
         const timeline = room.getLiveTimeline();
-        let token = timeline.getPaginationToken("b");
+        const token = timeline.getPaginationToken("b");
 
-        if(!token) {
+        if (!token) {
             // The room doesn't contain any tokens, meaning the live timeline
             // contains all the events, add those to the index.
             await this.addEventsFromLiveTimeline(timeline);
@@ -348,7 +348,7 @@ export default class EventIndex extends EventEmitter {
 
         console.log("EventIndex: Adding checkpoint", checkpoint);
 
-        try{
+        try {
             await indexManager.addCrawlerCheckpoint(checkpoint);
         } catch (e) {
             console.log("EventIndex: Error adding new checkpoint for room",
