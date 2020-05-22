@@ -1161,5 +1161,9 @@
     "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Jūs buvote atjungtas iš visų sesijų ir nebegausite pranešimų. Tam, kad vėl aktyvuotumėte pranešimus, prisijunkite iš naujo kiekviename įrenginyje.",
     "Show more": "Rodyti daugiau",
     "<a>Log in</a> to your new account.": "<a>Prisijunkite</a> į savo naują paskyrą.",
-    "Registration Successful": "Registracija sėkminga"
+    "Registration Successful": "Registracija sėkminga",
+    "Welcome to %(appName)s": "Sveiki prisijungę į %(appName)s",
+    "Liberate your communication": "Išlaisvinkite savo bendravimą",
+    "Explore Public Rooms": "Žvalgyti viešus kambarius",
+    "Create a Group Chat": "Sukurti grupės pokalbį"
 }
