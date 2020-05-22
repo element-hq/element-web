@@ -173,10 +173,6 @@ interface IState {
     leftDisabled: boolean;
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
-    version?: string;
-    newVersion?: string;
-    hasNewVersion: boolean;
-    newVersionReleaseNotes?: string;
     checkingForUpdate?: string; // updateCheckStatusEnum
     // Parameters used in the registration dance with the IS
     register_client_secret?: string;
@@ -230,7 +226,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             leftDisabled: false,
             middleDisabled: false,
 
-            hasNewVersion: false,
             newVersionReleaseNotes: null,
             checkingForUpdate: null,
 
@@ -725,12 +720,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'client_started':
                 this.onClientStarted();
-                break;
-            case 'new_version':
-                this.onVersion(
-                    payload.currentVersion, payload.newVersion,
-                    payload.releaseNotes,
-                );
                 break;
             case 'check_updates':
                 this.setState({ checkingForUpdate: payload.value });
@@ -1819,16 +1808,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
         this.showScreen("settings");
     };
-
-    onVersion(current: string, latest: string, releaseNotes?: string) {
-        this.setState({
-            version: current,
-            newVersion: latest,
-            hasNewVersion: current !== latest,
-            newVersionReleaseNotes: releaseNotes,
-            checkingForUpdate: null,
-        });
-    }
 
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();

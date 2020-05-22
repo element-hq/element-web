@@ -74,7 +74,6 @@ interface IProps {
     initialEventPixelOffset: number;
     leftDisabled: boolean;
     rightDisabled: boolean;
-    hasNewVersion: boolean;
     page_type: string;
     autoJoin: boolean;
     thirdPartyInvite?: object;
@@ -96,6 +95,7 @@ interface IProps {
     newVersion?: string;
     newVersionReleaseNotes?: string;
 }
+
 interface IState {
     mouseDown?: {
         x: number;
@@ -183,7 +183,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps, prevState) {
         // attempt to guess when a banner was opened or closed
         if (
-            (prevProps.hasNewVersion !== this.props.hasNewVersion)
+            (prevProps.checkingForUpdate !== this.props.checkingForUpdate)
         ) {
             this.props.resizeNotifier.notifyBannersChanged();
         }
@@ -620,7 +620,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
-        const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
 
         let pageElement;
@@ -666,11 +665,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         }
 
         let topBar;
-        if (this.props.hasNewVersion) {
-            topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
-                                    releaseNotes={this.props.newVersionReleaseNotes}
-            />;
-        } else if (this.props.checkingForUpdate) {
+        if (this.props.checkingForUpdate) {
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
         }
 
