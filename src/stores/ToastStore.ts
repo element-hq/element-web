@@ -34,7 +34,7 @@ export default class ToastStore extends EventEmitter {
     private toasts: IToast<any>[] = [];
     // The count of toasts which have been seen & dealt with in this stack
     // where the count resets when the stack of toasts clears.
-    private countSeen: number = 0;
+    private countSeen = 0;
 
     static sharedInstance() {
         if (!window.mx_ToastStore) window.mx_ToastStore = new ToastStore();

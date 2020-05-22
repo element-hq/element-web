@@ -2083,7 +2083,6 @@
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Tried to load a specific point in this room's timeline, but was unable to find it.",
     "Failed to load timeline position": "Failed to load timeline position",
-    " (1/%(totalCount)s)": " (1/%(totalCount)s)",
     "Guest": "Guest",
     "Your profile": "Your profile",
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
