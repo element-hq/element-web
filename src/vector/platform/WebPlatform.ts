@@ -1,5 +1,3 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
@@ -22,6 +20,7 @@ import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
+import {Room} from "matrix-js-sdk/src/models/room";
 
 import url from 'url';
 import UAParser from 'ua-parser-js';
@@ -29,13 +28,7 @@ import UAParser from 'ua-parser-js';
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
-    constructor() {
-        super();
-        this.runningVersion = null;
-
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
-    }
+    private runningVersion: string = null;
 
     getHumanReadableName(): string {
         return 'Web Platform'; // no translation required: only used for analytics
@@ -46,7 +39,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * notifications, otherwise false.
      */
     supportsNotifications(): boolean {
-        return Boolean(global.Notification);
+        return Boolean(window.Notification);
     }
 
     /**
@@ -54,7 +47,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * to display notifications. Otherwise false.
      */
     maySendNotifications(): boolean {
-        return global.Notification.permission === 'granted';
+        return window.Notification.permission === 'granted';
     }
 
     /**
@@ -69,27 +62,27 @@ export default class WebPlatform extends VectorBasePlatform {
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
         return new Promise(function(resolve, reject) {
-            global.Notification.requestPermission((result) => {
+            window.Notification.requestPermission((result) => {
                 resolve(result);
             });
         });
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Room) {
         const notifBody = {
             body: msg,
             tag: "vector",
             silent: true, // we play our own sounds
         };
         if (avatarUrl) notifBody['icon'] = avatarUrl;
-        const notification = new global.Notification(title, notifBody);
+        const notification = new window.Notification(title, notifBody);
 
         notification.onclick = function() {
             dis.dispatch({
                 action: 'view_room',
                 room_id: room.roomId,
             });
-            global.focus();
+            window.focus();
             notification.close();
         };
     }
@@ -131,14 +124,14 @@ export default class WebPlatform extends VectorBasePlatform {
 
     startUpdater() {
         this.pollForUpdate();
-        setInterval(this.pollForUpdate.bind(this), POKE_RATE_MS);
+        setInterval(this.pollForUpdate, POKE_RATE_MS);
     }
 
-    async canSelfUpdate(): boolean {
+    async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate() {
+    pollForUpdate = () => {
         return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
@@ -159,9 +152,9 @@ export default class WebPlatform extends VectorBasePlatform {
                 detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
             };
         });
-    }
+    };
 
-    startUpdateCheck() {
+    startUpdateCheck = () => {
         if (this.showUpdateCheck) return;
         super.startUpdateCheck();
         this.pollForUpdate().then((updateState) => {
@@ -172,7 +165,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 value: updateState,
             });
         });
-    }
+    };
 
     installUpdate() {
         window.location.reload(true);
@@ -204,9 +197,9 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    screenCaptureErrorString(): ?string {
+    screenCaptureErrorString(): string | null {
         // it won't work at all if you're not on HTTPS so whine whine whine
-        if (!global.window || global.window.location.protocol !== "https:") {
+        if (window.location.protocol !== "https:") {
             return _t("You need to be using HTTPS to place a screen-sharing call.");
         }
         return null;
