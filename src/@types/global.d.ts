@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as ModernizrStatic from "modernizr";
 import ToastStore from "../stores/ToastStore";
+import DeviceListener from "../DeviceListener";
 
 declare global {
     interface Window {
@@ -25,6 +26,7 @@ declare global {
         };
 
         mx_ToastStore: ToastStore;
+        mx_DeviceListener: DeviceListener;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
