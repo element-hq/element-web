@@ -1239,6 +1239,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-13.11.0.tgz#390ea202539c61c8fa6ba4428b57e05bc36dc47b"
   integrity sha512-uM4mnmsIIPK/yeO+42F2RQhGUIs39K2RFmugcJANppXe6J1nvH87PvzPZYpza7Xhhs8Yn9yIAVdLZ84z61+0xQ==
 
+"@types/node@^12.12.41":
+  version "12.12.42"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.42.tgz#d0d1149336bd07540dd1ea576692829d575dec34"
+  integrity sha512-R/9QdYFLL9dE9l5cWWzWIZByVGFd7lk7JVOJ7KD+E1SJ4gni7XJRLz9QTjyYQiHIqEAgku9VgxdLjMlhhUaAFg==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -6938,7 +6943,7 @@ mathml-tag-names@^2.1.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "6.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/e3c6a0e1a08a3812ba988e60eb5a2a013bb27404"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a4a7097c103da42075f2c70e070fd01fa6fb0d48"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
