@@ -1041,5 +1041,6 @@
     "%(senderName)s made no change.": "%(senderName)s non fixo cambios.",
     "%(senderDisplayName)s changed the room name from %(oldRoomName)s to %(newRoomName)s.": "%(senderDisplayName)s cambiou o nome da sala de %(oldRoomName)s a %(newRoomName)s.",
     "%(senderDisplayName)s upgraded this room.": "%(senderDisplayName)s actualizou esta sala.",
-    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s converteu en pública a sala para calquera que teña a ligazón."
+    "%(senderDisplayName)s made the room public to whoever knows the link.": "%(senderDisplayName)s converteu en pública a sala para calquera que teña a ligazón.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s fixo que a sala sexa só por convite."
 }
