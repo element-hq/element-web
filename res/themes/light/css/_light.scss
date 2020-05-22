@@ -262,6 +262,10 @@ $togglesw-off-color: #c1c9d6;
 $togglesw-on-color: $accent-color;
 $togglesw-ball-color: #fff;
 
+// Slider
+$slider-selection-color: $accent-color;
+$slider-background-color: #c1c9d6;
+
 $progressbar-color: #000;
 
 $room-warning-bg-color: $yellow-background;
@@ -301,6 +305,9 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #e8eef5;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+// FontSlider colors
+$font-slider-bg-color: rgba($input-darker-bg-color, 0.2);
 
 // ***** Mixins! *****
 

@@ -23,7 +23,7 @@ import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
 import * as sdk from "../../../index";
-import toRem from "../../../utils/rem";
+import {toRem} from "../../../utils/units";
 
 let bounce = false;
 try {

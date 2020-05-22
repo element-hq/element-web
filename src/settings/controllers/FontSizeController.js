@@ -14,7 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// converts a pixel value to rem.
-export default function(pixelVal) {
-  return pixelVal / 15 + "rem";
+import SettingController from "./SettingController";
+import dis from "../../dispatcher/dispatcher";
+
+export default class FontSizeController extends SettingController {
+    constructor() {
+        super();
+    }
+
+    onChange(level, roomId, newValue) {
+        // Dispatch font size change so that everything open responds to the change.
+        dis.dispatch({
+            action: "update-font-size",
+            size: newValue,
+        });
+    }
 }

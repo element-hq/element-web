@@ -60,6 +60,7 @@ import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDisco
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
 import { ThemeWatcher } from "../../theme";
+import { FontWatcher } from '../../FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer, IDeferred } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
@@ -216,6 +217,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly loggedInView: React.RefObject<LoggedInViewType>;
     private readonly dispatcherRef: any;
     private readonly themeWatcher: ThemeWatcher;
+    private readonly fontWatcher: FontWatcher;
 
     constructor(props, context) {
         super(props, context);
@@ -283,8 +285,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.accountPasswordTimer = null;
 
         this.dispatcherRef = dis.register(this.onAction);
+
         this.themeWatcher = new ThemeWatcher();
+        this.fontWatcher = new FontWatcher();
         this.themeWatcher.start();
+        this.fontWatcher.start();
 
         this.focusComposer = false;
 
@@ -367,6 +372,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         this.themeWatcher.stop();
+        this.fontWatcher.stop();
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
 

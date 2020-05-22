@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import { asyncAction } from './actionCreators';
-import RoomListStore, { TAG_DM } from '../stores/RoomListStore';
+import { TAG_DM } from '../stores/RoomListStore';
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
@@ -24,6 +24,7 @@ import * as sdk from '../index';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
+import { RoomListStoreTempProxy } from "../stores/room-list/RoomListStoreTempProxy";
 
 export default class RoomListActions {
     /**
@@ -51,7 +52,7 @@ export default class RoomListActions {
 
         // Is the tag ordered manually?
         if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-            const lists = RoomListStore.getRoomLists();
+            const lists = RoomListStoreTempProxy.getRoomLists();
             const newList = [...lists[newTag]];
 
             newList.sort((a, b) => a.tags[newTag].order - b.tags[newTag].order);

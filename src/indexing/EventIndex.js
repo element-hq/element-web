@@ -489,14 +489,20 @@ export default class EventIndex extends EventEmitter {
                 return object;
             });
 
-            // Create a new checkpoint so we can continue crawling the room for
-            // messages.
-            const newCheckpoint = {
-                roomId: checkpoint.roomId,
-                token: res.end,
-                fullCrawl: checkpoint.fullCrawl,
-                direction: checkpoint.direction,
-            };
+            let newCheckpoint;
+
+            // The token can be null for some reason. Don't create a checkpoint
+            // in that case since adding it to the db will fail.
+            if (res.end) {
+                // Create a new checkpoint so we can continue crawling the room
+                // for messages.
+                newCheckpoint = {
+                    roomId: checkpoint.roomId,
+                    token: res.end,
+                    fullCrawl: checkpoint.fullCrawl,
+                    direction: checkpoint.direction,
+                };
+            }
 
             try {
                 for (let i = 0; i < redactionEvents.length; i++) {
@@ -506,6 +512,15 @@ export default class EventIndex extends EventEmitter {
 
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(
                     events, newCheckpoint, checkpoint);
+
+                // We didn't get a valid new checkpoint from the server, nothing
+                // to do here anymore.
+                if (!newCheckpoint) {
+                    console.log("EventIndex: The server didn't return a valid ",
+                                "new checkpoint, not continuing the crawl.", checkpoint);
+                    continue;
+                }
+
                 // If all events were already indexed we assume that we catched
                 // up with our index and don't need to crawl the room further.
                 // Let us delete the checkpoint in that case, otherwise push

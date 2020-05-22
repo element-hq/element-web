@@ -21,6 +21,10 @@ limitations under the License.
     mask-image: url('$(res)/img/feather-customised/settings.svg');
 }
 
+.mx_UserSettingsDialog_appearanceIcon::before {
+    mask-image: url('$(res)/img/feather-customised/brush.svg');
+}
+
 .mx_UserSettingsDialog_voiceIcon::before {
     mask-image: url('$(res)/img/feather-customised/phone.svg');
 }
