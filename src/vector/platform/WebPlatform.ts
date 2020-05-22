@@ -21,6 +21,7 @@ import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 import {Room} from "matrix-js-sdk/src/models/room";
+import { showToast as showUpdateToast, hideToast as hideUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 
 import url from 'url';
 import UAParser from 'ua-parser-js';
@@ -135,15 +136,17 @@ export default class WebPlatform extends VectorBasePlatform {
         return this._getVersion().then((ver) => {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
-            } else if (this.runningVersion !== ver) {
-                dis.dispatch({
-                    action: 'new_version',
-                    currentVersion: this.runningVersion,
-                    newVersion: ver,
-                });
-                // Return to skip a MatrixChat state update
                 return;
             }
+
+            if (this.runningVersion !== ver) {
+                showUpdateToast(this.runningVersion, ver);
+                // Return to skip a MatrixChat state update
+                return;
+            } else {
+                hideUpdateToast();
+            }
+
             return { status: updateCheckStatusEnum.NOTAVAILABLE };
         }, (err) => {
             console.error("Failed to poll for update", err);

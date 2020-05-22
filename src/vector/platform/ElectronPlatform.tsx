@@ -42,6 +42,7 @@ import React from "react";
 import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
 import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
+import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -275,12 +276,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     async onUpdateDownloaded(ev, updateInfo) {
-        dis.dispatch({
-            action: 'new_version',
-            currentVersion: await this.getAppVersion(),
-            newVersion: updateInfo,
-            releaseNotes: updateInfo.releaseNotes,
-        });
+        showUpdateToast(await this.getAppVersion(), updateInfo, updateInfo.releaseNotes);
     }
 
     getHumanReadableName(): string {
