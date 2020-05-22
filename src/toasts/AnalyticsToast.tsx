@@ -44,7 +44,7 @@ const TOAST_KEY = "analytics";
 export const showToast = (policyUrl?: string) => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Notifications"),
+        title: _t("Help us improve Riot"),
         props: {
             description: _t(
                 "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. " +

@@ -34,14 +34,14 @@ export const showToast = (limitType: string, adminContact?: string, syncError?: 
 
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Notifications"),
+        title: _t("Warning"),
         props: {
             description: <React.Fragment>{errorText} {contactText}</React.Fragment>,
             acceptLabel: _t("Ok"),
             onAccept: hideToast,
         },
         component: GenericToast,
-        priority: 20,
+        priority: 70,
     });
 };
 
