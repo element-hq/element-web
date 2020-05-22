@@ -1559,7 +1559,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
-                    priority: 95,
+                    priority: 90,
                 });
             }
         });

@@ -197,6 +197,7 @@ export default class DeviceListener {
                         icon: "verification_warning",
                         props: {kind: 'verify_this_session'},
                         component: sdk.getComponent("toasts.SetupEncryptionToast"),
+                        priority: 95,
                     });
                 } else {
                     const backupInfo = await this._getKeyBackupInfo();
@@ -208,6 +209,7 @@ export default class DeviceListener {
                             icon: "verification_warning",
                             props: {kind: 'upgrade_encryption'},
                             component: sdk.getComponent("toasts.SetupEncryptionToast"),
+                            priority: 40,
                         });
                     } else {
                         // No cross-signing or key backup on account (set up encryption)
@@ -217,6 +219,7 @@ export default class DeviceListener {
                             icon: "verification_warning",
                             props: {kind: 'set_up_encryption'},
                             component: sdk.getComponent("toasts.SetupEncryptionToast"),
+                            priority: 40,
                         });
                     }
                 }
@@ -262,11 +265,11 @@ export default class DeviceListener {
                 key: OTHER_DEVICES_TOAST_KEY,
                 title: _t("Review where you’re logged in"),
                 icon: "verification_warning",
-                priority: ToastStore.PRIORITY_LOW,
                 props: {
                     deviceIds: oldUnverifiedDeviceIds,
                 },
                 component: sdk.getComponent("toasts.BulkUnverifiedSessionsToast"),
+                priority: 50,
             });
         } else {
             ToastStore.sharedInstance().dismissToast(OTHER_DEVICES_TOAST_KEY);
@@ -280,6 +283,7 @@ export default class DeviceListener {
                 icon: "verification_warning",
                 props: { deviceId },
                 component: sdk.getComponent("toasts.UnverifiedSessionToast"),
+                priority: 80,
             });
         }
 
