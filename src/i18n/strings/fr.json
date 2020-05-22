@@ -2435,5 +2435,16 @@
     "QR Code": "Code QR",
     "Dismiss read marker and jump to bottom": "Ignorer le signet de lecture et aller en bas",
     "Jump to oldest unread message": "Aller au plus vieux message non lu",
-    "Upload a file": "Envoyer un fichier"
+    "Upload a file": "Envoyer un fichier",
+    "Use IRC layout": "Utiliser la mise en page d’IRC",
+    "IRC display name width": "Largeur du nom affiché IRC",
+    "Create room": "Créer un salon",
+    "Font scaling": "Mise à l’échelle de la police",
+    "Font size": "Taille de la police",
+    "Custom font size": "Taille personnalisée de la police",
+    "Size must be a number": "La taille doit être un nombre",
+    "Custom font size can only be between %(min)s pt and %(max)s pt": "La taille de police personnalisée doit être comprise entre %(min)s pt et %(max)s pt",
+    "Use between %(min)s pt and %(max)s pt": "Utiliser entre %(min)s pt et %(max)s pt",
+    "Appearance": "Apparence",
+    "Use the improved room list (in development - refresh to apply changes)": "Utiliser la liste de salons améliorée (en développement − actualisez pour appliquer les changements)"
 }
