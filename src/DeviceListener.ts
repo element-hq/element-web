@@ -14,19 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import SettingsStore from './settings/SettingsStore';
-import * as sdk from './index';
-import { _t } from './languageHandler';
-import ToastStore from './stores/ToastStore';
+import {
+    hideToast as hideBulkUnverifiedSessionsToast,
+    showToast as showBulkUnverifiedSessionsToast
+} from "./toasts/BulkUnverifiedSessionsToast";
+import {
+    hideToast as hideSetupEncryptionToast,
+    Kind as SetupKind,
+    Kind,
+    showToast as showSetupEncryptionToast
+} from "./toasts/SetupEncryptionToast";
+import {
+    hideToast as hideUnverifiedSessionsToast,
+    showToast as showUnverifiedSessionsToast
+} from "./toasts/UnverifiedSessionToast";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
-const THIS_DEVICE_TOAST_KEY = 'setupencryption';
-const OTHER_DEVICES_TOAST_KEY = 'reviewsessions';
-
-function toastKey(deviceId) {
-    return "unverified_session_" + deviceId;
-}
 
 export default class DeviceListener {
     // device IDs for which the user has dismissed the verify toast ('Later')
@@ -82,7 +87,7 @@ export default class DeviceListener {
      *
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
-    async dismissUnverifiedSessions(deviceIds: string[]) {
+    async dismissUnverifiedSessions(deviceIds: Iterable<string>) {
         for (const d of deviceIds) {
             this.dismissed.add(d);
         }
@@ -181,51 +186,25 @@ export default class DeviceListener {
 
         const crossSigningReady = await cli.isCrossSigningReady();
 
-        if (this.dismissedThisDeviceToast) {
-            ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
+        if (this.dismissedThisDeviceToast || crossSigningReady) {
+            hideSetupEncryptionToast();
         } else {
-            if (!crossSigningReady) {
-                // make sure our keys are finished downlaoding
-                await cli.downloadKeys([cli.getUserId()]);
-                // cross signing isn't enabled - nag to enable it
-                // There are 3 different toasts for:
-                if (cli.getStoredCrossSigningForUser(cli.getUserId())) {
-                    // Cross-signing on account but this device doesn't trust the master key (verify this session)
-                    ToastStore.sharedInstance().addOrReplaceToast({
-                        key: THIS_DEVICE_TOAST_KEY,
-                        title: _t("Verify this session"),
-                        icon: "verification_warning",
-                        props: {kind: 'verify_this_session'},
-                        component: sdk.getComponent("toasts.SetupEncryptionToast"),
-                        priority: 95,
-                    });
-                } else {
-                    const backupInfo = await this._getKeyBackupInfo();
-                    if (backupInfo) {
-                        // No cross-signing on account but key backup available (upgrade encryption)
-                        ToastStore.sharedInstance().addOrReplaceToast({
-                            key: THIS_DEVICE_TOAST_KEY,
-                            title: _t("Encryption upgrade available"),
-                            icon: "verification_warning",
-                            props: {kind: 'upgrade_encryption'},
-                            component: sdk.getComponent("toasts.SetupEncryptionToast"),
-                            priority: 40,
-                        });
-                    } else {
-                        // No cross-signing or key backup on account (set up encryption)
-                        ToastStore.sharedInstance().addOrReplaceToast({
-                            key: THIS_DEVICE_TOAST_KEY,
-                            title: _t("Set up encryption"),
-                            icon: "verification_warning",
-                            props: {kind: 'set_up_encryption'},
-                            component: sdk.getComponent("toasts.SetupEncryptionToast"),
-                            priority: 40,
-                        });
-                    }
-                }
+            // make sure our keys are finished downloading
+            await cli.downloadKeys([cli.getUserId()]);
+            // cross signing isn't enabled - nag to enable it
+            // There are 3 different toasts for:
+            if (cli.getStoredCrossSigningForUser(cli.getUserId())) {
+                // Cross-signing on account but this device doesn't trust the master key (verify this session)
+                showSetupEncryptionToast(SetupKind.VERIFY_THIS_SESSION);
             } else {
-                // cross-signing is ready, and we don't need to upgrade encryption
-                ToastStore.sharedInstance().dismissToast(THIS_DEVICE_TOAST_KEY);
+                const backupInfo = await this._getKeyBackupInfo();
+                if (backupInfo) {
+                    // No cross-signing on account but key backup available (upgrade encryption)
+                    showSetupEncryptionToast(Kind.UPGRADE_ENCRYPTION);
+                } else {
+                    // No cross-signing or key backup on account (set up encryption)
+                    showSetupEncryptionToast(Kind.SET_UP_ENCRYPTION);
+                }
             }
         }
 
@@ -261,36 +240,20 @@ export default class DeviceListener {
 
         // Display or hide the batch toast for old unverified sessions
         if (oldUnverifiedDeviceIds.size > 0) {
-            ToastStore.sharedInstance().addOrReplaceToast({
-                key: OTHER_DEVICES_TOAST_KEY,
-                title: _t("Review where you’re logged in"),
-                icon: "verification_warning",
-                props: {
-                    deviceIds: oldUnverifiedDeviceIds,
-                },
-                component: sdk.getComponent("toasts.BulkUnverifiedSessionsToast"),
-                priority: 50,
-            });
+            showBulkUnverifiedSessionsToast(oldUnverifiedDeviceIds);
         } else {
-            ToastStore.sharedInstance().dismissToast(OTHER_DEVICES_TOAST_KEY);
+            hideBulkUnverifiedSessionsToast();
         }
 
         // Show toasts for new unverified devices if they aren't already there
         for (const deviceId of newUnverifiedDeviceIds) {
-            ToastStore.sharedInstance().addOrReplaceToast({
-                key: toastKey(deviceId),
-                title: _t("New login. Was this you?"),
-                icon: "verification_warning",
-                props: { deviceId },
-                component: sdk.getComponent("toasts.UnverifiedSessionToast"),
-                priority: 80,
-            });
+            showUnverifiedSessionsToast(deviceId);
         }
 
         // ...and hide any we don't need any more
         for (const deviceId of this.displayingToastsForDeviceIds) {
             if (!newUnverifiedDeviceIds.has(deviceId)) {
-                ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
+                hideUnverifiedSessionsToast(deviceId);
             }
         }
 
