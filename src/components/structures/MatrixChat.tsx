@@ -226,7 +226,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             leftDisabled: false,
             middleDisabled: false,
 
-            newVersionReleaseNotes: null,
             checkingForUpdate: null,
 
             hideToSRUsers: false,

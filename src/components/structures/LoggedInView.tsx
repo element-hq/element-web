@@ -91,9 +91,6 @@ interface IProps {
     currentUserId?: string;
     currentGroupId?: string;
     currentGroupIsNew?: boolean;
-    version?: string;
-    newVersion?: string;
-    newVersionReleaseNotes?: string;
 }
 
 interface IState {
