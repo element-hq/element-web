@@ -43,6 +43,11 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { RoomListStoreTempProxy } from "../../stores/room-list/RoomListStoreTempProxy";
 import { DefaultTagID } from "../../stores/room-list/models";
+import {
+    showToast as showSetPasswordToast,
+    hideToast as hideSetPasswordToast
+} from "../../toasts/SetPasswordToast";
+
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
 // NB. this is just for server notices rather than pinned messages in general.
@@ -66,7 +71,6 @@ interface IProps {
     leftDisabled: boolean;
     rightDisabled: boolean;
     hasNewVersion: boolean;
-    userHasGeneratedPassword: boolean;
     page_type: string;
     autoJoin: boolean;
     thirdPartyInvite?: object;
@@ -96,7 +100,6 @@ interface IState {
     syncErrorData: any;
     useCompactLayout: boolean;
     serverNoticeEvents: MatrixEvent[];
-    userHasGeneratedPassword: boolean;
 }
 
 /**
@@ -139,7 +142,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         this.state = {
             mouseDown: undefined,
             syncErrorData: undefined,
-            userHasGeneratedPassword: false,
             // use compact timeline view
             useCompactLayout: SettingsStore.getValue('useCompactLayout'),
             // any currently active server notice events
@@ -180,8 +182,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps, prevState) {
         // attempt to guess when a banner was opened or closed
         if (
-            (prevProps.hasNewVersion !== this.props.hasNewVersion) ||
-            (prevState.userHasGeneratedPassword !== this.state.userHasGeneratedPassword)
+            (prevProps.hasNewVersion !== this.props.hasNewVersion)
         ) {
             this.props.resizeNotifier.notifyBannersChanged();
         }
@@ -216,9 +217,11 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     };
 
     _setStateFromSessionStore = () => {
-        this.setState({
-            userHasGeneratedPassword: Boolean(this._sessionStore.getCachedPassword()),
-        });
+        if (this._sessionStore.getCachedPassword()) {
+            showSetPasswordToast();
+        } else {
+            hideSetPasswordToast();
+        }
     };
 
     _createResizer() {
@@ -597,7 +600,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
-        const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
         const ServerLimitBar = sdk.getComponent('globals.ServerLimitBar');
 
         let pageElement;
@@ -666,8 +668,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
             />;
         } else if (this.props.checkingForUpdate) {
             topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
-        } else if (this.state.userHasGeneratedPassword) {
-            topBar = <PasswordNagBar />;
         }
 
         let bodyClasses = 'mx_MatrixChat';
