@@ -98,6 +98,7 @@ limitations under the License.
 
 .mx_EventTile .mx_MessageTimestamp {
     display: block;
+    visibility: hidden;
     white-space: nowrap;
     left: 0px;
     text-align: center;
@@ -158,10 +159,15 @@ limitations under the License.
 }
 
 // Explicit relationships so that it doesn't apply to nested EventTile components (e.g in Replies)
+// The first set is to handle the 'group layout' (default) and the second for the IRC layout
 .mx_EventTile_last > div > a > .mx_MessageTimestamp,
 .mx_EventTile:hover > div > a > .mx_MessageTimestamp,
 .mx_EventTile.mx_EventTile_actionBarFocused > div > a > .mx_MessageTimestamp,
-.mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp {
+.mx_EventTile.focus-visible:focus-within > div > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_EventTile_last > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_EventTile:hover > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_EventTile.mx_EventTile_actionBarFocused > a > .mx_MessageTimestamp,
+.mx_IRCLayout .mx_EventTile.focus-visible:focus-within > a > .mx_MessageTimestamp {
     visibility: visible;
 }
 
