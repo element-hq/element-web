@@ -44,6 +44,7 @@ import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTem
 import {DefaultTagID} from "../../../stores/room-list/models";
 import * as Unread from "../../../Unread";
 import RoomViewStore from "../../../stores/RoomViewStore";
+import {TAG_DM} from "../../../stores/RoomListStore";
 
 const HIDE_CONFERENCE_CHANS = true;
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
