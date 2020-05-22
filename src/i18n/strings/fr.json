@@ -2445,5 +2445,6 @@
     "Size must be a number": "La taille doit être un nombre",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "La taille de police personnalisée doit être comprise entre %(min)s pt et %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Utiliser entre %(min)s pt et %(max)s pt",
-    "Appearance": "Apparence"
+    "Appearance": "Apparence",
+    "Use the improved room list (in development - refresh to apply changes)": "Utiliser la liste de salons améliorée (en développement − actualisez pour appliquer les changements)"
 }
