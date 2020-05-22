@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as ModernizrStatic from "modernizr";
+import ToastStore from "../stores/ToastStore";
 
 declare global {
     interface Window {
@@ -22,6 +23,8 @@ declare global {
         Olm: {
             init: () => Promise<void>;
         };
+
+        mx_ToastStore: ToastStore;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933

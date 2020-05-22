@@ -16,13 +16,19 @@ limitations under the License.
 
 import * as React from "react";
 import { _t } from '../../languageHandler';
-import ToastStore from "../../stores/ToastStore";
+import ToastStore, {IToast} from "../../stores/ToastStore";
 import classNames from "classnames";
 
-export default class ToastContainer extends React.Component {
-    constructor() {
-        super();
-        this.state = {toasts: ToastStore.sharedInstance().getToasts()};
+interface IState {
+    toasts: IToast<any>[];
+}
+
+export default class ToastContainer extends React.Component<{}, IState> {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            toasts: ToastStore.sharedInstance().getToasts(),
+        };
 
         // Start listening here rather than in componentDidMount because
         // toasts may dismiss themselves in their didMount if they find
