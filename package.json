@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -102,6 +102,7 @@
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
     "@types/modernizr": "^3.5.3",
+    "@types/node": "^12.12.41",
     "@types/react": "16.9",
     "@types/react-dom": "^16.9.4",
     "autoprefixer": "^9.7.3",
