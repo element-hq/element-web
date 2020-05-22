@@ -65,7 +65,6 @@ interface IProps {
     initialEventPixelOffset: number;
     leftDisabled: boolean;
     rightDisabled: boolean;
-    showCookieBar: boolean;
     hasNewVersion: boolean;
     userHasGeneratedPassword: boolean;
     page_type: string;
@@ -181,7 +180,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps, prevState) {
         // attempt to guess when a banner was opened or closed
         if (
-            (prevProps.showCookieBar !== this.props.showCookieBar) ||
             (prevProps.hasNewVersion !== this.props.hasNewVersion) ||
             (prevState.userHasGeneratedPassword !== this.state.userHasGeneratedPassword)
         ) {
@@ -597,7 +595,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
-        const CookieBar = sdk.getComponent('globals.CookieBar');
         const NewVersionBar = sdk.getComponent('globals.NewVersionBar');
         const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
         const PasswordNagBar = sdk.getComponent('globals.PasswordNagBar');
@@ -663,12 +660,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                 adminContact={usageLimitEvent.getContent().admin_contact}
                 limitType={usageLimitEvent.getContent().limit_type}
             />;
-        } else if (this.props.showCookieBar &&
-            this.props.config.piwik &&
-            navigator.doNotTrack !== "1"
-        ) {
-            const policyUrl = this.props.config.piwik.policyUrl || null;
-            topBar = <CookieBar policyUrl={policyUrl} />;
         } else if (this.props.hasNewVersion) {
             topBar = <NewVersionBar version={this.props.version} newVersion={this.props.newVersion}
                                     releaseNotes={this.props.newVersionReleaseNotes}
