@@ -28,7 +28,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         super(props, context);
         this.state = {
             toasts: ToastStore.sharedInstance().getToasts(),
-            countSeen: 0,
+            countSeen: ToastStore.sharedInstance().getCountSeen(),
         };
 
         // Start listening here rather than in componentDidMount because
