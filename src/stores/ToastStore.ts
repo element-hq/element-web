@@ -59,7 +59,7 @@ export default class ToastStore extends EventEmitter {
         const oldIndex = this.toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;
-            while (newIndex > 0 && this.toasts[newIndex - 1].priority > newToast.priority) --newIndex;
+            while (newIndex > 0 && this.toasts[newIndex - 1].priority < newToast.priority) --newIndex;
             this.toasts.splice(newIndex, 0, newToast);
         } else {
             this.toasts[oldIndex] = newToast;
