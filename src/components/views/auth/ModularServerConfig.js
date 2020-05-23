@@ -23,7 +23,8 @@ import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 import ServerConfig from "./ServerConfig";
 
-const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+const MODULAR_URL = 'https://modular.im/services/matrix-hosting-riot' +
+    '?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
 // TODO: TravisR - Can this extend ServerConfig for most things?
 
