@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ export interface MatrixEvent {
     content: {};
     event_id: string;
     origin_server_ts: number;
-    unsigned: ?{};
+    unsigned?: {};
     room_id: string;
 }
 
@@ -59,7 +59,7 @@ export interface SearchArgs {
     before_limit: number;
     after_limit: number;
     order_by_recency: boolean;
-    room_id: ?string;
+    room_id?: string;
 }
 
 export interface EventAndProfile {
@@ -85,7 +85,7 @@ export interface IndexStats {
  *
  * Instances of this class are provided by the application.
  */
-export default class BaseEventIndexManager {
+export default abstract class BaseEventIndexManager {
     /**
      * Does our EventIndexManager support event indexing.
      *
@@ -119,7 +119,7 @@ export default class BaseEventIndexManager {
      * @return {Promise} A promise that will resolve when the was queued up for
      * addition.
      */
-    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<> {
+    async addEventToIndex(ev: MatrixEvent, profile: MatrixProfile): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -188,7 +188,7 @@ export default class BaseEventIndexManager {
         events: [EventAndProfile],
         checkpoint: CrawlerCheckpoint | null,
         oldCheckpoint: CrawlerCheckpoint | null,
-    ): Promise<bool> {
+    ): Promise<boolean> {
         throw new Error("Unimplemented");
     }
 
