@@ -24,7 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
-import toRem from "../../../utils/rem";
+import {toPx} from "../../../utils/units";
 
 const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
     const [imageUrls, setUrls] = useState([]);
@@ -105,9 +105,9 @@ const BaseAvatar = (props) => {
                 className="mx_BaseAvatar_initial"
                 aria-hidden="true"
                 style={{
-                    fontSize: toRem(width * 0.65),
-                    width: toRem(width),
-                    lineHeight: toRem(height),
+                    fontSize: toPx(width * 0.65),
+                    width: toPx(width),
+                    lineHeight: toPx(height),
                 }}
             >
                 { initialLetter }
@@ -121,8 +121,8 @@ const BaseAvatar = (props) => {
                 title={title}
                 onError={onError}
                 style={{
-                    width: toRem(width),
-                    height: toRem(height),
+                    width: toPx(width),
+                    height: toPx(height),
                 }}
                 aria-hidden="true" />
         );
@@ -159,8 +159,8 @@ const BaseAvatar = (props) => {
                 onClick={onClick}
                 onError={onError}
                 style={{
-                    width: toRem(width),
-                    height: toRem(height),
+                    width: toPx(width),
+                    height: toPx(height),
                 }}
                 title={title} alt=""
                 inputRef={inputRef}
@@ -173,8 +173,8 @@ const BaseAvatar = (props) => {
                 src={imageUrl}
                 onError={onError}
                 style={{
-                    width: toRem(width),
-                    height: toRem(height),
+                    width: toPx(width),
+                    height: toPx(height),
                 }}
                 title={title} alt=""
                 ref={inputRef}

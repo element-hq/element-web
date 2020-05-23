@@ -22,7 +22,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 
 const MIN_TOOLTIP_HEIGHT = 25;

@@ -21,7 +21,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 export default class MKeyVerificationRequest extends React.Component {
