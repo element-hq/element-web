@@ -1,5 +1,3 @@
-// @flow
-
 /*
 Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
@@ -19,9 +17,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient} from "matrix-js-sdk";
+import {MatrixClient} from "matrix-js-sdk/src/client";
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
+import {ActionPayload} from "./dispatcher/payloads";
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -29,27 +28,25 @@ import BaseEventIndexManager from './indexing/BaseEventIndexManager';
  *
  * Instances of this class are provided by the application.
  */
-export default class BasePlatform {
-    constructor() {
-        this.notificationCount = 0;
-        this.errorDidOccur = false;
+export default abstract class BasePlatform {
+    protected notificationCount = 0;
+    protected errorDidOccur = false;
 
-        dis.register(this._onAction.bind(this));
+    constructor() {
+        dis.register(this.onAction);
     }
 
-    _onAction(payload: Object) {
+    protected onAction = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'on_client_not_viable':
             case 'on_logged_out':
                 this.setNotificationCount(0);
                 break;
         }
-    }
+    };
 
     // Used primarily for Analytics
-    getHumanReadableName(): string {
-        return 'Base Platform';
-    }
+    abstract getHumanReadableName(): string;
 
     setNotificationCount(count: number) {
         this.notificationCount = count;
@@ -84,22 +81,17 @@ export default class BasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission(): Promise<string> {
-    }
+    abstract requestNotificationPermission(): Promise<string>;
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Object) {
-    }
+    abstract displayNotification(title: string, msg: string, avatarUrl: string, room: Object);
 
     loudNotification(ev: Event, room: Object) {
-    }
+    };
 
     /**
-     * Returns a promise that resolves to a string representing
-     * the current version of the application.
+     * Returns a promise that resolves to a string representing the current version of the application.
      */
-    getAppVersion(): Promise<string> {
-        throw new Error("getAppVersion not implemented!");
-    }
+    abstract getAppVersion(): Promise<string>;
 
     /*
      * If it's not expected that capturing the screen will work
@@ -114,20 +106,18 @@ export default class BasePlatform {
      * Restarts the application, without neccessarily reloading
      * any application code
      */
-    reload() {
-        throw new Error("reload not implemented!");
-    }
+    abstract reload();
 
     supportsAutoLaunch(): boolean {
         return false;
     }
 
     // XXX: Surely this should be a setting like any other?
-    async getAutoLaunchEnabled(): boolean {
+    async getAutoLaunchEnabled(): Promise<boolean> {
         return false;
     }
 
-    async setAutoLaunchEnabled(enabled: boolean): void {
+    async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -135,11 +125,11 @@ export default class BasePlatform {
         return false;
     }
 
-    async getAutoHideMenuBarEnabled(): boolean {
+    async getAutoHideMenuBarEnabled(): Promise<boolean> {
         return false;
     }
 
-    async setAutoHideMenuBarEnabled(enabled: boolean): void {
+    async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
         throw new Error("Unimplemented");
     }
 
@@ -147,11 +137,11 @@ export default class BasePlatform {
         return false;
     }
 
-    async getMinimizeToTrayEnabled(): boolean {
+    async getMinimizeToTrayEnabled(): Promise<boolean> {
         return false;
     }
 
-    async setMinimizeToTrayEnabled(enabled: boolean): void {
+    async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
         throw new Error("Unimplemented");
     }
 

@@ -1,3 +1,12 @@
+Changes in [2.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.6.1) (2020-05-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.6.0...v2.6.1)
+
+ * Fix key backup restore with SSSS
+   [\#4617](https://github.com/matrix-org/matrix-react-sdk/pull/4617)
+ * Remove SSSS key upgrade check from rageshake
+   [\#4616](https://github.com/matrix-org/matrix-react-sdk/pull/4616)
+
 Changes in [2.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.6.0) (2020-05-19)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.6.0-rc.1...v2.6.0)
