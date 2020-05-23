@@ -141,6 +141,7 @@
     "flow-parser": "^0.57.3",
     "glob": "^5.0.14",
     "jest": "^24.9.0",
+    "jest-canvas-mock": "^2.2.0",
     "lolex": "^5.1.2",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.2",
@@ -160,6 +161,7 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
+    "setupFiles": ["jest-canvas-mock"],
     "setupFilesAfterEnv": [
       "<rootDir>/test/setupTests.js"
     ],
