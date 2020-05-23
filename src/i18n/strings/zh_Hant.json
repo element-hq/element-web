@@ -2444,5 +2444,6 @@
     "Size must be a number": "大小必須為數字",
     "Custom font size can only be between %(min)s pt and %(max)s pt": "自訂字型大小僅能為 %(min)s 點至 %(max)s 點間",
     "Use between %(min)s pt and %(max)s pt": "使用 %(min)s 點至 %(max)s 點間",
-    "Appearance": "外觀"
+    "Appearance": "外觀",
+    "Use the improved room list (in development - refresh to apply changes)": "使用改進的聊天室清單（開發中 - 重新整理以套用變更）"
 }
