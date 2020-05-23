@@ -94,11 +94,12 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     // XXX: This is a bit of an awful-looking hack. We should probably be using state for
     // this, but instead we're kinda forced to either duplicate the code or thread a variable
-    // through the code paths. This feels like the least evil
+    // through the code paths. This feels like the least evil option.
     private get roomIsInvite(): boolean {
         return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
+    // TODO: Make use of this function when the notification state needs updating.
     private updateNotificationState() {
         this.setState({notificationState: this.getNotificationState()});
     }
