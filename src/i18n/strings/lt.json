@@ -1314,5 +1314,6 @@
     "Doesn't look like a valid phone number": "Tai nepanašu į veikiantį telefono numerį",
     "Invalid homeserver discovery response": "Klaidingas serverio radimo atsakas",
     "Invalid identity server discovery response": "Klaidingas tapatybės serverio radimo atsakas",
-    "The phone number entered looks invalid": "Įvestas telefono numeris atrodo klaidingas"
+    "The phone number entered looks invalid": "Įvestas telefono numeris atrodo klaidingas",
+    "Double check that your server supports the room version chosen and try again.": "Patikrinkite ar jūsų serveris palaiko pasirinktą kambario versiją ir bandykite iš naujo."
 }
