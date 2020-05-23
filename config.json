@@ -34,10 +34,10 @@
         "feature_custom_themes": "enabled"
     },
     "default_federate": true,
-    "default_theme": "dark",
+    "default_theme": "light",
     "roomDirectory": {
         "servers": [
-            "matrix.org"
+            "navgurukul.org"
         ]
     },
     "welcomeUserId": "@bot:navgurukul.org",
