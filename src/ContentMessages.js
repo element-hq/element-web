@@ -258,10 +258,10 @@ function readFileAsArrayBuffer(file) {
  *  If the file is encrypted then the object will have a "file" key.
  */
 function uploadFile(matrixClient, roomId, file, progressHandler) {
+    let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
-        let canceled = false;
         let uploadPromise;
         let encryptInfo;
         const prom = readFileAsArrayBuffer(file).then(function(data) {
@@ -278,9 +278,9 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
                 progressHandler: progressHandler,
                 includeFilename: false,
             });
-
             return uploadPromise;
         }).then(function(url) {
+            if (canceled) throw new UploadCanceledError();
             // If the attachment is encrypted then bundle the URL along
             // with the information needed to decrypt the attachment and
             // add it under a file key.
@@ -300,11 +300,14 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
             progressHandler: progressHandler,
         });
         const promise1 = basePromise.then(function(url) {
+            if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
             return {"url": url};
         });
-        // XXX: copy over the abort method to the new promise
-        promise1.abort = basePromise.abort;
+        promise1.abort = () => {
+            canceled = true;
+            MatrixClientPeg.get().cancelUpload(basePromise);
+        };
         return promise1;
     }
 }
@@ -489,11 +492,16 @@ export default class ContentMessages {
             }
         });
 
+        prom.abort = () => {
+            upload.cancelled = true;
+        };
+
         const upload = {
             fileName: file.name || 'Attachment',
             roomId: roomId,
             total: 0,
             loaded: 0,
+            promise: prom,
         };
         this.inprogress.push(upload);
         dis.dispatch({action: 'upload_started'});
@@ -510,6 +518,7 @@ export default class ContentMessages {
         }
 
         return prom.then(function() {
+            if (upload.canceled) throw new UploadCanceledError();
             // XXX: upload.promise must be the promise that
             // is returned by uploadFile as it has an abort()
             // method hacked onto it.
@@ -524,6 +533,7 @@ export default class ContentMessages {
             // Await previous message being sent into the room
             return promBefore;
         }).then(function() {
+            if (upload.canceled) throw new UploadCanceledError();
             return matrixClient.sendMessage(roomId, content);
         }, function(err) {
             error = err;
