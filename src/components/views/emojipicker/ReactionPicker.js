@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import EmojiPicker from "./EmojiPicker";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import dis from "../../../dispatcher/dispatcher";
 
 class ReactionPicker extends React.Component {
     static propTypes = {
@@ -105,6 +106,7 @@ class ReactionPicker extends React.Component {
                     "key": reaction,
                 },
             });
+            dis.dispatch({action: "message_sent"});
             return true;
         }
     }

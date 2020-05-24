@@ -312,6 +312,7 @@ export default class SendMessageComposer extends React.Component {
                     event: null,
                 });
             }
+            dis.dispatch({action: "message_sent"});
         }
 
         this.sendHistoryManager.save(this.model);
