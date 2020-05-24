@@ -190,7 +190,7 @@ limitations under the License.
 
 .mx_EmojiPicker_footer {
     border-top: 1px solid $message-action-bar-border-color;
-    height: 72px;
+    min-height: 72px;
 
     display: flex;
     align-items: center;
