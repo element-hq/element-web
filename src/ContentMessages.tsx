@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,11 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
+import React from "react";
 import extend from './extend';
 import dis from './dispatcher/dispatcher';
 import {MatrixClientPeg} from './MatrixClientPeg';
+import {MatrixClient} from "matrix-js-sdk/src/client";
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
@@ -39,6 +40,50 @@ const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
 export class UploadCanceledError extends Error {}
 
+type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
+
+interface IUpload {
+    fileName: string;
+    roomId: string;
+    total: number;
+    loaded: number;
+    promise: Promise<any>;
+    canceled?: boolean;
+}
+
+interface IMediaConfig {
+    "m.upload.size"?: number;
+}
+
+interface IContent {
+    body: string;
+    msgtype: string;
+    info: {
+        size: number;
+        mimetype?: string;
+    };
+    file?: string;
+    url?: string;
+}
+
+interface IThumbnail {
+    info: {
+        thumbnail_info: {
+            w: number;
+            h: number;
+            mimetype: string;
+            size: number;
+        };
+        w: number;
+        h: number;
+    };
+    thumbnail: Blob;
+}
+
+interface IAbortablePromise<T> extends Promise<T> {
+    abort(): void;
+}
+
 /**
  * Create a thumbnail for a image DOM element.
  * The image will be smaller than MAX_WIDTH and MAX_HEIGHT.
@@ -51,13 +96,13 @@ export class UploadCanceledError extends Error {}
  * about the original image and the thumbnail.
  *
  * @param {HTMLElement} element The element to thumbnail.
- * @param {integer} inputWidth The width of the image in the input element.
- * @param {integer} inputHeight the width of the image in the input element.
+ * @param {number} inputWidth The width of the image in the input element.
+ * @param {number} inputHeight the width of the image in the input element.
  * @param {String} mimeType The mimeType to save the blob as.
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-function createThumbnail(element, inputWidth, inputHeight, mimeType) {
+function createThumbnail(element: ThumbnailableElement, inputWidth: number, inputHeight: number, mimeType: string): Promise<IThumbnail> {
     return new Promise((resolve) => {
         let targetWidth = inputWidth;
         let targetHeight = inputHeight;
@@ -98,7 +143,7 @@ function createThumbnail(element, inputWidth, inputHeight, mimeType) {
  * @param {File} imageFile The file to load in an image element.
  * @return {Promise} A promise that resolves with the html image element.
  */
-async function loadImageElement(imageFile) {
+async function loadImageElement(imageFile: File) {
     // Load the file into an html element
     const img = document.createElement("img");
     const objectUrl = URL.createObjectURL(imageFile);
@@ -128,8 +173,7 @@ async function loadImageElement(imageFile) {
             for (const chunk of chunks) {
                 if (chunk.name === 'pHYs') {
                     if (chunk.data.byteLength !== PHYS_HIDPI.length) return;
-                    const hidpi = chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
-                    return hidpi;
+                    return chunk.data.every((val, i) => val === PHYS_HIDPI[i]);
                 }
             }
             return false;
@@ -152,7 +196,7 @@ async function loadImageElement(imageFile) {
  */
 function infoForImageFile(matrixClient, roomId, imageFile) {
     let thumbnailType = "image/png";
-    if (imageFile.type == "image/jpeg") {
+    if (imageFile.type === "image/jpeg") {
         thumbnailType = "image/jpeg";
     }
 
@@ -175,15 +219,15 @@ function infoForImageFile(matrixClient, roomId, imageFile) {
  * @param {File} videoFile The file to load in an video element.
  * @return {Promise} A promise that resolves with the video image element.
  */
-function loadVideoElement(videoFile) {
+function loadVideoElement(videoFile): Promise<HTMLVideoElement> {
     return new Promise((resolve, reject) => {
         // Load the file into an html element
         const video = document.createElement("video");
 
         const reader = new FileReader();
 
-        reader.onload = function(e) {
-            video.src = e.target.result;
+        reader.onload = function(ev) {
+            video.src = ev.target.result as string;
 
             // Once ready, returns its size
             // Wait until we have enough data to thumbnail the first frame.
@@ -231,11 +275,11 @@ function infoForVideoFile(matrixClient, roomId, videoFile) {
  * @return {Promise} A promise that resolves with an ArrayBuffer when the file
  *   is read.
  */
-function readFileAsArrayBuffer(file) {
+function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = function(e) {
-            resolve(e.target.result);
+            resolve(e.target.result as ArrayBuffer);
         };
         reader.onerror = function(e) {
             reject(e);
@@ -257,7 +301,7 @@ function readFileAsArrayBuffer(file) {
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-function uploadFile(matrixClient, roomId, file, progressHandler) {
+function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blob, progressHandler?: any) {
     let canceled = false;
     if (matrixClient.isRoomEncrypted(roomId)) {
         // If the room is encrypted then encrypt the file before uploading it.
@@ -290,7 +334,7 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
             }
             return {"file": encryptInfo};
         });
-        prom.abort = () => {
+        (prom as IAbortablePromise<any>).abort = () => {
             canceled = true;
             if (uploadPromise) MatrixClientPeg.get().cancelUpload(uploadPromise);
         };
@@ -313,30 +357,27 @@ function uploadFile(matrixClient, roomId, file, progressHandler) {
 }
 
 export default class ContentMessages {
-    constructor() {
-        this.inprogress = [];
-        this.nextId = 0;
-        this._mediaConfig = null;
-    }
+    private inprogress: IUpload[] = [];
+    private mediaConfig: IMediaConfig = null;
 
     static sharedInstance() {
-        if (global.mx_ContentMessages === undefined) {
-            global.mx_ContentMessages = new ContentMessages();
+        if (window.mx_ContentMessages === undefined) {
+            window.mx_ContentMessages = new ContentMessages();
         }
-        return global.mx_ContentMessages;
+        return window.mx_ContentMessages;
     }
 
-    _isFileSizeAcceptable(file) {
-        if (this._mediaConfig !== null &&
-            this._mediaConfig["m.upload.size"] !== undefined &&
-            file.size > this._mediaConfig["m.upload.size"]) {
+    _isFileSizeAcceptable(file: File) {
+        if (this.mediaConfig !== null &&
+            this.mediaConfig["m.upload.size"] !== undefined &&
+            file.size > this.mediaConfig["m.upload.size"]) {
             return false;
         }
         return true;
     }
 
     _ensureMediaConfigFetched() {
-        if (this._mediaConfig !== null) return;
+        if (this.mediaConfig !== null) return;
 
         console.log("[Media Config] Fetching");
         return MatrixClientPeg.get().getMediaConfig().then((config) => {
@@ -347,11 +388,11 @@ export default class ContentMessages {
             console.log("[Media Config] Could not fetch config, so not limiting uploads.");
             return {};
         }).then((config) => {
-            this._mediaConfig = config;
+            this.mediaConfig = config;
         });
     }
 
-    sendStickerContentToRoom(url, roomId, info, text, matrixClient) {
+    sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
         return MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
@@ -359,14 +400,14 @@ export default class ContentMessages {
     }
 
     getUploadLimit() {
-        if (this._mediaConfig !== null && this._mediaConfig["m.upload.size"] !== undefined) {
-            return this._mediaConfig["m.upload.size"];
+        if (this.mediaConfig !== null && this.mediaConfig["m.upload.size"] !== undefined) {
+            return this.mediaConfig["m.upload.size"];
         } else {
             return null;
         }
     }
 
-    async sendContentListToRoom(files, roomId, matrixClient) {
+    async sendContentListToRoom(files: File[], roomId: string, matrixClient: MatrixClient) {
         if (matrixClient.isGuest()) {
             dis.dispatch({action: 'require_registration'});
             return;
@@ -375,22 +416,18 @@ export default class ContentMessages {
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-            const shouldUpload = await new Promise((resolve) => {
-                Modal.createTrackedDialog('Upload Reply Warning', '', QuestionDialog, {
-                    title: _t('Replying With Files'),
-                    description: (
-                        <div>{_t(
-                            'At this time it is not possible to reply with a file. ' +
-                            'Would you like to upload this file without replying?',
-                        )}</div>
-                    ),
-                    hasCancelButton: true,
-                    button: _t("Continue"),
-                    onFinished: (shouldUpload) => {
-                        resolve(shouldUpload);
-                    },
-                });
+            const {finished} = Modal.createTrackedDialog('Upload Reply Warning', '', QuestionDialog, {
+                title: _t('Replying With Files'),
+                description: (
+                    <div>{_t(
+                        'At this time it is not possible to reply with a file. ' +
+                        'Would you like to upload this file without replying?',
+                    )}</div>
+                ),
+                hasCancelButton: true,
+                button: _t("Continue"),
             });
+            const [shouldUpload]: [boolean] = await finished;
             if (!shouldUpload) return;
         }
 
@@ -409,17 +446,12 @@ export default class ContentMessages {
 
         if (tooBigFiles.length > 0) {
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
-            const uploadFailureDialogPromise = new Promise((resolve) => {
-                Modal.createTrackedDialog('Upload Failure', '', UploadFailureDialog, {
-                    badFiles: tooBigFiles,
-                    totalFiles: files.length,
-                    contentMessages: this,
-                    onFinished: (shouldContinue) => {
-                        resolve(shouldContinue);
-                    },
-                });
+            const {finished} = Modal.createTrackedDialog('Upload Failure', '', UploadFailureDialog, {
+                badFiles: tooBigFiles,
+                totalFiles: files.length,
+                contentMessages: this,
             });
-            const shouldContinue = await uploadFailureDialogPromise;
+            const [shouldContinue]: [boolean] = await finished;
             if (!shouldContinue) return;
         }
 
@@ -431,31 +463,28 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const shouldContinue = await new Promise((resolve) => {
-                    Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
-                        file,
-                        currentIndex: i,
-                        totalFiles: okFiles.length,
-                        onFinished: (shouldContinue, shouldUploadAll) => {
-                            if (shouldUploadAll) {
-                                uploadAll = true;
-                            }
-                            resolve(shouldContinue);
-                        },
-                    });
+                const {finished} = Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
+                    file,
+                    currentIndex: i,
+                    totalFiles: okFiles.length,
                 });
+                const [shouldContinue, shouldUploadAll]: [boolean, boolean] = await finished;
                 if (!shouldContinue) break;
+                if (shouldUploadAll) {
+                    uploadAll = true;
+                }
             }
             promBefore = this._sendContentToRoom(file, roomId, matrixClient, promBefore);
         }
     }
 
-    _sendContentToRoom(file, roomId, matrixClient, promBefore) {
-        const content = {
+    _sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+        const content: IContent = {
             body: file.name || 'Attachment',
             info: {
                 size: file.size,
             },
+            msgtype: "", // set later
         };
 
         // if we have a mime type for the file, add it to the message metadata
@@ -464,25 +493,25 @@ export default class ContentMessages {
         }
 
         const prom = new Promise((resolve) => {
-            if (file.type.indexOf('image/') == 0) {
+            if (file.type.indexOf('image/') === 0) {
                 content.msgtype = 'm.image';
-                infoForImageFile(matrixClient, roomId, file).then((imageInfo)=>{
+                infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
                     extend(content.info, imageInfo);
                     resolve();
-                }, (error)=>{
-                    console.error(error);
+                }, (e) => {
+                    console.error(e);
                     content.msgtype = 'm.file';
                     resolve();
                 });
-            } else if (file.type.indexOf('audio/') == 0) {
+            } else if (file.type.indexOf('audio/') === 0) {
                 content.msgtype = 'm.audio';
                 resolve();
-            } else if (file.type.indexOf('video/') == 0) {
+            } else if (file.type.indexOf('video/') === 0) {
                 content.msgtype = 'm.video';
-                infoForVideoFile(matrixClient, roomId, file).then((videoInfo)=>{
+                infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
                     extend(content.info, videoInfo);
                     resolve();
-                }, (error)=>{
+                }, (e) => {
                     content.msgtype = 'm.file';
                     resolve();
                 });
@@ -492,14 +521,15 @@ export default class ContentMessages {
             }
         });
 
-        prom.abort = () => {
-            upload.cancelled = true;
+        // create temporary abort handler for before the actual upload gets passed off to js-sdk
+        (prom as IAbortablePromise<any>).abort = () => {
+            upload.canceled = true;
         };
 
-        const upload = {
+        const upload: IUpload = {
             fileName: file.name || 'Attachment',
             roomId: roomId,
-            total: 0,
+            total: file.size,
             loaded: 0,
             promise: prom,
         };
@@ -509,14 +539,13 @@ export default class ContentMessages {
         // Focus the composer view
         dis.dispatch({action: 'focus_composer'});
 
-        let error;
-
         function onProgress(ev) {
             upload.total = ev.total;
             upload.loaded = ev.loaded;
             dis.dispatch({action: 'upload_progress', upload: upload});
         }
 
+        let error;
         return prom.then(function() {
             if (upload.canceled) throw new UploadCanceledError();
             // XXX: upload.promise must be the promise that
@@ -529,7 +558,7 @@ export default class ContentMessages {
                 content.file = result.file;
                 content.url = result.url;
             });
-        }).then((url) => {
+        }).then(() => {
             // Await previous message being sent into the room
             return promBefore;
         }).then(function() {
@@ -539,7 +568,7 @@ export default class ContentMessages {
             error = err;
             if (!upload.canceled) {
                 let desc = _t("The file '%(fileName)s' failed to upload.", {fileName: upload.fileName});
-                if (err.http_status == 413) {
+                if (err.http_status === 413) {
                     desc = _t(
                         "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
                         {fileName: upload.fileName},
@@ -552,11 +581,9 @@ export default class ContentMessages {
                 });
             }
         }).finally(() => {
-            const inprogressKeys = Object.keys(this.inprogress);
             for (let i = 0; i < this.inprogress.length; ++i) {
-                const k = inprogressKeys[i];
-                if (this.inprogress[k].promise === upload.promise) {
-                    this.inprogress.splice(k, 1);
+                if (this.inprogress[i].promise === upload.promise) {
+                    this.inprogress.splice(i, 1);
                     break;
                 }
             }
@@ -565,7 +592,7 @@ export default class ContentMessages {
                 // clear the media size limit so we fetch it again next time
                 // we try to upload
                 if (error && error.http_status === 413) {
-                    this._mediaConfig = null;
+                    this.mediaConfig = null;
                 }
                 dis.dispatch({action: 'upload_failed', upload, error});
             } else {
@@ -579,13 +606,11 @@ export default class ContentMessages {
         return this.inprogress.filter(u => !u.canceled);
     }
 
-    cancelUpload(promise) {
-        const inprogressKeys = Object.keys(this.inprogress);
+    cancelUpload(promise: Promise<any>) {
         let upload;
         for (let i = 0; i < this.inprogress.length; ++i) {
-            const k = inprogressKeys[i];
-            if (this.inprogress[k].promise === promise) {
-                upload = this.inprogress[k];
+            if (this.inprogress[i].promise === promise) {
+                upload = this.inprogress[i];
                 break;
             }
         }
