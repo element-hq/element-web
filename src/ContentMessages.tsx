@@ -360,38 +360,6 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    static sharedInstance() {
-        if (window.mx_ContentMessages === undefined) {
-            window.mx_ContentMessages = new ContentMessages();
-        }
-        return window.mx_ContentMessages;
-    }
-
-    _isFileSizeAcceptable(file: File) {
-        if (this.mediaConfig !== null &&
-            this.mediaConfig["m.upload.size"] !== undefined &&
-            file.size > this.mediaConfig["m.upload.size"]) {
-            return false;
-        }
-        return true;
-    }
-
-    _ensureMediaConfigFetched() {
-        if (this.mediaConfig !== null) return;
-
-        console.log("[Media Config] Fetching");
-        return MatrixClientPeg.get().getMediaConfig().then((config) => {
-            console.log("[Media Config] Fetched config:", config);
-            return config;
-        }).catch(() => {
-            // Media repo can't or won't report limits, so provide an empty object (no limits).
-            console.log("[Media Config] Could not fetch config, so not limiting uploads.");
-            return {};
-        }).then((config) => {
-            this.mediaConfig = config;
-        });
-    }
-
     sendStickerContentToRoom(url: string, roomId: string, info: string, text: string, matrixClient: MatrixClient) {
         return MatrixClientPeg.get().sendStickerMessage(roomId, url, info, text).catch((e) => {
             console.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
@@ -431,13 +399,13 @@ export default class ContentMessages {
             if (!shouldUpload) return;
         }
 
-        await this._ensureMediaConfigFetched();
+        await this.ensureMediaConfigFetched();
 
         const tooBigFiles = [];
         const okFiles = [];
 
         for (let i = 0; i < files.length; ++i) {
-            if (this._isFileSizeAcceptable(files[i])) {
+            if (this.isFileSizeAcceptable(files[i])) {
                 okFiles.push(files[i]);
             } else {
                 tooBigFiles.push(files[i]);
@@ -474,11 +442,30 @@ export default class ContentMessages {
                     uploadAll = true;
                 }
             }
-            promBefore = this._sendContentToRoom(file, roomId, matrixClient, promBefore);
+            promBefore = this.sendContentToRoom(file, roomId, matrixClient, promBefore);
         }
     }
 
-    _sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+    getCurrentUploads() {
+        return this.inprogress.filter(u => !u.canceled);
+    }
+
+    cancelUpload(promise: Promise<any>) {
+        let upload: IUpload;
+        for (let i = 0; i < this.inprogress.length; ++i) {
+            if (this.inprogress[i].promise === promise) {
+                upload = this.inprogress[i];
+                break;
+            }
+        }
+        if (upload) {
+            upload.canceled = true;
+            MatrixClientPeg.get().cancelUpload(upload.promise);
+            dis.dispatch({action: 'upload_canceled', upload});
+        }
+    }
+
+    private sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
         const content: IContent = {
             body: file.name || 'Attachment',
             info: {
@@ -602,22 +589,35 @@ export default class ContentMessages {
         });
     }
 
-    getCurrentUploads() {
-        return this.inprogress.filter(u => !u.canceled);
+    private isFileSizeAcceptable(file: File) {
+        if (this.mediaConfig !== null &&
+            this.mediaConfig["m.upload.size"] !== undefined &&
+            file.size > this.mediaConfig["m.upload.size"]) {
+            return false;
+        }
+        return true;
     }
 
-    cancelUpload(promise: Promise<any>) {
-        let upload;
-        for (let i = 0; i < this.inprogress.length; ++i) {
-            if (this.inprogress[i].promise === promise) {
-                upload = this.inprogress[i];
-                break;
-            }
+    private ensureMediaConfigFetched() {
+        if (this.mediaConfig !== null) return;
+
+        console.log("[Media Config] Fetching");
+        return MatrixClientPeg.get().getMediaConfig().then((config) => {
+            console.log("[Media Config] Fetched config:", config);
+            return config;
+        }).catch(() => {
+            // Media repo can't or won't report limits, so provide an empty object (no limits).
+            console.log("[Media Config] Could not fetch config, so not limiting uploads.");
+            return {};
+        }).then((config) => {
+            this.mediaConfig = config;
+        });
+    }
+
+    static sharedInstance() {
+        if (window.mx_ContentMessages === undefined) {
+            window.mx_ContentMessages = new ContentMessages();
         }
-        if (upload) {
-            upload.canceled = true;
-            MatrixClientPeg.get().cancelUpload(upload.promise);
-            dis.dispatch({action: 'upload_canceled', upload});
-        }
+        return window.mx_ContentMessages;
     }
 }
