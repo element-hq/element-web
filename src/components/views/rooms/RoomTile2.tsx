@@ -30,6 +30,8 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import { EffectiveMembership, getEffectiveMembership } from "../../../stores/room-list/membership";
 import * as Unread from '../../../Unread';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -86,10 +88,19 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             hover: false,
             notificationState: this.getNotificationState(),
         };
+
+        // TODO: We shouldn't have to listen to every room update
+        // We don't have a model which works in a better way though.
+        MatrixClientPeg.get().on("Room.receipt", this.tryUpdateIfRoomMatches);
+        MatrixClientPeg.get().on("Room.timeline", this.tryUpdateIfRoomMatches);
+        MatrixClientPeg.get().on("Event.decrypted", this.tryUpdateIfRoomMatches);
+        MatrixClientPeg.get().on("Room.redaction", this.tryUpdateIfRoomMatches);
     }
 
     public componentWillUnmount() {
-        // TODO: Listen for changes to the badge count and update as needed
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Room.receipt", this.tryUpdateIfRoomMatches);
+        }
     }
 
     // XXX: This is a bit of an awful-looking hack. We should probably be using state for
@@ -99,7 +110,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
-    // TODO: Make use of this function when the notification state needs updating.
+    private tryUpdateIfRoomMatches = (event: MatrixEvent) => {
+        const roomId = event.getRoomId();
+        if (roomId !== this.props.room.roomId) return;
+
+        this.updateNotificationState();
+    };
+
     private updateNotificationState() {
         this.setState({notificationState: this.getNotificationState()});
     }
