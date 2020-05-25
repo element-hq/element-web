@@ -39,6 +39,14 @@ import * as FormattingUtils from "../../../utils/FormattingUtils";
  * warning disappears.                                             *
  *******************************************************************/
 
+enum NotificationColor {
+    // Inverted (None -> Red) because we do integer comparisons on this
+    None, // nothing special
+    Bold, // no badge, show as unread
+    Grey, // unread notified messages
+    Red,  // unread pings
+}
+
 interface IProps {
     room: Room;
 
@@ -47,16 +55,14 @@ interface IProps {
     // TODO: Incoming call boxes?
 }
 
-interface IBadgeState {
-    showBadge: boolean; // if numUnread > 0 && !showBadge -> bold room
-    numUnread: number; // used only if showBadge or showBadgeHighlight is true
-    hasUnread: number; // used to make the room bold
-    showBadgeHighlight: boolean; // make the badge red
-    isInvite: boolean; // show a `!` instead of a number
+interface INotificationState {
+    symbol: string;
+    color: NotificationColor;
 }
 
-interface IState extends IBadgeState {
+interface IState {
     hover: boolean;
+    notificationState: INotificationState;
 }
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
@@ -78,8 +84,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-
-            ...this.getBadgeState(),
+            notificationState: this.getNotificationState(),
         };
     }
 
@@ -87,28 +92,58 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         // TODO: Listen for changes to the badge count and update as needed
     }
 
-    private updateBadgeCount() {
-        this.setState({...this.getBadgeState()});
+    // XXX: This is a bit of an awful-looking hack. We should probably be using state for
+    // this, but instead we're kinda forced to either duplicate the code or thread a variable
+    // through the code paths. This feels like the least evil option.
+    private get roomIsInvite(): boolean {
+        return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
-    private getBadgeState(): IBadgeState {
-        // TODO: Make this code path faster
-        const highlightCount = RoomNotifs.getUnreadNotificationCount(this.props.room, 'highlight');
-        const numUnread = RoomNotifs.getUnreadNotificationCount(this.props.room);
-        const showBadge = Unread.doesRoomHaveUnreadMessages(this.props.room);
-        const myMembership = getEffectiveMembership(this.props.room.getMyMembership());
-        const isInvite = myMembership === EffectiveMembership.Invite;
-        const notifState = RoomNotifs.getRoomNotifsState(this.props.room.roomId);
-        const shouldShowNotifBadge = RoomNotifs.shouldShowNotifBadge(notifState);
-        const shouldShowHighlightBadge = RoomNotifs.shouldShowMentionBadge(notifState);
+    // TODO: Make use of this function when the notification state needs updating.
+    private updateNotificationState() {
+        this.setState({notificationState: this.getNotificationState()});
+    }
 
-        return {
-            showBadge: (showBadge && shouldShowNotifBadge) || isInvite,
-            numUnread,
-            hasUnread: showBadge,
-            showBadgeHighlight: (highlightCount > 0 && shouldShowHighlightBadge) || isInvite,
-            isInvite,
+    private getNotificationState(): INotificationState {
+        const state: INotificationState = {
+            color: NotificationColor.None,
+            symbol: null,
         };
+
+        if (this.roomIsInvite) {
+            state.color = NotificationColor.Red;
+            state.symbol = "!";
+        } else {
+            const redNotifs = RoomNotifs.getUnreadNotificationCount(this.props.room, 'highlight');
+            const greyNotifs = RoomNotifs.getUnreadNotificationCount(this.props.room, 'total');
+
+            // For a 'true count' we pick the grey notifications first because they include the
+            // red notifications. If we don't have a grey count for some reason we use the red
+            // count. If that count is broken for some reason, assume zero. This avoids us showing
+            // a badge for 'NaN' (which formats as 'NaNB' for NaN Billion).
+            const trueCount = greyNotifs ? greyNotifs : (redNotifs ? redNotifs : 0);
+
+            // Note: we only set the symbol if we have an actual count. We don't want to show
+            // zero on badges.
+
+            if (redNotifs > 0) {
+                state.color = NotificationColor.Red;
+                state.symbol = FormattingUtils.formatCount(trueCount);
+            } else if (greyNotifs > 0) {
+                state.color = NotificationColor.Grey;
+                state.symbol = FormattingUtils.formatCount(trueCount);
+            } else {
+                // We don't have any notified messages, but we might have unread messages. Let's
+                // find out.
+                const hasUnread = Unread.doesRoomHaveUnreadMessages(this.props.room);
+                if (hasUnread) {
+                    state.color = NotificationColor.Bold;
+                    // no symbol for this state
+                }
+            }
+        }
+
+        return state;
     }
 
     private onTileMouseEnter = () => {
@@ -135,15 +170,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         // TODO: a11y proper
         // TODO: Render more than bare minimum
 
+        const hasBadge = this.state.notificationState.color > NotificationColor.Bold;
+        const isUnread = this.state.notificationState.color > NotificationColor.None;
         const classes = classNames({
             'mx_RoomTile': true,
             // 'mx_RoomTile_selected': this.state.selected,
-            'mx_RoomTile_unread': this.state.numUnread > 0 || this.state.hasUnread,
-            'mx_RoomTile_unreadNotify': this.state.showBadge,
-            'mx_RoomTile_highlight': this.state.showBadgeHighlight,
-            'mx_RoomTile_invited': this.state.isInvite,
+            'mx_RoomTile_unread': isUnread,
+            'mx_RoomTile_unreadNotify': this.state.notificationState.color >= NotificationColor.Grey,
+            'mx_RoomTile_highlight': this.state.notificationState.color >= NotificationColor.Red,
+            'mx_RoomTile_invited': this.roomIsInvite,
             // 'mx_RoomTile_menuDisplayed': isMenuDisplayed,
-            'mx_RoomTile_noBadges': !this.state.showBadge,
+            'mx_RoomTile_noBadges': !hasBadge,
             // 'mx_RoomTile_transparent': this.props.transparent,
             // 'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
         });
@@ -154,13 +191,12 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
 
         let badge;
-        if (this.state.showBadge) {
+        if (hasBadge) {
             const badgeClasses = classNames({
                 'mx_RoomTile_badge': true,
                 'mx_RoomTile_badgeButton': false, // this.state.badgeHover || isMenuDisplayed
             });
-            const formattedCount = this.state.isInvite ? `!` : FormattingUtils.formatCount(this.state.numUnread);
-            badge = <div className={badgeClasses}>{formattedCount}</div>;
+            badge = <div className={badgeClasses}>{this.state.notificationState.symbol}</div>;
         }
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
@@ -170,8 +206,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         const nameClasses = classNames({
             'mx_RoomTile_name': true,
-            'mx_RoomTile_invite': this.state.isInvite,
-            'mx_RoomTile_badgeShown': this.state.showBadge,
+            'mx_RoomTile_invite': this.roomIsInvite,
+            'mx_RoomTile_badgeShown': hasBadge,
         });
 
         // TODO: Support collapsed state properly
