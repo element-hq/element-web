@@ -17,6 +17,7 @@ limitations under the License.
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
+import { Component } from "react";
 
 export interface ViewUserPayload extends ActionPayload {
     action: Action.ViewUser,
@@ -26,4 +27,20 @@ export interface ViewUserPayload extends ActionPayload {
      * should be shown (hide whichever relevant components).
      */
     member?: RoomMember;
+}
+
+export interface ViewTooltipPayload extends ActionPayload {
+    action: Action.ViewTooltip,
+
+    /*
+     * The tooltip to render. If it's null the tooltip will not be rendered
+     * We need the void type because of typescript headaches.
+     */
+    tooltip: null | void | Element | Component<Element, any, any>;
+
+    /*
+     * The parent under which to render the tooltip. Can be null to remove
+     * the parent type.
+     */
+    parent: null | Element
 }

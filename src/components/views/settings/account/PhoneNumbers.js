@@ -267,7 +267,7 @@ export default class PhoneNumbers extends React.Component {
                             label={_t("Phone Number")}
                             autoComplete="off"
                             disabled={this.state.verifying}
-                            prefix={phoneCountry}
+                            prefixComponent={phoneCountry}
                             value={this.state.newPhoneNumber}
                             onChange={this._onChangeNewPhoneNumber}
                         />
