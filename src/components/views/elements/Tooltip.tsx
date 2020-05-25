@@ -40,7 +40,7 @@ interface IProps {
         label: React.ReactNode,
 }
 
-class Tooltip extends React.Component<IProps> {
+export default class Tooltip extends React.Component<IProps> {
     private tooltipContainer: HTMLElement;
     private tooltip: void | Element | Component<Element, any, any>;
     private parent: Element;
