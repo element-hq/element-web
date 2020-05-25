@@ -2424,5 +2424,15 @@
     "Click the button below to confirm setting up encryption.": "Klikoni mbi butonin më poshtë që të ripohoni ujdisjen e fshehtëzimit.",
     "Dismiss read marker and jump to bottom": "Mos merr parasysh piketë leximi dhe hidhu te fundi",
     "Jump to oldest unread message": "Hidhu te mesazhi më i vjetër i palexuar",
-    "Upload a file": "Ngarkoni një kartelë"
+    "Upload a file": "Ngarkoni një kartelë",
+    "Font scaling": "Përshkallëzim shkronjash",
+    "Use IRC layout": "Përdor skemë IRC-je",
+    "Font size": "Madhësi shkronjash",
+    "Custom font size": "Madhësi vetjake shkronjash",
+    "IRC display name width": "Gjerësi shfaqjeje emrash IRC",
+    "Size must be a number": "Madhësia duhet të jetë një numër",
+    "Custom font size can only be between %(min)s pt and %(max)s pt": "Madhësia vetjake për shkronjat mund të jetë vetëm mes vlerave %(min)s pt dhe %(max)s pt",
+    "Use between %(min)s pt and %(max)s pt": "Përdor me %(min)s pt dhe %(max)s pt",
+    "Appearance": "Dukje",
+    "Create room": "Krijo dhomë"
 }
