@@ -61,7 +61,7 @@ const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
         if (reconnected) {
-            setIndex(i => i > 0 ? 0 : i);
+            setIndex(0);
         }
     }, []);
     useEventEmitter(cli, "sync", onClientSync);
