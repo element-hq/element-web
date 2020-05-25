@@ -1218,7 +1218,7 @@
     "Hide sessions": "Slėpti seansus",
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> kambaryje %(roomName)s",
     "Security": "Saugumas",
-    "Verify by scanning": "Patvirtinti skenuojant",
+    "Verify by scanning": "Patvirtinti nuskaitant",
     "Verify all users in a room to ensure it's secure.": "Patvirtinkite visus vartotojus kambaryje, kad užtikrintumėte jo saugumą.",
     "You cancelled verification on your other session.": "Jūs atšaukėte patvirtinimą kitame savo seanse.",
     "%(displayName)s cancelled verification.": "%(displayName)s atšaukė patvirtinimą.",
@@ -1466,5 +1466,12 @@
     "Your new session is now verified. Other users will see it as trusted.": "Jūsų naujas seansas dabar yra patvirtintas. Kiti vartotojai matys jį kaip patikimą.",
     "NOT verified": "Nepatvirtinta",
     "verified": "patvirtinta",
-    "If you don't want to set this up now, you can later in Settings.": "Jei jūs dabar nenorite to nustatyti, galite padaryti tai vėliau Nustatymuose."
+    "If you don't want to set this up now, you can later in Settings.": "Jei jūs dabar nenorite to nustatyti, galite padaryti tai vėliau Nustatymuose.",
+    "Done": "Atlikta",
+    "No media permissions": "Nėra medijos leidimų",
+    "The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.": "Seansas, kurį jūs bandote patvirtinti, nepalaiko QR kodo nuskaitymo arba emoji patvirtinimo, kuriuos palaiko Riot. Bandykite su kitu klientu.",
+    "Almost there! Is your other session showing the same shield?": "Beveik atlikta! Ar jūsų kitas seansas rodo tokį patį skydą?",
+    "Almost there! Is %(displayName)s showing the same shield?": "Beveik atlikta! Ar %(displayName)s rodo tokį patį skydą?",
+    "No": "Ne",
+    "Yes": "Taip"
 }
