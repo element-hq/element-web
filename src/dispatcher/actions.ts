@@ -40,7 +40,7 @@ export enum Action {
     ViewUserSettings = "view_user_settings",
 
     /**
-     * Sets the current tooltip
+     * Sets the current tooltip. Should be use with ViewTooltipPayload.
      */
     ViewTooltip = "view_tooltip",
 }
