@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
 import Modal from "../../../Modal";
 
@@ -51,7 +51,7 @@ export default class VerificationRequestToast extends React.PureComponent {
 
         if (request.isSelfVerification) {
             const cli = MatrixClientPeg.get();
-            this.setState({device: await cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
+            this.setState({device: cli.getStoredDevice(cli.getUserId(), request.channel.deviceId)});
         }
     }
 

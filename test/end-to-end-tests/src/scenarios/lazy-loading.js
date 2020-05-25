@@ -25,7 +25,7 @@ const {
 } = require('../usecases/timeline');
 const {createRoom} = require('../usecases/create-room');
 const {getMembersInMemberlist} = require('../usecases/memberlist');
-const changeRoomSettings = require('../usecases/room-settings');
+const {changeRoomSettings} = require('../usecases/room-settings');
 const assert = require('assert');
 
 module.exports = async function lazyLoadingScenarios(alice, bob, charlies) {

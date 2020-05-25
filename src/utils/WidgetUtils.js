@@ -18,7 +18,7 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import * as url from "url";
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 
@@ -29,6 +29,8 @@ import SettingsStore from "../settings/SettingsStore";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
 import {Capability} from "../widgets/WidgetApi";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {WidgetType} from "../widgets/WidgetType";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -66,9 +68,11 @@ export default class WidgetUtils {
             return false;
         }
 
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         return room.currentState.maySendStateEvent('im.vector.modular.widgets', me);
     }
 
+    // TODO: Generify the name of this function. It's not just scalar.
     /**
      * Returns true if specified url is a scalar URL, typically https://scalar.vector.im/api
      * @param  {[type]}  testUrlString URL to check
@@ -180,6 +184,7 @@ export default class WidgetUtils {
             }
 
             const room = MatrixClientPeg.get().getRoom(roomId);
+            // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
             const startingWidgetEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
             if (eventsInIntendedState(startingWidgetEvents)) {
                 resolve();
@@ -189,6 +194,7 @@ export default class WidgetUtils {
             function onRoomStateEvents(ev) {
                 if (ev.getRoomId() !== roomId) return;
 
+                // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
                 const currentWidgetEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
 
                 if (eventsInIntendedState(currentWidgetEvents)) {
@@ -205,9 +211,9 @@ export default class WidgetUtils {
         });
     }
 
-    static setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+    static setUserWidget(widgetId, widgetType: WidgetType, widgetUrl, widgetName, widgetData) {
         const content = {
-            type: widgetType,
+            type: widgetType.preferred,
             url: widgetUrl,
             name: widgetName,
             data: widgetData,
@@ -249,14 +255,16 @@ export default class WidgetUtils {
         });
     }
 
-    static setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData) {
+    static setRoomWidget(roomId, widgetId, widgetType: WidgetType, widgetUrl, widgetName, widgetData) {
         let content;
 
         const addingWidget = Boolean(widgetUrl);
 
         if (addingWidget) {
             content = {
-                type: widgetType,
+                // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
+                // For now we'll send the legacy event type for compatibility with older apps/riots
+                type: widgetType.legacy,
                 url: widgetUrl,
                 name: widgetName,
                 data: widgetData,
@@ -268,8 +276,7 @@ export default class WidgetUtils {
         WidgetEchoStore.setRoomWidgetEcho(roomId, widgetId, content);
 
         const client = MatrixClientPeg.get();
-        // TODO - Room widgets need to be moved to 'm.widget' state events
-        // https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit?usp=sharing
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         return client.sendStateEvent(roomId, "im.vector.modular.widgets", content, widgetId).then(() => {
             return WidgetUtils.waitForRoomWidget(widgetId, roomId, addingWidget);
         }).finally(() => {
@@ -279,10 +286,11 @@ export default class WidgetUtils {
 
     /**
      * Get room specific widgets
-     * @param  {object} room The room to get widgets force
+     * @param  {Room} room The room to get widgets force
      * @return {[object]} Array containing current / active room widgets
      */
-    static getRoomWidgets(room) {
+    static getRoomWidgets(room: Room) {
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         const appsStateEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
         if (!appsStateEvents) {
             return [];
@@ -335,6 +343,14 @@ export default class WidgetUtils {
         return widgets.filter(w => w.content && w.content.type === "m.integration_manager");
     }
 
+    static getRoomWidgetsOfType(room: Room, type: WidgetType) {
+        const widgets = WidgetUtils.getRoomWidgets(room);
+        return (widgets || []).filter(w => {
+            const content = w.getContent();
+            return content.url && type.matches(content.type);
+        });
+    }
+
     static removeIntegrationManagerWidgets() {
         const client = MatrixClientPeg.get();
         if (!client) {
@@ -354,7 +370,7 @@ export default class WidgetUtils {
     static addIntegrationManagerWidget(name: string, uiUrl: string, apiUrl: string) {
         return WidgetUtils.setUserWidget(
             "integration_manager_" + (new Date().getTime()),
-            "m.integration_manager",
+            WidgetType.INTEGRATION_MANAGER,
             uiUrl,
             "Integration Manager: " + name,
             {"api_url": apiUrl},
@@ -402,7 +418,7 @@ export default class WidgetUtils {
         // Obviously anyone that can add a widget can claim it's a jitsi widget,
         // so this doesn't really offer much over the set of domains we load
         // widgets from at all, but it probably makes sense for sanity.
-        if (appType === 'jitsi') {
+        if (WidgetType.JITSI.matches(appType)) {
             capWhitelist.push(Capability.AlwaysOnScreen);
         }
 

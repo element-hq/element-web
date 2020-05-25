@@ -21,6 +21,7 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 
 import { _t } from '../../../../languageHandler';
+import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 /*
  * Access Secure Secret Storage by requesting the user's passphrase.
@@ -55,8 +56,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     }
 
     _onResetRecoveryClick = () => {
+        // Re-enter the access flow, but resetting storage this time around.
         this.props.onFinished(false);
-        throw new Error("Resetting secret storage unimplemented");
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
@@ -119,14 +121,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         if (hasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-            title = _t("Enter secret storage passphrase");
+            title = _t("Enter recovery passphrase");
 
             let keyStatus;
             if (this.state.keyMatches === false) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4E "}{_t(
-                        "Unable to access secret storage. Please verify that you " +
-                        "entered the correct passphrase.",
+                        "Unable to access secret storage. " +
+                        "Please verify that you entered the correct recovery passphrase.",
                     )}
                 </div>;
             } else {
@@ -135,13 +137,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: You should only access secret storage " +
-                    "from a trusted computer.", {},
+                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
                 <p>{_t(
                     "Access your secure message history and your cross-signing " +
-                    "identity for verifying other sessions by entering your passphrase.",
+                    "identity for verifying other sessions by entering your recovery passphrase.",
                 )}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onPassPhraseNext}>
@@ -164,7 +165,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     />
                 </form>
                 {_t(
-                    "If you've forgotten your passphrase you can "+
+                    "If you've forgotten your recovery passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
                     "<button2>set up new recovery options</button2>."
                 , {}, {
@@ -183,7 +184,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                 })}
             </div>;
         } else {
-            title = _t("Enter secret storage recovery key");
+            title = _t("Enter recovery key");
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
@@ -193,8 +194,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             } else if (this.state.keyMatches === false) {
                 keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
                     {"\uD83D\uDC4E "}{_t(
-                        "Unable to access secret storage. Please verify that you " +
-                        "entered the correct recovery key.",
+                        "Unable to access secret storage. " +
+                        "Please verify that you entered the correct recovery key.",
                     )}
                 </div>;
             } else if (this.state.recoveryKeyValid) {
@@ -209,8 +210,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: You should only access secret storage " +
-                    "from a trusted computer.", {},
+                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
                     { b: sub => <b>{sub}</b> },
                 )}</p>
                 <p>{_t(

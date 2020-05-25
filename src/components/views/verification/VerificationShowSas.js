@@ -20,6 +20,7 @@ import { _t, _td } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
+import { fixupColorFonts } from '../../../utils/FontManager';
 
 function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -29,6 +30,7 @@ export default class VerificationShowSas extends React.Component {
     static propTypes = {
         pending: PropTypes.bool,
         displayName: PropTypes.string, // required if pending is true
+        device: PropTypes.object,
         onDone: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired,
         sas: PropTypes.object.isRequired,
@@ -42,6 +44,13 @@ export default class VerificationShowSas extends React.Component {
         this.state = {
             pending: false,
         };
+    }
+
+    componentWillMount() {
+        // As this component is also used before login (during complete security),
+        // also make sure we have a working emoji font to display the SAS emojis here.
+        // This is also done from LoggedInView.
+        fixupColorFonts();
     }
 
     onMatchClick = () => {
@@ -108,10 +117,16 @@ export default class VerificationShowSas extends React.Component {
             let text;
             if (this.state.pending) {
                 if (this.props.isSelf) {
-                    text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
-                        deviceName: this.props.device.getDisplayName(),
-                        deviceId: this.props.device.deviceId,
-                    });
+                    // device shouldn't be null in this situation but it can be, eg. if the device is
+                    // logged out during verification
+                    if (this.props.device) {
+                        text = _t("Waiting for your other session, %(deviceName)s (%(deviceId)s), to verify…", {
+                            deviceName: this.props.device ? this.props.device.getDisplayName() : '',
+                            deviceId: this.props.device ? this.props.device.deviceId : '',
+                        });
+                    } else {
+                        text = _t("Waiting for your other session to verify…");
+                    }
                 } else {
                     const {displayName} = this.props;
                     text = _t("Waiting for %(displayName)s to verify…", {displayName});
@@ -132,11 +147,11 @@ export default class VerificationShowSas extends React.Component {
             />;
         } else {
             confirm = <React.Fragment>
-                <AccessibleButton onClick={this.onMatchClick} kind="primary">
-                    { _t("They match") }
-                </AccessibleButton>
                 <AccessibleButton onClick={this.onDontMatchClick} kind="danger">
                     { _t("They don't match") }
+                </AccessibleButton>
+                <AccessibleButton onClick={this.onMatchClick} kind="primary">
+                    { _t("They match") }
                 </AccessibleButton>
             </React.Fragment>;
         }

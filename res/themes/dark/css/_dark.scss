@@ -147,6 +147,9 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 $button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
 
+// Toggle switch
+$togglesw-off-color: $room-highlight-color;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -176,6 +179,9 @@ $interactive-tooltip-fg-color: #ffffff;
 $breadcrumb-placeholder-bg-color: #272c35;
 
 $user-tile-hover-bg-color: $header-panel-bg-color;
+
+// FontSlider colors
+$font-slider-bg-color: $room-highlight-color;
 
 // ***** Mixins! *****
 

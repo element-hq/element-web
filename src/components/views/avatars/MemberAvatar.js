@@ -20,7 +20,8 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as Avatar from '../../../Avatar';
 import * as sdk from "../../../index";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberAvatar',
@@ -33,7 +34,7 @@ export default createReactClass({
         resizeMethod: PropTypes.string,
         // The onClick to give the avatar
         onClick: PropTypes.func,
-        // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
+        // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
         viewUserOnClick: PropTypes.bool,
         title: PropTypes.string,
     },
@@ -85,7 +86,7 @@ export default createReactClass({
         if (viewUserOnClick) {
             onClick = () => {
                 dis.dispatch({
-                    action: 'view_user',
+                    action: Action.ViewUser,
                     member: this.props.member,
                 });
             };

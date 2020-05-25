@@ -34,14 +34,14 @@ import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
 import * as sdk from '../../index';
 import CallHandler from '../../CallHandler';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch from '../../Searching';
 
-import {isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
+import {isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
@@ -49,7 +49,6 @@ import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
-import WidgetUtils from '../../utils/WidgetUtils';
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -406,13 +405,9 @@ export default createReactClass({
         const hideWidgetDrawer = localStorage.getItem(
             room.roomId + "_hide_widget_drawer");
 
-        if (hideWidgetDrawer === "true") {
-            return false;
-        }
-
-        const widgets = WidgetEchoStore.getEchoedRoomWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
-
-        return widgets.length > 0 || WidgetEchoStore.roomHasPendingWidgets(room.roomId, WidgetUtils.getRoomWidgets(room));
+        // This is confusing, but it means to say that we default to the tray being
+        // hidden unless the user clicked to open it.
+        return hideWidgetDrawer === "false";
     },
 
     componentDidMount: function() {
@@ -430,7 +425,7 @@ export default createReactClass({
         }
         this.onResize();
 
-        document.addEventListener("keydown", this.onKeyDown);
+        document.addEventListener("keydown", this.onNativeKeyDown);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -513,7 +508,7 @@ export default createReactClass({
             this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
         }
 
-        document.removeEventListener("keydown", this.onKeyDown);
+        document.removeEventListener("keydown", this.onNativeKeyDown);
 
         // Remove RoomStore listener
         if (this._roomStoreToken) {
@@ -555,7 +550,8 @@ export default createReactClass({
         }
     },
 
-    onKeyDown: function(ev) {
+    // we register global shortcuts here, they *must not conflict* with local shortcuts elsewhere or both will fire
+    onNativeKeyDown: function(ev) {
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
@@ -570,6 +566,37 @@ export default createReactClass({
             case Key.E:
                 if (ctrlCmdOnly) {
                     this.onMuteVideoClick();
+                    handled = true;
+                }
+                break;
+        }
+
+        if (handled) {
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    },
+
+    onReactKeyDown: function(ev) {
+        let handled = false;
+
+        switch (ev.key) {
+            case Key.ESCAPE:
+                if (!ev.altKey && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey) {
+                    this._messagePanel.forgetReadMarker();
+                    this.jumpToLiveTimeline();
+                    handled = true;
+                }
+                break;
+            case Key.PAGE_UP:
+                if (!ev.altKey && !ev.ctrlKey && ev.shiftKey && !ev.metaKey) {
+                    this.jumpToReadMarker();
+                    handled = true;
+                }
+                break;
+            case Key.U.toUpperCase():
+                if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
+                    dis.dispatch({ action: "upload_file" })
                     handled = true;
                 }
                 break;
@@ -827,7 +854,7 @@ export default createReactClass({
             });
             return;
         }
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (!SettingsStore.getValue("feature_cross_signing")) {
             room.hasUnverifiedDevices().then((hasUnverifiedDevices) => {
                 this.setState({
                     e2eStatus: hasUnverifiedDevices ? "warning" : "verified",
@@ -1702,8 +1729,11 @@ export default createReactClass({
             } else {
                 const myUserId = this.context.credentials.userId;
                 const myMember = this.state.room.getMember(myUserId);
-                const inviteEvent = myMember.events.member;
-                var inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
+                const inviteEvent = myMember ? myMember.events.member : null;
+                let inviterName = _t("Unknown");
+                if (inviteEvent) {
+                    inviterName = inviteEvent.sender ? inviteEvent.sender.name : inviteEvent.getSender();
+                }
 
                 // We deliberately don't try to peek into invites, even if we have permission to peek
                 // as they could be a spam vector.
@@ -1773,7 +1803,7 @@ export default createReactClass({
         const showRoomRecoveryReminder = (
             SettingsStore.getValue("showRoomRecoveryReminder") &&
             this.context.isRoomEncrypted(this.state.room.roomId) &&
-            !this.context.getKeyBackupEnabled()
+            this.context.getKeyBackupEnabled() === false
         );
 
         const hiddenHighlightCount = this._getHiddenHighlightCount();
@@ -2013,9 +2043,13 @@ export default createReactClass({
             mx_RoomView_timeline_rr_enabled: this.state.showReadReceipts,
         });
 
+        const mainClasses = classNames("mx_RoomView", {
+            mx_RoomView_inCall: inCall,
+        });
+
         return (
             <RoomContext.Provider value={this.state}>
-                <main className={"mx_RoomView" + (inCall ? " mx_RoomView_inCall" : "")} ref={this._roomView}>
+                <main className={mainClasses} ref={this._roomView} onKeyDown={this.onReactKeyDown}>
                     <ErrorBoundary>
                         <RoomHeader
                             room={this.state.room}

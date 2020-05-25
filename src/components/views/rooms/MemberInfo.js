@@ -31,7 +31,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -48,6 +48,7 @@ import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberInfo',
@@ -160,13 +161,10 @@ export default createReactClass({
             // no need to re-download the whole thing; just update our copy of
             // the list.
 
-            // Promise.resolve to handle transition from static result to promise; can be removed
-            // in future
-            Promise.resolve(this.context.getStoredDevicesForUser(userId)).then((devices) => {
-                this.setState({
-                    devices: devices,
-                    e2eStatus: this._getE2EStatus(devices),
-                });
+            const devices = this.context.getStoredDevicesForUser(userId);
+            this.setState({
+                devices: devices,
+                e2eStatus: this._getE2EStatus(devices),
             });
         }
     },
@@ -367,7 +365,7 @@ export default createReactClass({
         let eventsToRedact = [];
         for (const timeline of timelineSet.getTimelines()) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
                     return events.concat(event);
                 } else {
                     return events;
@@ -727,7 +725,7 @@ export default createReactClass({
 
     onCancel: function(e) {
         dis.dispatch({
-            action: "view_user",
+            action: Action.ViewUser,
             member: null,
         });
     },

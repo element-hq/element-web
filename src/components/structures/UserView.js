@@ -22,6 +22,7 @@ import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
+import HomePage from "./HomePage";
 
 export default class UserView extends React.Component {
     static get propTypes() {
@@ -42,7 +43,10 @@ export default class UserView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.userId !== this.props.userId) {
+        // XXX: We shouldn't need to null check the userId here, but we declare
+        // it as optional and MatrixChat sometimes fires in a way which results
+        // in an NPE when we try to update the profile info.
+        if (prevProps.userId !== this.props.userId && this.props.userId) {
             this._loadProfileInfo();
         }
     }
@@ -76,7 +80,7 @@ export default class UserView extends React.Component {
             const RightPanel = sdk.getComponent('structures.RightPanel');
             const MainSplit = sdk.getComponent('structures.MainSplit');
             const panel = <RightPanel user={this.state.member} />;
-            return (<MainSplit panel={panel}><div style={{flex: "1"}} /></MainSplit>);
+            return (<MainSplit panel={panel}><HomePage /></MainSplit>);
         } else {
             return (<div />);
         }

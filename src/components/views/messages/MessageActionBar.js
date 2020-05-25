@@ -21,11 +21,12 @@ import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
+import SettingsStore from '../../../settings/SettingsStore';
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -48,7 +49,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         };
 
         let e2eInfoCallback = null;
-        if (mxEvent.isEncrypted()) {
+        if (mxEvent.isEncrypted() && !SettingsStore.getValue("feature_cross_signing")) {
             e2eInfoCallback = onCryptoClick;
         }
 

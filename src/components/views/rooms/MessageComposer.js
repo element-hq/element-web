@@ -20,7 +20,7 @@ import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
@@ -114,7 +114,18 @@ class UploadButton extends React.Component {
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
         this._uploadInput = createRef();
+        this._dispatcherRef = dis.register(this.onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    onAction = payload => {
+        if (payload.action === "upload_file") {
+            this.onUploadClick();
+        }
+    };
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
@@ -128,7 +139,7 @@ class UploadButton extends React.Component {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        // (Note it is a FileList: we can't use slice or sensible iteration).
         const tfiles = [];
         for (let i = 0; i < ev.target.files.length; ++i) {
             tfiles.push(ev.target.files[i]);
@@ -270,7 +281,7 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (SettingsStore.getValue("feature_cross_signing")) {
             if (this.state.isQuoting) {
                 if (this.props.e2eStatus) {
                     return _t('Send an encrypted reply…');
@@ -370,7 +381,7 @@ export default class MessageComposer extends React.Component {
         }
 
         return (
-            <div className="mx_MessageComposer">
+            <div className="mx_MessageComposer mx_GroupLayout">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }

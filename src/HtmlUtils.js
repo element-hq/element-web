@@ -446,7 +446,8 @@ export function bodyToHtml(content, highlights, opts={}) {
                     // their username. Permalinks (links in pills) can be any URL
                     // now, so we just check for an HTTP-looking thing.
                     (
-                        content.formatted_body == undefined ||
+                        strippedBody === safeBody || // replies have the html fallbacks, account for that here
+                        content.formatted_body === undefined ||
                         (!content.formatted_body.includes("http:") &&
                         !content.formatted_body.includes("https:"))
                     );

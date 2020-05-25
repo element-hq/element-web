@@ -75,6 +75,10 @@ module.exports = class RiotSession {
         return this.getElementProperty(field, 'outerHTML');
     }
 
+    isChecked(field) {
+        return this.getElementProperty(field, 'checked');
+    }
+
     consoleLogs() {
         return this.consoleLog.buffer;
     }

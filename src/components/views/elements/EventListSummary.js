@@ -66,12 +66,12 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
     }
 
     return (
-        <div className="mx_EventListSummary" data-scroll-tokens={eventIds}>
+        <li className="mx_EventListSummary" data-scroll-tokens={eventIds}>
             <AccessibleButton className="mx_EventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
                 { expanded ? _t('collapse') : _t('expand') }
             </AccessibleButton>
             { body }
-        </div>
+        </li>
     );
 };
 
@@ -90,7 +90,7 @@ EventListSummary.propTypes = {
     // The list of room members for which to show avatars next to the summary
     summaryMembers: PropTypes.arrayOf(PropTypes.instanceOf(RoomMember)),
     // The text to show as the summary of this event list
-    summaryText: PropTypes.string.isRequired,
+    summaryText: PropTypes.string,
 };
 
 export default EventListSummary;

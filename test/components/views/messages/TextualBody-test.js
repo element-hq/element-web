@@ -205,8 +205,9 @@ describe("<TextualBody />", () => {
             expect(content.html()).toBe('<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'Hey <span>' +
                 '<a class="mx_Pill mx_UserPill" title="@user:server">' +
-                '<img class="mx_BaseAvatar mx_BaseAvatar_image" src="mxc://avatar.url/image.png" ' +
-                'width="16" height="16" title="@member:domain.bla" alt="" aria-hidden="true">Member</a>' +
+                '<img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
+                'style="width: 16px; height: 16px;" ' +
+                'title="@member:domain.bla" alt="" aria-hidden="true" src="mxc://avatar.url/image.png">Member</a>' +
                 '</span></span>');
         });
     });

@@ -25,7 +25,7 @@ import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
 
 const STATUS_BAR_HIDDEN = 0;
