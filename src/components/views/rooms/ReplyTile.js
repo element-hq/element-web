@@ -21,7 +21,7 @@ import { _t, _td } from '../../../languageHandler';
 
 import * as sdk from '../../../index';
 
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {MatrixClient} from 'matrix-js-sdk';
 
