@@ -1,0 +1,23 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s per a %(osName)s",
+    "Custom Server Options": "Opcions de servidor personalitzat",
+    "Dismiss": "Omet",
+    "Unknown device": "Dispositiu desconegut",
+    "Welcome to Riot.im": "Us donem la benvinguda a Riot.im",
+    "Chat with Riot Bot": "Conversa amb el Bot de Riot",
+    "Riot Desktop on %(platformName)s": "Riot d'escriptori per a %(platformName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "Heu d'utilitzar HTTPS per poder fer una trucada amb pantalla compartida.",
+    "powered by Matrix": "amb tecnologia de Matrix",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Xat descentralitzat, encriptat i col·laboratiu amb tecnologia de [matrix]",
+    "Create Account": "Crea un compte",
+    "Need help?": "Necessiteu ajuda?",
+    "Explore rooms": "Exploreu les sales",
+    "Room Directory": "Directori de sales",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Podeu emprar les opcions personalitzades del servidor per iniciar la sessió en altres servidors de Matrix especificant un URL de servidor personal diferent. Això us permet emprar el Riot amb un compte de Matrix existent en un servidor personal diferent.",
+    "Sign In": "Inicia la sessió",
+    "Invalid configuration: no default server specified.": "Configuració no vàlida: no s'ha especificat cap servidor per defecte.",
+    "Your Riot is misconfigured": "El vostre Riot té una configuració errònia",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "El JSON de la configuraciò de Riot no és vàlid. Corregiu el problema i torneu a carregar la pàgina.",
+    "Invalid JSON": "JSON no vàlid",
+    "Go to your browser to complete Sign In": "Aneu al vostre navegador per completar l'inici de sessió"
+}

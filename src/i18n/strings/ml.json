@@ -1,0 +1,12 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(osName)sല്‍  %(browserName)s വഴി %(appName)s",
+    "Custom Server Options": "കസ്റ്റം സെര്‍വര്‍ ഓപ്ഷനുകള്‍",
+    "Dismiss": "ഒഴിവാക്കുക",
+    "powered by Matrix": "മാട്രിക്സില്‍ പ്രവര്‍ത്തിക്കുന്നു",
+    "Riot Desktop on %(platformName)s": "%(platformName)s ലെ റയട്ട് ഡെസ്ക്ടോപ്പ്",
+    "Unknown device": "അപരിചിത ഡിവൈസ്",
+    "You need to be using HTTPS to place a screen-sharing call.": "സ്ക്രീന്‍ ഷെയറിങ്ങ് കോള്‍ നടത്തണമെങ്കില്‍ https ഉപയോഗിക്കണം.",
+    "Welcome to Riot.im": "റയട്ടിലേക്ക് സ്വാഗതം",
+    "Chat with Riot Bot": "റയട്ട് ബോട്ടുമായി ചാറ്റ് ചെയ്യുക",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "വികേന്ദ്രീകൃത , എന്‍ക്രിപ്റ്റഡ് ചാറ്റ് &amp; മാട്രിക്സ് നല്‍കുന്ന കൊളാബൊറേഷന്‍"
+}

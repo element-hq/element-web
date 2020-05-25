@@ -1,0 +1,12 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s melalui %(browserName)s di %(osName)s",
+    "Custom Server Options": "Pilihan Server Khusus",
+    "Dismiss": "Abaikan",
+    "powered by Matrix": "didukung oleh Matrix",
+    "Riot Desktop on %(platformName)s": "Riot Desktop di %(platformName)s",
+    "Unknown device": "Perangkat Tidak Diketahui",
+    "You need to be using HTTPS to place a screen-sharing call.": "Anda perlu menggunakan HTTPS untuk melakukan panggilan berbagi-layar.",
+    "Welcome to Riot.im": "Selamat datang di Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Obrolan terenkripsi, terdesentralisasi &amp; kolaborasi didukung oleh [matrix]",
+    "Chat with Riot Bot": "Mengobrol dengan bot Riot"
+}

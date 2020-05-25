@@ -1,0 +1,12 @@
+{
+    "Riot Desktop on %(platformName)s": "la skami nu zunti ci'e la'o gy. %(platformName)s .gy.",
+    "Unknown device": "lo na'e te djuno se pilno",
+    "%(appName)s via %(browserName)s on %(osName)s": "la'o gy. %(appName)s .gy. xe be'i la'o gy. %(browserName)s .gy. ci'e la'o gy. %(osName)s .gy.",
+    "You need to be using HTTPS to place a screen-sharing call.": ".i la .hytytypysys. sarcu lo nu co'a vidni jorne",
+    "Custom Server Options": "lo macnu se cuxna be fi lo'i samse'u",
+    "Dismiss": "mipri",
+    "powered by Matrix": ".i la nacmeimei cu cumgau",
+    "Welcome to Riot.im": ".i fi'i lo pilno be la nu zunti",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": ".i la nacmeimei cu cumgau lo mifra je na'e se midju nu tavla je ke kansa gunka",
+    "Chat with Riot Bot": "tavla la nu zunti kei sampre"
+}

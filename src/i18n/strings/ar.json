@@ -1,0 +1,17 @@
+{
+    "Custom Server Options": "الإعدادات الشخصية للخادوم",
+    "Dismiss": "تجاهل",
+    "Riot Desktop on %(platformName)s": "الواجهة المكتبية لرايوت على %(platformName)s",
+    "Unknown device": "جهاز مجهول",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s عبر %(browserName)s على %(osName)s",
+    "You need to be using HTTPS to place a screen-sharing call.": "تحتاج الى استخدام الاتصال الآمن (HTTPS) للسماح بمشاركة الشاشة.",
+    "powered by Matrix": "مشغل بواسطة Matrix",
+    "Welcome to Riot.im": "مرحبا بك في Riot.im",
+    "Chat with Riot Bot": "الدردشة مع  Riot Bot",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] تعاون مدعوم مواسطة  &amp; دردشة لا مركزية ومشفرة",
+    "Create Account": "انشاء حساب",
+    "Need help?": "بحاجة إلى مساعدة؟",
+    "Explore rooms": "استكشف غرف المحادثات",
+    "Room Directory": "دليل غرف المحادثات",
+    "Sign In": "التسجيل"
+}

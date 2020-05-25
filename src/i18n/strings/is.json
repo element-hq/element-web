@@ -1,0 +1,12 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s með %(browserName)s á %(osName)s",
+    "powered by Matrix": "keyrt með Matrix",
+    "Welcome to Riot.im": "Velkomin í Riot.im",
+    "Riot Desktop on %(platformName)s": "Riot skjáborðsforrit á %(platformName)s",
+    "Unknown device": "Óþekkt tæki",
+    "Dismiss": "Hafna",
+    "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
+    "You need to be using HTTPS to place a screen-sharing call.": "Þú verður að nota HTTPS til að hringja samtal með deilingu á skjá.",
+    "Chat with Riot Bot": "Spjalla við Riot-róbótann",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]"
+}

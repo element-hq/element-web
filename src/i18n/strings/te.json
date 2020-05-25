@@ -1,0 +1,10 @@
+{
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s %(browserName)s ద్వార %(osName)s కి",
+    "Custom Server Options": "మలచిన  సేవిక ఎంపికలు",
+    "Dismiss": "రద్దుచేసే",
+    "Riot Desktop on %(platformName)s": "రియట్ రంగస్థలం లో %(platformName)s",
+    "Welcome to Riot.im": "రిమోట్.ఇం కి స్వగతం",
+    "Chat with Riot Bot": "రియోట్ బొట్తో మాటామంతి చేయండి",
+    "Unknown device": "తెలుయని పరికరం",
+    "You need to be using HTTPS to place a screen-sharing call.": "తెర ని పంచే కాల్ కి HTTPS అవసరం."
+}
