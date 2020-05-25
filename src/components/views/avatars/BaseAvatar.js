@@ -26,7 +26,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 
-const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
+const useImageUrl = ({url, urls}) => {
     const [imageUrls, setUrls] = useState([]);
     const [urlsIndex, setIndex] = useState();
 
@@ -86,7 +86,7 @@ const BaseAvatar = (props) => {
         ...otherProps
     } = props;
 
-    const [imageUrl, onError] = useImageUrl({url, urls, idName, name, defaultToInitialLetter});
+    const [imageUrl, onError] = useImageUrl({url, urls});
 
     if (!imageUrl && defaultToInitialLetter) {
         const initialLetter = AvatarLogic.getInitialLetter(name);
