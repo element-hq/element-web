@@ -147,8 +147,12 @@ class EmojiPicker extends React.Component {
             // We update this here instead of through React to avoid re-render on scroll.
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", true);
+                cat.ref.current.setAttribute("tabindex", 0);
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", false);
+                cat.ref.current.setAttribute("tabindex", -1);
             }
         }
     }
