@@ -120,7 +120,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         initialSyncLimit: 20,
     };
 
-    private matrixClient: MatrixClient;
+    private matrixClient: MatrixClient = null;
     private justRegisteredUserId: string;
 
     // the credentials used to init the current client object.
@@ -157,7 +157,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     public replaceUsingCreds(creds: IMatrixClientCreds): void {
         this.currentClientCreds = creds;
-        this._createClient(creds);
+        this.createClient(creds);
     }
 
     public async assign(): Promise<any> {
@@ -245,7 +245,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         return matches[1];
     }
 
-    private _createClient(creds: IMatrixClientCreds): void {
+    private createClient(creds: IMatrixClientCreds): void {
         // TODO: Make these opts typesafe with the js-sdk
         const opts = {
             baseUrl: creds.homeserverUrl,
