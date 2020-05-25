@@ -17,7 +17,8 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
-import { debounce, Cancelable } from 'lodash';
+import { debounce } from 'lodash';
+import {IFieldState, IValidationResult} from "../elements/Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -28,7 +29,7 @@ function getId() {
     return `${BASE_ID}_${count++}`;
 }
 
-interface IProps extends React.HTMLAttributes<HTMLElement> {
+interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInputElement> {
     // The field's ID, which binds the input and label together. Immutable.
     id?: string,
     // The element to create. Defaults to "input".
@@ -53,9 +54,7 @@ interface IProps extends React.HTMLAttributes<HTMLElement> {
     // changes.  Returns an object with `valid` boolean field
     // and a `feedback` react component field to provide feedback
     // to the user.
-    onValidate?: (
-        args: {value: string, focused: boolean, allowEmpty: boolean}
-    ) => {valid: boolean, feedback: React.ReactNode},
+    onValidate?: (input: IFieldState) => Promise<IValidationResult>,
     // If specified, overrides the value returned by onValidate.
     flagInvalid?: boolean,
     // If specified, contents will appear as a tooltip on the element and
@@ -85,6 +84,11 @@ interface IState {
 export default class Field extends React.PureComponent<IProps, IState> {
     private id: string;
     private input: HTMLInputElement;
+
+    static defaultProps = {
+        element: "input",
+        type: "text",
+    }
 
     /*
      * This was changed from throttle to debounce: this is more traditional for
@@ -188,10 +192,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
             element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, flagInvalid, tooltipClassName, list, ...inputProps} = this.props;
 
-        const inputElement = element || "input";
-
         // Set some defaults for the <input> element
-        inputProps.type = inputProps.type || "text";
         const ref = input => this.input = input;
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
         inputProps.id = this.id; // this overwrites the id from props
@@ -203,7 +204,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
         // Appease typescript's inference
         const inputProps_ = {...inputProps, ref, list};
 
-        const fieldInput = React.createElement(inputElement, inputProps_, children);
+        const fieldInput = React.createElement(this.props.element, inputProps_, children);
 
         let prefixContainer = null;
         if (prefixComponent) {
@@ -215,7 +216,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
         }
 
         const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
-        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, className, {
+        const fieldClasses = classNames("mx_Field", `mx_Field_${this.props.element}`, className, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
