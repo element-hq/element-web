@@ -32,7 +32,7 @@ export const useEventEmitter = (emitter, eventName, handler) => {
             if (!emitter) return;
 
             // Create event listener that calls handler function stored in ref
-            const eventListener = event => savedHandler.current(event);
+            const eventListener = (...args) => savedHandler.current(...args);
 
             // Add event listener
             emitter.on(eventName, eventListener);

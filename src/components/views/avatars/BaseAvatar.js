@@ -26,35 +26,26 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 
-const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
+const useImageUrl = ({url, urls}) => {
     const [imageUrls, setUrls] = useState([]);
     const [urlsIndex, setIndex] = useState();
 
-    const onError = () => {
-        const nextIndex = urlsIndex + 1;
-        if (nextIndex < imageUrls.length) {
-            // try the next one
-            setIndex(nextIndex);
-        }
-    };
-
-    const defaultImageUrl = useMemo(() => AvatarLogic.defaultAvatarUrlForString(idName || name), [idName, name]);
+    const onError = useCallback(() => {
+        setIndex(i => i + 1); // try the next one
+    }, []);
+    const memoizedUrls = useMemo(() => urls, [JSON.stringify(urls)]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         // work out the full set of urls to try to load. This is formed like so:
-        // imageUrls: [ props.url, ...props.urls, default image ]
+        // imageUrls: [ props.url, ...props.urls ]
 
         let _urls = [];
         if (!SettingsStore.getValue("lowBandwidth")) {
-            _urls = urls || [];
+            _urls = memoizedUrls || [];
 
             if (url) {
                 _urls.unshift(url); // put in urls[0]
             }
-        }
-
-        if (defaultToInitialLetter) {
-            _urls.push(defaultImageUrl); // lowest priority
         }
 
         // deduplicate URLs
@@ -62,22 +53,21 @@ const useImageUrl = ({url, urls, idName, name, defaultToInitialLetter}) => {
 
         setIndex(0);
         setUrls(_urls);
-    }, [url, ...(urls || [])]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [url, memoizedUrls]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const cli = useContext(MatrixClientContext);
     const onClientSync = useCallback((syncState, prevState) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
-        if (reconnected && urlsIndex > 0 ) { // Did we fall back?
-            // Start from the highest priority URL again
+        if (reconnected) {
             setIndex(0);
         }
-    }, [urlsIndex]);
+    }, []);
     useEventEmitter(cli, "sync", onClientSync);
 
     const imageUrl = imageUrls[urlsIndex];
-    return [imageUrl, imageUrl === defaultImageUrl, onError];
+    return [imageUrl, onError];
 };
 
 const BaseAvatar = (props) => {
@@ -96,9 +86,9 @@ const BaseAvatar = (props) => {
         ...otherProps
     } = props;
 
-    const [imageUrl, isDefault, onError] = useImageUrl({url, urls, idName, name, defaultToInitialLetter});
+    const [imageUrl, onError] = useImageUrl({url, urls});
 
-    if (isDefault) {
+    if (!imageUrl && defaultToInitialLetter) {
         const initialLetter = AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
@@ -116,7 +106,7 @@ const BaseAvatar = (props) => {
         const imgNode = (
             <img
                 className="mx_BaseAvatar_image"
-                src={imageUrl}
+                src={AvatarLogic.defaultAvatarUrlForString(idName || name)}
                 alt=""
                 title={title}
                 onError={onError}
