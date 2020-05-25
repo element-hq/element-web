@@ -42,11 +42,9 @@ export default (props) => {
     };
 
     const description =
-        _t("You've previously used a newer version of Riot on %(host)s. " +
+        _t("You've previously used a newer version of Riot with this session. " +
             "To use this version again with end to end encryption, you will " +
-            "need to sign out and back in again. ",
-            {host: props.host},
-        );
+            "need to sign out and back in again.");
 
     const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
     const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
