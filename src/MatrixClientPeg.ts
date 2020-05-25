@@ -34,7 +34,7 @@ import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks } from './CrossSigningManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
-interface ICredentials {
+export interface IMatrixClientCreds {
     homeserverUrl: string,
     identityServerUrl: string,
     userId: string,
@@ -57,20 +57,20 @@ interface IOpts {
  * Matrix Client object is available easily.
  */
 class _MatrixClientPeg {
-    private matrixClient: MatrixClient;
-    private justRegisteredUserId: string;
-
     // These are the default options used when when the
     // client is started in 'start'. These can be altered
     // at any time up to after the 'will_start_client'
     // event is finished processing.
-    private opts: IOpts = {
+    public opts: IOpts = {
         initialSyncLimit: 20,
     };
 
+    private matrixClient: MatrixClient;
+    private justRegisteredUserId: string;
+
     // the credentials used to init the current client object.
     // used if we tear it down & recreate it with a different store
-    private currentClientCreds: ICredentials;
+    private currentClientCreds: IMatrixClientCreds;
 
     constructor() {
     }
@@ -125,9 +125,9 @@ class _MatrixClientPeg {
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
-     * @param {ICredentials} creds The new credentials to use.
+     * @param {IMatrixClientCreds} creds The new credentials to use.
      */
-    public replaceUsingCreds(creds: ICredentials): void {
+    public replaceUsingCreds(creds: IMatrixClientCreds): void {
         this.currentClientCreds = creds;
         this._createClient(creds);
     }
@@ -198,7 +198,7 @@ class _MatrixClientPeg {
         console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
-    public getCredentials(): ICredentials {
+    public getCredentials(): IMatrixClientCreds {
         return {
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
@@ -224,7 +224,7 @@ class _MatrixClientPeg {
         return matches[1];
     }
 
-    private _createClient(creds: ICredentials): void {
+    private _createClient(creds: IMatrixClientCreds): void {
         // TODO: Make these opts typesafe with the js-sdk
         const opts = {
             baseUrl: creds.homeserverUrl,
