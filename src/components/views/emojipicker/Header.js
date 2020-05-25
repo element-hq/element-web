@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from "classnames";
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -26,13 +27,23 @@ class Header extends React.PureComponent {
 
     render() {
         return (
-            <nav className="mx_EmojiPicker_header">
-                {this.props.categories.map(category => (
-                    <button disabled={!category.enabled} key={category.id} ref={category.ref}
-                        className={`mx_EmojiPicker_anchor ${category.visible ? 'mx_EmojiPicker_anchor_visible' : ''}
-                            mx_EmojiPicker_anchor_${category.id}`}
-                        onClick={() => this.props.onAnchorClick(category.id)} title={category.name} />
-                ))}
+            <nav className="mx_EmojiPicker_header" role="tablist">
+                {this.props.categories.map(category => {
+                    const classes = classNames(`mx_EmojiPicker_anchor mx_EmojiPicker_anchor_${category.id}`, {
+                        mx_EmojiPicker_anchor_visible: category.visible,
+                    });
+                    return <button
+                        disabled={!category.enabled}
+                        key={category.id}
+                        ref={category.ref}
+                        className={classes}
+                        onClick={() => this.props.onAnchorClick(category.id)}
+                        title={category.name}
+                        role="tab"
+                        aria-selected={category.visible}
+                        aria-controls={`mx_EmojiPicker_category_${category.id}`}
+                    />;
+                })}
             </nav>
         );
     }

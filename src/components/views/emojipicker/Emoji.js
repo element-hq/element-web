@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import {MenuItem} from "../../structures/ContextMenu";
 
 class Emoji extends React.PureComponent {
     static propTypes = {
@@ -30,14 +31,18 @@ class Emoji extends React.PureComponent {
         const { onClick, onMouseEnter, onMouseLeave, emoji, selectedEmojis } = this.props;
         const isSelected = selectedEmojis && selectedEmojis.has(emoji.unicode);
         return (
-            <li onClick={() => onClick(emoji)}
+            <MenuItem
+                element="li"
+                onClick={() => onClick(emoji)}
                 onMouseEnter={() => onMouseEnter(emoji)}
                 onMouseLeave={() => onMouseLeave(emoji)}
-                className="mx_EmojiPicker_item_wrapper">
+                className="mx_EmojiPicker_item_wrapper"
+                label={emoji.unicode}
+            >
                 <div className={`mx_EmojiPicker_item ${isSelected ? 'mx_EmojiPicker_item_selected' : ''}`}>
                     {emoji.unicode}
                 </div>
-            </li>
+            </MenuItem>
         );
     }
 }
