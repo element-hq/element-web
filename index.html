@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" style="height: 100%;">
+  <head>
+    <meta charset="utf-8">
+    <title>Riot</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="vector-icons/apple-touch-icon-57x57.250bbfd.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="vector-icons/apple-touch-icon-60x60.4d632a0.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="vector-icons/apple-touch-icon-72x72.e93344d.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="vector-icons/apple-touch-icon-76x76.bfcf806.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="vector-icons/apple-touch-icon-114x114.90ee055.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="vector-icons/apple-touch-icon-120x120.efb825d.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.22c7dba.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.619b458.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.a6f14e2.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="referrer" content="no-referrer">
+    <link rel="shortcut icon" href="vector-icons/favicon.4535157.ico">
+    <meta name="apple-mobile-web-app-title" content="Riot">
+    <meta name="application-name" content="Riot">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.22c7dba.png">
+    <meta name="msapplication-config" content="vector-icons/browserconfig.e54b06e.xml">
+    <meta name="theme-color" content="#ffffff">
+    <meta property="og:image" content="https://riot.im/app/themes/riot/img/logos/opengraph.png">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
+        img-src * blob: data:;
+        connect-src *;
+        font-src 'self' data:;
+        media-src * blob: data:;
+        child-src * blob: data:;
+        worker-src 'self';
+        frame-src * blob: data:;
+        form-action 'self';
+        object-src 'self';
+        manifest-src 'self';
+    ">
+    
+           <link rel="stylesheet" href="bundles/2bf4776148e11399b9e7/bundle.css">
+        
+           <link rel="stylesheet" disabled="disabled" title="Light" href="bundles/2bf4776148e11399b9e7/theme-light.css">
+        
+           <link rel="stylesheet" disabled="disabled" title="Dark" href="bundles/2bf4776148e11399b9e7/theme-dark.css">
+        
+           <link rel="stylesheet" disabled="disabled" title="Light-custom" href="bundles/2bf4776148e11399b9e7/theme-light-custom.css">
+        
+           <link rel="stylesheet" disabled="disabled" title="Dark-custom" href="bundles/2bf4776148e11399b9e7/theme-dark-custom.css">
+        
+  </head>
+  <body style="height: 100%; margin: 0;" data-vector-indexeddb-worker-script="bundles/2bf4776148e11399b9e7/indexeddb-worker.js">
+    <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
+    <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
+    <script src="bundles/2bf4776148e11399b9e7/bundle.js"></script>
+
+    <!-- Legacy supporting Prefetch images -->
+    <img src="img/warning.05cc423.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/e2e/warning.2d79aff.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/feather-customised/warning-triangle.d050a38.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/format/bold.38e6779.svg" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/format/code.ea9f385.svg" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/format/italics.4e279d1.svg" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/format/quote.5843424.svg" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+    <img src="img/format/strikethrough.bac51cb.svg" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;">
+
+    <audio id="messageAudio">
+        <source src="media/message.ogg" type="audio/ogg">
+        <source src="media/message.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ringAudio" loop>
+        <source src="media/ring.ogg" type="audio/ogg">
+        <source src="media/ring.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ringbackAudio" loop>
+        <source src="media/ringback.ogg" type="audio/ogg">
+        <source src="media/ringback.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="callendAudio">
+        <source src="media/callend.ogg" type="audio/ogg">
+        <source src="media/callend.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="busyAudio">
+        <source src="media/busy.ogg" type="audio/ogg">
+        <source src="media/busy.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="remoteAudio"></audio>
+    <!-- let CSS themes pass constants to the app -->
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
+  </body>
+</html>

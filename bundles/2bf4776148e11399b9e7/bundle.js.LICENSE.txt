@@ -1,0 +1,2 @@
+/*! modernizr 3.8.0 (Custom Build) | MIT *
+ * https://modernizr.com/download/?-cors-cssanimations-cssfilters-displaytable-es5date-es5function-es5object-es5undefined-es6array-es6collections-es6string-fetch-flexbox-json-localstorage-objectfit-promises-sandbox-svg-svgasimg-svgfilters-urlparser-urlsearchparams-setclasses-cssclassprefix:modernizr_ !*/

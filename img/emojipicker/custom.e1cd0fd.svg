@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright (c) 2016, Missive
+From https://github.com/missive/emoji-mart/blob/master/src/svgs/index.js
+Licensed under BSD-3-Clause: https://github.com/missive/emoji-mart/blob/master/LICENSE
+-->
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+>
+    <g transform="translate(2.000000, 1.000000)">
+        <rect id="Rectangle" x="8" y="0" width="3" height="21" rx="1.5" />
+        <rect
+            id="Rectangle"
+            transform="translate(9.843, 10.549) rotate(60) translate(-9.843, -10.549) "
+            x="8.343"
+            y="0.049"
+            width="3"
+            height="21"
+            rx="1.5"
+        />
+        <rect
+            id="Rectangle"
+            transform="translate(9.843, 10.549) rotate(-60) translate(-9.843, -10.549) "
+            x="8.343"
+            y="0.049"
+            width="3"
+            height="21"
+            rx="1.5"
+        />
+    </g>
+</svg>
