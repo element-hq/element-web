@@ -92,9 +92,17 @@ class RoomListStore extends Store {
     constructor() {
         super(dis);
 
+        this._checkDisabled();
         this._init();
         this._getManualComparator = this._getManualComparator.bind(this);
         this._recentsComparator = this._recentsComparator.bind(this);
+    }
+
+    _checkDisabled() {
+        this.disabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
+        if (this.disabled) {
+            console.warn("👋 legacy room list store has been disabled");
+        }
     }
 
     /**
@@ -113,6 +121,8 @@ class RoomListStore extends Store {
     }
 
     _init() {
+        if (this.disabled) return;
+
         // Initialise state
         const defaultLists = {
             "m.server_notice": [/* { room: js-sdk room, category: string } */],
@@ -140,6 +150,8 @@ class RoomListStore extends Store {
     }
 
     _setState(newState) {
+        if (this.disabled) return;
+
         // If we're changing the lists, transparently change the presentation lists (which
         // is given to requesting components). This dramatically simplifies our code elsewhere
         // while also ensuring we don't need to update all the calling components to support
@@ -156,6 +168,8 @@ class RoomListStore extends Store {
     }
 
     __onDispatch(payload) {
+        if (this.disabled) return;
+
         const logicallyReady = this._matrixClient && this._state.ready;
         switch (payload.action) {
             case 'setting_updated': {
@@ -181,6 +195,9 @@ class RoomListStore extends Store {
                 if (!(payload.prevState !== 'PREPARED' && payload.state === 'PREPARED')) {
                     break;
                 }
+
+                this._checkDisabled();
+                if (this.disabled) return;
 
                 // Always ensure that we set any state needed for settings here. It is possible that
                 // setting updates trigger on startup before we are ready to sync, so we want to make

@@ -34,9 +34,10 @@ import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 import SettingsStore from '../../../settings/SettingsStore';
-import RoomListStore, {TAG_DM} from "../../../stores/RoomListStore";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
+import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
+import {DefaultTagID} from "../../../stores/room-list/models";
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -344,10 +345,10 @@ export default class InviteDialog extends React.PureComponent {
     _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
-        // Also pull in all the rooms tagged as TAG_DM so we don't miss anything. Sometimes the
+        // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
         // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const taggedRooms = RoomListStore.getRoomLists();
-        const dmTaggedRooms = taggedRooms[TAG_DM];
+        const taggedRooms = RoomListStoreTempProxy.getRoomLists();
+        const dmTaggedRooms = taggedRooms[DefaultTagID.DM];
         const myUserId = MatrixClientPeg.get().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter(u => u.userId !== myUserId);
