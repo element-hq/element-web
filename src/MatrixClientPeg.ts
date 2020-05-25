@@ -44,10 +44,65 @@ export interface IMatrixClientCreds {
 }
 
 // TODO: Move this to the js-sdk
-interface IOpts {
+export interface IOpts {
     initialSyncLimit?: number;
     pendingEventOrdering?: "detached" | "chronological";
     lazyLoadMembers?: boolean;
+}
+
+export interface IMatrixClientPeg {
+    opts: IOpts;
+
+    /**
+     * Sets the script href passed to the IndexedDB web worker
+     * If set, a separate web worker will be started to run the IndexedDB
+     * queries on.
+     *
+     * @param {string} script href to the script to be passed to the web worker
+     */
+    setIndexedDbWorkerScript(script: string): void;
+
+    /**
+     * Return the server name of the user's homeserver
+     * Throws an error if unable to deduce the homeserver name
+     * (eg. if the user is not logged in)
+     *
+     * @returns {string} The homeserver name, if present.
+     */
+    getHomeserverName(): string;
+
+    get(): MatrixClient;
+    unset(): void;
+    assign(): Promise<any>;
+    start(): Promise<any>;
+
+    getCredentials(): IMatrixClientCreds;
+
+    /**
+     * If we've registered a user ID we set this to the ID of the
+     * user we've just registered. If they then go & log in, we
+     * can send them to the welcome user (obviously this doesn't
+     * guarentee they'll get a chat with the welcome user).
+     *
+     * @param {string} uid The user ID of the user we've just registered
+     */
+    setJustRegisteredUserId(uid: string): void;
+
+    /**
+     * Returns true if the current user has just been registered by this
+     * client as determined by setJustRegisteredUserId()
+     *
+     * @returns {bool} True if user has just been registered
+     */
+    currentUserIsJustRegistered(): boolean;
+
+    /**
+     * Replace this MatrixClientPeg's client with a client instance that has
+     * homeserver / identity server URLs and active credentials
+     *
+     * @param {IMatrixClientCreds} creds The new credentials to use.
+     */
+    replaceUsingCreds(creds: IMatrixClientCreds): void;
 }
 
 /**
@@ -56,7 +111,7 @@ interface IOpts {
  * This module provides a singleton instance of this class so the 'current'
  * Matrix Client object is available easily.
  */
-class _MatrixClientPeg {
+class _MatrixClientPeg implements IMatrixClientPeg {
     // These are the default options used when when the
     // client is started in 'start'. These can be altered
     // at any time up to after the 'will_start_client'
@@ -75,13 +130,6 @@ class _MatrixClientPeg {
     constructor() {
     }
 
-    /**
-     * Sets the script href passed to the IndexedDB web worker
-     * If set, a separate web worker will be started to run the IndexedDB
-     * queries on.
-     *
-     * @param {string} script href to the script to be passed to the web worker
-     */
     public setIndexedDbWorkerScript(script: string): void {
         createMatrixClient.indexedDbWorkerScript = script;
     }
@@ -96,24 +144,10 @@ class _MatrixClientPeg {
         MatrixActionCreators.stop();
     }
 
-    /**
-     * If we've registered a user ID we set this to the ID of the
-     * user we've just registered. If they then go & log in, we
-     * can send them to the welcome user (obviously this doesn't
-     * guarentee they'll get a chat with the welcome user).
-     *
-     * @param {string} uid The user ID of the user we've just registered
-     */
     public setJustRegisteredUserId(uid: string): void {
         this.justRegisteredUserId = uid;
     }
 
-    /**
-     * Returns true if the current user has just been registered by this
-     * client as determined by setJustRegisteredUserId()
-     *
-     * @returns {bool} True if user has just been registered
-     */
     public currentUserIsJustRegistered(): boolean {
         return (
             this.matrixClient &&
@@ -121,12 +155,6 @@ class _MatrixClientPeg {
         );
     }
 
-    /**
-     * Replace this MatrixClientPeg's client with a client instance that has
-     * homeserver / identity server URLs and active credentials
-     *
-     * @param {IMatrixClientCreds} creds The new credentials to use.
-     */
     public replaceUsingCreds(creds: IMatrixClientCreds): void {
         this.currentClientCreds = creds;
         this._createClient(creds);
@@ -209,13 +237,6 @@ class _MatrixClientPeg {
         };
     }
 
-    /**
-     * Return the server name of the user's homeserver
-     * Throws an error if unable to deduce the homeserver name
-     * (eg. if the user is not logged in)
-     *
-     * @returns {string} The homeserver name, if present.
-     */
     public getHomeserverName(): string {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
@@ -267,10 +288,8 @@ class _MatrixClientPeg {
     }
 }
 
-const anyGlobal = <any>global;
-
-if (!anyGlobal.mxMatrixClientPeg) {
-    anyGlobal.mxMatrixClientPeg = new _MatrixClientPeg();
+if (!window.mxMatrixClientPeg) {
+    window.mxMatrixClientPeg = new _MatrixClientPeg();
 }
 
-export const MatrixClientPeg = <_MatrixClientPeg>anyGlobal.mxMatrixClientPeg;
+export const MatrixClientPeg = window.mxMatrixClientPeg;
