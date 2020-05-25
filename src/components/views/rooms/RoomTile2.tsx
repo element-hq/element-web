@@ -214,7 +214,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         let tooltip = null;
         if (false) { // isCollapsed
             if (this.state.hover) {
-                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto"/>
+                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} />
             }
         }
 
