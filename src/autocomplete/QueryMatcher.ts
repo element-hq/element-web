@@ -77,7 +77,8 @@ export default class QueryMatcher<T extends Object> {
         for (const object of objects) {
             // Need to use unsafe coerce here because the objects can have any
             // type for their values. We assume that those values who's keys have
-            // been specified will be string.
+            // been specified will be string. Also, we cannot infer all the
+            // types of the keys of the objects at compile.
             const keyValues: (string)[] = _at<T>(object as any, this._keys) as any;
 
             for (const f of this._funcs) {
