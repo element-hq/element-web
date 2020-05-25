@@ -22,7 +22,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { ViewTooltipPayload } from '../../../dispatcher/payloads/ViewUserPayload';
+import { ViewTooltipPayload } from '../../../dispatcher/payloads/ViewTooltipPayload';
 import { Action } from '../../../dispatcher/actions';
 
 const MIN_TOOLTIP_HEIGHT = 25;
