@@ -72,7 +72,7 @@ class QuickReactions extends React.Component {
                         </React.Fragment>
                     }
                 </h2>
-                <ul className="mx_EmojiPicker_list">
+                <ul className="mx_EmojiPicker_list" aria-label={_t("Quick Reactions")}>
                     {QUICK_REACTIONS.map(emoji => <Emoji
                         key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
                         onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
