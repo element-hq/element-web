@@ -1097,7 +1097,7 @@
     "Later": "Vėliau",
     "Verify yourself & others to keep your chats safe": "Patvirtinkite save ir kitus, kad jūsų pokalbiai būtų saugūs",
     "Go back": "Grįžti",
-    "This room is end-to-end encrypted": "Šis kambarys užšifruotas visapusiu šifravimu",
+    "This room is end-to-end encrypted": "Šis kambarys visapusiškai užšifruotas",
     "Send a message…": "Siųsti žinutę…",
     "Never lose encrypted messages": "Niekada nepraraskite šifruotų žinučių",
     "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Žinutės šiame kambaryje yra apsaugotos visapusiu šifravimu. Tik jūs ir gavėjas(-ai) turite raktus šioms žinutėms perskaityti.",
@@ -1539,5 +1539,10 @@
     "Logout": "Atsijungti",
     "Reject & Ignore user": "Atmesti ir ignoruoti vartotoją",
     "Reject invitation": "Atmesti pakvietimą",
-    "Unable to reject invite": "Nepavyko atmesti pakvietimo"
+    "Unable to reject invite": "Nepavyko atmesti pakvietimo",
+    "Whether you're using Riot as an installed Progressive Web App": "Nesvarbu, ar naudojate Riot kaip įdiegtą progresyviąją žiniatinklio programą",
+    "Your user agent": "Jūsų vartotojo agentas",
+    "The information being sent to us to help make Riot better includes:": "Informacija, siunčiama mums siekiant pagerinti Riot, yra:",
+    "Invite only": "Tik pakviestiems",
+    "You can only join it with a working invite.": "Jūs galite prisijungti tik su veikiančiu pakvietimu."
 }
