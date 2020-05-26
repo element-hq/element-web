@@ -802,6 +802,8 @@ export default createReactClass({
 
         const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
+        const groupPadlock = !this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const ircPadlock = this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -873,9 +875,10 @@ export default createReactClass({
                         { ircTimestamp }
                         { avatar }
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_reply">
                             { groupTimestamp }
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -904,9 +907,10 @@ export default createReactClass({
                             { readAvatars }
                         </div>
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_line">
                             { groupTimestamp }
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
