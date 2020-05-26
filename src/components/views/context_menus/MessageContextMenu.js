@@ -116,11 +116,6 @@ export default createReactClass({
         this.closeMenu();
     },
 
-    e2eInfoClicked: function() {
-        this.props.e2eInfoCallback();
-        this.closeMenu();
-    },
-
     onReportEventClick: function() {
         const ReportEventDialog = sdk.getComponent("dialogs.ReportEventDialog");
         Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
@@ -465,15 +460,6 @@ export default createReactClass({
             );
         }
 
-        let e2eInfo;
-        if (this.props.e2eInfoCallback) {
-            e2eInfo = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.e2eInfoClicked}>
-                    { _t('End-to-end encryption information') }
-                </MenuItem>
-            );
-        }
-
         let reportEventButton;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
@@ -500,7 +486,6 @@ export default createReactClass({
                 { quoteButton }
                 { externalURLButton }
                 { collapseReplyThread }
-                { e2eInfo }
                 { reportEventButton }
             </div>
         );
