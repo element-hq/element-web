@@ -34,7 +34,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInput
     id?: string,
     // The element to create. Defaults to "input".
     // To define options for a select, use <Field><option ... /></Field>
-    element?: InputType,
+    element?: "input" | " select" | "textarea",
     // The field's type (when used as an <input>). Defaults to "text".
     type?: string,
     // id of a <datalist> element for suggestions
@@ -68,12 +68,6 @@ interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInput
     // All other props pass through to the <input>.
 }
 
-enum InputType {
-    INPUT = "input",
-    SELECT = "select",
-    TEXTAREA = "textarea",
-}
-
 interface IState {
     valid: boolean,
     feedback: React.ReactNode,
@@ -85,7 +79,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
     private id: string;
     private input: HTMLInputElement;
 
-    static defaultProps = {
+    private static defaultProps = {
         element: "input",
         type: "text",
     }
@@ -99,15 +93,12 @@ export default class Field extends React.PureComponent<IProps, IState> {
      * We may find that we actually want different behaviour for registration
      * fields, in which case we can add some options to control it.
      */
-    validateOnChange = debounce(() => {
+    private validateOnChange = debounce(() => {
         this.validate({
             focused: true,
         });
     }, VALIDATION_THROTTLE_MS);
 
-    focus() {
-        this.input.focus();
-    }
     constructor(props) {
         super(props);
         this.state = {
@@ -120,7 +111,11 @@ export default class Field extends React.PureComponent<IProps, IState> {
         this.id = this.props.id || getId();
     }
 
-    onFocus = (ev) => {
+    public focus() {
+        this.input.focus();
+    }
+
+    private onFocus = (ev) => {
         this.setState({
             focused: true,
         });
@@ -133,7 +128,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
         }
     };
 
-    onChange = (ev) => {
+    private onChange = (ev) => {
         this.validateOnChange();
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
@@ -141,7 +136,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
         }
     };
 
-    onBlur = (ev) => {
+    private onBlur = (ev) => {
         this.setState({
             focused: false,
         });
@@ -154,7 +149,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
         }
     };
 
-    async validate({ focused, allowEmpty = true }: {focused: boolean, allowEmpty?: boolean}) {
+    private async validate({ focused, allowEmpty = true }: {focused: boolean, allowEmpty?: boolean}) {
         if (!this.props.onValidate) {
             return;
         }
@@ -187,7 +182,7 @@ export default class Field extends React.PureComponent<IProps, IState> {
 
 
 
-    render() {
+    public render() {
         const {
             element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, flagInvalid, tooltipClassName, list, ...inputProps} = this.props;

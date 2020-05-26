@@ -46,12 +46,12 @@ export default class Tooltip extends React.Component<IProps> {
     private parent: Element;
 
 
-    static defaultProps = {
+    public static readonly defaultProps = {
         visible: true,
     };
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
-    componentDidMount() {
+    public componentDidMount() {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_Tooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
@@ -62,12 +62,12 @@ export default class Tooltip extends React.Component<IProps> {
         this.renderTooltip();
     }
 
-    componentDidUpdate() {
+    public componentDidUpdate() {
         this.renderTooltip();
     }
 
     // Remove the wrapper element, as the tooltip has finished using it
-    componentWillUnmount() {
+    public componentWillUnmount() {
         dis.dispatch<ViewTooltipPayload>({
             action: Action.ViewTooltip,
             tooltip: null,
@@ -128,7 +128,7 @@ export default class Tooltip extends React.Component<IProps> {
         });
     }
 
-    render() {
+    public render() {
         // Render a placeholder
         return (
             <div className={this.props.className} >
