@@ -190,6 +190,7 @@ export default class EditMessageComposer extends React.Component {
             const roomId = editedEvent.getRoomId();
             this._cancelPreviousPendingEdit();
             this.context.sendMessage(roomId, editContent);
+            dis.dispatch({action: "message_sent"});
         }
 
         // close the event editing and focus composer
