@@ -1598,7 +1598,7 @@
     "Create Room": "Create Room",
     "Sign out": "Sign out",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this": "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of Riot to do this",
-    "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ": "You've previously used a newer version of Riot on %(host)s. To use this version again with end to end encryption, you will need to sign out and back in again. ",
+    "You've previously used a newer version of Riot with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "You've previously used a newer version of Riot with this session. To use this version again with end to end encryption, you will need to sign out and back in again.",
     "Incompatible Database": "Incompatible Database",
     "Continue With Encryption Disabled": "Continue With Encryption Disabled",
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Confirm your account deactivation by using Single Sign On to prove your identity.",

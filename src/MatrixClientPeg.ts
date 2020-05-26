@@ -197,9 +197,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
                 // The js-sdk found a crypto DB too new for it to use
                 const CryptoStoreTooNewDialog =
                     sdk.getComponent("views.dialogs.CryptoStoreTooNewDialog");
-                Modal.createDialog(CryptoStoreTooNewDialog, {
-                    host: window.location.host,
-                });
+                Modal.createDialog(CryptoStoreTooNewDialog);
             }
             // this can happen for a number of reasons, the most likely being
             // that the olm library was missing. It's not fatal.
