@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,67 +18,68 @@ limitations under the License.
 */
 
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
+import { ViewTooltipPayload } from '../../../dispatcher/payloads/ViewTooltipPayload';
+import { Action } from '../../../dispatcher/actions';
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
-export default createReactClass({
-    displayName: 'Tooltip',
-
-    propTypes: {
+interface IProps {
         // Class applied to the element used to position the tooltip
-        className: PropTypes.string,
+        className: string,
         // Class applied to the tooltip itself
-        tooltipClassName: PropTypes.string,
+        tooltipClassName?: string,
         // Whether the tooltip is visible or hidden.
         // The hidden state allows animating the tooltip away via CSS.
         // Defaults to visible if unset.
-        visible: PropTypes.bool,
+        visible?: boolean,
         // the react element to put into the tooltip
-        label: PropTypes.node,
-    },
+        label: React.ReactNode,
+}
 
-    getDefaultProps() {
-        return {
-            visible: true,
-        };
-    },
+export default class Tooltip extends React.Component<IProps> {
+    private tooltipContainer: HTMLElement;
+    private tooltip: void | Element | Component<Element, any, any>;
+    private parent: Element;
+
+
+    public static readonly defaultProps = {
+        visible: true,
+    };
 
     // Create a wrapper for the tooltip outside the parent and attach it to the body element
-    componentDidMount: function() {
+    public componentDidMount() {
         this.tooltipContainer = document.createElement("div");
         this.tooltipContainer.className = "mx_Tooltip_wrapper";
         document.body.appendChild(this.tooltipContainer);
-        window.addEventListener('scroll', this._renderTooltip, true);
+        window.addEventListener('scroll', this.renderTooltip, true);
 
-        this.parent = ReactDOM.findDOMNode(this).parentNode;
+        this.parent = ReactDOM.findDOMNode(this).parentNode as Element;
 
-        this._renderTooltip();
-    },
+        this.renderTooltip();
+    }
 
-    componentDidUpdate: function() {
-        this._renderTooltip();
-    },
+    public componentDidUpdate() {
+        this.renderTooltip();
+    }
 
     // Remove the wrapper element, as the tooltip has finished using it
-    componentWillUnmount: function() {
-        dis.dispatch({
-            action: 'view_tooltip',
+    public componentWillUnmount() {
+        dis.dispatch<ViewTooltipPayload>({
+            action: Action.ViewTooltip,
             tooltip: null,
             parent: null,
         });
 
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
         document.body.removeChild(this.tooltipContainer);
-        window.removeEventListener('scroll', this._renderTooltip, true);
-    },
+        window.removeEventListener('scroll', this.renderTooltip, true);
+    }
 
-    _updatePosition(style) {
+    private updatePosition(style: {[key: string]: any}) {
         const parentBox = this.parent.getBoundingClientRect();
         let offset = 0;
         if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
@@ -91,16 +92,15 @@ export default createReactClass({
         style.top = (parentBox.top - 2) + window.pageYOffset + offset;
         style.left = 6 + parentBox.right + window.pageXOffset;
         return style;
-    },
+    }
 
-    _renderTooltip: function() {
+    private renderTooltip() {
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        const parent = ReactDOM.findDOMNode(this).parentNode;
-        let style = {};
-        style = this._updatePosition(style);
+        const parent = ReactDOM.findDOMNode(this).parentNode as Element;
+        const style = this.updatePosition({});
         // Hide the entire container when not visible. This prevents flashing of the tooltip
         // if it is not meant to be visible on first mount.
         style.display = this.props.visible ? "block" : "none";
@@ -118,21 +118,21 @@ export default createReactClass({
         );
 
         // Render the tooltip manually, as we wish it not to be rendered within the parent
-        this.tooltip = ReactDOM.render(tooltip, this.tooltipContainer);
+        this.tooltip = ReactDOM.render<Element>(tooltip, this.tooltipContainer);
 
         // Tell the roomlist about us so it can manipulate us if it wishes
-        dis.dispatch({
-            action: 'view_tooltip',
+        dis.dispatch<ViewTooltipPayload>({
+            action: Action.ViewTooltip,
             tooltip: this.tooltip,
             parent: parent,
         });
-    },
+    }
 
-    render: function() {
+    public render() {
         // Render a placeholder
         return (
             <div className={this.props.className} >
             </div>
         );
-    },
-});
+    }
+}
