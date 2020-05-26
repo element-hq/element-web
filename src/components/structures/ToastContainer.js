@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from '../../languageHandler';
 import ToastStore from "../../stores/ToastStore";
 import classNames from "classnames";
 
@@ -50,14 +49,21 @@ export default class ToastContainer extends React.Component {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
             });
-            const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
+
+            let countIndicator;
+            if (isStacked) {
+                countIndicator = `(1/${totalCount})`;
+            }
 
             const toastProps = Object.assign({}, props, {
                 key,
                 toastKey: key,
             });
             toast = (<div className={toastClasses}>
-                <h2>{title}{countIndicator}</h2>
+                <div className="mx_Toast_title">
+                    <h2>{title}</h2>
+                    <span>{countIndicator}</span>
+                </div>
                 <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
             </div>);
         }
