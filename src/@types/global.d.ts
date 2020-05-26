@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as ModernizrStatic from "modernizr";
+import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 
 declare global {
@@ -24,6 +25,8 @@ declare global {
         Olm: {
             init: () => Promise<void>;
         };
+
+        mx_ContentMessages: ContentMessages;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
