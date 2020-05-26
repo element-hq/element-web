@@ -272,6 +272,7 @@ class RoomViewStore extends Store {
                 err: err,
             });
             let msg = err.message ? err.message : JSON.stringify(err);
+            console.log("Failed to join room:", msg);
             // XXX: We are relying on the error message returned by browsers here.
             // This isn't great, but it does generalize the error being shown to users.
             if (msg && msg.startsWith("CORS request rejected")) {
