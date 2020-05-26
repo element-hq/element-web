@@ -89,17 +89,18 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             notificationState: this.getNotificationState(),
         };
 
-        // TODO: We shouldn't have to listen to every room update
-        // We don't have a model which works in a better way though.
-        MatrixClientPeg.get().on("Room.receipt", this.tryUpdateIfRoomMatches);
-        MatrixClientPeg.get().on("Room.timeline", this.tryUpdateIfRoomMatches);
-        MatrixClientPeg.get().on("Event.decrypted", this.tryUpdateIfRoomMatches);
-        MatrixClientPeg.get().on("Room.redaction", this.tryUpdateIfRoomMatches);
+        this.props.room.on("Room.receipt", this.handleRoomEventUpdate);
+        this.props.room.on("Room.timeline", this.handleRoomEventUpdate);
+        this.props.room.on("Event.decrypted", this.handleRoomEventUpdate);
+        this.props.room.on("Room.redaction", this.handleRoomEventUpdate);
     }
 
     public componentWillUnmount() {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room.receipt", this.tryUpdateIfRoomMatches);
+        if (this.props.room) {
+            this.props.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
+            this.props.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
+            this.props.room.removeListener("Event.decrypted", this.handleRoomEventUpdate);
+            this.props.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
         }
     }
 
@@ -110,8 +111,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
-    private tryUpdateIfRoomMatches = (event: MatrixEvent) => {
+    private handleRoomEventUpdate = (event: MatrixEvent) => {
         const roomId = event.getRoomId();
+
+        // Sanity check: should never happen
         if (roomId !== this.props.room.roomId) return;
 
         this.updateNotificationState();
