@@ -2434,5 +2434,16 @@
     "QR Code": "QR Code",
     "Dismiss read marker and jump to bottom": "取消讀取標記並跳至底部",
     "Jump to oldest unread message": "跳至最舊的未讀訊息",
-    "Upload a file": "上傳檔案"
+    "Upload a file": "上傳檔案",
+    "Use IRC layout": "使用 IRC 佈局",
+    "IRC display name width": "IRC 顯示名稱寬度",
+    "Create room": "建立聊天室",
+    "Font scaling": "字型縮放",
+    "Font size": "字型大小",
+    "Custom font size": "自訂字型大小",
+    "Size must be a number": "大小必須為數字",
+    "Custom font size can only be between %(min)s pt and %(max)s pt": "自訂字型大小僅能為 %(min)s 點至 %(max)s 點間",
+    "Use between %(min)s pt and %(max)s pt": "使用 %(min)s 點至 %(max)s 點間",
+    "Appearance": "外觀",
+    "Use the improved room list (in development - refresh to apply changes)": "使用改進的聊天室清單（開發中 - 重新整理以套用變更）"
 }
