@@ -15,13 +15,21 @@ limitations under the License.
 */
 
 import * as React from "react";
-import ToastStore from "../../stores/ToastStore";
+import ToastStore, {IToast} from "../../stores/ToastStore";
 import classNames from "classnames";
 
-export default class ToastContainer extends React.Component {
-    constructor() {
-        super();
-        this.state = {toasts: ToastStore.sharedInstance().getToasts()};
+interface IState {
+    toasts: IToast<any>[];
+    countSeen: number;
+}
+
+export default class ToastContainer extends React.Component<{}, IState> {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            toasts: ToastStore.sharedInstance().getToasts(),
+            countSeen: ToastStore.sharedInstance().getCountSeen(),
+        };
 
         // Start listening here rather than in componentDidMount because
         // toasts may dismiss themselves in their didMount if they find
@@ -35,7 +43,10 @@ export default class ToastContainer extends React.Component {
     }
 
     _onToastStoreUpdate = () => {
-        this.setState({toasts: ToastStore.sharedInstance().getToasts()});
+        this.setState({
+            toasts: ToastStore.sharedInstance().getToasts(),
+            countSeen: ToastStore.sharedInstance().getCountSeen(),
+        });
     };
 
     render() {
@@ -51,8 +62,8 @@ export default class ToastContainer extends React.Component {
             });
 
             let countIndicator;
-            if (isStacked) {
-                countIndicator = `(1/${totalCount})`;
+            if (isStacked || this.state.countSeen > 0) {
+                countIndicator = ` (${this.state.countSeen + 1}/${this.state.countSeen + totalCount})`;
             }
 
             const toastProps = Object.assign({}, props, {
