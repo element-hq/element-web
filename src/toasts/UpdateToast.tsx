@@ -81,7 +81,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
             onAccept,
         },
         component: GenericToast,
-        priority: 20,
+        priority: 30,
     });
 };
 
