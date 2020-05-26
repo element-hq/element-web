@@ -18,10 +18,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import * as Avatar from '../../../Avatar';
 import * as sdk from "../../../index";
 import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 export default createReactClass({
     displayName: 'MemberAvatar',
@@ -62,10 +62,14 @@ export default createReactClass({
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
-                imageUrl: Avatar.avatarUrlForMember(props.member,
-                                             props.width,
-                                             props.height,
-                                             props.resizeMethod),
+                imageUrl: props.member.getAvatarUrl(
+                    MatrixClientPeg.get().getHomeserverUrl(),
+                    Math.floor(props.width * window.devicePixelRatio),
+                    Math.floor(props.height * window.devicePixelRatio),
+                    props.resizeMethod,
+                    false,
+                    false,
+                ),
             };
         } else if (props.fallbackUserId) {
             return {
