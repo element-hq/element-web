@@ -388,12 +388,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return Boolean(feedUrl);
     }
 
-    startUpdateCheck = () => {
+    startUpdateCheck() {
         if (this.showUpdateCheck) return;
         super.startUpdateCheck();
 
         ipcRenderer.send('check_updates');
-    };
+    }
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall

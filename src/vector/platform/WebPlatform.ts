@@ -154,7 +154,7 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     };
 
-    startUpdateCheck = () => {
+    startUpdateCheck() {
         if (this.showUpdateCheck) return;
         super.startUpdateCheck();
         this.pollForUpdate().then((updateState) => {
@@ -165,7 +165,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 value: updateState,
             });
         });
-    };
+    }
 
     installUpdate() {
         window.location.reload(true);
