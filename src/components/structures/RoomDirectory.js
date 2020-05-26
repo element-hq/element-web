@@ -199,7 +199,7 @@ export default createReactClass({
 
         let desc;
         if (alias) {
-            desc = _t('Delete the room alias %(alias)s and remove %(name)s from the directory?', {alias: alias, name: name});
+            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', {alias, name});
         } else {
             desc = _t('Remove %(name)s from the directory?', {name: name});
         }
@@ -216,7 +216,7 @@ export default createReactClass({
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = _t('delete the alias.');
+                    step = _t('delete the address.');
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).then(() => {
                     modal.close();

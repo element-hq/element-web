@@ -31,7 +31,7 @@ export function isContentActionable(mxEvent) {
     // status is SENT before remote-echo, null after
     const isSent = !eventStatus || eventStatus === EventStatus.SENT;
 
-    if (isSent) {
+    if (isSent && !mxEvent.isRedacted()) {
         if (mxEvent.getType() === 'm.room.message') {
             const content = mxEvent.getContent();
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {

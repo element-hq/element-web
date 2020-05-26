@@ -17,8 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClient, MemoryStore} from 'matrix-js-sdk';
-
+import {MatrixClient} from 'matrix-js-sdk/src/client';
+import {MemoryStore} from 'matrix-js-sdk/src/store/memory';
 import * as utils from 'matrix-js-sdk/src/utils';
 import {EventTimeline} from 'matrix-js-sdk/src/models/event-timeline';
 import {EventTimelineSet} from 'matrix-js-sdk/src/models/event-timeline-set';
@@ -34,7 +34,7 @@ import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks } from './CrossSigningManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
-interface MatrixClientCreds {
+export interface IMatrixClientCreds {
     homeserverUrl: string,
     identityServerUrl: string,
     userId: string,
@@ -43,28 +43,15 @@ interface MatrixClientCreds {
     guest: boolean,
 }
 
-/**
- * Wrapper object for handling the js-sdk Matrix Client object in the react-sdk
- * Handles the creation/initialisation of client objects.
- * This module provides a singleton instance of this class so the 'current'
- * Matrix Client object is available easily.
- */
-class _MatrixClientPeg {
-    constructor() {
-        this.matrixClient = null;
-        this._justRegisteredUserId = null;
+// TODO: Move this to the js-sdk
+export interface IOpts {
+    initialSyncLimit?: number;
+    pendingEventOrdering?: "detached" | "chronological";
+    lazyLoadMembers?: boolean;
+}
 
-        // These are the default options used when when the
-        // client is started in 'start'. These can be altered
-        // at any time up to after the 'will_start_client'
-        // event is finished processing.
-        this.opts = {
-            initialSyncLimit: 20,
-        };
-        // the credentials used to init the current client object.
-        // used if we tear it down & recreate it with a different store
-        this._currentClientCreds = null;
-    }
+export interface IMatrixClientPeg {
+    opts: IOpts;
 
     /**
      * Sets the script href passed to the IndexedDB web worker
@@ -73,19 +60,23 @@ class _MatrixClientPeg {
      *
      * @param {string} script href to the script to be passed to the web worker
      */
-    setIndexedDbWorkerScript(script) {
-        createMatrixClient.indexedDbWorkerScript = script;
-    }
+    setIndexedDbWorkerScript(script: string): void;
 
-    get(): MatrixClient {
-        return this.matrixClient;
-    }
+    /**
+     * Return the server name of the user's homeserver
+     * Throws an error if unable to deduce the homeserver name
+     * (eg. if the user is not logged in)
+     *
+     * @returns {string} The homeserver name, if present.
+     */
+    getHomeserverName(): string;
 
-    unset() {
-        this.matrixClient = null;
+    get(): MatrixClient;
+    unset(): void;
+    assign(): Promise<any>;
+    start(): Promise<any>;
 
-        MatrixActionCreators.stop();
-    }
+    getCredentials(): IMatrixClientCreds;
 
     /**
      * If we've registered a user ID we set this to the ID of the
@@ -95,9 +86,7 @@ class _MatrixClientPeg {
      *
      * @param {string} uid The user ID of the user we've just registered
      */
-    setJustRegisteredUserId(uid) {
-        this._justRegisteredUserId = uid;
-    }
+    setJustRegisteredUserId(uid: string): void;
 
     /**
      * Returns true if the current user has just been registered by this
@@ -105,23 +94,73 @@ class _MatrixClientPeg {
      *
      * @returns {bool} True if user has just been registered
      */
-    currentUserIsJustRegistered() {
+    currentUserIsJustRegistered(): boolean;
+
+    /**
+     * Replace this MatrixClientPeg's client with a client instance that has
+     * homeserver / identity server URLs and active credentials
+     *
+     * @param {IMatrixClientCreds} creds The new credentials to use.
+     */
+    replaceUsingCreds(creds: IMatrixClientCreds): void;
+}
+
+/**
+ * Wrapper object for handling the js-sdk Matrix Client object in the react-sdk
+ * Handles the creation/initialisation of client objects.
+ * This module provides a singleton instance of this class so the 'current'
+ * Matrix Client object is available easily.
+ */
+class _MatrixClientPeg implements IMatrixClientPeg {
+    // These are the default options used when when the
+    // client is started in 'start'. These can be altered
+    // at any time up to after the 'will_start_client'
+    // event is finished processing.
+    public opts: IOpts = {
+        initialSyncLimit: 20,
+    };
+
+    private matrixClient: MatrixClient = null;
+    private justRegisteredUserId: string;
+
+    // the credentials used to init the current client object.
+    // used if we tear it down & recreate it with a different store
+    private currentClientCreds: IMatrixClientCreds;
+
+    constructor() {
+    }
+
+    public setIndexedDbWorkerScript(script: string): void {
+        createMatrixClient.indexedDbWorkerScript = script;
+    }
+
+    public get(): MatrixClient {
+        return this.matrixClient;
+    }
+
+    public unset(): void {
+        this.matrixClient = null;
+
+        MatrixActionCreators.stop();
+    }
+
+    public setJustRegisteredUserId(uid: string): void {
+        this.justRegisteredUserId = uid;
+    }
+
+    public currentUserIsJustRegistered(): boolean {
         return (
             this.matrixClient &&
-            this.matrixClient.credentials.userId === this._justRegisteredUserId
+            this.matrixClient.credentials.userId === this.justRegisteredUserId
         );
     }
 
-    /*
-     * Replace this MatrixClientPeg's client with a client instance that has
-     * homeserver / identity server URLs and active credentials
-     */
-    replaceUsingCreds(creds: MatrixClientCreds) {
-        this._currentClientCreds = creds;
-        this._createClient(creds);
+    public replaceUsingCreds(creds: IMatrixClientCreds): void {
+        this.currentClientCreds = creds;
+        this.createClient(creds);
     }
 
-    async assign() {
+    public async assign(): Promise<any> {
         for (const dbType of ['indexeddb', 'memory']) {
             try {
                 const promise = this.matrixClient.store.startup();
@@ -132,7 +171,7 @@ class _MatrixClientPeg {
                 if (dbType === 'indexeddb') {
                     console.error('Error starting matrixclient store - falling back to memory store', err);
                     this.matrixClient.store = new MemoryStore({
-                        localStorage: global.localStorage,
+                        localStorage: localStorage,
                     });
                 } else {
                     console.error('Failed to start memory store!', err);
@@ -179,7 +218,7 @@ class _MatrixClientPeg {
         return opts;
     }
 
-    async start() {
+    public async start(): Promise<any> {
         const opts = await this.assign();
 
         console.log(`MatrixClientPeg: really starting MatrixClient`);
@@ -187,7 +226,7 @@ class _MatrixClientPeg {
         console.log(`MatrixClientPeg: MatrixClient started`);
     }
 
-    getCredentials(): MatrixClientCreds {
+    public getCredentials(): IMatrixClientCreds {
         return {
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
@@ -198,12 +237,7 @@ class _MatrixClientPeg {
         };
     }
 
-    /*
-     * Return the server name of the user's homeserver
-     * Throws an error if unable to deduce the homeserver name
-     * (eg. if the user is not logged in)
-     */
-    getHomeserverName() {
+    public getHomeserverName(): string {
         const matches = /^@.+:(.+)$/.exec(this.matrixClient.credentials.userId);
         if (matches === null || matches.length < 1) {
             throw new Error("Failed to derive homeserver name from user ID!");
@@ -211,7 +245,8 @@ class _MatrixClientPeg {
         return matches[1];
     }
 
-    _createClient(creds: MatrixClientCreds) {
+    private createClient(creds: IMatrixClientCreds): void {
+        // TODO: Make these opts typesafe with the js-sdk
         const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
@@ -228,9 +263,9 @@ class _MatrixClientPeg {
             ],
             unstableClientRelationAggregation: true,
             identityServer: new IdentityAuthClient(),
+            cryptoCallbacks: {},
         };
 
-        opts.cryptoCallbacks = {};
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
@@ -253,8 +288,8 @@ class _MatrixClientPeg {
     }
 }
 
-if (!global.mxMatrixClientPeg) {
-    global.mxMatrixClientPeg = new _MatrixClientPeg();
+if (!window.mxMatrixClientPeg) {
+    window.mxMatrixClientPeg = new _MatrixClientPeg();
 }
 
-export const MatrixClientPeg = global.mxMatrixClientPeg;
+export const MatrixClientPeg = window.mxMatrixClientPeg;

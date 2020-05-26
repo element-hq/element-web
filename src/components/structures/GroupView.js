@@ -92,7 +92,7 @@ const CategoryRoomList = createReactClass({
         Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
             title: _t('Add rooms to the community summary'),
             description: _t("Which rooms would you like to add to this summary?"),
-            placeholder: _t("Room name or alias"),
+            placeholder: _t("Room name or address"),
             button: _t("Add to summary"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],
