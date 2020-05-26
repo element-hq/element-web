@@ -405,7 +405,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                console.log("EventIndex: Error crawling events:", e);
+                console.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
