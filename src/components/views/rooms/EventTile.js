@@ -403,7 +403,7 @@ export default createReactClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.context.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
