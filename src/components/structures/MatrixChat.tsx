@@ -904,9 +904,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private viewGroup(payload) {
+    private async viewGroup(payload) {
         const groupId = payload.group_id;
+
+        // Wait for the first sync to complete
+        if (!this.firstSyncComplete) {
+            if (!this.firstSyncPromise) {
+                console.warn('Cannot view a group before first sync. group_id:', groupId);
+                return;
+            }
+            await this.firstSyncPromise.promise;
+        }
+
         this.setState({
+            view: Views.LOGGED_IN,
             currentGroupId: groupId,
             currentGroupIsNew: payload.group_is_new,
         });

@@ -38,5 +38,10 @@ export enum Action {
      * Open the user settings. No additional payload information required.
      */
     ViewUserSettings = "view_user_settings",
+
+    /**
+     * Sets the current tooltip. Should be use with ViewTooltipPayload.
+     */
+    ViewTooltip = "view_tooltip",
 }
 

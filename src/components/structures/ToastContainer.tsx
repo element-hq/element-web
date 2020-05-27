@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { _t } from '../../languageHandler';
 import ToastStore, {IToast} from "../../stores/ToastStore";
 import classNames from "classnames";
 
 interface IState {
     toasts: IToast<any>[];
+    countSeen: number;
 }
 
 export default class ToastContainer extends React.Component<{}, IState> {
@@ -28,6 +28,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
         super(props, context);
         this.state = {
             toasts: ToastStore.sharedInstance().getToasts(),
+            countSeen: ToastStore.sharedInstance().getCountSeen(),
         };
 
         // Start listening here rather than in componentDidMount because
@@ -42,7 +43,10 @@ export default class ToastContainer extends React.Component<{}, IState> {
     }
 
     _onToastStoreUpdate = () => {
-        this.setState({toasts: ToastStore.sharedInstance().getToasts()});
+        this.setState({
+            toasts: ToastStore.sharedInstance().getToasts(),
+            countSeen: ToastStore.sharedInstance().getCountSeen(),
+        });
     };
 
     render() {
@@ -56,14 +60,21 @@ export default class ToastContainer extends React.Component<{}, IState> {
                 "mx_Toast_hasIcon": icon,
                 [`mx_Toast_icon_${icon}`]: icon,
             });
-            const countIndicator = isStacked ? _t(" (1/%(totalCount)s)", {totalCount}) : null;
+
+            let countIndicator;
+            if (isStacked || this.state.countSeen > 0) {
+                countIndicator = ` (${this.state.countSeen + 1}/${this.state.countSeen + totalCount})`;
+            }
 
             const toastProps = Object.assign({}, props, {
                 key,
                 toastKey: key,
             });
             toast = (<div className={toastClasses}>
-                <h2>{title}{countIndicator}</h2>
+                <div className="mx_Toast_title">
+                    <h2>{title}</h2>
+                    <span>{countIndicator}</span>
+                </div>
                 <div className="mx_Toast_body">{React.createElement(component, toastProps)}</div>
             </div>);
         }

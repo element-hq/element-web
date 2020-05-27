@@ -32,6 +32,9 @@ export interface IToast<C extends keyof JSX.IntrinsicElements | JSXElementConstr
  */
 export default class ToastStore extends EventEmitter {
     private toasts: IToast<any>[] = [];
+    // The count of toasts which have been seen & dealt with in this stack
+    // where the count resets when the stack of toasts clears.
+    private countSeen = 0;
 
     static sharedInstance() {
         if (!window.mx_ToastStore) window.mx_ToastStore = new ToastStore();
@@ -40,6 +43,7 @@ export default class ToastStore extends EventEmitter {
 
     reset() {
         this.toasts = [];
+        this.countSeen = 0;
     }
 
     /**
@@ -67,11 +71,21 @@ export default class ToastStore extends EventEmitter {
         const length = this.toasts.length;
         this.toasts = this.toasts.filter(t => t.key !== key);
         if (length !== this.toasts.length) {
+            if (this.toasts.length === 0) {
+                this.countSeen = 0;
+            } else {
+                this.countSeen++;
+            }
+
             this.emit('update');
         }
     }
 
     getToasts() {
         return this.toasts;
+    }
+
+    getCountSeen() {
+        return this.countSeen;
     }
 }

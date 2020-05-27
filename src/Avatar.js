@@ -19,6 +19,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
+// Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(member, width, height, resizeMethod) {
     let url;
     if (member && member.getAvatarUrl) {

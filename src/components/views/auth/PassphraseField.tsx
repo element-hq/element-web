@@ -36,7 +36,7 @@ interface IProps {
     labelStrongPassword?: string;
     labelAllowedButUnsafe?: string;
 
-    onChange(ev: KeyboardEvent);
+    onChange(ev: React.FormEvent<HTMLElement>);
     onValidate(result: IValidationResult);
 }
 
