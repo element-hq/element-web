@@ -22,7 +22,10 @@ async function assertNoToasts(session) {
     } catch (e) {
         return;
     }
-    throw new Error('toast found when none expected');
+
+    const h2Element = await session.query('.mx_Toast_title h2');
+    const toastTitle = await session.innerText(h2Element);
+    throw new Error(`"${toastTitle}" toast found when none expected`);
 }
 
 async function assertToast(session, expectedTitle) {
