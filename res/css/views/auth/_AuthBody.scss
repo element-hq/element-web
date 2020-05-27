@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 .mx_AuthBody {
-    max-width: 500px;
+    width: 500px;
     font-size: $font-12px;
     color: $authpage-secondary-color;
     background-color: $authpage-body-bg-color;
@@ -147,8 +147,11 @@ limitations under the License.
     margin: 1em 0;
 }
 
-@media only screen and (max-width : 480px) {
-  .mx_AuthBody {
-      padding: 10px;
-  }
+@media only screen and (max-width: 480px) {
+    .mx_AuthBody {
+        border-radius: 4px;
+        width: auto;
+        max-width: 500px;
+        padding: 10px;
+    }
 }
