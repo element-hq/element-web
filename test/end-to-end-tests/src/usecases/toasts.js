@@ -16,6 +16,11 @@ limitations under the License.
 
 const assert = require('assert');
 
+async function assertNoToasts(session) {
+    const toast = await session.query('.mx_Toast_toast');
+    assert(!toast, 'toast found when none expected');
+}
+
 async function assertToast(session, expectedTitle) {
     const h2Element = await session.query('.mx_Toast_title h2');
     const toastTitle = await session.innerText(h2Element);
@@ -34,4 +39,4 @@ async function rejectToast(session, expectedTitle) {
     await btn.click();
 }
 
-module.exports = {assertToast, acceptToast, rejectToast};
+module.exports = {assertNoToasts, assertToast, acceptToast, rejectToast};

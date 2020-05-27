@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const {acceptToast, rejectToast} = require("../usecases/toasts");
+const {assertNoToasts, acceptToast, rejectToast} = require("../usecases/toasts");
 
 module.exports = async function toastScenarios(alice, bob) {
-    console.log(" checking and clearing all toasts:");
+    console.log(" checking and clearing toasts:");
 
     alice.log.startGroup(`clears toasts`);
+    alice.log.step(`accepts desktop notifications toast`);
     await acceptToast(alice, "Notifications");
+    alice.log.step(`accepts analytics toast`);
     await acceptToast(alice, "Help us improve Riot");
+    await assertNoToasts(alice);
     alice.log.endGroup();
 
     bob.log.startGroup(`clears toasts`);
+    alice.log.step(`reject desktop notifications toast`);
     await rejectToast(bob, "Notifications");
+    alice.log.step(`reject analytics toast`);
     await rejectToast(bob, "Help us improve Riot");
+    await assertNoToasts(bob);
     bob.log.endGroup();
 };
