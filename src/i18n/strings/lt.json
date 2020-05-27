@@ -697,7 +697,7 @@
     "Algorithm: ": "Algoritmas: ",
     "Don't ask again": "Daugiau nebeklausti",
     "Set up": "Nustatyti",
-    "Publish this room to the public in %(domain)s's room directory?": "Paskelbti šį kambarį į viešąjį %(domain)s kambarių katalogą?",
+    "Publish this room to the public in %(domain)s's room directory?": "Paskelbti šį kambarį viešai %(domain)s kambarių kataloge?",
     "Start authentication": "Pradėti tapatybės nustatymą",
     "Failed to load group members": "Nepavyko įkelti grupės dalyvių",
     "Manage Integrations": "Valdyti integracijas",
