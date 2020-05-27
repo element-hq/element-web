@@ -1664,5 +1664,15 @@
     "If you can't scan the code above, verify by comparing unique emoji.": "Pokiaľ nemôžete kód vyššie skenovať, overte sa porovnaním jedinečnej kombinácie emoji.",
     "Verify by comparing unique emoji.": "Overenie porovnaním jedinečnej kombinácie emoji",
     "Verify by emoji": "Overte pomocou emoji",
-    "Compare emoji": "Porovnajte emoji"
+    "Compare emoji": "Porovnajte emoji",
+    "Verify all your sessions to ensure your account & messages are safe": "Overte všetky vaše relácie, aby ste si boli istý, že sú vaše správy a účet bezpečné",
+    "Review": "Prehliadnuť",
+    "Later": "Neskôr",
+    "Upgrade": "Upgradovať",
+    "Verify": "Overiť",
+    "Verify yourself & others to keep your chats safe": "Overte seba a ostatných, aby vaše komunikácie boli bezpečné",
+    "Other users may not trust it": "Ostatný používatelia jej nemusia veriť",
+    "Verify the new login accessing your account: %(name)s": "Overte nové prihlásenie na váš účet: %(name)s",
+    "From %(deviceName)s (%(deviceId)s)": "Od %(deviceName)s (%(deviceId)s)",
+    "This bridge was provisioned by <user />.": "Tento most poskytuje <user />."
 }
