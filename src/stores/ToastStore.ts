@@ -56,7 +56,6 @@ export default class ToastStore extends EventEmitter {
      * @param {object} newToast The new toast
      */
     addOrReplaceToast<C extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>>(newToast: IToast<C>) {
-        console.log("DEBUG addOrReplaceToast", newToast.key, JSON.stringify(newToast));
         const oldIndex = this.toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;
@@ -69,7 +68,6 @@ export default class ToastStore extends EventEmitter {
     }
 
     dismissToast(key) {
-        console.log("DEBUG dismissToast", key);
         if (this.toasts[0] && this.toasts[0].key === key) {
             this.countSeen++;
         }
