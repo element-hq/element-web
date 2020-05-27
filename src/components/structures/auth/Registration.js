@@ -248,8 +248,7 @@ export default createReactClass({
             // need to.
             if (!this.state.doingUIAuth) {
                 await this._makeRegisterRequest(null);
-                // This should never succeed since we specified an empty
-                // auth object.
+                // This should never succeed since we specified no auth object.
                 console.log("Expecting 401 from register request but got success!");
             }
         } catch (e) {
