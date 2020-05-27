@@ -24,7 +24,6 @@ async function assertNoToasts(session) {
         const toastTitle = await session.innerText(h2Element);
         throw new Error(`"${toastTitle}" toast found when none expected`);
     }
-
 }
 
 async function assertToast(session, expectedTitle) {
