@@ -63,6 +63,8 @@ $irc-line-height: $font-18px;
             flex-direction: column;
             order: 3;
             flex-grow: 1;
+            flex-shrink: 1;
+            min-width: 0;
         }
 
         > .mx_EventTile_avatar {
