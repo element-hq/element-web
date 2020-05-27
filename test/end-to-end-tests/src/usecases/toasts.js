@@ -24,7 +24,7 @@ async function assertNoToasts(session) {
 async function assertToast(session, expectedTitle) {
     const h2Element = await session.query('.mx_Toast_title h2');
     const toastTitle = await session.innerText(h2Element);
-    assert(toastTitle, expectedTitle);
+    assert.equal(toastTitle, expectedTitle);
 }
 
 async function acceptToast(session, expectedTitle) {
