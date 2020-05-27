@@ -30,6 +30,9 @@ module.exports = async function toastScenarios(alice, bob) {
 
     while (true) {
         try {
+            const h2Element = await alice.query('.mx_Toast_title h2');
+            const toastTitle = await alice.innerText(h2Element);
+            console.log("DEBUG closing", toastTitle);
             const toastDismissButton = await alice.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
             await toastDismissButton.click();
         } catch (e) {
@@ -53,6 +56,9 @@ module.exports = async function toastScenarios(alice, bob) {
 
     while (true) {
         try {
+            const h2Element = await bob.query('.mx_Toast_title h2');
+            const toastTitle = await bob.innerText(h2Element);
+            console.log("DEBUG closing", toastTitle);
             const toastDismissButton = await bob.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
             await toastDismissButton.click();
         } catch (e) {
