@@ -29,6 +29,7 @@
     "test/url/urlsearchparams",
 
     "test/cors",
+    "test/crypto",
     "test/iframe/sandbox",
     "test/json",
     "test/network/fetch",
