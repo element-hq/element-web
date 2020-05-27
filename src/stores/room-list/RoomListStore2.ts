@@ -26,6 +26,7 @@ import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorit
 import { getListAlgorithmInstance } from "./algorithms/list-ordering";
 import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
+import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -135,15 +136,10 @@ class _RoomListStore extends AsyncStore<ActionPayload> {
         if (payload.action === 'MatrixActions.Room.receipt') {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
-            // noinspection JSObjectNullOrUndefined - this.matrixClient can't be null by this point in the lifecycle
-            const myUserId = this.matrixClient.getUserId();
-            for (const eventId of Object.keys(payload.event.getContent())) {
-                const receiptUsers = Object.keys(payload.event.getContent()[eventId]['m.read'] || {});
-                if (receiptUsers.includes(myUserId)) {
-                    // TODO: Update room now that it's been read
-                    console.log(payload);
-                    return;
-                }
+            if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
+                // TODO: Update room now that it's been read
+                console.log(payload);
+                return;
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
             // TODO: Update room from tags
