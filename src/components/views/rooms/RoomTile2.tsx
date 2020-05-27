@@ -91,16 +91,18 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.props.room.on("Room.receipt", this.handleRoomEventUpdate);
         this.props.room.on("Room.timeline", this.handleRoomEventUpdate);
-        this.props.room.on("Event.decrypted", this.handleRoomEventUpdate);
         this.props.room.on("Room.redaction", this.handleRoomEventUpdate);
+        MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
     }
 
     public componentWillUnmount() {
         if (this.props.room) {
             this.props.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
             this.props.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
-            this.props.room.removeListener("Event.decrypted", this.handleRoomEventUpdate);
             this.props.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
+        }
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
         }
     }
 
