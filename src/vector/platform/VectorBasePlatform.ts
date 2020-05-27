@@ -39,6 +39,13 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     protected showUpdateCheck: boolean = false;
     protected _favicon: Favicon;
 
+    constructor() {
+        super();
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+        this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+    }
+
     async getConfig(): Promise<{}> {
         return getVectorConfig();
     }
@@ -96,21 +103,21 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         return false;
     }
 
-    startUpdateCheck = () => {
+    startUpdateCheck() {
         this.showUpdateCheck = true;
         dis.dispatch({
             action: 'check_updates',
             value: { status: updateCheckStatusEnum.CHECKING },
         });
-    };
+    }
 
-    stopUpdateCheck = () => {
+    stopUpdateCheck() {
         this.showUpdateCheck = false;
         dis.dispatch({
             action: 'check_updates',
             value: false,
         });
-    };
+    }
 
     getUpdateCheckStatusEnum() {
         return updateCheckStatusEnum;
