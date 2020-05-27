@@ -49,7 +49,6 @@ import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
-import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
@@ -1471,16 +1470,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e, err) => dft.eventDecrypted(e, err));
 
-        // TODO: We can remove this once cross-signing is the only way.
-        // https://github.com/vector-im/riot-web/issues/11908
-        const krh = new KeyRequestHandler(cli);
-        cli.on("crypto.roomKeyRequest", (req) => {
-            krh.handleKeyRequest(req);
-        });
-        cli.on("crypto.roomKeyRequestCancellation", (req) => {
-            krh.handleKeyRequestCancellation(req);
-        });
-
         cli.on("Room", (room) => {
             if (MatrixClientPeg.get().isCryptoEnabled()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
@@ -1551,13 +1540,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on("crypto.verification.request", request => {
-            const isFlagOn = SettingsStore.getValue("feature_cross_signing");
-
-            if (!isFlagOn && !request.channel.deviceId) {
-                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
-                return;
-            }
-
             if (request.verifier) {
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
@@ -1600,9 +1582,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // be aware of will be signalled through the room shield
             // changing colour. More advanced behaviour will come once
             // we implement more settings.
-            cli.setGlobalErrorOnUnknownDevices(
-                !SettingsStore.getValue("feature_cross_signing"),
-            );
+            cli.setGlobalErrorOnUnknownDevices(false);
         }
     }
 
@@ -1956,18 +1936,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return setLoggedInPromise;
         }
 
-        // Test for the master cross-signing key in SSSS as a quick proxy for
-        // whether cross-signing has been set up on the account.
-        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
-        if (masterKeyInStorage) {
-            // Auto-enable cross-signing for the new session when key found in
-            // secret storage.
-            SettingsStore.setValue("feature_cross_signing", null, SettingLevel.DEVICE, true);
-            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (
-            SettingsStore.getValue("feature_cross_signing") &&
-            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
-        ) {
+        if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             // This will only work if the feature is set to 'enable' in the config,
             // since it's too early in the lifecycle for users to have turned the
             // labs flag on.

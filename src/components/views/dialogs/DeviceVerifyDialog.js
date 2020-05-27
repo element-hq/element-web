@@ -119,7 +119,7 @@ export default class DeviceVerifyDialog extends React.Component {
         const client = MatrixClientPeg.get();
         const verifyingOwnDevice = this.props.userId === client.getUserId();
         try {
-            if (!verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
+            if (!verifyingOwnDevice) {
                 const roomId = await ensureDMExistsAndOpen(this.props.userId);
                 // throws upon cancellation before having started
                 const request = await client.requestVerificationDM(
@@ -131,7 +131,7 @@ export default class DeviceVerifyDialog extends React.Component {
                 } else {
                     this._verifier = request.verifier;
                 }
-            } else if (verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
+            } else if (verifyingOwnDevice) {
                 this._request = await client.requestVerification(this.props.userId, [
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,

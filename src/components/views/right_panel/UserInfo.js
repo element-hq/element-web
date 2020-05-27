@@ -64,10 +64,6 @@ const _disambiguateDevices = (devices) => {
 };
 
 export const getE2EStatus = (cli, userId, devices) => {
-    if (!SettingsStore.getValue("feature_cross_signing")) {
-        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
-        return hasUnverifiedDevice ? "warning" : "verified";
-    }
     const isMe = userId === cli.getUserId();
     const userTrust = cli.checkUserTrust(userId);
     if (!userTrust.isCrossSigningVerified()) {
@@ -112,17 +108,15 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    if (SettingsStore.getValue("feature_cross_signing")) {
-        // Check whether all users have uploaded device keys before.
-        // If so, enable encryption in the new room.
-        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
-        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
-            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
-            return Object.keys(devices).length > 0;
-        });
-        if (allHaveDeviceKeys) {
-            createRoomOptions.encryption = true;
-        }
+    // Check whether all users have uploaded device keys before.
+    // If so, enable encryption in the new room.
+    const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
+    const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+        // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+        return Object.keys(devices).length > 0;
+    });
+    if (allHaveDeviceKeys) {
+        createRoomOptions.encryption = true;
     }
 
     createRoom(createRoomOptions);
@@ -167,9 +161,7 @@ function DeviceItem({userId, device}) {
     // cross-signing so that other users can then safely trust you.
     // For other people's devices, the more general verified check that
     // includes locally verified devices can be used.
-    const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
-        deviceTrust.isCrossSigningVerified() :
-        deviceTrust.isVerified();
+    const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
 
     const classes = classNames("mx_UserInfo_device", {
         mx_UserInfo_device_verified: isVerified,
@@ -248,9 +240,7 @@ function DevicesSection({devices, userId, loading}) {
             // cross-signing so that other users can then safely trust you.
             // For other people's devices, the more general verified check that
             // includes locally verified devices can be used.
-            const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
-                deviceTrust.isCrossSigningVerified() :
-                deviceTrust.isVerified();
+            const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
 
             if (isVerified) {
                 expandSectionDevices.push(device);
@@ -1309,8 +1299,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cli.checkUserTrust(member.userId);
     const userVerified = userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = SettingsStore.getValue("feature_cross_signing") &&
-                        homeserverSupportsCrossSigning && !userVerified && !isMe;
+    const canVerify = homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));
