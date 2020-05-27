@@ -133,9 +133,9 @@ def on_receive_buildkite_poke():
     for artifact in artifacts_array:
         if re.match(r"dist/.*.tar.gz", artifact['path']):
             artifact_to_deploy = artifact
-        if artifact_to_deploy is None:
-            print("No suitable artifacts found")
-            return jsonify({})
+    if artifact_to_deploy is None:
+        print("No suitable artifacts found")
+        return jsonify({})
 
     # double paranoia check: make sure the artifact is on the right org too
     if required_api_prefix is not None and not artifact_to_deploy['url'].startswith(required_api_prefix):

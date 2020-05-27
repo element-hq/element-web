@@ -6,7 +6,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
-if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/riot-im-logo-black-text.png';
+if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/opengraph.png';
 
 module.exports = (env, argv) => {
     if (process.env.CI_PACKAGE) {
@@ -19,6 +19,8 @@ module.exports = (env, argv) => {
         // This makes the sourcemaps human readable for developers. We use eval-source-map
         // because the plain source-map devtool ruins the alignment.
         development['devtool'] = 'eval-source-map';
+    } else {
+        development['devtool'] = 'nosources-source-map';
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -31,9 +33,10 @@ module.exports = (env, argv) => {
         ...development,
 
         entry: {
-            "bundle": "./src/vector/index.js",
+            "bundle": "./src/vector/index.ts",
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
+            "jitsi": "./src/vector/jitsi/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
             // CSS themes
@@ -51,6 +54,9 @@ module.exports = (env, argv) => {
                         test: /\.css$/,
                         enforce: true,
                         // Do not add `chunks: 'all'` here because you'll break the app entry point.
+                    },
+                    default: {
+                        reuseExistingChunk: true,
                     },
                 },
             },
@@ -79,7 +85,7 @@ module.exports = (env, argv) => {
             aliasFields: ['matrix_src_browser', 'browser'],
 
             // We need to specify that TS can be resolved without an extension
-            extensions: ['.js', '.json', '.ts'],
+            extensions: ['.js', '.json', '.ts', '.tsx'],
             alias: {
                 // alias any requires to the react module to the one in our path,
                 // otherwise we tend to get the react source included twice when
@@ -89,6 +95,9 @@ module.exports = (env, argv) => {
 
                 // same goes for js-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
+                // and prop-types and sanitize-html
+                "prop-types": path.resolve(__dirname, 'node_modules/prop-types'),
+                "sanitize-html": path.resolve(__dirname, 'node_modules/sanitize-html'),
 
                 // Define a variable so the i18n stuff can load
                 "$webapp": path.resolve(__dirname, 'webapp'),
@@ -172,6 +181,7 @@ module.exports = (env, argv) => {
 
                                     require("postcss-simple-vars")(),
                                     require("postcss-strip-inline-comments")(),
+                                    require("postcss-hexrgba")(),
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
@@ -209,6 +219,7 @@ module.exports = (env, argv) => {
                                     require("postcss-mixins")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
+                                    require("postcss-hexrgba")(),
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
@@ -300,11 +311,19 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ['mobileguide', 'usercontent'],
+                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
                 minify: argv.mode === 'production',
                 vars: {
                     og_image_url: og_image_url,
                 },
+            }),
+
+            // This is the jitsi widget wrapper (embedded, so isolated stack)
+            new HtmlWebpackPlugin({
+                template: './src/vector/jitsi/index.html',
+                filename: 'jitsi.html',
+                minify: argv.mode === 'production',
+                chunks: ['jitsi'],
             }),
 
             // This is the mobile guide's entry point (separate for faster mobile loading)
@@ -313,6 +332,20 @@ module.exports = (env, argv) => {
                 filename: 'mobile_guide/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['mobileguide'],
+            }),
+
+            // These are the static error pages for when the javascript env is *really unsupported*
+            new HtmlWebpackPlugin({
+                template: './src/vector/static/unable-to-load.html',
+                filename: 'static/unable-to-load.html',
+                minify: argv.mode === 'production',
+                chunks: [],
+            }),
+            new HtmlWebpackPlugin({
+                template: './src/vector/static/incompatible-browser.html',
+                filename: 'static/incompatible-browser.html',
+                minify: argv.mode === 'production',
+                chunks: [],
             }),
 
             // This is the usercontent sandbox's entry point (separate for iframing)

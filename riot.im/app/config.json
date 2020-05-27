@@ -14,7 +14,6 @@
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
     },
-    "welcomeUserId": "@riot-bot:matrix.org",
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,

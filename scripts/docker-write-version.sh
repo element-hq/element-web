@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -ex
 
@@ -11,7 +11,7 @@ DIST_VERSION=$TAG
 # a few SHAs rather than a version.
 # Docker Hub doesn't always check out the tag and sometimes checks out the branch, so we should look
 # for an appropriately tagged branch as well (heads/v1.2.3).
-if [ $BRANCH != 'HEAD' && $BRANCH != 'heads/v*' ]
+if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
     REACT_SHA=$(cd node_modules/matrix-react-sdk; git rev-parse --short=12 HEAD)
     JSSDK_SHA=$(cd node_modules/matrix-js-sdk; git rev-parse --short=12 HEAD)

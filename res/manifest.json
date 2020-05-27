@@ -6,40 +6,69 @@
     "start_url": "index.html",
     "icons": [
         {
-            "src": "vector-icons/android-chrome-36x36.png",
-            "sizes": "36x36",
-            "type": "image\/png",
-            "density": "0.75"
+            "src": "/vector-icons/20587a91-30e9-d583-2b9b-5c4c2aca967f.webPlatform.png",
+            "sizes": "44x44",
+            "type": "image/png"
         },
         {
-            "src": "vector-icons/android-chrome-48x48.png",
-            "sizes": "48x48",
-            "type": "image\/png",
-            "density": "1.0"
+            "src": "/vector-icons/20522817-fde7-6a88-54a9-496b1c8aee53.webPlatform.png",
+            "sizes": "1240x600",
+            "type": "image/png"
         },
         {
-            "src": "vector-icons/android-chrome-72x72.png",
-            "sizes": "72x72",
-            "type": "image\/png",
-            "density": "1.5"
+            "src": "/vector-icons/4168a7e5-9d94-e9a3-4e60-45a58cc8ee4e.webPlatform.png",
+            "sizes": "300x300",
+            "type": "image/png"
         },
         {
-            "src": "vector-icons/android-chrome-96x96.png",
-            "sizes": "96x96",
-            "type": "image\/png",
-            "density": "2.0"
+            "src": "/vector-icons/dd73cdd3-17c4-9b33-81b8-4789b7a4a250.webPlatform.png",
+            "sizes": "150x150",
+            "type": "image/png"
         },
         {
-            "src": "vector-icons/android-chrome-144x144.png",
-            "sizes": "144x144",
-            "type": "image\/png",
-            "density": "3.0"
+            "src": "/vector-icons/8f19f71b-ab84-4fe7-1866-8ee9fb1362da.webPlatform.png",
+            "sizes": "88x88",
+            "type": "image/png"
         },
         {
-            "src": "vector-icons/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image\/png",
-            "density": "4.0"
+            "src": "/vector-icons/89ac632f-d735-868d-4b9b-cfe32121294c.webPlatform.png",
+            "sizes": "24x24",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/5c925eef-dd2e-aa16-b6d4-13c90b81af1f.webPlatform.png",
+            "sizes": "50x50",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/b3624ff1-eaf4-1082-4923-949bc8eb40ef.webPlatform.png",
+            "sizes": "620x300",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/32aa4ec4-8b3f-d7b8-e2df-a49ba887199a.webPlatform.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/a2e91e68-aa4e-45e7-e5e6-951e1d314675.webPlatform.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/627721aa-5331-ded6-b4a5-0bb4799985ee.webPlatform.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/4f4b5190-3b9c-9173-3118-442179ae62d4.webPlatform.png",
+            "sizes": "120x120",
+            "type": "image/png"
+        },
+        {
+            "src": "/vector-icons/552c9d70-ff13-2235-8ef9-00db0d2fda0c.webPlatform.png",
+            "sizes": "76x76",
+            "type": "image/png"
         }
     ],
     "related_applications": [

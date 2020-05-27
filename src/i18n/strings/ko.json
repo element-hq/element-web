@@ -21,5 +21,19 @@
     "Create Account": "계정 만들기",
     "Need help?": "도움이 필요합니까?",
     "Explore rooms": "방 검색",
-    "Room Directory": "방 목록"
+    "Room Directory": "방 목록",
+    "Unable to load config file: please refresh the page to try again.": "설정 파일을 불러오는 데 실패: 페이지를 새로고침한 후에 다시 시도해 주십시오.",
+    "Open user settings": "사용자 설정 열기",
+    "Previous/next recently visited room or community": "최근에 방문한 이전/다음 방 또는 커뮤니티",
+    "Riot Desktop (%(platformName)s)": "Riot 데스크탑 (%(platformName)s)",
+    "Go to your browser to complete Sign In": "로그인을 완료하려면 브라우저로 이동해주세요",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "지원되지 않는 브라우저",
+    "Your browser can't run Riot": "사용중이신 브라우저는 Riot을 실행할 수 없습니다",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot은 현재 사용중이신 브라우저에서는 지원하지 않는 고급 브라우저 기능을 사용합니다.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "최상의 경험을 위해 <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, 또는 <safariLink>Safari</safariLink>를 설치해주세요.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "현재 사용중이신 브라우저를 계속 사용하셔도 됩니다, 다만 일부 기능들이 작동하지 않을 수 있으며 애플리케이션이 잘못돼 보일 수 있습니다.",
+    "I understand the risks and wish to continue": "위험하다는 것을 이해했으며 계속하고 싶습니다",
+    "Go to Riot.im": "Riot.im으로 가기",
+    "Failed to start": "시작 실패"
 }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jitsi Widget</title>
+</head>
+<body>
+<div id="jitsiContainer"><!-- the js will put the conference here --></div>
+<div id="joinButtonContainer">
+    <div class="joinConferenceFloating">
+        <div class="joinConferencePrompt">
+            <!-- TODO: i18n -->
+            <h2>Jitsi Video Conference</h2>
+            <button type="button" id="joinButton">Join Conference</button>
+        </div>
+    </div>
+</div>
+<!-- This script is not webpacked, and the script is downloaded at build time -->
+<script src="./jitsi_external_api.min.js"></script>
+</body>
+</html>

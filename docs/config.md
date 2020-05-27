@@ -32,7 +32,7 @@ For a good example, see https://riot.im/develop/config.json.
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
     1. `welcomeBackgroundUrl`: An image to use as a wallpaper outside the app
-       during authentication flows
+       during authentication flows. If an array is passed, an image is chosen randomly for each visit.
     1. `authHeaderLogoUrl`: An logo image that is shown in the header during
        authentication flows
     1. `authFooterLinks`: a list of links to show in the authentication page footer:
@@ -84,6 +84,23 @@ For a good example, see https://riot.im/develop/config.json.
    By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
    Set this to your Riot instance URL if you run an unfederated server (eg:
    "https://riot.example.org").
+1. `jitsi`: Used to change the default conference options. Learn more about the
+   Jitsi options at [jitsi.md](./jitsi.md).
+    1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
+       to `jitsi.riot.im`. This is used whenever a user clicks on the voice/video
+       call buttons - integration managers may use a different domain.
+1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
+    and its value defines whether to enable/disable the presence status display
+    from that homeserver. If no options are configurd, presence is shown for all
+    homeservers.
+1. `disable_guests`: Disables guest access tokens and auto-guest registrations.
+    Defaults to false (guests are allowed).
+1. `disable_login_language_selector`: Disables the login language selector. Defaults
+    to false (language selector is shown).
+1. `disable_3pid_login`: Disables 3rd party identity options on login and registration form
+    Defaults to false (3rd party identity options are shown).
+1. `default_federate`: Default option for room federation when creating a room
+    Defaults to true (room federation enabled).
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Riot
@@ -119,24 +136,11 @@ If none of these sources have an identity server set, then Riot will prompt the
 user to set an identity server first when attempting to use features that
 require one.
 
-Currently the only two public identity servers are https://vector.im and
+Currently, the only two public identity servers are https://vector.im and
 https://matrix.org, however in the future identity servers will be
 decentralised.
 
 Desktop app configuration
 =========================
 
-To run multiple instances of the desktop app for different accounts, you can
-launch the executable with the `--profile` argument followed by a unique
-identifier, e.g `riot-web --profile Work` for it to run a separate profile and
-not interfere with the default one.
-
-Alternatively, a custom location for the profile data can be specified using the
-`--profile-dir` flag followed by the desired path.
-
-+ `%APPDATA%\$NAME\config.json` on Windows
-+ `$XDG_CONFIG_HOME\$NAME\config.json` or `~/.config/$NAME/config.json` on Linux
-+ `~Library/Application Support/$NAME/config.json` on macOS
-
-In the paths above, `$NAME` is typically `Riot`, unless you use `--profile
-$PROFILE` in which case it becomes `Riot-$PROFILE`.
+See https://github.com/vector-im/riot-desktop#user-specified-configjson

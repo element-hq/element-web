@@ -25,6 +25,9 @@
     "test/svg/asimg",
     "test/svg/filters",
 
+    "test/url/parser",
+    "test/url/urlsearchparams",
+
     "test/cors",
     "test/iframe/sandbox",
     "test/json",

@@ -1,0 +1,199 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <style type="text/css">
+
+        /* By default, hide the custom IS stuff - enabled in JS */
+        #custom_is, #is_url {
+            display: none;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: #c5e0f7;
+            background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
+            background: -webkit-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
+            background: linear-gradient(to bottom, #c5e0f7 0%, #ffffff 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c5e0f7', endColorstr='#ffffff', GradientType=0);
+            max-width: 680px;
+            margin: auto;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        .mx_Button {
+            border: 0;
+            border-radius: 4px;
+            font-size: 18px;
+            margin-left: 4px;
+            margin-right: 4px;
+            min-width: 80px;
+            background-color: #03B381;
+            color: #fff;
+            cursor: pointer;
+            padding: 12px 22px;
+            word-break: break-word;
+            text-decoration: none;
+        }
+
+        .mx_Center {
+            justify-content: center;
+        }
+
+        .mx_ClearDecoration {
+            text-decoration: none !important;
+        }
+
+        .mx_HomePage_header {
+            color: #2E2F32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mx_HomePage h3 {
+            margin-top: 30px;
+        }
+
+        .mx_HomePage_header {
+            align-items: center;
+        }
+
+        .mx_HomePage_col {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .mx_HomePage_row {
+            flex: 1 1 0;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .mx_HomePage_logo {
+            margin-right: 20px;
+            margin-top: -10px;
+        }
+
+        .mx_HomePage_container {
+            display: block ! important;
+            margin: 10px 20px;
+        }
+
+        .mx_HomePage_errorContainer {
+            display: none; /* shown in JS if needed */
+            margin: 20px;
+            border: 1px solid red;
+            background-color: #ffb9b9;
+            padding: 5px;
+        }
+
+        .mx_HomePage_container h1,
+        .mx_HomePage_container h2,
+        .mx_HomePage_container h3,
+        .mx_HomePage_container h4 {
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        .mx_Spacer {
+            margin-top: 24px;
+        }
+
+        .mx_FooterLink {
+            color: #368BD6;
+            text-decoration: none;
+        }
+
+        .mx_Subtext {
+            font-size: 14px;
+        }
+
+        .mx_SubtextTop {
+            margin-top: 32px;
+        }
+
+        @media screen and (max-width: 1120px) {
+            body {
+                font-size: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            h4 {
+                font-size: 16px;
+            }
+
+            .mx_Button {
+                font-size: 18px;
+                padding: 14px 28px;
+            }
+
+            .mx_HomePage_header {
+                justify-content: left;
+            }
+
+            .mx_Spacer {
+                margin-top: 24px;
+            }
+        }
+    </style>
+
+    <meta name="apple-itunes-app" content="app-id=id1083446067">
+
+</head>
+
+<body>
+
+<div class="mx_HomePage_errorContainer">
+    <!-- populated by JS if needed -->
+</div>
+
+<div class="mx_HomePage_container">
+    <div class="mx_HomePage_header">
+          <span class="mx_HomePage_logo">
+              <svg width="34px" height="42px" viewBox="0 0 34 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <g id="blue" transform="translate(1.000000, 1.000000)">
+                          <path
+                              d="M11.6756011,11.3799998 L11.6756011,17.149751 L17.5348252,17.1437188 C17.6092313,17.1437188 17.6771226,17.1417081 17.744671,17.1373516 C19.2852547,17.0358104 20.4894678,15.7727453 20.4894678,14.2620269 C20.4894678,12.6725555 19.1669592,11.3799998 17.5406542,11.3799998 L11.6756011,11.3799998 Z M5.88083947,39.8778856 C2.68069092,39.8778856 0.0860778277,37.342372 0.0860778277,34.2143673 L0.0860778277,23.4205057 C0.0651618241,23.2247959 0.0538388139,23.025735 0.0538388139,22.8243282 C0.0535037238,22.6192351 0.0644760535,22.416823 0.0860778277,22.2170918 L0.0860778277,5.71648153 C0.0860778277,2.58847681 2.68069092,0.0526281121 5.88083947,0.0526281121 L17.5406542,0.0526281121 C25.5573126,0.0526281121 32.079334,6.42693471 32.079334,14.2620269 C32.079334,21.7113966 26.1261594,27.9382507 18.5264495,28.4382489 C18.2034515,28.4600316 17.8705099,28.4710906 17.5406542,28.4710906 L11.6756011,28.4767876 L11.6756011,34.2143673 C11.6756011,37.342372 9.08133089,39.8778856 5.88083947,39.8778856 L5.88083947,39.8778856 Z"
+                              id="Fill-1" fill="#A2DDEF"></path>
+                          <path
+                              d="M11.6756011,11.3799998 L11.6756011,17.149751 L17.5348252,17.1437188 C17.6092313,17.1437188 17.6771226,17.1417081 17.744671,17.1373516 C19.2852547,17.0358104 20.4894678,15.7727453 20.4894678,14.2620269 C20.4894678,12.6725555 19.1669592,11.3799998 17.5406542,11.3799998 L11.6756011,11.3799998 Z M5.88083947,39.8778856 C2.68069092,39.8778856 0.0860778277,37.342372 0.0860778277,34.2143673 L0.0860778277,23.4205057 C0.0651618241,23.2247959 0.0538388139,23.025735 0.0538388139,22.8243282 C0.0535037238,22.6192351 0.0644760535,22.416823 0.0860778277,22.2170918 L0.0860778277,5.71648153 C0.0860778277,2.58847681 2.68069092,0.0526281121 5.88083947,0.0526281121 L17.5406542,0.0526281121 C25.5573126,0.0526281121 32.079334,6.42693471 32.079334,14.2620269 C32.079334,21.7113966 26.1261594,27.9382507 18.5264495,28.4382489 C18.2034515,28.4600316 17.8705099,28.4710906 17.5406542,28.4710906 L11.6756011,28.4767876 L11.6756011,34.2143673 C11.6756011,37.342372 9.08133089,39.8778856 5.88083947,39.8778856 Z"
+                              id="Stroke-3" stroke="#368BD6" stroke-width="1.02344117"></path>
+                          <path
+                              d="M5.88087375,34.2142667 L5.88087375,5.716381 L17.5406885,5.716381 C22.3695423,5.716381 26.2842638,9.54243948 26.2842638,14.2619264 C26.2842638,18.7857035 22.6877398,22.488438 18.1373089,22.7876997 C17.939807,22.8007693 17.7412764,22.8074717 17.5406885,22.8074717 L5.84864254,22.8188658"
+                              id="Stroke-5" stroke="#368BD6" stroke-width="1.02344117" stroke-linecap="round"></path>
+                          <path
+                              d="M22.882533,19.5375774 L31.0723484,30.9604582 C32.909185,33.5221111 32.2731328,37.0539347 29.6524604,38.8484992 C28.640263,39.5418613 27.480282,39.8746349 26.3319591,39.8746349 C24.505752,39.8746349 22.709033,39.0334852 21.5812832,37.4607697 L13.3914677,26.0378889 C11.5549741,23.476236 12.1910263,19.9444124 14.8116987,18.1498479 C17.432371,16.3539429 21.0460393,16.9759245 22.882533,19.5375774 Z M10.6558259,2.46823596 C11.5442417,3.70717248 11.8854126,5.21051822 11.6165905,6.69945383 C11.3474256,8.1893948 10.5004989,9.48731234 9.23182325,10.3549365 C6.61252242,12.1461499 2.98925341,11.5224926 1.15515992,8.96452603 C0.266744094,7.72558951 -0.0744267831,6.22257889 0.194738181,4.73297304 C0.463560259,3.24336719 1.31048696,1.94511453 2.57950547,1.07782546 C5.19880631,-0.713387872 8.82173243,-0.08973062 10.6558259,2.46823596 Z"
+                              id="Combined-Shape" fill="#368BD6"></path>
+                      </g>
+                  </g>
+              </svg>
+          </span>
+        <h1>Unable to load</h1>
+    </div>
+    <div class="mx_HomePage_col">
+        <div class="mx_HomePage_row">
+            <div>
+                <h2 id="step1_heading">Riot can't load</h2>
+                <p>Something went wrong and riot was unable to load.</p>
+            </div>
+        </div>
+    </div>
+    <div class="mx_HomePage_row mx_Center mx_Spacer">
+        <p class="mx_Spacer">
+            <a href="https://riot.im" target="_blank" class="mx_FooterLink">
+                Go to Riot.im
+            </a>
+        </p>
+    </div>
+</div>
+
+</body>

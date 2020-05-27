@@ -1,11 +1,11 @@
 {
     "Custom Server Options": "Brugerdefinerede serverindstillinger",
-    "Dismiss": "Afskedige",
+    "Dismiss": "Afslut",
     "powered by Matrix": "Drevet af Matrix",
     "Riot Desktop on %(platformName)s": "Riot Desktop på %(platformName)s",
     "Unknown device": "Ukendt enhed",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s på %(osName)s",
-    "You need to be using HTTPS to place a screen-sharing call.": "Du skal bruge HTTPS for at lave skærm-delings-opkald.",
+    "You need to be using HTTPS to place a screen-sharing call.": "Du skal bruge HTTPS for at lave skærmdelings opkald.",
     "Welcome to Riot.im": "Velkommen til Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentraliseret, krypteret chat &amp; samarbejde baseret på [matrix]",
     "Chat with Riot Bot": "Chat med Riot Bot",
@@ -16,10 +16,15 @@
     "Unexpected error preparing the app. See console for details.": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfiguration: kan kun angive en af default_server_config, default_server_name eller default_hs_url.",
     "Invalid configuration: no default server specified.": "Ugyldig konfiguration: ingen standardserver angivet.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruge de brugertilpassede serverindstillinger til at logge på andre Matrix servere ved at angive en anden homeserver URL. Dette giver dig mulighed for at bruge Riot med en eksisterende Matrix konto på en anden homeserver.",
-    "Sign In": "Log på",
-    "Create Account": "Opret konto",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruge de brugertilpassede serverindstillinger til at logge på andre Matrix-servere ved at angive en anden homeserver URL. Dette giver dig mulighed for at bruge Riot med en eksisterende Matrix konto på en anden homeserver.",
+    "Sign In": "Log ind",
+    "Create Account": "Opret brugerkonto",
     "Need help?": "Brug for hjælp?",
     "Explore rooms": "Udforsk rum",
-    "Room Directory": "Rumliste"
+    "Room Directory": "Rumliste",
+    "Missing indexeddb worker script!": "Manglende indexeddb worker script!",
+    "Unable to load config file: please refresh the page to try again.": "Ikke i stand til at loade config fil: genopfrisk venligst siden for at prøve igen.",
+    "Open user settings": "Åbn brugerindstillinger",
+    "Previous/next recently visited room or community": "Forrige/næste besøgte rum eller fællesskab",
+    "Go to your browser to complete Sign In": "Gå til din browser for at færdiggøre Log ind"
 }

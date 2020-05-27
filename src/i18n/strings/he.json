@@ -8,5 +8,12 @@
     "Welcome to Riot.im": "ברוכים הבאים ל Riot.im",
     "Chat with Riot Bot": "שיחה עם Riot בוט",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s באמצעות הדפדפן %(browserName)s על גבי %(osName)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "צ'ט מוצפן &amp; ושת\"פ נעשה ע\"י ה [matrix]"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "צ'ט מוצפן &amp; ושת\"פ נעשה ע\"י ה [matrix]",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "תצורת Riot שלך מכילה JSON לא חוקי. אנא תקן את הבעיה וטען מחדש את הדף.",
+    "Invalid JSON": "JSON לא חוקי",
+    "Your Riot is misconfigured": "ה Riot שלך מוגדר באופן שגוי",
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "תצורה שגויה: ניתן לציין רק אחד מהבאים, default_server_config, default_server_name, או default_hs_url.",
+    "Invalid configuration: no default server specified.": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
+    "Open user settings": "פתיחת הגדרות משתמש",
+    "Go to your browser to complete Sign In": "עבור לדפדפן להמשך ההתחברות"
 }

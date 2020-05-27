@@ -3,7 +3,6 @@ test/
 webapp/
 lib/
 node_modules/
-electron_app/
 karma-reports/
 .idea/
 .tmp/

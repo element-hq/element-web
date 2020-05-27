@@ -5,6 +5,7 @@ Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,10 +23,19 @@ limitations under the License.
 import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
 import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
+import {MatrixClient} from "matrix-js-sdk";
+import Modal from "matrix-react-sdk/src/Modal";
+import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
+import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
+import {Categories, Modifiers, registerShortcut} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
+import {Key} from "matrix-react-sdk/src/Keyboard";
+import React from "react";
+import {randomString} from "matrix-js-sdk/src/randomstring";
 
 const ipcRenderer = window.ipcRenderer;
+const isMac = navigator.platform.toUpperCase().includes('MAC');
 
 function platformFriendlyName(): string {
     // used to use window.process but the same info is available here
@@ -116,6 +126,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('addEventToIndex', ev, profile);
     }
 
+    async deleteEvent(eventId: string): Promise<boolean> {
+        return this._ipcCall('deleteEvent', eventId);
+    }
+
     async isEventIndexEmpty(): Promise<boolean> {
         return this._ipcCall('isEventIndexEmpty');
     }
@@ -198,8 +212,49 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.on('ipcReply', this._onIpcReply.bind(this));
         ipcRenderer.on('update-downloaded', this.onUpdateDownloaded.bind(this));
 
+        ipcRenderer.on('preferences', () => {
+            dis.dispatch({ action: 'view_user_settings' });
+        });
+
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
         this.stopUpdateCheck = this.stopUpdateCheck.bind(this);
+
+        // register OS-specific shortcuts
+        if (isMac) {
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.COMMA,
+                }],
+                description: _td("Open user settings"),
+            });
+
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.SQUARE_BRACKET_LEFT,
+                }, {
+                    modifiers: [Modifiers.COMMAND],
+                    key: Key.SQUARE_BRACKET_RIGHT,
+                }],
+                description: _td("Previous/next recently visited room or community"),
+            });
+        } else {
+            registerShortcut(Categories.NAVIGATION, {
+                keybinds: [{
+                    modifiers: [Modifiers.ALT],
+                    key: Key.ARROW_LEFT,
+                }, {
+                    modifiers: [Modifiers.ALT],
+                    key: Key.ARROW_RIGHT,
+                }],
+                description: _td("Previous/next recently visited room or community"),
+            });
+        }
+
+        // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
+        this.ssoID = randomString(32);
+        this._ipcCall("startSSOFlow", this.ssoID);
     }
 
     async getConfig(): Promise<{}> {
@@ -291,7 +346,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     supportsAutoHideMenuBar(): boolean {
         // This is irelevant on Mac as Menu bars don't live in the app window
-        return !navigator.platform.toUpperCase().includes('MAC');
+        return !isMac;
     }
 
     async getAutoHideMenuBarEnabled(): boolean {
@@ -304,7 +359,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     supportsMinimizeToTray(): boolean {
         // Things other than Mac support tray icons
-        return !navigator.platform.toUpperCase().includes('MAC');
+        return !isMac;
     }
 
     async getMinimizeToTrayEnabled(): boolean {
@@ -335,7 +390,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        return _t('Riot Desktop on %(platformName)s', { platformName: platformFriendlyName() });
+        return _t('Riot Desktop (%(platformName)s)', { platformName: platformFriendlyName() });
     }
 
     screenCaptureErrorString(): ?string {
@@ -391,5 +446,48 @@ export default class ElectronPlatform extends VectorBasePlatform {
             console.log("Failed to send setLanguage IPC to Electron");
             console.error(error);
         });
+    }
+
+    getSSOCallbackUrl(hsUrl: string, isUrl: string): URL {
+        const url = super.getSSOCallbackUrl(hsUrl, isUrl);
+        url.protocol = "riot";
+        url.searchParams.set("riot-desktop-ssoid", this.ssoID);
+        return url;
+    }
+
+    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas") {
+        super.startSingleSignOn(mxClient, loginType); // this will get intercepted by electron-main will-navigate
+        Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
+            title: _t("Go to your browser to complete Sign In"),
+            description: <Spinner />,
+        });
+    }
+
+    _navigateForwardBack(back: boolean) {
+        this._ipcCall(back ? "navigateBack" : "navigateForward");
+    }
+
+    onKeyDown(ev: KeyboardEvent): boolean {
+        let handled = false;
+
+        switch (ev.key) {
+            case Key.SQUARE_BRACKET_LEFT:
+            case Key.SQUARE_BRACKET_RIGHT:
+                if (isMac && ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey) {
+                    this._navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
+                    handled = true;
+                }
+                break;
+
+            case Key.ARROW_LEFT:
+            case Key.ARROW_RIGHT:
+                if (!isMac && ev.altKey && !ev.metaKey && !ev.ctrlKey && !ev.shiftKey) {
+                    this._navigateForwardBack(ev.key === Key.ARROW_LEFT);
+                    handled = true;
+                }
+                break;
+        }
+
+        return handled;
     }
 }

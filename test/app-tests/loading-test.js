@@ -28,7 +28,7 @@ import MatrixReactTestUtils from 'matrix-react-test-utils';
 import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
-import {VIEWS} from 'matrix-react-sdk/src/components/structures/MatrixChat';
+import {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher';
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
@@ -307,12 +307,11 @@ describe('loading:', function() {
                 indexedDB,
                 "matrix-js-sdk:crypto",
             );
-            await cryptoStore._connect();
+            await cryptoStore.startup();
         });
 
         it('shows the last known room by default', function() {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp();
 
@@ -332,7 +331,6 @@ describe('loading:', function() {
             localStorage.removeItem("mx_last_room_id");
 
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp();
 
@@ -350,7 +348,6 @@ describe('loading:', function() {
 
         it('shows a room view if we followed a room link', function() {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
             loadApp({
                 uriFragment: "#/room/!room:id",
@@ -663,7 +660,6 @@ describe('loading:', function() {
             return sleep(1);
         }).then(() => {
             httpBackend.when('GET', '/pushrules').respond(200, {});
-            httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
             return expectAndAwaitSync().catch((e) => {
                 throw new Error("Never got /sync after login: did the client start?");
             });
@@ -683,7 +679,7 @@ function assertAtLoadingSpinner(matrixChat) {
 }
 
 function awaitLoggedIn(matrixChat) {
-    if (matrixChat.state.view === VIEWS.LOGGED_IN) {
+    if (matrixChat.state.view === Views.LOGGED_IN) {
         return Promise.resolve();
     }
     return new Promise(resolve => {
@@ -708,7 +704,7 @@ function awaitRoomView(matrixChat, retryLimit, retryCount) {
         retryCount = 0;
     }
 
-    if (matrixChat.state.view !== VIEWS.LOGGED_IN || !matrixChat.state.ready) {
+    if (matrixChat.state.view !== Views.LOGGED_IN || !matrixChat.state.ready) {
         console.log(Date.now() + " Awaiting room view: not ready yet.");
         if (retryCount >= retryLimit) {
             throw new Error("MatrixChat still not ready after " +

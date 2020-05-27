@@ -1,6 +1,7 @@
 # Labs features
 
-Some notes on the features you can enable by going to `Settings->Labs`. Not exhaustive, chat in
+If Labs is enabled in the [Riot config](config.md), you can enable some of these features by going
+to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#riot-web:matrix.org](https://matrix.to/#/#riot-web:matrix.org) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
@@ -66,21 +67,24 @@ An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/224
 
 This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
 
-## Cross-signing (in development) (`feature_cross_signing`)
+## Cross-signing
 
 Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
 improves the device verification experience by allowing you to verify a user
 instead of verifying each of their devices.
 
-This feature is still in development and will be landing in several chunks.
+The feature is enabled by default and does not follow a traditional labs flag
+at the moment. If something goes wrong, add this to your config to disable it:
+```json
+{
+  "settingDefaults": {
+    "feature_cross_signing": false  
+  }
+}
+```
 
-## Event indexing and E2EE search support using Seshat (`feature_event_indexing`)
-
-Adds support for search in E2E encrypted rooms. This enables an event indexer
-that downloads, stores, and indexes room messages for E2E encrypted rooms.
-
-The existing search will transparently work for encrypted rooms just like it
-does for non-encrypted.
+The setting will be removed in a future release, enabling it non-optionally for
+all users.
 
 ## Bridge info tab (`feature_bridge_state`)
 
@@ -94,7 +98,11 @@ tab as the single source of truth just yet.
 This adds a presence indicator in the room list next to DM rooms where the other
 person is online.
 
-## Show padlocks on invite only rooms (`feature_invite_only_padlocks`)
+## Custom themes (`feature_custom_themes`)
 
-This adds padlocks to room list tiles and room header for invite only rooms.
-This feature flag (unlike most) is enabled by default.
+Custom themes are possible through Riot's [theme support](./theming.md), though
+normally these themes need to be defined in the config for Riot. This labs flag
+adds an ability for end users to add themes themselves by using a URL to the JSON
+theme definition.
+
+For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).

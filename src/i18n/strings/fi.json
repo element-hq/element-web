@@ -21,5 +21,6 @@
     "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-asetuksissasi on virheellistä JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
     "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
-    "Invalid JSON": "Virheellinen JSON"
+    "Invalid JSON": "Virheellinen JSON",
+    "Missing indexeddb worker script!": "Indexeddb-suorittajan skripti puuttuu!"
 }

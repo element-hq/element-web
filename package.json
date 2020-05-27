@@ -31,39 +31,35 @@
     "reskindex": "reskindex -h src/header",
     "reskindex:watch": "reskindex -h src/header -w",
     "reskindex:watch-react": "node scripts/yarn-sub.js matrix-react-sdk reskindex:watch",
-    "clean": "rimraf lib webapp electron_app/dist",
+    "clean": "rimraf lib webapp",
     "build": "yarn clean && yarn build:genfiles && yarn build:compile && yarn build:types && yarn build:bundle",
+    "build-stats": "yarn clean && yarn build:genfiles && yarn build:compile && yarn build:types && yarn build:bundle-stats",
+    "build:jitsi": "node scripts/build-jitsi.js",
     "build:res": "node scripts/copy-res.js",
-    "build:genfiles": "yarn reskindex && yarn build:res",
+    "build:genfiles": "yarn reskindex && yarn build:res && yarn build:jitsi",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
-    "build:compile": "babel -d lib --verbose --extensions \".ts,.js\" src",
+    "build:compile": "babel -d lib --verbose --extensions \".ts,.js,.tsx\" src",
     "build:bundle": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production",
-    "build:electron": "yarn build && yarn install:electron && electron-builder -wml --ia32 --x64",
-    "build:electron:linux": "yarn build && electron-builder -l --x64",
-    "build:electron:macos": "yarn build && electron-builder -m --x64",
-    "build:electron:windows": "yarn build && electron-builder -w --ia32 --x64",
-    "build:types": "tsc --emitDeclarationOnly",
-    "install:electron": "electron-builder install-app-deps",
+    "build:bundle-stats": "cross-env NODE_ENV=production webpack -p --progress --bail --mode production --json > webpack-stats.json",
+    "build:types": "tsc --emitDeclarationOnly --jsx react",
     "dist": "scripts/package.sh",
-    "start": "concurrently --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
-    "start:res": "node scripts/copy-res.js -w",
+    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
+    "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
-    "electron": "yarn build && yarn install:electron && electron .",
     "lint": "yarn lint:types && yarn lint:ts && yarn lint:js && yarn lint:style",
     "lint:js": "eslint src",
     "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
-    "lint:types": "tsc --noEmit",
+    "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "jest"
   },
   "dependencies": {
     "browser-request": "^0.3.3",
     "favico.js": "^0.3.10",
-    "gemini-scrollbar": "github:matrix-org/gemini-scrollbar#91e1e566",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "5.1.0",
-    "matrix-react-sdk": "2.2.0",
+    "matrix-js-sdk": "6.1.0",
+    "matrix-react-sdk": "2.6.1",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
     "prop-types": "^15.7.2",
@@ -90,7 +86,8 @@
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
-    "@types/react": "^16.9.17",
+    "@types/modernizr": "^3.5.3",
+    "@types/react": "16.9",
     "@types/react-dom": "^16.9.4",
     "autoprefixer": "^9.7.3",
     "babel-eslint": "^10.0.3",
@@ -102,10 +99,6 @@
     "cpx": "^1.3.2",
     "cross-env": "^6.0.3",
     "css-loader": "^3.3.2",
-    "electron-builder": "^22.3.2",
-    "electron-builder-squirrel-windows": "^22.3.2",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-notarize": "^0.2.0",
     "eslint": "^5.8.0",
     "eslint-config-google": "^0.7.1",
     "eslint-plugin-babel": "^4.1.2",
@@ -128,8 +121,10 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "modernizr": "^3.6.0",
+    "node-fetch": "^2.6.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-extend": "^1.0.5",
+    "postcss-hexrgba": "^2.0.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-mixins": "^6.2.3",
@@ -147,49 +142,7 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
   },
-  "build": {
-    "appId": "im.riot.app",
-    "electronVersion": "8.0.2",
-    "files": [
-      "node_modules/**",
-      "src/**"
-    ],
-    "extraResources": [
-      {
-        "from": "electron_app/img",
-        "to": "img"
-      },
-      "webapp/**/*"
-    ],
-    "linux": {
-      "target": "deb",
-      "category": "Network;InstantMessaging;Chat",
-      "maintainer": "support@riot.im",
-      "desktop": {
-        "StartupWMClass": "riot"
-      }
-    },
-    "mac": {
-      "category": "public.app-category.social-networking",
-      "darkModeSupport": true
-    },
-    "win": {
-      "target": {
-        "target": "squirrel"
-      },
-      "sign": "scripts/electron_winSign"
-    },
-    "directories": {
-      "buildResources": "electron_app/build",
-      "output": "electron_app/dist",
-      "app": "electron_app"
-    },
-    "afterSign": "scripts/electron_afterSign.js"
-  },
   "jest": {
-    "modulePathIgnorePatterns": [
-      "<rootDir>/electron_app"
-    ],
     "testEnvironment": "jest-environment-jsdom-fourteen",
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
@@ -198,6 +151,7 @@
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
     ],
     "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/__mocks__/cssMock.js",
       "\\.(gif|png|svg|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
       "^browser-request$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/browser-request.js",
