@@ -20,13 +20,13 @@ module.exports = async function toastScenarios(alice, bob) {
     console.log(" checking and clearing toasts:");
 
     alice.log.startGroup(`clears toasts`);
-    alice.log.step(`accepts desktop notifications toast`);
-    await acceptToast(alice, "Notifications");
-    alice.log.done();
-
-    alice.log.step(`accepts analytics toast`);
-    await acceptToast(alice, "Help us improve Riot");
-    alice.log.done();
+    // alice.log.step(`accepts desktop notifications toast`);
+    // await acceptToast(alice, "Notifications");
+    // alice.log.done();
+    //
+    // alice.log.step(`accepts analytics toast`);
+    // await acceptToast(alice, "Help us improve Riot");
+    // alice.log.done();
 
     while (true) {
         try {
@@ -46,13 +46,13 @@ module.exports = async function toastScenarios(alice, bob) {
     alice.log.endGroup();
 
     bob.log.startGroup(`clears toasts`);
-    bob.log.step(`reject desktop notifications toast`);
-    await rejectToast(bob, "Notifications");
-    bob.log.done();
-
-    bob.log.step(`reject analytics toast`);
-    await rejectToast(bob, "Help us improve Riot");
-    bob.log.done();
+    // bob.log.step(`reject desktop notifications toast`);
+    // await rejectToast(bob, "Notifications");
+    // bob.log.done();
+    //
+    // bob.log.step(`reject analytics toast`);
+    // await rejectToast(bob, "Help us improve Riot");
+    // bob.log.done();
 
     while (true) {
         try {
