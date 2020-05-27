@@ -27,7 +27,7 @@
     "Open user settings": "Otvoriť používateľské nastavenia",
     "Previous/next recently visited room or community": "Predchádzajúca/ďalšia nedávno navštívená miestnosť alebo komunita",
     "Go to your browser to complete Sign In": "Prejdite do prehliadača a dokončite prihlásenie",
-    "Riot Desktop (%(platformName)s)": "Riot pre počítače (%(platformName)s)",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Nepodporovaný prehliadač",
     "Your browser can't run Riot": "Váš prehliadač nerozbehne Riot",
