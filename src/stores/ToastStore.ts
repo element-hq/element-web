@@ -70,13 +70,15 @@ export default class ToastStore extends EventEmitter {
 
     dismissToast(key) {
         console.log("DEBUG dismissToast", key);
+        if (this.toasts[0] && this.toasts[0].key === key) {
+            this.countSeen++;
+        }
+
         const length = this.toasts.length;
         this.toasts = this.toasts.filter(t => t.key !== key);
         if (length !== this.toasts.length) {
             if (this.toasts.length === 0) {
                 this.countSeen = 0;
-            } else {
-                this.countSeen++;
             }
 
             this.emit('update');
