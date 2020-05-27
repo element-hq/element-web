@@ -17,8 +17,12 @@ limitations under the License.
 const assert = require('assert');
 
 async function assertNoToasts(session) {
-    const toast = await session.query('.mx_Toast_toast');
-    assert(!toast, 'toast found when none expected');
+    try {
+        await session.query('.mx_Toast_toast');
+    } catch (e) {
+        return;
+    }
+    throw new Error('toast found when none expected');
 }
 
 async function assertToast(session, expectedTitle) {
