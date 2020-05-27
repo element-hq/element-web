@@ -20,7 +20,6 @@ module.exports = async function toastScenarios(alice, bob) {
     console.log(" checking and clearing toasts:");
 
     alice.log.startGroup(`clears toasts`);
-
     alice.log.step(`accepts desktop notifications toast`);
     await acceptToast(alice, "Notifications");
     alice.log.done();
@@ -29,14 +28,21 @@ module.exports = async function toastScenarios(alice, bob) {
     await acceptToast(alice, "Help us improve Riot");
     alice.log.done();
 
-    await alice.delay(300);
+    while (true) {
+        try {
+            const toastDismissButton = await alice.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
+            await toastDismissButton.click();
+        } catch (e) {
+            break;
+        }
+    }
+
     alice.log.step(`checks no remaining toasts`);
     await assertNoToasts(alice);
     alice.log.done();
     alice.log.endGroup();
 
     bob.log.startGroup(`clears toasts`);
-
     bob.log.step(`reject desktop notifications toast`);
     await rejectToast(bob, "Notifications");
     bob.log.done();
@@ -45,7 +51,15 @@ module.exports = async function toastScenarios(alice, bob) {
     await rejectToast(bob, "Help us improve Riot");
     bob.log.done();
 
-    await bob.delay(300);
+    while (true) {
+        try {
+            const toastDismissButton = await bob.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
+            await toastDismissButton.click();
+        } catch (e) {
+            break;
+        }
+    }
+
     bob.log.step(`checks no remaining toasts`);
     await assertNoToasts(bob);
     bob.log.done();
