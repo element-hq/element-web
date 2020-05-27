@@ -1,14 +1,10 @@
 {
-  "name": "riot-web",
-  "productName": "Riot",
+  "name": "tchap-web",
+  "productName": "Tchap",
   "main": "electron_app/src/electron-main.js",
-  "version": "1.5.11",
-  "description": "A feature-rich client for Matrix.org",
-  "author": "New Vector Ltd.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/vector-im/riot-web"
-  },
+  "version": "3.0.0",
+  "description": "A feature-rich client for Tchap",
+  "author": "MinArm based on the work of New Vector Ltd.",
   "license": "Apache-2.0",
   "files": [
     "lib",
@@ -49,7 +45,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "install:electron": "electron-builder install-app-deps",
     "dist": "scripts/package.sh",
-    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
+    "start": "concurrently --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:res": "node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "electron": "yarn build && yarn install:electron && electron .",

@@ -32,7 +32,7 @@ h1::after {
 }
 
 .mx_Logo {
-    height: 54px;
+    height: 150px;
     margin-top: 2px;
 }
 
@@ -122,12 +122,12 @@ h1::after {
 }
 
 .mx_ButtonSignIn {
-    background-color: #368BD6;
+    background-color: #374c72;
     color: white !important;
 }
 
 .mx_ButtonCreateAccount {
-    background-color: #03B381;
+    background-color: #124a9d;
     color: white !important;
 }
 
@@ -161,11 +161,10 @@ we don't have an account and should hide them. No account == no guest account ei
 </style>
 
 <div class="mx_Parent">
-    <a href="https://riot.im" target="_blank" rel="noopener">
-        <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
+    <a href="https://www.tchap.gouv.fr" target="_blank" rel="noopener">
+        <img src="themes/tchap/img/logos/tchap-logo.svg" alt="" class="mx_Logo"/>
     </a>
-    <h1 class="mx_Header_title">_t("Welcome to Riot.im")</h1>
-    <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
+    <h1 class="mx_Header_title">_t("Welcome to Tchap")</h1>
     <div class="mx_ButtonGroup">
         <div class="mx_ButtonRow">
             <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
@@ -175,25 +174,5 @@ we don't have an account and should hide them. No account == no guest account ei
                 <div class="mx_ButtonLabel">_t("Create Account")</div>
             </a>
         </div>
-        <!-- The comments below are meant to be used by Ansible as a quick way
-             to strip out the marked content when desired.
-             See https://github.com/vector-im/riot-web/issues/8622.
-             TODO: Strip out these comments and rely on the guest flag -->
-        <!-- BEGIN Ansible: Remove these lines when guest access is disabled -->
-        <div class="mx_ButtonRow mx_WelcomePage_guestFunctions">
-            <div>
-                <div class="mx_ButtonWrapperText">_t("Need help?")</div>
-                <a href="#/user/@riot-bot:matrix.org?action=chat" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconHelp">
-                    <div class="mx_ButtonLabel">_t("Chat with Riot Bot")</div>
-                </a>
-            </div>
-            <div>
-                <div class="mx_ButtonWrapperText">_t("Explore rooms")</div>
-                <a href="#/directory" class="mx_ButtonParent mx_SecondaryButton mx_Button_iconRoomDirectory">
-                    <div class="mx_ButtonLabel">_t("Room Directory")</div>
-                </a>
-            </div>
-        </div>
-        <!-- END Ansible: Remove these lines when guest access is disabled -->
     </div>
 </div>

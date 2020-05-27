@@ -11,46 +11,8 @@ const loaderUtils = require("loader-utils");
 // This could readily be automated, but it's nice to explicitly
 // control when new languages are available.
 const INCLUDE_LANGS = [
-    {'value': 'bg', 'label': 'Български'},
-    {'value': 'ca', 'label': 'Català'},
-    {'value': 'cs', 'label': 'čeština'},
-    {'value': 'da', 'label': 'Dansk'},
-    {'value': 'de_DE', 'label': 'Deutsch'},
-    {'value': 'el', 'label': 'Ελληνικά'},
     {'value': 'en_EN', 'label': 'English'},
-    {'value': 'en_US', 'label': 'English (US)'},
-    {'value': 'eo', 'label': 'Esperanto'},
-    {'value': 'es', 'label': 'Español'},
-    {'value': 'eu', 'label': 'Euskara'},
-    {'value': 'fi', 'label': 'Suomi'},
     {'value': 'fr', 'label': 'Français'},
-    {'value': 'gl', 'label': 'Galego'},
-    {'value': 'hi', 'label': 'हिन्दी'},
-    {'value': 'hu', 'label': 'Magyar'},
-    {'value': 'is', 'label': 'íslenska'},
-    {'value': 'it', 'label': 'Italiano'},
-    {'value': 'ja', 'label': '日本語'},
-    {'value': 'ko', 'label': '한국어'},
-    {'value': 'lt', 'label': 'Lietuvių'},
-    {'value': 'lv', 'label': 'Latviešu'},
-    {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
-    {'value': 'nl', 'label': 'Nederlands'},
-    {'value': 'nn', 'label': 'Norsk Nynorsk'},
-    {'value': 'pl', 'label': 'Polski'},
-    {'value': 'pt', 'label': 'Português'},
-    {'value': 'pt_BR', 'label': 'Português do Brasil'},
-    {'value': 'ru', 'label': 'Русский'},
-    {'value': 'sk', 'label': 'Slovenčina'},
-    {'value': 'sq', 'label': 'Shqip'},
-    {'value': 'sr', 'label': 'српски'},
-    {'value': 'sv', 'label': 'Svenska'},
-    {'value': 'te', 'label': 'తెలుగు'},
-    {'value': 'th', 'label': 'ไทย'},
-    {'value': 'tr', 'label': 'Türkçe'},
-    {'value': 'uk', 'label': 'українська мова'},
-    {'value': 'vls', 'label': 'West-Vlaams'},
-    {'value': 'zh_Hans', 'label': '简体中文'}, // simplified chinese
-    {'value': 'zh_Hant', 'label': '繁體中文'}, // traditional chinese
 ];
 
 // cpx includes globbed parts of the filename in the destination, but excludes

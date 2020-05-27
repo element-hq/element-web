@@ -37,10 +37,7 @@ module.exports = (env, argv) => {
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
             // CSS themes
-            "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
-            "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-            "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
-            "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            "theme-tchap": "./node_modules/matrix-react-sdk/res/themes/tchap/css/tchap.scss",
         },
 
         optimization: {
