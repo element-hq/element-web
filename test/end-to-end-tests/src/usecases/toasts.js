@@ -23,21 +23,13 @@ async function assertToast(session, expectedTitle) {
 }
 
 async function acceptToast(session, expectedTitle) {
-    const foundToast = await assertToast(session, expectedTitle);
-    if (!foundToast) {
-        throw new Error("could not find expected toast");
-    }
-
+    await assertToast(session, expectedTitle);
     const btn = await session.query('.mx_Toast_buttons .mx_AccessibleButton_kind_primary');
     await btn.click();
 }
 
 async function rejectToast(session, expectedTitle) {
-    const foundToast = await assertToast(session, expectedTitle);
-    if (!foundToast) {
-        throw new Error("could not find expected toast");
-    }
-
+    await assertToast(session, expectedTitle);
     const btn = await session.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
     await btn.click();
 }
