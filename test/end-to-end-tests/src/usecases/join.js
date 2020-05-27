@@ -19,15 +19,6 @@ const {openRoomDirectory} = require('./create-room');
 
 module.exports = async function join(session, roomName) {
     session.log.step(`joins room "${roomName}"`);
-    while (true) {
-        try {
-            const toastDismissButton = await session.query('.mx_Toast_buttons .mx_AccessibleButton_kind_danger');
-            await toastDismissButton.click();
-        } catch (e) {
-            break;
-        }
-    }
-
     await openRoomDirectory(session);
     const roomInput = await session.query('.mx_DirectorySearchBox input');
     await session.replaceInputText(roomInput, roomName);
