@@ -18,14 +18,13 @@ const assert = require('assert');
 
 async function assertNoToasts(session) {
     try {
-        await session.query('.mx_Toast_toast');
+        await session.query('.mx_Toast_toast', 1000, true);
     } catch (e) {
-        return;
+        const h2Element = await session.query('.mx_Toast_title h2', 1000);
+        const toastTitle = await session.innerText(h2Element);
+        throw new Error(`"${toastTitle}" toast found when none expected`);
     }
 
-    const h2Element = await session.query('.mx_Toast_title h2');
-    const toastTitle = await session.innerText(h2Element);
-    throw new Error(`"${toastTitle}" toast found when none expected`);
 }
 
 async function assertToast(session, expectedTitle) {
