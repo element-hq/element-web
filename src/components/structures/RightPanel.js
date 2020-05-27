@@ -26,7 +26,6 @@ import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
-import SettingsStore from "../../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -189,7 +188,7 @@ export default class RightPanel extends React.Component {
         }
     }
 
-    onCloseRoomMemberInfo = () => {
+    onCloseUserInfo = () => {
         // XXX: There are three different ways of 'closing' this panel depending on what state
         // things are in... this knows far more than it should do about the state of the rest
         // of the app and is generally a bit silly.
@@ -203,21 +202,13 @@ export default class RightPanel extends React.Component {
             });
         } else {
             // Otherwise we have got our user from RoomViewStore which means we're being shown
-            // within a room, so go back to the member panel if we were in the encryption panel,
+            // within a room/group, so go back to the member panel if we were in the encryption panel,
             // or the member list if we were in the member panel... phew.
             dis.dispatch({
                 action: Action.ViewUser,
-                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ?
-                    this.state.member : null,
+                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
             });
         }
-    };
-
-    onCloseGroupMemberInfo = () => {
-        dis.dispatch({
-            action: Action.ViewUser,
-            member: null,
-        });
     };
 
     render() {
@@ -253,7 +244,7 @@ export default class RightPanel extends React.Component {
                     user={this.state.member}
                     roomId={this.props.roomId}
                     key={this.props.roomId || this.state.member.userId}
-                    onClose={this.onCloseRoomMemberInfo}
+                    onClose={this.onCloseUserInfo}
                     phase={this.state.phase}
                     verificationRequest={this.state.verificationRequest}
                     verificationRequestPromise={this.state.verificationRequestPromise}
@@ -267,7 +258,7 @@ export default class RightPanel extends React.Component {
                     user={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.userId}
-                    onClose={this.onCloseGroupMemberInfo} />;
+                    onClose={this.onCloseUserInfo} />;
                 break;
             case RIGHT_PANEL_PHASES.GroupRoomInfo:
                 panel = <GroupRoomInfo

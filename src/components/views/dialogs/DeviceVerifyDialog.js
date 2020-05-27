@@ -26,7 +26,6 @@ import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {ensureDMExists} from "../../../createRoom";
 import dis from "../../../dispatcher/dispatcher";
-import SettingsStore from '../../../settings/SettingsStore';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import VerificationQREmojiOptions from "../verification/VerificationQREmojiOptions";
 
@@ -131,7 +130,7 @@ export default class DeviceVerifyDialog extends React.Component {
                 } else {
                     this._verifier = request.verifier;
                 }
-            } else if (verifyingOwnDevice) {
+            } else {
                 this._request = await client.requestVerification(this.props.userId, [
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,
@@ -140,11 +139,8 @@ export default class DeviceVerifyDialog extends React.Component {
 
                 await this._request.waitFor(r => r.ready || r.started);
                 this.setState({phase: PHASE_PICK_VERIFICATION_OPTION});
-            } else {
-                this._verifier = client.beginKeyVerification(
-                    verificationMethods.SAS, this.props.userId, this.props.device.deviceId,
-                );
             }
+
             if (!this._verifier) return;
             this._verifier.on('show_sas', this._onVerifierShowSas);
             // throws upon cancellation

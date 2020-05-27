@@ -1937,9 +1937,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
-            // This will only work if the feature is set to 'enable' in the config,
-            // since it's too early in the lifecycle for users to have turned the
-            // labs flag on.
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
