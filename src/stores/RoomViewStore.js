@@ -46,7 +46,6 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
-    matrixClientIsReady: false,
 };
 
 /**
@@ -60,9 +59,6 @@ class RoomViewStore extends Store {
 
         // Initialise state
         this._state = INITIAL_STATE;
-        if (MatrixClientPeg.get()) {
-            this._state.matrixClientIsReady = MatrixClientPeg.get().isInitialSyncComplete();
-        }
     }
 
     _setState(newState) {
@@ -157,11 +153,6 @@ class RoomViewStore extends Store {
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
-            case 'sync_state':
-                this._setState({
-                    matrixClientIsReady: MatrixClientPeg.get() && MatrixClientPeg.get().isInitialSyncComplete(),
-                });
-                break;
         }
     }
 
@@ -224,6 +215,7 @@ class RoomViewStore extends Store {
                     storeRoomAliasInCache(payload.room_alias, result.room_id);
                     roomId = result.room_id;
                 } catch (err) {
+                    console.error("RVS failed to get room id for alias: ", err);
                     dis.dispatch({
                         action: 'view_room_error',
                         room_id: null,
@@ -374,7 +366,7 @@ class RoomViewStore extends Store {
     }
 
     shouldPeek() {
-        return this._state.shouldPeek && this._state.matrixClientIsReady;
+        return this._state.shouldPeek;
     }
 }
 
