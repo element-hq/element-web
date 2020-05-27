@@ -25,7 +25,7 @@ import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {ensureDMExists} from "../../../createRoom";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from '../../../settings/SettingsStore';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 import VerificationQREmojiOptions from "../verification/VerificationQREmojiOptions";
@@ -131,7 +131,7 @@ export default class DeviceVerifyDialog extends React.Component {
                 } else {
                     this._verifier = request.verifier;
                 }
-            } else if (verifyingOwnDevice && SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+            } else if (verifyingOwnDevice && SettingsStore.getValue("feature_cross_signing")) {
                 this._request = await client.requestVerification(this.props.userId, [
                     verificationMethods.SAS,
                     SHOW_QR_CODE_METHOD,

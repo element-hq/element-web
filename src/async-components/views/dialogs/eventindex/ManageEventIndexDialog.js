@@ -140,7 +140,7 @@ export default class ManageEventIndexDialog extends React.Component {
             crawlerState = _t("Not currently indexing messages for any room.");
         } else {
             crawlerState = (
-                    _t("Currently indexing: %(currentRoom)s.", { currentRoom: this.state.currentRoom })
+                    _t("Currently indexing: %(currentRoom)s", { currentRoom: this.state.currentRoom })
             );
         }
 

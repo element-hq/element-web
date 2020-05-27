@@ -17,8 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import {replaceableComponent} from "../../../../utils/replaceableComponent";
-import Spinner from "../Spinner";
-import * as QRCode from "qrcode";
+import QRCode from "../QRCode";
 
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
 export default class VerificationQRCode extends React.PureComponent {
@@ -26,33 +25,12 @@ export default class VerificationQRCode extends React.PureComponent {
         qrCodeData: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            dataUri: null,
-        };
-        this.generateQrCode();
-    }
-
-    componentDidUpdate(prevProps): void {
-        if (JSON.stringify(this.props) === JSON.stringify(prevProps)) return; // No prop change
-
-        this.generateQRCode();
-    }
-
-    async generateQrCode() {
-        // Now actually assemble the QR code's data URI
-        const uri = await QRCode.toDataURL([{data: this.props.qrCodeData.buffer, mode: 'byte'}], {
-            errorCorrectionLevel: 'L', // we want it as trivial-looking as possible
-        });
-        this.setState({dataUri: uri});
-    }
-
     render() {
-        if (!this.state.dataUri) {
-            return <div className='mx_VerificationQRCode'><Spinner /></div>;
-        }
-
-        return <img src={this.state.dataUri} className='mx_VerificationQRCode' />;
+        return (
+            <QRCode
+                data={[{data: this.props.qrCodeData.buffer, mode: 'byte'}]}
+                className="mx_VerificationQRCode"
+                width={196} />
+        );
     }
 }

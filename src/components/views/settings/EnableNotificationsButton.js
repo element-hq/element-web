@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import createReactClass from 'create-react-class';
 import Notifier from "../../../Notifier";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 
 export default createReactClass({

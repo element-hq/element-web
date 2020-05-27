@@ -18,6 +18,7 @@ import EventEmitter from 'events';
 import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
 import FlairStore from './FlairStore';
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import dis from '../dispatcher/dispatcher';
 
 function parseMembersResponse(response) {
     return response.chunk.map((apiMember) => groupMemberFromApiObject(apiMember));
@@ -295,6 +296,11 @@ class GroupStore extends EventEmitter {
     }
 
     leaveGroup(groupId) {
+        // ensure the tag panel filter is cleared if the group was selected
+        dis.dispatch({
+            action: "deselect_tags",
+            tag: groupId,
+        });
         return MatrixClientPeg.get().leaveGroup(groupId)
             // The user should now not be able to access group settings
             .then(this._fetchResource.bind(this, this.STATE_KEY.Summary, groupId))

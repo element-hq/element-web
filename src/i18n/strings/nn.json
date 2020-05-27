@@ -1381,5 +1381,6 @@
     "Enter your passphrase a second time to confirm it.": "Stadfest passfrasen ved å skrive den inn ein gong til.",
     "Unable to set up secret storage": "Oppsett av hemmeleg lager feila",
     "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "Denne økta har oppdaga at gjenopprettingspassfrasen og nøkkelen for sikre meldingar vart fjerna.",
-    "Toggle microphone mute": "Slå av/på demping av mikrofon"
+    "Toggle microphone mute": "Slå av/på demping av mikrofon",
+    "Confirm": "Stadfest"
 }

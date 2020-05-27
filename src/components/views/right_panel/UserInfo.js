@@ -21,7 +21,7 @@ import React, {useCallback, useMemo, useState, useEffect, useContext} from 'reac
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -44,6 +44,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
+import {Action} from "../../../dispatcher/actions";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -63,7 +64,7 @@ const _disambiguateDevices = (devices) => {
 };
 
 export const getE2EStatus = (cli, userId, devices) => {
-    if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+    if (!SettingsStore.getValue("feature_cross_signing")) {
         const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
         return hasUnverifiedDevice ? "warning" : "verified";
     }
@@ -111,7 +112,7 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+    if (SettingsStore.getValue("feature_cross_signing")) {
         // Check whether all users have uploaded device keys before.
         // If so, enable encryption in the new room.
         const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
@@ -142,7 +143,7 @@ function useIsEncrypted(cli, room) {
 function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
     return useAsyncMemo(async () => {
         if (!canVerify) {
-            return false;
+            return undefined;
         }
         setUpdating(true);
         try {
@@ -153,7 +154,7 @@ function useHasCrossSigningKeys(cli, member, canVerify, setUpdating) {
         } finally {
             setUpdating(false);
         }
-    }, [cli, member, canVerify], false);
+    }, [cli, member, canVerify], undefined);
 }
 
 function DeviceItem({userId, device}) {
@@ -166,7 +167,7 @@ function DeviceItem({userId, device}) {
     // cross-signing so that other users can then safely trust you.
     // For other people's devices, the more general verified check that
     // includes locally verified devices can be used.
-    const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+    const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
         deviceTrust.isCrossSigningVerified() :
         deviceTrust.isVerified();
 
@@ -181,9 +182,7 @@ function DeviceItem({userId, device}) {
     });
 
     const onDeviceClick = () => {
-        if (!isVerified) {
-            verifyDevice(cli.getUser(userId), device);
-        }
+        verifyDevice(cli.getUser(userId), device);
     };
 
     const deviceName = device.ambiguous ?
@@ -191,17 +190,29 @@ function DeviceItem({userId, device}) {
             device.getDisplayName();
     let trustedLabel = null;
     if (userTrust.isVerified()) trustedLabel = isVerified ? _t("Trusted") : _t("Not trusted");
-    return (
-        <AccessibleButton
-            className={classes}
-            title={device.deviceId}
-            onClick={onDeviceClick}
-        >
-            <div className={iconClasses} />
-            <div className="mx_UserInfo_device_name">{deviceName}</div>
-            <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
-        </AccessibleButton>
-    );
+
+
+    if (isVerified) {
+        return (
+            <div className={classes} title={device.deviceId} >
+                <div className={iconClasses} />
+                <div className="mx_UserInfo_device_name">{deviceName}</div>
+                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+            </div>
+        );
+    } else {
+        return (
+            <AccessibleButton
+                className={classes}
+                title={device.deviceId}
+                onClick={onDeviceClick}
+            >
+                <div className={iconClasses} />
+                <div className="mx_UserInfo_device_name">{deviceName}</div>
+                <div className="mx_UserInfo_device_trusted">{trustedLabel}</div>
+            </AccessibleButton>
+        );
+    }
 }
 
 function DevicesSection({devices, userId, loading}) {
@@ -237,7 +248,7 @@ function DevicesSection({devices, userId, loading}) {
             // cross-signing so that other users can then safely trust you.
             // For other people's devices, the more general verified check that
             // includes locally verified devices can be used.
-            const isVerified = (isMe && SettingsStore.isFeatureEnabled("feature_cross_signing")) ?
+            const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
                 deviceTrust.isCrossSigningVerified() :
                 deviceTrust.isVerified();
 
@@ -547,7 +558,7 @@ const RedactMessagesButton = ({member}) => {
         let eventsToRedact = [];
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
                     return events.concat(event);
                 } else {
                     return events;
@@ -831,7 +842,7 @@ const GroupAdminToolsSection = ({children, groupId, groupMember, startUpdating, 
             cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
                 // return to the user list
                 dis.dispatch({
-                    action: "view_user",
+                    action: Action.ViewUser,
                     member: null,
                 });
             }).catch((e) => {
@@ -1100,7 +1111,7 @@ export const useDevices = (userId) => {
         async function _downloadDeviceList() {
             try {
                 await cli.downloadKeys([userId], true);
-                const devices = await cli.getStoredDevicesForUser(userId);
+                const devices = cli.getStoredDevicesForUser(userId);
 
                 if (cancelled) {
                     // we got cancelled - presumably a different user now
@@ -1125,7 +1136,7 @@ export const useDevices = (userId) => {
     useEffect(() => {
         let cancel = false;
         const updateDevices = async () => {
-            const newDevices = await cli.getStoredDevicesForUser(userId);
+            const newDevices = cli.getStoredDevicesForUser(userId);
             if (cancel) return;
             setDevices(newDevices);
         };
@@ -1298,7 +1309,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cli.checkUserTrust(member.userId);
     const userVerified = userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = SettingsStore.isFeatureEnabled("feature_cross_signing") &&
+    const canVerify = SettingsStore.getValue("feature_cross_signing") &&
                         homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
@@ -1307,18 +1318,28 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const hasCrossSigningKeys =
         useHasCrossSigningKeys(cli, member, canVerify, setUpdating );
 
+    const showDeviceListSpinner = devices === undefined;
     if (canVerify) {
-        verifyButton = (
-            <AccessibleButton className="mx_UserInfo_field" onClick={() => {
-                if (hasCrossSigningKeys) {
-                    verifyUser(member);
-                } else {
-                    legacyVerifyUser(member);
-                }
-            }}>
-                {_t("Verify")}
-            </AccessibleButton>
-        );
+        if (hasCrossSigningKeys !== undefined) {
+            // Note: mx_UserInfo_verifyButton is for the end-to-end tests
+            verifyButton = (
+                <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
+                    if (hasCrossSigningKeys) {
+                        verifyUser(member);
+                    } else {
+                        legacyVerifyUser(member);
+                    }
+                }}>
+                    {_t("Verify")}
+                </AccessibleButton>
+            );
+        } else if (!showDeviceListSpinner) {
+            // HACK: only show a spinner if the device section spinner is not shown,
+            // to avoid showing a double spinner
+            // We should ask for a design that includes all the different loading states here
+            const Spinner = sdk.getComponent('elements.Spinner');
+            verifyButton = <Spinner />;
+        }
     }
 
     const securitySection = (
@@ -1327,7 +1348,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
             <p>{ text }</p>
             { verifyButton }
             <DevicesSection
-                loading={devices === undefined}
+                loading={showDeviceListSpinner}
                 devices={devices}
                 userId={member.userId} />
         </div>

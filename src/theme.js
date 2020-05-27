@@ -19,7 +19,7 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
-import dis from "./dispatcher";
+import dis from "./dispatcher/dispatcher";
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 import ThemeController from "./settings/controllers/ThemeController";
 
@@ -81,7 +81,7 @@ export class ThemeWatcher {
     }
 
     getEffectiveTheme() {
-        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
+        // Dev note: Much of this logic is replicated in the AppearanceUserSettingsTab
 
         // XXX: checking the isLight flag here makes checking it in the ThemeController
         // itself completely redundant since we just override the result here and we're
@@ -141,14 +141,29 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
+
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
-    if (customTheme.colors) {
-        for (const [name, hexColor] of Object.entries(customTheme.colors)) {
-            style.setProperty(`--${name}`, hexColor);
-            // uses #rrggbbaa to define the color with alpha values at 0% and 50%
+
+    function setCSSVariable(name, hexColor, doPct = true) {
+        style.setProperty(`--${name}`, hexColor);
+        if (doPct) {
+            // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
             style.setProperty(`--${name}-0pct`, hexColor + "00");
+            style.setProperty(`--${name}-15pct`, hexColor + "26");
             style.setProperty(`--${name}-50pct`, hexColor + "7F");
+        }
+    }
+
+    if (customTheme.colors) {
+        for (const [name, value] of Object.entries(customTheme.colors)) {
+            if (Array.isArray(value)) {
+                for (let i = 0; i < value.length; i += 1) {
+                    setCSSVariable(`${name}_${i}`, value[i], false);
+                }
+            } else {
+                setCSSVariable(name, value);
+            }
         }
     }
 }
@@ -227,6 +242,10 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
+            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            if (bodyStyles.backgroundColor) {
+                document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
+            }
             Tinter.setTheme(theme);
             resolve();
         };

@@ -100,7 +100,7 @@ describe("AccessSecretStorageDialog", function() {
         });
         expect(notification.props.children).toEqual(
             ["\uD83D\uDC4E ", "Unable to access secret storage. Please verify that you " +
-                     "entered the correct passphrase."]);
+                     "entered the correct recovery passphrase."]);
         done();
     });
 });

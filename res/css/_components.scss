@@ -41,6 +41,7 @@
 @import "./views/auth/_CountryDropdown.scss";
 @import "./views/auth/_InteractiveAuthEntryComponents.scss";
 @import "./views/auth/_LanguageSelector.scss";
+@import "./views/auth/_PassphraseField.scss";
 @import "./views/auth/_ServerConfig.scss";
 @import "./views/auth/_ServerTypeSelector.scss";
 @import "./views/auth/_Welcome.scss";
@@ -62,7 +63,6 @@
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
 @import "./views/dialogs/_DeviceVerifyDialog.scss";
 @import "./views/dialogs/_DevtoolsDialog.scss";
-@import "./views/dialogs/_EncryptedEventDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
@@ -108,11 +108,13 @@
 @import "./views/elements/_ManageIntegsButton.scss";
 @import "./views/elements/_PowerSelector.scss";
 @import "./views/elements/_ProgressBar.scss";
+@import "./views/elements/_QRCode.scss";
 @import "./views/elements/_ReplyThread.scss";
 @import "./views/elements/_ResizeHandle.scss";
 @import "./views/elements/_RichText.scss";
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_RoomAliasField.scss";
+@import "./views/elements/_Slider.scss";
 @import "./views/elements/_Spinner.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
 @import "./views/elements/_TextWithTooltip.scss";
@@ -133,12 +135,14 @@
 @import "./views/messages/_MNoticeBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
+@import "./views/messages/_MVideoBody.scss";
 @import "./views/messages/_MessageActionBar.scss";
 @import "./views/messages/_MessageTimestamp.scss";
 @import "./views/messages/_MjolnirBody.scss";
 @import "./views/messages/_ReactionsRow.scss";
 @import "./views/messages/_ReactionsRowButton.scss";
 @import "./views/messages/_ReactionsRowButtonTooltip.scss";
+@import "./views/messages/_RedactedBody.scss";
 @import "./views/messages/_RoomAvatarEvent.scss";
 @import "./views/messages/_SenderProfile.scss";
 @import "./views/messages/_TextualEvent.scss";
@@ -158,6 +162,8 @@
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_GroupLayout.scss";
+@import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_InviteOnlyIcon.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
@@ -200,6 +206,7 @@
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_RolesRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_SecurityRoomSettingsTab.scss";
+@import "./views/settings/tabs/user/_AppearanceUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_GeneralUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_HelpUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_MjolnirUserSettingsTab.scss";

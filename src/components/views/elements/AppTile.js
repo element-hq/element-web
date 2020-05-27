@@ -31,13 +31,14 @@ import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
 import MessageSpinner from './MessageSpinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
+import {WidgetType} from "../../../widgets/WidgetType";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -187,13 +188,14 @@ export default class AppTile extends React.Component {
         }
     }
 
+    // TODO: Generify the name of this function. It's not just scalar tokens.
     /**
      * Adds a scalar token to the widget URL, if required
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
         if (!WidgetUtils.isScalarUrl(this.props.app.url)) {
-            console.warn('Non-scalar widget, not setting scalar token!', url);
+            console.warn('Widget does not match integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
@@ -217,7 +219,7 @@ export default class AppTile extends React.Component {
 
         const defaultManager = managers.getPrimaryManager();
         if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
-            console.warn('Non-scalar manager, not setting scalar token!', url);
+            console.warn('Unknown integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
                 widgetUrl: this._addWurlParams(this.props.app.url),
@@ -269,7 +271,9 @@ export default class AppTile extends React.Component {
             if (this.props.show && this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.show && !this.props.show) {
+        }
+
+        if (nextProps.show && !this.props.show) {
             // We assume that persisted widgets are loaded and don't need a spinner.
             if (this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey)) {
                 this.setState({
@@ -280,7 +284,9 @@ export default class AppTile extends React.Component {
             if (this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+        }
+
+        if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
@@ -332,6 +338,28 @@ export default class AppTile extends React.Component {
             });
     }
 
+    /**
+     * Ends all widget interaction, such as cancelling calls and disabling webcams.
+     * @private
+     */
+    _endWidgetActions() {
+        // HACK: This is a really dirty way to ensure that Jitsi cleans up
+        // its hold on the webcam. Without this, the widget holds a media
+        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+        if (this._appFrame.current) {
+            // In practice we could just do `+= ''` to trick the browser
+            // into thinking the URL changed, however I can foresee this
+            // being optimized out by a browser. Instead, we'll just point
+            // the iframe at a page that is reasonably safe to use in the
+            // event the iframe doesn't wink away.
+            // This is relative to where the Riot instance is located.
+            this._appFrame.current.src = 'about:blank';
+        }
+
+        // Delete the widget from the persisted store for good measure.
+        PersistedElement.destroyElement(this._persistKey);
+    }
+
     /* If user has permission to modify widgets, delete the widget,
      * otherwise revoke access for the widget to load in the user's browser
     */
@@ -353,18 +381,7 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    // HACK: This is a really dirty way to ensure that Jitsi cleans up
-                    // its hold on the webcam. Without this, the widget holds a media
-                    // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-                    if (this._appFrame.current) {
-                        // In practice we could just do `+= ''` to trick the browser
-                        // into thinking the URL changed, however I can foresee this
-                        // being optimized out by a browser. Instead, we'll just point
-                        // the iframe at a page that is reasonably safe to use in the
-                        // event the iframe doesn't wink away.
-                        // This is relative to where the Riot instance is located.
-                        this._appFrame.current.src = 'about:blank';
-                    }
+                    this._endWidgetActions();
 
                     WidgetUtils.setRoomWidget(
                         this.props.room.roomId,
@@ -408,7 +425,12 @@ export default class AppTile extends React.Component {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
         const widgetMessaging = new WidgetMessaging(
-            this.props.app.id, this._getRenderedUrl(), this.props.userWidget, this._appFrame.current.contentWindow);
+            this.props.app.id,
+            this.props.app.url,
+            this._getRenderedUrl(),
+            this.props.userWidget,
+            this._appFrame.current.contentWindow,
+        );
         ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);
@@ -439,7 +461,7 @@ export default class AppTile extends React.Component {
 
             // We only tell Jitsi widgets that we're ready because they're realistically the only ones
             // using this custom extension to the widget API.
-            if (this.props.app.type === 'jitsi') {
+            if (WidgetType.JITSI.matches(this.props.app.type)) {
                 widgetMessaging.flagReadyToContinue();
             }
         }).catch((err) => {
@@ -529,6 +551,10 @@ export default class AppTile extends React.Component {
         if (this.props.userWidget) {
             this._onMinimiseClick();
         } else {
+            if (this.props.show) {
+                // if we were being shown, end the widget as we're about to be minimized.
+                this._endWidgetActions();
+            }
             dis.dispatch({
                 action: 'appsDrawer',
                 show: !this.props.show,
@@ -540,15 +566,18 @@ export default class AppTile extends React.Component {
      * Replace the widget template variables in a url with their values
      *
      * @param {string} u The URL with template variables
+     * @param {string} widgetType The widget's type
      *
      * @returns {string} url with temlate variables replaced
      */
-    _templatedUrl(u) {
+    _templatedUrl(u, widgetType: string) {
+        const targetData = {};
+        if (WidgetType.JITSI.matches(widgetType)) {
+            targetData['domain'] = 'jitsi.riot.im'; // v1 jitsi widgets have this hardcoded
+        }
         const myUserId = MatrixClientPeg.get().credentials.userId;
         const myUser = MatrixClientPeg.get().getUser(myUserId);
-        const vars = Object.assign({
-            domain: "jitsi.riot.im", // v1 widgets have this hardcoded
-        }, this.props.app.data, {
+        const vars = Object.assign(targetData, this.props.app.data, {
             'matrix_user_id': myUserId,
             'matrix_room_id': this.props.room.roomId,
             'matrix_display_name': myUser ? myUser.displayName : myUserId,
@@ -578,25 +607,26 @@ export default class AppTile extends React.Component {
     _getRenderedUrl() {
         let url;
 
-        if (this.props.app.type === 'jitsi') {
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
             console.log("Replacing Jitsi widget URL with local wrapper");
             url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
             url = this._addWurlParams(url);
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
         }
-        return this._templatedUrl(url);
+        return this._templatedUrl(url, this.props.app.type);
     }
 
     _getPopoutUrl() {
-        if (this.props.app.type === 'jitsi') {
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
                 WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                this.props.app.type,
             );
         } else {
             // use app.url, not state.widgetUrl, because we want the one without
             // the wURL params for the popped-out version.
-            return this._templatedUrl(this._getSafeUrl(this.props.app.url));
+            return this._templatedUrl(this._getSafeUrl(this.props.app.url), this.props.app.type);
         }
     }
 
@@ -610,7 +640,10 @@ export default class AppTile extends React.Component {
         if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol)) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
-        return safeWidgetUrl;
+
+        // Replace all the dollar signs back to dollar signs as they don't affect HTTP at all.
+        // We also need the dollar signs in-tact for variable substitution.
+        return safeWidgetUrl.replace(/%24/g, '$');
     }
 
     _getTileTitle() {

@@ -114,6 +114,7 @@ export default class LanguageDropdown extends React.Component {
             searchEnabled={true}
             value={value}
             label={_t("Language Dropdown")}
+            disabled={this.props.disabled}
         >
             { options }
         </Dropdown>;

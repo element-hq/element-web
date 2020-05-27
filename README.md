@@ -133,8 +133,10 @@ Development
 
 Ensure you have the latest LTS version of Node.js installed.
 
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+Using `yarn` instead of `npm` is recommended. Please see the Yarn 1 [install
+guide](https://classic.yarnpkg.com/docs/install) if you do not have it
+already. This project has not yet been migrated to Yarn 2, so please ensure
+`yarn --version` shows a version from the 1.x series.
 
 `matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
 latter and to ensure tests run against the develop branch of `matrix-js-sdk`,

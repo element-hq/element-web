@@ -63,7 +63,7 @@ limitations under the License.
     display: inline-block;
     font-size: $font-14px;
     color: $primary-fg-color;
-    max-width: calc(100% - 48px); // Force word wrap instead of colliding with the switch
+    max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
     box-sizing: border-box;
     padding-right: 10px;
 }

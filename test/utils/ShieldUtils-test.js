@@ -11,7 +11,7 @@ function mkClient(selfTrust) {
         checkDeviceTrust: (userId, deviceId) => ({
             isVerified: () => userId === "@self:localhost" ? selfTrust : userId[2] == "T",
         }),
-        getStoredDevicesForUser: async (userId) => ["DEVICE"],
+        getStoredDevicesForUser: (userId) => ["DEVICE"],
     };
 }
 

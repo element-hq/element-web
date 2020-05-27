@@ -18,7 +18,7 @@ import {_t, _td} from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
@@ -26,8 +26,7 @@ import PersistedElement from "../elements/PersistedElement";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import {ContextMenu} from "../../structures/ContextMenu";
-
-const widgetType = 'm.stickerpicker';
+import {WidgetType} from "../../../widgets/WidgetType";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -87,7 +86,7 @@ export default class Stickerpicker extends React.Component {
         console.log('Removing Stickerpicker widgets');
         if (this.state.widgetId) {
             if (scalarClient) {
-                scalarClient.disableWidgetAssets(widgetType, this.state.widgetId).then(() => {
+                scalarClient.disableWidgetAssets(WidgetType.STICKERPICKER, this.state.widgetId).then(() => {
                     console.log('Assets disabled');
                 }).catch((err) => {
                     console.error('Failed to disable assets');
@@ -246,6 +245,7 @@ export default class Stickerpicker extends React.Component {
                 url: stickerpickerWidget.content.url,
                 name: stickerpickerWidget.content.name,
                 type: stickerpickerWidget.content.type,
+                data: stickerpickerWidget.content.data,
             };
 
             stickersContent = (
@@ -363,13 +363,13 @@ export default class Stickerpicker extends React.Component {
         if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll(
                 this.props.room,
-                `type_${widgetType}`,
+                `type_${WidgetType.STICKERPICKER.preferred}`,
                 this.state.widgetId,
             );
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(
                 this.props.room,
-                `type_${widgetType}`,
+                `type_${WidgetType.STICKERPICKER.preferred}`,
                 this.state.widgetId,
             );
         }

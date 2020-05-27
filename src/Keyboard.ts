@@ -43,6 +43,8 @@ export const Key = {
     BACKTICK: "`",
     SPACE: " ",
     SLASH: "/",
+    SQUARE_BRACKET_LEFT: "[",
+    SQUARE_BRACKET_RIGHT: "]",
     A: "a",
     B: "b",
     C: "c",

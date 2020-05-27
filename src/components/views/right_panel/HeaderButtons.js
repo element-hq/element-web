@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
 
 export const HEADER_KIND_ROOM = "room";

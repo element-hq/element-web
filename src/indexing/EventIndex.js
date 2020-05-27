@@ -102,9 +102,6 @@ export default class EventIndex extends EventEmitter {
             const timeline = room.getLiveTimeline();
             const token = timeline.getPaginationToken("b");
 
-            console.log("EventIndex: Got token for indexer",
-                        room.roomId, token);
-
             const backCheckpoint = {
                 roomId: room.roomId,
                 token: token,
@@ -161,7 +158,6 @@ export default class EventIndex extends EventEmitter {
         if (prevState === "SYNCING" && state === "SYNCING") {
             // A sync was done, presumably we queued up some live events,
             // commit them now.
-            console.log("EventIndex: Committing events");
             await indexManager.commitLiveEvents();
             return;
         }
@@ -275,6 +271,7 @@ export default class EventIndex extends EventEmitter {
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
+        let hasContentValue = true;
 
         if (ev.getType() === "m.room.message" && !ev.isRedacted()) {
             // Expand this if there are more invalid msgtypes.
@@ -282,9 +279,15 @@ export default class EventIndex extends EventEmitter {
 
             if (!msgtype) validMsgType = false;
             else validMsgType = !msgtype.startsWith("m.key.verification");
+
+            if (!ev.getContent().body) hasContentValue = false;
+        } else if (ev.getType() === "m.room.topic" && !ev.isRedacted()) {
+            if (!ev.getContent().topic) hasContentValue = false;
+        } else if (ev.getType() === "m.room.name" && !ev.isRedacted()) {
+            if (!ev.getContent().name) hasContentValue = false;
         }
 
-        return validEventType && validMsgType;
+        return validEventType && validMsgType && hasContentValue;
     }
 
     /**
@@ -329,8 +332,6 @@ export default class EventIndex extends EventEmitter {
     async crawlerFunc() {
         let cancelled = false;
 
-        console.log("EventIndex: Started crawler function");
-
         const client = MatrixClientPeg.get();
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
@@ -359,8 +360,6 @@ export default class EventIndex extends EventEmitter {
 
             await sleep(sleepTime);
 
-            console.log("EventIndex: Running the crawler loop.");
-
             if (cancelled) {
                 break;
             }
@@ -379,11 +378,9 @@ export default class EventIndex extends EventEmitter {
 
             idle = false;
 
-            console.log("EventIndex: crawling using checkpoint", checkpoint);
-
             // We have a checkpoint, let us fetch some messages, again, very
             // conservatively to not bother our homeserver too much.
-            const eventMapper = client.getEventMapper();
+            const eventMapper = client.getEventMapper({preventReEmit: true});
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
             let res;
@@ -408,7 +405,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                console.log("EventIndex: Error crawling events:", e);
+                console.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
@@ -470,9 +467,6 @@ export default class EventIndex extends EventEmitter {
             // decryption keys, do we want to retry this checkpoint at a later
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
-            const undecryptableEvents = matrixEvents.filter((ev) => {
-                return ev.isDecryptionFailure();
-            });
 
             // Collect the redaction events so we can delete the redacted events
             // from the index.
@@ -495,32 +489,44 @@ export default class EventIndex extends EventEmitter {
                 return object;
             });
 
-            // Create a new checkpoint so we can continue crawling the room for
-            // messages.
-            const newCheckpoint = {
-                roomId: checkpoint.roomId,
-                token: res.end,
-                fullCrawl: checkpoint.fullCrawl,
-                direction: checkpoint.direction,
-            };
+            let newCheckpoint;
 
-            console.log(
-                "EventIndex: Crawled room",
-                client.getRoom(checkpoint.roomId).name,
-                "and fetched total", matrixEvents.length, "events of which",
-                events.length, "are being added,", redactionEvents.length,
-                "are redacted,", matrixEvents.length - events.length,
-                "are being skipped, undecryptable", undecryptableEvents.length,
-            );
+            // The token can be null for some reason. Don't create a checkpoint
+            // in that case since adding it to the db will fail.
+            if (res.end) {
+                // Create a new checkpoint so we can continue crawling the room
+                // for messages.
+                newCheckpoint = {
+                    roomId: checkpoint.roomId,
+                    token: res.end,
+                    fullCrawl: checkpoint.fullCrawl,
+                    direction: checkpoint.direction,
+                };
+            }
 
             try {
                 for (let i = 0; i < redactionEvents.length; i++) {
                     const ev = redactionEvents[i];
-                    await indexManager.deleteEvent(ev.getAssociatedId());
+                    const eventId = ev.getAssociatedId();
+
+                    if (eventId) {
+                        await indexManager.deleteEvent(eventId);
+                    } else {
+                        console.warn("EventIndex: Redaction event doesn't contain a valid associated event id", ev);
+                    }
                 }
 
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(
                     events, newCheckpoint, checkpoint);
+
+                // We didn't get a valid new checkpoint from the server, nothing
+                // to do here anymore.
+                if (!newCheckpoint) {
+                    console.log("EventIndex: The server didn't return a valid ",
+                                "new checkpoint, not continuing the crawl.", checkpoint);
+                    continue;
+                }
+
                 // If all events were already indexed we assume that we catched
                 // up with our index and don't need to crawl the room further.
                 // Let us delete the checkpoint in that case, otherwise push
@@ -545,8 +551,6 @@ export default class EventIndex extends EventEmitter {
         }
 
         this._crawler = null;
-
-        console.log("EventIndex: Stopping crawler function");
     }
 
     /**

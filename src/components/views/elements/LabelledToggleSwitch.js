@@ -35,6 +35,9 @@ export default class LabelledToggleSwitch extends React.Component {
         // True to put the toggle in front of the label
         // Default false.
         toggleInFront: PropTypes.bool,
+
+        // Additional class names to append to the switch. Optional.
+        className: PropTypes.string,
     };
 
     render() {
@@ -50,8 +53,9 @@ export default class LabelledToggleSwitch extends React.Component {
             secondPart = temp;
         }
 
+        const classes = `mx_SettingsFlag ${this.props.className || ""}`;
         return (
-            <div className="mx_SettingsFlag">
+            <div className={classes}>
                 {firstPart}
                 {secondPart}
             </div>

@@ -19,7 +19,7 @@ import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { Key } from '../../Keyboard';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { throttle } from 'lodash';
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
 import classNames from 'classnames';

@@ -245,7 +245,6 @@ export class ContextMenu extends React.Component {
         }
 
         const contextMenuRect = this.state.contextMenuElem ? this.state.contextMenuElem.getBoundingClientRect() : null;
-        const padding = 10;
 
         const chevronOffset = {};
         if (props.chevronFace) {
@@ -264,7 +263,8 @@ export class ContextMenu extends React.Component {
             // If we know the dimensions of the context menu, adjust its position
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
+                const padding = 10;
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
             }
 
             position.top = adjusted;

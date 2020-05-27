@@ -25,7 +25,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -34,6 +34,7 @@ import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
+import {copyPlaintext} from "../../../utils/strings";
 
 export default createReactClass({
     displayName: 'TextualBody',
@@ -67,23 +68,6 @@ export default createReactClass({
             // track whether the preview widget is hidden
             widgetHidden: false,
         };
-    },
-
-    copyToClipboard: function(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-
-        let successful = false;
-        try {
-            successful = document.execCommand('copy');
-        } catch (err) {
-            console.log('Unable to copy');
-        }
-
-        document.body.removeChild(textArea);
-        return successful;
     },
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
@@ -277,17 +261,17 @@ export default createReactClass({
         Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
-            button.onclick = (e) => {
+            button.onclick = async () => {
                 const copyCode = button.parentNode.getElementsByTagName("pre")[0];
-                const successful = this.copyToClipboard(copyCode.textContent);
+                const successful = await copyPlaintext(copyCode.textContent);
 
-                const buttonRect = e.target.getBoundingClientRect();
+                const buttonRect = button.getBoundingClientRect();
                 const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
                     ...toRightOf(buttonRect, 2),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
                 });
-                e.target.onmouseleave = close;
+                button.onmouseleave = close;
             };
 
             // Wrap a div around <pre> so that the copy button can be correctly positioned

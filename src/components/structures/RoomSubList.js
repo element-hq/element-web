@@ -20,7 +20,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import * as Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
@@ -32,9 +32,46 @@ import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
 import {RovingTabIndexWrapper} from "../../accessibility/RovingTabIndex";
+import {toPx} from "../../utils/units";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
+
+class RoomTileErrorBoundary extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            error: null,
+        };
+    }
+
+    static getDerivedStateFromError(error) {
+        // Side effects are not permitted here, so we only update the state so
+        // that the next render shows an error message.
+        return { error };
+    }
+
+    componentDidCatch(error, { componentStack }) {
+        // Browser consoles are better at formatting output when native errors are passed
+        // in their own `console.error` invocation.
+        console.error(error);
+        console.error(
+            "The above error occured while React was rendering the following components:",
+            componentStack,
+        );
+    }
+
+    render() {
+        if (this.state.error) {
+            return (<div className="mx_RoomTile mx_RoomTileError">
+                {this.props.roomId}
+            </div>);
+        } else {
+            return this.props.children;
+        }
+    }
+}
 
 export default class RoomSubList extends React.PureComponent {
     static displayName = 'RoomSubList';
@@ -207,7 +244,7 @@ export default class RoomSubList extends React.PureComponent {
     };
 
     makeRoomTile = (room) => {
-        return <RoomTile
+        return <RoomTileErrorBoundary roomId={room.roomId}><RoomTile
             room={room}
             roomSubList={this}
             tagName={this.props.tagName}
@@ -220,7 +257,7 @@ export default class RoomSubList extends React.PureComponent {
             refreshSubList={this._updateSubListCount}
             incomingCall={null}
             onClick={this.onRoomTileClick}
-        />;
+        /></RoomTileErrorBoundary>;
     };
 
     _onNotifBadgeClick = (e) => {
@@ -383,7 +420,7 @@ export default class RoomSubList extends React.PureComponent {
 
     setHeight = (height) => {
         if (this._subList.current) {
-            this._subList.current.style.height = `${height}px`;
+            this._subList.current.style.height = toPx(height);
         }
         this._updateLazyRenderHeight(height);
     };

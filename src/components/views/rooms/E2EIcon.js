@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import {_t, _td} from '../../../languageHandler';
-import {useFeatureEnabled} from "../../../hooks/useSettings";
+import {useSettingValue} from "../../../hooks/useSettings";
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
 
@@ -62,7 +62,7 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
     }, className);
 
     let e2eTitle;
-    const crossSigning = useFeatureEnabled("feature_cross_signing");
+    const crossSigning = useSettingValue("feature_cross_signing");
     if (crossSigning && isUser) {
         e2eTitle = crossSigningUserTitles[status];
     } else if (crossSigning && !isUser) {

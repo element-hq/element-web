@@ -72,10 +72,10 @@ limitations under the License.
         .mx_AccessibleButton::after {
             mask-repeat: no-repeat;
             mask-position: 0 center;
-            mask-size: 16px;
+            mask-size: $font-16px;
             position: absolute;
-            width: 16px;
-            height: 16px;
+            width: $font-16px;
+            height: $font-16px;
             content: "";
             top: 5px;
             left: 14px;

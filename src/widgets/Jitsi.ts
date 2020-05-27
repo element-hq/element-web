@@ -21,6 +21,12 @@ import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
 const JITSI_WK_CHECK_INTERVAL = 2 * 60 * 60 * 1000; // 2 hours, arbitrarily selected
 
+export interface JitsiWidgetData {
+    conferenceId: string;
+    isAudioOnly: boolean;
+    domain: string;
+}
+
 export class Jitsi {
     private static instance: Jitsi;
 
@@ -62,6 +68,22 @@ export class Jitsi {
         // Put the result into memory for us to use later
         this.domain = domain;
         console.log("Jitsi conference domain:", this.preferredDomain);
+    }
+
+    /**
+     * Parses the given URL into the data needed for a Jitsi widget, if the widget
+     * URL matches the preferredDomain for the app.
+     * @param {string} url The URL to parse.
+     * @returns {JitsiWidgetData} The widget data if eligible, otherwise null.
+     */
+    public parsePreferredConferenceUrl(url: string): JitsiWidgetData {
+        const parsed = new URL(url);
+        if (parsed.hostname !== this.preferredDomain) return null; // invalid
+        return {
+            conferenceId: parsed.pathname,
+            domain: parsed.hostname,
+            isAudioOnly: false,
+        };
     }
 
     public static getInstance(): Jitsi {

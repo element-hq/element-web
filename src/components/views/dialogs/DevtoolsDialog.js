@@ -696,6 +696,9 @@ class VerificationExplorer extends React.Component {
                     <VerificationRequest txnId={txnId} request={request} key={txnId} />,
                 )}
             </div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={this.props.onBack}>{_t("Back")}</button>
+            </div>
         </div>);
     }
 }

@@ -13,7 +13,6 @@ handle_error() {
 
 trap 'handle_error' ERR
 
-
 echo "--- Building Riot"
 scripts/ci/layered-riot-web.sh
 cd ../riot-web

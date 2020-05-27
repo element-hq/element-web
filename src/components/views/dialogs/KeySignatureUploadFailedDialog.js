@@ -85,7 +85,7 @@ export default function KeySignatureUploadFailedDialog({
               <span>{_t("Upload completed")}</span> :
               cancelled ?
                 <span>{_t("Cancelled signature upload")}</span> :
-                <span>{_t("Unabled to upload")}</span>}
+                <span>{_t("Unable to upload")}</span>}
             <DialogButtons
                 primaryButton={_t("OK")}
                 hasCancel={false}

@@ -39,6 +39,7 @@ import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 import * as sdk from '../../../index';
 import {Key} from "../../../Keyboard";
 import {EMOTICON_TO_EMOJI} from "../../../emoji";
+import {CommandCategories, CommandMap, parseCommandString} from "../../../SlashCommands";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -84,6 +85,7 @@ export default class BasicMessageEditor extends React.Component {
         super(props);
         this.state = {
             autoComplete: null,
+            showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         };
         this._editorRef = null;
         this._autocompleteRef = null;
@@ -92,6 +94,7 @@ export default class BasicMessageEditor extends React.Component {
         this._isIMEComposing = false;
         this._hasTextSelected = false;
         this._emoticonSettingHandle = null;
+        this._shouldShowPillAvatarSettingHandle = null;
     }
 
     componentDidUpdate(prevProps) {
@@ -162,7 +165,16 @@ export default class BasicMessageEditor extends React.Component {
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
-        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, !this.props.model.isEmpty);
+
+        let isTyping = !this.props.model.isEmpty;
+        // If the user is entering a command, only consider them typing if it is one which sends a message into the room
+        if (isTyping && this.props.model.parts[0].type === "command") {
+            const {cmd} = parseCommandString(this.props.model.parts[0].text);
+            if (!CommandMap.has(cmd) || CommandMap.get(cmd).category !== CommandCategories.messages) {
+                isTyping = false;
+            }
+        }
+        TypingStore.sharedInstance().setSelfTyping(this.props.room.roomId, isTyping);
 
         if (this.props.onChange) {
             this.props.onChange();
@@ -508,10 +520,15 @@ export default class BasicMessageEditor extends React.Component {
         this.setState({completionIndex});
     }
 
-    _configureEmoticonAutoReplace() {
+    _configureEmoticonAutoReplace = () => {
         const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
         this.props.model.setTransformCallback(shouldReplace ? this._replaceEmoticon : null);
-    }
+    };
+
+    _configureShouldShowPillAvatar = () => {
+        const showPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
+        this.setState({ showPillAvatar });
+    };
 
     componentWillUnmount() {
         document.removeEventListener("selectionchange", this._onSelectionChange);
@@ -519,15 +536,17 @@ export default class BasicMessageEditor extends React.Component {
         this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
         this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
         SettingsStore.unwatchSetting(this._emoticonSettingHandle);
+        SettingsStore.unwatchSetting(this._shouldShowPillAvatarSettingHandle);
     }
 
     componentDidMount() {
         const model = this.props.model;
         model.setUpdateCallback(this._updateEditorState);
-        this._emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null, () => {
-            this._configureEmoticonAutoReplace();
-        });
+        this._emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
+            this._configureEmoticonAutoReplace);
         this._configureEmoticonAutoReplace();
+        this._shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting("Pill.shouldShowPillAvatar", null,
+            this._configureShouldShowPillAvatar);
         const partCreator = model.partCreator;
         // TODO: does this allow us to get rid of EditorStateTransfer?
         // not really, but we could not serialize the parts, and just change the autoCompleter
@@ -605,8 +624,11 @@ export default class BasicMessageEditor extends React.Component {
                 />
             </div>);
         }
-        const classes = classNames("mx_BasicMessageComposer", {
+        const wrapperClasses = classNames("mx_BasicMessageComposer", {
             "mx_BasicMessageComposer_input_error": this.state.showVisualBell,
+        });
+        const classes = classNames("mx_BasicMessageComposer_input", {
+            "mx_BasicMessageComposer_input_shouldShowPillAvatar": this.state.showPillAvatar,
         });
 
         const MessageComposerFormatBar = sdk.getComponent('rooms.MessageComposerFormatBar');
@@ -618,11 +640,11 @@ export default class BasicMessageEditor extends React.Component {
 
         const {completionIndex} = this.state;
 
-        return (<div className={classes}>
+        return (<div className={wrapperClasses}>
             { autoComplete }
             <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} shortcuts={shortcuts} />
             <div
-                className="mx_BasicMessageComposer_input"
+                className={classes}
                 contentEditable="true"
                 tabIndex="0"
                 onBlur={this._onBlur}

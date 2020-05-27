@@ -29,7 +29,7 @@ import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as ObjectUtils from "../../ObjectUtils";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';

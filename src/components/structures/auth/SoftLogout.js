@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -244,7 +244,9 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     <SSOButton
                         matrixClient={MatrixClientPeg.get()}
-                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"} />
+                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"}
+                        fragmentAfterLogin={this.props.fragmentAfterLogin}
+                    />
                 </div>
             );
         }

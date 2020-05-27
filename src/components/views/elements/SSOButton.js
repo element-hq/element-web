@@ -21,9 +21,9 @@ import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
 import {_t} from "../../../languageHandler";
 
-const SSOButton = ({matrixClient, loginType, ...props}) => {
+const SSOButton = ({matrixClient, loginType, fragmentAfterLogin, ...props}) => {
     const onClick = () => {
-        PlatformPeg.get().startSingleSignOn(matrixClient, loginType);
+        PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin);
     };
 
     return (
@@ -36,6 +36,7 @@ const SSOButton = ({matrixClient, loginType, ...props}) => {
 SSOButton.propTypes = {
     matrixClient: PropTypes.object.isRequired, // does not use context as may use a temporary client
     loginType: PropTypes.oneOf(["sso", "cas"]), // defaults to "sso" in base-apis
+    fragmentAfterLogin: PropTypes.string,
 };
 
 export default SSOButton;

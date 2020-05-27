@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
@@ -81,12 +81,14 @@ export default createReactClass({
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
+                // Note: these booleans are awkward because localstorage is fundamentally
+                // string-based. We also do exact equality on the strings later on.
                 if (action.show) {
-                    localStorage.removeItem(hideWidgetKey);
+                    localStorage.setItem(hideWidgetKey, "false");
                 } else {
                     // Store hidden state of widget
                     // Don't show if previously hidden
-                    localStorage.setItem(hideWidgetKey, true);
+                    localStorage.setItem(hideWidgetKey, "true");
                 }
 
                 break;

@@ -163,7 +163,7 @@ export default class EventIndexPanel extends React.Component {
             );
 
             eventIndexingSettings = (
-                <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     {
                         _t( "Riot is missing some components required for securely " +
                             "caching encrypted messages locally. If you'd like to " +
@@ -180,7 +180,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else {
             eventIndexingSettings = (
-                <div>
+                <div className='mx_SettingsTab_subsectionText'>
                     {
                         _t( "Riot can't securely cache encrypted messages locally " +
                             "while running in a web browser. Use <riotLink>Riot Desktop</riotLink> " +

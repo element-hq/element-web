@@ -73,7 +73,7 @@ export function showGroupAddRoomDialog(groupId) {
             title: _t("Add rooms to the community"),
             description: description,
             extraNode: checkboxContainer,
-            placeholder: _t("Room name or alias"),
+            placeholder: _t("Room name or address"),
             button: _t("Add to community"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],

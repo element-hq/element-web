@@ -59,17 +59,17 @@ export default class CompleteSecurity extends React.Component {
         let title;
 
         if (phase === PHASE_INTRO) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
-            title = _t("Complete security");
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
+            title = _t("Verify this login");
         } else if (phase === PHASE_DONE) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified"></span>;
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
             title = _t("Session verified");
         } else if (phase === PHASE_CONFIRM_SKIP) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Are you sure?");
         } else if (phase === PHASE_BUSY) {
-            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning"></span>;
-            title = _t("Complete security");
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
+            title = _t("Verify this login");
         } else {
             throw new Error(`Unknown phase ${phase}`);
         }
