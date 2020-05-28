@@ -27,7 +27,7 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 import {
-    hideToast as hideNotificationsToast, showToast as showNotificationsToast,
+    hideToast as hideNotificationsToast,
 } from "./toasts/DesktopNotificationsToast";
 
 /*
