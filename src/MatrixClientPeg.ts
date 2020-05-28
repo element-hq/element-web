@@ -41,6 +41,7 @@ export interface IMatrixClientCreds {
     deviceId: string,
     accessToken: string,
     guest: boolean,
+    pickleKey: string,
 }
 
 // TODO: Move this to the js-sdk

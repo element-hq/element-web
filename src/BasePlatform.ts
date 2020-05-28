@@ -189,7 +189,7 @@ export default abstract class BasePlatform {
      * @returns {string|null} the previously stored pickle key, or null if no
      *     pickle key has been stored.
      */
-    async getPickleKey(userId: string, deviceId: string): string | null {
+    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         return null;
     }
 
@@ -200,7 +200,7 @@ export default abstract class BasePlatform {
      * @returns {string|null} the pickle key, or null if the platform does not
      *     support storing pickle keys.
      */
-    async createPickleKey(userId: string, deviceId: string): string | null {
+    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         return null;
     }
 
@@ -209,6 +209,6 @@ export default abstract class BasePlatform {
      * @param {string} userId the user ID for the user that the pickle key is for.
      * @param {string} userId the device ID that the pickle key is for.
      */
-    async destroyPickleKey(userId: string, deviceId: string) {
+    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
     }
 }
