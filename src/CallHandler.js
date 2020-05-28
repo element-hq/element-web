@@ -118,18 +118,6 @@ function pause(audioId) {
     }
 }
 
-function _reAttemptCall(call) {
-    if (call.direction === 'outbound') {
-        dis.dispatch({
-            action: 'place_call',
-            room_id: call.roomId,
-            type: call.type,
-        });
-    } else {
-        call.answer();
-    }
-}
-
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error:", err);

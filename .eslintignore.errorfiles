@@ -22,7 +22,6 @@ src/components/views/room_settings/ColorSettings.js
 src/components/views/rooms/Autocomplete.js
 src/components/views/rooms/AuxPanel.js
 src/components/views/rooms/LinkPreviewWidget.js
-src/components/views/rooms/MemberDeviceInfo.js
 src/components/views/rooms/MemberInfo.js
 src/components/views/rooms/MemberList.js
 src/components/views/rooms/RoomList.js
