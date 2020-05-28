@@ -17,6 +17,7 @@ limitations under the License.
 
 const {range} = require('./util');
 const signup = require('./usecases/signup');
+const toastScenarios = require('./scenarios/toast');
 const roomDirectoryScenarios = require('./scenarios/directory');
 const lazyLoadingScenarios = require('./scenarios/lazy-loading');
 const e2eEncryptionScenarios = require('./scenarios/e2e-encryption');
@@ -37,6 +38,7 @@ module.exports = async function scenario(createSession, restCreator) {
     const alice = await createUser("alice");
     const bob = await createUser("bob");
 
+    await toastScenarios(alice, bob);
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
     console.log("create REST users:");

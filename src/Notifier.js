@@ -26,6 +26,10 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import {
+    showToast as showNotificationsToast,
+    hideToast as hideNotificationsToast,
+} from "./toasts/DesktopNotificationsToast";
 
 /*
  * Dispatches:
@@ -184,6 +188,10 @@ const Notifier = {
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
+
+        if (this.shouldShowToolbar()) {
+            showNotificationsToast();
+        }
     },
 
     stop: function() {
@@ -278,12 +286,7 @@ const Notifier = {
 
         Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
 
-        // XXX: why are we dispatching this here?
-        // this is nothing to do with notifier_enabled
-        dis.dispatch({
-            action: "notifier_enabled",
-            value: this.isEnabled(),
-        });
+        hideNotificationsToast();
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {

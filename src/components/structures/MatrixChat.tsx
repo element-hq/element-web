@@ -67,6 +67,10 @@ import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
 import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
+import {
+    showToast as showAnalyticsToast,
+    hideToast as hideAnalyticsToast
+} from "../../toasts/AnalyticsToast";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -168,12 +172,7 @@ interface IState {
     leftDisabled: boolean;
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
-    version?: string;
-    newVersion?: string;
-    hasNewVersion: boolean;
-    newVersionReleaseNotes?: string;
     checkingForUpdate?: string; // updateCheckStatusEnum
-    showCookieBar: boolean;
     // Parameters used in the registration dance with the IS
     register_client_secret?: string;
     register_session_id?: string;
@@ -183,7 +182,6 @@ interface IState {
     hideToSRUsers: boolean;
     syncError?: Error;
     resizeNotifier: ResizeNotifier;
-    showNotifierToolbar: boolean;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
     thirdPartyInvite?: object;
@@ -227,17 +225,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             leftDisabled: false,
             middleDisabled: false,
 
-            hasNewVersion: false,
-            newVersionReleaseNotes: null,
             checkingForUpdate: null,
-
-            showCookieBar: false,
 
             hideToSRUsers: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
             resizeNotifier: new ResizeNotifier(),
-            showNotifierToolbar: false,
             ready: false,
         };
 
@@ -335,12 +328,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
 
                 return this.loadSession();
-            });
-        }
-
-        if (SettingsStore.getValue("showCookieBar")) {
-            this.setState({
-                showCookieBar: true,
             });
         }
 
@@ -685,9 +672,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({action: 'view_my_groups'});
                 }
                 break;
-            case 'notifier_enabled':
-                this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
-                break;
             case 'hide_left_panel':
                 this.setState({
                     collapseLhs: true,
@@ -735,12 +719,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'client_started':
                 this.onClientStarted();
                 break;
-            case 'new_version':
-                this.onVersion(
-                    payload.currentVersion, payload.newVersion,
-                    payload.releaseNotes,
-                );
-                break;
             case 'check_updates':
                 this.setState({ checkingForUpdate: payload.value });
                 break;
@@ -760,19 +738,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'accept_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, true);
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
-
-                this.setState({
-                    showCookieBar: false,
-                });
+                hideAnalyticsToast();
                 Analytics.enable();
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
-
-                this.setState({
-                    showCookieBar: false,
-                });
+                hideAnalyticsToast();
                 break;
         }
     };
@@ -1261,6 +1233,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         StorageManager.tryPersistStorage();
+
+        if (SettingsStore.getValue("showCookieBar") && this.props.config.piwik && navigator.doNotTrack !== "1") {
+            showAnalyticsToast(this.props.config.piwik && this.props.config.piwik.policyUrl);
+        }
     }
 
     private showScreenAfterLogin() {
@@ -1391,7 +1367,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch({action: 'focus_composer'});
             this.setState({
                 ready: true,
-                showNotifierToolbar: Notifier.shouldShowToolbar(),
             });
         });
         cli.on('Call.incoming', function(call) {
@@ -1833,16 +1808,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("settings");
     };
 
-    onVersion(current: string, latest: string, releaseNotes?: string) {
-        this.setState({
-            version: current,
-            newVersion: latest,
-            hasNewVersion: current !== latest,
-            newVersionReleaseNotes: releaseNotes,
-            checkingForUpdate: null,
-        });
-    }
-
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
         if (!cli) {
@@ -2037,7 +2002,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
-                        showCookieBar={this.state.showCookieBar}
                     />
                 );
             } else {

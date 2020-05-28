@@ -575,10 +575,12 @@ async function startMatrixClient(startSyncing=true) {
     // to work).
     dis.dispatch({action: 'will_start_client'}, true);
 
+    // reset things first just in case
+    TypingStore.sharedInstance().reset();
+    ToastStore.sharedInstance().reset();
+
     Notifier.start();
     UserActivity.sharedInstance().start();
-    TypingStore.sharedInstance().reset(); // just in case
-    ToastStore.sharedInstance().reset();
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
