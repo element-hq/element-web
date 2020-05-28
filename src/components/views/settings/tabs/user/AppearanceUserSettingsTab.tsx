@@ -20,34 +20,64 @@ import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import * as sdk from "../../../../../index";
-import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
+import { enumerateThemes } from "../../../../../theme";
+import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
 import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
-import { FontWatcher } from "../../../../../FontWatcher";
+import { FontWatcher } from "../../../../../settings/watchers/FontWatcher";
+import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
+import { Action } from '../../../../../dispatcher/actions';
+import { IValidationResult, IFieldState } from '../../../elements/Validation';
 
-export default class AppearanceUserSettingsTab extends React.Component {
-    constructor() {
-        super();
+interface IProps {
+}
+
+interface IThemeState {
+    theme: string,
+    useSystemTheme: boolean,
+}
+
+export interface CustomThemeMessage {
+    isError: boolean,
+    text: string
+};
+
+interface IState extends IThemeState {
+    // String displaying the current selected fontSize.
+    // Needs to be string for things like '17.' without
+    // trailing 0s.
+    fontSize: string,
+    customThemeUrl: string,
+    customThemeMessage: CustomThemeMessage,
+    useCustomFontSize: boolean,
+}
+
+export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
+
+    private themeTimer: NodeJS.Timeout;
+
+    constructor(props: IProps) {
+        super(props);
 
         this.state = {
-            fontSize: SettingsStore.getValue("fontSize", null),
-            ...this._calculateThemeState(),
+            fontSize: SettingsStore.getValue("fontSize", null).toString(),
+            ...this.calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
         };
     }
 
-    _calculateThemeState() {
+    private calculateThemeState(): IThemeState {
         // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
         // show the right values for things.
 
-        const themeChoice = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
-        const systemThemeExplicit = SettingsStore.getValueAt(
+        const themeChoice: string = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
+        const systemThemeExplicit: boolean = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
-        const themeExplicit = SettingsStore.getValueAt(
+        const themeExplicit: string = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "theme", null, false, true);
 
         // If the user has enabled system theme matching, use that.
@@ -73,15 +103,15 @@ export default class AppearanceUserSettingsTab extends React.Component {
         };
     }
 
-    _onThemeChange = (e) => {
+    private onThemeChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void {
         const newTheme = e.target.value;
         if (this.state.theme === newTheme) return;
 
         // doing getValue in the .catch will still return the value we failed to set,
         // so remember what the value was before we tried to set it so we can revert
-        const oldTheme = SettingsStore.getValue('theme');
+        const oldTheme: string = SettingsStore.getValue('theme');
         SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme).catch(() => {
-            dis.dispatch({action: 'recheck_theme'});
+            dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
             this.setState({theme: oldTheme});
         });
         this.setState({theme: newTheme});
@@ -91,23 +121,21 @@ export default class AppearanceUserSettingsTab extends React.Component {
         // XXX: The local echoed value appears to be unreliable, in particular
         // when settings custom themes(!) so adding forceTheme to override
         // the value from settings.
-        dis.dispatch({action: 'recheck_theme', forceTheme: newTheme});
+        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme, forceTheme: newTheme});
     };
 
-    _onUseSystemThemeChanged = (checked) => {
+    private onUseSystemThemeChanged(checked: boolean) {
         this.setState({useSystemTheme: checked});
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch({action: 'recheck_theme'});
+        dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
     };
 
-    _onFontSizeChanged = (size) => {
-        this.setState({fontSize: size});
+    private onFontSizeChanged(size: number) {
+        this.setState({fontSize: size.toString()});
         SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, size);
     };
 
-    _onValidateFontSize = ({value}) => {
-        console.log({value});
-
+    private async onValidateFontSize({value}: Pick<IFieldState, "value">): Promise<IValidationResult> {
         const parsedSize = parseFloat(value);
         const min = FontWatcher.MIN_SIZE;
         const max = FontWatcher.MAX_SIZE;
@@ -127,17 +155,18 @@ export default class AppearanceUserSettingsTab extends React.Component {
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
     }
 
-    _onAddCustomTheme = async () => {
-        let currentThemes = SettingsStore.getValue("custom_themes");
+    private async onAddCustomTheme() {
+        let currentThemes: string[] = SettingsStore.getValue("custom_themes");
         if (!currentThemes) currentThemes = [];
         currentThemes = currentThemes.map(c => c); // cheap clone
 
-        if (this._themeTimer) {
-            clearTimeout(this._themeTimer);
+        if (this.themeTimer) {
+            clearTimeout(this.themeTimer);
         }
 
         try {
             const r = await fetch(this.state.customThemeUrl);
+            // XXX: need some schema for this
             const themeInfo = await r.json();
             if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
                 this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
@@ -153,42 +182,32 @@ export default class AppearanceUserSettingsTab extends React.Component {
         await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
         this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
 
-        this._themeTimer = setTimeout(() => {
+        this.themeTimer = setTimeout(() => {
             this.setState({customThemeMessage: {text: "", isError: false}});
         }, 3000);
     };
 
-    _onCustomThemeChange = (e) => {
+    private onCustomThemeChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
         this.setState({customThemeUrl: e.target.value});
     };
 
-    render() {
-        return (
-            <div className="mx_SettingsTab">
-                <div className="mx_SettingsTab_heading">{_t("Appearance")}</div>
-                {this._renderThemeSection()}
-                {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this._renderFontSection() : null}
-            </div>
-        );
-    }
-
-    _renderThemeSection() {
+    private renderThemeSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         const LabelledToggleSwitch = sdk.getComponent("views.elements.LabelledToggleSwitch");
 
         const themeWatcher = new ThemeWatcher();
-        let systemThemeSection;
+        let systemThemeSection: JSX.Element;
         if (themeWatcher.isSystemThemeSupported()) {
             systemThemeSection = <div>
                 <LabelledToggleSwitch
                     value={this.state.useSystemTheme}
                     label={SettingsStore.getDisplayName("use_system_theme")}
-                    onChange={this._onUseSystemThemeChanged}
+                    onChange={this.onUseSystemThemeChanged}
                 />
             </div>;
         }
 
-        let customThemeForm;
+        let customThemeForm: JSX.Element;
         if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
@@ -200,17 +219,17 @@ export default class AppearanceUserSettingsTab extends React.Component {
             }
             customThemeForm = (
                 <div className='mx_SettingsTab_section'>
-                    <form onSubmit={this._onAddCustomTheme}>
+                    <form onSubmit={this.onAddCustomTheme}>
                         <Field
                             label={_t("Custom theme URL")}
                             type='text'
                             id='mx_GeneralUserSettingsTab_customThemeInput'
                             autoComplete="off"
-                            onChange={this._onCustomThemeChange}
+                            onChange={this.onCustomThemeChange}
                             value={this.state.customThemeUrl}
                         />
                         <AccessibleButton
-                            onClick={this._onAddCustomTheme}
+                            onClick={this.onAddCustomTheme}
                             type="submit" kind="primary_sm"
                             disabled={!this.state.customThemeUrl.trim()}
                         >{_t("Add theme")}</AccessibleButton>
@@ -220,7 +239,8 @@ export default class AppearanceUserSettingsTab extends React.Component {
             );
         }
 
-        const themes = Object.entries(enumerateThemes())
+        // XXX: replace any type here
+        const themes = Object.entries<any>(enumerateThemes())
             .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
         const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
         const customThemes = themes.filter(p => !builtInThemes.includes(p))
@@ -232,7 +252,7 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 {systemThemeSection}
                 <Field
                     id="theme" label={_t("Theme")} element="select"
-                    value={this.state.theme} onChange={this._onThemeChange}
+                    value={this.state.theme} onChange={this.onThemeChange}
                     disabled={this.state.useSystemTheme}
                 >
                     {orderedThemes.map(theme => {
@@ -245,7 +265,7 @@ export default class AppearanceUserSettingsTab extends React.Component {
         );
     }
 
-    _renderFontSection() {
+    private renderFontSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
@@ -253,9 +273,9 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
                     values={[13, 15, 16, 18, 20]}
-                    value={this.state.fontSize}
-                    onSelectionChange={this._onFontSizeChanged}
-                    displayFunc={value => {}}
+                    value={parseInt(this.state.fontSize, 10)}
+                    onSelectionChange={this.onFontSizeChanged}
+                    displayFunc={value => ""}
                     disabled={this.state.useCustomFontSize}
                 />
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
@@ -263,7 +283,7 @@ export default class AppearanceUserSettingsTab extends React.Component {
             <SettingsFlag
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
-                onChange={(checked)=> this.setState({useCustomFontSize: checked})}
+                onChange={(checked) => this.setState({useCustomFontSize: checked})}
             />
             <Field
                 type="text"
@@ -272,10 +292,20 @@ export default class AppearanceUserSettingsTab extends React.Component {
                 placeholder={this.state.fontSize.toString()}
                 value={this.state.fontSize.toString()}
                 id="font_size_field"
-                onValidate={this._onValidateFontSize}
+                onValidate={this.onValidateFontSize}
                 onChange={(value) => this.setState({fontSize: value.target.value})}
                 disabled={!this.state.useCustomFontSize}
             />
         </div>;
+    }
+
+    render() {
+        return (
+            <div className="mx_SettingsTab">
+                <div className="mx_SettingsTab_heading">{_t("Appearance")}</div>
+                {this.renderThemeSection()}
+                {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
+            </div>
+        );
     }
 }
