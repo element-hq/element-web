@@ -41,7 +41,7 @@ export const showToast = () => {
             onReject,
         },
         component: GenericToast,
-        priority: 20,
+        priority: 30,
     });
 };
 
