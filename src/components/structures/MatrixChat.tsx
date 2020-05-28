@@ -71,6 +71,7 @@ import {
     showToast as showAnalyticsToast,
     hideToast as hideAnalyticsToast
 } from "../../toasts/AnalyticsToast";
+import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1363,6 +1364,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
+
+            if (Notifier.shouldShowToolbar()) {
+                showNotificationsToast();
+            }
 
             dis.dispatch({action: 'focus_composer'});
             this.setState({
