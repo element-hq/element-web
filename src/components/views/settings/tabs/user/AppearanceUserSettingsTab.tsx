@@ -34,6 +34,16 @@ import { IValidationResult, IFieldState } from '../../../elements/Validation';
 interface IProps {
 }
 
+interface IThemeState {
+    theme: string,
+    useSystemTheme: boolean,
+}
+
+export interface CustomThemeMessage {
+    isError: boolean,
+    text: string
+};
+
 interface IState extends IThemeState {
     // String displaying the current selected fontSize.
     // Needs to be string for things like '17.' without
@@ -42,13 +52,6 @@ interface IState extends IThemeState {
     customThemeUrl: string,
     customThemeMessage: CustomThemeMessage,
     useCustomFontSize: boolean,
-}
-
-export type CustomThemeMessage = {isError: boolean, text: string};
-
-interface IThemeState {
-    theme: string,
-    useSystemTheme: boolean,
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
