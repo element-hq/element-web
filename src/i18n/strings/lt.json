@@ -725,7 +725,7 @@
     "No backup found!": "Nerasta jokios atsarginės kopijos!",
     "Backup Restored": "Atsarginė kopija atkurta",
     "Failed to decrypt %(failedCount)s sessions!": "Nepavyko iššifruoti %(failedCount)s seansų!",
-    "Next": "Kitas",
+    "Next": "Toliau",
     "Private Chat": "Privatus pokalbis",
     "Public Chat": "Viešas pokalbis",
     "There are no visible files in this room": "Šiame kambaryje nėra matomų failų",
