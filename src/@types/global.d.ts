@@ -15,13 +15,22 @@ limitations under the License.
 */
 
 import * as ModernizrStatic from "modernizr";
+import ContentMessages from "../ContentMessages";
+import { IMatrixClientPeg } from "../MatrixClientPeg";
+import ToastStore from "../stores/ToastStore";
+import DeviceListener from "../DeviceListener";
 
 declare global {
     interface Window {
         Modernizr: ModernizrStatic;
+        mxMatrixClientPeg: IMatrixClientPeg;
         Olm: {
             init: () => Promise<void>;
         };
+
+        mx_ContentMessages: ContentMessages;
+        mx_ToastStore: ToastStore;
+        mx_DeviceListener: DeviceListener;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933

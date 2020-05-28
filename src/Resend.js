@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import { EventStatus } from 'matrix-js-sdk';
 
 export default class Resend {

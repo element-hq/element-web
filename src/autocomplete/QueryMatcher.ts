@@ -45,7 +45,7 @@ interface IOptions<T extends {}> {
  * @param {function[]} options.funcs List of functions that when called with the
  *     object as an arg will return a string to use as an index
  */
-export default class QueryMatcher<T> {
+export default class QueryMatcher<T extends Object> {
     private _options: IOptions<T>;
     private _keys: IOptions<T>["keys"];
     private _funcs: Required<IOptions<T>["funcs"]>;
@@ -75,7 +75,11 @@ export default class QueryMatcher<T> {
         this._items = new Map();
 
         for (const object of objects) {
-            const keyValues = _at(object, this._keys);
+            // Need to use unsafe coerce here because the objects can have any
+            // type for their values. We assume that those values who's keys have
+            // been specified will be string. Also, we cannot infer all the
+            // types of the keys of the objects at compile.
+            const keyValues = _at<string>(<any>object, this._keys);
 
             for (const f of this._funcs) {
                 keyValues.push(f(object));

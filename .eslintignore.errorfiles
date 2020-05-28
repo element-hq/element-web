@@ -6,7 +6,6 @@ src/components/structures/RoomView.js
 src/components/structures/ScrollPanel.js
 src/components/structures/SearchBox.js
 src/components/structures/UploadBar.js
-src/components/views/avatars/BaseAvatar.js
 src/components/views/avatars/MemberAvatar.js
 src/components/views/create_room/RoomAlias.js
 src/components/views/dialogs/SetPasswordDialog.js

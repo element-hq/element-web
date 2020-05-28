@@ -151,6 +151,7 @@ General Style
   Don't set things to undefined. Reserve that value to mean "not yet set to anything."
   Boolean objects are verboten.
 - Use JSDoc
+- Use switch-case statements where there are 5 or more branches running against the same variable.
 
 ECMAScript
 ----------

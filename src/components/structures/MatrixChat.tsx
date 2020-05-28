@@ -17,12 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from 'react';
-import {InvalidStoreError} from "matrix-js-sdk/src/errors";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import React, { createRef } from 'react';
+import { InvalidStoreError } from "matrix-js-sdk/src/errors";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
-
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
@@ -30,17 +29,17 @@ import 'what-input';
 
 import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import * as RoomListSorter from "../../RoomListSorter";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
 
 import Modal from "../../Modal";
 import Tinter from "../../Tinter";
 import * as sdk from '../../index';
-import { showStartChatInviteDialog, showRoomInviteDialog } from '../../RoomInvite';
+import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
 import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
@@ -50,23 +49,24 @@ import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
-import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
-import AutoDiscoveryUtils from "../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
-import { ThemeWatcher } from "../../theme";
+import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import { FontWatcher } from '../../settings/watchers/FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
-import {defer, IDeferred} from "../../utils/promise";
+import { defer, IDeferred } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
+import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
+import { Action } from "../../dispatcher/actions";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -107,7 +107,7 @@ export enum Views {
 // re-dispatched. NOTE: some actions are non-trivial and would require
 // re-factoring to be included in this list in future.
 const ONBOARDING_FLOW_STARTERS = [
-    'view_user_settings',
+    Action.ViewUserSettings,
     'view_create_chat',
     'view_create_room',
     'view_create_group',
@@ -216,6 +216,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private readonly loggedInView: React.RefObject<LoggedInViewType>;
     private readonly dispatcherRef: any;
     private readonly themeWatcher: ThemeWatcher;
+    private readonly fontWatcher: FontWatcher;
 
     constructor(props, context) {
         super(props, context);
@@ -283,8 +284,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.accountPasswordTimer = null;
 
         this.dispatcherRef = dis.register(this.onAction);
+
         this.themeWatcher = new ThemeWatcher();
+        this.fontWatcher = new FontWatcher();
         this.themeWatcher.start();
+        this.fontWatcher.start();
 
         this.focusComposer = false;
 
@@ -367,6 +371,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         Lifecycle.stopMatrixClient();
         dis.unregister(this.dispatcherRef);
         this.themeWatcher.stop();
+        this.fontWatcher.stop();
         window.removeEventListener('resize', this.handleResize);
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
 
@@ -613,7 +618,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_indexed_room':
                 this.viewIndexedRoom(payload.roomIndex);
                 break;
-            case 'view_user_settings': {
+            case Action.ViewUserSettings: {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
                     /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
@@ -926,9 +931,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private viewGroup(payload) {
+    private async viewGroup(payload) {
         const groupId = payload.group_id;
+
+        // Wait for the first sync to complete
+        if (!this.firstSyncComplete) {
+            if (!this.firstSyncPromise) {
+                console.warn('Cannot view a group before first sync. group_id:', groupId);
+                return;
+            }
+            await this.firstSyncPromise.promise;
+        }
+
         this.setState({
+            view: Views.LOGGED_IN,
             currentGroupId: groupId,
             currentGroupIsNew: payload.group_is_new,
         });
@@ -1454,16 +1470,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e, err) => dft.eventDecrypted(e, err));
 
-        // TODO: We can remove this once cross-signing is the only way.
-        // https://github.com/vector-im/riot-web/issues/11908
-        const krh = new KeyRequestHandler(cli);
-        cli.on("crypto.roomKeyRequest", (req) => {
-            krh.handleKeyRequest(req);
-        });
-        cli.on("crypto.roomKeyRequestCancellation", (req) => {
-            krh.handleKeyRequestCancellation(req);
-        });
-
         cli.on("Room", (room) => {
             if (MatrixClientPeg.get().isCryptoEnabled()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
@@ -1553,7 +1559,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
-                    priority: ToastStore.PRIORITY_REALTIME,
+                    priority: 90,
                 });
             }
         });
@@ -1621,9 +1627,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'view_create_room',
             });
         } else if (screen === 'settings') {
-            dis.dispatch({
-                action: 'view_user_settings',
-            });
+            dis.fire(Action.ViewUserSettings);
         } else if (screen === 'welcome') {
             dis.dispatch({
                 action: 'view_welcome_page',
@@ -1755,8 +1759,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         const member = new RoomMember(null, userId);
         if (!member) { return; }
-        dis.dispatch({
-            action: 'view_user',
+        dis.dispatch<ViewUserPayload>({
+            action: Action.ViewUser,
             member: member,
         });
     }

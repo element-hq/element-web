@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
@@ -92,7 +92,7 @@ const CategoryRoomList = createReactClass({
         Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
             title: _t('Add rooms to the community summary'),
             description: _t("Which rooms would you like to add to this summary?"),
-            placeholder: _t("Room name or alias"),
+            placeholder: _t("Room name or address"),
             button: _t("Add to summary"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],

@@ -146,27 +146,3 @@ limitations under the License.
 .mx_AuthBody_spinner {
     margin: 1em 0;
 }
-
-.mx_AuthBody_passwordScore {
-    width: 100%;
-    appearance: none;
-    height: 4px;
-    border: 0;
-    border-radius: 2px;
-    position: absolute;
-    top: -12px;
-
-    &::-moz-progress-bar {
-        border-radius: 2px;
-        background-color: $accent-color;
-    }
-
-    &::-webkit-progress-bar,
-    &::-webkit-progress-value {
-        border-radius: 2px;
-    }
-
-    &::-webkit-progress-value {
-        background-color: $accent-color;
-    }
-}

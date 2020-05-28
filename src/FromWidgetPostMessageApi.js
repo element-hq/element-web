@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import URL from 'url';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import {MatrixClientPeg} from "./MatrixClientPeg";

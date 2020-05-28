@@ -412,14 +412,14 @@ export const EmailIdentityAuthEntry = createReactClass({
         this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
-    getInitialState: function() {
-        return {
-            requestingToken: false,
-        };
-    },
-
     render: function() {
-        if (this.state.requestingToken) {
+        // This component is now only displayed once the token has been requested,
+        // so we know the email has been sent. It can also get loaded after the user
+        // has clicked the validation link if the server takes a while to propagate
+        // the validation internally. If we're in the session spawned from clicking
+        // the validation link, we won't know the email address, so if we don't have it,
+        // assume that the link has been clicked and the server will realise when we poll.
+        if (this.props.inputs.emailAddress === undefined) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
         } else {

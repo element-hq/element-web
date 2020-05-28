@@ -29,6 +29,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
 import {textForEvent} from "../../TextForEvent";
+import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
@@ -109,14 +110,16 @@ export default class MessagePanel extends React.Component {
         showReactions: PropTypes.bool,
     };
 
-    constructor() {
-        super();
+    // Force props to be loaded for useIRCLayout
+    constructor(props) {
+        super(props);
 
         this.state = {
             // previous positions the read marker has been in, so we can
             // display 'ghost' read markers that are animating away
             ghostReadMarkers: [],
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
+            useIRCLayout: this.useIRCLayout(SettingsStore.getValue("feature_irc_ui")),
         };
 
         // opaque readreceipt info for each userId; used by ReadReceiptMarker
@@ -169,6 +172,8 @@ export default class MessagePanel extends React.Component {
 
         this._showTypingNotificationsWatcherRef =
             SettingsStore.watchSetting("showTypingNotifications", null, this.onShowTypingNotificationsChange);
+
+        this._layoutWatcherRef = SettingsStore.watchSetting("feature_irc_ui", null, this.onLayoutChange);
     }
 
     componentDidMount() {
@@ -178,6 +183,7 @@ export default class MessagePanel extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
         SettingsStore.unwatchSetting(this._showTypingNotificationsWatcherRef);
+        SettingsStore.unwatchSetting(this._layoutWatcherRef);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -195,6 +201,17 @@ export default class MessagePanel extends React.Component {
             showTypingNotifications: SettingsStore.getValue("showTypingNotifications"),
         });
     };
+
+    onLayoutChange = () => {
+        this.setState({
+            useIRCLayout: this.useIRCLayout(SettingsStore.getValue("feature_irc_ui")),
+        });
+    }
+
+    useIRCLayout(ircLayoutSelected) {
+        // if room is null we are not in a normal room list
+        return ircLayoutSelected && this.props.room;
+    }
 
     /* get the DOM node representing the given event */
     getNodeForEventId(eventId) {
@@ -597,6 +614,7 @@ export default class MessagePanel extends React.Component {
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
+                        useIRCLayout={this.state.useIRCLayout}
                     />
                 </TileErrorBoundary>
             </li>,
@@ -779,6 +797,8 @@ export default class MessagePanel extends React.Component {
             this.props.className,
             {
                 "mx_MessagePanel_alwaysShowTimestamps": this.props.alwaysShowTimestamps,
+                "mx_IRCLayout": this.state.useIRCLayout,
+                "mx_GroupLayout": !this.state.useIRCLayout,
             },
         );
 
@@ -790,6 +810,15 @@ export default class MessagePanel extends React.Component {
                 onHidden={this._onTypingHidden}
                 ref={this._whoIsTyping} />
             );
+        }
+
+        let ircResizer = null;
+        if (this.state.useIRCLayout) {
+            ircResizer = <IRCTimelineProfileResizer
+                minWidth={20}
+                maxWidth={600}
+                roomId={this.props.room ? this.props.roomroomId : null}
+            />;
         }
 
         return (
@@ -804,6 +833,7 @@ export default class MessagePanel extends React.Component {
                     style={style}
                     stickyBottom={this.props.stickyBottom}
                     resizeNotifier={this.props.resizeNotifier}
+                    fixedChildren={ircResizer}
                 >
                     { topSpinner }
                     { this._getEventTiles() }

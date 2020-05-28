@@ -23,6 +23,8 @@ import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HEADER_KIND_ROOM} from './HeaderButtons';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {Action} from "../../../dispatcher/actions";
+import {ActionPayload} from "../../../dispatcher/payloads";
 
 const MEMBER_PHASES = [
     RIGHT_PANEL_PHASES.RoomMemberList,
@@ -39,9 +41,9 @@ export default class RoomHeaderButtons extends HeaderButtons {
         this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
     }
 
-    onAction(payload) {
+    onAction(payload: ActionPayload) {
         super.onAction(payload);
-        if (payload.action === "view_user") {
+        if (payload.action === Action.ViewUser) {
             if (payload.member) {
                 this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, {member: payload.member});
             } else {
