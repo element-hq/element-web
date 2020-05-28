@@ -27,7 +27,6 @@ import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 import {
-    showToast as showNotificationsToast,
     hideToast as hideNotificationsToast,
 } from "./toasts/DesktopNotificationsToast";
 
@@ -188,10 +187,6 @@ const Notifier = {
         MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
-
-        if (this.shouldShowToolbar()) {
-            showNotificationsToast();
-        }
     },
 
     stop: function() {
