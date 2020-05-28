@@ -355,6 +355,7 @@ export const TermsAuthEntry = createReactClass({
             allChecked = allChecked && checked;
 
             checkboxes.push(
+                // XXX: replace with StyledCheckbox
                 <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
                     <input type="checkbox" onChange={() => this._togglePolicy(policy.id)} checked={checked} />
                     <a href={policy.url} target="_blank" rel="noreferrer noopener">{ policy.name }</a>

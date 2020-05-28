@@ -29,6 +29,7 @@ import {RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink} from "../..
 import * as ContextMenu from "../../structures/ContextMenu";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext, selectText} from "../../../utils/strings";
+import StyledCheckbox from '../elements/StyledCheckbox';
 
 const socials = [
     {
@@ -168,13 +169,12 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             const events = this.props.target.getLiveTimeline().getEvents();
             if (events.length > 0) {
                 checkbox = <div>
-                    <input type="checkbox"
-                           id="mx_ShareDialog_checkbox"
-                           checked={this.state.linkSpecificEvent}
-                           onChange={this.onLinkSpecificEventCheckboxClick} />
-                    <label htmlFor="mx_ShareDialog_checkbox">
+                    <StyledCheckbox
+                        checked={this.state.linkSpecificEvent}
+                        onChange={this.onLinkSpecificEventCheckboxClick}
+                    >
                         { _t('Link to most recent message') }
-                    </label>
+                    </StyledCheckbox>
                 </div>;
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
@@ -184,13 +184,12 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         } else if (this.props.target instanceof MatrixEvent) {
             title = _t('Share Room Message');
             checkbox = <div>
-                <input type="checkbox"
-                       id="mx_ShareDialog_checkbox"
+                <StyledCheckbox
                        checked={this.state.linkSpecificEvent}
-                       onClick={this.onLinkSpecificEventCheckboxClick} />
-                <label htmlFor="mx_ShareDialog_checkbox">
+                       onClick={this.onLinkSpecificEventCheckboxClick}
+                >
                     { _t('Link to selected message') }
-                </label>
+                </StyledCheckbox>
             </div>;
         }
 
