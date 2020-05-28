@@ -218,6 +218,7 @@ class _MatrixClientPeg {
             accessToken: creds.accessToken,
             userId: creds.userId,
             deviceId: creds.deviceId,
+            pickleKey: creds.pickleKey,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),

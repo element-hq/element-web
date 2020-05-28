@@ -298,6 +298,8 @@ async function _restoreFromLocalStorage(opts) {
             return false;
         }
 
+        const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
@@ -306,6 +308,7 @@ async function _restoreFromLocalStorage(opts) {
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: isGuest,
+            pickleKey: pickleKey,
         }, false);
         return true;
     } else {
@@ -348,9 +351,13 @@ async function _handleLoadSessionFailure(e) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function setLoggedIn(credentials) {
+export async function setLoggedIn(credentials) {
     stopMatrixClient();
-    return _doSetLoggedIn(credentials, true);
+    const pickleKey = credentials.userId && credentials.deviceId
+          ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+          : null;
+
+    return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
 
 /**
@@ -516,7 +523,9 @@ export function logout() {
     }
 
     _isLoggingOut = true;
-    MatrixClientPeg.get().logout().then(onLoggedOut,
+    const client = MatrixClientPeg.get();
+    PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
+    client.logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
