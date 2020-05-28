@@ -238,7 +238,7 @@ export default class PasswordLogin extends React.Component {
                     type="text"
                     label={_t("Phone")}
                     value={this.state.phoneNumber}
-                    prefix={phoneCountry}
+                    prefixComponent={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
                     onBlur={this.onPhoneNumberBlur}
                     disabled={this.props.disableSubmit}
