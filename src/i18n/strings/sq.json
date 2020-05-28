@@ -2434,5 +2434,21 @@
     "Custom font size can only be between %(min)s pt and %(max)s pt": "Madhësia vetjake për shkronjat mund të jetë vetëm mes vlerave %(min)s pt dhe %(max)s pt",
     "Use between %(min)s pt and %(max)s pt": "Përdor me %(min)s pt dhe %(max)s pt",
     "Appearance": "Dukje",
-    "Create room": "Krijo dhomë"
+    "Create room": "Krijo dhomë",
+    "Room name or address": "Emër ose adresë dhome",
+    "Joins room with given address": "Hyhet në dhomën me adresën e dhënë",
+    "Unrecognised room address:": "Adresë dhome që s’njihet:",
+    "Help us improve Riot": "Ndihmonani të përmirësojmë Riot-in",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "Dërgoni <UsageDataLink>të dhëna anonime përdorimi</UsageDataLink> të cilat na ndihmojnë të përmirësojmë Riot-in. Kjo do të përdorë një <PolicyLink>cookie</PolicyLink>.",
+    "I want to help": "Dua të ndihmoj",
+    "Your homeserver has exceeded its user limit.": "Shërbyesi juaj Home ka tejkaluar kufijtë e tij të përdorimit.",
+    "Your homeserver has exceeded one of its resource limits.": "Shërbyesi juaj Home ka tejkaluar një nga kufijtë e tij të burimeve.",
+    "Contact your <a>server admin</a>.": "Lidhuni me <a>përgjegjësin e shërbyesit tuaj</a>.",
+    "Ok": "OK",
+    "Set password": "Caktoni fjalëkalim",
+    "To return to your account in future you need to set a password": "Që të ktheheni te llogaria juaj në të ardhmen, duhet të caktoni një fjalëkalim",
+    "Restart": "Rinise",
+    "Upgrade your Riot": "Përmirësoni Riot-in tuaj",
+    "A new version of Riot is available!": "Ka gati një version të ri të Riot-it!",
+    "Use the improved room list (in development - refresh to apply changes)": "Përdorni listën e përmirësuar të dhomave (në zhvillim - që të aplikohen ndryshimet, rifreskojeni)"
 }
