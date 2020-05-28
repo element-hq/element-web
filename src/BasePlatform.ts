@@ -180,4 +180,35 @@ export default abstract class BasePlatform {
     onKeyDown(ev: KeyboardEvent): boolean {
         return false; // no shortcuts implemented
     }
+
+    /**
+     * Get a previously stored pickle key.  The pickle key is used for
+     * encrypting libolm objects.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     * @returns {string|null} the previously stored pickle key, or null if no
+     *     pickle key has been stored.
+     */
+    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        return null;
+    }
+
+    /**
+     * Create and store a pickle key for encrypting libolm objects.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     * @returns {string|null} the pickle key, or null if the platform does not
+     *     support storing pickle keys.
+     */
+    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        return null;
+    }
+
+    /**
+     * Delete a previously stored pickle key from storage.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     */
+    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
+    }
 }
