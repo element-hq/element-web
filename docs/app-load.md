@@ -73,6 +73,7 @@ Key:
 + Red arrow: async task success is asserted
 
 Notes:
++ A task begins when all its dependencies (arrows going into it) are fulfilled.
 + The success of setting up rageshake is never asserted, riot-web has a fallback path for running without IDB (and thus rageshake).
 + Everything is awaited to be settled before the Modernizr check, to allow it to make use of things like i18n if they are successful.
 
