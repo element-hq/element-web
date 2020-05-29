@@ -84,8 +84,14 @@ export default class PasswordReset {
 
         try {
             await this.client.setPassword({
+                // Note: Though this sounds like a login type for identity servers only, it
+                // has a dual purpose of being used for homeservers too.
                 type: "m.login.email.identity",
+                // TODO: Remove `threepid_creds` once servers support proper UIA
+                // See https://github.com/matrix-org/synapse/issues/5665
+                // See https://github.com/matrix-org/matrix-doc/issues/2220
                 threepid_creds: creds,
+                threepidCreds: creds,
             }, this.password);
         } catch (err) {
             if (err.httpStatus === 401) {
