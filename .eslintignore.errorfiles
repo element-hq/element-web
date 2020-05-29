@@ -16,7 +16,6 @@ src/components/views/elements/MemberEventListSummary.js
 src/components/views/elements/UserSelector.js
 src/components/views/globals/MatrixToolbar.js
 src/components/views/globals/NewVersionBar.js
-src/components/views/globals/UpdateCheckBar.js
 src/components/views/messages/MFileBody.js
 src/components/views/messages/TextualBody.js
 src/components/views/room_settings/ColorSettings.js

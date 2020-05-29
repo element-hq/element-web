@@ -45,8 +45,13 @@ export enum Action {
     ViewTooltip = "view_tooltip",
 
     /**
-     *  Forces the theme to reload. No additional payload information required.
+     * Forces the theme to reload. No additional payload information required.
      */
     RecheckTheme = "recheck_theme",
+
+    /**
+     * Response to manual update check, will fire multiple times during the update check.
+     */
+    CheckUpdates = "check_updates",
 }
 
