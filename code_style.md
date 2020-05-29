@@ -4,7 +4,7 @@ Matrix JavaScript/ECMAScript Style Guide
 The intention of this guide is to make Matrix's JavaScript codebase clean,
 consistent with other popular JavaScript styles and consistent with the rest of
 the Matrix codebase. For reference, the Matrix Python style guide can be found
-at https://github.com/matrix-org/synapse/blob/master/docs/code_style.rst
+at https://github.com/matrix-org/synapse/blob/master/docs/code_style.md
 
 This document reflects how we would like Matrix JavaScript code to look, with
 acknowledgement that a significant amount of code is written to older
