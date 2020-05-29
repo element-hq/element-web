@@ -47,8 +47,8 @@ export default class RoomAliasField extends React.PureComponent {
                 <Field
                     label={_t("Room address")}
                     className="mx_RoomAliasField"
-                    prefix={poundSign}
-                    postfix={domain}
+                    prefixComponent={poundSign}
+                    postfixComponent={domain}
                     ref={ref => this._fieldRef = ref}
                     onValidate={this._onValidate}
                     placeholder={_t("e.g. my-room")}
