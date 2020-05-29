@@ -2424,5 +2424,18 @@
     "Click the button below to confirm setting up encryption.": "Az alábbi gomb megnyomásával erősítsd meg, hogy megadod a titkosítási beállításokat.",
     "Dismiss read marker and jump to bottom": "Az olvasottak jel eltűntetése és ugrás a végére",
     "Jump to oldest unread message": "A legrégebbi olvasatlan üzenetre ugrás",
-    "Upload a file": "Fájl feltöltése"
+    "Upload a file": "Fájl feltöltése",
+    "Room name or address": "A szoba neve vagy címe",
+    "Joins room with given address": "Megadott címmel csatlakozik a szobához",
+    "Unrecognised room address:": "Ismeretlen szoba cím:",
+    "Font scaling": "Betű nagyítás",
+    "Use the improved room list (in development - refresh to apply changes)": "Fejlesztett szobalista használata (fejlesztés alatt - frissíts a változások életbe léptetéséhez)",
+    "Use IRC layout": "IRC kinézet használata",
+    "Font size": "Betűméret",
+    "Custom font size": "Egyedit betűméret",
+    "IRC display name width": "IRC megjelenítési név szélessége",
+    "Size must be a number": "A méretnek számnak kell lennie",
+    "Custom font size can only be between %(min)s pt and %(max)s pt": "Az egyedi betűméret csak %(min)s pont és %(max)s pont között lehet",
+    "Use between %(min)s pt and %(max)s pt": "Csak %(min)s pont és %(max)s pont közötti értéket használj",
+    "Appearance": "Megjelenítés"
 }
