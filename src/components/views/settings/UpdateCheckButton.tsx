@@ -18,7 +18,6 @@ import React, {useState} from "react";
 
 import {UpdateCheckStatus} from "../../../BasePlatform";
 import PlatformPeg from "../../../PlatformPeg";
-import {hideToast as hideUpdateToast} from "../../../toasts/UpdateToast";
 import {useDispatcher} from "../../../hooks/useDispatcher";
 import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
@@ -60,7 +59,6 @@ const UpdateCheckButton = () => {
     const onCheckForUpdateClick = () => {
         setState(null);
         PlatformPeg.get().startUpdateCheck();
-        hideUpdateToast();
     };
 
     useDispatcher(dis, ({action, ...params}) => {
