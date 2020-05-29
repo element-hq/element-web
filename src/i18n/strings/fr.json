@@ -2468,5 +2468,17 @@
     "Address (optional)": "Adresse (optionnel)",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "Supprimer l’adresse du salon %(alias)s et supprimer %(name)s du répertoire ?",
     "delete the address.": "supprimer l’adresse.",
-    "Use a different passphrase?": "Utiliser une phrase secrète différente ?"
+    "Use a different passphrase?": "Utiliser une phrase secrète différente ?",
+    "Help us improve Riot": "Aidez-nous à améliorer Riot",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "Envoyez des <UsageDataLink>données anonymes d’utilisation</UsageDataLink> qui nous aident à améliorer Riot. Cela utilisera un <PolicyLink>cookie</PolicyLink>.",
+    "I want to help": "Je veux aider",
+    "Your homeserver has exceeded its user limit.": "Votre serveur d’accueil a dépassé ses limites d’utilisateurs.",
+    "Your homeserver has exceeded one of its resource limits.": "Votre serveur d’accueil a dépassé une de ses limites de ressources.",
+    "Contact your <a>server admin</a>.": "Contactez <a>l’administrateur de votre serveur</a>.",
+    "Ok": "OK",
+    "Set password": "Définir le mot de passe",
+    "To return to your account in future you need to set a password": "Pour réutiliser votre compte à l’avenir, vous devez définir un mot de passe",
+    "Restart": "Redémarrer",
+    "Upgrade your Riot": "Mettre à niveau votre Riot",
+    "A new version of Riot is available!": "Une nouvelle version de Riot est disponible !"
 }
