@@ -275,8 +275,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('getConfig');
     }
 
-    async onUpdateDownloaded(ev, updateInfo) {
-        showUpdateToast(await this.getAppVersion(), updateInfo, updateInfo.releaseNotes);
+    async onUpdateDownloaded(ev, {releaseNotes, releaseName}) {
+        if (this.shouldShowUpdate(releaseName)) {
+            showUpdateToast(await this.getAppVersion(), releaseName, releaseNotes);
+        }
     }
 
     getHumanReadableName(): string {
