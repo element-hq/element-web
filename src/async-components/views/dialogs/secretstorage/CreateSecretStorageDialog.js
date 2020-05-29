@@ -68,13 +68,19 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // does the server offer a UI auth flow with just m.login.password
             // for /keys/device_signing/upload? (If we have an account password, we
             // assume that it can)
-            canUploadKeysWithPasswordOnly: Boolean(this.state.accountPassword),
+            canUploadKeysWithPasswordOnly: null,
             canUploadKeyCheckInProgress: false,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
             // No toggle for this: if we really don't want one, remove it & just hard code true
             useKeyBackup: true,
         };
+
+        if (props.accountPassword) {
+            // If we have an account password, we assume we can upload keys with
+            // just a password (otherwise leave it as null so we poll to check)
+            this.state.canUploadKeysWithPasswordOnly = true;
+        }
 
         this._passphraseField = createRef();
 
@@ -375,7 +381,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div>{_t("Restore your key backup to upgrade your encryption")}</div>
             </div>;
             nextCaption = _t("Restore");
-        } else if (this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword) {
+        } else if (this.state.canUploadKeysWithPasswordOnly && !this.props.accountPassword) {
             authPrompt = <div>
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
                 <div><Field
