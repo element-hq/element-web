@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {createRef} from 'react';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -30,7 +30,11 @@ interface ITextualCompletionProps {
     className?: string;
 }
 
-export class TextualCompletion extends React.PureComponent<ITextualCompletionProps> {
+export abstract class Completion<T> extends React.PureComponent<T> {
+    nodeRef = createRef<HTMLDivElement>();
+}
+
+export class TextualCompletion extends Completion<ITextualCompletionProps> {
     render() {
         const {
             title,
@@ -40,7 +44,11 @@ export class TextualCompletion extends React.PureComponent<ITextualCompletionPro
             ...restProps
         } = this.props;
         return (
-            <div className={classNames('mx_Autocomplete_Completion_block', className)} role="option" {...restProps}>
+            <div {...restProps}
+                 className={classNames('mx_Autocomplete_Completion_block', className)}
+                 role="option"
+                 ref={this.nodeRef}
+            >
                 <span className="mx_Autocomplete_Completion_title">{ title }</span>
                 <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
                 <span className="mx_Autocomplete_Completion_description">{ description }</span>
@@ -57,7 +65,7 @@ interface IPillCompletionProps {
     className?: string;
 }
 
-export class PillCompletion extends React.PureComponent<IPillCompletionProps> {
+export class PillCompletion extends Completion<IPillCompletionProps> {
     render() {
         const {
             title,
@@ -68,7 +76,11 @@ export class PillCompletion extends React.PureComponent<IPillCompletionProps> {
             ...restProps
         } = this.props;
         return (
-            <div className={classNames('mx_Autocomplete_Completion_pill', className)} role="option" {...restProps}>
+            <div {...restProps}
+                 className={classNames('mx_Autocomplete_Completion_pill', className)}
+                 role="option"
+                 ref={this.nodeRef}
+            >
                 { initialComponent }
                 <span className="mx_Autocomplete_Completion_title">{ title }</span>
                 <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
