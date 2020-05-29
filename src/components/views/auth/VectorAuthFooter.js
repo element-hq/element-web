@@ -30,14 +30,7 @@ module.exports = React.createClass({
 
     render: function() {
         const brandingConfig = SdkConfig.get().branding;
-        let links = [
-            {"text": "Legifrance", "url": "https://www.legifrance.gouv.fr/"},
-            {"text": "Service-public", "url": "https://www.service-public.fr/"},
-            {"text": "Gouvernement", "url": "https://www.gouvernement.fr/"},
-            {"text": "OpenData", "url": "https://www.data.gouv.fr/fr/"},
-            {"text": "Mentions Légales", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344726"},
-            {"text": "Contact", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344725"},
-        ];
+        let links = [];
 
         if (brandingConfig && brandingConfig.authFooterLinks) {
             links = brandingConfig.authFooterLinks;
