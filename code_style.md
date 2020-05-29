@@ -17,7 +17,7 @@ writing in modern ECMAScript and using a transpile step to generate the file
 that applications can then include. There are significant benefits in being
 able to use modern ECMAScript, although the tooling for doing so can be awkward
 for library code, especially with regard to translating source maps and line
-number throgh from the original code to the final application.
+number through from the original code to the final application.
 
 General Style
 -------------
