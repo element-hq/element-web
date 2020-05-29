@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Travis Ralston
 Copyright 2018, 2019 New Vector Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from 'matrix-js-sdk';
+
 import {_td} from '../languageHandler';
 import {
     AudioNotificationsEnabledController,
@@ -24,8 +26,10 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
+import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
+import FontSizeController from './controllers/FontSizeController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -91,6 +95,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_font_scaling": {
+        isFeature: true,
+        displayName: _td("Font scaling"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -128,6 +138,24 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_new_room_list": {
+        isFeature: true,
+        displayName: _td("Use the improved room list (in development - refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_custom_themes": {
+        isFeature: true,
+        displayName: _td("Support adding custom themes"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_irc_ui": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Use IRC layout'),
+        default: false,
+        isFeature: true,
+    },
     "mjolnirRooms": {
         supportedLevels: ['account'],
         default: [],
@@ -136,30 +164,29 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
-    "feature_dm_verification": {
-        isFeature: true,
-        displayName: _td("Send verification requests in direct message," +
-            " including a new verification UX in the member panel."),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_cross_signing": {
-        isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-device (in development)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
-    "feature_event_indexing": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
-        default: false,
-    },
-    "useCiderComposer": {
-        displayName: _td("Use the new, faster, composer for writing messages"),
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        // XXX: We shouldn't be using the feature prefix for non-feature settings. There is an exception
+        // for this case though as we're converting a feature to a setting for a temporary safety net.
+        displayName: _td("Enable cross-signing to verify per-user instead of per-session"),
+        supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
         default: true,
+    },
+    "feature_bridge_state": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show info about bridges in room settings"),
+        default: false,
+    },
+    "fontSize": {
+        displayName: _td("Font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 15,
+        controller: new FontSizeController(),
+    },
+    "useCustomFontSize": {
+        displayName: _td("Custom font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -258,6 +285,11 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'dontSendTypingNotifications',
     },
+    "showTypingNotifications": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show typing notifications"),
+        default: true,
+    },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),
@@ -314,6 +346,10 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: [],
     },
+    "room_directory_servers": {
+        supportedLevels: ['account'],
+        default: [],
+    },
     "integrationProvisioning": {
         supportedLevels: ['account'],
         default: true,
@@ -349,8 +385,8 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         supportedLevelsAreOrdered: true,
         displayName: {
-            "default": _td('Never send encrypted messages to unverified devices from this device'),
-            "room-device": _td('Never send encrypted messages to unverified devices in this room from this device'),
+            "default": _td('Never send encrypted messages to unverified sessions from this session'),
+            "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
     },
@@ -423,14 +459,19 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    "RoomList.orderAlphabetically": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Order rooms by name"),
+        default: false,
+    },
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        displayName: _td("Show rooms with unread notifications first"),
         default: true,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show recently visited rooms above the room list"),
+        displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
@@ -480,5 +521,39 @@ export const SETTINGS = {
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: RIGHT_PANEL_PHASES.GroupMemberList,
+    },
+    "enableEventIndexing": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Enable message search in encrypted rooms"),
+        default: true,
+    },
+    "keepSecretStoragePassphraseForSession": {
+         supportedLevels: ['device', 'config'],
+         displayName: _td("Keep recovery passphrase in memory for this session"),
+         default: false,
+    },
+    "crawlerSleepTime": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("How fast should messages be downloaded."),
+        default: 3000,
+    },
+    "showCallButtonsInComposer": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+    },
+    "e2ee.manuallyVerifyAllSessions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Manually verify all remote sessions"),
+        default: false,
+        controller: new PushToMatrixClientController(
+            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+        ),
+    },
+    "ircDisplayNameWidth": {
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        displayName: _td("IRC display name width"),
+        default: 80,
     },
 };

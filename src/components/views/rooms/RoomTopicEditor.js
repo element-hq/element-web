@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from "../../../languageHandler";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTopicEditor',
 
     propTypes: {
@@ -33,7 +33,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         const room = this.props.room;
         const topic = room.currentState.getStateEvents('m.room.topic', '');
         this.setState({

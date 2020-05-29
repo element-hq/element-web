@@ -16,10 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import Modal from './Modal';
-import sdk from './';
+import * as sdk from './';
 import MultiInviter from './utils/MultiInviter';
 import { _t } from './languageHandler';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
 import {allSettled} from "./utils/promise";
 
@@ -73,7 +73,7 @@ export function showGroupAddRoomDialog(groupId) {
             title: _t("Add rooms to the community"),
             description: description,
             extraNode: checkboxContainer,
-            placeholder: _t("Room name or alias"),
+            placeholder: _t("Room name or address"),
             button: _t("Add to community"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],

@@ -19,12 +19,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from '../../../Modal';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import SdkConfig from "../../../SdkConfig";
-import { createClient } from 'matrix-js-sdk/lib/matrix';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 import classNames from 'classnames';
 
 /*
@@ -72,7 +72,8 @@ export default class ServerConfig extends React.PureComponent {
         };
     }
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (newProps.serverConfig.hsUrl === this.state.hsUrl &&
             newProps.serverConfig.isUrl === this.state.isUrl) return;
 
@@ -223,7 +224,8 @@ export default class ServerConfig extends React.PureComponent {
                     {sub}
                 </a>,
             })}
-            <Field id="mx_ServerConfig_hsUrl"
+            <Field
+                id="mx_ServerConfig_hsUrl"
                 label={_t("Homeserver URL")}
                 placeholder={this.props.serverConfig.hsUrl}
                 value={this.state.hsUrl}
@@ -246,7 +248,7 @@ export default class ServerConfig extends React.PureComponent {
                     {sub}
             </a>,
             })}
-            <Field id="mx_ServerConfig_isUrl"
+            <Field
                 label={_t("Identity Server URL")}
                 placeholder={this.props.serverConfig.isUrl}
                 value={this.state.isUrl || ''}
@@ -274,15 +276,13 @@ export default class ServerConfig extends React.PureComponent {
             : null;
 
         return (
-            <div className="mx_ServerConfig">
+            <form className="mx_ServerConfig" onSubmit={this.onSubmit} autoComplete="off">
                 <h3>{_t("Other servers")}</h3>
                 {errorText}
                 {this._renderHomeserverSection()}
                 {this._renderIdentityServerSection()}
-                <form onSubmit={this.onSubmit} autoComplete="off" action={null}>
-                    {submitButton}
-                </form>
-            </div>
+                {submitButton}
+            </form>
         );
     }
 }

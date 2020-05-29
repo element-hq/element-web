@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import ScalarAuthClient from "../ScalarAuthClient";
-import sdk from "../index";
+import * as sdk from "../index";
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../Terms";
 import type {Room} from "matrix-js-sdk";
 import Modal from '../Modal';

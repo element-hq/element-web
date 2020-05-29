@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {formatDate} from '../../../DateUtils';
 
 export default class DevicesPanelEntry extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._unmounted = false;
         this.onDeviceToggled = this.onDeviceToggled.bind(this);
@@ -40,7 +40,7 @@ export default class DevicesPanelEntry extends React.Component {
         return MatrixClientPeg.get().setDeviceDetails(device.device_id, {
             display_name: value,
         }).catch((e) => {
-            console.error("Error setting device display name", e);
+            console.error("Error setting session display name", e);
             throw new Error(_t("Failed to set display name"));
         });
     }

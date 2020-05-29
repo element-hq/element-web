@@ -1,0 +1,37 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_NewSessionReviewDialog_header {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+}
+
+.mx_NewSessionReviewDialog_headerIcon {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    position: relative;
+}
+
+.mx_NewSessionReviewDialog_deviceName {
+    font-weight: 600;
+}
+
+.mx_NewSessionReviewDialog_deviceID {
+    font-size: $font-12px;
+    color: $notice-secondary-color;
+}

@@ -76,13 +76,6 @@ limitations under the License.
     flex: 1 1 0;
     min-width: 0;
 
-    /* Experimental fix for https://github.com/vector-im/vector-web/issues/947
-       and https://github.com/vector-im/vector-web/issues/946.
-       Empirically this stops the MessagePanel's width exploding outwards when
-       gemini is in 'prevented' mode
-       */
-    overflow-x: auto;
-
     /* To fix https://github.com/vector-im/riot-web/issues/3298 where Safari
        needed height 100% all the way down to the HomePage. Height does not
        have to be auto, empirically.

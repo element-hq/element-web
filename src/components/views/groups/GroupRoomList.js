@@ -16,12 +16,13 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupAddRoomDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import TintableSvg from '../elements/TintableSvg';
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
 
@@ -38,7 +39,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._initGroupStore(this.props.groupId);
     },
@@ -150,17 +151,16 @@ export default createReactClass({
                     placeholder={_t('Filter community rooms')} autoComplete="off" />
         );
 
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return (
             <div className="mx_GroupRoomList" role="tabpanel">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true} className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
+                <AutoHideScrollbar className="mx_GroupRoomList_joined mx_GroupRoomList_outerWrapper">
                     <TruncatedList className="mx_GroupRoomList_wrapper" truncateAt={this.state.truncateAt}
                             createOverflowElement={this._createOverflowTile}>
                         { this.makeGroupRoomTiles(this.state.searchQuery) }
                     </TruncatedList>
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
                 { inputBox }
             </div>
         );

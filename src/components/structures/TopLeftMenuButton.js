@@ -17,12 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TopLeftMenu} from '../views/context_menus/TopLeftMenu';
+import TopLeftMenu from '../views/context_menus/TopLeftMenu';
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import MatrixClientPeg from '../../MatrixClientPeg';
-import Avatar from '../../Avatar';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
+import * as Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import {ContextMenu, ContextMenuButton} from "./ContextMenu";
 
 const AVATAR_SIZE = 28;

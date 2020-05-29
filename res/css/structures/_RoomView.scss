@@ -23,7 +23,7 @@ limitations under the License.
 .mx_RoomView_fileDropTarget {
     min-width: 0px;
     width: 100%;
-    font-size: 18px;
+    font-size: $font-18px;
     text-align: center;
 
     pointer-events: none;
@@ -186,7 +186,7 @@ limitations under the License.
 
 .mx_RoomView_empty {
     flex: 1 1 auto;
-    font-size: 13px;
+    font-size: $font-13px;
     padding-left: 3em;
     padding-right: 3em;
     margin-right: 20px;

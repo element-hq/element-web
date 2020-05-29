@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,49 +16,69 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import {verificationMethods} from 'matrix-js-sdk/lib/crypto';
-import sdk from '../../../index';
-import Modal from "../../../Modal";
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import KeyVerificationStateObserver, {getNameForEventRoom, userLabelForEventRoom}
+import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
+import dis from "../../../dispatcher/dispatcher";
+import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
         super(props);
-        this.keyVerificationState = new KeyVerificationStateObserver(this.props.mxEvent, MatrixClientPeg.get(), () => {
-            this.setState(this._copyState());
-        });
-        this.state = this._copyState();
-    }
-
-    _copyState() {
-        const {accepted, done, cancelled, cancelPartyUserId, otherPartyUserId} = this.keyVerificationState;
-        return {accepted, done, cancelled, cancelPartyUserId, otherPartyUserId};
+        this.state = {};
     }
 
     componentDidMount() {
-        this.keyVerificationState.attach();
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            request.on("change", this._onRequestChanged);
+        }
     }
 
     componentWillUnmount() {
-        this.keyVerificationState.detach();
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            request.off("change", this._onRequestChanged);
+        }
     }
 
-    _onAcceptClicked = () => {
-        const IncomingSasDialog = sdk.getComponent('views.dialogs.IncomingSasDialog');
-        // todo: validate event, for example if it has sas in the methods.
-        const verifier = MatrixClientPeg.get().acceptVerificationDM(this.props.mxEvent, verificationMethods.SAS);
-        Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
-            verifier,
-        }, null, /* priority = */ false, /* static = */ true);
+    _openRequest = () => {
+        const {verificationRequest} = this.props.mxEvent;
+        const member = MatrixClientPeg.get().getUser(verificationRequest.otherUserId);
+        dis.dispatch({
+            action: "set_right_panel_phase",
+            phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+            refireParams: {verificationRequest, member},
+        });
     };
 
-    _onRejectClicked = () => {
-        // todo: validate event, for example if it has sas in the methods.
-        const verifier = MatrixClientPeg.get().acceptVerificationDM(this.props.mxEvent, verificationMethods.SAS);
-        verifier.cancel("User declined");
+    _onRequestChanged = () => {
+        this.forceUpdate();
+    };
+
+    _onAcceptClicked = async () => {
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            try {
+                this._openRequest();
+                await request.accept();
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
+    };
+
+    _onRejectClicked = async () => {
+        const request = this.props.mxEvent.verificationRequest;
+        if (request) {
+            try {
+                await request.cancel();
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
     };
 
     _acceptedLabel(userId) {
@@ -67,65 +87,83 @@ export default class MKeyVerificationRequest extends React.Component {
         if (userId === myUserId) {
             return _t("You accepted");
         } else {
-            return _t("%(name)s accepted", {name: getNameForEventRoom(userId, this.props.mxEvent)});
+            return _t("%(name)s accepted", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
         }
     }
 
     _cancelledLabel(userId) {
         const client = MatrixClientPeg.get();
         const myUserId = client.getUserId();
+        const {cancellationCode} = this.props.mxEvent.verificationRequest;
+        const declined = cancellationCode === "m.user";
         if (userId === myUserId) {
-            return _t("You cancelled");
+            if (declined) {
+                return _t("You declined");
+            } else {
+                return _t("You cancelled");
+            }
         } else {
-            return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent)});
+            if (declined) {
+                return _t("%(name)s declined", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
+            } else {
+                return _t("%(name)s cancelled", {name: getNameForEventRoom(userId, this.props.mxEvent.getRoomId())});
+            }
         }
     }
 
     render() {
+        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
+        const FormButton = sdk.getComponent("elements.FormButton");
+
         const {mxEvent} = this.props;
-        const fromUserId = mxEvent.getSender();
-        const content = mxEvent.getContent();
-        const toUserId = content.to;
-        const client = MatrixClientPeg.get();
-        const myUserId = client.getUserId();
-        const isOwn = fromUserId === myUserId;
+        const request = mxEvent.verificationRequest;
+
+        if (!request || request.invalid) {
+            return null;
+        }
 
         let title;
         let subtitle;
         let stateNode;
 
-        if (this.state.accepted || this.state.cancelled) {
+        if (!request.canAccept) {
             let stateLabel;
-            if (this.state.accepted) {
-                stateLabel = this._acceptedLabel(toUserId);
-            } else if (this.state.cancelled) {
-                stateLabel = this._cancelledLabel(this.state.cancelPartyUserId);
+            const accepted = request.ready || request.started || request.done;
+            if (accepted) {
+                stateLabel = (<AccessibleButton onClick={this._openRequest}>
+                    {this._acceptedLabel(request.receivingUserId)}
+                </AccessibleButton>);
+            } else if (request.cancelled) {
+                stateLabel = this._cancelledLabel(request.cancellingUserId);
+            } else if (request.accepting) {
+                stateLabel = _t("Accepting …");
+            } else if (request.declining) {
+                stateLabel = _t("Declining …");
             }
-            stateNode = (<div className="mx_KeyVerification_state">{stateLabel}</div>);
+            stateNode = (<div className="mx_cryptoEvent_state">{stateLabel}</div>);
         }
 
-        if (toUserId === myUserId) { // request sent to us
-            title = (<div className="mx_KeyVerification_title">{
-                _t("%(name)s wants to verify", {name: getNameForEventRoom(fromUserId, mxEvent)})}</div>);
-            subtitle = (<div className="mx_KeyVerification_subtitle">{
-                userLabelForEventRoom(fromUserId, mxEvent)}</div>);
-            const isResolved = !(this.state.accepted || this.state.cancelled || this.state.done);
-            if (isResolved) {
-                const FormButton = sdk.getComponent("elements.FormButton");
-                stateNode = (<div className="mx_KeyVerification_buttons">
+        if (!request.initiatedByMe) {
+            const name = getNameForEventRoom(request.requestingUserId, mxEvent.getRoomId());
+            title = (<div className="mx_cryptoEvent_title">{
+                _t("%(name)s wants to verify", {name})}</div>);
+            subtitle = (<div className="mx_cryptoEvent_subtitle">{
+                userLabelForEventRoom(request.requestingUserId, mxEvent.getRoomId())}</div>);
+            if (request.canAccept) {
+                stateNode = (<div className="mx_cryptoEvent_buttons">
                     <FormButton kind="danger" onClick={this._onRejectClicked} label={_t("Decline")} />
                     <FormButton onClick={this._onAcceptClicked} label={_t("Accept")} />
                 </div>);
             }
-        } else if (isOwn) { // request sent by us
-            title = (<div className="mx_KeyVerification_title">{
+        } else { // request sent by us
+            title = (<div className="mx_cryptoEvent_title">{
                 _t("You sent a verification request")}</div>);
-            subtitle = (<div className="mx_KeyVerification_subtitle">{
-                userLabelForEventRoom(this.state.otherPartyUserId, mxEvent)}</div>);
+            subtitle = (<div className="mx_cryptoEvent_subtitle">{
+                userLabelForEventRoom(request.receivingUserId, mxEvent.getRoomId())}</div>);
         }
 
         if (title) {
-            return (<div className="mx_EventTile_bubble mx_KeyVerification mx_KeyVerification_icon">
+            return (<div className="mx_EventTile_bubble mx_cryptoEvent mx_cryptoEvent_icon">
                 {title}
                 {subtitle}
                 {stateNode}

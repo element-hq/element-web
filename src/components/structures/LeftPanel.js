@@ -19,15 +19,14 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk';
 import { Key } from '../../Keyboard';
-import sdk from '../../index';
-import dis from '../../dispatcher';
-import VectorConferenceHandler from '../../VectorConferenceHandler';
-import TagPanelButtons from './TagPanelButtons';
+import * as sdk from '../../index';
+import dis from '../../dispatcher/dispatcher';
+import * as VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
+import RoomList2 from "../views/rooms/RoomList2";
 
 
 const LeftPanel = createReactClass({
@@ -39,10 +38,6 @@ const LeftPanel = createReactClass({
         collapsed: PropTypes.bool.isRequired,
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    },
-
     getInitialState: function() {
         return {
             searchFilter: '',
@@ -50,7 +45,8 @@ const LeftPanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this.focusedElement = null;
 
         this._breadcrumbsWatcherRef = SettingsStore.watchSetting(
@@ -135,9 +131,6 @@ const LeftPanel = createReactClass({
         if (!this.focusedElement) return;
 
         switch (ev.key) {
-            case Key.TAB:
-                this._onMoveFocus(ev, ev.shiftKey);
-                break;
             case Key.ARROW_UP:
                 this._onMoveFocus(ev, true, true);
                 break;
@@ -243,7 +236,6 @@ const LeftPanel = createReactClass({
             tagPanelContainer = (<div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel />
                 { isCustomTagsEnabled ? <CustomRoomTagPanel /> : undefined }
-                <TagPanelButtons />
             </div>);
         }
 
@@ -282,6 +274,29 @@ const LeftPanel = createReactClass({
             breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
         }
 
+        let roomList = null;
+        if (SettingsStore.isFeatureEnabled("feature_new_room_list")) {
+            roomList = <RoomList2
+                onKeyDown={this._onKeyDown}
+                resizeNotifier={this.props.resizeNotifier}
+                collapsed={this.props.collapsed}
+                searchFilter={this.state.searchFilter}
+                ref={this.collectRoomList}
+                onFocus={this._onFocus}
+                onBlur={this._onBlur}
+            />;
+        } else {
+            roomList = <RoomList
+                onKeyDown={this._onKeyDown}
+                onFocus={this._onFocus}
+                onBlur={this._onBlur}
+                ref={this.collectRoomList}
+                resizeNotifier={this.props.resizeNotifier}
+                collapsed={this.props.collapsed}
+                searchFilter={this.state.searchFilter}
+                ConferenceHandler={VectorConferenceHandler} />;
+        }
+
         return (
             <div className={containerClasses}>
                 { tagPanelContainer }
@@ -293,19 +308,11 @@ const LeftPanel = createReactClass({
                         { exploreButton }
                         { searchBox }
                     </div>
-                    <RoomList
-                        onKeyDown={this._onKeyDown}
-                        onFocus={this._onFocus}
-                        onBlur={this._onBlur}
-                        ref={this.collectRoomList}
-                        resizeNotifier={this.props.resizeNotifier}
-                        collapsed={this.props.collapsed}
-                        searchFilter={this.state.searchFilter}
-                        ConferenceHandler={VectorConferenceHandler} />
+                    {roomList}
                 </aside>
             </div>
         );
     },
 });
 
-module.exports = LeftPanel;
+export default LeftPanel;

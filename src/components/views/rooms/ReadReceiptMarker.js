@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-
-const sdk = require('../../../index');
-
-const Velociraptor = require('../../../Velociraptor');
-require('../../../VelocityBounce');
+import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
-
 import {formatDate} from '../../../DateUtils';
+import Velociraptor from "../../../Velociraptor";
+import * as sdk from "../../../index";
+import {toRem} from "../../../utils/units";
 
 let bounce = false;
 try {
@@ -35,7 +33,7 @@ try {
 } catch (e) {
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ReadReceiptMarker',
 
     propTypes: {
@@ -90,6 +88,11 @@ module.exports = createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
+        this._avatar = createRef();
+    },
+
     componentWillUnmount: function() {
         // before we remove the rr, store its location in the map, so that if
         // it reappears, it can be animated from the right place.
@@ -105,7 +108,7 @@ module.exports = createReactClass({
             return;
         }
 
-        const avatarNode = ReactDOM.findDOMNode(this);
+        const avatarNode = this._avatar.current;
         rrInfo.top = avatarNode.offsetTop;
         rrInfo.left = avatarNode.offsetLeft;
         rrInfo.parent = avatarNode.offsetParent;
@@ -125,7 +128,7 @@ module.exports = createReactClass({
             oldTop = oldInfo.top + oldInfo.parent.getBoundingClientRect().top;
         }
 
-        const newElement = ReactDOM.findDOMNode(this);
+        const newElement = this._avatar.current;
         let startTopOffset;
         if (!newElement.offsetParent) {
             // this seems to happen sometimes for reasons I don't understand
@@ -146,7 +149,7 @@ module.exports = createReactClass({
             // start at the old height and in the old h pos
 
             startStyles.push({ top: startTopOffset+"px",
-                               left: oldInfo.left+"px" });
+                               left: toRem(oldInfo.left) });
 
             const reorderTransitionOpts = {
                 duration: 100,
@@ -175,11 +178,11 @@ module.exports = createReactClass({
     render: function() {
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         if (this.state.suppressDisplay) {
-            return <div />;
+            return <div ref={this._avatar} />;
         }
 
         const style = {
-            left: this.props.leftOffset+'px',
+            left: toRem(this.props.leftOffset),
             top: '0px',
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };
@@ -215,6 +218,7 @@ module.exports = createReactClass({
                     style={style}
                     title={title}
                     onClick={this.props.onClick}
+                    inputRef={this._avatar}
                 />
             </Velociraptor>
         );

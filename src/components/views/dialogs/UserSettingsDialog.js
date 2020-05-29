@@ -17,18 +17,19 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tab, TabbedView} from "../../structures/TabbedView";
+import TabbedView, {Tab} from "../../structures/TabbedView";
 import {_t, _td} from "../../../languageHandler";
 import GeneralUserSettingsTab from "../settings/tabs/user/GeneralUserSettingsTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import LabsUserSettingsTab from "../settings/tabs/user/LabsUserSettingsTab";
+import AppearanceUserSettingsTab from "../settings/tabs/user/AppearanceUserSettingsTab";
 import SecurityUserSettingsTab from "../settings/tabs/user/SecurityUserSettingsTab";
 import NotificationUserSettingsTab from "../settings/tabs/user/NotificationUserSettingsTab";
 import PreferencesUserSettingsTab from "../settings/tabs/user/PreferencesUserSettingsTab";
 import VoiceUserSettingsTab from "../settings/tabs/user/VoiceUserSettingsTab";
 import HelpUserSettingsTab from "../settings/tabs/user/HelpUserSettingsTab";
 import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
 
@@ -67,6 +68,11 @@ export default class UserSettingsDialog extends React.Component {
             <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         tabs.push(new Tab(
+            _td("Appearance"),
+            "mx_UserSettingsDialog_appearanceIcon",
+            <AppearanceUserSettingsTab />,
+        ));
+        tabs.push(new Tab(
             _td("Flair"),
             "mx_UserSettingsDialog_flairIcon",
             <FlairUserSettingsTab />,
@@ -89,7 +95,7 @@ export default class UserSettingsDialog extends React.Component {
         tabs.push(new Tab(
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
-            <SecurityUserSettingsTab />,
+            <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
         if (SdkConfig.get()['showLabsSettings'] || SettingsStore.getLabsFeatures().length > 0) {
             tabs.push(new Tab(

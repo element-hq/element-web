@@ -19,9 +19,9 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import classNames from 'classnames';
-import sdk from '../../index';
-import dis from '../../dispatcher';
-import Unread from '../../Unread';
+import * as sdk from '../../index';
+import dis from '../../dispatcher/dispatcher';
+import * as Unread from '../../Unread';
 import * as RoomNotifs from '../../RoomNotifs';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 import IndicatorScrollbar from './IndicatorScrollbar';
@@ -31,9 +31,47 @@ import PropTypes from 'prop-types';
 import RoomTile from "../views/rooms/RoomTile";
 import LazyRenderList from "../views/elements/LazyRenderList";
 import {_t} from "../../languageHandler";
+import {RovingTabIndexWrapper} from "../../accessibility/RovingTabIndex";
+import {toPx} from "../../utils/units";
 
 // turn this on for drop & drag console debugging galore
 const debug = false;
+
+class RoomTileErrorBoundary extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            error: null,
+        };
+    }
+
+    static getDerivedStateFromError(error) {
+        // Side effects are not permitted here, so we only update the state so
+        // that the next render shows an error message.
+        return { error };
+    }
+
+    componentDidCatch(error, { componentStack }) {
+        // Browser consoles are better at formatting output when native errors are passed
+        // in their own `console.error` invocation.
+        console.error(error);
+        console.error(
+            "The above error occured while React was rendering the following components:",
+            componentStack,
+        );
+    }
+
+    render() {
+        if (this.state.error) {
+            return (<div className="mx_RoomTile mx_RoomTileError">
+                {this.props.roomId}
+            </div>);
+        } else {
+            return this.props.children;
+        }
+    }
+}
 
 export default class RoomSubList extends React.PureComponent {
     static displayName = 'RoomSubList';
@@ -44,8 +82,6 @@ export default class RoomSubList extends React.PureComponent {
         label: PropTypes.string.isRequired,
         tagName: PropTypes.string,
         addRoomLabel: PropTypes.string,
-
-        order: PropTypes.string.isRequired,
 
         // passed through to RoomTile and used to highlight room with `!` regardless of notifications count
         isInvite: PropTypes.bool,
@@ -112,21 +148,30 @@ export default class RoomSubList extends React.PureComponent {
     }
 
     onAction = (payload) => {
-        // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
-        // but this is no longer true, so we must do it here (and can apply the small
-        // optimisation of checking that we care about the room being read).
-        //
-        // Ultimately we need to transition to a state pushing flow where something
-        // explicitly notifies the components concerned that the notif count for a room
-        // has change (e.g. a Flux store).
-        if (payload.action === 'on_room_read' &&
-            this.props.list.some((r) => r.roomId === payload.roomId)
-        ) {
-            this.forceUpdate();
+        switch (payload.action) {
+            case 'on_room_read':
+                // XXX: Previously RoomList would forceUpdate whenever on_room_read is dispatched,
+                // but this is no longer true, so we must do it here (and can apply the small
+                // optimisation of checking that we care about the room being read).
+                //
+                // Ultimately we need to transition to a state pushing flow where something
+                // explicitly notifies the components concerned that the notif count for a room
+                // has change (e.g. a Flux store).
+                if (this.props.list.some((r) => r.roomId === payload.roomId)) {
+                    this.forceUpdate();
+                }
+                break;
+
+            case 'view_room':
+                if (this.state.hidden && !this.props.forceExpand && payload.show_room_tile &&
+                    this.props.list.some((r) => r.roomId === payload.room_id)
+                ) {
+                    this.toggle();
+                }
         }
     };
 
-    onClick = (ev) => {
+    toggle = () => {
         if (this.isCollapsibleOnClick()) {
             // The header isCollapsible, so the click is to be interpreted as collapse and truncation logic
             const isHidden = !this.state.hidden;
@@ -139,12 +184,12 @@ export default class RoomSubList extends React.PureComponent {
         }
     };
 
+    onClick = (ev) => {
+        this.toggle();
+    };
+
     onHeaderKeyDown = (ev) => {
         switch (ev.key) {
-            case Key.TAB:
-                // Prevent LeftPanel handling Tab if focus is on the sublist header itself
-                ev.stopPropagation();
-                break;
             case Key.ARROW_LEFT:
                 // On ARROW_LEFT collapse the room sublist
                 if (!this.state.hidden && !this.props.forceExpand) {
@@ -185,6 +230,7 @@ export default class RoomSubList extends React.PureComponent {
     onRoomTileClick = (roomId, ev) => {
         dis.dispatch({
             action: 'view_room',
+            show_room_tile: true, // to make sure the room gets scrolled into view
             room_id: roomId,
             clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
         });
@@ -198,7 +244,7 @@ export default class RoomSubList extends React.PureComponent {
     };
 
     makeRoomTile = (room) => {
-        return <RoomTile
+        return <RoomTileErrorBoundary roomId={room.roomId}><RoomTile
             room={room}
             roomSubList={this}
             tagName={this.props.tagName}
@@ -211,7 +257,7 @@ export default class RoomSubList extends React.PureComponent {
             refreshSubList={this._updateSubListCount}
             incomingCall={null}
             onClick={this.onRoomTileClick}
-        />;
+        /></RoomTileErrorBoundary>;
     };
 
     _onNotifBadgeClick = (e) => {
@@ -263,33 +309,6 @@ export default class RoomSubList extends React.PureComponent {
         const subListNotifCount = subListNotifications.count;
         const subListNotifHighlight = subListNotifications.highlight;
 
-        let badge;
-        if (!this.props.collapsed) {
-            const badgeClasses = classNames({
-                'mx_RoomSubList_badge': true,
-                'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
-            });
-            // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
-            if (subListNotifCount > 0) {
-                badge = (
-                    <AccessibleButton className={badgeClasses} onClick={this._onNotifBadgeClick} aria-label={_t("Jump to first unread room.")}>
-                        <div>
-                            { FormattingUtils.formatCount(subListNotifCount) }
-                        </div>
-                    </AccessibleButton>
-                );
-            } else if (this.props.isInvite && this.props.list.length) {
-                // no notifications but highlight anyway because this is an invite badge
-                badge = (
-                    <AccessibleButton className={badgeClasses} onClick={this._onInviteBadgeClick} aria-label={_t("Jump to first invite.")}>
-                        <div>
-                            { this.props.list.length }
-                        </div>
-                    </AccessibleButton>
-                );
-            }
-        }
-
         // When collapsed, allow a long hover on the header to show user
         // the full tag name and room count
         let title;
@@ -305,17 +324,6 @@ export default class RoomSubList extends React.PureComponent {
                 <IncomingCallBox className="mx_RoomSubList_incomingCall" incomingCall={this.props.incomingCall} />;
         }
 
-        let addRoomButton;
-        if (this.props.onAddRoom) {
-            addRoomButton = (
-                <AccessibleTooltipButton
-                    onClick={this.onAddRoom}
-                    className="mx_RoomSubList_addRoom"
-                    title={this.props.addRoomLabel || _t("Add room")}
-                />
-            );
-        }
-
         const len = this.props.list.length + this.props.extraTiles.length;
         let chevron;
         if (len) {
@@ -327,25 +335,81 @@ export default class RoomSubList extends React.PureComponent {
             chevron = (<div className={chevronClasses} />);
         }
 
-        return (
-            <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
-                <AccessibleButton
-                    onClick={this.onClick}
-                    className="mx_RoomSubList_label"
-                    tabIndex={0}
-                    aria-expanded={!isCollapsed}
-                    inputRef={this._headerButton}
-                    role="treeitem"
-                    aria-level="1"
-                >
-                    { chevron }
-                    <span>{this.props.label}</span>
-                    { incomingCall }
-                </AccessibleButton>
-                { badge }
-                { addRoomButton }
-            </div>
-        );
+        return <RovingTabIndexWrapper inputRef={this._headerButton}>
+            {({onFocus, isActive, ref}) => {
+                const tabIndex = isActive ? 0 : -1;
+
+                let badge;
+                if (!this.props.collapsed) {
+                    const badgeClasses = classNames({
+                        'mx_RoomSubList_badge': true,
+                        'mx_RoomSubList_badgeHighlight': subListNotifHighlight,
+                    });
+                    // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
+                    if (subListNotifCount > 0) {
+                        badge = (
+                            <AccessibleButton
+                                tabIndex={tabIndex}
+                                className={badgeClasses}
+                                onClick={this._onNotifBadgeClick}
+                                aria-label={_t("Jump to first unread room.")}
+                            >
+                                <div>
+                                    { FormattingUtils.formatCount(subListNotifCount) }
+                                </div>
+                            </AccessibleButton>
+                        );
+                    } else if (this.props.isInvite && this.props.list.length) {
+                        // no notifications but highlight anyway because this is an invite badge
+                        badge = (
+                            <AccessibleButton
+                                tabIndex={tabIndex}
+                                className={badgeClasses}
+                                onClick={this._onInviteBadgeClick}
+                                aria-label={_t("Jump to first invite.")}
+                            >
+                                <div>
+                                    { this.props.list.length }
+                                </div>
+                            </AccessibleButton>
+                        );
+                    }
+                }
+
+                let addRoomButton;
+                if (this.props.onAddRoom) {
+                    addRoomButton = (
+                        <AccessibleTooltipButton
+                            tabIndex={tabIndex}
+                            onClick={this.onAddRoom}
+                            className="mx_RoomSubList_addRoom"
+                            title={this.props.addRoomLabel || _t("Add room")}
+                        />
+                    );
+                }
+
+                return (
+                    <div className="mx_RoomSubList_labelContainer" title={title} ref={this._header} onKeyDown={this.onHeaderKeyDown}>
+                        <AccessibleButton
+                            onFocus={onFocus}
+                            tabIndex={tabIndex}
+                            inputRef={ref}
+                            onClick={this.onClick}
+                            className="mx_RoomSubList_label"
+                            aria-expanded={!isCollapsed}
+                            role="treeitem"
+                            aria-level="1"
+                        >
+                            { chevron }
+                            <span>{this.props.label}</span>
+                            { incomingCall }
+                        </AccessibleButton>
+                        { badge }
+                        { addRoomButton }
+                    </div>
+                );
+            } }
+        </RovingTabIndexWrapper>;
     }
 
     checkOverflow = () => {
@@ -356,7 +420,7 @@ export default class RoomSubList extends React.PureComponent {
 
     setHeight = (height) => {
         if (this._subList.current) {
-            this._subList.current.style.height = `${height}px`;
+            this._subList.current.style.height = toPx(height);
         }
         this._updateLazyRenderHeight(height);
     };

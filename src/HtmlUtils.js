@@ -23,18 +23,17 @@ import ReplyThread from "./components/views/elements/ReplyThread";
 
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
-import highlight from 'highlight.js';
 import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import url from 'url';
 
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
+import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
 
 linkifyMatrix(linkify);
 
@@ -58,8 +57,6 @@ const COLOR_REGEX = /^#[0-9a-fA-F]{6}$/;
 
 const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
 
-const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
-
 /*
  * Return true if the given string contains emoji
  * Uses a much, much simpler regex than emojibase's so will give false
@@ -72,28 +69,13 @@ function mightContainEmoji(str) {
 }
 
 /**
- * Find emoji data in emojibase by character.
- *
- * @param {String} char The emoji character
- * @return {Object} The emoji data
- */
-export function findEmojiData(char) {
-    // Check against both the char and the char with an empty variation selector
-    // appended because that's how emojibase stores its base emojis which have
-    // variations.
-    // See also https://github.com/vector-im/riot-web/issues/9785.
-    const emptyVariation = char + VARIATION_SELECTOR;
-    return EMOJIBASE.find(e => e.unicode === char || e.unicode === emptyVariation);
-}
-
-/**
  * Returns the shortcode for an emoji character.
  *
  * @param {String} char The emoji character
  * @return {String} The shortcode (such as :thumbup:)
  */
 export function unicodeToShortcode(char) {
-    const data = findEmojiData(char);
+    const data = getEmojiFromUnicode(char);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
 
@@ -105,7 +87,7 @@ export function unicodeToShortcode(char) {
  */
 export function shortcodeToUnicode(shortcode) {
     shortcode = shortcode.slice(1, shortcode.length - 1);
-    const data = EMOJIBASE.find(e => e.shortcodes && e.shortcodes.includes(shortcode));
+    const data = SHORTCODE_TO_EMOJI.get(shortcode);
     return data ? data.unicode : null;
 }
 
@@ -177,7 +159,7 @@ const transformTags = { // custom to matrix
                 delete attribs.target;
             }
         }
-        attribs.rel = 'noopener'; // https://mathiasbynens.github.io/rel-noopener/
+        attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
     'img': function(tagName, attribs) {
@@ -394,6 +376,7 @@ class TextHighlighter extends BaseHighlighter {
  * opts.stripReplyFallback: optional argument specifying the event is a reply and so fallback needs removing
  * opts.returnString: return an HTML string rather than JSX elements
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
+ * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
 export function bodyToHtml(content, highlights, opts={}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
@@ -463,7 +446,8 @@ export function bodyToHtml(content, highlights, opts={}) {
                     // their username. Permalinks (links in pills) can be any URL
                     // now, so we just check for an HTTP-looking thing.
                     (
-                        content.formatted_body == undefined ||
+                        strippedBody === safeBody || // replies have the html fallbacks, account for that here
+                        content.formatted_body === undefined ||
                         (!content.formatted_body.includes("http:") &&
                         !content.formatted_body.includes("https:"))
                     );
@@ -476,18 +460,19 @@ export function bodyToHtml(content, highlights, opts={}) {
     });
 
     return isDisplayedWithHtml ?
-        <span key="body" className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span key="body" className={className} dir="auto">{ strippedBody }</span>;
+        <span key="body" ref={opts.ref} className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
+        <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
 }
 
 /**
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
- * @param {string} str
- * @returns {string}
+ * @param {string} str string to linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
+ * @returns {string} Linkified string
  */
-export function linkifyString(str) {
-    return _linkifyString(str);
+export function linkifyString(str, options = linkifyMatrix.options) {
+    return _linkifyString(str, options);
 }
 
 /**
@@ -505,10 +490,11 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml) {
-    return sanitizeHtml(linkifyString(dirtyHtml), sanitizeHtmlParams);
+export function linkifyAndSanitizeHtml(dirtyHtml, options = linkifyMatrix.options) {
+    return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
 
 /**

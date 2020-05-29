@@ -18,16 +18,16 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { linkifyElement } from '../../../HtmlUtils';
+import { AllHtmlEntities } from 'html-entities';
+import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
+import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
 
-const sdk = require('../../../index');
-const MatrixClientPeg = require('../../../MatrixClientPeg');
-const ImageUtils = require('../../../ImageUtils');
-const Modal = require('../../../Modal');
-
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'LinkPreviewWidget',
 
     propTypes: {
@@ -43,7 +43,8 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this.unmounted = false;
         MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
             if (this.unmounted) {
@@ -127,15 +128,19 @@ module.exports = createReactClass({
                   </div>;
         }
 
+        // The description includes &-encoded HTML entities, we decode those as React treats the thing as an
+        // opaque string. This does not allow any HTML to be injected into the DOM.
+        const description = AllHtmlEntities.decode(p["og:description"] || "");
+
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
             <div className="mx_LinkPreviewWidget" >
                 { img }
                 <div className="mx_LinkPreviewWidget_caption">
-                    <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noopener">{ p["og:title"] }</a></div>
+                    <div className="mx_LinkPreviewWidget_title"><a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a></div>
                     <div className="mx_LinkPreviewWidget_siteName">{ p["og:site_name"] ? (" - " + p["og:site_name"]) : null }</div>
                     <div className="mx_LinkPreviewWidget_description" ref={this._description}>
-                        { p["og:description"] }
+                        { description }
                     </div>
                 </div>
                 <AccessibleButton className="mx_LinkPreviewWidget_cancel" onClick={this.props.onCancelClick} aria-label={_t("Close preview")}>

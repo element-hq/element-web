@@ -18,13 +18,15 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
+import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
+import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 
 function ComposerAvatar(props) {
@@ -133,13 +135,24 @@ class UploadButton extends React.Component {
         roomId: PropTypes.string.isRequired,
     }
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
         this._uploadInput = createRef();
+        this._dispatcherRef = dis.register(this.onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    onAction = payload => {
+        if (payload.action === "upload_file") {
+            this.onUploadClick();
+        }
+    };
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
@@ -153,7 +166,7 @@ class UploadButton extends React.Component {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        // (Note it is a FileList: we can't use slice or sensible iteration).
         const tfiles = [];
         for (let i = 0; i < ev.target.files.length; ++i) {
             tfiles.push(ev.target.files[i]);
@@ -191,10 +204,9 @@ class UploadButton extends React.Component {
 }
 
 export default class MessageComposer extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onInputStateChanged = this.onInputStateChanged.bind(this);
-        this.onEvent = this.onEvent.bind(this);
         this._onRoomStateEvents = this._onRoomStateEvents.bind(this);
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
@@ -204,15 +216,11 @@ export default class MessageComposer extends React.Component {
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
             canSendMessages: this.props.room.maySendMessage(),
+            showCallButtons: SettingsStore.getValue("showCallButtonsInComposer"),
         };
     }
 
     componentDidMount() {
-        // N.B. using 'event' rather than 'RoomEvents' otherwise the crypto handler
-        // for 'event' fires *after* 'RoomEvent', and our room won't have yet been
-        // marked as encrypted.
-        // XXX: fragile as all hell - fixme somehow, perhaps with a dedicated Room.encryption event or something.
-        MatrixClientPeg.get().on("event", this.onEvent);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
@@ -236,19 +244,11 @@ export default class MessageComposer extends React.Component {
 
     componentWillUnmount() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("event", this.onEvent);
             MatrixClientPeg.get().removeListener("RoomState.events", this._onRoomStateEvents);
         }
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
-    }
-
-    onEvent(event) {
-        if (event.getType() !== 'm.room.encryption') return;
-        if (event.getRoomId() !== this.props.room.roomId) return;
-        // TODO: put (encryption state??) in state
-        this.forceUpdate();
     }
 
     _onRoomStateEvents(ev, state) {
@@ -308,18 +308,33 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        const roomIsEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
-        if (this.state.isQuoting) {
-            if (roomIsEncrypted) {
-                return _t('Send an encrypted reply…');
+        if (SettingsStore.getValue("feature_cross_signing")) {
+            if (this.state.isQuoting) {
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted reply…');
+                } else {
+                    return _t('Send a reply…');
+                }
             } else {
-                return _t('Send a reply (unencrypted)…');
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted message…');
+                } else {
+                    return _t('Send a message…');
+                }
             }
         } else {
-            if (roomIsEncrypted) {
-                return _t('Send an encrypted message…');
+            if (this.state.isQuoting) {
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted reply…');
+                } else {
+                    return _t('Send a reply (unencrypted)…');
+                }
             } else {
-                return _t('Send a message (unencrypted)…');
+                if (this.props.e2eStatus) {
+                    return _t('Send an encrypted message…');
+                } else {
+                    return _t('Send a message (unencrypted)…');
+                }
             }
         }
     }
@@ -354,12 +369,22 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator} />,
-                <EmojiButton key='stickerpicker_controls_button' addEmoji={this.addEmoji} />,
+                <EmojiButton key="stickerpicker_controls_button" addEmoji={this.addEmoji} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
-                callInProgress ? <HangupButton key="controls_hangup" roomId={this.props.room.roomId} /> : null,
-                callInProgress ? null : <CallButton key="controls_call" roomId={this.props.room.roomId} />,
-                callInProgress ? null : <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
             );
+
+            if (this.state.showCallButtons) {
+                if (callInProgress) {
+                    controls.push(
+                        <HangupButton key="controls_hangup" roomId={this.props.room.roomId} />,
+                    );
+                } else {
+                    controls.push(
+                        <CallButton key="controls_call" roomId={this.props.room.roomId} />,
+                        <VideoCallButton key="controls_videocall" roomId={this.props.room.roomId} />,
+                    );
+                }
+            }
         } else if (this.state.tombstone) {
             const replacementRoomId = this.state.tombstone.getContent()['replacement_room'];
 
@@ -372,7 +397,7 @@ export default class MessageComposer extends React.Component {
                 </a>
             ) : '';
 
-            controls.push(<div className="mx_MessageComposer_replaced_wrapper">
+            controls.push(<div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
                 <div className="mx_MessageComposer_replaced_valign">
                     <img className="mx_MessageComposer_roomReplaced_icon" src={require("../../../../res/img/room_replaced.svg")} />
                     <span className="mx_MessageComposer_roomReplaced_header">
@@ -390,7 +415,7 @@ export default class MessageComposer extends React.Component {
         }
 
         return (
-            <div className="mx_MessageComposer">
+            <div className="mx_MessageComposer mx_GroupLayout">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }

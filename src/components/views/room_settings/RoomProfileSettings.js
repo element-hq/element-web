@@ -17,9 +17,9 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import sdk from "../../../index";
+import * as sdk from "../../../index";
 
 // TODO: Merge with ProfileSettings?
 export default class RoomProfileSettings extends React.Component {
@@ -98,6 +98,8 @@ export default class RoomProfileSettings extends React.Component {
             newState.avatarUrl = client.mxcUrlToHttp(uri, 96, 96, 'crop', false);
             newState.originalAvatarUrl = newState.avatarUrl;
             newState.avatarFile = null;
+        } else if (this.state.originalAvatarUrl !== this.state.avatarUrl) {
+            await client.sendStateEvent(this.props.roomId, 'm.room.avatar', {url: undefined}, '');
         }
 
         if (this.state.originalTopic !== this.state.topic) {
@@ -153,7 +155,7 @@ export default class RoomProfileSettings extends React.Component {
                        onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
                     <div className="mx_ProfileSettings_controls">
-                        <Field id="profileDisplayName" label={_t("Room Name")}
+                        <Field label={_t("Room Name")}
                                type="text" value={this.state.displayName} autoComplete="off"
                                onChange={this._onDisplayNameChanged} disabled={!this.state.canSetName} />
                         <Field id="profileTopic" label={_t("Room Topic")} disabled={!this.state.canSetTopic}

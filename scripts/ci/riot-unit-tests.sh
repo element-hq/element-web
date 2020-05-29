@@ -6,9 +6,7 @@
 
 set -ev
 
-RIOT_WEB_DIR=riot-web
-
-scripts/ci/build.sh
-pushd "$RIOT_WEB_DIR"
+scripts/ci/layered-riot-web.sh
+cd ../riot-web
+yarn build:genfiles # so the tests can run. Faster version of `build`
 yarn test
-popd

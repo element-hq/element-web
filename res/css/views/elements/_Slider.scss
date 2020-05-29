@@ -1,0 +1,99 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_Slider {
+    position: relative;
+    margin: 0px;
+    flex-grow: 1;
+}
+
+.mx_Slider_dotContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.mx_Slider_bar {
+    display: flex;
+    box-sizing: border-box;
+    position: absolute;
+    height: 1em;
+    width: 100%;
+    padding: 0 0.5em; // half the width of a dot.
+    align-items: center;
+}
+
+.mx_Slider_bar > hr {
+    width: 100%;
+    height: 0.4em;
+    background-color: $slider-background-color;
+    border: 0;
+}
+
+.mx_Slider_selection {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 1em); // 2 * half the width of a dot
+    height: 1em;
+    position: absolute;
+    pointer-events: none;
+}
+
+.mx_Slider_selectionDot {
+    position: absolute;
+    width: 1.1em;
+    height: 1.1em;
+    background-color: $slider-selection-color;
+    border-radius: 50%;
+    box-shadow: 0 0 6px lightgrey;
+    z-index: 10;
+}
+
+.mx_Slider_selection > hr {
+    margin: 0;
+    border: 0.2em solid $slider-selection-color;
+}
+
+.mx_Slider_dot {
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    background-color: $slider-background-color;
+    z-index: 0;
+}
+
+.mx_Slider_dotActive {
+    background-color: $slider-selection-color;
+}
+
+.mx_Slider_dotValue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: $slider-background-color;
+}
+
+// The following is a hack to center the labels without adding
+// any width to the slider's dots.
+.mx_Slider_labelContainer {
+    width: 1em;
+}
+
+.mx_Slider_label {
+    position: relative;
+    width: fit-content;
+    left: -50%;
+}

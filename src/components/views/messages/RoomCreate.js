@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,12 +19,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomCreate',
 
     propTypes: {

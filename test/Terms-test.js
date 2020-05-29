@@ -14,15 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import expect from 'expect';
-
-import sinon from 'sinon';
-
 import * as Matrix from 'matrix-js-sdk';
 
 import { startTermsFlow, Service } from '../src/Terms';
 import { stubClient } from './test-utils';
-import MatrixClientPeg from '../src/MatrixClientPeg';
+import {MatrixClientPeg} from '../src/MatrixClientPeg';
 
 const POLICY_ONE = {
     version: "six",
@@ -44,107 +40,100 @@ const IM_SERVICE_ONE = new Service(Matrix.SERVICE_TYPES.IM, 'https://imone.test'
 const IM_SERVICE_TWO = new Service(Matrix.SERVICE_TYPES.IM, 'https://imtwo.test', 'a token token');
 
 describe('Terms', function() {
-    let sandbox;
-
     beforeEach(function() {
-        sandbox = stubClient();
-    });
-
-    afterEach(function() {
-        sandbox.restore();
+        stubClient();
     });
 
     it('should prompt for all terms & services if no account data', async function() {
-        MatrixClientPeg.get().getAccountData = sinon.stub().returns(null);
-        MatrixClientPeg.get().getTerms = sinon.stub().returns({
+        MatrixClientPeg.get().getAccountData = jest.fn().mockReturnValue(null);
+        MatrixClientPeg.get().getTerms = jest.fn().mockReturnValue({
             policies: {
                 "policy_the_first": POLICY_ONE,
             },
         });
-        const interactionCallback = sinon.stub().resolves([]);
+        const interactionCallback = jest.fn().mockResolvedValue([]);
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
-        console.log("interaction callback calls", interactionCallback.getCall(0));
+        console.log("interaction callback calls", interactionCallback.mock.calls[0]);
 
-        expect(interactionCallback.calledWith([
+        expect(interactionCallback).toBeCalledWith([
             {
                 service: IM_SERVICE_ONE,
                 policies: {
                     policy_the_first: POLICY_ONE,
                 },
             },
-        ])).toBeTruthy();
+        ], []);
     });
 
     it('should not prompt if all policies are signed in account data', async function() {
-        MatrixClientPeg.get().getAccountData = sinon.stub().returns({
-            getContent: sinon.stub().returns({
+        MatrixClientPeg.get().getAccountData = jest.fn().mockReturnValue({
+            getContent: jest.fn().mockReturnValue({
                 accepted: ["http://example.com/one"],
             }),
         });
-        MatrixClientPeg.get().getTerms = sinon.stub().returns({
+        MatrixClientPeg.get().getTerms = jest.fn().mockReturnValue({
             policies: {
                 "policy_the_first": POLICY_ONE,
             },
         });
-        MatrixClientPeg.get().agreeToTerms = sinon.stub();
+        MatrixClientPeg.get().agreeToTerms = jest.fn();
 
-        const interactionCallback = sinon.spy();
+        const interactionCallback = jest.fn();
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
-        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.getCall(0).args);
+        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.mock.calls[0]);
 
-        expect(interactionCallback.called).toBeFalsy();
-        expect(MatrixClientPeg.get().agreeToTerms.calledWith(
+        expect(interactionCallback).not.toHaveBeenCalled();
+        expect(MatrixClientPeg.get().agreeToTerms).toBeCalledWith(
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
             ["http://example.com/one"],
-        )).toBeTruthy();
+        );
     });
 
     it("should prompt for only terms that aren't already signed", async function() {
-        MatrixClientPeg.get().getAccountData = sinon.stub().returns({
-            getContent: sinon.stub().returns({
+        MatrixClientPeg.get().getAccountData = jest.fn().mockReturnValue({
+            getContent: jest.fn().mockReturnValue({
                 accepted: ["http://example.com/one"],
             }),
         });
-        MatrixClientPeg.get().getTerms = sinon.stub().returns({
+        MatrixClientPeg.get().getTerms = jest.fn().mockReturnValue({
             policies: {
                 "policy_the_first": POLICY_ONE,
                 "policy_the_second": POLICY_TWO,
             },
         });
-        MatrixClientPeg.get().agreeToTerms = sinon.stub();
+        MatrixClientPeg.get().agreeToTerms = jest.fn();
 
-        const interactionCallback = sinon.stub().resolves(["http://example.com/one", "http://example.com/two"]);
+        const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow([IM_SERVICE_ONE], interactionCallback);
-        console.log("interactionCallback call", interactionCallback.getCall(0).args);
-        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.getCall(0).args);
+        console.log("interactionCallback call", interactionCallback.mock.calls[0]);
+        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.mock.calls[0]);
 
-        expect(interactionCallback.calledWith([
+        expect(interactionCallback).toBeCalledWith([
             {
                 service: IM_SERVICE_ONE,
                 policies: {
                     policy_the_second: POLICY_TWO,
                 },
             },
-        ])).toBeTruthy();
-        expect(MatrixClientPeg.get().agreeToTerms.calledWith(
+        ], ["http://example.com/one"]);
+        expect(MatrixClientPeg.get().agreeToTerms).toBeCalledWith(
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
             ["http://example.com/one", "http://example.com/two"],
-        )).toBeTruthy();
+        );
     });
 
     it("should prompt for only services with un-agreed policies", async function() {
-        MatrixClientPeg.get().getAccountData = sinon.stub().returns({
-            getContent: sinon.stub().returns({
+        MatrixClientPeg.get().getAccountData = jest.fn().mockReturnValue({
+            getContent: jest.fn().mockReturnValue({
                 accepted: ["http://example.com/one"],
             }),
         });
 
-        MatrixClientPeg.get().getTerms = sinon.stub();
-        MatrixClientPeg.get().getTerms.callsFake((serviceType, baseUrl, accessToken) => {
+        MatrixClientPeg.get().getTerms = jest.fn((serviceType, baseUrl, accessToken) => {
             switch (baseUrl) {
                 case 'https://imone.test':
                     return {
@@ -161,35 +150,35 @@ describe('Terms', function() {
             }
         });
 
-        MatrixClientPeg.get().agreeToTerms = sinon.stub();
+        MatrixClientPeg.get().agreeToTerms = jest.fn();
 
-        const interactionCallback = sinon.stub().resolves(["http://example.com/one", "http://example.com/two"]);
+        const interactionCallback = jest.fn().mockResolvedValue(["http://example.com/one", "http://example.com/two"]);
         await startTermsFlow([IM_SERVICE_ONE, IM_SERVICE_TWO], interactionCallback);
-        console.log("getTerms call 0", MatrixClientPeg.get().getTerms.getCall(0).args);
-        console.log("getTerms call 1", MatrixClientPeg.get().getTerms.getCall(1).args);
-        console.log("interactionCallback call", interactionCallback.getCall(0).args);
-        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.getCall(0).args);
+        console.log("getTerms call 0", MatrixClientPeg.get().getTerms.mock.calls[0]);
+        console.log("getTerms call 1", MatrixClientPeg.get().getTerms.mock.calls[1]);
+        console.log("interactionCallback call", interactionCallback.mock.calls[0]);
+        console.log("agreeToTerms call", MatrixClientPeg.get().agreeToTerms.mock.calls[0]);
 
-        expect(interactionCallback.calledWith([
+        expect(interactionCallback).toBeCalledWith([
             {
                 service: IM_SERVICE_TWO,
                 policies: {
                     policy_the_second: POLICY_TWO,
                 },
             },
-        ])).toBeTruthy();
-        expect(MatrixClientPeg.get().agreeToTerms.calledWith(
+        ], ["http://example.com/one"]);
+        expect(MatrixClientPeg.get().agreeToTerms).toBeCalledWith(
             Matrix.SERVICE_TYPES.IM,
             'https://imone.test',
             'a token token',
             ["http://example.com/one"],
-        )).toBeTruthy();
-        expect(MatrixClientPeg.get().agreeToTerms.calledWith(
+        );
+        expect(MatrixClientPeg.get().agreeToTerms).toBeCalledWith(
             Matrix.SERVICE_TYPES.IM,
             'https://imtwo.test',
             'a token token',
             ["http://example.com/two"],
-        )).toBeTruthy();
+        );
     });
 });
 

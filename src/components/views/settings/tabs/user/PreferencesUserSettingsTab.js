@@ -21,18 +21,24 @@ import {SettingLevel} from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
+    static ROOM_LIST_SETTINGS = [
+        'RoomList.orderAlphabetically',
+        'RoomList.orderByImportance',
+        'breadcrumbs',
+    ];
+
     static COMPOSER_SETTINGS = [
-        'useCiderComposer',
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.suggestEmoji',
         'sendTypingNotifications',
     ];
 
     static TIMELINE_SETTINGS = [
+        'showTypingNotifications',
         'autoplayGifsAndVideos',
         'urlPreviewsEnabled',
         'TextualBody.enableBigEmoji',
@@ -45,11 +51,6 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
-    ];
-
-    static ROOM_LIST_SETTINGS = [
-        'RoomList.orderByImportance',
-        'breadcrumbs',
     ];
 
     static ADVANCED_SETTINGS = [
@@ -80,7 +81,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();
@@ -171,35 +172,39 @@ export default class PreferencesUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Preferences")}</div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                </div>
+
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Composer")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.COMPOSER_SETTINGS)}
+                </div>
 
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Timeline")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.TIMELINE_SETTINGS)}
+                </div>
 
-                    <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
-
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
                     {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
                     <Field
-                        id={"autocompleteDelay"}
                         label={_t('Autocomplete delay (ms)')}
                         type='number'
                         value={this.state.autocompleteDelay}
                         onChange={this._onAutocompleteDelayChange} />
                     <Field
-                        id={"readMarkerInViewThresholdMs"}
                         label={_t('Read Marker lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerInViewThresholdMs}
                         onChange={this._onReadMarkerInViewThresholdMs} />
                     <Field
-                        id={"readMarkerOutOfViewThresholdMs"}
                         label={_t('Read Marker off-screen lifetime (ms)')}
                         type='number'
                         value={this.state.readMarkerOutOfViewThresholdMs}

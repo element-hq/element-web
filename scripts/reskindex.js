@@ -2,24 +2,26 @@
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
-var args = require('optimist').argv;
+var args = require('minimist')(process.argv);
 var chokidar = require('chokidar');
 
 var componentIndex = path.join('src', 'component-index.js');
 var componentIndexTmp = componentIndex+".tmp";
 var componentsDir = path.join('src', 'components');
-var componentGlob = '**/*.js';
+var componentJsGlob = '**/*.js';
+var componentTsGlob = '**/*.tsx';
 var prevFiles = [];
 
 function reskindex() {
-    var files = glob.sync(componentGlob, {cwd: componentsDir}).sort();
+    var jsFiles = glob.sync(componentJsGlob, {cwd: componentsDir}).sort();
+    var tsFiles = glob.sync(componentTsGlob, {cwd: componentsDir}).sort();
+    var files = [...tsFiles, ...jsFiles];
     if (!filesHaveChanged(files, prevFiles)) {
         return;
     }
     prevFiles = files;
 
     var header = args.h || args.header;
-    var packageJson = JSON.parse(fs.readFileSync('./package.json'));
 
     var strm = fs.createWriteStream(componentIndexTmp);
 
@@ -34,22 +36,10 @@ function reskindex() {
     strm.write(" * so you'd just be trying to swim upstream like a salmon.\n");
     strm.write(" * You are not a salmon.\n");
     strm.write(" */\n\n");
-
-    if (packageJson['matrix-react-parent']) {
-        const parentIndex = packageJson['matrix-react-parent'] +
-              '/lib/component-index';
-        strm.write(
-`let components = require('${parentIndex}').components;
-if (!components) {
-    throw new Error("'${parentIndex}' didn't export components");
-}
-`);
-    } else {
-        strm.write("let components = {};\n");
-    }
+    strm.write("let components = {};\n");
 
     for (var i = 0; i < files.length; ++i) {
-        var file = files[i].replace('.js', '');
+        var file = files[i].replace('.js', '').replace('.tsx', '');
 
         var moduleName = (file.replace(/\//g, '.'));
         var importName = moduleName.replace(/\./g, "$");
@@ -92,7 +82,7 @@ if (!args.w) {
 }
 
 var watchDebouncer = null;
-chokidar.watch(path.join(componentsDir, componentGlob)).on('all', (event, path) => {
+chokidar.watch(path.join(componentsDir, componentJsGlob)).on('all', (event, path) => {
     if (path === componentIndex) return;
     if (watchDebouncer) clearTimeout(watchDebouncer);
     watchDebouncer = setTimeout(reskindex, 1000);

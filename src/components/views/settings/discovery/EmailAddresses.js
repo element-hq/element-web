@@ -19,8 +19,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
-import sdk from '../../../../index';
+import {MatrixClientPeg} from "../../../../MatrixClientPeg";
+import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
 
@@ -58,7 +58,8 @@ export class EmailAddress extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         const { bound } = nextProps.email;
         this.setState({ bound });
     }

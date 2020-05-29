@@ -19,13 +19,14 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import filesize from 'filesize';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {decryptFile} from '../../../utils/DecryptFile';
 import Tinter from '../../../Tinter';
 import request from 'browser-request';
 import Modal from '../../../Modal';
+import AccessibleButton from "../elements/AccessibleButton";
 
 
 // A cached tinted copy of require("../../../../res/img/download.svg")
@@ -93,84 +94,6 @@ Tinter.registerTintable(updateTintedDownloadImage);
 // The downside of using a second domain is that it complicates hosting,
 // the downside of using a sandboxed iframe is that the browers are overly
 // restrictive in what you are allowed to do with the generated URL.
-//
-// For now given how unusable the blobs generated in sandboxed iframes are we
-// default to using a renderer hosted on "usercontent.riot.im". This is
-// overridable so that people running their own version of the client can
-// choose a different renderer.
-//
-// To that end the current version of the blob generation is the following
-// html:
-//
-//      <html><head><script>
-//      var params = window.location.search.substring(1).split('&');
-//      var lockOrigin;
-//      for (var i = 0; i < params.length; ++i) {
-//          var parts = params[i].split('=');
-//          if (parts[0] == 'origin') lockOrigin = decodeURIComponent(parts[1]);
-//      }
-//      window.onmessage=function(e){
-//          if (lockOrigin === undefined || e.origin === lockOrigin) eval("("+e.data.code+")")(e);
-//      }
-//      </script></head><body></body></html>
-//
-// This waits to receive a message event sent using the window.postMessage API.
-// When it receives the event it evals a javascript function in data.code and
-// runs the function passing the event as an argument. This version adds
-// support for a query parameter controlling the origin from which messages
-// will be processed as an extra layer of security (note that the default URL
-// is still 'v1' since it is backwards compatible).
-//
-// In particular it means that the rendering function can be written as a
-// ordinary javascript function which then is turned into a string using
-// toString().
-//
-const DEFAULT_CROSS_ORIGIN_RENDERER = "https://usercontent.riot.im/v1.html";
-
-/**
- * Render the attachment inside the iframe.
- * We can't use imported libraries here so this has to be vanilla JS.
- */
-function remoteRender(event) {
-    const data = event.data;
-
-    const img = document.createElement("img");
-    img.id = "img";
-    img.src = data.imgSrc;
-
-    const a = document.createElement("a");
-    a.id = "a";
-    a.rel = data.rel;
-    a.target = data.target;
-    a.download = data.download;
-    a.style = data.style;
-    a.style.fontFamily = "Arial, Helvetica, Sans-Serif";
-    a.href = window.URL.createObjectURL(data.blob);
-    a.appendChild(img);
-    a.appendChild(document.createTextNode(data.textContent));
-
-    const body = document.body;
-    // Don't display scrollbars if the link takes more than one line
-    // to display.
-    body.style = "margin: 0px; overflow: hidden";
-    body.appendChild(a);
-}
-
-/**
- * Update the tint inside the iframe.
- * We can't use imported libraries here so this has to be vanilla JS.
- */
-function remoteSetTint(event) {
-    const data = event.data;
-
-    const img = document.getElementById("img");
-    img.src = data.imgSrc;
-    img.style = data.imgStyle;
-
-    const a = document.getElementById("a");
-    a.style = data.style;
-}
-
 
 /**
  * Get the current CSS style for a DOMElement.
@@ -194,7 +117,7 @@ function computedStyle(element) {
     return cssText;
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MFileBody',
 
     getInitialState: function() {
@@ -212,10 +135,6 @@ module.exports = createReactClass({
         onHeightChanged: PropTypes.func,
         /* the shape of the tile, used */
         tileShape: PropTypes.string,
-    },
-
-    contextTypes: {
-        appConfig: PropTypes.object,
     },
 
     /**
@@ -251,6 +170,7 @@ module.exports = createReactClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url);
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._iframe = createRef();
         this._dummyLink = createRef();
@@ -286,7 +206,6 @@ module.exports = createReactClass({
             // will be inside the iframe so we wont be able to update
             // it directly.
             this._iframe.current.contentWindow.postMessage({
-                code: remoteSetTint.toString(),
                 imgSrc: tintedDownloadImageURL,
                 style: computedStyle(this._dummyLink.current),
             }, "*");
@@ -309,7 +228,7 @@ module.exports = createReactClass({
                 // Wait for the user to click on the link before downloading
                 // and decrypting the attachment.
                 let decrypting = false;
-                const decrypt = () => {
+                const decrypt = (e) => {
                     if (decrypting) {
                         return false;
                     }
@@ -326,16 +245,17 @@ module.exports = createReactClass({
                         });
                     }).finally(() => {
                         decrypting = false;
-                        return;
                     });
                 };
 
+                // This button should actually Download because usercontent/ will try to click itself
+                // but it is not guaranteed between various browsers' settings.
                 return (
                     <span className="mx_MFileBody">
                         <div className="mx_MFileBody_download">
-                            <a href="javascript:void(0)" onClick={decrypt}>
+                            <AccessibleButton onClick={decrypt}>
                                 { _t("Decrypt %(text)s", { text: text }) }
-                            </a>
+                            </AccessibleButton>
                         </div>
                     </span>
                 );
@@ -344,7 +264,6 @@ module.exports = createReactClass({
             // When the iframe loads we tell it to render a download link
             const onIframeLoad = (ev) => {
                 ev.target.contentWindow.postMessage({
-                    code: remoteRender.toString(),
                     imgSrc: tintedDownloadImageURL,
                     style: computedStyle(this._dummyLink.current),
                     blob: this.state.decryptedBlob,
@@ -352,18 +271,15 @@ module.exports = createReactClass({
                     // will have the correct name when the user tries to download it.
                     // We can't provide a Content-Disposition header like we would for HTTP.
                     download: fileName,
-                    rel: "noopener",
-                    target: "_blank",
                     textContent: _t("Download %(text)s", { text: text }),
+                    // only auto-download if a user triggered this iframe explicitly
+                    auto: !this.props.decryptedBlob,
                 }, "*");
             };
 
-            // If the attachment is encryped then put the link inside an iframe.
-            let renderer_url = DEFAULT_CROSS_ORIGIN_RENDERER;
-            if (this.context.appConfig && this.context.appConfig.cross_origin_renderer_url) {
-                renderer_url = this.context.appConfig.cross_origin_renderer_url;
-            }
-            renderer_url += "?origin=" + encodeURIComponent(window.location.origin);
+            const url = "usercontent/"; // XXX: this path should probably be passed from the skin
+
+            // If the attachment is encrypted then put the link inside an iframe.
             return (
                 <span className="mx_MFileBody">
                     <div className="mx_MFileBody_download">
@@ -375,14 +291,18 @@ module.exports = createReactClass({
                               */ }
                             <a ref={this._dummyLink} />
                         </div>
-                        <iframe src={renderer_url} onLoad={onIframeLoad} ref={this._iframe} />
+                        <iframe
+                            src={`${url}?origin=${encodeURIComponent(window.location.origin)}`}
+                            onLoad={onIframeLoad}
+                            ref={this._iframe}
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
                     </div>
                 </span>
             );
         } else if (contentUrl) {
             const downloadProps = {
                 target: "_blank",
-                rel: "noopener",
+                rel: "noreferrer noopener",
 
                 // We set the href regardless of whether or not we intercept the download
                 // because we don't really want to convert the file to a blob eagerly, and

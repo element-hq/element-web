@@ -16,6 +16,7 @@ $room-highlight-color: #343a46;
 // typical text (dark-on-white in light skin)
 $primary-fg-color: $text-primary-color;
 $primary-bg-color: $bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
 
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
@@ -146,6 +147,9 @@ $button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
 $button-link-fg-color: $accent-color;
 $button-link-bg-color: transparent;
 
+// Toggle switch
+$togglesw-off-color: $room-highlight-color;
+
 $visual-bell-bg-color: #800;
 
 $room-warning-bg-color: $header-panel-bg-color;
@@ -164,6 +168,8 @@ $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 $reaction-row-button-selected-border-color: $accent-color;
 
+$kbd-border-color: #000000;
+
 $tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
@@ -171,6 +177,11 @@ $interactive-tooltip-bg-color: $base-color;
 $interactive-tooltip-fg-color: #ffffff;
 
 $breadcrumb-placeholder-bg-color: #272c35;
+
+$user-tile-hover-bg-color: $header-panel-bg-color;
+
+// FontSlider colors
+$font-slider-bg-color: $room-highlight-color;
 
 // ***** Mixins! *****
 
@@ -180,7 +191,7 @@ $breadcrumb-placeholder-bg-color: #272c35;
     border: 0px;
     border-radius: 4px;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $button-fg-color;
     background-color: $button-bg-color;
     width: auto;
@@ -216,10 +227,6 @@ $breadcrumb-placeholder-bg-color: #272c35;
     filter: invert(1);
 }
 
-.gm-scrollbar .thumb {
-    filter: invert(1);
-}
-
 // markdown overrides:
 .mx_EventTile_content .markdown-body pre:hover {
     border-color: #808080 !important; // inverted due to rules below
@@ -242,4 +249,14 @@ $breadcrumb-placeholder-bg-color: #272c35;
             background-color: #080808;
         }
     }
+}
+
+// diff highlight colors
+// intentionally swapped to avoid inversion
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
 }

@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {Key} from "../../../Keyboard";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'EditableText',
 
     propTypes: {
@@ -62,7 +62,8 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.value = nextProps.initialValue;
             if (this._editable_div.current) {
@@ -71,7 +72,8 @@ module.exports = createReactClass({
         }
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // we track value as an JS object field rather than in React state
         // as React doesn't play nice with contentEditable.
         this.value = '';

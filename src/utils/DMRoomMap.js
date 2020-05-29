@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from '../MatrixClientPeg';
+import {MatrixClientPeg} from '../MatrixClientPeg';
 import _uniq from 'lodash/uniq';
+import {Room} from "matrix-js-sdk/src/matrix";
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map
@@ -122,6 +124,27 @@ export default class DMRoomMap {
         return this._getUserToRooms()[userId] || [];
     }
 
+    /**
+     * Gets the DM room which the given IDs share, if any.
+     * @param {string[]} ids The identifiers (user IDs and email addresses) to look for.
+     * @returns {Room} The DM room which all IDs given share, or falsey if no common room.
+     */
+    getDMRoomForIdentifiers(ids) {
+        // TODO: [Canonical DMs] Handle lookups for email addresses.
+        // For now we'll pretend we only get user IDs and end up returning nothing for email addresses
+
+        let commonRooms = this.getDMRoomsForUserId(ids[0]);
+        for (let i = 1; i < ids.length; i++) {
+            const userRooms = this.getDMRoomsForUserId(ids[i]);
+            commonRooms = commonRooms.filter(r => userRooms.includes(r));
+        }
+
+        const joinedRooms = commonRooms.map(r => MatrixClientPeg.get().getRoom(r))
+            .filter(r => r && r.getMyMembership() === 'join');
+
+        return joinedRooms[0];
+    }
+
     getUserIdForRoomId(roomId) {
         if (this.roomToUser == null) {
             // we lazily populate roomToUser so you can use
@@ -142,6 +165,14 @@ export default class DMRoomMap {
             }
         }
         return this.roomToUser[roomId];
+    }
+
+    getUniqueRoomsWithIndividuals(): {[userId: string]: Room} {
+        if (!this.roomToUser) return {}; // No rooms means no map.
+        return Object.keys(this.roomToUser)
+            .map(r => ({userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r)}))
+            .filter(r => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)
+            .reduce((obj, r) => (obj[r.userId] = r.room) && obj, {});
     }
 
     _getUserToRooms() {

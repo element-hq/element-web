@@ -18,21 +18,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
+import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import {MatrixClient} from "matrix-js-sdk";
-import dis from "../../../../../dispatcher";
-import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
+import dis from "../../../../../dispatcher/dispatcher";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 export default class GeneralRoomSettingsTab extends React.Component {
-    static childContextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
-
     static propTypes = {
         roomId: PropTypes.string.isRequired,
     };
+
+    static contextType = MatrixClientContext;
 
     constructor() {
         super();
@@ -41,32 +37,6 @@ export default class GeneralRoomSettingsTab extends React.Component {
             isRoomPublished: false, // loaded async
         };
     }
-
-    getChildContext() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    }
-
-    componentWillMount() {
-        MatrixClientPeg.get().getRoomDirectoryVisibility(this.props.roomId).then((result => {
-            this.setState({isRoomPublished: result.visibility === 'public'});
-        }));
-    }
-
-    onRoomPublishChange = (e) => {
-        const valueBefore = this.state.isRoomPublished;
-        const newValue = !valueBefore;
-        this.setState({isRoomPublished: newValue});
-
-        MatrixClientPeg.get().setRoomDirectoryVisibility(
-            this.props.roomId,
-            newValue ? 'public' : 'private',
-        ).catch(() => {
-            // Roll back the local echo on the change
-            this.setState({isRoomPublished: valueBefore});
-        });
-    };
 
     _onLeaveClick = () => {
         dis.dispatch({
@@ -80,11 +50,10 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const RelatedGroupSettings = sdk.getComponent("room_settings.RelatedGroupSettings");
         const UrlPreviewSettings = sdk.getComponent("room_settings.UrlPreviewSettings");
 
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
         const canSetAliases = true; // Previously, we arbitrarily only allowed admins to do this
-        const canActuallySetAliases = room.currentState.mayClientSendStateEvent("m.room.aliases", client);
         const canSetCanonical = room.currentState.mayClientSendStateEvent("m.room.canonical_alias", client);
         const canonicalAliasEv = room.currentState.getStateEvents("m.room.canonical_alias", '');
         const aliasEvents = room.currentState.getStateEvents("m.room.aliases");
@@ -99,21 +68,13 @@ export default class GeneralRoomSettingsTab extends React.Component {
                     <RoomProfileSettings roomId={this.props.roomId} />
                 </div>
 
-                <span className='mx_SettingsTab_subheading'>{_t("Room Addresses")}</span>
+                <div className="mx_SettingsTab_heading">{_t("Room Addresses")}</div>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <AliasSettings roomId={this.props.roomId}
                                    canSetCanonicalAlias={canSetCanonical} canSetAliases={canSetAliases}
                                    canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
                 </div>
-                <div className='mx_SettingsTab_section'>
-                    <LabelledToggleSwitch value={this.state.isRoomPublished}
-                                          onChange={this.onRoomPublishChange}
-                                          disabled={!canActuallySetAliases}
-                                          label={_t("Publish this room to the public in %(domain)s's room directory?", {
-                                              domain: client.getDomain(),
-                                          })} />
-                </div>
-
+                <div className="mx_SettingsTab_heading">{_t("Other")}</div>
                 <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
                 <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
                     <RelatedGroupSettings roomId={room.roomId}

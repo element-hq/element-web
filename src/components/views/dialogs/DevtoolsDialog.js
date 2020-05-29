@@ -14,25 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import { Room } from "matrix-js-sdk";
 import Field from "../elements/Field";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {useEventEmitter} from "../../../hooks/useEventEmitter";
 
-class DevtoolsComponent extends React.Component {
-    static contextTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
-}
+import {
+    PHASE_UNSENT,
+    PHASE_REQUESTED,
+    PHASE_READY,
+    PHASE_DONE,
+    PHASE_STARTED,
+    PHASE_CANCELLED,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
-class GenericEditor extends DevtoolsComponent {
+class GenericEditor extends React.PureComponent {
     // static propTypes = {onBack: PropTypes.func.isRequired};
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this._onChange = this._onChange.bind(this);
         this.onBack = this.onBack.bind(this);
     }
@@ -67,12 +72,15 @@ class SendCustomEvent extends GenericEditor {
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
         forceStateEvent: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
         this._send = this._send.bind(this);
 
         const {eventType, stateKey, evContent} = Object.assign({
@@ -91,11 +99,11 @@ class SendCustomEvent extends GenericEditor {
     }
 
     send(content) {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         if (this.state.isStateEvent) {
-            return cli.sendStateEvent(this.context.roomId, this.state.eventType, content, this.state.stateKey);
+            return cli.sendStateEvent(this.props.room.roomId, this.state.eventType, content, this.state.stateKey);
         } else {
-            return cli.sendEvent(this.context.roomId, this.state.eventType, content);
+            return cli.sendEvent(this.props.room.roomId, this.state.eventType, content);
         }
     }
 
@@ -154,13 +162,16 @@ class SendAccountData extends GenericEditor {
     static getLabel() { return _t('Send Account Data'); }
 
     static propTypes = {
+        room: PropTypes.instanceOf(Room).isRequired,
         isRoomAccountData: PropTypes.bool,
         forceMode: PropTypes.bool,
         inputs: PropTypes.object,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
         this._send = this._send.bind(this);
 
         const {eventType, evContent} = Object.assign({
@@ -177,9 +188,9 @@ class SendAccountData extends GenericEditor {
     }
 
     send(content) {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         if (this.state.isRoomAccountData) {
-            return cli.setRoomAccountData(this.context.roomId, this.state.eventType, content);
+            return cli.setRoomAccountData(this.props.room.roomId, this.state.eventType, content);
         }
         return cli.setAccountData(this.state.eventType, content);
     }
@@ -234,7 +245,7 @@ class SendAccountData extends GenericEditor {
 const INITIAL_LOAD_TILES = 20;
 const LOAD_TILES_STEP_SIZE = 50;
 
-class FilteredList extends React.Component {
+class FilteredList extends React.PureComponent {
     static propTypes = {
         children: PropTypes.any,
         query: PropTypes.string,
@@ -247,8 +258,8 @@ class FilteredList extends React.Component {
         return children.filter((child) => child.key.toLowerCase().includes(lcQuery));
     }
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             filteredChildren: FilteredList.filterChildren(this.props.children, this.props.query),
@@ -256,7 +267,8 @@ class FilteredList extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         if (this.props.children === nextProps.children && this.props.query === nextProps.query) return;
         this.setState({
             filteredChildren: FilteredList.filterChildren(nextProps.children, nextProps.query),
@@ -291,7 +303,7 @@ class FilteredList extends React.Component {
     render() {
         const TruncatedList = sdk.getComponent("elements.TruncatedList");
         return <div>
-            <Field id="DevtoolsDialog_FilteredList_filter" label={_t('Filter results')} autoFocus={true} size={64}
+            <Field label={_t('Filter results')} autoFocus={true} size={64}
                    type="text" autoComplete="off" value={this.props.query} onChange={this.onQuery}
                    className="mx_TextInputDialog_input mx_DevTools_RoomStateExplorer_query"
                    // force re-render so that autoFocus is applied when this component is re-used
@@ -305,19 +317,20 @@ class FilteredList extends React.Component {
     }
 }
 
-class RoomStateExplorer extends DevtoolsComponent {
+class RoomStateExplorer extends React.PureComponent {
     static getLabel() { return _t('Explore Room State'); }
-
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
 
-        const room = MatrixClientPeg.get().getRoom(this.context.roomId);
-        this.roomStateEvents = room.currentState.events;
+    constructor(props) {
+        super(props);
+
+        this.roomStateEvents = this.props.room.currentState.events;
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
@@ -373,7 +386,7 @@ class RoomStateExplorer extends DevtoolsComponent {
     render() {
         if (this.state.event) {
             if (this.state.editing) {
-                return <SendCustomEvent forceStateEvent={true} onBack={this.onBack} inputs={{
+                return <SendCustomEvent room={this.props.room} forceStateEvent={true} onBack={this.onBack} inputs={{
                     eventType: this.state.event.getType(),
                     evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
                     stateKey: this.state.event.getStateKey(),
@@ -442,15 +455,18 @@ class RoomStateExplorer extends DevtoolsComponent {
     }
 }
 
-class AccountDataExplorer extends DevtoolsComponent {
+class AccountDataExplorer extends React.PureComponent {
     static getLabel() { return _t('Explore Account Data'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
+
+    constructor(props) {
+        super(props);
 
         this.onBack = this.onBack.bind(this);
         this.editEv = this.editEv.bind(this);
@@ -467,11 +483,10 @@ class AccountDataExplorer extends DevtoolsComponent {
     }
 
     getData() {
-        const cli = MatrixClientPeg.get();
         if (this.state.isRoomAccountData) {
-            return cli.getRoom(this.context.roomId).accountData;
+            return this.props.room.accountData;
         }
-        return cli.store.accountData;
+        return this.context.store.accountData;
     }
 
     onViewSourceClick(event) {
@@ -505,10 +520,14 @@ class AccountDataExplorer extends DevtoolsComponent {
     render() {
         if (this.state.event) {
             if (this.state.editing) {
-                return <SendAccountData isRoomAccountData={this.state.isRoomAccountData} onBack={this.onBack} inputs={{
-                    eventType: this.state.event.getType(),
-                    evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
-                }} forceMode={true} />;
+                return <SendAccountData
+                    room={this.props.room}
+                    isRoomAccountData={this.state.isRoomAccountData}
+                    onBack={this.onBack}
+                    inputs={{
+                        eventType: this.state.event.getType(),
+                        evContent: JSON.stringify(this.state.event.getContent(), null, '\t'),
+                    }} forceMode={true} />;
             }
 
             return <div className="mx_ViewSource">
@@ -553,17 +572,20 @@ class AccountDataExplorer extends DevtoolsComponent {
     }
 }
 
-class ServersInRoomList extends DevtoolsComponent {
+class ServersInRoomList extends React.PureComponent {
     static getLabel() { return _t('View Servers in Room'); }
 
     static propTypes = {
         onBack: PropTypes.func.isRequired,
+        room: PropTypes.instanceOf(Room).isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    static contextType = MatrixClientContext;
 
-        const room = MatrixClientPeg.get().getRoom(this.context.roomId);
+    constructor(props) {
+        super(props);
+
+        const room = this.props.room;
         const servers = new Set();
         room.currentState.getStateEvents("m.room.member").forEach(ev => servers.add(ev.getSender().split(":")[1]));
         this.servers = Array.from(servers).map(s =>
@@ -594,27 +616,110 @@ class ServersInRoomList extends DevtoolsComponent {
     }
 }
 
+const PHASE_MAP = {
+    [PHASE_UNSENT]: "unsent",
+    [PHASE_REQUESTED]: "requested",
+    [PHASE_READY]: "ready",
+    [PHASE_DONE]: "done",
+    [PHASE_STARTED]: "started",
+    [PHASE_CANCELLED]: "cancelled",
+};
+
+function VerificationRequest({txnId, request}) {
+    const [, updateState] = useState();
+    const [timeout, setRequestTimeout] = useState(request.timeout);
+
+    /* Re-render if something changes state */
+    useEventEmitter(request, "change", updateState);
+
+    /* Keep re-rendering if there's a timeout */
+    useEffect(() => {
+        if (request.timeout == 0) return;
+
+        /* Note that request.timeout is a getter, so its value changes */
+        const id = setInterval(() => {
+           setRequestTimeout(request.timeout);
+        }, 500);
+
+        return () => { clearInterval(id); };
+    }, [request]);
+
+    return (<div className="mx_DevTools_VerificationRequest">
+        <dl>
+            <dt>Transaction</dt>
+            <dd>{txnId}</dd>
+            <dt>Phase</dt>
+            <dd>{PHASE_MAP[request.phase] || request.phase}</dd>
+            <dt>Timeout</dt>
+            <dd>{Math.floor(timeout / 1000)}</dd>
+            <dt>Methods</dt>
+            <dd>{request.methods && request.methods.join(", ")}</dd>
+            <dt>requestingUserId</dt>
+            <dd>{request.requestingUserId}</dd>
+            <dt>observeOnly</dt>
+            <dd>{JSON.stringify(request.observeOnly)}</dd>
+        </dl>
+    </div>);
+}
+
+class VerificationExplorer extends React.Component {
+    static getLabel() {
+        return _t("Verification Requests");
+    }
+
+    /* Ensure this.context is the cli */
+    static contextType = MatrixClientContext;
+
+    onNewRequest = () => {
+        this.forceUpdate();
+    }
+
+    componentDidMount() {
+        const cli = this.context;
+        cli.on("crypto.verification.request", this.onNewRequest);
+    }
+
+    componentWillUnmount() {
+        const cli = this.context;
+        cli.off("crypto.verification.request", this.onNewRequest);
+    }
+
+    render() {
+        const cli = this.context;
+        const room = this.props.room;
+        const inRoomChannel = cli._crypto._inRoomVerificationRequests;
+        const inRoomRequests = (inRoomChannel._requestsByRoomId || new Map()).get(room.roomId) || new Map();
+
+        return (<div>
+            <div className="mx_Dialog_content">
+                {Array.from(inRoomRequests.entries()).reverse().map(([txnId, request]) =>
+                    <VerificationRequest txnId={txnId} request={request} key={txnId} />,
+                )}
+            </div>
+            <div className="mx_Dialog_buttons">
+                <button onClick={this.props.onBack}>{_t("Back")}</button>
+            </div>
+        </div>);
+    }
+}
+
 const Entries = [
     SendCustomEvent,
     RoomStateExplorer,
     SendAccountData,
     AccountDataExplorer,
     ServersInRoomList,
+    VerificationExplorer,
 ];
 
-export default class DevtoolsDialog extends React.Component {
-    static childContextTypes = {
-        roomId: PropTypes.string.isRequired,
-        // client: PropTypes.instanceOf(MatixClient),
-    };
-
+export default class DevtoolsDialog extends React.PureComponent {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
         onFinished: PropTypes.func.isRequired,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.onBack = this.onBack.bind(this);
         this.onCancel = this.onCancel.bind(this);
 
@@ -625,10 +730,6 @@ export default class DevtoolsDialog extends React.Component {
 
     componentWillUnmount() {
         this._unmounted = true;
-    }
-
-    getChildContext() {
-        return { roomId: this.props.roomId };
     }
 
     _setMode(mode) {
@@ -654,15 +755,17 @@ export default class DevtoolsDialog extends React.Component {
         let body;
 
         if (this.state.mode) {
-            body = <div>
-                <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
-                <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
-                <div className="mx_DevTools_label_bottom" />
-                <this.state.mode onBack={this.onBack} />
-            </div>;
+            body = <MatrixClientContext.Consumer>
+                {(cli) => <React.Fragment>
+                    <div className="mx_DevTools_label_left">{ this.state.mode.getLabel() }</div>
+                    <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
+                    <div className="mx_DevTools_label_bottom" />
+                    <this.state.mode onBack={this.onBack} room={cli.getRoom(this.props.roomId)} />
+                </React.Fragment>}
+            </MatrixClientContext.Consumer>;
         } else {
             const classes = "mx_DevTools_RoomStateExplorer_button";
-            body = <div>
+            body = <React.Fragment>
                 <div>
                     <div className="mx_DevTools_label_left">{ _t('Toolbox') }</div>
                     <div className="mx_DevTools_label_right">Room ID: { this.props.roomId }</div>
@@ -679,7 +782,7 @@ export default class DevtoolsDialog extends React.Component {
                 <div className="mx_Dialog_buttons">
                     <button onClick={this.onCancel}>{ _t('Cancel') }</button>
                 </div>
-            </div>;
+            </React.Fragment>;
         }
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');

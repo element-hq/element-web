@@ -1,7 +1,7 @@
-const React = require('react');
-const ReactDom = require('react-dom');
+import React from "react";
+import ReactDom from "react-dom";
+import Velocity from "velocity-animate";
 import PropTypes from 'prop-types';
-const Velocity = require('velocity-animate');
 
 /**
  * The Velociraptor contains components and animates transitions with velocity.

@@ -58,10 +58,6 @@ var USERNAME_RULE = {
 
 
 describe("ContentRules", function() {
-    beforeEach(function() {
-        test_utils.beforeEach(this);
-    });
-
     describe("parseContentRules", function() {
         it("should handle there being no keyword rules", function() {
             var rules = { 'global': { 'content': [

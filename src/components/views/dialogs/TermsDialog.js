@@ -17,7 +17,7 @@ limitations under the License.
 import url from 'url';
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, pickBestLanguage } from '../../../languageHandler';
 
 import Matrix from 'matrix-js-sdk';
@@ -135,7 +135,7 @@ export default class TermsDialog extends React.PureComponent {
                 rows.push(<tr key={termDoc[termsLang].url}>
                     <td className="mx_TermsDialog_service">{serviceName}</td>
                     <td className="mx_TermsDialog_summary">{summary}</td>
-                    <td>{termDoc[termsLang].name} <a rel="noopener" target="_blank" href={termDoc[termsLang].url}>
+                    <td>{termDoc[termsLang].name} <a rel="noreferrer noopener" target="_blank" href={termDoc[termsLang].url}>
                         <span className="mx_TermsDialog_link" />
                     </a></td>
                     <td><TermsCheckbox

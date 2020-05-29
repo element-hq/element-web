@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import WhoIsTyping from '../../../WhoIsTyping';
+import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'WhoIsTypingTile',
 
     propTypes: {
@@ -54,7 +54,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on("RoomMember.typing", this.onRoomMemberTyping);
         MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
     },
@@ -213,7 +213,7 @@ module.exports = createReactClass({
         }
 
         return (
-            <li className="mx_WhoIsTypingTile">
+            <li className="mx_WhoIsTypingTile" aria-atomic="true">
                 <div className="mx_WhoIsTypingTile_avatars">
                     { this._renderTypingIndicatorAvatars(usersTyping, this.props.whoIsTypingLimit) }
                 </div>

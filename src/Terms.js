@@ -16,8 +16,8 @@ limitations under the License.
 
 import classNames from 'classnames';
 
-import MatrixClientPeg from './MatrixClientPeg';
-import sdk from './';
+import {MatrixClientPeg} from './MatrixClientPeg';
+import * as sdk from './';
 import Modal from './Modal';
 
 export class TermsNotSignedError extends Error {}

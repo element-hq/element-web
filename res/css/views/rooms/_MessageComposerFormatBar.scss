@@ -97,13 +97,13 @@ limitations under the License.
 
 .mx_MessageComposerFormatBar_buttonTooltip {
     white-space: nowrap;
-    font-size: 13px;
+    font-size: $font-13px;
     font-weight: 600;
     min-width: 54px;
     text-align: center;
 
     .mx_MessageComposerFormatBar_tooltipShortcut {
-        font-size: 9px;
+        font-size: $font-9px;
         opacity: 0.7;
     }
 }

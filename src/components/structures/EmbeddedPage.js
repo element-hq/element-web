@@ -23,11 +23,11 @@ import PropTypes from 'prop-types';
 import request from 'browser-request';
 import { _t } from '../../languageHandler';
 import sanitizeHtml from 'sanitize-html';
-import sdk from '../../index';
-import dis from '../../dispatcher';
-import MatrixClientPeg from '../../MatrixClientPeg';
-import { MatrixClient } from 'matrix-js-sdk';
+import dis from '../../dispatcher/dispatcher';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 import classnames from 'classnames';
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "./AutoHideScrollbar";
 
 export default class EmbeddedPage extends React.PureComponent {
     static propTypes = {
@@ -37,11 +37,11 @@ export default class EmbeddedPage extends React.PureComponent {
         className: PropTypes.string,
         // Whether to wrap the page in a scrollbar
         scrollbar: PropTypes.bool,
+        // Map of keys to replace with values, e.g {$placeholder: "value"}
+        replaceMap: PropTypes.object,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    };
+    static contextType = MatrixClientContext;
 
     constructor(props) {
         super(props);
@@ -58,7 +58,7 @@ export default class EmbeddedPage extends React.PureComponent {
         return sanitizeHtml(_t(s));
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
 
         if (!this.props.url) {
@@ -83,6 +83,13 @@ export default class EmbeddedPage extends React.PureComponent {
                 }
 
                 body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1)=>this.translate(g1));
+
+                if (this.props.replaceMap) {
+                    Object.keys(this.props.replaceMap).forEach(key => {
+                        body = body.split(key).join(this.props.replaceMap[key]);
+                    });
+                }
+
                 this.setState({ page: body });
             },
         );
@@ -104,7 +111,7 @@ export default class EmbeddedPage extends React.PureComponent {
 
     render() {
         // HACK: Workaround for the context's MatrixClient not updating.
-        const client = this.context.matrixClient || MatrixClientPeg.get();
+        const client = this.context || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;
         const className = this.props.className;
         const classes = classnames({
@@ -119,10 +126,9 @@ export default class EmbeddedPage extends React.PureComponent {
         </div>;
 
         if (this.props.scrollbar) {
-            const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
-            return <GeminiScrollbarWrapper autoshow={true} className={classes}>
+            return <AutoHideScrollbar className={classes}>
                 {content}
-            </GeminiScrollbarWrapper>;
+            </AutoHideScrollbar>;
         } else {
             return <div className={classes}>
                 {content}

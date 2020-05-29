@@ -1,6 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,18 +19,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import classNames from "classnames";
-
+import E2EIcon from './E2EIcon';
 
 const PRESENCE_CLASS = {
     "offline": "mx_EntityTile_offline",
     "online": "mx_EntityTile_online",
     "unavailable": "mx_EntityTile_unavailable",
 };
-
 
 function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     if (showPresence === false) {
@@ -69,6 +69,7 @@ const EntityTile = createReactClass({
         suppressOnHover: PropTypes.bool,
         showPresence: PropTypes.bool,
         subtextLabel: PropTypes.string,
+        e2eStatus: PropTypes.string,
     },
 
     getDefaultProps: function() {
@@ -156,23 +157,26 @@ const EntityTile = createReactClass({
             );
         }
 
-        let power;
+        let powerLabel;
         const powerStatus = this.props.powerStatus;
         if (powerStatus) {
-            const src = {
-                [EntityTile.POWER_STATUS_MODERATOR]: require("../../../../res/img/mod.svg"),
-                [EntityTile.POWER_STATUS_ADMIN]: require("../../../../res/img/admin.svg"),
-            }[powerStatus];
-            const alt = {
-                [EntityTile.POWER_STATUS_MODERATOR]: _t("Moderator"),
+            const powerText = {
+                [EntityTile.POWER_STATUS_MODERATOR]: _t("Mod"),
                 [EntityTile.POWER_STATUS_ADMIN]: _t("Admin"),
             }[powerStatus];
-            power = <img src={src} className="mx_EntityTile_power" width="16" height="17" alt={alt} />;
+            powerLabel = <div className="mx_EntityTile_power">{powerText}</div>;
+        }
+
+        let e2eIcon;
+        const { e2eStatus } = this.props;
+        if (e2eStatus) {
+            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} />;
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
-        const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
+        const av = this.props.avatarJsx ||
+            <BaseAvatar name={this.props.name} width={36} height={36} aria-hidden="true" />;
 
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (
@@ -181,9 +185,10 @@ const EntityTile = createReactClass({
                                   onClick={this.props.onClick}>
                     <div className="mx_EntityTile_avatar">
                         { av }
-                        { power }
+                        { e2eIcon }
                     </div>
                     { nameEl }
+                    { powerLabel }
                     { inviteButton }
                 </AccessibleButton>
             </div>
@@ -193,6 +198,5 @@ const EntityTile = createReactClass({
 
 EntityTile.POWER_STATUS_MODERATOR = "moderator";
 EntityTile.POWER_STATUS_ADMIN = "admin";
-
 
 export default EntityTile;

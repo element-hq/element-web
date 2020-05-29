@@ -1,3 +1,1821 @@
+Changes in [2.6.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.6.1) (2020-05-22)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.6.0...v2.6.1)
+
+ * Fix key backup restore with SSSS
+   [\#4617](https://github.com/matrix-org/matrix-react-sdk/pull/4617)
+ * Remove SSSS key upgrade check from rageshake
+   [\#4616](https://github.com/matrix-org/matrix-react-sdk/pull/4616)
+
+Changes in [2.6.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.6.0) (2020-05-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.6.0-rc.1...v2.6.0)
+
+ * Upgrade to JS SDK 6.1.0
+ * Revert "ImageView make clicking off it easier"
+   [\#4602](https://github.com/matrix-org/matrix-react-sdk/pull/4602)
+ * Remove debugging that causes email addresses to load forever (to release)
+   [\#4598](https://github.com/matrix-org/matrix-react-sdk/pull/4598)
+
+Changes in [2.6.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.6.0-rc.1) (2020-05-14)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0...v2.6.0-rc.1)
+
+ * Upgrade to JS SDK 6.1.0-rc.1
+ * Update from Weblate
+   [\#4596](https://github.com/matrix-org/matrix-react-sdk/pull/4596)
+ * Fix message edits dialog being wrong and sometimes crashing
+   [\#4595](https://github.com/matrix-org/matrix-react-sdk/pull/4595)
+ * Acquire a new session before enacting deactivation
+   [\#4584](https://github.com/matrix-org/matrix-react-sdk/pull/4584)
+ * Remove UI for upgrading 4S to symmetric encryption
+   [\#4581](https://github.com/matrix-org/matrix-react-sdk/pull/4581)
+ * Add copy to SSO prompts during cross-signing setup
+   [\#4555](https://github.com/matrix-org/matrix-react-sdk/pull/4555)
+ * Re-fix OpenID requests from widgets
+   [\#4592](https://github.com/matrix-org/matrix-react-sdk/pull/4592)
+ * Fix persistent widgets on desktop / http
+   [\#4591](https://github.com/matrix-org/matrix-react-sdk/pull/4591)
+ * Updated link and added:Yarn two is not yet used.
+   [\#4589](https://github.com/matrix-org/matrix-react-sdk/pull/4589)
+ * Fix topic dialog not supporting escape as it didn't have a "Close"
+   [\#4578](https://github.com/matrix-org/matrix-react-sdk/pull/4578)
+ * Default to public room when creating room from room directory
+   [\#4579](https://github.com/matrix-org/matrix-react-sdk/pull/4579)
+ * Replace png flags and add Kosovo to country code dropdown
+   [\#4576](https://github.com/matrix-org/matrix-react-sdk/pull/4576)
+ * Rename `trash (custom).svg` as electron doesn't like paths with spaces
+   [\#4583](https://github.com/matrix-org/matrix-react-sdk/pull/4583)
+ * Fix sign in / up links on previewed rooms
+   [\#4582](https://github.com/matrix-org/matrix-react-sdk/pull/4582)
+ * Avoid soft crash if unknown device in verification
+   [\#4580](https://github.com/matrix-org/matrix-react-sdk/pull/4580)
+ * Add slash commands /query and /msg to match IRC
+   [\#4568](https://github.com/matrix-org/matrix-react-sdk/pull/4568)
+ * Send cross-signing debug booleans over rageshake
+   [\#4570](https://github.com/matrix-org/matrix-react-sdk/pull/4570)
+ * Prompt user to specify an alternate server if theirs has registration off
+   [\#4575](https://github.com/matrix-org/matrix-react-sdk/pull/4575)
+ * Don't try and redact redactions for "Remove recent messages"
+   [\#4573](https://github.com/matrix-org/matrix-react-sdk/pull/4573)
+ * View Source should target the replacing event rather than the root one
+   [\#4571](https://github.com/matrix-org/matrix-react-sdk/pull/4571)
+ * Fix passphrase reset in key backup restore dialog
+   [\#4569](https://github.com/matrix-org/matrix-react-sdk/pull/4569)
+ * Ensure key backup gets dealt with correctly during secret storage reset
+   [\#4556](https://github.com/matrix-org/matrix-react-sdk/pull/4556)
+ * Fix crash for broken invites
+   [\#4565](https://github.com/matrix-org/matrix-react-sdk/pull/4565)
+ * Fix rageshake with no matrix client
+   [\#4572](https://github.com/matrix-org/matrix-react-sdk/pull/4572)
+ * Update from Weblate
+   [\#4567](https://github.com/matrix-org/matrix-react-sdk/pull/4567)
+ * Bring back UnknownBody for UISIs
+   [\#4564](https://github.com/matrix-org/matrix-react-sdk/pull/4564)
+ * clear tag panel selection if the community selected is left
+   [\#4559](https://github.com/matrix-org/matrix-react-sdk/pull/4559)
+ * Close ImageView when redacting
+   [\#4560](https://github.com/matrix-org/matrix-react-sdk/pull/4560)
+ * Redesign redactions
+   [\#4484](https://github.com/matrix-org/matrix-react-sdk/pull/4484)
+ * Don't try to reload profile information when closing the user panel
+   [\#4547](https://github.com/matrix-org/matrix-react-sdk/pull/4547)
+ * Fix right panel hiding when viewing room member
+   [\#4558](https://github.com/matrix-org/matrix-react-sdk/pull/4558)
+ * Don't erase password confirm on registration error
+   [\#4540](https://github.com/matrix-org/matrix-react-sdk/pull/4540)
+ * Add a loading state for email addresses/phone numbers in settings
+   [\#4557](https://github.com/matrix-org/matrix-react-sdk/pull/4557)
+ * set the meta tag for theme-color to the same theme css background
+   [\#4554](https://github.com/matrix-org/matrix-react-sdk/pull/4554)
+ * Update Invite Dialog copy to include email addresses
+   [\#4497](https://github.com/matrix-org/matrix-react-sdk/pull/4497)
+ * Fix slider toggle regression.
+   [\#4546](https://github.com/matrix-org/matrix-react-sdk/pull/4546)
+ * Fix a crash where a name could unexpectedly be an empty list
+   [\#4552](https://github.com/matrix-org/matrix-react-sdk/pull/4552)
+ * Solves communities can be dragged from context menu
+   [\#4492](https://github.com/matrix-org/matrix-react-sdk/pull/4492)
+ * Remove prefixes for composer avatar urls
+   [\#4553](https://github.com/matrix-org/matrix-react-sdk/pull/4553)
+ * Fix reply RR spacing getting doubled
+   [\#4541](https://github.com/matrix-org/matrix-react-sdk/pull/4541)
+ * Differentiate copy for own untrusted device dialog
+   [\#4549](https://github.com/matrix-org/matrix-react-sdk/pull/4549)
+ * EventIndex: Reduce the logging the event index is producing.
+   [\#4548](https://github.com/matrix-org/matrix-react-sdk/pull/4548)
+ * Increase rageshake size limit to 5mb
+   [\#4543](https://github.com/matrix-org/matrix-react-sdk/pull/4543)
+ * Update from Weblate
+   [\#4542](https://github.com/matrix-org/matrix-react-sdk/pull/4542)
+ * Guard against race when waiting for cross-signing to be ready
+   [\#4539](https://github.com/matrix-org/matrix-react-sdk/pull/4539)
+ * Wait for user to be verified in e2e setup
+   [\#4537](https://github.com/matrix-org/matrix-react-sdk/pull/4537)
+ * Convert MatrixChat to a TypeScript class
+   [\#4462](https://github.com/matrix-org/matrix-react-sdk/pull/4462)
+ * Mark room as read when escape is pressed
+   [\#4271](https://github.com/matrix-org/matrix-react-sdk/pull/4271)
+ * Only show key backup reminder when confirmed by server to be missing
+   [\#4534](https://github.com/matrix-org/matrix-react-sdk/pull/4534)
+ * Add device name to unverified session toast
+   [\#4535](https://github.com/matrix-org/matrix-react-sdk/pull/4535)
+ * Show progress when loading keys
+   [\#4507](https://github.com/matrix-org/matrix-react-sdk/pull/4507)
+ * Fix device verification toasts not disappearing
+   [\#4532](https://github.com/matrix-org/matrix-react-sdk/pull/4532)
+ * Update toast copy again
+   [\#4529](https://github.com/matrix-org/matrix-react-sdk/pull/4529)
+ * Re-apply theme after login
+   [\#4518](https://github.com/matrix-org/matrix-react-sdk/pull/4518)
+ * Reduce maximum width of toasts & allow multiple lines
+   [\#4525](https://github.com/matrix-org/matrix-react-sdk/pull/4525)
+ * Treat sessions that are there when we log in as old
+   [\#4524](https://github.com/matrix-org/matrix-react-sdk/pull/4524)
+ * Allow resetting storage from the access dialog
+   [\#4521](https://github.com/matrix-org/matrix-react-sdk/pull/4521)
+ * Update (bulk) unverified device toast copy
+   [\#4522](https://github.com/matrix-org/matrix-react-sdk/pull/4522)
+ * Make new device toasts appear above review toasts
+   [\#4519](https://github.com/matrix-org/matrix-react-sdk/pull/4519)
+ * Separate toasts for existing & new device verification
+   [\#4511](https://github.com/matrix-org/matrix-react-sdk/pull/4511)
+ * Slightly darker toggle off bg color
+   [\#4477](https://github.com/matrix-org/matrix-react-sdk/pull/4477)
+ * Fix pill vertical align
+   [\#4514](https://github.com/matrix-org/matrix-react-sdk/pull/4514)
+ * Fix set up encryption toast to use "set up" as action
+   [\#4502](https://github.com/matrix-org/matrix-react-sdk/pull/4502)
+ * Don't enable e2ee when inviting a 3pid
+   [\#4509](https://github.com/matrix-org/matrix-react-sdk/pull/4509)
+ * Fix internal link styling in Security Settings
+   [\#4510](https://github.com/matrix-org/matrix-react-sdk/pull/4510)
+ * Small custom theming fixes
+   [\#4508](https://github.com/matrix-org/matrix-react-sdk/pull/4508)
+ * Fix scaling issues
+   [\#4355](https://github.com/matrix-org/matrix-react-sdk/pull/4355)
+ * Aggregate device verify toasts
+   [\#4506](https://github.com/matrix-org/matrix-react-sdk/pull/4506)
+ * Support setting username and avatar colors in custom themes
+   [\#4503](https://github.com/matrix-org/matrix-react-sdk/pull/4503)
+ * only clear on continuations where the clear isn't done by SenderProfile
+   [\#4501](https://github.com/matrix-org/matrix-react-sdk/pull/4501)
+ * cap width of editable item list item to leave space for its X button
+   [\#4495](https://github.com/matrix-org/matrix-react-sdk/pull/4495)
+ * Add a link from settings / devices to your user profile
+   [\#4498](https://github.com/matrix-org/matrix-react-sdk/pull/4498)
+ * Update from Weblate
+   [\#4496](https://github.com/matrix-org/matrix-react-sdk/pull/4496)
+ * Make icon change in SetupEncryptionDialog
+   [\#4485](https://github.com/matrix-org/matrix-react-sdk/pull/4485)
+ * Remove invite only padlocks feature flag
+   [\#4487](https://github.com/matrix-org/matrix-react-sdk/pull/4487)
+ * Fix incorrect toast if security setup skipped
+   [\#4486](https://github.com/matrix-org/matrix-react-sdk/pull/4486)
+ * Revert "Update emojibase for fixed emoji codepoints and Emoji 13 support"
+   [\#4482](https://github.com/matrix-org/matrix-react-sdk/pull/4482)
+ * Fix widget URL templating (again)
+   [\#4481](https://github.com/matrix-org/matrix-react-sdk/pull/4481)
+ * Fix recovery link on login verification flow
+   [\#4479](https://github.com/matrix-org/matrix-react-sdk/pull/4479)
+ * Make avatars in pills occupy the entire space using cropping
+   [\#4476](https://github.com/matrix-org/matrix-react-sdk/pull/4476)
+ * Use WidgetType more often to avoid breaking new sticker pickers
+   [\#4458](https://github.com/matrix-org/matrix-react-sdk/pull/4458)
+ * Update logging for unmanaged widgets, and add TODO comments for other areas
+   [\#4460](https://github.com/matrix-org/matrix-react-sdk/pull/4460)
+ * Fix OpenID requests from widgets
+   [\#4459](https://github.com/matrix-org/matrix-react-sdk/pull/4459)
+ * Take encrypted message search out of labs
+   [\#4467](https://github.com/matrix-org/matrix-react-sdk/pull/4467)
+ * Fix BigEmoji for replies
+   [\#4475](https://github.com/matrix-org/matrix-react-sdk/pull/4475)
+ * Update login security copy and design to match Figma
+   [\#4472](https://github.com/matrix-org/matrix-react-sdk/pull/4472)
+ * Fix i18n of SSO UIA copy in Deactivate Account Dialog
+   [\#4471](https://github.com/matrix-org/matrix-react-sdk/pull/4471)
+ * Assert type of domNode as HTMLElement to fix build
+   [\#4470](https://github.com/matrix-org/matrix-react-sdk/pull/4470)
+ * Unignored in settings
+   [\#4466](https://github.com/matrix-org/matrix-react-sdk/pull/4466)
+ * Skip auth flow test for signing upload when password present
+   [\#4464](https://github.com/matrix-org/matrix-react-sdk/pull/4464)
+ * If user cannot set email during registration don't tell them to
+   [\#4461](https://github.com/matrix-org/matrix-react-sdk/pull/4461)
+ * Fix post-ts autocomplete, it is not null
+   [\#4463](https://github.com/matrix-org/matrix-react-sdk/pull/4463)
+ * Convert autocomplete stuff to TypeScript
+   [\#4452](https://github.com/matrix-org/matrix-react-sdk/pull/4452)
+ * Add a back button to the devtools verifications panel
+   [\#4455](https://github.com/matrix-org/matrix-react-sdk/pull/4455)
+ * Fix: wait until cross-signing keys are fetched to show verify button
+   [\#4456](https://github.com/matrix-org/matrix-react-sdk/pull/4456)
+ * Handle load error in create secret storage dialog
+   [\#4451](https://github.com/matrix-org/matrix-react-sdk/pull/4451)
+ * Allow iframes and Jitsi URLs in /addwidget
+   [\#4382](https://github.com/matrix-org/matrix-react-sdk/pull/4382)
+ * Support m.jitsi-typed widgets as Jitsi widgets
+   [\#4379](https://github.com/matrix-org/matrix-react-sdk/pull/4379)
+ * Don't recheck DeviceListener until after initial sync is finished
+   [\#4450](https://github.com/matrix-org/matrix-react-sdk/pull/4450)
+ * Fix CSS class in ButtonPlaceholder
+   [\#4449](https://github.com/matrix-org/matrix-react-sdk/pull/4449)
+ * Password Login make sure tab takes user to password field
+   [\#4441](https://github.com/matrix-org/matrix-react-sdk/pull/4441)
+ * Network Dropdown fix things not scrolling properly
+   [\#4439](https://github.com/matrix-org/matrix-react-sdk/pull/4439)
+ * ImageView make clicking off it easier
+   [\#4448](https://github.com/matrix-org/matrix-react-sdk/pull/4448)
+ * Add slash command to send a rageshake
+   [\#4443](https://github.com/matrix-org/matrix-react-sdk/pull/4443)
+ * EventIndex: Filter out events that don't have a propper content value.
+   [\#4446](https://github.com/matrix-org/matrix-react-sdk/pull/4446)
+ * Revert "Fix Filepanel scroll position state lost when room is changed"
+   [\#4445](https://github.com/matrix-org/matrix-react-sdk/pull/4445)
+ * Update seshat copy to remove trailing full stop
+   [\#4442](https://github.com/matrix-org/matrix-react-sdk/pull/4442)
+ * Fix Filepanel scroll position state lost when room is changed
+   [\#4388](https://github.com/matrix-org/matrix-react-sdk/pull/4388)
+ * Fix end-to-end tests for end-to-end encryption verification
+   [\#4436](https://github.com/matrix-org/matrix-react-sdk/pull/4436)
+ * Don't explode if the e2e test directory exists when crashing
+   [\#4437](https://github.com/matrix-org/matrix-react-sdk/pull/4437)
+ * Bump https-proxy-agent from 2.2.1 to 2.2.4 in /test/end-to-end-tests
+   [\#4430](https://github.com/matrix-org/matrix-react-sdk/pull/4430)
+ * Minor updates to e2e test instructions on Windows
+   [\#4432](https://github.com/matrix-org/matrix-react-sdk/pull/4432)
+ * Fix typo
+   [\#4435](https://github.com/matrix-org/matrix-react-sdk/pull/4435)
+ * Catch errors sooner so users can recover more easily
+   [\#4122](https://github.com/matrix-org/matrix-react-sdk/pull/4122)
+ * Rageshake: remind user of unsupported browser and send modernizr report
+   [\#4381](https://github.com/matrix-org/matrix-react-sdk/pull/4381)
+ * Design tweaks for DM Room Tiles
+   [\#4338](https://github.com/matrix-org/matrix-react-sdk/pull/4338)
+ * Don't break spills over multiple lines, ellipsis them at max-1-line
+   [\#4434](https://github.com/matrix-org/matrix-react-sdk/pull/4434)
+ * Turn the end-to-end tests back on and fix the lazy-loading tests
+   [\#4433](https://github.com/matrix-org/matrix-react-sdk/pull/4433)
+ * Fix key backup debug panel
+   [\#4431](https://github.com/matrix-org/matrix-react-sdk/pull/4431)
+ * Convert cross-signing feature flag to setting
+   [\#4416](https://github.com/matrix-org/matrix-react-sdk/pull/4416)
+ * Make RoomPublishSetting import-skinnable
+   [\#4428](https://github.com/matrix-org/matrix-react-sdk/pull/4428)
+ * Iterate cross-signing copy
+   [\#4425](https://github.com/matrix-org/matrix-react-sdk/pull/4425)
+ * Fix: ensure twemoji font is loaded when showing SAS emojis
+   [\#4422](https://github.com/matrix-org/matrix-react-sdk/pull/4422)
+ * Revert "Fix: load Twemoji before login so complete security gets the right
+   emojis during SAS"
+   [\#4421](https://github.com/matrix-org/matrix-react-sdk/pull/4421)
+ * Fix: load Twemoji before login so complete security gets the right emojis
+   during SAS
+   [\#4419](https://github.com/matrix-org/matrix-react-sdk/pull/4419)
+ * consolidate and fix copy to clipboard
+   [\#4410](https://github.com/matrix-org/matrix-react-sdk/pull/4410)
+ * Fix Message Context Menu options not displaying: block
+   [\#4418](https://github.com/matrix-org/matrix-react-sdk/pull/4418)
+ * Fix pills being broken by unescaped characters
+   [\#4411](https://github.com/matrix-org/matrix-react-sdk/pull/4411)
+
+Changes in [2.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0) (2020-05-05)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.6...v2.5.0)
+
+ * Upgrade to JS SDK 6.0.0
+ * EventIndex: Reduce the logging the event index is producing.
+   [\#4551](https://github.com/matrix-org/matrix-react-sdk/pull/4551)
+ *  Differentiate copy for own untrusted device dialog
+   [\#4550](https://github.com/matrix-org/matrix-react-sdk/pull/4550)
+ * More detailed progress for key backup progress
+   [\#4545](https://github.com/matrix-org/matrix-react-sdk/pull/4545)
+ *  Increase rageshake size limit to 5mb
+   [\#4544](https://github.com/matrix-org/matrix-react-sdk/pull/4544)
+
+Changes in [2.5.0-rc.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.6) (2020-05-01)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.5...v2.5.0-rc.6)
+
+ * Upgrade to JS SDK 6.0.0-rc.2
+ * Wait for user to be verified in e2e setup
+   [\#4538](https://github.com/matrix-org/matrix-react-sdk/pull/4538)
+ * Add device name to unverified session toast
+   [\#4536](https://github.com/matrix-org/matrix-react-sdk/pull/4536)
+
+Changes in [2.5.0-rc.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.5) (2020-04-30)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.4...v2.5.0-rc.5)
+
+ * Upgrade to JS SDK 6.0.0-rc.1
+ * Fix device verification toasts not disappearing
+   [\#4533](https://github.com/matrix-org/matrix-react-sdk/pull/4533)
+ * Allow resetting storage from the access dialog
+   [\#4526](https://github.com/matrix-org/matrix-react-sdk/pull/4526)
+ * Update toast copy again
+   [\#4530](https://github.com/matrix-org/matrix-react-sdk/pull/4530)
+ * Reduce maximum width of toasts & allow multiple lines
+   [\#4528](https://github.com/matrix-org/matrix-react-sdk/pull/4528)
+ * Treat sessions that are there when we log in as old
+   [\#4527](https://github.com/matrix-org/matrix-react-sdk/pull/4527)
+ * Update (bulk) unverified device toast copy
+   [\#4523](https://github.com/matrix-org/matrix-react-sdk/pull/4523)
+ * Make new device toasts appear above review toasts
+   [\#4520](https://github.com/matrix-org/matrix-react-sdk/pull/4520)
+ * Separate toasts for existing & new device verification
+   [\#4517](https://github.com/matrix-org/matrix-react-sdk/pull/4517)
+ * Aggregate device verify toasts
+   [\#4516](https://github.com/matrix-org/matrix-react-sdk/pull/4516)
+ * Fix set up encryption toast to use "set up" as action
+   [\#4515](https://github.com/matrix-org/matrix-react-sdk/pull/4515)
+ * Fix internal link styling in Security Settings
+   [\#4512](https://github.com/matrix-org/matrix-react-sdk/pull/4512)
+ *  Don't enable e2ee when inviting a 3pid
+   [\#4513](https://github.com/matrix-org/matrix-react-sdk/pull/4513)
+ * only clear on continuations where the clear isn't done by SenderProfile
+   [\#4505](https://github.com/matrix-org/matrix-react-sdk/pull/4505)
+ * cap width of editable item list item to leave space for its X button
+   [\#4504](https://github.com/matrix-org/matrix-react-sdk/pull/4504)
+ * Add a link from settings / devices to your user profile
+   [\#4499](https://github.com/matrix-org/matrix-react-sdk/pull/4499)
+ * Make icon change in SetupEncryptionDialog
+   [\#4490](https://github.com/matrix-org/matrix-react-sdk/pull/4490)
+ * Remove invite only padlocks feature flag for release
+   [\#4488](https://github.com/matrix-org/matrix-react-sdk/pull/4488)
+ * Fix incorrect toast if security setup skipped
+   [\#4489](https://github.com/matrix-org/matrix-react-sdk/pull/4489)
+ * Revert "Update emojibase for fixed emoji codepoints and Emoji 13 support"
+   [\#4483](https://github.com/matrix-org/matrix-react-sdk/pull/4483)
+ * Fix recovery link on login verification flow
+   [\#4480](https://github.com/matrix-org/matrix-react-sdk/pull/4480)
+
+Changes in [2.5.0-rc.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.4) (2020-04-23)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.3...v2.5.0-rc.4)
+
+ * Upgrade to JS SDK 5.3.1-rc.4
+ * Take encrypted message search out of labs for release
+   [\#4468](https://github.com/matrix-org/matrix-react-sdk/pull/4468)
+ * Update login security copy and design to match Figma [to release]
+   [\#4474](https://github.com/matrix-org/matrix-react-sdk/pull/4474)
+ * Fix i18n of SSO UIA copy in Deactivate Account Dialog on release
+   [\#4473](https://github.com/matrix-org/matrix-react-sdk/pull/4473)
+ * Skip auth flow test for signing upload when password present
+   [\#4465](https://github.com/matrix-org/matrix-react-sdk/pull/4465)
+ * Fix: wait until cross-signing keys are fetched to show verify button
+   [\#4457](https://github.com/matrix-org/matrix-react-sdk/pull/4457)
+ * Handle load error in create secret storage dialog
+   [\#4454](https://github.com/matrix-org/matrix-react-sdk/pull/4454)
+ * Don't recheck DeviceListener until after initial sync is finished
+   [\#4450](https://github.com/matrix-org/matrix-react-sdk/pull/4450)
+ * EventIndex: Filter out events that don't have a propper content value.
+   [\#4447](https://github.com/matrix-org/matrix-react-sdk/pull/4447)
+
+Changes in [2.5.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.3) (2020-04-17)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.2...v2.5.0-rc.3)
+
+ * Upgrade to JS SDK 5.3.1-rc.3
+
+Changes in [2.5.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.2) (2020-04-16)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.5.0-rc.1...v2.5.0-rc.2)
+
+ * Upgrade to JS SDK 5.3.1-rc.2
+ * [Release] Convert cross-signing flag to a setting
+   [\#4429](https://github.com/matrix-org/matrix-react-sdk/pull/4429)
+ * Iterate cross-signing copy
+   [\#4426](https://github.com/matrix-org/matrix-react-sdk/pull/4426)
+ * Fix: ensure twemoji font is loaded when showing SAS emojis
+   [\#4423](https://github.com/matrix-org/matrix-react-sdk/pull/4423)
+
+Changes in [2.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.5.0-rc.1) (2020-04-15)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.4.0-rc.1...v2.5.0-rc.1)
+
+ * Upgrade to JS SDK 5.3.1-rc.1
+ * null-guard MatrixClientPeg in RoomViewStore
+   [\#4415](https://github.com/matrix-org/matrix-react-sdk/pull/4415)
+ * Fix: prevent spurious notifications from indexer
+   [\#4414](https://github.com/matrix-org/matrix-react-sdk/pull/4414)
+ * Login block on initialSync with spinners
+   [\#4413](https://github.com/matrix-org/matrix-react-sdk/pull/4413)
+ * Allow network dropdown to be scrollable and fix context menu padding calc
+   [\#4408](https://github.com/matrix-org/matrix-react-sdk/pull/4408)
+ * Remove end-to-end message info option when cross-signing is used
+   [\#4412](https://github.com/matrix-org/matrix-react-sdk/pull/4412)
+ * Minimize widgets by default
+   [\#4378](https://github.com/matrix-org/matrix-react-sdk/pull/4378)
+ * Add comments to highlight where we'll need m.widget support
+   [\#4380](https://github.com/matrix-org/matrix-react-sdk/pull/4380)
+ * Fix: dont try to enable 4S if cross-signing is disabled
+   [\#4407](https://github.com/matrix-org/matrix-react-sdk/pull/4407)
+ * Fix: don't confuse user with spinner during complete security step
+   [\#4406](https://github.com/matrix-org/matrix-react-sdk/pull/4406)
+ *  Fix: avoid potential crash during certain verification paths
+   [\#4405](https://github.com/matrix-org/matrix-react-sdk/pull/4405)
+ * Add riot-desktop shortcuts for forward/back matching browsers&slack
+   [\#4392](https://github.com/matrix-org/matrix-react-sdk/pull/4392)
+ * Convert LoggedInView to an ES6 PureComponent Class & TypeScript
+   [\#4398](https://github.com/matrix-org/matrix-react-sdk/pull/4398)
+ * Fix width of MVideoBody in FilePanel
+   [\#4396](https://github.com/matrix-org/matrix-react-sdk/pull/4396)
+ * Remove unused react-addons-css-transition-group
+   [\#4397](https://github.com/matrix-org/matrix-react-sdk/pull/4397)
+ * Fix emoji tooltip flickering
+   [\#4395](https://github.com/matrix-org/matrix-react-sdk/pull/4395)
+ * Pass along key backup for bootstrap
+   [\#4374](https://github.com/matrix-org/matrix-react-sdk/pull/4374)
+ * Fix create room dialog e2ee private room setting
+   [\#4403](https://github.com/matrix-org/matrix-react-sdk/pull/4403)
+ * Sort emoji by shortcodes for autocomplete primarily for :-1 and :+1
+   [\#4391](https://github.com/matrix-org/matrix-react-sdk/pull/4391)
+ * Fix invalid commands when figuring out whether to set isTyping
+   [\#4390](https://github.com/matrix-org/matrix-react-sdk/pull/4390)
+ * op/deop return error if trying to affect an unknown user
+   [\#4389](https://github.com/matrix-org/matrix-react-sdk/pull/4389)
+ * Composer pills respect showPillAvatar setting
+   [\#4384](https://github.com/matrix-org/matrix-react-sdk/pull/4384)
+ * Only send typing notification when composing commands which send messages
+   [\#4385](https://github.com/matrix-org/matrix-react-sdk/pull/4385)
+ * Reverse order of they match/they don't match buttons
+   [\#4386](https://github.com/matrix-org/matrix-react-sdk/pull/4386)
+ * Use singular text on 'delete sessions' button for SSO
+   [\#4383](https://github.com/matrix-org/matrix-react-sdk/pull/4383)
+ * Pass widget data through from sticker picker
+   [\#4377](https://github.com/matrix-org/matrix-react-sdk/pull/4377)
+ * Obliterate widgets when they are minimized
+   [\#4376](https://github.com/matrix-org/matrix-react-sdk/pull/4376)
+ * Fix image thumbnail width when read receipts are hidden
+   [\#4370](https://github.com/matrix-org/matrix-react-sdk/pull/4370)
+ * Add toggle for e2ee when creating private room
+   [\#4362](https://github.com/matrix-org/matrix-react-sdk/pull/4362)
+ * Fix logging for failed searches
+   [\#4372](https://github.com/matrix-org/matrix-react-sdk/pull/4372)
+ * Ensure UI is updated when cross-signing gets disabled
+   [\#4369](https://github.com/matrix-org/matrix-react-sdk/pull/4369)
+ * Retry the request for the master key from SSSS on login
+   [\#4371](https://github.com/matrix-org/matrix-react-sdk/pull/4371)
+ * Upgrade deps
+   [\#4365](https://github.com/matrix-org/matrix-react-sdk/pull/4365)
+ * App load tweaks, i18n and localStorage
+   [\#4367](https://github.com/matrix-org/matrix-react-sdk/pull/4367)
+ * Fix encoding of widget arguments
+   [\#4366](https://github.com/matrix-org/matrix-react-sdk/pull/4366)
+
+Changes in [2.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.4.0-rc.1) (2020-04-08)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.3.1...v2.4.0-rc.1)
+
+ * Upgrade to JS SDK to 5.3.0-rc.1
+ * EventIndex: Log if we had all events in a checkpoint but are continuing.
+   [\#4363](https://github.com/matrix-org/matrix-react-sdk/pull/4363)
+ * Update from Weblate
+   [\#4364](https://github.com/matrix-org/matrix-react-sdk/pull/4364)
+ * Support deactivating your account with SSO
+   [\#4356](https://github.com/matrix-org/matrix-react-sdk/pull/4356)
+ * Add debug status for cached backup key format
+   [\#4359](https://github.com/matrix-org/matrix-react-sdk/pull/4359)
+ * Fix composer placeholder not updating
+   [\#4361](https://github.com/matrix-org/matrix-react-sdk/pull/4361)
+ * Fix sas verification buttons to match figma
+   [\#4358](https://github.com/matrix-org/matrix-react-sdk/pull/4358)
+ * Don't show fallback text for verification requests
+   [\#4345](https://github.com/matrix-org/matrix-react-sdk/pull/4345)
+ * Fix share dialog correctly
+   [\#4360](https://github.com/matrix-org/matrix-react-sdk/pull/4360)
+ * Use singular copy when only deleting one device
+   [\#4357](https://github.com/matrix-org/matrix-react-sdk/pull/4357)
+ * Deem m.sticker events as actionable for reacting
+   [\#4288](https://github.com/matrix-org/matrix-react-sdk/pull/4288)
+ * Don't show spinner over encryption setup dialogs
+   [\#4354](https://github.com/matrix-org/matrix-react-sdk/pull/4354)
+ * Support Jitsi information from client .well-known
+   [\#4348](https://github.com/matrix-org/matrix-react-sdk/pull/4348)
+ * Add new default home page fallback
+   [\#4350](https://github.com/matrix-org/matrix-react-sdk/pull/4350)
+ * Check more account data in toast listener
+   [\#4351](https://github.com/matrix-org/matrix-react-sdk/pull/4351)
+ * Don't try to send presence updates until the client is started
+   [\#4353](https://github.com/matrix-org/matrix-react-sdk/pull/4353)
+ * Fix copy button on code blocks when there is no code tag just pre
+   [\#4352](https://github.com/matrix-org/matrix-react-sdk/pull/4352)
+ * Clear sessionStorage on sign out
+   [\#4346](https://github.com/matrix-org/matrix-react-sdk/pull/4346)
+ * Re-request room keys after auth
+   [\#4341](https://github.com/matrix-org/matrix-react-sdk/pull/4341)
+ * Update emojibase for fixed emoji codepoints and Emoji 13 support
+   [\#4344](https://github.com/matrix-org/matrix-react-sdk/pull/4344)
+ * App load order tweaks for code splitting
+   [\#4343](https://github.com/matrix-org/matrix-react-sdk/pull/4343)
+ * Fix alignment of e2e icon in userinfo and expose full displayname in title
+   [\#4312](https://github.com/matrix-org/matrix-react-sdk/pull/4312)
+ * Adjust copy & UX for self-verification
+   [\#4342](https://github.com/matrix-org/matrix-react-sdk/pull/4342)
+ * QR code reciprocation
+   [\#4334](https://github.com/matrix-org/matrix-react-sdk/pull/4334)
+ * Fix Hangul typing does not work properly
+   [\#4339](https://github.com/matrix-org/matrix-react-sdk/pull/4339)
+ * Fix: dismiss setup encryption toast if cross-signing is ready
+   [\#4336](https://github.com/matrix-org/matrix-react-sdk/pull/4336)
+ * Fix read marker visibility for grouped events
+   [\#4340](https://github.com/matrix-org/matrix-react-sdk/pull/4340)
+ * Make all 'font-size's and 'line-height's rem
+   [\#4305](https://github.com/matrix-org/matrix-react-sdk/pull/4305)
+ * Fix spurious extra devices on registration
+   [\#4337](https://github.com/matrix-org/matrix-react-sdk/pull/4337)
+ * Fix the edit messager composer
+   [\#4333](https://github.com/matrix-org/matrix-react-sdk/pull/4333)
+ * Fix Room Settings Dialog Notifications tab icon
+   [\#4321](https://github.com/matrix-org/matrix-react-sdk/pull/4321)
+ * Fix various cases of React warnings by silencing them
+   [\#4331](https://github.com/matrix-org/matrix-react-sdk/pull/4331)
+ * Only apply padding to standard textual buttons (kind buttons)
+   [\#4332](https://github.com/matrix-org/matrix-react-sdk/pull/4332)
+ * Use console.log in place of console.warn for less warnings
+   [\#4330](https://github.com/matrix-org/matrix-react-sdk/pull/4330)
+ * Revert componentDidMount changes on breadcrumbs
+   [\#4329](https://github.com/matrix-org/matrix-react-sdk/pull/4329)
+ * Use new method for checking secret storage key
+   [\#4309](https://github.com/matrix-org/matrix-react-sdk/pull/4309)
+ * Label and use UNSAFE_componentWillMount to minimize warnings
+   [\#4315](https://github.com/matrix-org/matrix-react-sdk/pull/4315)
+ * Fix a number of minor code quality issues
+   [\#4314](https://github.com/matrix-org/matrix-react-sdk/pull/4314)
+ * Use componentDidMount in place of componentWillMount where possible
+   [\#4313](https://github.com/matrix-org/matrix-react-sdk/pull/4313)
+ * EventIndex: Mark the initial checkpoints for a full crawl.
+   [\#4325](https://github.com/matrix-org/matrix-react-sdk/pull/4325)
+ * Fix UserInfo e2e buttons to match Figma
+   [\#4320](https://github.com/matrix-org/matrix-react-sdk/pull/4320)
+ * Only auto-scroll to RoomTile when clicking on RoomTile or via shortcuts
+   [\#4316](https://github.com/matrix-org/matrix-react-sdk/pull/4316)
+ * Support SSO for interactive authentication
+   [\#4292](https://github.com/matrix-org/matrix-react-sdk/pull/4292)
+ * Fix /invite Slash Command
+   [\#4328](https://github.com/matrix-org/matrix-react-sdk/pull/4328)
+ * Fix jitsi popout URL
+   [\#4326](https://github.com/matrix-org/matrix-react-sdk/pull/4326)
+ * Use our own jitsi widget for the popout URL
+   [\#4323](https://github.com/matrix-org/matrix-react-sdk/pull/4323)
+ * Fix popout support for jitsi widgets
+   [\#4319](https://github.com/matrix-org/matrix-react-sdk/pull/4319)
+ * Fix: legacy verify user throwing error
+   [\#4318](https://github.com/matrix-org/matrix-react-sdk/pull/4318)
+ * Document settingDefaults
+   [\#3046](https://github.com/matrix-org/matrix-react-sdk/pull/3046)
+ * Fix Ctrl+/ for Finnish keyboard where it includes Shift
+   [\#4317](https://github.com/matrix-org/matrix-react-sdk/pull/4317)
+ * Rework SlashCommands to better expose aliases
+   [\#4302](https://github.com/matrix-org/matrix-react-sdk/pull/4302)
+ * Fix EventListSummary when RR rendering is disabled
+   [\#4311](https://github.com/matrix-org/matrix-react-sdk/pull/4311)
+ * Update link to css location.
+   [\#4299](https://github.com/matrix-org/matrix-react-sdk/pull/4299)
+ * Fix peeking keeping two timeline update mechanisms in play
+   [\#4310](https://github.com/matrix-org/matrix-react-sdk/pull/4310)
+ * Pass new secret storage key to bootstrap path
+   [\#4308](https://github.com/matrix-org/matrix-react-sdk/pull/4308)
+ * Show red shield for users that become unverified
+   [\#4303](https://github.com/matrix-org/matrix-react-sdk/pull/4303)
+ * Accessibility fixed for Event List Summary and Composer Format Bar
+   [\#4295](https://github.com/matrix-org/matrix-react-sdk/pull/4295)
+ * Support $riot: Templates for SSO/CAS urls in the welcome.html page
+   [\#4279](https://github.com/matrix-org/matrix-react-sdk/pull/4279)
+ * Added the /html command
+   [\#4296](https://github.com/matrix-org/matrix-react-sdk/pull/4296)
+ * EventIndex: Better logging on how many events are added.
+   [\#4301](https://github.com/matrix-org/matrix-react-sdk/pull/4301)
+ * Field: mark id as optional in propTypes
+   [\#4307](https://github.com/matrix-org/matrix-react-sdk/pull/4307)
+ * Fix view community link icon contrast
+   [\#4254](https://github.com/matrix-org/matrix-react-sdk/pull/4254)
+ * Remove underscore from Jitsi conference names
+   [\#4304](https://github.com/matrix-org/matrix-react-sdk/pull/4304)
+ * Refactor shield display logic; changed rules for DMs
+   [\#4290](https://github.com/matrix-org/matrix-react-sdk/pull/4290)
+ * Fix: bring back global thin scrollbars
+   [\#4300](https://github.com/matrix-org/matrix-react-sdk/pull/4300)
+ * Keyboard shortcuts: Escape cancel reply and fix Ctrl+K
+   [\#4297](https://github.com/matrix-org/matrix-react-sdk/pull/4297)
+ * Field: make id optional, generate one if not provided
+   [\#4298](https://github.com/matrix-org/matrix-react-sdk/pull/4298)
+ * Fix ugly scrollbars in TabbedView (settings), emojipicker and widgets
+   [\#4293](https://github.com/matrix-org/matrix-react-sdk/pull/4293)
+ * Rename secret storage force-reset variable to avoid confusion
+   [\#4274](https://github.com/matrix-org/matrix-react-sdk/pull/4274)
+ * Fix: can't dismiss unverified session toast when encryption hasn't been
+   upgraded
+   [\#4291](https://github.com/matrix-org/matrix-react-sdk/pull/4291)
+ * Blank out UserInfo avatar when changing between members
+   [\#4289](https://github.com/matrix-org/matrix-react-sdk/pull/4289)
+ * Add cancel button to verification panel
+   [\#4283](https://github.com/matrix-org/matrix-react-sdk/pull/4283)
+ * Show ongoing verification request straight away when navigating to member
+   [\#4284](https://github.com/matrix-org/matrix-react-sdk/pull/4284)
+ * Fix: allow scrolling while window is not focused & remove scrollbar hack
+   [\#4276](https://github.com/matrix-org/matrix-react-sdk/pull/4276)
+ * Show whether backup key is cached
+   [\#4287](https://github.com/matrix-org/matrix-react-sdk/pull/4287)
+ * Rename unverified session toast
+   [\#4285](https://github.com/matrix-org/matrix-react-sdk/pull/4285)
+ * Fix: pick last active DM for verification request
+   [\#4286](https://github.com/matrix-org/matrix-react-sdk/pull/4286)
+ * Fix formatBar not hidden after highlight and backspacing some text
+   [\#4269](https://github.com/matrix-org/matrix-react-sdk/pull/4269)
+
+Changes in [2.3.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.3.1) (2020-04-01)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.3.0...v2.3.1)
+
+ * Fix jitsi popout URL
+   [\#4327](https://github.com/matrix-org/matrix-react-sdk/pull/4327)
+ * Remove underscore from Jitsi conference names
+   [\#4324](https://github.com/matrix-org/matrix-react-sdk/pull/4324)
+ * Fix popout support for jitsi widgets
+   [\#4322](https://github.com/matrix-org/matrix-react-sdk/pull/4322)
+
+Changes in [2.3.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.3.0) (2020-03-30)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.3.0-rc.1...v2.3.0)
+
+ * Upgrade JS SDK to 5.2.0
+
+Changes in [2.3.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.3.0-rc.1) (2020-03-26)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.3...v2.3.0-rc.1)
+
+ * Upgrade JS SDK to 5.2.0-rc.1
+ * Add a flag to control whether cross-signing signatures are trusted
+   [\#4277](https://github.com/matrix-org/matrix-react-sdk/pull/4277)
+ * Update from Weblate
+   [\#4282](https://github.com/matrix-org/matrix-react-sdk/pull/4282)
+ * Update copy on SSSS symmetric upgrade toast
+   [\#4281](https://github.com/matrix-org/matrix-react-sdk/pull/4281)
+ * Wait for SSSS upgrade to complete
+   [\#4270](https://github.com/matrix-org/matrix-react-sdk/pull/4270)
+ * Update cross-signing verification copy and fix i18n
+   [\#4278](https://github.com/matrix-org/matrix-react-sdk/pull/4278)
+ * Fix soft-crash on bad permalinks
+   [\#4280](https://github.com/matrix-org/matrix-react-sdk/pull/4280)
+ * Fix: make self-verification wait for incoming request
+   [\#4267](https://github.com/matrix-org/matrix-react-sdk/pull/4267)
+ * Fall back to non-standard persisted api for Safari
+   [\#4272](https://github.com/matrix-org/matrix-react-sdk/pull/4272)
+ * Respond to backup key sharing requests
+   [\#4275](https://github.com/matrix-org/matrix-react-sdk/pull/4275)
+ * Log and display secret sharing cache state
+   [\#4268](https://github.com/matrix-org/matrix-react-sdk/pull/4268)
+ * Support sending config and ready events to capable widgets (Jitsi)
+   [\#4266](https://github.com/matrix-org/matrix-react-sdk/pull/4266)
+ * If cached keys are present in the key backup dialog, use them
+   [\#4273](https://github.com/matrix-org/matrix-react-sdk/pull/4273)
+ * Fix formatbar not hidden on highlighted message sent
+   [\#4265](https://github.com/matrix-org/matrix-react-sdk/pull/4265)
+ * Support Jitsi conferences sent/received on Riot Mobile and older Riot Webs
+   [\#4252](https://github.com/matrix-org/matrix-react-sdk/pull/4252)
+ * Use unified function to check cross-signing is ready
+   [\#4263](https://github.com/matrix-org/matrix-react-sdk/pull/4263)
+ * Migrate SSSS to symmetric
+   [\#4224](https://github.com/matrix-org/matrix-react-sdk/pull/4224)
+ * Migration to symmetric SSSS
+   [\#4242](https://github.com/matrix-org/matrix-react-sdk/pull/4242)
+ * Always display verification request toasts on top
+   [\#4262](https://github.com/matrix-org/matrix-react-sdk/pull/4262)
+ * Fix: assume SAS is supported when starting request with .start
+   [\#4249](https://github.com/matrix-org/matrix-react-sdk/pull/4249)
+ * Fix logout when Olm failed to load.
+   [\#4261](https://github.com/matrix-org/matrix-react-sdk/pull/4261)
+ * Improve naming of Jitsi conferences
+   [\#4251](https://github.com/matrix-org/matrix-react-sdk/pull/4251)
+ * Handle matrix.to user permalink in-room rather than solo
+   [\#4245](https://github.com/matrix-org/matrix-react-sdk/pull/4245)
+ * Fix: filter room list (again) by canonical and alternative aliases
+   [\#4260](https://github.com/matrix-org/matrix-react-sdk/pull/4260)
+ * EventIndex: Add some logging to the file panel populating.
+   [\#4250](https://github.com/matrix-org/matrix-react-sdk/pull/4250)
+ * Update from Weblate
+   [\#4259](https://github.com/matrix-org/matrix-react-sdk/pull/4259)
+ * Migrate RoomView to React Contexts in the hope for better temporal stability
+   [\#4258](https://github.com/matrix-org/matrix-react-sdk/pull/4258)
+ * Update WidgetUtils.js fix Jitsi path
+   [\#4256](https://github.com/matrix-org/matrix-react-sdk/pull/4256)
+ * Fix local jitsi build url fail and missing argument
+   [\#4255](https://github.com/matrix-org/matrix-react-sdk/pull/4255)
+ * Add shortcut CmdOrCtrl+. to toggle right panel
+   [\#4244](https://github.com/matrix-org/matrix-react-sdk/pull/4244)
+ * Improve Keyboard Shortcuts. Add alt-arrows & alt-shift-arrows
+   [\#4241](https://github.com/matrix-org/matrix-react-sdk/pull/4241)
+ * Bring back legacy verification by comparing public device keys
+   [\#4240](https://github.com/matrix-org/matrix-react-sdk/pull/4240)
+ * Searching: Return an empty result if the search term is an empty string.
+   [\#4248](https://github.com/matrix-org/matrix-react-sdk/pull/4248)
+ * Break continuation on showHiddenEvents-rendered events
+   [\#4247](https://github.com/matrix-org/matrix-react-sdk/pull/4247)
+ * Watch for show-RR settings changes, use room-specific and fix margins
+   [\#4246](https://github.com/matrix-org/matrix-react-sdk/pull/4246)
+ * Register Mac electron specific Cmd+, shortcut to User Settings
+   [\#4243](https://github.com/matrix-org/matrix-react-sdk/pull/4243)
+ * Use a local wrapper for Jitsi calls
+   [\#4234](https://github.com/matrix-org/matrix-react-sdk/pull/4234)
+ * Invite Dialog fixes
+   [\#4233](https://github.com/matrix-org/matrix-react-sdk/pull/4233)
+ * RoomPreviewBar word-break the sender name too
+   [\#4239](https://github.com/matrix-org/matrix-react-sdk/pull/4239)
+ * Report to the user when a key signature upload fails
+   [\#4229](https://github.com/matrix-org/matrix-react-sdk/pull/4229)
+ * pre-send megolm keys when possible when a user starts typing
+   [\#4235](https://github.com/matrix-org/matrix-react-sdk/pull/4235)
+ * we don't do mx_fadable anymore so get rid of broken RightPanel disabling
+   [\#4238](https://github.com/matrix-org/matrix-react-sdk/pull/4238)
+ * Fix left left panel overflowing vertically
+   [\#4237](https://github.com/matrix-org/matrix-react-sdk/pull/4237)
+ * Fix custom tags causing left panel to over-expand
+   [\#4236](https://github.com/matrix-org/matrix-react-sdk/pull/4236)
+ * Add Keyboard shortcuts dialog
+   [\#4231](https://github.com/matrix-org/matrix-react-sdk/pull/4231)
+ * Don't use buildkite agent to upload logs
+   [\#4232](https://github.com/matrix-org/matrix-react-sdk/pull/4232)
+ * Remove Gemini Scrollbars
+   [\#4217](https://github.com/matrix-org/matrix-react-sdk/pull/4217)
+ * Room Directory Explore Servers redesign
+   [\#4209](https://github.com/matrix-org/matrix-react-sdk/pull/4209)
+ * Fix redo keyboard shortcut on macOS
+   [\#4110](https://github.com/matrix-org/matrix-react-sdk/pull/4110)
+ * Fix: ensure local state for aliases doesn't get garbled up
+   [\#4230](https://github.com/matrix-org/matrix-react-sdk/pull/4230)
+ * Rename 'jump to bottom' to avoid ublock block
+   [\#4208](https://github.com/matrix-org/matrix-react-sdk/pull/4208)
+ * Restore key backup in background after complete security
+   [\#4225](https://github.com/matrix-org/matrix-react-sdk/pull/4225)
+ * Fix key backup trust text for cross-signing
+   [\#4223](https://github.com/matrix-org/matrix-react-sdk/pull/4223)
+ * Add default on config setting to control call button in composer
+   [\#4227](https://github.com/matrix-org/matrix-react-sdk/pull/4227)
+ * Fix: make alternative addresses UX less confusing
+   [\#4221](https://github.com/matrix-org/matrix-react-sdk/pull/4221)
+ * Wait for verification request on login
+   [\#4222](https://github.com/matrix-org/matrix-react-sdk/pull/4222)
+ * EventIndex: Add support to delete events from the index.
+   [\#4204](https://github.com/matrix-org/matrix-react-sdk/pull/4204)
+ * EventIndex: Remove a checkpoint if the HTTP request returns a 403.
+   [\#4214](https://github.com/matrix-org/matrix-react-sdk/pull/4214)
+ * Move to composer when typing letters with Shift held
+   [\#4216](https://github.com/matrix-org/matrix-react-sdk/pull/4216)
+ * Wrap large room names when previewing them
+   [\#4213](https://github.com/matrix-org/matrix-react-sdk/pull/4213)
+ * Rename Review Devices to Review Sessions
+   [\#4219](https://github.com/matrix-org/matrix-react-sdk/pull/4219)
+ * Fix typo in tabIndex to make React happy
+   [\#4215](https://github.com/matrix-org/matrix-react-sdk/pull/4215)
+ * Proof of concept for custom theme adding
+   [\#4148](https://github.com/matrix-org/matrix-react-sdk/pull/4148)
+ * Remove stuff that yarn install doesn't think we need
+   [\#4205](https://github.com/matrix-org/matrix-react-sdk/pull/4205)
+ * Declare jsx in tsconfig for IDEs
+   [\#4207](https://github.com/matrix-org/matrix-react-sdk/pull/4207)
+ * Fix: best-effort to join room without canonical alias over federation from
+   room directory
+   [\#4210](https://github.com/matrix-org/matrix-react-sdk/pull/4210)
+ * Test for cross-signing homeserver support during login, toasts
+   [\#4206](https://github.com/matrix-org/matrix-react-sdk/pull/4206)
+ * Send verification request to a single device in a way compatible with non-
+   cross-signing
+   [\#4202](https://github.com/matrix-org/matrix-react-sdk/pull/4202)
+ * Fixes for removing local alias
+   [\#4199](https://github.com/matrix-org/matrix-react-sdk/pull/4199)
+ * yarn upgrade
+   [\#4201](https://github.com/matrix-org/matrix-react-sdk/pull/4201)
+ * Support TypeScript for React components
+   [\#4203](https://github.com/matrix-org/matrix-react-sdk/pull/4203)
+ * When room name is changed, show both the old and new name
+   [\#4183](https://github.com/matrix-org/matrix-react-sdk/pull/4183)
+
+Changes in [2.2.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.2.3) (2020-03-17)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.3-rc.1...v2.2.3)
+
+ * Upgrade JS SDK to 5.1.1
+ * Add default on config setting to control call button in composer
+   [\#4228](https://github.com/matrix-org/matrix-react-sdk/pull/4228)
+ * Fix: make alternative addresses UX less confusing
+   [\#4226](https://github.com/matrix-org/matrix-react-sdk/pull/4226)
+ * Fix: best-effort to join room without canonical alias over federation from
+   room directory
+   [\#4211](https://github.com/matrix-org/matrix-react-sdk/pull/4211)
+
+Changes in [2.2.3-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.2.3-rc.1) (2020-03-11)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.1...v2.2.3-rc.1)
+
+ * Update from Weblate
+   [\#4200](https://github.com/matrix-org/matrix-react-sdk/pull/4200)
+ * Revert "enable 4s when accepting a verification request"
+   [\#4198](https://github.com/matrix-org/matrix-react-sdk/pull/4198)
+ * Don't remount main split children on rhs collapse
+   [\#4197](https://github.com/matrix-org/matrix-react-sdk/pull/4197)
+ * Add fallback label for canonical alias events that dont change anything
+   [\#4195](https://github.com/matrix-org/matrix-react-sdk/pull/4195)
+ * Immediately switch to verification dialog when clicking [Continue] from new
+   session dialog
+   [\#4196](https://github.com/matrix-org/matrix-react-sdk/pull/4196)
+ * Enable 4S if needed when trying to verify or accepting verification
+   [\#4194](https://github.com/matrix-org/matrix-react-sdk/pull/4194)
+ * Remove extraneous tab stop from room tree view.
+   [\#4193](https://github.com/matrix-org/matrix-react-sdk/pull/4193)
+ * Remove v1 identity server fallbacks
+   [\#4191](https://github.com/matrix-org/matrix-react-sdk/pull/4191)
+ * Allow editing of alt_aliases according to MSC2432
+   [\#4187](https://github.com/matrix-org/matrix-react-sdk/pull/4187)
+ * Update timeline rendering of aliases
+   [\#4189](https://github.com/matrix-org/matrix-react-sdk/pull/4189)
+ * Fix mark as read button for dark theme
+   [\#4190](https://github.com/matrix-org/matrix-react-sdk/pull/4190)
+ * Un-linkify version in settings
+   [\#4188](https://github.com/matrix-org/matrix-react-sdk/pull/4188)
+ * Make Mjolnir stop more robust
+   [\#4186](https://github.com/matrix-org/matrix-react-sdk/pull/4186)
+ * Fix secret sharing names to match spec
+   [\#4185](https://github.com/matrix-org/matrix-react-sdk/pull/4185)
+ * Share secrets with another device on request
+   [\#4172](https://github.com/matrix-org/matrix-react-sdk/pull/4172)
+ * Fall back to to_device verification if other user hasn't uploaded cross-
+   signing keys
+   [\#4181](https://github.com/matrix-org/matrix-react-sdk/pull/4181)
+ * Disable edits on redacted events
+   [\#4182](https://github.com/matrix-org/matrix-react-sdk/pull/4182)
+ * Use crypto.verification.request even when xsign is disabled
+   [\#4180](https://github.com/matrix-org/matrix-react-sdk/pull/4180)
+ * Reword the status for the currently indexing rooms.
+   [\#4084](https://github.com/matrix-org/matrix-react-sdk/pull/4084)
+ * Moved read receipts to the bottom of the message
+   [\#3892](https://github.com/matrix-org/matrix-react-sdk/pull/3892)
+ * Include a mark as read X under the scroll to unread button
+   [\#4159](https://github.com/matrix-org/matrix-react-sdk/pull/4159)
+ * Show the room presence indicator, even when cross-singing is enabled
+   [\#4178](https://github.com/matrix-org/matrix-react-sdk/pull/4178)
+ * Add local echo when clicking "Manually Verify" in unverified session dialog
+   [\#4179](https://github.com/matrix-org/matrix-react-sdk/pull/4179)
+ * link to matrix.org/security-disclosure-policy in help screen
+   [\#4129](https://github.com/matrix-org/matrix-react-sdk/pull/4129)
+ * only show verify button if user has uploaded cross-signing keys
+   [\#4174](https://github.com/matrix-org/matrix-react-sdk/pull/4174)
+ * Fix room alias references in topics
+   [\#4176](https://github.com/matrix-org/matrix-react-sdk/pull/4176)
+ * Fix not being able to start chats when you have no rooms
+   [\#4177](https://github.com/matrix-org/matrix-react-sdk/pull/4177)
+ * Disable registration flows on SSO servers
+   [\#4170](https://github.com/matrix-org/matrix-react-sdk/pull/4170)
+ * Don't group blank membership changes
+   [\#4160](https://github.com/matrix-org/matrix-react-sdk/pull/4160)
+ * Ensure the room list always triggers updates on itself
+   [\#4175](https://github.com/matrix-org/matrix-react-sdk/pull/4175)
+ * Fix composer touch bar flickering on keypress in Chrome
+   [\#4173](https://github.com/matrix-org/matrix-react-sdk/pull/4173)
+ * Document scrollpanel and BACAT scrolling
+   [\#4167](https://github.com/matrix-org/matrix-react-sdk/pull/4167)
+ * riot-desktop open SSO in browser so user doesn't have to auth twice
+   [\#4158](https://github.com/matrix-org/matrix-react-sdk/pull/4158)
+ * Lock login and registration buttons after submit
+   [\#4165](https://github.com/matrix-org/matrix-react-sdk/pull/4165)
+ * Suggest the server's results as lower quality in the invite dialog
+   [\#4149](https://github.com/matrix-org/matrix-react-sdk/pull/4149)
+ * Adjust scroll offset with relative scrolling
+   [\#4166](https://github.com/matrix-org/matrix-react-sdk/pull/4166)
+ * only automatically download in usercontent if user requested it
+   [\#4163](https://github.com/matrix-org/matrix-react-sdk/pull/4163)
+ * Fix having to decrypt & download in two steps
+   [\#4162](https://github.com/matrix-org/matrix-react-sdk/pull/4162)
+ * Use bash for release script
+   [\#4161](https://github.com/matrix-org/matrix-react-sdk/pull/4161)
+ * Revert to manual sorting for custom tag rooms
+   [\#4157](https://github.com/matrix-org/matrix-react-sdk/pull/4157)
+ * Fix the last char of people's names being cut off in the invite dialog
+   [\#4150](https://github.com/matrix-org/matrix-react-sdk/pull/4150)
+ * Add /whois SlashCommand to open UserInfo
+   [\#4154](https://github.com/matrix-org/matrix-react-sdk/pull/4154)
+ * word-break in pills and wrap the background correctly
+   [\#4155](https://github.com/matrix-org/matrix-react-sdk/pull/4155)
+ * don't show "This alias is available to use" if the alias is invalid
+   [\#4153](https://github.com/matrix-org/matrix-react-sdk/pull/4153)
+ * Don't ask to enable analytics when Do Not Track is enabled
+   [\#4098](https://github.com/matrix-org/matrix-react-sdk/pull/4098)
+ * Fix MELS not breaking on day boundaries regression
+   [\#4152](https://github.com/matrix-org/matrix-react-sdk/pull/4152)
+ * Fix Quote on search results page
+   [\#4151](https://github.com/matrix-org/matrix-react-sdk/pull/4151)
+ * Ensure errors when creating a DM are raised to the user
+   [\#4144](https://github.com/matrix-org/matrix-react-sdk/pull/4144)
+ * Add a Login button to startAnyRegistrationFlow
+   [\#3829](https://github.com/matrix-org/matrix-react-sdk/pull/3829)
+ * Use latest backup status directly rather than via state
+   [\#4147](https://github.com/matrix-org/matrix-react-sdk/pull/4147)
+ * Prefer account password variation of upgrading
+   [\#4146](https://github.com/matrix-org/matrix-react-sdk/pull/4146)
+ * Hide user avatars from screen readers in group and room user lists.
+   [\#4145](https://github.com/matrix-org/matrix-react-sdk/pull/4145)
+ * Room List sorting algorithms
+   [\#4085](https://github.com/matrix-org/matrix-react-sdk/pull/4085)
+ * Clear selected tags when disabling tag panel
+   [\#4143](https://github.com/matrix-org/matrix-react-sdk/pull/4143)
+ * Ignore cursor jumping shortcuts with shift
+   [\#4142](https://github.com/matrix-org/matrix-react-sdk/pull/4142)
+ * add local echo for clicking 'start verification' button
+   [\#4138](https://github.com/matrix-org/matrix-react-sdk/pull/4138)
+ * Fix formatting buttons not marking the composer as modified
+   [\#4141](https://github.com/matrix-org/matrix-react-sdk/pull/4141)
+ * Upgrade deps
+   [\#4136](https://github.com/matrix-org/matrix-react-sdk/pull/4136)
+ * Remove debug line from Analytics
+   [\#4137](https://github.com/matrix-org/matrix-react-sdk/pull/4137)
+ * Use the right function for creating binary verification QR codes
+   [\#4140](https://github.com/matrix-org/matrix-react-sdk/pull/4140)
+ * Ensure verification QR codes use the right buffer size
+   [\#4139](https://github.com/matrix-org/matrix-react-sdk/pull/4139)
+ * Don't prefix QR codes with the length of the static marker string
+   [\#4128](https://github.com/matrix-org/matrix-react-sdk/pull/4128)
+ * Solve fixed-width digit display in flowed text
+   [\#4127](https://github.com/matrix-org/matrix-react-sdk/pull/4127)
+ * Limit UserInfo Displayname to 3 lines to get rid of scrollbars
+   [\#4135](https://github.com/matrix-org/matrix-react-sdk/pull/4135)
+
+Changes in [2.2.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.2.1) (2020-03-04)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.0...v2.2.1)
+
+ * Adjust scroll offset with relative scrolling
+   [\#4171](https://github.com/matrix-org/matrix-react-sdk/pull/4171)
+ * Disable registration flows on SSO servers
+   [\#4169](https://github.com/matrix-org/matrix-react-sdk/pull/4169)
+
+Changes in [2.2.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.2.0) (2020-03-02)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.2.0-rc.1...v2.2.0)
+
+ * Upgrade JS SDK to 5.1.0
+ * Ignore cursor jumping shortcuts with shift
+   [\#4142](https://github.com/matrix-org/matrix-react-sdk/pull/4142)
+
+Changes in [2.2.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.2.0-rc.1) (2020-02-26)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.1...v2.2.0-rc.1)
+
+ * Upgrade JS SDK to 5.1.0-rc.1
+ * Fix message context menu breaking on invalid m.room.pinned_events event
+   [\#4133](https://github.com/matrix-org/matrix-react-sdk/pull/4133)
+ * Update from Weblate
+   [\#4134](https://github.com/matrix-org/matrix-react-sdk/pull/4134)
+ * Notify platform of language changes
+   [\#4121](https://github.com/matrix-org/matrix-react-sdk/pull/4121)
+ * Handle errors when previewing rooms more safely
+   [\#4132](https://github.com/matrix-org/matrix-react-sdk/pull/4132)
+ * Don't try to collapse zero events with a group
+   [\#4131](https://github.com/matrix-org/matrix-react-sdk/pull/4131)
+ * Don't print errors when the tab is used with no autocomplete present
+   [\#4130](https://github.com/matrix-org/matrix-react-sdk/pull/4130)
+ * Improve UI feedback while waiting for network
+   [\#4126](https://github.com/matrix-org/matrix-react-sdk/pull/4126)
+ * Ensure DMs tagged outside of account data work in the invite dialog
+   [\#4123](https://github.com/matrix-org/matrix-react-sdk/pull/4123)
+ * Show a warning dialog when user indicates a new session wasn't them
+   [\#4125](https://github.com/matrix-org/matrix-react-sdk/pull/4125)
+ * Show cancel events as hidden events if we wouldn't usually render them
+   [\#4120](https://github.com/matrix-org/matrix-react-sdk/pull/4120)
+ * Collapsed room list has unaligned room tiles #4030 version 2
+   [\#4033](https://github.com/matrix-org/matrix-react-sdk/pull/4033)
+ * Check for cross-signing homeserver support
+   [\#4118](https://github.com/matrix-org/matrix-react-sdk/pull/4118)
+ * Don't leak if show_sas never comes (or already came)
+   [\#4119](https://github.com/matrix-org/matrix-react-sdk/pull/4119)
+ * Add verification request viewer in devtools
+   [\#4106](https://github.com/matrix-org/matrix-react-sdk/pull/4106)
+ * update phase when request prop changes
+   [\#4117](https://github.com/matrix-org/matrix-react-sdk/pull/4117)
+ * Handle file downloading locally in electron rather than sending to browser
+   [\#4113](https://github.com/matrix-org/matrix-react-sdk/pull/4113)
+ * Remove unused CIDER setting watcher
+   [\#4116](https://github.com/matrix-org/matrix-react-sdk/pull/4116)
+ * Use alt_aliases for pills and autocomplete
+   [\#4102](https://github.com/matrix-org/matrix-react-sdk/pull/4102)
+ * Add shortcuts for beginning / end of composer
+   [\#4108](https://github.com/matrix-org/matrix-react-sdk/pull/4108)
+ * Update from Weblate
+   [\#4115](https://github.com/matrix-org/matrix-react-sdk/pull/4115)
+ * Revert "Fix escaped markdown passing backslashes through"
+   [\#4114](https://github.com/matrix-org/matrix-react-sdk/pull/4114)
+ * Fix a couple of React warnings/errors
+   [\#4112](https://github.com/matrix-org/matrix-react-sdk/pull/4112)
+ * Fix two big DOM leaks which were locking Chrome solid.
+   [\#4111](https://github.com/matrix-org/matrix-react-sdk/pull/4111)
+ * Filter out empty strings when pasting IDs into the invite dialog
+   [\#4109](https://github.com/matrix-org/matrix-react-sdk/pull/4109)
+ * Remove buildkite pipeline
+   [\#4107](https://github.com/matrix-org/matrix-react-sdk/pull/4107)
+ * Use binary packing for verification QR codes
+   [\#4091](https://github.com/matrix-org/matrix-react-sdk/pull/4091)
+ * Fix several small bugs with the invite/DM dialog
+   [\#4099](https://github.com/matrix-org/matrix-react-sdk/pull/4099)
+ * ignore e2e tests node_modules during linting
+   [\#4103](https://github.com/matrix-org/matrix-react-sdk/pull/4103)
+ * Apply null-guard to room pills for when we can't fetch the room
+   [\#4104](https://github.com/matrix-org/matrix-react-sdk/pull/4104)
+ * Fix theme being overridden to light even after login is completed
+   [\#4105](https://github.com/matrix-org/matrix-react-sdk/pull/4105)
+ * Fix bug where SSSS could be overwritten if user never cross-signs
+   [\#4100](https://github.com/matrix-org/matrix-react-sdk/pull/4100)
+ * Accept canonical alias for pills
+   [\#4096](https://github.com/matrix-org/matrix-react-sdk/pull/4096)
+ * Fix: don't advertise ability to scan a QR code for verification
+   [\#4094](https://github.com/matrix-org/matrix-react-sdk/pull/4094)
+ * Fixes for printing event indexing stats.
+   [\#4082](https://github.com/matrix-org/matrix-react-sdk/pull/4082)
+ * Remove exec so release script continues
+   [\#4095](https://github.com/matrix-org/matrix-react-sdk/pull/4095)
+ * Use Persistent Storage where possible
+   [\#4092](https://github.com/matrix-org/matrix-react-sdk/pull/4092)
+ * Fix user page (missing null check)
+   [\#4088](https://github.com/matrix-org/matrix-react-sdk/pull/4088)
+ * Cancel verification request on dialog close
+   [\#4081](https://github.com/matrix-org/matrix-react-sdk/pull/4081)
+ * Fix various memory leaks due to method re-binding
+   [\#4093](https://github.com/matrix-org/matrix-react-sdk/pull/4093)
+ * Fix share message context menu option keyboard a11y
+   [\#4073](https://github.com/matrix-org/matrix-react-sdk/pull/4073)
+
+Changes in [2.1.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.1) (2020-02-19)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0...v2.1.1)
+
+ * show spinner while loading local aliases
+   [\#4090](https://github.com/matrix-org/matrix-react-sdk/pull/4090)
+ * Don't index key verification events.
+   [\#4083](https://github.com/matrix-org/matrix-react-sdk/pull/4083)
+ * Get rid of dependence on usercontent.riot.im
+   [\#4046](https://github.com/matrix-org/matrix-react-sdk/pull/4046)
+ * also detect aliases using new /aliases endpoint for room access settings
+   [\#4089](https://github.com/matrix-org/matrix-react-sdk/pull/4089)
+ * get local aliases from /aliases in room settings
+   [\#4086](https://github.com/matrix-org/matrix-react-sdk/pull/4086)
+ * Start verification sessions in an E2E DM where possible
+   [\#4080](https://github.com/matrix-org/matrix-react-sdk/pull/4080)
+ * Only show supported verification methods
+   [\#4077](https://github.com/matrix-org/matrix-react-sdk/pull/4077)
+ * Use local echo in VerificationRequest for accepting/declining a verification
+   request
+   [\#4072](https://github.com/matrix-org/matrix-react-sdk/pull/4072)
+ * Report installed PWA, touch input status in rageshakes, analytics
+   [\#4078](https://github.com/matrix-org/matrix-react-sdk/pull/4078)
+ * refactor event grouping into separate helper classes
+   [\#4059](https://github.com/matrix-org/matrix-react-sdk/pull/4059)
+ * Find existing requests when starting a new verification request
+   [\#4070](https://github.com/matrix-org/matrix-react-sdk/pull/4070)
+ * Always speak the full text of the typing indicator when it updates.
+   [\#4074](https://github.com/matrix-org/matrix-react-sdk/pull/4074)
+ * Fix escaped markdown passing backslashes through
+   [\#4008](https://github.com/matrix-org/matrix-react-sdk/pull/4008)
+ * Move the sidebar to below the sidebar tab buttons for screen readers.
+   [\#4071](https://github.com/matrix-org/matrix-react-sdk/pull/4071)
+
+Changes in [2.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0) (2020-02-17)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0-rc.2...v2.1.0)
+
+ * Automate SDK dep upgrades for release
+   [\#4076](https://github.com/matrix-org/matrix-react-sdk/pull/4076)
+
+Changes in [2.1.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0-rc.2) (2020-02-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.1.0-rc.1...v2.1.0-rc.2)
+
+ * Fix error in previous attempt to upgrade JS SDK 
+
+Changes in [2.1.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.1.0-rc.1) (2020-02-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0...v2.1.0-rc.1)
+
+ * Upgrade JS SDK to 5.0.0-rc.1
+ * don't show tooltips on big icons
+   [\#4067](https://github.com/matrix-org/matrix-react-sdk/pull/4067)
+ * Update from Weblate
+   [\#4069](https://github.com/matrix-org/matrix-react-sdk/pull/4069)
+ * Fix sending of visit variables to Matomo
+   [\#4068](https://github.com/matrix-org/matrix-react-sdk/pull/4068)
+ * Use embedded piwik script rather than piwik.js to respect CSP
+   [\#4066](https://github.com/matrix-org/matrix-react-sdk/pull/4066)
+ * remove methods arg to requestVerification(DM)
+   [\#4058](https://github.com/matrix-org/matrix-react-sdk/pull/4058)
+ * Check for null config settings a bit safer
+   [\#4061](https://github.com/matrix-org/matrix-react-sdk/pull/4061)
+ * Score user ID searches higher when they match nearly exactly
+   [\#4060](https://github.com/matrix-org/matrix-react-sdk/pull/4060)
+ * Fix uncentered letter inside avatar for currently typing users
+   [\#4051](https://github.com/matrix-org/matrix-react-sdk/pull/4051)
+ * Disable 'start' button after clicking in VerificationPanel
+   [\#4065](https://github.com/matrix-org/matrix-react-sdk/pull/4065)
+ * Fixed bug where key reset didn't always return the right key
+   [\#4057](https://github.com/matrix-org/matrix-react-sdk/pull/4057)
+ * Don't render avatars in pills for screen readers.
+   [\#4062](https://github.com/matrix-org/matrix-react-sdk/pull/4062)
+ * Make QR self-verification compatible with RiotX
+   [\#4044](https://github.com/matrix-org/matrix-react-sdk/pull/4044)
+ * Verify single device from other user in right panel & Not Trusted dialog
+   [\#4043](https://github.com/matrix-org/matrix-react-sdk/pull/4043)
+ * Disable verification buttons after clicking to avoid double submission
+   [\#4049](https://github.com/matrix-org/matrix-react-sdk/pull/4049)
+ * Verification toast fixes
+   [\#4048](https://github.com/matrix-org/matrix-react-sdk/pull/4048)
+ * Use EncryptionPanel everywhere, part I
+   [\#4042](https://github.com/matrix-org/matrix-react-sdk/pull/4042)
+ * quick fix for cross-signing reset bug
+   [\#4056](https://github.com/matrix-org/matrix-react-sdk/pull/4056)
+ * Fix error message rendering for key entry
+   [\#4055](https://github.com/matrix-org/matrix-react-sdk/pull/4055)
+ * Fix recaptcha blocked by CSP for non-SSL origins
+   [\#4052](https://github.com/matrix-org/matrix-react-sdk/pull/4052)
+ * Fix watcher for showTypingNotifications setting
+   [\#4054](https://github.com/matrix-org/matrix-react-sdk/pull/4054)
+ * Allow custom hs url submission on enter
+   [\#4053](https://github.com/matrix-org/matrix-react-sdk/pull/4053)
+ * Support keepSecretStoragePassphraseForSession at the config level too
+   [\#4045](https://github.com/matrix-org/matrix-react-sdk/pull/4045)
+ * Add setting to allow hiding of typing indicator
+   [\#4047](https://github.com/matrix-org/matrix-react-sdk/pull/4047)
+ * Button to reset cross-signing and SSSS keys
+   [\#4041](https://github.com/matrix-org/matrix-react-sdk/pull/4041)
+ * Use forms to wrap password fields so Chrome doesn't go wild
+   [\#3974](https://github.com/matrix-org/matrix-react-sdk/pull/3974)
+ * Update QR code rendering to support VerificationRequests
+   [\#4001](https://github.com/matrix-org/matrix-react-sdk/pull/4001)
+ * Differentiate AccessSecretStorageDialog dismiss dialog based on which key we
+   want to read
+   [\#4038](https://github.com/matrix-org/matrix-react-sdk/pull/4038)
+ * Only emit in RoomViewStore when state actually changes
+   [\#4039](https://github.com/matrix-org/matrix-react-sdk/pull/4039)
+ * Mark AccessSecretStorageDialog to not be closed by clicking background
+   [\#4029](https://github.com/matrix-org/matrix-react-sdk/pull/4029)
+ * Let pointer events fall through to scroll button
+   [\#4037](https://github.com/matrix-org/matrix-react-sdk/pull/4037)
+ * Improve event indexing status strings for translation
+   [\#4035](https://github.com/matrix-org/matrix-react-sdk/pull/4035)
+ * Button size reviewed for word consuming languages & Settings showing devices
+   are a bit too tight
+   [\#4024](https://github.com/matrix-org/matrix-react-sdk/pull/4024)
+ * Only enumerate settings handlers which are supported
+   [\#4034](https://github.com/matrix-org/matrix-react-sdk/pull/4034)
+ * Fix listener removal in verification tile
+   [\#4036](https://github.com/matrix-org/matrix-react-sdk/pull/4036)
+ * Do not show alarming red shields on large encrypted rooms for your own
+   device
+   [\#4028](https://github.com/matrix-org/matrix-react-sdk/pull/4028)
+ * Add a class for styling room directory permissions
+   [\#4007](https://github.com/matrix-org/matrix-react-sdk/pull/4007)
+ * double-check user verification
+   [\#4010](https://github.com/matrix-org/matrix-react-sdk/pull/4010)
+ * Use minimist instead of optimist as it is deprecated
+   [\#4031](https://github.com/matrix-org/matrix-react-sdk/pull/4031)
+ * SettingsStore, use a counter instead of wall clock for watcher ids
+   [\#4032](https://github.com/matrix-org/matrix-react-sdk/pull/4032)
+ * Don't crash immediately if the room directory chunk is null/empty
+   [\#4027](https://github.com/matrix-org/matrix-react-sdk/pull/4027)
+ * Fix verification toast to close at 0s
+   [\#3998](https://github.com/matrix-org/matrix-react-sdk/pull/3998)
+ * Fix listener leak in TagPanel
+   [\#4026](https://github.com/matrix-org/matrix-react-sdk/pull/4026)
+ * Update from Weblate
+   [\#4025](https://github.com/matrix-org/matrix-react-sdk/pull/4025)
+ * Honour the isLogin flag in theme.js
+   [\#4023](https://github.com/matrix-org/matrix-react-sdk/pull/4023)
+ * ManageEventIndexDialog: Show how many rooms are being currently crawled.
+   [\#4022](https://github.com/matrix-org/matrix-react-sdk/pull/4022)
+ * Advertise that we can scan QR codes even though we can't
+   [\#4021](https://github.com/matrix-org/matrix-react-sdk/pull/4021)
+ * Checkpoint addition fixes and return of the crawler sleep time setting.
+   [\#4020](https://github.com/matrix-org/matrix-react-sdk/pull/4020)
+ * Truncate SAS emoji labels to fit
+   [\#4018](https://github.com/matrix-org/matrix-react-sdk/pull/4018)
+ * Apply copy edits to security setup flow
+   [\#4017](https://github.com/matrix-org/matrix-react-sdk/pull/4017)
+ * Fix user trust text to match what was checked
+   [\#4016](https://github.com/matrix-org/matrix-react-sdk/pull/4016)
+ * Fix size of invite only icon
+   [\#4015](https://github.com/matrix-org/matrix-react-sdk/pull/4015)
+ * Add temporary feature flag to control padlocks
+   [\#4013](https://github.com/matrix-org/matrix-react-sdk/pull/4013)
+ * Add an override for the theme
+   [\#4014](https://github.com/matrix-org/matrix-react-sdk/pull/4014)
+ * Add title to complete security loading
+   [\#4011](https://github.com/matrix-org/matrix-react-sdk/pull/4011)
+ * Only display the first zxcvbn warning/suggestion
+   [\#4012](https://github.com/matrix-org/matrix-react-sdk/pull/4012)
+ * Log exceptions from accessSecretStorage
+   [\#4009](https://github.com/matrix-org/matrix-react-sdk/pull/4009)
+ * Add advanced option to keep secret storage in memory for session
+   [\#3995](https://github.com/matrix-org/matrix-react-sdk/pull/3995)
+ * Add shields to member list, move power label to text
+   [\#4006](https://github.com/matrix-org/matrix-react-sdk/pull/4006)
+ * Make encryption events into bubble-style tiles
+   [\#4005](https://github.com/matrix-org/matrix-react-sdk/pull/4005)
+ * Update copy when the user verifies their own devices
+   [\#4000](https://github.com/matrix-org/matrix-react-sdk/pull/4000)
+ * Use Sets instead of array scans and simplify hiding of invalid users when
+   inviting
+   [\#4004](https://github.com/matrix-org/matrix-react-sdk/pull/4004)
+ * Fix room completion for invited rooms and upgraded rooms
+   [\#4003](https://github.com/matrix-org/matrix-react-sdk/pull/4003)
+ * Make shields in UserInfo black if user isn't verified
+   [\#3999](https://github.com/matrix-org/matrix-react-sdk/pull/3999)
+ * Change verify user text
+   [\#3994](https://github.com/matrix-org/matrix-react-sdk/pull/3994)
+ * Disable all inputs in login form while busy, not just the submit button
+   [\#3996](https://github.com/matrix-org/matrix-react-sdk/pull/3996)
+ * fix SAS dialog width
+   [\#3993](https://github.com/matrix-org/matrix-react-sdk/pull/3993)
+ * Update placeholder in the composer when it gets changed
+   [\#3990](https://github.com/matrix-org/matrix-react-sdk/pull/3990)
+ * Send initial device display name on register
+   [\#3992](https://github.com/matrix-org/matrix-react-sdk/pull/3992)
+ * Update QR code handling for new spec
+   [\#3959](https://github.com/matrix-org/matrix-react-sdk/pull/3959)
+ * Apply the Olympic effect to SAS Emoji Verification
+   [\#3989](https://github.com/matrix-org/matrix-react-sdk/pull/3989)
+ * Pass an ID to the <Field/> as needed and fix div inside p nesting
+   [\#3988](https://github.com/matrix-org/matrix-react-sdk/pull/3988)
+ * Update user info for device and trust changes
+   [\#3987](https://github.com/matrix-org/matrix-react-sdk/pull/3987)
+ * Relax secret storage account data check
+   [\#3985](https://github.com/matrix-org/matrix-react-sdk/pull/3985)
+ * Fix various races that prevented the right panel being in the right state
+   for verifications
+   [\#3984](https://github.com/matrix-org/matrix-react-sdk/pull/3984)
+ * Fix verifying individual devices
+   [\#3986](https://github.com/matrix-org/matrix-react-sdk/pull/3986)
+ * Update from Weblate
+   [\#3982](https://github.com/matrix-org/matrix-react-sdk/pull/3982)
+ * Replace device with session in UI text
+   [\#3980](https://github.com/matrix-org/matrix-react-sdk/pull/3980)
+ * Add missing await causing promises to be leaked as room IDs
+   [\#3981](https://github.com/matrix-org/matrix-react-sdk/pull/3981)
+ * Change new session toast to unverified
+   [\#3978](https://github.com/matrix-org/matrix-react-sdk/pull/3978)
+ * Replace Verify button in UserInfo verification with "Learn more"
+   [\#3975](https://github.com/matrix-org/matrix-react-sdk/pull/3975)
+ * Don't peek until the matrix client is ready
+   [\#3979](https://github.com/matrix-org/matrix-react-sdk/pull/3979)
+ * Verification: don't block UI update on verification finishing
+   [\#3976](https://github.com/matrix-org/matrix-react-sdk/pull/3976)
+ * Adjust icons with in person with design
+   [\#3977](https://github.com/matrix-org/matrix-react-sdk/pull/3977)
+ * Update copy for right panel verification
+   [\#3973](https://github.com/matrix-org/matrix-react-sdk/pull/3973)
+ * Check for timeline in pre-join UISI path
+   [\#3972](https://github.com/matrix-org/matrix-react-sdk/pull/3972)
+ * Let users paste text if they've already started filtering invite targets
+   [\#3970](https://github.com/matrix-org/matrix-react-sdk/pull/3970)
+ * Filter event types when deciding on activity metrics for DM suggestions
+   [\#3969](https://github.com/matrix-org/matrix-react-sdk/pull/3969)
+ * Revert a change causing a login loop
+   [\#3971](https://github.com/matrix-org/matrix-react-sdk/pull/3971)
+ * Improve the docs for the event index and fix some type hints.
+   [\#3960](https://github.com/matrix-org/matrix-react-sdk/pull/3960)
+ * Automatically focus on the invite dialog input
+   [\#3968](https://github.com/matrix-org/matrix-react-sdk/pull/3968)
+ * Restore key backup in Complete Security dialog
+   [\#3966](https://github.com/matrix-org/matrix-react-sdk/pull/3966)
+ * Right Panel Verification improvements
+   [\#3967](https://github.com/matrix-org/matrix-react-sdk/pull/3967)
+ * Cross Signing Right Panel Verification Decoration
+   [\#3950](https://github.com/matrix-org/matrix-react-sdk/pull/3950)
+ * Passing refireParams actually prevented this from working
+   [\#3965](https://github.com/matrix-org/matrix-react-sdk/pull/3965)
+ * Start new key backup in security setup flow
+   [\#3964](https://github.com/matrix-org/matrix-react-sdk/pull/3964)
+ * Tweak styling of the unread indicator circle.
+   [\#3958](https://github.com/matrix-org/matrix-react-sdk/pull/3958)
+ * Add device IDs in user info tooltips
+   [\#3963](https://github.com/matrix-org/matrix-react-sdk/pull/3963)
+ * Improve encryption upgrade on login flow
+   [\#3962](https://github.com/matrix-org/matrix-react-sdk/pull/3962)
+ * Switch back to legacy decorators
+   [\#3961](https://github.com/matrix-org/matrix-react-sdk/pull/3961)
+ * Style bridge settings tab according to design
+   [\#3894](https://github.com/matrix-org/matrix-react-sdk/pull/3894)
+ * Fix skinning and babel targets
+   [\#3957](https://github.com/matrix-org/matrix-react-sdk/pull/3957)
+ * Enable cross-signing lab when key in storage
+   [\#3956](https://github.com/matrix-org/matrix-react-sdk/pull/3956)
+ * Add new session verification details dialog
+   [\#3953](https://github.com/matrix-org/matrix-react-sdk/pull/3953)
+ * Fix issue where we don't notice if our own devices shouldn't be trusted
+   [\#3949](https://github.com/matrix-org/matrix-react-sdk/pull/3949)
+ * Add separate component for post-auth security flows
+   [\#3951](https://github.com/matrix-org/matrix-react-sdk/pull/3951)
+ * Add more logging to settings watchers
+   [\#3952](https://github.com/matrix-org/matrix-react-sdk/pull/3952)
+ * Use https for recaptcha for all non-http protocols
+   [\#3944](https://github.com/matrix-org/matrix-react-sdk/pull/3944)
+ * Add status and management UI for the event indexer
+   [\#3672](https://github.com/matrix-org/matrix-react-sdk/pull/3672)
+ * Remove DM icons if `feature_cross_signing` is enabled; hide padlocks in DM
+   room headers
+   [\#3948](https://github.com/matrix-org/matrix-react-sdk/pull/3948)
+ * Stop rogue verification toast if you verify during login
+   [\#3943](https://github.com/matrix-org/matrix-react-sdk/pull/3943)
+ * Show incoming verification requests in the 'complete security' phase
+   [\#3942](https://github.com/matrix-org/matrix-react-sdk/pull/3942)
+ * Dismiss logged out device toasts
+   [\#3941](https://github.com/matrix-org/matrix-react-sdk/pull/3941)
+ * Verification nag toasts
+   [\#3940](https://github.com/matrix-org/matrix-react-sdk/pull/3940)
+ * Update from Weblate
+   [\#3947](https://github.com/matrix-org/matrix-react-sdk/pull/3947)
+ * Remember password for e2e bootstrapping
+   [\#3939](https://github.com/matrix-org/matrix-react-sdk/pull/3939)
+ * fix compound emoji
+   [\#3946](https://github.com/matrix-org/matrix-react-sdk/pull/3946)
+ * Setup flow for cross-signing on login / registration
+   [\#3937](https://github.com/matrix-org/matrix-react-sdk/pull/3937)
+ * Update profile avatar letter size
+   [\#3935](https://github.com/matrix-org/matrix-react-sdk/pull/3935)
+ * Hide default encryption algorithm
+   [\#3936](https://github.com/matrix-org/matrix-react-sdk/pull/3936)
+ * Resolve default export warnings from Webpack
+   [\#3938](https://github.com/matrix-org/matrix-react-sdk/pull/3938)
+ * Add null check for cross-signing info in verification panel
+   [\#3934](https://github.com/matrix-org/matrix-react-sdk/pull/3934)
+ * Add trace logging to figure out which component is causing weird events
+   [\#3926](https://github.com/matrix-org/matrix-react-sdk/pull/3926)
+ * Remove user lists feature flag, making it the default
+   [\#3906](https://github.com/matrix-org/matrix-react-sdk/pull/3906)
+ * Last bit of polish for user lists
+   [\#3925](https://github.com/matrix-org/matrix-react-sdk/pull/3925)
+ * QR code verification
+   [\#3871](https://github.com/matrix-org/matrix-react-sdk/pull/3871)
+ * Do less unnecessary work on CI
+   [\#3933](https://github.com/matrix-org/matrix-react-sdk/pull/3933)
+ * Re-enable stylelint on CI
+   [\#3932](https://github.com/matrix-org/matrix-react-sdk/pull/3932)
+ * Design pass for room icons
+   [\#3931](https://github.com/matrix-org/matrix-react-sdk/pull/3931)
+ * Populate the file panel using the event index if available.
+   [\#3858](https://github.com/matrix-org/matrix-react-sdk/pull/3858)
+ * Split AsyncWrapper out from Modal
+   [\#3928](https://github.com/matrix-org/matrix-react-sdk/pull/3928)
+ * Fix error in verification code on develop
+   [\#3930](https://github.com/matrix-org/matrix-react-sdk/pull/3930)
+ * Seperates out the padlock icon, and adds a tooltip
+   [\#3929](https://github.com/matrix-org/matrix-react-sdk/pull/3929)
+ * Cross Signing redesign for composer
+   [\#3910](https://github.com/matrix-org/matrix-react-sdk/pull/3910)
+ * Fix verifying your own devices with to_device messages
+   [\#3927](https://github.com/matrix-org/matrix-react-sdk/pull/3927)
+ * Room list reflects encryption state
+   [\#3908](https://github.com/matrix-org/matrix-react-sdk/pull/3908)
+ * Make the entire User Info scrollable, sticky close button
+   [\#3914](https://github.com/matrix-org/matrix-react-sdk/pull/3914)
+ * Remove riot logo from the security setup screens
+   [\#3916](https://github.com/matrix-org/matrix-react-sdk/pull/3916)
+ * Only say the session is verified if it is now verified
+   [\#3917](https://github.com/matrix-org/matrix-react-sdk/pull/3917)
+ * Hide password section if you can't change your password
+   [\#3924](https://github.com/matrix-org/matrix-react-sdk/pull/3924)
+ * Ensure a plaintext version of the composer ends up on the clipboard
+   [\#3922](https://github.com/matrix-org/matrix-react-sdk/pull/3922)
+ * Move & upgrade babel runtime into dependencies (like it wants)
+   [\#3920](https://github.com/matrix-org/matrix-react-sdk/pull/3920)
+ * Don't list every single alias when there's many
+   [\#3918](https://github.com/matrix-org/matrix-react-sdk/pull/3918)
+ * Try to populate user IDs even when the server's directory fails us
+   [\#3907](https://github.com/matrix-org/matrix-react-sdk/pull/3907)
+ * Remove .event property on verification request
+   [\#3912](https://github.com/matrix-org/matrix-react-sdk/pull/3912)
+ * Attempt to fix Safari + VoiceOver misunderstanding the timeline list
+   [\#3911](https://github.com/matrix-org/matrix-react-sdk/pull/3911)
+ * Enable encryption in DMs with device keys
+   [\#3913](https://github.com/matrix-org/matrix-react-sdk/pull/3913)
+ * Fix scrollable area and padding in user lists dialog
+   [\#3905](https://github.com/matrix-org/matrix-react-sdk/pull/3905)
+ * Add Reject & Ignore user button to invites view
+   [\#3909](https://github.com/matrix-org/matrix-react-sdk/pull/3909)
+ * Fix paragraph-awareness of the composer formatting features
+   [\#3891](https://github.com/matrix-org/matrix-react-sdk/pull/3891)
+ * Updated visuals for cross-signing bootstrap
+   [\#3903](https://github.com/matrix-org/matrix-react-sdk/pull/3903)
+ * Implement some parts of new cross signing bootstrap UI
+   [\#3897](https://github.com/matrix-org/matrix-react-sdk/pull/3897)
+ * Treat links as external in report content admin message
+   [\#3904](https://github.com/matrix-org/matrix-react-sdk/pull/3904)
+ * Be consistent about our settings svg, free the other one
+   [\#3902](https://github.com/matrix-org/matrix-react-sdk/pull/3902)
+ * Change prepublish script to prepare
+   [\#3899](https://github.com/matrix-org/matrix-react-sdk/pull/3899)
+ * Remove the react-sdk version
+   [\#3901](https://github.com/matrix-org/matrix-react-sdk/pull/3901)
+ * BuildKite: Retry end-to-end tests automatically once if they fail
+   [\#3900](https://github.com/matrix-org/matrix-react-sdk/pull/3900)
+ * Slash Command improvements around sending messages with leading slash
+   [\#3893](https://github.com/matrix-org/matrix-react-sdk/pull/3893)
+ * Support admin configurable message when reporting content
+   [\#3898](https://github.com/matrix-org/matrix-react-sdk/pull/3898)
+ * Don't warn on unverified users; ensured behavior stays the same with flags
+   off
+   [\#3896](https://github.com/matrix-org/matrix-react-sdk/pull/3896)
+ * Fix roving room list for resizer and ff tabstop a11y
+   [\#3895](https://github.com/matrix-org/matrix-react-sdk/pull/3895)
+ * Verify individual messages via cross-signing
+   [\#3875](https://github.com/matrix-org/matrix-react-sdk/pull/3875)
+ * Fix layering of dependencies in riot-web and e2e tests
+   [\#3882](https://github.com/matrix-org/matrix-react-sdk/pull/3882)
+ * Implement Roving Tab Index and Room List as TreeView
+   [\#3844](https://github.com/matrix-org/matrix-react-sdk/pull/3844)
+ * Move room header shields over the avatar for the room
+   [\#3888](https://github.com/matrix-org/matrix-react-sdk/pull/3888)
+ * Fix toast icon to prevent clipping
+   [\#3890](https://github.com/matrix-org/matrix-react-sdk/pull/3890)
+ * Only show devices and verify actions in E2EE rooms
+   [\#3889](https://github.com/matrix-org/matrix-react-sdk/pull/3889)
+ * Change user info verification checks to use cross-signing
+   [\#3887](https://github.com/matrix-org/matrix-react-sdk/pull/3887)
+ * Fix click-to-ping not inserting colon if composer non-empty
+   [\#3886](https://github.com/matrix-org/matrix-react-sdk/pull/3886)
+ * Fix emoticon space completion for upper case emoticons like :D xD
+   [\#3884](https://github.com/matrix-org/matrix-react-sdk/pull/3884)
+ * Repair cross-signing panel with async status
+   [\#3880](https://github.com/matrix-org/matrix-react-sdk/pull/3880)
+ * Remove temporary key backup button
+   [\#3878](https://github.com/matrix-org/matrix-react-sdk/pull/3878)
+ * Score users who have recently spoken higher in invite suggestions
+   [\#3866](https://github.com/matrix-org/matrix-react-sdk/pull/3866)
+ * Initial support for verification in right panel
+   [\#3796](https://github.com/matrix-org/matrix-react-sdk/pull/3796)
+ * Prevent the invite dialog from jumping around when elements change
+   [\#3868](https://github.com/matrix-org/matrix-react-sdk/pull/3868)
+ * Add prepublish script
+   [\#3876](https://github.com/matrix-org/matrix-react-sdk/pull/3876)
+
+Changes in [2.0.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0) (2020-01-27)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.2...v2.0.0)
+
+ * Ensure a plaintext version of the composer ends up on the clipboard
+   [\#3923](https://github.com/matrix-org/matrix-react-sdk/pull/3923)
+ * Move & upgrade babel runtime into dependencies (like it wants)
+   [\#3921](https://github.com/matrix-org/matrix-react-sdk/pull/3921)
+ * Don't list every single alias when there's many
+   [\#3919](https://github.com/matrix-org/matrix-react-sdk/pull/3919)
+
+Changes in [2.0.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0-rc.2) (2020-01-20)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.0.0-rc.1...v2.0.0-rc.2)
+
+ * Add prepublish script
+   [\#3877](https://github.com/matrix-org/matrix-react-sdk/pull/3877)
+
+Changes in [2.0.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.0.0-rc.1) (2020-01-20)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.6...v2.0.0-rc.1)
+
+BREAKING CHANGES
+================
+ * The react-sdk node module now exports ES6 rather than ES5. If you
+   wish to supports target that aren't compatible with ES6, you
+   will need to transpile the react-sdk to a suitable dialect.
+
+All Changes
+===========
+ * Fix arrows keys moving through edit history
+   [\#3874](https://github.com/matrix-org/matrix-react-sdk/pull/3874)
+ * Fix error about MessagePanel not being available for read markers
+   [\#3867](https://github.com/matrix-org/matrix-react-sdk/pull/3867)
+ * Adjust secret storage to work before sync
+   [\#3864](https://github.com/matrix-org/matrix-react-sdk/pull/3864)
+ * Update from Weblate
+   [\#3872](https://github.com/matrix-org/matrix-react-sdk/pull/3872)
+ * Remove unused deps and dev-deps
+   [\#3870](https://github.com/matrix-org/matrix-react-sdk/pull/3870)
+ * Tidy Jest test stuff and dependencies
+   [\#3869](https://github.com/matrix-org/matrix-react-sdk/pull/3869)
+ * Move feature flag check for new session toast
+   [\#3865](https://github.com/matrix-org/matrix-react-sdk/pull/3865)
+ * Catch exception in checkTerms if no ID server
+   [\#3863](https://github.com/matrix-org/matrix-react-sdk/pull/3863)
+ * Catch exception if passphrase dialog cancelled
+   [\#3862](https://github.com/matrix-org/matrix-react-sdk/pull/3862)
+ * Disable key request dialogs with cross-signing
+   [\#3860](https://github.com/matrix-org/matrix-react-sdk/pull/3860)
+ * Toasts for new, unverified sessions
+   [\#3859](https://github.com/matrix-org/matrix-react-sdk/pull/3859)
+ * Check for a matrixclient before trying to use it
+   [\#3861](https://github.com/matrix-org/matrix-react-sdk/pull/3861)
+ * Room header & message box shields now reflect cross-signing state
+   [\#3850](https://github.com/matrix-org/matrix-react-sdk/pull/3850)
+ * Fix Array.concat undefined
+   [\#3857](https://github.com/matrix-org/matrix-react-sdk/pull/3857)
+ * Update chokidar to fix reskindex not working
+   [\#3856](https://github.com/matrix-org/matrix-react-sdk/pull/3856)
+ * Make the new DM invite dialog work for regular invites too
+   [\#3854](https://github.com/matrix-org/matrix-react-sdk/pull/3854)
+ * Fix event handler leak in MemberStatusMessageAvatar
+   [\#3855](https://github.com/matrix-org/matrix-react-sdk/pull/3855)
+ * Move DM creation logic into DMInviteDialog
+   [\#3843](https://github.com/matrix-org/matrix-react-sdk/pull/3843)
+ * Remove all text when cutting in the composer
+   [\#3848](https://github.com/matrix-org/matrix-react-sdk/pull/3848)
+ * Add a ToastStore
+   [\#3853](https://github.com/matrix-org/matrix-react-sdk/pull/3853)
+ * 'Members' button always toggle the right panel
+   [\#3804](https://github.com/matrix-org/matrix-react-sdk/pull/3804)
+ * Fix timing of when Composer considers itself to be modified
+   [\#3842](https://github.com/matrix-org/matrix-react-sdk/pull/3842)
+ * Compute download file icon immediately
+   [\#3851](https://github.com/matrix-org/matrix-react-sdk/pull/3851)
+ * Fix not being able to open profiles from the timeline
+   [\#3852](https://github.com/matrix-org/matrix-react-sdk/pull/3852)
+ * Add post-login complete security flow
+   [\#3847](https://github.com/matrix-org/matrix-react-sdk/pull/3847)
+ * Added cut/copy and pasting user pills from editor.
+   [\#3828](https://github.com/matrix-org/matrix-react-sdk/pull/3828)
+ * Fix imports for help & support tab
+   [\#3846](https://github.com/matrix-org/matrix-react-sdk/pull/3846)
+ * Humanize the recent DM rooms ourselves for translations
+   [\#3841](https://github.com/matrix-org/matrix-react-sdk/pull/3841)
+ * Improve the quality of invite suggestions by filtering out DMs
+   [\#3840](https://github.com/matrix-org/matrix-react-sdk/pull/3840)
+ * Fix linter and tests on develop
+   [\#3845](https://github.com/matrix-org/matrix-react-sdk/pull/3845)
+ * Fix sourcemaps by refactoring the build system
+   [\#3839](https://github.com/matrix-org/matrix-react-sdk/pull/3839)
+ * Don't error on unverified/unknown devices.
+   [\#3837](https://github.com/matrix-org/matrix-react-sdk/pull/3837)
+ * Padlock icons in room header
+   [\#3835](https://github.com/matrix-org/matrix-react-sdk/pull/3835)
+ * Don't allow upgrade from untrusted key backup.
+   [\#3822](https://github.com/matrix-org/matrix-react-sdk/pull/3822)
+ * Emoji verification: Change name of 🔒 to lock
+   [\#3825](https://github.com/matrix-org/matrix-react-sdk/pull/3825)
+ * Room padlock decorations only if cross-signing is enabled
+   [\#3838](https://github.com/matrix-org/matrix-react-sdk/pull/3838)
+ * Enable end-to-end tests for sourcemaps (+Windows instructions)
+   [\#3827](https://github.com/matrix-org/matrix-react-sdk/pull/3827)
+ * Repair community member info panel
+   [\#3832](https://github.com/matrix-org/matrix-react-sdk/pull/3832)
+ * Add feature flag around the presence indicator in room list
+   [\#3831](https://github.com/matrix-org/matrix-react-sdk/pull/3831)
+ * Display a padlock icon beside invite-only rooms in the room list
+   [\#3821](https://github.com/matrix-org/matrix-react-sdk/pull/3821)
+ * Update from Weblate
+   [\#3830](https://github.com/matrix-org/matrix-react-sdk/pull/3830)
+ * Fix listener leak on RoomView
+   [\#3826](https://github.com/matrix-org/matrix-react-sdk/pull/3826)
+ * Regenerate i18n for sourcemaps branch
+   [\#3824](https://github.com/matrix-org/matrix-react-sdk/pull/3824)
+ * Fix tests for sourcemaps branch
+   [\#3823](https://github.com/matrix-org/matrix-react-sdk/pull/3823)
+ * Jest
+   [\#3724](https://github.com/matrix-org/matrix-react-sdk/pull/3724)
+ * Sourcemaps: develop -> feature branch
+   [\#3817](https://github.com/matrix-org/matrix-react-sdk/pull/3817)
+ * Support pasting a bunch of identifiers into the invite dialog
+   [\#3820](https://github.com/matrix-org/matrix-react-sdk/pull/3820)
+ * Support 3PIDs (email addresses) in the invite dialog
+   [\#3819](https://github.com/matrix-org/matrix-react-sdk/pull/3819)
+ * Placeholder PR for cleaner diffs: ES6
+   [\#3765](https://github.com/matrix-org/matrix-react-sdk/pull/3765)
+ * Misc fixes for ES6 imports/exports
+   [\#3766](https://github.com/matrix-org/matrix-react-sdk/pull/3766)
+ * Wire up the invite targets dialog to a real composer and show selections
+   [\#3815](https://github.com/matrix-org/matrix-react-sdk/pull/3815)
+ * Change ref handling in TextualBody to prevent it parsing generated nodes
+   [\#3711](https://github.com/matrix-org/matrix-react-sdk/pull/3711)
+ * Render encoded html entities in og:description
+   [\#3789](https://github.com/matrix-org/matrix-react-sdk/pull/3789)
+ * Update package.json for new build process + cosmetics
+   [\#3767](https://github.com/matrix-org/matrix-react-sdk/pull/3767)
+ * Convert CommonJS exports to ES6 exports
+   [\#3761](https://github.com/matrix-org/matrix-react-sdk/pull/3761)
+ * Round 2 of CommonJS to ES6 imports
+   [\#3764](https://github.com/matrix-org/matrix-react-sdk/pull/3764)
+ * Strip all variation selectors on emoji
+   [\#3814](https://github.com/matrix-org/matrix-react-sdk/pull/3814)
+ * Use the new js-sdk imports and import from src
+   [\#3763](https://github.com/matrix-org/matrix-react-sdk/pull/3763)
+ * Convert many imports to handle ES6 exports
+   [\#3762](https://github.com/matrix-org/matrix-react-sdk/pull/3762)
+ * Fix userinfo for users not in the room
+   [\#3812](https://github.com/matrix-org/matrix-react-sdk/pull/3812)
+ * Attempt to fix e2e tests
+   [\#3811](https://github.com/matrix-org/matrix-react-sdk/pull/3811)
+ * Add bunch of null-guards and similar to fix React Errors/complaints
+   [\#3752](https://github.com/matrix-org/matrix-react-sdk/pull/3752)
+ * Delegate all room alias validation to the RoomAliasField validator
+   [\#3807](https://github.com/matrix-org/matrix-react-sdk/pull/3807)
+ * Support filtering and searching for users to invite in DMs
+   [\#3802](https://github.com/matrix-org/matrix-react-sdk/pull/3802)
+ * Add suggestions for which users to invite to chat
+   [\#3801](https://github.com/matrix-org/matrix-react-sdk/pull/3801)
+ * Use `flex-start` instead of `start` for postcss
+   [\#3760](https://github.com/matrix-org/matrix-react-sdk/pull/3760)
+ * Define getLanguageFromBrowser() for LanguageDropdown
+   [\#3769](https://github.com/matrix-org/matrix-react-sdk/pull/3769)
+ * Introduce babel's export-default-from plugin to fix build errors
+   [\#3768](https://github.com/matrix-org/matrix-react-sdk/pull/3768)
+ * Add a bit of debugging to incorrect components in the Skinner
+   [\#3770](https://github.com/matrix-org/matrix-react-sdk/pull/3770)
+ * [BREAKING] Refactor the entire build process for babel@7 and TypeScript
+   (chunk 1 of many)
+   [\#3722](https://github.com/matrix-org/matrix-react-sdk/pull/3722)
+ * Implementation of new potential skinning mechanism
+   [\#3723](https://github.com/matrix-org/matrix-react-sdk/pull/3723)
+
+Changes in [1.7.6](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.6) (2020-01-13)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.6-rc.2...v1.7.6)
+
+ * Repair community member info panel
+   [\#3834](https://github.com/matrix-org/matrix-react-sdk/pull/3834)
+ * Add feature flag around the presence indicator in room list
+   [\#3833](https://github.com/matrix-org/matrix-react-sdk/pull/3833)
+
+Changes in [1.7.6-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.6-rc.2) (2020-01-08)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.6-rc.1...v1.7.6-rc.2)
+
+ * Strip all variation selectors on emoji
+   [\#3818](https://github.com/matrix-org/matrix-react-sdk/pull/3818)
+
+Changes in [1.7.6-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.6-rc.1) (2020-01-06)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.5...v1.7.6-rc.1)
+
+ * Deduplicate recent emoji
+   [\#3806](https://github.com/matrix-org/matrix-react-sdk/pull/3806)
+ * Fix ability to remove avatars
+   [\#3803](https://github.com/matrix-org/matrix-react-sdk/pull/3803)
+ * Update from Weblate
+   [\#3810](https://github.com/matrix-org/matrix-react-sdk/pull/3810)
+ * User Info fetch latest RoomMember instead of showing historical data
+   [\#3788](https://github.com/matrix-org/matrix-react-sdk/pull/3788)
+ * Remove all usages of slate in favour of CIDER
+   [\#3808](https://github.com/matrix-org/matrix-react-sdk/pull/3808)
+ * Use display name when pinned messages are changed
+   [\#3809](https://github.com/matrix-org/matrix-react-sdk/pull/3809)
+ * Fix inverted diff line highlighting in dark theme
+   [\#3790](https://github.com/matrix-org/matrix-react-sdk/pull/3790)
+ * Bridge info settings tab
+   [\#3693](https://github.com/matrix-org/matrix-react-sdk/pull/3693)
+ * Send the labs flags the client is running with in rageshake
+   [\#3805](https://github.com/matrix-org/matrix-react-sdk/pull/3805)
+ * Initial implementation of FTUE user lists design
+   [\#3792](https://github.com/matrix-org/matrix-react-sdk/pull/3792)
+ * Update key backup creation and recovery paths for SSSS
+   [\#3800](https://github.com/matrix-org/matrix-react-sdk/pull/3800)
+ * Don't fail if logs exists and is an empty dir
+   [\#3798](https://github.com/matrix-org/matrix-react-sdk/pull/3798)
+ * Comment remaining non-cross-signing-compliant components
+   [\#3799](https://github.com/matrix-org/matrix-react-sdk/pull/3799)
+ * Remove 'unverify' from UserInfoPanel
+   [\#3797](https://github.com/matrix-org/matrix-react-sdk/pull/3797)
+ * Use deviceTrust when displaying key backup trust status
+   [\#3795](https://github.com/matrix-org/matrix-react-sdk/pull/3795)
+ * Don't crash if a keyshare request is removed
+   [\#3793](https://github.com/matrix-org/matrix-react-sdk/pull/3793)
+ * Convert /verify to checkDeviceTrust
+   [\#3794](https://github.com/matrix-org/matrix-react-sdk/pull/3794)
+ * Remove E2eIcon onClick
+   [\#3791](https://github.com/matrix-org/matrix-react-sdk/pull/3791)
+ * support channel names with slash in name/alias
+   [\#3778](https://github.com/matrix-org/matrix-react-sdk/pull/3778)
+ * Fix NPE when filtering the room list
+   [\#3787](https://github.com/matrix-org/matrix-react-sdk/pull/3787)
+ * Turn RoomAliasField into properly controlled and use in RoomSettings
+   [\#3782](https://github.com/matrix-org/matrix-react-sdk/pull/3782)
+ * fuzzy-sort MemberList
+   [\#3783](https://github.com/matrix-org/matrix-react-sdk/pull/3783)
+ * Serialize file uploads into room to match confirmation dialog order
+   [\#3786](https://github.com/matrix-org/matrix-react-sdk/pull/3786)
+ * Do not show Top Unread Messages Bar and Jump to bottom button if searching
+   [\#3785](https://github.com/matrix-org/matrix-react-sdk/pull/3785)
+ * Fix sticker picker chevron offset calculation
+   [\#3784](https://github.com/matrix-org/matrix-react-sdk/pull/3784)
+ * Fix not being able to promote others to the same power level as your own
+   [\#3781](https://github.com/matrix-org/matrix-react-sdk/pull/3781)
+ * Room Tile DMs online/active green dot
+   [\#3751](https://github.com/matrix-org/matrix-react-sdk/pull/3751)
+ * Fix spelling and grammar in README
+   [\#3780](https://github.com/matrix-org/matrix-react-sdk/pull/3780)
+ * Reintroduce working resizer code for right panel
+   [\#3776](https://github.com/matrix-org/matrix-react-sdk/pull/3776)
+ * Fix wrong scope binding on openHelp for TopLeftMenu
+   [\#3775](https://github.com/matrix-org/matrix-react-sdk/pull/3775)
+ * UserInfo hide kick/mute buttons if they make no sense
+   [\#3774](https://github.com/matrix-org/matrix-react-sdk/pull/3774)
+ * Fix duplicate Incoming Call prompt on Community Invite sublist
+   [\#3773](https://github.com/matrix-org/matrix-react-sdk/pull/3773)
+ * Apply new design to highlighted tags and add toggle mechanic
+   [\#3755](https://github.com/matrix-org/matrix-react-sdk/pull/3755)
+ * stop using ReactDOM.findDOMNode in componentWillUnmount, use refs
+   [\#3771](https://github.com/matrix-org/matrix-react-sdk/pull/3771)
+ * Add alt="" to presentational images
+   [\#3772](https://github.com/matrix-org/matrix-react-sdk/pull/3772)
+ * Fix room list filtering weird case sensitivity
+   [\#3759](https://github.com/matrix-org/matrix-react-sdk/pull/3759)
+ * Don't show the 'verify' button if the user is verified
+   [\#3758](https://github.com/matrix-org/matrix-react-sdk/pull/3758)
+ * Switch to using checkDeviceTrust
+   [\#3757](https://github.com/matrix-org/matrix-react-sdk/pull/3757)
+ * Migrate away from React Legacy contexts API
+   [\#3743](https://github.com/matrix-org/matrix-react-sdk/pull/3743)
+ * Migrate key backups to SSSS
+   [\#3749](https://github.com/matrix-org/matrix-react-sdk/pull/3749)
+ * Get rid of stripped-emoji.json in favour of an in-memory single source of
+   truth
+   [\#3745](https://github.com/matrix-org/matrix-react-sdk/pull/3745)
+ * Combine cross signing and verification over DM feature flags
+   [\#3753](https://github.com/matrix-org/matrix-react-sdk/pull/3753)
+ * apply unhomoglyph when filtering room list to fuzzify it
+   [\#3754](https://github.com/matrix-org/matrix-react-sdk/pull/3754)
+ * Make EmojiPicker an unmanaged Context Menu as it is too complex to be
+   managed
+   [\#3746](https://github.com/matrix-org/matrix-react-sdk/pull/3746)
+ * Internationalise M_TOO_LARGE error from Synapse
+   [\#3750](https://github.com/matrix-org/matrix-react-sdk/pull/3750)
+ * Replace UserInfo avatar with <MemberAvatar/> for fallback logic
+   [\#3748](https://github.com/matrix-org/matrix-react-sdk/pull/3748)
+ * Dropdown stop keyboard propagation if key handled
+   [\#3741](https://github.com/matrix-org/matrix-react-sdk/pull/3741)
+ * Fix right panel for multiple member info viewings
+   [\#3742](https://github.com/matrix-org/matrix-react-sdk/pull/3742)
+ * Fix Field validation tooltip sticking if blurred before async validation
+   resolved
+   [\#3740](https://github.com/matrix-org/matrix-react-sdk/pull/3740)
+ * Fix UserInfo exploding without a room being passed to it
+   [\#3738](https://github.com/matrix-org/matrix-react-sdk/pull/3738)
+ * Fix room directory maintaining and error state
+   [\#3737](https://github.com/matrix-org/matrix-react-sdk/pull/3737)
+ * Stop trapping tab in AddressPickerDialog
+   [\#3735](https://github.com/matrix-org/matrix-react-sdk/pull/3735)
+ * Stop using KeyboardEvent.keyCode as it is deprecated
+   [\#3736](https://github.com/matrix-org/matrix-react-sdk/pull/3736)
+ * Implement new design for uploading/removing avatars
+   [\#3733](https://github.com/matrix-org/matrix-react-sdk/pull/3733)
+ * Fix aspect ratio on room/profile avatar preview
+   [\#3731](https://github.com/matrix-org/matrix-react-sdk/pull/3731)
+ * Switch to react-focus-lock for it to comprehend Portals
+   [\#3732](https://github.com/matrix-org/matrix-react-sdk/pull/3732)
+ * Make combobox dropdown keyboard and screen reader accessible
+   [\#3729](https://github.com/matrix-org/matrix-react-sdk/pull/3729)
+ * Verify users when cross-signing enabled
+   [\#3728](https://github.com/matrix-org/matrix-react-sdk/pull/3728)
+ * Update from Weblate
+   [\#3730](https://github.com/matrix-org/matrix-react-sdk/pull/3730)
+ * Improve a11y of the unignore button in Settings
+   [\#3727](https://github.com/matrix-org/matrix-react-sdk/pull/3727)
+ * Fix ToggleSwitch A11Y (trapping tab and switch v. checkbox)
+   [\#3726](https://github.com/matrix-org/matrix-react-sdk/pull/3726)
+ * Make URL previews dismissable via keyboard and accessible to screen readers
+   [\#3725](https://github.com/matrix-org/matrix-react-sdk/pull/3725)
+ * Create new key backups using secret storage
+   [\#3720](https://github.com/matrix-org/matrix-react-sdk/pull/3720)
+ * Replace sign-ins with sessions
+   [\#3721](https://github.com/matrix-org/matrix-react-sdk/pull/3721)
+ * Refactor RightPanel to match expected behaviour
+   [\#3703](https://github.com/matrix-org/matrix-react-sdk/pull/3703)
+ * Render policy room event updates in the timeline
+   [\#3716](https://github.com/matrix-org/matrix-react-sdk/pull/3716)
+ * Wrap the await call for unknown device lookups
+   [\#3718](https://github.com/matrix-org/matrix-react-sdk/pull/3718)
+ * Add testing flow to bootstrap secret storage
+   [\#3640](https://github.com/matrix-org/matrix-react-sdk/pull/3640)
+ * Fix remaining context menu regressions
+   [\#3715](https://github.com/matrix-org/matrix-react-sdk/pull/3715)
+ * Migrate away from React Legacy string refs
+   [\#3712](https://github.com/matrix-org/matrix-react-sdk/pull/3712)
+ * Update copy for DM invites
+   [\#3706](https://github.com/matrix-org/matrix-react-sdk/pull/3706)
+ * Fix message action bar reaction picker regression
+   [\#3714](https://github.com/matrix-org/matrix-react-sdk/pull/3714)
+ * Add what-input to allow different scoping to focus-visible for MAB a11y
+   [\#3709](https://github.com/matrix-org/matrix-react-sdk/pull/3709)
+ * Mark the This/All Rooms scope buttons as radios for a11y
+   [\#3708](https://github.com/matrix-org/matrix-react-sdk/pull/3708)
+ * Switch ReactionsRowButton to an AccessibleButton for space/enter handling
+   [\#3707](https://github.com/matrix-org/matrix-react-sdk/pull/3707)
+ * Change the (edited) link to an AccessibleButton for a11y
+   [\#3710](https://github.com/matrix-org/matrix-react-sdk/pull/3710)
+ * Update from Weblate
+   [\#3713](https://github.com/matrix-org/matrix-react-sdk/pull/3713)
+ * Fix ?via= args in SpecPermalinkConstructor.js
+   [\#3694](https://github.com/matrix-org/matrix-react-sdk/pull/3694)
+ * Don't mark a room as unread when server ACLs are set
+   [\#3705](https://github.com/matrix-org/matrix-react-sdk/pull/3705)
+ * Make reaction buttons more accessible
+   [\#3704](https://github.com/matrix-org/matrix-react-sdk/pull/3704)
+ * yarn upgrade
+   [\#3701](https://github.com/matrix-org/matrix-react-sdk/pull/3701)
+ * Make CI scripts executable
+   [\#3698](https://github.com/matrix-org/matrix-react-sdk/pull/3698)
+ * ARIA compliant context menus
+   [\#3611](https://github.com/matrix-org/matrix-react-sdk/pull/3611)
+
 Changes in [1.7.5](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v1.7.5) (2019-12-09)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v1.7.5-rc.1...v1.7.5)

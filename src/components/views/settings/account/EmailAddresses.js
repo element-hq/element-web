@@ -18,12 +18,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../languageHandler";
-import MatrixClientPeg from "../../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../../MatrixClientPeg";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
-import sdk from '../../../../index';
+import * as sdk from '../../../../index';
 import Modal from '../../../../Modal';
 
 /*
@@ -237,7 +237,7 @@ export default class EmailAddresses extends React.Component {
                 {existingEmailElements}
                 <form onSubmit={this._onAddClick} autoComplete="off"
                       noValidate={true} className="mx_EmailAddresses_new">
-                    <Field id="mx_EmailAddressses_newEmailAddress"
+                    <Field
                         type="text"
                         label={_t("Email Address")}
                         autoComplete="off"

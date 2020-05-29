@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,10 +18,9 @@ limitations under the License.
 'use strict';
 
 import { _td } from '../languageHandler';
-
-const StandardActions = require('./StandardActions');
-const PushRuleVectorState = require('./PushRuleVectorState');
-const { decodeActions } = require('./NotificationUtils');
+import {StandardActions} from "./StandardActions";
+import {PushRuleVectorState} from "./PushRuleVectorState";
+import {NotificationUtils} from "./NotificationUtils";
 
 class VectorPushRuleDefinition {
     constructor(opts) {
@@ -51,8 +51,8 @@ class VectorPushRuleDefinition {
                 // value: true vs. unspecified for highlight (which defaults to
                 // true, making them equivalent).
                 if (enabled &&
-                        JSON.stringify(decodeActions(rule.actions)) ===
-                        JSON.stringify(decodeActions(vectorStateToActions))) {
+                        JSON.stringify(NotificationUtils.decodeActions(rule.actions)) ===
+                        JSON.stringify(NotificationUtils.decodeActions(vectorStateToActions))) {
                     return state;
                 }
             }
@@ -68,7 +68,7 @@ class VectorPushRuleDefinition {
 /**
  * The descriptions of rules managed by the Vector UI.
  */
-module.exports = {
+export const VectorPushRulesDefinitions = {
     // Messages containing user's display name
     ".m.rule.contains_display_name": new VectorPushRuleDefinition({
         kind: "override",

@@ -17,8 +17,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
@@ -30,7 +30,7 @@ export default createReactClass({
         onFinished: PropTypes.func.isRequired,
     },
 
-    componentWillMount: async function() {
+    componentDidMount: async function() {
         const recommended = await this.props.room.getRecommendedVersion();
         this._targetVersion = recommended.version;
         this.setState({busy: false});

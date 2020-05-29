@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 function readFileAsArrayBuffer(file) {
@@ -54,7 +54,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
 
         this._file = createRef();

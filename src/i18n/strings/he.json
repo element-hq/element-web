@@ -3,7 +3,6 @@
     "This phone number is already in use": "מספר הטלפון הזה כבר בשימוש",
     "Failed to verify email address: make sure you clicked the link in the email": "אימות כתובת הדוא\"ל נכשלה: וודא שלחצת על הקישור בדוא\"ל",
     "Call Failed": "השיחה נכשלה",
-    "There are unknown devices in this room: if you proceed without verifying them, it will be possible for someone to eavesdrop on your call.": "ישנם מכשירים לא ידועים בחדר: המשך ללא אימותם יאפשר למישהו לצוטט לשיחתך.",
     "Review Devices": "סקירת מכשירים",
     "Call Anyway": "התקשר בכל זאת",
     "Answer Anyway": "ענה בכל זאת",
@@ -126,7 +125,6 @@
     "Resend": "שלח מחדש",
     "Collecting app version information": "אוסף מידע על גרסת היישום",
     "Delete the room alias %(alias)s and remove %(name)s from the directory?": "מחק כינוי %(alias)s של החדר  והסר את %(name)s מהרשימה?",
-    "This will allow you to return to your account after signing out, and sign in on other devices.": "זה יאפשר לך לחזור לחשבונך אחרי התנתקות ולהתחבר באמצעות התקנים אחרים.",
     "Keywords": "מילות מפתח",
     "Enable notifications for this account": "אפשר התראות לחשבון זה",
     "Invite to this community": "הזמן לקהילה זו",
@@ -209,5 +207,6 @@
     "Thank you!": "רב תודות!",
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "באמצעות הדפדפן הנוכחי שלך המראה של היישום יכול להיות שגוי לחלוטין וחלק מהאפשרויות לא תתפקדנה. אם תרצה לנסות בכל זאת תוכל אבל אז כל האחריות עליך!",
     "Checking for an update...": "בודק עדכונים...",
-    "There are advanced notifications which are not shown here": "ישנן התראות מתקדמות אשר אינן מוצגות כאן"
+    "There are advanced notifications which are not shown here": "ישנן התראות מתקדמות אשר אינן מוצגות כאן",
+    "Your Riot is misconfigured": "ה Riot שלך מוגדר באופן שגוי"
 }

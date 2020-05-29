@@ -17,17 +17,17 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import { findEmojiData } from '../../../HtmlUtils';
+import {getEmojiFromUnicode} from "../../../emoji";
 
+// We use the variation-selector Heart in Quick Reactions for some reason
 const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀", "👀"].map(emoji => {
-    const data = findEmojiData(emoji);
+    const data = getEmojiFromUnicode(emoji);
     if (!data) {
         throw new Error(`Emoji ${emoji} doesn't exist in emojibase`);
     }
-    // Prefer our unicode value for quick reactions (which does not have
-    // variation selectors).
+    // Prefer our unicode value for quick reactions as we sometimes use variation selectors.
     return Object.assign({}, data, { unicode: emoji });
 });
 
@@ -72,7 +72,7 @@ class QuickReactions extends React.Component {
                         </React.Fragment>
                     }
                 </h2>
-                <ul className="mx_EmojiPicker_list">
+                <ul className="mx_EmojiPicker_list" aria-label={_t("Quick Reactions")}>
                     {QUICK_REACTIONS.map(emoji => <Emoji
                         key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
                         onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}

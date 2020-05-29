@@ -3,7 +3,7 @@ Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,10 +23,13 @@ import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HEADER_KIND_ROOM} from './HeaderButtons';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {Action} from "../../../dispatcher/actions";
+import {ActionPayload} from "../../../dispatcher/payloads";
 
 const MEMBER_PHASES = [
     RIGHT_PANEL_PHASES.RoomMemberList,
     RIGHT_PANEL_PHASES.RoomMemberInfo,
+    RIGHT_PANEL_PHASES.EncryptionPanel,
     RIGHT_PANEL_PHASES.Room3pidMemberInfo,
 ];
 
@@ -38,9 +41,9 @@ export default class RoomHeaderButtons extends HeaderButtons {
         this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
     }
 
-    onAction(payload) {
+    onAction(payload: ActionPayload) {
         super.onAction(payload);
-        if (payload.action === "view_user") {
+        if (payload.action === Action.ViewUser) {
             if (payload.member) {
                 this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, {member: payload.member});
             } else {
@@ -56,8 +59,14 @@ export default class RoomHeaderButtons extends HeaderButtons {
     }
 
     _onMembersClicked() {
-        // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+            // send the active phase to trigger a toggle
+            // XXX: we should pass refireParams here but then it won't collapse as we desire it to
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+        }
     }
 
     _onFilesClicked() {

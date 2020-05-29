@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from "../../../MatrixClientPeg";
-import sdk from '../../../index';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangeAvatar',
     propTypes: {
         initialAvatarUrl: PropTypes.string,
@@ -55,11 +55,12 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         if (this.avatarSet) {
             // don't clobber what the user has just set
             return;

@@ -130,7 +130,7 @@ export async function decryptMegolmKeyFile(data, password) {
  * @param {String} data
  * @param {String} password
  * @param {Object=} options
- * @param {Nunber=} options.kdf_rounds Number of iterations to perform of the
+ * @param {Number=} options.kdf_rounds Number of iterations to perform of the
  *    key-derivation function.
  * @return {Promise<ArrayBuffer>} promise for encrypted output
  */

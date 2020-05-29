@@ -78,7 +78,7 @@ export default class AutoDiscoveryUtils {
                         return <a
                             href="https://github.com/vector-im/riot-web/blob/master/docs/config.md"
                             target="_blank"
-                            rel="noopener"
+                            rel="noreferrer noopener"
                         >{sub}</a>;
                     },
                 },

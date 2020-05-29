@@ -18,18 +18,19 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import MatrixClientPeg from "../../../MatrixClientPeg";
-import sdk from '../../../index';
-import dis from "../../../dispatcher";
-import ObjectUtils from '../../../ObjectUtils';
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import * as sdk from '../../../index';
+import dis from "../../../dispatcher/dispatcher";
+import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'AuxPanel',
 
     propTypes: {
@@ -140,6 +141,15 @@ module.exports = createReactClass({
         return counters;
     },
 
+    _onScroll: function(rect) {
+        if (this.props.onResize) {
+            this.props.onResize();
+        }
+
+        /* Force refresh of PersistedElements which may be partially hidden */
+        window.dispatchEvent(new Event('resize'));
+    },
+
     render: function() {
         const CallView = sdk.getComponent("voip.CallView");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -219,7 +229,7 @@ module.exports = createReactClass({
 
                 if (link) {
                     span = (
-                        <a href={link} target="_blank" rel="noopener">
+                        <a href={link} target="_blank" rel="noreferrer noopener">
                             { span }
                         </a>
                     );
@@ -264,14 +274,14 @@ module.exports = createReactClass({
         }
 
         return (
-            <div className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style} onScroll={this._onScroll}>
                 { stateViews }
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }
                 { this.props.children }
-            </div>
+            </AutoHideScrollbar>
         );
     },
 });

@@ -19,9 +19,9 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import IdentityAuthClient from '../../../IdentityAuthClient';
@@ -43,12 +43,13 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomPreviewBar',
 
     propTypes: {
         onJoinClick: PropTypes.func,
         onRejectClick: PropTypes.func,
+        onRejectAndIgnoreClick: PropTypes.func,
         onForgetClick: PropTypes.func,
         // if inviterName is specified, the preview bar will shown an invite to the room.
         // You should also specify onRejectClick if specifiying inviterName
@@ -96,7 +97,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._checkInvitedEmail();
     },
 
@@ -265,9 +266,9 @@ module.exports = createReactClass({
             params: {
                 email: this.props.invitedEmail,
                 signurl: this.props.signUrl,
-                room_name: this.props.oobData.room_name,
-                room_avatar_url: this.props.oobData.avatarUrl,
-                inviter_name: this.props.oobData.inviterName,
+                room_name: this.props.oobData ? this.props.oobData.room_name : null,
+                room_avatar_url: this.props.oobData ? this.props.oobData.avatarUrl : null,
+                inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
             }
         };
     },
@@ -282,6 +283,7 @@ module.exports = createReactClass({
 
     render: function() {
         const Spinner = sdk.getComponent('elements.Spinner');
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let showSpinner = false;
         let darkStyle = false;
@@ -292,6 +294,7 @@ module.exports = createReactClass({
         let secondaryActionHandler;
         let secondaryActionLabel;
         let footer;
+        const extraComponents = [];
 
         const messageCase = this._getMessageCase();
         switch (messageCase) {
@@ -469,6 +472,14 @@ module.exports = createReactClass({
                 primaryActionHandler = this.props.onJoinClick;
                 secondaryActionLabel = _t("Reject");
                 secondaryActionHandler = this.props.onRejectClick;
+
+                if (this.props.onRejectAndIgnoreClick) {
+                    extraComponents.push(
+                        <AccessibleButton kind="secondary" onClick={this.props.onRejectAndIgnoreClick} key="ignore">
+                            { _t("Reject & Ignore user") }
+                        </AccessibleButton>,
+                    );
+                }
                 break;
             }
             case MessageCase.ViewingRoom: {
@@ -498,14 +509,12 @@ module.exports = createReactClass({
                         "<issueLink>submit a bug report</issueLink>.",
                         { errcode: this.props.error.errcode },
                         { issueLink: label => <a href="https://github.com/vector-im/riot-web/issues/new/choose"
-                            target="_blank" rel="noopener">{ label }</a> },
+                            target="_blank" rel="noreferrer noopener">{ label }</a> },
                     ),
                 ];
                 break;
             }
         }
-
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let subTitleElements;
         if (subTitle) {
@@ -554,6 +563,7 @@ module.exports = createReactClass({
                 </div>
                 <div className="mx_RoomPreviewBar_actions">
                     { secondaryButton }
+                    { extraComponents }
                     { primaryButton }
                 </div>
                 <div className="mx_RoomPreviewBar_footer">

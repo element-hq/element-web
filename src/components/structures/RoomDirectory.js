@@ -18,18 +18,17 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-
-const MatrixClientPeg = require('../../MatrixClientPeg');
-const ContentRepo = require("matrix-js-sdk").ContentRepo;
-const Modal = require('../../Modal');
-const sdk = require('../../index');
-const dis = require('../../dispatcher');
-
+import {MatrixClientPeg} from "../../MatrixClientPeg";
+import * as sdk from "../../index";
+import dis from "../../dispatcher/dispatcher";
+import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
+import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
+import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -38,18 +37,11 @@ function track(action) {
     Analytics.trackEvent('RoomDirectory', action);
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomDirectory',
 
     propTypes: {
-        config: PropTypes.object,
         onFinished: PropTypes.func.isRequired,
-    },
-
-    getDefaultProps: function() {
-        return {
-            config: {},
-        };
     },
 
     getInitialState: function() {
@@ -58,24 +50,14 @@ module.exports = createReactClass({
             loading: true,
             protocolsLoading: true,
             error: null,
-            instanceId: null,
-            includeAll: false,
-            roomServer: null,
+            instanceId: undefined,
+            roomServer: MatrixClientPeg.getHomeserverName(),
             filterString: null,
         };
     },
 
-    childContextTypes: {
-        matrixClient: PropTypes.object,
-    },
-
-    getChildContext: function() {
-        return {
-            matrixClient: MatrixClientPeg.get(),
-        };
-    },
-
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
         this.nextBatch = null;
         this.filterTimeout = null;
@@ -108,6 +90,8 @@ module.exports = createReactClass({
                 ),
             });
         });
+
+        this.refreshRoomList();
     },
 
     componentWillUnmount: function() {
@@ -142,10 +126,10 @@ module.exports = createReactClass({
         if (my_server != MatrixClientPeg.getHomeserverName()) {
             opts.server = my_server;
         }
-        if (this.state.instanceId) {
-            opts.third_party_instance_id = this.state.instanceId;
-        } else if (this.state.includeAll) {
+        if (this.state.instanceId === ALL_ROOMS) {
             opts.include_all_networks = true;
+        } else if (this.state.instanceId) {
+            opts.third_party_instance_id = this.state.instanceId;
         }
         if (this.nextBatch) opts.since = this.nextBatch;
         if (my_filter_string) opts.filter = { generic_search_term: my_filter_string };
@@ -167,7 +151,7 @@ module.exports = createReactClass({
 
             this.nextBatch = data.next_batch;
             this.setState((s) => {
-                s.publicRooms.push(...data.chunk);
+                s.publicRooms.push(...(data.chunk || []));
                 s.loading = false;
                 return s;
             });
@@ -215,7 +199,7 @@ module.exports = createReactClass({
 
         let desc;
         if (alias) {
-            desc = _t('Delete the room alias %(alias)s and remove %(name)s from the directory?', {alias: alias, name: name});
+            desc = _t('Delete the room address %(alias)s and remove %(name)s from the directory?', {alias, name});
         } else {
             desc = _t('Remove %(name)s from the directory?', {name: name});
         }
@@ -232,7 +216,7 @@ module.exports = createReactClass({
 
                 MatrixClientPeg.get().setRoomDirectoryVisibility(room.room_id, 'private').then(() => {
                     if (!alias) return;
-                    step = _t('delete the alias.');
+                    step = _t('delete the address.');
                     return MatrixClientPeg.get().deleteAlias(alias);
                 }).then(() => {
                     modal.close();
@@ -259,7 +243,7 @@ module.exports = createReactClass({
         }
     },
 
-    onOptionChange: function(server, instanceId, includeAll) {
+    onOptionChange: function(server, instanceId) {
         // clear next batch so we don't try to load more rooms
         this.nextBatch = null;
         this.setState({
@@ -269,7 +253,6 @@ module.exports = createReactClass({
             publicRooms: [],
             roomServer: server,
             instanceId: instanceId,
-            includeAll: includeAll,
             error: null,
         }, this.refreshRoomList);
         // We also refresh the room list each time even though this
@@ -317,7 +300,7 @@ module.exports = createReactClass({
 
     onJoinFromSearchClick: function(alias) {
         // If we don't have a particular instance id selected, just show that rooms alias
-        if (!this.state.instanceId) {
+        if (!this.state.instanceId || this.state.instanceId === ALL_ROOMS) {
             // If the user specified an alias without a domain, add on whichever server is selected
             // in the dropdown
             if (alias.indexOf(':') == -1) {
@@ -384,7 +367,10 @@ module.exports = createReactClass({
 
     onCreateRoomClick: function(room) {
         this.props.onFinished();
-        dis.dispatch({action: 'view_create_room'});
+        dis.dispatch({
+            action: 'view_create_room',
+            public: true,
+        });
     },
 
     showRoomAlias: function(alias, autoJoin=false) {
@@ -418,6 +404,12 @@ module.exports = createReactClass({
                 // would normally decide what the name is.
                 name: room.name || room_alias || _t('Unnamed room'),
             };
+
+            if (this.state.roomServer) {
+                payload.opts = {
+                    viaServers: [this.state.roomServer],
+                };
+            }
         }
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know
         // which servers to start querying. However, there's no other way to join rooms in
@@ -466,7 +458,7 @@ module.exports = createReactClass({
             topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
         }
         topic = linkifyAndSanitizeHtml(topic);
-        const avatarUrl = ContentRepo.getHttpUriForMxc(
+        const avatarUrl = getHttpUriForMxc(
                                 MatrixClientPeg.get().getHomeserverUrl(),
                                 room.avatar_url, 32, 32, "crop",
                             );
@@ -599,7 +591,7 @@ module.exports = createReactClass({
             }
 
             let placeholder = _t('Find a room…');
-            if (!this.state.instanceId) {
+            if (!this.state.instanceId || this.state.instanceId === ALL_ROOMS) {
                 placeholder = _t("Find a room… (e.g. %(exampleRoom)s)", {exampleRoom: "#example:" + this.state.roomServer});
             } else if (instance_expected_field_type) {
                 placeholder = instance_expected_field_type.placeholder;
@@ -616,10 +608,18 @@ module.exports = createReactClass({
             listHeader = <div className="mx_RoomDirectory_listheader">
                 <DirectorySearchBox
                     className="mx_RoomDirectory_searchbox"
-                    onChange={this.onFilterChange} onClear={this.onFilterClear} onJoinClick={this.onJoinFromSearchClick}
-                    placeholder={placeholder} showJoinButton={showJoinButton}
+                    onChange={this.onFilterChange}
+                    onClear={this.onFilterClear}
+                    onJoinClick={this.onJoinFromSearchClick}
+                    placeholder={placeholder}
+                    showJoinButton={showJoinButton}
                 />
-                <NetworkDropdown config={this.props.config} protocols={this.protocols} onOptionChange={this.onOptionChange} />
+                <NetworkDropdown
+                    protocols={this.protocols}
+                    onOptionChange={this.onOptionChange}
+                    selectedServerName={this.state.roomServer}
+                    selectedInstanceId={this.state.instanceId}
+                />
             </div>;
         }
         const explanation =
@@ -640,7 +640,7 @@ module.exports = createReactClass({
                 title={_t("Explore rooms")}
             >
                 <div className="mx_RoomDirectory">
-                    <p>{explanation}</p>
+                    {explanation}
                     <div className="mx_RoomDirectory_list">
                         {listHeader}
                         {content}

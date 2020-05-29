@@ -18,7 +18,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { GroupMemberType } from '../../../groups';
 
@@ -55,7 +55,8 @@ export default createReactClass({
         askReason: false,
     }),
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._reasonField = null;
     },
 

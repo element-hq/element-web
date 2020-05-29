@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,9 +19,9 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
@@ -30,9 +31,11 @@ import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
+import DMRoomMap from '../../../utils/DMRoomMap';
 import E2EIcon from './E2EIcon';
+import InviteOnlyIcon from './InviteOnlyIcon';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomHeader',
 
     propTypes: {
@@ -55,6 +58,7 @@ module.exports = createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._topic = createRef();
     },
@@ -158,6 +162,17 @@ module.exports = createReactClass({
         const e2eIcon = this.props.e2eStatus ?
             <E2EIcon status={this.props.e2eStatus} /> :
             undefined;
+
+        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+        const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRule = joinRules && joinRules.getContent().join_rule;
+        let privateIcon;
+        // Don't show an invite-only icon for DMs. Users know they're invite-only.
+        if (!dmUserId && SettingsStore.getValue("feature_cross_signing")) {
+            if (joinRule == "invite") {
+                privateIcon = <InviteOnlyIcon />;
+            }
+        }
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
@@ -300,9 +315,9 @@ module.exports = createReactClass({
 
         return (
             <div className="mx_RoomHeader light-panel">
-                <div className="mx_RoomHeader_wrapper">
-                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
-                    { e2eIcon }
+                <div className="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
+                    <div className="mx_RoomHeader_avatar">{ roomAvatar }{ e2eIcon }</div>
+                    { privateIcon }
                     { name }
                     { topicElement }
                     { cancelButton }

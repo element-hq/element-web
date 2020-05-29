@@ -24,7 +24,7 @@ import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import {_t} from '../languageHandler';
 import SdkConfig from "../SdkConfig";
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import {WatchManager} from "./WatchManager";
@@ -113,6 +113,9 @@ export default class SettingsStore {
     static _watchers = {}; // { callbackRef => { callbackFn } }
     static _monitors = {}; // { settingName => { roomId => callbackRef } }
 
+    // Counter used for generation of watcher IDs
+    static _watcherCount = 1;
+
     /**
      * Watches for changes in a particular setting. This is done without any local echo
      * wrapping and fires whenever a change is detected in a setting's value, at any level.
@@ -138,14 +141,14 @@ export default class SettingsStore {
             settingName = setting.invertedSettingName;
         }
 
-        const watcherId = `${new Date().getTime()}_${settingName}_${roomId}`;
+        const watcherId = `${new Date().getTime()}_${SettingsStore._watcherCount++}_${settingName}_${roomId}`;
 
         const localizedCallback = (changedInRoomId, atLevel, newValAtLevel) => {
             const newValue = SettingsStore.getValue(originalSettingName);
             callbackFn(originalSettingName, changedInRoomId, atLevel, newValAtLevel, newValue);
         };
 
-        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'}`);
+        console.log(`Starting watcher for ${settingName}@${roomId || '<null room>'} as ID ${watcherId}`);
         SettingsStore._watchers[watcherId] = localizedCallback;
         defaultWatchManager.watchSetting(settingName, roomId, localizedCallback);
 
@@ -159,8 +162,12 @@ export default class SettingsStore {
      * to cancel.
      */
     static unwatchSetting(watcherReference) {
-        if (!SettingsStore._watchers[watcherReference]) return;
+        if (!SettingsStore._watchers[watcherReference]) {
+            console.warn(`Ending non-existent watcher ID ${watcherReference}`);
+            return;
+        }
 
+        console.log(`Ending watcher ID ${watcherReference}`);
         defaultWatchManager.unwatchSetting(SettingsStore._watchers[watcherReference]);
         delete SettingsStore._watchers[watcherReference];
     }
@@ -363,6 +370,21 @@ export default class SettingsStore {
         return SettingsStore._getFinalValue(setting, level, roomId, null, null);
     }
 
+    /**
+     * Gets the default value of a setting.
+     * @param {string} settingName The name of the setting to read the value of.
+     * @param {String} roomId The room ID to read the setting value in, may be null.
+     * @return {*} The default value
+     */
+    static getDefaultValue(settingName) {
+        // Verify that the setting is actually a setting
+        if (!SETTINGS[settingName]) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        return SETTINGS[settingName].default;
+    }
+
     static _getFinalValue(setting, level, roomId, calculatedValue, calculatedAtLevel) {
         let resultingValue = calculatedValue;
 
@@ -560,7 +582,7 @@ export default class SettingsStore {
         const handlers = {};
         for (const level of SETTINGS[settingName].supportedLevels) {
             if (!LEVEL_HANDLERS[level]) throw new Error("Unexpected level " + level);
-            handlers[level] = LEVEL_HANDLERS[level];
+            if (SettingsStore.isLevelSupported(level)) handlers[level] = LEVEL_HANDLERS[level];
         }
 
         // Always support 'default'

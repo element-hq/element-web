@@ -21,6 +21,10 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import React from 'react';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import PlatformPeg from "./PlatformPeg";
+
+// $webapp is a webpack resolve alias pointing to the output directory, see webpack config
+import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 
 const i18nFolder = 'i18n/';
 
@@ -282,6 +286,11 @@ export function setLanguage(preferredLangs) {
         preferredLangs = [preferredLangs];
     }
 
+    const plaf = PlatformPeg.get();
+    if (plaf) {
+        plaf.setLanguage(preferredLangs);
+    }
+
     let langToUse;
     let availLangs;
     return getLangsJson().then((result) => {
@@ -334,6 +343,10 @@ export function getLanguagesFromBrowser() {
     if (navigator.languages && navigator.languages.length) return navigator.languages;
     if (navigator.language) return [navigator.language];
     return [navigator.userLanguage || "en"];
+}
+
+export function getLanguageFromBrowser() {
+    return getLanguagesFromBrowser()[0];
 }
 
 /**
@@ -410,12 +423,11 @@ export function pickBestLanguage(langs) {
 }
 
 function getLangsJson() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let url;
-        try {
-            // $webapp is a webpack resolve alias pointing to the output directory, see webpack config
-            url = require('$webapp/i18n/languages.json');
-        } catch (e) {
+        if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
+            url = webpackLangJsonUrl;
+        } else {
             url = i18nFolder + 'languages.json';
         }
         request(

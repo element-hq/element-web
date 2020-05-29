@@ -68,11 +68,11 @@ limitations under the License.
     width: 240px;
     color: $input-fg-color;
     font-family: $font-family;
-    font-size: 16px;
+    font-size: $font-16px;
 }
 
 .mx_DevTools_textarea {
-    font-size: 12px;
+    font-size: $font-12px;
     max-width: 684px;
     min-height: 250px;
     padding: 10px;
@@ -187,5 +187,39 @@ limitations under the License.
         &:active::after {
             transform: rotateY(20deg);
         }
+    }
+}
+
+.mx_DevTools_VerificationRequest {
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-bottom: 6px;
+    font-family: $monospace-font-family;
+
+    dl {
+        display: grid;
+        grid-template-columns: max-content auto;
+        margin: 0;
+    }
+
+    dd {
+        grid-column-start: 2;
+    }
+
+    dd:empty {
+        color: #666666;
+        &::after {
+            content: "(empty)";
+        }
+    }
+
+    dt {
+        font-weight: bold;
+        grid-column-start: 1;
+    }
+
+    dt::after {
+        content: ":";
     }
 }

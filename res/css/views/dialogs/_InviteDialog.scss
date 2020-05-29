@@ -1,0 +1,228 @@
+/*
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_InviteDialog_addressBar {
+    display: flex;
+    flex-direction: row;
+
+    .mx_InviteDialog_editor {
+        flex: 1;
+        width: 100%; // Needed to make the Field inside grow
+        background-color: $user-tile-hover-bg-color;
+        border-radius: 4px;
+        min-height: 25px;
+        padding-left: 8px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .mx_InviteDialog_userTile {
+            display: inline-block;
+            float: left;
+            position: relative;
+            top: 7px;
+        }
+
+        // Using a textarea for this element, to circumvent autofill
+        // Mostly copied from AddressPickerDialog
+        textarea,
+        textarea:focus {
+            height: 34px;
+            line-height: $font-34px;
+            font-size: $font-14px;
+            padding-left: 12px;
+            margin: 0 !important;
+            border: 0 !important;
+            outline: 0 !important;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+            word-wrap: nowrap;
+
+            // Roughly fill about 2/5ths of the available space. This is to try and 'fill' the
+            // remaining space after a bunch of pills, but is a bit hacky. Ideally we'd have
+            // support for "fill remaining width", but traditional tricks don't work with what
+            // we're pushing into this "field". Flexbox just makes things worse. The theory is
+            // that users won't need more than about 2/5ths of the input to find the person
+            // they're looking for.
+            width: 40%;
+        }
+    }
+
+    .mx_InviteDialog_goButton {
+        min-width: 48px;
+        margin-left: 10px;
+        height: 25px;
+        line-height: $font-25px;
+    }
+
+    .mx_InviteDialog_buttonAndSpinner {
+        .mx_Spinner {
+            // Width and height are required to trick the layout engine.
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+}
+
+.mx_InviteDialog_section {
+    padding-bottom: 10px;
+
+    h3 {
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+.mx_InviteDialog_roomTile {
+    cursor: pointer;
+    padding: 5px 10px;
+
+    &:hover {
+        background-color: $user-tile-hover-bg-color;
+        border-radius: 4px;
+    }
+
+    * {
+        vertical-align: middle;
+    }
+
+    .mx_InviteDialog_roomTile_avatarStack {
+        display: inline-block;
+        position: relative;
+        width: 36px;
+        height: 36px;
+
+        & > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .mx_InviteDialog_roomTile_selected {
+        width: 36px;
+        height: 36px;
+        border-radius: 36px;
+        background-color: $username-variant1-color;
+        display: inline-block;
+        position: relative;
+
+        &::before {
+            content: "";
+            width: 24px;
+            height: 24px;
+            grid-column: 1;
+            grid-row: 1;
+            mask-image: url("$(res)/img/feather-customised/check.svg");
+            mask-size: 100%;
+            mask-repeat: no-repeat;
+            position: absolute;
+            top: 6px; // 50%
+            left: 6px; // 50%
+            background-color: #ffffff; // this is fine without a var because it's for both themes
+        }
+    }
+
+    .mx_InviteDialog_roomTile_name {
+        font-weight: 600;
+        font-size: $font-14px;
+        color: $primary-fg-color;
+        margin-left: 7px;
+    }
+
+    .mx_InviteDialog_roomTile_userId {
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        margin-left: 7px;
+    }
+
+    .mx_InviteDialog_roomTile_time {
+        text-align: right;
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        float: right;
+        line-height: $font-36px; // Height of the avatar to keep the time vertically aligned
+    }
+
+    .mx_InviteDialog_roomTile_highlight {
+        font-weight: 900;
+    }
+}
+
+// Many of these styles are stolen from mx_UserPill, but adjusted for the invite dialog.
+.mx_InviteDialog_userTile {
+    margin-right: 8px;
+
+    .mx_InviteDialog_userTile_pill {
+        background-color: $username-variant1-color;
+        border-radius: 12px;
+        display: inline-block;
+        height: 24px;
+        line-height: $font-24px;
+        padding-left: 8px;
+        padding-right: 8px;
+        color: #ffffff; // this is fine without a var because it's for both themes
+
+        .mx_InviteDialog_userTile_avatar {
+            border-radius: 20px;
+            position: relative;
+            left: -5px;
+            top: 2px;
+        }
+
+        img.mx_InviteDialog_userTile_avatar {
+            vertical-align: top;
+        }
+
+        .mx_InviteDialog_userTile_name {
+            vertical-align: top;
+        }
+
+        .mx_InviteDialog_userTile_threepidAvatar {
+            background-color: #ffffff; // this is fine without a var because it's for both themes
+        }
+    }
+
+    .mx_InviteDialog_userTile_remove {
+        display: inline-block;
+        margin-left: 4px;
+    }
+}
+
+.mx_InviteDialog {
+    // Prevent the dialog from jumping around randomly when elements change.
+    height: 590px;
+    padding-left: 20px; // the design wants some padding on the left
+}
+
+.mx_InviteDialog_userSections {
+    margin-top: 10px;
+    overflow-y: auto;
+    padding-right: 45px;
+    height: 455px; // mx_InviteDialog's height minus some for the upper elements
+}
+
+// Right margin for the design. We could apply this to the whole dialog, but then the scrollbar
+// for the user section gets weird.
+.mx_InviteDialog_helpText,
+.mx_InviteDialog_addressBar {
+    margin-right: 45px;
+}

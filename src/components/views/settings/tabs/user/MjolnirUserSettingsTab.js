@@ -20,9 +20,8 @@ import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
 import {ListRule} from "../../../../../mjolnir/ListRule";
 import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
-
-const sdk = require("../../../../..");
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import * as sdk from "../../../../../index";
 
 export default class MjolnirUserSettingsTab extends React.Component {
     constructor() {
@@ -85,7 +84,7 @@ export default class MjolnirUserSettingsTab extends React.Component {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
                 title: _t('Error subscribing to list'),
-                description: _t('Please verify the room ID or alias and try again.'),
+                description: _t('Please verify the room ID or address and try again.'),
             });
         } finally {
             this.setState({busy: false});
@@ -273,7 +272,6 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onAddPersonalRule} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_personalAdd"
                                 type="text"
                                 label={_t("Server or user ID to ignore")}
                                 placeholder={_t("eg: @bot:* or example.org")}
@@ -306,9 +304,8 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onSubscribeList} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_subscriptionAdd"
                                 type="text"
-                                label={_t("Room ID or alias of ban list")}
+                                label={_t("Room ID or address of ban list")}
                                 value={this.state.newList}
                                 onChange={this._onNewListChanged}
                             />

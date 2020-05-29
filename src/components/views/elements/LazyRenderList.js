@@ -56,14 +56,20 @@ class ItemRange {
 }
 
 export default class LazyRenderList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {};
+    }
+
     static getDerivedStateFromProps(props, state) {
         const range = LazyRenderList.getVisibleRangeFromProps(props);
         const intersectRange = range.expand(props.overflowMargin);
         const renderRange = range.expand(props.overflowItems);
-        const listHasChangedSize = !!state && renderRange.totalSize() !== state.renderRange.totalSize();
+        const listHasChangedSize = !!state.renderRange && renderRange.totalSize() !== state.renderRange.totalSize();
         // only update render Range if the list has shrunk/grown and we need to adjust padding OR
         // if the new range + overflowMargin isn't contained by the old anymore
-        if (listHasChangedSize || !state || !state.renderRange.contains(intersectRange)) {
+        if (listHasChangedSize || !state.renderRange || !state.renderRange.contains(intersectRange)) {
             return {renderRange};
         }
         return null;

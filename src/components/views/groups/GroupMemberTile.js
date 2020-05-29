@@ -19,10 +19,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import { MatrixClient } from 'matrix-js-sdk';
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export default createReactClass({
     displayName: 'GroupMemberTile',
@@ -36,8 +36,8 @@ export default createReactClass({
         return {};
     },
 
-    contextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
+    statics: {
+        contextType: MatrixClientContext,
     },
 
     onClick: function(e) {
@@ -53,13 +53,14 @@ export default createReactClass({
         const EntityTile = sdk.getComponent('rooms.EntityTile');
 
         const name = this.props.member.displayname || this.props.member.userId;
-        const avatarUrl = this.context.matrixClient.mxcUrlToHttp(
+        const avatarUrl = this.context.mxcUrlToHttp(
             this.props.member.avatarUrl,
             36, 36, 'crop',
         );
 
         const av = (
             <BaseAvatar
+                aria-hidden="true"
                 name={this.props.member.displayname || this.props.member.userId}
                 idName={this.props.member.userId}
                 width={36} height={36}

@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Aidan Gauland
 Copyright 2018 New Vector Ltd.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@ import { _t } from '../../../languageHandler';
 /**
  * Basic container for buttons in modal dialogs.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: "DialogButtons",
 
     propTypes: {
@@ -33,11 +34,18 @@ module.exports = createReactClass({
         // A node to insert into the cancel button instead of default "Cancel"
         cancelButton: PropTypes.node,
 
+        // If true, make the primary button a form submit button (input type="submit")
+        primaryIsSubmit: PropTypes.bool,
+
         // onClick handler for the primary button.
-        onPrimaryButtonClick: PropTypes.func.isRequired,
+        onPrimaryButtonClick: PropTypes.func,
 
         // should there be a cancel button? default: true
         hasCancel: PropTypes.bool,
+
+        // The class of the cancel button, only used if a cancel button is
+        // enabled
+        cancelButtonClass: PropTypes.node,
 
         // onClick handler for the cancel button.
         onCancel: PropTypes.func,
@@ -68,16 +76,26 @@ module.exports = createReactClass({
             primaryButtonClassName += " " + this.props.primaryButtonClass;
         }
         let cancelButton;
+
         if (this.props.cancelButton || this.props.hasCancel) {
-            cancelButton = <button onClick={this._onCancelClick} disabled={this.props.disabled}>
+            cancelButton = <button
+                // important: the default type is 'submit' and this button comes before the
+                // primary in the DOM so will get form submissions unless we make it not a submit.
+                type="button"
+                onClick={this._onCancelClick}
+                className={this.props.cancelButtonClass}
+                disabled={this.props.disabled}
+            >
                 { this.props.cancelButton || _t("Cancel") }
             </button>;
         }
+
         return (
             <div className="mx_Dialog_buttons">
                 { cancelButton }
                 { this.props.children }
-                <button className={primaryButtonClassName}
+                <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
+                    className={primaryButtonClassName}
                     onClick={this.props.onPrimaryButtonClick}
                     autoFocus={this.props.focus}
                     disabled={this.props.disabled || this.props.primaryDisabled}

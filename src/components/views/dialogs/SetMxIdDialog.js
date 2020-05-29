@@ -18,8 +18,8 @@ limitations under the License.
 import React, {createRef} from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import classnames from 'classnames';
 import { Key } from '../../../Keyboard';
 import { _t } from '../../../languageHandler';
@@ -62,6 +62,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._input_value = createRef();
         this._uiAuth = createRef();

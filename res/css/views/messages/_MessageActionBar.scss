@@ -21,7 +21,7 @@ limitations under the License.
     cursor: pointer;
     display: flex;
     height: 24px;
-    line-height: 24px;
+    line-height: $font-24px;
     border-radius: 4px;
     background: $message-action-bar-bg-color;
     top: -18px;

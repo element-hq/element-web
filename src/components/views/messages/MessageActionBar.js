@@ -1,7 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,12 +20,11 @@ import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
-import Modal from '../../../Modal';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
-import {RoomContext} from "../../structures/RoomView";
+import RoomContext from "../../../contexts/RoomContext";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
@@ -40,18 +39,6 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         const tile = getTile && getTile();
         const replyThread = getReplyThread && getReplyThread();
 
-        const onCryptoClick = () => {
-            Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
-                import('../../../async-components/views/dialogs/EncryptedEventDialog'),
-                {event: mxEvent},
-            );
-        };
-
-        let e2eInfoCallback = null;
-        if (mxEvent.isEncrypted()) {
-            e2eInfoCallback = onCryptoClick;
-        }
-
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <MessageContextMenu
@@ -59,7 +46,6 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
                 permalinkCreator={permalinkCreator}
                 eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
                 collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
-                e2eInfoCallback={e2eInfoCallback}
                 onFinished={closeMenu}
             />
         </ContextMenu>;
@@ -88,7 +74,7 @@ const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     if (menuDisplayed) {
         const buttonRect = button.current.getBoundingClientRect();
         const ReactionPicker = sdk.getComponent('emojipicker.ReactionPicker');
-        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} managed={false}>
             <ReactionPicker mxEvent={mxEvent} reactions={reactions} onFinished={closeMenu} />
         </ContextMenu>;
     }
@@ -117,21 +103,26 @@ export default class MessageActionBar extends React.PureComponent {
         onFocusChange: PropTypes.func,
     };
 
-    static contextTypes = {
-        room: RoomContext,
-    };
+    static contextType = RoomContext;
 
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.removeListener("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     onDecrypted = () => {
         // When an event decrypts, it is likely to change the set of available
         // actions, so we force an update to check again.
+        this.forceUpdate();
+    };
+
+    onBeforeRedaction = () => {
+        // When an event is redacted, we can't edit it so update the available actions.
         this.forceUpdate();
     };
 
@@ -164,12 +155,12 @@ export default class MessageActionBar extends React.PureComponent {
         let editButton;
 
         if (isContentActionable(this.props.mxEvent)) {
-            if (this.context.room.canReact) {
+            if (this.context.canReact) {
                 reactButton = (
                     <ReactButton mxEvent={this.props.mxEvent} reactions={this.props.reactions} onFocusChange={this.onFocusChange} />
                 );
             }
-            if (this.context.room.canReply) {
+            if (this.context.canReply) {
                 replyButton = <AccessibleButton
                     className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}

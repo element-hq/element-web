@@ -25,7 +25,7 @@ import { _t } from './languageHandler';
  * the client owns the given email address, which is then passed to the password
  * API on the homeserver in question with the new password.
  */
-class PasswordReset {
+export default class PasswordReset {
     /**
      * Configure the endpoints for password resetting.
      * @param {string} homeserverUrl The URL to the HS which has the account to reset.
@@ -101,4 +101,3 @@ class PasswordReset {
     }
 }
 
-module.exports = PasswordReset;

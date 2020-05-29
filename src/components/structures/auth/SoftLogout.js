@@ -17,13 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
-import url from 'url';
+import AuthPage from "../../views/auth/AuthPage";
+import SSOButton from "../../views/elements/SSOButton";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -53,8 +54,7 @@ export default class SoftLogout extends React.Component {
 
         this.state = {
             loginView: LOGIN_VIEW.LOADING,
-            keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
-            ssoUrl: null,
+            keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
 
             busy: false,
             password: "",
@@ -65,7 +65,7 @@ export default class SoftLogout extends React.Component {
     componentDidMount(): void {
         // We've ended up here when we don't need to - navigate to login
         if (!Lifecycle.isSoftLogout()) {
-            dis.dispatch({action: "on_logged_in"});
+            dis.dispatch({action: "start_login"});
             return;
         }
 
@@ -82,7 +82,7 @@ export default class SoftLogout extends React.Component {
             onFinished: (wipeData) => {
                 if (!wipeData) return;
 
-                console.log("Clearing data from soft-logged-out device");
+                console.log("Clearing data from soft-logged-out session");
                 Lifecycle.logout();
             },
         });
@@ -104,18 +104,6 @@ export default class SoftLogout extends React.Component {
 
         const chosenView = loginViews.filter(f => !!f)[0] || LOGIN_VIEW.UNSUPPORTED;
         this.setState({loginView: chosenView});
-
-        if (chosenView === LOGIN_VIEW.CAS || chosenView === LOGIN_VIEW.SSO) {
-            const client = MatrixClientPeg.get();
-
-            const appUrl = url.parse(window.location.href, true);
-            appUrl.hash = ""; // Clear #/soft_logout off the URL
-            appUrl.query["homeserver"] = client.getHomeserverUrl();
-            appUrl.query["identityServer"] = client.getIdentityServerUrl();
-
-            const ssoUrl = client.getSsoLoginUrl(url.format(appUrl), chosenView === LOGIN_VIEW.CAS ? "cas" : "sso");
-            this.setState({ssoUrl});
-        }
     }
 
     onPasswordChange = (ev) => {
@@ -194,14 +182,6 @@ export default class SoftLogout extends React.Component {
         });
     }
 
-    onSsoLogin = async (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        this.setState({busy: true});
-        window.location.href = this.state.ssoUrl;
-    };
-
     _renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
             const Spinner = sdk.getComponent("elements.Spinner");
@@ -211,8 +191,8 @@ export default class SoftLogout extends React.Component {
         let introText = null; // null is translated to something area specific in this function
         if (this.state.keyBackupNeeded) {
             introText = _t(
-                "Regain access to your account and recover encryption keys stored on this device. " +
-                "Without them, you won’t be able to read all of your secure messages on any device.");
+                "Regain access to your account and recover encryption keys stored in this session. " +
+                "Without them, you won’t be able to read all of your secure messages in any session.");
         }
 
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {
@@ -233,7 +213,6 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     {error}
                     <Field
-                        id="softlogout_password"
                         type="password"
                         label={_t("Password")}
                         onChange={this.onPasswordChange}
@@ -256,8 +235,6 @@ export default class SoftLogout extends React.Component {
         }
 
         if (this.state.loginView === LOGIN_VIEW.SSO || this.state.loginView === LOGIN_VIEW.CAS) {
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
             if (!introText) {
                 introText = _t("Sign in and regain access to your account.");
             } // else we already have a message and should use it (key backup warning)
@@ -265,9 +242,11 @@ export default class SoftLogout extends React.Component {
             return (
                 <div>
                     <p>{introText}</p>
-                    <AccessibleButton kind='primary' onClick={this.onSsoLogin}>
-                        {_t('Sign in with single sign-on')}
-                    </AccessibleButton>
+                    <SSOButton
+                        matrixClient={MatrixClientPeg.get()}
+                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"}
+                        fragmentAfterLogin={this.props.fragmentAfterLogin}
+                    />
                 </div>
             );
         }
@@ -284,7 +263,6 @@ export default class SoftLogout extends React.Component {
     }
 
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -306,7 +284,7 @@ export default class SoftLogout extends React.Component {
                     <p>
                         {_t(
                             "Warning: Your personal data (including encryption keys) is still stored " +
-                            "on this device. Clear it if you're finished using this device, or want to sign " +
+                            "in this session. Clear it if you're finished using this session, or want to sign " +
                             "in to another account.",
                         )}
                     </p>

@@ -4,7 +4,7 @@ matrix-react-sdk
 This is a react-based SDK for inserting a Matrix chat/voip client into a web page.
 
 This package provides the React components needed to build a Matrix web client
-using React.  It is not useable in isolation, and instead must must be used from
+using React.  It is not useable in isolation, and instead must be used from
 a 'skin'. A skin provides:
  * Customised implementations of presentation components.
  * Custom CSS
@@ -34,7 +34,7 @@ All code lands on the `develop` branch - `master` is only used for stable releas
 **Please file PRs against `develop`!!**
 
 Please follow the standard Matrix contributor's guide:
-https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
+https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.rst
 
 Please follow the Matrix JS/React code style as per:
 https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
@@ -45,7 +45,7 @@ Code should be committed as follows:
    * In practice, `matrix-react-sdk` is still evolving so fast that the maintenance
      burden of customising and overriding these components for Riot can seriously
      impede development.  So right now, there should be very few (if any) customisations for Riot.
- * CSS: https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/matrix-react-sdk
+ * CSS: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css
  * Theme specific CSS & resources: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
 
 React components in matrix-react-sdk are come in two different flavours:
@@ -67,6 +67,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
 
   * After creating a new component you must run `yarn reskindex` to regenerate
     the `component-index.js` for the SDK (used in future for skinning)
+    <!-- TODO: Remove this once this approach to skinning is replaced -->
 
   * The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
     CSS for matrix-react-sdk currently resides in
@@ -82,7 +83,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
     'Stealing' styling information from other components (including parents)
     is not cool, as it breaks the independence of the components.
 
-  * CSS classes are named with an app-specific namespacing prefix to try to avoid
+  * CSS classes are named with an app-specific name-spacing prefix to try to avoid
     CSS collisions.  The base skin shipped by Matrix.org with the matrix-react-sdk
     uses the naming prefix "mx_".  A company called Yoyodyne Inc might use a
     prefix like "yy_" for its app-specific classes.
@@ -107,7 +108,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
     .mx_RoomTile {} in RoomList.css - only RoomTile.css is allowed to define its
     own CSS.  Instead, say .mx_RoomList .mx_RoomTile {} to scope the override
     only to the context of RoomList views.  N.B. overrides should be relatively
-    rare as in general CSS inheritence should be enough.
+    rare as in general CSS inheritance should be enough.
 
   * Components should render only within the bounding box of their outermost DOM
     element. Page-absolute positioning and negative CSS margins and similar are
@@ -132,8 +133,10 @@ Development
 
 Ensure you have the latest LTS version of Node.js installed.
 
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+Using `yarn` instead of `npm` is recommended. Please see the Yarn 1 [install
+guide](https://classic.yarnpkg.com/docs/install) if you do not have it
+already. This project has not yet been migrated to Yarn 2, so please ensure
+`yarn --version` shows a version from the 1.x series.
 
 `matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
 latter and to ensure tests run against the develop branch of `matrix-js-sdk`,

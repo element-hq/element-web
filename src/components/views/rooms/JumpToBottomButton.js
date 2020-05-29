@@ -24,7 +24,7 @@ export default (props) => {
     }
     return (<div className="mx_JumpToBottomButton">
         <AccessibleButton className="mx_JumpToBottomButton_scrollDown"
-            title={_t("Scroll to bottom of page")}
+            title={_t("Scroll to most recent messages")}
             onClick={props.onScrollToBottomClick}>
         </AccessibleButton>
         { badge }

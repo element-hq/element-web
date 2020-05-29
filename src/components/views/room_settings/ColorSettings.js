@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import Tinter from '../../../Tinter';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const ROOM_COLORS = [
@@ -40,7 +40,7 @@ const ROOM_COLORS = [
 // has a high possibility of being used in the nearish future.
 // Ref: https://github.com/vector-im/riot-web/issues/8421
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ColorSettings',
 
     propTypes: {

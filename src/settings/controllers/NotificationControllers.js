@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import MatrixClientPeg from '../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../MatrixClientPeg';
 
 // XXX: This feels wrong.
-import PushProcessor from "matrix-js-sdk/lib/pushprocessor";
+import {PushProcessor} from "matrix-js-sdk/src/pushprocessor";
 
 function isMasterRuleEnabled() {
     // Return the value of the master push rule as a default
@@ -34,10 +34,15 @@ function isMasterRuleEnabled() {
     return !masterRule.enabled;
 }
 
+function getNotifier() {
+    let Notifier = require('../../Notifier'); // avoids cyclical references
+    if (Notifier.default) Notifier = Notifier.default; // correct for webpack require() weirdness
+    return Notifier;
+}
+
 export class NotificationsEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
-        const Notifier = require('../../Notifier'); // avoids cyclical references
-        if (!Notifier.isPossible()) return false;
+        if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {
             return isMasterRuleEnabled();
@@ -47,18 +52,15 @@ export class NotificationsEnabledController extends SettingController {
     }
 
     onChange(level, roomId, newValue) {
-        const Notifier = require('../../Notifier'); // avoids cyclical references
-
-        if (Notifier.supportsDesktopNotifications()) {
-            Notifier.setEnabled(newValue);
+        if (getNotifier().supportsDesktopNotifications()) {
+            getNotifier().setEnabled(newValue);
         }
     }
 }
 
 export class NotificationBodyEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue) {
-        const Notifier = require('../../Notifier'); // avoids cyclical references
-        if (!Notifier.isPossible()) return false;
+        if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null) {
             return isMasterRuleEnabled();
@@ -70,8 +72,7 @@ export class NotificationBodyEnabledController extends SettingController {
 
 export class AudioNotificationsEnabledController extends SettingController {
     getValueOverride(level, roomId, calculatedValue) {
-        const Notifier = require('../../Notifier'); // avoids cyclical references
-        if (!Notifier.isPossible()) return false;
+        if (!getNotifier().isPossible()) return false;
 
         // Note: Audio notifications are *not* enabled by default.
         return calculatedValue;

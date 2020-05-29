@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import {Group} from 'matrix-js-sdk';
@@ -31,8 +31,8 @@ export default class GroupInviteTileContextMenu extends React.Component {
         onFinished: PropTypes.func,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._onClickReject = this._onClickReject.bind(this);
     }

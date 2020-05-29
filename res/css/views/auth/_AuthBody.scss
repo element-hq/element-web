@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,22 +17,22 @@ limitations under the License.
 
 .mx_AuthBody {
     width: 500px;
+    font-size: $font-12px;
+    color: $authpage-secondary-color;
     background-color: $authpage-body-bg-color;
     border-radius: 0 4px 4px 0;
     padding: 25px 60px;
     box-sizing: border-box;
-    font-size: 12px;
-    color: $authpage-secondary-color;
 
     h2 {
-        font-size: 24px;
+        font-size: $font-24px;
         font-weight: 600;
         margin-top: 8px;
         color: $authpage-primary-color;
     }
 
     h3 {
-        font-size: 14px;
+        font-size: $font-14px;
         font-weight: 600;
         color: $authpage-primary-color;
     }
@@ -97,7 +98,7 @@ limitations under the License.
 
 .mx_AuthBody_editServerDetails {
     padding-left: 1em;
-    font-size: 12px;
+    font-size: $font-12px;
     font-weight: normal;
 }
 
@@ -118,6 +119,24 @@ limitations under the License.
     margin-right: 0;
 }
 
+.mx_AuthBody_paddedFooter {
+    height: 80px; // height of the submit button + register link
+    padding-top: 28px;
+    text-align: center;
+
+    .mx_AuthBody_paddedFooter_title {
+        margin-top: 16px;
+        font-size: $font-15px;
+        line-height: $font-24px;
+    }
+
+    .mx_AuthBody_paddedFooter_subtitle {
+        margin-top: 8px;
+        font-size: $font-10px;
+        line-height: $font-14px;
+    }
+}
+
 .mx_AuthBody_changeFlow {
     display: block;
     text-align: center;
@@ -126,28 +145,4 @@ limitations under the License.
 
 .mx_AuthBody_spinner {
     margin: 1em 0;
-}
-
-.mx_AuthBody_passwordScore {
-    width: 100%;
-    appearance: none;
-    height: 4px;
-    border: 0;
-    border-radius: 2px;
-    position: absolute;
-    top: -12px;
-
-    &::-moz-progress-bar {
-        border-radius: 2px;
-        background-color: $accent-color;
-    }
-
-    &::-webkit-progress-bar,
-    &::-webkit-progress-value {
-        border-radius: 2px;
-    }
-
-    &::-webkit-progress-value {
-        background-color: $accent-color;
-    }
 }

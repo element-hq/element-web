@@ -16,9 +16,9 @@ limitations under the License.
 
 import { createClient, SERVICE_TYPES } from 'matrix-js-sdk';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import { _t } from './languageHandler';
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 import {
@@ -181,24 +181,12 @@ export default class IdentityAuthClient {
     }
 
     async registerForToken(check=true) {
-        try {
-            const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
-            // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
-            const { access_token: accessToken, token } =
-                await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
-            const identityAccessToken = token ? token : accessToken;
-            if (check) await this._checkToken(identityAccessToken);
-            return identityAccessToken;
-        } catch (e) {
-            if (e.cors === "rejected" || e.httpStatus === 404) {
-                // Assume IS only supports deprecated v1 API for now
-                // TODO: Remove this path once v2 is only supported version
-                // See https://github.com/vector-im/riot-web/issues/10443
-                console.warn("IS doesn't support v2 auth");
-                this.authEnabled = false;
-                return;
-            }
-            throw e;
-        }
+        const hsOpenIdToken = await MatrixClientPeg.get().getOpenIdToken();
+        // XXX: The spec is `token`, but we used `access_token` for a Sydent release.
+        const { access_token: accessToken, token } =
+            await this._matrixClient.registerWithIdentityServer(hsOpenIdToken);
+        const identityAccessToken = token ? token : accessToken;
+        if (check) await this._checkToken(identityAccessToken);
+        return identityAccessToken;
     }
 }

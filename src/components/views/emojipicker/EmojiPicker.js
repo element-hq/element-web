@@ -16,54 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import EMOJIBASE from 'emojibase-data/en/compact.json';
 
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-import * as recent from './recent';
-
-const EMOJIBASE_CATEGORY_IDS = [
-    "people", // smileys
-    "people", // actually people
-    "control", // modifiers and such, not displayed in picker
-    "nature",
-    "foods",
-    "places",
-    "activity",
-    "objects",
-    "symbols",
-    "flags",
-];
-
-const DATA_BY_CATEGORY = {
-    "people": [],
-    "nature": [],
-    "foods": [],
-    "places": [],
-    "activity": [],
-    "objects": [],
-    "symbols": [],
-    "flags": [],
-};
-const DATA_BY_EMOJI = {};
-
-const VARIATION_SELECTOR = String.fromCharCode(0xFE0F);
-EMOJIBASE.forEach(emoji => {
-    if (emoji.unicode.includes(VARIATION_SELECTOR)) {
-        // Clone data into variation-less version
-        emoji = Object.assign({}, emoji, {
-            unicode: emoji.unicode.replace(VARIATION_SELECTOR, ""),
-        });
-    }
-    DATA_BY_EMOJI[emoji.unicode] = emoji;
-    const categoryId = EMOJIBASE_CATEGORY_IDS[emoji.group];
-    if (DATA_BY_CATEGORY.hasOwnProperty(categoryId)) {
-        DATA_BY_CATEGORY[categoryId].push(emoji);
-    }
-    // This is used as the string to match the query against when filtering emojis.
-    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`.toLowerCase();
-});
+import * as recent from '../../../emojipicker/recent';
+import {DATA_BY_CATEGORY, getEmojiFromUnicode} from "../../../emoji";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
@@ -89,10 +48,8 @@ class EmojiPicker extends React.Component {
             viewportHeight: 280,
         };
 
-        // Convert recent emoji characters to emoji data, removing unknowns.
-        this.recentlyUsed = recent.get()
-            .map(unicode => DATA_BY_EMOJI[unicode])
-            .filter(data => !!data);
+        // Convert recent emoji characters to emoji data, removing unknowns and duplicates
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
         this.memoizedDataByCategory = {
             recent: this.recentlyUsed,
             ...DATA_BY_CATEGORY,
@@ -190,8 +147,12 @@ class EmojiPicker extends React.Component {
             // We update this here instead of through React to avoid re-render on scroll.
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", true);
+                cat.ref.current.setAttribute("tabindex", 0);
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", false);
+                cat.ref.current.setAttribute("tabindex", -1);
             }
         }
     }
@@ -258,7 +219,7 @@ class EmojiPicker extends React.Component {
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory} />
                 <Search query={this.state.filter} onChange={this.onChangeFilter} />
-                <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.onScroll}>
+                <AutoHideScrollbar className="mx_EmojiPicker_body" wrappedRef={e => this.bodyRef.current = e} onScroll={this.onScroll}>
                     {this.categories.map(category => {
                         const emojis = this.memoizedDataByCategory[category.id];
                         const categoryElement = (<Category key={category.id} id={category.id} name={category.name}
@@ -270,7 +231,7 @@ class EmojiPicker extends React.Component {
                         heightBefore += height;
                         return categoryElement;
                     })}
-                </div>
+                </AutoHideScrollbar>
                 {this.state.previewEmoji || !this.props.showQuickReactions
                     ? <Preview emoji={this.state.previewEmoji} />
                     : <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} /> }

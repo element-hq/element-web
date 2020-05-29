@@ -17,7 +17,7 @@ limitations under the License.
 import React from "react";
 import PropTypes from "prop-types";
 import {_t, pickBestLanguage} from "../../../languageHandler";
-import sdk from "../../..";
+import * as sdk from "../../..";
 
 export default class InlineTermsAgreement extends React.Component {
     static propTypes = {
@@ -77,7 +77,7 @@ export default class InlineTermsAgreement extends React.Component {
                 "Accept <policyLink /> to continue:", {}, {
                     policyLink: () => {
                         return (
-                            <a href={policy.url} rel='noopener' target='_blank'>
+                            <a href={policy.url} rel='noreferrer noopener' target='_blank'>
                                 {policy.name}
                                 <span className='mx_InlineTermsAgreement_link' />
                             </a>

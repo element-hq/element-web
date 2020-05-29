@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,11 +18,12 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const Avatar = require('../../../Avatar');
-const sdk = require("../../../index");
-const dispatcher = require("../../../dispatcher");
+import * as sdk from "../../../index";
+import dis from "../../../dispatcher/dispatcher";
+import {Action} from "../../../dispatcher/actions";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'MemberAvatar',
 
     propTypes: {
@@ -32,7 +34,7 @@ module.exports = createReactClass({
         resizeMethod: PropTypes.string,
         // The onClick to give the avatar
         onClick: PropTypes.func,
-        // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
+        // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
         viewUserOnClick: PropTypes.bool,
         title: PropTypes.string,
     },
@@ -50,19 +52,24 @@ module.exports = createReactClass({
         return this._getState(this.props);
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         this.setState(this._getState(nextProps));
     },
 
     _getState: function(props) {
-        if (props.member) {
+        if (props.member && props.member.name) {
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
-                imageUrl: Avatar.avatarUrlForMember(props.member,
-                                             props.width,
-                                             props.height,
-                                             props.resizeMethod),
+                imageUrl: props.member.getAvatarUrl(
+                    MatrixClientPeg.get().getHomeserverUrl(),
+                    Math.floor(props.width * window.devicePixelRatio),
+                    Math.floor(props.height * window.devicePixelRatio),
+                    props.resizeMethod,
+                    false,
+                    false,
+                ),
             };
         } else if (props.fallbackUserId) {
             return {
@@ -82,8 +89,8 @@ module.exports = createReactClass({
 
         if (viewUserOnClick) {
             onClick = () => {
-                dispatcher.dispatch({
-                    action: 'view_user',
+                dis.dispatch({
+                    action: Action.ViewUser,
                     member: this.props.member,
                 });
             };

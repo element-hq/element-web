@@ -19,99 +19,8 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
-import dis from "./dispatcher";
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
-
-export class ThemeWatcher {
-    static _instance = null;
-
-    constructor() {
-        this._themeWatchRef = null;
-        this._systemThemeWatchRef = null;
-        this._dispatcherRef = null;
-
-        // we have both here as each may either match or not match, so by having both
-        // we can get the tristate of dark/light/unsupported
-        this._preferDark = global.matchMedia("(prefers-color-scheme: dark)");
-        this._preferLight = global.matchMedia("(prefers-color-scheme: light)");
-
-        this._currentTheme = this.getEffectiveTheme();
-    }
-
-    start() {
-        this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onChange);
-        this._systemThemeWatchRef = SettingsStore.watchSetting("use_system_theme", null, this._onChange);
-        if (this._preferDark.addEventListener) {
-            this._preferDark.addEventListener('change', this._onChange);
-            this._preferLight.addEventListener('change', this._onChange);
-        }
-        this._dispatcherRef = dis.register(this._onAction);
-    }
-
-    stop() {
-        if (this._preferDark.addEventListener) {
-            this._preferDark.removeEventListener('change', this._onChange);
-            this._preferLight.removeEventListener('change', this._onChange);
-        }
-        SettingsStore.unwatchSetting(this._systemThemeWatchRef);
-        SettingsStore.unwatchSetting(this._themeWatchRef);
-        dis.unregister(this._dispatcherRef);
-    }
-
-    _onChange = () => {
-        this.recheck();
-    };
-
-    _onAction = (payload) => {
-        if (payload.action === 'recheck_theme') {
-            // XXX forceTheme
-            this.recheck(payload.forceTheme);
-        }
-    };
-
-    // XXX: forceTheme param aded here as local echo appears to be unreliable
-    // https://github.com/vector-im/riot-web/issues/11443
-    recheck(forceTheme) {
-        const oldTheme = this._currentTheme;
-        this._currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
-        if (oldTheme !== this._currentTheme) {
-            setTheme(this._currentTheme);
-        }
-    }
-
-    getEffectiveTheme() {
-        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
-
-        // If the user has specifically enabled the system matching option (excluding default),
-        // then use that over anything else. We pick the lowest possible level for the setting
-        // to ensure the ordering otherwise works.
-        const systemThemeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, true);
-        if (systemThemeExplicit) {
-            if (this._preferDark.matches) return 'dark';
-            if (this._preferLight.matches) return 'light';
-        }
-
-        // If the user has specifically enabled the theme (without the system matching option being
-        // enabled specifically and excluding the default), use that theme. We pick the lowest possible
-        // level for the setting to ensure the ordering otherwise works.
-        const themeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, true);
-        if (themeExplicit) return themeExplicit;
-
-        // If the user hasn't really made a preference in either direction, assume the defaults of the
-        // settings and use those.
-        if (SettingsStore.getValue('use_system_theme')) {
-            if (this._preferDark.matches) return 'dark';
-            if (this._preferLight.matches) return 'light';
-        }
-        return SettingsStore.getValue('theme');
-    }
-
-    isSystemThemeSupported() {
-        return this._preferDark.matches || this._preferLight.matches;
-    }
-}
+import SettingsStore from "./settings/SettingsStore";
+import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
 export function enumerateThemes() {
     const BUILTIN_THEMES = {
@@ -126,14 +35,29 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
+
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
-    if (customTheme.colors) {
-        for (const [name, hexColor] of Object.entries(customTheme.colors)) {
-            style.setProperty(`--${name}`, hexColor);
-            // uses #rrggbbaa to define the color with alpha values at 0% and 50%
+
+    function setCSSVariable(name, hexColor, doPct = true) {
+        style.setProperty(`--${name}`, hexColor);
+        if (doPct) {
+            // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
             style.setProperty(`--${name}-0pct`, hexColor + "00");
+            style.setProperty(`--${name}-15pct`, hexColor + "26");
             style.setProperty(`--${name}-50pct`, hexColor + "7F");
+        }
+    }
+
+    if (customTheme.colors) {
+        for (const [name, value] of Object.entries(customTheme.colors)) {
+            if (Array.isArray(value)) {
+                for (let i = 0; i < value.length; i += 1) {
+                    setCSSVariable(`${name}_${i}`, value[i], false);
+                }
+            } else {
+                setCSSVariable(name, value);
+            }
         }
     }
 }
@@ -212,6 +136,10 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
+            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            if (bodyStyles.backgroundColor) {
+                document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
+            }
             Tinter.setTheme(theme);
             resolve();
         };

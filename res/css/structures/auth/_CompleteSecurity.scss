@@ -1,0 +1,100 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CompleteSecurity_header {
+    display: flex;
+    align-items: center;
+}
+
+.mx_CompleteSecurity_headerIcon {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+    position: relative;
+}
+
+.mx_CompleteSecurity_clients {
+    width: max-content;
+    margin: 36px auto 0;
+
+    .mx_CompleteSecurity_clients_desktop, .mx_CompleteSecurity_clients_mobile {
+        position: relative;
+        width: 160px;
+        text-align: center;
+        padding-top: 64px;
+        display: inline-block;
+
+        &::before {
+            content: '';
+            position: absolute;
+            height: 48px;
+            width: 48px;
+            left: 56px;
+            top: 0;
+            background-color: $muted-fg-color;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+        }
+    }
+
+    .mx_CompleteSecurity_clients_desktop {
+        margin-right: 56px;
+    }
+
+    .mx_CompleteSecurity_clients_desktop::before {
+        mask-image: url('$(res)/img/feather-customised/monitor.svg');
+    }
+
+    .mx_CompleteSecurity_clients_mobile::before {
+        mask-image: url('$(res)/img/feather-customised/smartphone.svg');
+    }
+
+    p {
+        margin-top: 16px;
+        font-size: $font-12px;
+        color: $muted-fg-color;
+        text-align: center;
+    }
+}
+
+.mx_CompleteSecurity_heroIcon {
+    width: 128px;
+    height: 128px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.mx_CompleteSecurity_body {
+    font-size: $font-15px;
+}
+
+.mx_CompleteSecurity_waiting {
+    color: $notice-secondary-color;
+}
+
+.mx_CompleteSecurity_actionRow {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $font-28px;
+
+    .mx_AccessibleButton {
+        margin-inline-start: 18px;
+
+        &.warning {
+            color: $warning-color;
+        }
+    }
+}

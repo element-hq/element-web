@@ -18,15 +18,17 @@ limitations under the License.
 import url from 'url';
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
-const request = require('browser-request');
-
-const SdkConfig = require('./SdkConfig');
-const MatrixClientPeg = require('./MatrixClientPeg');
+import {MatrixClientPeg} from "./MatrixClientPeg";
+import request from "browser-request";
 
 import * as Matrix from 'matrix-js-sdk';
+import SdkConfig from "./SdkConfig";
+import {WidgetType} from "./widgets/WidgetType";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";
+
+// TODO: Generify the name of this class and all components within - it's not just for Scalar.
 
 export default class ScalarAuthClient {
     constructor(apiUrl, uiUrl) {
@@ -234,20 +236,20 @@ export default class ScalarAuthClient {
      * Mark all assets associated with the specified widget as "disabled" in the
      * integration manager database.
      * This can be useful to temporarily prevent purchased assets from being displayed.
-     * @param  {string} widgetType [description]
-     * @param  {string} widgetId   [description]
+     * @param  {WidgetType} widgetType The Widget Type to disable assets for
+     * @param  {string} widgetId   The widget ID to disable assets for
      * @return {Promise}           Resolves on completion
      */
-    disableWidgetAssets(widgetType, widgetId) {
+    disableWidgetAssets(widgetType: WidgetType, widgetId) {
         let url = this.apiUrl + '/widgets/set_assets_state';
         url = this.getStarterLink(url);
         return new Promise((resolve, reject) => {
             request({
-                method: 'GET',
+                method: 'GET', // XXX: Actions shouldn't be GET requests
                 uri: url,
                 json: true,
                 qs: {
-                    'widget_type': widgetType,
+                    'widget_type': widgetType.preferred,
                     'widget_id': widgetId,
                     'state': 'disable',
                 },

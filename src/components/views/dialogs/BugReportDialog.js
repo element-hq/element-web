@@ -19,14 +19,15 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
+import sendBugReport from '../../../rageshake/submit-rageshake';
 
 export default class BugReportDialog extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             sendLogs: true,
             busy: false,
@@ -67,32 +68,30 @@ export default class BugReportDialog extends React.Component {
         this.setState({ busy: true, progress: null, err: null });
         this._sendProgressCallback(_t("Preparing to send logs"));
 
-        require(['../../../rageshake/submit-rageshake'], (s) => {
-            s(SdkConfig.get().bug_report_endpoint_url, {
-                userText,
-                sendLogs: true,
-                progressCallback: this._sendProgressCallback,
-                label: this.props.label,
-            }).then(() => {
-                if (!this._unmounted) {
-                    this.props.onFinished(false);
-                    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-                    // N.B. first param is passed to piwik and so doesn't want i18n
-                    Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
-                        title: _t('Logs sent'),
-                        description: _t('Thank you!'),
-                        hasCancelButton: false,
-                    });
-                }
-            }, (err) => {
-                if (!this._unmounted) {
-                    this.setState({
-                        busy: false,
-                        progress: null,
-                        err: _t("Failed to send logs: ") + `${err.message}`,
-                    });
-                }
-            });
+        sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+            userText,
+            sendLogs: true,
+            progressCallback: this._sendProgressCallback,
+            label: this.props.label,
+        }).then(() => {
+            if (!this._unmounted) {
+                this.props.onFinished(false);
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                // N.B. first param is passed to piwik and so doesn't want i18n
+                Modal.createTrackedDialog('Bug report sent', '', QuestionDialog, {
+                    title: _t('Logs sent'),
+                    description: _t('Thank you!'),
+                    hasCancelButton: false,
+                });
+            }
+        }, (err) => {
+            if (!this._unmounted) {
+                this.setState({
+                    busy: false,
+                    progress: null,
+                    err: _t("Failed to send logs: ") + `${err.message}`,
+                });
+            }
         });
     }
 
@@ -138,12 +137,20 @@ export default class BugReportDialog extends React.Component {
             );
         }
 
+        let warning;
+        if (window.Modernizr && Object.values(window.Modernizr).some(support => support === false)) {
+            warning = <p><b>
+                { _t("Reminder: Your browser is unsupported, so your experience may be unpredictable.") }
+            </b></p>;
+        }
+
         return (
             <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
                     title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { warning }
                     <p>
                         { _t(
                             "Debug logs contain application usage data including your " +
@@ -167,7 +174,6 @@ export default class BugReportDialog extends React.Component {
                         ) }
                     </b></p>
                     <Field
-                        id="mx_BugReportDialog_issueUrl"
                         type="text"
                         className="mx_BugReportDialog_field_input"
                         label={_t("GitHub issue")}
@@ -176,7 +182,6 @@ export default class BugReportDialog extends React.Component {
                         placeholder="https://github.com/vector-im/riot-web/issues/..."
                     />
                     <Field
-                        id="mx_BugReportDialog_notes"
                         className="mx_BugReportDialog_field_input"
                         element="textarea"
                         label={_t("Notes")}

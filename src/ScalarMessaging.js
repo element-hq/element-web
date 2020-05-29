@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Generify the name of this and all components within - it's not just for scalar.
+
 /*
 Listens for incoming postMessage requests from the integrations UI URL. The following API is exposed:
 {
@@ -172,6 +174,7 @@ Request:
 Response:
 [
     {
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         type: "im.vector.modular.widgets",
         state_key: "wid1",
         content: {
@@ -190,6 +193,7 @@ Example:
     room_id: "!foo:bar",
     response: [
         {
+            // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
             type: "im.vector.modular.widgets",
             state_key: "wid1",
             content: {
@@ -232,13 +236,14 @@ Example:
 }
 */
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import {WidgetType} from "./widgets/WidgetType";
 
 function sendResponse(event, res) {
     const data = JSON.parse(JSON.stringify(event.data));
@@ -290,7 +295,7 @@ function inviteUser(event, roomId, userId) {
 
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
-    const widgetType = event.data.type;
+    let widgetType = event.data.type;
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
@@ -321,6 +326,9 @@ function setWidget(event, roomId) {
             return;
         }
     }
+
+    // convert the widget type to a known widget type
+    widgetType = WidgetType.fromString(widgetType);
 
     if (userWidget) {
         WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
@@ -658,30 +666,29 @@ const onMessage = function(event) {
 
 let listenerCount = 0;
 let openManagerUrl = null;
-module.exports = {
-    startListening: function() {
-        if (listenerCount === 0) {
-            window.addEventListener("message", onMessage, false);
-        }
-        listenerCount += 1;
-    },
 
-    stopListening: function() {
-        listenerCount -= 1;
-        if (listenerCount === 0) {
-            window.removeEventListener("message", onMessage);
-        }
-        if (listenerCount < 0) {
-            // Make an error so we get a stack trace
-            const e = new Error(
-                "ScalarMessaging: mismatched startListening / stopListening detected." +
-                " Negative count",
-            );
-            console.error(e);
-        }
-    },
+export function startListening() {
+    if (listenerCount === 0) {
+        window.addEventListener("message", onMessage, false);
+    }
+    listenerCount += 1;
+}
 
-    setOpenManagerUrl: function(url) {
-        openManagerUrl = url;
-    },
-};
+export function stopListening() {
+    listenerCount -= 1;
+    if (listenerCount === 0) {
+        window.removeEventListener("message", onMessage);
+    }
+    if (listenerCount < 0) {
+        // Make an error so we get a stack trace
+        const e = new Error(
+            "ScalarMessaging: mismatched startListening / stopListening detected." +
+            " Negative count",
+        );
+        console.error(e);
+    }
+}
+
+export function setOpenManagerUrl(url) {
+    openManagerUrl = url;
+}

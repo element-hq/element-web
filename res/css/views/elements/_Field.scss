@@ -40,7 +40,7 @@ limitations under the License.
 .mx_Field textarea {
     font-weight: normal;
     font-family: $font-family;
-    font-size: 14px;
+    font-size: $font-14px;
     border: none;
     // Even without a border here, we still need this avoid overlapping the rounded
     // corners on the field above.
@@ -102,7 +102,7 @@ limitations under the License.
         background-color 0.25s ease-out 0.1s;
     color: $primary-fg-color;
     background-color: transparent;
-    font-size: 14px;
+    font-size: $font-14px;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -126,7 +126,7 @@ limitations under the License.
         color 0.25s ease-out 0s,
         top 0.25s ease-out 0s,
         background-color 0.25s ease-out 0s;
-    font-size: 10px;
+    font-size: $font-10px;
     top: -13px;
     padding: 0 2px;
     background-color: $field-focused-label-bg-color;

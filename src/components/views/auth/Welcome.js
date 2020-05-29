@@ -15,12 +15,18 @@ limitations under the License.
 */
 
 import React from 'react';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
+import AuthPage from "./AuthPage";
+import * as Matrix from "matrix-js-sdk";
+import {_td} from "../../../languageHandler";
+import PlatformPeg from "../../../PlatformPeg";
+
+// translatable strings for Welcome pages
+_td("Sign in with SSO");
 
 export default class Welcome extends React.PureComponent {
     render() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const EmbeddedPage = sdk.getComponent('structures.EmbeddedPage');
         const LanguageSelector = sdk.getComponent('auth.LanguageSelector');
 
@@ -33,11 +39,25 @@ export default class Welcome extends React.PureComponent {
             pageUrl = 'welcome.html';
         }
 
+        const {hsUrl, isUrl} = this.props.serverConfig;
+        const tmpClient = Matrix.createClient({
+            baseUrl: hsUrl,
+            idBaseUrl: isUrl,
+        });
+        const plaf = PlatformPeg.get();
+        const callbackUrl = plaf.getSSOCallbackUrl(tmpClient.getHomeserverUrl(), tmpClient.getIdentityServerUrl(),
+            this.props.fragmentAfterLogin);
+
         return (
             <AuthPage>
                 <div className="mx_Welcome">
-                    <EmbeddedPage className="mx_WelcomePage"
+                    <EmbeddedPage
+                        className="mx_WelcomePage"
                         url={pageUrl}
+                        replaceMap={{
+                            "$riot:ssoUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "sso"),
+                            "$riot:casUrl": tmpClient.getSsoLoginUrl(callbackUrl.toString(), "cas"),
+                        }}
                     />
                     <LanguageSelector />
                 </div>

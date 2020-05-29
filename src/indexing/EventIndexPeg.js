@@ -21,31 +21,50 @@ limitations under the License.
 
 import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
-import SettingsStore from '../settings/SettingsStore';
+import SettingsStore, {SettingLevel} from '../settings/SettingsStore';
 
 class EventIndexPeg {
     constructor() {
         this.index = null;
+        this._supportIsInstalled = false;
     }
 
     /**
-     * Create a new EventIndex and initialize it if the platform supports it.
+     * Initialize the EventIndexPeg and if event indexing is enabled initialize
+     * the event index.
      *
-     * @return {Promise<bool>} A promise that will resolve to true if an
+     * @return {Promise<boolean>} A promise that will resolve to true if an
      * EventIndex was successfully initialized, false otherwise.
      */
     async init() {
-        if (!SettingsStore.isFeatureEnabled("feature_event_indexing")) {
-            return false;
-        }
-
         const indexManager = PlatformPeg.get().getEventIndexingManager();
-        if (!indexManager || await indexManager.supportsEventIndexing() !== true) {
-            console.log("EventIndex: Platform doesn't support event indexing,",
-                        "not initializing.");
+        if (!indexManager) {
+            console.log("EventIndex: Platform doesn't support event indexing, not initializing.");
             return false;
         }
 
+        this._supportIsInstalled = await indexManager.supportsEventIndexing();
+
+        if (!this.supportIsInstalled()) {
+            console.log("EventIndex: Event indexing isn't installed for the platform, not initializing.");
+            return false;
+        }
+
+        if (!SettingsStore.getValueAt(SettingLevel.DEVICE, 'enableEventIndexing')) {
+            console.log("EventIndex: Event indexing is disabled, not initializing");
+            return false;
+        }
+
+        return this.initEventIndex();
+    }
+
+    /**
+     * Initialize the event index.
+     *
+     * @returns {boolean} True if the event index was succesfully initialized,
+     * false otherwise.
+     */
+    async initEventIndex() {
         const index = new EventIndex();
 
         try {
@@ -61,12 +80,40 @@ class EventIndexPeg {
     }
 
     /**
+     * Check if the current platform has support for event indexing.
+     *
+     * @return {boolean} True if it has support, false otherwise. Note that this
+     * does not mean that support is installed.
+     */
+    platformHasSupport(): boolean {
+        return PlatformPeg.get().getEventIndexingManager() !== null;
+    }
+
+    /**
+     * Check if event indexing support is installed for the platfrom.
+     *
+     * Event indexing might require additional optional modules to be installed,
+     * this tells us if those are installed. Note that this should only be
+     * called after the init() method was called.
+     *
+     * @return {boolean} True if support is installed, false otherwise.
+     */
+    supportIsInstalled(): boolean {
+        return this._supportIsInstalled;
+    }
+
+    /**
      * Get the current event index.
      *
      * @return {EventIndex} The current event index.
      */
     get() {
         return this.index;
+    }
+
+    start() {
+        if (this.index === null) return;
+        this.index.startCrawler();
     }
 
     stop() {
@@ -84,7 +131,7 @@ class EventIndexPeg {
      */
     async unset() {
         if (this.index === null) return;
-        this.index.close();
+        await this.index.close();
         this.index = null;
     }
 
@@ -100,7 +147,7 @@ class EventIndexPeg {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (indexManager !== null) {
-            this.unset();
+            await this.unset();
             console.log("EventIndex: Deleting event index.");
             await indexManager.deleteEventIndex();
         }
@@ -110,4 +157,4 @@ class EventIndexPeg {
 if (!global.mxEventIndexPeg) {
     global.mxEventIndexPeg = new EventIndexPeg();
 }
-module.exports = global.mxEventIndexPeg;
+export default global.mxEventIndexPeg;

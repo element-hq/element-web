@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@ import createReactClass from 'create-react-class';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import sdk from '../../../index';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'PersistentApp',
 
     getInitialState: function() {
@@ -32,7 +33,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
     },
@@ -74,11 +75,7 @@ module.exports = createReactClass({
                 const AppTile = sdk.getComponent('elements.AppTile');
                 return <AppTile
                     key={app.id}
-                    id={app.id}
-                    eventId={app.eventId}
-                    url={app.url}
-                    name={app.name}
-                    type={app.type}
+                    app={app}
                     fullWidth={true}
                     room={persistentWidgetInRoom}
                     userId={MatrixClientPeg.get().credentials.userId}

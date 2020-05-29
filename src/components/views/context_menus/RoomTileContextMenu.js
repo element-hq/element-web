@@ -21,10 +21,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher/dispatcher';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import * as Rooms from '../../../Rooms';
 import * as RoomNotifs from '../../../RoomNotifs';
@@ -63,7 +63,7 @@ const NotifOption = ({active, onClick, src, label}) => {
     );
 };
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RoomTileContextMenu',
 
     propTypes: {
@@ -82,7 +82,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
     },
 
@@ -306,7 +306,7 @@ module.exports = createReactClass({
         return (
             <div>
                 <MenuItem className="mx_RoomTileContextMenu_tag_field" onClick={this._onClickSettings}>
-                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/icons-settings-room.svg")} width="15" height="15" alt="" />
+                    <img className="mx_RoomTileContextMenu_tag_icon" src={require("../../../../res/img/feather-customised/settings.svg")} width="15" height="15" alt="" />
                     { _t('Settings') }
                 </MenuItem>
             </div>

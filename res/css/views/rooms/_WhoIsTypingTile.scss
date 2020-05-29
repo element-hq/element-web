@@ -31,12 +31,13 @@ limitations under the License.
     margin-left: -12px;
 }
 
-.mx_WhoIsTypingTile_avatars .mx_BaseAvatar_image {
-    border: 1px solid $primary-bg-color;
-}
-
 .mx_WhoIsTypingTile_avatars .mx_BaseAvatar_initial {
     padding-top: 1px;
+}
+
+.mx_WhoIsTypingTile_avatars .mx_BaseAvatar {
+    border: 1px solid $primary-bg-color;
+    border-radius: 40px;
 }
 
 .mx_WhoIsTypingTile_remainingAvatarPlaceholder {
@@ -48,7 +49,7 @@ limitations under the License.
     border-radius: 40px;
     width: 24px;
     height: 24px;
-    line-height: 24px;
+    line-height: $font-24px;
     font-size: 0.8em;
     vertical-align: top;
     text-align: center;
@@ -56,7 +57,7 @@ limitations under the License.
 
 .mx_WhoIsTypingTile_label {
     flex: 1;
-    font-size: 14px;
+    font-size: $font-14px;
     font-weight: 600;
     color: $eventtile-meta-color;
 }

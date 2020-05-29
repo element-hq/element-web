@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Matrix from 'matrix-js-sdk';
-import LocalStorageCryptoStore from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
+import {LocalStorageCryptoStore} from 'matrix-js-sdk/src/crypto/store/localStorage-crypto-store';
 import Analytics from '../Analytics';
 
 const localStorage = window.localStorage;
@@ -41,6 +41,21 @@ function error(msg) {
 
 function track(action) {
     Analytics.trackEvent("StorageManager", action);
+}
+
+export function tryPersistStorage() {
+    if (navigator.storage && navigator.storage.persist) {
+        navigator.storage.persist().then(persistent => {
+            console.log("StorageManager: Persistent?", persistent);
+        });
+    } else if (document.requestStorageAccess) { // Safari
+        document.requestStorageAccess().then(
+            () => console.log("StorageManager: Persistent?", true),
+            () => console.log("StorageManager: Persistent?", false),
+        );
+    } else {
+        console.log("StorageManager: Persistence unsupported");
+    }
 }
 
 export async function checkConsistency() {

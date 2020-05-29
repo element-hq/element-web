@@ -22,7 +22,7 @@ import { _t } from '../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;
@@ -42,7 +42,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
 
         this._passphrase1 = createRef();

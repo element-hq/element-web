@@ -16,7 +16,11 @@ limitations under the License.
 */
 
 import {baseUrl} from "./utils/permalinks/SpecPermalinkConstructor";
-import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
+import {
+    parsePermalink,
+    tryTransformEntityToPermalink,
+    tryTransformPermalinkToLocalHref,
+} from "./utils/permalinks/Permalinks";
 
 function matrixLinkify(linkify) {
     // Text tokens
@@ -40,7 +44,7 @@ function matrixLinkify(linkify) {
     const S_HASH = S_START.jump(TT.POUND);
     const S_HASH_NAME = new linkify.parser.State();
     const S_HASH_NAME_COLON = new linkify.parser.State();
-    const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_HASH_NAME_COLON_DOMAIN = new linkify.parser.State(ROOMALIAS);
     const S_HASH_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_ROOMALIAS = new linkify.parser.State(ROOMALIAS);
     const S_ROOMALIAS_COLON = new linkify.parser.State();
@@ -88,7 +92,7 @@ function matrixLinkify(linkify) {
     const S_AT = S_START.jump(TT.AT);
     const S_AT_NAME = new linkify.parser.State();
     const S_AT_NAME_COLON = new linkify.parser.State();
-    const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_AT_NAME_COLON_DOMAIN = new linkify.parser.State(USERID);
     const S_AT_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_USERID = new linkify.parser.State(USERID);
     const S_USERID_COLON = new linkify.parser.State();
@@ -134,7 +138,7 @@ function matrixLinkify(linkify) {
     const S_PLUS = S_START.jump(TT.PLUS);
     const S_PLUS_NAME = new linkify.parser.State();
     const S_PLUS_NAME_COLON = new linkify.parser.State();
-    const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State();
+    const S_PLUS_NAME_COLON_DOMAIN = new linkify.parser.State(GROUPID);
     const S_PLUS_NAME_COLON_DOMAIN_DOT = new linkify.parser.State();
     const S_GROUPID = new linkify.parser.State(GROUPID);
     const S_GROUPID_COLON = new linkify.parser.State();
@@ -194,6 +198,22 @@ matrixLinkify.MATRIXTO_BASE_URL= baseUrl;
 matrixLinkify.options = {
     events: function(href, type) {
         switch (type) {
+            case "url": {
+                // intercept local permalinks to users and show them like userids (in userinfo of current room)
+                try {
+                    const permalink = parsePermalink(href);
+                    if (permalink && permalink.userId) {
+                        return {
+                            click: function(e) {
+                                matrixLinkify.onUserClick(e, permalink.userId);
+                            },
+                        };
+                    }
+                } catch (e) {
+                    // OK fine, it's not actually a permalink
+                }
+                break;
+            }
             case "userid":
                 return {
                     click: function(e) {
@@ -221,13 +241,13 @@ matrixLinkify.options = {
             case 'userid':
             case 'groupid':
             default: {
-                return tryTransformPermalinkToLocalHref(href);
+                return tryTransformEntityToPermalink(href);
             }
         }
     },
 
     linkAttributes: {
-        rel: 'noopener',
+        rel: 'noreferrer noopener',
     },
 
     target: function(href, type) {

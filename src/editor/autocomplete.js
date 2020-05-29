@@ -102,7 +102,7 @@ export default class AutocompleteWrapperModel {
         const text = completion.completion;
         switch (completion.type) {
             case "room":
-                return [this._partCreator.roomPill(completionId), this._partCreator.plain(completion.suffix)];
+                return [this._partCreator.roomPill(text, completionId), this._partCreator.plain(completion.suffix)];
             case "at-room":
                 return [this._partCreator.atRoomPill(completionId), this._partCreator.plain(completion.suffix)];
             case "user":

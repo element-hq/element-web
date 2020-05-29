@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018, 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import Matrix from 'matrix-js-sdk';
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
@@ -29,7 +29,10 @@ import * as ServerType from '../../views/auth/ServerTypeSelector';
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from "classnames";
 import * as Lifecycle from '../../../Lifecycle';
-import MatrixClientPeg from "../../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import AuthPage from "../../views/auth/AuthPage";
+import Login from "../../../Login";
+import dis from "../../../dispatcher/dispatcher";
 
 // Phases
 // Show controls to configure server details
@@ -40,11 +43,17 @@ const PHASE_REGISTRATION = 1;
 // Enable phases for registration
 const PHASES_ENABLED = true;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Registration',
 
     propTypes: {
+        // Called when the user has logged in. Params:
+        // - object with userId, deviceId, homeserverUrl, identityServerUrl, accessToken
+        // - The user's password, if available and applicable (may be cached in memory
+        //   for a short time so the user is not required to re-enter their password
+        //   for operations like uploading cross-signing keys).
         onLoggedIn: PropTypes.func.isRequired,
+
         clientSecret: PropTypes.string,
         sessionId: PropTypes.string,
         makeRegistrationUrl: PropTypes.func.isRequired,
@@ -55,6 +64,7 @@ module.exports = createReactClass({
         // registration shouldn't know or care how login is done.
         onLoginClick: PropTypes.func.isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
+        defaultDeviceDisplayName: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -110,12 +120,13 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._replaceClient();
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -224,29 +235,56 @@ module.exports = createReactClass({
             serverRequiresIdServer,
             busy: false,
         });
+        const showGenericError = (e) => {
+            this.setState({
+                errorText: _t("Unable to query for supported registration methods."),
+                // add empty flows array to get rid of spinner
+                flows: [],
+            });
+        };
         try {
-            await this._makeRegisterRequest({});
-            // This should never succeed since we specified an empty
-            // auth object.
-            console.log("Expecting 401 from register request but got success!");
+            // We do the first registration request ourselves to discover whether we need to
+            // do SSO instead. If we've already started the UI Auth process though, we don't
+            // need to.
+            if (!this.state.doingUIAuth) {
+                await this._makeRegisterRequest({});
+                // This should never succeed since we specified an empty
+                // auth object.
+                console.log("Expecting 401 from register request but got success!");
+            }
         } catch (e) {
             if (e.httpStatus === 401) {
                 this.setState({
                     flows: e.data.flows,
                 });
             } else if (e.httpStatus === 403 && e.errcode === "M_UNKNOWN") {
-                this.setState({
-                    errorText: _t("Registration has been disabled on this homeserver."),
-                    // add empty flows array to get rid of spinner
-                    flows: [],
-                });
+                // At this point registration is pretty much disabled, but before we do that let's
+                // quickly check to see if the server supports SSO instead. If it does, we'll send
+                // the user off to the login page to figure their account out.
+                try {
+                    const loginLogic = new Login(hsUrl, isUrl, null, {
+                        defaultDeviceDisplayName: "riot login check", // We shouldn't ever be used
+                    });
+                    const flows = await loginLogic.getFlows();
+                    const hasSsoFlow = flows.find(f => f.type === 'm.login.sso' || f.type === 'm.login.cas');
+                    if (hasSsoFlow) {
+                        // Redirect to login page - server probably expects SSO only
+                        dis.dispatch({action: 'start_login'});
+                    } else {
+                        this.setState({
+                            serverErrorIsFatal: true, // fatal because user cannot continue on this server
+                            errorText: _t("Registration has been disabled on this homeserver."),
+                            // add empty flows array to get rid of spinner
+                            flows: [],
+                        });
+                    }
+                } catch (e) {
+                    console.error("Failed to get login flows to check for SSO support", e);
+                    showGenericError(e);
+                }
             } else {
                 console.log("Unable to query for supported registration methods.", e);
-                this.setState({
-                    errorText: _t("Unable to query for supported registration methods."),
-                    // add empty flows array to get rid of spinner
-                    flows: [],
-                });
+                showGenericError(e);
             }
         }
     },
@@ -347,7 +385,7 @@ module.exports = createReactClass({
                 homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
                 identityServerUrl: this.state.matrixClient.getIdentityServerUrl(),
                 accessToken: response.access_token,
-            });
+            }, this.state.formVals.password);
 
             this._setupPushers(cli);
             // we're still busy until we get unmounted: don't show the registration form again
@@ -425,15 +463,14 @@ module.exports = createReactClass({
         // session).
         if (!this.state.formVals.password) inhibitLogin = null;
 
-        return this.state.matrixClient.register(
-            this.state.formVals.username,
-            this.state.formVals.password,
-            undefined, // session id: included in the auth dict already
-            auth,
-            null,
-            null,
-            inhibitLogin,
-        );
+        const registerParams = {
+            username: this.state.formVals.username,
+            password: this.state.formVals.password,
+            initial_device_display_name: this.props.defaultDeviceDisplayName,
+        };
+        if (auth) registerParams.auth = auth;
+        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
+        return this.state.matrixClient.registerRequest(registerParams);
     },
 
     _getUIAuthInputs: function() {
@@ -576,7 +613,6 @@ module.exports = createReactClass({
     render: function() {
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
         const AuthBody = sdk.getComponent("auth.AuthBody");
-        const AuthPage = sdk.getComponent('auth.AuthPage');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let errorText;

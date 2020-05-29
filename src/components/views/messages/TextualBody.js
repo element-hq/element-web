@@ -23,19 +23,20 @@ import createReactClass from 'create-react-class';
 import highlight from 'highlight.js';
 import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyThread from "../elements/ReplyThread";
-import {pillifyLinks} from '../../../utils/pillify';
+import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
+import {copyPlaintext} from "../../../utils/strings";
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'TextualBody',
 
     propTypes: {
@@ -69,41 +70,26 @@ module.exports = createReactClass({
         };
     },
 
-    copyToClipboard: function(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-
-        let successful = false;
-        try {
-            successful = document.execCommand('copy');
-        } catch (err) {
-            console.log('Unable to copy');
-        }
-
-        document.body.removeChild(textArea);
-        return successful;
-    },
-
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._content = createRef();
     },
 
     componentDidMount: function() {
         this._unmounted = false;
+        this._pills = [];
         if (!this.props.editState) {
             this._applyFormatting();
         }
     },
 
     _applyFormatting() {
-        this.activateSpoilers(this._content.current.children);
+        this.activateSpoilers([this._content.current]);
 
         // pillifyLinks BEFORE linkifyElement because plain room/user URLs in the composer
         // are still sent as plaintext URLs. If these are ever pillified in the composer,
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
-        pillifyLinks(this._content.current.children, this.props.mxEvent);
+        pillifyLinks([this._content.current], this.props.mxEvent, this._pills);
         HtmlUtils.linkifyElement(this._content.current);
         this.calculateUrlPreview();
 
@@ -146,6 +132,7 @@ module.exports = createReactClass({
 
     componentWillUnmount: function() {
         this._unmounted = true;
+        unmountPills(this._pills);
     },
 
     shouldComponentUpdate: function(nextProps, nextState) {
@@ -167,7 +154,8 @@ module.exports = createReactClass({
         //console.info("calculateUrlPreview: ShowUrlPreview for %s is %s", this.props.mxEvent.getId(), this.props.showUrlPreview);
 
         if (this.props.showUrlPreview) {
-            let links = this.findLinks(this._content.current.children);
+            // pass only the first child which is the event tile otherwise this recurses on edited events
+            let links = this.findLinks([this._content.current]);
             if (links.length) {
                 // de-dup the links (but preserve ordering)
                 const seen = new Set();
@@ -273,17 +261,17 @@ module.exports = createReactClass({
         Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
-            button.onclick = (e) => {
-                const copyCode = button.parentNode.getElementsByTagName("code")[0];
-                const successful = this.copyToClipboard(copyCode.textContent);
+            button.onclick = async () => {
+                const copyCode = button.parentNode.getElementsByTagName("pre")[0];
+                const successful = await copyPlaintext(copyCode.textContent);
 
-                const buttonRect = e.target.getBoundingClientRect();
+                const buttonRect = button.getBoundingClientRect();
                 const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
                     ...toRightOf(buttonRect, 2),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
                 });
-                e.target.onmouseleave = close;
+                button.onmouseleave = close;
             };
 
             // Wrap a div around <pre> so that the copy button can be correctly positioned
@@ -329,10 +317,6 @@ module.exports = createReactClass({
                     global.localStorage.removeItem("hide_preview_" + this.props.mxEvent.getId());
                 }
             },
-
-            getInnerText: () => {
-                return this._content.current.innerText;
-            },
         };
     },
 
@@ -375,7 +359,9 @@ module.exports = createReactClass({
                     const height = window.screen.height > 800 ? 800 : window.screen.height;
                     const left = (window.screen.width - width) / 2;
                     const top = (window.screen.height - height) / 2;
-                    window.open(completeUrl, '_blank', `height=${height}, width=${width}, top=${top}, left=${left},`);
+                    const features = `height=${height}, width=${width}, top=${top}, left=${left},`;
+                    const wnd = window.open(completeUrl, '_blank', features);
+                    wnd.opener = null;
                 },
             });
         });
@@ -433,6 +419,7 @@ module.exports = createReactClass({
             disableBigEmoji: content.msgtype === "m.emote" || !SettingsStore.getValue('TextualBody.enableBigEmoji'),
             // Part of Replies fallback support
             stripReplyFallback: stripReply,
+            ref: this._content,
         });
         if (this.props.replacingEventId) {
             body = [body, this._renderEditedMarker()];
@@ -459,15 +446,14 @@ module.exports = createReactClass({
 
         switch (content.msgtype) {
             case "m.emote":
-                const name = mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender();
                 return (
-                    <span ref={this._content} className="mx_MEmoteBody mx_EventTile_content">
+                    <span className="mx_MEmoteBody mx_EventTile_content">
                         *&nbsp;
                         <span
                             className="mx_MEmoteBody_sender"
                             onClick={this.onEmoteSenderClick}
                         >
-                            { name }
+                            { mxEvent.sender ? mxEvent.sender.name : mxEvent.getSender() }
                         </span>
                         &nbsp;
                         { body }
@@ -476,14 +462,14 @@ module.exports = createReactClass({
                 );
             case "m.notice":
                 return (
-                    <span ref={this._content} className="mx_MNoticeBody mx_EventTile_content">
+                    <span className="mx_MNoticeBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>
                 );
             default: // including "m.text"
                 return (
-                    <span ref={this._content} className="mx_MTextBody mx_EventTile_content">
+                    <span className="mx_MTextBody mx_EventTile_content">
                         { body }
                         { widgets }
                     </span>

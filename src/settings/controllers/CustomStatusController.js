@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import SettingController from "./SettingController";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 
 export default class CustomStatusController extends SettingController {
     onChange(level, roomId, newValue) {

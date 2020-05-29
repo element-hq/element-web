@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,10 +17,11 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from "prop-types";
-import sdk from "../../../../index";
-import dis from "../../../../dispatcher";
+import * as sdk from "../../../../index";
+import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
+import {Action} from "../../../../dispatcher/actions";
 
 export default class RecoveryMethodRemovedDialog extends React.PureComponent {
     static propTypes = {
@@ -28,13 +30,14 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
 
     onGoToSettingsClick = () => {
         this.props.onFinished();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
     }
 
     onSetupClick = () => {
         this.props.onFinished();
         Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
             import("./CreateKeyBackupDialog"),
+            null, null, /* priority = */ false, /* static = */ true,
         );
     }
 
@@ -53,12 +56,12 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent {
             >
                 <div>
                     <p>{_t(
-                        "This device has detected that your recovery passphrase and key " +
+                        "This session has detected that your recovery passphrase and key " +
                         "for Secure Messages have been removed.",
                     )}</p>
                     <p>{_t(
                         "If you did this accidentally, you can setup Secure Messages on " +
-                        "this device which will re-encrypt this device's message " +
+                        "this session which will re-encrypt this session's message " +
                         "history with a new recovery method.",
                     )}</p>
                     <p className="warning">{_t(

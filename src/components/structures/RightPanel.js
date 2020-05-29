@@ -21,15 +21,16 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import sdk from '../../index';
-import dis from '../../dispatcher';
-import { MatrixClient } from 'matrix-js-sdk';
+import * as sdk from '../../index';
+import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
 import SettingsStore from "../../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
+import MatrixClientContext from "../../contexts/MatrixClientContext";
+import {Action} from "../../dispatcher/actions";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -40,18 +41,15 @@ export default class RightPanel extends React.Component {
         };
     }
 
-    static get contextTypes() {
-        return {
-            matrixClient: PropTypes.instanceOf(MatrixClient),
-        };
-    }
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.state = {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
             member: this._getUserForPanel(),
+            verificationRequest: RightPanelStore.getSharedInstance().roomPanelPhaseParams.verificationRequest,
         };
         this.onAction = this.onAction.bind(this);
         this.onRoomStateMember = this.onRoomStateMember.bind(this);
@@ -72,15 +70,35 @@ export default class RightPanel extends React.Component {
         return this.props.user || lastParams['member'];
     }
 
+    // gets the current phase from the props and also maybe the store
     _getPhaseFromProps() {
         const rps = RightPanelStore.getSharedInstance();
+        const userForPanel = this._getUserForPanel();
         if (this.props.groupId) {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
                 dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.GroupMemberList});
                 return RIGHT_PANEL_PHASES.GroupMemberList;
             }
             return rps.groupPanelPhase;
-        } else if (this._getUserForPanel()) {
+        } else if (userForPanel) {
+            // XXX FIXME AAAAAARGH: What is going on with this class!? It takes some of its state
+            // from its props and some from a store, except if the contents of the store changes
+            // while it's mounted in which case it replaces all of its state with that of the store,
+            // except it uses a dispatch instead of a normal store listener?
+            // Unfortunately rewriting this would almost certainly break showing the right panel
+            // in some of the many cases, and I don't have time to re-architect it and test all
+            // the flows now, so adding yet another special case so if the store thinks there is
+            // a verification going on for the member we're displaying, we show that, otherwise
+            // we race if a verification is started while the panel isn't displayed because we're
+            // not mounted in time to get the dispatch.
+            // Until then, let this code serve as a warning from history.
+            if (
+                rps.roomPanelPhaseParams.member &&
+                userForPanel.userId === rps.roomPanelPhaseParams.member.userId &&
+                rps.roomPanelPhaseParams.verificationRequest
+            ) {
+                return rps.roomPanelPhase;
+            }
             return RIGHT_PANEL_PHASES.RoomMemberInfo;
         } else {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
@@ -91,22 +109,23 @@ export default class RightPanel extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        const cli = this.context.matrixClient;
+        const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         this._initGroupStore(this.props.groupId);
     }
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        if (this.context.matrixClient) {
-            this.context.matrixClient.removeListener("RoomState.members", this.onRoomStateMember);
+        if (this.context) {
+            this.context.removeListener("RoomState.members", this.onRoomStateMember);
         }
         this._unregisterGroupStore(this.props.groupId);
     }
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) { // eslint-disable-line camelcase
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
@@ -164,6 +183,8 @@ export default class RightPanel extends React.Component {
                 groupId: payload.groupId,
                 member: payload.member,
                 event: payload.event,
+                verificationRequest: payload.verificationRequest,
+                verificationRequestPromise: payload.verificationRequestPromise,
             });
         }
     }
@@ -183,62 +204,100 @@ export default class RightPanel extends React.Component {
 
         let panel = <div />;
 
-        if (this.props.roomId && this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList) {
-            panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
-        } else if (this.props.groupId && this.state.phase === RIGHT_PANEL_PHASES.GroupMemberList) {
-            panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomList) {
-            panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
-                const onClose = () => {
-                    dis.dispatch({
-                        action: "view_user",
-                        member: null,
-                    });
-                };
-                panel = <UserInfo
-                    user={this.state.member}
-                    roomId={this.props.roomId}
-                    key={this.props.roomId || this.state.member.userId}
-                    onClose={onClose}
-                />;
-            } else {
-                panel = <MemberInfo member={this.state.member} key={this.props.roomId || this.state.member.userId} />;
-            }
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.Room3pidMemberInfo) {
-            panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-            if (SettingsStore.isFeatureEnabled("feature_dm_verification")) {
-                const onClose = () => {
-                    dis.dispatch({
-                        action: "view_user",
-                        member: null,
-                    });
-                };
-                panel = <UserInfo
-                    user={this.state.member}
-                    groupId={this.props.groupId}
-                    key={this.state.member.userId}
-                    onClose={onClose} />;
-            } else {
-                panel = (
-                    <GroupMemberInfo
-                        groupMember={this.state.member}
+        switch (this.state.phase) {
+            case RIGHT_PANEL_PHASES.RoomMemberList:
+                if (this.props.roomId) {
+                    panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupMemberList:
+                if (this.props.groupId) {
+                    panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupRoomList:
+                panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
+                break;
+            case RIGHT_PANEL_PHASES.RoomMemberInfo:
+            case RIGHT_PANEL_PHASES.EncryptionPanel:
+                if (SettingsStore.getValue("feature_cross_signing")) {
+                    const onClose = () => {
+                        // XXX: There are three different ways of 'closing' this panel depending on what state
+                        // things are in... this knows far more than it should do about the state of the rest
+                        // of the app and is generally a bit silly.
+                        if (this.props.user) {
+                            // If we have a user prop then we're displaying a user from the 'user' page type
+                            // in LoggedInView, so need to change the page type to close the panel (we switch
+                            // to the home page which is not obviously the correct thing to do, but I'm not sure
+                            // anything else is - we could hide the close button altogether?)
+                            dis.dispatch({
+                                action: "view_home_page",
+                            });
+                        } else {
+                            // Otherwise we have got our user from RoomViewStore which means we're being shown
+                            // within a room, so go back to the member panel if we were in the encryption panel,
+                            // or the member list if we were in the member panel... phew.
+                            dis.dispatch({
+                                action: Action.ViewUser,
+                                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ?
+                                    this.state.member : null,
+                            });
+                        }
+                    };
+                    panel = <UserInfo
+                        user={this.state.member}
+                        roomId={this.props.roomId}
+                        key={this.props.roomId || this.state.member.userId}
+                        onClose={onClose}
+                        phase={this.state.phase}
+                        verificationRequest={this.state.verificationRequest}
+                        verificationRequestPromise={this.state.verificationRequestPromise}
+                    />;
+                } else {
+                    panel = <MemberInfo
+                        member={this.state.member}
+                        key={this.props.roomId || this.state.member.userId}
+                    />;
+                }
+                break;
+            case RIGHT_PANEL_PHASES.Room3pidMemberInfo:
+                panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
+                break;
+            case RIGHT_PANEL_PHASES.GroupMemberInfo:
+                if (SettingsStore.getValue("feature_cross_signing")) {
+                    const onClose = () => {
+                        dis.dispatch({
+                            action: Action.ViewUser,
+                            member: null,
+                        });
+                    };
+                    panel = <UserInfo
+                        user={this.state.member}
                         groupId={this.props.groupId}
-                        key={this.state.member.user_id}
-                    />
-                );
-            }
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.GroupRoomInfo) {
-            panel = <GroupRoomInfo
-                groupRoomId={this.state.groupRoomId}
-                groupId={this.props.groupId}
-                key={this.state.groupRoomId} />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.NotificationPanel) {
-            panel = <NotificationPanel />;
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.FilePanel) {
-            panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                        key={this.state.member.userId}
+                        onClose={onClose} />;
+                } else {
+                    panel = (
+                        <GroupMemberInfo
+                            groupMember={this.state.member}
+                            groupId={this.props.groupId}
+                            key={this.state.member.user_id}
+                        />
+                    );
+                }
+                break;
+            case RIGHT_PANEL_PHASES.GroupRoomInfo:
+                panel = <GroupRoomInfo
+                    groupRoomId={this.state.groupRoomId}
+                    groupId={this.props.groupId}
+                    key={this.state.groupRoomId} />;
+                break;
+            case RIGHT_PANEL_PHASES.NotificationPanel:
+                panel = <NotificationPanel />;
+                break;
+            case RIGHT_PANEL_PHASES.FilePanel:
+                panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                break;
         }
 
         const classes = classNames("mx_RightPanel", "mx_fadable", {
@@ -248,7 +307,7 @@ export default class RightPanel extends React.Component {
         });
 
         return (
-            <aside className={classes}>
+            <aside className={classes} id="mx_RightPanel">
                 { panel }
             </aside>
         );

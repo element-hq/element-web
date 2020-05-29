@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../languageHandler";
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 export default class SetIntegrationManager extends React.Component {

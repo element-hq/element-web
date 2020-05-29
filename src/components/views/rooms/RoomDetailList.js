@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import PropTypes from 'prop-types';

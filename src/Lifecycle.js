@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,25 +19,28 @@ limitations under the License.
 
 import Matrix from 'matrix-js-sdk';
 
-import MatrixClientPeg from './MatrixClientPeg';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
 import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
-import sdk from './index';
+import * as sdk from './index';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
 import SettingsStore from "./settings/SettingsStore";
 import TypingStore from "./stores/TypingStore";
+import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
+import DeviceListener from "./DeviceListener";
+import {Jitsi} from "./widgets/Jitsi";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -294,6 +298,8 @@ async function _restoreFromLocalStorage(opts) {
             return false;
         }
 
+        const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
@@ -302,6 +308,7 @@ async function _restoreFromLocalStorage(opts) {
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: isGuest,
+            pickleKey: pickleKey,
         }, false);
         return true;
     } else {
@@ -310,7 +317,7 @@ async function _restoreFromLocalStorage(opts) {
     }
 }
 
-function _handleLoadSessionFailure(e) {
+async function _handleLoadSessionFailure(e) {
     console.error("Unable to load session", e);
 
     const SessionRestoreErrorDialog =
@@ -320,16 +327,15 @@ function _handleLoadSessionFailure(e) {
         error: e.message,
     });
 
-    return modal.finished.then(([success]) => {
-        if (success) {
-            // user clicked continue.
-            _clearStorage();
-            return false;
-        }
+    const [success] = await modal.finished;
+    if (success) {
+        // user clicked continue.
+        await _clearStorage();
+        return false;
+    }
 
-        // try, try again
-        return loadSession();
-    });
+    // try, try again
+    return loadSession();
 }
 
 /**
@@ -345,9 +351,13 @@ function _handleLoadSessionFailure(e) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function setLoggedIn(credentials) {
+export async function setLoggedIn(credentials) {
     stopMatrixClient();
-    return _doSetLoggedIn(credentials, true);
+    const pickleKey = credentials.userId && credentials.deviceId
+          ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+          : null;
+
+    return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
 
 /**
@@ -375,7 +385,7 @@ export function hydrateSession(credentials) {
 
     const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
-        console.warn("Clearing all data: Old session belongs to a different user/device");
+        console.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
     return _doSetLoggedIn(credentials, overwrite);
@@ -432,7 +442,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         }
     }
 
-    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl, credentials.identityServerUrl);
+    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
     if (localStorage) {
         try {
@@ -513,7 +523,9 @@ export function logout() {
     }
 
     _isLoggingOut = true;
-    MatrixClientPeg.get().logout().then(onLoggedOut,
+    const client = MatrixClientPeg.get();
+    PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
+    client.logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
@@ -572,12 +584,12 @@ async function startMatrixClient(startSyncing=true) {
     // to work).
     dis.dispatch({action: 'will_start_client'}, true);
 
+    // reset things first just in case
+    TypingStore.sharedInstance().reset();
+    ToastStore.sharedInstance().reset();
+
     Notifier.start();
     UserActivity.sharedInstance().start();
-    TypingStore.sharedInstance().reset(); // just in case
-    if (!SettingsStore.getValue("lowBandwidth")) {
-        Presence.start();
-    }
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
@@ -588,12 +600,26 @@ async function startMatrixClient(startSyncing=true) {
     Mjolnir.sharedInstance().start();
 
     if (startSyncing) {
-        await MatrixClientPeg.start();
+        // The client might want to populate some views with events from the
+        // index (e.g. the FilePanel), therefore initialize the event index
+        // before the client.
         await EventIndexPeg.init();
+        await MatrixClientPeg.start();
     } else {
         console.warn("Caller requested only auxiliary services be started");
         await MatrixClientPeg.assign();
     }
+
+    // This needs to be started after crypto is set up
+    DeviceListener.sharedInstance().start();
+    // Similarly, don't start sending presence updates until we've started
+    // the client
+    if (!SettingsStore.getValue("lowBandwidth")) {
+        Presence.start();
+    }
+
+    // Now that we have a MatrixClientPeg, update the Jitsi info
+    await Jitsi.getInstance().update();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
@@ -622,10 +648,14 @@ export async function onLoggedOut() {
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 async function _clearStorage() {
-    Analytics.logout();
+    Analytics.disable();
 
     if (window.localStorage) {
         window.localStorage.clear();
+    }
+
+    if (window.sessionStorage) {
+        window.sessionStorage.clear();
     }
 
     // create a temporary client to clear out the persistent stores.
@@ -651,6 +681,7 @@ export function stopMatrixClient(unsetClient=true) {
     ActiveWidgetStore.stop();
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
+    DeviceListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

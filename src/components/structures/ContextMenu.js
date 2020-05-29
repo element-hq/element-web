@@ -21,7 +21,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Key} from "../../Keyboard";
-import sdk from "../../index";
+import * as sdk from "../../index";
 import AccessibleButton from "../views/elements/AccessibleButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
@@ -71,12 +71,12 @@ export class ContextMenu extends React.Component {
         // on resize callback
         windowResize: PropTypes.func,
 
-        catchTab: PropTypes.bool, // whether to close the ContextMenu on TAB (default=true)
+        managed: PropTypes.bool, // whether this context menu should be focus managed. If false it must handle itself
     };
 
     static defaultProps = {
         hasBackground: true,
-        catchTab: true,
+        managed: true,
     };
 
     constructor() {
@@ -186,15 +186,19 @@ export class ContextMenu extends React.Component {
     };
 
     _onKeyDown = (ev) => {
+        if (!this.props.managed) {
+            if (ev.key === Key.ESCAPE) {
+                this.props.onFinished();
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+            return;
+        }
+
         let handled = true;
 
         switch (ev.key) {
             case Key.TAB:
-                if (!this.props.catchTab) {
-                    handled = false;
-                    break;
-                }
-                // fallthrough
             case Key.ESCAPE:
                 this.props.onFinished();
                 break;
@@ -241,7 +245,6 @@ export class ContextMenu extends React.Component {
         }
 
         const contextMenuRect = this.state.contextMenuElem ? this.state.contextMenuElem.getBoundingClientRect() : null;
-        const padding = 10;
 
         const chevronOffset = {};
         if (props.chevronFace) {
@@ -251,7 +254,7 @@ export class ContextMenu extends React.Component {
 
         if (chevronFace === 'top' || chevronFace === 'bottom') {
             chevronOffset.left = props.chevronOffset;
-        } else {
+        } else if (position.top !== undefined) {
             const target = position.top;
 
             // By default, no adjustment is made
@@ -260,7 +263,8 @@ export class ContextMenu extends React.Component {
             // If we know the dimensions of the context menu, adjust its position
             // such that it does not leave the (padded) window.
             if (contextMenuRect) {
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
+                const padding = 10;
+                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height + padding);
             }
 
             position.top = adjusted;
@@ -321,7 +325,7 @@ export class ContextMenu extends React.Component {
 
         return (
             <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
-                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role="menu">
+                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role={this.props.managed ? "menu" : undefined}>
                     { chevron }
                     { props.children }
                 </div>
@@ -346,7 +350,7 @@ export const ContextMenuButton = ({ label, isExpanded, children, ...props }) => 
 };
 ContextMenuButton.propTypes = {
     ...AccessibleButton.propTypes,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
     isExpanded: PropTypes.bool.isRequired, // whether or not the context menu is currently open
 };
 
@@ -373,7 +377,6 @@ export const MenuGroup = ({children, label, ...props}) => {
     </div>;
 };
 MenuGroup.propTypes = {
-    ...AccessibleButton.propTypes,
     label: PropTypes.string.isRequired,
     className: PropTypes.string, // optional
 };

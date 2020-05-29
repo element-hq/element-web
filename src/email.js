@@ -16,8 +16,6 @@ limitations under the License.
 
 const EMAIL_ADDRESS_REGEX = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-module.exports = {
-    looksValid: function(email) {
-        return EMAIL_ADDRESS_REGEX.test(email);
-    },
-};
+export function looksValid(email) {
+    return EMAIL_ADDRESS_REGEX.test(email);
+}

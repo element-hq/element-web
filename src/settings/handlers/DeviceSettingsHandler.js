@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
-import MatrixClientPeg from "../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import {SettingLevel} from "../SettingsStore";
 
 /**

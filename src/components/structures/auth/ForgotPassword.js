@@ -20,12 +20,13 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import classNames from 'classnames';
+import AuthPage from "../../views/auth/AuthPage";
 
 // Phases
 // Show controls to configure server details
@@ -39,7 +40,7 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ForgotPassword',
 
     propTypes: {
@@ -68,12 +69,13 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.reset = null;
         this._checkServerLiveliness(this.props.serverConfig);
     },
 
-    componentWillReceiveProps: function(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
@@ -151,8 +153,8 @@ module.exports = createReactClass({
                     <div>
                         { _t(
                             "Changing your password will reset any end-to-end encryption keys " +
-                            "on all of your devices, making encrypted chat history unreadable. Set up " +
-                            "Key Backup or export your room keys from another device before resetting your " +
+                            "on all of your sessions, making encrypted chat history unreadable. Set up " +
+                            "Key Backup or export your room keys from another session before resetting your " +
                             "password.",
                         ) }
                     </div>,
@@ -295,7 +297,6 @@ module.exports = createReactClass({
             <form onSubmit={this.onSubmitForm}>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_email"
                         name="reset_email" // define a name so browser's password autofill gets less confused
                         type="text"
                         label={_t('Email')}
@@ -306,7 +307,6 @@ module.exports = createReactClass({
                 </div>
                 <div className="mx_AuthBody_fieldRow">
                     <Field
-                        id="mx_ForgotPassword_password"
                         name="reset_password"
                         type="password"
                         label={_t('Password')}
@@ -314,7 +314,6 @@ module.exports = createReactClass({
                         onChange={this.onInputChanged.bind(this, "password")}
                     />
                     <Field
-                        id="mx_ForgotPassword_passwordConfirm"
                         name="reset_password_confirm"
                         type="password"
                         label={_t('Confirm')}
@@ -357,7 +356,7 @@ module.exports = createReactClass({
         return <div>
             <p>{_t("Your password has been reset.")}</p>
             <p>{_t(
-                "You have been logged out of all devices and will no longer receive " +
+                "You have been logged out of all sessions and will no longer receive " +
                 "push notifications. To re-enable notifications, sign in again on each " +
                 "device.",
             )}</p>
@@ -367,7 +366,6 @@ module.exports = createReactClass({
     },
 
     render: function() {
-        const AuthPage = sdk.getComponent("auth.AuthPage");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
 

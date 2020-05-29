@@ -17,7 +17,7 @@ limitations under the License.
 .mx_EventTile_content.mx_ViewSourceEvent {
     display: flex;
     opacity: 0.6;
-    font-size: 12px;
+    font-size: $font-12px;
 
     pre, code {
         flex: 1;

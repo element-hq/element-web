@@ -36,7 +36,7 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
 
     const linkSub = sub => {
         if (adminContact) {
-            return <a href={adminContact} target="_blank" rel="noopener">{sub}</a>;
+            return <a href={adminContact} target="_blank" rel="noreferrer noopener">{sub}</a>;
         } else {
             return sub;
         }
@@ -46,6 +46,12 @@ export function messageForResourceLimitError(limitType, adminContact, strings, e
         return _t(errString, {}, Object.assign({ 'a': linkSub }, extraTranslations));
     } else {
         return _t(errString, {}, extraTranslations);
+    }
+}
+
+export function messageForSendError(errorData) {
+    if (errorData.errcode === "M_TOO_LARGE") {
+        return _t("The message you are trying to send is too large.");
     }
 }
 

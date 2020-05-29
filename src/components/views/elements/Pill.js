@@ -17,15 +17,16 @@ limitations under the License.
 */
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
-import dis from '../../../dispatcher';
+import * as sdk from '../../../index';
+import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { Room, RoomMember, MatrixClient } from 'matrix-js-sdk';
+import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
-import MatrixClientPeg from '../../../MatrixClientPeg';
-import { getDisplayAliasForRoom } from '../../../Rooms';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
@@ -66,17 +67,6 @@ const Pill = createReactClass({
         isSelected: PropTypes.bool,
     },
 
-
-    childContextTypes: {
-        matrixClient: PropTypes.instanceOf(MatrixClient),
-    },
-
-    getChildContext() {
-        return {
-            matrixClient: this._matrixClient,
-        };
-    },
-
     getInitialState() {
         return {
             // ID/alias of the room/user
@@ -93,7 +83,8 @@ const Pill = createReactClass({
         };
     },
 
-    async componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
 
@@ -127,7 +118,7 @@ const Pill = createReactClass({
             }
                 break;
             case Pill.TYPE_USER_MENTION: {
-                const localMember = nextProps.room.getMember(resourceId);
+                const localMember = nextProps.room ? nextProps.room.getMember(resourceId) : undefined;
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
@@ -138,7 +129,8 @@ const Pill = createReactClass({
             case Pill.TYPE_ROOM_MENTION: {
                 const localRoom = resourceId[0] === '#' ?
                     MatrixClientPeg.get().getRooms().find((r) => {
-                        return r.getAliases().includes(resourceId);
+                        return r.getCanonicalAlias() === resourceId ||
+                               r.getAltAliases().includes(resourceId);
                     }) : MatrixClientPeg.get().getRoom(resourceId);
                 room = localRoom;
                 if (!localRoom) {
@@ -165,10 +157,12 @@ const Pill = createReactClass({
         this.setState({resourceId, pillType, member, group, room});
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
-        this.componentWillReceiveProps(this.props);
+
+        // eslint-disable-next-line new-cap
+        this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     },
 
     componentWillUnmount() {
@@ -198,7 +192,7 @@ const Pill = createReactClass({
 
     onUserPillClicked: function() {
         dis.dispatch({
-            action: 'view_user',
+            action: Action.ViewUser,
             member: this.state.member,
         });
     },
@@ -221,7 +215,7 @@ const Pill = createReactClass({
                 if (room) {
                     linkText = "@room";
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <RoomAvatar room={room} width={16} height={16} />;
+                        avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
                     pillClass = 'mx_AtRoomPill';
                 }
@@ -235,7 +229,7 @@ const Pill = createReactClass({
                         member.rawDisplayName = member.rawDisplayName || '';
                         linkText = member.rawDisplayName;
                         if (this.props.shouldShowPillAvatar) {
-                            avatar = <MemberAvatar member={member} width={16} height={16} />;
+                            avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
                         }
                         pillClass = 'mx_UserPill';
                         href = null;
@@ -246,12 +240,12 @@ const Pill = createReactClass({
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
-                    linkText = (room ? getDisplayAliasForRoom(room) : null) || resource;
+                    linkText = resource;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <RoomAvatar room={room} width={16} height={16} />;
+                        avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
-                    pillClass = 'mx_RoomPill';
                 }
+                pillClass = 'mx_RoomPill';
             }
                 break;
             case Pill.TYPE_GROUP_MENTION: {
@@ -261,7 +255,7 @@ const Pill = createReactClass({
 
                     linkText = groupId;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar name={name || groupId} width={16} height={16}
+                        avatar = <BaseAvatar name={name || groupId} width={16} height={16} aria-hidden="true"
                                              url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 16, 16) : null} />;
                     }
                     pillClass = 'mx_GroupPill';
@@ -271,20 +265,22 @@ const Pill = createReactClass({
         }
 
         const classes = classNames("mx_Pill", pillClass, {
-            "mx_UserPill_me": userId === MatrixClientPeg.get().credentials.userId,
+            "mx_UserPill_me": userId === MatrixClientPeg.get().getUserId(),
             "mx_UserPill_selected": this.props.isSelected,
         });
 
         if (this.state.pillType) {
-            return this.props.inMessage ?
-                <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
-                    { avatar }
-                    { linkText }
-                </a> :
-                <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
-                    { avatar }
-                    { linkText }
-                </span>;
+            return <MatrixClientContext.Provider value={this._matrixClient}>
+                { this.props.inMessage ?
+                    <a className={classes} href={href} onClick={onClick} title={resource} data-offset-key={this.props.offsetKey}>
+                        { avatar }
+                        { linkText }
+                    </a> :
+                    <span className={classes} title={resource} data-offset-key={this.props.offsetKey}>
+                        { avatar }
+                        { linkText }
+                    </span> }
+            </MatrixClientContext.Provider>;
         } else {
             // Deliberately render nothing if the URL isn't recognised
             return null;

@@ -23,6 +23,7 @@ limitations under the License.
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    min-height: 0;
 }
 
 .mx_TagPanel_items_selected {
@@ -57,6 +58,7 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagPanel_scroller {
     flex-grow: 1;
+    width: 100%;
 }
 
 .mx_TagPanel .mx_TagPanel_tagTileContainer {
@@ -68,7 +70,7 @@ limitations under the License.
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
     height: 40px;
-    padding: 5px 0 4px 0;
+    padding: 10px 0 9px 0;
 }
 
 .mx_TagPanel .mx_TagTile {
@@ -82,21 +84,39 @@ limitations under the License.
     // opacity: 1;
 }
 
-.mx_TagPanel .mx_TagTile.mx_TagTile_selected .mx_TagTile_avatar .mx_BaseAvatar {
-    background-color: $accent-color;
-    border-radius: 40px;
-
-    /* In case this is a "initial" avatar */
-    display: block;
+.mx_TagPanel .mx_TagTile_plus {
+    margin-bottom: 12px;
     height: 40px;
     width: 40px;
+    border-radius: 20px;
+    background-color: $roomheader-addroom-bg-color;
+    position: relative;
+    /* overwrite mx_RoleButton inline-block */
+    display: block !important;
+
+    &::before {
+        background-color: $roomheader-addroom-fg-color;
+        mask-image: url('$(res)/img/feather-customised/plus.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
 }
 
-.mx_TagPanel .mx_TagTile_selected .mx_BaseAvatar_image {
-    border: 3px solid $accent-color;
-    height: 40px;
-    width: 40px;
-    box-sizing: border-box;
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
+    content: '';
+    height: calc(100% + 16px);
+    background-color: $accent-color;
+    width: 5px;
+    position: absolute;
+    left: -15px;
+    border-radius: 0 3px 3px 0;
+    top: -8px; // (16px from height / 2)
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {
@@ -117,9 +137,9 @@ limitations under the License.
     top: -8px;
     border-radius: 8px;
     background-color: $neutral-badge-color;
-    color: #ffffff;
+    color: #000;
     font-weight: 600;
-    font-size: 10px;
+    font-size: $font-10px;
     text-align: center;
     padding-top: 1px;
     padding-left: 4px;
@@ -137,7 +157,7 @@ limitations under the License.
     border-radius: 8px;
     color: $accent-fg-color;
     font-weight: 600;
-    font-size: 14px;
+    font-size: $font-14px;
     padding: 0 5px;
     background-color: $roomtile-name-color;
 }

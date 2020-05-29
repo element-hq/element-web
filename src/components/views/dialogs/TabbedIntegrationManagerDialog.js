@@ -18,10 +18,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {Room} from "matrix-js-sdk";
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../../../Terms";
 import classNames from 'classnames';
-import ScalarMessaging from "../../../ScalarMessaging";
+import * as ScalarMessaging from "../../../ScalarMessaging";
 
 export default class TabbedIntegrationManagerDialog extends React.Component {
     static propTypes = {

@@ -17,14 +17,13 @@ limitations under the License.
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils from "react-dom/test-utils";
-import expect from "expect";
 
 import MockHttpBackend from "matrix-mock-request";
-import MatrixClientPeg from "../../../../src/MatrixClientPeg";
-import sdk from "matrix-react-sdk";
+import {MatrixClientPeg} from "../../../../src/MatrixClientPeg";
+import sdk from "../../../skinned-sdk";
 import Matrix from "matrix-js-sdk";
 
-import * as TestUtils from "test-utils";
+import * as TestUtils from "../../../test-utils";
 const { waitForUpdate } = TestUtils;
 
 const GroupMemberList = sdk.getComponent("views.groups.GroupMemberList");
@@ -70,8 +69,6 @@ describe("GroupMemberList", function() {
     };
 
     beforeEach(function() {
-        TestUtils.beforeEach(this);
-
         httpBackend = new MockHttpBackend();
 
         Matrix.request(httpBackend.requestFn);
@@ -115,7 +112,9 @@ describe("GroupMemberList", function() {
             const memberList = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_MemberList_joined");
             const memberListElement = ReactDOM.findDOMNode(memberList);
             expect(memberListElement).toBeTruthy();
-            expect(memberListElement.innerText).toBe("Test");
+            const userNameElement = memberListElement.querySelector(".mx_EntityTile_name");
+            expect(userNameElement).toBeTruthy();
+            expect(userNameElement.textContent).toBe("Test");
         });
 
         httpBackend.when("GET", "/groups/" + groupIdEncoded + "/summary").respond(200, summaryResponse);
@@ -135,7 +134,7 @@ describe("GroupMemberList", function() {
             const memberList = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_MemberList_joined");
             const memberListElement = ReactDOM.findDOMNode(memberList);
             expect(memberListElement).toBeTruthy();
-            expect(memberListElement.innerText).toBe("Failed to load group members");
+            expect(memberListElement.textContent).toBe("Failed to load group members");
         });
 
         httpBackend.when("GET", "/groups/" + groupIdEncoded + "/summary").respond(200, summaryResponse);

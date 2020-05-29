@@ -20,8 +20,8 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
-import sdk from '../../../index';
-import Email from '../../../email';
+import * as sdk from '../../../index';
+import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
@@ -29,6 +29,7 @@ import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation from '../elements/Validation';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import PassphraseField from "./PassphraseField";
 
 const FIELD_EMAIL = 'field_email';
 const FIELD_PHONE_NUMBER = 'field_phone_number';
@@ -41,7 +42,7 @@ const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from of
 /**
  * A pure UI component which displays a registration form.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'RegistrationForm',
 
     propTypes: {
@@ -76,9 +77,8 @@ module.exports = createReactClass({
             email: this.props.defaultEmail || "",
             phoneNumber: this.props.defaultPhoneNumber || "",
             password: this.props.defaultPassword || "",
-            passwordConfirm: "",
+            passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
-            passwordSafe: false,
         };
     },
 
@@ -102,11 +102,15 @@ module.exports = createReactClass({
                     "No identity server is configured so you cannot add an email address in order to " +
                     "reset your password in the future.",
                 );
-            } else {
+            } else if (this._showEmail()) {
                 desc = _t(
                     "If you don't specify an email address, you won't be able to reset your password. " +
                     "Are you sure?",
                 );
+            } else {
+                // user can't set an e-mail so don't prompt them to
+                self._doSubmit(ev);
+                return;
             }
 
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
@@ -260,64 +264,9 @@ module.exports = createReactClass({
         });
     },
 
-    async onPasswordValidate(fieldState) {
-        const result = await this.validatePasswordRules(fieldState);
+    onPasswordValidate(result) {
         this.markFieldValid(FIELD_PASSWORD, result.valid);
-        return result;
     },
-
-    validatePasswordRules: withValidation({
-        description: function() {
-            const complexity = this.state.passwordComplexity;
-            const score = complexity ? complexity.score : 0;
-            return <progress
-                className="mx_AuthBody_passwordScore"
-                max={PASSWORD_MIN_SCORE}
-                value={score}
-            />;
-        },
-        rules: [
-            {
-                key: "required",
-                test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Enter password"),
-            },
-            {
-                key: "complexity",
-                test: async function({ value }) {
-                    if (!value) {
-                        return false;
-                    }
-                    const { scorePassword } = await import('../../../utils/PasswordScorer');
-                    const complexity = scorePassword(value);
-                    const safe = complexity.score >= PASSWORD_MIN_SCORE;
-                    const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
-                    this.setState({
-                        passwordComplexity: complexity,
-                        passwordSafe: safe,
-                    });
-                    return allowUnsafe || safe;
-                },
-                valid: function() {
-                    // Unsafe passwords that are valid are only possible through a
-                    // configuration flag. We'll print some helper text to signal
-                    // to the user that their password is allowed, but unsafe.
-                    if (!this.state.passwordSafe) {
-                        return _t("Password is allowed, but unsafe");
-                    }
-                    return _t("Nice, strong password!");
-                },
-                invalid: function() {
-                    const complexity = this.state.passwordComplexity;
-                    if (!complexity) {
-                        return null;
-                    }
-                    const { feedback } = complexity;
-                    return feedback.warning || feedback.suggestions[0] || _t("Keep going...");
-                },
-            },
-        ],
-    }),
 
     onPasswordConfirmChange(ev) {
         this.setState({
@@ -470,7 +419,6 @@ module.exports = createReactClass({
             _t("Email") :
             _t("Email (optional)");
         return <Field
-            id="mx_RegistrationForm_email"
             ref={field => this[FIELD_EMAIL] = field}
             type="text"
             label={emailPlaceholder}
@@ -481,12 +429,10 @@ module.exports = createReactClass({
     },
 
     renderPassword() {
-        const Field = sdk.getComponent('elements.Field');
-        return <Field
+        return <PassphraseField
             id="mx_RegistrationForm_password"
-            ref={field => this[FIELD_PASSWORD] = field}
-            type="password"
-            label={_t("Password")}
+            fieldRef={field => this[FIELD_PASSWORD] = field}
+            minScore={PASSWORD_MIN_SCORE}
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
@@ -499,6 +445,7 @@ module.exports = createReactClass({
             id="mx_RegistrationForm_passwordConfirm"
             ref={field => this[FIELD_PASSWORD_CONFIRM] = field}
             type="password"
+            autoComplete="new-password"
             label={_t("Confirm")}
             value={this.state.passwordConfirm}
             onChange={this.onPasswordConfirmChange}
@@ -522,7 +469,6 @@ module.exports = createReactClass({
             onOptionChange={this.onPhoneCountryChange}
         />;
         return <Field
-            id="mx_RegistrationForm_phoneNumber"
             ref={field => this[FIELD_PHONE_NUMBER] = field}
             type="text"
             label={phoneLabel}

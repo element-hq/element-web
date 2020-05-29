@@ -24,14 +24,13 @@ export default class SyntaxHighlight extends React.Component {
         children: PropTypes.node,
     };
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this._ref = this._ref.bind(this);
     }
 
     // componentDidUpdate used here for reusability
-    // componentWillReceiveProps fires too early to call highlightBlock on.
     componentDidUpdate() {
         if (this._el) highlightBlock(this._el);
     }

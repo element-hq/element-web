@@ -24,7 +24,7 @@ const DIV_ID = 'mx_recaptcha';
 /**
  * A pure UI component which displays a captcha form.
  */
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'CaptchaForm',
 
     propTypes: {
@@ -46,7 +46,8 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._captchaWidgetId = null;
 
         this._recaptchaContainer = createRef();
@@ -61,13 +62,9 @@ module.exports = createReactClass({
         } else {
             console.log("Loading recaptcha script...");
             window.mx_on_recaptcha_loaded = () => {this._onCaptchaLoaded();};
-            let protocol = global.location.protocol;
-            if (protocol === "vector:") {
-                protocol = "https:";
-            }
             const scriptTag = document.createElement('script');
             scriptTag.setAttribute(
-                'src', `${protocol}//www.recaptcha.net/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
+                'src', `https://www.recaptcha.net/recaptcha/api.js?onload=mx_on_recaptcha_loaded&render=explicit`,
             );
             this._recaptchaContainer.current.appendChild(scriptTag);
         }

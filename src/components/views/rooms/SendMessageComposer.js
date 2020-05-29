@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
 import {
     htmlSerializeIfNeeded,
@@ -24,9 +24,10 @@ import {
     containsEmote,
     stripEmoteCommand,
     unescapeMessage,
+    startsWith,
+    stripPrefix,
 } from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
-import {MatrixClient} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -34,12 +35,15 @@ import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
 import {findEditableEvent} from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import {processCommandInput} from '../../../SlashCommands';
-import sdk from '../../../index';
+import {getCommand} from '../../../SlashCommands';
+import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import {_t, _td} from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
 import {Key} from "../../../Keyboard";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import RateLimitedFunc from '../../../ratelimitedfunc';
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -56,10 +60,14 @@ function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     }
 }
 
-function createMessageContent(model, permalinkCreator) {
+// exported for tests
+export function createMessageContent(model, permalinkCreator) {
     const isEmote = containsEmote(model);
     if (isEmote) {
         model = stripEmoteCommand(model);
+    }
+    if (startsWith(model, "//")) {
+        model = stripPrefix(model, "/");
     }
     model = unescapeMessage(model);
     const repliedToEvent = RoomViewStore.getQuotingEvent();
@@ -89,15 +97,19 @@ export default class SendMessageComposer extends React.Component {
         permalinkCreator: PropTypes.object.isRequired,
     };
 
-    static contextTypes = {
-        matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
-    };
+    static contextType = MatrixClientContext;
 
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.model = null;
         this._editorRef = null;
         this.currentlyComposedEditorState = null;
+        const cli = MatrixClientPeg.get();
+        if (cli.isCryptoEnabled() && cli.isRoomEncrypted(this.props.room.roomId)) {
+            this._prepareToEncrypt = new RateLimitedFunc(() => {
+                cli.prepareToEncrypt(this.props.room);
+            }, 60000);
+        }
     }
 
     _setEditorRef = ref => {
@@ -117,14 +129,23 @@ export default class SendMessageComposer extends React.Component {
             this.onVerticalArrow(event, true);
         } else if (event.key === Key.ARROW_DOWN) {
             this.onVerticalArrow(event, false);
+        } else if (this._prepareToEncrypt) {
+            this._prepareToEncrypt();
+        } else if (event.key === Key.ESCAPE) {
+            dis.dispatch({
+                action: 'reply_to_event',
+                event: null,
+            });
         }
-    }
+    };
 
     onVerticalArrow(e, up) {
-        if (e.ctrlKey || e.shiftKey || e.metaKey) return;
+        // arrows from an initial-caret composer navigates recent messages to edit
+        // ctrl-alt-arrows navigate send history
+        if (e.shiftKey || e.metaKey) return;
 
-        const shouldSelectHistory = e.altKey;
-        const shouldEditLastMessage = !e.altKey && up && !RoomViewStore.getQuotingEvent();
+        const shouldSelectHistory = e.altKey && e.ctrlKey;
+        const shouldEditLastMessage = !e.altKey && !e.ctrlKey && up && !RoomViewStore.getQuotingEvent();
 
         if (shouldSelectHistory) {
             // Try select composer history
@@ -177,20 +198,21 @@ export default class SendMessageComposer extends React.Component {
         const parts = this.model.parts;
         const firstPart = parts[0];
         if (firstPart) {
-            if (firstPart.type === "command") {
+            if (firstPart.type === "command" && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
                 return true;
             }
             // be extra resilient when somehow the AutocompleteWrapperModel or
             // CommandPartCreator fails to insert a command part, so we don't send
             // a command as a message
-            if (firstPart.text.startsWith("/") && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
+            if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
+                && (firstPart.type === "plain" || firstPart.type === "pill-candidate")) {
                 return true;
             }
         }
         return false;
     }
 
-    async _runSlashCommand() {
+    _getSlashCommand() {
         const commandText = this.model.parts.reduce((text, part) => {
             // use mxid to textify user pills in a command
             if (part.type === "user-pill") {
@@ -198,54 +220,90 @@ export default class SendMessageComposer extends React.Component {
             }
             return text + part.text;
         }, "");
-        const cmd = processCommandInput(this.props.room.roomId, commandText);
+        return [getCommand(this.props.room.roomId, commandText), commandText];
+    }
 
-        if (cmd) {
-            let error = cmd.error;
-            if (cmd.promise) {
-                try {
-                    await cmd.promise;
-                } catch (err) {
-                    error = err;
-                }
+    async _runSlashCommand(fn) {
+        const cmd = fn();
+        let error = cmd.error;
+        if (cmd.promise) {
+            try {
+                await cmd.promise;
+            } catch (err) {
+                error = err;
             }
-            if (error) {
-                console.error("Command failure: %s", error);
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-                // assume the error is a server error when the command is async
-                const isServerError = !!cmd.promise;
-                const title = isServerError ? _td("Server error") : _td("Command error");
+        }
+        if (error) {
+            console.error("Command failure: %s", error);
+            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+            // assume the error is a server error when the command is async
+            const isServerError = !!cmd.promise;
+            const title = isServerError ? _td("Server error") : _td("Command error");
 
-                let errText;
-                if (typeof error === 'string') {
-                    errText = error;
-                } else if (error.message) {
-                    errText = error.message;
-                } else {
-                    errText = _t("Server unavailable, overloaded, or something else went wrong.");
-                }
-
-                Modal.createTrackedDialog(title, '', ErrorDialog, {
-                    title: _t(title),
-                    description: errText,
-                });
+            let errText;
+            if (typeof error === 'string') {
+                errText = error;
+            } else if (error.message) {
+                errText = error.message;
             } else {
-                console.log("Command success.");
+                errText = _t("Server unavailable, overloaded, or something else went wrong.");
             }
+
+            Modal.createTrackedDialog(title, '', ErrorDialog, {
+                title: _t(title),
+                description: errText,
+            });
+        } else {
+            console.log("Command success.");
         }
     }
 
-    _sendMessage() {
+    async _sendMessage() {
         if (this.model.isEmpty) {
             return;
         }
+
+        let shouldSend = true;
+
         if (!containsEmote(this.model) && this._isSlashCommand()) {
-            this._runSlashCommand();
-        } else {
+            const [cmd, commandText] = this._getSlashCommand();
+            if (cmd) {
+                shouldSend = false;
+                this._runSlashCommand(cmd);
+            } else {
+                // ask the user if their unknown command should be sent as a message
+                const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
+                const {finished} = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+                    title: _t("Unknown Command"),
+                    description: <div>
+                        <p>
+                            { _t("Unrecognised command: %(commandText)s", {commandText}) }
+                        </p>
+                        <p>
+                            { _t("You can use <code>/help</code> to list available commands. " +
+                                "Did you mean to send this as a message?", {}, {
+                                code: t => <code>{ t }</code>,
+                            }) }
+                        </p>
+                        <p>
+                            { _t("Hint: Begin your message with <code>//</code> to start it with a slash.", {}, {
+                                code: t => <code>{ t }</code>,
+                            }) }
+                        </p>
+                    </div>,
+                    button: _t('Send as message'),
+                });
+                const [sendAnyway] = await finished;
+                // if !sendAnyway bail to let the user edit the composer and try again
+                if (!sendAnyway) return;
+            }
+        }
+
+        if (shouldSend) {
             const isReply = !!RoomViewStore.getQuotingEvent();
             const {roomId} = this.props.room;
             const content = createMessageContent(this.model, this.props.permalinkCreator);
-            this.context.matrixClient.sendMessage(roomId, content);
+            this.context.sendMessage(roomId, content);
             if (isReply) {
                 // Clear reply_to_event as we put the message into the queue
                 // if the send fails, retry will handle resending.
@@ -254,7 +312,9 @@ export default class SendMessageComposer extends React.Component {
                     event: null,
                 });
             }
+            dis.dispatch({action: "message_sent"});
         }
+
         this.sendHistoryManager.save(this.model);
         // clear composer
         this.model.reset([]);
@@ -272,8 +332,9 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
-    componentWillMount() {
-        const partCreator = new CommandPartCreator(this.props.room, this.context.matrixClient);
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
+        const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
         this.dispatcherRef = dis.register(this.onAction);
@@ -331,7 +392,8 @@ export default class SendMessageComposer extends React.Component {
             member.rawDisplayName : userId;
         const caret = this._editorRef.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
-        const insertIndex = position.index + 1;
+        // index is -1 if there are no parts but we only care for if this would be the part in position 0
+        const insertIndex = position.index > 0 ? position.index : 0;
         const parts = partCreator.createMentionParts(insertIndex, displayName, userId);
         model.transform(() => {
             const addedLen = model.insert(parts, position);
@@ -375,7 +437,7 @@ export default class SendMessageComposer extends React.Component {
             // from Finder) but more images copied from a different website
             // / word processor etc.
             ContentMessages.sharedInstance().sendContentListToRoom(
-                Array.from(clipboardData.files), this.props.room.roomId, this.context.matrixClient,
+                Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );
         }
     }

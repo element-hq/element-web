@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import createReactClass from 'create-react-class';
-import sdk from '../../../index';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import MatrixClientPeg from '../../../MatrixClientPeg';
+import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
@@ -63,7 +63,7 @@ function portLegacyActions(actions) {
     }
 }
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'Notifications',
 
     phases: {
@@ -87,7 +87,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._refreshFromServer();
     },
 
@@ -864,7 +864,7 @@ module.exports = createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationsEnabled")}
                                           onChange={this.onEnableDesktopNotificationsChange}
-                                          label={_t('Enable desktop notifications for this device')} />
+                                          label={_t('Enable desktop notifications for this session')} />
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("notificationBodyEnabled")}
                                           onChange={this.onEnableDesktopNotificationBodyChange}
@@ -872,7 +872,7 @@ module.exports = createReactClass({
 
                     <LabelledToggleSwitch value={SettingsStore.getValue("audioNotificationsEnabled")}
                                           onChange={this.onEnableAudioNotificationsChange}
-                                          label={_t('Enable audible notifications for this device')} />
+                                          label={_t('Enable audible notifications for this session')} />
 
                     { emailNotificationsRows }
 

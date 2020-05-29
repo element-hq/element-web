@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
 
 export const HEADER_KIND_ROOM = "room";
@@ -40,7 +40,7 @@ export default class HeaderButtons extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
         this._dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
@@ -74,7 +74,7 @@ export default class HeaderButtons extends React.Component {
         const rps = RightPanelStore.getSharedInstance();
         if (this.state.headerKind === HEADER_KIND_ROOM) {
             this.setState({phase: rps.visibleRoomPanelPhase});
-        } else if (this.state.head === HEADER_KIND_GROUP) {
+        } else if (this.state.headerKind === HEADER_KIND_GROUP) {
             this.setState({phase: rps.visibleGroupPanelPhase});
         }
     }

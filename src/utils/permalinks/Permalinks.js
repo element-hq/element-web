@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import MatrixClientPeg from "../../MatrixClientPeg";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import isIp from "is-ip";
-import utils from 'matrix-js-sdk/lib/utils';
+import * as utils from 'matrix-js-sdk/src/utils';
 import SpecPermalinkConstructor, {baseUrl as matrixtoBaseUrl} from "./SpecPermalinkConstructor";
 import PermalinkConstructor, {PermalinkParts} from "./PermalinkConstructor";
 import RiotPermalinkConstructor from "./RiotPermalinkConstructor";
 import matrixLinkify from "../../linkify-matrix";
-
-const SdkConfig = require("../../SdkConfig");
+import SdkConfig from "../../SdkConfig";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -289,6 +288,25 @@ export function isPermalinkHost(host: string): boolean {
     // parsePermalink after this function).
     if (new SpecPermalinkConstructor().isPermalinkHost(host)) return true;
     return getPermalinkConstructor().isPermalinkHost(host);
+}
+
+/**
+ * Transforms an entity (permalink, room alias, user ID, etc) into a local URL
+ * if possible. If the given entity is not found to be valid enough to be converted
+ * then a null value will be returned.
+ * @param {string} entity The entity to transform.
+ * @returns {string|null} The transformed permalink or null if unable.
+ */
+export function tryTransformEntityToPermalink(entity: string): string {
+    if (!entity) return null;
+
+    // Check to see if it is a bare entity for starters
+    if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);
+    if (entity[0] === '@') return makeUserPermalink(entity);
+    if (entity[0] === '+') return makeGroupPermalink(entity);
+
+    // Then try and merge it into a permalink
+    return tryTransformPermalinkToLocalHref(entity);
 }
 
 /**

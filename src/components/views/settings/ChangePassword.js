@@ -16,21 +16,19 @@ limitations under the License.
 */
 
 import Field from "../elements/Field";
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-const MatrixClientPeg = require("../../../MatrixClientPeg");
-const Modal = require("../../../Modal");
-const sdk = require("../../../index");
-
-import dis from "../../../dispatcher";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
+import * as sdk from "../../../index";
+import Modal from "../../../Modal";
 
 import sessionStore from '../../../stores/SessionStore';
 
-module.exports = createReactClass({
+export default createReactClass({
     displayName: 'ChangePassword',
 
     propTypes: {
@@ -80,7 +78,7 @@ module.exports = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._sessionStore = sessionStore;
         this._sessionStoreToken = this._sessionStore.addListener(
             this._setStateFromSessionStore,
@@ -115,13 +113,13 @@ module.exports = createReactClass({
             description:
                 <div>
                     { _t(
-                        'Changing password will currently reset any end-to-end encryption keys on all devices, ' +
+                        'Changing password will currently reset any end-to-end encryption keys on all sessions, ' +
                         'making encrypted chat history unreadable, unless you first export your room keys ' +
                         'and re-import them afterwards. ' +
                         'In future this will be improved.',
                     ) }
                     {' '}
-                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noopener">
+                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noreferrer noopener">
                         https://github.com/vector-im/riot-web/issues/2671
                     </a>
                 </div>,
@@ -237,7 +235,7 @@ module.exports = createReactClass({
         if (!this.state.cachedPassword) {
             currentPassword = (
                 <div className={rowClassName}>
-                    <Field id="mx_ChangePassword_oldPassword"
+                    <Field
                         type="password"
                         label={_t('Current password')}
                         value={this.state.oldPassword}
@@ -255,20 +253,22 @@ module.exports = createReactClass({
                     <form className={this.props.className} onSubmit={this.onClickChange}>
                         { currentPassword }
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPassword"
+                            <Field
                                 type="password"
                                 label={passwordLabel}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
                                 onChange={this.onChangeNewPassword}
+                                autoComplete="new-password"
                             />
                         </div>
                         <div className={rowClassName}>
-                            <Field id="mx_ChangePassword_newPasswordConfirm"
+                            <Field
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}
                                 onChange={this.onChangeNewPasswordConfirm}
+                                autoComplete="new-password"
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>

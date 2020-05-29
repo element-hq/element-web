@@ -17,6 +17,7 @@ limitations under the License.
 //
 // --accent-color
 $accent-color: var(--accent-color);
+$accent-bg-color: var(--accent-color-15pct);
 $button-bg-color: var(--accent-color);
 $button-link-fg-color: var(--accent-color);
 $button-primary-bg-color: var(--accent-color);
@@ -52,7 +53,6 @@ $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
 //
 // --roomlist-background-color
-$event-selected-color: var(--roomlist-background-color);
 $header-panel-bg-color: var(--roomlist-background-color);
 $reaction-row-button-bg-color: var(--roomlist-background-color);
 $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
@@ -124,3 +124,15 @@ $notice-primary-color: var(--warning-color);
 $pinned-unread-color: var(--warning-color);
 $warning-color: var(--warning-color);
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5
+
+$username-variant1-color: var(--username-colors_1, $username-variant1-color);
+$username-variant2-color: var(--username-colors_2, $username-variant2-color);
+$username-variant3-color: var(--username-colors_3, $username-variant3-color);
+$username-variant4-color: var(--username-colors_4, $username-variant4-color);
+$username-variant5-color: var(--username-colors_5, $username-variant5-color);
+$username-variant6-color: var(--username-colors_6, $username-variant6-color);
+$username-variant7-color: var(--username-colors_7, $username-variant7-color);
+$username-variant8-color: var(--username-colors_8, $username-variant8-color);
+
+$event-selected-color: var(--timeline-highlights-color);
+$event-highlight-bg-color: var(--timeline-highlights-color);

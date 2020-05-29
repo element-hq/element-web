@@ -38,7 +38,7 @@ limitations under the License.
     white-space: nowrap;
     display: flex;
     align-items: center;
-    line-height: 16px;
+    line-height: $font-16px;
 }
 
 .mx_RoomTileContextMenu_tag_field.mx_RoomTileContextMenu_tag_fieldSet {

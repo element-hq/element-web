@@ -1,5 +1,6 @@
 /*
 Copyright (c) 2008-2015 Pivotal Labs
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -25,7 +26,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * jasmine-core and exposed as a standalone module. The interface is just the
  * same as that of jasmine.clock. For example:
  *
- *    var mock_clock = require("mock-clock").clock();
+ *    var mock_clock = require("../../mock-clock").clock();
  *    mock_clock.install();
  *    setTimeout(function() {
  *        timerCallback();
@@ -411,10 +412,10 @@ j$.MockDate = function() {
   return MockDate;
 }();
 
-const clock = new j$.Clock(global, function() { return new j$.DelayedFunctionScheduler(); }, new j$.MockDate(global));
+const _clock = new j$.Clock(global, function() { return new j$.DelayedFunctionScheduler(); }, new j$.MockDate(global));
 
-module.exports.clock = function() {
-    return clock;
-};
+export function clock() {
+    return _clock;
+}
 
 

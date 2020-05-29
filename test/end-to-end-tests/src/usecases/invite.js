@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,10 +31,11 @@ module.exports = async function invite(session, userId) {
     }
     const inviteButton = await session.query(".mx_MemberList_invite");
     await inviteButton.click();
-    const inviteTextArea = await session.query(".mx_AddressPickerDialog textarea");
+    const inviteTextArea = await session.query(".mx_InviteDialog_editor textarea");
     await inviteTextArea.type(userId);
-    await inviteTextArea.press("Enter");
-    const confirmButton = await session.query(".mx_Dialog_primary");
+    const selectUserItem = await session.query(".mx_InviteDialog_roomTile");
+    await selectUserItem.click();
+    const confirmButton = await session.query(".mx_InviteDialog_goButton");
     await confirmButton.click();
     session.log.done();
 };

@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import MatrixClientPeg from "../../../../../MatrixClientPeg";
-import sdk from "../../../../..";
+import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
+import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -38,7 +38,8 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         };
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         // we handle lack of this object gracefully later, so don't worry about it failing here.
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         room.getRecommendedVersion().then((v) => {

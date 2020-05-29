@@ -17,6 +17,7 @@ limitations under the License.
 
 import SettingsHandler from "./SettingsHandler";
 import SdkConfig from "../../SdkConfig";
+import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
 
 /**
  * Gets and sets settings at the "config" level. This handler does not make use of the
@@ -32,7 +33,7 @@ export default class ConfigSettingsHandler extends SettingsHandler {
         }
 
         const settingsConfig = config["settingDefaults"];
-        if (!settingsConfig || !settingsConfig[settingName]) return null;
+        if (!settingsConfig || isNullOrUndefined(settingsConfig[settingName])) return null;
         return settingsConfig[settingName];
     }
 
