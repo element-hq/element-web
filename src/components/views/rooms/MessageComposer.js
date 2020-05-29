@@ -117,7 +117,7 @@ const EmojiButton = ({addEmoji}) => {
     }
 
     return <React.Fragment>
-        <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_stickers"
+        <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_emoji"
                            onClick={openMenu}
                            isExpanded={menuDisplayed}
                            label={_t('Upload file')}
@@ -369,8 +369,9 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator} />,
-                <EmojiButton key="stickerpicker_controls_button" addEmoji={this.addEmoji} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
+                <Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />,
             );
 
             if (this.state.showCallButtons) {
