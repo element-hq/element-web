@@ -1587,5 +1587,6 @@
     "Confirm encryption setup": "Patvirtinti šifravimo sąranką",
     "Click the button below to confirm setting up encryption.": "Paspauskite mygtuką žemiau, kad patvirtintumėte šifravimo nustatymą.",
     "Restore your key backup to upgrade your encryption": "Atstatykite savo raktų atsarginę kopiją, kad atnaujintumėte šifravimą",
-    "Upgrade your encryption": "Atnaujinkite savo šifravimą"
+    "Upgrade your encryption": "Atnaujinkite savo šifravimą",
+    "Failed to set topic": "Nepavyko nustatyti temos"
 }
