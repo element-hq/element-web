@@ -164,7 +164,10 @@ export default createReactClass({
 
             canReact: false,
             canReply: false,
+
             useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+
+            matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
         };
     },
 
@@ -235,7 +238,8 @@ export default createReactClass({
             initialEventId: RoomViewStore.getInitialEventId(),
             isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             forwardingEvent: RoomViewStore.getForwardingEvent(),
-            shouldPeek: RoomViewStore.shouldPeek(),
+            // we should only peek once we have a ready client
+            shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
             showingPinned: SettingsStore.getValue("PinnedEvents.isOpen", roomId),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
         };
@@ -689,6 +693,16 @@ export default createReactClass({
                             room_id: roomId,
                             deferred_action: payload,
                         });
+                    });
+                }
+                break;
+            case 'sync_state':
+                if (!this.state.matrixClientIsReady) {
+                    this.setState({
+                        matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
+                    }, () => {
+                        // send another "initial" RVS update to trigger peeking if needed
+                        this._onRoomViewStoreUpdate(true);
                     });
                 }
                 break;
@@ -1674,14 +1688,16 @@ export default createReactClass({
         const ErrorBoundary = sdk.getComponent("elements.ErrorBoundary");
 
         if (!this.state.room) {
-            const loading = this.state.roomLoading || this.state.peekLoading;
+            const loading = !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekLoading;
             if (loading) {
+                // Assume preview loading if we don't have a ready client or a room ID (still resolving the alias)
+                const previewLoading = !this.state.matrixClientIsReady || !this.state.roomId || this.state.peekLoading;
                 return (
                     <div className="mx_RoomView">
                         <ErrorBoundary>
                             <RoomPreviewBar
                                 canPreview={false}
-                                previewLoading={this.state.peekLoading}
+                                previewLoading={previewLoading && !this.state.roomLoadError}
                                 error={this.state.roomLoadError}
                                 loading={loading}
                                 joining={this.state.joining}
@@ -1706,7 +1722,8 @@ export default createReactClass({
                 return (
                     <div className="mx_RoomView">
                         <ErrorBoundary>
-                            <RoomPreviewBar onJoinClick={this.onJoinButtonClicked}
+                            <RoomPreviewBar
+                                onJoinClick={this.onJoinButtonClicked}
                                 onForgetClick={this.onForgetClick}
                                 onRejectClick={this.onRejectThreepidInviteButtonClicked}
                                 canPreview={false} error={this.state.roomLoadError}

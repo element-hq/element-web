@@ -1,5 +1,5 @@
 /*
-Copyright 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_EncryptedEventDialog .mx_DeviceVerifyButtons {
-    float: right;
-    padding: 0px;
-    margin-right: 42px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-.mx_EncryptedEventDialog .mx_MemberDeviceInfo_textButton {
-    @mixin mx_DialogButton;
-    background-color: $primary-bg-color;
-    color: $accent-color;
-}
+export interface RecheckThemePayload extends ActionPayload {
+    action: Action.RecheckTheme,
 
-.mx_EncryptedEventDialog button {
-    margin-top: 0px;
+    /**
+     * Optionally specify the exact theme which is to be loaded.
+     */
+    forceTheme?: string;
 }

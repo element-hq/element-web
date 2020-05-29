@@ -405,7 +405,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                console.log("EventIndex: Error crawling events:", e);
+                console.log("EventIndex: Error crawling using checkpoint:", checkpoint, ",", e);
                 this.crawlerCheckpoints.push(checkpoint);
                 continue;
             }
@@ -507,7 +507,13 @@ export default class EventIndex extends EventEmitter {
             try {
                 for (let i = 0; i < redactionEvents.length; i++) {
                     const ev = redactionEvents[i];
-                    await indexManager.deleteEvent(ev.getAssociatedId());
+                    const eventId = ev.getAssociatedId();
+
+                    if (eventId) {
+                        await indexManager.deleteEvent(eventId);
+                    } else {
+                        console.warn("EventIndex: Redaction event doesn't contain a valid associated event id", ev);
+                    }
                 }
 
                 const eventsAlreadyAdded = await indexManager.addHistoricEvents(

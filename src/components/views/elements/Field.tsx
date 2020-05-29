@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { debounce } from 'lodash';
+import {IFieldState, IValidationResult} from "../elements/Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -29,58 +29,93 @@ function getId() {
     return `${BASE_ID}_${count++}`;
 }
 
-export default class Field extends React.PureComponent {
-    static propTypes = {
-        // The field's ID, which binds the input and label together. Immutable.
-        id: PropTypes.string,
-        // The element to create. Defaults to "input".
-        // To define options for a select, use <Field><option ... /></Field>
-        element: PropTypes.oneOf(["input", "select", "textarea"]),
-        // The field's type (when used as an <input>). Defaults to "text".
-        type: PropTypes.string,
-        // id of a <datalist> element for suggestions
-        list: PropTypes.string,
-        // The field's label string.
-        label: PropTypes.string,
-        // The field's placeholder string. Defaults to the label.
-        placeholder: PropTypes.string,
-        // The field's value.
-        // This is a controlled component, so the value is required.
-        value: PropTypes.string.isRequired,
-        // Optional component to include inside the field before the input.
-        prefix: PropTypes.node,
-        // Optional component to include inside the field after the input.
-        postfix: PropTypes.node,
-        // The callback called whenever the contents of the field
-        // changes.  Returns an object with `valid` boolean field
-        // and a `feedback` react component field to provide feedback
-        // to the user.
-        onValidate: PropTypes.func,
-        // If specified, overrides the value returned by onValidate.
-        flagInvalid: PropTypes.bool,
-        // If specified, contents will appear as a tooltip on the element and
-        // validation feedback tooltips will be suppressed.
-        tooltipContent: PropTypes.node,
-        // If specified alongside tooltipContent, the class name to apply to the
-        // tooltip itself.
-        tooltipClassName: PropTypes.string,
-        // If specified, an additional class name to apply to the field container
-        className: PropTypes.string,
-        // All other props pass through to the <input>.
-    };
+interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInputElement> {
+    // The field's ID, which binds the input and label together. Immutable.
+    id?: string,
+    // The element to create. Defaults to "input".
+    // To define options for a select, use <Field><option ... /></Field>
+    element?: "input" | "select" | "textarea",
+    // The field's type (when used as an <input>). Defaults to "text".
+    type?: string,
+    // id of a <datalist> element for suggestions
+    list?: string,
+    // The field's label string.
+    label?: string,
+    // The field's placeholder string. Defaults to the label.
+    placeholder?: string,
+    // The field's value.
+    // This is a controlled component, so the value is required.
+    value: string,
+    // Optional component to include inside the field before the input.
+    prefixComponent?: React.ReactNode,
+    // Optional component to include inside the field after the input.
+    postfixComponent?: React.ReactNode,
+    // The callback called whenever the contents of the field
+    // changes.  Returns an object with `valid` boolean field
+    // and a `feedback` react component field to provide feedback
+    // to the user.
+    onValidate?: (input: IFieldState) => Promise<IValidationResult>,
+    // If specified, overrides the value returned by onValidate.
+    flagInvalid?: boolean,
+    // If specified, contents will appear as a tooltip on the element and
+    // validation feedback tooltips will be suppressed.
+    tooltipContent?: React.ReactNode,
+    // If specified alongside tooltipContent, the class name to apply to the
+    // tooltip itself.
+    tooltipClassName?: string,
+    // If specified, an additional class name to apply to the field container
+    className?: string,
+    // All other props pass through to the <input>.
+}
+
+interface IState {
+    valid: boolean,
+    feedback: React.ReactNode,
+    feedbackVisible: boolean,
+    focused: boolean,
+}
+
+export default class Field extends React.PureComponent<IProps, IState> {
+    private id: string;
+    private input: HTMLInputElement;
+
+    private static defaultProps = {
+        element: "input",
+        type: "text",
+    }
+
+    /*
+     * This was changed from throttle to debounce: this is more traditional for
+     * form validation since it means that the validation doesn't happen at all
+     * until the user stops typing for a bit (debounce defaults to not running on
+     * the leading edge). If we're doing an HTTP hit on each validation, we have more
+     * incentive to prevent validating input that's very unlikely to be valid.
+     * We may find that we actually want different behaviour for registration
+     * fields, in which case we can add some options to control it.
+     */
+    private validateOnChange = debounce(() => {
+        this.validate({
+            focused: true,
+        });
+    }, VALIDATION_THROTTLE_MS);
 
     constructor(props) {
         super(props);
         this.state = {
             valid: undefined,
             feedback: undefined,
+            feedbackVisible: false,
             focused: false,
         };
 
         this.id = this.props.id || getId();
     }
 
-    onFocus = (ev) => {
+    public focus() {
+        this.input.focus();
+    }
+
+    private onFocus = (ev) => {
         this.setState({
             focused: true,
         });
@@ -93,7 +128,7 @@ export default class Field extends React.PureComponent {
         }
     };
 
-    onChange = (ev) => {
+    private onChange = (ev) => {
         this.validateOnChange();
         // Parent component may have supplied its own `onChange` as well
         if (this.props.onChange) {
@@ -101,7 +136,7 @@ export default class Field extends React.PureComponent {
         }
     };
 
-    onBlur = (ev) => {
+    private onBlur = (ev) => {
         this.setState({
             focused: false,
         });
@@ -114,11 +149,7 @@ export default class Field extends React.PureComponent {
         }
     };
 
-    focus() {
-        this.input.focus();
-    }
-
-    async validate({ focused, allowEmpty = true }) {
+    private async validate({ focused, allowEmpty = true }: {focused: boolean, allowEmpty?: boolean}) {
         if (!this.props.onValidate) {
             return;
         }
@@ -149,56 +180,42 @@ export default class Field extends React.PureComponent {
         }
     }
 
-    /*
-     * This was changed from throttle to debounce: this is more traditional for
-     * form validation since it means that the validation doesn't happen at all
-     * until the user stops typing for a bit (debounce defaults to not running on
-     * the leading edge). If we're doing an HTTP hit on each validation, we have more
-     * incentive to prevent validating input that's very unlikely to be valid.
-     * We may find that we actually want different behaviour for registration
-     * fields, in which case we can add some options to control it.
-     */
-    validateOnChange = debounce(() => {
-        this.validate({
-            focused: true,
-        });
-    }, VALIDATION_THROTTLE_MS);
 
-    render() {
+
+    public render() {
         const {
-            element, prefix, postfix, className, onValidate, children,
+            element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, flagInvalid, tooltipClassName, list, ...inputProps} = this.props;
 
-        const inputElement = element || "input";
-
         // Set some defaults for the <input> element
-        inputProps.type = inputProps.type || "text";
-        inputProps.ref = input => this.input = input;
+        const ref = input => this.input = input;
         inputProps.placeholder = inputProps.placeholder || inputProps.label;
         inputProps.id = this.id; // this overwrites the id from props
 
         inputProps.onFocus = this.onFocus;
         inputProps.onChange = this.onChange;
         inputProps.onBlur = this.onBlur;
-        inputProps.list = list;
 
-        const fieldInput = React.createElement(inputElement, inputProps, children);
+        // Appease typescript's inference
+        const inputProps_ = {...inputProps, ref, list};
+
+        const fieldInput = React.createElement(this.props.element, inputProps_, children);
 
         let prefixContainer = null;
-        if (prefix) {
-            prefixContainer = <span className="mx_Field_prefix">{prefix}</span>;
+        if (prefixComponent) {
+            prefixContainer = <span className="mx_Field_prefix">{prefixComponent}</span>;
         }
         let postfixContainer = null;
-        if (postfix) {
-            postfixContainer = <span className="mx_Field_postfix">{postfix}</span>;
+        if (postfixComponent) {
+            postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
         }
 
         const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
-        const fieldClasses = classNames("mx_Field", `mx_Field_${inputElement}`, className, {
+        const fieldClasses = classNames("mx_Field", `mx_Field_${this.props.element}`, className, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
-            mx_Field_labelAlwaysTopLeft: prefix,
+            mx_Field_labelAlwaysTopLeft: prefixComponent,
             mx_Field_valid: onValidate && this.state.valid === true,
             mx_Field_invalid: hasValidationFlag
                 ? flagInvalid

@@ -538,6 +538,7 @@ export const MsisdnAuthEntry = createReactClass({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     // TODO: Remove `threepid_creds` once servers support proper UIA
                     // See https://github.com/vector-im/riot-web/issues/10312
+                    // See https://github.com/matrix-org/matrix-doc/issues/2220
                     threepid_creds: creds,
                     threepidCreds: creds,
                 });
