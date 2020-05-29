@@ -39,7 +39,7 @@ import Tinter from '../../Tinter';
 import rate_limited_func from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
-import eventSearch from '../../Searching';
+import eventSearch, {searchPagination} from '../../Searching';
 
 import {isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isOnlyCtrlOrCmdKeyEvent, Key} from '../../Keyboard';
 
@@ -1035,8 +1035,7 @@ export default createReactClass({
 
         if (this.state.searchResults.next_batch) {
             debuglog("requesting more search results");
-            const searchPromise = this.context.backPaginateRoomEventsSearch(
-                this.state.searchResults);
+            const searchPromise = searchPagination(this.state.searchResults);
             return this._handleSearchResult(searchPromise);
         } else {
             debuglog("no more search results");

@@ -88,6 +88,7 @@ async function localSearch(searchTerm, roomId = undefined) {
     }
 
     const emptyResult = {
+        seshatQuery: searchArgs,
         results: [],
         highlights: [],
     };
@@ -97,6 +98,7 @@ async function localSearch(searchTerm, roomId = undefined) {
     const eventIndex = EventIndexPeg.get();
 
     const localResult = await eventIndex.search(searchArgs);
+    emptyResult.seshatQuery.next_batch = localResult.next_batch;
 
     const response = {
         search_categories: {
@@ -104,8 +106,25 @@ async function localSearch(searchTerm, roomId = undefined) {
         },
     };
 
-    const result = MatrixClientPeg.get()._processRoomEventsSearch(
+    return MatrixClientPeg.get()._processRoomEventsSearch(
         emptyResult, response);
+}
+
+async function paginatedLocalSearch(searchResult) {
+    const eventIndex = EventIndexPeg.get();
+
+    let searchArgs = searchResult.seshatQuery;
+
+    const localResult = await eventIndex.search(searchArgs);
+
+    const response = {
+        search_categories: {
+            room_events: localResult,
+        },
+    };
+
+    const result = MatrixClientPeg.get()._processRoomEventsSearch(searchResult, response);
+    searchResult.pendingRequest = null;
 
     return result;
 }
@@ -130,6 +149,29 @@ function eventIndexSearch(term, roomId = undefined) {
     }
 
     return searchPromise;
+}
+
+function eventIndexSearchPagination(searchResult) {
+    const client = MatrixClientPeg.get();
+    const query = searchResult.seshatQuery;
+
+    if (!query) {
+        return client.backPaginateRoomEventsSearch(searchResult);
+    } else {
+        const promise = paginatedLocalSearch(searchResult);
+        searchResult.pendingRequest = promise;
+        return promise;
+    }
+}
+
+export function searchPagination(searchResult) {
+    const eventIndex = EventIndexPeg.get();
+    const client = MatrixClientPeg.get();
+
+    if (searchResult.pendingRequest) return searchResult.pendingRequest;
+
+    if (eventIndex === null) return client.backPaginateRoomEventsSearch(searchResult);
+    else return eventIndexSearchPagination(searchResult);
 }
 
 export default function eventSearch(term, roomId = undefined) {
