@@ -111,6 +111,21 @@ an object containing the tags it needs to worry about and the rooms within. The 
 decide which tags need rendering (as it commonly filters out empty tags in most cases), and will deal with 
 all kinds of filtering.
 
+## Filtering
+
+Filters are provided to the store as condition classes, which are then passed along to the algorithm
+implementations. The implementations then get to decide how to actually filter the rooms, however in
+practice the base `Algorithm` class deals with the filtering in a more optimized/generic way.
+
+The results of filters get cached to avoid needlessly iterating over potentially thousands of rooms,
+as the old room list store does. When a filter condition changes, it emits an update which (in this
+case) the `Algorithm` class will pick up and act accordingly. Typically, this also means filtering a 
+minor subset where possible to avoid over-iterating rooms.
+
+All filter conditions are considered "stable" by the consumers, meaning that the consumer does not
+expect a change in the condition unless the condition says it has changed. This is intentional to
+maintain the caching behaviour described above.
+
 ## Class breakdowns
 
 The `RoomListStore` is the major coordinator of various `Algorithm` implementations, which take care 
