@@ -22,7 +22,8 @@ import classnames from 'classnames';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import {makeType} from "../../../utils/TypeUtils";
 
-const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+const MODULAR_URL = 'https://modular.im/services/matrix-hosting-riot' +
+    '?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
 
 export const FREE = 'Free';
 export const PREMIUM = 'Premium';
