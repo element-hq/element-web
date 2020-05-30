@@ -2036,6 +2036,11 @@ blueimp-canvas-to-blob@^3.5.0:
   resolved "https://registry.yarnpkg.com/blueimp-canvas-to-blob/-/blueimp-canvas-to-blob-3.27.0.tgz#a2bd5c43587b95dedf0f6998603452d1bfcc9b9e"
   integrity sha512-AcIj+hCw6WquxzJuzC6KzgYmqxLFeTWe88KuY2BEIsW1zbEOfoinDAGlhyvFNGt+U3JElkVSK7anA1FaSdmmfA==
 
+bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.4.0:
+  version "4.11.9"
+  resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.9.tgz#26d556829458f9d1e81fc48952493d0ba3507828"
+  integrity sha512-E6QoYqCKZfgatHTdHzs1RRKP7ip4vvm+EyRUeE2RF0NblwVvb0p6jSVeNTOFxPn26QXN2o6SMfNxKp6kU8zQaw==
+
 bn.js@^5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.1.2.tgz#c9686902d3c9a27729f43ab10f9d79c2004da7b0"
@@ -2423,15 +2428,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001043, caniuse-lite@^1.0.30001061:
-<<<<<<< HEAD
-  version "1.0.30001064"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001064.tgz#a0f49689119ba08943b09968e118faf3f645add0"
-  integrity sha512-hdBcQMFvJIrOhkpAZiRXz04Cmetwc9NekeuNl0qZfHOugxOhJKxsjF1RmISMPFjIF4PPx1reliIzbfN42EiQ5A==
-=======
   version "1.0.30001065"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001065.tgz#e8d7fef61cdfd8a7107493ad6bf551a4eb59c68f"
   integrity sha512-DDxCLgJ266YnAHQv0jS1wdOaihRFF52Zgmlag39sQJVy2H46oROpJp4hITstqhdB8qnHSrKNoAEkQA9L/oYF9A==
->>>>>>> afd0d69ab5d358d43738376f140cdef32e0bc01e
 
 canvas@^2.6.1:
   version "2.6.1"
@@ -6951,11 +6950,7 @@ mathml-tag-names@^2.1.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "6.1.0"
-<<<<<<< HEAD
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ff0d91979bfa34775c9e8c6383ef31490c675041"
-=======
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/3305f2cc72f1a299b2a82366ff4729ad8d6b0edc"
->>>>>>> afd0d69ab5d358d43738376f140cdef32e0bc01e
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -6977,11 +6972,7 @@ matrix-mock-request@^1.2.3:
 
 "matrix-react-sdk@github:navgurukul/matrix-react-sdk#develop":
   version "2.6.1"
-<<<<<<< HEAD
-  resolved "https://codeload.github.com/navgurukul/matrix-react-sdk/tar.gz/98ceac8671249c094195d05ea343feaaf65852d2"
-=======
   resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/0e41bde875c2996aefb3fdbeae292211b9347f36"
->>>>>>> afd0d69ab5d358d43738376f140cdef32e0bc01e
   dependencies:
     "@babel/runtime" "^7.8.3"
     await-lock "^2.0.1"
