@@ -17,17 +17,21 @@ limitations under the License.
 import React, {ReactChild} from "react";
 
 import FormButton from "../elements/FormButton";
+import {XOR} from "../../../@types/common";
 
 interface IProps {
     description: ReactChild;
     acceptLabel: string;
-    rejectLabel?: string;
 
     onAccept();
-    onReject?();
 }
 
-const GenericToast: React.FC<IProps> = ({description, acceptLabel, rejectLabel, onAccept, onReject}) => {
+interface IPropsExtended extends IProps {
+    rejectLabel: string;
+    onReject();
+}
+
+const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({description, acceptLabel, rejectLabel, onAccept, onReject}) => {
     return <div>
         <div className="mx_Toast_description">
             { description }
