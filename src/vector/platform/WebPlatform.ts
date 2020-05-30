@@ -16,11 +16,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
+import VectorBasePlatform from './VectorBasePlatform';
+import {UpdateCheckStatus} from "matrix-react-sdk/src/BasePlatform";
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
+import {_t} from 'matrix-react-sdk/src/languageHandler';
 import {Room} from "matrix-js-sdk/src/models/room";
+import {hideToast as hideUpdateToast, showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
+import {Action} from "matrix-react-sdk/src/dispatcher/actions";
+import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
 
 import url from 'url';
 import UAParser from 'ua-parser-js';
@@ -136,36 +140,33 @@ export default class WebPlatform extends VectorBasePlatform {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
             } else if (this.runningVersion !== ver) {
-                dis.dispatch({
-                    action: 'new_version',
-                    currentVersion: this.runningVersion,
-                    newVersion: ver,
-                });
-                // Return to skip a MatrixChat state update
-                return;
+                if (this.shouldShowUpdate(ver)) {
+                    showUpdateToast(this.runningVersion, ver);
+                }
+                return { status: UpdateCheckStatus.Ready };
+            } else {
+                hideUpdateToast();
             }
-            return { status: updateCheckStatusEnum.NOTAVAILABLE };
+
+            return { status: UpdateCheckStatus.NotAvailable };
         }, (err) => {
             console.error("Failed to poll for update", err);
             return {
-                status: updateCheckStatusEnum.ERROR,
+                status: UpdateCheckStatus.Error,
                 detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
             };
         });
     };
 
-    startUpdateCheck = () => {
-        if (this.showUpdateCheck) return;
+    startUpdateCheck() {
         super.startUpdateCheck();
         this.pollForUpdate().then((updateState) => {
-            if (!this.showUpdateCheck) return;
-            if (!updateState) return;
-            dis.dispatch({
-                action: 'check_updates',
-                value: updateState,
+            dis.dispatch<CheckUpdatesPayload>({
+                action: Action.CheckUpdates,
+                ...updateState,
             });
         });
-    };
+    }
 
     installUpdate() {
         window.location.reload(true);

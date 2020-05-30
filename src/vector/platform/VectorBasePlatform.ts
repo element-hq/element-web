@@ -18,8 +18,7 @@ limitations under the License.
 */
 
 import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
-import { _t } from 'matrix-react-sdk/src/languageHandler';
-import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
+import {_t} from 'matrix-react-sdk/src/languageHandler';
 import {getVectorConfig} from "../getconfig";
 
 import Favicon from "../../favicon";
@@ -36,8 +35,13 @@ export const updateCheckStatusEnum = {
  * Vector-specific extensions to the BasePlatform template
  */
 export default abstract class VectorBasePlatform extends BasePlatform {
-    protected showUpdateCheck: boolean = false;
     protected _favicon: Favicon;
+
+    constructor() {
+        super();
+
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
+    }
 
     async getConfig(): Promise<{}> {
         return getVectorConfig();
@@ -87,41 +91,6 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * Begin update polling, if applicable
      */
     startUpdater() {
-    }
-
-    /**
-     * Whether we can call checkForUpdate on this platform build
-     */
-    async canSelfUpdate(): Promise<boolean> {
-        return false;
-    }
-
-    startUpdateCheck = () => {
-        this.showUpdateCheck = true;
-        dis.dispatch({
-            action: 'check_updates',
-            value: { status: updateCheckStatusEnum.CHECKING },
-        });
-    };
-
-    stopUpdateCheck = () => {
-        this.showUpdateCheck = false;
-        dis.dispatch({
-            action: 'check_updates',
-            value: false,
-        });
-    };
-
-    getUpdateCheckStatusEnum() {
-        return updateCheckStatusEnum;
-    }
-
-    /**
-     * Update the currently running app to the latest available
-     * version and replace this instance of the app with the
-     * new version.
-     */
-    installUpdate() {
     }
 
     /**

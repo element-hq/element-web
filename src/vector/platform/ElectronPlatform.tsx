@@ -18,18 +18,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform, {updateCheckStatusEnum} from './VectorBasePlatform';
+import VectorBasePlatform from './VectorBasePlatform';
+import {UpdateCheckStatus} from "matrix-react-sdk/src/BasePlatform";
 import BaseEventIndexManager, {
-    MatrixEvent,
-    MatrixProfile,
-    SearchResult,
     CrawlerCheckpoint,
     EventAndProfile,
+    IndexStats,
+    MatrixEvent,
+    MatrixProfile,
     SearchArgs,
-    IndexStats
+    SearchResult
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
+import {_t, _td} from 'matrix-react-sdk/src/languageHandler';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 import {MatrixClient} from "matrix-js-sdk/src/client";
 import {Room} from "matrix-js-sdk/src/models/room";
@@ -41,7 +42,9 @@ import {Key} from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
-import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
+import {ActionPayload} from "matrix-react-sdk/src/dispatcher/payloads";
+import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
+import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -72,14 +75,14 @@ function _onAction(payload: ActionPayload) {
     }
 }
 
-function getUpdateCheckStatus(status) {
+function getUpdateCheckStatus(status: boolean | string) {
     if (status === true) {
-        return { status: updateCheckStatusEnum.DOWNLOADING };
+        return { status: UpdateCheckStatus.Downloading };
     } else if (status === false) {
-        return { status: updateCheckStatusEnum.NOTAVAILABLE };
+        return { status: UpdateCheckStatus.NotAvailable };
     } else {
         return {
-            status: updateCheckStatusEnum.ERROR,
+            status: UpdateCheckStatus.Error,
             detail: status,
         };
     }
@@ -213,12 +216,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
             or the error if one is encountered
          */
         ipcRenderer.on('check_updates', (event, status) => {
-            if (!this.showUpdateCheck) return;
-            dis.dispatch({
-                action: 'check_updates',
-                value: getUpdateCheckStatus(status),
+            dis.dispatch<CheckUpdatesPayload>({
+                action: Action.CheckUpdates,
+                ...getUpdateCheckStatus(status),
             });
-            this.showUpdateCheck = false;
         });
 
         // try to flush the rageshake logs to indexeddb before quit.
@@ -274,13 +275,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('getConfig');
     }
 
-    async onUpdateDownloaded(ev, updateInfo) {
-        dis.dispatch({
-            action: 'new_version',
-            currentVersion: await this.getAppVersion(),
-            newVersion: updateInfo,
-            releaseNotes: updateInfo.releaseNotes,
-        });
+    async onUpdateDownloaded(ev, {releaseNotes, releaseName}) {
+        if (this.shouldShowUpdate(releaseName)) {
+            showUpdateToast(await this.getAppVersion(), releaseName, releaseNotes);
+        }
     }
 
     getHumanReadableName(): string {
@@ -388,12 +386,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return Boolean(feedUrl);
     }
 
-    startUpdateCheck = () => {
-        if (this.showUpdateCheck) return;
+    startUpdateCheck() {
         super.startUpdateCheck();
-
         ipcRenderer.send('check_updates');
-    };
+    }
 
     installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
