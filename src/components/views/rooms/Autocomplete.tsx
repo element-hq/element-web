@@ -23,7 +23,6 @@ import {Room} from 'matrix-js-sdk/src/models/room';
 
 import SettingsStore from "../../../settings/SettingsStore";
 import Autocompleter from '../../../autocomplete/Autocompleter';
-import { Completion } from '../../../autocomplete/Components';
 
 const COMPOSER_SELECTED = 0;
 
@@ -254,10 +253,10 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps: IProps) {
         this.applyNewProps(prevProps.query, prevProps.room);
         // this is the selected completion, so scroll it into view if needed
-        const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as Completion<any>;
+        const selectedCompletion = this.refs[`completion${this.state.selectionOffset}`] as HTMLElement;
 
-        if (selectedCompletion && selectedCompletion.nodeRef.current) {
-            selectedCompletion.nodeRef.current.scrollIntoView({
+        if (selectedCompletion) {
+            selectedCompletion.scrollIntoView({
                 behavior: "auto",
                 block: "nearest",
             });
