@@ -2467,5 +2467,17 @@
     "Address (optional)": "地址（選擇性）",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "刪除聊天室地址 %(alias)s 並從目錄移除 %(name)s？",
     "delete the address.": "刪除地址。",
-    "Use a different passphrase?": "使用不同的通關密語？"
+    "Use a different passphrase?": "使用不同的通關密語？",
+    "Help us improve Riot": "協助我們改善 Riot",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "傳送<UsageDataLink>匿名使用資料</UsageDataLink>以協助我們改善 Riot。這將會使用 <PolicyLink>cookie</PolicyLink>。",
+    "I want to help": "我想要協助",
+    "Your homeserver has exceeded its user limit.": "您的家伺服器已超過使用者限制。",
+    "Your homeserver has exceeded one of its resource limits.": "您的家伺服器已超過其中一種資源限制。",
+    "Contact your <a>server admin</a>.": "聯絡您的<a>伺服器管理員</a>。",
+    "Ok": "確定",
+    "Set password": "設定密碼",
+    "To return to your account in future you need to set a password": "要在日後取回您的帳號，您必須設定密碼",
+    "Restart": "重新啟動",
+    "Upgrade your Riot": "升級您的 Riot",
+    "A new version of Riot is available!": "已有新版的 Riot！"
 }
