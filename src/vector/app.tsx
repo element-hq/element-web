@@ -169,6 +169,7 @@ export async function loadApp(fragParams: {}) {
 }
 
 async function verifyServerConfig() {
+/*
     let validatedConfig;
     try {
         console.log("Verifying homeserver configuration");
@@ -258,6 +259,7 @@ async function verifyServerConfig() {
     // Add the newly built config to the actual config for use by the app
     console.log("Updating SdkConfig with validated discovery information");
     SdkConfig.add({"validated_server_config": validatedConfig});
+*/
 
     return SdkConfig.get();
 }
