@@ -40,6 +40,10 @@ function installUpdate() {
 }
 
 export const showToast = (version: string, newVersion: string, releaseNotes?: string) => {
+    function onReject() {
+        PlatformPeg.get().deferUpdate(newVersion);
+    }
+
     let onAccept;
     let acceptLabel = _t("What's new?");
     if (releaseNotes) {
@@ -79,6 +83,8 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
             description: _t("A new version of Riot is available!"),
             acceptLabel,
             onAccept,
+            rejectLabel: _t("Later"),
+            onReject,
         },
         component: GenericToast,
         priority: 20,
