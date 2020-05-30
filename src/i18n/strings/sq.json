@@ -2469,5 +2469,6 @@
     "Address (optional)": "Adresë (opsionale)",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "Të fshihet adresa e dhomës %(alias)s dhe të hiqet %(name)s nga drejtoria?",
     "delete the address.": "fshije adresën.",
-    "Use a different passphrase?": "Të përdoret një frazëkalim tjetër?"
+    "Use a different passphrase?": "Të përdoret një frazëkalim tjetër?",
+    "New version available. <a>Update now.</a>": "Version i ri gati. <a>Përditësojeni tani.</a>"
 }
