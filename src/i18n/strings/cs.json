@@ -2311,5 +2311,17 @@
     "Use between %(min)s pt and %(max)s pt": "Použijte velikost mezi %(min)s pt a %(max)s pt",
     "Appearance": "Vzhled",
     "Please verify the room ID or address and try again.": "Ověřte prosím, že ID místnosti je správné a zkuste to znovu.",
-    "Room ID or address of ban list": "ID nebo adresa seznamu zablokovaných"
+    "Room ID or address of ban list": "ID nebo adresa seznamu zablokovaných",
+    "Help us improve Riot": "Pomozte nám zlepšovat Riot",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "Zasílat <UsageDataLink>anonymní data o použití aplikace</UsageDataLink>, která nám pomáhají Riot zlepšovat. Bedeme na to používat <PolicyLink>soubory cookie</PolicyLink>.",
+    "I want to help": "Chci pomoci",
+    "Your homeserver has exceeded its user limit.": "Na vašem domovském serveru byl překročen limit počtu uživatelů.",
+    "Your homeserver has exceeded one of its resource limits.": "Na vašem domovském serveru byl překročen limit systémových požadavků.",
+    "Contact your <a>server admin</a>.": "Kontaktujte <a>administrátora serveru</a>.",
+    "Ok": "Ok",
+    "Set password": "Nastavit heslo",
+    "To return to your account in future you need to set a password": "Abyste se k účtu mohli v budoucnu vrátit, je potřeba nastavit heslo",
+    "Restart": "Restartovat",
+    "Upgrade your Riot": "Aktualizovat Riot",
+    "A new version of Riot is available!": "Je dostupná nová verze Riotu!"
 }
