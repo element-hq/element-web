@@ -2442,5 +2442,18 @@
     "Address (optional)": "Adreso (malnepra)",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "Ĉu forigi la adreson de ĉambro %(alias)s kaj forigi %(name)s de la listo?",
     "delete the address.": "forigi la adreson.",
-    "Use a different passphrase?": "Ĉu uzi alian pasfrazon?"
+    "Use a different passphrase?": "Ĉu uzi alian pasfrazon?",
+    "Help us improve Riot": "Helpu al ni plibonigi Rioton",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "Sendi <UsageDataLink>sennomajn datumojn pri uzado</UsageDataLink>, kiuj helpos al ni plibonigi Rioton. Ĉi tio uzos <PolicyLink>kuketon</PolicyLink>.",
+    "I want to help": "Mi volas helpi",
+    "Your homeserver has exceeded its user limit.": "Via hejmservilo atingis sian limon de uzantoj.",
+    "Your homeserver has exceeded one of its resource limits.": "Via hejmservilo atingis iun limon de rimedoj.",
+    "Contact your <a>server admin</a>.": "Kontaktu <a>administranton de via servilo</a>.",
+    "Ok": "Bone",
+    "Set password": "Agordi pasvorton",
+    "To return to your account in future you need to set a password": "Por reveni ose al via konto, vi devas agordi pasvorton",
+    "Restart": "Restartigi",
+    "Upgrade your Riot": "Gradaltigi vian Rioton",
+    "A new version of Riot is available!": "Nova versio de Riot estas disponebla!",
+    "New version available. <a>Update now.</a>": "Nova versio estas disponebla. <a>Ĝisdatigu nun.</a>"
 }
