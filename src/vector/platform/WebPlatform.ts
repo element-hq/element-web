@@ -140,7 +140,9 @@ export default class WebPlatform extends VectorBasePlatform {
             if (this.runningVersion === null) {
                 this.runningVersion = ver;
             } else if (this.runningVersion !== ver) {
-                showUpdateToast(this.runningVersion, ver);
+                if (this.shouldShowUpdate(ver)) {
+                    showUpdateToast(this.runningVersion, ver);
+                }
                 return { status: UpdateCheckStatus.Ready };
             } else {
                 hideUpdateToast();

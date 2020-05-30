@@ -94,14 +94,6 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     }
 
     /**
-     * Update the currently running app to the latest available
-     * version and replace this instance of the app with the
-     * new version.
-     */
-    installUpdate() {
-    }
-
-    /**
      * Get a sensible default display name for the
      * device Vector is running on
      */
