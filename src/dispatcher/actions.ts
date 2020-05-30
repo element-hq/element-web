@@ -50,8 +50,7 @@ export enum Action {
     RecheckTheme = "recheck_theme",
 
     /**
-     * Response to manual update check, will fire multiple times during the update check.
+     * Provide status information for an ongoing update check. Should be used with a CheckUpdatesPayload.
      */
     CheckUpdates = "check_updates",
 }
-
