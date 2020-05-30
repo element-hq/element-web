@@ -29,11 +29,6 @@ export default class ResizeNotifier extends EventEmitter {
         this._throttledMiddlePanel = throttle(() => this.emit("middlePanelResized"), 200);
     }
 
-    notifyBannersChanged() {
-        this.emit("leftPanelResized");
-        this.emit("middlePanelResized");
-    }
-
     // can be called in quick succession
     notifyLeftHandleResized() {
         // don't emit event for own region

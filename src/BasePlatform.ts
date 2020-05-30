@@ -21,6 +21,16 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 import {ActionPayload} from "./dispatcher/payloads";
+import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
+import {Action} from "./dispatcher/actions";
+
+export enum UpdateCheckStatus {
+    Checking = "CHECKING",
+    Error = "ERROR",
+    NotAvailable = "NOTAVAILABLE",
+    Downloading = "DOWNLOADING",
+    Ready = "READY",
+}
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -54,6 +64,20 @@ export default abstract class BasePlatform {
 
     setErrorStatus(errorDidOccur: boolean) {
         this.errorDidOccur = errorDidOccur;
+    }
+
+    /**
+     * Whether we can call checkForUpdate on this platform build
+     */
+    async canSelfUpdate(): Promise<boolean> {
+        return false;
+    }
+
+    startUpdateCheck() {
+        dis.dispatch<CheckUpdatesPayload>({
+            action: Action.CheckUpdates,
+            status: UpdateCheckStatus.Checking,
+        });
     }
 
     /**

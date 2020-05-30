@@ -81,7 +81,6 @@ interface IProps {
     currentRoomId: string;
     ConferenceHandler?: object;
     collapseLhs: boolean;
-    checkingForUpdate: boolean;
     config: {
         piwik: {
             policyUrl: string;
@@ -175,15 +174,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         this.resizer = this._createResizer();
         this.resizer.attach();
         this._loadResizerPreferences();
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        // attempt to guess when a banner was opened or closed
-        if (
-            (prevProps.checkingForUpdate !== this.props.checkingForUpdate)
-        ) {
-            this.props.resizeNotifier.notifyBannersChanged();
-        }
     }
 
     componentWillUnmount() {
@@ -617,7 +607,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         const GroupView = sdk.getComponent('structures.GroupView');
         const MyGroups = sdk.getComponent('structures.MyGroups');
         const ToastContainer = sdk.getComponent('structures.ToastContainer');
-        const UpdateCheckBar = sdk.getComponent('globals.UpdateCheckBar');
 
         let pageElement;
 
@@ -661,15 +650,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                 break;
         }
 
-        let topBar;
-        if (this.props.checkingForUpdate) {
-            topBar = <UpdateCheckBar {...this.props.checkingForUpdate} />;
-        }
-
         let bodyClasses = 'mx_MatrixChat';
-        if (topBar) {
-            bodyClasses += ' mx_MatrixChat_toolbarShowing';
-        }
         if (this.state.useCompactLayout) {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
@@ -684,7 +665,6 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                     onMouseDown={this._onMouseDown}
                     onMouseUp={this._onMouseUp}
                 >
-                    { topBar }
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
