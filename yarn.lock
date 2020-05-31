@@ -3155,10 +3155,10 @@ emoji-regex@^8.0.0:
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
 
-emojibase-data@^4.0.2:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-4.2.1.tgz#3d1f0c69ddbb2ca7b7014f5e34654190802a40df"
-  integrity sha512-O0vxoPMgVkRq/uII/gdAjz9RwNv6ClJrd3J9QCCRC4btZRmeut/qohC/Fi+NNXUcjY08RWNTvxSnq/vij8hvrw==
+emojibase-data@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/emojibase-data/-/emojibase-data-5.0.1.tgz#ce6fe36b4affd3578e0be8779211018a2fdae960"
+  integrity sha512-rYWlogJ2q5P78U8Xx1vhsXHcYKu1wFnr7+o6z9QHssZ1SsJLTCkJINZIPHRFWuDreAUK457TkqHpdOXElu0fzA==
 
 emojibase-regex@^4.0.1:
   version "4.0.1"
