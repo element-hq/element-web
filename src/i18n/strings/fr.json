@@ -2480,5 +2480,6 @@
     "To return to your account in future you need to set a password": "Pour réutiliser votre compte à l’avenir, vous devez définir un mot de passe",
     "Restart": "Redémarrer",
     "Upgrade your Riot": "Mettre à niveau votre Riot",
-    "A new version of Riot is available!": "Une nouvelle version de Riot est disponible !"
+    "A new version of Riot is available!": "Une nouvelle version de Riot est disponible !",
+    "New version available. <a>Update now.</a>": "Nouvelle version disponible. <a>Faire la mise à niveau maintenant.</a>"
 }
