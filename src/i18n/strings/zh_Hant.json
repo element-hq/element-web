@@ -2479,5 +2479,6 @@
     "To return to your account in future you need to set a password": "要在日後取回您的帳號，您必須設定密碼",
     "Restart": "重新啟動",
     "Upgrade your Riot": "升級您的 Riot",
-    "A new version of Riot is available!": "已有新版的 Riot！"
+    "A new version of Riot is available!": "已有新版的 Riot！",
+    "New version available. <a>Update now.</a>": "有可用的新版本。<a>立刻更新。</a>"
 }
