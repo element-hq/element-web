@@ -323,13 +323,8 @@ export default class SendMessageComposer extends React.Component {
         this._clearStoredEditorState();
     }
 
-    componentDidMount() {
-        this._editorRef.getEditableRootNode().addEventListener("paste", this._onPaste, true);
-    }
-
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
@@ -425,6 +420,7 @@ export default class SendMessageComposer extends React.Component {
             ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );
+            return true; // to skip internal onPaste handler
         }
     }
 
@@ -441,6 +437,7 @@ export default class SendMessageComposer extends React.Component {
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onChange={this._saveStoredEditorState}
+                    onPaste={this._onPaste}
                 />
             </div>
         );
