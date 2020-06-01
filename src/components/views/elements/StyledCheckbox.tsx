@@ -34,12 +34,12 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
 
     constructor(props: IProps) {
         super(props);
+        // 56^10 so unlikely chance of collision.
         this.id = "checkbox_" + randomString(10);
     }
 
     public render() {
         const { children, className, ...otherProps } = this.props;
-        // 56^10 so unlikely chance of collision.
         return <span className={"mx_Checkbox " + className}>
             <input id={this.id} {...otherProps} type="checkbox" />
             <label htmlFor={this.id}>
