@@ -16,10 +16,8 @@ limitations under the License.
 
 import SdkConfig from "../SdkConfig";
 import {MatrixClientPeg} from "../MatrixClientPeg";
-import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 
 const JITSI_WK_PROPERTY = "im.vector.riot.jitsi";
-const JITSI_WK_CHECK_INTERVAL = 2 * 60 * 60 * 1000; // 2 hours, arbitrarily selected
 
 export interface JitsiWidgetData {
     conferenceId: string;
@@ -36,33 +34,21 @@ export class Jitsi {
         return this.domain || 'jitsi.riot.im';
     }
 
-    constructor() {
-        // We rely on the first call to be an .update() instead of doing one here. Doing one
-        // here could result in duplicate calls to the homeserver.
-
-        // Start a timer to update the server info regularly
-        setInterval(() => this.update(), JITSI_WK_CHECK_INTERVAL);
-    }
-
     public async update(): Promise<any> {
         // Start with a default of the config's domain
         let domain = (SdkConfig.get()['jitsi'] || {})['preferredDomain'] || 'jitsi.riot.im';
 
-        // Now request the .well-known config to see if it changed
-        if (MatrixClientPeg.get()) {
-            try {
-                console.log("Attempting to get Jitsi conference information from homeserver");
+        const cli = MatrixClientPeg.get();
+        const discoveryResponse = cli && MatrixClientPeg.get().getClientWellKnown();
 
-                const homeserverDomain = MatrixClientPeg.getHomeserverName();
-                const discoveryResponse = await AutoDiscovery.getRawClientConfig(homeserverDomain);
-                if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
-                    const wkPreferredDomain = discoveryResponse[JITSI_WK_PROPERTY]['preferredDomain'];
-                    if (wkPreferredDomain) domain = wkPreferredDomain;
-                }
-            } catch (e) {
-                // These are non-fatal errors
-                console.error(e);
-            }
+        if (cli) {
+            cli.on("WellKnown.client", this.update);
+        }
+
+        console.log("Attempting to get Jitsi conference information from homeserver");
+        if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
+            const wkPreferredDomain = discoveryResponse[JITSI_WK_PROPERTY]['preferredDomain'];
+            if (wkPreferredDomain) domain = wkPreferredDomain;
         }
 
         // Put the result into memory for us to use later

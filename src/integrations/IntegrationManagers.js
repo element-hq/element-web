@@ -21,10 +21,8 @@ import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} 
 import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
 import WidgetUtils from "../utils/WidgetUtils";
 import {MatrixClientPeg} from "../MatrixClientPeg";
-import {AutoDiscovery} from "matrix-js-sdk";
 import SettingsStore from "../settings/SettingsStore";
 
-const HS_MANAGERS_REFRESH_INTERVAL = 8 * 60 * 60 * 1000; // 8 hours
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
     KIND_ACCOUNT,
@@ -44,7 +42,6 @@ export class IntegrationManagers {
 
     _managers: IntegrationManagerInstance[] = [];
     _client: MatrixClient;
-    _wellknownRefreshTimerId: number = null;
     _primaryManager: IntegrationManagerInstance;
 
     constructor() {
@@ -55,20 +52,19 @@ export class IntegrationManagers {
         this.stopWatching();
         this._client = MatrixClientPeg.get();
         this._client.on("accountData", this._onAccountData);
+        this._client.on("WellKnown.client", this._setupHomeserverManagers);
         this._compileManagers();
-        setInterval(() => this._setupHomeserverManagers(), HS_MANAGERS_REFRESH_INTERVAL);
     }
 
     stopWatching(): void {
         if (!this._client) return;
         this._client.removeListener("accountData", this._onAccountData);
-        if (this._wellknownRefreshTimerId !== null) clearInterval(this._wellknownRefreshTimerId);
+        this._client.removeListener("WellKnown.client", this._setupHomeserverManagers);
     }
 
     _compileManagers() {
         this._managers = [];
         this._setupConfiguredManager();
-        this._setupHomeserverManagers();
         this._setupAccountManagers();
     }
 
@@ -82,39 +78,31 @@ export class IntegrationManagers {
         }
     }
 
-    async _setupHomeserverManagers() {
-        if (!MatrixClientPeg.get()) return;
-        try {
-            console.log("Updating homeserver-configured integration managers...");
-            const homeserverDomain = MatrixClientPeg.getHomeserverName();
-            const discoveryResponse = await AutoDiscovery.getRawClientConfig(homeserverDomain);
-            if (discoveryResponse && discoveryResponse['m.integrations']) {
-                let managers = discoveryResponse['m.integrations']['managers'];
-                if (!Array.isArray(managers)) managers = []; // make it an array so we can wipe the HS managers
+    async _setupHomeserverManagers(discoveryResponse) {
+        console.log("Updating homeserver-configured integration managers...");
+        if (discoveryResponse && discoveryResponse['m.integrations']) {
+            let managers = discoveryResponse['m.integrations']['managers'];
+            if (!Array.isArray(managers)) managers = []; // make it an array so we can wipe the HS managers
 
-                console.log(`Homeserver has ${managers.length} integration managers`);
+            console.log(`Homeserver has ${managers.length} integration managers`);
 
-                // Clear out any known managers for the homeserver
-                // TODO: Log out of the scalar clients
-                this._managers = this._managers.filter(m => m.kind !== KIND_HOMESERVER);
+            // Clear out any known managers for the homeserver
+            // TODO: Log out of the scalar clients
+            this._managers = this._managers.filter(m => m.kind !== KIND_HOMESERVER);
 
-                // Now add all the managers the homeserver wants us to have
-                for (const hsManager of managers) {
-                    if (!hsManager["api_url"]) continue;
-                    this._managers.push(new IntegrationManagerInstance(
-                        KIND_HOMESERVER,
-                        hsManager["api_url"],
-                        hsManager["ui_url"], // optional
-                    ));
-                }
-
-                this._primaryManager = null; // reset primary
-            } else {
-                console.log("Homeserver has no integration managers");
+            // Now add all the managers the homeserver wants us to have
+            for (const hsManager of managers) {
+                if (!hsManager["api_url"]) continue;
+                this._managers.push(new IntegrationManagerInstance(
+                    KIND_HOMESERVER,
+                    hsManager["api_url"],
+                    hsManager["ui_url"], // optional
+                ));
             }
-        } catch (e) {
-            console.error(e);
-            // Errors during discovery are non-fatal
+
+            this._primaryManager = null; // reset primary
+        } else {
+            console.log("Homeserver has no integration managers");
         }
     }
 
