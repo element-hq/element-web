@@ -26,6 +26,7 @@ interface IState {
 }
 
 export default class StyledCheckbox extends React.PureComponent<IProps, IState> {
+    private id: string;
 
     public static readonly defaultProps = {
         className: "",
@@ -33,16 +34,16 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
 
     constructor(props: IProps) {
         super(props);
+        this.id = "checkbox_" + randomString(10);
     }
 
     public render() {
         const { children, className, ...otherProps } = this.props;
         // 56^10 so unlikely chance of collision.
-        const id = "checkbox_" + randomString(10);
         return [
             <span className={"mx_Checkbox " + className}>
-                <input id={id} {...otherProps} type="checkbox" />
-                <label htmlFor={id}>
+                <input id={this.id} {...otherProps} type="checkbox" />
+                <label htmlFor={this.id}>
                     {/* Using the div to center the image */}
                     <div className="mx_Checkbox_background">
                         <img src={CHECK_BOX_SVG}/>
