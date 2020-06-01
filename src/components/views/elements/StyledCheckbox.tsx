@@ -40,19 +40,17 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
     public render() {
         const { children, className, ...otherProps } = this.props;
         // 56^10 so unlikely chance of collision.
-        return [
-            <span className={"mx_Checkbox " + className}>
-                <input id={this.id} {...otherProps} type="checkbox" />
-                <label htmlFor={this.id}>
-                    {/* Using the div to center the image */}
-                    <div className="mx_Checkbox_background">
-                        <img src={CHECK_BOX_SVG}/>
-                    </div>
-                    <div>
-                        { this.props.children }
-                    </div>
-                </label>
-            </span>
-        ]
+        return <span className={"mx_Checkbox " + className}>
+            <input id={this.id} {...otherProps} type="checkbox" />
+            <label htmlFor={this.id}>
+                {/* Using the div to center the image */}
+                <div className="mx_Checkbox_background">
+                    <img src={CHECK_BOX_SVG}/>
+                </div>
+                <div>
+                    { this.props.children }
+                </div>
+            </label>
+        </span>
     }
 }
