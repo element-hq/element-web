@@ -33,7 +33,6 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
-import SettingsStore from '../../../settings/SettingsStore';
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
