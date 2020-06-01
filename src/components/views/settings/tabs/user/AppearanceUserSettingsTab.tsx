@@ -103,7 +103,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         };
     }
 
-    private onThemeChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void {
+    private onThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
         const newTheme = e.target.value;
         if (this.state.theme === newTheme) return;
 
@@ -124,18 +124,18 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme, forceTheme: newTheme});
     };
 
-    private onUseSystemThemeChanged(checked: boolean) {
+    private onUseSystemThemeChanged = (checked: boolean): void => {
         this.setState({useSystemTheme: checked});
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
         dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
     };
 
-    private onFontSizeChanged(size: number) {
+    private onFontSizeChanged = (size: number): void => {
         this.setState({fontSize: size.toString()});
         SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, size);
     };
 
-    private async onValidateFontSize({value}: Pick<IFieldState, "value">): Promise<IValidationResult> {
+    private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
         const min = FontWatcher.MIN_SIZE;
         const max = FontWatcher.MAX_SIZE;
@@ -155,7 +155,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
     }
 
-    private async onAddCustomTheme() {
+    private onAddCustomTheme = async (): Promise<void> => {
         let currentThemes: string[] = SettingsStore.getValue("custom_themes");
         if (!currentThemes) currentThemes = [];
         currentThemes = currentThemes.map(c => c); // cheap clone
@@ -187,7 +187,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         }, 3000);
     };
 
-    private onCustomThemeChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
+    private onCustomThemeChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
         this.setState({customThemeUrl: e.target.value});
     };
 
