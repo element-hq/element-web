@@ -56,7 +56,7 @@ $left-gutter: 65px;
     .mx_EventTile {
         padding-top: 4px;
 
-        .mx_EventTile.mx_EventTile_info {
+        &.mx_EventTile_info {
             // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
             padding-top: 0px;
             font-size: $font-13px;
