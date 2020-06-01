@@ -53,6 +53,11 @@ $left-gutter: 65px;
 /* Compact layout overrides */
 
 .mx_MatrixChat_useCompactLayout {
+    .mx_EventTile_line, .mx_EventTile_reply {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
     .mx_EventTile {
         padding-top: 4px;
 
@@ -68,11 +73,11 @@ $left-gutter: 65px;
             }
         }
 
-        .mx_EventTile .mx_SenderProfile {
+        .mx_SenderProfile {
             font-size: $font-13px;
         }
 
-        .mx_EventTile.mx_EventTile_emote {
+        &.mx_EventTile_emote {
             // add a bit more space for emotes so that avatars don't collide
             padding-top: 8px;
             .mx_EventTile_avatar {
@@ -84,17 +89,12 @@ $left-gutter: 65px;
             }
         }
 
-        .mx_EventTile.mx_EventTile_emote.mx_EventTile_continuation {
+        &.mx_EventTile_emote.mx_EventTile_continuation {
             padding-top: 0;
             .mx_EventTile_line, .mx_EventTile_reply {
                 padding-top: 0px;
                 padding-bottom: 0px;
             }
-        }
-
-        .mx_EventTile_line, .mx_EventTile_reply {
-            padding-top: 0px;
-            padding-bottom: 0px;
         }
 
         .mx_EventTile_avatar {
