@@ -21,7 +21,7 @@ import {_t} from "../../../languageHandler";
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Modal from '../../../Modal';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import { getThreepidsWithBindStatus } from '../../../boundThreepids';
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import {abbreviateUrl, unabbreviateUrl} from "../../../utils/UrlUtils";

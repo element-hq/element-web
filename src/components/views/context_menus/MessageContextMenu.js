@@ -23,7 +23,7 @@ import createReactClass from 'create-react-class';
 import {EventStatus} from 'matrix-js-sdk';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
@@ -113,11 +113,6 @@ export default createReactClass({
         for (const reaction of this._getUnsentReactions()) {
             Resend.resend(reaction);
         }
-        this.closeMenu();
-    },
-
-    e2eInfoClicked: function() {
-        this.props.e2eInfoCallback();
         this.closeMenu();
     },
 
@@ -465,15 +460,6 @@ export default createReactClass({
             );
         }
 
-        let e2eInfo;
-        if (this.props.e2eInfoCallback) {
-            e2eInfo = (
-                <MenuItem className="mx_MessageContextMenu_field" onClick={this.e2eInfoClicked}>
-                    { _t('End-to-end encryption information') }
-                </MenuItem>
-            );
-        }
-
         let reportEventButton;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
@@ -500,7 +486,6 @@ export default createReactClass({
                 { quoteButton }
                 { externalURLButton }
                 { collapseReplyThread }
-                { e2eInfo }
                 { reportEventButton }
             </div>
         );

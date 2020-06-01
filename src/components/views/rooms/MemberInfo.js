@@ -31,7 +31,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -48,6 +48,7 @@ import E2EIcon from "./E2EIcon";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberInfo',
@@ -724,7 +725,7 @@ export default createReactClass({
 
     onCancel: function(e) {
         dis.dispatch({
-            action: "view_user",
+            action: Action.ViewUser,
             member: null,
         });
     },

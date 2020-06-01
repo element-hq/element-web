@@ -18,9 +18,10 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import * as Avatar from '../../../Avatar';
 import * as sdk from "../../../index";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
+import {Action} from "../../../dispatcher/actions";
+import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
 export default createReactClass({
     displayName: 'MemberAvatar',
@@ -33,7 +34,7 @@ export default createReactClass({
         resizeMethod: PropTypes.string,
         // The onClick to give the avatar
         onClick: PropTypes.func,
-        // Whether the onClick of the avatar should be overriden to dispatch 'view_user'
+        // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
         viewUserOnClick: PropTypes.bool,
         title: PropTypes.string,
     },
@@ -61,10 +62,14 @@ export default createReactClass({
             return {
                 name: props.member.name,
                 title: props.title || props.member.userId,
-                imageUrl: Avatar.avatarUrlForMember(props.member,
-                                             props.width,
-                                             props.height,
-                                             props.resizeMethod),
+                imageUrl: props.member.getAvatarUrl(
+                    MatrixClientPeg.get().getHomeserverUrl(),
+                    Math.floor(props.width * window.devicePixelRatio),
+                    Math.floor(props.height * window.devicePixelRatio),
+                    props.resizeMethod,
+                    false,
+                    false,
+                ),
             };
         } else if (props.fallbackUserId) {
             return {
@@ -85,7 +90,7 @@ export default createReactClass({
         if (viewUserOnClick) {
             onClick = () => {
                 dis.dispatch({
-                    action: 'view_user',
+                    action: Action.ViewUser,
                     member: this.props.member,
                 });
             };

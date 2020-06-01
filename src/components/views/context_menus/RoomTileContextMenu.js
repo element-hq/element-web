@@ -24,7 +24,7 @@ import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { _t, _td } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import * as Rooms from '../../../Rooms';
 import * as RoomNotifs from '../../../RoomNotifs';

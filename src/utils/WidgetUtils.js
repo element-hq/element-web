@@ -18,7 +18,7 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import * as url from "url";
 import WidgetEchoStore from '../stores/WidgetEchoStore';
 

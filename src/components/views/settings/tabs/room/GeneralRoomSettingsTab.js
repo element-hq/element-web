@@ -20,7 +20,7 @@ import {_t} from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
 import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 export default class GeneralRoomSettingsTab extends React.Component {

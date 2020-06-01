@@ -20,9 +20,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberTile',
@@ -185,7 +186,7 @@ export default createReactClass({
 
     onClick: function(e) {
         dis.dispatch({
-            action: 'view_user',
+            action: Action.ViewUser,
             member: this.props.member,
         });
     },

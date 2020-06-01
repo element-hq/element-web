@@ -21,7 +21,7 @@ limitations under the License.
 import * as React from 'react';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
@@ -41,6 +41,8 @@ import { parseFragment as parseHtml } from "parse5";
 import sendBugReport from "./rageshake/submit-rageshake";
 import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
+import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { Action } from "./dispatcher/actions";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -448,8 +450,8 @@ export const Commands = [
     new Command({
         command: 'join',
         aliases: ['j', 'goto'],
-        args: '<room-alias>',
-        description: _td('Joins room with given alias'),
+        args: '<room-address>',
+        description: _td('Joins room with given address'),
         runFn: function(_, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
@@ -560,7 +562,7 @@ export const Commands = [
     }),
     new Command({
         command: 'part',
-        args: '[<room-alias>]',
+        args: '[<room-address>]',
         description: _td('Leave room'),
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
@@ -592,7 +594,7 @@ export const Commands = [
                         }
                         if (targetRoomId) break;
                     }
-                    if (!targetRoomId) return reject(_t('Unrecognised room alias:') + ' ' + roomAlias);
+                    if (!targetRoomId) return reject(_t('Unrecognised room address:') + ' ' + roomAlias);
                 }
             }
 
@@ -943,8 +945,10 @@ export const Commands = [
             }
 
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
-            dis.dispatch({
-                action: 'view_user',
+            dis.dispatch<ViewUserPayload>({
+                action: Action.ViewUser,
+                // XXX: We should be using a real member object and not assuming what the
+                // receiver wants.
                 member: member || {userId},
             });
             return success();

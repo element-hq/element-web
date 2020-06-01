@@ -63,7 +63,6 @@
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
 @import "./views/dialogs/_DeviceVerifyDialog.scss";
 @import "./views/dialogs/_DevtoolsDialog.scss";
-@import "./views/dialogs/_EncryptedEventDialog.scss";
 @import "./views/dialogs/_GroupAddressPicker.scss";
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
@@ -115,7 +114,9 @@
 @import "./views/elements/_RichText.scss";
 @import "./views/elements/_RoleButton.scss";
 @import "./views/elements/_RoomAliasField.scss";
+@import "./views/elements/_Slider.scss";
 @import "./views/elements/_Spinner.scss";
+@import "./views/elements/_StyledCheckbox.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
 @import "./views/elements/_TextWithTooltip.scss";
 @import "./views/elements/_ToggleSwitch.scss";
@@ -123,7 +124,6 @@
 @import "./views/elements/_TooltipButton.scss";
 @import "./views/elements/_Validation.scss";
 @import "./views/emojipicker/_EmojiPicker.scss";
-@import "./views/globals/_MatrixToolbar.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
@@ -162,6 +162,8 @@
 @import "./views/rooms/_EditMessageComposer.scss";
 @import "./views/rooms/_EntityTile.scss";
 @import "./views/rooms/_EventTile.scss";
+@import "./views/rooms/_GroupLayout.scss";
+@import "./views/rooms/_IRCLayout.scss";
 @import "./views/rooms/_InviteOnlyIcon.scss";
 @import "./views/rooms/_JumpToBottomButton.scss";
 @import "./views/rooms/_LinkPreviewWidget.scss";
@@ -200,10 +202,12 @@
 @import "./views/settings/_ProfileSettings.scss";
 @import "./views/settings/_SetIdServer.scss";
 @import "./views/settings/_SetIntegrationManager.scss";
+@import "./views/settings/_UpdateCheckButton.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_RolesRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_SecurityRoomSettingsTab.scss";
+@import "./views/settings/tabs/user/_AppearanceUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_GeneralUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_HelpUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_MjolnirUserSettingsTab.scss";

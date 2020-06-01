@@ -25,7 +25,7 @@ import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {

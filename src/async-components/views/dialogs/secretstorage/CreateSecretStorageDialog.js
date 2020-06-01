@@ -201,7 +201,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     type: 'm.id.user',
                     user: MatrixClientPeg.get().getUserId(),
                 },
-                // https://github.com/matrix-org/synapse/issues/5665
+                // TODO: Remove `user` once servers support proper UIA
+                // See https://github.com/matrix-org/synapse/issues/5665
                 user: MatrixClientPeg.get().getUserId(),
                 password: this.state.accountPassword,
             });
@@ -538,8 +539,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const Field = sdk.getComponent('views.elements.Field');
 
         let matchText;
+        let changeText;
         if (this.state.passPhraseConfirm === this.state.passPhrase) {
             matchText = _t("That matches!");
+            changeText = _t("Use a different passphrase?");
         } else if (!this.state.passPhrase.startsWith(this.state.passPhraseConfirm)) {
             // only tell them they're wrong if they've actually gone wrong.
             // Security concious readers will note that if you left riot-web unattended
@@ -549,6 +552,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             // Note that not having typed anything at all will not hit this clause and
             // fall through so empty box === no hint.
             matchText = _t("That doesn't match.");
+            changeText = _t("Go back to set it again.");
         }
 
         let passPhraseMatch = null;
@@ -557,7 +561,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div>{matchText}</div>
                 <div>
                     <AccessibleButton element="span" className="mx_linkButton" onClick={this._onSetAgainClick}>
-                        {_t("Go back to set it again.")}
+                        {changeText}
                     </AccessibleButton>
                 </div>
             </div>;

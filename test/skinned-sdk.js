@@ -16,7 +16,6 @@ const components = {};
 components['structures.LeftPanel'] = stubComponent();
 components['structures.RightPanel'] = stubComponent();
 components['structures.RoomDirectory'] = stubComponent();
-components['views.globals.MatrixToolbar'] = stubComponent();
 components['views.globals.GuestWarningBar'] = stubComponent();
 components['views.globals.NewVersionBar'] = stubComponent();
 components['views.elements.Spinner'] = stubComponent({displayName: 'Spinner'});

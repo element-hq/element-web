@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
@@ -141,6 +141,12 @@ export default createReactClass({
     _changePassword: function(cli, oldPassword, newPassword) {
         const authDict = {
             type: 'm.login.password',
+            identifier: {
+                type: 'm.id.user',
+                user: cli.credentials.userId,
+            },
+            // TODO: Remove `user` once servers support proper UIA
+            // See https://github.com/matrix-org/synapse/issues/5665
             user: cli.credentials.userId,
             password: oldPassword,
         };
