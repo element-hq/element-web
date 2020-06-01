@@ -41,6 +41,7 @@ export interface IMatrixClientCreds {
     deviceId: string,
     accessToken: string,
     guest: boolean,
+    pickleKey?: string,
 }
 
 // TODO: Move this to the js-sdk
@@ -251,6 +252,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             accessToken: creds.accessToken,
             userId: creds.userId,
             deviceId: creds.deviceId,
+            pickleKey: creds.pickleKey,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),

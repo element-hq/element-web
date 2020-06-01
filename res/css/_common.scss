@@ -335,6 +335,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
     text-align: center;
 }
+.mx_Dialog_header.mx_Dialog_headerWithCancel > .mx_Dialog_title {
+    margin-right: 20px; // leave space for the 'X' cancel button
+}
 
 .mx_Dialog_title.danger {
     color: $warning-color;

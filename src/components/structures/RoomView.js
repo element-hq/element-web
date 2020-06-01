@@ -165,6 +165,8 @@ export default createReactClass({
             canReact: false,
             canReply: false,
 
+            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
         };
     },
@@ -195,6 +197,8 @@ export default createReactClass({
 
         this._roomView = createRef();
         this._searchResultsPanel = createRef();
+
+        this._layoutWatcherRef = SettingsStore.watchSetting("feature_irc_ui", null, this.onLayoutChange);
     },
 
     _onReadReceiptsChange: function() {
@@ -535,6 +539,14 @@ export default createReactClass({
         // no need to do this as Dir & Settings are now overlays. It just burnt CPU.
         // console.log("Tinter.tint from RoomView.unmount");
         // Tinter.tint(); // reset colourscheme
+
+        SettingsStore.unwatchSetting(this._layoutWatcherRef);
+    },
+
+    onLayoutChange: function() {
+        this.setState({
+            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+        });
     },
 
     _onRightPanelStoreUpdate: function() {
@@ -1996,6 +2008,13 @@ export default createReactClass({
             highlightedEventId = this.state.initialEventId;
         }
 
+        const messagePanelClassNames = classNames(
+            "mx_RoomView_messagePanel",
+            {
+                "mx_IRCLayout": this.state.useIRCLayout,
+                "mx_GroupLayout": !this.state.useIRCLayout,
+            });
+
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         const messagePanel = (
             <TimelinePanel
@@ -2011,11 +2030,12 @@ export default createReactClass({
                 onScroll={this.onMessageListScroll}
                 onReadMarkerUpdated={this._updateTopUnreadMessagesBar}
                 showUrlPreview = {this.state.showUrlPreview}
-                className="mx_RoomView_messagePanel"
+                className={messagePanelClassNames}
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}
                 showReactions={true}
+                useIRCLayout={this.state.useIRCLayout}
             />);
 
         let topUnreadMessagesBar = null;

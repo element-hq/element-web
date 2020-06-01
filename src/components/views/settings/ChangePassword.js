@@ -141,6 +141,12 @@ export default createReactClass({
     _changePassword: function(cli, oldPassword, newPassword) {
         const authDict = {
             type: 'm.login.password',
+            identifier: {
+                type: 'm.id.user',
+                user: cli.credentials.userId,
+            },
+            // TODO: Remove `user` once servers support proper UIA
+            // See https://github.com/matrix-org/synapse/issues/5665
             user: cli.credentials.userId,
             password: oldPassword,
         };

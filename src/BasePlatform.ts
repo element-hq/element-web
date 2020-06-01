@@ -21,6 +21,19 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 import {ActionPayload} from "./dispatcher/payloads";
+import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
+import {Action} from "./dispatcher/actions";
+import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
+
+export enum UpdateCheckStatus {
+    Checking = "CHECKING",
+    Error = "ERROR",
+    NotAvailable = "NOTAVAILABLE",
+    Downloading = "DOWNLOADING",
+    Ready = "READY",
+}
+
+const UPDATE_DEFER_KEY = "mx_defer_update";
 
 /**
  * Base class for classes that provide platform-specific functionality
@@ -54,6 +67,53 @@ export default abstract class BasePlatform {
 
     setErrorStatus(errorDidOccur: boolean) {
         this.errorDidOccur = errorDidOccur;
+    }
+
+    /**
+     * Whether we can call checkForUpdate on this platform build
+     */
+    async canSelfUpdate(): Promise<boolean> {
+        return false;
+    }
+
+    startUpdateCheck() {
+        hideUpdateToast();
+        localStorage.removeItem(UPDATE_DEFER_KEY);
+        dis.dispatch<CheckUpdatesPayload>({
+            action: Action.CheckUpdates,
+            status: UpdateCheckStatus.Checking,
+        });
+    }
+
+    /**
+     * Update the currently running app to the latest available version
+     * and replace this instance of the app with the new version.
+     */
+    installUpdate() {
+    }
+
+    /**
+     * Check if the version update has been deferred and that deferment is still in effect
+     * @param newVersion the version string to check
+     */
+    protected shouldShowUpdate(newVersion: string): boolean {
+        try {
+            const [version, deferUntil] = JSON.parse(localStorage.getItem(UPDATE_DEFER_KEY));
+            return newVersion !== version || Date.now() > deferUntil;
+        } catch (e) {
+            return true;
+        }
+    }
+
+    /**
+     * Ignore the pending update and don't prompt about this version
+     * until the next morning (8am).
+     */
+    deferUpdate(newVersion: string) {
+        const date = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        date.setHours(8, 0, 0, 0); // set to next 8am
+        localStorage.setItem(UPDATE_DEFER_KEY, JSON.stringify([newVersion, date.getTime()]));
+        hideUpdateToast();
     }
 
     /**
@@ -179,5 +239,36 @@ export default abstract class BasePlatform {
 
     onKeyDown(ev: KeyboardEvent): boolean {
         return false; // no shortcuts implemented
+    }
+
+    /**
+     * Get a previously stored pickle key.  The pickle key is used for
+     * encrypting libolm objects.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     * @returns {string|null} the previously stored pickle key, or null if no
+     *     pickle key has been stored.
+     */
+    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        return null;
+    }
+
+    /**
+     * Create and store a pickle key for encrypting libolm objects.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     * @returns {string|null} the pickle key, or null if the platform does not
+     *     support storing pickle keys.
+     */
+    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        return null;
+    }
+
+    /**
+     * Delete a previously stored pickle key from storage.
+     * @param {string} userId the user ID for the user that the pickle key is for.
+     * @param {string} userId the device ID that the pickle key is for.
+     */
+    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
     }
 }
