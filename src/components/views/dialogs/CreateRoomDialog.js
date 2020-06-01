@@ -195,6 +195,14 @@ export default createReactClass({
 
         let e2eeSection;
         if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+            let microcopy;
+            if (privateShouldBeEncrypted()) {
+                microcopy = _t("You can’t disable this later. Bridges & most bots won’t work yet.");
+            } else {
+                microcopy = _t("Your server admin has disabled end-to-end encryption by default " +
+                    "in private rooms & Direct Messages.");
+            }
+
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
                     label={ _t("Enable end-to-end encryption")}
@@ -202,7 +210,7 @@ export default createReactClass({
                     value={this.state.isEncrypted}
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
                 />
-                <p>{ _t("You can’t disable this later. Bridges & most bots won’t work yet.") }</p>
+                <p>{ microcopy }</p>
             </React.Fragment>;
         }
 
