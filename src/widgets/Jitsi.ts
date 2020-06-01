@@ -42,7 +42,7 @@ export class Jitsi {
         const discoveryResponse = cli && MatrixClientPeg.get().getClientWellKnown();
 
         if (cli) {
-            cli.on("WellKnown.client", this.update);
+            cli.on("WellKnown.client", () => this.update);
         }
 
         console.log("Attempting to get Jitsi conference information from homeserver");
