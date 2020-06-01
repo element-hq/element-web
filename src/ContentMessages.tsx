@@ -399,7 +399,12 @@ export default class ContentMessages {
             if (!shouldUpload) return;
         }
 
-        await this.ensureMediaConfigFetched();
+        if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
+            const Loader = sdk.getComponent("elements.Spinner");
+            const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
+            await this.ensureMediaConfigFetched();
+            modal.close();
+        }
 
         const tooBigFiles = [];
         const okFiles = [];
