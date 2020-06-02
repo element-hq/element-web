@@ -27,6 +27,7 @@ import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
 import encrypt from "browser-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
+import Spinner from "./components/views/elements/Spinner";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
@@ -399,7 +400,11 @@ export default class ContentMessages {
             if (!shouldUpload) return;
         }
 
-        await this.ensureMediaConfigFetched();
+        if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
+            const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+            await this.ensureMediaConfigFetched();
+            modal.close();
+        }
 
         const tooBigFiles = [];
         const okFiles = [];

@@ -22,6 +22,7 @@ import { _t } from './languageHandler';
 import {MatrixClientPeg} from './MatrixClientPeg';
 import GroupStore from './stores/GroupStore';
 import {allSettled} from "./utils/promise";
+import StyledCheckbox from './components/views/elements/StyledCheckbox';
 
 export function showGroupInviteDialog(groupId) {
     return new Promise((resolve, reject) => {
@@ -61,12 +62,12 @@ export function showGroupAddRoomDialog(groupId) {
             <div>{ _t("Which rooms would you like to add to this community?") }</div>
         </div>;
 
-        const checkboxContainer = <label className="mx_GroupAddressPicker_checkboxContainer">
-            <input type="checkbox" onChange={onCheckboxClicked} />
-            <div>
-                { _t("Show these rooms to non-members on the community page and room list?") }
-            </div>
-        </label>;
+        const checkboxContainer = <StyledCheckbox
+            className="mx_GroupAddressPicker_checkboxContainer"
+            onChange={onCheckboxClicked}
+        >
+            { _t("Show these rooms to non-members on the community page and room list?") }
+        </StyledCheckbox>;
 
         const AddressPickerDialog = sdk.getComponent("dialogs.AddressPickerDialog");
         Modal.createTrackedDialog('Add Rooms to Group', '', AddressPickerDialog, {

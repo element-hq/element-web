@@ -58,18 +58,15 @@ export default class Draggable extends React.Component<IProps, IState> {
 
         document.addEventListener("mousemove", this.state.onMouseMove);
         document.addEventListener("mouseup", this.state.onMouseUp);
-        console.log("Mouse down")
     }
 
     private onMouseUp = (event: MouseEvent): void => {
         document.removeEventListener("mousemove", this.state.onMouseMove);
         document.removeEventListener("mouseup", this.state.onMouseUp);
         this.props.onMouseUp(event);
-        console.log("Mouse up")
     }
 
     private onMouseMove(event: MouseEvent): void {
-        console.log("Mouse Move")
         const newLocation = this.props.dragFunc(this.state.location, event);
 
         this.setState({

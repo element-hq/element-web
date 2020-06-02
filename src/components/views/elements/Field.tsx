@@ -34,7 +34,7 @@ interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInput
     id?: string,
     // The element to create. Defaults to "input".
     // To define options for a select, use <Field><option ... /></Field>
-    element?: "input" | " select" | "textarea",
+    element?: "input" | "select" | "textarea",
     // The field's type (when used as an <input>). Defaults to "text".
     type?: string,
     // id of a <datalist> element for suggestions

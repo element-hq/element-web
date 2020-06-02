@@ -14,38 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from './dispatcher/dispatcher';
-import SettingsStore, {SettingLevel} from './settings/SettingsStore';
+import dis from '../../dispatcher/dispatcher';
+import SettingsStore, {SettingLevel} from '../SettingsStore';
+import IWatcher from "./Watcher";
+import { toPx } from '../../utils/units';
 
-export class FontWatcher {
-    static MIN_SIZE = 13;
-    static MAX_SIZE = 20;
+export class FontWatcher implements IWatcher {
+    public static readonly MIN_SIZE = 13;
+    public static readonly MAX_SIZE = 20;
+
+    private dispatcherRef: string;
 
     constructor() {
-        this._dispatcherRef = null;
+        this.dispatcherRef = null;
     }
 
-    start() {
-        this._setRootFontSize(SettingsStore.getValue("fontSize"));
-        this._dispatcherRef = dis.register(this._onAction);
+    public start() {
+        this.setRootFontSize(SettingsStore.getValue("fontSize"));
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
-    stop() {
-        dis.unregister(this._dispatcherRef);
+    public stop() {
+        dis.unregister(this.dispatcherRef);
     }
 
-    _onAction = (payload) => {
+    private onAction = (payload) => {
         if (payload.action === 'update-font-size') {
-            this._setRootFontSize(payload.size);
+            this.setRootFontSize(payload.size);
         }
     };
 
-    _setRootFontSize = (size) => {
+    private setRootFontSize = (size) => {
         const fontSize = Math.max(Math.min(FontWatcher.MAX_SIZE, size), FontWatcher.MIN_SIZE);
 
-        if (fontSize != size) {
+        if (fontSize !== size) {
             SettingsStore.setValue("fontSize", null, SettingLevel.Device, fontSize);
         }
-        document.querySelector(":root").style.fontSize = fontSize + "px";
+        (<HTMLElement>document.querySelector(":root")).style.fontSize = toPx(fontSize);
     };
 }

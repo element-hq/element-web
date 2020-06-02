@@ -116,6 +116,7 @@
 @import "./views/elements/_RoomAliasField.scss";
 @import "./views/elements/_Slider.scss";
 @import "./views/elements/_Spinner.scss";
+@import "./views/elements/_StyledCheckbox.scss";
 @import "./views/elements/_SyntaxHighlight.scss";
 @import "./views/elements/_TextWithTooltip.scss";
 @import "./views/elements/_ToggleSwitch.scss";
@@ -123,7 +124,6 @@
 @import "./views/elements/_TooltipButton.scss";
 @import "./views/elements/_Validation.scss";
 @import "./views/emojipicker/_EmojiPicker.scss";
-@import "./views/globals/_MatrixToolbar.scss";
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
@@ -202,6 +202,7 @@
 @import "./views/settings/_ProfileSettings.scss";
 @import "./views/settings/_SetIdServer.scss";
 @import "./views/settings/_SetIntegrationManager.scss";
+@import "./views/settings/_UpdateCheckButton.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_RolesRoomSettingsTab.scss";

@@ -63,6 +63,10 @@ limitations under the License.
     padding-left: 32px;
     padding-top: 8px;
     position: relative;
+
+    a {
+        display: flex;
+    }
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a,

@@ -1106,7 +1106,7 @@
     "Bug reporting": "Felrapportering",
     "FAQ": "FAQ",
     "Versions": "Versioner",
-    "Preferences": "Inställningar",
+    "Preferences": "Alternativ",
     "Timeline": "Tidslinje",
     "Room list": "Rumslista",
     "Autocomplete delay (ms)": "Autokompletteringsfördröjning (ms)",
@@ -1630,5 +1630,6 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End"
+    "End": "End",
+    "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Du har blivit utloggad från alla dina sessioner och kommer inte längre att motta pushnotiser. För att återaktivera pushnotiser, logga in igen på varje enhet."
 }

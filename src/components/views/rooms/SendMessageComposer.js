@@ -323,13 +323,8 @@ export default class SendMessageComposer extends React.Component {
         this._clearStoredEditorState();
     }
 
-    componentDidMount() {
-        this._editorRef.getEditableRootNode().addEventListener("paste", this._onPaste, true);
-    }
-
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
     // TODO: [REACT-WARNING] Move this to constructor
@@ -378,6 +373,9 @@ export default class SendMessageComposer extends React.Component {
             case 'quote':
                 this._insertQuotedMessage(payload.event);
                 break;
+            case 'insert_emoji':
+                this._insertEmoji(payload.emoji);
+                break;
         }
     };
 
@@ -415,6 +413,17 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef && this._editorRef.focus();
     }
 
+    _insertEmoji = (emoji) => {
+        const {model} = this;
+        const {partCreator} = model;
+        const caret = this._editorRef.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([partCreator.plain(emoji)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+    };
+
     _onPaste = (event) => {
         const {clipboardData} = event;
         if (clipboardData.files.length) {
@@ -425,6 +434,7 @@ export default class SendMessageComposer extends React.Component {
             ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );
+            return true; // to skip internal onPaste handler
         }
     }
 
@@ -441,6 +451,7 @@ export default class SendMessageComposer extends React.Component {
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onChange={this._saveStoredEditorState}
+                    onPaste={this._onPaste}
                 />
             </div>
         );
