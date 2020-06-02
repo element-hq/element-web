@@ -509,7 +509,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         } else {
             // if it's setting up from scratch then aborting leaves the user without
             // crypto set up, so they skipping the setup.
-            cancelButton = <button type="button" className="danger" onClick={this._onSkipSetupClick}>{_t('Skip')}</button>;
+            cancelButton = <button type="button"
+                className="danger" onClick={this._onSkipSetupClick}
+            >{_t('Skip')}</button>;
         }
 
         return <div>
