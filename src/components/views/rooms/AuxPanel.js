@@ -141,15 +141,6 @@ export default createReactClass({
         return counters;
     },
 
-    _onScroll: function(rect) {
-        if (this.props.onResize) {
-            this.props.onResize();
-        }
-
-        /* Force refresh of PersistedElements which may be partially hidden */
-        window.dispatchEvent(new Event('resize'));
-    },
-
     render: function() {
         const CallView = sdk.getComponent("voip.CallView");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
@@ -274,7 +265,7 @@ export default createReactClass({
         }
 
         return (
-            <AutoHideScrollbar className={classes} style={style} onScroll={this._onScroll}>
+            <AutoHideScrollbar className={classes} style={style} >
                 { stateViews }
                 { appsDrawer }
                 { fileDropTarget }
