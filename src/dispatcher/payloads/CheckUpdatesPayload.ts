@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_GroupAddressPicker_checkboxContainer {
-    margin-top: 10px;
-    display: flex;
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
+import {UpdateCheckStatus} from "../../BasePlatform";
+
+export interface CheckUpdatesPayload extends ActionPayload {
+    action: Action.CheckUpdates,
+
+    /**
+     * The current phase of the manual update check.
+     */
+    status: UpdateCheckStatus;
+
+    /**
+     * Detail string relating to the current status, typically for error details.
+     */
+    detail?: string;
 }

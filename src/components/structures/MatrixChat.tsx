@@ -173,7 +173,6 @@ interface IState {
     leftDisabled: boolean;
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
-    checkingForUpdate?: string; // updateCheckStatusEnum
     // Parameters used in the registration dance with the IS
     register_client_secret?: string;
     register_session_id?: string;
@@ -225,8 +224,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             collapseLhs: false,
             leftDisabled: false,
             middleDisabled: false,
-
-            checkingForUpdate: null,
 
             hideToSRUsers: false,
 
@@ -719,9 +716,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'client_started':
                 this.onClientStarted();
-                break;
-            case 'check_updates':
-                this.setState({ checkingForUpdate: payload.value });
                 break;
             case 'send_event':
                 this.onSendEvent(payload.room_id, payload.event);

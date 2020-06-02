@@ -74,6 +74,7 @@ function selectionEquals(a: Selection, b: Selection): boolean {
 export default class BasicMessageEditor extends React.Component {
     static propTypes = {
         onChange: PropTypes.func,
+        onPaste: PropTypes.func, // returns true if handled and should skip internal onPaste handler
         model: PropTypes.instanceOf(EditorModel).isRequired,
         room: PropTypes.instanceOf(Room).isRequired,
         placeholder: PropTypes.string,
@@ -254,6 +255,12 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _onPaste = (event) => {
+        event.preventDefault(); // we always handle the paste ourselves
+        if (this.props.onPaste && this.props.onPaste(event, this.props.model)) {
+            // to prevent double handling, allow props.onPaste to skip internal onPaste
+            return true;
+        }
+
         const {model} = this.props;
         const {partCreator} = model;
         const partsText = event.clipboardData.getData("application/x-riot-composer");
@@ -269,7 +276,6 @@ export default class BasicMessageEditor extends React.Component {
         this._modifiedFlag = true;
         const range = getRangeForSelection(this._editorRef, model, document.getSelection());
         replaceRangeAndMoveCaret(range, parts);
-        event.preventDefault();
     }
 
     _onInput = (event) => {
@@ -501,10 +507,6 @@ export default class BasicMessageEditor extends React.Component {
         } catch (err) {
             console.error(err);
         }
-    }
-
-    getEditableRootNode() {
-        return this._editorRef;
     }
 
     isModified() {

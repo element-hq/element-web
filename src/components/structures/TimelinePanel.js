@@ -112,6 +112,9 @@ const TimelinePanel = createReactClass({
 
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
+
+        // whether to use the irc layout
+        useIRCLayout: PropTypes.bool,
     },
 
     statics: {
@@ -1447,6 +1450,7 @@ const TimelinePanel = createReactClass({
                 getRelationsForEvent={this.getRelationsForEvent}
                 editState={this.state.editState}
                 showReactions={this.props.showReactions}
+                useIRCLayout={this.props.useIRCLayout}
             />
         );
     },
