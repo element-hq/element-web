@@ -23,13 +23,13 @@ import {
 import {
     hideToast as hideSetupEncryptionToast,
     Kind as SetupKind,
-    Kind,
     showToast as showSetupEncryptionToast
 } from "./toasts/SetupEncryptionToast";
 import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast
 } from "./toasts/UnverifiedSessionToast";
+import {privateShouldBeEncrypted} from "./createRoom";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -170,6 +170,14 @@ export default class DeviceListener {
         return this.keyBackupInfo;
     }
 
+    private shouldShowSetupEncryptionToast() {
+        // In a default configuration, show the toasts. If the well-known config causes e2ee default to be false
+        // then do not show the toasts until user is in at least one encrypted room.
+        if (privateShouldBeEncrypted()) return true;
+        const cli = MatrixClientPeg.get();
+        return cli && cli.getRooms().some(r => cli.isRoomEncrypted(r.roomId));
+    }
+
     async _recheck() {
         const cli = MatrixClientPeg.get();
 
@@ -188,7 +196,7 @@ export default class DeviceListener {
 
         if (this.dismissedThisDeviceToast || crossSigningReady) {
             hideSetupEncryptionToast();
-        } else {
+        } else if (this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
             await cli.downloadKeys([cli.getUserId()]);
             // cross signing isn't enabled - nag to enable it
@@ -200,10 +208,10 @@ export default class DeviceListener {
                 const backupInfo = await this._getKeyBackupInfo();
                 if (backupInfo) {
                     // No cross-signing on account but key backup available (upgrade encryption)
-                    showSetupEncryptionToast(Kind.UPGRADE_ENCRYPTION);
+                    showSetupEncryptionToast(SetupKind.UPGRADE_ENCRYPTION);
                 } else {
                     // No cross-signing or key backup on account (set up encryption)
-                    showSetupEncryptionToast(Kind.SET_UP_ENCRYPTION);
+                    showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
                 }
             }
         }
