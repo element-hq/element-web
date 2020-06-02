@@ -1244,5 +1244,14 @@
     "Join": "Únete",
     "Matrix rooms": "Salas Matrix",
     "Join millions for free on the largest public server": "Únete a millóns de persoas gratuitamente no maior servidor público",
-    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Se non atopas a sala que buscas, pide un convite ou <a>Crea unha nova sala</a>."
+    "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Se non atopas a sala que buscas, pide un convite ou <a>Crea unha nova sala</a>.",
+    "Match system theme": "Imitar o aspecto do sistema",
+    "Invalid theme schema.": "Esquema do decorado incorrecto.",
+    "Error downloading theme information.": "Erro ao descargar información do decorado.",
+    "Theme added!": "Decorado engadido!",
+    "Custom theme URL": "URL do decorado personalizado",
+    "Add theme": "Engadir decorado",
+    "Theme": "Decorado",
+    "Language and region": "Idioma e rexión",
+    "Your theme": "O teu decorado"
 }
