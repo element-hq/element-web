@@ -80,7 +80,7 @@
     "is-ip": "^2.0.0",
     "linkifyjs": "^2.1.6",
     "lodash": "^4.17.14",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-js-sdk": "6.2.0-rc.1",
     "minimist": "^1.2.0",
     "pako": "^1.0.5",
     "parse5": "^5.1.1",
@@ -164,7 +164,9 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
-    "setupFiles": ["jest-canvas-mock"],
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/test/setupTests.js"
     ],
