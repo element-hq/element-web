@@ -83,6 +83,11 @@ export default class SetupEncryptionBody extends React.Component {
         store.stop();
     }
 
+    _onResetClick = () => {
+        const store = SetupEncryptionStore.sharedInstance();
+        store.startKeyReset();
+    }
+
     _onUseRecoveryKeyClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
         store.useRecoveryKey();
@@ -226,6 +231,16 @@ export default class SetupEncryptionBody extends React.Component {
                             {_t("Skip")}
                         </AccessibleButton>
                     </div>
+                    <div className="mx_CompleteSecurity_resetText">{_t(
+                        "If you've forgotten your recovery key you can " +
+                        "<button>set up new recovery options</button>", {}, {
+                            button: sub => <AccessibleButton
+                                element="span" className="mx_linkButton" onClick={this._onResetClick}
+                            >
+                                {sub}
+                            </AccessibleButton>,
+                        },
+                    )}</div>
                 </div>
             );
         } else if (phase === PHASE_RECOVERY_KEY) {

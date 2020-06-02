@@ -81,6 +81,15 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
     }
 
+    async startKeyReset() {
+        try {
+            await accessSecretStorage(() => {}, {forceReset: true});
+            // If the keys are reset, the trust status event will fire and we'll change state
+        } catch (e) {
+            // dialog was cancelled - stay on the current screen
+        }
+    }
+
     async useRecoveryKey() {
         this.phase = PHASE_RECOVERY_KEY;
         this.emit("update");

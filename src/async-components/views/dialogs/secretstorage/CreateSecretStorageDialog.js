@@ -359,6 +359,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this.setState({phase: PHASE_CONFIRM_SKIP});
     }
 
+    _onGoBackClick = () => {
+        if (this.state.backupInfo && !this.props.force) {
+            this.setState({phase: PHASE_MIGRATE});
+        } else {
+            this.setState({phase: PHASE_INTRO});
+        }
+    }
+
     _onAccountPasswordChange = (e) => {
         this.setState({
             accountPassword: e.target.value,
@@ -492,6 +500,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhaseIntro() {
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
+
+        let cancelButton;
+        if (this.props.force) {
+            // if this is a forced key reset then aborting will just leave the old keys
+            // in place, and is thereforece just 'cancel'
+            cancelButton = <button type="button" onClick={this._onCancel}>{_t('Cancel')}</button>;
+        } else {
+            // if it's setting up from scratch then aborting leaves the user without
+            // crypto set up, so they skipping the setup.
+            cancelButton = <button type="button" className="danger" onClick={this._onSkipSetupClick}>{_t('Skip')}</button>;
+        }
+
         return <div>
             <p>{_t(
                 "Create a Recovery Key to store encryption keys & secrets with your account data. " +
@@ -502,7 +522,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     onPrimaryButtonClick={this._onIntroContinueClick}
                     hasCancel={false}
                 >
-                    <button type="button" className="danger" onClick={this._onCancel}>{_t('Skip')}</button>
+                    {cancelButton}
                 </DialogButtons>
             </div>
         </div>;
@@ -516,7 +536,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 "access to encrypted messages.",
         )}
             <DialogButtons primaryButton={_t('Go back')}
-                onPrimaryButtonClick={this._onSetUpClick}
+                onPrimaryButtonClick={this._onGoBackClick}
                 hasCancel={false}
             >
                 <button type="button" className="danger" onClick={this._onCancel}>{_t('Skip')}</button>
