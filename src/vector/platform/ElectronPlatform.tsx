@@ -457,8 +457,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    getSSOCallbackUrl(hsUrl: string, isUrl: string, fragmentAfterLogin: string): URL {
-        const url = super.getSSOCallbackUrl(hsUrl, isUrl, fragmentAfterLogin);
+    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+        const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "riot";
         url.searchParams.set("riot-desktop-ssoid", this.ssoID);
         return url;
