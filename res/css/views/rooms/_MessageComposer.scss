@@ -214,8 +214,12 @@ limitations under the License.
     mask-image: url('$(res)/img/feather-customised/video.svg');
 }
 
+.mx_MessageComposer_emoji::before {
+    mask-image: url('$(res)/img/feather-customised/emoji3.custom.svg');
+}
+
 .mx_MessageComposer_stickers::before {
-    mask-image: url('$(res)/img/feather-customised/face.svg');
+    mask-image: url('$(res)/img/feather-customised/sticker.custom.svg');
 }
 
 .mx_MessageComposer_formatting {
