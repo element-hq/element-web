@@ -373,6 +373,9 @@ export default class SendMessageComposer extends React.Component {
             case 'quote':
                 this._insertQuotedMessage(payload.event);
                 break;
+            case 'insert_emoji':
+                this._insertEmoji(payload.emoji);
+                break;
         }
     };
 
@@ -409,6 +412,17 @@ export default class SendMessageComposer extends React.Component {
         // refocus on composer, as we just clicked "Quote"
         this._editorRef && this._editorRef.focus();
     }
+
+    _insertEmoji = (emoji) => {
+        const {model} = this;
+        const {partCreator} = model;
+        const caret = this._editorRef.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([partCreator.plain(emoji)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+    };
 
     _onPaste = (event) => {
         const {clipboardData} = event;
