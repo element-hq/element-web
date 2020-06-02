@@ -94,7 +94,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         if (SettingsStore.getValue("feature_cross_signing")) {
             // If cross-signing is enabled, we reset the SSSS recovery passphrase (and cross-signing keys)
             this.props.onFinished(false);
-            accessSecretStorage(() => {}, /* forceReset = */ true);
+            accessSecretStorage(() => {}, {forceReset: true});
         } else {
             Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
                 import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
