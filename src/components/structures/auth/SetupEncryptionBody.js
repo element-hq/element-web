@@ -279,6 +279,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </AccessibleButton>
                     <AccessibleButton kind="primary"
                         disabled={!this.state.recoveryKeyCorrect}
+                        onClick={this._onRecoveryKeyFormSubmit}
                     >
                         {_t("Continue")}
                     </AccessibleButton>
