@@ -35,7 +35,6 @@ const STICKERPICKER_Z_INDEX = 3500;
 // Key to store the widget's AppTile under in PersistedElement
 const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
-// TODO figure out where to expose it now that the EmojiPicker has taken its place
 export default class Stickerpicker extends React.Component {
     static currentWidget;
 

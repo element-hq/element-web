@@ -120,7 +120,7 @@ const EmojiButton = ({addEmoji}) => {
         <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_emoji"
                            onClick={openMenu}
                            isExpanded={menuDisplayed}
-                           label={_t('Upload file')}
+                           label={_t('Emoji picker')}
                            inputRef={button}
         >
 
