@@ -1190,6 +1190,19 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
+"@types/fbemitter@*":
+  version "2.0.32"
+  resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
+  integrity sha1-jtIE2g9U6cjq7DGx7skeJRMtCCw=
+
+"@types/flux@^3.1.9":
+  version "3.1.9"
+  resolved "https://registry.yarnpkg.com/@types/flux/-/flux-3.1.9.tgz#ddfc9641ee2e2e6cb6cd730c6a48ef82e2076711"
+  integrity sha512-bSbDf4tTuN9wn3LTGPnH9wnSSLtR5rV7UPWFpM00NJ1pSTBwCzeZG07XsZ9lBkxwngrqjDtM97PLt5IuIdCQUA==
+  dependencies:
+    "@types/fbemitter" "*"
+    "@types/react" "*"
+
 "@types/glob@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.1.1.tgz#aa59a1c6e3fbc421e07ccd31a944c30eba521575"
