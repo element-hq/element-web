@@ -180,7 +180,7 @@ export const SETTINGS = {
     "fontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: 15,
+        default: 20,
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
