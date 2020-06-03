@@ -34,16 +34,19 @@ export class Jitsi {
         return this.domain || 'jitsi.riot.im';
     }
 
-    public async update(): Promise<any> {
+    public start() {
+        const cli = MatrixClientPeg.get();
+        cli.on("WellKnown.client", this.update);
+        const discoveryResponse = cli.getClientWellKnown();
+        if (discoveryResponse) {
+            // if we missed the first WellKnown.client event then call update anyway
+            this.update(discoveryResponse);
+        }
+    }
+
+    private update = async (discoveryResponse): Promise<any> => {
         // Start with a default of the config's domain
         let domain = (SdkConfig.get()['jitsi'] || {})['preferredDomain'] || 'jitsi.riot.im';
-
-        const cli = MatrixClientPeg.get();
-        const discoveryResponse = cli && MatrixClientPeg.get().getClientWellKnown();
-
-        if (cli) {
-            cli.on("WellKnown.client", () => this.update);
-        }
 
         console.log("Attempting to get Jitsi conference information from homeserver");
         if (discoveryResponse && discoveryResponse[JITSI_WK_PROPERTY]) {
@@ -54,7 +57,7 @@ export class Jitsi {
         // Put the result into memory for us to use later
         this.domain = domain;
         console.log("Jitsi conference domain:", this.preferredDomain);
-    }
+    };
 
     /**
      * Parses the given URL into the data needed for a Jitsi widget, if the widget
