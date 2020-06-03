@@ -33,7 +33,6 @@ import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
-import SettingsStore from '../../../settings/SettingsStore';
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
@@ -576,16 +575,14 @@ export default class InviteDialog extends React.PureComponent {
 
         const createRoomOptions = {inlineErrors: true};
 
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            // Check whether all users have uploaded device keys before.
-            // If so, enable encryption in the new room.
-            const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
-            if (!has3PidMembers) {
-                const client = MatrixClientPeg.get();
-                const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
-                if (allHaveDeviceKeys) {
-                    createRoomOptions.encryption = true;
-                }
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
+        if (!has3PidMembers) {
+            const client = MatrixClientPeg.get();
+            const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
+            if (allHaveDeviceKeys) {
+                createRoomOptions.encryption = true;
             }
         }
 

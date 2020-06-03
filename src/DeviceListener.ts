@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import SettingsStore from './settings/SettingsStore';
 import {
     hideToast as hideBulkUnverifiedSessionsToast,
     showToast as showBulkUnverifiedSessionsToast
@@ -173,10 +172,7 @@ export default class DeviceListener {
     async _recheck() {
         const cli = MatrixClientPeg.get();
 
-        if (
-            !SettingsStore.getValue("feature_cross_signing") ||
-            !await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
-        ) return;
+        if (!await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) return;
 
         if (!cli.isCryptoEnabled()) return;
         // don't recheck until the initial sync is complete: lots of account data events will fire

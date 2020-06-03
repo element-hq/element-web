@@ -20,10 +20,8 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
-import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
-import SettingsStore from "../../../../settings/SettingsStore";
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
@@ -90,21 +88,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
     _onResetRecoveryClick = () => {
         this.props.onFinished(false);
-
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            // If cross-signing is enabled, we reset the SSSS recovery passphrase (and cross-signing keys)
-            this.props.onFinished(false);
-            accessSecretStorage(() => {}, /* forceReset = */ true);
-        } else {
-            Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-                import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
-                {
-                    onFinished: () => {
-                        this._loadBackupStatus();
-                    },
-                }, null, /* priority = */ false, /* static = */ true,
-            );
-        }
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
