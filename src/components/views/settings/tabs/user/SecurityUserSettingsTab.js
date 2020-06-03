@@ -26,6 +26,7 @@ import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
+import {privateShouldBeEncrypted} from "../../../../../createRoom";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -317,8 +318,17 @@ export default class SecurityUserSettingsTab extends React.Component {
 
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
 
+        let warning;
+        if (!privateShouldBeEncrypted()) {
+            warning = <div className="mx_SecurityUserSettingsTab_warning">
+                { _t("Your server admin has disabled end-to-end encryption by default " +
+                    "in private rooms & Direct Messages.") }
+            </div>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
+                {warning}
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>

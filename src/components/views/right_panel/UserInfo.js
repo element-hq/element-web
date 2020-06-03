@@ -25,7 +25,7 @@ import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
+import createRoom, {privateShouldBeEncrypted} from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -108,15 +108,17 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    // Check whether all users have uploaded device keys before.
-    // If so, enable encryption in the new room.
-    const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
-    const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
-        // `devices` is an object of the form { deviceId: deviceInfo, ... }.
-        return Object.keys(devices).length > 0;
-    });
-    if (allHaveDeviceKeys) {
-        createRoomOptions.encryption = true;
+    if (privateShouldBeEncrypted()) {
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
+        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
+            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
+            return Object.keys(devices).length > 0;
+        });
+        if (allHaveDeviceKeys) {
+            createRoomOptions.encryption = true;
+        }
     }
 
     createRoom(createRoomOptions);
