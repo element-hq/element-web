@@ -21,14 +21,13 @@ import { _t, _td } from "../../../languageHandler";
 import { Layout } from '../../../resizer/distributors/roomsublist2';
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStore2 } from "../../../stores/room-list/RoomListStore2";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
 import dis from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
-import { IFilterCondition } from "../../../stores/room-list/filters/IFilterCondition";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 
 /*******************************************************************
@@ -50,6 +49,7 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
+    heights: Map<TagID, number>;
 }
 
 const TAG_ORDER: TagID[] = [
@@ -133,13 +133,16 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     private unfilteredLayout: Layout;
     private filteredLayout: Layout;
     private searchFilter: NameFilterCondition = new NameFilterCondition();
+    private currentTagResize: TagID = null;
 
     constructor(props: IProps) {
         super(props);
 
-        this.state = {sublists: {}};
+        this.state = {
+            sublists: {},
+            heights: new Map<TagID, number>(),
+        };
         this.loadSublistSizes();
-        this.prepareLayouts();
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
@@ -158,9 +161,16 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store) => {
-            console.log("new lists", store.orderedLists);
-            this.setState({sublists: store.orderedLists});
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store: RoomListStore2) => {
+            const newLists = store.orderedLists;
+            console.log("new lists", newLists);
+
+            const heightMap = new Map<TagID, number>();
+            for (const tagId of Object.keys(newLists)) {
+                heightMap.set(tagId, store.layout.getPixelHeight(tagId));
+            }
+
+            this.setState({sublists: newLists, heights: heightMap});
         });
     }
 
@@ -177,32 +187,24 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.sublistCollapseStates));
     }
 
-    private prepareLayouts() {
-        // TODO: Change layout engine for FTUE support
-        this.unfilteredLayout = new Layout((tagId: string, height: number) => {
-            const sublist = this.sublistRefs[tagId];
-            if (sublist) sublist.current.setHeight(height);
+    private onResizerMouseDown = (ev: React.MouseEvent) => {
+        const hr = ev.target as HTMLHRElement;
+        this.currentTagResize = hr.getAttribute("data-id");
+    };
 
-            // TODO: Check overflow (see old impl)
+    private onResizerMouseUp = (ev: React.MouseEvent) => {
+        this.currentTagResize = null;
+    };
 
-            // Don't store a height for collapsed sublists
-            if (!this.sublistCollapseStates[tagId]) {
-                this.sublistSizes[tagId] = height;
-                this.saveSublistSizes();
-            }
-        }, this.sublistSizes, this.sublistCollapseStates, {
-            allowWhitespace: false,
-            handleHeight: 1,
-        });
-
-        this.filteredLayout = new Layout((tagId: string, height: number) => {
-            const sublist = this.sublistRefs[tagId];
-            if (sublist) sublist.current.setHeight(height);
-        }, null, null, {
-            allowWhitespace: false,
-            handleHeight: 0,
-        });
-    }
+    private onMouseMove = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        if (this.currentTagResize) {
+            const pixelHeight = this.state.heights.get(this.currentTagResize);
+            RoomListStore.instance.layout.setPixelHeight(this.currentTagResize, pixelHeight + ev.movementY);
+            this.state.heights.set(this.currentTagResize, RoomListStore.instance.layout.getPixelHeight(this.currentTagResize));
+            this.forceUpdate();
+        }
+    };
 
     private renderSublists(): React.ReactElement[] {
         const components: React.ReactElement[] = [];
@@ -235,6 +237,14 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                 onAddRoom={onAddRoomFn}
                 addRoomLabel={aesthetics.addRoomLabel}
                 isInvite={aesthetics.isInvite}
+                height={this.state.heights.get(orderedTagId)}
+            />);
+            components.push(<hr
+                key={`resizer-${orderedTagId}`}
+                data-id={orderedTagId}
+                className="mx_RoomList2_resizer"
+                onMouseDown={this.onResizerMouseDown}
+                onMouseUp={this.onResizerMouseUp}
             />);
         }
 
@@ -250,7 +260,9 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        className="mx_RoomList"
+                        onMouseUp={this.onResizerMouseUp}
+                        onMouseMove={this.onMouseMove}
+                        className="mx_RoomList mx_RoomList2"
                         role="tree"
                         aria-label={_t("Rooms")}
                         // Firefox sometimes makes this element focusable due to

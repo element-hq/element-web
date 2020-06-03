@@ -45,9 +45,9 @@ interface IProps {
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
+    height: number; // pixels
 
     // TODO: Collapsed state
-    // TODO: Height
     // TODO: Group invites
     // TODO: Calls
     // TODO: forceExpand?
@@ -60,10 +60,6 @@ interface IState {
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef();
-
-    public setHeight(size: number) {
-        // TODO: Do a thing (maybe - height changes are different in FTUE)
-    }
 
     private hasTiles(): boolean {
         return this.numTiles > 0;
@@ -205,9 +201,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // TODO: Lazy list rendering
             // TODO: Whatever scrolling magic needs to happen here
             content = (
-                <IndicatorScrollbar className='mx_RoomSubList_scroll'>
-                    {tiles}
-                </IndicatorScrollbar>
+                <IndicatorScrollbar
+                    className='mx_RoomSubList_scroll'
+                    style={{height: `${this.props.height}px`}}
+                >{tiles}</IndicatorScrollbar>
             )
         }
 
