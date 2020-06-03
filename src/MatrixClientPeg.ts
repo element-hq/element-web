@@ -210,7 +210,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         // the react sdk doesn't work without this, so don't allow
         opts.pendingEventOrdering = "detached";
         opts.lazyLoadMembers = true;
-        opts.clientWellKnownPollPeriod = 4 * 60 * 60; // 4 hours
+        opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
 
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);
