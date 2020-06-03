@@ -20,24 +20,138 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
 import { ITagMap, ITagSortingMap } from "../models";
 import DMRoomMap from "../../../../utils/DMRoomMap";
+import { FILTER_CHANGED, IFilterCondition } from "../../filters/IFilterCondition";
+import { EventEmitter } from "events";
 
 // TODO: Add locking support to avoid concurrent writes?
-// TODO: EventEmitter support? Might not be needed.
+
+/**
+ * Fired when the Algorithm has determined a list has been updated.
+ */
+export const LIST_UPDATED_EVENT = "list_updated_event";
 
 /**
  * Represents a list ordering algorithm. This class will take care of tag
  * management (which rooms go in which tags) and ask the implementation to
  * deal with ordering mechanics.
  */
-export abstract class Algorithm {
-    protected cached: ITagMap = {};
+export abstract class Algorithm extends EventEmitter {
+    private _cachedRooms: ITagMap = {};
+    private filteredRooms: ITagMap = {};
+
     protected sortAlgorithms: ITagSortingMap;
     protected rooms: Room[] = [];
     protected roomIdsToTags: {
         [roomId: string]: TagID[];
     } = {};
+    protected allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
+    protected allowedRoomsByFilters: Set<Room> = new Set<Room>();
 
     protected constructor() {
+        super();
+    }
+
+    protected get hasFilters(): boolean {
+        return this.allowedByFilter.size > 0;
+    }
+
+    protected set cachedRooms(val: ITagMap) {
+        this._cachedRooms = val;
+        this.recalculateFilteredRooms();
+    }
+
+    protected get cachedRooms(): ITagMap {
+        return this._cachedRooms;
+    }
+
+    /**
+     * Sets the filter conditions the Algorithm should use.
+     * @param filterConditions The filter conditions to use.
+     */
+    public setFilterConditions(filterConditions: IFilterCondition[]): void {
+        for (const filter of filterConditions) {
+            this.addFilterCondition(filter);
+        }
+    }
+
+    public addFilterCondition(filterCondition: IFilterCondition): void {
+        // Populate the cache of the new filter
+        this.allowedByFilter.set(filterCondition, this.rooms.filter(r => filterCondition.isVisible(r)));
+        this.recalculateFilteredRooms();
+        filterCondition.on(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+    }
+
+    public removeFilterCondition(filterCondition: IFilterCondition): void {
+        filterCondition.off(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+        if (this.allowedByFilter.has(filterCondition)) {
+            this.allowedByFilter.delete(filterCondition);
+
+            // If we removed the last filter, tell consumers that we've "updated" our filtered
+            // view. This will trick them into getting the complete room list.
+            if (!this.hasFilters) {
+                this.emit(LIST_UPDATED_EVENT);
+            }
+        }
+    }
+
+    protected recalculateFilteredRooms() {
+        if (!this.hasFilters) {
+            return;
+        }
+
+        console.warn("Recalculating filtered room list");
+        const allowedByFilters = new Set<Room>();
+        const filters = Array.from(this.allowedByFilter.keys());
+        const newMap: ITagMap = {};
+        for (const tagId of Object.keys(this.cachedRooms)) {
+            // Cheaply clone the rooms so we can more easily do operations on the list.
+            // We optimize our lookups by trying to reduce sample size as much as possible
+            // to the rooms we know will be deduped by the Set.
+            const rooms = this.cachedRooms[tagId];
+            const remainingRooms = rooms.map(r => r).filter(r => !allowedByFilters.has(r));
+            const allowedRoomsInThisTag = [];
+            for (const filter of filters) {
+                const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
+                for (const room of filteredRooms) {
+                    const idx = remainingRooms.indexOf(room);
+                    if (idx >= 0) remainingRooms.splice(idx, 1);
+                    allowedByFilters.add(room);
+                    allowedRoomsInThisTag.push(room);
+                }
+            }
+            newMap[tagId] = allowedRoomsInThisTag;
+            console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
+        }
+
+        this.allowedRoomsByFilters = allowedByFilters;
+        this.filteredRooms = newMap;
+        this.emit(LIST_UPDATED_EVENT);
+    }
+
+    protected addPossiblyFilteredRoomsToTag(tagId: TagID, added: Room[]): void {
+        const filters = this.allowedByFilter.keys();
+        for (const room of added) {
+            for (const filter of filters) {
+                if (filter.isVisible(room)) {
+                    this.allowedRoomsByFilters.add(room);
+                    break;
+                }
+            }
+        }
+
+        // Now that we've updated the allowed rooms, recalculate the tag
+        this.recalculateFilteredRoomsForTag(tagId);
+    }
+
+    protected recalculateFilteredRoomsForTag(tagId: TagID): void {
+        console.log(`Recalculating filtered rooms for ${tagId}`);
+        delete this.filteredRooms[tagId];
+        const rooms = this.cachedRooms[tagId];
+        const filteredRooms = rooms.filter(r => this.allowedRoomsByFilters.has(r));
+        if (filteredRooms.length > 0) {
+            this.filteredRooms[tagId] = filteredRooms;
+        }
+        console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
     }
 
     /**
@@ -54,12 +168,15 @@ export abstract class Algorithm {
     }
 
     /**
-     * Gets an ordered set of rooms for the all known tags.
+     * Gets an ordered set of rooms for the all known tags, filtered.
      * @returns {ITagMap} The cached list of rooms, ordered,
      * for each tag. May be empty, but never null/undefined.
      */
     public getOrderedRooms(): ITagMap {
-        return this.cached;
+        if (!this.hasFilters) {
+            return this.cachedRooms;
+        }
+        return this.filteredRooms;
     }
 
     /**
@@ -83,7 +200,7 @@ export abstract class Algorithm {
         // If we can avoid doing work, do so.
         if (!rooms.length) {
             await this.generateFreshTags(newTags); // just in case it wants to do something
-            this.cached = newTags;
+            this.cachedRooms = newTags;
             return;
         }
 
@@ -130,7 +247,7 @@ export abstract class Algorithm {
 
         await this.generateFreshTags(newTags);
 
-        this.cached = newTags;
+        this.cachedRooms = newTags;
         this.updateTagsFromCache();
     }
 
@@ -140,9 +257,9 @@ export abstract class Algorithm {
     protected updateTagsFromCache() {
         const newMap = {};
 
-        const tags = Object.keys(this.cached);
+        const tags = Object.keys(this.cachedRooms);
         for (const tagId of tags) {
-            const rooms = this.cached[tagId];
+            const rooms = this.cachedRooms[tagId];
             for (const room of rooms) {
                 if (!newMap[room.roomId]) newMap[room.roomId] = [];
                 newMap[room.roomId].push(tagId);

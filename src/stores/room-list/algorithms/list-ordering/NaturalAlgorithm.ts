@@ -49,7 +49,7 @@ export class NaturalAlgorithm extends Algorithm {
         for (const tag of tags) {
             // TODO: Optimize this loop to avoid useless operations
             // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
-            this.cached[tag] = await sortRoomsWithAlgorithm(this.cached[tag], tag, this.sortAlgorithms[tag]);
+            this.cachedRooms[tag] = await sortRoomsWithAlgorithm(this.cachedRooms[tag], tag, this.sortAlgorithms[tag]);
         }
         return true; // assume we changed something
     }
