@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -306,9 +306,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         // in having advanced details here once all flows are implemented, we
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
-        let crossSigning;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            crossSigning = (
+        const crossSigning = (
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -316,7 +314,6 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </div>
                 </div>
             );
-        }
 
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
 

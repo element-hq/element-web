@@ -23,7 +23,6 @@ import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
-import SettingsStore from "./settings/SettingsStore";
 
 /**
  * Create a new room, and switch to it.
@@ -226,10 +225,7 @@ export async function ensureDMExists(client, userId) {
     if (existingDMRoom) {
         roomId = existingDMRoom.roomId;
     } else {
-        let encryption;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            encryption = canEncryptToAllUsers(client, [userId]);
-        }
+        const encryption = canEncryptToAllUsers(client, [userId]);
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);
     }

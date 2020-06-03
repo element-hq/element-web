@@ -194,6 +194,8 @@ export default class CrossSigningPanel extends React.PureComponent {
                 </div>
             );
         }
+
+        // TODO: determine how better to expose this to users in addition to prompts at login/toast
         let bootstrapButton;
         if (
             (!enabledForAccount || !crossSigningPublicKeysOnDevice) &&

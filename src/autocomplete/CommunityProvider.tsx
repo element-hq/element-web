@@ -90,11 +90,12 @@ export default class CommunityProvider extends AutocompleteProvider {
                 type: "community",
                 href: makeGroupPermalink(groupId),
                 component: (
-                    <PillCompletion initialComponent={
+                    <PillCompletion title={name} description={groupId}>
                         <BaseAvatar name={name || groupId}
-                                    width={24} height={24}
+                                    width={24}
+                                    height={24}
                                     url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
-                    } title={name} description={groupId} />
+                    </PillCompletion>
                 ),
                 range,
             }))

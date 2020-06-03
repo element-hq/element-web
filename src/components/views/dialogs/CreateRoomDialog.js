@@ -24,7 +24,6 @@ import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
-import SettingsStore from "../../../settings/SettingsStore";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -66,7 +65,7 @@ export default createReactClass({
             createOpts.creation_content = {'m.federate': false};
         }
 
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
             opts.encryption = this.state.isEncrypted;
         }
 
@@ -193,7 +192,7 @@ export default createReactClass({
         }
 
         let e2eeSection;
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
                     label={ _t("Enable end-to-end encryption")}

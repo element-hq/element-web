@@ -60,7 +60,6 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher/dispatcher';
-import { showUnknownDeviceDialogForCalls } from './cryptodevices';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
@@ -119,62 +118,22 @@ function pause(audioId) {
     }
 }
 
-function _reAttemptCall(call) {
-    if (call.direction === 'outbound') {
-        dis.dispatch({
-            action: 'place_call',
-            room_id: call.roomId,
-            type: call.type,
-        });
-    } else {
-        call.answer();
-    }
-}
-
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error:", err);
-        if (err.code === 'unknown_devices') {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
-                title: _t('Call Failed'),
-                description: _t(
-                    "There are unknown sessions in this room: "+
-                    "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call.",
-                ),
-                button: _t('Review Sessions'),
-                onFinished: function(confirmed) {
-                    if (confirmed) {
-                        const room = MatrixClientPeg.get().getRoom(call.roomId);
-                        showUnknownDeviceDialogForCalls(
-                            MatrixClientPeg.get(),
-                            room,
-                            () => {
-                                _reAttemptCall(call);
-                            },
-                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
-                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
-                        );
-                    }
-                },
-            });
-        } else {
-            if (
-                MatrixClientPeg.get().getTurnServers().length === 0 &&
-                SettingsStore.getValue("fallbackICEServerAllowed") === null
-            ) {
-                _showICEFallbackPrompt();
-                return;
-            }
-
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
-                title: _t('Call Failed'),
-                description: err.message,
-            });
+        if (
+            MatrixClientPeg.get().getTurnServers().length === 0 &&
+            SettingsStore.getValue("fallbackICEServerAllowed") === null
+        ) {
+            _showICEFallbackPrompt();
+            return;
         }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+            title: _t('Call Failed'),
+            description: err.message,
+        });
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {forwardRef} from 'react';
 import classNames from 'classnames';
 
 /* These were earlier stateless functional components but had to be converted
@@ -30,50 +30,37 @@ interface ITextualCompletionProps {
     className?: string;
 }
 
-export class TextualCompletion extends React.PureComponent<ITextualCompletionProps> {
-    render() {
-        const {
-            title,
-            subtitle,
-            description,
-            className,
-            ...restProps
-        } = this.props;
-        return (
-            <div className={classNames('mx_Autocomplete_Completion_block', className)} role="option" {...restProps}>
-                <span className="mx_Autocomplete_Completion_title">{ title }</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
-                <span className="mx_Autocomplete_Completion_description">{ description }</span>
-            </div>
-        );
-    }
+export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props, ref) => {
+    const {title, subtitle, description, className, ...restProps} = props;
+    return (
+        <div {...restProps}
+             className={classNames('mx_Autocomplete_Completion_block', className)}
+             role="option"
+             ref={ref}
+        >
+            <span className="mx_Autocomplete_Completion_title">{ title }</span>
+            <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+            <span className="mx_Autocomplete_Completion_description">{ description }</span>
+        </div>
+    );
+});
+
+interface IPillCompletionProps extends ITextualCompletionProps {
+    children?: React.ReactNode,
 }
 
-interface IPillCompletionProps {
-    title?: string;
-    subtitle?: string;
-    description?: string;
-    initialComponent?: React.ReactNode,
-    className?: string;
-}
-
-export class PillCompletion extends React.PureComponent<IPillCompletionProps> {
-    render() {
-        const {
-            title,
-            subtitle,
-            description,
-            initialComponent,
-            className,
-            ...restProps
-        } = this.props;
-        return (
-            <div className={classNames('mx_Autocomplete_Completion_pill', className)} role="option" {...restProps}>
-                { initialComponent }
-                <span className="mx_Autocomplete_Completion_title">{ title }</span>
-                <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
-                <span className="mx_Autocomplete_Completion_description">{ description }</span>
-            </div>
-        );
-    }
-}
+export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref) => {
+    const {title, subtitle, description, className, children, ...restProps} = props;
+    return (
+        <div {...restProps}
+             className={classNames('mx_Autocomplete_Completion_pill', className)}
+             role="option"
+             ref={ref}
+        >
+            { children }
+            <span className="mx_Autocomplete_Completion_title">{ title }</span>
+            <span className="mx_Autocomplete_Completion_subtitle">{ subtitle }</span>
+            <span className="mx_Autocomplete_Completion_description">{ description }</span>
+        </div>
+    );
+});

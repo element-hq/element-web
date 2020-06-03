@@ -21,7 +21,6 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import SettingsStore from '../../../settings/SettingsStore';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -316,7 +315,7 @@ export default class KeyBackupPanel extends React.PureComponent {
                 trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 
-            let buttonRow = (
+            const buttonRow = (
                 <div className="mx_KeyBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         {restoreButtonCaption}
@@ -326,13 +325,6 @@ export default class KeyBackupPanel extends React.PureComponent {
                     </AccessibleButton>
                 </div>
             );
-            if (this.state.backupKeyStored && !SettingsStore.getValue("feature_cross_signing")) {
-                buttonRow = <p>⚠️ {_t(
-                    "Backup key stored in secret storage, but this feature is not " +
-                    "enabled on this session. Please enable cross-signing in Labs to " +
-                    "modify key backup state.",
-                )}</p>;
-            }
 
             return <div>
                 <div>{clientBackupStatus}</div>
