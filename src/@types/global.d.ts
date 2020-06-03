@@ -31,6 +31,12 @@ declare global {
         // https://developer.mozilla.org/en-US/docs/Web/API/InstallTrigger
         InstallTrigger: any;
     }
+
+    interface Navigator {
+        // PWA badging extensions https://w3c.github.io/badging/
+        setAppBadge?(count: number): Promise<void>;
+        clearAppBadge?(): Promise<void>;
+    }
 }
 
 // add method which is missing from the node typing
