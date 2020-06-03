@@ -25,7 +25,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import SSOButton from "../../views/elements/SSOButton";
-import {HS_URL_LS_KEY, IS_URL_LS_KEY} from "../../../BasePlatform";
+import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "../../../BasePlatform";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -158,8 +158,8 @@ export default class SoftLogout extends React.Component {
     async trySsoLogin() {
         this.setState({busy: true});
 
-        const hsUrl = localStorage.getItem(HS_URL_LS_KEY);
-        const isUrl = localStorage.getItem(IS_URL_LS_KEY) || MatrixClientPeg.get().getIdentityServerUrl();
+        const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+        const isUrl = localStorage.getItem(ID_SERVER_URL_KEY) || MatrixClientPeg.get().getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
             token: this.props.realQueryParams['loginToken'],

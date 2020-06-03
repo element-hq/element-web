@@ -41,7 +41,7 @@ import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
-import {HS_URL_LS_KEY, IS_URL_LS_KEY} from "./BasePlatform";
+import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "./BasePlatform";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -164,8 +164,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    const homeserver = localStorage.getItem(HS_URL_LS_KEY);
-    const identityServer = localStorage.getItem(IS_URL_LS_KEY);
+    const homeserver = localStorage.getItem(HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(ID_SERVER_URL_KEY);
     if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);
@@ -259,8 +259,8 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
  * @returns {Object} Information about the session - see implementation for variables.
  */
 export function getLocalStorageSessionVars() {
-    const hsUrl = localStorage.getItem(HS_URL_LS_KEY);
-    const isUrl = localStorage.getItem(IS_URL_LS_KEY);
+    const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+    const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
     const accessToken = localStorage.getItem("mx_access_token");
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
@@ -489,9 +489,9 @@ function _showStorageEvictedDialog() {
 class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
-    localStorage.setItem(HS_URL_LS_KEY, credentials.homeserverUrl);
+    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
-        localStorage.setItem(IS_URL_LS_KEY, credentials.identityServerUrl);
+        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
     }
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_access_token", credentials.accessToken);
