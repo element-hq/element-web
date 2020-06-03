@@ -389,10 +389,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         let authPrompt;
         let nextCaption = _t("Next");
         if (!this.state.backupSigStatus.usable) {
-            authPrompt = <div>
-                <div>{_t("Restore your key backup to upgrade your encryption")}</div>
-            </div>;
-            nextCaption = _t("Restore");
+            authPrompt = null;
+            nextCaption = _t("Upload");
         } else if (this.state.canUploadKeysWithPasswordOnly && !this.props.accountPassword) {
             authPrompt = <div>
                 <div>{_t("Enter your account password to confirm the upgrade:")}</div>
@@ -413,9 +411,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         return <form onSubmit={this._onMigrateFormSubmit}>
             <p>{_t(
-                "Upgrade this session to allow it to verify other sessions, " +
-                "granting them access to encrypted messages and marking them " +
-                "as trusted for other users.",
+                "Upgrade your Recovery Key to store encryption keys & secrets " +
+                "with your account data. If you lose access to this login you'll " +
+                "need it to unlock your data.",
             )}</p>
             <div>{authPrompt}</div>
             <DialogButtons
@@ -547,7 +545,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_INTRO:
                 return _t('Create a Recovery Key');
             case PHASE_MIGRATE:
-                return _t('Upgrade your encryption');
+                return _t('Upgrade your Recovery Key');
             case PHASE_CONFIRM_SKIP:
                 return _t('Are you sure?');
             case PHASE_SHOWKEY:
