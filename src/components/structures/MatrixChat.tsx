@@ -1900,7 +1900,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return setLoggedInPromise;
         }
 
-        if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
+        // Test for the master cross-signing key in SSSS as a quick proxy for
+        // whether cross-signing has been set up on the account.
+        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
+        if (masterKeyInStorage) {
+            this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
+        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
