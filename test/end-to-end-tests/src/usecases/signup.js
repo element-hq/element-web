@@ -79,7 +79,7 @@ module.exports = async function signup(session, username, password, homeserver) 
     const acceptButton = await session.query('.mx_InteractiveAuthEntryComponents_termsSubmit');
     await acceptButton.click();
 
-    let xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
+    const xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
     //ignore the recovery key
@@ -88,7 +88,9 @@ module.exports = async function signup(session, username, password, homeserver) 
     await copyButton.click();
 
     //acknowledge that we copied the recovery key to a safe place
-    const copyContinueButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
+    const copyContinueButton = await session.query(
+        '.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary',
+    );
     await copyContinueButton.click();
 
     //wait for registration to finish so the hash gets set
