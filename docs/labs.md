@@ -72,22 +72,6 @@ An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/224
 
 This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
 
-## Cross-signing
-
-Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
-improves the device verification experience by allowing you to verify a user
-instead of verifying each of their devices.
-
-The feature is enabled by default and does not follow a traditional labs flag
-at the moment. If something goes wrong, add this to your config to disable it:
-```json
-{
-  "settingDefaults": {
-    "feature_cross_signing": false  
-  }
-}
-```
-
 The setting will be removed in a future release, enabling it non-optionally for
 all users.
 
