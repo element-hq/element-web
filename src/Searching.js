@@ -184,17 +184,8 @@ async function localPagination(searchResult) {
     return result;
 }
 
-/**
- * Combine the local and server search results
- */
-function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
+function combineEvents(localEvents = undefined, serverEvents = undefined, cachedEvents = undefined) {
     const response = {};
-
-    if (previousSearchResult.count) {
-        response.count = previousSearchResult.count;
-    } else {
-        response.count = localEvents.count + serverEvents.count;
-    }
 
     if (localEvents && serverEvents) {
         response.results = localEvents.results.concat(serverEvents.results).sort(compareEvents);
@@ -205,6 +196,21 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
     } else {
         response.results = serverEvents.results;
         response.highlights = serverEvents.highlights;
+    }
+
+    return response;
+}
+
+/**
+ * Combine the local and server search responses
+ */
+function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
+    const response = combineEvents(localEvents, serverEvents);
+
+    if (previousSearchResult.count) {
+        response.count = previousSearchResult.count;
+    } else {
+        response.count = localEvents.count + serverEvents.count;
     }
 
     if (localEvents) {
