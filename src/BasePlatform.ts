@@ -25,8 +25,8 @@ import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
 import {Action} from "./dispatcher/actions";
 import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
 
-export const HS_URL_LS_KEY = "mx_hs_url";
-export const IS_URL_LS_KEY = "mx_is_url";
+export const HOMESERVER_URL_KEY = "mx_hs_url";
+export const ID_SERVER_URL_KEY = "mx_is_url";
 
 export enum UpdateCheckStatus {
     Checking = "CHECKING",
@@ -235,9 +235,9 @@ export default abstract class BasePlatform {
      */
     startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
         // persist hs url and is url for when the user is returned to the app with the login token
-        localStorage.setItem(HS_URL_LS_KEY, mxClient.getHomeserverUrl());
+        localStorage.setItem(HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
         if (mxClient.getIdentityServerUrl()) {
-            localStorage.setItem(IS_URL_LS_KEY, mxClient.getIdentityServerUrl());
+            localStorage.setItem(ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
         }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
