@@ -26,7 +26,6 @@ import * as VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
-import RoomList2 from "../views/rooms/RoomList2";
 import {Action} from "../../dispatcher/actions";
 
 
@@ -275,28 +274,15 @@ const LeftPanel = createReactClass({
             breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
         }
 
-        let roomList = null;
-        if (SettingsStore.isFeatureEnabled("feature_new_room_list")) {
-            roomList = <RoomList2
-                onKeyDown={this._onKeyDown}
-                resizeNotifier={this.props.resizeNotifier}
-                collapsed={this.props.collapsed}
-                searchFilter={this.state.searchFilter}
-                ref={this.collectRoomList}
-                onFocus={this._onFocus}
-                onBlur={this._onBlur}
-            />;
-        } else {
-            roomList = <RoomList
-                onKeyDown={this._onKeyDown}
-                onFocus={this._onFocus}
-                onBlur={this._onBlur}
-                ref={this.collectRoomList}
-                resizeNotifier={this.props.resizeNotifier}
-                collapsed={this.props.collapsed}
-                searchFilter={this.state.searchFilter}
-                ConferenceHandler={VectorConferenceHandler} />;
-        }
+        const roomList = <RoomList
+            onKeyDown={this._onKeyDown}
+            onFocus={this._onFocus}
+            onBlur={this._onBlur}
+            ref={this.collectRoomList}
+            resizeNotifier={this.props.resizeNotifier}
+            collapsed={this.props.collapsed}
+            searchFilter={this.state.searchFilter}
+            ConferenceHandler={VectorConferenceHandler} />;
 
         return (
             <div className={containerClasses}>
