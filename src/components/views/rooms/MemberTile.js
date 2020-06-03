@@ -57,21 +57,19 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            const { roomId } = this.props.member;
-            if (roomId) {
-                const isRoomEncrypted = cli.isRoomEncrypted(roomId);
-                this.setState({
-                    isRoomEncrypted,
-                });
-                if (isRoomEncrypted) {
-                    cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
-                    cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
-                    this.updateE2EStatus();
-                } else {
-                    // Listen for room to become encrypted
-                    cli.on("RoomState.events", this.onRoomStateEvents);
-                }
+        const { roomId } = this.props.member;
+        if (roomId) {
+            const isRoomEncrypted = cli.isRoomEncrypted(roomId);
+            this.setState({
+                isRoomEncrypted,
+            });
+            if (isRoomEncrypted) {
+                cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
+                cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+                this.updateE2EStatus();
+            } else {
+                // Listen for room to become encrypted
+                cli.on("RoomState.events", this.onRoomStateEvents);
             }
         }
     },

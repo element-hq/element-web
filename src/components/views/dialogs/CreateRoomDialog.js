@@ -24,7 +24,6 @@ import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
-import SettingsStore from "../../../settings/SettingsStore";
 import {privateShouldBeEncrypted} from "../../../createRoom";
 
 export default createReactClass({
@@ -67,7 +66,7 @@ export default createReactClass({
             createOpts.creation_content = {'m.federate': false};
         }
 
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
             opts.encryption = this.state.isEncrypted;
         }
 
@@ -194,7 +193,7 @@ export default createReactClass({
         }
 
         let e2eeSection;
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
             let microcopy;
             if (privateShouldBeEncrypted()) {
                 microcopy = _t("You can’t disable this later. Bridges & most bots won’t work yet.");
@@ -202,7 +201,6 @@ export default createReactClass({
                 microcopy = _t("Your server admin has disabled end-to-end encryption by default " +
                     "in private rooms & Direct Messages.");
             }
-
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
                     label={ _t("Enable end-to-end encryption")}
