@@ -26,6 +26,7 @@ import * as React from "react";
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
 import ElectronPlatform from "./platform/ElectronPlatform";
+import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
@@ -39,8 +40,10 @@ export const rageshakePromise = initRageshake();
 export function preparePlatform() {
     if (window.ipcRenderer) {
         console.log("Using Electron platform");
-        const plaf = new ElectronPlatform();
-        PlatformPeg.set(plaf);
+        PlatformPeg.set(new ElectronPlatform());
+    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log("Using PWA platform");
+        PlatformPeg.set(new PWAPlatform());
     } else {
         console.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
