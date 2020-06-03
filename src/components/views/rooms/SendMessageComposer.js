@@ -44,6 +44,7 @@ import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RateLimitedFunc from '../../../ratelimitedfunc';
+import {Action} from "../../../dispatcher/actions";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -364,7 +365,7 @@ export default class SendMessageComposer extends React.Component {
     onAction = (payload) => {
         switch (payload.action) {
             case 'reply_to_event':
-            case 'focus_composer':
+            case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
             case 'insert_mention':

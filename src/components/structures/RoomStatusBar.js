@@ -27,6 +27,7 @@ import Resend from '../../Resend';
 import * as cryptodevices from '../../cryptodevices';
 import dis from '../../dispatcher/dispatcher';
 import {messageForResourceLimitError, messageForSendError} from '../../utils/ErrorUtils';
+import {Action} from "../../dispatcher/actions";
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -135,12 +136,12 @@ export default createReactClass({
 
     _onResendAllClick: function() {
         Resend.resendUnsentEvents(this.props.room);
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     },
 
     _onCancelAllClick: function() {
         Resend.cancelUnsentEvents(this.props.room);
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     },
 
     _onShowDevicesClick: function() {

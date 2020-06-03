@@ -19,6 +19,7 @@ import * as sdk from './index';
 import dis from './dispatcher/dispatcher';
 import Modal from './Modal';
 import { _t } from './languageHandler';
+import {Action} from "./dispatcher/actions";
 
 /**
  * Mark all given devices as 'known'
@@ -66,7 +67,7 @@ export async function getUnknownDevicesForRoom(matrixClient, room) {
 }
 
 function focusComposer() {
-    dis.dispatch({action: 'focus_composer'});
+    dis.fire(Action.FocusComposer);
 }
 
 /**

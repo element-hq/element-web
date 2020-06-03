@@ -27,6 +27,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
 import RoomList2 from "../views/rooms/RoomList2";
+import {Action} from "../../dispatcher/actions";
 
 
 const LeftPanel = createReactClass({
@@ -198,7 +199,7 @@ const LeftPanel = createReactClass({
 
     onSearchCleared: function(source) {
         if (source === "keyboard") {
-            dis.dispatch({action: 'focus_composer'});
+            dis.fire(Action.FocusComposer);
         }
         this.setState({searchExpanded: false});
     },

@@ -347,7 +347,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Analytics.trackPageChange(durationMs);
         }
         if (this.focusComposer) {
-            dis.dispatch({action: 'focus_composer'});
+            dis.fire(Action.FocusComposer);
             this.focusComposer = false;
         }
     }
@@ -1363,7 +1363,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 showNotificationsToast();
             }
 
-            dis.dispatch({action: 'focus_composer'});
+            dis.fire(Action.FocusComposer);
             this.setState({
                 ready: true,
             });
