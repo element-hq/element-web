@@ -17,7 +17,9 @@ limitations under the License.
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import {MatrixClientPeg} from "./MatrixClientPeg";
 
-function serverSideSearch(term, roomId = undefined) {
+async function serverSideSearch(term, roomId = undefined, processResult = true) {
+    const client = MatrixClientPeg.get();
+
     let filter;
     if (roomId !== undefined) {
         // XXX: it's unintuitive that the filter for searching doesn't have
@@ -27,19 +29,59 @@ function serverSideSearch(term, roomId = undefined) {
         };
     }
 
-    const searchPromise = MatrixClientPeg.get().searchRoomEvents({
-        filter,
-        term,
-    });
+    const body = {
+        search_categories: {
+            room_events: {
+                search_term: term,
+                filter: filter,
+                order_by: "recent",
+                event_context: {
+                    before_limit: 1,
+                    after_limit: 1,
+                    include_profile: true,
+                },
+            },
+        },
+    };
 
-    return searchPromise;
+    const response = await client.search({body: body});
+
+    if (processResult) {
+        const searchResult = {
+            _query: body,
+            results: [],
+            highlights: [],
+        };
+
+        return client._processRoomEventsSearch(searchResult, response);
+    }
+
+    const result = {
+        response: response,
+        query: body,
+    };
+
+    return result;
+}
+
+function compareEvents(a, b) {
+    const aEvent = a.result;
+    const bEvent = b.result;
+
+    if (aEvent.origin_server_ts >
+        bEvent.origin_server_ts) return -1;
+    if (aEvent.origin_server_ts <
+        bEvent.origin_server_ts) return 1;
+    return 0;
 }
 
 async function combinedSearch(searchTerm) {
+    const client = MatrixClientPeg.get();
+
     // Create two promises, one for the local search, one for the
     // server-side search.
-    const serverSidePromise = serverSideSearch(searchTerm);
-    const localPromise = localSearch(searchTerm);
+    const serverSidePromise = serverSideSearch(searchTerm, undefined, false);
+    const localPromise = localSearch(searchTerm, undefined, false);
 
     // Wait for both promises to resolve.
     await Promise.all([serverSidePromise, localPromise]);
@@ -48,45 +90,34 @@ async function combinedSearch(searchTerm) {
     const localResult = await localPromise;
     const serverSideResult = await serverSidePromise;
 
-    // Combine the search results into one result.
-    const result = {};
+    const serverQuery = serverSideResult.query;
+    const serverResponse = serverSideResult.response;
 
-    // Our localResult and serverSideResult are both ordered by
-    // recency separately, when we combine them the order might not
-    // be the right one so we need to sort them.
-    const compare = (a, b) => {
-        const aEvent = a.context.getEvent().event;
-        const bEvent = b.context.getEvent().event;
+    const localQuery = localResult.query;
+    const localResponse = localResult.response;
 
-        if (aEvent.origin_server_ts >
-            bEvent.origin_server_ts) return -1;
-        if (aEvent.origin_server_ts <
-            bEvent.origin_server_ts) return 1;
-        return 0;
+    const emptyResult = {
+        seshatQuery: localQuery,
+        _query: serverQuery,
+        serverSideNextBatch: serverResponse.next_batch,
+        results: [],
+        highlights: [],
     };
 
-    result.count = localResult.count + serverSideResult.count;
-    result.results = localResult.results.concat(
-        serverSideResult.results).sort(compare);
-    result.highlights = localResult.highlights.concat(
-        serverSideResult.highlights);
+    const combinedResult = combineResponses(emptyResult, localResponse, serverResponse.search_categories.room_events);
 
-    result.seshatQuery = localResult.seshatQuery;
-    result.serverSideNextBatch = serverSideResult.next_batch;
-    result._query = serverSideResult._query;
+    const response = {
+        search_categories: {
+            room_events: combinedResult,
+        },
+    };
 
-    // We need the next batch to be set for the client to know that it can
-    // paginate further.
-    if (serverSideResult.next_batch) {
-        result.next_batch = serverSideResult.next_batch;
-    } else {
-        result.next_batch = localResult.next_batch;
-    }
+    const result = client._processRoomEventsSearch(emptyResult, response);
 
     return result;
 }
 
-async function localSearch(searchTerm, roomId = undefined) {
+async function localSearch(searchTerm, roomId = undefined, processResult = true) {
     const searchArgs = {
         search_term: searchTerm,
         before_limit: 1,
@@ -110,15 +141,27 @@ async function localSearch(searchTerm, roomId = undefined) {
     const eventIndex = EventIndexPeg.get();
 
     const localResult = await eventIndex.search(searchArgs);
-    emptyResult.seshatQuery.next_batch = localResult.next_batch;
 
-    const response = {
-        search_categories: {
-            room_events: localResult,
-        },
-    };
+    if (processResult) {
+        emptyResult.seshatQuery.next_batch = localResult.next_batch;
 
-    return MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
+        const response = {
+            search_categories: {
+                room_events: localResult,
+            },
+        };
+
+        return MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
+    }
+
+    searchArgs.next_batch = localResult.next_batch;
+
+    const result = {
+        response: localResult,
+        query: searchArgs,
+    }
+
+    return result;
 }
 
 async function localPagination(searchResult) {
@@ -144,57 +187,46 @@ async function localPagination(searchResult) {
 /**
  * Combine the local and server search results
  */
-function combineResults(previousSearchResult, localResult = undefined, serverSideResult = undefined) {
-    // // cachedResults = previousSearchResult.cachedResults;
-    // if (localResult) {
-    //     previousSearchResult.seshatQuery.next_batch = localResult.next_batch;
-    // }
-    const compare = (a, b) => {
-        const aEvent = a.result;
-        const bEvent = b.result;
+function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
+    const response = {};
 
-        if (aEvent.origin_server_ts >
-            bEvent.origin_server_ts) return -1;
-        if (aEvent.origin_server_ts <
-            bEvent.origin_server_ts) return 1;
-        return 0;
-    };
-
-    const result = {};
-
-    result.count = previousSearchResult.count;
-
-    if (localResult && serverSideResult) {
-        result.results = localResult.results.concat(serverSideResult.results).sort(compare);
-        result.highlights = localResult.highlights.concat(serverSideResult.highlights);
-    } else if (localResult) {
-        result.results = localResult.results;
-        result.highlights = localResult.highlights;
+    if (previousSearchResult.count) {
+        response.count = previousSearchResult.count;
     } else {
-        result.results = serverSideResult.results;
-        result.highlights = serverSideResult.highlights;
+        response.count = localEvents.count + serverEvents.count;
     }
 
-    if (localResult) {
-        previousSearchResult.seshatQuery.next_batch = localResult.next_batch;
-        result.next_batch = localResult.next_batch;
+    if (localEvents && serverEvents) {
+        response.results = localEvents.results.concat(serverEvents.results).sort(compareEvents);
+        response.highlights = localEvents.highlights.concat(serverEvents.highlights);
+    } else if (localEvents) {
+        response.results = localEvents.results;
+        response.highlights = localEvents.highlights;
+    } else {
+        response.results = serverEvents.results;
+        response.highlights = serverEvents.highlights;
     }
 
-    if (serverSideResult && serverSideResult.next_batch) {
-        previousSearchResult.serverSideNextBatch = serverSideResult.next_batch;
-        result.next_batch = serverSideResult.next_batch;
+    if (localEvents) {
+        previousSearchResult.seshatQuery.next_batch = localEvents.next_batch;
+        response.next_batch = localEvents.next_batch;
     }
 
-    console.log("HELLOO COMBINING RESULTS", localResult, serverSideResult, result);
+    if (serverEvents && serverEvents.next_batch) {
+        previousSearchResult.serverSideNextBatch = serverEvents.next_batch;
+        response.next_batch = serverEvents.next_batch;
+    }
 
-    return result
+    console.log("HELLOO COMBINING RESULTS", localEvents, serverEvents, response);
+
+    return response
 }
 
 async function combinedPagination(searchResult) {
     const eventIndex = EventIndexPeg.get();
     const client = MatrixClientPeg.get();
 
-    console.log("HELLOOO WORLD");
+    console.log("HELLOOO WORLD", searchResult.oldestEventFrom);
 
     const searchArgs = searchResult.seshatQuery;
 
@@ -210,7 +242,7 @@ async function combinedPagination(searchResult) {
         serverSideResult = await client.search(body);
     }
 
-    const combinedResult = combineResults(searchResult, localResult, serverSideResult.search_categories.room_events);
+    const combinedResult = combineResponses(searchResult, localResult, serverSideResult.search_categories.room_events);
 
     const response = {
         search_categories: {
