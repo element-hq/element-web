@@ -103,7 +103,9 @@ export default class RoomProvider extends AutocompleteProvider {
                     suffix: ' ',
                     href: makeRoomPermalink(room.displayedAlias),
                     component: (
-                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.room.name} description={room.displayedAlias} />
+                        <PillCompletion title={room.room.name} description={room.displayedAlias}>
+                            <RoomAvatar width={24} height={24} room={room.room} />
+                        </PillCompletion>
                     ),
                     range,
                 };
