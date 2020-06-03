@@ -37,11 +37,8 @@ export class Jitsi {
     public start() {
         const cli = MatrixClientPeg.get();
         cli.on("WellKnown.client", this.update);
-        const discoveryResponse = cli.getClientWellKnown();
-        if (discoveryResponse) {
-            // if we missed the first WellKnown.client event then call update anyway
-            this.update(discoveryResponse);
-        }
+        // call update initially in case we missed the first WellKnown.client event and for if no well-known present
+        this.update(cli.getClientWellKnown());
     }
 
     private update = async (discoveryResponse): Promise<any> => {
