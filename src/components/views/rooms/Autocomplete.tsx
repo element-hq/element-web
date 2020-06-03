@@ -260,7 +260,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
                 behavior: "auto",
                 block: "nearest",
             });
-        } else {
+        } else if (this.containerRef.current) {
             this.containerRef.current.scrollTo({ top: 0 });
         }
     }
