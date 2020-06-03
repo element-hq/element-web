@@ -25,6 +25,10 @@ import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
 import {copyNode} from "../../../../utils/strings";
 import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
+import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
+import DialogButtons from "../../../../components/views/elements/DialogButtons";
+import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
+
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -380,7 +384,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // Once we're confident enough in this (and it's supported enough) we can do
         // it automatically.
         // https://github.com/vector-im/riot-web/issues/11696
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Field = sdk.getComponent('views.elements.Field');
 
         let authPrompt;
@@ -429,10 +432,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhaseShowKey() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-        const InlineSpinner = sdk.getComponent("elements.InlineSpinner");
-
         let continueButton;
         if (this.state.phase === PHASE_SHOWKEY) {
             continueButton = <DialogButtons primaryButton={_t("Continue")}
@@ -486,7 +485,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
      }
 
     _renderPhaseLoadError() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             <p>{_t("Unable to query secret storage status")}</p>
             <div className="mx_Dialog_buttons">
@@ -500,8 +498,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhaseIntro() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let cancelButton;
         if (this.props.force) {
             // if this is a forced key reset then aborting will just leave the old keys
@@ -532,7 +528,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhaseSkipConfirm() {
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return <div>
             {_t(
                 "Without completing security on this session, it won’t have " +
@@ -568,7 +563,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         let content;
         if (this.state.error) {
-            const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             content = <div>
                 <p>{_t("Unable to set up secret storage")}</p>
                 <div className="mx_Dialog_buttons">
