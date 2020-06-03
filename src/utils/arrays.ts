@@ -45,17 +45,3 @@ export function arrayDiff<T>(a: T[], b: T[]): { added: T[], removed: T[] } {
         removed: a.filter(i => !b.includes(i)),
     };
 }
-
-/**
- * Converts an iterator to an array. Not recommended to be called with infinite
- * generator types.
- * @param i The iterator to convert.
- * @returns The array from the iterator.
- */
-export function iteratorToArray<T>(i: Iterable<T>): T[] {
-    const a: T[] = [];
-    for (const e of i) {
-        a.push(e);
-    }
-    return a;
-}

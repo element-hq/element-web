@@ -17,7 +17,7 @@ limitations under the License.
 import { RoomListStore2 } from "./RoomListStore2";
 import TagOrderStore from "../TagOrderStore";
 import { CommunityFilterCondition } from "./filters/CommunityFilterCondition";
-import { arrayDiff, arrayHasDiff, iteratorToArray } from "../../utils/arrays";
+import { arrayDiff, arrayHasDiff } from "../../utils/arrays";
 
 /**
  * Watches for changes in tags/groups to manage filters on the provided RoomListStore
@@ -31,7 +31,7 @@ export class TagWatcher {
     }
 
     private onTagsUpdated = () => {
-        const lastTags = iteratorToArray(this.filters.keys());
+        const lastTags = Array.from(this.filters.keys());
         const newTags = TagOrderStore.getSelectedTags();
 
         if (arrayHasDiff(lastTags, newTags)) {

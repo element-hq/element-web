@@ -22,7 +22,6 @@ import { ITagMap, ITagSortingMap } from "../models";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { FILTER_CHANGED, IFilterCondition } from "../../filters/IFilterCondition";
 import { EventEmitter } from "events";
-import { iteratorToArray } from "../../../../utils/arrays";
 
 // TODO: Add locking support to avoid concurrent writes?
 
@@ -102,7 +101,7 @@ export abstract class Algorithm extends EventEmitter {
 
         console.warn("Recalculating filtered room list");
         const allowedByFilters = new Set<Room>();
-        const filters = iteratorToArray(this.allowedByFilter.keys());
+        const filters = Array.from(this.allowedByFilter.keys());
         const newMap: ITagMap = {};
         for (const tagId of Object.keys(this.cachedRooms)) {
             // Cheaply clone the rooms so we can more easily do operations on the list.
