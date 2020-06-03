@@ -25,6 +25,9 @@ import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
 import {Action} from "./dispatcher/actions";
 import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
 
+export const HOMESERVER_URL_KEY = "mx_hs_url";
+export const ID_SERVER_URL_KEY = "mx_is_url";
+
 export enum UpdateCheckStatus {
     Checking = "CHECKING",
     Error = "ERROR",
@@ -47,6 +50,7 @@ export default abstract class BasePlatform {
 
     constructor() {
         dis.register(this.onAction);
+        this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
     protected onAction = (payload: ActionPayload) => {
@@ -217,11 +221,9 @@ export default abstract class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
-    getSSOCallbackUrl(hsUrl: string, isUrl: string, fragmentAfterLogin: string): URL {
+    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);
         url.hash = fragmentAfterLogin || "";
-        url.searchParams.set("homeserver", hsUrl);
-        url.searchParams.set("identityServer", isUrl);
         return url;
     }
 
@@ -232,8 +234,12 @@ export default abstract class BasePlatform {
      * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
      */
     startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
-        const callbackUrl = this.getSSOCallbackUrl(mxClient.getHomeserverUrl(), mxClient.getIdentityServerUrl(),
-            fragmentAfterLogin);
+        // persist hs url and is url for when the user is returned to the app with the login token
+        localStorage.setItem(HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
+        if (mxClient.getIdentityServerUrl()) {
+            localStorage.setItem(ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
+        }
+        const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
 
