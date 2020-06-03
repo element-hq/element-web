@@ -93,7 +93,7 @@ interface IProps {
 }
 
 interface IUsageLimit {
-    limit_type: "monthly_active_user" | "hs_disabled" | string;
+    limit_type: "monthly_active_user" | string;
     admin_contact?: string;
 }
 
