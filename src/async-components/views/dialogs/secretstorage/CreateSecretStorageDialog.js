@@ -481,8 +481,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const Spinner = sdk.getComponent('views.elements.Spinner');
         return <div>
             <Spinner />
-         </div>;
-     }
+        </div>;
+    }
 
     _renderPhaseLoadError() {
         return <div>
