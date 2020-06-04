@@ -127,8 +127,6 @@ const TAG_AESTHETICS: {
 };
 
 export default class RoomList2 extends React.Component<IProps, IState> {
-    private sublistSizes: { [tagId: string]: number } = {};
-    private sublistCollapseStates: { [tagId: string]: boolean } = {};
     private searchFilter: NameFilterCondition = new NameFilterCondition();
 
     constructor(props: IProps) {
@@ -138,7 +136,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             sublists: {},
             layouts: new Map<TagID, ListLayout>(),
         };
-        this.loadSublistSizes();
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
@@ -168,14 +165,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
             this.setState({sublists: newLists, layouts: layoutMap});
         });
-    }
-
-    private loadSublistSizes() {
-        const sizesJson = window.localStorage.getItem("mx_roomlist_sizes");
-        if (sizesJson) this.sublistSizes = JSON.parse(sizesJson);
-
-        const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
-        if (collapsedJson) this.sublistCollapseStates = JSON.parse(collapsedJson);
     }
 
     private renderSublists(): React.ReactElement[] {
