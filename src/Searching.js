@@ -284,8 +284,6 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
         response.next_batch = "cached";
     }
 
-    console.log("HELLOO COMBINING RESULTS", localEvents, serverEvents, response);
-
     return response;
 }
 
@@ -325,8 +323,6 @@ async function combinedPagination(searchResult) {
     };
 
     const result = client._processRoomEventsSearch(searchResult, response);
-
-    console.log("HELLO NEW RESULT", searchResult);
 
     searchResult.pendingRequest = null;
 
