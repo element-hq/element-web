@@ -221,14 +221,20 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             if (layout.visibleTiles >= tiles.length && tiles.length <= layout.minVisibleTiles) {
                 handles = []; // no handles, we're at a minimum
             }
-            const visibleTiles = tiles.slice(0, layout.visibleTiles);
+
+            let nVisible = Math.floor(layout.visibleTiles);
+            if (localStorage.getItem("mx_rl_mathfn")) {
+                nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
+            }
+            console.log({nVisible})
+            const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // replaces the last visible tile, so will always show 2+ rooms. We do this
             // because if it said "show 1 more room" we had might as well show that room
             // instead. We also replace the last item so we don't have to adjust our math
             // on pixel heights, etc. It's much easier to pretend the button is a tile.
-            if (tiles.length > layout.visibleTiles) {
+            if (tiles.length > nVisible) {
                 // we have a cutoff condition - add the button to show all
 
                 // we +1 to account for the room we're about to hide with our 'show more' button
