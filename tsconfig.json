@@ -14,7 +14,8 @@
     "jsx": "react",
     "types": [
       "node",
-      "react"
+      "react",
+      "flux"
     ]
   },
   "include": [

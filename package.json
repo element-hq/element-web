@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -60,8 +60,8 @@
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
-    "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+    "matrix-js-sdk": "6.2.0",
+    "matrix-react-sdk": "2.7.0",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "postcss-easings": "^2.0.0",
     "prop-types": "^15.7.2",
@@ -88,6 +88,7 @@
     "@babel/preset-typescript": "^7.7.4",
     "@babel/register": "^7.7.4",
     "@babel/runtime": "^7.7.6",
+    "@types/flux": "^3.1.9",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^12.12.41",
     "@types/react": "16.9",

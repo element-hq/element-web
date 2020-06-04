@@ -1,3 +1,68 @@
+Changes in [1.6.3](https://github.com/vector-im/riot-web/releases/tag/v1.6.3) (2020-06-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3-rc.1...v1.6.3)
+
+## Security notice
+
+Riot Web 1.6.3 fixes a vulnerability in single sign-on (SSO) deployments where Riot Web could be confused into sending authentication details to an attacker-controlled server. Thanks to Quentin Gliech for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Fix login loop where the sso flow returns to `#/login` to release
+   [\#13915](https://github.com/vector-im/riot-web/pull/13915)
+
+Changes in [1.6.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.3-rc.1) (2020-06-02)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.2...v1.6.3-rc.1)
+
+ * Upgrade to JS SDK 6.2.0-rc.1 and React SDK 2.7.0-rc.2
+ * Get rid of welcome.html's Chat with Riot Bot button
+   [\#13842](https://github.com/vector-im/riot-web/pull/13842)
+ * Update from Weblate
+   [\#13886](https://github.com/vector-im/riot-web/pull/13886)
+ * Allow deferring of Update Toast until the next morning
+   [\#13864](https://github.com/vector-im/riot-web/pull/13864)
+ * Give contextual feedback for manual update check instead of banner
+   [\#13862](https://github.com/vector-im/riot-web/pull/13862)
+ * Add app-load doc
+   [\#13834](https://github.com/vector-im/riot-web/pull/13834)
+ * Update Modular hosting link
+   [\#13777](https://github.com/vector-im/riot-web/pull/13777)
+ * Replace New Version Bar with a Toast
+   [\#13776](https://github.com/vector-im/riot-web/pull/13776)
+ * Remove webpack-build-notifier from lockfile
+   [\#13814](https://github.com/vector-im/riot-web/pull/13814)
+ *  Add media queries and mobile viewport (#12142)
+   [\#13818](https://github.com/vector-im/riot-web/pull/13818)
+ * Fix @types/react conflict in matrix-react-sdk
+   [\#13809](https://github.com/vector-im/riot-web/pull/13809)
+ * Fix manual update checking, super in arrow funcs doesn't work
+   [\#13808](https://github.com/vector-im/riot-web/pull/13808)
+ * Update from Weblate
+   [\#13806](https://github.com/vector-im/riot-web/pull/13806)
+ * Convert platforms to Typescript
+   [\#13756](https://github.com/vector-im/riot-web/pull/13756)
+ * Fix EventEmitter typescript signature in node typings
+   [\#13764](https://github.com/vector-im/riot-web/pull/13764)
+ * Add docs and labs flag for new room list implementation
+   [\#13675](https://github.com/vector-im/riot-web/pull/13675)
+ * Add font scaling labs setting.
+   [\#13352](https://github.com/vector-im/riot-web/pull/13352)
+ * Add labs flag for alternate message layouts
+   [\#13350](https://github.com/vector-im/riot-web/pull/13350)
+ * Move dispatcher references in support of TypeScript conversion
+   [\#13666](https://github.com/vector-im/riot-web/pull/13666)
+ * Update from Weblate
+   [\#13704](https://github.com/vector-im/riot-web/pull/13704)
+ * Replace favico.js dependency with simplified variant grown from it
+   [\#13649](https://github.com/vector-im/riot-web/pull/13649)
+ * Remove Electron packaging scripts
+   [\#13688](https://github.com/vector-im/riot-web/pull/13688)
+ * Fix postcss order to allow mixin variables to work
+   [\#13674](https://github.com/vector-im/riot-web/pull/13674)
+ * Pass screenAfterLogin through SSO in the callback url
+   [\#13650](https://github.com/vector-im/riot-web/pull/13650)
+
 Changes in [1.6.2](https://github.com/vector-im/riot-web/releases/tag/v1.6.2) (2020-05-22)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.1...v1.6.2)
