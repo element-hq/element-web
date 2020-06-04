@@ -5802,8 +5802,8 @@ mathml-tag-names@^2.0.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "6.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/a4a7097c103da42075f2c70e070fd01fa6fb0d48"
+  version "6.2.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ef1d5e3d765bc4dc133c0637434c2ca9941ff97b"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
