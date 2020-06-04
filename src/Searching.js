@@ -22,15 +22,11 @@ const SEARCH_LIMIT = 10;
 async function serverSideSearch(term, roomId = undefined, processResult = true) {
     const client = MatrixClientPeg.get();
 
-    let filter;
-    if (roomId !== undefined) {
-        // XXX: it's unintuitive that the filter for searching doesn't have
-        // the same shape as the v2 filter API :(
-        filter = {
-            rooms: [roomId],
-            limit: SEARCH_LIMIT,
-        };
-    }
+    const filter = {
+        limit: SEARCH_LIMIT,
+    };
+
+    if (roomId !== undefined) filter.rooms = [roomId];
 
     const body = {
         search_categories: {
