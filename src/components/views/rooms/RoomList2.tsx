@@ -216,7 +216,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        className="mx_RoomList mx_RoomList2"
+                        className="mx_RoomList2"
                         role="tree"
                         aria-label={_t("Rooms")}
                         // Firefox sometimes makes this element focusable due to

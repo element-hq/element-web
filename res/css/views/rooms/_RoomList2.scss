@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-@import "../../../../node_modules/react-resizable/css/styles.css";
-
-.mx_RoomList2 .mx_RoomSubList2_labelContainer {
-  z-index: 12;
-  background-color: purple;
+.mx_RoomList2 {
+    // Create a column-based flexbox for the sublists. That's pretty much all we have to
+    // worry about in this stylesheet.
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }

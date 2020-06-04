@@ -113,9 +113,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let chevron = null;
         if (this.hasTiles()) {
             const chevronClasses = classNames({
-                'mx_RoomSubList_chevron': true,
-                'mx_RoomSubList_chevronRight': false, // isCollapsed
-                'mx_RoomSubList_chevronDown': true, // !isCollapsed
+                'mx_RoomSublist2_chevron': true,
+                'mx_RoomSublist2_chevronRight': false, // isCollapsed
+                'mx_RoomSublist2_chevronDown': true, // !isCollapsed
             });
             chevron = (<div className={chevronClasses}/>);
         }
@@ -130,8 +130,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     let badge;
                     if (true) { // !isCollapsed
                         const badgeClasses = classNames({
-                            'mx_RoomSubList_badge': true,
-                            'mx_RoomSubList_badgeHighlight': notifHighlight,
+                            'mx_RoomSublist2_badge': true,
+                            'mx_RoomSublist2_badgeHighlight': notifHighlight,
                         });
                         // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
                         if (notifCount > 0) {
@@ -168,7 +168,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <AccessibleTooltipButton
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoom}
-                                className="mx_RoomSubList_addRoom"
+                                className="mx_RoomSublist2_addButton"
                                 title={this.props.addRoomLabel || _t("Add room")}
                             />
                         );
@@ -176,11 +176,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     // TODO: a11y (see old component)
                     return (
-                        <div className={"mx_RoomSubList_labelContainer"}>
+                        <div className={"mx_RoomSublist2_headerContainer"}>
                             <AccessibleButton
                                 inputRef={ref}
                                 tabIndex={tabIndex}
-                                className={"mx_RoomSubList_label"}
+                                className={"mx_RoomSublist2_headerText"}
                                 role="treeitem"
                                 aria-level="1"
                             >
@@ -204,9 +204,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const classes = classNames({
             // TODO: Proper collapse support
-            'mx_RoomSubList': true,
-            'mx_RoomSubList_hidden': false, // len && isCollapsed
-            'mx_RoomSubList_nonEmpty': this.hasTiles(), // len && !isCollapsed
+            'mx_RoomSublist2': true,
+            'mx_RoomSublist2_collapsed': false, // len && isCollapsed
         });
 
         let content = null;

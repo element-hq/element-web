@@ -195,28 +195,28 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const hasBadge = this.state.notificationState.color > NotificationColor.Bold;
         const isUnread = this.state.notificationState.color > NotificationColor.None;
         const classes = classNames({
-            'mx_RoomTile': true,
+            'mx_RoomTile2': true,
             // 'mx_RoomTile_selected': this.state.selected,
-            'mx_RoomTile_unread': isUnread,
-            'mx_RoomTile_unreadNotify': this.state.notificationState.color >= NotificationColor.Grey,
-            'mx_RoomTile_highlight': this.state.notificationState.color >= NotificationColor.Red,
-            'mx_RoomTile_invited': this.roomIsInvite,
+            'mx_RoomTile2_unread': isUnread,
+            'mx_RoomTile2_unreadNotify': this.state.notificationState.color >= NotificationColor.Grey,
+            'mx_RoomTile2_highlight': this.state.notificationState.color >= NotificationColor.Red,
+            'mx_RoomTile2_invited': this.roomIsInvite,
             // 'mx_RoomTile_menuDisplayed': isMenuDisplayed,
-            'mx_RoomTile_noBadges': !hasBadge,
+            'mx_RoomTile2_noBadges': !hasBadge,
             // 'mx_RoomTile_transparent': this.props.transparent,
             // 'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
         });
 
         const avatarClasses = classNames({
-            'mx_RoomTile_avatar': true,
+            'mx_RoomTile2_avatar': true,
         });
 
 
         let badge;
         if (hasBadge) {
             const badgeClasses = classNames({
-                'mx_RoomTile_badge': true,
-                'mx_RoomTile_badgeButton': false, // this.state.badgeHover || isMenuDisplayed
+                'mx_RoomTile2_badge': true,
+                'mx_RoomTile2_badgeButton': false, // this.state.badgeHover || isMenuDisplayed
             });
             badge = <div className={badgeClasses}>{this.state.notificationState.symbol}</div>;
         }
@@ -227,16 +227,16 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         const nameClasses = classNames({
-            'mx_RoomTile_name': true,
-            'mx_RoomTile_invite': this.roomIsInvite,
-            'mx_RoomTile_badgeShown': hasBadge,
+            'mx_RoomTile2_name': true,
+            'mx_RoomTile2_invite': this.roomIsInvite,
+            'mx_RoomTile2_badgeShown': hasBadge,
         });
 
         // TODO: Support collapsed state properly
         let tooltip = null;
         if (false) { // isCollapsed
             if (this.state.hover) {
-                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} />
+                tooltip = <Tooltip className="mx_RoomTile2_tooltip" label={this.props.room.name} />
             }
         }
 
@@ -255,12 +255,12 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             role="treeitem"
                         >
                             <div className={avatarClasses}>
-                                <div className="mx_RoomTile_avatar_container">
+                                <div className="mx_RoomTile2_avatarContainer">
                                     <RoomAvatar room={this.props.room} width={24} height={24}/>
                                 </div>
                             </div>
-                            <div className="mx_RoomTile_nameContainer">
-                                <div className="mx_RoomTile_labelContainer">
+                            <div className="mx_RoomTile2_nameContainer">
+                                <div className="mx_RoomTile2_labelContainer">
                                     <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
                                         {name}
                                     </div>
