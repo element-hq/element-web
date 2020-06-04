@@ -19,6 +19,7 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
+import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
 
 declare global {
     interface Window {
@@ -31,6 +32,7 @@ declare global {
         mx_ContentMessages: ContentMessages;
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
+        mx_RoomListStore2: RoomListStore2;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933

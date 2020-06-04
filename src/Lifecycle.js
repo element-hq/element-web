@@ -41,6 +41,7 @@ import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
+import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "./BasePlatform";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -163,14 +164,16 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    if (!queryParams.homeserver) {
+    const homeserver = localStorage.getItem(HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(ID_SERVER_URL_KEY);
+    if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);
     }
 
     return sendLoginRequest(
-        queryParams.homeserver,
-        queryParams.identityServer,
+        homeserver,
+        identityServer,
         "m.login.token", {
             token: queryParams.loginToken,
             initial_device_display_name: defaultDeviceDisplayName,
@@ -256,8 +259,8 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
  * @returns {Object} Information about the session - see implementation for variables.
  */
 export function getLocalStorageSessionVars() {
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url");
+    const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+    const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
     const accessToken = localStorage.getItem("mx_access_token");
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
@@ -486,9 +489,9 @@ function _showStorageEvictedDialog() {
 class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
-    localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
+    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
-        localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
     }
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_access_token", credentials.accessToken);
@@ -619,7 +622,7 @@ async function startMatrixClient(startSyncing=true) {
     }
 
     // Now that we have a MatrixClientPeg, update the Jitsi info
-    await Jitsi.getInstance().update();
+    await Jitsi.getInstance().start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.

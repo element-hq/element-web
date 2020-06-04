@@ -31,9 +31,8 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
-import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
+import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
-import SettingsStore from '../../../settings/SettingsStore';
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
@@ -576,7 +575,7 @@ export default class InviteDialog extends React.PureComponent {
 
         const createRoomOptions = {inlineErrors: true};
 
-        if (SettingsStore.getValue("feature_cross_signing")) {
+        if (privateShouldBeEncrypted()) {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
             const has3PidMembers = targets.some(t => t instanceof ThreepidMember);

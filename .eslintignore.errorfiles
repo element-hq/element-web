@@ -9,7 +9,6 @@ src/components/structures/UploadBar.js
 src/components/views/avatars/MemberAvatar.js
 src/components/views/create_room/RoomAlias.js
 src/components/views/dialogs/SetPasswordDialog.js
-src/components/views/dialogs/UnknownDeviceDialog.js
 src/components/views/elements/AddressSelector.js
 src/components/views/elements/DirectorySearchBox.js
 src/components/views/elements/MemberEventListSummary.js
@@ -21,7 +20,6 @@ src/components/views/room_settings/ColorSettings.js
 src/components/views/rooms/Autocomplete.js
 src/components/views/rooms/AuxPanel.js
 src/components/views/rooms/LinkPreviewWidget.js
-src/components/views/rooms/MemberDeviceInfo.js
 src/components/views/rooms/MemberInfo.js
 src/components/views/rooms/MemberList.js
 src/components/views/rooms/RoomList.js

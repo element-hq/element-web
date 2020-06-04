@@ -1514,13 +1514,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on("crypto.verification.request", request => {
-            const isFlagOn = SettingsStore.getValue("feature_cross_signing");
-
-            if (!isFlagOn && !request.channel.deviceId) {
-                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
-                return;
-            }
-
             if (request.verifier) {
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
@@ -1563,9 +1556,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // be aware of will be signalled through the room shield
             // changing colour. More advanced behaviour will come once
             // we implement more settings.
-            cli.setGlobalErrorOnUnknownDevices(
-                !SettingsStore.getValue("feature_cross_signing"),
-            );
+            cli.setGlobalErrorOnUnknownDevices(false);
         }
     }
 
@@ -1913,17 +1904,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // whether cross-signing has been set up on the account.
         const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
         if (masterKeyInStorage) {
-            // Auto-enable cross-signing for the new session when key found in
-            // secret storage.
-            SettingsStore.setValue("feature_cross_signing", null, SettingLevel.DEVICE, true);
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (
-            SettingsStore.getValue("feature_cross_signing") &&
-            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
-        ) {
-            // This will only work if the feature is set to 'enable' in the config,
-            // since it's too early in the lifecycle for users to have turned the
-            // labs flag on.
+        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
@@ -1942,7 +1924,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
         let fragmentAfterLogin = "";
-        if (this.props.initialScreenAfterLogin) {
+        if (this.props.initialScreenAfterLogin &&
+            // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
+            !["welcome", "login", "register"].includes(this.props.initialScreenAfterLogin.screen)
+        ) {
             fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
         }
 

@@ -28,6 +28,8 @@ import { Dispatcher } from "flux";
 import dis from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { IFilterCondition } from "../../../stores/room-list/filters/IFilterCondition";
+import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -130,6 +132,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     private sublistCollapseStates: { [tagId: string]: boolean } = {};
     private unfilteredLayout: Layout;
     private filteredLayout: Layout;
+    private searchFilter: NameFilterCondition = new NameFilterCondition();
 
     constructor(props: IProps) {
         super(props);
@@ -137,6 +140,21 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         this.state = {sublists: {}};
         this.loadSublistSizes();
         this.prepareLayouts();
+    }
+
+    public componentDidUpdate(prevProps: Readonly<IProps>): void {
+        if (prevProps.searchFilter !== this.props.searchFilter) {
+            const hadSearch = !!this.searchFilter.search.trim();
+            const haveSearch = !!this.props.searchFilter.trim();
+            this.searchFilter.search = this.props.searchFilter;
+            if (!hadSearch && haveSearch) {
+                // started a new filter - add the condition
+                RoomListStore.instance.addFilter(this.searchFilter);
+            } else if (hadSearch && !haveSearch) {
+                // cleared a filter - remove the condition
+                RoomListStore.instance.removeFilter(this.searchFilter);
+            } // else the filter hasn't changed enough for us to care here
+        }
     }
 
     public componentDidMount(): void {

@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -26,6 +26,7 @@ import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
+import {privateShouldBeEncrypted} from "../../../../../createRoom";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -306,9 +307,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         // in having advanced details here once all flows are implemented, we
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
-        let crossSigning;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            crossSigning = (
+        const crossSigning = (
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -316,12 +315,20 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </div>
                 </div>
             );
-        }
 
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
 
+        let warning;
+        if (!privateShouldBeEncrypted()) {
+            warning = <div className="mx_SecurityUserSettingsTab_warning">
+                { _t("Your server admin has disabled end-to-end encryption by default " +
+                    "in private rooms & Direct Messages.") }
+            </div>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
+                {warning}
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>

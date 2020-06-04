@@ -164,13 +164,6 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
-    "feature_cross_signing": {
-        // XXX: We shouldn't be using the feature prefix for non-feature settings. There is an exception
-        // for this case though as we're converting a feature to a setting for a temporary safety net.
-        displayName: _td("Enable cross-signing to verify per-user instead of per-session"),
-        supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
-        default: true,
-    },
     "feature_bridge_state": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,

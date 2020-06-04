@@ -23,7 +23,8 @@ import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
-import SettingsStore from "./settings/SettingsStore";
+
+const E2EE_WK_KEY = "im.vector.riot.e2ee";
 
 /**
  * Create a new room, and switch to it.
@@ -227,11 +228,21 @@ export async function ensureDMExists(client, userId) {
         roomId = existingDMRoom.roomId;
     } else {
         let encryption;
-        if (SettingsStore.getValue("feature_cross_signing")) {
+        if (privateShouldBeEncrypted()) {
             encryption = canEncryptToAllUsers(client, [userId]);
         }
         roomId = await createRoom({encryption, dmUserId: userId, spinner: false, andView: false});
         await _waitForMember(client, roomId, userId);
     }
     return roomId;
+}
+
+export function privateShouldBeEncrypted() {
+    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
+    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
+        const defaultDisabled = clientWellKnown[E2EE_WK_KEY]["default"] === false;
+        return !defaultDisabled;
+    }
+
+    return true;
 }
