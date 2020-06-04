@@ -62,7 +62,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         super(props);
 
         this.state = {
-            fontSize: SettingsStore.getValue("fontSize", null).toString(),
+            fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             ...this.calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
@@ -132,7 +132,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private onFontSizeChanged = (size: number): void => {
         this.setState({fontSize: size.toString()});
-        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, size);
+        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, size - FontWatcher.SIZE_DIFF);
     };
 
     private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
@@ -151,7 +151,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             };
         }
 
-        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, value);
+        SettingsStore.setValue(
+            "baseFontSize",
+            null,
+            SettingLevel.DEVICE,
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+        );
+
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
     }
 
