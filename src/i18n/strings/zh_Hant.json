@@ -2480,5 +2480,7 @@
     "Restart": "重新啟動",
     "Upgrade your Riot": "升級您的 Riot",
     "A new version of Riot is available!": "已有新版的 Riot！",
-    "New version available. <a>Update now.</a>": "有可用的新版本。<a>立刻更新。</a>"
+    "New version available. <a>Update now.</a>": "有可用的新版本。<a>立刻更新。</a>",
+    "Emoji picker": "顏文字挑選器",
+    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "您的伺服器管理員已在私人聊天室與直接訊息中預設停用端到端加密。"
 }
