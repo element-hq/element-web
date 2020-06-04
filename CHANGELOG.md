@@ -1,3 +1,14 @@
+Changes in [2.7.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.0) (2020-06-04)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.0-rc.2...v2.7.0)
+
+ * Prevent (double) 4S bootstrap from RestoreKeyBackupDialog
+   [\#4703](https://github.com/matrix-org/matrix-react-sdk/pull/4703)
+ * Fix checkbox bleed
+   [\#4702](https://github.com/matrix-org/matrix-react-sdk/pull/4702)
+ * Fix login loop where the sso flow returns to `#/login` to release
+   [\#4693](https://github.com/matrix-org/matrix-react-sdk/pull/4693)
+
 Changes in [2.7.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.0-rc.2) (2020-06-02)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.0-rc.1...v2.7.0-rc.2)
