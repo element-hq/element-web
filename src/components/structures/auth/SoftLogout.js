@@ -25,6 +25,7 @@ import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import SSOButton from "../../views/elements/SSOButton";
+import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "../../../BasePlatform";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -43,7 +44,7 @@ const FLOWS_TO_VIEWS = {
 export default class SoftLogout extends React.Component {
     static propTypes = {
         // Query parameters from MatrixChat
-        realQueryParams: PropTypes.object, // {homeserver, identityServer, loginToken}
+        realQueryParams: PropTypes.object, // {loginToken}
 
         // Called when the SSO login completes
         onTokenLoginCompleted: PropTypes.func,
@@ -90,7 +91,7 @@ export default class SoftLogout extends React.Component {
 
     async _initLogin() {
         const queryParams = this.props.realQueryParams;
-        const hasAllParams = queryParams && queryParams['homeserver'] && queryParams['loginToken'];
+        const hasAllParams = queryParams && queryParams['loginToken'];
         if (hasAllParams) {
             this.setState({loginView: LOGIN_VIEW.LOADING});
             this.trySsoLogin();
@@ -157,8 +158,8 @@ export default class SoftLogout extends React.Component {
     async trySsoLogin() {
         this.setState({busy: true});
 
-        const hsUrl = this.props.realQueryParams['homeserver'];
-        const isUrl = this.props.realQueryParams['identityServer'] || MatrixClientPeg.get().getIdentityServerUrl();
+        const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+        const isUrl = localStorage.getItem(ID_SERVER_URL_KEY) || MatrixClientPeg.get().getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
             token: this.props.realQueryParams['loginToken'],
