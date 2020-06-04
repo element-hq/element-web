@@ -47,7 +47,6 @@ export class FontWatcher implements IWatcher {
     };
 
     private setRootFontSize = (size) => {
-        console.log({size})
         const fontSize = Math.max(Math.min(FontWatcher.MAX_SIZE, size), FontWatcher.MIN_SIZE);
 
         if (fontSize !== size) {
