@@ -204,7 +204,9 @@ function compareOldestEvents(firstResults, secondResults) {
 }
 
 function combineEventSources(previousSearchResult, response, a, b) {
+    // Merge event sources and sort the events.
     const combinedEvents = a.concat(b).sort(compareEvents);
+    // Put half of the events in the response, and cache the other half.
     response.results = combinedEvents.slice(0, SEARCH_LIMIT);
     previousSearchResult.cachedEvents = combinedEvents.slice(SEARCH_LIMIT);
 }
@@ -212,13 +214,104 @@ function combineEventSources(previousSearchResult, response, a, b) {
 /**
  * Combine the events from our event sources into a sorted result
  *
+ * This method will first be called from the combinedSearch() method. In this
+ * case we will fetch SEARCH_LIMIT events from the server and the local index.
+ *
+ * The method will put the SEARCH_LIMIT newest events from the server and the
+ * local index in the results part of the response, the rest will be put in the
+ * cachedEvents field of the previousSearchResult (in this case an empty search
+ * result).
+ *
+ * Every subsequent call will be made from the combinedPagination() method, in
+ * this case we will combine the cachedEvents and the next SEARCH_LIMIT events
+ * from either the server or the local index.
+ *
+ * Since we have two event sources and we need to sort the results by date we
+ * need keep on looking for the oldest event. We are implementing a variation of
+ * a sliding window.
+ *
+ * If we set SEARCH_LIMIT to 3:
+ *
+ *  Server events [01, 02, 04, 06, 07, 08, 11, 13]
+ *                |01, 02, 04|
+ *  Local events  [03, 05, 09, 10, 12, 14, 15, 16]
+ *                |03, 05, 09|
+ *
+ *  We note that the oldest event is from the local index, and we combine the
+ *  results:
+ *
+ *  Server window [01, 02, 04]
+ *  Local window  [03, 05, 09]
+ *
+ *  Combined events [01, 02, 03, 04, 05, 09]
+ *
+ *  We split the combined result in the part that we want to present and a part
+ *  that will be cached.
+ *
+ *  Presented events [01, 02, 03]
+ *  Cached events    [04, 05, 09]
+ *
+ *  We slide the window for the server since the oldest event is from the local
+ *  index.
+ *
+ *  Server events [01, 02, 04, 06, 07, 08, 11, 13]
+ *                            |06, 07, 08|
+ *  Local events  [03, 05, 09, 10, 12, 14, 15, 16]
+ *                |XX, XX, XX|
+ *  Cached events [04, 05, 09]
+ *
+ *  We note that the oldest event is from the server and we combine the new
+ *  server events with the cached ones.
+ *
+ *  Cached events [04, 05, 09]
+ *  Server events [06, 07, 08]
+ *
+ *  Combined events [04, 05, 06, 07, 08, 09]
+ *
+ *  We split again.
+ *
+ *  Presented events [04, 05, 06]
+ *  Cached events    [07, 08, 09]
+ *
+ *  We slide the local window, the oldest event is on the server.
+ *
+ *  Server events [01, 02, 04, 06, 07, 08, 11, 13]
+ *                            |XX, XX, XX|
+ *  Local events  [03, 05, 09, 10, 12, 14, 15, 16]
+ *                            |10, 12, 14|
+ *
+ *  Cached events [07, 08, 09]
+ *  Local events  [10, 12, 14]
+ *  Combined events [07, 08, 09, 10, 12, 14]
+ *
+ *  Presented events [07, 08, 09]
+ *  Cached events    [10, 12, 14]
+ *
+ *  Next up we slide the server window again.
+ *
+ *  Server events [01, 02, 04, 06, 07, 08, 11, 13]
+ *                                        |11, 13|
+ *  Local events  [03, 05, 09, 10, 12, 14, 15, 16]
+ *                            |XX, XX, XX|
+ *
+ *  Cached events [10, 12, 14]
+ *  Server events [11, 13]
+ *  Combined events [10, 11, 12, 13, 14]
+ *
+ *  Presented events [10, 11, 12]
+ *  Cached events    [13, 14]
+ *
+ *  We have one source exhausted, we fetch the rest of our events from the other
+ *  source and combine it with our cached events.
+ *
+ *
  * @param {object} previousSearchResult A search result from a previous search
  * call.
  * @param {object} localEvents An unprocessed search result from the event
  * index.
  * @param {object} serverEvents An unprocessed search result from the server.
  *
- * @ return {object} A response object that combines the events from the
+ * @return {object} A response object that combines the events from the
  * different event sources.
  *
  */
@@ -230,6 +323,9 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
     response.highlights = previousSearchResult.highlights;
 
     if (localEvents && serverEvents) {
+        // This is a first search call, combine the events from the server and
+        // the local index. Note where our oldest event came from, we shall
+        // fetch the next batch of events from the other source.
         if (compareOldestEvents(localEvents, serverEvents) < 0) {
             oldestEventFrom = "local";
         }
@@ -237,18 +333,28 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
         combineEventSources(previousSearchResult, response, localEvents.results, serverEvents.results);
         response.highlights = localEvents.highlights.concat(serverEvents.highlights);
     } else if (localEvents) {
+        // This is a pagination call fetching more events from the local index,
+        // meaning that our oldest event was on the server.
+        // Change the source of the oldest event if our local event is older
+        // than the cached one.
         if (compareOldestEvents(localEvents, cachedEvents) < 0) {
             oldestEventFrom = "local";
         }
         combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
     } else if (serverEvents) {
+        // This is a pagination call fetching more events from the server,
+        // meaning that our oldest event was in the local index.
+        // Change the source of the oldest event if our server event is older
+        // than the cached one.
         if (compareOldestEvents(serverEvents, cachedEvents) < 0) {
             oldestEventFrom = "server";
         }
         combineEventSources(previousSearchResult, response, serverEvents.results, cachedEvents);
     } else {
+        // This is a pagination call where we exhausted both of our event
+        // sources, let's push the remaining cached events.
         response.results = cachedEvents;
-        delete previousSearchResult.cachedEvents;
+        previousSearchResult.cachedEvents = [];
     }
 
     previousSearchResult.oldestEventFrom = oldestEventFrom;
@@ -258,8 +364,18 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
 
 /**
  * Combine the local and server search responses
+ *
+ * @param {object} previousSearchResult A search result from a previous search
+ * call.
+ * @param {object} localEvents An unprocessed search result from the event
+ * index.
+ * @param {object} serverEvents An unprocessed search result from the server.
+ *
+ * @return {object} A response object that combines the events from the
+ * different event sources.
  */
 function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
+    // Combine our events first.
     const response = combineEvents(previousSearchResult, localEvents, serverEvents);
 
     // Our first search will contain counts from both sources, subsequent
@@ -293,7 +409,7 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
     // pagination request.
     //
     // Provide a fake next batch token for that case.
-    if (!response.next_batch && previousSearchResult.cachedEvents && previousSearchResult.cachedEvents.length > 0) {
+    if (!response.next_batch && previousSearchResult.cachedEvents.length > 0) {
         response.next_batch = "cached";
     }
 
@@ -310,13 +426,15 @@ async function combinedPagination(searchResult) {
     let localResult;
     let serverSideResult;
 
-    if ((searchArgs.next_batch && oldestEventFrom === "server") ||
-        (!searchResult.serverSideNextBatch && searchArgs.next_batch)) {
+    // Fetch events from the local index if we have a token for itand if it's
+    // the local indexes turn or the server has exhausted its results.
+    if (searchArgs.next_batch && (!searchResult.serverSideNextBatch || oldestEventFrom === "server")) {
         localResult = await eventIndex.search(searchArgs);
     }
 
-    if ((searchResult.serverSideNextBatch && oldestEventFrom === "local") ||
-        (!searchArgs.next_batch && searchResult.serverSideNextBatch)) {
+    // Fetch events from the server if we have a token for it and if it's the
+    // local indexes turn or the local index has exhausted its results.
+    if (searchResult.serverSideNextBatch && (oldestEventFrom === "local" || !searchArgs.next_batch)) {
         const body = {body: searchResult._query, next_batch: searchResult.serverSideNextBatch};
         serverSideResult = await client.search(body);
     }
@@ -327,6 +445,7 @@ async function combinedPagination(searchResult) {
         serverEvents = serverSideResult.search_categories.room_events;
     }
 
+    // Combine our events.
     const combinedResult = combineResponses(searchResult, localResult, serverEvents);
 
     const response = {
@@ -335,6 +454,7 @@ async function combinedPagination(searchResult) {
         },
     };
 
+    // Let the client process the combined result.
     const result = client._processRoomEventsSearch(searchResult, response);
 
     searchResult.pendingRequest = null;
