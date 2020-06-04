@@ -68,11 +68,6 @@ export default class ToastStore extends EventEmitter {
     }
 
     dismissToast(key) {
-        if (!this.toasts.some(t => t.key === key)) {
-            console.warn(`No toast for ${key} found - cannot dismiss. Check your toastKey`);
-            return;
-        }
-
         if (this.toasts[0] && this.toasts[0].key === key) {
             this.countSeen++;
         }
