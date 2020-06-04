@@ -76,6 +76,17 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
 
+    private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
+        const tileDiff = e.movementY < 0 ? -1 : +1;
+        this.props.layout.visibleTiles += tileDiff;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onShowAllClick = () => {
+        this.props.layout.visibleTiles = this.numTiles;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
     private renderTiles(): React.ReactElement[] {
         const tiles: React.ReactElement[] = [];
 
@@ -184,12 +195,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         );
     }
 
-    private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
-        const tileDiff = e.movementY < 0 ? -1 : +1;
-        this.props.layout.visibleTiles += tileDiff;
-        this.forceUpdate(); // because the layout doesn't trigger a re-render
-    };
-
     public render(): React.ReactElement {
         // TODO: Proper rendering
         // TODO: Error boundary
@@ -216,6 +221,33 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
             const visibleTiles = tiles.slice(0, layout.visibleTiles);
+            console.log({n: tiles.length, c: layout.visibleTiles});
+
+            // If we're hiding rooms, show a 'show more' button to the user. This button
+            // replaces the last visible tile, so will always show 2+ rooms. We do this
+            // because if it said "show 1 more room" we had might as well show that room
+            // instead. We also replace the last item so we don't have to adjust our math
+            // on pixel heights, etc. It's much easier to pretend the button is a tile.
+            if (tiles.length > layout.visibleTiles) {
+                // we have a cutoff condition - add the button to show all
+
+                // we +1 to account for the room we're about to hide with our 'show more' button
+                const numMissing = (tiles.length - visibleTiles.length) + 1;
+
+                // TODO: Copy TBD
+                // TODO: CSS TBD
+                // TODO: Show N more instead of infinity more?
+                // TODO: Safely use the same height of a tile, not hardcoded hacks
+                visibleTiles.splice(visibleTiles.length - 1, 1, (
+                    <div
+                        onClick={this.onShowAllClick}
+                        style={{height: '34px', lineHeight: '34px', backgroundColor: 'green', cursor: 'pointer'}}
+                        key='showall'
+                    >
+                        {_t("Show %(n)s more rooms", {n: numMissing})}
+                    </div>
+                ));
+            }
             content = (
                 <ResizableBox
                     width={-1}
