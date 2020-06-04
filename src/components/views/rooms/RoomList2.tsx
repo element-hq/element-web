@@ -18,18 +18,17 @@ limitations under the License.
 
 import * as React from "react";
 import { _t, _td } from "../../../languageHandler";
-import { Layout } from '../../../resizer/distributors/roomsublist2';
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStore2 } from "../../../stores/room-list/RoomListStore2";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
 import dis from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
-import { IFilterCondition } from "../../../stores/room-list/filters/IFilterCondition";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
+import { ListLayout } from "../../../stores/room-list/ListLayout";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -50,6 +49,7 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
+    layouts: Map<TagID, ListLayout>;
 }
 
 const TAG_ORDER: TagID[] = [
@@ -127,19 +127,15 @@ const TAG_AESTHETICS: {
 };
 
 export default class RoomList2 extends React.Component<IProps, IState> {
-    private sublistRefs: { [tagId: string]: React.RefObject<RoomSublist2> } = {};
-    private sublistSizes: { [tagId: string]: number } = {};
-    private sublistCollapseStates: { [tagId: string]: boolean } = {};
-    private unfilteredLayout: Layout;
-    private filteredLayout: Layout;
     private searchFilter: NameFilterCondition = new NameFilterCondition();
 
     constructor(props: IProps) {
         super(props);
 
-        this.state = {sublists: {}};
-        this.loadSublistSizes();
-        this.prepareLayouts();
+        this.state = {
+            sublists: {},
+            layouts: new Map<TagID, ListLayout>(),
+        };
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>): void {
@@ -158,49 +154,16 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store) => {
-            console.log("new lists", store.orderedLists);
-            this.setState({sublists: store.orderedLists});
-        });
-    }
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store: RoomListStore2) => {
+            const newLists = store.orderedLists;
+            console.log("new lists", newLists);
 
-    private loadSublistSizes() {
-        const sizesJson = window.localStorage.getItem("mx_roomlist_sizes");
-        if (sizesJson) this.sublistSizes = JSON.parse(sizesJson);
-
-        const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
-        if (collapsedJson) this.sublistCollapseStates = JSON.parse(collapsedJson);
-    }
-
-    private saveSublistSizes() {
-        window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.sublistSizes));
-        window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.sublistCollapseStates));
-    }
-
-    private prepareLayouts() {
-        // TODO: Change layout engine for FTUE support
-        this.unfilteredLayout = new Layout((tagId: string, height: number) => {
-            const sublist = this.sublistRefs[tagId];
-            if (sublist) sublist.current.setHeight(height);
-
-            // TODO: Check overflow (see old impl)
-
-            // Don't store a height for collapsed sublists
-            if (!this.sublistCollapseStates[tagId]) {
-                this.sublistSizes[tagId] = height;
-                this.saveSublistSizes();
+            const layoutMap = new Map<TagID, ListLayout>();
+            for (const tagId of Object.keys(newLists)) {
+                layoutMap.set(tagId, new ListLayout(tagId));
             }
-        }, this.sublistSizes, this.sublistCollapseStates, {
-            allowWhitespace: false,
-            handleHeight: 1,
-        });
 
-        this.filteredLayout = new Layout((tagId: string, height: number) => {
-            const sublist = this.sublistRefs[tagId];
-            if (sublist) sublist.current.setHeight(height);
-        }, null, null, {
-            allowWhitespace: false,
-            handleHeight: 0,
+            this.setState({sublists: newLists, layouts: layoutMap});
         });
     }
 
@@ -226,16 +189,19 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
-            components.push(<RoomSublist2
-                key={`sublist-${orderedTagId}`}
-                forRooms={true}
-                rooms={orderedRooms}
-                startAsHidden={aesthetics.defaultHidden}
-                label={_t(aesthetics.sectionLabel)}
-                onAddRoom={onAddRoomFn}
-                addRoomLabel={aesthetics.addRoomLabel}
-                isInvite={aesthetics.isInvite}
-            />);
+            components.push(
+                <RoomSublist2
+                    key={`sublist-${orderedTagId}`}
+                    forRooms={true}
+                    rooms={orderedRooms}
+                    startAsHidden={aesthetics.defaultHidden}
+                    label={_t(aesthetics.sectionLabel)}
+                    onAddRoom={onAddRoomFn}
+                    addRoomLabel={aesthetics.addRoomLabel}
+                    isInvite={aesthetics.isInvite}
+                    layout={this.state.layouts.get(orderedTagId)}
+                />
+            );
         }
 
         return components;
@@ -250,7 +216,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        className="mx_RoomList"
+                        className="mx_RoomList mx_RoomList2"
                         role="tree"
                         aria-label={_t("Rooms")}
                         // Firefox sometimes makes this element focusable due to
