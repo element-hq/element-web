@@ -2477,5 +2477,6 @@
     "Upgrade your Riot": "Aggiorna Riot",
     "A new version of Riot is available!": "È disponibile una nuova versione di Riot!",
     "New version available. <a>Update now.</a>": "Nuova versione disponibile. <a>Aggiorna ora.</a>",
-    "Emoji picker": "Selettore emoji"
+    "Emoji picker": "Selettore emoji",
+    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "L'amministratore del server ha disattivato la crittografia end-to-end in modo predefinito nelle stanze private e nei messaggi diretti."
 }
