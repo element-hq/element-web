@@ -159,7 +159,7 @@ async function localSearch(searchTerm, roomId = undefined, processResult = true)
     const result = {
         response: localResult,
         query: searchArgs,
-    }
+    };
 
     return result;
 }
@@ -291,7 +291,7 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
 
     console.log("HELLOO COMBINING RESULTS", localEvents, serverEvents, response);
 
-    return response
+    return response;
 }
 
 async function combinedPagination(searchResult) {
@@ -307,11 +307,13 @@ async function combinedPagination(searchResult) {
 
     const oldestEventFrom = searchResult.oldestEventFrom;
 
-    if ((searchArgs.next_batch && oldestEventFrom === "server") || (!searchResult.serverSideNextBatch && searchArgs.next_batch)) {
+    if ((searchArgs.next_batch && oldestEventFrom === "server") ||
+        (!searchResult.serverSideNextBatch && searchArgs.next_batch)) {
         localResult = await eventIndex.search(searchArgs);
     }
 
-    if ((searchResult.serverSideNextBatch && oldestEventFrom === "local") || (!searchArgs.next_batch && searchResult.serverSideNextBatch)) {
+    if ((searchResult.serverSideNextBatch && oldestEventFrom === "local") ||
+        (!searchArgs.next_batch && searchResult.serverSideNextBatch)) {
         const body = {body: searchResult._query, next_batch: searchResult.serverSideNextBatch};
         serverSideResult = await client.search(body);
     }
@@ -336,7 +338,7 @@ async function combinedPagination(searchResult) {
 
     searchResult.pendingRequest = null;
 
-    return result
+    return result;
 }
 
 function eventIndexSearch(term, roomId = undefined) {
@@ -378,7 +380,7 @@ function eventIndexSearchPagination(searchResult) {
         const promise = combinedPagination(searchResult);
         searchResult.pendingRequest = promise;
 
-        return promise
+        return promise;
     }
 }
 
