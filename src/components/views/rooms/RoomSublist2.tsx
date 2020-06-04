@@ -20,7 +20,6 @@ import * as React from "react";
 import { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 import * as RoomNotifs from '../../../RoomNotifs';
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
@@ -28,6 +27,8 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import AccessibleTooltipButton from "../../views/elements/AccessibleTooltipButton";
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import RoomTile2 from "./RoomTile2";
+import { ResizableBox, ResizeCallbackData } from "react-resizable";
+import { ListLayout } from "../../../stores/room-list/ListLayout";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -45,7 +46,7 @@ interface IProps {
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
-    height: number; // pixels
+    layout: ListLayout;
 
     // TODO: Collapsed state
     // TODO: Group invites
@@ -183,6 +184,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         );
     }
 
+    private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
+        const tileDiff = e.movementY < 0 ? -1 : +1;
+        this.props.layout.visibleTiles += tileDiff;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
     public render(): React.ReactElement {
         // TODO: Proper rendering
         // TODO: Error boundary
@@ -200,11 +207,29 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (tiles.length > 0) {
             // TODO: Lazy list rendering
             // TODO: Whatever scrolling magic needs to happen here
+            const layout = this.props.layout; // to shorten calls
+            const minTilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.minVisibleTiles));
+            const maxTilesPx = layout.tilesToPixels(tiles.length);
+            const tilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.visibleTiles));
+            let handles = ['s'];
+            if (layout.visibleTiles >= tiles.length && tiles.length <= layout.minVisibleTiles) {
+                handles = []; // no handles, we're at a minimum
+            }
+            const visibleTiles = tiles.slice(0, layout.visibleTiles);
             content = (
-                <IndicatorScrollbar
-                    className='mx_RoomSubList_scroll'
-                    style={{height: `${this.props.height}px`}}
-                >{tiles}</IndicatorScrollbar>
+                <ResizableBox
+                    width={-1}
+                    height={tilesPx}
+                    axis="y"
+                    minConstraints={[-1, minTilesPx]}
+                    maxConstraints={[-1, maxTilesPx]}
+                    draggableOpts={{grid: [-1, layout.tileHeight]}}
+                    resizeHandles={handles}
+                    onResize={this.onResize}
+                    className="mx_RoomSublist2_resizeBox"
+                >
+                    {visibleTiles}
+                </ResizableBox>
             )
         }
 

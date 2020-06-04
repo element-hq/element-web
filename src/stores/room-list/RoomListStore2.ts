@@ -29,7 +29,6 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
-import { RoomListLayoutStore } from "./RoomListLayoutStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -45,8 +44,6 @@ interface IState {
 export const LISTS_UPDATE_EVENT = "lists_update";
 
 export class RoomListStore2 extends AsyncStore<ActionPayload> {
-    public readonly layout = new RoomListLayoutStore();
-
     private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;

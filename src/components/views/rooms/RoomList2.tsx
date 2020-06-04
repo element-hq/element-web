@@ -18,7 +18,6 @@ limitations under the License.
 
 import * as React from "react";
 import { _t, _td } from "../../../languageHandler";
-import { Layout } from '../../../resizer/distributors/roomsublist2';
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStore2 } from "../../../stores/room-list/RoomListStore2";
@@ -29,6 +28,7 @@ import dis from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
+import { ListLayout } from "../../../stores/room-list/ListLayout";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -49,7 +49,7 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
-    heights: Map<TagID, number>;
+    layouts: Map<TagID, ListLayout>;
 }
 
 const TAG_ORDER: TagID[] = [
@@ -127,20 +127,16 @@ const TAG_AESTHETICS: {
 };
 
 export default class RoomList2 extends React.Component<IProps, IState> {
-    private sublistRefs: { [tagId: string]: React.RefObject<RoomSublist2> } = {};
     private sublistSizes: { [tagId: string]: number } = {};
     private sublistCollapseStates: { [tagId: string]: boolean } = {};
-    private unfilteredLayout: Layout;
-    private filteredLayout: Layout;
     private searchFilter: NameFilterCondition = new NameFilterCondition();
-    private currentTagResize: TagID = null;
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             sublists: {},
-            heights: new Map<TagID, number>(),
+            layouts: new Map<TagID, ListLayout>(),
         };
         this.loadSublistSizes();
     }
@@ -165,12 +161,12 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             const newLists = store.orderedLists;
             console.log("new lists", newLists);
 
-            const heightMap = new Map<TagID, number>();
+            const layoutMap = new Map<TagID, ListLayout>();
             for (const tagId of Object.keys(newLists)) {
-                heightMap.set(tagId, store.layout.getPixelHeight(tagId));
+                layoutMap.set(tagId, new ListLayout(tagId));
             }
 
-            this.setState({sublists: newLists, heights: heightMap});
+            this.setState({sublists: newLists, layouts: layoutMap});
         });
     }
 
@@ -181,30 +177,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         const collapsedJson = window.localStorage.getItem("mx_roomlist_collapsed");
         if (collapsedJson) this.sublistCollapseStates = JSON.parse(collapsedJson);
     }
-
-    private saveSublistSizes() {
-        window.localStorage.setItem("mx_roomlist_sizes", JSON.stringify(this.sublistSizes));
-        window.localStorage.setItem("mx_roomlist_collapsed", JSON.stringify(this.sublistCollapseStates));
-    }
-
-    private onResizerMouseDown = (ev: React.MouseEvent) => {
-        const hr = ev.target as HTMLHRElement;
-        this.currentTagResize = hr.getAttribute("data-id");
-    };
-
-    private onResizerMouseUp = (ev: React.MouseEvent) => {
-        this.currentTagResize = null;
-    };
-
-    private onMouseMove = (ev: React.MouseEvent) => {
-        ev.preventDefault();
-        if (this.currentTagResize) {
-            const pixelHeight = this.state.heights.get(this.currentTagResize);
-            RoomListStore.instance.layout.setPixelHeight(this.currentTagResize, pixelHeight + ev.movementY);
-            this.state.heights.set(this.currentTagResize, RoomListStore.instance.layout.getPixelHeight(this.currentTagResize));
-            this.forceUpdate();
-        }
-    };
 
     private renderSublists(): React.ReactElement[] {
         const components: React.ReactElement[] = [];
@@ -228,24 +200,19 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
-            components.push(<RoomSublist2
-                key={`sublist-${orderedTagId}`}
-                forRooms={true}
-                rooms={orderedRooms}
-                startAsHidden={aesthetics.defaultHidden}
-                label={_t(aesthetics.sectionLabel)}
-                onAddRoom={onAddRoomFn}
-                addRoomLabel={aesthetics.addRoomLabel}
-                isInvite={aesthetics.isInvite}
-                height={this.state.heights.get(orderedTagId)}
-            />);
-            components.push(<hr
-                key={`resizer-${orderedTagId}`}
-                data-id={orderedTagId}
-                className="mx_RoomList2_resizer"
-                onMouseDown={this.onResizerMouseDown}
-                onMouseUp={this.onResizerMouseUp}
-            />);
+            components.push(
+                <RoomSublist2
+                    key={`sublist-${orderedTagId}`}
+                    forRooms={true}
+                    rooms={orderedRooms}
+                    startAsHidden={aesthetics.defaultHidden}
+                    label={_t(aesthetics.sectionLabel)}
+                    onAddRoom={onAddRoomFn}
+                    addRoomLabel={aesthetics.addRoomLabel}
+                    isInvite={aesthetics.isInvite}
+                    layout={this.state.layouts.get(orderedTagId)}
+                />
+            );
         }
 
         return components;
@@ -260,8 +227,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        onMouseUp={this.onResizerMouseUp}
-                        onMouseMove={this.onMouseMove}
                         className="mx_RoomList mx_RoomList2"
                         role="tree"
                         aria-label={_t("Rooms")}
