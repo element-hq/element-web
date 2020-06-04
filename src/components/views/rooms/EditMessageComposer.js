@@ -31,6 +31,7 @@ import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
 import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -157,7 +158,7 @@ export default class EditMessageComposer extends React.Component {
                 dis.dispatch({action: 'edit_event', event: nextEvent});
             } else {
                 dis.dispatch({action: 'edit_event', event: null});
-                dis.dispatch({action: 'focus_composer'});
+                dis.fire(Action.FocusComposer);
             }
             event.preventDefault();
         }
@@ -165,7 +166,7 @@ export default class EditMessageComposer extends React.Component {
 
     _cancelEdit = () => {
         dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     }
 
     _isContentModified(newContent) {
@@ -195,7 +196,7 @@ export default class EditMessageComposer extends React.Component {
 
         // close the event editing and focus composer
         dis.dispatch({action: "edit_event", event: null});
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     };
 
     _cancelPreviousPendingEdit() {
