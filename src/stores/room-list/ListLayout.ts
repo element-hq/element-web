@@ -57,6 +57,10 @@ export class ListLayout {
         return n * this.tileHeight;
     }
 
+    public pixelsToTiles(px: number): number {
+        return px / this.tileHeight;
+    }
+
     private serialize(): ISerializedListLayout {
         return {
             numTiles: this.visibleTiles,

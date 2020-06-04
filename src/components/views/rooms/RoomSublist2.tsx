@@ -77,7 +77,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
-        const tileDiff = e.movementY < 0 ? -1 : +1;
+        const direction = e.movementY < 0 ? -1 : +1;
+        const tileDiff = this.props.layout.pixelsToTiles(Math.abs(e.movementY)) * direction;
         this.props.layout.visibleTiles += tileDiff;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
@@ -254,7 +255,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     axis="y"
                     minConstraints={[-1, minTilesPx]}
                     maxConstraints={[-1, maxTilesPx]}
-                    draggableOpts={{grid: [-1, layout.tileHeight]}}
+                    draggableOpts={{grid: [-1, 1]}}
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
