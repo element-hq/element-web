@@ -71,10 +71,9 @@ function compareEvents(a, b) {
     const aEvent = a.result;
     const bEvent = b.result;
 
-    if (aEvent.origin_server_ts >
-        bEvent.origin_server_ts) return -1;
-    if (aEvent.origin_server_ts <
-        bEvent.origin_server_ts) return 1;
+    if (aEvent.origin_server_ts > bEvent.origin_server_ts) return -1;
+    if (aEvent.origin_server_ts < bEvent.origin_server_ts) return 1;
+
     return 0;
 }
 
@@ -254,26 +253,37 @@ function combineEvents(previousSearchResult, localEvents = undefined, serverEven
 function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
     const response = combineEvents(previousSearchResult, localEvents, serverEvents);
 
+    // Our first search will contain counts from both sources, subsequent
+    // pagination requests will fetch responses only from one of the sources, so
+    // reuse the first count when we're paginating.
     if (previousSearchResult.count) {
         response.count = previousSearchResult.count;
     } else {
         response.count = localEvents.count + serverEvents.count;
     }
 
+    // Update our next batch tokens for the given search sources.
     if (localEvents) {
         previousSearchResult.seshatQuery.next_batch = localEvents.next_batch;
     }
-
     if (serverEvents) {
         previousSearchResult.serverSideNextBatch = serverEvents.next_batch;
     }
 
+    // Set the response next batch token to one of the tokens from the sources,
+    // this makes sure that if we exhaust one of the sources we continue with
+    // the other one.
     if (previousSearchResult.seshatQuery.next_batch) {
         response.next_batch = previousSearchResult.seshatQuery.next_batch;
     } else if (previousSearchResult.serverSideNextBatch) {
         response.next_batch = previousSearchResult.serverSideNextBatch;
     }
 
+    // We collected all search results from the server as well as from Seshat,
+    // we still have some events cached that we'll want to display on the next
+    // pagination request.
+    //
+    // Provide a fake next batch token for that case.
     if (!response.next_batch && previousSearchResult.cachedEvents && previousSearchResult.cachedEvents.length > 0) {
         response.next_batch = "cached";
     }
@@ -356,13 +366,18 @@ function eventIndexSearchPagination(searchResult) {
     const serverQuery = searchResult._query;
 
     if (!seshatQuery) {
+        // This is a search in a non-encrypted room. Do the normal server-side
+        // pagination.
         return client.backPaginateRoomEventsSearch(searchResult);
     } else if (!serverQuery) {
+        // This is a search in a encrypted room. Do a local pagination.
         const promise = localPagination(searchResult);
         searchResult.pendingRequest = promise;
 
         return promise;
     } else {
+        // We have both queries around, this is a search across all rooms so a
+        // combined pagination needs to be done.
         const promise = combinedPagination(searchResult);
         searchResult.pendingRequest = promise;
 
