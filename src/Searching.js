@@ -17,6 +17,8 @@ limitations under the License.
 import EventIndexPeg from "./indexing/EventIndexPeg";
 import {MatrixClientPeg} from "./MatrixClientPeg";
 
+const SEARCH_LIMIT = 10;
+
 async function serverSideSearch(term, roomId = undefined, processResult = true) {
     const client = MatrixClientPeg.get();
 
@@ -26,6 +28,7 @@ async function serverSideSearch(term, roomId = undefined, processResult = true) 
         // the same shape as the v2 filter API :(
         filter = {
             rooms: [roomId],
+            limit: SEARCH_LIMIT,
         };
     }
 
@@ -96,16 +99,21 @@ async function combinedSearch(searchTerm) {
     const localQuery = localResult.query;
     const localResponse = localResult.response;
 
+    // Store our queries for later on so we can support pagination.
     const emptyResult = {
         seshatQuery: localQuery,
         _query: serverQuery,
         serverSideNextBatch: serverResponse.next_batch,
+        cachedEvents: [],
+        oldestEventFrom: "server",
         results: [],
         highlights: [],
     };
 
+    // Combine our results.
     const combinedResult = combineResponses(emptyResult, localResponse, serverResponse.search_categories.room_events);
 
+    // Let the client process the combined result.
     const response = {
         search_categories: {
             room_events: combinedResult,
@@ -122,6 +130,7 @@ async function localSearch(searchTerm, roomId = undefined, processResult = true)
         search_term: searchTerm,
         before_limit: 1,
         after_limit: 1,
+        limit: SEARCH_LIMIT,
         order_by_recency: true,
         room_id: undefined,
     };
@@ -184,73 +193,53 @@ async function localPagination(searchResult) {
     return result;
 }
 
+function compareOldestEvents(firstResults, secondResults) {
+    try {
+        const oldestFirstEvent = firstResults.results[firstResults.results.length - 1].result;
+        const oldestSecondEvent = secondResults.results[secondResults.results.length - 1].result;
+
+        if (oldestFirstEvent.origin_server_ts <= oldestSecondEvent.origin_server_ts) {
+            return -1
+        } else {
+            return 1
+        }
+    } catch {
+        return 0
+    }
+}
+
+function combineEventSources(previousSearchResult, response, a, b) {
+    const combinedEvents = a.concat(b).sort(compareEvents);
+    response.results = combinedEvents.slice(0, SEARCH_LIMIT);
+    previousSearchResult.cachedEvents = combinedEvents.slice(SEARCH_LIMIT);
+}
+
 function combineEvents(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
     const response = {};
 
-    let oldestEventFrom = "server";
-    let cachedEvents;
-
-    if (previousSearchResult.oldestEventFrom) {
-        oldestEventFrom = previousSearchResult.oldestEventFrom;
-    }
-
-    if (previousSearchResult.cachedEvents) {
-        cachedEvents = previousSearchResult.cachedEvents;
-    }
+    const cachedEvents = previousSearchResult.cachedEvents;
+    let oldestEventFrom = previousSearchResult.oldestEventFrom;
+    response.highlights = previousSearchResult.highlights;
 
     if (localEvents && serverEvents) {
-        const oldestLocalEvent = localEvents.results[localEvents.results.length - 1].result;
-        const oldestServerEvent = serverEvents.results[serverEvents.results.length - 1].result;
-
-        if (oldestLocalEvent.origin_server_ts <= oldestServerEvent.origin_server_ts) {
+        if (compareOldestEvents(localEvents, serverEvents) < 0) {
             oldestEventFrom = "local";
         }
 
-        const combinedEvents = localEvents.results.concat(serverEvents.results).sort(compareEvents);
-        response.results = combinedEvents.slice(0, 10);
+        combineEventSources(previousSearchResult, response, localEvents.results, serverEvents.results);
         response.highlights = localEvents.highlights.concat(serverEvents.highlights);
-        previousSearchResult.cachedEvents = combinedEvents.slice(10);
-        console.log("HELLOO COMBINED", combinedEvents);
     } else if (localEvents) {
-        if (cachedEvents && cachedEvents.length > 0) {
-            const oldestLocalEvent = localEvents.results[localEvents.results.length - 1].result;
-            const oldestCachedEvent = cachedEvents[cachedEvents.length - 1].result;
-
-            if (oldestLocalEvent.origin_server_ts <= oldestCachedEvent.origin_server_ts) {
-                oldestEventFrom = "local";
-            }
-
-            const combinedEvents = localEvents.results.concat(cachedEvents).sort(compareEvents);
-            response.results = combinedEvents.slice(0, 10);
-            previousSearchResult.cachedEvents = combinedEvents.slice(10);
-        } else {
-            response.results = localEvents.results;
+        if (compareOldestEvents(localEvents, cachedEvents) < 0) {
+            oldestEventFrom = "local";
         }
-
-        response.highlights = localEvents.highlights;
+        combineEventSources(previousSearchResult, response, localEvents.results, cachedEvents);
     } else if (serverEvents) {
-        console.log("HEEEEELOO WHAT'S GOING ON", cachedEvents);
-        if (cachedEvents && cachedEvents.length > 0) {
-            const oldestServerEvent = serverEvents.results[serverEvents.results.length - 1].result;
-            const oldestCachedEvent = cachedEvents[cachedEvents.length - 1].result;
-
-            if (oldestServerEvent.origin_server_ts <= oldestCachedEvent.origin_server_ts) {
-                oldestEventFrom = "server";
-            }
-
-            const combinedEvents = serverEvents.results.concat(cachedEvents).sort(compareEvents);
-            response.results = combinedEvents.slice(0, 10);
-            previousSearchResult.cachedEvents = combinedEvents.slice(10);
-        } else {
-            response.results = serverEvents.results;
+        if (compareOldestEvents(serverEvents, cachedEvents) < 0) {
+            oldestEventFrom = "server";
         }
-        response.highlights = serverEvents.highlights;
+        combineEventSources(previousSearchResult, response, serverEvents.results, cachedEvents);
     } else {
-        if (cachedEvents && cachedEvents.length > 0) {
-            response.results = cachedEvents;
-        }
-        response.highlights = [];
-
+        response.results = cachedEvents;
         delete previousSearchResult.cachedEvents;
     }
 
@@ -298,14 +287,11 @@ async function combinedPagination(searchResult) {
     const eventIndex = EventIndexPeg.get();
     const client = MatrixClientPeg.get();
 
-    console.log("HELLOOO WORLD", searchResult.oldestEventFrom);
-
     const searchArgs = searchResult.seshatQuery;
+    const oldestEventFrom = searchResult.oldestEventFrom;
 
     let localResult;
     let serverSideResult;
-
-    const oldestEventFrom = searchResult.oldestEventFrom;
 
     if ((searchArgs.next_batch && oldestEventFrom === "server") ||
         (!searchResult.serverSideNextBatch && searchArgs.next_batch)) {
