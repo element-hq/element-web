@@ -184,19 +184,77 @@ async function localPagination(searchResult) {
     return result;
 }
 
-function combineEvents(localEvents = undefined, serverEvents = undefined, cachedEvents = undefined) {
+function combineEvents(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
     const response = {};
 
-    if (localEvents && serverEvents) {
-        response.results = localEvents.results.concat(serverEvents.results).sort(compareEvents);
-        response.highlights = localEvents.highlights.concat(serverEvents.highlights);
-    } else if (localEvents) {
-        response.results = localEvents.results;
-        response.highlights = localEvents.highlights;
-    } else {
-        response.results = serverEvents.results;
-        response.highlights = serverEvents.highlights;
+    let oldestEventFrom = "server";
+    let cachedEvents;
+
+    if (previousSearchResult.oldestEventFrom) {
+        oldestEventFrom = previousSearchResult.oldestEventFrom;
     }
+
+    if (previousSearchResult.cachedEvents) {
+        cachedEvents = previousSearchResult.cachedEvents;
+    }
+
+    if (localEvents && serverEvents) {
+        const oldestLocalEvent = localEvents.results[localEvents.results.length - 1].result;
+        const oldestServerEvent = serverEvents.results[serverEvents.results.length - 1].result;
+
+        if (oldestLocalEvent.origin_server_ts <= oldestServerEvent.origin_server_ts) {
+            oldestEventFrom = "local";
+        }
+
+        const combinedEvents = localEvents.results.concat(serverEvents.results).sort(compareEvents);
+        response.results = combinedEvents.slice(0, 10);
+        response.highlights = localEvents.highlights.concat(serverEvents.highlights);
+        previousSearchResult.cachedEvents = combinedEvents.slice(10);
+        console.log("HELLOO COMBINED", combinedEvents);
+    } else if (localEvents) {
+        if (cachedEvents && cachedEvents.length > 0) {
+            const oldestLocalEvent = localEvents.results[localEvents.results.length - 1].result;
+            const oldestCachedEvent = cachedEvents[cachedEvents.length - 1].result;
+
+            if (oldestLocalEvent.origin_server_ts <= oldestCachedEvent.origin_server_ts) {
+                oldestEventFrom = "local";
+            }
+
+            const combinedEvents = localEvents.results.concat(cachedEvents).sort(compareEvents);
+            response.results = combinedEvents.slice(0, 10);
+            previousSearchResult.cachedEvents = combinedEvents.slice(10);
+        } else {
+            response.results = localEvents.results;
+        }
+
+        response.highlights = localEvents.highlights;
+    } else if (serverEvents) {
+        console.log("HEEEEELOO WHAT'S GOING ON", cachedEvents);
+        if (cachedEvents && cachedEvents.length > 0) {
+            const oldestServerEvent = serverEvents.results[serverEvents.results.length - 1].result;
+            const oldestCachedEvent = cachedEvents[cachedEvents.length - 1].result;
+
+            if (oldestServerEvent.origin_server_ts <= oldestCachedEvent.origin_server_ts) {
+                oldestEventFrom = "server";
+            }
+
+            const combinedEvents = serverEvents.results.concat(cachedEvents).sort(compareEvents);
+            response.results = combinedEvents.slice(0, 10);
+            previousSearchResult.cachedEvents = combinedEvents.slice(10);
+        } else {
+            response.results = serverEvents.results;
+        }
+        response.highlights = serverEvents.highlights;
+    } else {
+        if (cachedEvents && cachedEvents.length > 0) {
+            response.results = cachedEvents;
+        }
+        response.highlights = [];
+
+        delete previousSearchResult.cachedEvents;
+    }
+
+    previousSearchResult.oldestEventFrom = oldestEventFrom;
 
     return response;
 }
@@ -205,7 +263,7 @@ function combineEvents(localEvents = undefined, serverEvents = undefined, cached
  * Combine the local and server search responses
  */
 function combineResponses(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
-    const response = combineEvents(localEvents, serverEvents);
+    const response = combineEvents(previousSearchResult, localEvents, serverEvents);
 
     if (previousSearchResult.count) {
         response.count = previousSearchResult.count;
@@ -215,12 +273,20 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
 
     if (localEvents) {
         previousSearchResult.seshatQuery.next_batch = localEvents.next_batch;
-        response.next_batch = localEvents.next_batch;
     }
 
-    if (serverEvents && serverEvents.next_batch) {
+    if (serverEvents) {
         previousSearchResult.serverSideNextBatch = serverEvents.next_batch;
-        response.next_batch = serverEvents.next_batch;
+    }
+
+    if (previousSearchResult.seshatQuery.next_batch) {
+        response.next_batch = previousSearchResult.seshatQuery.next_batch;
+    } else if (previousSearchResult.serverSideNextBatch) {
+        response.next_batch = previousSearchResult.serverSideNextBatch;
+    }
+
+    if (!response.next_batch && previousSearchResult.cachedEvents && previousSearchResult.cachedEvents.length > 0) {
+        response.next_batch = "cached";
     }
 
     console.log("HELLOO COMBINING RESULTS", localEvents, serverEvents, response);
@@ -239,16 +305,24 @@ async function combinedPagination(searchResult) {
     let localResult;
     let serverSideResult;
 
-    if (searchArgs.next_batch) {
+    const oldestEventFrom = searchResult.oldestEventFrom;
+
+    if ((searchArgs.next_batch && oldestEventFrom === "server") || (!searchResult.serverSideNextBatch && searchArgs.next_batch)) {
         localResult = await eventIndex.search(searchArgs);
     }
 
-    if (searchResult.serverSideNextBatch) {
+    if ((searchResult.serverSideNextBatch && oldestEventFrom === "local") || (!searchArgs.next_batch && searchResult.serverSideNextBatch)) {
         const body = {body: searchResult._query, next_batch: searchResult.serverSideNextBatch};
         serverSideResult = await client.search(body);
     }
 
-    const combinedResult = combineResponses(searchResult, localResult, serverSideResult.search_categories.room_events);
+    let serverEvents;
+
+    if (serverSideResult) {
+        serverEvents = serverSideResult.search_categories.room_events;
+    }
+
+    const combinedResult = combineResponses(searchResult, localResult, serverEvents);
 
     const response = {
         search_categories: {
