@@ -37,12 +37,6 @@ export const updateCheckStatusEnum = {
 export default abstract class VectorBasePlatform extends BasePlatform {
     protected _favicon: Favicon;
 
-    constructor() {
-        super();
-
-        this.startUpdateCheck = this.startUpdateCheck.bind(this);
-    }
-
     async getConfig(): Promise<{}> {
         return getVectorConfig();
     }

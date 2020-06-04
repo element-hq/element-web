@@ -457,8 +457,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    getSSOCallbackUrl(hsUrl: string, isUrl: string, fragmentAfterLogin: string): URL {
-        const url = super.getSSOCallbackUrl(hsUrl, isUrl, fragmentAfterLogin);
+    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+        const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "riot";
         url.searchParams.set("riot-desktop-ssoid", this.ssoID);
         return url;
@@ -499,5 +499,31 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
 
         return handled;
+    }
+
+    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        try {
+            return await this._ipcCall('getPickleKey', userId, deviceId);
+        } catch (e) {
+            // if we can't connect to the password storage, assume there's no
+            // pickle key
+            return null;
+        }
+    }
+
+    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
+        try {
+            return await this._ipcCall('createPickleKey', userId, deviceId);
+        } catch (e) {
+            // if we can't connect to the password storage, assume there's no
+            // pickle key
+            return null;
+        }
+    }
+
+    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
+        try {
+            await this._ipcCall('destroyPickleKey', userId, deviceId);
+        } catch (e) {}
     }
 }
