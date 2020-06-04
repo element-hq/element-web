@@ -221,7 +221,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
             const visibleTiles = tiles.slice(0, layout.visibleTiles);
-            console.log({n: tiles.length, c: layout.visibleTiles});
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // replaces the last visible tile, so will always show 2+ rooms. We do this
