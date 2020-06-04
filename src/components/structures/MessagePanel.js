@@ -34,6 +34,30 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
 
+// check if there is a previous event and it has the same sender as this event
+// and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
+function shouldFormContinuation(prevEvent, mxEvent) {
+    // sanity check inputs
+    if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
+    // check if within the max continuation period
+    if (mxEvent.getTs() - prevEvent.getTs() > CONTINUATION_MAX_INTERVAL) return false;
+
+    // Some events should appear as continuations from previous events of different types.
+    if (mxEvent.getType() !== prevEvent.getType() &&
+        (!continuedTypes.includes(mxEvent.getType()) ||
+            !continuedTypes.includes(prevEvent.getType()))) return false;
+
+    // Check if the sender is the same and hasn't changed their displayname/avatar between these events
+    if (mxEvent.sender.userId !== prevEvent.sender.userId ||
+        mxEvent.sender.name !== prevEvent.sender.name ||
+        mxEvent.sender.getMxcAvatarUrl() !== prevEvent.sender.getMxcAvatarUrl()) return false;
+
+    // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
+    if (!haveTileForEvent(prevEvent)) return false;
+
+    return true;
+}
+
 const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType() === 'm.room.third_party_invite';
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
@@ -515,39 +539,6 @@ export default class MessagePanel extends React.Component {
 
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
-        // is this a continuation of the previous message?
-        let continuation = false;
-
-        // Some events should appear as continuations from previous events of
-        // different types.
-
-        const eventTypeContinues =
-            prevEvent !== null &&
-            continuedTypes.includes(mxEv.getType()) &&
-            continuedTypes.includes(prevEvent.getType());
-
-        // if there is a previous event and it has the same sender as this event
-        // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
-            // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
-            haveTileForEvent(prevEvent) && (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
-            (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
-            continuation = true;
-        }
-
-/*
-        // Work out if this is still a continuation, as we are now showing commands
-        // and /me messages with their own little avatar. The case of a change of
-        // event type (commands) is handled above, but we need to handle the /me
-        // messages seperately as they have a msgtype of 'm.emote' but are classed
-        // as normal messages
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender
-                && mxEv.sender.userId === prevEvent.sender.userId
-                && mxEv.getType() == prevEvent.getType()
-                && prevEvent.getContent().msgtype === 'm.emote') {
-            continuation = false;
-        }
-*/
 
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
@@ -559,11 +550,14 @@ export default class MessagePanel extends React.Component {
         }
 
         // do we need a date separator since the last event?
-        if (this._wantsDateSeparator(prevEvent, eventDate)) {
+        const wantsDateSeparator = this._wantsDateSeparator(prevEvent, eventDate);
+        if (wantsDateSeparator) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
-            continuation = false;
         }
+
+        // is this a continuation of the previous message?
+        const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
