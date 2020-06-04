@@ -45,8 +45,8 @@ export class FontWatcher implements IWatcher {
     };
 
     private setRootFontSize = (size) => {
-        // Externally we tell the user the font is size 15. Internally we use 20.
-        const fontSize = Math.max(Math.min(FontWatcher.MAX_SIZE, size), FontWatcher.MIN_SIZE) + 5;
+        // Externally we tell the user the font is size 15. Internally we use 10.
+        const fontSize = Math.max(Math.min(FontWatcher.MAX_SIZE, size), FontWatcher.MIN_SIZE) - 5;
 
         if (fontSize !== size) {
             SettingsStore.setValue("fontSize", null, SettingLevel.Device, fontSize);
