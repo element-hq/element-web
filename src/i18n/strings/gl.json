@@ -1253,5 +1253,11 @@
     "Add theme": "Engadir decorado",
     "Theme": "Decorado",
     "Language and region": "Idioma e rexión",
-    "Your theme": "O teu decorado"
+    "Your theme": "O teu decorado",
+    "Use the improved room list (in development - refresh to apply changes)": "Usar a lista mellorada de salas (en desenvolvemento - actualiza para aplicar)",
+    "Support adding custom themes": "Permitir engadir decorados personalizados",
+    "Use IRC layout": "Usar disposición IRC",
+    "Font size": "Tamaño da letra",
+    "Custom font size": "Tamaño letra personalizado",
+    "Enable Emoji suggestions while typing": "Activar suxestión de Emoji ao escribir"
 }
