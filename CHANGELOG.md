@@ -1,3 +1,16 @@
+Changes in [1.6.3](https://github.com/vector-im/riot-web/releases/tag/v1.6.3) (2020-06-04)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3-rc.1...v1.6.3)
+
+## Security notice
+
+Riot Web 1.6.3 fixes a vulnerability in single sign-on (SSO) deployments where Riot Web could be confused into sending authentication details to an attacker-controlled server. Thanks to Quentin Gliech for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+ * Fix login loop where the sso flow returns to `#/login` to release
+   [\#13915](https://github.com/vector-im/riot-web/pull/13915)
+
 Changes in [1.6.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.3-rc.1) (2020-06-02)
 ====================================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.2...v1.6.3-rc.1)
