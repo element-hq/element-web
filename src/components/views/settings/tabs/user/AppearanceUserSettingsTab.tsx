@@ -137,8 +137,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
-        const min = FontWatcher.MIN_SIZE;
-        const max = FontWatcher.MAX_SIZE;
+        const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
+        const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
 
         if (isNaN(parsedSize)) {
             return {valid: false, feedback: _t("Size must be a number")};
