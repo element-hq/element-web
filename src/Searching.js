@@ -194,12 +194,12 @@ function compareOldestEvents(firstResults, secondResults) {
         const oldestSecondEvent = secondResults.results[secondResults.results.length - 1].result;
 
         if (oldestFirstEvent.origin_server_ts <= oldestSecondEvent.origin_server_ts) {
-            return -1
+            return -1;
         } else {
-            return 1
+            return 1;
         }
     } catch {
-        return 0
+        return 0;
     }
 }
 
@@ -209,6 +209,19 @@ function combineEventSources(previousSearchResult, response, a, b) {
     previousSearchResult.cachedEvents = combinedEvents.slice(SEARCH_LIMIT);
 }
 
+/**
+ * Combine the events from our event sources into a sorted result
+ *
+ * @param {object} previousSearchResult A search result from a previous search
+ * call.
+ * @param {object} localEvents An unprocessed search result from the event
+ * index.
+ * @param {object} serverEvents An unprocessed search result from the server.
+ *
+ * @ return {object} A response object that combines the events from the
+ * different event sources.
+ *
+ */
 function combineEvents(previousSearchResult, localEvents = undefined, serverEvents = undefined) {
     const response = {};
 
