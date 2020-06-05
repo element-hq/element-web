@@ -235,6 +235,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 // we have a cutoff condition - add the button to show all
 
                 // we +1 to account for the room we're about to hide with our 'show more' button
+                // this results in the button always being 1+, and not needing an i18n `count`.
                 const numMissing = (tiles.length - visibleTiles.length) + 1;
 
                 // TODO: CSS TBD
