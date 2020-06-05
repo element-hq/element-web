@@ -1136,6 +1136,7 @@
     "Jump to first unread room.": "Jump to first unread room.",
     "Jump to first invite.": "Jump to first invite.",
     "Add room": "Add room",
+    "Show %(n)s more": "Show %(n)s more",
     "Options": "Options",
     "%(count)s unread messages including mentions.|other": "%(count)s unread messages including mentions.",
     "%(count)s unread messages including mentions.|one": "1 unread mention.",
