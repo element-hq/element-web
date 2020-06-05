@@ -23,7 +23,6 @@ import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
-import Tooltip from "../../views/elements/Tooltip";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import * as RoomNotifs from '../../../RoomNotifs';
@@ -32,6 +31,7 @@ import * as Unread from '../../../Unread';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import ActiveRoomObserver from "../../../ActiveRoomObserver";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -66,6 +66,7 @@ interface INotificationState {
 interface IState {
     hover: boolean;
     notificationState: INotificationState;
+    selected: boolean;
 }
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
@@ -88,12 +89,14 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.state = {
             hover: false,
             notificationState: this.getNotificationState(),
+            selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
         };
 
         this.props.room.on("Room.receipt", this.handleRoomEventUpdate);
         this.props.room.on("Room.timeline", this.handleRoomEventUpdate);
         this.props.room.on("Room.redaction", this.handleRoomEventUpdate);
         MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
+        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
     }
 
     public componentWillUnmount() {
@@ -101,6 +104,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             this.props.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
             this.props.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
             this.props.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
+            ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
@@ -187,6 +191,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         });
     };
 
+    private onActiveRoomUpdate = (isActive: boolean) => {
+        this.setState({selected: isActive});
+    };
+
     public render(): React.ReactElement {
         // TODO: Collapsed state
         // TODO: Invites
@@ -195,6 +203,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         const classes = classNames({
             'mx_RoomTile2': true,
+            'mx_RoomTile2_selected': this.state.selected,
         });
 
         let badge;

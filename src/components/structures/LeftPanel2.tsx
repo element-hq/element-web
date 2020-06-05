@@ -86,26 +86,35 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     private renderHeader(): React.ReactNode {
-        // TODO: Use real profile info
+        // TODO: Update when profile info changes
         // TODO: Presence
         // TODO: Breadcrumbs toggle
         // TODO: Menu button
         const avatarSize = 32;
+        // TODO: Don't do this profile lookup in render()
+        const client = MatrixClientPeg.get();
+        let displayName = client.getUserId();
+        let avatarUrl: string = null;
+        const myUser = client.getUser(client.getUserId());
+        if (myUser) {
+            displayName = myUser.rawDisplayName;
+            avatarUrl = myUser.avatarUrl;
+        }
         return (
             <div className="mx_LeftPanel2_userHeader">
                 <div className="mx_LeftPanel2_headerRow">
                     <span className="mx_LeftPanel2_userAvatarContainer">
                         <BaseAvatar
                             idName={MatrixClientPeg.get().getUserId()}
-                            name={"TODO: Display Name"}
-                            url={null}
+                            name={displayName}
+                            url={avatarUrl}
                             width={avatarSize}
                             height={avatarSize}
                             resizeMethod="crop"
                             className="mx_LeftPanel2_userAvatar"
                         />
                     </span>
-                    <span className="mx_LeftPanel2_userName">Irene</span>
+                    <span className="mx_LeftPanel2_userName">{displayName}</span>
                 </div>
                 <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
                     <RoomBreadcrumbs />

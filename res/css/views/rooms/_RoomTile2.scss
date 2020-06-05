@@ -14,14 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Rename to mx_RoomTile during replacement of old component
+
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
-    width: 100%;
-    padding-bottom: 12px;
+    width: calc(100% - 11px); // 8px for padding (4px on either side), 3px for margin
+    margin-bottom: 4px;
+    margin-right: 3px;
+    padding: 4px;
 
     // The tile is also a flexbox row itself
     display: flex;
     flex-wrap: wrap;
+
+    &.mx_RoomTile2_selected {
+        background-color: $roomtile2-selected-bg-color;
+        border-radius: 32px;
+    }
 
     .mx_RoomTile2_avatarContainer {
         margin-right: 8px;
