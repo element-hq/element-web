@@ -239,17 +239,15 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 // we +1 to account for the room we're about to hide with our 'show more' button
                 const numMissing = (tiles.length - visibleTiles.length) + 1;
 
-                // TODO: Copy TBD
                 // TODO: CSS TBD
-                // TODO: Show N more instead of infinity more?
-                // TODO: Safely use the same height of a tile, not hardcoded hacks
+                // TODO: Make this an actual tile
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
                         style={{height: '34px', lineHeight: '34px', cursor: 'pointer'}}
                         key='showall'
                     >
-                        {_t("Show %(n)s more rooms", {n: numMissing})}
+                        {_t("Show %(n)s more", {n: numMissing})}
                     </div>
                 ));
             }
@@ -260,7 +258,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     axis="y"
                     minConstraints={[-1, minTilesPx]}
                     maxConstraints={[-1, maxTilesPx]}
-                    draggableOpts={{grid: [-1, 1]}}
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
