@@ -38,5 +38,14 @@ limitations under the License.
         display: flex;
         flex-direction: column;
         overflow: hidden;
+
+        .mx_RoomSublist2_showMoreButton {
+            height: 44px; // 1 room tile high
+            cursor: pointer;
+
+            // We create a flexbox to cheat at alignment
+            display: flex;
+            align-items: center;
+        }
     }
 }

@@ -237,11 +237,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                 // TODO: CSS TBD
                 // TODO: Make this an actual tile
-                const moreTileHeightPx = layout.tileHeight;
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
-                        style={{height: moreTileHeightPx, lineHeight: moreTileHeightPx, cursor: 'pointer'}}
+                        className='mx_RoomSublist2_showMoreButton'
                         key='showall'
                     >
                         {_t("Show %(n)s more", {n: numMissing})}
