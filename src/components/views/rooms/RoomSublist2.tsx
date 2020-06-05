@@ -217,11 +217,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
 
-            // TODO: Remove Math hacks
-            let nVisible = Math.floor(layout.visibleTiles);
-            if (localStorage.getItem("mx_rl_mathfn")) {
-                nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
-            }
+            // TODO: This might need adjustment, however for now it is fine as a round.
+            const nVisible = Math.round(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -233,10 +230,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 // we have a cutoff condition - add the button to show all
 
                 // we +1 to account for the room we're about to hide with our 'show more' button
+                // this results in the button always being 1+, and not needing an i18n `count`.
                 const numMissing = (tiles.length - visibleTiles.length) + 1;
 
                 // TODO: CSS TBD
                 // TODO: Make this an actual tile
+                // TODO: This is likely to pop out of the list, consider that.
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}

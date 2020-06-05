@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { TagID } from "./models";
+
 const TILE_HEIGHT_PX = 44;
 
 interface ISerializedListLayout {
@@ -23,7 +25,7 @@ interface ISerializedListLayout {
 export class ListLayout {
     private _n = 0;
 
-    constructor(public readonly tagId) {
+    constructor(public readonly tagId: TagID) {
         const serialized = localStorage.getItem(this.key);
         if (serialized) {
             // We don't use the setters as they cause writes.

@@ -359,6 +359,8 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     _onSelectionChange = () => {
+        const {isEmpty} = this.props.model;
+
         this._refreshLastCaretIfNeeded();
         const selection = document.getSelection();
         if (this._hasTextSelected && selection.isCollapsed) {
@@ -366,7 +368,7 @@ export default class BasicMessageEditor extends React.Component {
             if (this._formatBarRef) {
                 this._formatBarRef.hide();
             }
-        } else if (!selection.isCollapsed) {
+        } else if (!selection.isCollapsed && !isEmpty) {
             this._hasTextSelected = true;
             if (this._formatBarRef) {
                 const selectionRect = selection.getRangeAt(0).getBoundingClientRect();

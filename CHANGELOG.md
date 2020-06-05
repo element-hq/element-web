@@ -1,7 +1,20 @@
+Changes in [2.7.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.1) (2020-06-05)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.0...v2.7.1)
+
+ * Upgrade to JS SDK 6.2.1
+ * Fix exceptions from Tooltip
+   [\#4716](https://github.com/matrix-org/matrix-react-sdk/pull/4716)
+ * Fix not being able to dismiss new login toasts
+   [\#4715](https://github.com/matrix-org/matrix-react-sdk/pull/4715)
+ * Fix compact layout regression
+   [\#4714](https://github.com/matrix-org/matrix-react-sdk/pull/4714)
+
 Changes in [2.7.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.0) (2020-06-04)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.0-rc.2...v2.7.0)
 
+ * Upgrade to JS SDK 6.2.0
  * Prevent (double) 4S bootstrap from RestoreKeyBackupDialog
    [\#4703](https://github.com/matrix-org/matrix-react-sdk/pull/4703)
  * Fix checkbox bleed
