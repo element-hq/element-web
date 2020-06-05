@@ -217,11 +217,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
 
+            // TODO: Remove Math hacks
             let nVisible = Math.floor(layout.visibleTiles);
             if (localStorage.getItem("mx_rl_mathfn")) {
                 nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
             }
-            console.log({nVisible})
             const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -235,15 +235,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 // we +1 to account for the room we're about to hide with our 'show more' button
                 const numMissing = (tiles.length - visibleTiles.length) + 1;
 
-                // TODO: Copy TBD
                 // TODO: CSS TBD
-                // TODO: Show N more instead of infinity more?
-                // TODO: Safely use the same height of a tile, not hardcoded hacks
-                const moreTileHeightPx = `${layout.tileHeight}px`;
+                // TODO: Make this an actual tile
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
-                        style={{height: moreTileHeightPx, lineHeight: moreTileHeightPx, backgroundColor: 'transparent', cursor: 'pointer'}}
+                        style={{height: moreTileHeightPx, lineHeight: moreTileHeightPx, cursor: 'pointer'}}
                         key='showall'
                     >
                         {_t("Show %(n)s more", {n: numMissing})}
@@ -257,7 +254,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     axis="y"
                     minConstraints={[-1, minTilesPx]}
                     maxConstraints={[-1, maxTilesPx]}
-                    draggableOpts={{grid: [-1, 1]}}
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
