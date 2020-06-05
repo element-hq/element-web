@@ -237,6 +237,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                 // TODO: CSS TBD
                 // TODO: Make this an actual tile
+                const moreTileHeightPx = layout.tileHeight;
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
