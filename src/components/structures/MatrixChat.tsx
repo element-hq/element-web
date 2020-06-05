@@ -1900,10 +1900,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return setLoggedInPromise;
         }
 
-        // Test for the master cross-signing key in SSSS as a quick proxy for
-        // whether cross-signing has been set up on the account.
-        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
-        if (masterKeyInStorage) {
+        // wait for the client to finish downloading cross-signing keys for us so we
+        // know whether or not we have keys set up on this account
+        await cli.downloadKeys([cli.getUserId()]);
+
+        const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
+        if (crossSigningIsSetUp) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });

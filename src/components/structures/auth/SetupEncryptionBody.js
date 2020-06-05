@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import withValidation from '../../views/elements/Validation';
@@ -196,11 +196,27 @@ export default class SetupEncryptionBody extends React.Component {
         } else if (phase === PHASE_INTRO) {
             const store = SetupEncryptionStore.sharedInstance();
             let recoveryKeyPrompt;
-            if (keyHasPassphrase(store.keyInfo)) {
+            if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
                 recoveryKeyPrompt = _t("Use Recovery Key or Passphrase");
-            } else {
+            } else if (store.keyInfo) {
                 recoveryKeyPrompt = _t("Use Recovery Key");
             }
+
+            let useRecoveryKeyButton;
+            let resetKeysCaption;
+            if (recoveryKeyPrompt) {
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUseRecoveryKeyClick}>
+                    {recoveryKeyPrompt}
+                </AccessibleButton>;
+                resetKeysCaption = _td(
+                    "If you've forgotten your recovery key you can <button>set up new recovery options</button>",
+                );
+            } else {
+                resetKeysCaption = _td(
+                    "If you have no other devices you can <button>set up new recovery options</button>",
+                );
+            }
+
             return (
                 <div>
                     <p>{_t(
@@ -224,16 +240,12 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="link" onClick={this._onUseRecoveryKeyClick}>
-                            {recoveryKeyPrompt}
-                        </AccessibleButton>
+                        {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
                         </AccessibleButton>
                     </div>
-                    <div className="mx_CompleteSecurity_resetText">{_t(
-                        "If you've forgotten your recovery key you can " +
-                        "<button>set up new recovery options</button>", {}, {
+                    <div className="mx_CompleteSecurity_resetText">{_t(resetKeysCaption, {}, {
                             button: sub => <AccessibleButton
                                 element="span" className="mx_linkButton" onClick={this._onResetClick}
                             >
