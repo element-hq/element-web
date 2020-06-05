@@ -222,11 +222,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
 
-            // TODO: Remove Math hacks
-            let nVisible = Math.floor(layout.visibleTiles);
-            if (localStorage.getItem("mx_rl_mathfn")) {
-                nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
-            }
+            // TODO: This might need adjustment, however for now it is fine as a round.
+            const nVisible = Math.round(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -242,6 +239,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                 // TODO: CSS TBD
                 // TODO: Make this an actual tile
+                // TODO: This is likely to pop out of the list, consider that.
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
