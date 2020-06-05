@@ -92,12 +92,23 @@ interface IProps {
     currentGroupIsNew?: boolean;
 }
 
+interface IUsageLimit {
+    limit_type: "monthly_active_user" | string;
+    admin_contact?: string;
+}
+
 interface IState {
     mouseDown?: {
         x: number;
         y: number;
     };
-    syncErrorData: any;
+    syncErrorData?: {
+        error: {
+            data: IUsageLimit;
+            errcode: string;
+        };
+    };
+    usageLimitEventContent?: IUsageLimit;
     useCompactLayout: boolean;
 }
 
@@ -282,7 +293,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         if (oldSyncState === 'PREPARED' && syncState === 'SYNCING') {
             this._updateServerNoticeEvents();
         } else {
-            this._calculateServerLimitToast(data);
+            this._calculateServerLimitToast(this.state.syncErrorData, this.state.usageLimitEventContent);
         }
     };
 
@@ -293,7 +304,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         }
     };
 
-    _calculateServerLimitToast(syncErrorData, usageLimitEventContent?) {
+    _calculateServerLimitToast(syncErrorData: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
         const error = syncErrorData && syncErrorData.error && syncErrorData.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
             usageLimitEventContent = syncErrorData.error.data;
@@ -330,8 +341,9 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                 e.getContent()['server_notice_type'] === 'm.server_notice.usage_limit_reached'
             );
         });
-
-        this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEvent && usageLimitEvent.getContent());
+        const usageLimitEventContent = usageLimitEvent && usageLimitEvent.getContent();
+        this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEventContent);
+        this.setState({ usageLimitEventContent });
     };
 
     _onPaste = (ev) => {

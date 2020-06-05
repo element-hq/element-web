@@ -94,7 +94,7 @@ export default class Tooltip extends React.Component<IProps> {
         return style;
     }
 
-    private renderTooltip() {
+    private renderTooltip = () => {
         // Add the parent's position to the tooltips, so it's correctly
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the

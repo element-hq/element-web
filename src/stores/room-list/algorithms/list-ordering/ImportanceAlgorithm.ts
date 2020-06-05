@@ -17,7 +17,7 @@ limitations under the License.
 
 import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomUpdateCause, TagID } from "../../models";
+import { DefaultTagID, RoomUpdateCause, TagID } from "../../models";
 import { ITagMap, SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import * as Unread from '../../../../Unread';
@@ -92,9 +92,9 @@ export class ImportanceAlgorithm extends Algorithm {
     // can be found from `this.indices[tag][category]` and the sticky room information
     // from `this.stickyRoom`.
     //
-    // The room list store is always provided with the `this.cached` results, which are
+    // The room list store is always provided with the `this.cachedRooms` results, which are
     // updated as needed and not recalculated often. For example, when a room needs to
-    // move within a tag, the array in `this.cached` will be spliced instead of iterated.
+    // move within a tag, the array in `this.cachedRooms` will be spliced instead of iterated.
     // The `indices` help track the positions of each category to make splicing easier.
 
     private indices: {
@@ -189,7 +189,13 @@ export class ImportanceAlgorithm extends Algorithm {
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        const tags = this.roomIdsToTags[room.roomId];
+        if (cause === RoomUpdateCause.NewRoom) {
+            // TODO: Be smarter and insert rather than regen the planet.
+            await this.setKnownRooms([room, ...this.rooms]);
+            return;
+        }
+
+        let tags = this.roomIdsToTags[room.roomId];
         if (!tags) {
             console.warn(`No tags known for "${room.name}" (${room.roomId})`);
             return false;
@@ -201,7 +207,7 @@ export class ImportanceAlgorithm extends Algorithm {
                 continue; // Nothing to do here.
             }
 
-            const taggedRooms = this.cached[tag];
+            const taggedRooms = this.cachedRooms[tag];
             const indices = this.indices[tag];
             let roomIdx = taggedRooms.indexOf(room);
             if (roomIdx === -1) {

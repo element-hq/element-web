@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "2.6.1",
+  "version": "2.7.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -164,7 +164,9 @@
     "testMatch": [
       "<rootDir>/test/**/*-test.js"
     ],
-    "setupFiles": ["jest-canvas-mock"],
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
     "setupFilesAfterEnv": [
       "<rootDir>/test/setupTests.js"
     ],
