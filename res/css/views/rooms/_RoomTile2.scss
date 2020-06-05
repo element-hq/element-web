@@ -14,5 +14,81 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
+    width: 100%;
+    padding-bottom: 12px;
+
+    // The tile is also a flexbox row itself
+    display: flex;
+    flex-wrap: wrap;
+
+    .mx_RoomTile2_avatarContainer {
+        margin-right: 8px;
+    }
+
+    .mx_RoomTile2_nameContainer {
+        // Create a new column layout flexbox for the name parts
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .mx_RoomTile2_name,
+        .mx_RoomTile2_messagePreview {
+            margin: 0 2px;
+        }
+
+        // TODO: Ellipsis on the name and preview
+
+        .mx_RoomTile2_name {
+            font-weight: 600;
+            font-size: $font-14px;
+            line-height: $font-19px;
+        }
+
+        .mx_RoomTile2_messagePreview {
+            font-size: $font-13px;
+            line-height: $font-18px;
+            color: $roomtile2-preview-color;
+        }
+    }
+
+    .mx_RoomTile2_badgeContainer {
+        flex-grow: 1;
+
+        // Create another flexbox row because it's super easy to position the badge at
+        // the end this way.
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .mx_RoomTile2_badge {
+            background-color: $roomtile2-badge-color;
+
+            &:not(.mx_RoomTile2_badgeEmpty) {
+                border-radius: 16px;
+                font-size: $font-10px;
+                line-height: $font-14px;
+                text-align: center;
+                font-weight: bold;
+                margin-right: 14px;
+                color: #fff; // TODO: Variable
+
+                // TODO: Confirm padding on counted badges
+                padding: 2px 5px;
+            }
+
+            &.mx_RoomTile2_badgeEmpty {
+                width: 6px;
+                height: 6px;
+                border-radius: 6px;
+                margin-right: 18px;
+            }
+
+            &.mx_RoomTile2_badgeHighlight {
+                // TODO: Use a more specific variable
+                background-color: $warning-color;
+            }
+        }
+    }
 }

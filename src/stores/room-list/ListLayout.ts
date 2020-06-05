@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const TILE_HEIGHT_PX = 34;
+const TILE_HEIGHT_PX = 44;
 
 interface ISerializedListLayout {
     numTiles: number;

@@ -16,7 +16,27 @@ limitations under the License.
 
 @import "../../../../node_modules/react-resizable/css/styles.css";
 
-.mx_RoomList2 .mx_RoomSubList2_labelContainer {
-  z-index: 12;
-  background-color: purple;
+.mx_RoomSublist2 {
+    // The sublist is a column of rows, essentially
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+
+    .mx_RoomSublist2_headerContainer {
+        text-transform: uppercase;
+        opacity: 0.5;
+        line-height: $font-16px;
+        font-size: $font-12px;
+        padding-bottom: 8px;
+    }
+
+    .mx_RoomSublist2_resizeBox {
+        // Create another flexbox column for the tiles
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
 }

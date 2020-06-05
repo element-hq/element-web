@@ -96,7 +96,7 @@ const TAG_AESTHETICS: {
         defaultHidden: false,
     },
     [DefaultTagID.DM]: {
-        sectionLabel: _td("Direct Messages"),
+        sectionLabel: _td("People"),
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
@@ -200,6 +200,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel}
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
+                    showMessagePreviews={orderedTagId === DefaultTagID.DM}
                 />
             );
         }
