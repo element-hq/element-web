@@ -66,5 +66,5 @@ export const showToast = (deviceId: string) => {
 };
 
 export const hideToast = (deviceId: string) => {
-    ToastStore.sharedInstance().dismissToast(deviceId);
+    ToastStore.sharedInstance().dismissToast(toastKey(deviceId));
 };
