@@ -16,6 +16,8 @@ limitations under the License.
 
 // TODO: Rename to mx_RoomSublist during replacement of old component
 
+// TODO: Just use the 3 selectors we need from this instead of importing it.
+// We're going to end up with heavy modifications anyways.
 @import "../../../../node_modules/react-resizable/css/styles.css";
 
 .mx_RoomSublist2 {
