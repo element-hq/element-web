@@ -226,7 +226,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             if (localStorage.getItem("mx_rl_mathfn")) {
                 nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
             }
-            console.log({nVisible})
             const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
