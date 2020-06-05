@@ -31,6 +31,7 @@ import Spinner from "./components/views/elements/Spinner";
 
 // Polyfill for Canvas.toBlob API using Canvas.toDataURL
 import "blueimp-canvas-to-blob";
+import { Action } from "./dispatcher/actions";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -529,7 +530,7 @@ export default class ContentMessages {
         dis.dispatch({action: 'upload_started'});
 
         // Focus the composer view
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
 
         function onProgress(ev) {
             upload.total = ev.total;

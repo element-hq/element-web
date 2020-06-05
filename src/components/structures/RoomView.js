@@ -55,6 +55,7 @@ import {haveTileForEvent} from "../views/rooms/EventTile";
 import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { shieldStatusForRoom } from '../../utils/ShieldUtils';
+import {Action} from "../../dispatcher/actions";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -1162,7 +1163,7 @@ export default createReactClass({
             ev.dataTransfer.files, this.state.room.roomId, this.context,
         );
         this.setState({ draggingFile: false });
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     },
 
     onDragLeaveOrEnd: function(ev) {
@@ -1368,7 +1369,7 @@ export default createReactClass({
                 event: null,
             });
         }
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     },
 
     onLeaveClick: function() {
@@ -1479,7 +1480,7 @@ export default createReactClass({
     // jump down to the bottom of this room, where new events are arriving
     jumpToLiveTimeline: function() {
         this._messagePanel.jumpToLiveTimeline();
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     },
 
     // jump up to wherever our read marker is
