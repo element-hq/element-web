@@ -131,7 +131,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         );
 
         const searchBox = (<SearchBox
-            className="mx_LeftPanel2_TODO_filterRooms"
+            className="mx_LeftPanel2_filterRoomsSearch"
             enableRoomSearchFocus={true}
             blurredPlaceholder={_t('Filter')}
             placeholder={_t('Filter rooms…')}
