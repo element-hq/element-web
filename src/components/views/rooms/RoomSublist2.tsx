@@ -247,7 +247,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
-                        style={{height: '34px', lineHeight: '34px', backgroundColor: 'green', cursor: 'pointer'}}
+                        style={{height: '34px', lineHeight: '34px', cursor: 'pointer'}}
                         key='showall'
                     >
                         {_t("Show %(n)s more rooms", {n: numMissing})}
