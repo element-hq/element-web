@@ -222,6 +222,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 handles = []; // no handles, we're at a minimum
             }
 
+            // TODO: Remove Math hacks
             let nVisible = Math.floor(layout.visibleTiles);
             if (localStorage.getItem("mx_rl_mathfn")) {
                 nVisible = Math[localStorage.getItem("mx_rl_mathfn")](layout.visibleTiles);
