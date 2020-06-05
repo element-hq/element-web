@@ -1890,7 +1890,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         if (!cryptoEnabled) {
             this.setState({ pendingInitialSync: false });
-            return setLoggedInPromise;
+            return;
         }
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
