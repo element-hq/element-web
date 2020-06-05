@@ -1868,41 +1868,30 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.accountPasswordTimer = null;
         }, 60 * 5 * 1000);
 
-        // Wait for the client to be logged in (but not started)
-        // which is enough to ask the server about account data.
-        const loggedIn = new Promise(resolve => {
-            const actionHandlerRef = dis.register(payload => {
-                if (payload.action !== "on_logged_in") {
-                    return;
-                }
-                dis.unregister(actionHandlerRef);
-                resolve();
-            });
-        });
-
-        // Create and start the client in the background
-        const setLoggedInPromise = Lifecycle.setLoggedIn(credentials);
-        await loggedIn;
+        // Create and start the client
+        await Lifecycle.setLoggedIn(credentials);
 
         const cli = MatrixClientPeg.get();
-        // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
-        // because the client hasn't been started yet.
-        const cryptoAvailable = isCryptoAvailable();
-        if (!cryptoAvailable) {
+        const cryptoEnabled = cli.isCryptoEnabled();
+        if (!cryptoEnabled) {
             this.onLoggedIn();
         }
 
-        this.setState({ pendingInitialSync: true });
-        await this.firstSyncPromise.promise;
+        const promisesList = [this.firstSyncPromise.promise];
+        if (cryptoEnabled) {
+            // wait for the client to finish downloading cross-signing keys for us so we
+            // know whether or not we have keys set up on this account
+            promisesList.push(cli.downloadKeys([cli.getUserId()]));
+        }
 
-        if (!cryptoAvailable) {
+        this.setState({ pendingInitialSync: true });
+
+        await Promise.all(promisesList);
+
+        if (!cryptoEnabled) {
             this.setState({ pendingInitialSync: false });
             return setLoggedInPromise;
         }
-
-        // wait for the client to finish downloading cross-signing keys for us so we
-        // know whether or not we have keys set up on this account
-        await cli.downloadKeys([cli.getUserId()]);
 
         const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
         if (crossSigningIsSetUp) {
@@ -1913,8 +1902,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.onLoggedIn();
         }
         this.setState({ pendingInitialSync: false });
-
-        return setLoggedInPromise;
     };
 
     // complete security / e2e setup has finished
