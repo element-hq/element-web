@@ -29,6 +29,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
+import RoomViewStore from "../RoomViewStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -62,6 +63,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.checkEnabled();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
+        RoomViewStore.addListener(this.onRVSUpdate);
     }
 
     public get orderedLists(): ITagMap {
@@ -93,6 +95,23 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.setAlgorithmClass();
     }
 
+    private onRVSUpdate = () => {
+        if (!this.enabled) return; // TODO: Remove enabled flag when RoomListStore2 takes over
+        if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
+
+        const activeRoomId = RoomViewStore.getRoomId();
+        if (!activeRoomId && this.algorithm.stickyRoom) {
+            this.algorithm.stickyRoom = null;
+        } else if (activeRoomId) {
+            const activeRoom = this.matrixClient.getRoom(activeRoomId);
+            if (!activeRoom) throw new Error(`${activeRoomId} is current in RVS but missing from client`);
+            if (activeRoom !== this.algorithm.stickyRoom) {
+                console.log(`Changing sticky room to ${activeRoomId}`);
+                this.algorithm.stickyRoom = activeRoom;
+            }
+        }
+    };
+
     protected async onDispatch(payload: ActionPayload) {
         if (payload.action === 'MatrixActions.sync') {
             // Filter out anything that isn't the first PREPARED sync.
@@ -110,6 +129,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             console.log("Regenerating room lists: Startup");
             await this.readAndCacheSettingsFromStore();
             await this.regenerateAllLists();
+            this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
         }
 
         // TODO: Remove this once the RoomListStore becomes default
