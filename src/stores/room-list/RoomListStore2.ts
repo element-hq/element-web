@@ -145,13 +145,19 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
             if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
-                // TODO: Update room now that it's been read
-                console.log(payload);
+                console.log(`[RoomListDebug] Got own read receipt in ${payload.event.roomId}`);
+                const room = this.matrixClient.getRoom(payload.event.roomId);
+                if (!room) {
+                    console.warn(`Own read receipt was in unknown room ${payload.event.roomId}`);
+                    return;
+                }
+                await this.handleRoomUpdate(room, RoomUpdateCause.ReadReceipt);
                 return;
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
-            // TODO: Update room from tags
-            console.log(payload);
+            const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
+            console.log(`[RoomListDebug] Got tag change in ${roomPayload.room.roomId}`);
+            await this.handleRoomUpdate(roomPayload.room, RoomUpdateCause.PossibleTagChange);
         } else if (payload.action === 'MatrixActions.Room.timeline') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
 
@@ -189,23 +195,39 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
-            // TODO: Update DMs
-            console.log(payload);
+            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+            console.log(`[RoomListDebug] Received updated DM map`);
+            const dmMap = eventPayload.event.getContent();
+            for (const userId of Object.keys(dmMap)) {
+                const roomIds = dmMap[userId];
+                for (const roomId of roomIds) {
+                    const room = this.matrixClient.getRoom(roomId);
+                    if (!room) {
+                        console.warn(`${roomId} was found in DMs but the room is not in the store`);
+                        continue;
+                    }
+
+                    // We expect this RoomUpdateCause to no-op if there's no change, and we don't expect
+                    // the user to have hundreds of rooms to update in one event. As such, we just hammer
+                    // away at updates until the problem is solved. If we were expecting more than a couple
+                    // of rooms to be updated at once, we would consider batching the rooms up.
+                    await this.handleRoomUpdate(room, RoomUpdateCause.PossibleTagChange);
+                }
+            }
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
-            // TODO: Improve new room check
             const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
-            if (!membershipPayload.oldMembership && membershipPayload.membership === "join") {
+            if (membershipPayload.oldMembership !== "join" && membershipPayload.membership === "join") {
                 console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
                 await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+                return;
             }
 
-            // TODO: Update room from membership change
-            console.log(payload);
-        } else if (payload.action === 'MatrixActions.Room') {
-            // TODO: Improve new room check
-            // const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
-            // console.log(`[RoomListDebug] Handling new room ${roomPayload.room.roomId}`);
-            // await this.algorithm.handleRoomUpdate(roomPayload.room, RoomUpdateCause.NewRoom);
+            // If it's not a join, it's transitioning into a different list (possibly historical)
+            if (membershipPayload.oldMembership !== membershipPayload.membership) {
+                console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
+                await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
+                return;
+            }
         } else if (payload.action === 'view_room') {
             // TODO: Update sticky room
             console.log(payload);
