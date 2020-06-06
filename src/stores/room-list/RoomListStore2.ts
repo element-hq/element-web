@@ -226,9 +226,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
             // console.log(`[RoomListDebug] Handling new room ${roomPayload.room.roomId}`);
             // await this.algorithm.handleRoomUpdate(roomPayload.room, RoomUpdateCause.NewRoom);
-        } else if (payload.action === 'view_room') {
-            // TODO: Update sticky room
-            console.log(payload);
         }
     }
 
