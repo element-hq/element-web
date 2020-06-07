@@ -189,6 +189,13 @@ export class ImportanceAlgorithm extends Algorithm {
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        if (cause === RoomUpdateCause.PossibleTagChange) {
+            // TODO: Be smarter and splice rather than regen the planet.
+            // TODO: No-op if no change.
+            await this.setKnownRooms(this.rooms);
+            return;
+        }
+
         if (cause === RoomUpdateCause.NewRoom) {
             // TODO: Be smarter and insert rather than regen the planet.
             await this.setKnownRooms([room, ...this.rooms]);
