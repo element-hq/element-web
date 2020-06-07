@@ -65,66 +65,8 @@ export abstract class Algorithm extends EventEmitter {
     }
 
     public set stickyRoom(val: Room) {
-        // We wrap this in a closure because we can't use async setters.
-        // We need async so we can wait for handleRoomUpdate() to do its thing, otherwise
-        // we risk duplicating rooms.
-        (async () => {
-            // It's possible to have no selected room. In that case, clear the sticky room
-            if (!val) {
-                if (this._stickyRoom) {
-                    // Lie to the algorithm and re-add the room to the algorithm
-                    await this.handleRoomUpdate(this._stickyRoom.room, RoomUpdateCause.NewRoom);
-                }
-                this._stickyRoom = null;
-                return;
-            }
-
-            // When we do have a room though, we expect to be able to find it
-            const tag = this.roomIdsToTags[val.roomId][0];
-            if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
-            let position = this.cachedRooms[tag].indexOf(val);
-            if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
-
-            // 🐉 Here be dragons.
-            // Before we can go through with lying to the underlying algorithm about a room
-            // we need to ensure that when we do we're ready for the innevitable sticky room
-            // update we'll receive. To prepare for that, we first remove the sticky room and
-            // recalculate the state ourselves so that when the underlying algorithm calls for
-            // the same thing it no-ops. After we're done calling the algorithm, we'll issue
-            // a new update for ourselves.
-            const lastStickyRoom = this._stickyRoom;
-            console.log(`Last sticky room:`, lastStickyRoom);
-            this._stickyRoom = null;
-            this.recalculateStickyRoom();
-
-            // When we do have the room, re-add the old room (if needed) to the algorithm
-            // and remove the sticky room from the algorithm. This is so the underlying
-            // algorithm doesn't try and confuse itself with the sticky room concept.
-            if (lastStickyRoom) {
-                // Lie to the algorithm and re-add the room to the algorithm
-                await this.handleRoomUpdate(lastStickyRoom.room, RoomUpdateCause.NewRoom);
-            }
-            // Lie to the algorithm and remove the room from it's field of view
-            await this.handleRoomUpdate(val, RoomUpdateCause.RoomRemoved);
-
-            // Now that we're done lying to the algorithm, we need to update our position
-            // marker only if the user is moving further down the same list. If they're switching
-            // lists, or moving upwards, the position marker will splice in just fine but if
-            // they went downwards in the same list we'll be off by 1 due to the shifting rooms.
-            if (lastStickyRoom && lastStickyRoom.tag === tag && lastStickyRoom.position <= position) {
-                position++;
-            }
-
-            this._stickyRoom = {
-                room: val,
-                position: position,
-                tag: tag,
-            };
-            this.recalculateStickyRoom();
-
-            // Finally, trigger an update
-            this.emit(LIST_UPDATED_EVENT);
-        })();
+        // setters can't be async, so we call a private function to do the work
+        this.updateStickyRoom(val);
     }
 
     protected get hasFilters(): boolean {
@@ -173,6 +115,67 @@ export abstract class Algorithm extends EventEmitter {
                 this.emit(LIST_UPDATED_EVENT);
             }
         }
+    }
+
+    private async updateStickyRoom(val: Room) {
+        // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
+        // otherwise we risk duplicating rooms.
+
+        // It's possible to have no selected room. In that case, clear the sticky room
+        if (!val) {
+            if (this._stickyRoom) {
+                // Lie to the algorithm and re-add the room to the algorithm
+                await this.handleRoomUpdate(this._stickyRoom.room, RoomUpdateCause.NewRoom);
+            }
+            this._stickyRoom = null;
+            return;
+        }
+
+        // When we do have a room though, we expect to be able to find it
+        const tag = this.roomIdsToTags[val.roomId][0];
+        if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
+        let position = this.cachedRooms[tag].indexOf(val);
+        if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
+
+        // 🐉 Here be dragons.
+        // Before we can go through with lying to the underlying algorithm about a room
+        // we need to ensure that when we do we're ready for the innevitable sticky room
+        // update we'll receive. To prepare for that, we first remove the sticky room and
+        // recalculate the state ourselves so that when the underlying algorithm calls for
+        // the same thing it no-ops. After we're done calling the algorithm, we'll issue
+        // a new update for ourselves.
+        const lastStickyRoom = this._stickyRoom;
+        console.log(`Last sticky room:`, lastStickyRoom);
+        this._stickyRoom = null;
+        this.recalculateStickyRoom();
+
+        // When we do have the room, re-add the old room (if needed) to the algorithm
+        // and remove the sticky room from the algorithm. This is so the underlying
+        // algorithm doesn't try and confuse itself with the sticky room concept.
+        if (lastStickyRoom) {
+            // Lie to the algorithm and re-add the room to the algorithm
+            await this.handleRoomUpdate(lastStickyRoom.room, RoomUpdateCause.NewRoom);
+        }
+        // Lie to the algorithm and remove the room from it's field of view
+        await this.handleRoomUpdate(val, RoomUpdateCause.RoomRemoved);
+
+        // Now that we're done lying to the algorithm, we need to update our position
+        // marker only if the user is moving further down the same list. If they're switching
+        // lists, or moving upwards, the position marker will splice in just fine but if
+        // they went downwards in the same list we'll be off by 1 due to the shifting rooms.
+        if (lastStickyRoom && lastStickyRoom.tag === tag && lastStickyRoom.position <= position) {
+            position++;
+        }
+
+        this._stickyRoom = {
+            room: val,
+            position: position,
+            tag: tag,
+        };
+        this.recalculateStickyRoom();
+
+        // Finally, trigger an update
+        this.emit(LIST_UPDATED_EVENT);
     }
 
     protected recalculateFilteredRooms() {
