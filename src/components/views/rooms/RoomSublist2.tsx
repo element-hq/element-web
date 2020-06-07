@@ -20,7 +20,6 @@ import * as React from "react";
 import { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 import * as RoomNotifs from '../../../RoomNotifs';
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
@@ -28,6 +27,8 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import AccessibleTooltipButton from "../../views/elements/AccessibleTooltipButton";
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import RoomTile2 from "./RoomTile2";
+import { ResizableBox, ResizeCallbackData } from "react-resizable";
+import { ListLayout } from "../../../stores/room-list/ListLayout";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -45,9 +46,9 @@ interface IProps {
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
+    layout: ListLayout;
 
     // TODO: Collapsed state
-    // TODO: Height
     // TODO: Group invites
     // TODO: Calls
     // TODO: forceExpand?
@@ -61,10 +62,6 @@ interface IState {
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef();
 
-    public setHeight(size: number) {
-        // TODO: Do a thing (maybe - height changes are different in FTUE)
-    }
-
     private hasTiles(): boolean {
         return this.numTiles > 0;
     }
@@ -77,6 +74,18 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onAddRoom = (e) => {
         e.stopPropagation();
         if (this.props.onAddRoom) this.props.onAddRoom();
+    };
+
+    private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
+        const direction = e.movementY < 0 ? -1 : +1;
+        const tileDiff = this.props.layout.pixelsToTiles(Math.abs(e.movementY)) * direction;
+        this.props.layout.visibleTiles += tileDiff;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onShowAllClick = () => {
+        this.props.layout.visibleTiles = this.numTiles;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
     private renderTiles(): React.ReactElement[] {
@@ -204,10 +213,57 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (tiles.length > 0) {
             // TODO: Lazy list rendering
             // TODO: Whatever scrolling magic needs to happen here
+            const layout = this.props.layout; // to shorten calls
+            const minTilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.minVisibleTiles));
+            const maxTilesPx = layout.tilesToPixels(tiles.length);
+            const tilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.visibleTiles));
+            let handles = ['s'];
+            if (layout.visibleTiles >= tiles.length && tiles.length <= layout.minVisibleTiles) {
+                handles = []; // no handles, we're at a minimum
+            }
+
+            // TODO: This might need adjustment, however for now it is fine as a round.
+            const nVisible = Math.round(layout.visibleTiles);
+            const visibleTiles = tiles.slice(0, nVisible);
+
+            // If we're hiding rooms, show a 'show more' button to the user. This button
+            // replaces the last visible tile, so will always show 2+ rooms. We do this
+            // because if it said "show 1 more room" we had might as well show that room
+            // instead. We also replace the last item so we don't have to adjust our math
+            // on pixel heights, etc. It's much easier to pretend the button is a tile.
+            if (tiles.length > nVisible) {
+                // we have a cutoff condition - add the button to show all
+
+                // we +1 to account for the room we're about to hide with our 'show more' button
+                // this results in the button always being 1+, and not needing an i18n `count`.
+                const numMissing = (tiles.length - visibleTiles.length) + 1;
+
+                // TODO: CSS TBD
+                // TODO: Make this an actual tile
+                // TODO: This is likely to pop out of the list, consider that.
+                visibleTiles.splice(visibleTiles.length - 1, 1, (
+                    <div
+                        onClick={this.onShowAllClick}
+                        style={{height: '34px', lineHeight: '34px', cursor: 'pointer'}}
+                        key='showall'
+                    >
+                        {_t("Show %(n)s more", {n: numMissing})}
+                    </div>
+                ));
+            }
             content = (
-                <IndicatorScrollbar className='mx_RoomSubList_scroll'>
-                    {tiles}
-                </IndicatorScrollbar>
+                <ResizableBox
+                    width={-1}
+                    height={tilesPx}
+                    axis="y"
+                    minConstraints={[-1, minTilesPx]}
+                    maxConstraints={[-1, maxTilesPx]}
+                    resizeHandles={handles}
+                    onResize={this.onResize}
+                    className="mx_RoomSublist2_resizeBox"
+                >
+                    {visibleTiles}
+                </ResizableBox>
             )
         }
 

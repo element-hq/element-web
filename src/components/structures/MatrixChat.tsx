@@ -49,7 +49,6 @@ import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
-import KeyRequestHandler from '../../KeyRequestHandler';
 import { _t, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
@@ -59,8 +58,8 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
 import { countRoomsWithNotif } from '../../RoomNotifs';
-import { ThemeWatcher } from "../../theme";
-import { FontWatcher } from '../../FontWatcher';
+import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
+import { FontWatcher } from '../../settings/watchers/FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import { defer, IDeferred } from "../../utils/promise";
 import ToastStore from "../../stores/ToastStore";
@@ -68,6 +67,11 @@ import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
 import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
+import {
+    showToast as showAnalyticsToast,
+    hideToast as hideAnalyticsToast
+} from "../../toasts/AnalyticsToast";
+import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -169,12 +173,6 @@ interface IState {
     leftDisabled: boolean;
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
-    version?: string;
-    newVersion?: string;
-    hasNewVersion: boolean;
-    newVersionReleaseNotes?: string;
-    checkingForUpdate?: string; // updateCheckStatusEnum
-    showCookieBar: boolean;
     // Parameters used in the registration dance with the IS
     register_client_secret?: string;
     register_session_id?: string;
@@ -184,7 +182,6 @@ interface IState {
     hideToSRUsers: boolean;
     syncError?: Error;
     resizeNotifier: ResizeNotifier;
-    showNotifierToolbar: boolean;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
     thirdPartyInvite?: object;
@@ -228,17 +225,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             leftDisabled: false,
             middleDisabled: false,
 
-            hasNewVersion: false,
-            newVersionReleaseNotes: null,
-            checkingForUpdate: null,
-
-            showCookieBar: false,
-
             hideToSRUsers: false,
 
             syncError: null, // If the current syncing status is ERROR, the error object, otherwise null.
             resizeNotifier: new ResizeNotifier(),
-            showNotifierToolbar: false,
             ready: false,
         };
 
@@ -339,12 +329,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         }
 
-        if (SettingsStore.getValue("showCookieBar")) {
-            this.setState({
-                showCookieBar: true,
-            });
-        }
-
         if (SettingsStore.getValue("analyticsOptIn")) {
             Analytics.enable();
         }
@@ -363,7 +347,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Analytics.trackPageChange(durationMs);
         }
         if (this.focusComposer) {
-            dis.dispatch({action: 'focus_composer'});
+            dis.fire(Action.FocusComposer);
             this.focusComposer = false;
         }
     }
@@ -686,9 +670,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     dis.dispatch({action: 'view_my_groups'});
                 }
                 break;
-            case 'notifier_enabled':
-                this.setState({showNotifierToolbar: Notifier.shouldShowToolbar()});
-                break;
             case 'hide_left_panel':
                 this.setState({
                     collapseLhs: true,
@@ -736,15 +717,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'client_started':
                 this.onClientStarted();
                 break;
-            case 'new_version':
-                this.onVersion(
-                    payload.currentVersion, payload.newVersion,
-                    payload.releaseNotes,
-                );
-                break;
-            case 'check_updates':
-                this.setState({ checkingForUpdate: payload.value });
-                break;
             case 'send_event':
                 this.onSendEvent(payload.room_id, payload.event);
                 break;
@@ -761,19 +733,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'accept_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, true);
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
-
-                this.setState({
-                    showCookieBar: false,
-                });
+                hideAnalyticsToast();
                 Analytics.enable();
                 break;
             case 'reject_cookies':
                 SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
-
-                this.setState({
-                    showCookieBar: false,
-                });
+                hideAnalyticsToast();
                 break;
         }
     };
@@ -932,9 +898,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private viewGroup(payload) {
+    private async viewGroup(payload) {
         const groupId = payload.group_id;
+
+        // Wait for the first sync to complete
+        if (!this.firstSyncComplete) {
+            if (!this.firstSyncPromise) {
+                console.warn('Cannot view a group before first sync. group_id:', groupId);
+                return;
+            }
+            await this.firstSyncPromise.promise;
+        }
+
         this.setState({
+            view: Views.LOGGED_IN,
             currentGroupId: groupId,
             currentGroupIsNew: payload.group_is_new,
         });
@@ -1251,6 +1228,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         StorageManager.tryPersistStorage();
+
+        if (SettingsStore.getValue("showCookieBar") && this.props.config.piwik && navigator.doNotTrack !== "1") {
+            showAnalyticsToast(this.props.config.piwik && this.props.config.piwik.policyUrl);
+        }
     }
 
     private showScreenAfterLogin() {
@@ -1378,10 +1359,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            dis.dispatch({action: 'focus_composer'});
+            if (Notifier.shouldShowToolbar()) {
+                showNotificationsToast();
+            }
+
+            dis.fire(Action.FocusComposer);
             this.setState({
                 ready: true,
-                showNotifierToolbar: Notifier.shouldShowToolbar(),
             });
         });
         cli.on('Call.incoming', function(call) {
@@ -1460,16 +1444,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("Session.logged_out", () => dft.stop());
         cli.on("Event.decrypted", (e, err) => dft.eventDecrypted(e, err));
 
-        // TODO: We can remove this once cross-signing is the only way.
-        // https://github.com/vector-im/riot-web/issues/11908
-        const krh = new KeyRequestHandler(cli);
-        cli.on("crypto.roomKeyRequest", (req) => {
-            krh.handleKeyRequest(req);
-        });
-        cli.on("crypto.roomKeyRequestCancellation", (req) => {
-            krh.handleKeyRequestCancellation(req);
-        });
-
         cli.on("Room", (room) => {
             if (MatrixClientPeg.get().isCryptoEnabled()) {
                 const blacklistEnabled = SettingsStore.getValueAt(
@@ -1540,13 +1514,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on("crypto.verification.request", request => {
-            const isFlagOn = SettingsStore.getValue("feature_cross_signing");
-
-            if (!isFlagOn && !request.channel.deviceId) {
-                request.cancel({code: "m.invalid_message", reason: "This client has cross-signing disabled"});
-                return;
-            }
-
             if (request.verifier) {
                 const IncomingSasDialog = sdk.getComponent("views.dialogs.IncomingSasDialog");
                 Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
@@ -1559,7 +1526,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     icon: "verification",
                     props: {request},
                     component: sdk.getComponent("toasts.VerificationRequestToast"),
-                    priority: ToastStore.PRIORITY_REALTIME,
+                    priority: 90,
                 });
             }
         });
@@ -1589,9 +1556,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // be aware of will be signalled through the room shield
             // changing colour. More advanced behaviour will come once
             // we implement more settings.
-            cli.setGlobalErrorOnUnknownDevices(
-                !SettingsStore.getValue("feature_cross_signing"),
-            );
+            cli.setGlobalErrorOnUnknownDevices(false);
         }
     }
 
@@ -1833,16 +1798,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.showScreen("settings");
     };
 
-    onVersion(current: string, latest: string, releaseNotes?: string) {
-        this.setState({
-            version: current,
-            newVersion: latest,
-            hasNewVersion: current !== latest,
-            newVersionReleaseNotes: releaseNotes,
-            checkingForUpdate: null,
-        });
-    }
-
     onSendEvent(roomId: string, event: MatrixEvent) {
         const cli = MatrixClientPeg.get();
         if (!cli) {
@@ -1949,17 +1904,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // whether cross-signing has been set up on the account.
         const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
         if (masterKeyInStorage) {
-            // Auto-enable cross-signing for the new session when key found in
-            // secret storage.
-            SettingsStore.setValue("feature_cross_signing", null, SettingLevel.DEVICE, true);
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
-        } else if (
-            SettingsStore.getValue("feature_cross_signing") &&
-            await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")
-        ) {
-            // This will only work if the feature is set to 'enable' in the config,
-            // since it's too early in the lifecycle for users to have turned the
-            // labs flag on.
+        } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
         } else {
             this.onLoggedIn();
@@ -1978,7 +1924,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // console.log(`Rendering MatrixChat with view ${this.state.view}`);
 
         let fragmentAfterLogin = "";
-        if (this.props.initialScreenAfterLogin) {
+        if (this.props.initialScreenAfterLogin &&
+            // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
+            !["welcome", "login", "register"].includes(this.props.initialScreenAfterLogin.screen)
+        ) {
             fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
         }
 
@@ -2037,7 +1986,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         onCloseAllSettings={this.onCloseAllSettings}
                         onRegistered={this.onRegistered}
                         currentRoomId={this.state.currentRoomId}
-                        showCookieBar={this.state.showCookieBar}
                     />
                 );
             } else {

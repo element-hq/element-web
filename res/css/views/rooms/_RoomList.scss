@@ -15,6 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_RoomList.mx_RoomList2 {
+    overflow-y: auto;
+}
+
 .mx_RoomList {
     /* take up remaining space below TopLeftMenu */
     flex: 1;

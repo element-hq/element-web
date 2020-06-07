@@ -39,4 +39,5 @@ export type TagID = string | DefaultTagID;
 export enum RoomUpdateCause {
     Timeline = "TIMELINE",
     RoomRead = "ROOM_READ", // TODO: Use this.
+    NewRoom = "NEW_ROOM",
 }

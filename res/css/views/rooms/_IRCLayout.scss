@@ -41,7 +41,7 @@ $irc-line-height: $font-18px;
         }
 
         > .mx_EventTile_msgOption {
-            order: 4;
+            order: 5;
             flex-shrink: 0;
         }
 
@@ -63,6 +63,8 @@ $irc-line-height: $font-18px;
             flex-direction: column;
             order: 3;
             flex-grow: 1;
+            flex-shrink: 1;
+            min-width: 0;
         }
 
         > .mx_EventTile_avatar {
@@ -90,12 +92,14 @@ $irc-line-height: $font-18px;
             text-align: right;
         }
 
-        .mx_EventTile_e2eIcon {
+        > .mx_EventTile_e2eIcon {
             position: relative;
             right: unset;
             left: unset;
-            top: -2px;
             padding: 0;
+            order: 3;
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .mx_EventTile_line {
@@ -113,7 +117,7 @@ $irc-line-height: $font-18px;
         }
 
         .mx_EventTile_reply {
-            order: 3;
+            order: 4;
         }
 
         .mx_EditMessageComposer_buttons {

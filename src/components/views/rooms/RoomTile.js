@@ -155,9 +155,6 @@ export default createReactClass({
         if (!cli.isRoomEncrypted(this.props.room.roomId)) {
             return;
         }
-        if (!SettingsStore.getValue("feature_cross_signing")) {
-            return;
-        }
 
         /* At this point, the user has encryption on and cross-signing on */
         this.setState({
@@ -515,10 +512,8 @@ export default createReactClass({
         }
 
         let privateIcon = null;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            if (this.state.joinRule == "invite" && !dmUserId) {
-                privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
-            }
+        if (this.state.joinRule === "invite" && !dmUserId) {
+            privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
         }
 
         let e2eIcon = null;

@@ -473,7 +473,7 @@ export default createReactClass({
             type="text"
             label={phoneLabel}
             value={this.state.phoneNumber}
-            prefix={phoneCountry}
+            prefixComponent={phoneCountry}
             onChange={this.onPhoneNumberChange}
             onValidate={this.onPhoneNumberValidate}
         />;

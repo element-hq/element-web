@@ -38,5 +38,24 @@ export enum Action {
      * Open the user settings. No additional payload information required.
      */
     ViewUserSettings = "view_user_settings",
-}
 
+    /**
+     * Sets the current tooltip. Should be use with ViewTooltipPayload.
+     */
+    ViewTooltip = "view_tooltip",
+
+    /**
+     * Forces the theme to reload. No additional payload information required.
+     */
+    RecheckTheme = "recheck_theme",
+
+    /**
+     * Provide status information for an ongoing update check. Should be used with a CheckUpdatesPayload.
+     */
+    CheckUpdates = "check_updates",
+
+    /**
+     * Focuses the user's cursor to the composer. No additional payload information required.
+     */
+    FocusComposer = "focus_composer",
+}

@@ -27,6 +27,7 @@ import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
+import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -101,6 +102,32 @@ function HangupButton(props) {
 
 HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
+};
+
+const EmojiButton = ({addEmoji}) => {
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const buttonRect = button.current.getBoundingClientRect();
+        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+            <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
+        </ContextMenu>;
+    }
+
+    return <React.Fragment>
+        <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_emoji"
+                           onClick={openMenu}
+                           isExpanded={menuDisplayed}
+                           label={_t('Emoji picker')}
+                           inputRef={button}
+        >
+
+        </ContextMenuButton>
+
+        { contextMenu }
+    </React.Fragment>;
 };
 
 class UploadButton extends React.Component {
@@ -281,35 +308,26 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply…');
-                }
+        if (this.state.isQuoting) {
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted reply…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message…');
-                }
+                return _t('Send a reply…');
             }
         } else {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply (unencrypted)…');
-                }
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted message…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message (unencrypted)…');
-                }
+                return _t('Send a message…');
             }
         }
+    }
+
+    addEmoji(emoji) {
+        dis.dispatch({
+            action: "insert_emoji",
+            emoji,
+        });
     }
 
     render() {
@@ -335,8 +353,9 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator} />,
-                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
+                <Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />,
             );
 
             if (this.state.showCallButtons) {

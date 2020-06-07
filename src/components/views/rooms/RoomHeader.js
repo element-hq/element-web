@@ -168,10 +168,8 @@ export default createReactClass({
         const joinRule = joinRules && joinRules.getContent().join_rule;
         let privateIcon;
         // Don't show an invite-only icon for DMs. Users know they're invite-only.
-        if (!dmUserId && SettingsStore.getValue("feature_cross_signing")) {
-            if (joinRule == "invite") {
-                privateIcon = <InviteOnlyIcon />;
-            }
+        if (!dmUserId && joinRule === "invite") {
+            privateIcon = <InviteOnlyIcon />;
         }
 
         if (this.props.onCancelClick) {

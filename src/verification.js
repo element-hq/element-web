@@ -22,12 +22,11 @@ import { _t } from './languageHandler';
 import {RIGHT_PANEL_PHASES} from "./stores/RightPanelStorePhases";
 import {findDMForUser} from './createRoom';
 import {accessSecretStorage} from './CrossSigningManager';
-import SettingsStore from './settings/SettingsStore';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
-    if (!cli.isCryptoEnabled() || !SettingsStore.getValue("feature_cross_signing")) {
+    if (!cli.isCryptoEnabled()) {
         return false;
     }
     const usk = cli.getCrossSigningId("user_signing");

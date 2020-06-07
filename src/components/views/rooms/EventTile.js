@@ -104,7 +104,7 @@ export function getHandlerTile(ev) {
     // fall back to showing hidden events, if we're viewing hidden events
     // XXX: This is extremely a hack. Possibly these components should have an interface for
     // declining to render?
-    if (type === "m.key.verification.cancel" && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+    if (type === "m.key.verification.cancel" || type === "m.key.verification.done") {
         const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
         if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
             return;
@@ -325,15 +325,6 @@ export default createReactClass({
             return;
         }
 
-        // If cross-signing is off, the old behaviour is to scream at the user
-        // as if they've done something wrong, which they haven't
-        if (!SettingsStore.getValue("feature_cross_signing")) {
-            this.setState({
-                verified: E2E_STATE.WARNING,
-            }, this.props.onHeightChanged);
-            return;
-        }
-
         if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
             this.setState({
                 verified: E2E_STATE.NORMAL,
@@ -403,7 +394,7 @@ export default createReactClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.context.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
@@ -802,6 +793,8 @@ export default createReactClass({
 
         const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
         const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
+        const groupPadlock = !this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const ircPadlock = this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
 
         switch (this.props.tileShape) {
             case 'notif': {
@@ -873,9 +866,10 @@ export default createReactClass({
                         { ircTimestamp }
                         { avatar }
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_reply">
                             { groupTimestamp }
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -904,9 +898,10 @@ export default createReactClass({
                             { readAvatars }
                         </div>
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_line">
                             { groupTimestamp }
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}

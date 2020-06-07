@@ -30,6 +30,8 @@ import * as RoomNotifs from '../../../RoomNotifs';
 import { EffectiveMembership, getEffectiveMembership } from "../../../stores/room-list/membership";
 import * as Unread from '../../../Unread';
 import * as FormattingUtils from "../../../utils/FormattingUtils";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -86,10 +88,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             hover: false,
             notificationState: this.getNotificationState(),
         };
+
+        this.props.room.on("Room.receipt", this.handleRoomEventUpdate);
+        this.props.room.on("Room.timeline", this.handleRoomEventUpdate);
+        this.props.room.on("Room.redaction", this.handleRoomEventUpdate);
+        MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
     }
 
     public componentWillUnmount() {
-        // TODO: Listen for changes to the badge count and update as needed
+        if (this.props.room) {
+            this.props.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
+            this.props.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
+            this.props.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
+        }
+        if (MatrixClientPeg.get()) {
+            MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
+        }
     }
 
     // XXX: This is a bit of an awful-looking hack. We should probably be using state for
@@ -99,7 +113,15 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
-    // TODO: Make use of this function when the notification state needs updating.
+    private handleRoomEventUpdate = (event: MatrixEvent) => {
+        const roomId = event.getRoomId();
+
+        // Sanity check: should never happen
+        if (roomId !== this.props.room.roomId) return;
+
+        this.updateNotificationState();
+    };
+
     private updateNotificationState() {
         this.setState({notificationState: this.getNotificationState()});
     }
@@ -214,7 +236,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         let tooltip = null;
         if (false) { // isCollapsed
             if (this.state.hover) {
-                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} dir="auto"/>
+                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} />
             }
         }
 
