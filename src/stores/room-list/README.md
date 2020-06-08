@@ -74,29 +74,29 @@ gets applied to each category in a sub-sub-list fashion. This should result in t
 being sorted alphabetically amongst each other as well as the grey rooms sorted amongst each other, but 
 collectively the tag will be sorted into categories with red being at the top.
 
-<!-- TODO: Implement sticky rooms as described below -->
+### Sticky rooms
 
-The algorithm also has a concept of a 'sticky' room which is the room the user is currently viewing.
-The sticky room will remain in position on the room list regardless of other factors going on as typically
-clicking on a room will cause it to change categories into 'idle'. This is done by preserving N rooms
-above the selected room at all times, where N is the number of rooms above the selected rooms when it was
-selected.
+When the user visits a room, that room becomes 'sticky' in the list, regardless of ordering algorithm.
+From a code perspective, the underlying algorithm is not aware of a sticky room and instead the base class
+manages which room is sticky. This is to ensure that all algorithms handle it the same.
 
-For example, if the user has 3 red rooms and selects the middle room, they will always see exactly one
-room above their selection at all times. If they receive another notification, and the tag ordering is 
-specified as Recent, they'll see the new notification go to the top position, and the one that was previously
-there fall behind the sticky room.
+The sticky flag is simply to say it will not move higher or lower down the list while it is active. For
+example, if using the importance algorithm, the room would naturally become idle once viewed and thus
+would normally fly down the list out of sight. The sticky room concept instead holds it in place, never
+letting it fly down until the user moves to another room.
 
-The sticky room's category is technically 'idle' while being viewed and is explicitly pulled out of the
-tag sorting algorithm's input as it must maintain its position in the list. When the user moves to another
-room, the previous sticky room gets recalculated to determine which category it needs to be in as the user
-could have been scrolled up while new messages were received.
+Only one room can be sticky at a time. Room updates around the sticky room will still hold the sticky
+room in place. The best example of this is the importance algorithm: if the user has 3 red rooms and
+selects the middle room, they will see exactly one room above their selection at all times. If they
+receive another notification which causes the room to move into the topmost position, the room that was
+above the sticky room will move underneath to allow for the new room to take the top slot, maintaining
+the sticky room's position.
 
-Further, the sticky room is not aware of category boundaries and thus the user can see a shift in what 
-kinds of rooms move around their selection. An example would be the user having 4 red rooms, the user 
-selecting the third room (leaving 2 above it), and then having the rooms above it read on another device. 
-This would result in 1 red room and 1 other kind of room above the sticky room as it will try to maintain 
-2 rooms above the sticky room.
+Though only applicable to the importance algorithm, the sticky room is not aware of category boundaries 
+and thus the user can see a shift in what kinds of rooms move around their selection. An example would 
+be the user having 4 red rooms, the user selecting the third room (leaving 2 above it), and then having 
+the rooms above it read on another device. This would result in 1 red room and 1 other kind of room 
+above the sticky room as it will try to maintain 2 rooms above the sticky room.
 
 An exception for the sticky room placement is when there's suddenly not enough rooms to maintain the placement
 exactly. This typically happens if the user selects a room and leaves enough rooms where it cannot maintain

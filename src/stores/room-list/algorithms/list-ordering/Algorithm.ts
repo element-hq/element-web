@@ -22,6 +22,7 @@ import { ITagMap, ITagSortingMap } from "../models";
 import DMRoomMap from "../../../../utils/DMRoomMap";
 import { FILTER_CHANGED, IFilterCondition } from "../../filters/IFilterCondition";
 import { EventEmitter } from "events";
+import { UPDATE_EVENT } from "../../../AsyncStore";
 
 // TODO: Add locking support to avoid concurrent writes?
 
@@ -30,6 +31,12 @@ import { EventEmitter } from "events";
  */
 export const LIST_UPDATED_EVENT = "list_updated_event";
 
+interface IStickyRoom {
+    room: Room;
+    position: number;
+    tag: TagID;
+}
+
 /**
  * Represents a list ordering algorithm. This class will take care of tag
  * management (which rooms go in which tags) and ask the implementation to
@@ -37,7 +44,9 @@ export const LIST_UPDATED_EVENT = "list_updated_event";
  */
 export abstract class Algorithm extends EventEmitter {
     private _cachedRooms: ITagMap = {};
+    private _cachedStickyRooms: ITagMap = {}; // a clone of the _cachedRooms, with the sticky room
     private filteredRooms: ITagMap = {};
+    private _stickyRoom: IStickyRoom = null;
 
     protected sortAlgorithms: ITagSortingMap;
     protected rooms: Room[] = [];
@@ -51,6 +60,15 @@ export abstract class Algorithm extends EventEmitter {
         super();
     }
 
+    public get stickyRoom(): Room {
+        return this._stickyRoom ? this._stickyRoom.room : null;
+    }
+
+    public set stickyRoom(val: Room) {
+        // setters can't be async, so we call a private function to do the work
+        this.updateStickyRoom(val);
+    }
+
     protected get hasFilters(): boolean {
         return this.allowedByFilter.size > 0;
     }
@@ -58,9 +76,14 @@ export abstract class Algorithm extends EventEmitter {
     protected set cachedRooms(val: ITagMap) {
         this._cachedRooms = val;
         this.recalculateFilteredRooms();
+        this.recalculateStickyRoom();
     }
 
     protected get cachedRooms(): ITagMap {
+        // 🐉 Here be dragons.
+        // Note: this is used by the underlying algorithm classes, so don't make it return
+        // the sticky room cache. If it ends up returning the sticky room cache, we end up
+        // corrupting our caches and confusing them.
         return this._cachedRooms;
     }
 
@@ -92,6 +115,67 @@ export abstract class Algorithm extends EventEmitter {
                 this.emit(LIST_UPDATED_EVENT);
             }
         }
+    }
+
+    private async updateStickyRoom(val: Room) {
+        // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
+        // otherwise we risk duplicating rooms.
+
+        // It's possible to have no selected room. In that case, clear the sticky room
+        if (!val) {
+            if (this._stickyRoom) {
+                // Lie to the algorithm and re-add the room to the algorithm
+                await this.handleRoomUpdate(this._stickyRoom.room, RoomUpdateCause.NewRoom);
+            }
+            this._stickyRoom = null;
+            return;
+        }
+
+        // When we do have a room though, we expect to be able to find it
+        const tag = this.roomIdsToTags[val.roomId][0];
+        if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
+        let position = this.cachedRooms[tag].indexOf(val);
+        if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
+
+        // 🐉 Here be dragons.
+        // Before we can go through with lying to the underlying algorithm about a room
+        // we need to ensure that when we do we're ready for the innevitable sticky room
+        // update we'll receive. To prepare for that, we first remove the sticky room and
+        // recalculate the state ourselves so that when the underlying algorithm calls for
+        // the same thing it no-ops. After we're done calling the algorithm, we'll issue
+        // a new update for ourselves.
+        const lastStickyRoom = this._stickyRoom;
+        console.log(`Last sticky room:`, lastStickyRoom);
+        this._stickyRoom = null;
+        this.recalculateStickyRoom();
+
+        // When we do have the room, re-add the old room (if needed) to the algorithm
+        // and remove the sticky room from the algorithm. This is so the underlying
+        // algorithm doesn't try and confuse itself with the sticky room concept.
+        if (lastStickyRoom) {
+            // Lie to the algorithm and re-add the room to the algorithm
+            await this.handleRoomUpdate(lastStickyRoom.room, RoomUpdateCause.NewRoom);
+        }
+        // Lie to the algorithm and remove the room from it's field of view
+        await this.handleRoomUpdate(val, RoomUpdateCause.RoomRemoved);
+
+        // Now that we're done lying to the algorithm, we need to update our position
+        // marker only if the user is moving further down the same list. If they're switching
+        // lists, or moving upwards, the position marker will splice in just fine but if
+        // they went downwards in the same list we'll be off by 1 due to the shifting rooms.
+        if (lastStickyRoom && lastStickyRoom.tag === tag && lastStickyRoom.position <= position) {
+            position++;
+        }
+
+        this._stickyRoom = {
+            room: val,
+            position: position,
+            tag: tag,
+        };
+        this.recalculateStickyRoom();
+
+        // Finally, trigger an update
+        this.emit(LIST_UPDATED_EVENT);
     }
 
     protected recalculateFilteredRooms() {
@@ -155,6 +239,59 @@ export abstract class Algorithm extends EventEmitter {
     }
 
     /**
+     * Recalculate the sticky room position. If this is being called in relation to
+     * a specific tag being updated, it should be given to this function to optimize
+     * the call.
+     * @param updatedTag The tag that was updated, if possible.
+     */
+    protected recalculateStickyRoom(updatedTag: TagID = null): void {
+        // 🐉 Here be dragons.
+        // This function does far too much for what it should, and is called by many places.
+        // Not only is this responsible for ensuring the sticky room is held in place at all
+        // times, it is also responsible for ensuring our clone of the cachedRooms is up to
+        // date. If either of these desyncs, we see weird behaviour like duplicated rooms,
+        // outdated lists, and other nonsensical issues that aren't necessarily obvious.
+
+        if (!this._stickyRoom) {
+            // If there's no sticky room, just do nothing useful.
+            if (!!this._cachedStickyRooms) {
+                // Clear the cache if we won't be needing it
+                this._cachedStickyRooms = null;
+                this.emit(LIST_UPDATED_EVENT);
+            }
+            return;
+        }
+
+        if (!this._cachedStickyRooms || !updatedTag) {
+            console.log(`Generating clone of cached rooms for sticky room handling`);
+            const stickiedTagMap: ITagMap = {};
+            for (const tagId of Object.keys(this.cachedRooms)) {
+                stickiedTagMap[tagId] = this.cachedRooms[tagId].map(r => r); // shallow clone
+            }
+            this._cachedStickyRooms = stickiedTagMap;
+        }
+
+        if (updatedTag) {
+            // Update the tag indicated by the caller, if possible. This is mostly to ensure
+            // our cache is up to date.
+            console.log(`Replacing cached sticky rooms for ${updatedTag}`);
+            this._cachedStickyRooms[updatedTag] = this.cachedRooms[updatedTag].map(r => r); // shallow clone
+        }
+
+        // Now try to insert the sticky room, if we need to.
+        // We need to if there's no updated tag (we regenned the whole cache) or if the tag
+        // we might have updated from the cache is also our sticky room.
+        const sticky = this._stickyRoom;
+        if (!updatedTag || updatedTag === sticky.tag) {
+            console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
+            this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
+        }
+
+        // Finally, trigger an update
+        this.emit(LIST_UPDATED_EVENT);
+    }
+
+    /**
      * Asks the Algorithm to regenerate all lists, using the tags given
      * as reference for which lists to generate and which way to generate
      * them.
@@ -174,7 +311,7 @@ export abstract class Algorithm extends EventEmitter {
      */
     public getOrderedRooms(): ITagMap {
         if (!this.hasFilters) {
-            return this.cachedRooms;
+            return this._cachedStickyRooms || this.cachedRooms;
         }
         return this.filteredRooms;
     }
