@@ -41,4 +41,5 @@ export enum RoomUpdateCause {
     PossibleTagChange = "POSSIBLE_TAG_CHANGE",
     ReadReceipt = "READ_RECEIPT",
     NewRoom = "NEW_ROOM",
+    RoomRemoved = "ROOM_REMOVED",
 }
