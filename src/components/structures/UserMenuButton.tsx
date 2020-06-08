@@ -28,6 +28,8 @@ import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
+import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import {getCustomTheme} from "../../theme";
 
 interface IProps {
 }
@@ -35,10 +37,12 @@ interface IProps {
 interface IState {
     user: User;
     menuDisplayed: boolean;
+    isDarkTheme: boolean;
 }
 
 export default class UserMenuButton extends React.Component<IProps, IState> {
     private dispatcherRef: string;
+    private themeWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
 
     constructor(props: IProps) {
@@ -47,6 +51,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         this.state = {
             menuDisplayed: false,
             user: MatrixClientPeg.get().getUser(MatrixClientPeg.get().getUserId()),
+            isDarkTheme: this.isUserOnDarkTheme(),
         };
     }
 
@@ -62,7 +67,25 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
     }
+
+    public componentWillUnmount() {
+        if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
+        if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+    }
+
+    private isUserOnDarkTheme(): boolean {
+        const theme = SettingsStore.getValue("theme");
+        if (theme.startsWith("custom-")) {
+            return getCustomTheme(theme.substring(0, 7)).is_dark;
+        }
+        return theme === "dark";
+    }
+
+    private onThemeChanged = () => {
+        this.setState({isDarkTheme: this.isUserOnDarkTheme()});
+    };
 
     private onAction = (ev: ActionPayload) => {
         if (ev.action !== Action.ToggleUserMenu) return; // not interested
@@ -82,7 +105,11 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
     };
 
     private onSwitchThemeClick = () => {
-        console.log("TODO: Switch theme");
+        // Disable system theme matching if the user hits this button
+        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
+
+        const newTheme = this.state.isDarkTheme ? "light" : "dark";
+        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
     };
 
     private onSettingsOpen = (ev: React.MouseEvent, tabId: string) => {
@@ -142,7 +169,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                             <div
                                 className="mx_UserMenuButton_contextMenu_themeButton"
                                 onClick={this.onSwitchThemeClick}
-                                title={_t("Switch to dark mode")}
+                                title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
                             >
                                 <img
                                     src={require("../../../res/img/feather-customised/sun.svg")}
