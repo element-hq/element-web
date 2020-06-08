@@ -107,3 +107,7 @@ be missing critical features - please use at your own risk, though do report bug
 Adds an option to change the message layout to an IRC style ` timestamp | avatar
 | name | message `
 
+## Compact Group Layout (`feature_compact_modern_layout`)
+
+Adds the option to reduce space between messages in the Modern layout.
+

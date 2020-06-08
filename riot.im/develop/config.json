@@ -25,7 +25,8 @@
         "feature_presence_in_room_list": "labs",
         "feature_custom_themes": "labs",
         "feature_new_room_list": "labs",
-        "feature_irc_ui": "labs"
+        "feature_irc_ui": "labs",
+        "feature_compact_modern_layout": "labs"
     },
     "piwik": {
         "url": "https://piwik.riot.im/",
