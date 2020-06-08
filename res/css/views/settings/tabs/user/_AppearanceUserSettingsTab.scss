@@ -43,3 +43,58 @@ limitations under the License.
     padding-left: 20px;
     padding-right: 5px;
 }
+
+.mx_AppearanceUserSettingsTab_themeSection {
+    $radio-bg-color: $input-darker-bg-color;
+
+    > .mx_ThemeSelectors {
+        display: flex;
+        flex-direction: row;
+
+        margin-top: 23px;
+
+        > .mx_RadioButton {
+            padding: $font-16px;
+            border-radius: 10px;
+            background: rgba($radio-bg-color, 0.2);
+            width: 180px;
+            flex-shrink: 1;
+            flex-grow: 0;
+            margin-right: 15px;
+        }
+
+        > .mx_RadioButton:not([disabled]) {
+            // These need to be hardcoded because they don't change with the theme
+            &.mx_ThemeSelector_light {
+                background-color: #f3f8fd;
+                color: #2e2f32;
+            }
+
+            &.mx_ThemeSelector_dark {
+                background-color: #181b21;
+
+                > input > div {
+                    border-color: $input-darker-bg-color;
+                    > div {
+                        border-color: $input-darker-bg-color;
+                    }
+                }
+            }
+
+            &.mx_ThemeSelector_black {
+                background-color: #000000;
+
+                > input > div {
+                    border-color: $input-darker-bg-color;
+                    > div {
+                        border-color: $input-darker-bg-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mx_SettingsTab_customFontSizeField {
+    margin-left: calc($font-16px + 10px);
+}
