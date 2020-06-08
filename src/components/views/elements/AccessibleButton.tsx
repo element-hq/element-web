@@ -97,8 +97,8 @@ export default function AccessibleButton({
  * onClick:  (required) Event handler for button activation. Should be
  *           implemented exactly like a normal onClick handler.
  */
-interface IProps extends React.InputHTMLAttributes<HTMLElement> {
-    inputRef?: React.Ref<HTMLElement>,
+interface IProps extends React.InputHTMLAttributes<Element> {
+    inputRef?: React.Ref<Element>,
     element?: string;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
@@ -109,11 +109,11 @@ interface IProps extends React.InputHTMLAttributes<HTMLElement> {
     tabIndex?: number,
     disabled?: boolean,
     className?: string,
-    onClick(e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>): void;
+    onClick(e?: React.MouseEvent<Element> | React.KeyboardEvent<Element>): void;
 };
 
-interface IAccessibleButtonProps extends React.InputHTMLAttributes<HTMLElement> {
-    ref?: React.Ref<HTMLElement>,
+interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
+    ref?: React.Ref<Element>,
 }
 
 AccessibleButton.defaultProps = {
