@@ -281,7 +281,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     values={[13, 15, 16, 18, 20]}
                     value={parseInt(this.state.fontSize, 10)}
                     onSelectionChange={this.onFontSizeChanged}
-                    displayFunc={value => ""}
+                    displayFunc={_ => ""}
                     disabled={this.state.useCustomFontSize}
                 />
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
@@ -290,9 +290,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
                 onChange={(checked) => this.setState({useCustomFontSize: checked})}
+                useCheckbox={true}
             />
             <Field
-                type="text"
+                type="number"
                 label={_t("Font size")}
                 autoComplete="off"
                 placeholder={this.state.fontSize.toString()}
@@ -301,6 +302,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 onValidate={this.onValidateFontSize}
                 onChange={(value) => this.setState({fontSize: value.target.value})}
                 disabled={!this.state.useCustomFontSize}
+                className="mx_SettingsTab_customFontSizeField"
             />
         </div>;
     }
