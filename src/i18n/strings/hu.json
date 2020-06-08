@@ -2415,7 +2415,7 @@
     "Waiting for your other session to verify…": "A másik munkameneted ellenőrzésére várunk…",
     "You've successfully verified your device!": "Sikeresen ellenőrizted az eszközödet!",
     "Message deleted": "Üzenet törölve",
-    "Message deleted by %(name)s": "Üzenetet törölte: %(name)s",
+    "Message deleted by %(name)s": "%(name)s törölte az üzenetet",
     "QR Code": "QR kód",
     "To continue, use Single Sign On to prove your identity.": "A folytatáshoz a személyazonosságod megerősítéséhez használd az egyszeri bejelentkezést.",
     "Confirm to continue": "Erősítsd meg a továbblépéshez",
