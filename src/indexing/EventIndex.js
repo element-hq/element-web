@@ -200,7 +200,7 @@ export default class EventIndex extends EventEmitter {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
 
         if (ev.getType() === "m.room.encryption" && !await this.isRoomIndexed(state.roomId)) {
-            console.log("EventIndex: Adding a checkpoint for a newly encrypted room", room.roomId);
+            console.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
     }
