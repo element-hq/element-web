@@ -2042,6 +2042,7 @@
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "Uploading %(filename)s and %(count)s others|zero": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
+    "Switch to light mode": "Switch to light mode",
     "Switch to dark mode": "Switch to dark mode",
     "Switch theme": "Switch theme",
     "Security & privacy": "Security & privacy",
