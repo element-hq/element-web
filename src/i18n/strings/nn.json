@@ -21,5 +21,5 @@
     "Your Riot is misconfigured": "Riot-klienten din er sett opp feil",
     "Unexpected error preparing the app. See console for details.": "Uventa feil under lasting av programmet. Sjå konsollen for detaljar.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig oppsett: berre muleg å berre spesifiere ein av default_server_config, default_server_name eller default_hs_url.",
-    "Invalid configuration: no default server specified.": "Ugyldig oppsett:  \"default server\" er ikkje spesifisert."
+    "Invalid configuration: no default server specified.": "Ugyldig oppsett:  ingen \"default server\" er spesifisert."
 }
