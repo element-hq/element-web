@@ -58,4 +58,9 @@ export enum Action {
      * Focuses the user's cursor to the composer. No additional payload information required.
      */
     FocusComposer = "focus_composer",
+
+    /**
+     * Opens the user menu (previously known as the top left menu). No additional payload information required.
+     */
+    ToggleUserMenu = "toggle_user_menu",
 }
