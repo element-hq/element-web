@@ -153,6 +153,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('isEventIndexEmpty');
     }
 
+    async isRoomIndexed(roomId: string): Promise<boolean> {
+        return this._ipcCall('isRoomIndexed', roomId);
+    }
+
     async commitLiveEvents(): Promise<void> {
         return this._ipcCall('commitLiveEvents');
     }
