@@ -145,6 +145,10 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     if (enabledLabs.length) {
         body.append('enabled_labs', enabledLabs.join(', '));
     }
+    // if low bandwidth mode is enabled, say so over rageshake, it causes many issues
+    if (SettingsStore.getValue("lowBandwidth")) {
+        body.append("lowBandwidth", "enabled");
+    }
 
     // add storage persistence/quota information
     if (navigator.storage && navigator.storage.persisted) {
