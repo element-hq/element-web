@@ -82,36 +82,24 @@ export class ImportanceAlgorithm extends Algorithm {
     // HOW THIS WORKS
     // --------------
     //
-    // This block of comments assumes you've read the README one level higher.
+    // This block of comments assumes you've read the README two levels higher.
     // You should do that if you haven't already.
     //
     // Tags are fed into the algorithmic functions from the Algorithm superclass,
     // which cause subsequent updates to the room list itself. Categories within
     // those tags are tracked as index numbers within the array (zero = top), with
     // each sticky room being tracked separately. Internally, the category index
-    // can be found from `this.indices[tag][category]` and the sticky room information
-    // from `this.stickyRoom`.
+    // can be found from `this.indices[tag][category]`.
     //
-    // The room list store is always provided with the `this.cached` results, which are
+    // The room list store is always provided with the `this.cachedRooms` results, which are
     // updated as needed and not recalculated often. For example, when a room needs to
-    // move within a tag, the array in `this.cached` will be spliced instead of iterated.
+    // move within a tag, the array in `this.cachedRooms` will be spliced instead of iterated.
     // The `indices` help track the positions of each category to make splicing easier.
 
     private indices: {
         // @ts-ignore - TS wants this to be a string but we know better than it
         [tag: TagID]: ICategoryIndex;
     } = {};
-
-    // TODO: Use this (see docs above)
-    private stickyRoom: {
-        roomId: string;
-        tag: TagID;
-        fromTop: number;
-    } = {
-        roomId: null,
-        tag: null,
-        fromTop: 0,
-    };
 
     constructor() {
         super();
@@ -189,7 +177,26 @@ export class ImportanceAlgorithm extends Algorithm {
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        const tags = this.roomIdsToTags[room.roomId];
+        if (cause === RoomUpdateCause.PossibleTagChange) {
+            // TODO: Be smarter and splice rather than regen the planet.
+            // TODO: No-op if no change.
+            await this.setKnownRooms(this.rooms);
+            return;
+        }
+
+        if (cause === RoomUpdateCause.NewRoom) {
+            // TODO: Be smarter and insert rather than regen the planet.
+            await this.setKnownRooms([room, ...this.rooms]);
+            return;
+        }
+
+        if (cause === RoomUpdateCause.RoomRemoved) {
+            // TODO: Be smarter and splice rather than regen the planet.
+            await this.setKnownRooms(this.rooms.filter(r => r !== room));
+            return;
+        }
+
+        let tags = this.roomIdsToTags[room.roomId];
         if (!tags) {
             console.warn(`No tags known for "${room.name}" (${room.roomId})`);
             return false;
@@ -201,7 +208,7 @@ export class ImportanceAlgorithm extends Algorithm {
                 continue; // Nothing to do here.
             }
 
-            const taggedRooms = this.cached[tag];
+            const taggedRooms = this.cachedRooms[tag];
             const indices = this.indices[tag];
             let roomIdx = taggedRooms.indexOf(room);
             if (roomIdx === -1) {
@@ -245,6 +252,8 @@ export class ImportanceAlgorithm extends Algorithm {
             taggedRooms.splice(startIdx, 0, ...sorted);
 
             // Finally, flag that we've done something
+            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
+            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
             changed = true;
         }
         return changed;

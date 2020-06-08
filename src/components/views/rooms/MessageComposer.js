@@ -308,33 +308,17 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply…');
-                }
+        if (this.state.isQuoting) {
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted reply…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message…');
-                }
+                return _t('Send a reply…');
             }
         } else {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply (unencrypted)…');
-                }
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted message…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message (unencrypted)…');
-                }
+                return _t('Send a message…');
             }
         }
     }

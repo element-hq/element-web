@@ -51,6 +51,8 @@ import {
     showToast as showServerLimitToast,
     hideToast as hideServerLimitToast
 } from "../../toasts/ServerLimitToast";
+import { Action } from "../../dispatcher/actions";
+import LeftPanel2 from "./LeftPanel2";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -92,12 +94,23 @@ interface IProps {
     currentGroupIsNew?: boolean;
 }
 
+interface IUsageLimit {
+    limit_type: "monthly_active_user" | string;
+    admin_contact?: string;
+}
+
 interface IState {
     mouseDown?: {
         x: number;
         y: number;
     };
-    syncErrorData: any;
+    syncErrorData?: {
+        error: {
+            data: IUsageLimit;
+            errcode: string;
+        };
+    };
+    usageLimitEventContent?: IUsageLimit;
     useCompactLayout: boolean;
 }
 
@@ -282,7 +295,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         if (oldSyncState === 'PREPARED' && syncState === 'SYNCING') {
             this._updateServerNoticeEvents();
         } else {
-            this._calculateServerLimitToast(data);
+            this._calculateServerLimitToast(this.state.syncErrorData, this.state.usageLimitEventContent);
         }
     };
 
@@ -293,7 +306,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         }
     };
 
-    _calculateServerLimitToast(syncErrorData, usageLimitEventContent?) {
+    _calculateServerLimitToast(syncErrorData: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
         const error = syncErrorData && syncErrorData.error && syncErrorData.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
             usageLimitEventContent = syncErrorData.error.data;
@@ -330,8 +343,9 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                 e.getContent()['server_notice_type'] === 'm.server_notice.usage_limit_reached'
             );
         });
-
-        this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEvent && usageLimitEvent.getContent());
+        const usageLimitEventContent = usageLimitEvent && usageLimitEvent.getContent();
+        this._calculateServerLimitToast(this.state.syncErrorData, usageLimitEventContent);
+        this.setState({ usageLimitEventContent });
     };
 
     _onPaste = (ev) => {
@@ -346,7 +360,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
             // refocusing during a paste event will make the
             // paste end up in the newly focused element,
             // so dispatch synchronously before paste happens
-            dis.dispatch({action: 'focus_composer'}, true);
+            dis.fire(Action.FocusComposer, true);
         }
     };
 
@@ -496,7 +510,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
 
             if (!isClickShortcut && ev.key !== Key.TAB && !canElementReceiveInput(ev.target)) {
                 // synchronous dispatch so we focus before key generates input
-                dis.dispatch({action: 'focus_composer'}, true);
+                dis.fire(Action.FocusComposer, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as
                 // that would prevent typing in the now-focussed composer
@@ -655,6 +669,20 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
+        let leftPanel = (
+            <LeftPanel
+                resizeNotifier={this.props.resizeNotifier}
+                collapsed={this.props.collapseLhs || false}
+                disabled={this.props.leftDisabled}
+            />
+        );
+        if (SettingsStore.isFeatureEnabled("feature_new_room_list")) {
+            // TODO: Supply props like collapsed and disabled to LeftPanel2
+            leftPanel = (
+                <LeftPanel2 />
+            );
+        }
+
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
                 <div
@@ -668,11 +696,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                     <ToastContainer />
                     <DragDropContext onDragEnd={this._onDragEnd}>
                         <div ref={this._resizeContainer} className={bodyClasses}>
-                            <LeftPanel
-                                resizeNotifier={this.props.resizeNotifier}
-                                collapsed={this.props.collapseLhs || false}
-                                disabled={this.props.leftDisabled}
-                            />
+                            { leftPanel }
                             <ResizeHandle />
                             { pageElement }
                         </div>

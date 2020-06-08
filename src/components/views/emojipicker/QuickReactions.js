@@ -27,8 +27,7 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
     if (!data) {
         throw new Error(`Emoji ${emoji} doesn't exist in emojibase`);
     }
-    // Prefer our unicode value for quick reactions as we sometimes use variation selectors.
-    return Object.assign({}, data, { unicode: emoji });
+    return data;
 });
 
 class QuickReactions extends React.Component {

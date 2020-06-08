@@ -20,6 +20,7 @@ limitations under the License.
     flex: 0 0 auto;
     position: relative;
     min-width: 264px;
+    max-width: 50%;
     display: flex;
     flex-direction: column;
 }
@@ -67,22 +68,27 @@ limitations under the License.
 
 .mx_RightPanel_membersButton::before {
     mask-image: url('$(res)/img/feather-customised/user.svg');
+    mask-position: center;
 }
 
 .mx_RightPanel_filesButton::before {
     mask-image: url('$(res)/img/feather-customised/files.svg');
+    mask-position: center;
 }
 
 .mx_RightPanel_notifsButton::before {
     mask-image: url('$(res)/img/feather-customised/notifications.svg');
+    mask-position: center;
 }
 
 .mx_RightPanel_groupMembersButton::before {
     mask-image: url('$(res)/img/icons-people.svg');
+    mask-position: center;
 }
 
 .mx_RightPanel_roomsButton::before {
     mask-image: url('$(res)/img/icons-room-nobg.svg');
+    mask-position: center;
 }
 
 .mx_RightPanel_headerButton_highlight::after {

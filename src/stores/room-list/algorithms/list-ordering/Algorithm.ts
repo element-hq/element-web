@@ -20,24 +20,275 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
 import { ITagMap, ITagSortingMap } from "../models";
 import DMRoomMap from "../../../../utils/DMRoomMap";
+import { FILTER_CHANGED, IFilterCondition } from "../../filters/IFilterCondition";
+import { EventEmitter } from "events";
+import { UPDATE_EVENT } from "../../../AsyncStore";
 
 // TODO: Add locking support to avoid concurrent writes?
-// TODO: EventEmitter support? Might not be needed.
+
+/**
+ * Fired when the Algorithm has determined a list has been updated.
+ */
+export const LIST_UPDATED_EVENT = "list_updated_event";
+
+interface IStickyRoom {
+    room: Room;
+    position: number;
+    tag: TagID;
+}
 
 /**
  * Represents a list ordering algorithm. This class will take care of tag
  * management (which rooms go in which tags) and ask the implementation to
  * deal with ordering mechanics.
  */
-export abstract class Algorithm {
-    protected cached: ITagMap = {};
+export abstract class Algorithm extends EventEmitter {
+    private _cachedRooms: ITagMap = {};
+    private _cachedStickyRooms: ITagMap = {}; // a clone of the _cachedRooms, with the sticky room
+    private filteredRooms: ITagMap = {};
+    private _stickyRoom: IStickyRoom = null;
+
     protected sortAlgorithms: ITagSortingMap;
     protected rooms: Room[] = [];
     protected roomIdsToTags: {
         [roomId: string]: TagID[];
     } = {};
+    protected allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
+    protected allowedRoomsByFilters: Set<Room> = new Set<Room>();
 
     protected constructor() {
+        super();
+    }
+
+    public get stickyRoom(): Room {
+        return this._stickyRoom ? this._stickyRoom.room : null;
+    }
+
+    public set stickyRoom(val: Room) {
+        // setters can't be async, so we call a private function to do the work
+        this.updateStickyRoom(val);
+    }
+
+    protected get hasFilters(): boolean {
+        return this.allowedByFilter.size > 0;
+    }
+
+    protected set cachedRooms(val: ITagMap) {
+        this._cachedRooms = val;
+        this.recalculateFilteredRooms();
+        this.recalculateStickyRoom();
+    }
+
+    protected get cachedRooms(): ITagMap {
+        // 🐉 Here be dragons.
+        // Note: this is used by the underlying algorithm classes, so don't make it return
+        // the sticky room cache. If it ends up returning the sticky room cache, we end up
+        // corrupting our caches and confusing them.
+        return this._cachedRooms;
+    }
+
+    /**
+     * Sets the filter conditions the Algorithm should use.
+     * @param filterConditions The filter conditions to use.
+     */
+    public setFilterConditions(filterConditions: IFilterCondition[]): void {
+        for (const filter of filterConditions) {
+            this.addFilterCondition(filter);
+        }
+    }
+
+    public addFilterCondition(filterCondition: IFilterCondition): void {
+        // Populate the cache of the new filter
+        this.allowedByFilter.set(filterCondition, this.rooms.filter(r => filterCondition.isVisible(r)));
+        this.recalculateFilteredRooms();
+        filterCondition.on(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+    }
+
+    public removeFilterCondition(filterCondition: IFilterCondition): void {
+        filterCondition.off(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+        if (this.allowedByFilter.has(filterCondition)) {
+            this.allowedByFilter.delete(filterCondition);
+
+            // If we removed the last filter, tell consumers that we've "updated" our filtered
+            // view. This will trick them into getting the complete room list.
+            if (!this.hasFilters) {
+                this.emit(LIST_UPDATED_EVENT);
+            }
+        }
+    }
+
+    private async updateStickyRoom(val: Room) {
+        // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
+        // otherwise we risk duplicating rooms.
+
+        // It's possible to have no selected room. In that case, clear the sticky room
+        if (!val) {
+            if (this._stickyRoom) {
+                // Lie to the algorithm and re-add the room to the algorithm
+                await this.handleRoomUpdate(this._stickyRoom.room, RoomUpdateCause.NewRoom);
+            }
+            this._stickyRoom = null;
+            return;
+        }
+
+        // When we do have a room though, we expect to be able to find it
+        const tag = this.roomIdsToTags[val.roomId][0];
+        if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
+        let position = this.cachedRooms[tag].indexOf(val);
+        if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
+
+        // 🐉 Here be dragons.
+        // Before we can go through with lying to the underlying algorithm about a room
+        // we need to ensure that when we do we're ready for the innevitable sticky room
+        // update we'll receive. To prepare for that, we first remove the sticky room and
+        // recalculate the state ourselves so that when the underlying algorithm calls for
+        // the same thing it no-ops. After we're done calling the algorithm, we'll issue
+        // a new update for ourselves.
+        const lastStickyRoom = this._stickyRoom;
+        console.log(`Last sticky room:`, lastStickyRoom);
+        this._stickyRoom = null;
+        this.recalculateStickyRoom();
+
+        // When we do have the room, re-add the old room (if needed) to the algorithm
+        // and remove the sticky room from the algorithm. This is so the underlying
+        // algorithm doesn't try and confuse itself with the sticky room concept.
+        if (lastStickyRoom) {
+            // Lie to the algorithm and re-add the room to the algorithm
+            await this.handleRoomUpdate(lastStickyRoom.room, RoomUpdateCause.NewRoom);
+        }
+        // Lie to the algorithm and remove the room from it's field of view
+        await this.handleRoomUpdate(val, RoomUpdateCause.RoomRemoved);
+
+        // Now that we're done lying to the algorithm, we need to update our position
+        // marker only if the user is moving further down the same list. If they're switching
+        // lists, or moving upwards, the position marker will splice in just fine but if
+        // they went downwards in the same list we'll be off by 1 due to the shifting rooms.
+        if (lastStickyRoom && lastStickyRoom.tag === tag && lastStickyRoom.position <= position) {
+            position++;
+        }
+
+        this._stickyRoom = {
+            room: val,
+            position: position,
+            tag: tag,
+        };
+        this.recalculateStickyRoom();
+
+        // Finally, trigger an update
+        this.emit(LIST_UPDATED_EVENT);
+    }
+
+    protected recalculateFilteredRooms() {
+        if (!this.hasFilters) {
+            return;
+        }
+
+        console.warn("Recalculating filtered room list");
+        const allowedByFilters = new Set<Room>();
+        const filters = Array.from(this.allowedByFilter.keys());
+        const newMap: ITagMap = {};
+        for (const tagId of Object.keys(this.cachedRooms)) {
+            // Cheaply clone the rooms so we can more easily do operations on the list.
+            // We optimize our lookups by trying to reduce sample size as much as possible
+            // to the rooms we know will be deduped by the Set.
+            const rooms = this.cachedRooms[tagId];
+            const remainingRooms = rooms.map(r => r).filter(r => !allowedByFilters.has(r));
+            const allowedRoomsInThisTag = [];
+            for (const filter of filters) {
+                const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
+                for (const room of filteredRooms) {
+                    const idx = remainingRooms.indexOf(room);
+                    if (idx >= 0) remainingRooms.splice(idx, 1);
+                    allowedByFilters.add(room);
+                    allowedRoomsInThisTag.push(room);
+                }
+            }
+            newMap[tagId] = allowedRoomsInThisTag;
+            console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
+        }
+
+        this.allowedRoomsByFilters = allowedByFilters;
+        this.filteredRooms = newMap;
+        this.emit(LIST_UPDATED_EVENT);
+    }
+
+    protected addPossiblyFilteredRoomsToTag(tagId: TagID, added: Room[]): void {
+        const filters = this.allowedByFilter.keys();
+        for (const room of added) {
+            for (const filter of filters) {
+                if (filter.isVisible(room)) {
+                    this.allowedRoomsByFilters.add(room);
+                    break;
+                }
+            }
+        }
+
+        // Now that we've updated the allowed rooms, recalculate the tag
+        this.recalculateFilteredRoomsForTag(tagId);
+    }
+
+    protected recalculateFilteredRoomsForTag(tagId: TagID): void {
+        console.log(`Recalculating filtered rooms for ${tagId}`);
+        delete this.filteredRooms[tagId];
+        const rooms = this.cachedRooms[tagId];
+        const filteredRooms = rooms.filter(r => this.allowedRoomsByFilters.has(r));
+        if (filteredRooms.length > 0) {
+            this.filteredRooms[tagId] = filteredRooms;
+        }
+        console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
+    }
+
+    /**
+     * Recalculate the sticky room position. If this is being called in relation to
+     * a specific tag being updated, it should be given to this function to optimize
+     * the call.
+     * @param updatedTag The tag that was updated, if possible.
+     */
+    protected recalculateStickyRoom(updatedTag: TagID = null): void {
+        // 🐉 Here be dragons.
+        // This function does far too much for what it should, and is called by many places.
+        // Not only is this responsible for ensuring the sticky room is held in place at all
+        // times, it is also responsible for ensuring our clone of the cachedRooms is up to
+        // date. If either of these desyncs, we see weird behaviour like duplicated rooms,
+        // outdated lists, and other nonsensical issues that aren't necessarily obvious.
+
+        if (!this._stickyRoom) {
+            // If there's no sticky room, just do nothing useful.
+            if (!!this._cachedStickyRooms) {
+                // Clear the cache if we won't be needing it
+                this._cachedStickyRooms = null;
+                this.emit(LIST_UPDATED_EVENT);
+            }
+            return;
+        }
+
+        if (!this._cachedStickyRooms || !updatedTag) {
+            console.log(`Generating clone of cached rooms for sticky room handling`);
+            const stickiedTagMap: ITagMap = {};
+            for (const tagId of Object.keys(this.cachedRooms)) {
+                stickiedTagMap[tagId] = this.cachedRooms[tagId].map(r => r); // shallow clone
+            }
+            this._cachedStickyRooms = stickiedTagMap;
+        }
+
+        if (updatedTag) {
+            // Update the tag indicated by the caller, if possible. This is mostly to ensure
+            // our cache is up to date.
+            console.log(`Replacing cached sticky rooms for ${updatedTag}`);
+            this._cachedStickyRooms[updatedTag] = this.cachedRooms[updatedTag].map(r => r); // shallow clone
+        }
+
+        // Now try to insert the sticky room, if we need to.
+        // We need to if there's no updated tag (we regenned the whole cache) or if the tag
+        // we might have updated from the cache is also our sticky room.
+        const sticky = this._stickyRoom;
+        if (!updatedTag || updatedTag === sticky.tag) {
+            console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
+            this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
+        }
+
+        // Finally, trigger an update
+        this.emit(LIST_UPDATED_EVENT);
     }
 
     /**
@@ -54,12 +305,15 @@ export abstract class Algorithm {
     }
 
     /**
-     * Gets an ordered set of rooms for the all known tags.
+     * Gets an ordered set of rooms for the all known tags, filtered.
      * @returns {ITagMap} The cached list of rooms, ordered,
      * for each tag. May be empty, but never null/undefined.
      */
     public getOrderedRooms(): ITagMap {
-        return this.cached;
+        if (!this.hasFilters) {
+            return this._cachedStickyRooms || this.cachedRooms;
+        }
+        return this.filteredRooms;
     }
 
     /**
@@ -83,7 +337,7 @@ export abstract class Algorithm {
         // If we can avoid doing work, do so.
         if (!rooms.length) {
             await this.generateFreshTags(newTags); // just in case it wants to do something
-            this.cached = newTags;
+            this.cachedRooms = newTags;
             return;
         }
 
@@ -130,7 +384,7 @@ export abstract class Algorithm {
 
         await this.generateFreshTags(newTags);
 
-        this.cached = newTags;
+        this.cachedRooms = newTags;
         this.updateTagsFromCache();
     }
 
@@ -140,9 +394,9 @@ export abstract class Algorithm {
     protected updateTagsFromCache() {
         const newMap = {};
 
-        const tags = Object.keys(this.cached);
+        const tags = Object.keys(this.cachedRooms);
         for (const tagId of tags) {
-            const rooms = this.cached[tagId];
+            const rooms = this.cachedRooms[tagId];
             for (const room of rooms) {
                 if (!newMap[room.roomId]) newMap[room.roomId] = [];
                 newMap[room.roomId].push(tagId);

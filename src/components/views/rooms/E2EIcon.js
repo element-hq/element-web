@@ -20,7 +20,6 @@ import PropTypes from "prop-types";
 import classNames from 'classnames';
 
 import {_t, _td} from '../../../languageHandler';
-import {useSettingValue} from "../../../hooks/useSettings";
 import AccessibleButton from "../elements/AccessibleButton";
 import Tooltip from "../elements/Tooltip";
 
@@ -42,15 +41,6 @@ const crossSigningRoomTitles = {
     [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
 
-const legacyUserTitles = {
-    [E2E_STATE.WARNING]: _td("Some sessions for this user are not trusted"),
-    [E2E_STATE.VERIFIED]: _td("All sessions for this user are trusted"),
-};
-const legacyRoomTitles = {
-    [E2E_STATE.WARNING]: _td("Some sessions in this encrypted room are not trusted"),
-    [E2E_STATE.VERIFIED]: _td("All sessions in this encrypted room are trusted"),
-};
-
 const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
     const [hover, setHover] = useState(false);
 
@@ -62,15 +52,10 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
     }, className);
 
     let e2eTitle;
-    const crossSigning = useSettingValue("feature_cross_signing");
-    if (crossSigning && isUser) {
+    if (isUser) {
         e2eTitle = crossSigningUserTitles[status];
-    } else if (crossSigning && !isUser) {
+    } else {
         e2eTitle = crossSigningRoomTitles[status];
-    } else if (!crossSigning && isUser) {
-        e2eTitle = legacyUserTitles[status];
-    } else if (!crossSigning && !isUser) {
-        e2eTitle = legacyRoomTitles[status];
     }
 
     let style;

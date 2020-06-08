@@ -121,9 +121,9 @@ export default class EmojiProvider extends AutocompleteProvider {
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} aria-label={unicode} initialComponent={
-                            <span style={{maxWidth: '1em'}}>{ unicode }</span>
-                        } />
+                        <PillCompletion title={shortname} aria-label={unicode}>
+                            <span>{ unicode }</span>
+                        </PillCompletion>
                     ),
                     range,
                 };

@@ -24,7 +24,7 @@ import withValidation from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
-import SettingsStore from "../../../settings/SettingsStore";
+import {privateShouldBeEncrypted} from "../../../createRoom";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -37,7 +37,7 @@ export default createReactClass({
         const config = SdkConfig.get();
         return {
             isPublic: this.props.defaultPublic || false,
-            isEncrypted: true,
+            isEncrypted: privateShouldBeEncrypted(),
             name: "",
             topic: "",
             alias: "",
@@ -66,7 +66,7 @@ export default createReactClass({
             createOpts.creation_content = {'m.federate': false};
         }
 
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
             opts.encryption = this.state.isEncrypted;
         }
 
@@ -193,7 +193,14 @@ export default createReactClass({
         }
 
         let e2eeSection;
-        if (!this.state.isPublic && SettingsStore.getValue("feature_cross_signing")) {
+        if (!this.state.isPublic) {
+            let microcopy;
+            if (privateShouldBeEncrypted()) {
+                microcopy = _t("You can’t disable this later. Bridges & most bots won’t work yet.");
+            } else {
+                microcopy = _t("Your server admin has disabled end-to-end encryption by default " +
+                    "in private rooms & Direct Messages.");
+            }
             e2eeSection = <React.Fragment>
                 <LabelledToggleSwitch
                     label={ _t("Enable end-to-end encryption")}
@@ -201,7 +208,7 @@ export default createReactClass({
                     value={this.state.isEncrypted}
                     className='mx_CreateRoomDialog_e2eSwitch' // for end-to-end tests
                 />
-                <p>{ _t("You can’t disable this later. Bridges & most bots won’t work yet.") }</p>
+                <p>{ microcopy }</p>
             </React.Fragment>;
         }
 
