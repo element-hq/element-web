@@ -31,6 +31,7 @@ import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
+import AccessibleButton from "../views/elements/AccessibleButton";
 
 interface IProps {
 }
@@ -205,44 +206,44 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         <div className="mx_UserMenuButton_contextMenu_optionList">
                             <ul>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
+                                    <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
                                         <img src={require("../../../res/img/feather-customised/notifications.svg")} width={16} />
                                         <span>{_t("Notification settings")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
+                                    <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
                                         <img src={require("../../../res/img/feather-customised/lock.svg")} width={16} />
                                         <span>{_t("Security & privacy")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, null)}>
+                                    <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
                                         <img src={require("../../../res/img/feather-customised/settings.svg")} width={16} />
                                         <span>{_t("All settings")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={this.onShowArchived}>
+                                    <AccessibleButton onClick={this.onShowArchived}>
                                         <img src={require("../../../res/img/feather-customised/archive.svg")} width={16} />
                                         <span>{_t("Archived rooms")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={this.onProvideFeedback}>
+                                    <AccessibleButton onClick={this.onProvideFeedback}>
                                         <img src={require("../../../res/img/feather-customised/message-circle.svg")} width={16} />
                                         <span>{_t("Feedback")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                             </ul>
                         </div>
                         <div className="mx_UserMenuButton_contextMenu_optionList">
                             <ul>
                                 <li>
-                                    <a href={"#"} onClick={this.onSignOutClick}>
+                                    <AccessibleButton onClick={this.onSignOutClick}>
                                         <img src={require("../../../res/img/feather-customised/sign-out.svg")} width={16} />
                                         <span>{_t("Sign out")}</span>
-                                    </a>
+                                    </AccessibleButton>
                                 </li>
                             </ul>
                         </div>
