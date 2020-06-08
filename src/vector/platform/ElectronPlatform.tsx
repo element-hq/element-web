@@ -44,7 +44,7 @@ import {randomString} from "matrix-js-sdk/src/randomstring";
 import {Action} from "matrix-react-sdk/src/dispatcher/actions";
 import {ActionPayload} from "matrix-react-sdk/src/dispatcher/payloads";
 import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
-import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
+import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -228,8 +228,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
             rageshake.flush();
         });
 
-        ipcRenderer.on('ipcReply', this._onIpcReply.bind(this));
-        ipcRenderer.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+        ipcRenderer.on('ipcReply', this._onIpcReply);
+        ipcRenderer.on('update-downloaded', this.onUpdateDownloaded);
 
         ipcRenderer.on('preferences', () => {
             dis.fire(Action.ViewUserSettings);
@@ -275,11 +275,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this._ipcCall('getConfig');
     }
 
-    async onUpdateDownloaded(ev, {releaseNotes, releaseName}) {
+    onUpdateDownloaded = async (ev, {releaseNotes, releaseName}) => {
+        dis.dispatch<CheckUpdatesPayload>({
+            action: Action.CheckUpdates,
+            status: UpdateCheckStatus.Ready,
+        });
         if (this.shouldShowUpdate(releaseName)) {
             showUpdateToast(await this.getAppVersion(), releaseName, releaseNotes);
         }
-    }
+    };
 
     getHumanReadableName(): string {
         return 'Electron Platform'; // no translation required: only used for analytics
@@ -426,7 +430,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    _onIpcReply(ev, payload) {
+    _onIpcReply = (ev, payload) => {
         if (payload.id === undefined) {
             console.warn("Ignoring IPC reply with no ID");
             return;
@@ -444,7 +448,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         } else {
             callbacks.resolve(payload.reply);
         }
-    }
+    };
 
     getEventIndexingManager(): BaseEventIndexManager | null {
         return this.eventIndexManager;
