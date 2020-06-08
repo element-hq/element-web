@@ -181,6 +181,8 @@ export default class SettingsStore {
      * @param {String} roomId The room ID to monitor for changes in. Use null for all rooms.
      */
     static monitorSetting(settingName, roomId) {
+        roomId = roomId || null; // the thing wants null specifically to work, so appease it.
+
         if (!this._monitors[settingName]) this._monitors[settingName] = {};
 
         const registerWatcher = () => {

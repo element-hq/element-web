@@ -26,7 +26,9 @@ import TopLeftMenuButton from "./TopLeftMenuButton";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
+import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
+import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -43,6 +45,7 @@ interface IProps {
 interface IState {
     searchExpanded: boolean;
     searchFilter: string; // TODO: Move search into room list?
+    showBreadcrumbs: boolean;
 }
 
 export default class LeftPanel2 extends React.Component<IProps, IState> {
@@ -60,7 +63,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         this.state = {
             searchExpanded: false,
             searchFilter: "",
+            showBreadcrumbs: BreadcrumbsStore.instance.visible,
         };
+
+        BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+    }
+
+    public componentWillUnmount() {
+        BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
     }
 
     private onSearch = (term: string): void => {
@@ -85,6 +95,13 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     }
 
+    private onBreadcrumbsUpdate = () => {
+        const newVal = BreadcrumbsStore.instance.visible;
+        if (newVal !== this.state.showBreadcrumbs) {
+            this.setState({showBreadcrumbs: newVal});
+        }
+    };
+
     private renderHeader(): React.ReactNode {
         // TODO: Update when profile info changes
         // TODO: Presence
@@ -100,6 +117,16 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             displayName = myUser.rawDisplayName;
             avatarUrl = myUser.avatarUrl;
         }
+
+        let breadcrumbs;
+        if (this.state.showBreadcrumbs) {
+            breadcrumbs = (
+                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
+                    <RoomBreadcrumbs2 />
+                </div>
+            );
+        }
+
         return (
             <div className="mx_LeftPanel2_userHeader">
                 <div className="mx_LeftPanel2_headerRow">
@@ -116,9 +143,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     </span>
                     <span className="mx_LeftPanel2_userName">{displayName}</span>
                 </div>
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
-                    <RoomBreadcrumbs />
-                </div>
+                {breadcrumbs}
             </div>
         );
     }
@@ -152,7 +177,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             onBlur={() => {/*TODO*/}}
         />;
 
-        // TODO: Breadcrumbs
         // TODO: Conference handling / calls
 
         const containerClasses = classNames({

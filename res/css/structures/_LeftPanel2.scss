@@ -76,9 +76,9 @@ $roomListMinimizedWidth: 50px;
             }
 
             .mx_LeftPanel2_breadcrumbsContainer {
-                // TODO: Improve CSS for breadcrumbs (currently shoved into the view rather than placed)
                 width: 100%;
                 overflow: hidden;
+                margin-top: 8px;
             }
         }
 
