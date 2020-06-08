@@ -36,6 +36,7 @@ export enum Action {
 
     /**
      * Open the user settings. No additional payload information required.
+     * Optionally can include an OpenToTabPayload.
      */
     ViewUserSettings = "view_user_settings",
 

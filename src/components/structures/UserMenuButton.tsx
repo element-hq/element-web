@@ -23,6 +23,8 @@ import { Action } from "../../dispatcher/actions";
 import { createRef } from "react";
 import { _t } from "../../languageHandler";
 import {ContextMenu, ContextMenuButton} from "./ContextMenu";
+import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
+import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 
 interface IProps {
 }
@@ -80,11 +82,13 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         console.log("TODO: Switch theme");
     };
 
-    private onSettingsOpen = (ev: React.MouseEvent, tabRef: string) => {
+    private onSettingsOpen = (ev: React.MouseEvent, tabId: string) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO: Open settings", tabRef);
+        const payload: OpenToTabPayload = {action: Action.ViewUserSettings, initialTabId: tabId};
+        defaultDispatcher.dispatch(payload);
+        this.setState({menuDisplayed: false}); // also close the menu
     };
 
     private onShowArchived = (ev: React.MouseEvent) => {
@@ -147,19 +151,19 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         <div className="mx_UserMenuButton_contextMenu_optionList">
                             <ul>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, 'notifications')}>
+                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
                                         <img src={require("../../../res/img/feather-customised/notifications.svg")} width={16} />
                                         <span>{_t("Notification settings")}</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, 'security')}>
+                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
                                         <img src={require("../../../res/img/feather-customised/lock.svg")} width={16} />
                                         <span>{_t("Security & privacy")}</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, 'all')}>
+                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, null)}>
                                         <img src={require("../../../res/img/feather-customised/settings.svg")} width={16} />
                                         <span>{_t("All settings")}</span>
                                     </a>
