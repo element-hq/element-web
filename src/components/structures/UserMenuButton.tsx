@@ -25,6 +25,9 @@ import { _t } from "../../languageHandler";
 import {ContextMenu, ContextMenuButton} from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
+import Modal from "../../Modal";
+import LogoutDialog from "../views/dialogs/LogoutDialog";
 
 interface IProps {
 }
@@ -95,6 +98,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
+        // TODO: Archived room view (deferred)
         console.log("TODO: Show archived rooms");
     };
 
@@ -102,14 +106,16 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO: Show feedback");
+        Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
+        this.setState({menuDisplayed: false}); // also close the menu
     };
 
     private onSignOutClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO: Sign out");
+        Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+        this.setState({menuDisplayed: false}); // also close the menu
     };
 
     public render() {
