@@ -24,7 +24,7 @@ limitations under the License.
     // Put 20px of padding around the whole menu. We do this instead of a
     // simple `padding: 20px` rule so the horizontal rules added by the
     // optionLists is rendered correctly (full width).
-    >* {
+    > * {
         padding-left: 20px;
         padding-right: 20px;
 
