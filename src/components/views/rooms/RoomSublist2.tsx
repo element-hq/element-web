@@ -20,15 +20,13 @@ import * as React from "react";
 import { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import * as RoomNotifs from '../../../RoomNotifs';
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
-import AccessibleTooltipButton from "../../views/elements/AccessibleTooltipButton";
-import * as FormattingUtils from '../../../utils/FormattingUtils';
 import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
+import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -43,6 +41,7 @@ interface IProps {
     rooms?: Room[];
     startAsHidden: boolean;
     label: string;
+    showMessagePreviews: boolean;
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
@@ -93,7 +92,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         if (this.props.rooms) {
             for (const room of this.props.rooms) {
-                tiles.push(<RoomTile2 room={room} key={`room-${room.roomId}`}/>);
+                tiles.push(
+                    <RoomTile2
+                        room={room}
+                        key={`room-${room.roomId}`}
+                        showMessagePreview={this.props.showMessagePreviews}
+                    />
+                );
             }
         }
 
@@ -101,24 +106,15 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderHeader(): React.ReactElement {
-        const notifications = !this.props.isInvite
-            ? RoomNotifs.aggregateNotificationCount(this.props.rooms)
-            : {count: 0, highlight: true};
-        const notifCount = notifications.count;
-        const notifHighlight = notifications.highlight;
+        // TODO: Handle badge count
+        // const notifications = !this.props.isInvite
+        //     ? RoomNotifs.aggregateNotificationCount(this.props.rooms)
+        //     : {count: 0, highlight: true};
+        // const notifCount = notifications.count;
+        // const notifHighlight = notifications.highlight;
 
         // TODO: Title on collapsed
         // TODO: Incoming call box
-
-        let chevron = null;
-        if (this.hasTiles()) {
-            const chevronClasses = classNames({
-                'mx_RoomSubList_chevron': true,
-                'mx_RoomSubList_chevronRight': false, // isCollapsed
-                'mx_RoomSubList_chevronDown': true, // !isCollapsed
-            });
-            chevron = (<div className={chevronClasses}/>);
-        }
 
         return (
             <RovingTabIndexWrapper inputRef={this.headerButton}>
@@ -127,68 +123,68 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     const tabIndex = isActive ? 0 : -1;
 
                     // TODO: Collapsed state
-                    let badge;
-                    if (true) { // !isCollapsed
-                        const badgeClasses = classNames({
-                            'mx_RoomSubList_badge': true,
-                            'mx_RoomSubList_badgeHighlight': notifHighlight,
-                        });
-                        // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
-                        if (notifCount > 0) {
-                            badge = (
-                                <AccessibleButton
-                                    tabIndex={tabIndex}
-                                    className={badgeClasses}
-                                    aria-label={_t("Jump to first unread room.")}
-                                >
-                                    <div>
-                                        {FormattingUtils.formatCount(notifCount)}
-                                    </div>
-                                </AccessibleButton>
-                            );
-                        } else if (this.props.isInvite && this.hasTiles()) {
-                            // Render the `!` badge for invites
-                            badge = (
-                                <AccessibleButton
-                                    tabIndex={tabIndex}
-                                    className={badgeClasses}
-                                    aria-label={_t("Jump to first invite.")}
-                                >
-                                    <div>
-                                        {FormattingUtils.formatCount(this.numTiles)}
-                                    </div>
-                                </AccessibleButton>
-                            );
-                        }
-                    }
+                    // TODO: Handle badge count
+                    // let badge;
+                    // if (true) { // !isCollapsed
+                    //     const showCount = localStorage.getItem("mx_rls_count") || notifHighlight;
+                    //     const badgeClasses = classNames({
+                    //         'mx_RoomSublist2_badge': true,
+                    //         'mx_RoomSublist2_badgeHighlight': notifHighlight,
+                    //         'mx_RoomSublist2_badgeEmpty': !showCount,
+                    //     });
+                    //     // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
+                    //     if (notifCount > 0) {
+                    //         const count = <div>{FormattingUtils.formatCount(notifCount)}</div>;
+                    //         badge = (
+                    //             <AccessibleButton
+                    //                 tabIndex={tabIndex}
+                    //                 className={badgeClasses}
+                    //                 aria-label={_t("Jump to first unread room.")}
+                    //             >
+                    //                 {showCount ? count : null}
+                    //             </AccessibleButton>
+                    //         );
+                    //     } else if (this.props.isInvite && this.hasTiles()) {
+                    //         // Render the `!` badge for invites
+                    //         badge = (
+                    //             <AccessibleButton
+                    //                 tabIndex={tabIndex}
+                    //                 className={badgeClasses}
+                    //                 aria-label={_t("Jump to first invite.")}
+                    //             >
+                    //                 <div>
+                    //                     {FormattingUtils.formatCount(this.numTiles)}
+                    //                 </div>
+                    //             </AccessibleButton>
+                    //         );
+                    //     }
+                    // }
 
-                    let addRoomButton = null;
-                    if (!!this.props.onAddRoom) {
-                        addRoomButton = (
-                            <AccessibleTooltipButton
-                                tabIndex={tabIndex}
-                                onClick={this.onAddRoom}
-                                className="mx_RoomSubList_addRoom"
-                                title={this.props.addRoomLabel || _t("Add room")}
-                            />
-                        );
-                    }
+                    // TODO: Aux button
+                    // let addRoomButton = null;
+                    // if (!!this.props.onAddRoom) {
+                    //     addRoomButton = (
+                    //         <AccessibleTooltipButton
+                    //             tabIndex={tabIndex}
+                    //             onClick={this.onAddRoom}
+                    //             className="mx_RoomSublist2_addButton"
+                    //             title={this.props.addRoomLabel || _t("Add room")}
+                    //         />
+                    //     );
+                    // }
 
                     // TODO: a11y (see old component)
                     return (
-                        <div className={"mx_RoomSubList_labelContainer"}>
+                        <div className={"mx_RoomSublist2_headerContainer"}>
                             <AccessibleButton
                                 inputRef={ref}
                                 tabIndex={tabIndex}
-                                className={"mx_RoomSubList_label"}
+                                className={"mx_RoomSublist2_headerText"}
                                 role="treeitem"
                                 aria-level="1"
                             >
-                                {chevron}
                                 <span>{this.props.label}</span>
                             </AccessibleButton>
-                            {badge}
-                            {addRoomButton}
                         </div>
                     );
                 }}
@@ -204,9 +200,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const classes = classNames({
             // TODO: Proper collapse support
-            'mx_RoomSubList': true,
-            'mx_RoomSubList_hidden': false, // len && isCollapsed
-            'mx_RoomSubList_nonEmpty': this.hasTiles(), // len && !isCollapsed
+            'mx_RoomSublist2': true,
+            'mx_RoomSublist2_collapsed': false, // len && isCollapsed
         });
 
         let content = null;
@@ -244,7 +239,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 visibleTiles.splice(visibleTiles.length - 1, 1, (
                     <div
                         onClick={this.onShowAllClick}
-                        style={{height: '34px', lineHeight: '34px', cursor: 'pointer'}}
+                        className='mx_RoomSublist2_showMoreButton'
                         key='showall'
                     >
                         {_t("Show %(n)s more", {n: numMissing})}
