@@ -26,7 +26,7 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import NotificationBadge, { ListNotificationState } from "./NotificationBadge";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -56,18 +56,28 @@ interface IProps {
 }
 
 interface IState {
+    notificationState: ListNotificationState;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef();
 
-    private hasTiles(): boolean {
-        return this.numTiles > 0;
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            notificationState: new ListNotificationState(this.props.isInvite),
+        };
+        this.state.notificationState.setRooms(this.props.rooms);
     }
 
     private get numTiles(): number {
         // TODO: Account for group invites
         return (this.props.rooms || []).length;
+    }
+
+    public componentDidUpdate() {
+        this.state.notificationState.setRooms(this.props.rooms);
     }
 
     private onAddRoom = (e) => {
@@ -106,13 +116,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderHeader(): React.ReactElement {
-        // TODO: Handle badge count
-        // const notifications = !this.props.isInvite
-        //     ? RoomNotifs.aggregateNotificationCount(this.props.rooms)
-        //     : {count: 0, highlight: true};
-        // const notifCount = notifications.count;
-        // const notifHighlight = notifications.highlight;
-
         // TODO: Title on collapsed
         // TODO: Incoming call box
 
@@ -123,42 +126,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     const tabIndex = isActive ? 0 : -1;
 
                     // TODO: Collapsed state
-                    // TODO: Handle badge count
-                    // let badge;
-                    // if (true) { // !isCollapsed
-                    //     const showCount = localStorage.getItem("mx_rls_count") || notifHighlight;
-                    //     const badgeClasses = classNames({
-                    //         'mx_RoomSublist2_badge': true,
-                    //         'mx_RoomSublist2_badgeHighlight': notifHighlight,
-                    //         'mx_RoomSublist2_badgeEmpty': !showCount,
-                    //     });
-                    //     // Wrap the contents in a div and apply styles to the child div so that the browser default outline works
-                    //     if (notifCount > 0) {
-                    //         const count = <div>{FormattingUtils.formatCount(notifCount)}</div>;
-                    //         badge = (
-                    //             <AccessibleButton
-                    //                 tabIndex={tabIndex}
-                    //                 className={badgeClasses}
-                    //                 aria-label={_t("Jump to first unread room.")}
-                    //             >
-                    //                 {showCount ? count : null}
-                    //             </AccessibleButton>
-                    //         );
-                    //     } else if (this.props.isInvite && this.hasTiles()) {
-                    //         // Render the `!` badge for invites
-                    //         badge = (
-                    //             <AccessibleButton
-                    //                 tabIndex={tabIndex}
-                    //                 className={badgeClasses}
-                    //                 aria-label={_t("Jump to first invite.")}
-                    //             >
-                    //                 <div>
-                    //                     {FormattingUtils.formatCount(this.numTiles)}
-                    //                 </div>
-                    //             </AccessibleButton>
-                    //         );
-                    //     }
-                    // }
+
+                    const badge = <NotificationBadge allowNoCount={false} notification={this.state.notificationState}/>;
 
                     // TODO: Aux button
                     // let addRoomButton = null;
@@ -185,6 +154,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             >
                                 <span>{this.props.label}</span>
                             </AccessibleButton>
+                            <div className="mx_RoomSublist2_badgeContainer">
+                                {badge}
+                            </div>
                         </div>
                     );
                 }}

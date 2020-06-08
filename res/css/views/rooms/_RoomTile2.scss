@@ -50,9 +50,12 @@ limitations under the License.
         // TODO: Ellipsis on the name and preview
 
         .mx_RoomTile2_name {
-            font-weight: 600;
             font-size: $font-14px;
             line-height: $font-19px;
+        }
+
+        .mx_RoomTile2_name.mx_RoomTile2_nameHasUnreadEvents {
+            font-weight: 600;
         }
 
         .mx_RoomTile2_messagePreview {
@@ -70,34 +73,5 @@ limitations under the License.
         display: flex;
         align-items: center;
         justify-content: flex-end;
-
-        .mx_RoomTile2_badge {
-            background-color: $roomtile2-badge-color;
-
-            &:not(.mx_RoomTile2_badgeEmpty) {
-                border-radius: 16px;
-                font-size: $font-10px;
-                line-height: $font-14px;
-                text-align: center;
-                font-weight: bold;
-                margin-right: 14px;
-                color: #fff; // TODO: Variable
-
-                // TODO: Confirm padding on counted badges
-                padding: 2px 5px;
-            }
-
-            &.mx_RoomTile2_badgeEmpty {
-                width: 6px;
-                height: 6px;
-                border-radius: 6px;
-                margin-right: 18px;
-            }
-
-            &.mx_RoomTile2_badgeHighlight {
-                // TODO: Use a more specific variable
-                background-color: $warning-color;
-            }
-        }
     }
 }
