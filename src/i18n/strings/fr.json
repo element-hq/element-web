@@ -2481,5 +2481,8 @@
     "Restart": "Redémarrer",
     "Upgrade your Riot": "Mettre à niveau votre Riot",
     "A new version of Riot is available!": "Une nouvelle version de Riot est disponible !",
-    "New version available. <a>Update now.</a>": "Nouvelle version disponible. <a>Faire la mise à niveau maintenant.</a>"
+    "New version available. <a>Update now.</a>": "Nouvelle version disponible. <a>Faire la mise à niveau maintenant.</a>",
+    "Emoji picker": "Sélecteur d’émojis",
+    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "L’administrateur de votre serveur a désactivé le chiffrement de bout en bout par défaut dans les salons privés et les messages directs.",
+    "Show %(n)s more": "En montrer %(n)s de plus"
 }
