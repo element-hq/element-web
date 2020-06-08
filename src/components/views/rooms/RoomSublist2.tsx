@@ -182,7 +182,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                 tabIndex={tabIndex}
                                 className={"mx_RoomSubList_label"}
                                 role="treeitem"
-                                aria-level="1"
+                                aria-level={1}
                             >
                                 {chevron}
                                 <span>{this.props.label}</span>

@@ -20,7 +20,7 @@ import classNames from "classnames";
 import * as sdk from "../../../index";
 
 // Controlled Toggle Switch element, written with Accessibility in mind
-export default ({checked, disabled=false, onChange, ...props}: IProps) => {
+export default ({checked, disabled = false, onChange, ...props}: IProps) => {
     const _onClick = () => {
         if (disabled) return;
         onChange(!checked);

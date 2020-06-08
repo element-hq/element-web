@@ -109,7 +109,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     tabIndex?: number,
     disabled?: boolean,
     className?: string,
-    onClick(e?: React.MouseEvent<Element> | React.KeyboardEvent<Element>): void;
+    onClick?(e?: React.MouseEvent<Element> | React.KeyboardEvent<Element>): void;
 };
 
 interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
