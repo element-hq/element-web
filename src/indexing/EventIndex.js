@@ -62,6 +62,7 @@ export default class EventIndex extends EventEmitter {
         client.on('Event.decrypted', this.onEventDecrypted);
         client.on('Room.timelineReset', this.onTimelineReset);
         client.on('Room.redaction', this.onRedaction);
+        client.on('RoomState.events', this.onRoomStateEvent);
     }
 
     /**
@@ -76,6 +77,7 @@ export default class EventIndex extends EventEmitter {
         client.removeListener('Event.decrypted', this.onEventDecrypted);
         client.removeListener('Room.timelineReset', this.onTimelineReset);
         client.removeListener('Room.redaction', this.onRedaction);
+        client.removeListener('RoomState.events', this.onRoomStateEvent);
     }
 
     /**
@@ -182,14 +184,6 @@ export default class EventIndex extends EventEmitter {
             return;
         }
 
-        if (ev.getType() === "m.room.encryption") {
-            console.log("EventIndex: Adding checkpoint for newly encrypted room",
-                        room.roomId);
-
-            this.addRoomCheckpoint(room.roomId, true);
-            return;
-        }
-
         // If the event is not yet decrypted mark it for the
         // Event.decrypted callback.
         if (ev.isBeingDecrypted()) {
@@ -199,6 +193,15 @@ export default class EventIndex extends EventEmitter {
             // If the event is decrypted or is unencrypted add it to the
             // index now.
             await this.addLiveEventToIndex(ev);
+        }
+    }
+
+    onRoomStateEvent = async (ev, state) => {
+        if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
+
+        if (ev.getType() === "m.room.encryption" && !await this.isRoomIndexed(state.roomId)) {
+            console.log("EventIndex: Adding a checkpoint for a newly encrypted room", room.roomId);
+            this.addRoomCheckpoint(state.roomId, true);
         }
     }
 
@@ -845,6 +848,20 @@ export default class EventIndex extends EventEmitter {
     async getStats() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
         return indexManager.getStats();
+    }
+
+    /**
+     * Check if the room with the given id is already indexed.
+     *
+     * @param {string} roomId The ID of the room which we want to check if it
+     * has been already indexed.
+     *
+     * @return {Promise<boolean>} Returns true if the index contains events for
+     * the given room, false otherwise.
+     */
+    async isRoomIndexed(roomId) {
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
+        return indexManager.isRoomIndexed(roomId);
     }
 
     /**
