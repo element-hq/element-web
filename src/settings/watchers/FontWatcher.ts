@@ -32,7 +32,7 @@ export class FontWatcher implements IWatcher {
     }
 
     public start() {
-        this.setRootFontSize(SettingsStore.getValue("baseFontSize") + FontWatcher.SIZE_DIFF);
+        this.setRootFontSize(SettingsStore.getValue("baseFontSize"));
         this.dispatcherRef = dis.register(this.onAction);
     }
 
