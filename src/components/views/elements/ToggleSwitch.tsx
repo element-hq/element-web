@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import PropTypes from "prop-types";
+import React, { EventHandler } from "react";
 import classNames from "classnames";
 import * as sdk from "../../../index";
 
 // Controlled Toggle Switch element, written with Accessibility in mind
-const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
-    const _onClick = (e) => {
+export default ({checked, disabled=false, onChange, ...props}: IProps) => {
+    const _onClick = () => {
         if (disabled) return;
         onChange(!checked);
     };
@@ -47,15 +46,13 @@ const ToggleSwitch = ({checked, disabled=false, onChange, ...props}) => {
     );
 };
 
-ToggleSwitch.propTypes = {
+interface IProps {
     // Whether or not this toggle is in the 'on' position.
-    checked: PropTypes.bool.isRequired,
+    checked: boolean,
 
     // Whether or not the user can interact with the switch
-    disabled: PropTypes.bool,
+    disabled: boolean,
 
     // Called when the checked state changes. First argument will be the new state.
-    onChange: PropTypes.func.isRequired,
+    onChange(checked: boolean): void,
 };
-
-export default ToggleSwitch;

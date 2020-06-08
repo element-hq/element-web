@@ -21,58 +21,76 @@ import createReactClass from 'create-react-class';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 import ToggleSwitch from "./ToggleSwitch";
+import StyledCheckbox from "./StyledCheckbox";
 
-export default createReactClass({
-    displayName: 'SettingsFlag',
-    propTypes: {
-        name: PropTypes.string.isRequired,
-        level: PropTypes.string.isRequired,
-        roomId: PropTypes.string, // for per-room settings
-        label: PropTypes.string, // untranslated
-        onChange: PropTypes.func,
-        isExplicit: PropTypes.bool,
-    },
+interface IProps {
+    name: string,
+    level: string,
+    roomId?: string, // for per-room settings
+    label?: string, // untranslated
+    isExplicit: boolean,
+    // XXX: once design replaces all toggles make this the default
+    useCheckbox?: boolean,
+    onChange(checked: boolean): void,
+}
 
-    getInitialState: function() {
-        return {
+interface IState {
+    // XXX: make this generic when the settings store is typed
+    value: any;
+}
+
+export default class SettingsFlag extends React.Component<IProps, IState> {
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
             value: SettingsStore.getValueAt(
                 this.props.level,
                 this.props.name,
                 this.props.roomId,
                 this.props.isExplicit,
             ),
-        };
-    },
+        }
+    }
 
-    onChange: function(checked) {
-        if (this.props.group && !checked) return;
-
+    private onChange = (checked: boolean): void => {
         this.save(checked);
         this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
-    },
+    }
 
-    save: function(val = undefined) {
+    private checkBoxOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.onChange(e.target.checked);
+    }
+
+    private save = (val?: any): void => {
         return SettingsStore.setValue(
             this.props.name,
             this.props.roomId,
             this.props.level,
             val !== undefined ? val : this.state.value,
         );
-    },
+    }
 
-    render: function() {
+    public render() {
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);
 
         let label = this.props.label;
         if (!label) label = SettingsStore.getDisplayName(this.props.name, this.props.level);
         else label = _t(label);
 
-        return (
-            <div className="mx_SettingsFlag">
-                <span className="mx_SettingsFlag_label">{label}</span>
-                <ToggleSwitch checked={this.state.value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
-            </div>
-        );
-    },
-});
+        if (this.props.useCheckbox) {
+            return <StyledCheckbox checked={this.state.value} onChange={this.checkBoxOnChange} disabled={!canChange} >
+                {label}
+            </StyledCheckbox>;
+        } else {
+            return (
+                <div className="mx_SettingsFlag">
+                    <span className="mx_SettingsFlag_label">{label}</span>
+                    <ToggleSwitch checked={this.state.value} onChange={this.onChange} disabled={!canChange} aria-label={label} />
+                </div>
+            );
+        }
+    }
+}
