@@ -1374,5 +1374,13 @@
     "Sounds": "Helid",
     "Notification sound": "Teavitusheli",
     "Reset": "Taasta algolek",
-    "Set a new custom sound": "Seadista uus kohandatud heli"
+    "Set a new custom sound": "Seadista uus kohandatud heli",
+    "Jump to message": "Mine sõnumi juurde",
+    "were invited %(count)s times|other": "said kutse %(count)s korda",
+    "were invited %(count)s times|one": "said kutse",
+    "was invited %(count)s times|other": "sai kutse %(count)s korda",
+    "was invited %(count)s times|one": "sai kutse",
+    "%(severalUsers)schanged their name %(count)s times|other": "Mitu kasutajat %(severalUsers)s muutsid oma nime %(count)s korda",
+    "%(severalUsers)schanged their name %(count)s times|one": "Mitu kasutajat %(severalUsers)s muutsid oma nime",
+    "%(oneUser)schanged their name %(count)s times|other": "Kasutaja %(oneUser)s muutis oma nime %(count)s korda"
 }
