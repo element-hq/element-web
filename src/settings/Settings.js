@@ -170,10 +170,10 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "fontSize": {
+    "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: 15,
+        default: 10,
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
