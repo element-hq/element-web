@@ -30,6 +30,7 @@ import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
+import {getHostingLink} from "../../utils/HostingLink";
 
 interface IProps {
 }
@@ -148,6 +149,28 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
     public render() {
         let contextMenu;
         if (this.state.menuDisplayed) {
+            let hostingLink;
+            const signupLink = getHostingLink("user-context-menu");
+            if (signupLink) {
+                hostingLink = (
+                    <div className="mx_UserMenuButton_contextMenu_header">
+                        {_t(
+                            "<a>Upgrade</a> to your own domain", {},
+                            {
+                                a: sub => (
+                                    <a
+                                        href={signupLink}
+                                        target="_blank"
+                                        rel="noreferrer noopener"
+                                        tabIndex={-1}
+                                    >{sub}</a>
+                                ),
+                            },
+                        )}
+                    </div>
+                );
+            }
+
             const elementRect = this.buttonRef.current.getBoundingClientRect();
             contextMenu = (
                 <ContextMenu
@@ -178,9 +201,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                                 />
                             </div>
                         </div>
-                        <div className="mx_UserMenuButton_contextMenu_header">
-                            TODO: Upgrade prompt
-                        </div>
+                        {hostingLink}
                         <div className="mx_UserMenuButton_contextMenu_optionList">
                             <ul>
                                 <li>
