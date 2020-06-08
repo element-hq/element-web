@@ -171,7 +171,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href={"#"} onClick={this.onShowArchived}>
+                                    <a href={"#"} onClick={this.onProvideFeedback}>
                                         <img src={require("../../../res/img/feather-customised/message-circle.svg")} width={16} />
                                         <span>{_t("Feedback")}</span>
                                     </a>
@@ -181,7 +181,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         <div className="mx_UserMenuButton_contextMenu_optionList">
                             <ul>
                                 <li>
-                                    <a href={"#"} onClick={(e) => this.onSettingsOpen(e, 'notifications')}>
+                                    <a href={"#"} onClick={this.onSignOutClick}>
                                         <img src={require("../../../res/img/feather-customised/sign-out.svg")} width={16} />
                                         <span>{_t("Sign out")}</span>
                                     </a>
