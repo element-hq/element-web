@@ -15,16 +15,16 @@ limitations under the License.
 */
 
 @keyframes breadcrumb-popin {
-  0% {
-      // Ideally we'd use `width` instead of `opacity`, but we only
-      // have 16 nanoseconds to render the frame, and width is expensive.
-      opacity: 0;
-      transform: scale(0);
-  }
-  100% {
-      opacity: 1;
-      transform: scale(1);
-  }
+    0% {
+        // Ideally we'd use `width` instead of `opacity`, but we only
+        // have 16 nanoseconds to render the frame, and width is expensive.
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .mx_RoomBreadcrumbs2 {
