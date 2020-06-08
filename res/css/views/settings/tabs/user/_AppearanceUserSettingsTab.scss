@@ -50,8 +50,9 @@ limitations under the License.
     > .mx_ThemeSelectors {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
 
-        margin-top: 23px;
+        margin-top: 13px;
 
         > .mx_RadioButton {
             padding: $font-16px;
@@ -61,6 +62,7 @@ limitations under the License.
             flex-shrink: 1;
             flex-grow: 0;
             margin-right: 15px;
+            margin-top: 10px;
         }
 
         > .mx_RadioButton:not([disabled]) {

@@ -255,6 +255,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 <div className="mx_ThemeSelectors" onChange={this.onThemeChange}>
                     {orderedThemes.map(theme => {
                         return <StyledRadioButton
+                            key={theme.id}
                             value={theme.id}
                             name={"theme"}
                     disabled={this.state.useSystemTheme}
