@@ -2455,5 +2455,7 @@
     "Restart": "Restartigi",
     "Upgrade your Riot": "Gradaltigi vian Rioton",
     "A new version of Riot is available!": "Nova versio de Riot estas disponebla!",
-    "New version available. <a>Update now.</a>": "Nova versio estas disponebla. <a>Ĝisdatigu nun.</a>"
+    "New version available. <a>Update now.</a>": "Nova versio estas disponebla. <a>Ĝisdatigu nun.</a>",
+    "Emoji picker": "Elektilo de bildsignoj",
+    "Show %(n)s more": "Montri %(n)s pliajn"
 }
