@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export type EnumValue = string | number;
-
 /**
  * Get the values for an enum.
  * @param e The enum.
