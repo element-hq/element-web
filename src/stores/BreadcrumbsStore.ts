@@ -113,7 +113,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private async appendRoom(room: Room) {
-        const rooms = this.state.rooms.slice(); // cheap clone
+        const rooms = (this.state.rooms || []).slice(); // cheap clone
 
         // If the room is upgraded, use that room instead. We'll also splice out
         // any children of the room.
