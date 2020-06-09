@@ -20,13 +20,13 @@ import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
 import { arrayHasDiff } from "../../../utils/arrays";
-import { IDisposable } from "../../../utils/IDisposable";
+import { IDestroyable } from "../../../utils/IDestroyable";
 
 /**
  * A filter condition for the room list which reveals rooms which
  * are a member of a given community.
  */
-export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDisposable {
+export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
     private roomIds: string[] = [];
 
     constructor(private community: Group) {
@@ -57,7 +57,7 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
         }
     };
 
-    public dispose(): void {
+    public destroy(): void {
         GroupStore.off("update", this.onStoreUpdate);
     }
 }

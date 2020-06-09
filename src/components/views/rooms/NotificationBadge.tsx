@@ -31,6 +31,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { EventEmitter } from "events";
 import { arrayDiff } from "../../../utils/arrays";
+import { IDestroyable } from "../../../utils/IDestroyable";
 
 export const NOTIFICATION_STATE_UPDATE = "update";
 
@@ -106,7 +107,7 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
     }
 }
 
-export class RoomNotificationState extends EventEmitter {
+export class RoomNotificationState extends EventEmitter implements IDestroyable {
     private _symbol: string;
     private _count: number;
     private _color: NotificationColor;
