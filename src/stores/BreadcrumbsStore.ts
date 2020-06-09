@@ -68,7 +68,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
                 // waiting for a room join to complete.
                 this.waitingRooms.push({roomId: payload.room_id, addedTs: Date.now()});
             } else {
-                await this.appendRoom(this.matrixClient.getRoom(payload.room_id));
+                // The tests might not result in a valid room object.
+                const room = this.matrixClient.getRoom(payload.room_id);
+                if (room) await this.appendRoom(room);
             }
         }
     }
