@@ -452,9 +452,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
                 // composer, so CTRL+` it is
 
                 if (ctrlCmdOnly) {
-                    dis.dispatch({
-                        action: 'toggle_top_left_menu',
-                    });
+                    dis.fire(Action.ToggleUserMenu);
                     handled = true;
                 }
                 break;

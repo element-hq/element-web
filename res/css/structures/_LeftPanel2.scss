@@ -73,6 +73,11 @@ $roomListMinimizedWidth: 50px;
                 font-weight: 600;
                 font-size: $font-15px;
                 line-height: $font-20px;
+                flex: 1;
+            }
+
+            .mx_LeftPanel2_headerButtons {
+                // No special styles: the rest of the layout happens to make it work.
             }
 
             .mx_LeftPanel2_breadcrumbsContainer {

@@ -72,6 +72,7 @@ import {
     hideToast as hideAnalyticsToast
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
+import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -604,9 +605,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewIndexedRoom(payload.roomIndex);
                 break;
             case Action.ViewUserSettings: {
+                const tabPayload = payload as OpenToTabPayload;
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
-                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
+                    {initialTabId: tabPayload.initialTabId},
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true
+                );
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
