@@ -30,11 +30,36 @@ limitations under the License.
     margin-bottom: 12px;
 
     .mx_RoomSublist2_headerContainer {
-        text-transform: uppercase;
-        opacity: 0.5;
-        line-height: $font-16px;
-        font-size: $font-12px;
-        padding-bottom: 8px;
+        // Create a flexbox to make ordering easy
+        display: flex;
+        align-items: center;
+
+        .mx_RoomSublist2_badgeContainer {
+            opacity: 0.8;
+            padding-right: 7px;
+
+            // Create another flexbox row because it's super easy to position the badge at
+            // the end this way.
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .mx_RoomSublist2_headerText {
+            text-transform: uppercase;
+            opacity: 0.5;
+            line-height: $font-16px;
+            font-size: $font-12px;
+            padding-bottom: 8px;
+
+            width: 100%;
+            flex: 1;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
     }
 
     .mx_RoomSublist2_resizeBox {

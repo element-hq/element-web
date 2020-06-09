@@ -43,3 +43,7 @@ limitations under the License.
     padding-left: 20px;
     padding-right: 5px;
 }
+
+.mx_SettingsTab_customFontSizeField {
+    margin-left: calc($font-16px + 10px);
+}

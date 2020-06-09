@@ -18,15 +18,15 @@ import * as React from "react";
 import TagPanel from "./TagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
-import AccessibleButton from "../views/elements/AccessibleButton";
 import { _t } from "../../languageHandler";
 import SearchBox from "./SearchBox";
 import RoomList2 from "../views/rooms/RoomList2";
-import TopLeftMenuButton from "./TopLeftMenuButton";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import UserMenuButton from "./UserMenuButton";
+import RoomSearch from "./RoomSearch";
+import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -44,7 +44,6 @@ interface IProps {
 }
 
 interface IState {
-    searchExpanded: boolean;
     searchFilter: string; // TODO: Move search into room list?
     showBreadcrumbs: boolean;
 }
@@ -61,7 +60,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            searchExpanded: false,
             searchFilter: "",
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
         };
@@ -77,23 +75,9 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         this.setState({searchFilter: term});
     };
 
-    private onSearchCleared = (source: string): void => {
-        if (source === "keyboard") {
-            dis.fire(Action.FocusComposer);
-        }
-        this.setState({searchExpanded: false});
-    }
-
-    private onSearchFocus = (): void => {
-        this.setState({searchExpanded: true});
+    private onExplore = () => {
+        dis.fire(Action.ViewRoomDirectory);
     };
-
-    private onSearchBlur = (event: FocusEvent): void => {
-        const target = event.target as HTMLInputElement;
-        if (target.value.length === 0) {
-            this.setState({searchExpanded: false});
-        }
-    }
 
     private onBreadcrumbsUpdate = () => {
         const newVal = BreadcrumbsStore.instance.visible;
@@ -151,24 +135,28 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         );
     }
 
+    private renderSearchExplore(): React.ReactNode {
+        // TODO: Collapsed support
+
+        return (
+            <div className="mx_LeftPanel2_filterContainer">
+                <RoomSearch onQueryUpdate={this.onSearch} />
+                <AccessibleButton
+                    tabIndex={-1}
+                    className='mx_LeftPanel2_exploreButton'
+                    onClick={this.onExplore}
+                    alt={_t("Explore rooms")}
+                />
+            </div>
+        );
+    }
+
     public render(): React.ReactNode {
         const tagPanel = (
             <div className="mx_LeftPanel2_tagPanelContainer">
                 <TagPanel/>
             </div>
         );
-
-        const searchBox = (<SearchBox
-            className="mx_LeftPanel2_filterRoomsSearch"
-            enableRoomSearchFocus={true}
-            blurredPlaceholder={_t('Filter')}
-            placeholder={_t('Filter rooms…')}
-            onKeyDown={() => {/*TODO*/}}
-            onSearch={this.onSearch}
-            onCleared={this.onSearchCleared}
-            onFocus={this.onSearchFocus}
-            onBlur={this.onSearchBlur}
-            collapsed={false}/>); // TODO: Collapsed support
 
         // TODO: Improve props for RoomList2
         const roomList = <RoomList2
@@ -191,14 +179,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 {tagPanel}
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
-                    <div
-                        className="mx_LeftPanel2_filterContainer"
-                        onKeyDown={() => {/*TODO*/}}
-                        onFocus={() => {/*TODO*/}}
-                        onBlur={() => {/*TODO*/}}
-                    >
-                        {searchBox}
-                    </div>
+                    {this.renderSearchExplore()}
                     <div className="mx_LeftPanel2_actualRoomListContainer">
                         {roomList}
                     </div>

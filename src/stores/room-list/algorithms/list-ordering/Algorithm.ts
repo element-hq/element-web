@@ -20,9 +20,11 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
 import { ITagMap, ITagSortingMap } from "../models";
 import DMRoomMap from "../../../../utils/DMRoomMap";
-import { FILTER_CHANGED, IFilterCondition } from "../../filters/IFilterCondition";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../../filters/IFilterCondition";
 import { EventEmitter } from "events";
 import { UPDATE_EVENT } from "../../../AsyncStore";
+import { ArrayUtil } from "../../../../utils/arrays";
+import { getEnumValues } from "../../../../utils/enums";
 
 // TODO: Add locking support to avoid concurrent writes?
 
@@ -184,22 +186,33 @@ export abstract class Algorithm extends EventEmitter {
         }
 
         console.warn("Recalculating filtered room list");
-        const allowedByFilters = new Set<Room>();
         const filters = Array.from(this.allowedByFilter.keys());
+        const orderedFilters = new ArrayUtil(filters)
+            .groupBy(f => f.relativePriority)
+            .orderBy(getEnumValues(FilterPriority))
+            .value;
         const newMap: ITagMap = {};
         for (const tagId of Object.keys(this.cachedRooms)) {
             // Cheaply clone the rooms so we can more easily do operations on the list.
             // We optimize our lookups by trying to reduce sample size as much as possible
             // to the rooms we know will be deduped by the Set.
             const rooms = this.cachedRooms[tagId];
-            const remainingRooms = rooms.map(r => r).filter(r => !allowedByFilters.has(r));
-            const allowedRoomsInThisTag = [];
-            for (const filter of filters) {
+            let remainingRooms = rooms.map(r => r);
+            let allowedRoomsInThisTag = [];
+            let lastFilterPriority = orderedFilters[0].relativePriority;
+            for (const filter of orderedFilters) {
+                if (filter.relativePriority !== lastFilterPriority) {
+                    // Every time the filter changes priority, we want more specific filtering.
+                    // To accomplish that, reset the variables to make it look like the process
+                    // has started over, but using the filtered rooms as the seed.
+                    remainingRooms = allowedRoomsInThisTag;
+                    allowedRoomsInThisTag = [];
+                    lastFilterPriority = filter.relativePriority;
+                }
                 const filteredRooms = remainingRooms.filter(r => filter.isVisible(r));
                 for (const room of filteredRooms) {
                     const idx = remainingRooms.indexOf(room);
                     if (idx >= 0) remainingRooms.splice(idx, 1);
-                    allowedByFilters.add(room);
                     allowedRoomsInThisTag.push(room);
                 }
             }
@@ -207,7 +220,8 @@ export abstract class Algorithm extends EventEmitter {
             console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
         }
 
-        this.allowedRoomsByFilters = allowedByFilters;
+        const allowedRooms = Object.values(newMap).reduce((rv, v) => { rv.push(...v); return rv; }, <Room[]>[]);
+        this.allowedRoomsByFilters = new Set(allowedRooms);
         this.filteredRooms = newMap;
         this.emit(LIST_UPDATED_EVENT);
     }

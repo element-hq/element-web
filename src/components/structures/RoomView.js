@@ -1458,9 +1458,7 @@ export default createReactClass({
         // using /leave rather than /join. In the short term though, we
         // just ignore them.
         // https://github.com/vector-im/vector-web/issues/1134
-        dis.dispatch({
-            action: 'view_room_directory',
-        });
+        dis.fire(Action.ViewRoomDirectory);
     },
 
     onSearchClick: function() {
