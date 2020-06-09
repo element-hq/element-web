@@ -19,6 +19,12 @@ import { EventEmitter } from "events";
 
 export const FILTER_CHANGED = "filter_changed";
 
+export enum FilterPriority {
+    Lowest,
+    // in the middle would be Low, Normal, and High if we had a need
+    Highest,
+}
+
 /**
  * A filter condition for the room list, determining if a room
  * should be shown or not.
@@ -32,6 +38,12 @@ export const FILTER_CHANGED = "filter_changed";
  * as a change in the user's input), this emits FILTER_CHANGED.
  */
 export interface IFilterCondition extends EventEmitter {
+    /**
+     * The relative priority that this filter should be applied with.
+     * Lower priorities get applied first.
+     */
+    relativePriority: FilterPriority;
+
     /**
      * Determines if a given room should be visible under this
      * condition.
