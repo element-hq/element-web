@@ -83,7 +83,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
     // it wants this at the top of the file, but we know better
     // tslint:disable-next-line
-    private onSearchUpdated = throttle(() => {
+    private onSearchUpdated = throttle(
+        () => {
             // We can't use the state variable because it can lag behind the input.
             // The lag is most obvious when deleting/clearing text with the keyboard.
             this.props.onQueryUpdate(this.inputRef.current.value);
