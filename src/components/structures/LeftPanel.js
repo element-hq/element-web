@@ -252,7 +252,7 @@ const LeftPanel = createReactClass({
         if (!this.props.collapsed) {
             exploreButton = (
                 <div className={classNames("mx_LeftPanel_explore", {"mx_LeftPanel_explore_hidden": this.state.searchExpanded})}>
-                    <AccessibleButton onClick={() => dis.dispatch({action: 'view_room_directory'})}>{_t("Explore")}</AccessibleButton>
+                    <AccessibleButton onClick={() => dis.fire(Action.ViewRoomDirectory)}>{_t("Explore")}</AccessibleButton>
                 </div>
             );
         }

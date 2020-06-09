@@ -624,7 +624,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
                 break;
             }
-            case 'view_room_directory': {
+            case Action.ViewRoomDirectory: {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
                 Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
                     'mx_RoomDirectory_dialogWrapper', false, true);
@@ -1611,9 +1611,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'require_registration',
             });
         } else if (screen === 'directory') {
-            dis.dispatch({
-                action: 'view_room_directory',
-            });
+            dis.fire(Action.ViewRoomDirectory);
         } else if (screen === 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',
