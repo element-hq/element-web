@@ -20,6 +20,7 @@ import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
+import { RoomListStoreTempProxy } from "./room-list/RoomListStoreTempProxy";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -56,6 +57,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
 
+        // TODO: Remove when new room list is made the default
+        if (!RoomListStoreTempProxy.isUsingNewStore()) return;
+
         if (payload.action === 'setting_updated') {
             if (payload.settingName === 'breadcrumb_rooms') {
                 await this.updateRooms();
@@ -76,6 +80,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady() {
+        // TODO: Remove when new room list is made the default
+        if (!RoomListStoreTempProxy.isUsingNewStore()) return;
+
         await this.updateRooms();
         await this.updateState({enabled: SettingsStore.getValue("breadcrumbs", null)});
 
@@ -84,6 +91,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady() {
+        // TODO: Remove when new room list is made the default
+        if (!RoomListStoreTempProxy.isUsingNewStore()) return;
+
         this.matrixClient.removeListener("Room.myMembership", this.onMyMembership);
         this.matrixClient.removeListener("Room", this.onRoom);
     }
