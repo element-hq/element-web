@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
 
 /**
@@ -27,6 +27,11 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
     constructor() {
         super();
+    }
+
+    public get relativePriority(): FilterPriority {
+        // We want this one to be at the highest priority so it can search within other filters.
+        return FilterPriority.Highest;
     }
 
     public get search(): string {

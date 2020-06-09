@@ -41,6 +41,11 @@ export enum Action {
     ViewUserSettings = "view_user_settings",
 
     /**
+     * Opens the room directory. No additional payload information required.
+     */
+    ViewRoomDirectory = "view_room_directory",
+
+    /**
      * Sets the current tooltip. Should be use with ViewTooltipPayload.
      */
     ViewTooltip = "view_tooltip",

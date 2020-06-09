@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
@@ -35,6 +35,11 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
 
         // noinspection JSIgnoredPromiseFromCall
         this.onStoreUpdate(); // trigger a false update to seed the store
+    }
+
+    public get relativePriority(): FilterPriority {
+        // Lowest priority so we can coarsely find rooms.
+        return FilterPriority.Lowest;
     }
 
     public isVisible(room: Room): boolean {

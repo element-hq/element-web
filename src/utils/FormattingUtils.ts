@@ -121,11 +121,12 @@ export function formatCommaSeparatedList(items: string[], itemLimit?: number): s
 }
 
 /**
- * Formats a number into a 'minimal' badge count (9, 99, 99+).
+ * Formats a number into a 'minimal' badge count (9, 98, 99+).
  * @param count The number to convert
  * @returns The badge count, stringified.
  */
 export function formatMinimalBadgeCount(count: number): string {
-    if (count < 100) return count.toString();
+    // we specifically go from "98" to "99+"
+    if (count < 99) return count.toString();
     return "99+";
 }
