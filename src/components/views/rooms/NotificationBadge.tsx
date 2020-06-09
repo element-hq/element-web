@@ -136,7 +136,7 @@ export class RoomNotificationState extends EventEmitter {
         return getEffectiveMembership(this.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
-    public dispose(): void {
+    public destroy(): void {
         this.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
         this.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
         this.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
@@ -240,7 +240,7 @@ export class ListNotificationState extends EventEmitter {
             const state = this.states[oldRoom.roomId];
             delete this.states[oldRoom.roomId];
             state.off(NOTIFICATION_STATE_UPDATE, this.onRoomNotificationStateUpdate);
-            state.dispose();
+            state.destroy();
         }
         for (const newRoom of diff.added) {
             const state = new RoomNotificationState(newRoom);
