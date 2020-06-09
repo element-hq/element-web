@@ -258,10 +258,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                             key={theme.id}
                             value={theme.id}
                             name={"theme"}
-                    disabled={this.state.useSystemTheme}
+                            disabled={this.state.useSystemTheme}
                             checked={!this.state.useSystemTheme && theme.id === this.state.theme}
                             className={"mx_ThemeSelector_" + theme.id}
-                >
+                        >
                             {theme.name}
                         </StyledRadioButton>;
                     })}
