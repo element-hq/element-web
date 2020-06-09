@@ -104,7 +104,7 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
             // NOTE: The CSSTransition timeout MUST match the timeout in our CSS!
             return (
                 <CSSTransition
-                    appear={true} in={this.state.doAnimation} timeout={300}
+                    appear={true} in={this.state.doAnimation} timeout={640}
                     classNames='mx_RoomBreadcrumbs2'
                 >
                     <div className='mx_RoomBreadcrumbs2'>
