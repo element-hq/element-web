@@ -51,7 +51,6 @@ export class RoomListStoreTempProxy {
     }
 }
 
-
 export class RoomListStoreTempToken {
     constructor(private offFn: () => void) {
     }
