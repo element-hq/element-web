@@ -1,0 +1,99 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Rename to mx_LeftPanel during replacement of old component
+
+// TODO: Put these variables in the right place, or namespace them.
+$tagPanelWidth: 70px;
+$roomListMinimizedWidth: 50px;
+
+.mx_LeftPanel2 {
+    background-color: $header-panel-bg-color;
+    min-width: 260px;
+    max-width: 50%;
+
+    // Create a row-based flexbox for the TagPanel and the room list
+    display: flex;
+
+    .mx_LeftPanel2_tagPanelContainer {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: $tagPanelWidth;
+        height: 100%;
+
+        // Create another flexbox so the TagPanel fills the container
+        display: flex;
+
+        // TagPanel handles its own CSS
+    }
+
+    // Note: The 'room list' in this context is actually everything that isn't the tag
+    // panel, such as the menu options, breadcrumbs, filtering, etc
+    .mx_LeftPanel2_roomListContainer {
+        width: calc(100% - $tagPanelWidth);
+
+        // Create another flexbox (this time a column) for the room list components
+        display: flex;
+        flex-direction: column;
+
+        .mx_LeftPanel2_userHeader {
+            padding: 14px 12px 20px; // 14px top, 12px sides, 20px bottom
+
+            // Create another flexbox column for the rows to stack within
+            display: flex;
+            flex-direction: column;
+
+            // There's 2 rows when breadcrumbs are present: the top bit and the breadcrumbs
+            .mx_LeftPanel2_headerRow {
+                // Create yet another flexbox, this time within the row, to ensure items stay
+                // aligned correctly. This is also a row-based flexbox.
+                display: flex;
+                align-items: center;
+            }
+
+            .mx_LeftPanel2_userAvatarContainer {
+                position: relative; // to make default avatars work
+                margin-right: 8px;
+            }
+
+            .mx_LeftPanel2_userName {
+                font-weight: 600;
+                font-size: $font-15px;
+                line-height: $font-20px;
+                flex: 1;
+            }
+
+            .mx_LeftPanel2_headerButtons {
+                // No special styles: the rest of the layout happens to make it work.
+            }
+
+            .mx_LeftPanel2_breadcrumbsContainer {
+                // TODO: Improve CSS for breadcrumbs (currently shoved into the view rather than placed)
+                width: 100%;
+                overflow: hidden;
+            }
+        }
+
+        .mx_LeftPanel2_filterContainer {
+            // TODO: Improve CSS for filtering and its input
+        }
+
+        .mx_LeftPanel2_actualRoomListContainer {
+            flex-grow: 1; // fill the available space
+            overflow-y: auto;
+        }
+    }
+}

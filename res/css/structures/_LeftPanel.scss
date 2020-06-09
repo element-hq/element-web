@@ -23,14 +23,6 @@ limitations under the License.
     flex: 0 0 auto;
 }
 
-// TODO: Remove temporary indicator of new room list implementation.
-// This border is meant to visually distinguish between the two components when the
-// user has turned on the new room list implementation, at least until the designs
-// themselves give it away.
-.mx_LeftPanel2 .mx_LeftPanel {
-    border-left: 5px #e26dff solid;
-}
-
 .mx_LeftPanel_container.collapsed {
     min-width: unset;
     /* Collapsed LeftPanel 50px */
