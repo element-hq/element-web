@@ -27,6 +27,7 @@ import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
+import UserMenuButton from "./UserMenuButton";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -49,7 +50,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     // TODO: Properly support TagPanel
     // TODO: Properly support searching/filtering
     // TODO: Properly support breadcrumbs
-    // TODO: Properly support TopLeftMenu (User Settings)
     // TODO: a11y
     // TODO: actually make this useful in general (match design proposals)
     // TODO: Fadable support (is this still needed?)
@@ -115,6 +115,9 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                         />
                     </span>
                     <span className="mx_LeftPanel2_userName">{displayName}</span>
+                    <span className="mx_LeftPanel2_headerButtons">
+                        <UserMenuButton />
+                    </span>
                 </div>
                 <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
                     <RoomBreadcrumbs />

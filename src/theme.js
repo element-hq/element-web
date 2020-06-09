@@ -62,7 +62,7 @@ function setCustomThemeVars(customTheme) {
     }
 }
 
-function getCustomTheme(themeName) {
+export function getCustomTheme(themeName) {
     // set css variables
     const customThemes = SettingsStore.getValue("custom_themes");
     if (!customThemes) {

@@ -1,0 +1,162 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserMenuButton {
+    // No special styles on the button itself
+}
+
+.mx_UserMenuButton_contextMenu {
+    width: 231px;
+
+    // Put 20px of padding around the whole menu. We do this instead of a
+    // simple `padding: 20px` rule so the horizontal rules added by the
+    // optionLists is rendered correctly (full width).
+    > * {
+        padding-left: 20px;
+        padding-right: 20px;
+
+        &:first-child {
+            padding-top: 20px;
+        }
+
+        &:last-child {
+            padding-bottom: 20px;
+        }
+    }
+
+    .mx_UserMenuButton_contextMenu_header {
+        // Create a flexbox to organize the header a bit easier
+        display: flex;
+        align-items: center;
+
+        &:nth-child(n + 1) {
+            // The first header will have appropriate padding, subsequent ones need a margin.
+            margin-top: 10px;
+        }
+
+        .mx_UserMenuButton_contextMenu_name {
+            // Create another flexbox of columns to handle large user IDs
+            display: flex;
+            flex-direction: column;
+
+            // fit the container
+            flex: 1;
+            width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
+
+            * {
+                // Automatically grow all subelements to fit the container
+                flex: 1;
+                width: 100%;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_UserMenuButton_contextMenu_displayName {
+                font-weight: bold;
+                font-size: $font-15px;
+                line-height: $font-20px;
+            }
+
+            .mx_UserMenuButton_contextMenu_userId {
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+        }
+
+        .mx_UserMenuButton_contextMenu_themeButton {
+            min-width: 32px;
+            max-width: 32px;
+            width: 32px;
+            height: 32px;
+            margin-left: 8px;
+            border-radius: 32px;
+            background-color: $theme-button-bg-color;
+            cursor: pointer;
+
+            // to make alignment easier, create flexbox for the image
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .mx_UserMenuButton_contextMenu_optionList {
+        margin-top: 20px;
+
+        // This is a bit of a hack when we could just use a simple border-top property,
+        // however we have a (kinda) good reason for doing it this way: we need opacity.
+        // To get the right color, we need an opacity modifier which means we have to work
+        // around the problem. PostCSS doesn't support the opacity() function, and if we
+        // use something like postcss-functions we quickly run into an issue where the
+        // function we would define gets passed a CSS variable for custom themes, which
+        // can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379
+        //
+        // Therefore, we just hack in a line and border the thing ourselves
+        &::before {
+            border-top: 1px solid $primary-fg-color;
+            opacity: 0.1;
+            content: '';
+
+            // Counteract the padding problems (width: 100% ignores the 40px padding,
+            // unless we position it absolutely then it does the right thing).
+            width: 100%;
+            position: absolute;
+            left: 0;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                margin: 0;
+                padding: 20px 0 0;
+
+                .mx_AccessibleButton {
+                    text-decoration: none;
+                    color: $primary-fg-color;
+                    font-size: $font-15px;
+                    line-height: $font-24px;
+
+                    // Create a flexbox to more easily define the list items
+                    display: flex;
+                    align-items: center;
+
+                    img { // icons
+                        width: 16px;
+                        min-width: 16px;
+                        max-width: 16px;
+                    }
+
+                    span { // labels
+                        padding-left: 14px;
+                        width: 100%;
+                        flex: 1;
+
+                        // Ellipsize any text overflow
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
+}

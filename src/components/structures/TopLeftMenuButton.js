@@ -24,6 +24,7 @@ import * as Avatar from '../../Avatar';
 import { _t } from '../../languageHandler';
 import dis from "../../dispatcher/dispatcher";
 import {ContextMenu, ContextMenuButton} from "./ContextMenu";
+import {Action} from "../../dispatcher/actions";
 
 const AVATAR_SIZE = 28;
 
@@ -75,7 +76,7 @@ export default class TopLeftMenuButton extends React.Component {
 
     onAction = (payload) => {
         // For accessibility
-        if (payload.action === "toggle_top_left_menu") {
+        if (payload.action === Action.ToggleUserMenu) {
             if (this._buttonRef) this._buttonRef.click();
         }
     };
