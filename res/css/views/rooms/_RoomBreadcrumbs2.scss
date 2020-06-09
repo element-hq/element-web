@@ -14,34 +14,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-@keyframes breadcrumb-popin {
-    0% {
-        // Ideally we'd use `width` instead of `opacity`, but we only
-        // have 16 nanoseconds to render the frame, and width is expensive.
-        opacity: 0;
-        transform: scale(0);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
 .mx_RoomBreadcrumbs2 {
+    width: 100%;
+
     // Create a flexbox for the crumbs
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    width: 100%;
 
     .mx_RoomBreadcrumbs2_crumb {
         margin-right: 8px;
         width: 32px;
+    }
 
-        // React loves to add elements, so only target the one we want to animate
-        &:first-child {
-            animation: breadcrumb-popin 0.3s;
-        }
+    // These classes come from the CSSTransition component. There's many more classes we
+    // could care about, but this is all we worried about for now. The animation works by
+    // first triggering the enter state with the newest breadcrumb off screen (-40px) then
+    // sliding it into view.
+    &.mx_RoomBreadcrumbs2-enter {
+        margin-left: -40px; // 32px for the avatar, 8px for the margin
+    }
+    &.mx_RoomBreadcrumbs2-enter-active {
+        margin-left: 0;
+
+        // Timing function is as-requested by design.
+        // NOTE: The transition time MUST match the value passed to CSSTransition!
+        transition: margin-left 300ms cubic-bezier(0.66, 0.02, 0.36, 1);
     }
 
     .mx_RoomBreadcrumbs2_placeholder {
