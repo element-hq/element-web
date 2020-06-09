@@ -45,3 +45,63 @@ export function arrayDiff<T>(a: T[], b: T[]): { added: T[], removed: T[] } {
         removed: a.filter(i => !b.includes(i)),
     };
 }
+
+/**
+ * Helper functions to perform LINQ-like queries on arrays.
+ */
+export class ArrayUtil<T> {
+    /**
+     * Create a new array helper.
+     * @param a The array to help. Can be modified in-place.
+     */
+    constructor(private a: T[]) {
+    }
+
+    /**
+     * The value of this array, after all appropriate alterations.
+     */
+    public get value(): T[] {
+        return this.a;
+    }
+
+    /**
+     * Groups an array by keys.
+     * @param fn The key-finding function.
+     * @returns This.
+     */
+    public groupBy<K>(fn: (a: T) => K): GroupedArray<K, T> {
+        const obj = this.a.reduce((rv: Map<K, T[]>, val: T) => {
+            const k = fn(val);
+            if (!rv.has(k)) rv.set(k, []);
+            rv.get(k).push(val);
+            return rv;
+        }, new Map<K, T[]>());
+        return new GroupedArray(obj);
+    }
+}
+
+/**
+ * Helper functions to perform LINQ-like queries on groups (maps).
+ */
+export class GroupedArray<K, T> {
+    /**
+     * Creates a new group helper.
+     * @param val The group to help. Can be modified in-place.
+     */
+    constructor(private val: Map<K, T[]>) {
+    }
+
+    /**
+     * Orders the grouping into an array using the provided key order.
+     * @param keyOrder The key order.
+     * @returns An array helper of the result.
+     */
+    public orderBy(keyOrder: K[]): ArrayUtil<T> {
+        const a: T[] = [];
+        for (const k of keyOrder) {
+            if (!this.val.has(k)) continue;
+            a.push(...this.val.get(k));
+        }
+        return new ArrayUtil(a);
+    }
+}
