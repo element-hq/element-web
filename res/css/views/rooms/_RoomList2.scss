@@ -23,5 +23,5 @@ limitations under the License.
     // worry about in this stylesheet.
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; // let the column overflow
 }
