@@ -18,7 +18,6 @@ limitations under the License.
 $left-gutter: 65px;
 
 .mx_GroupLayout {
-
     .mx_EventTile {
         > .mx_SenderProfile {
             line-height: $font-17px;
@@ -53,13 +52,13 @@ $left-gutter: 65px;
 /* Compact layout overrides */
 
 .mx_MatrixChat_useCompactLayout {
-    .mx_EventTile_line, .mx_EventTile_reply {
-        padding-top: 0px;
-        padding-bottom: 0px;
-    }
-
     .mx_EventTile {
         padding-top: 4px;
+
+        .mx_EventTile_line, .mx_EventTile_reply {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
 
         &.mx_EventTile_info {
             // same as the padding for non-compact .mx_EventTile.mx_EventTile_info

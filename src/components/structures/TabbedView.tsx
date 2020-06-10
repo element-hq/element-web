@@ -27,25 +27,20 @@ import { ReactNode } from "react";
  * Represents a tab for the TabbedView.
  */
 export class Tab {
-    public label: string;
-    public icon: string;
-    public body: React.ReactNode;
-
     /**
      * Creates a new tab.
-     * @param {string} tabLabel The untranslated tab label.
-     * @param {string} tabIconClass The class for the tab icon. This should be a simple mask.
-     * @param {React.ReactNode} tabJsx The JSX for the tab container.
+     * @param {string} id The tab's ID.
+     * @param {string} label The untranslated tab label.
+     * @param {string} icon The class for the tab icon. This should be a simple mask.
+     * @param {React.ReactNode} body The JSX for the tab container.
      */
-    constructor(tabLabel: string, tabIconClass: string, tabJsx: React.ReactNode) {
-        this.label = tabLabel;
-        this.icon = tabIconClass;
-        this.body = tabJsx;
+    constructor(public id: string, public label: string, public icon: string, public body: React.ReactNode) {
     }
 }
 
 interface IProps {
     tabs: Tab[];
+    initialTabId?: string;
 }
 
 interface IState {
@@ -53,16 +48,17 @@ interface IState {
 }
 
 export default class TabbedView extends React.Component<IProps, IState> {
-    static propTypes = {
-        // The tabs to show
-        tabs: PropTypes.arrayOf(PropTypes.instanceOf(Tab)).isRequired,
-    };
-
     constructor(props: IProps) {
         super(props);
 
+        let activeTabIndex = 0;
+        if (props.initialTabId) {
+            const tabIndex = props.tabs.findIndex(t => t.id === props.initialTabId);
+            if (tabIndex >= 0) activeTabIndex = tabIndex;
+        }
+
         this.state = {
-            activeTabIndex: 0,
+            activeTabIndex,
         };
     }
 

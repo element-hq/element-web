@@ -1,0 +1,80 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Rename to mx_RoomSublist during replacement of old component
+
+// TODO: Just use the 3 selectors we need from this instead of importing it.
+// We're going to end up with heavy modifications anyways.
+@import "../../../../node_modules/react-resizable/css/styles.css";
+
+.mx_RoomSublist2 {
+    // The sublist is a column of rows, essentially
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+
+    .mx_RoomSublist2_headerContainer {
+        // Create a flexbox to make ordering easy
+        display: flex;
+        align-items: center;
+
+        .mx_RoomSublist2_badgeContainer {
+            opacity: 0.8;
+            padding-right: 7px;
+
+            // Create another flexbox row because it's super easy to position the badge at
+            // the end this way.
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .mx_RoomSublist2_headerText {
+            text-transform: uppercase;
+            opacity: 0.5;
+            line-height: $font-16px;
+            font-size: $font-12px;
+            padding-bottom: 8px;
+
+            width: 100%;
+            flex: 1;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+
+    .mx_RoomSublist2_resizeBox {
+        // Create another flexbox column for the tiles
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .mx_RoomSublist2_showMoreButton {
+            height: 44px; // 1 room tile high
+            cursor: pointer;
+
+            // We create a flexbox to cheat at alignment
+            display: flex;
+            align-items: center;
+        }
+    }
+}

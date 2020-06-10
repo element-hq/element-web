@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// @ts-ignore - import * as EMOJIBASE actually breaks this
 import EMOJIBASE from 'emojibase-data/en/compact.json';
 
 export interface IEmoji {
@@ -63,6 +62,8 @@ export const DATA_BY_CATEGORY = {
     "flags": [],
 };
 
+const ZERO_WIDTH_JOINER = "\u200D";
+
 // Store various mappings from unicode/emoticon/shortcode to the Emoji objects
 EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
     const categoryId = EMOJIBASE_GROUP_ID_TO_CATEGORY[emoji.group];
@@ -70,7 +71,8 @@ EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
         DATA_BY_CATEGORY[categoryId].push(emoji);
     }
     // This is used as the string to match the query against when filtering emojis
-    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}`.toLowerCase();
+    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
+        `${emoji.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`.toLowerCase();
 
     // Add mapping from unicode to Emoji object
     // The 'unicode' field that we use in emojibase has either

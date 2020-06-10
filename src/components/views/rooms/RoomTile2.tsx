@@ -23,15 +23,10 @@ import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
-import Tooltip from "../../views/elements/Tooltip";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
-import * as RoomNotifs from '../../../RoomNotifs';
-import { EffectiveMembership, getEffectiveMembership } from "../../../stores/room-list/membership";
-import * as Unread from '../../../Unread';
-import * as FormattingUtils from "../../../utils/FormattingUtils";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import ActiveRoomObserver from "../../../ActiveRoomObserver";
+import NotificationBadge, { INotificationState, NotificationColor, RoomNotificationState } from "./NotificationBadge";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -41,30 +36,19 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
  * warning disappears.                                             *
  *******************************************************************/
 
-enum NotificationColor {
-    // Inverted (None -> Red) because we do integer comparisons on this
-    None, // nothing special
-    Bold, // no badge, show as unread
-    Grey, // unread notified messages
-    Red,  // unread pings
-}
-
 interface IProps {
     room: Room;
+    showMessagePreview: boolean;
 
     // TODO: Allow falsifying counts (for invites and stuff)
     // TODO: Transparency? Was this ever used?
     // TODO: Incoming call boxes?
 }
 
-interface INotificationState {
-    symbol: string;
-    color: NotificationColor;
-}
-
 interface IState {
     hover: boolean;
     notificationState: INotificationState;
+    selected: boolean;
 }
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
@@ -86,86 +70,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-            notificationState: this.getNotificationState(),
+            notificationState: new RoomNotificationState(this.props.room),
+            selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
         };
 
-        this.props.room.on("Room.receipt", this.handleRoomEventUpdate);
-        this.props.room.on("Room.timeline", this.handleRoomEventUpdate);
-        this.props.room.on("Room.redaction", this.handleRoomEventUpdate);
-        MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
+        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
     }
 
     public componentWillUnmount() {
         if (this.props.room) {
-            this.props.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
-            this.props.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
-            this.props.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
+            ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
-        }
-    }
-
-    // XXX: This is a bit of an awful-looking hack. We should probably be using state for
-    // this, but instead we're kinda forced to either duplicate the code or thread a variable
-    // through the code paths. This feels like the least evil option.
-    private get roomIsInvite(): boolean {
-        return getEffectiveMembership(this.props.room.getMyMembership()) === EffectiveMembership.Invite;
-    }
-
-    private handleRoomEventUpdate = (event: MatrixEvent) => {
-        const roomId = event.getRoomId();
-
-        // Sanity check: should never happen
-        if (roomId !== this.props.room.roomId) return;
-
-        this.updateNotificationState();
-    };
-
-    private updateNotificationState() {
-        this.setState({notificationState: this.getNotificationState()});
-    }
-
-    private getNotificationState(): INotificationState {
-        const state: INotificationState = {
-            color: NotificationColor.None,
-            symbol: null,
-        };
-
-        if (this.roomIsInvite) {
-            state.color = NotificationColor.Red;
-            state.symbol = "!";
-        } else {
-            const redNotifs = RoomNotifs.getUnreadNotificationCount(this.props.room, 'highlight');
-            const greyNotifs = RoomNotifs.getUnreadNotificationCount(this.props.room, 'total');
-
-            // For a 'true count' we pick the grey notifications first because they include the
-            // red notifications. If we don't have a grey count for some reason we use the red
-            // count. If that count is broken for some reason, assume zero. This avoids us showing
-            // a badge for 'NaN' (which formats as 'NaNB' for NaN Billion).
-            const trueCount = greyNotifs ? greyNotifs : (redNotifs ? redNotifs : 0);
-
-            // Note: we only set the symbol if we have an actual count. We don't want to show
-            // zero on badges.
-
-            if (redNotifs > 0) {
-                state.color = NotificationColor.Red;
-                state.symbol = FormattingUtils.formatCount(trueCount);
-            } else if (greyNotifs > 0) {
-                state.color = NotificationColor.Grey;
-                state.symbol = FormattingUtils.formatCount(trueCount);
-            } else {
-                // We don't have any notified messages, but we might have unread messages. Let's
-                // find out.
-                const hasUnread = Unread.doesRoomHaveUnreadMessages(this.props.room);
-                if (hasUnread) {
-                    state.color = NotificationColor.Bold;
-                    // no symbol for this state
-                }
-            }
-        }
-
-        return state;
     }
 
     private onTileMouseEnter = () => {
@@ -186,60 +101,44 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         });
     };
 
+    private onActiveRoomUpdate = (isActive: boolean) => {
+        this.setState({selected: isActive});
+    };
+
     public render(): React.ReactElement {
         // TODO: Collapsed state
         // TODO: Invites
         // TODO: a11y proper
         // TODO: Render more than bare minimum
 
-        const hasBadge = this.state.notificationState.color > NotificationColor.Bold;
-        const isUnread = this.state.notificationState.color > NotificationColor.None;
         const classes = classNames({
-            'mx_RoomTile': true,
-            // 'mx_RoomTile_selected': this.state.selected,
-            'mx_RoomTile_unread': isUnread,
-            'mx_RoomTile_unreadNotify': this.state.notificationState.color >= NotificationColor.Grey,
-            'mx_RoomTile_highlight': this.state.notificationState.color >= NotificationColor.Red,
-            'mx_RoomTile_invited': this.roomIsInvite,
-            // 'mx_RoomTile_menuDisplayed': isMenuDisplayed,
-            'mx_RoomTile_noBadges': !hasBadge,
-            // 'mx_RoomTile_transparent': this.props.transparent,
-            // 'mx_RoomTile_hasSubtext': subtext && !this.props.collapsed,
+            'mx_RoomTile2': true,
+            'mx_RoomTile2_selected': this.state.selected,
         });
 
-        const avatarClasses = classNames({
-            'mx_RoomTile_avatar': true,
-        });
-
-
-        let badge;
-        if (hasBadge) {
-            const badgeClasses = classNames({
-                'mx_RoomTile_badge': true,
-                'mx_RoomTile_badgeButton': false, // this.state.badgeHover || isMenuDisplayed
-            });
-            badge = <div className={badgeClasses}>{this.state.notificationState.symbol}</div>;
-        }
+        const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true} />;
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
         if (typeof name !== 'string') name = '';
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
-        const nameClasses = classNames({
-            'mx_RoomTile_name': true,
-            'mx_RoomTile_invite': this.roomIsInvite,
-            'mx_RoomTile_badgeShown': hasBadge,
-        });
-
         // TODO: Support collapsed state properly
-        let tooltip = null;
-        if (false) { // isCollapsed
-            if (this.state.hover) {
-                tooltip = <Tooltip className="mx_RoomTile_tooltip" label={this.props.room.name} />
-            }
+        // TODO: Tooltip?
+
+        let messagePreview = null;
+        if (this.props.showMessagePreview) {
+            // TODO: Actually get the real message preview from state
+            messagePreview = <div className="mx_RoomTile2_messagePreview">I just ate a pie.</div>;
         }
 
+        const nameClasses = classNames({
+            "mx_RoomTile2_name": true,
+            "mx_RoomTile2_nameWithPreview": !!messagePreview,
+            "mx_RoomTile2_nameHasUnreadEvents": this.state.notificationState.color >= NotificationColor.Bold,
+        });
+
+        const avatarSize = 32;
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTile}>
@@ -254,20 +153,18 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             onClick={this.onTileClick}
                             role="treeitem"
                         >
-                            <div className={avatarClasses}>
-                                <div className="mx_RoomTile_avatar_container">
-                                    <RoomAvatar room={this.props.room} width={24} height={24}/>
-                                </div>
+                            <div className="mx_RoomTile2_avatarContainer">
+                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize}/>
                             </div>
-                            <div className="mx_RoomTile_nameContainer">
-                                <div className="mx_RoomTile_labelContainer">
-                                    <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                                        {name}
-                                    </div>
+                            <div className="mx_RoomTile2_nameContainer">
+                                <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
+                                    {name}
                                 </div>
+                                {messagePreview}
+                            </div>
+                            <div className="mx_RoomTile2_badgeContainer">
                                 {badge}
                             </div>
-                            {tooltip}
                         </AccessibleButton>
                     }
                 </RovingTabIndexWrapper>

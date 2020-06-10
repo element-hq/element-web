@@ -1,0 +1,77 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Rename to mx_RoomTile during replacement of old component
+
+// Note: the room tile expects to be in a flexbox column container
+.mx_RoomTile2 {
+    width: calc(100% - 11px); // 8px for padding (4px on either side), 3px for margin
+    margin-bottom: 4px;
+    margin-right: 3px;
+    padding: 4px;
+
+    // The tile is also a flexbox row itself
+    display: flex;
+    flex-wrap: wrap;
+
+    &.mx_RoomTile2_selected {
+        background-color: $roomtile2-selected-bg-color;
+        border-radius: 32px;
+    }
+
+    .mx_RoomTile2_avatarContainer {
+        margin-right: 8px;
+    }
+
+    .mx_RoomTile2_nameContainer {
+        // Create a new column layout flexbox for the name parts
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .mx_RoomTile2_name,
+        .mx_RoomTile2_messagePreview {
+            margin: 0 2px;
+        }
+
+        // TODO: Ellipsis on the name and preview
+
+        .mx_RoomTile2_name {
+            font-size: $font-14px;
+            line-height: $font-19px;
+        }
+
+        .mx_RoomTile2_name.mx_RoomTile2_nameHasUnreadEvents {
+            font-weight: 600;
+        }
+
+        .mx_RoomTile2_messagePreview {
+            font-size: $font-13px;
+            line-height: $font-18px;
+            color: $roomtile2-preview-color;
+        }
+    }
+
+    .mx_RoomTile2_badgeContainer {
+        flex-grow: 1;
+
+        // Create another flexbox row because it's super easy to position the badge at
+        // the end this way.
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}

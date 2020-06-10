@@ -18,11 +18,13 @@ limitations under the License.
 // https://github.com/turt2live/matrix-dimension/blob/4f92d560266635e5a3c824606215b84e8c0b19f5/web/app/shared/services/scalar/scalar-widget.api.ts
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import { EventEmitter } from "events";
 
 export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
+    ReceiveTerminate = "im.vector.receive_terminate",
 }
 
 export enum KnownWidgetActions {
@@ -34,6 +36,7 @@ export enum KnownWidgetActions {
     ReceiveOpenIDCredentials = "openid_credentials",
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
+    Terminate = "im.vector.terminate",
 }
 
 export type WidgetAction = KnownWidgetActions | string;
@@ -62,8 +65,13 @@ export interface FromWidgetRequest extends WidgetRequest {
 
 /**
  * Handles Riot <--> Widget interactions for embedded/standalone widgets.
+ *
+ * Emitted events:
+ * - terminate(wait): client requested the widget to terminate.
+ *   Call the argument 'wait(promise)' to postpone the finalization until
+ *   the given promise resolves.
  */
-export class WidgetApi {
+export class WidgetApi extends EventEmitter {
     private origin: string;
     private inFlightRequests: { [requestId: string]: (reply: FromWidgetRequest) => void } = {};
     private readyPromise: Promise<any>;
@@ -75,6 +83,8 @@ export class WidgetApi {
     public expectingExplicitReady = false;
 
     constructor(currentUrl: string, private widgetId: string, private requestedCapabilities: string[]) {
+        super();
+
         this.origin = new URL(currentUrl).origin;
 
         this.readyPromise = new Promise<any>(resolve => this.readyPromiseResolve = resolve);
@@ -98,6 +108,17 @@ export class WidgetApi {
 
                     // Automatically acknowledge so we can move on
                     this.replyToRequest(<ToWidgetRequest>payload, {});
+                } else if (payload.action === KnownWidgetActions.Terminate) {
+                    // Finalization needs to be async, so postpone with a promise
+                    let finalizePromise = Promise.resolve();
+                    const wait = (promise) => {
+                        finalizePromise = finalizePromise.then(value => promise);
+                    };
+                    this.emit('terminate', wait);
+                    Promise.resolve(finalizePromise).then(() => {
+                        // Acknowledge that we're shut down now
+                        this.replyToRequest(<ToWidgetRequest>payload, {});
+                    });
                 } else {
                     console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }

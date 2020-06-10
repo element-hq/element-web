@@ -46,11 +46,17 @@ export class NaturalAlgorithm extends Algorithm {
             console.warn(`No tags known for "${room.name}" (${room.roomId})`);
             return false;
         }
+        let changed = false;
         for (const tag of tags) {
             // TODO: Optimize this loop to avoid useless operations
             // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
             this.cachedRooms[tag] = await sortRoomsWithAlgorithm(this.cachedRooms[tag], tag, this.sortAlgorithms[tag]);
+
+            // Flag that we've done something
+            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
+            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
+            changed = true;
         }
-        return true; // assume we changed something
+        return changed;
     }
 }

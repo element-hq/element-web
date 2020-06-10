@@ -122,7 +122,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     completion: unicode,
                     component: (
                         <PillCompletion title={shortname} aria-label={unicode}>
-                            <span style={{maxWidth: '1em'}}>{ unicode }</span>
+                            <span>{ unicode }</span>
                         </PillCompletion>
                     ),
                     range,

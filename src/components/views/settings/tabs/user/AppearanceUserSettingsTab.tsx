@@ -62,7 +62,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         super(props);
 
         this.state = {
-            fontSize: SettingsStore.getValue("fontSize", null).toString(),
+            fontSize: (SettingsStore.getValue("baseFontSize", null) + FontWatcher.SIZE_DIFF).toString(),
             ...this.calculateThemeState(),
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
@@ -132,13 +132,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private onFontSizeChanged = (size: number): void => {
         this.setState({fontSize: size.toString()});
-        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, size);
+        SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, size - FontWatcher.SIZE_DIFF);
     };
 
     private onValidateFontSize = async ({value}: Pick<IFieldState, "value">): Promise<IValidationResult> => {
         const parsedSize = parseFloat(value);
-        const min = FontWatcher.MIN_SIZE;
-        const max = FontWatcher.MAX_SIZE;
+        const min = FontWatcher.MIN_SIZE + FontWatcher.SIZE_DIFF;
+        const max = FontWatcher.MAX_SIZE + FontWatcher.SIZE_DIFF;
 
         if (isNaN(parsedSize)) {
             return {valid: false, feedback: _t("Size must be a number")};
@@ -151,7 +151,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             };
         }
 
-        SettingsStore.setValue("fontSize", null, SettingLevel.DEVICE, value);
+        SettingsStore.setValue(
+            "baseFontSize",
+            null,
+            SettingLevel.DEVICE,
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+        );
+
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
     }
 
@@ -275,7 +281,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     values={[13, 15, 16, 18, 20]}
                     value={parseInt(this.state.fontSize, 10)}
                     onSelectionChange={this.onFontSizeChanged}
-                    displayFunc={value => ""}
+                    displayFunc={_ => ""}
                     disabled={this.state.useCustomFontSize}
                 />
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
@@ -284,9 +290,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
                 onChange={(checked) => this.setState({useCustomFontSize: checked})}
+                useCheckbox={true}
             />
             <Field
-                type="text"
+                type="number"
                 label={_t("Font size")}
                 autoComplete="off"
                 placeholder={this.state.fontSize.toString()}
@@ -295,6 +302,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 onValidate={this.onValidateFontSize}
                 onChange={(value) => this.setState({fontSize: value.target.value})}
                 disabled={!this.state.useCustomFontSize}
+                className="mx_SettingsTab_customFontSizeField"
             />
         </div>;
     }

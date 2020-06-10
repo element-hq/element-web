@@ -39,6 +39,8 @@ import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
+import {Capability} from "../../../widgets/WidgetApi";
+import {sleep} from "../../../utils/promise";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -341,23 +343,37 @@ export default class AppTile extends React.Component {
     /**
      * Ends all widget interaction, such as cancelling calls and disabling webcams.
      * @private
+     * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
     _endWidgetActions() {
-        // HACK: This is a really dirty way to ensure that Jitsi cleans up
-        // its hold on the webcam. Without this, the widget holds a media
-        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-        if (this._appFrame.current) {
-            // In practice we could just do `+= ''` to trick the browser
-            // into thinking the URL changed, however I can foresee this
-            // being optimized out by a browser. Instead, we'll just point
-            // the iframe at a page that is reasonably safe to use in the
-            // event the iframe doesn't wink away.
-            // This is relative to where the Riot instance is located.
-            this._appFrame.current.src = 'about:blank';
+        let terminationPromise;
+
+        if (this._hasCapability(Capability.ReceiveTerminate)) {
+            // Wait for widget to terminate within a timeout
+            const timeout = 2000;
+            const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
+            terminationPromise = Promise.race([messaging.terminate(), sleep(timeout)]);
+        } else {
+            terminationPromise = Promise.resolve();
         }
 
-        // Delete the widget from the persisted store for good measure.
-        PersistedElement.destroyElement(this._persistKey);
+        return terminationPromise.finally(() => {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+            if (this._appFrame.current) {
+                // In practice we could just do `+= ''` to trick the browser
+                // into thinking the URL changed, however I can foresee this
+                // being optimized out by a browser. Instead, we'll just point
+                // the iframe at a page that is reasonably safe to use in the
+                // event the iframe doesn't wink away.
+                // This is relative to where the Riot instance is located.
+                this._appFrame.current.src = 'about:blank';
+            }
+
+            // Delete the widget from the persisted store for good measure.
+            PersistedElement.destroyElement(this._persistKey);
+        });
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -381,12 +397,12 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    this._endWidgetActions();
-
-                    WidgetUtils.setRoomWidget(
-                        this.props.room.roomId,
-                        this.props.app.id,
-                    ).catch((e) => {
+                    this._endWidgetActions().then(() => {
+                        return WidgetUtils.setRoomWidget(
+                            this.props.room.roomId,
+                            this.props.app.id,
+                        );
+                    }).catch((e) => {
                         console.error('Failed to delete widget', e);
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -669,6 +685,17 @@ export default class AppTile extends React.Component {
     }
 
     _onPopoutWidgetClick() {
+        // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
+        // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
+            this._endWidgetActions().then(() => {
+                if (this._appFrame.current) {
+                    // Reload iframe
+                    this._appFrame.current.src = this._getRenderedUrl();
+                    this.setState({});
+                }
+            });
+        }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
