@@ -133,6 +133,9 @@ async function combinedSearch(searchTerm) {
 
     const result = client._processRoomEventsSearch(emptyResult, response);
 
+    // Restore our encryption info so we can properly re-verify the events.
+    restoreEncryptionInfo(result.results);
+
     return result;
 }
 
@@ -197,6 +200,10 @@ async function localPagination(searchResult) {
     const localResult = await eventIndex.search(searchArgs);
     searchResult.seshatQuery.next_batch = localResult.next_batch;
 
+    // We only need to restore the encryption state for the new results, so
+    // remember how many of them we got.
+    const newResultCount = localResult.results.length;
+
     const response = {
         search_categories: {
             room_events: localResult,
@@ -204,6 +211,11 @@ async function localPagination(searchResult) {
     };
 
     const result = MatrixClientPeg.get()._processRoomEventsSearch(searchResult, response);
+
+    // Restore our encryption info so we can properly re-verify the events.
+    const newSlice = result.results.slice(Math.max(result.results.length - newResultCount, 0));
+    restoreEncryptionInfo(newSlice);
+
     searchResult.pendingRequest = null;
 
     return result;
@@ -505,12 +517,17 @@ async function combinedPagination(searchResult) {
         },
     };
 
+    const oldResultCount = searchResult.results.length;
+
     // Let the client process the combined result.
     const result = client._processRoomEventsSearch(searchResult, response);
 
-    searchResult.pendingRequest = null;
-
     // Restore our encryption info so we can properly re-verify the events.
+    const newResultCount = result.results.length - oldResultCount;
+    const newSlice = result.results.slice(Math.max(result.results.length - newResultCount, 0));
+    restoreEncryptionInfo(newSlice);
+
+    searchResult.pendingRequest = null;
 
     return result;
 }
