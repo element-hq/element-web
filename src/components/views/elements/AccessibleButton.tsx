@@ -100,15 +100,14 @@ export default function AccessibleButton({
     // Pass through the ref - used for keyboard shortcut access to some buttons
     newProps.ref = inputRef;
 
-    let classNameBooleans = {
-        "mx_AccessibleButton_hasKind": kind,
-        "mx_AccessibleButton_disabled": disabled,
-    }
-    classNameBooleans["mx_AccessibleButton_kind_" + kind] = kind;
     newProps.className = classnames(
         "mx_AccessibleButton",
         className,
-        classNameBooleans,
+        {
+            "mx_AccessibleButton_hasKind": kind,
+            [`mx_AccessibleButton_kind_${kind}`]: kind,
+            "mx_AccessibleButton_disabled": disabled,
+        },
     );
 
     // React.createElement expects InputHTMLAttributes
