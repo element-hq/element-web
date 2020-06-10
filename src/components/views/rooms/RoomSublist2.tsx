@@ -178,46 +178,61 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         let content = null;
         if (tiles.length > 0) {
+            const layout = this.props.layout; // to shorten calls
+
             // TODO: Lazy list rendering
             // TODO: Whatever scrolling magic needs to happen here
-            const layout = this.props.layout; // to shorten calls
-            const minTilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.minVisibleTiles));
-            const maxTilesPx = layout.tilesToPixels(tiles.length);
-            const tilesPx = layout.tilesToPixels(Math.min(tiles.length, layout.visibleTiles));
+
+            const nVisible = Math.floor(layout.visibleTiles);
+            const visibleTiles = tiles.slice(0, nVisible);
+
+            // If we're hiding rooms, show a 'show more' button to the user. This button
+            // floats above the resize handle, if we have one present
+            let showMoreButton = null;
+            if (tiles.length > nVisible) {
+                // we have a cutoff condition - add the button to show all
+                const numMissing = tiles.length - visibleTiles.length;
+                showMoreButton = (
+                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showMoreButton'>
+                        <span className='mx_RoomSublist2_showMoreButtonChevron'>
+                            {/* set by CSS masking */}
+                        </span>
+                        <span className='mx_RoomSublist2_showMoreButtonText'>
+                            {_t("Show %(count)s more", {count: numMissing})}
+                        </span>
+                    </div>
+                );
+            }
+
+            // Figure out if we need a handle
             let handles = ['s'];
             if (layout.visibleTiles >= tiles.length && tiles.length <= layout.minVisibleTiles) {
                 handles = []; // no handles, we're at a minimum
             }
 
-            // TODO: This might need adjustment, however for now it is fine as a round.
-            const nVisible = Math.round(layout.visibleTiles);
-            const visibleTiles = tiles.slice(0, nVisible);
+            // We have to account for padding so we can accommodate a 'show more' button and
+            // the resize handle, which are pinned to the bottom of the container. This is the
+            // easiest way to have a resize handle below the button as otherwise we're writing
+            // our own resize handling and that doesn't sound fun.
+            //
+            // The layout class has some helpers for dealing with padding, as we don't want to
+            // apply it in all cases. If we apply it in all cases, the resizing feels like it
+            // goes backwards and can become wildly incorrect (visibleTiles says 18 when there's
+            // only mathematically 7 possible).
 
-            // If we're hiding rooms, show a 'show more' button to the user. This button
-            // replaces the last visible tile, so will always show 2+ rooms. We do this
-            // because if it said "show 1 more room" we had might as well show that room
-            // instead. We also replace the last item so we don't have to adjust our math
-            // on pixel heights, etc. It's much easier to pretend the button is a tile.
-            if (tiles.length > nVisible) {
-                // we have a cutoff condition - add the button to show all
+            const showMoreHeight = 32; // As defined by CSS
+            const resizeHandleHeight = 4; // As defined by CSS
 
-                // we +1 to account for the room we're about to hide with our 'show more' button
-                // this results in the button always being 1+, and not needing an i18n `count`.
-                const numMissing = (tiles.length - visibleTiles.length) + 1;
+            // The padding is variable though, so figure out what we need padding for.
+            let padding = 0;
+            if (showMoreButton) padding += showMoreHeight;
+            if (handles.length > 0) padding += resizeHandleHeight;
 
-                // TODO: CSS TBD
-                // TODO: Make this an actual tile
-                // TODO: This is likely to pop out of the list, consider that.
-                visibleTiles.splice(visibleTiles.length - 1, 1, (
-                    <div
-                        onClick={this.onShowAllClick}
-                        className='mx_RoomSublist2_showMoreButton'
-                        key='showall'
-                    >
-                        {_t("Show %(n)s more", {n: numMissing})}
-                    </div>
-                ));
-            }
+            const minTilesPx = layout.calculateTilesToPixelsMin(tiles.length, layout.minVisibleTiles, padding);
+            const maxTilesPx = layout.tilesToPixelsWithPadding(tiles.length, padding);
+            const tilesWithoutPadding = Math.min(tiles.length, layout.visibleTiles);
+            const tilesPx = layout.calculateTilesToPixelsMin(tiles.length, tilesWithoutPadding, padding);
+
             content = (
                 <ResizableBox
                     width={-1}
@@ -230,6 +245,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     className="mx_RoomSublist2_resizeBox"
                 >
                     {visibleTiles}
+                    {showMoreButton}
                 </ResizableBox>
             )
         }

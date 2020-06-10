@@ -16,10 +16,6 @@ limitations under the License.
 
 // TODO: Rename to mx_RoomSublist during replacement of old component
 
-// TODO: Just use the 3 selectors we need from this instead of importing it.
-// We're going to end up with heavy modifications anyways.
-@import "../../../../node_modules/react-resizable/css/styles.css";
-
 .mx_RoomSublist2 {
     // The sublist is a column of rows, essentially
     display: flex;
@@ -63,18 +59,83 @@ limitations under the License.
     }
 
     .mx_RoomSublist2_resizeBox {
+        margin-bottom: 4px; // for the resize handle
+        position: relative;
+
         // Create another flexbox column for the tiles
         display: flex;
         flex-direction: column;
         overflow: hidden;
 
         .mx_RoomSublist2_showMoreButton {
-            height: 44px; // 1 room tile high
             cursor: pointer;
+            font-size: $font-13px;
+            line-height: $font-18px;
+            color: $roomtile2-preview-color;
+
+            // This is the same color as the left panel background because it needs
+            // to occlude the lastmost tile in the list.
+            background-color: $header-panel-bg-color;
+
+            // Update the render() function for RoomSublist2 if these change
+            // Update the ListLayout class for minVisibleTiles if these change.
+            //
+            // At 24px high and 8px padding on the top this equates to 0.65 of
+            // a tile due to how the padding calculations work.
+            height: 24px;
+            padding-top: 8px;
+
+            // We force this to the bottom so it will overlap rooms as needed.
+            // We account for the space it takes up (24px) in the code through padding.
+            position: absolute;
+            bottom: 4px; // the height of the resize handle
+            left: 0;
+            right: 0;
 
             // We create a flexbox to cheat at alignment
             display: flex;
             align-items: center;
+
+            .mx_RoomSublist2_showMoreButtonChevron {
+                position: relative;
+                width: 16px;
+                height: 16px;
+                margin-left: 12px;
+                margin-right: 18px;
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background: $roomtile2-preview-color;
+            }
         }
+
+        // Class name comes from the ResizableBox component
+        // The hover state needs to use the whole sublist, not just the resizable box,
+        // so that selector is below and one level higher.
+        .react-resizable-handle {
+            cursor: ns-resize;
+            border-radius: 2px;
+
+            // This is positioned directly below the 'show more' button.
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            // This is to visually align the bar in the list. Should be 12px from
+            // either side of the list. We define this after the positioning to
+            // trick the browser.
+            margin-left: 4px;
+            margin-right: 8px;
+        }
+    }
+
+    // The aforementioned selector for the hover state.
+    &:hover .react-resizable-handle {
+        opacity: 0.2;
+
+        // Update the render() function for RoomSublist2 if this changes
+        border: 2px solid $primary-fg-color;
     }
 }
