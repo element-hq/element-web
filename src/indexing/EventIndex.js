@@ -290,6 +290,33 @@ export default class EventIndex extends EventEmitter {
         return validEventType && validMsgType && hasContentValue;
     }
 
+    eventToJson(ev) {
+        const jsonEvent = ev.toJSON();
+        const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
+
+        if (ev.isEncrypted()) {
+            // Let us store some additional data so we can re-verify the event.
+            // The js-sdk checks if an event is encrypted using the algorithm,
+            // the sender key and ed25519 signing key are used to find the
+            // correct device that sent the event which allows us to check the
+            // verification state of the event, either directly or using cross
+            // signing.
+            e.curve25519Key = ev.getSenderKey();
+            e.ed25519Key = ev.getClaimedEd25519Key();
+            e.algorithm = ev.getWireContent().algorithm;
+            e.forwardingCurve25519KeyChain = ev.getForwardingCurve25519KeyChain();
+        } else {
+            // Make sure that unencrypted events don't contain any of that data,
+            // despite what the server might give to us.
+            delete e.curve25519Key;
+            delete e.ed25519Key;
+            delete e.algorithm;
+            delete e.forwardingCurve25519KeyChain;
+        }
+
+        return e;
+    }
+
     /**
      * Queue up live events to be added to the event index.
      *
@@ -300,8 +327,7 @@ export default class EventIndex extends EventEmitter {
 
         if (!this.isValidEvent(ev)) return;
 
-        const jsonEvent = ev.toJSON();
-        const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
+        const e = this.eventToJson(ev);
 
         const profile = {
             displayname: ev.sender.rawDisplayName,
@@ -477,8 +503,7 @@ export default class EventIndex extends EventEmitter {
             // Let us convert the events back into a format that EventIndex can
             // consume.
             const events = filteredEvents.map((ev) => {
-                const jsonEvent = ev.toJSON();
-                const e = ev.isEncrypted() ? jsonEvent.decrypted : jsonEvent;
+                const e = this.eventToJson(ev);
 
                 let profile = {};
                 if (e.sender in profiles) profile = profiles[e.sender];
