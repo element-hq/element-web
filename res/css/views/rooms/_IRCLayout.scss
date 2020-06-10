@@ -43,6 +43,10 @@ $irc-line-height: $font-18px;
         > .mx_EventTile_msgOption {
             order: 5;
             flex-shrink: 0;
+
+            .mx_EventTile_readAvatars {
+                top: 7px;
+            }
         }
 
         > .mx_SenderProfile {
