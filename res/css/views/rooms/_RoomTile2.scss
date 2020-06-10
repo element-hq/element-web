@@ -18,7 +18,7 @@ limitations under the License.
 
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
-    width: calc(100% - 11px); // 8px for padding (4px on either side), 3px for margin
+    width: calc(100% - 21px); // 8px for padding (4px on either side), 3px for margin
     margin-bottom: 4px;
     margin-right: 3px;
     padding: 4px;
@@ -27,7 +27,7 @@ limitations under the License.
     display: flex;
     flex-wrap: wrap;
 
-    &.mx_RoomTile2_selected {
+    &.mx_RoomTile2_selected, &:hover, &.mx_RoomTile2_hasMenuOpen {
         background-color: $roomtile2-selected-bg-color;
         border-radius: 32px;
     }
@@ -37,6 +37,9 @@ limitations under the License.
     }
 
     .mx_RoomTile2_nameContainer {
+        flex-grow: 1;
+        max-width: calc(100% - 58px); // 32px avatar, 18px badge area, 8px margin on avatar
+
         // Create a new column layout flexbox for the name parts
         display: flex;
         flex-direction: column;
@@ -45,9 +48,13 @@ limitations under the License.
         .mx_RoomTile2_name,
         .mx_RoomTile2_messagePreview {
             margin: 0 2px;
-        }
+            width: 100%;
 
-        // TODO: Ellipsis on the name and preview
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
 
         .mx_RoomTile2_name {
             font-size: $font-14px;
@@ -66,12 +73,106 @@ limitations under the License.
     }
 
     .mx_RoomTile2_badgeContainer {
-        flex-grow: 1;
+        width: 18px;
+        height: 32px;
 
         // Create another flexbox row because it's super easy to position the badge at
         // the end this way.
         display: flex;
         align-items: center;
         justify-content: flex-end;
+    }
+
+    // The menu button is hidden by default
+    // TODO: [Notifications] Add your bell icon class here, similar to the following approach:
+    // https://github.com/matrix-org/matrix-react-sdk/blob/2180a56074f3698fc0241c309a72ba6cad802d1c/res/css/views/rooms/_RoomSublist2.scss#L48-L76
+    // You'll need to do the same down below on the &:hover selector for the tile.
+    // ... also remove this 4 line TODO comment.
+    .mx_RoomTile2_menuButton {
+        width: 0;
+        height: 0;
+        visibility: hidden;
+        position: relative;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
+    }
+
+    .mx_RoomTile2_menuButton::before {
+        top: 8px;
+        left: -1px; // this is off-center to align it with the badges
+        mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
+    }
+
+    &:hover, &.mx_RoomTile2_hasMenuOpen {
+        // Hide the badge container on hover because it'll be a menu button
+        .mx_RoomTile2_badgeContainer {
+            width: 0;
+            height: 0;
+            visibility: hidden;
+        }
+
+        .mx_RoomTile2_menuButton {
+            width: 18px;
+            height: 32px;
+            visibility: visible;
+        }
+    }
+}
+
+.mx_RoomTile2_contextMenu {
+    .mx_RoomTile2_contextMenu_redRow {
+        .mx_AccessibleButton {
+            color: $warning-color !important; // !important to override styles from context menu
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $warning-color;
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
+    }
+
+    .mx_RoomTile2_iconStar::before {
+        mask-image: url('$(res)/img/feather-customised/star.svg');
+    }
+
+    .mx_RoomTile2_iconArrowDown::before {
+        mask-image: url('$(res)/img/feather-customised/arrow-down.svg');
+    }
+
+    .mx_RoomTile2_iconUser::before {
+        mask-image: url('$(res)/img/feather-customised/user.svg');
+    }
+
+    .mx_RoomTile2_iconSettings::before {
+        mask-image: url('$(res)/img/feather-customised/settings.svg');
+    }
+
+    .mx_RoomTile2_iconSignOut::before {
+        mask-image: url('$(res)/img/feather-customised/sign-out.svg');
     }
 }

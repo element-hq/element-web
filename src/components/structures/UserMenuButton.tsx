@@ -180,7 +180,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                     top={elementRect.top + elementRect.height}
                     onFinished={this.onCloseMenu}
                 >
-                    <div className="mx_UserMenuButton_contextMenu">
+                    <div className="mx_IconizedContextMenu mx_UserMenuButton_contextMenu">
                         <div className="mx_UserMenuButton_contextMenu_header">
                             <div className="mx_UserMenuButton_contextMenu_name">
                                 <span className="mx_UserMenuButton_contextMenu_displayName">
@@ -203,7 +203,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                             </div>
                         </div>
                         {hostingLink}
-                        <div className="mx_UserMenuButton_contextMenu_optionList">
+                        <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
                             <ul>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
@@ -237,7 +237,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                                 </li>
                             </ul>
                         </div>
-                        <div className="mx_UserMenuButton_contextMenu_optionList">
+                        <div className="mx_IconizedContextMenu_optionList">
                             <ul>
                                 <li>
                                     <AccessibleButton onClick={this.onSignOutClick}>
