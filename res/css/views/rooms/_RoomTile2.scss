@@ -84,11 +84,12 @@ limitations under the License.
     }
 
     // The menu button is hidden by default
-    // TODO: [Notifications] Add your bell icon class here, similar to the following approach:
+    // TODO: [Notifications] Use mx_RoomTile2_notificationsButton, similar to the following approach:
     // https://github.com/matrix-org/matrix-react-sdk/blob/2180a56074f3698fc0241c309a72ba6cad802d1c/res/css/views/rooms/_RoomSublist2.scss#L48-L76
     // You'll need to do the same down below on the &:hover selector for the tile.
     // ... also remove this 4 line TODO comment.
-    .mx_RoomTile2_menuButton {
+    .mx_RoomTile2_menuButton,
+    .mx_RoomTile2_notificationsButton {
         width: 0;
         height: 0;
         visibility: hidden;
