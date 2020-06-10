@@ -131,6 +131,11 @@ $roomListMinimizedWidth: 50px;
         .mx_LeftPanel2_actualRoomListContainer {
             flex-grow: 1; // fill the available space
             overflow-y: auto;
+            width: 100%;
+            max-width: 100%;
+
+            // Create a flexbox to trick the layout engine
+            display: flex;
         }
     }
 }

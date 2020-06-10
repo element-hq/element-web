@@ -237,11 +237,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             >
                                 <span>{this.props.label}</span>
                             </AccessibleButton>
+                            {this.renderMenu()}
+                            {addRoomButton}
                             <div className="mx_RoomSublist2_badgeContainer">
                                 {badge}
                             </div>
-                            {this.renderMenu()}
-                            {addRoomButton}
                         </div>
                     );
                 }}
