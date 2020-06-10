@@ -1,0 +1,98 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/**
+* This component expects the parent to specify a positive padding and
+* width
+*/
+
+.mx_RadioButton {
+
+    $radio-circle-color: $muted-fg-color;
+    $active-radio-circle-color: $accent-color;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+
+    > span {
+        flex-grow: 1;
+
+        display: flex;
+
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .mx_RadioButton_spacer {
+        flex-shrink: 0;
+        flex-grow: 0;
+
+        height: $font-16px;
+        width: $font-16px;
+    }
+
+    > input[type=radio] {
+        // Remove the OS's representation
+        margin: 0;
+        padding: 0;
+        appearance: none;
+
+        + div {
+            flex-shrink: 0;
+            flex-grow: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+            height: $font-16px;
+            width: $font-16px;
+
+            border: $font-1-5px solid $radio-circle-color;
+            border-radius: $font-16px;
+
+            > div {
+                box-sizing: border-box;
+
+                height: $font-8px;
+                width: $font-8px;
+
+                border-radius: $font-8px;
+            }
+        }
+    }
+
+    > input[type=radio]:checked {
+        + div {
+            border-color: $active-radio-circle-color;
+
+            > div {
+                background: $active-radio-circle-color;
+            }
+        }
+    }
+
+    > input[type=radio]:disabled {
+        + div {
+            > div {
+                display: none;
+            }
+        }
+    }
+}
