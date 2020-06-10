@@ -21,13 +21,13 @@ import * as sdk from "../../../index";
 
 interface IProps {
     // Whether or not this toggle is in the 'on' position.
-    checked: boolean,
+    checked: boolean;
 
     // Whether or not the user can interact with the switch
-    disabled: boolean,
+    disabled: boolean;
 
     // Called when the checked state changes. First argument will be the new state.
-    onChange(checked: boolean): void,
+    onChange(checked: boolean): void;
 };
 
 // Controlled Toggle Switch element, written with Accessibility in mind

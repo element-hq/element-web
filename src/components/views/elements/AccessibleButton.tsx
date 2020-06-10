@@ -26,22 +26,22 @@ import classnames from 'classnames';
  *           implemented exactly like a normal onClick handler.
  */
 interface IProps extends React.InputHTMLAttributes<Element> {
-    inputRef?: React.Ref<Element>,
+    inputRef?: React.Ref<Element>;
     element?: string;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
-    kind?: string,
+    kind?: string;
     // The ARIA role
-    role?: string,
+    role?: string;
     // The tabIndex
-    tabIndex?: number,
-    disabled?: boolean,
-    className?: string,
+    tabIndex?: number;
+    disabled?: boolean;
+    className?: string;
     onClick?(e?: React.MouseEvent<Element> | React.KeyboardEvent<Element>): void;
 };
 
 interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
-    ref?: React.Ref<Element>,
+    ref?: React.Ref<Element>;
 }
 
 /**
@@ -100,18 +100,16 @@ export default function AccessibleButton({
     // Pass through the ref - used for keyboard shortcut access to some buttons
     newProps.ref = inputRef;
 
-    newProps.className = classnames("mx_AccessibleButton", className);
-
-    if (kind) {
-        // We apply a hasKind class to maintain backwards compatibility with
-        // buttons which might not know about kind and break
-        newProps.className += " mx_AccessibleButton_hasKind mx_AccessibleButton_kind_" + kind;
+    let classNameBooleans = {
+        "mx_AccessibleButton_hasKind": kind,
+        "mx_AccessibleButton_disabled": disabled,
     }
-
-    if (disabled) {
-        newProps.className += " mx_AccessibleButton_disabled";
-        newProps["aria-disabled"] = true;
-    }
+    classNameBooleans["mx_AccessibleButton_kind_" + kind] = kind;
+    newProps.className = classnames(
+        "mx_AccessibleButton",
+        className,
+        classNameBooleans,
+    );
 
     // React.createElement expects InputHTMLAttributes
     return React.createElement(element, restProps, children);

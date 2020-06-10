@@ -23,14 +23,14 @@ import StyledCheckbox from "./StyledCheckbox";
 
 interface IProps {
     // The setting must be a boolean
-    name: string,
-    level: string,
-    roomId?: string, // for per-room settings
-    label?: string, // untranslated
-    isExplicit?: boolean,
+    name: string;
+    level: string;
+    roomId?: string; // for per-room settings
+    label?: string; // untranslated
+    isExplicit?: boolean;
     // XXX: once design replaces all toggles make this the default
-    useCheckbox?: boolean,
-    onChange?(checked: boolean): void,
+    useCheckbox?: boolean;
+    onChange?(checked: boolean): void;
 }
 
 interface IState {
