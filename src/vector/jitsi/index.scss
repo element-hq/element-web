@@ -73,3 +73,30 @@ body, html {
     background-color: #03b381;
     border: 0;
 }
+
+#jwtTokenDetails {
+    width: 50%;
+    margin: 15px auto;
+
+    summary {
+        color: #03b381;
+        font-size: 0.6rem;
+	cursor: pointer;
+    }
+
+    p {
+      font-size:0.8rem;
+    }
+
+    #jitsiRoom, #jwtToken{
+	border:1px solid #03b381;
+	background-color: #181b21;
+	color: #edf3ff;
+	border-radius:4px;
+	font-size:0.8rem;
+    }
+    #jwtToken {
+	width:100%;
+	height:80px;
+    }
+}
