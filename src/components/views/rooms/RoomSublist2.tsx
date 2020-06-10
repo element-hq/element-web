@@ -233,7 +233,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                 tabIndex={tabIndex}
                                 className={"mx_RoomSublist2_headerText"}
                                 role="treeitem"
-                                aria-level="1"
+                                aria-level={1}
                             >
                                 <span>{this.props.label}</span>
                             </AccessibleButton>
