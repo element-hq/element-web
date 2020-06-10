@@ -18,7 +18,7 @@ limitations under the License.
 
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
-    width: calc(100% - 21px); // 8px for padding (4px on either side), 3px for margin
+    width: calc(100% - 21px); // 10px for alignment/inset, 8px for padding on sides, 3px for margin
     margin-bottom: 4px;
     margin-right: 3px;
     padding: 4px;
