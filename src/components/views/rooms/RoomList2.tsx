@@ -200,7 +200,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel}
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
-                    showMessagePreviews={orderedTagId === DefaultTagID.DM}
                 />
             );
         }

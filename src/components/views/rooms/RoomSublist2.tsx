@@ -27,6 +27,8 @@ import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import NotificationBadge, { ListNotificationState } from "./NotificationBadge";
+import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -41,7 +43,6 @@ interface IProps {
     rooms?: Room[];
     startAsHidden: boolean;
     label: string;
-    showMessagePreviews: boolean;
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
@@ -57,16 +58,19 @@ interface IProps {
 
 interface IState {
     notificationState: ListNotificationState;
+    menuDisplayed: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef();
+    private menuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite),
+            menuDisplayed: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
@@ -97,6 +101,26 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
+    private onOpenMenuClick = (ev: InputEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({menuDisplayed: true});
+    };
+
+    private onCloseMenu = () => {
+        this.setState({menuDisplayed: false});
+    };
+
+    private onUnreadFirstChanged = () => {
+        // TODO: Support per-list algorithm changes
+        console.log("Unread first changed");
+    };
+
+    private onMessagePreviewChanged = () => {
+        this.props.layout.showPreviews = !this.props.layout.showPreviews;
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
     private renderTiles(): React.ReactElement[] {
         const tiles: React.ReactElement[] = [];
 
@@ -106,13 +130,68 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <RoomTile2
                         room={room}
                         key={`room-${room.roomId}`}
-                        showMessagePreview={this.props.showMessagePreviews}
+                        showMessagePreview={this.props.layout.showPreviews}
                     />
                 );
             }
         }
 
         return tiles;
+    }
+
+    private renderMenu(): React.ReactElement {
+        let contextMenu = null;
+        if (this.state.menuDisplayed) {
+            const elementRect = this.menuButtonRef.current.getBoundingClientRect();
+            contextMenu = (
+                <ContextMenu
+                    chevronFace="none"
+                    left={elementRect.left}
+                    top={elementRect.top + elementRect.height}
+                    onFinished={this.onCloseMenu}
+                >
+                    <div className="mx_RoomSublist2_contextMenu">
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Sort by")}</div>
+                            TODO: Radios are blocked by https://github.com/matrix-org/matrix-react-sdk/pull/4731
+                        </div>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
+                            <StyledCheckbox
+                                onChange={this.onUnreadFirstChanged}
+                                checked={false/*TODO*/}
+                            >
+                                {_t("Always show first")}
+                            </StyledCheckbox>
+                        </div>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
+                            <StyledCheckbox
+                                onChange={this.onMessagePreviewChanged}
+                                checked={this.props.layout.showPreviews}
+                            >
+                                {_t("Message preview")}
+                            </StyledCheckbox>
+                        </div>
+                    </div>
+                </ContextMenu>
+            );
+        }
+
+        return (
+            <React.Fragment>
+                <ContextMenuButton
+                    className="mx_RoomSublist2_menuButton"
+                    onClick={this.onOpenMenuClick}
+                    inputRef={this.menuButtonRef}
+                    label={_t("List options")}
+                    isExpanded={this.state.menuDisplayed}
+                />
+                {contextMenu}
+            </React.Fragment>
+        );
     }
 
     private renderHeader(): React.ReactElement {
@@ -129,22 +208,26 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     const badge = <NotificationBadge allowNoCount={false} notification={this.state.notificationState}/>;
 
-                    // TODO: Aux button
-                    // let addRoomButton = null;
-                    // if (!!this.props.onAddRoom) {
-                    //     addRoomButton = (
-                    //         <AccessibleTooltipButton
-                    //             tabIndex={tabIndex}
-                    //             onClick={this.onAddRoom}
-                    //             className="mx_RoomSublist2_addButton"
-                    //             title={this.props.addRoomLabel || _t("Add room")}
-                    //         />
-                    //     );
-                    // }
+                    let addRoomButton = null;
+                    if (!!this.props.onAddRoom) {
+                        addRoomButton = (
+                            <AccessibleButton
+                                tabIndex={tabIndex}
+                                onClick={this.onAddRoom}
+                                className="mx_RoomSublist2_auxButton"
+                                aria-label={this.props.addRoomLabel || _t("Add room")}
+                            />
+                        );
+                    }
+
+                    const classes = classNames({
+                        'mx_RoomSublist2_headerContainer': true,
+                        'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
+                    });
 
                     // TODO: a11y (see old component)
                     return (
-                        <div className={"mx_RoomSublist2_headerContainer"}>
+                        <div className={classes}>
                             <AccessibleButton
                                 inputRef={ref}
                                 tabIndex={tabIndex}
@@ -157,6 +240,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <div className="mx_RoomSublist2_badgeContainer">
                                 {badge}
                             </div>
+                            {this.renderMenu()}
+                            {addRoomButton}
                         </div>
                     );
                 }}
@@ -174,6 +259,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // TODO: Proper collapse support
             'mx_RoomSublist2': true,
             'mx_RoomSublist2_collapsed': false, // len && isCollapsed
+            'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
         });
 
         let content = null;
