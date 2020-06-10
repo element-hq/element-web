@@ -31,7 +31,7 @@ import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
-import AccessibleButton from "../views/elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 
 interface IProps {
 }
@@ -114,7 +114,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
     };
 
-    private onSettingsOpen = (ev: React.MouseEvent, tabId: string) => {
+    private onSettingsOpen = (ev: ButtonEvent, tabId: string) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -123,7 +123,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         this.setState({menuDisplayed: false}); // also close the menu
     };
 
-    private onShowArchived = (ev: React.MouseEvent) => {
+    private onShowArchived = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -131,7 +131,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         console.log("TODO: Show archived rooms");
     };
 
-    private onProvideFeedback = (ev: React.MouseEvent) => {
+    private onProvideFeedback = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -139,7 +139,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         this.setState({menuDisplayed: false}); // also close the menu
     };
 
-    private onSignOutClick = (ev: React.MouseEvent) => {
+    private onSignOutClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
