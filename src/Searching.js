@@ -123,6 +123,9 @@ async function localSearch(searchTerm, roomId = undefined) {
                 ev._forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
 
                 delete ev.event.curve25519Key;
+                delete ev.event.ed25519Key;
+                delete ev.event.algorithm;
+                delete ev.event.forwardingCurve25519KeyChain;
             }
         }
     }
