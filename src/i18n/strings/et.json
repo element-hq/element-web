@@ -1385,5 +1385,9 @@
     "%(oneUser)schanged their name %(count)s times|other": "Kasutaja %(oneUser)s muutis oma nime %(count)s korda",
     "You cannot place VoIP calls in this browser.": "Selle brauseriga ei saa VoIP kõnet teha.",
     "You cannot place a call with yourself.": "Sa ei saa iseendale helistada.",
-    "You do not have permission to start a conference call in this room": "Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet"
+    "You do not have permission to start a conference call in this room": "Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet",
+    "%(severalUsers)schanged their avatar %(count)s times|other": "Mitu kasutajat %(severalUsers)s muutsid oma tunnuspilti %(count)s korda",
+    "%(severalUsers)schanged their avatar %(count)s times|one": "Mitu kasutajat %(severalUsers)s muutsid oma tunnuspilti",
+    "%(oneUser)schanged their avatar %(count)s times|other": "Kasutaja %(oneUser)s muutis oma tunnuspilti %(count)s korda",
+    "%(oneUser)schanged their avatar %(count)s times|one": "Kasutaja %(oneUser)s muutis oma tunnuspilti"
 }
