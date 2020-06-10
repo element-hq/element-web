@@ -51,7 +51,7 @@ limitations under the License.
 
         .mx_RoomTile2_name {
             font-size: $font-14px;
-            line-height: $font-19px;
+            line-height: $font-18px;
         }
 
         .mx_RoomTile2_name.mx_RoomTile2_nameHasUnreadEvents {
@@ -62,6 +62,10 @@ limitations under the License.
             font-size: $font-13px;
             line-height: $font-18px;
             color: $roomtile2-preview-color;
+        }
+
+        .mx_RoomTile2_nameWithPreview {
+            margin-top: -4px; // shift the name up a bit more
         }
     }
 
