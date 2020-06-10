@@ -182,7 +182,11 @@ async function localSearchProcess(searchTerm, roomId = undefined) {
         },
     };
 
-    return MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
+    const processedResult = MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
+    // Restore our encryption info so we can properly re-verify the events.
+    restoreEncryptionInfo(processedResult.results);
+
+    return processedResult;
 }
 
 async function localPagination(searchResult) {
@@ -438,6 +442,31 @@ function combineResponses(previousSearchResult, localEvents = undefined, serverE
     return response;
 }
 
+function restoreEncryptionInfo(searchResultSlice) {
+    for (let i = 0; i < searchResultSlice.length; i++) {
+        const timeline = searchResultSlice[i].context.getTimeline();
+
+        for (let j = 0; j < timeline.length; j++) {
+            const ev = timeline[j];
+
+            if (ev.event.curve25519Key) {
+                ev.makeEncrypted(
+                    "m.room.encrypted",
+                    { algorithm: ev.event.algorithm },
+                    ev.event.curve25519Key,
+                    ev.event.ed25519Key,
+                );
+                ev._forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
+
+                delete ev.event.curve25519Key;
+                delete ev.event.ed25519Key;
+                delete ev.event.algorithm;
+                delete ev.event.forwardingCurve25519KeyChain;
+            }
+        }
+    }
+}
+
 async function combinedPagination(searchResult) {
     const eventIndex = EventIndexPeg.get();
     const client = MatrixClientPeg.get();
@@ -482,27 +511,6 @@ async function combinedPagination(searchResult) {
     searchResult.pendingRequest = null;
 
     // Restore our encryption info so we can properly re-verify the events.
-    for (let i = 0; i < result.results.length; i++) {
-        const timeline = result.results[i].context.getTimeline();
-
-        for (let j = 0; j < timeline.length; j++) {
-            const ev = timeline[j];
-            if (ev.event.curve25519Key) {
-                ev.makeEncrypted(
-                    "m.room.encrypted",
-                    { algorithm: ev.event.algorithm },
-                    ev.event.curve25519Key,
-                    ev.event.ed25519Key,
-                );
-                ev._forwardingCurve25519KeyChain = ev.event.forwardingCurve25519KeyChain;
-
-                delete ev.event.curve25519Key;
-                delete ev.event.ed25519Key;
-                delete ev.event.algorithm;
-                delete ev.event.forwardingCurve25519KeyChain;
-            }
-        }
-    }
 
     return result;
 }
