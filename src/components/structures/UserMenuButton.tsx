@@ -80,7 +80,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
     private isUserOnDarkTheme(): boolean {
         const theme = SettingsStore.getValue("theme");
         if (theme.startsWith("custom-")) {
-            return getCustomTheme(theme.substring(0, 7)).is_dark;
+            return getCustomTheme(theme.substring("custom-".length)).is_dark;
         }
         return theme === "dark";
     }

@@ -31,11 +31,14 @@ export class RoomListStoreTempProxy {
         return SettingsStore.isFeatureEnabled("feature_new_room_list");
     }
 
-    public static addListener(handler: () => void) {
+    public static addListener(handler: () => void): RoomListStoreTempToken {
         if (RoomListStoreTempProxy.isUsingNewStore()) {
-            return RoomListStore.instance.on(UPDATE_EVENT, handler);
+            const offFn = () => RoomListStore.instance.off(UPDATE_EVENT, handler);
+            RoomListStore.instance.on(UPDATE_EVENT, handler);
+            return new RoomListStoreTempToken(offFn);
         } else {
-            return OldRoomListStore.addListener(handler);
+            const token = OldRoomListStore.addListener(handler);
+            return new RoomListStoreTempToken(() => token.remove());
         }
     }
 
@@ -45,5 +48,14 @@ export class RoomListStoreTempProxy {
         } else {
             return OldRoomListStore.getRoomLists();
         }
+    }
+}
+
+export class RoomListStoreTempToken {
+    constructor(private offFn: () => void) {
+    }
+
+    public remove(): void {
+        this.offFn();
     }
 }
