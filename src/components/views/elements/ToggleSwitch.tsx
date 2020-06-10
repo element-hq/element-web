@@ -15,9 +15,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { EventHandler } from "react";
+import React from "react";
 import classNames from "classnames";
 import * as sdk from "../../../index";
+
+interface IProps {
+    // Whether or not this toggle is in the 'on' position.
+    checked: boolean,
+
+    // Whether or not the user can interact with the switch
+    disabled: boolean,
+
+    // Called when the checked state changes. First argument will be the new state.
+    onChange(checked: boolean): void,
+};
 
 // Controlled Toggle Switch element, written with Accessibility in mind
 export default ({checked, disabled = false, onChange, ...props}: IProps) => {
@@ -44,15 +55,4 @@ export default ({checked, disabled = false, onChange, ...props}: IProps) => {
             <div className="mx_ToggleSwitch_ball" />
         </AccessibleButton>
     );
-};
-
-interface IProps {
-    // Whether or not this toggle is in the 'on' position.
-    checked: boolean,
-
-    // Whether or not the user can interact with the switch
-    disabled: boolean,
-
-    // Called when the checked state changes. First argument will be the new state.
-    onChange(checked: boolean): void,
 };

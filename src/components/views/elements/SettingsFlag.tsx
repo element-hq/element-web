@@ -16,31 +16,28 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
 
 interface IProps {
+    // The setting must be a boolean
     name: string,
     level: string,
     roomId?: string, // for per-room settings
     label?: string, // untranslated
-    isExplicit: boolean,
+    isExplicit?: boolean,
     // XXX: once design replaces all toggles make this the default
     useCheckbox?: boolean,
-    onChange(checked: boolean): void,
+    onChange?(checked: boolean): void,
 }
 
 interface IState {
-    // XXX: make this generic when the settings store is typed
-    value: any;
+    value: boolean;
 }
 
 export default class SettingsFlag extends React.Component<IProps, IState> {
-
     constructor(props: IProps) {
         super(props);
 
@@ -64,7 +61,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         this.onChange(e.target.checked);
     }
 
-    private save = (val?: any): void => {
+    private save = (val?: boolean): void => {
         return SettingsStore.setValue(
             this.props.name,
             this.props.roomId,
