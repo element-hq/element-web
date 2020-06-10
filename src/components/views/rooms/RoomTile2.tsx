@@ -21,7 +21,7 @@ import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../views/elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
@@ -123,7 +123,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false});
     };
 
-    private onTagRoom = (ev: React.MouseEvent, tagId: TagID) => {
+    private onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -134,7 +134,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         }
     };
 
-    private onLeaveRoomClick = (ev: React.MouseEvent) => {
+    private onLeaveRoomClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -145,7 +145,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false}); // hide the menu
     };
 
-    private onOpenRoomSettings = (ev: React.MouseEvent) => {
+    private onOpenRoomSettings = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
