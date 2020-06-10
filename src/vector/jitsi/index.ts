@@ -33,6 +33,7 @@ let conferenceId: string;
 let displayName: string;
 let avatarUrl: string;
 let userId: string;
+let roomId: string;
 
 let widgetApi: WidgetApi;
 
@@ -70,14 +71,32 @@ let widgetApi: WidgetApi;
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
 
+	roomId = window.parent.document.URL.match("!(.*):")[1];
+
         if (widgetApi) {
             await widgetApi.waitReady();
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
         }
 
+	// Populate JWT field with existing key if widget already in localStorage and show it opening details
+	var current_jwt = JSON.parse( localStorage.getItem('jitsi_jwt'));
+	if (current_jwt){
+	  if (current_jwt[roomId]){
+	    document.getElementById("jwtToken")["value"] = current_jwt[roomId][widgetId] || "";
+	    if (current_jwt[roomId][widgetId]){
+	      document.getElementById("jwtTokenDetails").setAttribute("open", true);
+	    } else {
+	      document.getElementById("jwtTokenDetails").removeAttribute("open")
+	    }
+	  }
+	}
+	// Information about jitsi room to manually request a jwt token to admin, moderator or bot. Someday auto
+	document.getElementById("jitsiRoom")["value"] = conferenceId;
+
+
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
-        document.getElementById("joinButton").onclick = () => joinConference();
+        document.getElementById("joinButton").onclick = () => joinConference(widgetId);
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
         document.getElementById("jitsiContainer").innerText = "Failed to load Jitsi widget";
@@ -91,7 +110,7 @@ function switchVisibleContainers() {
     document.getElementById("joinButtonContainer").style.visibility = inConference ? 'hidden' : 'unset';
 }
 
-function joinConference() { // event handler bound in HTML
+function joinConference(widgetId) { // event handler bound in HTML
     switchVisibleContainers();
 
     // noinspection JSIgnoredPromiseFromCall
@@ -102,6 +121,7 @@ function joinConference() { // event handler bound in HTML
         "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
         "our fragment values and not recognizing the options.",
     );
+    roomId = window.parent.document.URL.match("!(.*):")[1];
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, {
         width: "100%",
         height: "100%",
@@ -113,10 +133,18 @@ function joinConference() { // event handler bound in HTML
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
         },
+	jwt: document.querySelector('#jwtToken'),
     });
+
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
+
+    // Gets whole JWT tokens and overwrites current room with the actual token, then store it again
+    var current_jwt = JSON.parse( localStorage.getItem('jitsi_jwt') ) || {};
+    current_jwt[roomId] = { [widgetId] : document.querySelector('#jwtToken')["value"] } || undefined;
+    localStorage.setItem("jitsi_jwt", JSON.stringify(current_jwt));
+
 
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
