@@ -19,7 +19,7 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 
 const SEARCH_LIMIT = 10;
 
-async function serverSideSearch(term, roomId = undefined, processResult = true) {
+async function serverSideSearch(term, roomId = undefined) {
     const client = MatrixClientPeg.get();
 
     const filter = {
@@ -45,22 +45,25 @@ async function serverSideSearch(term, roomId = undefined, processResult = true) 
 
     const response = await client.search({body: body});
 
-    if (processResult) {
-        const searchResult = {
-            _query: body,
-            results: [],
-            highlights: [],
-        };
-
-        return client._processRoomEventsSearch(searchResult, response);
-    }
-
     const result = {
         response: response,
         query: body,
     };
 
     return result;
+}
+
+async function serverSideSearchProcess(term, roomId = undefined) {
+    const client = MatrixClientPeg.get();
+    const result = await serverSideSearch(term, roomId);
+
+    const searchResult = {
+        _query: result.query,
+        results: [],
+        highlights: [],
+    };
+
+    return client._processRoomEventsSearch(searchResult, result.response);
 }
 
 function compareEvents(a, b) {
@@ -78,8 +81,8 @@ async function combinedSearch(searchTerm) {
 
     // Create two promises, one for the local search, one for the
     // server-side search.
-    const serverSidePromise = serverSideSearch(searchTerm, undefined, false);
-    const localPromise = localSearch(searchTerm, undefined, false);
+    const serverSidePromise = serverSideSearch(searchTerm, undefined);
+    const localPromise = localSearch(searchTerm, undefined);
 
     // Wait for both promises to resolve.
     await Promise.all([serverSidePromise, localPromise]);
@@ -121,6 +124,8 @@ async function combinedSearch(searchTerm) {
 }
 
 async function localSearch(searchTerm, roomId = undefined, processResult = true) {
+    const eventIndex = EventIndexPeg.get();
+
     const searchArgs = {
         search_term: searchTerm,
         before_limit: 1,
@@ -134,29 +139,7 @@ async function localSearch(searchTerm, roomId = undefined, processResult = true)
         searchArgs.room_id = roomId;
     }
 
-    const emptyResult = {
-        seshatQuery: searchArgs,
-        results: [],
-        highlights: [],
-    };
-
-    if (searchTerm === "") return emptyResult;
-
-    const eventIndex = EventIndexPeg.get();
-
     const localResult = await eventIndex.search(searchArgs);
-
-    if (processResult) {
-        emptyResult.seshatQuery.next_batch = localResult.next_batch;
-
-        const response = {
-            search_categories: {
-                room_events: localResult,
-            },
-        };
-
-        return MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
-    }
 
     searchArgs.next_batch = localResult.next_batch;
 
@@ -166,6 +149,27 @@ async function localSearch(searchTerm, roomId = undefined, processResult = true)
     };
 
     return result;
+}
+
+async function localSearchProcess(searchTerm, roomId = undefined) {
+    const emptyResult = {
+        results: [],
+        highlights: [],
+    };
+
+    if (searchTerm === "") return emptyResult;
+
+    const result = await localSearch(searchTerm, roomId);
+
+    emptyResult.seshatQuery = result.query;
+
+    const response = {
+        search_categories: {
+            room_events: result.response,
+        },
+    };
+
+    return MatrixClientPeg.get()._processRoomEventsSearch(emptyResult, response);
 }
 
 async function localPagination(searchResult) {
@@ -469,11 +473,11 @@ function eventIndexSearch(term, roomId = undefined) {
         if (MatrixClientPeg.get().isRoomEncrypted(roomId)) {
             // The search is for a single encrypted room, use our local
             // search method.
-            searchPromise = localSearch(term, roomId);
+            searchPromise = localSearchProcess(term, roomId);
         } else {
             // The search is for a single non-encrypted room, use the
             // server-side search.
-            searchPromise = serverSideSearch(term, roomId);
+            searchPromise = serverSideSearchProcess(term, roomId);
         }
     } else {
         // Search across all rooms, combine a server side search and a
@@ -523,6 +527,6 @@ export function searchPagination(searchResult) {
 export default function eventSearch(term, roomId = undefined) {
     const eventIndex = EventIndexPeg.get();
 
-    if (eventIndex === null) return serverSideSearch(term, roomId);
+    if (eventIndex === null) return serverSideSearchProcess(term, roomId);
     else return eventIndexSearch(term, roomId);
 }
