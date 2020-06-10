@@ -412,7 +412,7 @@
     "Seen by %(userName)s at %(dateTime)s": "Gesehen von %(userName)s um %(dateTime)s",
     "Send anyway": "Trotzdem senden",
     "Start authentication": "Authentifizierung beginnen",
-    "This room": "In diesem Raum",
+    "This room": "diesen Raum",
     "unknown caller": "Unbekannter Anrufer",
     "Unnamed Room": "Unbenannter Raum",
     "Upload new:": "Neue(s) hochladen:",
@@ -1985,7 +1985,7 @@
     "This invite to %(roomName)s was sent to %(email)s": "Diese Einladung zu %(roomName)s wurde an %(email)s gesendet",
     "Use an identity server in Settings to receive invites directly in Riot.": "Verknüpfe einen Identitätsserver in den Einstellungen um die Einladungen direkt in Riot zu erhalten.",
     "Share this email in Settings to receive invites directly in Riot.": "Teile diese E-Mail-Adresse in den Einstellungen um Einladungen direkt in Riot zu erhalten.",
-    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kann keine Vorschau erzeugt werden. Möchtest du den Raum betreten?",
+    "%(roomName)s can't be previewed. Do you want to join it?": "Für %(roomName)s kann keine Vorschau erzeugt werden. Möchtest du den Raum betreten?",
     "This room doesn't exist. Are you sure you're at the right place?": "Dieser Raum existiert nicht. Bist du sicher dass du hier richtig bist?",
     "Try again later, or ask a room admin to check if you have access.": "Versuche es später erneut oder bitte einen Raum-Administrator deine Zutrittsrechte zu überprüfen.",
     "%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "Beim Betreten des Raums ist ein Fehler aufgetreten %(errcode)s. Wenn du denkst dass diese Meldung nicht korrekt ist <issueLink>sende bitte einen Fehlerbericht</issueLink>.",
@@ -2435,5 +2435,6 @@
     "All settings": "Alle Einstellungen",
     "Archived rooms": "Archivierte Räume",
     "Feedback": "Feedback",
-    "Account settings": "Konto-Einstellungen"
+    "Account settings": "Konto-Einstellungen",
+    "Room ID or address of ban list": "Raum-ID oder Adresse der Verbotsliste"
 }
