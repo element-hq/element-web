@@ -2478,5 +2478,15 @@
     "A new version of Riot is available!": "È disponibile una nuova versione di Riot!",
     "New version available. <a>Update now.</a>": "Nuova versione disponibile. <a>Aggiorna ora.</a>",
     "Emoji picker": "Selettore emoji",
-    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "L'amministratore del server ha disattivato la crittografia end-to-end in modo predefinito nelle stanze private e nei messaggi diretti."
+    "Your server admin has disabled end-to-end encryption by default in private rooms & Direct Messages.": "L'amministratore del server ha disattivato la crittografia end-to-end in modo predefinito nelle stanze private e nei messaggi diretti.",
+    "People": "Persone",
+    "Show %(n)s more": "Mostra altri %(n)s",
+    "Switch to light mode": "Passa alla modalità chiara",
+    "Switch to dark mode": "Passa alla modalità scura",
+    "Switch theme": "Cambia tema",
+    "Security & privacy": "Sicurezza e privacy",
+    "All settings": "Tutte le impostazioni",
+    "Archived rooms": "Stanze archiviate",
+    "Feedback": "Feedback",
+    "Account settings": "Impostazioni account"
 }
