@@ -234,6 +234,11 @@ function combineEventSources(previousSearchResult, response, a, b) {
  * need keep on looking for the oldest event. We are implementing a variation of
  * a sliding window.
  *
+ * The event sources are here represented as two sorted lists where the lowest
+ * number represents the newest event. The two sorted lists need to be merged
+ * so they can be shown as one search result. We first fetch SEARCH_LIMIT events
+ * from both sources.
+ *
  * If we set SEARCH_LIMIT to 3:
  *
  *  Server events [01, 02, 04, 06, 07, 08, 11, 13]
