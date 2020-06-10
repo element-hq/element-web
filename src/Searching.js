@@ -84,8 +84,8 @@ async function combinedSearch(searchTerm) {
 
     // Create two promises, one for the local search, one for the
     // server-side search.
-    const serverSidePromise = serverSideSearch(searchTerm, undefined);
-    const localPromise = localSearch(searchTerm, undefined);
+    const serverSidePromise = serverSideSearch(searchTerm);
+    const localPromise = localSearch(searchTerm);
 
     // Wait for both promises to resolve.
     await Promise.all([serverSidePromise, localPromise]);
