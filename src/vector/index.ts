@@ -128,6 +128,15 @@ async function start() {
             }
         }
 
+        if (window.localStorage && window.localStorage.getItem("mx_user_id")) {
+            let locationHash = window.location.hash;
+            if (locationHash.startsWith("#/welcome") ||
+                locationHash.startsWith("#/login") ||
+                locationHash.startsWith("#/register")) {
+                window.location.replace(window.location.origin);
+            }
+        }
+
         const loadOlmPromise = loadOlm();
         // set the platform for react sdk
         preparePlatform();
