@@ -57,6 +57,9 @@ async function serverSideSearchProcess(term, roomId = undefined) {
     const client = MatrixClientPeg.get();
     const result = await serverSideSearch(term, roomId);
 
+    // The js-sdk method backPaginateRoomEventsSearch() uses _query internally
+    // so we're reusing the concept here since we wan't to delegate the
+    // pagination back to backPaginateRoomEventsSearch() in some cases.
     const searchResult = {
         _query: result.query,
         results: [],
@@ -98,6 +101,16 @@ async function combinedSearch(searchTerm) {
     const localResponse = localResult.response;
 
     // Store our queries for later on so we can support pagination.
+    //
+    // We're reusing _query here again to not introduce separate code paths and
+    // concepts for our different pagination methods. We're storing the
+    // server-side next batch separately since the query is the json body of
+    // the request and next_batch needs to be a query parameter.
+    //
+    // We can't put it in the final result that _processRoomEventsSearch()
+    // returns since that one can be either a server-side one, a local one or a
+    // fake one to fetch the remaining cached events. See the docs for
+    // combineEvents() for an explanation why we need to cache events.
     const emptyResult = {
         seshatQuery: localQuery,
         _query: serverQuery,
