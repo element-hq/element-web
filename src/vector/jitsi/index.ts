@@ -84,7 +84,7 @@ let widgetApi: WidgetApi;
 	  if (current_jwt[roomId]){
 	    document.getElementById("jwtToken")["value"] = current_jwt[roomId][widgetId] || "";
 	    if (current_jwt[roomId][widgetId]){
-	      document.getElementById("jwtTokenDetails").setAttribute("open", true);
+	      document.getElementById("jwtTokenDetails").setAttribute("open", "true");
 	    } else {
 	      document.getElementById("jwtTokenDetails").removeAttribute("open")
 	    }
