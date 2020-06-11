@@ -4,8 +4,8 @@ class StartupError extends Error {}
  * We need to know the bundle path before we can fetch the sourcemap files.  In a production environment, we can guess
  * it using this.
  */
-async function getBundleName() {
-    const res = await fetch("../index.html");
+async function getBundleName(baseUrl) {
+    const res = await fetch(new URL("index.html", baseUrl).toString());
     if (!res.ok) {
         throw new StartupError(`Couldn't fetch index.html to prefill bundle; ${res.status} ${res.statusText}`);
     }
@@ -25,7 +25,7 @@ function validateBundle(value) {
  * The purpose of this is just to validate that the user entered a real bundle, and provide feedback.
  */
 const bundleCache = new Map();
-function bundleSubject(bundle) {
+function bundleSubject(baseUrl, bundle) {
     if (!bundle.match(/^[0-9a-f]{20}$/)) throw new Error("Bad input");
     if (bundleCache.has(bundle)) {
         return bundleCache.get(bundle);
@@ -33,7 +33,7 @@ function bundleSubject(bundle) {
     const fetcher = new rxjs.BehaviorSubject(Pending.of());
     bundleCache.set(bundle, fetcher);
 
-    fetch(`/bundles/${bundle}/bundle.js.map`).then((res) => {
+    fetch(new URL(`bundles/${bundle}/bundle.js.map`, baseUrl).toString()).then((res) => {
         res.body.cancel(); /* Bail on the download immediately - it could be big! */
         const status = res.ok;
         if (status) {
@@ -145,6 +145,7 @@ function ProgressBar({ fetchStatus }) {
  * The main component.
  */
 function BundlePicker() {
+    const [baseUrl, setBaseUrl] = React.useState(new URL("..", window.location).toString());
     const [bundle, setBundle] = React.useState("");
     const [file, setFile] = React.useState("");
     const [line, setLine] = React.useState("1");
@@ -153,19 +154,25 @@ function BundlePicker() {
     const [bundleFetchStatus, setBundleFetchStatus] = React.useState(None);
     const [fileFetchStatus, setFileFetchStatus] = React.useState(None);
 
-    /* At startup, try to fill in the bundle name for the user */
+    /* On baseUrl change, try to fill in the bundle name for the user */
     React.useEffect(() => {
-        getBundleName().then((name) => {
+        console.log("DEBUG", baseUrl);
+        getBundleName(baseUrl).then((name) => {
+            console.log("DEBUG", name);
             if (bundle === "" && validateBundle(name) !== None) {
                 setBundle(name);
             }
         }, console.log.bind(console));
-    }, []);
-
+    }, [baseUrl]);
 
     /* ------------------------- */
     /* Follow user state changes */
     /* ------------------------- */
+    const onBaseUrlChange = React.useCallback((event) => {
+        const value = event.target.value;
+        setBaseUrl(value);
+    }, []);
+
     const onBundleChange = React.useCallback((event) => {
         const value = event.target.value;
         setBundle(value);
@@ -195,14 +202,14 @@ function BundlePicker() {
     React.useEffect(() =>
         validateBundle(bundle).fold({
             some: (value) => {
-                const subscription = bundleSubject(value)
+                const subscription = bundleSubject(baseUrl, value)
                     .pipe(rxjs.operators.map(Some.of))
                     .subscribe(setBundleFetchStatus);
                 return () => subscription.unsubscribe();
             },
             none: () => setBundleFetchStatus(None),
         }),
-    [bundle]);
+    [baseUrl, bundle]);
 
     /* Whenever a valid javascript file is input, see if it corresponds to a sourcemap file and initiate a fetch
      * if so. */
@@ -211,7 +218,7 @@ function BundlePicker() {
             setFileFetchStatus(None);
             return;
         }
-        const observable = fetchAsSubject(`/bundles/${bundle}/${file}.map`)
+        const observable = fetchAsSubject(new URL(`bundles/${bundle}/${file}.map`, baseUrl).toString())
             .pipe(
                 rxjs.operators.map((fetchStatus) => fetchStatus.flatMap(value => {
                     try {
@@ -224,7 +231,7 @@ function BundlePicker() {
             );
         const subscription = observable.subscribe(setFileFetchStatus);
         return () => subscription.unsubscribe();
-    }, [bundle, file]);
+    }, [baseUrl, bundle, file]);
 
     /*
      * Whenever we have a valid fetched sourcemap, and a valid line, attempt to find the original position from the
@@ -255,6 +262,16 @@ function BundlePicker() {
     /* ------ */
     return e('div', {},
         e('div', { className: 'inputs' },
+            e('div', { className: 'baseUrl' },
+                e('label', { htmlFor: 'baseUrl'}, 'Base URL'),
+                e('input', {
+                    name: 'baseUrl',
+                    required: true,
+                    pattern: ".+",
+                    onChange: onBaseUrlChange,
+                    value: baseUrl,
+                }),
+            ),
             e('div', { className: 'bundle' },
                 e('label', { htmlFor: 'bundle'}, 'Bundle'),
                 e('input', {
