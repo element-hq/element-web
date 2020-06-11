@@ -240,6 +240,8 @@ limitations under the License.
             align-items: center;
 
             .mx_RoomSublist2_showMoreButton {
+                flex-direction: column;
+
                 .mx_RoomSublist2_showMoreButtonChevron {
                     margin-right: 12px; // to center
                 }
