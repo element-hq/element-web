@@ -2492,5 +2492,16 @@
     "All settings": "所有設定",
     "Archived rooms": "已封存的聊天室",
     "Feedback": "回饋",
-    "Account settings": "帳號設定"
+    "Account settings": "帳號設定",
+    "No recently visited rooms": "沒有最近造訪過的聊天室",
+    "Sort by": "排序方式",
+    "Unread rooms": "未讀聊天室",
+    "Always show first": "一律先顯示",
+    "Show": "顯示",
+    "Message preview": "訊息預覽",
+    "List options": "列表選項",
+    "Show %(count)s more|other": "再顯示 %(count)s 個",
+    "Show %(count)s more|one": "再顯示 %(count)s 個",
+    "Leave Room": "離開聊天室",
+    "Room options": "聊天室選項"
 }
