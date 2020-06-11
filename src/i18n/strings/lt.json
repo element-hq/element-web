@@ -1661,5 +1661,6 @@
     "We'll store an encrypted copy of your keys on our server. Secure your backup with a recovery passphrase.": "Užšifruotą jūsų raktų kopiją saugosime savo serveryje. Apsaugokite savo atsarginę kopiją naudodami atkūrimo slaptafrazę.",
     "Your keys are being backed up (the first backup could take a few minutes).": "Kuriama jūsų raktų atsarginė kopija (pirmas atsarginės kopijos sukūrimas gali užtrukti kelias minutes).",
     "Create key backup": "Sukurti atsarginę raktų kopiją",
-    "Unable to create key backup": "Nepavyko sukurti atsarginės raktų kopijos"
+    "Unable to create key backup": "Nepavyko sukurti atsarginės raktų kopijos",
+    "Your homeserver does not support session management.": "Jūsų serveris nepalaiko seansų tvarkymo."
 }
