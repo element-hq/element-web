@@ -265,13 +265,22 @@ function textForServerACLEvent(ev) {
     return text + changes.join(" ");
 }
 
-function textForMessageEvent(ev) {
+function textForMessageEvent(ev, skipUserPrefix) {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     let message = senderDisplayName + ': ' + ev.getContent().body;
-    if (ev.getContent().msgtype === "m.emote") {
-        message = "* " + senderDisplayName + " " + message;
-    } else if (ev.getContent().msgtype === "m.image") {
-        message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
+    if (skipUserPrefix) {
+        message = ev.getContent().body;
+        if (ev.getContent().msgtype === "m.emote") {
+            message = senderDisplayName + " " + message;
+        } else if (ev.getContent().msgtype === "m.image") {
+            message = _t('sent an image.');
+        }
+    } else {
+        if (ev.getContent().msgtype === "m.emote") {
+            message = "* " + senderDisplayName + " " + message;
+        } else if (ev.getContent().msgtype === "m.image") {
+            message = _t('%(senderDisplayName)s sent an image.', {senderDisplayName});
+        }
     }
     return message;
 }
@@ -612,8 +621,8 @@ for (const evType of ALL_RULE_TYPES) {
     stateHandlers[evType] = textForMjolnirEvent;
 }
 
-export function textForEvent(ev) {
+export function textForEvent(ev, skipUserPrefix) {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
-    if (handler) return handler(ev);
+    if (handler) return handler(ev, skipUserPrefix);
     return '';
 }

@@ -42,18 +42,20 @@ export const UPDATE_EVENT = "update";
  * help prevent lock conflicts.
  */
 export abstract class AsyncStore<T extends Object> extends EventEmitter {
-    private storeState: T = <T>{};
+    private storeState: T;
     private lock = new AwaitLock();
     private readonly dispatcherRef: string;
 
     /**
      * Creates a new AsyncStore using the given dispatcher.
      * @param {Dispatcher<ActionPayload>} dispatcher The dispatcher to rely upon.
+     * @param {T} initialState The initial state for the store.
      */
-    protected constructor(private dispatcher: Dispatcher<ActionPayload>) {
+    protected constructor(private dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
         super();
 
         this.dispatcherRef = dispatcher.register(this.onDispatch.bind(this));
+        this.storeState = initialState;
     }
 
     /**
