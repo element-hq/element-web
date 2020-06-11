@@ -133,7 +133,7 @@ function joinConference(widgetId) { // event handler bound in HTML
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
         },
-	jwt: document.querySelector('#jwtToken'),
+	jwt: document.querySelector('#jwtToken')["value"] || undefined,
     });
 
     if (displayName) meetApi.executeCommand("displayName", displayName);
