@@ -43,6 +43,10 @@ $irc-line-height: $font-18px;
         > .mx_EventTile_msgOption {
             order: 5;
             flex-shrink: 0;
+
+            .mx_EventTile_readAvatars {
+                top: 0.2rem; // ($irc-line-height - avatar height) / 2
+            }
         }
 
         > .mx_SenderProfile {
@@ -78,7 +82,7 @@ $irc-line-height: $font-18px;
             align-items: center;
 
             // Need to use important to override the js provided height and width values.
-            > .mx_BaseAvatar, .mx_BaseAvatar > * {
+            > .mx_BaseAvatar, > .mx_BaseAvatar > * {
                 height: $font-14px !important;
                 width: $font-14px !important;
                 font-size: $font-10px !important;

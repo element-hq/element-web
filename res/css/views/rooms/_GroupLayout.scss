@@ -108,12 +108,12 @@ $left-gutter: 65px;
             top: 27px;
         }
 
-        .mx_EventTile_continuation .mx_EventTile_readAvatars,
-        .mx_EventTile_emote .mx_EventTile_readAvatars {
+        &.mx_EventTile_continuation .mx_EventTile_readAvatars,
+        &.mx_EventTile_emote .mx_EventTile_readAvatars {
             top: 5px;
         }
 
-        .mx_EventTile_info .mx_EventTile_readAvatars {
+        &.mx_EventTile_info .mx_EventTile_readAvatars {
             top: 4px;
         }
 
