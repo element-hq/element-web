@@ -15,11 +15,11 @@
     "Need help?": "Treng du hjelp?",
     "Explore rooms": "Utforsk romma",
     "Room Directory": "Romkatalog",
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-konfigurasjonen din har ugyldig JSON-kode. Korriger dette og last inn sida på nytt.",
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Riot-oppsettet ditt inneheld ugyldig JSON-kode. Korriger dette og last inn sida på nytt.",
     "The message from the parser is: %(message)s": "Meldinga frå kodetolkaren er: %(message)s",
     "Invalid JSON": "Ugyldig JSON",
-    "Your Riot is misconfigured": "Riot-klienten din er feilkonfiguert",
+    "Your Riot is misconfigured": "Riot-klienten din er sett opp feil",
     "Unexpected error preparing the app. See console for details.": "Uventa feil under lasting av programmet. Sjå konsollen for detaljar.",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: berre muleg å berre spesifiere ein av default_server_config, default_server_name eller default_hs_url.",
-    "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon:  \"default server\" er ikkje spesifisert."
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig oppsett: berre muleg å berre spesifiere ein av default_server_config, default_server_name eller default_hs_url.",
+    "Invalid configuration: no default server specified.": "Ugyldig oppsett:  ingen \"default server\" er spesifisert."
 }
