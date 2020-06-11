@@ -40,7 +40,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
  *******************************************************************/
 
 interface IProps {
-    // TODO: Support collapsed state
+    isMinimized: boolean;
 }
 
 interface IState {
@@ -106,9 +106,20 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         if (this.state.showBreadcrumbs) {
             breadcrumbs = (
                 <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
-                    <RoomBreadcrumbs2 />
+                    {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
                 </div>
             );
+        }
+
+        let name = <span className="mx_LeftPanel2_userName">{displayName}</span>;
+        let buttons = (
+            <span className="mx_LeftPanel2_headerButtons">
+                <UserMenuButton />
+            </span>
+        );
+        if (this.props.isMinimized) {
+            name = null;
+            buttons = null;
         }
 
         return (
@@ -125,10 +136,8 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                             className="mx_LeftPanel2_userAvatar"
                         />
                     </span>
-                    <span className="mx_LeftPanel2_userName">{displayName}</span>
-                    <span className="mx_LeftPanel2_headerButtons">
-                        <UserMenuButton />
-                    </span>
+                    {name}
+                    {buttons}
                 </div>
                 {breadcrumbs}
             </div>
@@ -140,7 +149,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_LeftPanel2_filterContainer">
-                <RoomSearch onQueryUpdate={this.onSearch} />
+                <RoomSearch onQueryUpdate={this.onSearch} isMinimized={this.props.isMinimized} />
                 <AccessibleButton
                     tabIndex={-1}
                     className='mx_LeftPanel2_exploreButton'
@@ -166,12 +175,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             searchFilter={this.state.searchFilter}
             onFocus={() => {/*TODO*/}}
             onBlur={() => {/*TODO*/}}
+            isMinimized={this.props.isMinimized}
         />;
 
         // TODO: Conference handling / calls
 
         const containerClasses = classNames({
             "mx_LeftPanel2": true,
+            "mx_LeftPanel2_minimized": this.props.isMinimized,
         });
 
         return (

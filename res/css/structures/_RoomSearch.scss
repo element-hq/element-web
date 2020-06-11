@@ -67,4 +67,15 @@ limitations under the License.
         width: 0;
         height: 0;
     }
+
+    &.mx_RoomSearch_minimized {
+        border-radius: 32px;
+        height: auto;
+        width: auto;
+        padding: 8px;
+
+        .mx_RoomSearch_icon {
+            margin-left: 0;
+        }
+    }
 }

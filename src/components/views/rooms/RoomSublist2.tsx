@@ -47,6 +47,7 @@ interface IProps {
     addRoomLabel: string;
     isInvite: boolean;
     layout: ListLayout;
+    isMinimized: boolean;
 
     // TODO: Collapsed state
     // TODO: Group invites
@@ -135,6 +136,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         room={room}
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.props.layout.showPreviews}
+                        isMinimized={this.props.isMinimized}
                     />
                 );
             }
@@ -264,6 +266,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             'mx_RoomSublist2': true,
             'mx_RoomSublist2_collapsed': false, // len && isCollapsed
             'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
+            'mx_RoomSublist2_minimized': this.props.isMinimized,
         });
 
         let content = null;
@@ -282,14 +285,18 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             if (tiles.length > nVisible) {
                 // we have a cutoff condition - add the button to show all
                 const numMissing = tiles.length - visibleTiles.length;
+                let showMoreText = (
+                    <span className='mx_RoomSublist2_showMoreButtonText'>
+                        {_t("Show %(count)s more", {count: numMissing})}
+                    </span>
+                );
+                if (this.props.isMinimized) showMoreText = null;
                 showMoreButton = (
                     <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showMoreButton'>
                         <span className='mx_RoomSublist2_showMoreButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
-                        <span className='mx_RoomSublist2_showMoreButtonText'>
-                            {_t("Show %(count)s more", {count: numMissing})}
-                        </span>
+                        {showMoreText}
                     </div>
                 );
             }

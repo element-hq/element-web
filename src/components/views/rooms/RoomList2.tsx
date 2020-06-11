@@ -45,6 +45,7 @@ interface IProps {
     resizeNotifier: ResizeNotifier;
     collapsed: boolean;
     searchFilter: string;
+    isMinimized: boolean;
 }
 
 interface IState {
@@ -200,6 +201,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     addRoomLabel={aesthetics.addRoomLabel}
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
+                    isMinimized={this.props.isMinimized}
                 />
             );
         }

@@ -35,6 +35,7 @@ import { Action } from "../../dispatcher/actions";
 
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
+    isMinimized: boolean;
 }
 
 interface IState {
@@ -75,6 +76,10 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         this.onChange();
     };
 
+    private openSearch = () => {
+        defaultDispatcher.dispatch({action: "show_left_panel"});
+    };
+
     private onChange = () => {
         if (!this.inputRef.current) return;
         this.setState({query: this.inputRef.current.value});
@@ -111,6 +116,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         const classes = classNames({
             'mx_RoomSearch': true,
             'mx_RoomSearch_expanded': this.state.query || this.state.focused,
+            'mx_RoomSearch_minimized': this.props.isMinimized,
         });
 
         const inputClasses = classNames({
@@ -118,26 +124,48 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             'mx_RoomSearch_inputExpanded': this.state.query || this.state.focused,
         });
 
-        return (
-            <div className={classes}>
-                <div className='mx_RoomSearch_icon'/>
-                <input
-                    type="text"
-                    ref={this.inputRef}
-                    className={inputClasses}
-                    value={this.state.query}
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}
-                    onKeyDown={this.onKeyDown}
-                    placeholder={_t("Search")}
-                    autoComplete="off"
-                />
+        let icon = (
+            <div className='mx_RoomSearch_icon'/>
+        );
+        let input = (
+            <input
+                type="text"
+                ref={this.inputRef}
+                className={inputClasses}
+                value={this.state.query}
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                onChange={this.onChange}
+                onKeyDown={this.onKeyDown}
+                placeholder={_t("Search")}
+                autoComplete="off"
+            />
+        );
+        let clearButton = (
+            <AccessibleButton
+                tabIndex={-1}
+                className='mx_RoomSearch_clearButton'
+                onClick={this.clearInput}
+            />
+        );
+
+        if (this.props.isMinimized) {
+            icon = (
                 <AccessibleButton
                     tabIndex={-1}
-                    className='mx_RoomSearch_clearButton'
-                    onClick={this.clearInput}
+                    className='mx_RoomSearch_icon'
+                    onClick={this.openSearch}
                 />
+            );
+            input = null;
+            clearButton = null;
+        }
+
+        return (
+            <div className={classes}>
+                {icon}
+                {input}
+                {clearButton}
             </div>
         );
     }
