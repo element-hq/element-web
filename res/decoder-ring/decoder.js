@@ -33,7 +33,7 @@ function bundleSubject(bundle) {
     const fetcher = new rxjs.BehaviorSubject(Pending.of());
     bundleCache.set(bundle, fetcher);
 
-    fetch(`/bundles/${bundle}/bundle.js.map`).then((res) => {
+    fetch(`../bundles/${bundle}/bundle.js.map`).then((res) => {
         res.body.cancel(); /* Bail on the download immediately - it could be big! */
         const status = res.ok;
         if (status) {
@@ -211,7 +211,7 @@ function BundlePicker() {
             setFileFetchStatus(None);
             return;
         }
-        const observable = fetchAsSubject(`/bundles/${bundle}/${file}.map`)
+        const observable = fetchAsSubject(`../bundles/${bundle}/${file}.map`)
             .pipe(
                 rxjs.operators.map((fetchStatus) => fetchStatus.flatMap(value => {
                     try {
