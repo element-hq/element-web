@@ -110,7 +110,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // doing getValue in the .catch will still return the value we failed to set,
         // so remember what the value was before we tried to set it so we can revert
         const oldTheme: string = SettingsStore.getValue('theme');
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme).catch(() => {
+        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme).catch(() => {
             dis.dispatch<RecheckThemePayload>({action: Action.RecheckTheme});
             this.setState({theme: oldTheme});
         });
@@ -316,7 +316,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     render() {
         return (
-            <div className="mx_SettingsTab">
+            <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
                 <div className="mx_SettingsTab_SubHeading">
                     {_t("Appearance Settings only affect this Riot session.")}

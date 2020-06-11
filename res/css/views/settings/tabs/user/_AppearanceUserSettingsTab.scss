@@ -44,8 +44,15 @@ limitations under the License.
     padding-right: 5px;
 }
 
+.mx_AppearanceUserSettingsTab {
+    > .mx_SettingsTab_SubHeading {
+        margin-bottom: 32px;
+    }
+}
+
 .mx_AppearanceUserSettingsTab_themeSection {
     $radio-bg-color: $input-darker-bg-color;
+    color: $primary-fg-color;
 
     > .mx_ThemeSelectors {
         display: flex;
@@ -53,19 +60,31 @@ limitations under the License.
         flex-wrap: wrap;
 
         margin-top: 13px;
+        margin-bottom: 30px;
 
         > .mx_RadioButton {
             padding: $font-16px;
+            box-sizing: border-box;
             border-radius: 10px;
-            background: rgba($radio-bg-color, 0.2);
             width: 180px;
+
+            background: rgba($radio-bg-color, 0.2);
+
             flex-shrink: 1;
             flex-grow: 0;
+
             margin-right: 15px;
             margin-top: 10px;
+
+            font-weight: 600;
+            color: $muted-fg-color;
+
+            > span {
+                justify-content: center;
+            }
         }
 
-        > .mx_RadioButton:not([disabled]) {
+        > .mx_RadioButton_enabled {
             // These need to be hardcoded because they don't change with the theme
             &.mx_ThemeSelector_light {
                 background-color: #f3f8fd;
@@ -74,6 +93,7 @@ limitations under the License.
 
             &.mx_ThemeSelector_dark {
                 background-color: #181b21;
+                color: #f3f8fd;
 
                 > input > div {
                     border-color: $input-darker-bg-color;
@@ -85,6 +105,7 @@ limitations under the License.
 
             &.mx_ThemeSelector_black {
                 background-color: #000000;
+                color: #f3f8fd;
 
                 > input > div {
                     border-color: $input-darker-bg-color;
