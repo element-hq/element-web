@@ -96,10 +96,16 @@ $irc-line-height: $font-18px;
             position: relative;
             right: unset;
             left: unset;
+            top: 0;
+
             padding: 0;
-            order: 3;
+
             flex-shrink: 0;
             flex-grow: 0;
+
+            height: $font-18px;
+
+            background-position: center;
         }
 
         .mx_EventTile_line {
