@@ -43,6 +43,7 @@ import { MessagePreviewStore } from "../../../stores/MessagePreviewStore";
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
+    isMinimized: boolean;
 
     // TODO: Allow falsifying counts (for invites and stuff)
     // TODO: Transparency? Was this ever used?
@@ -158,6 +159,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     };
 
     private renderGeneralMenu(): React.ReactElement {
+        if (this.props.isMinimized) return null; // no menu when minimized
+
         let contextMenu = null;
         if (this.state.generalMenuDisplayed) {
             // The context menu appears within the list, so use the room tile as a reference point
@@ -240,6 +243,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2': true,
             'mx_RoomTile2_selected': this.state.selected,
             'mx_RoomTile2_hasMenuOpen': this.state.generalMenuDisplayed,
+            'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
         const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true} />;
@@ -253,7 +257,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         // TODO: Tooltip?
 
         let messagePreview = null;
-        if (this.props.showMessagePreview) {
+        if (this.props.showMessagePreview && !this.props.isMinimized) {
             // The preview store heavily caches this info, so should be safe to hammer.
             const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room);
 
@@ -273,6 +277,16 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             "mx_RoomTile2_nameHasUnreadEvents": this.state.notificationState.color >= NotificationColor.Bold,
         });
 
+        let nameContainer = (
+            <div className="mx_RoomTile2_nameContainer">
+                <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
+                    {name}
+                </div>
+                {messagePreview}
+            </div>
+        );
+        if (this.props.isMinimized) nameContainer = null;
+
         const avatarSize = 32;
         return (
             <React.Fragment>
@@ -291,12 +305,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             <div className="mx_RoomTile2_avatarContainer">
                                 <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize}/>
                             </div>
-                            <div className="mx_RoomTile2_nameContainer">
-                                <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
-                                    {name}
-                                </div>
-                                {messagePreview}
-                            </div>
+                            {nameContainer}
                             <div className="mx_RoomTile2_badgeContainer">
                                 {badge}
                             </div>

@@ -51,6 +51,7 @@ limitations under the License.
             margin: 0;
             visibility: hidden;
             position: relative;
+            border-radius: 32px;
 
             &::before {
                 content: '';
@@ -172,7 +173,7 @@ limitations under the License.
             border: 2px solid $primary-fg-color;
         }
 
-        .mx_RoomSublist2_headerContainer {
+        &:not(.mx_RoomSublist2_minimized) > .mx_RoomSublist2_headerContainer {
             // If the header doesn't have an aux button we still need to hide the badge for
             // the menu button.
             .mx_RoomSublist2_badgeContainer {
@@ -195,18 +196,89 @@ limitations under the License.
             .mx_RoomSublist2_menuButton {
                 width: 24px;
                 height: 24px;
-                border-radius: 32px;
                 margin-left: 16px;
-                background-color: #fff; // TODO: Variable and theme
                 visibility: visible;
+                background-color: #fff; // TODO: Variable and theme
+            }
+        }
+    }
+
+    &.mx_RoomSublist2_minimized {
+        .mx_RoomSublist2_headerContainer {
+            height: auto;
+            flex-direction: column;
+            position: relative;
+
+            .mx_RoomSublist2_badgeContainer {
+                order: 1;
+                align-self: flex-end;
+                margin-right: 0;
+            }
+
+            .mx_RoomSublist2_headerText {
+                order: 2;
+                max-width: 100%;
+            }
+
+            .mx_RoomSublist2_auxButton {
+                order: 4;
+                visibility: visible;
+                width: 32px !important; // !important to override hover styles
+                height: 32px !important; // !important to override hover styles
+                margin-left: 0 !important; // !important to override hover styles
+                background-color: #fff; // TODO: Variable and theme
+                margin-top: 8px;
+
+                &::before {
+                    top: 8px;
+                    left: 8px;
+                }
+            }
+        }
+
+        .mx_RoomSublist2_resizeBox {
+            align-items: center;
+
+            .mx_RoomSublist2_showMoreButton {
+                .mx_RoomSublist2_showMoreButtonChevron {
+                    margin-right: 12px; // to center
+                }
+            }
+        }
+
+        &:hover, &.mx_RoomSublist2_hasMenuOpen {
+            .mx_RoomSublist2_menuButton {
+                visibility: visible;
+                position: absolute;
+                bottom: 48px; // align to middle of name, 40px for aux button (with padding) and 8px for alignment
+                right: 0;
+                width: 16px;
+                height: 16px;
+                border-radius: 0;
+                z-index: 1; // occlude the list name
+
+                // This is the same color as the left panel background because it needs
+                // to occlude the sublist title
+                background-color: $header-panel-bg-color;
+
+                &::before {
+                    top: 0;
+                    left: 0;
+                }
+            }
+
+            .mx_RoomSublist2_headerContainer:not(.mx_RoomSublist2_headerContainer_withAux) {
+                .mx_RoomSublist2_menuButton {
+                    bottom: 8px; // align to the middle of name, 40px less than the `bottom` above.
+                }
             }
         }
     }
 }
 
 // We have a hover style on the room list with no specific list hovered, so account for that
-.mx_RoomList2:hover .mx_RoomSublist2,
-.mx_RoomSublist2_hasMenuOpen {
+.mx_RoomList2:hover .mx_RoomSublist2:not(.mx_RoomSublist2_minimized),
+.mx_RoomSublist2_hasMenuOpen:not(.mx_RoomSublist2_minimized) {
     .mx_RoomSublist2_headerContainer_withAux {
         .mx_RoomSublist2_badgeContainer {
             // Completely hide the badge

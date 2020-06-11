@@ -115,18 +115,37 @@ limitations under the License.
         mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
     }
 
-    &:hover, &.mx_RoomTile2_hasMenuOpen {
-        // Hide the badge container on hover because it'll be a menu button
-        .mx_RoomTile2_badgeContainer {
-            width: 0;
-            height: 0;
-            visibility: hidden;
+    &:not(.mx_RoomTile2_minimized) {
+        &:hover, &.mx_RoomTile2_hasMenuOpen {
+            // Hide the badge container on hover because it'll be a menu button
+            .mx_RoomTile2_badgeContainer {
+                width: 0;
+                height: 0;
+                visibility: hidden;
+            }
+
+            .mx_RoomTile2_menuButton {
+                width: 18px;
+                height: 32px;
+                visibility: visible;
+            }
+        }
+    }
+
+    &.mx_RoomTile2_minimized {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        .mx_RoomTile2_avatarContainer {
+            margin-right: 0;
         }
 
-        .mx_RoomTile2_menuButton {
-            width: 18px;
-            height: 32px;
-            visibility: visible;
+        .mx_RoomTile2_badgeContainer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 18px;
         }
     }
 }

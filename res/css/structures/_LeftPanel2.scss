@@ -138,4 +138,38 @@ $roomListMinimizedWidth: 50px;
             display: flex;
         }
     }
+
+    // These styles override the defaults for the minimized (66px) layout
+    &.mx_LeftPanel2_minimized {
+        min-width: unset;
+
+        // We have to forcefully set the width to override the resizer's style attribute.
+        width: calc(68px + $tagPanelWidth) !important;
+
+        .mx_LeftPanel2_roomListContainer {
+            width: 68px;
+
+            .mx_LeftPanel2_userHeader {
+                .mx_LeftPanel2_headerRow {
+                    justify-content: center;
+                }
+
+                .mx_LeftPanel2_userAvatarContainer {
+                    margin-right: 0;
+                }
+            }
+
+            .mx_LeftPanel2_filterContainer {
+                // Organize the flexbox into a centered column layout
+                flex-direction: column;
+                justify-content: center;
+
+                .mx_LeftPanel2_exploreButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                    background-color: transparent;
+                }
+            }
+        }
+    }
 }
