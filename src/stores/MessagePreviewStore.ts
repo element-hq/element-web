@@ -20,7 +20,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { RoomListStoreTempProxy } from "./room-list/RoomListStoreTempProxy";
 import { textForEvent } from "../TextForEvent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/Event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../languageHandler";
 
 const PREVIEWABLE_EVENTS = [
@@ -40,8 +40,11 @@ const PREVIEWABLE_EVENTS = [
     {type: "m.room.create", isState: true},
 ];
 
+// The maximum number of events we're willing to look back on to get a preview.
+const MAX_EVENTS_BACKWARDS = 50;
+
 interface IState {
-    [roomId: string]: string;
+    [roomId: string]: string | null; // null indicates the preview is empty
 }
 
 export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
@@ -64,6 +67,8 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         if (!room) return null; // invalid room, just return nothing
 
         // It's faster to do a lookup this way than it is to use Object.keys().includes()
+        // We only want to generate a preview if there's one actually missing and not explicitly
+        // set as 'none'.
         const val = this.state[room.roomId];
         if (val !== null && typeof(val) !== "string") {
             this.generatePreview(room);
@@ -73,14 +78,12 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     private generatePreview(room: Room) {
-        const maxEventsBackwards = 50; // any further and we just assume there's nothing important
-
         const timeline = room.getLiveTimeline();
         if (!timeline) return; // usually only happens in tests
         const events = timeline.getEvents();
 
         for (let i = events.length - 1; i >= 0; i--) {
-            if (i === events.length - maxEventsBackwards) return; // limit reached
+            if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached
 
             const event = events[i];
             const preview = this.generatePreviewForEvent(event);
