@@ -2488,5 +2488,17 @@
     "All settings": "Tutte le impostazioni",
     "Archived rooms": "Stanze archiviate",
     "Feedback": "Feedback",
-    "Account settings": "Impostazioni account"
+    "Account settings": "Impostazioni account",
+    "sent an image.": "ha inviato un'immagine.",
+    "You: %(message)s": "Tu: %(message)s",
+    "No recently visited rooms": "Nessuna stanza visitata di recente",
+    "Sort by": "Ordina per",
+    "Unread rooms": "Stanze non lette",
+    "Show": "Mostra",
+    "Message preview": "Anteprima messaggio",
+    "List options": "Opzioni lista",
+    "Show %(count)s more|other": "Mostra altri %(count)s",
+    "Show %(count)s more|one": "Mostra %(count)s altro",
+    "Leave Room": "Lascia stanza",
+    "Room options": "Opzioni stanza"
 }
