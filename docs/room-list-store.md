@@ -2,7 +2,7 @@
 
 It's so complicated it needs its own README.
 
-![](./RoomListStore2.png)
+![](img/RoomListStore2.png)
 
 Legend:
 * Orange = External event.
