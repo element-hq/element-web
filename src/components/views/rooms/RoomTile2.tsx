@@ -21,7 +21,7 @@ import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../views/elements/AccessibleButton";
+import AccessibleButton, {ButtonEvent} from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
@@ -30,6 +30,7 @@ import NotificationBadge, { INotificationState, NotificationColor, RoomNotificat
 import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { MessagePreviewStore } from "../../../stores/MessagePreviewStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -123,7 +124,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false});
     };
 
-    private onTagRoom = (ev: React.MouseEvent, tagId: TagID) => {
+    private onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -134,7 +135,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         }
     };
 
-    private onLeaveRoomClick = (ev: React.MouseEvent) => {
+    private onLeaveRoomClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -145,7 +146,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false}); // hide the menu
     };
 
-    private onOpenRoomSettings = (ev: React.MouseEvent) => {
+    private onOpenRoomSettings = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -253,8 +254,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         let messagePreview = null;
         if (this.props.showMessagePreview) {
-            // TODO: Actually get the real message preview from state
-            messagePreview = <div className="mx_RoomTile2_messagePreview">I just ate a pie.</div>;
+            // The preview store heavily caches this info, so should be safe to hammer.
+            const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room);
+
+            // Only show the preview if there is one to show.
+            if (text) {
+                messagePreview = (
+                    <div className="mx_RoomTile2_messagePreview">
+                        {text}
+                    </div>
+                );
+            }
         }
 
         const nameClasses = classNames({
