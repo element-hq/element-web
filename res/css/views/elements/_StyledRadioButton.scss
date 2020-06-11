@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,8 +23,6 @@ limitations under the License.
 
     $radio-circle-color: $muted-fg-color;
     $active-radio-circle-color: $accent-color;
-    // We need to make this element positioned
-    // so that the radio circle can be absolute
     position: relative;
 
     display: flex;
@@ -35,18 +33,28 @@ limitations under the License.
         flex-grow: 1;
 
         display: flex;
-        justify-content: center;
+
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+
+    .mx_RadioButton_spacer {
+        flex-shrink: 0;
+        flex-grow: 0;
+
+        height: $font-16px;
+        width: $font-16px;
     }
 
     > input[type=radio] {
         // Remove the OS's representation
         margin: 0;
         padding: 0;
-        display: none;
+        appearance: none;
 
         + div {
-            // Necessary to center the following span
-            position: absolute;
+            flex-shrink: 0;
+            flex-grow: 0;
 
             display: flex;
             align-items: center;
@@ -72,8 +80,10 @@ limitations under the License.
 
     > input[type=radio]:checked {
         + div {
+            border-color: $active-radio-circle-color;
+
             > div {
-                background: $radio-circle-color;
+                background: $active-radio-circle-color;
             }
         }
     }

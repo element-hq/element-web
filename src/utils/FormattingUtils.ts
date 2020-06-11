@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import { _t } from '../languageHandler';
  * formats numbers to fit into ~3 characters, suitable for badge counts
  * e.g: 999, 9.9K, 99K, 0.9M, 9.9M, 99M, 0.9B, 9.9B
  */
-export function formatCount(count) {
-   if (count < 1000) return count;
+export function formatCount(count: number): string {
+   if (count < 1000) return count.toString();
    if (count < 10000) return (count / 1000).toFixed(1) + "K";
    if (count < 100000) return (count / 1000).toFixed(0) + "K";
    if (count < 10000000) return (count / 1000000).toFixed(1) + "M";
@@ -34,7 +34,7 @@ export function formatCount(count) {
  * Format a count showing the whole number but making it a bit more readable.
  * e.g: 1000 => 1,000
  */
-export function formatCountLong(count) {
+export function formatCountLong(count: number): string {
     const formatter = new Intl.NumberFormat();
     return formatter.format(count)
 }
@@ -43,7 +43,7 @@ export function formatCountLong(count) {
  * format a size in bytes into a human readable form
  * e.g: 1024 -> 1.00 KB
  */
-export function formatBytes(bytes, decimals = 2) {
+export function formatBytes(bytes: number, decimals = 2): string {
     if (bytes === 0) return '0 Bytes';
 
     const k = 1024;
@@ -62,7 +62,7 @@ export function formatBytes(bytes, decimals = 2) {
  *
  * @return {string}
  */
-export function formatCryptoKey(key) {
+export function formatCryptoKey(key: string): string {
     return key.match(/.{1,4}/g).join(" ");
 }
 /**
@@ -72,7 +72,7 @@ export function formatCryptoKey(key) {
  *
  * @return {number}
  */
-export function hashCode(str) {
+export function hashCode(str: string): number {
     let hash = 0;
     let i;
     let chr;
@@ -87,7 +87,7 @@ export function hashCode(str) {
     return Math.abs(hash);
 }
 
-export function getUserNameColorClass(userId) {
+export function getUserNameColorClass(userId: string): string {
     const colorNumber = (hashCode(userId) % 8) + 1;
     return `mx_Username_color${colorNumber}`;
 }
@@ -103,7 +103,7 @@ export function getUserNameColorClass(userId) {
  * @returns {string} a string constructed by joining `items` with a comma
  * between each item, but with the last item appended as " and [lastItem]".
  */
-export function formatCommaSeparatedList(items, itemLimit) {
+export function formatCommaSeparatedList(items: string[], itemLimit?: number): string {
     const remaining = itemLimit === undefined ? 0 : Math.max(
         items.length - itemLimit, 0,
     );
@@ -118,4 +118,15 @@ export function formatCommaSeparatedList(items, itemLimit) {
         const lastItem = items.pop();
         return _t("%(items)s and %(lastItem)s", { items: items.join(', '), lastItem: lastItem });
     }
+}
+
+/**
+ * Formats a number into a 'minimal' badge count (9, 98, 99+).
+ * @param count The number to convert
+ * @returns The badge count, stringified.
+ */
+export function formatMinimalBadgeCount(count: number): string {
+    // we specifically go from "98" to "99+"
+    if (count < 99) return count.toString();
+    return "99+";
 }

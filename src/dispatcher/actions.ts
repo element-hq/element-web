@@ -36,8 +36,14 @@ export enum Action {
 
     /**
      * Open the user settings. No additional payload information required.
+     * Optionally can include an OpenToTabPayload.
      */
     ViewUserSettings = "view_user_settings",
+
+    /**
+     * Opens the room directory. No additional payload information required.
+     */
+    ViewRoomDirectory = "view_room_directory",
 
     /**
      * Sets the current tooltip. Should be use with ViewTooltipPayload.
@@ -58,4 +64,9 @@ export enum Action {
      * Focuses the user's cursor to the composer. No additional payload information required.
      */
     FocusComposer = "focus_composer",
+
+    /**
+     * Opens the user menu (previously known as the top left menu). No additional payload information required.
+     */
+    ToggleUserMenu = "toggle_user_menu",
 }

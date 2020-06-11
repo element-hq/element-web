@@ -27,12 +27,16 @@ import RoomViewStore from './stores/RoomViewStore';
  */
 class ActiveRoomObserver {
     constructor() {
-        this._listeners = {};
+        this._listeners = {}; // key=roomId, value=function(isActive:boolean)
 
         this._activeRoomId = RoomViewStore.getRoomId();
         // TODO: We could self-destruct when the last listener goes away, or at least
         // stop listening.
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate.bind(this));
+    }
+
+    get activeRoomId(): string {
+        return this._activeRoomId;
     }
 
     addListener(roomId, listener) {
@@ -51,23 +55,23 @@ class ActiveRoomObserver {
         }
     }
 
-    _emit(roomId) {
+    _emit(roomId, isActive: boolean) {
         if (!this._listeners[roomId]) return;
 
         for (const l of this._listeners[roomId]) {
-            l.call();
+            l.call(null, isActive);
         }
     }
 
     _onRoomViewStoreUpdate() {
         // emit for the old room ID
-        if (this._activeRoomId) this._emit(this._activeRoomId);
+        if (this._activeRoomId) this._emit(this._activeRoomId, false);
 
         // update our cache
         this._activeRoomId = RoomViewStore.getRoomId();
 
         // and emit for the new one
-        if (this._activeRoomId) this._emit(this._activeRoomId);
+        if (this._activeRoomId) this._emit(this._activeRoomId, true);
     }
 }
 

@@ -72,6 +72,7 @@ import {
     hideToast as hideAnalyticsToast
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
+import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -604,9 +605,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewIndexedRoom(payload.roomIndex);
                 break;
             case Action.ViewUserSettings: {
+                const tabPayload = payload as OpenToTabPayload;
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
-                Modal.createTrackedDialog('User settings', '', UserSettingsDialog, {},
-                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+                Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
+                    {initialTabId: tabPayload.initialTabId},
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true
+                );
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -620,7 +624,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
                 break;
             }
-            case 'view_room_directory': {
+            case Action.ViewRoomDirectory: {
                 const RoomDirectory = sdk.getComponent("structures.RoomDirectory");
                 Modal.createTrackedDialog('Room directory', '', RoomDirectory, {},
                     'mx_RoomDirectory_dialogWrapper', false, true);
@@ -1607,9 +1611,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'require_registration',
             });
         } else if (screen === 'directory') {
-            dis.dispatch({
-                action: 'view_room_directory',
-            });
+            dis.fire(Action.ViewRoomDirectory);
         } else if (screen === 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',

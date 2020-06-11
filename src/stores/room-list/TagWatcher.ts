@@ -74,6 +74,11 @@ export class TagWatcher {
                 this.store.removeFilter(filter);
             }
 
+            // Destroy any and all old filter conditions to prevent resource leaks
+            for (const filter of this.filters.values()) {
+                filter.destroy();
+            }
+
             this.filters = newFilters;
         }
     };
