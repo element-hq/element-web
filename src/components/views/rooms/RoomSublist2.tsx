@@ -84,6 +84,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.state.notificationState.setRooms(this.props.rooms);
     }
 
+    public componentWillUnmount() {
+        this.state.notificationState.destroy();
+    }
+
     private onAddRoom = (e) => {
         e.stopPropagation();
         if (this.props.onAddRoom) this.props.onAddRoom();

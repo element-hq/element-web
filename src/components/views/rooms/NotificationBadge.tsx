@@ -205,7 +205,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable 
     }
 }
 
-export class ListNotificationState extends EventEmitter {
+export class ListNotificationState extends EventEmitter implements IDestroyable {
     private _count: number;
     private _color: NotificationColor;
     private rooms: Room[] = [];
@@ -237,6 +237,7 @@ export class ListNotificationState extends EventEmitter {
 
         const oldRooms = this.rooms;
         const diff = arrayDiff(oldRooms, rooms);
+        this.rooms = rooms;
         for (const oldRoom of diff.removed) {
             const state = this.states[oldRoom.roomId];
             delete this.states[oldRoom.roomId];
@@ -246,10 +247,22 @@ export class ListNotificationState extends EventEmitter {
         for (const newRoom of diff.added) {
             const state = new RoomNotificationState(newRoom);
             state.on(NOTIFICATION_STATE_UPDATE, this.onRoomNotificationStateUpdate);
+            if (this.states[newRoom.roomId]) {
+                // "Should never happen" disclaimer.
+                console.warn("Overwriting notification state for room:", newRoom.roomId);
+                this.states[newRoom.roomId].destroy();
+            }
             this.states[newRoom.roomId] = state;
         }
 
         this.calculateTotalState();
+    }
+
+    public destroy() {
+        for (const state of Object.values(this.states)) {
+            state.destroy();
+        }
+        this.states = {};
     }
 
     private onRoomNotificationStateUpdate = () => {
