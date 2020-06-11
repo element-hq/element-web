@@ -1344,5 +1344,15 @@
     "Repeat your recovery passphrase...": "Gjenta gjenopprettingspassfrasen din …",
     "Other users may not trust it": "Andre brukere kan kanskje mistro den",
     "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> reagerte med %(content)s</reactedWith>",
-    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith> reagerte med %(shortName)s</reactedWith>"
+    "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith> reagerte med %(shortName)s</reactedWith>",
+    "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)s kan ikke forhåndsvises. Vil du bli med i den?",
+    "Messages in this room are end-to-end encrypted.": "Meldinger i dette rommet er start-til-slutt-kryptert.",
+    "Messages in this room are not end-to-end encrypted.": "Meldinger i dette rommet er ikke start-til-slutt-kryptert.",
+    "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Meldinger i dette rommet er start-til-slutt-kryptert. Lær mer og verifiser denne brukeren i brukerprofilen deres.",
+    "Use a different passphrase?": "Vil du bruke en annen passfrase?",
+    "Emoji picker": "Emojivelger",
+    "Jump to read receipt": "Hopp til lesekvitteringen",
+    "Mention": "Nevn",
+    "Community Name": "Samfunnets navn",
+    "Dismiss read marker and jump to bottom": "Avføy lesekvitteringen og hopp ned til bunnen"
 }
