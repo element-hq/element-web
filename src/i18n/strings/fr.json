@@ -2493,5 +2493,18 @@
     "All settings": "Tous les paramètres",
     "Archived rooms": "Salons archivés",
     "Feedback": "Commentaire",
-    "Account settings": "Paramètres du compte"
+    "Account settings": "Paramètres du compte",
+    "sent an image.": "a envoyé une image.",
+    "You: %(message)s": "Vous : %(message)s",
+    "No recently visited rooms": "Aucun salon visité récemment",
+    "Sort by": "Trier par",
+    "Unread rooms": "Salons non lus",
+    "Always show first": "Toujours afficher en premier",
+    "Show": "Afficher",
+    "Message preview": "Aperçu de message",
+    "List options": "Options de liste",
+    "Show %(count)s more|other": "En afficher %(count)s de plus",
+    "Show %(count)s more|one": "En afficher %(count)s de plus",
+    "Leave Room": "Quitter le salon",
+    "Room options": "Options du salon"
 }
