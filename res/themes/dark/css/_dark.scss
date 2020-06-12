@@ -103,6 +103,24 @@ $eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
 
+// ********************
+
+// V2 Room List
+// TODO: Remove the 2 from all of these when the new list takes over
+
+$theme-button-bg-color: #e3e8f0;
+
+$roomlist2-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist2-bg-color: $header-panel-bg-color;
+
+$roomsublist2-divider-color: #e9eaeb;
+
+$roomtile2-preview-color: #9e9e9e;
+$roomtile2-default-badge-bg-color: #61708b;
+$roomtile2-selected-bg-color: #1A1D23;
+
+// ********************
+
 $roomtile-name-color: $header-panel-text-primary-color;
 $roomtile-selected-color: $text-primary-color;
 $roomtile-notified-color: $text-primary-color;

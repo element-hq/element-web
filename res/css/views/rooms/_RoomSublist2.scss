@@ -108,7 +108,7 @@ limitations under the License.
 
             // This is the same color as the left panel background because it needs
             // to occlude the lastmost tile in the list.
-            background-color: $header-panel-bg-color;
+            background-color: $roomlist2-bg-color;
 
             // Update the render() function for RoomSublist2 if these change
             // Update the ListLayout class for minVisibleTiles if these change.
@@ -198,7 +198,7 @@ limitations under the License.
                 height: 24px;
                 margin-left: 16px;
                 visibility: visible;
-                background-color: #fff; // TODO: Variable and theme
+                background-color: $roomlist2-button-bg-color;
             }
         }
     }
@@ -226,7 +226,7 @@ limitations under the License.
                 width: 32px !important; // !important to override hover styles
                 height: 32px !important; // !important to override hover styles
                 margin-left: 0 !important; // !important to override hover styles
-                background-color: #fff; // TODO: Variable and theme
+                background-color: $roomlist2-button-bg-color;
                 margin-top: 8px;
 
                 &::before {
@@ -261,7 +261,7 @@ limitations under the License.
 
                 // This is the same color as the left panel background because it needs
                 // to occlude the sublist title
-                background-color: $header-panel-bg-color;
+                background-color: $roomlist2-bg-color;
 
                 &::before {
                     top: 0;

@@ -16,12 +16,10 @@ limitations under the License.
 
 // TODO: Rename to mx_LeftPanel during replacement of old component
 
-// TODO: Put these variables in the right place, or namespace them.
-$tagPanelWidth: 70px;
-$roomListMinimizedWidth: 50px;
+$tagPanelWidth: 70px; // only applies in this file, used for calculations
 
 .mx_LeftPanel2 {
-    background-color: $header-panel-bg-color;
+    background-color: $roomlist2-bg-color;
     min-width: 260px;
     max-width: 50%;
 
@@ -108,7 +106,7 @@ $roomListMinimizedWidth: 50px;
                 width: 28px;
                 height: 28px;
                 border-radius: 20px;
-                background-color: #fff; // TODO: Variable and theme
+                background-color: $roomlist2-button-bg-color;
                 position: relative;
                 margin-left: 8px;
 
