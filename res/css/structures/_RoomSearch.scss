@@ -18,7 +18,7 @@ limitations under the License.
 .mx_RoomSearch {
     flex: 1;
     border-radius: 20px;
-    background-color: #fff; // TODO: Variable & theme
+    background-color: $roomlist2-button-bg-color;
     height: 26px;
     padding: 2px;
 
