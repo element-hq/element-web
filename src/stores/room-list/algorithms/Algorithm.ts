@@ -508,7 +508,7 @@ export class Algorithm extends EventEmitter {
         if (cause === RoomUpdateCause.NewRoom) {
             // TODO: Be smarter and insert rather than regen the planet.
             await this.setKnownRooms([room, ...this.rooms]);
-            return;
+            return true;
         }
 
         if (cause === RoomUpdateCause.RoomRemoved) {
