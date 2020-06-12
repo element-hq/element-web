@@ -17,7 +17,7 @@ limitations under the License.
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
-import { TagID } from "../../models";
+import { RoomUpdateCause, TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 /**
@@ -36,6 +36,11 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
     }
 
     public async handleRoomUpdate(room, cause): Promise<boolean> {
+        // TODO: Handle NewRoom and RoomRemoved
+        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+            throw new Error(`Unsupported update cause: ${cause}`);
+        }
+
         // TODO: Optimize this to avoid useless operations
         // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
         this.cachedOrderedRooms = await sortRoomsWithAlgorithm(this.cachedOrderedRooms, this.tagId, this.sortingAlgorithm);

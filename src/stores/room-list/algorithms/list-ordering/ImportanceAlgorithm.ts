@@ -152,6 +152,11 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        // TODO: Handle NewRoom and RoomRemoved
+        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+            throw new Error(`Unsupported update cause: ${cause}`);
+        }
+
         const category = this.getRoomCategory(room);
         if (this.sortingAlgorithm === SortAlgorithm.Manual) {
             return; // Nothing to do here.
