@@ -24,7 +24,7 @@ algorithm to call, instead of having all the logic in the room list store itself
 
 
 Tag sorting is effectively the comparator supplied to the list algorithm. This gives the list algorithm
-the power to decide when and how to apply the tag sorting, if at all. For example, The importance algorithm, 
+the power to decide when and how to apply the tag sorting, if at all. For example, the importance algorithm, 
 later described in this document, heavily uses the list ordering behaviour to break the tag into categories. 
 Each category then gets sorted by the appropriate tag sorting algorithm.
 
