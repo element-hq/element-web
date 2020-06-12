@@ -798,6 +798,9 @@ const TimelinePanel = createReactClass({
                 readMarkerVisible: false,
             });
         }
+
+        // Send the updated read marker (along with read receipt) to the server
+        this.sendReadReceipt();
     },
 
 
