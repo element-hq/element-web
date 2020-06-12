@@ -27,8 +27,11 @@ import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import NotificationBadge, { ListNotificationState } from "./NotificationBadge";
-import {ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
+import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import StyledCheckbox from "../elements/StyledCheckbox";
+import StyledRadioButton from "../elements/StyledRadioButton";
+import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -115,9 +118,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.setState({menuDisplayed: false});
     };
 
-    private onUnreadFirstChanged = () => {
-        // TODO: Support per-list algorithm changes
-        console.log("Unread first changed");
+    private onUnreadFirstChanged = async () => {
+        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
+        const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
+        await RoomListStore.instance.setListOrder(this.props.layout.tagId, newAlgorithm);
+    };
+
+    private onTagSortChanged = async (sort: SortAlgorithm) => {
+        await RoomListStore.instance.setTagSorting(this.props.layout.tagId, sort);
     };
 
     private onMessagePreviewChanged = () => {
@@ -147,6 +155,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.menuDisplayed) {
             const elementRect = this.menuButtonRef.current.getBoundingClientRect();
+            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.layout.tagId) === SortAlgorithm.Alphabetic;
+            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
@@ -157,14 +167,27 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <div className="mx_RoomSublist2_contextMenu">
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Sort by")}</div>
-                            TODO: Radios are blocked by https://github.com/matrix-org/matrix-react-sdk/pull/4731
+                            <StyledRadioButton
+                                onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
+                                checked={!isAlphabetical}
+                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                            >
+                                {_t("Activity")}
+                            </StyledRadioButton>
+                            <StyledRadioButton
+                                onChange={() => this.onTagSortChanged(SortAlgorithm.Alphabetic)}
+                                checked={isAlphabetical}
+                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                            >
+                                {_t("A-Z")}
+                            </StyledRadioButton>
                         </div>
                         <hr />
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
                             <StyledCheckbox
                                 onChange={this.onUnreadFirstChanged}
-                                checked={false/*TODO*/}
+                                checked={isUnreadFirst}
                             >
                                 {_t("Always show first")}
                             </StyledCheckbox>
