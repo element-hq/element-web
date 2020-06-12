@@ -2436,5 +2436,18 @@
     "Archived rooms": "Archivierte Räume",
     "Feedback": "Feedback",
     "Account settings": "Konto-Einstellungen",
-    "Room ID or address of ban list": "Raum-ID oder Adresse der Verbotsliste"
+    "Room ID or address of ban list": "Raum-ID oder Adresse der Verbotsliste",
+    "sent an image.": "hat ein Bild gesendet.",
+    "You: %(message)s": "Du: %(message)s",
+    "No recently visited rooms": "Keine kürzlich besuchten Räume",
+    "Sort by": "Sortieren nach",
+    "Unread rooms": "Ungelesene Räume",
+    "Always show first": "Zeige immer zuerst",
+    "Show": "Zeige",
+    "Message preview": "Nachrichtenvorschau",
+    "List options": "Optionen anzeigen",
+    "Show %(count)s more|other": "Zeige %(count)s weitere",
+    "Show %(count)s more|one": "Zeige %(count)s weitere",
+    "Leave Room": "Verlasse Raum",
+    "Room options": "Raumoptionen"
 }
