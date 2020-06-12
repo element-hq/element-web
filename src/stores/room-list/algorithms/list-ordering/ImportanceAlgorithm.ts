@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
-import { ITagMap, SortAlgorithm } from "../models";
+import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import * as Unread from '../../../../Unread';
+import { OrderingAlgorithm } from "./OrderingAlgorithm";
 
 /**
  * The determined category of a room.
@@ -77,32 +77,16 @@ const CATEGORY_ORDER = [Category.Red, Category.Grey, Category.Bold, Category.Idl
  * within the same category. For more information, see the comments contained
  * within the class.
  */
-export class ImportanceAlgorithm extends Algorithm {
+export class ImportanceAlgorithm extends OrderingAlgorithm {
+    // This tracks the category for the tag it represents by tracking the index of
+    // each category within the list, where zero is the top of the list. This then
+    // tracks when rooms change categories and splices the orderedRooms array as
+    // needed, preventing many ordering operations.
 
-    // HOW THIS WORKS
-    // --------------
-    //
-    // This block of comments assumes you've read the README two levels higher.
-    // You should do that if you haven't already.
-    //
-    // Tags are fed into the algorithmic functions from the Algorithm superclass,
-    // which cause subsequent updates to the room list itself. Categories within
-    // those tags are tracked as index numbers within the array (zero = top), with
-    // each sticky room being tracked separately. Internally, the category index
-    // can be found from `this.indices[tag][category]`.
-    //
-    // The room list store is always provided with the `this.cachedRooms` results, which are
-    // updated as needed and not recalculated often. For example, when a room needs to
-    // move within a tag, the array in `this.cachedRooms` will be spliced instead of iterated.
-    // The `indices` help track the positions of each category to make splicing easier.
+    private indices: ICategoryIndex = {};
 
-    private indices: {
-        // @ts-ignore - TS wants this to be a string but we know better than it
-        [tag: TagID]: ICategoryIndex;
-    } = {};
-
-    constructor() {
-        super();
+    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
+        super(tagId, initialSortingAlgorithm);
         console.log("Constructed an ImportanceAlgorithm");
     }
 
@@ -143,122 +127,86 @@ export class ImportanceAlgorithm extends Algorithm {
         return Category.Idle;
     }
 
-    protected async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
-        for (const tagId of Object.keys(updatedTagMap)) {
-            const unorderedRooms = updatedTagMap[tagId];
-
-            const sortBy = this.sortAlgorithms[tagId];
-            if (!sortBy) throw new Error(`${tagId} does not have a sorting algorithm`);
-
-            if (sortBy === SortAlgorithm.Manual) {
-                // Manual tags essentially ignore the importance algorithm, so don't do anything
-                // special about them.
-                updatedTagMap[tagId] = await sortRoomsWithAlgorithm(unorderedRooms, tagId, sortBy);
-            } else {
-                // Every other sorting type affects the categories, not the whole tag.
-                const categorized = this.categorizeRooms(unorderedRooms);
-                for (const category of Object.keys(categorized)) {
-                    const roomsToOrder = categorized[category];
-                    categorized[category] = await sortRoomsWithAlgorithm(roomsToOrder, tagId, sortBy);
-                }
-
-                const newlyOrganized: Room[] = [];
-                const newIndices: ICategoryIndex = {};
-
-                for (const category of CATEGORY_ORDER) {
-                    newIndices[category] = newlyOrganized.length;
-                    newlyOrganized.push(...categorized[category]);
-                }
-
-                this.indices[tagId] = newIndices;
-                updatedTagMap[tagId] = newlyOrganized;
+    public async setRooms(rooms: Room[]): Promise<any> {
+        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
+            this.cachedOrderedRooms = await sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
+        } else {
+            // Every other sorting type affects the categories, not the whole tag.
+            const categorized = this.categorizeRooms(rooms);
+            for (const category of Object.keys(categorized)) {
+                const roomsToOrder = categorized[category];
+                categorized[category] = await sortRoomsWithAlgorithm(roomsToOrder, this.tagId, this.sortingAlgorithm);
             }
+
+            const newlyOrganized: Room[] = [];
+            const newIndices: ICategoryIndex = {};
+
+            for (const category of CATEGORY_ORDER) {
+                newIndices[category] = newlyOrganized.length;
+                newlyOrganized.push(...categorized[category]);
+            }
+
+            this.indices = newIndices;
+            this.cachedOrderedRooms = newlyOrganized;
         }
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        if (cause === RoomUpdateCause.PossibleTagChange) {
-            // TODO: Be smarter and splice rather than regen the planet.
-            // TODO: No-op if no change.
-            await this.setKnownRooms(this.rooms);
-            return;
+        // TODO: Handle NewRoom and RoomRemoved
+        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+            throw new Error(`Unsupported update cause: ${cause}`);
         }
 
-        if (cause === RoomUpdateCause.NewRoom) {
-            // TODO: Be smarter and insert rather than regen the planet.
-            await this.setKnownRooms([room, ...this.rooms]);
-            return;
-        }
-
-        if (cause === RoomUpdateCause.RoomRemoved) {
-            // TODO: Be smarter and splice rather than regen the planet.
-            await this.setKnownRooms(this.rooms.filter(r => r !== room));
-            return;
-        }
-
-        let tags = this.roomIdsToTags[room.roomId];
-        if (!tags) {
-            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
-            return false;
-        }
         const category = this.getRoomCategory(room);
-        let changed = false;
-        for (const tag of tags) {
-            if (this.sortAlgorithms[tag] === SortAlgorithm.Manual) {
-                continue; // Nothing to do here.
-            }
-
-            const taggedRooms = this.cachedRooms[tag];
-            const indices = this.indices[tag];
-            let roomIdx = taggedRooms.indexOf(room);
-            if (roomIdx === -1) {
-                console.warn(`Degrading performance to find missing room in "${tag}": ${room.roomId}`);
-                roomIdx = taggedRooms.findIndex(r => r.roomId === room.roomId);
-            }
-            if (roomIdx === -1) {
-                throw new Error(`Room ${room.roomId} has no index in ${tag}`);
-            }
-
-            // Try to avoid doing array operations if we don't have to: only move rooms within
-            // the categories if we're jumping categories
-            const oldCategory = this.getCategoryFromIndices(roomIdx, indices);
-            if (oldCategory !== category) {
-                // Move the room and update the indices
-                this.moveRoomIndexes(1, oldCategory, category, indices);
-                taggedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
-                taggedRooms.splice(indices[category], 0, room); // splice in the new room (pre-adjusted)
-                // Note: if moveRoomIndexes() is called after the splice then the insert operation
-                // will happen in the wrong place. Because we would have already adjusted the index
-                // for the category, we don't need to determine how the room is moving in the list.
-                // If we instead tried to insert before updating the indices, we'd have to determine
-                // whether the room was moving later (towards IDLE) or earlier (towards RED) from its
-                // current position, as it'll affect the category's start index after we remove the
-                // room from the array.
-            }
-
-            // The room received an update, so take out the slice and sort it. This should be relatively
-            // quick because the room is inserted at the top of the category, and most popular sorting
-            // algorithms will deal with trying to keep the active room at the top/start of the category.
-            // For the few algorithms that will have to move the thing quite far (alphabetic with a Z room
-            // for example), the list should already be sorted well enough that it can rip through the
-            // array and slot the changed room in quickly.
-            const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
-                ? Number.MAX_SAFE_INTEGER
-                : indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
-            const startIdx = indices[category];
-            const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
-            const unsortedSlice = taggedRooms.splice(startIdx, numSort);
-            const sorted = await sortRoomsWithAlgorithm(unsortedSlice, tag, this.sortAlgorithms[tag]);
-            taggedRooms.splice(startIdx, 0, ...sorted);
-
-            // Finally, flag that we've done something
-            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
-            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
-            changed = true;
+        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
+            return; // Nothing to do here.
         }
-        return changed;
+
+        let roomIdx = this.cachedOrderedRooms.indexOf(room);
+        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
+            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
+            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
+        }
+        if (roomIdx === -1) {
+            throw new Error(`Room ${room.roomId} has no index in ${this.tagId}`);
+        }
+
+        // Try to avoid doing array operations if we don't have to: only move rooms within
+        // the categories if we're jumping categories
+        const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
+        if (oldCategory !== category) {
+            // Move the room and update the indices
+            this.moveRoomIndexes(1, oldCategory, category, this.indices);
+            this.cachedOrderedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
+            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            // Note: if moveRoomIndexes() is called after the splice then the insert operation
+            // will happen in the wrong place. Because we would have already adjusted the index
+            // for the category, we don't need to determine how the room is moving in the list.
+            // If we instead tried to insert before updating the indices, we'd have to determine
+            // whether the room was moving later (towards IDLE) or earlier (towards RED) from its
+            // current position, as it'll affect the category's start index after we remove the
+            // room from the array.
+        }
+
+        // The room received an update, so take out the slice and sort it. This should be relatively
+        // quick because the room is inserted at the top of the category, and most popular sorting
+        // algorithms will deal with trying to keep the active room at the top/start of the category.
+        // For the few algorithms that will have to move the thing quite far (alphabetic with a Z room
+        // for example), the list should already be sorted well enough that it can rip through the
+        // array and slot the changed room in quickly.
+        const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
+            ? Number.MAX_SAFE_INTEGER
+            : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
+        const startIdx = this.indices[category];
+        const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
+        const unsortedSlice = this.cachedOrderedRooms.splice(startIdx, numSort);
+        const sorted = await sortRoomsWithAlgorithm(unsortedSlice, this.tagId, this.sortingAlgorithm);
+        this.cachedOrderedRooms.splice(startIdx, 0, ...sorted);
+
+        return true; // change made
     }
 
+    // noinspection JSMethodCanBeStatic
     private getCategoryFromIndices(index: number, indices: ICategoryIndex): Category {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
@@ -274,6 +222,7 @@ export class ImportanceAlgorithm extends Algorithm {
         throw new Error("Programming error: somehow you've ended up with an index that isn't in a category");
     }
 
+    // noinspection JSMethodCanBeStatic
     private moveRoomIndexes(nRooms: number, fromCategory: Category, toCategory: Category, indices: ICategoryIndex) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those

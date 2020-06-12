@@ -2,20 +2,31 @@
 
 It's so complicated it needs its own README.
 
+![](img/RoomListStore2.png)
+
+Legend:
+* Orange = External event.
+* Purple = Deterministic flow. 
+* Green = Algorithm definition.
+* Red = Exit condition/point.
+* Blue = Process definition.
+
 ## Algorithms involved
 
 There's two main kinds of algorithms involved in the room list store: list ordering and tag sorting.
 Throughout the code an intentional decision has been made to call them the List Algorithm and Sorting
-Algorithm respectively. The list algorithm determines the behaviour of the room list whereas the sorting
-algorithm determines how rooms get ordered within tags affected by the list algorithm.
+Algorithm respectively. The list algorithm determines the primary ordering of a given tag whereas the
+tag sorting defines how rooms within that tag get sorted, at the discretion of the list ordering.
 
-Behaviour of the room list takes the shape of determining what features the room list supports, as well
-as determining where and when to apply the sorting algorithm in a tag. The importance algorithm, which
-is described later in this doc, is an example of an algorithm which makes heavy behavioural changes
-to the room list.
+Behaviour of the overall room list (sticky rooms, etc) are determined by the generically-named Algorithm
+class. Here is where much of the coordination from the room list store is done to figure out which list
+algorithm to call, instead of having all the logic in the room list store itself.
+
 
 Tag sorting is effectively the comparator supplied to the list algorithm. This gives the list algorithm
-the power to decide when and how to apply the tag sorting, if at all.
+the power to decide when and how to apply the tag sorting, if at all. For example, the importance algorithm, 
+later described in this document, heavily uses the list ordering behaviour to break the tag into categories. 
+Each category then gets sorted by the appropriate tag sorting algorithm.
 
 ### Tag sorting algorithm: Alphabetical
 
@@ -70,11 +81,11 @@ Conveniently, each tag gets ordered by those categories as presented: red rooms 
 above bold, etc.
 
 Once the algorithm has determined which rooms belong in which categories, the tag sorting algorithm
-gets applied to each category in a sub-sub-list fashion. This should result in the red rooms (for example)
+gets applied to each category in a sub-list fashion. This should result in the red rooms (for example)
 being sorted alphabetically amongst each other as well as the grey rooms sorted amongst each other, but 
 collectively the tag will be sorted into categories with red being at the top.
 
-### Sticky rooms
+## Sticky rooms
 
 When the user visits a room, that room becomes 'sticky' in the list, regardless of ordering algorithm.
 From a code perspective, the underlying algorithm is not aware of a sticky room and instead the base class
@@ -128,13 +139,13 @@ maintain the caching behaviour described above.
 
 ## Class breakdowns
 
-The `RoomListStore` is the major coordinator of various `Algorithm` implementations, which take care 
-of the various `ListAlgorithm` and `SortingAlgorithm` options. The `Algorithm` superclass is also 
-responsible for figuring out which tags get which rooms, as Matrix specifies them as a reverse map: 
-tags get defined on rooms and are not defined as a collection of rooms (unlike how they are presented 
-to the user). Various list-specific utilities are also included, though they are expected to move 
-somewhere more general when needed. For example, the `membership` utilities could easily be moved 
-elsewhere as needed.
+The `RoomListStore` is the major coordinator of various algorithm implementations, which take care 
+of the various `ListAlgorithm` and `SortingAlgorithm` options. The `Algorithm` class is responsible 
+for figuring out which tags get which rooms, as Matrix specifies them as a reverse map: tags get 
+defined on rooms and are not defined as a collection of rooms (unlike how they are presented to the 
+user). Various list-specific utilities are also included, though they are expected to move somewhere 
+more general when needed. For example, the `membership` utilities could easily be moved elsewhere 
+as needed.
 
 The various bits throughout the room list store should also have jsdoc of some kind to help describe
 what they do and how they work.

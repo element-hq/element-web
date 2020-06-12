@@ -14,49 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm } from "./Algorithm";
-import { ITagMap } from "../models";
+import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
+import { OrderingAlgorithm } from "./OrderingAlgorithm";
+import { RoomUpdateCause, TagID } from "../../models";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 /**
  * Uses the natural tag sorting algorithm order to determine tag ordering. No
  * additional behavioural changes are present.
  */
-export class NaturalAlgorithm extends Algorithm {
+export class NaturalAlgorithm extends OrderingAlgorithm {
 
-    constructor() {
-        super();
+    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
+        super(tagId, initialSortingAlgorithm);
         console.log("Constructed a NaturalAlgorithm");
     }
 
-    protected async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
-        for (const tagId of Object.keys(updatedTagMap)) {
-            const unorderedRooms = updatedTagMap[tagId];
-
-            const sortBy = this.sortAlgorithms[tagId];
-            if (!sortBy) throw new Error(`${tagId} does not have a sorting algorithm`);
-
-            updatedTagMap[tagId] = await sortRoomsWithAlgorithm(unorderedRooms, tagId, sortBy);
-        }
+    public async setRooms(rooms: Room[]): Promise<any> {
+        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
     }
 
     public async handleRoomUpdate(room, cause): Promise<boolean> {
-        const tags = this.roomIdsToTags[room.roomId];
-        if (!tags) {
-            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
-            return false;
+        // TODO: Handle NewRoom and RoomRemoved
+        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+            throw new Error(`Unsupported update cause: ${cause}`);
         }
-        let changed = false;
-        for (const tag of tags) {
-            // TODO: Optimize this loop to avoid useless operations
-            // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
-            this.cachedRooms[tag] = await sortRoomsWithAlgorithm(this.cachedRooms[tag], tag, this.sortAlgorithms[tag]);
 
-            // Flag that we've done something
-            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
-            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
-            changed = true;
-        }
-        return changed;
+        // TODO: Optimize this to avoid useless operations
+        // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
+        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(this.cachedOrderedRooms, this.tagId, this.sortingAlgorithm);
+
+        return true;
     }
 }

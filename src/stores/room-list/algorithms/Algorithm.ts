@@ -14,17 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { DefaultTagID, RoomUpdateCause, TagID } from "../../models";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import { EffectiveMembership, splitRoomsByMembership } from "../../membership";
-import { ITagMap, ITagSortingMap } from "../models";
-import DMRoomMap from "../../../../utils/DMRoomMap";
-import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../../filters/IFilterCondition";
+import DMRoomMap from "../../../utils/DMRoomMap";
 import { EventEmitter } from "events";
-import { UPDATE_EVENT } from "../../../AsyncStore";
-import { ArrayUtil } from "../../../../utils/arrays";
-import { getEnumValues } from "../../../../utils/enums";
+import { arrayHasDiff, ArrayUtil } from "../../../utils/arrays";
+import { getEnumValues } from "../../../utils/enums";
+import { DefaultTagID, RoomUpdateCause, TagID } from "../models";
+import {
+    IListOrderingMap,
+    IOrderingAlgorithmMap,
+    ITagMap,
+    ITagSortingMap,
+    ListAlgorithm,
+    SortAlgorithm
+} from "./models";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
+import { EffectiveMembership, splitRoomsByMembership } from "../membership";
+import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
+import { getListAlgorithmInstance } from "./list-ordering";
 
 // TODO: Add locking support to avoid concurrent writes?
 
@@ -44,21 +52,22 @@ interface IStickyRoom {
  * management (which rooms go in which tags) and ask the implementation to
  * deal with ordering mechanics.
  */
-export abstract class Algorithm extends EventEmitter {
+export class Algorithm extends EventEmitter {
     private _cachedRooms: ITagMap = {};
     private _cachedStickyRooms: ITagMap = {}; // a clone of the _cachedRooms, with the sticky room
     private filteredRooms: ITagMap = {};
     private _stickyRoom: IStickyRoom = null;
-
-    protected sortAlgorithms: ITagSortingMap;
-    protected rooms: Room[] = [];
-    protected roomIdsToTags: {
+    private sortAlgorithms: ITagSortingMap;
+    private listAlgorithms: IListOrderingMap;
+    private algorithms: IOrderingAlgorithmMap;
+    private rooms: Room[] = [];
+    private roomIdsToTags: {
         [roomId: string]: TagID[];
     } = {};
-    protected allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
-    protected allowedRoomsByFilters: Set<Room> = new Set<Room>();
+    private allowedByFilter: Map<IFilterCondition, Room[]> = new Map<IFilterCondition, Room[]>();
+    private allowedRoomsByFilters: Set<Room> = new Set<Room>();
 
-    protected constructor() {
+    public constructor() {
         super();
     }
 
@@ -68,6 +77,7 @@ export abstract class Algorithm extends EventEmitter {
 
     public set stickyRoom(val: Room) {
         // setters can't be async, so we call a private function to do the work
+        // noinspection JSIgnoredPromiseFromCall
         this.updateStickyRoom(val);
     }
 
@@ -89,14 +99,38 @@ export abstract class Algorithm extends EventEmitter {
         return this._cachedRooms;
     }
 
-    /**
-     * Sets the filter conditions the Algorithm should use.
-     * @param filterConditions The filter conditions to use.
-     */
-    public setFilterConditions(filterConditions: IFilterCondition[]): void {
-        for (const filter of filterConditions) {
-            this.addFilterCondition(filter);
-        }
+    public getTagSorting(tagId: TagID): SortAlgorithm {
+        return this.sortAlgorithms[tagId];
+    }
+
+    public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+        if (!tagId) throw new Error("Tag ID must be defined");
+        if (!sort) throw new Error("Algorithm must be defined");
+        this.sortAlgorithms[tagId] = sort;
+
+        const algorithm: OrderingAlgorithm = this.algorithms[tagId];
+        await algorithm.setSortAlgorithm(sort);
+        this._cachedRooms[tagId] = algorithm.orderedRooms;
+        this.recalculateFilteredRoomsForTag(tagId); // update filter to re-sort the list
+        this.recalculateStickyRoom(tagId); // update sticky room to make sure it appears if needed
+    }
+
+    public getListOrdering(tagId: TagID): ListAlgorithm {
+        return this.listAlgorithms[tagId];
+    }
+
+    public async setListOrdering(tagId: TagID, order: ListAlgorithm) {
+        if (!tagId) throw new Error("Tag ID must be defined");
+        if (!order) throw new Error("Algorithm must be defined");
+        this.listAlgorithms[tagId] = order;
+
+        const algorithm = getListAlgorithmInstance(order, tagId, this.sortAlgorithms[tagId]);
+        this.algorithms[tagId] = algorithm;
+
+        await algorithm.setRooms(this._cachedRooms[tagId])
+        this._cachedRooms[tagId] = algorithm.orderedRooms;
+        this.recalculateFilteredRoomsForTag(tagId); // update filter to re-sort the list
+        this.recalculateStickyRoom(tagId); // update sticky room to make sure it appears if needed
     }
 
     public addFilterCondition(filterCondition: IFilterCondition): void {
@@ -310,11 +344,21 @@ export abstract class Algorithm extends EventEmitter {
      * as reference for which lists to generate and which way to generate
      * them.
      * @param {ITagSortingMap} tagSortingMap The tags to generate.
+     * @param {IListOrderingMap} listOrderingMap The ordering of those tags.
      * @returns {Promise<*>} A promise which resolves when complete.
      */
-    public async populateTags(tagSortingMap: ITagSortingMap): Promise<any> {
-        if (!tagSortingMap) throw new Error(`Map cannot be null or empty`);
+    public async populateTags(tagSortingMap: ITagSortingMap, listOrderingMap: IListOrderingMap): Promise<any> {
+        if (!tagSortingMap) throw new Error(`Sorting map cannot be null or empty`);
+        if (!listOrderingMap) throw new Error(`Ordering ma cannot be null or empty`);
+        if (arrayHasDiff(Object.keys(tagSortingMap), Object.keys(listOrderingMap))) {
+            throw new Error(`Both maps must contain the exact same tags`);
+        }
         this.sortAlgorithms = tagSortingMap;
+        this.listAlgorithms = listOrderingMap;
+        this.algorithms = {};
+        for (const tag of Object.keys(tagSortingMap)) {
+            this.algorithms[tag] = getListAlgorithmInstance(this.listAlgorithms[tag], tag, this.sortAlgorithms[tag]);
+        }
         return this.setKnownRooms(this.rooms);
     }
 
@@ -428,7 +472,17 @@ export abstract class Algorithm extends EventEmitter {
      * be mutated in place.
      * @returns {Promise<*>} A promise which resolves when complete.
      */
-    protected abstract generateFreshTags(updatedTagMap: ITagMap): Promise<any>;
+    private async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
+        if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
+
+        for (const tag of Object.keys(updatedTagMap)) {
+            const algorithm: OrderingAlgorithm = this.algorithms[tag];
+            if (!algorithm) throw new Error(`No algorithm for ${tag}`);
+
+            await algorithm.setRooms(updatedTagMap[tag]);
+            updatedTagMap[tag] = algorithm.orderedRooms;
+        }
+    }
 
     /**
      * Asks the Algorithm to update its knowledge of a room. For example, when
@@ -441,5 +495,48 @@ export abstract class Algorithm extends EventEmitter {
      * depending on whether or not getOrderedRooms() should be called after
      * processing.
      */
-    public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean>;
+    public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
+
+        if (cause === RoomUpdateCause.PossibleTagChange) {
+            // TODO: Be smarter and splice rather than regen the planet.
+            // TODO: No-op if no change.
+            await this.setKnownRooms(this.rooms);
+            return true;
+        }
+
+        if (cause === RoomUpdateCause.NewRoom) {
+            // TODO: Be smarter and insert rather than regen the planet.
+            await this.setKnownRooms([room, ...this.rooms]);
+            return true;
+        }
+
+        if (cause === RoomUpdateCause.RoomRemoved) {
+            // TODO: Be smarter and splice rather than regen the planet.
+            await this.setKnownRooms(this.rooms.filter(r => r !== room));
+            return true;
+        }
+
+        let tags = this.roomIdsToTags[room.roomId];
+        if (!tags) {
+            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
+            return false;
+        }
+
+        let changed = false;
+        for (const tag of tags) {
+            const algorithm: OrderingAlgorithm = this.algorithms[tag];
+            if (!algorithm) throw new Error(`No algorithm for ${tag}`);
+
+            await algorithm.handleRoomUpdate(room, cause);
+            this.cachedRooms[tag] = algorithm.orderedRooms;
+
+            // Flag that we've done something
+            this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
+            this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
+            changed = true;
+        }
+
+        return true;
+    };
 }

@@ -314,6 +314,14 @@ limitations under the License.
         font-size: $font-15px;
         line-height: $font-20px;
         font-weight: 600;
-        margin-bottom: 12px;
+        margin-bottom: 4px;
+    }
+
+    .mx_RadioButton, .mx_Checkbox {
+        margin-top: 8px;
+    }
+
+    .mx_Checkbox {
+        margin-left: -8px; // to counteract the indent from the component
     }
 }
