@@ -2503,5 +2503,7 @@
     "Show %(count)s more|other": "再顯示 %(count)s 個",
     "Show %(count)s more|one": "再顯示 %(count)s 個",
     "Leave Room": "離開聊天室",
-    "Room options": "聊天室選項"
+    "Room options": "聊天室選項",
+    "sent an image.": "傳送圖片。",
+    "You: %(message)s": "您：%(message)s"
 }
