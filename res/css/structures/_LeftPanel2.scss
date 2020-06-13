@@ -131,6 +131,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             overflow-y: auto;
             width: 100%;
             max-width: 100%;
+            position: relative; // for sticky headers
 
             // Create a flexbox to trick the layout engine
             display: flex;

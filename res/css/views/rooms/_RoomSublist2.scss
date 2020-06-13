@@ -30,8 +30,50 @@ limitations under the License.
         // Create a flexbox to make ordering easy
         display: flex;
         align-items: center;
+
+        // ***************************
+        // Sticky Headers Start
+
+        // Ideally we'd be able to use `position: sticky; top: 0; bottom: 0;` on the
+        // headerContainer, however due to our layout concerns we actually have to
+        // calculate it manually so we can sticky things in the right places. We also
+        // target the headerText instead of the container to reduce jumps when scrolling,
+        // and to help hide the badges/other buttons that could appear on hover. This
+        // all works by ensuring the header text has a fixed height when sticky so the
+        // fixed height of the container can maintain the scroll position.
+
+        // The combined height must be set in the LeftPanel2 component for sticky headers
+        // to work correctly.
         padding-bottom: 8px;
         height: 24px;
+
+        .mx_RoomSublist2_headerText {
+            z-index: 2; // Prioritize headers in the visible list over sticky ones
+
+            // We use a generic sticky class for 2 reasons: to reduce style duplication and
+            // to identify when a header is sticky. If we didn't have a consistent sticky class,
+            // we'd have to do the "is sticky" checks again on click, as clicking the header
+            // when sticky scrolls instead of collapses the list.
+            &.mx_RoomSublist2_headerContainer_sticky {
+                position: fixed;
+                z-index: 1; // over top of other elements, but still under the ones in the visible list
+                height: 32px; // to match the header container
+                // width set by JS
+            }
+
+            &.mx_RoomSublist2_headerContainer_stickyBottom {
+                bottom: 0;
+            }
+
+            // We don't have this style because the top is dependent on the room list header's
+            // height, and is therefore calculated in JS.
+            //&.mx_RoomSublist2_headerContainer_stickyTop {
+            //    top: 0;
+            //}
+        }
+
+        // Sticky Headers End
+        // ***************************
 
         .mx_RoomSublist2_badgeContainer {
             opacity: 0.8;
@@ -76,18 +118,25 @@ limitations under the License.
         }
 
         .mx_RoomSublist2_headerText {
-            text-transform: uppercase;
-            opacity: 0.5;
-            line-height: $font-16px;
-            font-size: $font-12px;
-
             flex: 1;
             max-width: calc(100% - 16px); // 16px is the badge width
 
-            // Ellipsize any text overflow
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
+            // Set the same background color as the room list for sticky headers
+            background-color: $roomlist2-bg-color;
+
+            // Target the span inside the container so we don't opacify the
+            // whole header, which can make the sticky header experience annoying.
+            > span {
+                text-transform: uppercase;
+                opacity: 0.5;
+                line-height: $font-16px;
+                font-size: $font-12px;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
         }
     }
 
