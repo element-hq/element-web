@@ -2506,5 +2506,7 @@
     "Show %(count)s more|other": "En afficher %(count)s de plus",
     "Show %(count)s more|one": "En afficher %(count)s de plus",
     "Leave Room": "Quitter le salon",
-    "Room options": "Options du salon"
+    "Room options": "Options du salon",
+    "Activity": "Activité",
+    "A-Z": "A-Z"
 }
