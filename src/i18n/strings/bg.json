@@ -2437,5 +2437,14 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Space",
-    "End": "End"
+    "End": "End",
+    "sent an image.": "изпрати снимка.",
+    "You: %(message)s": "Вие: %(message)s",
+    "No recently visited rooms": "Няма наскоро-посетени стаи",
+    "Sort by": "Подреди по",
+    "Activity": "Активност",
+    "A-Z": "Азбучен ред",
+    "Unread rooms": "Непрочетени стаи",
+    "Show %(count)s more|other": "Покажи още %(count)s",
+    "Show %(count)s more|one": "Покажи още %(count)s"
 }
