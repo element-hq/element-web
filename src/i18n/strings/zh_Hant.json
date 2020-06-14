@@ -2505,5 +2505,7 @@
     "Leave Room": "離開聊天室",
     "Room options": "聊天室選項",
     "sent an image.": "傳送圖片。",
-    "You: %(message)s": "您：%(message)s"
+    "You: %(message)s": "您：%(message)s",
+    "Activity": "活動",
+    "A-Z": "A-Z"
 }
