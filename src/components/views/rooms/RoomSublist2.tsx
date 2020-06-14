@@ -257,19 +257,21 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // TODO: a11y (see old component)
                     return (
                         <div className={classes}>
-                            <AccessibleButton
-                                inputRef={ref}
-                                tabIndex={tabIndex}
-                                className={"mx_RoomSublist2_headerText"}
-                                role="treeitem"
-                                aria-level={1}
-                            >
-                                <span>{this.props.label}</span>
-                            </AccessibleButton>
-                            {this.renderMenu()}
-                            {addRoomButton}
-                            <div className="mx_RoomSublist2_badgeContainer">
-                                {badge}
+                            <div className='mx_RoomSublist2_stickable'>
+                                <AccessibleButton
+                                    inputRef={ref}
+                                    tabIndex={tabIndex}
+                                    className={"mx_RoomSublist2_headerText"}
+                                    role="treeitem"
+                                    aria-level={1}
+                                >
+                                    <span>{this.props.label}</span>
+                                </AccessibleButton>
+                                {this.renderMenu()}
+                                {addRoomButton}
+                                <div className="mx_RoomSublist2_badgeContainer">
+                                    {badge}
+                                </div>
                             </div>
                         </div>
                     );
