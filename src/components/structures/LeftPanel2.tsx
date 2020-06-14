@@ -122,31 +122,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
                 header.style.width = `unset`;
             }
-
-            // const name = header.textContent;
-            // if (hRect.bottom + headerHeight < top) {
-            //     // Before the content (top of list)
-            //     header.classList.add(
-            //         "mx_RoomSublist2_headerContainer_sticky",
-            //         "mx_RoomSublist2_headerContainer_stickyTop",
-            //     );
-            // } else {
-            //     header.classList.remove(
-            //         "mx_RoomSublist2_headerContainer_sticky",
-            //         "mx_RoomSublist2_headerContainer_stickyTop",
-            //         "mx_RoomSublist2_headerContainer_stickyBottom",
-            //     );
-            // }
-
-            // if (!hitMiddle && (headerHeight + hRect.top) >= bottom) {
-            //     // if we got here, the header is visible
-            //     hitMiddle = true;
-            //     header.style.backgroundColor = 'red';
-            // } else {
-            //     header.style.top = "0px";
-            //     header.style.bottom = "unset";
-            //     header.style.backgroundColor = "unset";
-            // }
         }
     };
 
