@@ -1367,7 +1367,7 @@
     "Sends the given message coloured as a rainbow": "Sendet die Nachricht in Regenbogenfarben",
     "Adds a custom widget by URL to the room": "Fügt ein Benutzer-Widget über eine URL zum Raum hinzu",
     "Please supply a https:// or http:// widget URL": "Bitte gib eine https:// oder http:// Widget-URL an",
-    "Sends the given emote coloured as a rainbow": "Sended das Emoji in Regenbogenfarben",
+    "Sends the given emote coloured as a rainbow": "Sendet das Emoji in Regenbogenfarben",
     "%(senderName)s made no change.": "%(senderName)s hat keine Änderung vorgenommen.",
     "%(senderName)s revoked the invitation for %(targetDisplayName)s to join the room.": "%(senderName)s hat die Einladung zum Raumbeitritt für %(targetDisplayName)s zurückgezogen.",
     "Cannot reach homeserver": "Der Heimserver ist nicht erreichbar",
