@@ -20,8 +20,10 @@ import IWatcher from "./Watcher";
 import { toPx } from '../../utils/units';
 
 export class FontWatcher implements IWatcher {
-    public static readonly MIN_SIZE = 13;
-    public static readonly MAX_SIZE = 20;
+    public static readonly MIN_SIZE = 8;
+    public static readonly MAX_SIZE = 15;
+    // Externally we tell the user the font is size 15. Internally we use 10.
+    public static readonly SIZE_DIFF = 5;
 
     private dispatcherRef: string;
 
@@ -30,7 +32,7 @@ export class FontWatcher implements IWatcher {
     }
 
     public start() {
-        this.setRootFontSize(SettingsStore.getValue("fontSize"));
+        this.setRootFontSize(SettingsStore.getValue("baseFontSize"));
         this.dispatcherRef = dis.register(this.onAction);
     }
 
@@ -48,7 +50,7 @@ export class FontWatcher implements IWatcher {
         const fontSize = Math.max(Math.min(FontWatcher.MAX_SIZE, size), FontWatcher.MIN_SIZE);
 
         if (fontSize !== size) {
-            SettingsStore.setValue("fontSize", null, SettingLevel.Device, fontSize);
+            SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, fontSize);
         }
         (<HTMLElement>document.querySelector(":root")).style.fontSize = toPx(fontSize);
     };

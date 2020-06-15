@@ -15,7 +15,8 @@
     "types": [
       "node",
       "react",
-      "flux"
+      "flux",
+      "react-transition-group"
     ]
   },
   "include": [

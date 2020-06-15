@@ -17,24 +17,21 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
-import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/list-ordering/Algorithm";
+import { OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import TagOrderStore from "../TagOrderStore";
 import { AsyncStore } from "../AsyncStore";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
-import { getListAlgorithmInstance } from "./algorithms/list-ordering";
+import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
 import { IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
+import RoomViewStore from "../RoomViewStore";
+import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 
 interface IState {
     tagsEnabled?: boolean;
-
-    preferredSort?: SortAlgorithm;
-    preferredAlgorithm?: ListAlgorithm;
 }
 
 /**
@@ -47,7 +44,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
-    private algorithm: Algorithm;
+    private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
 
@@ -62,6 +59,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.checkEnabled();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
+        RoomViewStore.addListener(this.onRVSUpdate);
+        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
     }
 
     public get orderedLists(): ITagMap {
@@ -83,15 +82,28 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
     private async readAndCacheSettingsFromStore() {
         const tagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
-        const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
-        const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
         await this.updateState({
             tagsEnabled,
-            preferredSort: orderAlphabetically ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent,
-            preferredAlgorithm: orderByImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural,
         });
-        this.setAlgorithmClass();
+        await this.updateAlgorithmInstances();
     }
+
+    private onRVSUpdate = () => {
+        if (!this.enabled) return; // TODO: Remove enabled flag when RoomListStore2 takes over
+        if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
+
+        const activeRoomId = RoomViewStore.getRoomId();
+        if (!activeRoomId && this.algorithm.stickyRoom) {
+            this.algorithm.stickyRoom = null;
+        } else if (activeRoomId) {
+            const activeRoom = this.matrixClient.getRoom(activeRoomId);
+            if (!activeRoom) throw new Error(`${activeRoomId} is current in RVS but missing from client`);
+            if (activeRoom !== this.algorithm.stickyRoom) {
+                console.log(`Changing sticky room to ${activeRoomId}`);
+                this.algorithm.stickyRoom = activeRoom;
+            }
+        }
+    };
 
     protected async onDispatch(payload: ActionPayload) {
         if (payload.action === 'MatrixActions.sync') {
@@ -110,6 +122,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             console.log("Regenerating room lists: Startup");
             await this.readAndCacheSettingsFromStore();
             await this.regenerateAllLists();
+            this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
         }
 
         // TODO: Remove this once the RoomListStore becomes default
@@ -145,13 +158,19 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
             if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
-                // TODO: Update room now that it's been read
-                console.log(payload);
+                console.log(`[RoomListDebug] Got own read receipt in ${payload.event.roomId}`);
+                const room = this.matrixClient.getRoom(payload.event.roomId);
+                if (!room) {
+                    console.warn(`Own read receipt was in unknown room ${payload.event.roomId}`);
+                    return;
+                }
+                await this.handleRoomUpdate(room, RoomUpdateCause.ReadReceipt);
                 return;
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
-            // TODO: Update room from tags
-            console.log(payload);
+            const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
+            console.log(`[RoomListDebug] Got tag change in ${roomPayload.room.roomId}`);
+            await this.handleRoomUpdate(roomPayload.room, RoomUpdateCause.PossibleTagChange);
         } else if (payload.action === 'MatrixActions.Room.timeline') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
 
@@ -189,26 +208,39 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
-            // TODO: Update DMs
-            console.log(payload);
+            const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+            console.log(`[RoomListDebug] Received updated DM map`);
+            const dmMap = eventPayload.event.getContent();
+            for (const userId of Object.keys(dmMap)) {
+                const roomIds = dmMap[userId];
+                for (const roomId of roomIds) {
+                    const room = this.matrixClient.getRoom(roomId);
+                    if (!room) {
+                        console.warn(`${roomId} was found in DMs but the room is not in the store`);
+                        continue;
+                    }
+
+                    // We expect this RoomUpdateCause to no-op if there's no change, and we don't expect
+                    // the user to have hundreds of rooms to update in one event. As such, we just hammer
+                    // away at updates until the problem is solved. If we were expecting more than a couple
+                    // of rooms to be updated at once, we would consider batching the rooms up.
+                    await this.handleRoomUpdate(room, RoomUpdateCause.PossibleTagChange);
+                }
+            }
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
-            // TODO: Improve new room check
             const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
-            if (!membershipPayload.oldMembership && membershipPayload.membership === "join") {
+            if (membershipPayload.oldMembership !== "join" && membershipPayload.membership === "join") {
                 console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
                 await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+                return;
             }
 
-            // TODO: Update room from membership change
-            console.log(payload);
-        } else if (payload.action === 'MatrixActions.Room') {
-            // TODO: Improve new room check
-            // const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
-            // console.log(`[RoomListDebug] Handling new room ${roomPayload.room.roomId}`);
-            // await this.algorithm.handleRoomUpdate(roomPayload.room, RoomUpdateCause.NewRoom);
-        } else if (payload.action === 'view_room') {
-            // TODO: Update sticky room
-            console.log(payload);
+            // If it's not a join, it's transitioning into a different list (possibly historical)
+            if (membershipPayload.oldMembership !== membershipPayload.membership) {
+                console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
+                await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
+                return;
+            }
         }
     }
 
@@ -220,17 +252,57 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         }
     }
 
-    private getSortAlgorithmFor(tagId: TagID): SortAlgorithm {
-        switch (tagId) {
-            case DefaultTagID.Invite:
-            case DefaultTagID.Untagged:
-            case DefaultTagID.Archived:
-            case DefaultTagID.LowPriority:
-            case DefaultTagID.DM:
-                return this.state.preferredSort;
-            case DefaultTagID.Favourite:
-            default:
-                return SortAlgorithm.Manual;
+    public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+        await this.algorithm.setTagSorting(tagId, sort);
+        localStorage.setItem(`mx_tagSort_${tagId}`, sort);
+    }
+
+    public getTagSorting(tagId: TagID): SortAlgorithm {
+        return this.algorithm.getTagSorting(tagId);
+    }
+
+    // noinspection JSMethodCanBeStatic
+    private getStoredTagSorting(tagId: TagID): SortAlgorithm {
+        return <SortAlgorithm>localStorage.getItem(`mx_tagSort_${tagId}`);
+    }
+
+    public async setListOrder(tagId: TagID, order: ListAlgorithm) {
+        await this.algorithm.setListOrdering(tagId, order);
+        localStorage.setItem(`mx_listOrder_${tagId}`, order);
+    }
+
+    public getListOrder(tagId: TagID): ListAlgorithm {
+        return this.algorithm.getListOrdering(tagId);
+    }
+
+    // noinspection JSMethodCanBeStatic
+    private getStoredListOrder(tagId: TagID): ListAlgorithm {
+        return <ListAlgorithm>localStorage.getItem(`mx_listOrder_${tagId}`);
+    }
+
+    private async updateAlgorithmInstances() {
+        const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
+        const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
+
+        const defaultSort = orderAlphabetically ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
+        const defaultOrder = orderByImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
+
+        for (const tag of Object.keys(this.orderedLists)) {
+            const definedSort = this.getTagSorting(tag);
+            const definedOrder = this.getListOrder(tag);
+
+            const storedSort = this.getStoredTagSorting(tag);
+            const storedOrder = this.getStoredListOrder(tag);
+
+            const tagSort = storedSort ? storedSort : (definedSort ? definedSort : defaultSort);
+            const listOrder = storedOrder ? storedOrder : (definedOrder ? definedOrder : defaultOrder);
+
+            if (tagSort !== definedSort) {
+                await this.setTagSorting(tag, tagSort);
+            }
+            if (listOrder !== definedOrder) {
+                await this.setListOrder(tag, listOrder);
+            }
         }
     }
 
@@ -238,15 +310,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (!this.enabled) return;
 
         await super.updateState(newState);
-    }
-
-    private setAlgorithmClass() {
-        if (this.algorithm) {
-            this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
-        }
-        this.algorithm = getListAlgorithmInstance(this.state.preferredAlgorithm);
-        this.algorithm.setFilterConditions(this.filterConditions);
-        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
     }
 
     private onAlgorithmListUpdated = () => {
@@ -257,9 +320,11 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private async regenerateAllLists() {
         console.warn("Regenerating all room lists");
 
-        const tags: ITagSortingMap = {};
+        const sorts: ITagSortingMap = {};
+        const orders: IListOrderingMap = {};
         for (const tagId of OrderedDefaultTagIDs) {
-            tags[tagId] = this.getSortAlgorithmFor(tagId);
+            sorts[tagId] = this.getStoredTagSorting(tagId) || SortAlgorithm.Alphabetic;
+            orders[tagId] = this.getStoredListOrder(tagId) || ListAlgorithm.Natural;
         }
 
         if (this.state.tagsEnabled) {
@@ -268,7 +333,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             console.log("rtags", roomTags);
         }
 
-        await this.algorithm.populateTags(tags);
+        await this.algorithm.populateTags(sorts, orders);
         await this.algorithm.setKnownRooms(this.matrixClient.getRooms());
 
         this.initialListsGenerated = true;

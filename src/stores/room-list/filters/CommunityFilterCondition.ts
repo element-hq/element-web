@@ -15,18 +15,18 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
 import { arrayHasDiff } from "../../../utils/arrays";
-import { IDisposable } from "../../../utils/IDisposable";
+import { IDestroyable } from "../../../utils/IDestroyable";
 
 /**
  * A filter condition for the room list which reveals rooms which
  * are a member of a given community.
  */
-export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDisposable {
+export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
     private roomIds: string[] = [];
 
     constructor(private community: Group) {
@@ -35,6 +35,11 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
 
         // noinspection JSIgnoredPromiseFromCall
         this.onStoreUpdate(); // trigger a false update to seed the store
+    }
+
+    public get relativePriority(): FilterPriority {
+        // Lowest priority so we can coarsely find rooms.
+        return FilterPriority.Lowest;
     }
 
     public isVisible(room: Room): boolean {
@@ -52,7 +57,7 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
         }
     };
 
-    public dispose(): void {
+    public destroy(): void {
         GroupStore.off("update", this.onStoreUpdate);
     }
 }

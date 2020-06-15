@@ -1,0 +1,173 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+// TODO: Rename to mx_LeftPanel during replacement of old component
+
+$tagPanelWidth: 70px; // only applies in this file, used for calculations
+
+.mx_LeftPanel2 {
+    background-color: $roomlist2-bg-color;
+    min-width: 260px;
+    max-width: 50%;
+
+    // Create a row-based flexbox for the TagPanel and the room list
+    display: flex;
+
+    .mx_LeftPanel2_tagPanelContainer {
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: $tagPanelWidth;
+        height: 100%;
+
+        // Create another flexbox so the TagPanel fills the container
+        display: flex;
+
+        // TagPanel handles its own CSS
+    }
+
+    // Note: The 'room list' in this context is actually everything that isn't the tag
+    // panel, such as the menu options, breadcrumbs, filtering, etc
+    .mx_LeftPanel2_roomListContainer {
+        width: calc(100% - $tagPanelWidth);
+
+        // Create another flexbox (this time a column) for the room list components
+        display: flex;
+        flex-direction: column;
+
+        .mx_LeftPanel2_userHeader {
+            padding: 14px 12px 20px; // 14px top, 12px sides, 20px bottom
+
+            // Create another flexbox column for the rows to stack within
+            display: flex;
+            flex-direction: column;
+
+            // There's 2 rows when breadcrumbs are present: the top bit and the breadcrumbs
+            .mx_LeftPanel2_headerRow {
+                // Create yet another flexbox, this time within the row, to ensure items stay
+                // aligned correctly. This is also a row-based flexbox.
+                display: flex;
+                align-items: center;
+            }
+
+            .mx_LeftPanel2_userAvatarContainer {
+                position: relative; // to make default avatars work
+                margin-right: 8px;
+            }
+
+            .mx_LeftPanel2_userName {
+                font-weight: 600;
+                font-size: $font-15px;
+                line-height: $font-20px;
+                flex: 1;
+            }
+
+            .mx_LeftPanel2_headerButtons {
+                // No special styles: the rest of the layout happens to make it work.
+            }
+
+            .mx_LeftPanel2_breadcrumbsContainer {
+                width: 100%;
+                overflow: hidden;
+                margin-top: 8px;
+            }
+        }
+
+        .mx_LeftPanel2_filterContainer {
+            margin-left: 12px;
+            margin-right: 12px;
+
+            // Create a flexbox to organize the inputs
+            display: flex;
+            align-items: center;
+
+            .mx_RoomSearch_expanded + .mx_LeftPanel2_exploreButton {
+                // Cheaty way to return the occupied space to the filter input
+                margin: 0;
+                width: 0;
+
+                // Don't forget to hide the masked ::before icon
+                visibility: hidden;
+            }
+
+            .mx_LeftPanel2_exploreButton {
+                width: 28px;
+                height: 28px;
+                border-radius: 20px;
+                background-color: $roomlist2-button-bg-color;
+                position: relative;
+                margin-left: 8px;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 6px;
+                    left: 6px;
+                    width: 16px;
+                    height: 16px;
+                    mask-image: url('$(res)/img/feather-customised/compass.svg');
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background: $primary-fg-color;
+                }
+            }
+        }
+
+        .mx_LeftPanel2_actualRoomListContainer {
+            flex-grow: 1; // fill the available space
+            overflow-y: auto;
+            width: 100%;
+            max-width: 100%;
+
+            // Create a flexbox to trick the layout engine
+            display: flex;
+        }
+    }
+
+    // These styles override the defaults for the minimized (66px) layout
+    &.mx_LeftPanel2_minimized {
+        min-width: unset;
+
+        // We have to forcefully set the width to override the resizer's style attribute.
+        width: calc(68px + $tagPanelWidth) !important;
+
+        .mx_LeftPanel2_roomListContainer {
+            width: 68px;
+
+            .mx_LeftPanel2_userHeader {
+                .mx_LeftPanel2_headerRow {
+                    justify-content: center;
+                }
+
+                .mx_LeftPanel2_userAvatarContainer {
+                    margin-right: 0;
+                }
+            }
+
+            .mx_LeftPanel2_filterContainer {
+                // Organize the flexbox into a centered column layout
+                flex-direction: column;
+                justify-content: center;
+
+                .mx_LeftPanel2_exploreButton {
+                    margin-left: 0;
+                    margin-top: 8px;
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}
