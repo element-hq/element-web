@@ -68,7 +68,8 @@ limitations under the License.
             border-radius: 10px;
             width: 180px;
 
-            background: rgba($radio-bg-color, 0.2);
+            background: $radio-bg-color;
+            opacity: 0.4;
 
             flex-shrink: 1;
             flex-grow: 0;
@@ -85,7 +86,9 @@ limitations under the License.
         }
 
         > .mx_RadioButton_enabled {
-            // These need to be hardcoded because they don't change with the theme
+            opacity: 1;
+
+            // These colors need to be hardcoded because they don't change with the theme
             &.mx_ThemeSelector_light {
                 background-color: #f3f8fd;
                 color: #2e2f32;
