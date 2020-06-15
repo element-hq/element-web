@@ -18,7 +18,7 @@ import React from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { debounce } from 'lodash';
-import {IFieldState, IValidationResult} from "../elements/Validation";
+import {IFieldState, IValidationResult} from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.
 const VALIDATION_THROTTLE_MS = 200;
@@ -29,7 +29,7 @@ function getId() {
     return `${BASE_ID}_${count++}`;
 }
 
-interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInputElement> {
+interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> {
     // The field's ID, which binds the input and label together. Immutable.
     id?: string,
     // The element to create. Defaults to "input".
