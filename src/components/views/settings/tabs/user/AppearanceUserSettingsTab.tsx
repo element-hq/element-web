@@ -22,7 +22,6 @@ import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore
 import * as sdk from "../../../../../index";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
-import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
