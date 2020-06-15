@@ -354,6 +354,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
                     }}
                     tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    forceTooltipVisible={true}
                     disabled={!this.state.useSystemFont}
                     value={this.state.systemFont}
                 />
