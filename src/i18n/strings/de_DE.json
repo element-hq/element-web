@@ -2449,5 +2449,18 @@
     "Show %(count)s more|other": "Zeige %(count)s weitere",
     "Show %(count)s more|one": "Zeige %(count)s weitere",
     "Leave Room": "Verlasse Raum",
-    "Room options": "Raumoptionen"
+    "Room options": "Raumoptionen",
+    "Activity": "Aktivität",
+    "A-Z": "A-Z",
+    "Recovery Key": "Wiederherstellungsschlüssel",
+    "This isn't the recovery key for your account": "Das ist nicht der Wiederherstellungsschlüssel für dein Konto",
+    "This isn't a valid recovery key": "Das ist kein gültiger Wiederherstellungsschlüssel",
+    "Looks good!": "Sieht gut aus!",
+    "Use Recovery Key or Passphrase": "Verwende einen Wiederherstellungsschlüssel oder deine Passphrase",
+    "Use Recovery Key": "Verwende einen Wiederherstellungsschlüssel",
+    "Enter your Recovery Key or enter a <a>Recovery Passphrase</a> to continue.": "Gib deinen Wiederherstellungsschlüssel oder eine <a>Wiederherstellungspassphrase</a> ein um fortzufahren.",
+    "Enter your Recovery Key to continue.": "Gib deinen Wiederherstellungsschlüssel ein um fortzufahren.",
+    "Create a Recovery Key": "Erzeuge einen Wiederherstellungsschlüssel",
+    "Upgrade your Recovery Key": "Aktualisiere deinen Wiederherstellungsschlüssel",
+    "Store your Recovery Key": "Speichere deinen Wiederherstellungsschlüssel"
 }
