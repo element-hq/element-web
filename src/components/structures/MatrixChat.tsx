@@ -1886,6 +1886,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             promisesList.push(cli.downloadKeys([cli.getUserId()]));
         }
 
+        // Now update the state to sya we're waiting for the first sync to complete rather
+        // than for the login to finish.
         this.setState({ pendingInitialSync: true });
 
         await Promise.all(promisesList);
