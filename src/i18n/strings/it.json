@@ -2500,5 +2500,7 @@
     "Show %(count)s more|other": "Mostra altri %(count)s",
     "Show %(count)s more|one": "Mostra %(count)s altro",
     "Leave Room": "Lascia stanza",
-    "Room options": "Opzioni stanza"
+    "Room options": "Opzioni stanza",
+    "Activity": "Attività",
+    "A-Z": "A-Z"
 }
