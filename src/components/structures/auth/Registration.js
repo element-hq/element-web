@@ -378,7 +378,7 @@ export default createReactClass({
         }
 
         if (response.access_token) {
-            const cli = await this.props.onLoggedIn({
+            await this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
                 homeserverUrl: this.state.matrixClient.getHomeserverUrl(),
@@ -386,7 +386,7 @@ export default createReactClass({
                 accessToken: response.access_token,
             }, this.state.formVals.password);
 
-            this._setupPushers(cli);
+            this._setupPushers();
             // we're still busy until we get unmounted: don't show the registration form again
             newState.busy = true;
         } else {
@@ -397,10 +397,11 @@ export default createReactClass({
         this.setState(newState);
     },
 
-    _setupPushers: function(matrixClient) {
+    _setupPushers: function() {
         if (!this.props.brand) {
             return Promise.resolve();
         }
+        const matrixClient = MatrixClientPeg.get();
         return matrixClient.getPushers().then((resp)=>{
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
