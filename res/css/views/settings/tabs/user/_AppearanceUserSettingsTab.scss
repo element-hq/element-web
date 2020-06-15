@@ -14,15 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AppearanceUserSettingsTab_fontSlider {
-    @mixin mx_Settings_fullWidthField;
-}
-
 .mx_AppearanceUserSettingsTab .mx_Field {
     width: 256px;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider {
+    @mixin mx_Settings_fullWidthField;
     display: flex;
     flex-direction: row;
     align-items: center;
