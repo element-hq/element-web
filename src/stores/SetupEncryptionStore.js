@@ -52,6 +52,9 @@ export class SetupEncryptionStore extends EventEmitter {
         const cli = MatrixClientPeg.get();
         const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
         if (requestsInProgress.length) {
+            // If there are multiple, we take the first. Equally if the user sends another request from
+            // another device after this screen has been shown, we'll switch to the new one, so this
+            // generally doesn't support multiple requests.
             this._setActiveVerificationRequest(requestsInProgress[0]);
         }
 
