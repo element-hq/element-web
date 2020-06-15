@@ -14,19 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingController from "./SettingController";
-import dis from "../../dispatcher/dispatcher";
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-export default class FontSizeController extends SettingController {
-    constructor() {
-        super();
-    }
+export interface UpdateFontSizePayload extends ActionPayload {
+    action: Action.UpdateFontSize,
 
-    onChange(level, roomId, newValue) {
-        // Dispatch font size change so that everything open responds to the change.
-        dis.dispatch({
-            action: "update-font-size",
-            size: newValue,
-        });
-    }
+    /**
+     * The font size to set the root to
+     */
+    size: number;
 }

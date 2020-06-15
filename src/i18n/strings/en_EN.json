@@ -459,6 +459,8 @@
     "Mirror local video feed": "Mirror local video feed",
     "Enable Community Filter Panel": "Enable Community Filter Panel",
     "Match system theme": "Match system theme",
+    "Use a system font": "Use a system font",
+    "System font name": "System font name",
     "Allow Peer-to-Peer for 1:1 calls": "Allow Peer-to-Peer for 1:1 calls",
     "Send analytics data": "Send analytics data",
     "Never send encrypted messages to unverified sessions from this session": "Never send encrypted messages to unverified sessions from this session",

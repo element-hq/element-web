@@ -52,6 +52,9 @@ interface IState extends IThemeState {
     customThemeUrl: string,
     customThemeMessage: CustomThemeMessage,
     useCustomFontSize: boolean,
+    useSystemFont: boolean,
+    systemFont: string,
+    showAdvanced: boolean,
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
@@ -67,6 +70,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
+            useSystemFont: SettingsStore.getValue("useSystemFont"),
+            systemFont: SettingsStore.getValue("systemFont"),
+            showAdvanced: false,
         };
     }
 
@@ -201,6 +207,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         const StyledCheckbox = sdk.getComponent("views.elements.StyledCheckbox");
         const StyledRadioButton = sdk.getComponent("views.elements.StyledRadioButton");
+        const Field = sdk.getComponent("views.elements.Field");
 
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
@@ -280,6 +287,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private renderFontSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        const Field = sdk.getComponent("views.elements.Field");
+
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
@@ -314,6 +323,49 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     }
 
+    private renderAdvancedSection() {
+        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        const Field = sdk.getComponent("views.elements.Field");
+
+        const toggle = <div
+            className="mx_AppearanceUserSettingsTab_AdvancedToggle"
+            onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
+        >
+            {this.state.showAdvanced ? "Hide advanced" : "Show advanced"}
+        </div>;
+
+        let advanced: React.ReactNode;
+
+        if (this.state.showAdvanced) {
+            advanced = <div>
+                <SettingsFlag
+                    name="useSystemFont"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    onChange={(checked) => this.setState({useSystemFont: checked})}
+                />
+                <Field
+                    className="mx_AppearanceUserSettingsTab_systemFont"
+                    label={SettingsStore.getDisplayName("systemFont")}
+                    onChange={(value) => {
+                        this.setState({
+                            systemFont: value.target.value,
+                        })
+
+                        SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
+                    }}
+                    tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    disabled={!this.state.useSystemFont}
+                    value={this.state.systemFont}
+                />
+            </div>;
+        }
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
+            {toggle}
+            {advanced}
+        </div>
+    }
+
     render() {
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
@@ -323,6 +375,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
+                {this.renderAdvancedSection()}
             </div>
         );
     }

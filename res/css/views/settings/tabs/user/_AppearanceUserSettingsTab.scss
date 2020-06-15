@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_themeSection .mx_Field,
-.mx_AppearanceUserSettingsTab_fontScaling .mx_Field {
+.mx_AppearanceUserSettingsTab .mx_Field {
     @mixin mx_Settings_fullWidthField;
 }
 
@@ -123,4 +122,15 @@ limitations under the License.
 
 .mx_SettingsTab_customFontSizeField {
     margin-left: calc($font-16px + 10px);
+}
+
+.mx_AppearanceUserSettingsTab_Advanced {
+    .mx_AppearanceUserSettingsTab_AdvancedToggle {
+        color: $accent-color;
+        margin-bottom: 16px;
+    }
+
+    .mx_AppearanceUserSettingsTab_systemFont {
+        margin-left: calc($font-16px + 10px);
+    }
 }

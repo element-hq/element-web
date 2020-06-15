@@ -30,6 +30,8 @@ import PushToMatrixClientController from './controllers/PushToMatrixClientContro
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 import FontSizeController from './controllers/FontSizeController';
+import SystemFontController from './controllers/SystemFontController';
+import UseSystemFontController from './controllers/UseSystemFontController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -312,6 +314,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         displayName: _td("Match system theme"),
+    },
+    "useSystemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("Use a system font"),
+        controller: new UseSystemFontController(),
+    },
+    "systemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "",
+        displayName: _td("System font name"),
+        controller: new SystemFontController(),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
