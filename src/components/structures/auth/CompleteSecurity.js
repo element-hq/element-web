@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import {
     SetupEncryptionStore,
     PHASE_INTRO,
+    PHASE_RECOVERY_KEY,
     PHASE_BUSY,
     PHASE_DONE,
     PHASE_CONFIRM_SKIP,
@@ -61,6 +62,9 @@ export default class CompleteSecurity extends React.Component {
         if (phase === PHASE_INTRO) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Verify this login");
+        } else if (phase === PHASE_RECOVERY_KEY) {
+            icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
+            title = _t("Recovery Key");
         } else if (phase === PHASE_DONE) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
             title = _t("Session verified");
