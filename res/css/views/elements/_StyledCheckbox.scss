@@ -25,6 +25,8 @@ limitations under the License.
 
     input[type=checkbox] {
         appearance: none;
+        margin: 0;
+        padding: 0;
 
         & + label {
             display: flex;
