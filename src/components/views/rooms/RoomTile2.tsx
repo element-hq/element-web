@@ -305,7 +305,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             role="treeitem"
                         >
                             <div className="mx_RoomTile2_avatarContainer">
-                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize}/>
+                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} />
                                 <RoomTileIcon room={this.props.room} tag={this.props.tag} />
                             </div>
                             {nameContainer}
