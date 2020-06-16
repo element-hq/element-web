@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
+import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
 /**
  * A filter condition for the room list which reveals rooms of a particular
@@ -45,7 +46,16 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
     }
 
     public isVisible(room: Room): boolean {
-        // TODO: Improve this filter to include aliases and such
-        return room.name.toLowerCase().indexOf(this.search.toLowerCase()) >= 0;
+        const lcFilter = this.search.toLowerCase();
+        if (this.search[0] === '#') {
+            // Try and find rooms by alias
+            if (room.getCanonicalAlias() && room.getCanonicalAlias().toLowerCase().startsWith(lcFilter)) {
+                return true;
+            }
+            if (room.getAltAliases().some(a => a.toLowerCase().startsWith(lcFilter))) {
+                return true;
+            }
+        }
+        return room.name && removeHiddenChars(room.name).toLowerCase().includes(lcFilter);
     }
 }
