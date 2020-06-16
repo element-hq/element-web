@@ -100,7 +100,7 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
-        .mx_RoomSublist2_showMoreButton {
+        .mx_RoomSublist2_showNButton {
             cursor: pointer;
             font-size: $font-13px;
             line-height: $font-18px;
@@ -129,17 +129,24 @@ limitations under the License.
             display: flex;
             align-items: center;
 
-            .mx_RoomSublist2_showMoreButtonChevron {
+            .mx_RoomSublist2_showNButtonChevron {
                 position: relative;
                 width: 16px;
                 height: 16px;
                 margin-left: 12px;
                 margin-right: 18px;
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 mask-position: center;
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 background: $roomtile2-preview-color;
+            }
+
+            .mx_RoomSublist2_showMoreButtonChevron {
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            }
+
+            .mx_RoomSublist2_showLessButtonChevron {
+                mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
             }
         }
 
@@ -239,10 +246,10 @@ limitations under the License.
         .mx_RoomSublist2_resizeBox {
             align-items: center;
 
-            .mx_RoomSublist2_showMoreButton {
+            .mx_RoomSublist2_showNButton {
                 flex-direction: column;
 
-                .mx_RoomSublist2_showMoreButtonChevron {
+                .mx_RoomSublist2_showNButtonChevron {
                     margin-right: 12px; // to center
                 }
             }
