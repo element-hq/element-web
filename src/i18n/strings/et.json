@@ -1475,5 +1475,9 @@
     "Emoji Autocomplete": "Emoji'de automaatne lõpetamine",
     "Notification Autocomplete": "Teavituste automaatne lõpetamine",
     "Room Autocomplete": "Jututubade nimede automaatne lõpetamine",
-    "User Autocomplete": "Kasutajanimede automaatne lõpetamine"
+    "User Autocomplete": "Kasutajanimede automaatne lõpetamine",
+    "Enter recovery key": "Sisesta taastevõti",
+    "Unable to access secret storage. Please verify that you entered the correct recovery key.": "Ei õnnestu lugeda krüptitud salvestusruumi. Palun kontrolli, kas sa sisestasid õige taastevõtme.",
+    "This looks like a valid recovery key!": "See tundub olema õige taastevõti!",
+    "Not a valid recovery key": "Ei ole sobilik taastevõti"
 }
