@@ -181,6 +181,12 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
                 console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
+                if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
+                    console.log(`[RoomListDebug] Got tombstone event - regenerating room list`);
+                    // TODO: We could probably be smarter about this
+                    await this.regenerateAllLists();
+                    return; // don't pass the update down - we will have already handled it in the regen
+                }
                 await this.handleRoomUpdate(updatedRoom, RoomUpdateCause.Timeline);
             };
             if (!room) {
@@ -334,7 +340,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         }
 
         await this.algorithm.populateTags(sorts, orders);
-        await this.algorithm.setKnownRooms(this.matrixClient.getRooms());
+        await this.algorithm.setKnownRooms(this.matrixClient.getVisibleRooms());
 
         this.initialListsGenerated = true;
 
