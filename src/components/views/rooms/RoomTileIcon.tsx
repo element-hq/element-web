@@ -1,8 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 New Vector Ltd
-Copyright 2018 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,16 +16,11 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../views/elements/AccessibleButton";
-import RoomAvatar from "../../views/avatars/RoomAvatar";
-import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { User } from "matrix-js-sdk/src/models/user";
-import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import SdkConfig from "../../../SdkConfig";
 import { isPresenceEnabled } from "../../../utils/presence";
 
 enum Icon {
@@ -50,15 +42,15 @@ interface IState {
 }
 
 export default class RoomTileIcon extends React.Component<IProps, IState> {
+    private _dmUser: User;
     private isUnmounted = false;
-    private dmUser: User;
     private isWatchingTimeline = false;
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
-            icon: this.getIcon(),
+            icon: this.calculateIcon(),
         };
     }
 
@@ -68,17 +60,27 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
         return joinRule === 'public';
     }
 
+    private get dmUser(): User {
+        return this._dmUser;
+    }
+
+    private set dmUser(val: User) {
+        const oldUser = this._dmUser;
+        this._dmUser = val;
+        if (oldUser && oldUser !== this._dmUser) {
+            oldUser.off('User.currentlyActive', this.onPresenceUpdate);
+            oldUser.off('User.presence', this.onPresenceUpdate);
+        }
+        if (this._dmUser && oldUser !== this._dmUser) {
+            this._dmUser.on('User.currentlyActive', this.onPresenceUpdate);
+            this._dmUser.on('User.presence', this.onPresenceUpdate);
+        }
+    }
+
     public componentWillUnmount() {
         this.isUnmounted = true;
         if (this.isWatchingTimeline) this.props.room.off('Room.timeline', this.onRoomTimeline);
-        this.unsubscribePresence();
-    }
-
-    private unsubscribePresence() {
-        if (this.dmUser) {
-            this.dmUser.off('User.currentlyActive', this.onPresenceUpdate);
-            this.dmUser.off('User.presence', this.onPresenceUpdate);
-        }
+        this.dmUser = null; // clear listeners, if any
     }
 
     private onRoomTimeline = (ev: MatrixEvent, room: Room) => {
@@ -89,7 +91,7 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
         if (this.props.room.roomId !== room.roomId) return;
 
         if (ev.getType() === 'm.room.join_rules' || ev.getType() === 'm.room.member') {
-            this.setState({icon: this.getIcon()});
+            this.setState({icon: this.calculateIcon()});
         }
     };
 
@@ -101,43 +103,43 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
     };
 
     private getPresenceIcon(): Icon {
-        let newIcon = Icon.None;
+        if (!this.dmUser) return Icon.None;
+
+        let icon = Icon.None;
 
         const isOnline = this.dmUser.currentlyActive || this.dmUser.presence === 'online';
         if (isOnline) {
-            newIcon = Icon.PresenceOnline;
+            icon = Icon.PresenceOnline;
         } else if (this.dmUser.presence === 'offline') {
-            newIcon = Icon.PresenceOffline;
+            icon = Icon.PresenceOffline;
         } else if (this.dmUser.presence === 'unavailable') {
-            newIcon = Icon.PresenceAway;
+            icon = Icon.PresenceAway;
         }
 
-        return newIcon;
+        return icon;
     }
 
-    private getIcon(): Icon {
-        let defaultIcon = Icon.None;
-        this.unsubscribePresence();
+    private calculateIcon(): Icon {
+        let icon = Icon.None;
+
         if (this.props.tag === DefaultTagID.DM && this.props.room.getJoinedMemberCount() === 2) {
             // Track presence, if available
             if (isPresenceEnabled()) {
                 const otherUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
                 if (otherUserId) {
                     this.dmUser = MatrixClientPeg.get().getUser(otherUserId);
-                    if (this.dmUser) {
-                        this.dmUser.on('User.currentlyActive', this.onPresenceUpdate);
-                        this.dmUser.on('User.presence', this.onPresenceUpdate);
-                        defaultIcon = this.getPresenceIcon();
-                    }
+                    icon = this.getPresenceIcon();
                 }
             }
         } else {
             // Track publicity
-            defaultIcon = this.isPublicRoom ? Icon.Globe : Icon.None;
-            this.props.room.on('Room.timeline', this.onRoomTimeline);
-            this.isWatchingTimeline = true;
+            icon = this.isPublicRoom ? Icon.Globe : Icon.None;
+            if (!this.isWatchingTimeline) {
+                this.props.room.on('Room.timeline', this.onRoomTimeline);
+                this.isWatchingTimeline = true;
+            }
         }
-        return defaultIcon;
+        return icon;
     }
 
     public render(): React.ReactElement {
