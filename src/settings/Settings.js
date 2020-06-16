@@ -177,7 +177,7 @@ export const SETTINGS = {
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
-        displayName: _td("Custom font size"),
+        displayName: _td("Use custom size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },

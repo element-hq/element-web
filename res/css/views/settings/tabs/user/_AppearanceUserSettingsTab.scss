@@ -15,9 +15,13 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_themeSection .mx_Field,
-.mx_AppearanceUserSettingsTab_fontScaling .mx_Field {
+.mx_AppearanceUserSettingsTab_fontSlider_preview,
+.mx_AppearanceUserSettingsTab .mx_Field {
     @mixin mx_Settings_fullWidthField;
+}
+
+.mx_AppearanceUserSettingsTab_fontScaling {
+    color: $primary-fg-color;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider {
@@ -30,6 +34,13 @@ limitations under the License.
     font-size: 10px;
     margin-top: 24px;
     margin-bottom: 24px;
+}
+
+.mx_AppearanceUserSettingsTab_fontSlider_preview {
+    border: 1px solid $input-darker-bg-color;
+    border-radius: 10px;
+    padding: 0 16px 9px 16px;
+    pointer-events: none;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider_smallText {

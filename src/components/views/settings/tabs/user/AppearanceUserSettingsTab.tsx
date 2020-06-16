@@ -280,8 +280,15 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
     private renderFontSection() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
+        const MessagePreview = sdk.getComponent("views.elements.MessagePreview");
+
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
+
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
+            <MessagePreview
+                className="mx_AppearanceUserSettingsTab_fontSlider_preview"
+                message="Hey you. You're the best"
+            />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
@@ -293,12 +300,14 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 />
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_largeText">Aa</div>
             </div>
+
             <SettingsFlag
                 name="useCustomFontSize"
                 level={SettingLevel.ACCOUNT}
                 onChange={(checked) => this.setState({useCustomFontSize: checked})}
                 useCheckbox={true}
             />
+
             <Field
                 type="number"
                 label={_t("Font size")}
