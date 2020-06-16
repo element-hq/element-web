@@ -152,7 +152,7 @@ export const SETTINGS = {
     },
     "feature_irc_ui": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use IRC layout'),
+        displayName: _td('Enable IRC layout option in the appearance tab'),
         default: false,
         isFeature: true,
     },
@@ -548,5 +548,10 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         displayName: _td("IRC display name width"),
         default: 80,
+    },
+    "useIRCLayout": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Use IRC layout"),
+        default: false,
     },
 };
