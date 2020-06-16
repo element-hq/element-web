@@ -230,7 +230,10 @@ export class Algorithm extends EventEmitter {
             // Cheaply clone the rooms so we can more easily do operations on the list.
             // We optimize our lookups by trying to reduce sample size as much as possible
             // to the rooms we know will be deduped by the Set.
-            const rooms = this.cachedRooms[tagId];
+            const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
+            if (this._stickyRoom && this._stickyRoom.tag === tagId && this._stickyRoom.room) {
+                rooms.push(this._stickyRoom.room);
+            }
             let remainingRooms = rooms.map(r => r);
             let allowedRoomsInThisTag = [];
             let lastFilterPriority = orderedFilters[0].relativePriority;
