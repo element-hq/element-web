@@ -189,6 +189,10 @@ limitations under the License.
 
     .mx_RadioButton {
         border-top: 1px solid $input-darker-bg-color;
+
+        > input + div {
+            border-color: rgba($muted-fg-color, 0.2);
+        }
     }
 
     .mx_RadioButton_checked {
