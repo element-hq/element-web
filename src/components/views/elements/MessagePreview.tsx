@@ -20,7 +20,7 @@ import React from 'react';
 
 import * as Avatar from '../../../Avatar';
 import classnames from 'classnames';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/Event';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import * as sdk from "../../../index";
 
 interface IProps {
