@@ -1,3 +1,9 @@
+Changes in [1.6.5](https://github.com/vector-im/riot-web/releases/tag/v1.6.5) (2020-06-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.4...v1.6.5)
+
+* Upgrade to JS SDK 6.2.2 and React SDK 2.7.2
+
 Changes in [1.6.4](https://github.com/vector-im/riot-web/releases/tag/v1.6.4) (2020-06-05)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3...v1.6.4)
