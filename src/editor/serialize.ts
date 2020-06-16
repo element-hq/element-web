@@ -62,15 +62,15 @@ export function textSerialize(model: EditorModel) {
 }
 
 export function containsEmote(model: EditorModel) {
-    return startsWith(model, "/me ", true);
+    return startsWith(model, "/me ", false);
 }
 
-export function startsWith(model: EditorModel, prefix: string, caseInsensitive = false) {
+export function startsWith(model: EditorModel, prefix: string, caseSensitive = true) {
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
     let text = firstPart && firstPart.text;
-    if (caseInsensitive) {
+    if (!caseSensitive) {
         prefix = prefix.toLowerCase();
         text = text.toLowerCase();
     }
