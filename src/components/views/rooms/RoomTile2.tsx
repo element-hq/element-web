@@ -182,25 +182,25 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             <ul>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar"/>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
                                         <span>{_t("Favourite")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.LowPriority)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconArrowDown"/>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconArrowDown" />
                                         <span>{_t("Low Priority")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.DM)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconUser"/>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconUser" />
                                         <span>{_t("Direct Chat")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onOpenRoomSettings}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings"/>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
                                         <span>{_t("Settings")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -210,7 +210,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             <ul>
                                 <li className="mx_RoomTile2_contextMenu_redRow">
                                     <AccessibleButton onClick={this.onLeaveRoomClick}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut"/>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
                                         <span>{_t("Leave Room")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -248,7 +248,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true}/>;
+        const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true} />;
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
