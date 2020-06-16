@@ -134,7 +134,28 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
+    private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
+        let target = ev.target as HTMLDivElement;
+        if (!target.classList.contains('mx_RoomSublist2_headerText')) {
+            // If we don't have the headerText class, the user clicked the span in the headerText.
+            target = target.parentElement as HTMLDivElement;
+        }
+
+        const possibleSticky = target.parentElement;
+        const sublist = possibleSticky.parentElement.parentElement;
+        if (possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky')) {
+            // is sticky - jump to list
+            sublist.scrollIntoView({behavior: 'smooth'});
+        } else {
+            // on screen - toggle collapse
+            this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
+            this.forceUpdate(); // because the layout doesn't trigger an update
+        }
+    };
+
     private renderTiles(): React.ReactElement[] {
+        if (this.props.layout && this.props.layout.isCollapsed) return []; // don't waste time on rendering
+
         const tiles: React.ReactElement[] = [];
 
         if (this.props.rooms) {
@@ -249,6 +270,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         );
                     }
 
+                    const collapseClasses = classNames({
+                        'mx_RoomSublist2_collapseBtn': true,
+                        'mx_RoomSublist2_collapseBtn_collapsed': this.props.layout && this.props.layout.isCollapsed,
+                    });
+
                     const classes = classNames({
                         'mx_RoomSublist2_headerContainer': true,
                         'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
@@ -264,7 +290,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     className={"mx_RoomSublist2_headerText"}
                                     role="treeitem"
                                     aria-level={1}
+                                    onClick={this.onHeaderClick}
                                 >
+                                    <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
                                 </AccessibleButton>
                                 {this.renderMenu()}

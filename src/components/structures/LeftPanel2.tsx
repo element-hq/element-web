@@ -105,13 +105,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
 
             if (slRect.top + headerHeight > bottom && !gotBottom) {
-                console.log(`${header.textContent} is off the bottom`);
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
                 header.style.width = `${headerStickyWidth}px`;
                 gotBottom = true;
             } else if (slRect.top < top) {
-                console.log(`${header.textContent} is off the top`);
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
                 header.style.width = `${headerStickyWidth}px`;
