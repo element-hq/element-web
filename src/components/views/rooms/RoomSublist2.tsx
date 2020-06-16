@@ -145,6 +145,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.props.layout.showPreviews}
                         isMinimized={this.props.isMinimized}
+                        tag={this.props.layout.tagId}
                     />
                 );
             }

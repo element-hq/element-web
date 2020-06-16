@@ -32,6 +32,31 @@ limitations under the License.
 
     .mx_RoomTile2_avatarContainer {
         margin-right: 8px;
+        position: relative;
+
+        .mx_RoomTile2_publicRoom {
+            width: 12px;
+            height: 12px;
+            border-radius: 12px;
+            background-color: $roomlist2-bg-color; // to match the room list itself
+            position: absolute;
+            bottom: 0;
+            right: 0;
+
+            &::before {
+                content: '';
+                width: 8px;
+                height: 8px;
+                top: 2px;
+                left: 2px;
+                position: absolute;
+                mask-position: center;
+                mask-size: contain;
+                mask-repeat: no-repeat;
+                background: $primary-fg-color;
+                mask-image: url('$(res)/img/globe.svg');
+            }
+        }
     }
 
     .mx_RoomTile2_nameContainer {

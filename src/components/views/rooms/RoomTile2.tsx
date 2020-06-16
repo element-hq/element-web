@@ -44,6 +44,7 @@ interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
+    tag: TagID;
 
     // TODO: Allow falsifying counts (for invites and stuff)
     // TODO: Transparency? Was this ever used?
@@ -83,6 +84,12 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+    }
+
+    private get isPublicRoom(): boolean {
+        const joinRules = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRule = joinRules && joinRules.getContent().join_rule;
+        return joinRule === 'public';
     }
 
     public componentWillUnmount() {
@@ -287,6 +294,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
+        let globe = null;
+        if (this.isPublicRoom && this.props.tag !== DefaultTagID.DM) {
+            globe = <span className='mx_RoomTile2_publicRoom' />; // sizing and such set by CSS
+        }
+
         const avatarSize = 32;
         return (
             <React.Fragment>
@@ -304,6 +316,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                         >
                             <div className="mx_RoomTile2_avatarContainer">
                                 <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize}/>
+                                {globe}
                             </div>
                             {nameContainer}
                             <div className="mx_RoomTile2_badgeContainer">
