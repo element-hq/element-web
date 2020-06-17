@@ -287,7 +287,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <MessagePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
-                message="Hey you. You're the best"
+                message="Hey you. You're the best!"
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
