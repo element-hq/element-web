@@ -56,6 +56,14 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
                 return true;
             }
         }
-        return room.name && removeHiddenChars(room.name).toLowerCase().includes(lcFilter);
+
+        if (!room.name) return false; // should realisitically not happen: the js-sdk always calculates a name
+
+        // Note: we have to match the filter with the removeHiddenChars() room name because the
+        // function strips spaces and other characters (M becomes RN for example, in lowercase).
+        // We also doubly convert to lowercase to work around oddities of the library.
+        const noSecretsFilter = removeHiddenChars(lcFilter).toLowerCase();
+        const noSecretsName = removeHiddenChars(room.name.toLowerCase()).toLowerCase();
+        return noSecretsName.includes(noSecretsFilter);
     }
 }
