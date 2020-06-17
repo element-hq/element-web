@@ -42,6 +42,10 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     if (!parser.isPlainText() || forceHTML) {
         return parser.toHTML();
     }
+    // ensure removal of escape backslashes in non-Markdown messages
+    if (md.indexOf("\\") > -1) {
+        return parser.toPlaintext();
+    }
 }
 
 export function textSerialize(model: EditorModel) {
