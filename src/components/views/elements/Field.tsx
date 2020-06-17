@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes} from 'react';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { debounce } from 'lodash';
@@ -29,44 +29,60 @@ function getId() {
     return `${BASE_ID}_${count++}`;
 }
 
-interface IProps extends React.InputHTMLAttributes<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> {
+interface IProps {
     // The field's ID, which binds the input and label together. Immutable.
-    id?: string,
-    // The element to create. Defaults to "input".
-    // To define options for a select, use <Field><option ... /></Field>
-    element?: "input" | "select" | "textarea",
+    id?: string;
     // The field's type (when used as an <input>). Defaults to "text".
-    type?: string,
+    type?: string;
     // id of a <datalist> element for suggestions
-    list?: string,
+    list?: string;
     // The field's label string.
-    label?: string,
+    label?: string;
     // The field's placeholder string. Defaults to the label.
-    placeholder?: string,
-    // The field's value.
-    // This is a controlled component, so the value is required.
-    value: string,
+    placeholder?: string;
     // Optional component to include inside the field before the input.
-    prefixComponent?: React.ReactNode,
+    prefixComponent?: React.ReactNode;
     // Optional component to include inside the field after the input.
-    postfixComponent?: React.ReactNode,
+    postfixComponent?: React.ReactNode;
     // The callback called whenever the contents of the field
     // changes.  Returns an object with `valid` boolean field
     // and a `feedback` react component field to provide feedback
     // to the user.
-    onValidate?: (input: IFieldState) => Promise<IValidationResult>,
+    onValidate?: (input: IFieldState) => Promise<IValidationResult>;
     // If specified, overrides the value returned by onValidate.
-    flagInvalid?: boolean,
+    flagInvalid?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
-    tooltipContent?: React.ReactNode,
+    tooltipContent?: React.ReactNode;
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
-    tooltipClassName?: string,
+    tooltipClassName?: string;
     // If specified, an additional class name to apply to the field container
-    className?: string,
+    className?: string;
     // All other props pass through to the <input>.
 }
+
+interface IInputProps extends IProps, InputHTMLAttributes<HTMLInputElement> {
+    // The element to create. Defaults to "input".
+    element?: "input";
+    // The input's value. This is a controlled component, so the value is required.
+    value: string;
+}
+
+interface ISelectProps extends IProps, SelectHTMLAttributes<HTMLSelectElement> {
+    // To define options for a select, use <Field><option ... /></Field>
+    element: "select";
+    // The select's value. This is a controlled component, so the value is required.
+    value: string;
+}
+
+interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElement> {
+    element: "textarea";
+    // The textarea's value. This is a controlled component, so the value is required.
+    value: string;
+}
+
+type PropShapes = IInputProps | ISelectProps | ITextareaProps;
 
 interface IState {
     valid: boolean,
@@ -75,7 +91,7 @@ interface IState {
     focused: boolean,
 }
 
-export default class Field extends React.PureComponent<IProps, IState> {
+export default class Field extends React.PureComponent<PropShapes, IState> {
     private id: string;
     private input: HTMLInputElement;
 
