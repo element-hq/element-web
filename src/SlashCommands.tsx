@@ -118,7 +118,7 @@ export class Command {
 
     run(roomId: string, args: string, cmd: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!this.runFn) return;
+        if (!this.runFn) return reject(_t("Command error"));
         return this.runFn.bind(this)(roomId, args, cmd);
     }
 
