@@ -86,6 +86,43 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     };
 
+    // TODO: Apply this on resize, init, etc for reliability
+    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
+        const list = ev.target as HTMLDivElement;
+        const rlRect = list.getBoundingClientRect();
+        const bottom = rlRect.bottom;
+        const top = rlRect.top;
+        const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
+        const headerHeight = 32; // Note: must match the CSS!
+        const headerRightMargin = 24; // calculated from margins and widths to align with non-sticky tiles
+
+        const headerStickyWidth = rlRect.width - headerRightMargin;
+
+        let gotBottom = false;
+        for (const sublist of sublists) {
+            const slRect = sublist.getBoundingClientRect();
+
+            const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+
+            if (slRect.top + headerHeight > bottom && !gotBottom) {
+                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                header.style.width = `${headerStickyWidth}px`;
+                gotBottom = true;
+            } else if (slRect.top < top) {
+                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                header.style.width = `${headerStickyWidth}px`;
+                header.style.top = `${rlRect.top}px`;
+            } else {
+                header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
+                header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                header.style.width = `unset`;
+            }
+        }
+    };
+
     private renderHeader(): React.ReactNode {
         // TODO: Update when profile info changes
         // TODO: Presence
@@ -191,7 +228,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div className="mx_LeftPanel2_actualRoomListContainer">
+                    <div className="mx_LeftPanel2_actualRoomListContainer" onScroll={this.onScroll}>
                         {roomList}
                     </div>
                 </aside>
