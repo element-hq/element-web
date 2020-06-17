@@ -1715,5 +1715,18 @@
     "Don't ask me again": "Non preguntarme outra vez",
     "Sort by": "Orde por",
     "Activity": "Actividade",
-    "A-Z": "A-Z"
+    "A-Z": "A-Z",
+    "Unread rooms": "",
+    "Always show first": "Mostrar sempre primeiro",
+    "Show": "Mostrar",
+    "Message preview": "Vista previa da mensaxe",
+    "List options": "Opcións da listaxe",
+    "Add room": "Engadir sala",
+    "Show %(count)s more|other": "Mostrar %(count)s máis",
+    "Show %(count)s more|one": "Mostrar %(count)s máis",
+    "%(count)s unread messages including mentions.|other": "%(count)s mensaxes non lidas incluíndo mencións.",
+    "%(count)s unread messages including mentions.|one": "1 mención non lida.",
+    "%(count)s unread messages.|other": "%(count)s mensaxe non lidas.",
+    "%(count)s unread messages.|one": "1 mensaxe non lida.",
+    "Unread mentions.": "Mencións non lidas."
 }
