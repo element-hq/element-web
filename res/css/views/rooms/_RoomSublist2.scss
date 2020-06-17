@@ -74,11 +74,9 @@ limitations under the License.
                 bottom: 0;
             }
 
-            // We don't have this style because the top is dependent on the room list header's
+            // We don't have a top style because the top is dependent on the room list header's
             // height, and is therefore calculated in JS.
-            //&.mx_RoomSublist2_headerContainer_stickyTop {
-            //    top: 0;
-            //}
+            // The class, mx_RoomSublist2_headerContainer_stickyTop, is applied though.
         }
 
         // Sticky Headers End
