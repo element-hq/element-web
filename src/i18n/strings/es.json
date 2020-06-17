@@ -1176,7 +1176,7 @@
     "Incoming Verification Request": "Petición de verificación entrante",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s cambió la regla para unirse a %(rule)s",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s cambió el acceso para invitados a %(rule)s",
-    "Use a longer keyboard pattern with more turns": "Usa un patrón de tecleo más largo y con más vueltas",
+    "Use a longer keyboard pattern with more turns": "Usa un patrón de tecleo largo con más vueltas",
     "Enable Community Filter Panel": "Habilitar el Panel de Filtro de Comunidad",
     "Verify this user by confirming the following emoji appear on their screen.": "Verifica este usuario confirmando que los siguientes emojis aparecen en su pantalla.",
     "Your Riot is misconfigured": "Tu Riot está mal configurado",
