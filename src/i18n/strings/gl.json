@@ -1712,5 +1712,8 @@
     "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "As mensaxes nesta sala están aseguradas con cifrado extremo-a-extremo. Só ti e o correspondente(s) tedes as chaves para ler as mensaxes.",
     "Securely back up your keys to avoid losing them. <a>Learn more.</a>": "Fai unha copia das chaves para evitar perdelas. <a>Saber máis.</a>",
     "Not now": "Agora non",
-    "Don't ask me again": "Non preguntarme outra vez"
+    "Don't ask me again": "Non preguntarme outra vez",
+    "Sort by": "Orde por",
+    "Activity": "Actividade",
+    "A-Z": "A-Z"
 }
