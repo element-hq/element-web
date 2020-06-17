@@ -2211,12 +2211,18 @@
     "Are you sure you want to deactivate your account? This is irreversible.": "Weet u zeker dat u uw account wil sluiten?  Dit is onomkeerbaar.",
     "Confirm account deactivation": "Bevestig accountsluiting",
     "Room name or address": "Gespreksnaam of -adres",
-    "Joins room with given address": "Treedt tot het gesprek met het opgegeven adres toe",
+    "Joins room with given address": "Neem aan het gesprek met dat adres deel",
     "Unrecognised room address:": "Gespreksadres niet herkend:",
     "Help us improve Riot": "Help ons Riot nog beter te maken",
     "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. This will use a <PolicyLink>cookie</PolicyLink>.": "Stuur <UsageDataLink>anonieme gebruiksinformatie</UsageDataLink> waarmee we Riot kunnen verbeteren.  Dit plaatst een <PolicyLink>cookie</PolicyLink>.",
     "I want to help": "Ik wil helpen",
     "Your homeserver has exceeded its user limit.": "Uw thuisserver heeft het maximaal aantal gebruikers overschreden.",
     "Your homeserver has exceeded one of its resource limits.": "Uw thuisserver heeft een van zijn limieten overschreden.",
-    "Ok": "Oké"
+    "Ok": "Oké",
+    "sent an image.": "heeft een plaatje gestuurd.",
+    "Light": "Helder",
+    "Dark": "Donker",
+    "Set password": "Stel wachtwoord in",
+    "To return to your account in future you need to set a password": "Zonder wachtwoord kunt u later niet tot uw account terugkeren",
+    "Restart": "Herstarten"
 }
