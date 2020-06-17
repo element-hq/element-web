@@ -45,7 +45,7 @@ export class NotificationsEnabledController extends SettingController {
         if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {
-            return isMasterRuleEnabled();
+            return !isMasterRuleEnabled();
         }
 
         return calculatedValue;
@@ -63,7 +63,7 @@ export class NotificationBodyEnabledController extends SettingController {
         if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null) {
-            return isMasterRuleEnabled();
+            return !isMasterRuleEnabled();
         }
 
         return calculatedValue;
