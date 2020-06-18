@@ -19,7 +19,7 @@ import { Action } from "../actions";
 import { Component } from "react";
 
 export interface ViewTooltipPayload extends ActionPayload {
-    action: Action.ViewTooltip,
+    action: Action.ViewTooltip;
 
     /*
      * The tooltip to render. If it's null the tooltip will not be rendered
@@ -31,5 +31,5 @@ export interface ViewTooltipPayload extends ActionPayload {
      * The parent under which to render the tooltip. Can be null to remove
      * the parent type.
      */
-    parent: null | Element
+    parent: null | Element;
 }

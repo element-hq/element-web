@@ -36,7 +36,7 @@ export function formatCount(count: number): string {
  */
 export function formatCountLong(count: number): string {
     const formatter = new Intl.NumberFormat();
-    return formatter.format(count)
+    return formatter.format(count);
 }
 
 /**

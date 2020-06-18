@@ -97,7 +97,7 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
                 >
                     <RoomAvatar room={r} width={32} height={32}/>
                 </AccessibleButton>
-            )
+            );
         });
 
         if (tiles.length > 0) {

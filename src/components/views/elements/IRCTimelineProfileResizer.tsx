@@ -20,15 +20,15 @@ import Draggable, {ILocationState} from './Draggable';
 
 interface IProps {
     // Current room
-    roomId: string,
-    minWidth: number,
-    maxWidth: number,
-};
+    roomId: string;
+    minWidth: number;
+    maxWidth: number;
+}
 
 interface IState {
-    width: number,
-    IRCLayoutRoot: HTMLElement,
-};
+    width: number;
+    IRCLayoutRoot: HTMLElement;
+}
 
 export default class IRCTimelineProfileResizer extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -37,20 +37,19 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         this.state = {
             width: SettingsStore.getValue("ircDisplayNameWidth", this.props.roomId),
             IRCLayoutRoot: null,
-        }
-    };
+        };
+    }
 
     componentDidMount() {
         this.setState({
             IRCLayoutRoot: document.querySelector(".mx_IRCLayout") as HTMLElement,
-        }, () => this.updateCSSWidth(this.state.width))
+        }, () => this.updateCSSWidth(this.state.width));
     }
 
     private dragFunc = (location: ILocationState, event: React.MouseEvent<Element, MouseEvent>): ILocationState => {
         const offset = event.clientX - location.currentX;
         const newWidth = this.state.width + offset;
 
-        console.log({offset})
         // If we're trying to go smaller than min width, don't.
         if (newWidth < this.props.minWidth) {
             return location;
@@ -69,8 +68,8 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         return {
             currentX: event.clientX,
             currentY: location.currentY,
-        }
-    }
+        };
+    };
 
     private updateCSSWidth(newWidth: number) {
         this.state.IRCLayoutRoot.style.setProperty("--name-width", newWidth + "px");
@@ -83,6 +82,10 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
     }
 
     render() {
-        return <Draggable className="mx_ProfileResizer" dragFunc={this.dragFunc.bind(this)} onMouseUp={this.onMoueUp.bind(this)}/>
+        return <Draggable
+            className="mx_ProfileResizer"
+            dragFunc={this.dragFunc.bind(this)}
+            onMouseUp={this.onMoueUp.bind(this)}
+        />;
     }
-};
+}

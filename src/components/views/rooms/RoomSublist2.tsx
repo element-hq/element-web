@@ -423,7 +423,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     {visibleTiles}
                     {showNButton}
                 </ResizableBox>
-            )
+            );
         }
 
         // TODO: onKeyDown support

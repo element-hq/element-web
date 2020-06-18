@@ -232,7 +232,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 />
                 {contextMenu}
             </React.Fragment>
-        )
+        );
     }
 
     public render(): React.ReactElement {
