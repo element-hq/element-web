@@ -1494,5 +1494,9 @@
     "Cannot reach homeserver": "不可连接到主服务器",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "确保您的网络连接稳定，或与服务器管理员联系",
     "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.": "跟您的Riot管理员确认<a>您的配置</a>不正确或重复的条目。",
-    "Cannot reach identity server": "不可连接到身份服务器"
+    "Cannot reach identity server": "不可连接到身份服务器",
+    "Room name or address": "房间名称或地址",
+    "Joins room with given address": "使用给定地址加入房间",
+    "Verify this login": "验证此登录名",
+    "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "通过从其他会话之一验证此登录名并授予其访问加密信息的权限来确认您的身份"
 }
