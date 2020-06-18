@@ -521,11 +521,6 @@ export const SETTINGS = {
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
-    "keepSecretStoragePassphraseForSession": {
-         supportedLevels: ['device', 'config'],
-         displayName: _td("Keep recovery passphrase in memory for this session"),
-         default: false,
-    },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("How fast should messages be downloaded."),

@@ -20,7 +20,6 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
-import SettingsStore from './settings/SettingsStore';
 import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -34,10 +33,7 @@ let secretStorageBeingAccessed = false;
 let passphraseOnlyOption = null;
 
 function isCachingAllowed() {
-    return (
-        secretStorageBeingAccessed ||
-        SettingsStore.getValue("keepSecretStoragePassphraseForSession")
-    );
+    return secretStorageBeingAccessed;
 }
 
 export class AccessCancelledError extends Error {
