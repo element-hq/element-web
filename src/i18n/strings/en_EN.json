@@ -2038,7 +2038,6 @@
     "Search failed": "Search failed",
     "Server may be unavailable, overloaded, or search timed out :(": "Server may be unavailable, overloaded, or search timed out :(",
     "No more results": "No more results",
-    "Unknown room %(roomId)s": "Unknown room %(roomId)s",
     "Room": "Room",
     "Failed to reject invite": "Failed to reject invite",
     "You have %(count)s unread notifications in a prior version of this room.|other": "You have %(count)s unread notifications in a prior version of this room.",
