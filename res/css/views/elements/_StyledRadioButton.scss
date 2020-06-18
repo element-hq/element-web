@@ -20,7 +20,6 @@ limitations under the License.
 */
 
 .mx_RadioButton {
-
     $radio-circle-color: $muted-fg-color;
     $active-radio-circle-color: $accent-color;
     position: relative;
@@ -76,22 +75,32 @@ limitations under the License.
                 border-radius: $font-8px;
             }
         }
-    }
 
-    > input[type=radio]:checked {
-        + div {
-            border-color: $active-radio-circle-color;
+        &:checked {
+            & + div {
+                border-color: $active-radio-circle-color;
 
-            > div {
-                background: $active-radio-circle-color;
+                & > div {
+                    background: $active-radio-circle-color;
+                }
             }
         }
-    }
 
-    > input[type=radio]:disabled {
-        + div {
-            > div {
-                display: none;
+        &:disabled {
+            & + div,
+            & + div + span {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            & + div {
+                border-color: $radio-circle-color;
+            }
+        }
+
+        &:checked:disabled {
+            & + div > div {
+                background-color: $radio-circle-color;
             }
         }
     }

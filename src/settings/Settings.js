@@ -142,9 +142,10 @@ export const SETTINGS = {
     },
     "feature_new_room_list": {
         isFeature: true,
-        displayName: _td("Use the improved room list (in development - refresh to apply changes)"),
+        displayName: _td("Use the improved room list (in development - will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new ReloadOnChangeController(),
     },
     "feature_custom_themes": {
         isFeature: true,
@@ -533,11 +534,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
-    },
-    "keepSecretStoragePassphraseForSession": {
-         supportedLevels: ['device', 'config'],
-         displayName: _td("Keep recovery passphrase in memory for this session"),
-         default: false,
     },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

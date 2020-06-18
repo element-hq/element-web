@@ -42,6 +42,10 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     if (!parser.isPlainText() || forceHTML) {
         return parser.toHTML();
     }
+    // ensure removal of escape backslashes in non-Markdown messages
+    if (md.indexOf("\\") > -1) {
+        return parser.toPlaintext();
+    }
 }
 
 export function textSerialize(model: EditorModel) {
@@ -62,16 +66,20 @@ export function textSerialize(model: EditorModel) {
 }
 
 export function containsEmote(model: EditorModel) {
-    return startsWith(model, "/me ");
+    return startsWith(model, "/me ", false);
 }
 
-export function startsWith(model: EditorModel, prefix: string) {
+export function startsWith(model: EditorModel, prefix: string, caseSensitive = true) {
     const firstPart = model.parts[0];
     // part type will be "plain" while editing,
     // and "command" while composing a message.
-    return firstPart &&
-        (firstPart.type === "plain" || firstPart.type === "command") &&
-        firstPart.text.startsWith(prefix);
+    let text = firstPart && firstPart.text;
+    if (!caseSensitive) {
+        prefix = prefix.toLowerCase();
+        text = text.toLowerCase();
+    }
+
+    return firstPart && (firstPart.type === "plain" || firstPart.type === "command") && text.startsWith(prefix);
 }
 
 export function stripEmoteCommand(model: EditorModel) {

@@ -27,11 +27,60 @@ limitations under the License.
     width: 100%;
 
     .mx_RoomSublist2_headerContainer {
-        // Create a flexbox to make ordering easy
+        // Create a flexbox to make alignment easy
         display: flex;
         align-items: center;
+
+        // ***************************
+        // Sticky Headers Start
+
+        // Ideally we'd be able to use `position: sticky; top: 0; bottom: 0;` on the
+        // headerContainer, however due to our layout concerns we actually have to
+        // calculate it manually so we can sticky things in the right places. We also
+        // target the headerText instead of the container to reduce jumps when scrolling,
+        // and to help hide the badges/other buttons that could appear on hover. This
+        // all works by ensuring the header text has a fixed height when sticky so the
+        // fixed height of the container can maintain the scroll position.
+
+        // The combined height must be set in the LeftPanel2 component for sticky headers
+        // to work correctly.
         padding-bottom: 8px;
         height: 24px;
+
+        .mx_RoomSublist2_stickable {
+            flex: 1;
+            max-width: 100%;
+            z-index: 2; // Prioritize headers in the visible list over sticky ones
+
+            // Set the same background color as the room list for sticky headers
+            background-color: $roomlist2-bg-color;
+
+            // Create a flexbox to make ordering easy
+            display: flex;
+            align-items: center;
+
+            // We use a generic sticky class for 2 reasons: to reduce style duplication and
+            // to identify when a header is sticky. If we didn't have a consistent sticky class,
+            // we'd have to do the "is sticky" checks again on click, as clicking the header
+            // when sticky scrolls instead of collapses the list.
+            &.mx_RoomSublist2_headerContainer_sticky {
+                position: fixed;
+                z-index: 1; // over top of other elements, but still under the ones in the visible list
+                height: 32px; // to match the header container
+                // width set by JS
+            }
+
+            &.mx_RoomSublist2_headerContainer_stickyBottom {
+                bottom: 0;
+            }
+
+            // We don't have a top style because the top is dependent on the room list header's
+            // height, and is therefore calculated in JS.
+            // The class, mx_RoomSublist2_headerContainer_stickyTop, is applied though.
+        }
+
+        // Sticky Headers End
+        // ***************************
 
         .mx_RoomSublist2_badgeContainer {
             opacity: 0.8;
@@ -76,18 +125,45 @@ limitations under the License.
         }
 
         .mx_RoomSublist2_headerText {
+            flex: 1;
+            max-width: calc(100% - 16px); // 16px is the badge width
             text-transform: uppercase;
             opacity: 0.5;
             line-height: $font-16px;
             font-size: $font-12px;
 
-            flex: 1;
-            max-width: calc(100% - 16px); // 16px is the badge width
-
             // Ellipsize any text overflow
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+
+            .mx_RoomSublist2_collapseBtn {
+                display: inline-block;
+                position: relative;
+
+                // Default hidden
+                visibility: hidden;
+                width: 0;
+                height: 0;
+
+                &::before {
+                    content: '';
+                    width: 12px;
+                    height: 12px;
+                    position: absolute;
+                    top: 1px;
+                    left: 1px;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background: $primary-fg-color;
+                    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+                }
+
+                &.mx_RoomSublist2_collapseBtn_collapsed::before {
+                    mask-image: url('$(res)/img/feather-customised/chevron-right.svg');
+                }
+            }
         }
     }
 
@@ -100,7 +176,7 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
-        .mx_RoomSublist2_showMoreButton {
+        .mx_RoomSublist2_showNButton {
             cursor: pointer;
             font-size: $font-13px;
             line-height: $font-18px;
@@ -129,17 +205,24 @@ limitations under the License.
             display: flex;
             align-items: center;
 
-            .mx_RoomSublist2_showMoreButtonChevron {
+            .mx_RoomSublist2_showNButtonChevron {
                 position: relative;
                 width: 16px;
                 height: 16px;
                 margin-left: 12px;
                 margin-right: 18px;
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 mask-position: center;
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 background: $roomtile2-preview-color;
+            }
+
+            .mx_RoomSublist2_showMoreButtonChevron {
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            }
+
+            .mx_RoomSublist2_showLessButtonChevron {
+                mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
             }
         }
 
@@ -201,6 +284,17 @@ limitations under the License.
                 background-color: $roomlist2-button-bg-color;
             }
         }
+
+        .mx_RoomSublist2_headerContainer {
+            .mx_RoomSublist2_headerText {
+                .mx_RoomSublist2_collapseBtn {
+                    visibility: visible;
+                    width: 12px;
+                    height: 12px;
+                    margin-right: 4px;
+                }
+            }
+        }
     }
 
     &.mx_RoomSublist2_minimized {
@@ -239,10 +333,10 @@ limitations under the License.
         .mx_RoomSublist2_resizeBox {
             align-items: center;
 
-            .mx_RoomSublist2_showMoreButton {
+            .mx_RoomSublist2_showNButton {
                 flex-direction: column;
 
-                .mx_RoomSublist2_showMoreButtonChevron {
+                .mx_RoomSublist2_showNButtonChevron {
                     margin-right: 12px; // to center
                 }
             }
@@ -319,9 +413,5 @@ limitations under the License.
 
     .mx_RadioButton, .mx_Checkbox {
         margin-top: 8px;
-    }
-
-    .mx_Checkbox {
-        margin-left: -8px; // to counteract the indent from the component
     }
 }

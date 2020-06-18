@@ -32,6 +32,13 @@ limitations under the License.
 
     .mx_RoomTile2_avatarContainer {
         margin-right: 8px;
+        position: relative;
+
+        .mx_RoomTileIcon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
     }
 
     .mx_RoomTile2_nameContainer {

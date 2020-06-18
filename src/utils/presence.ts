@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,18 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_AuthHeaderLogo {
-    margin-top: 15px;
-    flex: 1;
-    padding: 0 10px;
-}
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import SdkConfig from "../SdkConfig";
 
-.mx_AuthHeaderLogo img {
-    width: 100%;
-}
-
-@media only screen and (max-width: 480px) {
-    .mx_AuthHeaderLogo {
-        display: none;
-    }
+export function isPresenceEnabled() {
+    const hsUrl = MatrixClientPeg.get().baseUrl;
+    const urls = SdkConfig.get()['enable_presence_by_hs_url'];
+    if (!urls) return true;
+    if (urls[hsUrl] || urls[hsUrl] === undefined) return true;
+    return false;
 }

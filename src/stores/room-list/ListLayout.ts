@@ -21,11 +21,13 @@ const TILE_HEIGHT_PX = 44;
 interface ISerializedListLayout {
     numTiles: number;
     showPreviews: boolean;
+    collapsed: boolean;
 }
 
 export class ListLayout {
     private _n = 0;
     private _previews = false;
+    private _collapsed = false;
 
     constructor(public readonly tagId: TagID) {
         const serialized = localStorage.getItem(this.key);
@@ -34,7 +36,17 @@ export class ListLayout {
             const parsed = <ISerializedListLayout>JSON.parse(serialized);
             this._n = parsed.numTiles;
             this._previews = parsed.showPreviews;
+            this._collapsed = parsed.collapsed;
         }
+    }
+
+    public get isCollapsed(): boolean {
+        return this._collapsed;
+    }
+
+    public set isCollapsed(v: boolean) {
+        this._collapsed = v;
+        this.save();
     }
 
     public get showPreviews(): boolean {
@@ -100,6 +112,7 @@ export class ListLayout {
         return {
             numTiles: this.visibleTiles,
             showPreviews: this.showPreviews,
+            collapsed: this.isCollapsed,
         };
     }
 }
