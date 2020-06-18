@@ -41,6 +41,11 @@ import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorith
  * warning disappears.                                             *
  *******************************************************************/
 
+const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
+const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+
+const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
+
 interface IProps {
     forRooms: boolean;
     rooms?: Room[];
@@ -105,7 +110,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = () => {
-        this.props.layout.visibleTiles = this.numTiles;
+        this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -359,7 +364,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </div>
                 );
-            } else if (tiles.length <= nVisible) {
+            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.minVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
@@ -393,18 +398,16 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // goes backwards and can become wildly incorrect (visibleTiles says 18 when there's
             // only mathematically 7 possible).
 
-            const showMoreHeight = 32; // As defined by CSS
-            const resizeHandleHeight = 4; // As defined by CSS
-
             // The padding is variable though, so figure out what we need padding for.
             let padding = 0;
-            if (showNButton) padding += showMoreHeight;
-            if (handles.length > 0) padding += resizeHandleHeight;
+            if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
+            padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
 
-            const minTilesPx = layout.calculateTilesToPixelsMin(tiles.length, layout.minVisibleTiles, padding);
+            const relativeTiles = layout.tilesWithPadding(tiles.length, padding);
+            const minTilesPx = layout.calculateTilesToPixelsMin(relativeTiles, layout.minVisibleTiles, padding);
             const maxTilesPx = layout.tilesToPixelsWithPadding(tiles.length, padding);
-            const tilesWithoutPadding = Math.min(tiles.length, layout.visibleTiles);
-            const tilesPx = layout.calculateTilesToPixelsMin(tiles.length, tilesWithoutPadding, padding);
+            const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
+            const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
 
             content = (
                 <ResizableBox
