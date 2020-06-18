@@ -29,8 +29,6 @@ import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 // operation ends.
 let secretStorageKeys = {};
 let secretStorageBeingAccessed = false;
-// Stores the 'passphraseOnly' option for the active storage access operation
-let passphraseOnlyOption = null;
 
 function isCachingAllowed() {
     return secretStorageBeingAccessed;
@@ -97,7 +95,6 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
                 const key = await inputToKey(input);
                 return await MatrixClientPeg.get().checkSecretStorageKey(key, info);
             },
-            passphraseOnly: passphraseOnlyOption,
         },
         /* className= */ null,
         /* isPriorityModal= */ false,
@@ -212,27 +209,19 @@ export async function promptForBackupPassphrase() {
  *
  * @param {Function} [func] An operation to perform once secret storage has been
  * bootstrapped. Optional.
- * @param {object} [opts] Named options
- * @param {bool} [opts.forceReset] Reset secret storage even if it's already set up
- * @param {object} [opts.withKeys] Map of key ID to key for SSSS keys that the client
- *     already has available. If a key is not supplied here, the user will be prompted.
- * @param {bool} [opts.passphraseOnly] If true, do not prompt for recovery key or to reset keys
+ * @param {bool} [forceReset] Reset secret storage even if it's already set up
  */
-export async function accessSecretStorage(
-    func = async () => { }, opts = {},
-) {
+export async function accessSecretStorage(func = async () => { }, forceReset = false) {
     const cli = MatrixClientPeg.get();
     secretStorageBeingAccessed = true;
-    passphraseOnlyOption = opts.passphraseOnly;
-    secretStorageKeys = Object.assign({}, opts.withKeys || {});
     try {
-        if (!await cli.hasSecretStorageKey() || opts.forceReset) {
+        if (!await cli.hasSecretStorageKey() || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force: opts.forceReset,
+                    force: forceReset,
                 },
                 null, /* priority = */ false, /* static = */ true,
             );
@@ -270,6 +259,5 @@ export async function accessSecretStorage(
         if (!isCachingAllowed()) {
             secretStorageKeys = {};
         }
-        passphraseOnlyOption = null;
     }
 }
