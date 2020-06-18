@@ -60,7 +60,7 @@ export default class TagOrderActions {
             // For an optimistic update
             return {tags, removedTags};
         });
-    };
+    }
 
     /**
      * Creates an action thunk that will do an asynchronous request to

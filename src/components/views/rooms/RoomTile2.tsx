@@ -21,7 +21,7 @@ import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton, {ButtonEvent} from "../../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
@@ -31,6 +31,7 @@ import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/MessagePreviewStore";
+import RoomTileIcon from "./RoomTileIcon";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -44,6 +45,7 @@ interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
+    tag: TagID;
 
     // TODO: Allow falsifying counts (for invites and stuff)
     // TODO: Transparency? Was this ever used?
@@ -230,7 +232,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 />
                 {contextMenu}
             </React.Fragment>
-        )
+        );
     }
 
     public render(): React.ReactElement {
@@ -303,7 +305,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             role="treeitem"
                         >
                             <div className="mx_RoomTile2_avatarContainer">
-                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize}/>
+                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} />
+                                <RoomTileIcon room={this.props.room} tag={this.props.tag} />
                             </div>
                             {nameContainer}
                             <div className="mx_RoomTile2_badgeContainer">

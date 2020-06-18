@@ -119,26 +119,26 @@ export default class DeviceListener {
 
         // No need to do a recheck here: we just need to get a snapshot of our devices
         // before we download any new ones.
-    }
+    };
 
     _onDevicesUpdated = (users: string[]) => {
         if (!users.includes(MatrixClientPeg.get().getUserId())) return;
         this._recheck();
-    }
+    };
 
     _onDeviceVerificationChanged = (userId: string) => {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
         this._recheck();
-    }
+    };
 
     _onUserTrustStatusChanged = (userId: string) => {
         if (userId !== MatrixClientPeg.get().getUserId()) return;
         this._recheck();
-    }
+    };
 
     _onCrossSingingKeysChanged = () => {
         this._recheck();
-    }
+    };
 
     _onAccountData = (ev) => {
         // User may have:
@@ -152,11 +152,11 @@ export default class DeviceListener {
         ) {
             this._recheck();
         }
-    }
+    };
 
     _onSync = (state, prevState) => {
         if (state === 'PREPARED' && prevState === null) this._recheck();
-    }
+    };
 
     // The server doesn't tell us when key backup is set up, so we poll
     // & cache the result

@@ -95,6 +95,8 @@ export default class Login {
             identifier = {
                 type: 'm.id.phone',
                 country: phoneCountry,
+                phone: phoneNumber,
+                // XXX: Synapse historically wanted `number` and not `phone`
                 number: phoneNumber,
             };
         } else if (isEmail) {

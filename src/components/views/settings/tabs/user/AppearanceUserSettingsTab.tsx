@@ -45,7 +45,7 @@ interface IThemeState {
 export interface CustomThemeMessage {
     isError: boolean;
     text: string;
-};
+}
 
 interface IState extends IThemeState {
     // String displaying the current selected fontSize.
@@ -162,7 +162,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
-    }
+    };
 
     private onAddCustomTheme = async (): Promise<void> => {
         let currentThemes: string[] = SettingsStore.getValue("custom_themes");

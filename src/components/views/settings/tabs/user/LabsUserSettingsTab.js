@@ -66,7 +66,6 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name={"keepSecretStoragePassphraseForSession"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );

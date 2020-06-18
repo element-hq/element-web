@@ -127,7 +127,7 @@ export class Algorithm extends EventEmitter {
         const algorithm = getListAlgorithmInstance(order, tagId, this.sortAlgorithms[tagId]);
         this.algorithms[tagId] = algorithm;
 
-        await algorithm.setRooms(this._cachedRooms[tagId])
+        await algorithm.setRooms(this._cachedRooms[tagId]);
         this._cachedRooms[tagId] = algorithm.orderedRooms;
         this.recalculateFilteredRoomsForTag(tagId); // update filter to re-sort the list
         this.recalculateStickyRoom(tagId); // update sticky room to make sure it appears if needed
@@ -230,7 +230,10 @@ export class Algorithm extends EventEmitter {
             // Cheaply clone the rooms so we can more easily do operations on the list.
             // We optimize our lookups by trying to reduce sample size as much as possible
             // to the rooms we know will be deduped by the Set.
-            const rooms = this.cachedRooms[tagId];
+            const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
+            if (this._stickyRoom && this._stickyRoom.tag === tagId && this._stickyRoom.room) {
+                rooms.push(this._stickyRoom.room);
+            }
             let remainingRooms = rooms.map(r => r);
             let allowedRoomsInThisTag = [];
             let lastFilterPriority = orderedFilters[0].relativePriority;
@@ -505,16 +508,14 @@ export class Algorithm extends EventEmitter {
             return true;
         }
 
-        if (cause === RoomUpdateCause.NewRoom) {
-            // TODO: Be smarter and insert rather than regen the planet.
-            await this.setKnownRooms([room, ...this.rooms]);
-            return true;
-        }
-
-        if (cause === RoomUpdateCause.RoomRemoved) {
-            // TODO: Be smarter and splice rather than regen the planet.
-            await this.setKnownRooms(this.rooms.filter(r => r !== room));
-            return true;
+        // If the update is for a room change which might be the sticky room, prevent it. We
+        // need to make sure that the causes (NewRoom and RoomRemoved) are still triggered though
+        // as the sticky room relies on this.
+        if (cause !== RoomUpdateCause.NewRoom && cause !== RoomUpdateCause.RoomRemoved) {
+            if (this.stickyRoom === room) {
+                console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
+                return false;
+            }
         }
 
         let tags = this.roomIdsToTags[room.roomId];
@@ -538,5 +539,5 @@ export class Algorithm extends EventEmitter {
         }
 
         return true;
-    };
+    }
 }

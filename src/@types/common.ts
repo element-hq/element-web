@@ -15,5 +15,5 @@ limitations under the License.
 */
 
 // Based on https://stackoverflow.com/a/53229857/3532235
-export type Without<T, U> = {[P in Exclude<keyof T, keyof U>] ? : never}
+export type Without<T, U> = {[P in Exclude<keyof T, keyof U>] ? : never};
 export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;

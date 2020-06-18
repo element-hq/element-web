@@ -90,7 +90,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         } catch (err) {
             console.error("Error while cancelling verification request", err);
         }
-    }
+    };
 
     accept = async () => {
         ToastStore.sharedInstance().dismissToast(this.props.toastKey);
