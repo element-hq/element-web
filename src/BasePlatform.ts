@@ -150,7 +150,7 @@ export default abstract class BasePlatform {
     abstract displayNotification(title: string, msg: string, avatarUrl: string, room: Object);
 
     loudNotification(ev: Event, room: Object) {
-    };
+    }
 
     /**
      * Returns a promise that resolves to a string representing the current version of the application.

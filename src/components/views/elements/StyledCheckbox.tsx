@@ -30,7 +30,7 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
 
     public static readonly defaultProps = {
         className: "",
-    }
+    };
 
     constructor(props: IProps) {
         super(props);
@@ -51,6 +51,6 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
                     { this.props.children }
                 </div>
             </label>
-        </span>
+        </span>;
     }
 }

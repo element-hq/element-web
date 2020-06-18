@@ -14,22 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ActionPayload } from "../payloads";
-import { Action } from "../actions";
-import { Component } from "react";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import SdkConfig from "../SdkConfig";
 
-export interface ViewTooltipPayload extends ActionPayload {
-    action: Action.ViewTooltip;
-
-    /*
-     * The tooltip to render. If it's null the tooltip will not be rendered
-     * We need the void type because of typescript headaches.
-     */
-    tooltip: null | void | Element | Component<Element, any, any>;
-
-    /*
-     * The parent under which to render the tooltip. Can be null to remove
-     * the parent type.
-     */
-    parent: null | Element;
+export function isPresenceEnabled() {
+    const hsUrl = MatrixClientPeg.get().baseUrl;
+    const urls = SdkConfig.get()['enable_presence_by_hs_url'];
+    if (!urls) return true;
+    if (urls[hsUrl] || urls[hsUrl] === undefined) return true;
+    return false;
 }

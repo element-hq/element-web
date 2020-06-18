@@ -46,7 +46,9 @@
     "quotemark": false,
     "radix": true,
     "semicolon": [
-      "always"
+      true,
+      "always",
+      "strict-bound-class-methods"
     ],
     "triple-equals": [],
     "typedef-whitespace": [

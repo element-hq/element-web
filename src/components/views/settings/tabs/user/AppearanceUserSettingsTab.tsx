@@ -35,23 +35,23 @@ interface IProps {
 }
 
 interface IThemeState {
-    theme: string,
-    useSystemTheme: boolean,
+    theme: string;
+    useSystemTheme: boolean;
 }
 
 export interface CustomThemeMessage {
-    isError: boolean,
-    text: string
-};
+    isError: boolean;
+    text: string;
+}
 
 interface IState extends IThemeState {
     // String displaying the current selected fontSize.
     // Needs to be string for things like '17.' without
     // trailing 0s.
-    fontSize: string,
-    customThemeUrl: string,
-    customThemeMessage: CustomThemeMessage,
-    useCustomFontSize: boolean,
+    fontSize: string;
+    customThemeUrl: string;
+    customThemeMessage: CustomThemeMessage;
+    useCustomFontSize: boolean;
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
@@ -159,7 +159,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
-    }
+    };
 
     private onAddCustomTheme = async (): Promise<void> => {
         let currentThemes: string[] = SettingsStore.getValue("custom_themes");

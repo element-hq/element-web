@@ -19,7 +19,7 @@ import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 
 export interface ViewUserPayload extends ActionPayload {
-    action: Action.ViewUser,
+    action: Action.ViewUser;
 
     /**
      * The member to view. May be null or falsy to indicate that no member
