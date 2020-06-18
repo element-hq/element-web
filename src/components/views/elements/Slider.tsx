@@ -86,7 +86,7 @@ export default class Slider extends React.Component<IProps> {
             const offset = this.offset(this.props.values, this.props.value);
             selection = <div className="mx_Slider_selection">
                 <div className="mx_Slider_selectionDot" style={{left: "calc(-0.55em + " + offset + "%)"}} />
-                <hr style={{width: offset + "%;"}} />
+                <hr style={{width: offset + "%"}} />
             </div>;
         }
 
