@@ -96,11 +96,10 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
 
-## New room list (`feature_new_room_list`) (in development)
+## New room list (`feature_new_room_list`)
 
 A complete rewrite of the room list is underway to increase performance, stability,
-and general usability. This is expected to take a while to complete and as such might
-be missing critical features - please use at your own risk, though do report bugs!
+and general usability. This is still rapidly changing, but feel free to give it a test.
 
 ## IRC message layout (`feature_irc_ui`)
 
