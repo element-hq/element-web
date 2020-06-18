@@ -32,9 +32,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         keyInfo: PropTypes.object.isRequired,
         // Function from one of { passphrase, recoveryKey } -> boolean
         checkPrivateKey: PropTypes.func.isRequired,
-        // If true, only prompt for a passphrase and do not offer to restore with
-        // a recovery key or reset keys.
-        passphraseOnly: PropTypes.bool,
     }
 
     constructor(props) {
@@ -61,7 +58,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
     _onResetRecoveryClick = () => {
         // Re-enter the access flow, but resetting storage this time around.
         this.props.onFinished(false);
-        accessSecretStorage(() => {}, {forceReset: true});
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
@@ -167,7 +164,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         primaryDisabled={this.state.passPhrase.length === 0}
                     />
                 </form>
-                {this.props.passphraseOnly ? null : _t(
+                {_t(
                     "If you've forgotten your recovery passphrase you can "+
                     "<button1>use your recovery key</button1> or " +
                     "<button2>set up new recovery options</button2>."
@@ -237,7 +234,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         primaryDisabled={!this.state.recoveryKeyValid}
                     />
                 </form>
-                {this.props.passphraseOnly ? null : _t(
+                {_t(
                     "If you've forgotten your recovery key you can "+
                     "<button>set up new recovery options</button>."
                 , {}, {

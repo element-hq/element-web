@@ -113,7 +113,7 @@ export default class CrossSigningPanel extends React.PureComponent {
     _bootstrapSecureSecretStorage = async (forceReset=false) => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(() => undefined, {forceReset});
+            await accessSecretStorage(() => undefined, forceReset);
         } catch (e) {
             this.setState({ error: e });
             console.error("Error bootstrapping secret storage", e);
