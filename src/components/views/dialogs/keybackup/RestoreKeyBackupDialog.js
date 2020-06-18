@@ -88,7 +88,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
     _onResetRecoveryClick = () => {
         this.props.onFinished(false);
-        accessSecretStorage(() => {}, {forceReset: true});
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
