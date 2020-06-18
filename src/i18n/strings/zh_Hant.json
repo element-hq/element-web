@@ -2525,5 +2525,6 @@
     "Create a Recovery Key to store encryption keys & secrets with your account data. If you lose access to this login you’ll need it to unlock your data.": "建立您的復原金鑰以儲存加密金鑰與您的帳號資料。如果您失去對此登入階段的存取權，您必須用它來解鎖您的資料。",
     "Create a Recovery Key": "建立復原金鑰",
     "Upgrade your Recovery Key": "升級您的復原金鑰",
-    "Store your Recovery Key": "儲存您的復原金鑰"
+    "Store your Recovery Key": "儲存您的復原金鑰",
+    "Use the improved room list (in development - will refresh to apply changes)": "使用改進的聊天室清單（開發中 ── 將會重新整理以套用變更）"
 }
