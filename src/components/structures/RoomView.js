@@ -1314,6 +1314,13 @@ export default createReactClass({
             const mxEv = result.context.getEvent();
             const roomId = mxEv.getRoomId();
             const room = this.context.getRoom(roomId);
+            if (!room) {
+                // if we do not have the room in js-sdk stores then hide it as we cannot easily show it
+                // As per the spec, an all rooms search can create this condition,
+                // it happens with Seshat but not Synapse.
+                console.log("Hiding search result from an unknown room", roomId);
+                continue;
+            }
 
             if (!haveTileForEvent(mxEv)) {
                 // XXX: can this ever happen? It will make the result count
@@ -1322,13 +1329,12 @@ export default createReactClass({
             }
 
             if (this.state.searchScope === 'All') {
-                if (roomId != lastRoomId) {
-
+                if (roomId !== lastRoomId) {
                     // XXX: if we've left the room, we might not know about
                     // it. We should tell the js sdk to go and find out about
                     // it. But that's not an issue currently, as synapse only
                     // returns results for rooms we're joined to.
-                    const roomName = room ? room.name : _t("Unknown room %(roomId)s", { roomId: roomId });
+                    const roomName = room.name;
 
                     ret.push(<li key={mxEv.getId() + "-room"}>
                                  <h2>{ _t("Room") }: { roomName }</h2>
