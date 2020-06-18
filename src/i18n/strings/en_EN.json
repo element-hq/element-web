@@ -480,7 +480,6 @@
     "Send read receipts for messages (requires compatible homeserver to disable)": "Send read receipts for messages (requires compatible homeserver to disable)",
     "Show previews/thumbnails for images": "Show previews/thumbnails for images",
     "Enable message search in encrypted rooms": "Enable message search in encrypted rooms",
-    "Keep recovery passphrase in memory for this session": "Keep recovery passphrase in memory for this session",
     "How fast should messages be downloaded.": "How fast should messages be downloaded.",
     "Manually verify all remote sessions": "Manually verify all remote sessions",
     "IRC display name width": "IRC display name width",
