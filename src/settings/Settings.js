@@ -140,7 +140,7 @@ export const SETTINGS = {
     },
     "feature_new_room_list": {
         isFeature: true,
-        displayName: _td("Use the improved room list (in development - will refresh to apply changes)"),
+        displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
         controller: new ReloadOnChangeController(),
