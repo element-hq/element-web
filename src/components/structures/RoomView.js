@@ -1318,6 +1318,7 @@ export default createReactClass({
                 // if we do not have the room in js-sdk stores then hide it as we cannot easily show it
                 // As per the spec, an all rooms search can create this condition,
                 // it happens with Seshat but not Synapse.
+                // It will make the result count not match the displayed count.
                 console.log("Hiding search result from an unknown room", roomId);
                 continue;
             }
@@ -1330,14 +1331,8 @@ export default createReactClass({
 
             if (this.state.searchScope === 'All') {
                 if (roomId !== lastRoomId) {
-                    // XXX: if we've left the room, we might not know about
-                    // it. We should tell the js sdk to go and find out about
-                    // it. But that's not an issue currently, as synapse only
-                    // returns results for rooms we're joined to.
-                    const roomName = room.name;
-
                     ret.push(<li key={mxEv.getId() + "-room"}>
-                                 <h2>{ _t("Room") }: { roomName }</h2>
+                                 <h2>{ _t("Room") }: { room.name }</h2>
                              </li>);
                     lastRoomId = roomId;
                 }
