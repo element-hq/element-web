@@ -34,10 +34,7 @@ let secretStorageBeingAccessed = false;
 let passphraseOnlyOption = null;
 
 function isCachingAllowed() {
-    return (
-        secretStorageBeingAccessed ||
-        SettingsStore.getValue("keepSecretStoragePassphraseForSession")
-    );
+    return secretStorageBeingAccessed;
 }
 
 export class AccessCancelledError extends Error {
