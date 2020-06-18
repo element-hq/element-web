@@ -92,8 +92,12 @@ export class ListLayout {
         return this.tilesToPixels(Math.min(maxTiles, n)) + padding;
     }
 
-    public tilesToPixelsWithPadding(n: number, padding: number): number {
-        return this.tilesToPixels(n) + padding;
+    public tilesWithPadding(n: number, paddingPx: number): number {
+        return this.pixelsToTiles(this.tilesToPixelsWithPadding(n, paddingPx));
+    }
+
+    public tilesToPixelsWithPadding(n: number, paddingPx: number): number {
+        return this.tilesToPixels(n) + paddingPx;
     }
 
     public tilesToPixels(n: number): number {
