@@ -2502,5 +2502,15 @@
     "Leave Room": "Lascia stanza",
     "Room options": "Opzioni stanza",
     "Activity": "Attività",
-    "A-Z": "A-Z"
+    "A-Z": "A-Z",
+    "Light": "Chiaro",
+    "Dark": "Scuro",
+    "Customise your appearance": "Personalizza l'aspetto",
+    "Appearance Settings only affect this Riot session.": "Le impostazioni dell'aspetto hanno effetto solo in questa sessione di Riot.",
+    "Recovery Key": "Chiave di recupero",
+    "This isn't the recovery key for your account": "Questa non è la chiave di recupero del tuo account",
+    "This isn't a valid recovery key": "Questa non è una chiave di ripristino valida",
+    "Looks good!": "Sembra giusta!",
+    "Use Recovery Key or Passphrase": "Usa la chiave o password di recupero",
+    "Use Recovery Key": "Usa chiave di recupero"
 }

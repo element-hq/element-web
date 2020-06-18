@@ -41,6 +41,11 @@ import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorith
  * warning disappears.                                             *
  *******************************************************************/
 
+const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
+const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+
+const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
+
 interface IProps {
     forRooms: boolean;
     rooms?: Room[];
@@ -105,7 +110,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = () => {
-        this.props.layout.visibleTiles = this.numTiles;
+        this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
+        this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onShowLessClick = () => {
+        this.props.layout.visibleTiles = this.props.layout.minVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -134,7 +144,28 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
+    private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
+        let target = ev.target as HTMLDivElement;
+        if (!target.classList.contains('mx_RoomSublist2_headerText')) {
+            // If we don't have the headerText class, the user clicked the span in the headerText.
+            target = target.parentElement as HTMLDivElement;
+        }
+
+        const possibleSticky = target.parentElement;
+        const sublist = possibleSticky.parentElement.parentElement;
+        if (possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky')) {
+            // is sticky - jump to list
+            sublist.scrollIntoView({behavior: 'smooth'});
+        } else {
+            // on screen - toggle collapse
+            this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
+            this.forceUpdate(); // because the layout doesn't trigger an update
+        }
+    };
+
     private renderTiles(): React.ReactElement[] {
+        if (this.props.layout && this.props.layout.isCollapsed) return []; // don't waste time on rendering
+
         const tiles: React.ReactElement[] = [];
 
         if (this.props.rooms) {
@@ -145,6 +176,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.props.layout.showPreviews}
                         isMinimized={this.props.isMinimized}
+                        tag={this.props.layout.tagId}
                     />
                 );
             }
@@ -249,6 +281,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         );
                     }
 
+                    const collapseClasses = classNames({
+                        'mx_RoomSublist2_collapseBtn': true,
+                        'mx_RoomSublist2_collapseBtn_collapsed': this.props.layout && this.props.layout.isCollapsed,
+                    });
+
                     const classes = classNames({
                         'mx_RoomSublist2_headerContainer': true,
                         'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
@@ -257,19 +294,23 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // TODO: a11y (see old component)
                     return (
                         <div className={classes}>
-                            <AccessibleButton
-                                inputRef={ref}
-                                tabIndex={tabIndex}
-                                className={"mx_RoomSublist2_headerText"}
-                                role="treeitem"
-                                aria-level={1}
-                            >
-                                <span>{this.props.label}</span>
-                            </AccessibleButton>
-                            {this.renderMenu()}
-                            {addRoomButton}
-                            <div className="mx_RoomSublist2_badgeContainer">
-                                {badge}
+                            <div className='mx_RoomSublist2_stickable'>
+                                <AccessibleButton
+                                    inputRef={ref}
+                                    tabIndex={tabIndex}
+                                    className={"mx_RoomSublist2_headerText"}
+                                    role="treeitem"
+                                    aria-level={1}
+                                    onClick={this.onHeaderClick}
+                                >
+                                    <span className={collapseClasses} />
+                                    <span>{this.props.label}</span>
+                                </AccessibleButton>
+                                {this.renderMenu()}
+                                {addRoomButton}
+                                <div className="mx_RoomSublist2_badgeContainer">
+                                    {badge}
+                                </div>
                             </div>
                         </div>
                     );
@@ -303,23 +344,40 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const visibleTiles = tiles.slice(0, nVisible);
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
-            // floats above the resize handle, if we have one present
-            let showMoreButton = null;
+            // floats above the resize handle, if we have one present. If the user has all
+            // tiles visible, it becomes 'show less'.
+            let showNButton = null;
             if (tiles.length > nVisible) {
                 // we have a cutoff condition - add the button to show all
                 const numMissing = tiles.length - visibleTiles.length;
                 let showMoreText = (
-                    <span className='mx_RoomSublist2_showMoreButtonText'>
+                    <span className='mx_RoomSublist2_showNButtonText'>
                         {_t("Show %(count)s more", {count: numMissing})}
                     </span>
                 );
                 if (this.props.isMinimized) showMoreText = null;
-                showMoreButton = (
-                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showMoreButton'>
-                        <span className='mx_RoomSublist2_showMoreButtonChevron'>
+                showNButton = (
+                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showNButton'>
+                        <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showMoreText}
+                    </div>
+                );
+            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.minVisibleTiles) {
+                // we have all tiles visible - add a button to show less
+                let showLessText = (
+                    <span className='mx_RoomSublist2_showNButtonText'>
+                        {_t("Show less")}
+                    </span>
+                );
+                if (this.props.isMinimized) showLessText = null;
+                showNButton = (
+                    <div onClick={this.onShowLessClick} className='mx_RoomSublist2_showNButton'>
+                        <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
+                            {/* set by CSS masking */}
+                        </span>
+                        {showLessText}
                     </div>
                 );
             }
@@ -340,18 +398,16 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // goes backwards and can become wildly incorrect (visibleTiles says 18 when there's
             // only mathematically 7 possible).
 
-            const showMoreHeight = 32; // As defined by CSS
-            const resizeHandleHeight = 4; // As defined by CSS
-
             // The padding is variable though, so figure out what we need padding for.
             let padding = 0;
-            if (showMoreButton) padding += showMoreHeight;
-            if (handles.length > 0) padding += resizeHandleHeight;
+            if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
+            padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
 
-            const minTilesPx = layout.calculateTilesToPixelsMin(tiles.length, layout.minVisibleTiles, padding);
+            const relativeTiles = layout.tilesWithPadding(tiles.length, padding);
+            const minTilesPx = layout.calculateTilesToPixelsMin(relativeTiles, layout.minVisibleTiles, padding);
             const maxTilesPx = layout.tilesToPixelsWithPadding(tiles.length, padding);
-            const tilesWithoutPadding = Math.min(tiles.length, layout.visibleTiles);
-            const tilesPx = layout.calculateTilesToPixelsMin(tiles.length, tilesWithoutPadding, padding);
+            const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
+            const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
 
             content = (
                 <ResizableBox
@@ -365,9 +421,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     className="mx_RoomSublist2_resizeBox"
                 >
                     {visibleTiles}
-                    {showMoreButton}
+                    {showNButton}
                 </ResizableBox>
-            )
+            );
         }
 
         // TODO: onKeyDown support

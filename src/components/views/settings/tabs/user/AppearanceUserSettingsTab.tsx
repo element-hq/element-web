@@ -32,7 +32,7 @@ import { IValidationResult, IFieldState } from '../../../elements/Validation';
 import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
-import MessagePreview from '../../../elements/MessagePreview';
+import EventTilePreview from '../../../elements/EventTilePreview';
 
 interface IProps {
 }
@@ -45,7 +45,7 @@ interface IThemeState {
 export interface CustomThemeMessage {
     isError: boolean;
     text: string;
-};
+}
 
 interface IState extends IThemeState {
     // String displaying the current selected fontSize.
@@ -166,7 +166,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
-    }
+    };
 
     private onAddCustomTheme = async (): Promise<void> => {
         let currentThemes: string[] = SettingsStore.getValue("custom_themes");
@@ -295,7 +295,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
-            <MessagePreview
+            <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={MESSAGE_PREVIEW_TEXT}
                 useIRCLayout={this.state.useIRCLayout}

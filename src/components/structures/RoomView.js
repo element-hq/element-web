@@ -1977,8 +1977,9 @@ export default createReactClass({
                 searchResultsPanel = (<div className="mx_RoomView_messagePanel mx_RoomView_messagePanelSearchSpinner" />);
             } else {
                 searchResultsPanel = (
-                    <ScrollPanel ref={this._searchResultsPanel}
-                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel"
+                    <ScrollPanel
+                        ref={this._searchResultsPanel}
+                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel mx_GroupLayout"
                         onFillRequest={this.onSearchResultsFillRequest}
                         resizeNotifier={this.props.resizeNotifier}
                     >

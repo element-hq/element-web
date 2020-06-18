@@ -151,9 +151,9 @@ interface IProps { // TODO type things better
     // Represents the screen to display as a result of parsing the initial window.location
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
-    defaultDeviceDisplayName?: string,
+    defaultDeviceDisplayName?: string;
     // A function that makes a registration URL
-    makeRegistrationUrl: (object) => string,
+    makeRegistrationUrl: (object) => string;
 }
 
 interface IState {
