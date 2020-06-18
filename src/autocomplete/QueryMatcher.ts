@@ -118,7 +118,7 @@ export default class QueryMatcher<T extends Object> {
             const index = resultKey.indexOf(query);
             if (index !== -1 && (!this._options.shouldMatchPrefix || index === 0)) {
                 matches.push(
-                    ...candidates.map((candidate) => ({key, index, ...candidate}))
+                    ...candidates.map((candidate) => ({index, ...candidate}))
                 );
             }
         }
