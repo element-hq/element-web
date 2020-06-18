@@ -359,7 +359,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </div>
                 );
-            } else if (tiles.length <= nVisible) {
+            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.minVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
