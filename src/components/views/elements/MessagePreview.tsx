@@ -62,7 +62,6 @@ export default class MessagePreview extends React.Component<IProps, IState> {
         // Fetch current user data
         const client = MatrixClientPeg.get()
         const userId = client.getUserId();
-        console.log({userId})
         const profileInfo = await client.getProfileInfo(userId);
         const avatar_url = Avatar.avatarUrlForUser(
             {avatarUrl: profileInfo.avatar_url},
