@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
-import * as sdk from "../../../../../index";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
 import Field from "../../../elements/Field";
@@ -30,28 +29,32 @@ import { FontWatcher } from "../../../../../settings/watchers/FontWatcher";
 import { RecheckThemePayload } from '../../../../../dispatcher/payloads/RecheckThemePayload';
 import { Action } from '../../../../../dispatcher/actions';
 import { IValidationResult, IFieldState } from '../../../elements/Validation';
+import StyledRadioButton from '../../../elements/StyledRadioButton';
+import StyledCheckbox from '../../../elements/StyledCheckbox';
+import SettingsFlag from '../../../elements/SettingsFlag';
+import MessagePreview from '../../../elements/MessagePreview';
 
 interface IProps {
 }
 
 interface IThemeState {
-    theme: string,
-    useSystemTheme: boolean,
+    theme: string;
+    useSystemTheme: boolean;
 }
 
 export interface CustomThemeMessage {
-    isError: boolean,
-    text: string
+    isError: boolean;
+    text: string;
 };
 
 interface IState extends IThemeState {
     // String displaying the current selected fontSize.
     // Needs to be string for things like '17.' without
     // trailing 0s.
-    fontSize: string,
-    customThemeUrl: string,
-    customThemeMessage: CustomThemeMessage,
-    useCustomFontSize: boolean,
+    fontSize: string;
+    customThemeUrl: string;
+    customThemeMessage: CustomThemeMessage;
+    useCustomFontSize: boolean;
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
@@ -198,10 +201,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     };
 
     private renderThemeSection() {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        const StyledCheckbox = sdk.getComponent("views.elements.StyledCheckbox");
-        const StyledRadioButton = sdk.getComponent("views.elements.StyledRadioButton");
-
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
         if (themeWatcher.isSystemThemeSupported()) {
@@ -279,15 +278,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     private renderFontSection() {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        const MessagePreview = sdk.getComponent("views.elements.MessagePreview");
-
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <MessagePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
-                message="Hey you. You're the best!"
+                message={_t("Hey you. You're the best!")}
+                useIRCLayout={false}
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
