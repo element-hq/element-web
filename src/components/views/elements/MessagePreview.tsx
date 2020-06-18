@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-
 import React from 'react';
-
-import * as Avatar from '../../../Avatar';
 import classnames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import * as sdk from "../../../index";
+
+import * as Avatar from '../../../Avatar';
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import EventTile from '../rooms/EventTile';
 
 interface IProps {
     /**
@@ -42,8 +41,8 @@ interface IProps {
 
 interface IState {
     userId: string;
-    displayname: string,
-    avatar_url: string,
+    displayname: string;
+    avatar_url: string;
 }
 
 const AVATAR_SIZE = 32;
@@ -62,7 +61,8 @@ export default class MessagePreview extends React.Component<IProps, IState> {
     async componentDidMount() {
         // Fetch current user data
         const client = MatrixClientPeg.get()
-        const userId = await client.getUserId();
+        const userId = client.getUserId();
+        console.log({userId})
         const profileInfo = await client.getProfileInfo(userId);
         const avatar_url = Avatar.avatarUrlForUser(
             {avatarUrl: profileInfo.avatar_url},
@@ -76,24 +76,22 @@ export default class MessagePreview extends React.Component<IProps, IState> {
 
     }
 
-    public render() {
-        const EventTile = sdk.getComponent("views.rooms.EventTile");
-
+    private fakeEvent({userId, displayname, avatar_url}: IState) {
         // Fake it till we make it
         const event = new MatrixEvent(JSON.parse(`{
                 "type": "m.room.message",
-                "sender": "${this.state.userId}",
+                "sender": "${userId}",
                 "content": {
                   "m.new_content": {
                     "msgtype": "m.text",
                     "body": "${this.props.message}",
-                    "displayname": "${this.state.displayname}",
-                    "avatar_url": "${this.state.avatar_url}"
+                    "displayname": "${displayname}",
+                    "avatar_url": "${avatar_url}"
                   },
                   "msgtype": "m.text",
                   "body": "${this.props.message}",
-                  "displayname": "${this.state.displayname}",
-                  "avatar_url": "${this.state.avatar_url}"
+                  "displayname": "${displayname}",
+                  "avatar_url": "${avatar_url}"
                 },
                 "unsigned": {
                   "age": 97
@@ -104,12 +102,18 @@ export default class MessagePreview extends React.Component<IProps, IState> {
 
         // Fake it more
         event.sender = {
-            name: this.state.displayname,
-            userId: this.state.userId,
+            name: displayname,
+            userId: userId,
             getAvatarUrl: (..._) => {
-                return this.state.avatar_url;
+                return avatar_url;
             },
         }
+
+
+    }
+
+    public render() {
+        const event = this.fakeEvent(this.state);
 
         let className = classnames(
             this.props.className,
@@ -119,7 +123,7 @@ export default class MessagePreview extends React.Component<IProps, IState> {
             }
         );
 
-        return <div className={className} >
+        return <div className={className}>
             <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
         </div>
     }
