@@ -270,7 +270,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // handling. For instance, if 45 rooms are removed from the middle of a 50 room list, the
         // index for the categories will be way off.
 
-        const nextOrderIndex = CATEGORY_ORDER.indexOf(category) + 1
+        const nextOrderIndex = CATEGORY_ORDER.indexOf(category) + 1;
         if (n > 0) {
             for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
                 const nextCategory = CATEGORY_ORDER[i];
