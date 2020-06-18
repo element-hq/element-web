@@ -58,9 +58,9 @@ interface IState extends IThemeState {
     useIRCLayout: boolean;
 }
 
-const MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
+    private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
     private themeTimer: NodeJS.Timeout;
 
@@ -212,7 +212,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         });
 
         SettingsStore.setValue("useIRCLayout", null, SettingLevel.DEVICE, val);
-    }
+    };
 
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
@@ -297,7 +297,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
-                message={MESSAGE_PREVIEW_TEXT}
+                message={this.MESSAGE_PREVIEW_TEXT}
                 useIRCLayout={this.state.useIRCLayout}
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
@@ -340,9 +340,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
             <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons" >
                 <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
-                    <MessagePreview
+                    <EventTilePreview
                         className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={MESSAGE_PREVIEW_TEXT}
+                        message={this.MESSAGE_PREVIEW_TEXT}
                         useIRCLayout={true}
                     />
                     <StyledRadioButton
@@ -356,9 +356,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
                 <div className="mx_AppearanceUserSettingsTab_spacer" />
                 <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
-                    <MessagePreview
+                    <EventTilePreview
                         className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
-                        message={MESSAGE_PREVIEW_TEXT}
+                        message={this.MESSAGE_PREVIEW_TEXT}
                         useIRCLayout={false}
                     />
                     <StyledRadioButton
@@ -371,8 +371,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     </StyledRadioButton>
                 </div>
             </div>
-        </div>
-    }
+        </div>;
+    };
 
     render() {
         return (
