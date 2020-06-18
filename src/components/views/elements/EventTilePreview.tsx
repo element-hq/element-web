@@ -47,7 +47,7 @@ interface IState {
 
 const AVATAR_SIZE = 32;
 
-export default class MessagePreview extends React.Component<IProps, IState> {
+export default class EventTilePreview extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 

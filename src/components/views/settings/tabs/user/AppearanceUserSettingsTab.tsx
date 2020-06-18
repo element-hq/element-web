@@ -32,7 +32,7 @@ import { IValidationResult, IFieldState } from '../../../elements/Validation';
 import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
-import MessagePreview from '../../../elements/MessagePreview';
+import EventTilePreview from '../../../elements/EventTilePreview';
 
 interface IProps {
 }
@@ -281,7 +281,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_fontScaling">
 
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
-            <MessagePreview
+            <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
                 message={_t("Hey you. You're the best!")}
                 useIRCLayout={false}
