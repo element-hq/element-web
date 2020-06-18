@@ -55,12 +55,12 @@ export default class MessagePreview extends React.Component<IProps, IState> {
             userId: "@erim:fink.fink",
             displayname: "Erimayas Fink",
             avatar_url: null,
-        }
+        };
     }
 
     async componentDidMount() {
         // Fetch current user data
-        const client = MatrixClientPeg.get()
+        const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
         const avatar_url = Avatar.avatarUrlForUser(
@@ -97,7 +97,7 @@ export default class MessagePreview extends React.Component<IProps, IState> {
                 },
                 "event_id": "$9999999999999999999999999999999999999999999",
                 "room_id": "!999999999999999999:matrix.org"
-              }`))
+              }`));
 
         // Fake it more
         event.sender = {
@@ -106,7 +106,7 @@ export default class MessagePreview extends React.Component<IProps, IState> {
             getAvatarUrl: (..._) => {
                 return avatar_url;
             },
-        }
+        };
 
 
     }
@@ -124,6 +124,6 @@ export default class MessagePreview extends React.Component<IProps, IState> {
 
         return <div className={className}>
             <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
-        </div>
+        </div>;
     }
 }
