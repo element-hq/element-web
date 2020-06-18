@@ -70,5 +70,15 @@ limitations under the License.
         & + label > *:not(.mx_Checkbox_background) {
             margin-left: 10px;
         }
+
+        &:disabled + label {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:checked:disabled + label > .mx_Checkbox_background {
+            background-color: $muted-fg-color;
+            border-color: rgba($muted-fg-color, 0.5);
+        }
     }
 }

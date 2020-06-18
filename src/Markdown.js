@@ -175,14 +175,6 @@ export default class Markdown {
         const renderer = new commonmark.HtmlRenderer({safe: false});
         const real_paragraph = renderer.paragraph;
 
-        // The default `out` function only sends the input through an XML
-        // escaping function, which causes messages to be entity encoded,
-        // which we don't want in this case.
-        renderer.out = function(s) {
-            // The `lit` function adds a string literal to the output buffer.
-            this.lit(s);
-        };
-
         renderer.paragraph = function(node, entering) {
             // as with toHTML, only append lines to paragraphs if there are
             // multiple paragraphs

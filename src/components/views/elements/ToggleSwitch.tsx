@@ -28,7 +28,7 @@ interface IProps {
 
     // Called when the checked state changes. First argument will be the new state.
     onChange(checked: boolean): void;
-};
+}
 
 // Controlled Toggle Switch element, written with Accessibility in mind
 export default ({checked, disabled = false, onChange, ...props}: IProps) => {

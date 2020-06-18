@@ -48,18 +48,18 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                 this.props.roomId,
                 this.props.isExplicit,
             ),
-        }
+        };
     }
 
     private onChange = (checked: boolean): void => {
         this.save(checked);
         this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
-    }
+    };
 
     private checkBoxOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.onChange(e.target.checked);
-    }
+    };
 
     private save = (val?: boolean): void => {
         return SettingsStore.setValue(
@@ -68,7 +68,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
             this.props.level,
             val !== undefined ? val : this.state.value,
         );
-    }
+    };
 
     public render() {
         const canChange = SettingsStore.canSetValue(this.props.name, this.props.roomId, this.props.level);

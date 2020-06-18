@@ -75,7 +75,7 @@ export class RecentAlgorithm implements IAlgorithm {
         };
 
         return rooms.sort((a, b) => {
-            return getLastTs(a) - getLastTs(b);
+            return getLastTs(b) - getLastTs(a);
         });
     }
 }

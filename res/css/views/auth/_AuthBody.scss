@@ -146,3 +146,12 @@ limitations under the License.
 .mx_AuthBody_spinner {
     margin: 1em 0;
 }
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthBody {
+        border-radius: 4px;
+        width: auto;
+        max-width: 500px;
+        padding: 10px;
+    }
+}

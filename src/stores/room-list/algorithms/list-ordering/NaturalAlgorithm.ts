@@ -28,7 +28,7 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
-        console.log("Constructed a NaturalAlgorithm");
+        console.log(`[RoomListDebug] Constructed a NaturalAlgorithm for ${tagId}`);
     }
 
     public async setRooms(rooms: Room[]): Promise<any> {
@@ -36,9 +36,17 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
     }
 
     public async handleRoomUpdate(room, cause): Promise<boolean> {
-        // TODO: Handle NewRoom and RoomRemoved
-        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+        const isSplice = cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved;
+        const isInPlace = cause === RoomUpdateCause.Timeline || cause === RoomUpdateCause.ReadReceipt;
+        if (!isSplice && !isInPlace) {
             throw new Error(`Unsupported update cause: ${cause}`);
+        }
+
+        if (cause === RoomUpdateCause.NewRoom) {
+            this.cachedOrderedRooms.push(room);
+        } else if (cause === RoomUpdateCause.RoomRemoved) {
+            const idx = this.cachedOrderedRooms.indexOf(room);
+            if (idx >= 0) this.cachedOrderedRooms.splice(idx, 1);
         }
 
         // TODO: Optimize this to avoid useless operations
