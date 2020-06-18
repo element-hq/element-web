@@ -240,6 +240,7 @@ export class ListNotificationState extends EventEmitter implements IDestroyable 
         this.rooms = rooms;
         for (const oldRoom of diff.removed) {
             const state = this.states[oldRoom.roomId];
+            if (!state) continue; // We likely just didn't have a badge (race condition)
             delete this.states[oldRoom.roomId];
             state.off(NOTIFICATION_STATE_UPDATE, this.onRoomNotificationStateUpdate);
             state.destroy();
