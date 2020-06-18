@@ -17,20 +17,20 @@ limitations under the License.
 import React from 'react';
 
 interface IProps {
-    className: string,
-    dragFunc: (currentLocation: ILocationState, event: MouseEvent) => ILocationState,
-    onMouseUp: (event: MouseEvent) => void,
+    className: string;
+    dragFunc: (currentLocation: ILocationState, event: MouseEvent) => ILocationState;
+    onMouseUp: (event: MouseEvent) => void;
 }
 
 interface IState {
-    onMouseMove: (event: MouseEvent) => void,
-    onMouseUp: (event: MouseEvent) => void,
-    location: ILocationState,
+    onMouseMove: (event: MouseEvent) => void;
+    onMouseUp: (event: MouseEvent) => void;
+    location: ILocationState;
 }
 
 export interface ILocationState {
-    currentX: number,
-    currentY: number,
+    currentX: number;
+    currentY: number;
 }
 
 export default class Draggable extends React.Component<IProps, IState> {
@@ -58,13 +58,13 @@ export default class Draggable extends React.Component<IProps, IState> {
 
         document.addEventListener("mousemove", this.state.onMouseMove);
         document.addEventListener("mouseup", this.state.onMouseUp);
-    }
+    };
 
     private onMouseUp = (event: MouseEvent): void => {
         document.removeEventListener("mousemove", this.state.onMouseMove);
         document.removeEventListener("mouseup", this.state.onMouseUp);
         this.props.onMouseUp(event);
-    }
+    };
 
     private onMouseMove(event: MouseEvent): void {
         const newLocation = this.props.dragFunc(this.state.location, event);
@@ -75,7 +75,7 @@ export default class Draggable extends React.Component<IProps, IState> {
     }
 
     render() {
-        return <div className={this.props.className} onMouseDown={this.onMouseDown.bind(this)} />
+        return <div className={this.props.className} onMouseDown={this.onMouseDown.bind(this)} />;
     }
 
 }

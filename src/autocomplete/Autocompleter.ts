@@ -35,15 +35,15 @@ export interface ISelectionRange {
 
 export interface ICompletion {
     type: "at-room" | "command" | "community" | "room" | "user";
-    completion: string,
+    completion: string;
     completionId?: string;
-    component?: ReactElement,
-    range: ISelectionRange,
-    command?: string,
+    component?: ReactElement;
+    range: ISelectionRange;
+    command?: string;
     suffix?: string;
     // If provided, apply a LINK entity to the completion with the
     // data = { url: href }.
-    href?: string,
+    href?: string;
 }
 
 const PROVIDERS = [

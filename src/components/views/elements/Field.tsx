@@ -85,20 +85,20 @@ interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElem
 type PropShapes = IInputProps | ISelectProps | ITextareaProps;
 
 interface IState {
-    valid: boolean,
-    feedback: React.ReactNode,
-    feedbackVisible: boolean,
-    focused: boolean,
+    valid: boolean;
+    feedback: React.ReactNode;
+    feedbackVisible: boolean;
+    focused: boolean;
 }
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
     private id: string;
     private input: HTMLInputElement;
 
-    private static defaultProps = {
+    public static readonly defaultProps = {
         element: "input",
         type: "text",
-    }
+    };
 
     /*
      * This was changed from throttle to debounce: this is more traditional for

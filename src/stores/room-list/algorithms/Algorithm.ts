@@ -127,7 +127,7 @@ export class Algorithm extends EventEmitter {
         const algorithm = getListAlgorithmInstance(order, tagId, this.sortAlgorithms[tagId]);
         this.algorithms[tagId] = algorithm;
 
-        await algorithm.setRooms(this._cachedRooms[tagId])
+        await algorithm.setRooms(this._cachedRooms[tagId]);
         this._cachedRooms[tagId] = algorithm.orderedRooms;
         this.recalculateFilteredRoomsForTag(tagId); // update filter to re-sort the list
         this.recalculateStickyRoom(tagId); // update sticky room to make sure it appears if needed
@@ -541,5 +541,5 @@ export class Algorithm extends EventEmitter {
         }
 
         return true;
-    };
+    }
 }
