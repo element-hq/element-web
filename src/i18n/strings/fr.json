@@ -2527,5 +2527,6 @@
     "Create a Recovery Key": "Créer une clé de récupération",
     "Upgrade your Recovery Key": "Mettre à jour votre clé de récupération",
     "Store your Recovery Key": "Stocker votre clé de récupération",
-    "Use the improved room list (in development - will refresh to apply changes)": "Utiliser la liste de salons améliorée (en développement − actualisera pour appliquer les changements)"
+    "Use the improved room list (in development - will refresh to apply changes)": "Utiliser la liste de salons améliorée (en développement − actualisera pour appliquer les changements)",
+    "Use the improved room list (will refresh to apply changes)": "Utiliser la liste de salons améliorée (actualisera pour appliquer les changements)"
 }
