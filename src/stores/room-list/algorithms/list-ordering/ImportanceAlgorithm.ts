@@ -87,7 +87,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
-        console.log("Constructed an ImportanceAlgorithm");
+        console.log(`[RoomListDebug] Constructed an ImportanceAlgorithm for ${tagId}`);
     }
 
     // noinspection JSMethodCanBeStatic
@@ -151,8 +151,36 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         }
     }
 
+    private async handleSplice(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        if (cause === RoomUpdateCause.NewRoom) {
+            const category = this.getRoomCategory(room);
+            this.alterCategoryPositionBy(category, 1, this.indices);
+            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+        } else if (cause === RoomUpdateCause.RoomRemoved) {
+            const roomIdx = this.getRoomIndex(room);
+            if (roomIdx === -1) return false; // no change
+            const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
+            this.alterCategoryPositionBy(oldCategory, -1, this.indices);
+            this.cachedOrderedRooms.splice(roomIdx, 1); // remove the room
+        } else {
+            throw new Error(`Unhandled splice: ${cause}`);
+        }
+    }
+
+    private getRoomIndex(room: Room): number {
+        let roomIdx = this.cachedOrderedRooms.indexOf(room);
+        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
+            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
+            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
+        }
+        return roomIdx;
+    }
+
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        // TODO: Handle NewRoom and RoomRemoved
+        if (cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved) {
+            return this.handleSplice(room, cause);
+        }
+
         if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
             throw new Error(`Unsupported update cause: ${cause}`);
         }
@@ -162,11 +190,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             return; // Nothing to do here.
         }
 
-        let roomIdx = this.cachedOrderedRooms.indexOf(room);
-        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
-            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
-            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
-        }
+        const roomIdx = this.getRoomIndex(room);
         if (roomIdx === -1) {
             throw new Error(`Room ${room.roomId} has no index in ${this.tagId}`);
         }
@@ -188,12 +212,18 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             // room from the array.
         }
 
-        // The room received an update, so take out the slice and sort it. This should be relatively
-        // quick because the room is inserted at the top of the category, and most popular sorting
-        // algorithms will deal with trying to keep the active room at the top/start of the category.
-        // For the few algorithms that will have to move the thing quite far (alphabetic with a Z room
-        // for example), the list should already be sorted well enough that it can rip through the
-        // array and slot the changed room in quickly.
+        // Sort the category now that we've dumped the room in
+        await this.sortCategory(category);
+
+        return true; // change made
+    }
+
+    private async sortCategory(category: Category) {
+        // This should be relatively quick because the room is usually inserted at the top of the
+        // category, and most popular sorting algorithms will deal with trying to keep the active
+        // room at the top/start of the category. For the few algorithms that will have to move the
+        // thing quite far (alphabetic with a Z room for example), the list should already be sorted
+        // well enough that it can rip through the array and slot the changed room in quickly.
         const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
             ? Number.MAX_SAFE_INTEGER
             : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
@@ -202,8 +232,6 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         const unsortedSlice = this.cachedOrderedRooms.splice(startIdx, numSort);
         const sorted = await sortRoomsWithAlgorithm(unsortedSlice, this.tagId, this.sortingAlgorithm);
         this.cachedOrderedRooms.splice(startIdx, 0, ...sorted);
-
-        return true; // change made
     }
 
     // noinspection JSMethodCanBeStatic
@@ -230,14 +258,29 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         // We also need to update subsequent categories as they'll all shift by nRooms, so we
         // loop over the order to achieve that.
 
-        for (let i = CATEGORY_ORDER.indexOf(fromCategory) + 1; i < CATEGORY_ORDER.length; i++) {
-            const nextCategory = CATEGORY_ORDER[i];
-            indices[nextCategory] -= nRooms;
-        }
+        this.alterCategoryPositionBy(fromCategory, -nRooms, indices);
+        this.alterCategoryPositionBy(toCategory, +nRooms, indices);
+    }
 
-        for (let i = CATEGORY_ORDER.indexOf(toCategory) + 1; i < CATEGORY_ORDER.length; i++) {
-            const nextCategory = CATEGORY_ORDER[i];
-            indices[nextCategory] += nRooms;
+    private alterCategoryPositionBy(category: Category, n: number, indices: ICategoryIndex) {
+        // Note: when we alter a category's index, we actually have to modify the ones following
+        // the target and not the target itself.
+
+        // XXX: If this ever actually gets more than one room passed to it, it'll need more index
+        // handling. For instance, if 45 rooms are removed from the middle of a 50 room list, the
+        // index for the categories will be way off.
+
+        const nextOrderIndex = CATEGORY_ORDER.indexOf(category) + 1;
+        if (n > 0) {
+            for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
+                const nextCategory = CATEGORY_ORDER[i];
+                indices[nextCategory] += Math.abs(n);
+            }
+        } else if (n < 0) {
+            for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
+                const nextCategory = CATEGORY_ORDER[i];
+                indices[nextCategory] -= Math.abs(n);
+            }
         }
 
         // Do a quick check to see if we've completely broken the index

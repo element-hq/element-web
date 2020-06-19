@@ -26,16 +26,23 @@ interface IState {
 export default class StyledRadioButton extends React.PureComponent<IProps, IState> {
     public static readonly defaultProps = {
         className: '',
-    }
+    };
 
     public render() {
-        const { children, className, ...otherProps } = this.props;
-        return <label className={classnames('mx_RadioButton', className)}>
-            <input type='radio' {...otherProps} />
+        const { children, className, disabled, ...otherProps } = this.props;
+        const _className = classnames(
+            'mx_RadioButton',
+            className,
+            {
+                "mx_RadioButton_disabled": disabled,
+                "mx_RadioButton_enabled": !disabled,
+            });
+        return <label className={_className}>
+            <input type='radio' disabled={disabled} {...otherProps} />
             {/* Used to render the radio button circle */}
             <div><div></div></div>
             <span>{children}</span>
             <div className="mx_RadioButton_spacer" />
-        </label>
+        </label>;
     }
 }

@@ -20,11 +20,10 @@ import { accessSecretStorage, AccessCancelledError } from '../CrossSigningManage
 import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 export const PHASE_INTRO = 0;
-export const PHASE_RECOVERY_KEY = 1;
-export const PHASE_BUSY = 2;
-export const PHASE_DONE = 3;    //final done stage, but still showing UX
-export const PHASE_CONFIRM_SKIP = 4;
-export const PHASE_FINISHED = 5; //UX can be closed
+export const PHASE_BUSY = 1;
+export const PHASE_DONE = 2;    //final done stage, but still showing UX
+export const PHASE_CONFIRM_SKIP = 3;
+export const PHASE_FINISHED = 4; //UX can be closed
 
 export class SetupEncryptionStore extends EventEmitter {
     static sharedInstance() {
@@ -68,7 +67,7 @@ export class SetupEncryptionStore extends EventEmitter {
 
     async fetchKeyInfo() {
         const keys = await MatrixClientPeg.get().isSecretStored('m.cross_signing.master', false);
-        if (!keys || Object.keys(keys).length === 0) {
+        if (Object.keys(keys).length === 0) {
             this.keyId = null;
             this.keyInfo = null;
         } else {
@@ -81,34 +80,7 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
     }
 
-    async startKeyReset() {
-        try {
-            await accessSecretStorage(() => {}, {forceReset: true});
-            // If the keys are reset, the trust status event will fire and we'll change state
-        } catch (e) {
-            // dialog was cancelled - stay on the current screen
-        }
-    }
-
-    async useRecoveryKey() {
-        this.phase = PHASE_RECOVERY_KEY;
-        this.emit("update");
-    }
-
-    cancelUseRecoveryKey() {
-        this.phase = PHASE_INTRO;
-        this.emit("update");
-    }
-
-    async setupWithRecoveryKey(recoveryKey) {
-        this.startTrustCheck({[this.keyId]: recoveryKey});
-    }
-
     async usePassPhrase() {
-        this.startTrustCheck();
-    }
-
-    async startTrustCheck(withKeys) {
         this.phase = PHASE_BUSY;
         this.emit("update");
         const cli = MatrixClientPeg.get();
@@ -135,9 +107,6 @@ export class SetupEncryptionStore extends EventEmitter {
                             // to advance before this.
                             await cli.restoreKeyBackupWithSecretStorage(backupInfo);
                         }
-                    }, {
-                        withKeys,
-                        passphraseOnly: true,
                     }).catch(reject);
                 } catch (e) {
                     console.error(e);

@@ -61,4 +61,16 @@ describe('editor/serialize', function() {
         const html = htmlSerializeIfNeeded(model, {});
         expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname]</a>");
     });
+    it('escaped markdown should not retain backslashes', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.plain('\\*hello\\* world')]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe('*hello* world');
+    });
+    it('escaped markdown should convert HTML entities', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.plain('\\*hello\\* world < hey world!')]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe('*hello* world &lt; hey world!');
+    });
 });

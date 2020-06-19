@@ -29,15 +29,15 @@ const MIN_TOOLTIP_HEIGHT = 25;
 
 interface IProps {
         // Class applied to the element used to position the tooltip
-        className: string,
+        className: string;
         // Class applied to the tooltip itself
-        tooltipClassName?: string,
+        tooltipClassName?: string;
         // Whether the tooltip is visible or hidden.
         // The hidden state allows animating the tooltip away via CSS.
         // Defaults to visible if unset.
-        visible?: boolean,
+        visible?: boolean;
         // the react element to put into the tooltip
-        label: React.ReactNode,
+        label: React.ReactNode;
 }
 
 export default class Tooltip extends React.Component<IProps> {
@@ -126,7 +126,7 @@ export default class Tooltip extends React.Component<IProps> {
             tooltip: this.tooltip,
             parent: parent,
         });
-    }
+    };
 
     public render() {
         // Render a placeholder

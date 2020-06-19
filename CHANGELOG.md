@@ -1,3 +1,9 @@
+Changes in [2.7.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.2) (2020-06-16)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.1...v2.7.2)
+
+ * Upgrade to JS SDK 6.2.2
+
 Changes in [2.7.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.7.1) (2020-06-05)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.7.0...v2.7.1)

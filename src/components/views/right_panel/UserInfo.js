@@ -748,19 +748,26 @@ const RoomAdminToolsContainer = ({room, children, member, startUpdating, stopUpd
         powerLevels.state_default
     );
 
+    // if these do not exist in the event then they should default to 50 as per the spec
+    const {
+        ban: banPowerLevel = 50,
+        kick: kickPowerLevel = 50,
+        redact: redactPowerLevel = 50,
+    } = powerLevels;
+
     const me = room.getMember(cli.getUserId());
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+    if (canAffectUser && me.powerLevel >= kickPowerLevel) {
         kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (me.powerLevel >= powerLevels.redact) {
+    if (me.powerLevel >= redactPowerLevel) {
         redactButton = (
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
-    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+    if (canAffectUser && me.powerLevel >= banPowerLevel) {
         banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (canAffectUser && me.powerLevel >= editPowerLevel) {

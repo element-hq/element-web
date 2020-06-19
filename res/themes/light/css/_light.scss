@@ -186,6 +186,10 @@ $roomtile2-preview-color: #9e9e9e;
 $roomtile2-default-badge-bg-color: #61708b;
 $roomtile2-selected-bg-color: #FFF;
 
+$presence-online: $accent-color;
+$presence-away: orange; // TODO: Get color
+$presence-offline: #E3E8F0;
+
 // ********************
 
 $roomtile-name-color: #61708b;

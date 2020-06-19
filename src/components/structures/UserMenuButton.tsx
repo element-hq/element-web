@@ -32,6 +32,8 @@ import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import SdkConfig from "../../SdkConfig";
+import {getHomePageUrl} from "../../utils/pages";
 
 interface IProps {
 }
@@ -65,6 +67,10 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         } else {
             return MatrixClientPeg.get().getUserId();
         }
+    }
+
+    private get hasHomePage(): boolean {
+        return !!getHomePageUrl(SdkConfig.get());
     }
 
     public componentDidMount() {
@@ -147,6 +153,13 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         this.setState({menuDisplayed: false}); // also close the menu
     };
 
+    private onHomeClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        defaultDispatcher.dispatch({action: 'view_home_page'});
+    };
+
     public render() {
         let contextMenu;
         if (this.state.menuDisplayed) {
@@ -169,6 +182,18 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                             },
                         )}
                     </div>
+                );
+            }
+
+            let homeButton = null;
+            if (this.hasHomePage) {
+                homeButton = (
+                    <li>
+                        <AccessibleButton onClick={this.onHomeClick}>
+                            <img src={require("../../../res/img/feather-customised/home.svg")} width={16} />
+                            <span>{_t("Home")}</span>
+                        </AccessibleButton>
+                    </li>
                 );
             }
 
@@ -205,6 +230,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         {hostingLink}
                         <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
                             <ul>
+                                {homeButton}
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
                                         <img src={require("../../../res/img/feather-customised/notifications.svg")} width={16} />
@@ -265,6 +291,6 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                 </ContextMenuButton>
                 {contextMenu}
             </React.Fragment>
-        )
+        );
     }
 }
