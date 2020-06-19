@@ -118,7 +118,7 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
         const hasNotif = this.props.notification.color >= NotificationColor.Red;
         const hasCount = this.props.notification.color >= NotificationColor.Grey;
         const hasUnread = this.props.notification.color >= NotificationColor.Bold;
-        const couldBeEmpty = !this.state.showCounts || hasUnread;
+        const couldBeEmpty = (!this.state.showCounts || hasUnread) && !hasNotif;
         let isEmptyBadge = couldBeEmpty && (!this.state.showCounts || !hasCount);
         if (this.props.forceCount) {
             isEmptyBadge = false;
