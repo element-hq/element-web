@@ -2121,7 +2121,6 @@
     "Create your account": "Create your account",
     "Use Recovery Key or Passphrase": "Use Recovery Key or Passphrase",
     "Use Recovery Key": "Use Recovery Key",
-    "If you have no other devices you can <button>set up new recovery options</button>": "If you have no other devices you can <button>set up new recovery options</button>",
     "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.",
     "This requires the latest Riot on your other devices:": "This requires the latest Riot on your other devices:",
     "or another cross-signing capable Matrix client": "or another cross-signing capable Matrix client",
