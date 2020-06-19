@@ -248,7 +248,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true} />;
+        const badge = (
+            <NotificationBadge
+                notification={this.state.notificationState}
+                forceCount={false}
+                roomId={this.props.room.roomId}
+            />
+        );
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;

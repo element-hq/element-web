@@ -267,7 +267,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     // TODO: Collapsed state
 
-                    const badge = <NotificationBadge allowNoCount={false} notification={this.state.notificationState}/>;
+                    const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
 
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {

@@ -188,6 +188,11 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    // TODO: Wire up appropriately to UI (FTUE notifications)
+    "Notifications.alwaysShowBadgeCounts": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
+    },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Use compact timeline layout'),
