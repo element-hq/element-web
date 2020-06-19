@@ -2515,5 +2515,6 @@
     "Create a Recovery Key": "Visszaállítási kulcs készítése",
     "Upgrade your Recovery Key": "A Visszaállítási kulcs fejlesztése",
     "Store your Recovery Key": "Visszaállítási kulcs tárolása",
-    "Use the improved room list (in development - will refresh to apply changes)": "Használd a fejlesztett szoba listát (fejlesztés alatt - a változások a frissítés után aktiválódnak)"
+    "Use the improved room list (in development - will refresh to apply changes)": "Használd a fejlesztett szoba listát (fejlesztés alatt - a változások a frissítés után aktiválódnak)",
+    "Use the improved room list (will refresh to apply changes)": "Használd a fejlesztett szoba listát (a változások életbe lépéséhez újra fog tölteni)"
 }
