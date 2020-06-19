@@ -1023,6 +1023,7 @@
     "Encrypted by an unverified session": "Encrypted by an unverified session",
     "Unencrypted": "Unencrypted",
     "Encrypted by a deleted session": "Encrypted by a deleted session",
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "The authenticity of this encrypted message can't be guaranteed on this device.",
     "Please select the destination room for this message": "Please select the destination room for this message",
     "Invite only": "Invite only",
     "Scroll to most recent messages": "Scroll to most recent messages",
