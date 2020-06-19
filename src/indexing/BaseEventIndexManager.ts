@@ -157,6 +157,29 @@ export default abstract class BaseEventIndexManager {
         throw new Error("Unimplemented");
     }
 
+
+    /**
+     * Get the user version of the database.
+     * @return {Promise<number>} A promise that will resolve to the user stored
+     * version number.
+     */
+    async getUserVersion(): Promise<number> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Set the user stored version to the given version number.
+     *
+     * @param {number} version The new version that should be stored in the
+     * database.
+     *
+     * @return {Promise<void>} A promise that will resolve once the new version
+     * is stored.
+     */
+    async setUserVersion(version: number): Promise<void> {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * Commit the previously queued up events to the index.
      *

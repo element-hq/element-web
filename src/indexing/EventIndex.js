@@ -42,9 +42,6 @@ export default class EventIndex extends EventEmitter {
     async init() {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
-        await indexManager.initEventIndex();
-        console.log("EventIndex: Successfully initialized the event index");
-
         this.crawlerCheckpoints = await indexManager.loadCheckpoints();
         console.log("EventIndex: Loaded checkpoints", this.crawlerCheckpoints);
 
