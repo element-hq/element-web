@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
+import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import {
@@ -125,18 +125,10 @@ export default class SetupEncryptionBody extends React.Component {
             }
 
             let useRecoveryKeyButton;
-            let resetKeysCaption;
             if (recoveryKeyPrompt) {
                 useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
                     {recoveryKeyPrompt}
                 </AccessibleButton>;
-                resetKeysCaption = _td(
-                    "If you've forgotten your recovery key you can <button>set up new recovery options</button>",
-                );
-            } else {
-                resetKeysCaption = _td(
-                    "If you have no other devices you can <button>set up new recovery options</button>",
-                );
             }
 
             return (
