@@ -41,6 +41,17 @@ export class SetupEncryptionStore extends EventEmitter {
         this.backupInfo = null;
         MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
         MatrixClientPeg.get().on('userTrustStatusChanged', this._onUserTrustStatusChanged);
+
+        const cli = MatrixClientPeg.get();
+        const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
+        if (requestsInProgress.length) {
+            // If there are multiple, we take the most recent. Equally if the user sends another request from
+            // another device after this screen has been shown, we'll switch to the new one, so this
+            // generally doesn't support multiple requests.
+            this._setActiveVerificationRequest(requestsInProgress[requestsInProgress.length - 1]);
+        }
+
+        this.fetchKeyInfo();
     }
 
     stop() {
@@ -114,16 +125,8 @@ export class SetupEncryptionStore extends EventEmitter {
         }
     }
 
-    onVerificationRequest = async (request) => {
-        if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
-
-        if (this.verificationRequest) {
-            this.verificationRequest.off("change", this.onVerificationRequestChange);
-        }
-        this.verificationRequest = request;
-        await request.accept();
-        request.on("change", this.onVerificationRequestChange);
-        this.emit("update");
+    onVerificationRequest = (request) => {
+        this._setActiveVerificationRequest(request);
     }
 
     onVerificationRequestChange = async () => {
@@ -163,5 +166,17 @@ export class SetupEncryptionStore extends EventEmitter {
         this.emit("update");
         // async - ask other clients for keys, if necessary
         MatrixClientPeg.get()._crypto.cancelAndResendAllOutgoingKeyRequests();
+    }
+
+    async _setActiveVerificationRequest(request) {
+        if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
+
+        if (this.verificationRequest) {
+            this.verificationRequest.off("change", this.onVerificationRequestChange);
+        }
+        this.verificationRequest = request;
+        await request.accept();
+        request.on("change", this.onVerificationRequestChange);
+        this.emit("update");
     }
 }
