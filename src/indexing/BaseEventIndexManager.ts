@@ -135,12 +135,48 @@ export default abstract class BaseEventIndexManager {
     }
 
     /**
+     * Check if the room with the given id is already indexed.
+     *
+     * @param {string} roomId The ID of the room which we want to check if it
+     * has been already indexed.
+     *
+     * @return {Promise<boolean>} Returns true if the index contains events for
+     * the given room, false otherwise.
+     */
+    isRoomIndexed(roomId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
      * Get statistical information of the index.
      *
      * @return {Promise<IndexStats>} A promise that will resolve to the index
      * statistics.
      */
     async getStats(): Promise<IndexStats> {
+        throw new Error("Unimplemented");
+    }
+
+
+    /**
+     * Get the user version of the database.
+     * @return {Promise<number>} A promise that will resolve to the user stored
+     * version number.
+     */
+    async getUserVersion(): Promise<number> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Set the user stored version to the given version number.
+     *
+     * @param {number} version The new version that should be stored in the
+     * database.
+     *
+     * @return {Promise<void>} A promise that will resolve once the new version
+     * is stored.
+     */
+    async setUserVersion(version: number): Promise<void> {
         throw new Error("Unimplemented");
     }
 
