@@ -2526,5 +2526,6 @@
     "Create a Recovery Key": "建立復原金鑰",
     "Upgrade your Recovery Key": "升級您的復原金鑰",
     "Store your Recovery Key": "儲存您的復原金鑰",
-    "Use the improved room list (in development - will refresh to apply changes)": "使用改進的聊天室清單（開發中 ── 將會重新整理以套用變更）"
+    "Use the improved room list (in development - will refresh to apply changes)": "使用改進的聊天室清單（開發中 ── 將會重新整理以套用變更）",
+    "Use the improved room list (will refresh to apply changes)": "使用改進的聊天室清單（將會重新整理以套用變更）"
 }
