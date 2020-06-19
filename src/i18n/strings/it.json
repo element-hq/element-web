@@ -2521,5 +2521,6 @@
     "Create a Recovery Key to store encryption keys & secrets with your account data. If you lose access to this login you’ll need it to unlock your data.": "Crea un chiave di recupero per memorizzare le chiavi di cifratura e i segreti con i dati del tuo account. Se perdi l'accesso a questo login, ti servirà per sbloccare i tuoi dati.",
     "Create a Recovery Key": "Crea una chiave di recupero",
     "Upgrade your Recovery Key": "Aggiorna la chiave di recupero",
-    "Store your Recovery Key": "Salva la chiave di recupero"
+    "Store your Recovery Key": "Salva la chiave di recupero",
+    "Use the improved room list (will refresh to apply changes)": "Usa l'elenco stanze migliorato (verrà ricaricato per applicare le modifiche)"
 }
