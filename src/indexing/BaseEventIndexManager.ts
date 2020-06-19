@@ -135,6 +135,19 @@ export default abstract class BaseEventIndexManager {
     }
 
     /**
+     * Check if the room with the given id is already indexed.
+     *
+     * @param {string} roomId The ID of the room which we want to check if it
+     * has been already indexed.
+     *
+     * @return {Promise<boolean>} Returns true if the index contains events for
+     * the given room, false otherwise.
+     */
+    isRoomIndexed(roomId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
      * Get statistical information of the index.
      *
      * @return {Promise<IndexStats>} A promise that will resolve to the index
