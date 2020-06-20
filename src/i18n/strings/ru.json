@@ -2122,7 +2122,7 @@
     "Enable cross-signing to verify per-user instead of per-session": "Разрешить кросс-подпись для подтверждения пользователей вместо отдельных сессий",
     "Keep recovery passphrase in memory for this session": "Сохранить пароль восстановления в памяти для этой сессии",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Отдельно подтверждать каждую сессию пользователя как доверенную, не доверяя кросс-подписанным устройствам.",
-    "Securely cache encrypted messages locally for them to appear in search results, using ": "Безопасно кэшировать шифрованные сообщения локально, чтобы они появлялись в результатах поиска с помощью ",
+    "Securely cache encrypted messages locally for them to appear in search results, using ": "Кэшировать шифрованные сообщения локально, чтобы они выводились в результатах поиска, используя: ",
     " to store messages from ": " чтобы сохранить сообщения от ",
     "Securely cache encrypted messages locally for them to appear in search results.": "Безопасно кэшировать шифрованные сообщения локально, чтобы они появлялись в результатах поиска.",
     "Riot is missing some components required for securely caching encrypted messages locally. If you'd like to experiment with this feature, build a custom Riot Desktop with <nativeLink>search components added</nativeLink>.": "Отсутствуют некоторые необходимые компоненты для Riot, чтобы безопасно кэшировать шифрованные сообщения локально. Если вы хотите попробовать эту возможность, соберите самостоятельно Riot Desktop с <nativeLink>добавлением поисковых компонентов</nativeLink>.",
@@ -2144,5 +2144,7 @@
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong>в %(roomName)s",
     "Start verification again from their profile.": "Начните подтверждение заново в профиле пользователя.",
     "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Сообщения в этой комнате зашифрованы сквозным шифрованием. Посмотрите подробности и подтвердите пользователя в его профиле.",
-    "Send a Direct Message": "Отправить сообщение"
+    "Send a Direct Message": "Отправить сообщение",
+    "Light": "Светлая",
+    "Dark": "Темная"
 }
