@@ -5,5 +5,10 @@
     "Go to your browser to complete Sign In": "Ddu ɣer iminig akken ad tkemleḍ ajerred",
     "Unknown device": "Ibenk arussin",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "Create Account": "Rnu amiḍan"
+    "Create Account": "Rnu amiḍan",
+    "powered by Matrix": "S lmendad n Matrix",
+    "Custom Server Options": "Iɣewwaren n uqeddac udmawan",
+    "Dismiss": "Agwi",
+    "Sign In": "Kcem",
+    "Explore rooms": "Snirem tixxamin"
 }
