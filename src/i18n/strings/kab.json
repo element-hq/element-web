@@ -243,7 +243,7 @@
     "Sign in": "Qqen",
     "Help": "Tallelt",
     "Reload": "Smiren",
-    "powered by Matrix": "S lmendad n Matrix",
+    "powered by Matrix": "s lmendad n Matrix",
     "Custom Server Options": "Iɣewwaren n uqeddac udmawan",
     "Code": "Tangalt",
     "Submit": "Azen",
@@ -336,5 +336,15 @@
     "Toggle right panel": "Sken/ffer agalis ayeffus",
     "Toggle this dialog": "Sken/ffer adiwanni-a",
     "Move autocomplete selection up/down": "Err tafrant n tacart tawurmant afellay/adday",
-    "Cancel autocomplete": "Sefsex tacaṛt tawurmant"
+    "Cancel autocomplete": "Sefsex tacaṛt tawurmant",
+    "Toggle Bold": "Err-it d azuran",
+    "Toggle Italics": "Err-it ɣer uknan",
+    "Toggle Quote": "Err-it ɣer yizen aneẓli",
+    "Navigate recent messages to edit": "Nadi iznan imaynuten i usiẓreg",
+    "Jump to start/end of the composer": "Ṛuḥ ɣer tazwara/taggara n yimsuddes",
+    "Navigate composer history": "Nadi deg uzray n yimsuddes",
+    "Cancel replying to a message": "Sefsex tiririt ɣef yizen",
+    "Toggle microphone mute": "Rmed/sens tanusi n usawaḍ",
+    "Toggle video on/off": "Rmed/sens tavidyut",
+    "Scroll up/down in the timeline": "Drurem gar afellay/addday n tesnakudt"
 }
