@@ -293,5 +293,10 @@
     "Esc": "Échap",
     "Enter": "Entrée",
     "Space": "Tallunt",
-    "End": "Tagara"
+    "End": "Tagara",
+    "This email address is already in use": "Tansa-agi n yimayl tettuseqdac yakan",
+    "This phone number is already in use": "Uṭṭun-agi n tilifun yettuseqddac yakan",
+    "Your Riot is misconfigured": "Riot inek(inem) ur ittusbadu ara",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Ma ulac aɣilif, sebded <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, neɣ<safariLink>Safari</safariLink> i tirmit igerrzen.",
+    "I understand the risks and wish to continue": "Gziɣ ayen ara d-yeḍrun maca bɣiɣ ad kemmleɣ"
 }
