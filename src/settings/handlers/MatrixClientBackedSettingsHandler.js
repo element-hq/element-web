@@ -42,6 +42,10 @@ export default class MatrixClientBackedSettingsHandler extends SettingsHandler {
         MatrixClientBackedSettingsHandler._instances.push(this);
     }
 
+    get client() {
+        return MatrixClientBackedSettingsHandler._matrixClient;
+    }
+
     initMatrixClient() {
         console.warn("initMatrixClient not overridden");
     }
