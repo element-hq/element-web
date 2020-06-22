@@ -38,7 +38,7 @@ export class FontWatcher implements IWatcher {
         this.setSystemFont({
             useSystemFont: SettingsStore.getValue("useSystemFont"),
             font: SettingsStore.getValue("systemFont"),
-        })
+        });
         this.dispatcherRef = dis.register(this.onAction);
     }
 
@@ -50,7 +50,7 @@ export class FontWatcher implements IWatcher {
         if (payload.action === Action.UpdateFontSize) {
             this.setRootFontSize(payload.size);
         } else if (payload.action === Action.UpdateSystemFont) {
-            this.setSystemFont(payload)
+            this.setSystemFont(payload);
         }
     };
 
@@ -65,5 +65,5 @@ export class FontWatcher implements IWatcher {
 
     private setSystemFont = ({useSystemFont, font}) => {
         document.body.style.fontFamily = useSystemFont ? font : "";
-    }
+    };
 }

@@ -47,13 +47,13 @@ interface IState extends IThemeState {
     // String displaying the current selected fontSize.
     // Needs to be string for things like '17.' without
     // trailing 0s.
-    fontSize: string,
-    customThemeUrl: string,
-    customThemeMessage: CustomThemeMessage,
-    useCustomFontSize: boolean,
-    useSystemFont: boolean,
-    systemFont: string,
-    showAdvanced: boolean,
+    fontSize: string;
+    customThemeUrl: string;
+    customThemeMessage: CustomThemeMessage;
+    useCustomFontSize: boolean;
+    useSystemFont: boolean;
+    systemFont: string;
+    showAdvanced: boolean;
 }
 
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
@@ -349,7 +349,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     onChange={(value) => {
                         this.setState({
                             systemFont: value.target.value,
-                        })
+                        });
 
                         SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
                     }}
@@ -363,7 +363,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
             {toggle}
             {advanced}
-        </div>
+        </div>;
     }
 
     render() {

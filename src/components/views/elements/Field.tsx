@@ -53,9 +53,9 @@ interface IProps {
     flagInvalid?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
-    tooltipContent?: React.ReactNode,
+    tooltipContent?: React.ReactNode;
     // If specified the tooltip will be shown regardless of feedback
-    forceTooltipVisible?: boolean,
+    forceTooltipVisible?: boolean;
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
     tooltipClassName?: string;
