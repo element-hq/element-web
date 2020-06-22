@@ -18,6 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
+import {objectKeyChanges} from "../../utils/objects";
 
 /**
  * Gets and sets settings at the "room" level.
@@ -38,8 +39,12 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         newClient.on("RoomState.events", this._onEvent);
     }
 
-    _onEvent(event) {
+    _onEvent(event, state, prevEvent) {
         const roomId = event.getRoomId();
+        const room = this.client.getRoom(roomId);
+        if (!room) throw new Error(`Unknown room caused state update: ${roomId}`);
+
+        if (state !== room.currentState) return; // ignore state updates which are not current
 
         if (event.getType() === "org.matrix.room.preview_urls") {
             let val = event.getContent()['disable'];
@@ -51,8 +56,10 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
             this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
         } else if (event.getType() === "im.vector.web.settings") {
-            // We can't really discern what changed, so trigger updates for everything
-            for (const settingName of Object.keys(event.getContent())) {
+            // Figure out what changed and fire those updates
+            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const changedSettings = objectKeyChanges(prevContent, event.getContent());
+            for (const settingName of changedSettings) {
                 this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
             }
         }
