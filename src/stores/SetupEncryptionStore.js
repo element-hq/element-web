@@ -36,13 +36,19 @@ export class SetupEncryptionStore extends EventEmitter {
             return;
         }
         this._started = true;
-        this.phase = PHASE_INTRO;
+        this.phase = PHASE_BUSY;
         this.verificationRequest = null;
         this.backupInfo = null;
-        MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequest);
-        MatrixClientPeg.get().on('userTrustStatusChanged', this._onUserTrustStatusChanged);
+
+        // ID of the key that the secrets we want are encrypted with
+        this.keyId = null;
+        // Descriptor of the key that the secrets we want are encrypted with
+        this.keyInfo = null;
 
         const cli = MatrixClientPeg.get();
+        cli.on("crypto.verification.request", this.onVerificationRequest);
+        cli.on('userTrustStatusChanged', this._onUserTrustStatusChanged);
+
         const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
         if (requestsInProgress.length) {
             // If there are multiple, we take the most recent. Equally if the user sends another request from
@@ -66,6 +72,21 @@ export class SetupEncryptionStore extends EventEmitter {
             MatrixClientPeg.get().removeListener("crypto.verification.request", this.onVerificationRequest);
             MatrixClientPeg.get().removeListener('userTrustStatusChanged', this._onUserTrustStatusChanged);
         }
+    }
+
+    async fetchKeyInfo() {
+        const keys = await MatrixClientPeg.get().isSecretStored('m.cross_signing.master', false);
+        if (keys === null || Object.keys(keys).length === 0) {
+            this.keyId = null;
+            this.keyInfo = null;
+        } else {
+            // If the secret is stored under more than one key, we just pick an arbitrary one
+            this.keyId = Object.keys(keys)[0];
+            this.keyInfo = keys[this.keyId];
+        }
+
+        this.phase = PHASE_INTRO;
+        this.emit("update");
     }
 
     async usePassPhrase() {
