@@ -15,9 +15,14 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab_fontSlider,
-.mx_AppearanceUserSettingsTab_themeSection .mx_Field,
-.mx_AppearanceUserSettingsTab_fontScaling .mx_Field {
+.mx_AppearanceUserSettingsTab_fontSlider_preview,
+.mx_AppearanceUserSettingsTab_Layout,
+.mx_AppearanceUserSettingsTab .mx_Field {
     @mixin mx_Settings_fullWidthField;
+}
+
+.mx_AppearanceUserSettingsTab_fontScaling {
+    color: $primary-fg-color;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider {
@@ -30,6 +35,21 @@ limitations under the License.
     font-size: 10px;
     margin-top: 24px;
     margin-bottom: 24px;
+}
+
+.mx_AppearanceUserSettingsTab_fontSlider_preview {
+    border: 1px solid $input-darker-bg-color;
+    border-radius: 10px;
+    padding: 0 16px 9px 16px;
+    pointer-events: none;
+
+    .mx_EventTile_msgOption {
+        display: none;
+    }
+
+    &.mx_IRCLayout {
+        padding-top: 9px;
+    }
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider_smallText {
@@ -123,4 +143,59 @@ limitations under the License.
 
 .mx_SettingsTab_customFontSizeField {
     margin-left: calc($font-16px + 10px);
+}
+
+.mx_AppearanceUserSettingsTab_Layout_RadioButtons {
+    display: flex;
+    flex-direction: row;
+
+    color: $primary-fg-color;
+
+    .mx_AppearanceUserSettingsTab_spacer {
+        width: 24px;
+    }
+
+    > .mx_AppearanceUserSettingsTab_Layout_RadioButton {
+        flex-grow: 0;
+        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+
+        width: 300px;
+
+        border: 1px solid $input-darker-bg-color;
+        border-radius: 10px;
+
+        .mx_EventTile_msgOption {
+            display: none;
+        }
+
+        .mx_AppearanceUserSettingsTab_Layout_RadioButton_preview {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .mx_RadioButton {
+            flex-grow: 0;
+            padding: 10px;
+        }
+
+        .mx_EventTile_content {
+            margin-right: 0;
+        }
+    }
+
+    .mx_RadioButton {
+        border-top: 1px solid $input-darker-bg-color;
+
+        > input + div {
+            border-color: rgba($muted-fg-color, 0.2);
+        }
+    }
+
+    .mx_RadioButton_checked {
+        background-color: rgba($accent-color, 0.08);
+    }
 }

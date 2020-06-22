@@ -166,7 +166,7 @@ export default createReactClass({
             canReact: false,
             canReply: false,
 
-            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
 
             matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
         };
@@ -199,7 +199,7 @@ export default createReactClass({
         this._roomView = createRef();
         this._searchResultsPanel = createRef();
 
-        this._layoutWatcherRef = SettingsStore.watchSetting("feature_irc_ui", null, this.onLayoutChange);
+        this._layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
     },
 
     _onReadReceiptsChange: function() {
@@ -546,7 +546,7 @@ export default createReactClass({
 
     onLayoutChange: function() {
         this.setState({
-            useIRCLayout: SettingsStore.getValue("feature_irc_ui"),
+            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
         });
     },
 
