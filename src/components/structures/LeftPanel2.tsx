@@ -19,7 +19,6 @@ import TagPanel from "./TagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import SearchBox from "./SearchBox";
 import RoomList2 from "../views/rooms/RoomList2";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -30,6 +29,8 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import ResizeNotifier from "../../utils/ResizeNotifier";
+import { createRef } from "react";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -41,6 +42,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 interface IProps {
     isMinimized: boolean;
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
@@ -49,6 +51,8 @@ interface IState {
 }
 
 export default class LeftPanel2 extends React.Component<IProps, IState> {
+    private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
+
     // TODO: Properly support TagPanel
     // TODO: Properly support searching/filtering
     // TODO: Properly support breadcrumbs
@@ -65,10 +69,15 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+
+        // We watch the middle panel because we don't actually get resized, the middle panel does.
+        // We listen to the noisy channel to avoid choppy reaction times.
+        this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
     }
 
     public componentWillUnmount() {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
 
     private onSearch = (term: string): void => {
@@ -86,9 +95,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     };
 
-    // TODO: Apply this on resize, init, etc for reliability
-    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
-        const list = ev.target as HTMLDivElement;
+    private handleStickyHeaders(list: HTMLDivElement) {
         const rlRect = list.getBoundingClientRect();
         const bottom = rlRect.bottom;
         const top = rlRect.top;
@@ -123,6 +130,18 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.style.top = `unset`;
             }
         }
+    }
+
+    // TODO: Apply this on resize, init, etc for reliability
+    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
+        const list = ev.target as HTMLDivElement;
+        this.handleStickyHeaders(list);
+    };
+
+    private onResize = () => {
+        console.log("Resize width");
+        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+        this.handleStickyHeaders(this.listContainerRef.current);
     };
 
     private renderHeader(): React.ReactNode {
@@ -230,9 +249,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div className="mx_LeftPanel2_actualRoomListContainer" onScroll={this.onScroll}>
-                        {roomList}
-                    </div>
+                    <div
+                        className="mx_LeftPanel2_actualRoomListContainer"
+                        onScroll={this.onScroll}
+                        ref={this.listContainerRef}
+                    >{roomList}</div>
                 </aside>
             </div>
         );
