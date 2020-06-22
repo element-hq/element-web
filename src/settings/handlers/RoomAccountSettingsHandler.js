@@ -18,7 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
-import {objectKeyChanges} from "../../utils/objects";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 
@@ -137,6 +137,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
         const event = room.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 }
