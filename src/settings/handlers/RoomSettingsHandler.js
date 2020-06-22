@@ -42,9 +42,12 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
     _onEvent(event, state, prevEvent) {
         const roomId = event.getRoomId();
         const room = this.client.getRoom(roomId);
-        if (!room) throw new Error(`Unknown room caused state update: ${roomId}`);
 
-        if (state !== room.currentState) return; // ignore state updates which are not current
+        // Note: the tests often fire setting updates that don't have rooms in the store, so
+        // we fail softly here. We shouldn't assume that the state being fired is current
+        // state, but we also don't need to explode just because we didn't find a room.
+        if (!room) console.warn(`Unknown room caused setting update: ${roomId}`);
+        if (room && state !== room.currentState) return; // ignore state updates which are not current
 
         if (event.getType() === "org.matrix.room.preview_urls") {
             let val = event.getContent()['disable'];
