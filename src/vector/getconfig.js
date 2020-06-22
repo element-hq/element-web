@@ -35,7 +35,7 @@ export async function getVectorConfig(relativeLocation) {
 function getConfig(configJsonFilename) {
     return new Promise(function(resolve, reject) {
         request(
-            { method: "GET", url: configJsonFilename },
+            { method: "GET", url: configJsonFilename, qs: { cachebuster: Date.now() } },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
                     // Lack of a config isn't an error, we should
