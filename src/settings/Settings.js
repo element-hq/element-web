@@ -155,7 +155,7 @@ export const SETTINGS = {
     },
     "feature_irc_ui": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use IRC layout'),
+        displayName: _td('Enable IRC layout option in the appearance tab'),
         default: false,
         isFeature: true,
     },
@@ -180,7 +180,7 @@ export const SETTINGS = {
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
-        displayName: _td("Custom font size"),
+        displayName: _td("Use custom size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
@@ -558,5 +558,10 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         displayName: _td("IRC display name width"),
         default: 80,
+    },
+    "useIRCLayout": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Use IRC layout"),
+        default: false,
     },
 };
