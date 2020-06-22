@@ -216,7 +216,7 @@
     "Send": "Azen",
     "Suggestions": "Isumar",
     "Go": "Ddu",
-    "Session name": "Nom de session",
+    "Session name": "Isem n tɣimit",
     "Send report": "Azen aneqqis",
     "Refresh": "Sismeḍ",
     "Email address": "Tansa email",
@@ -346,5 +346,18 @@
     "Cancel replying to a message": "Sefsex tiririt ɣef yizen",
     "Toggle microphone mute": "Rmed/sens tanusi n usawaḍ",
     "Toggle video on/off": "Rmed/sens tavidyut",
-    "Scroll up/down in the timeline": "Drurem gar afellay/addday n tesnakudt"
+    "Scroll up/down in the timeline": "Drurem gar afellay/addday n tesnakudt",
+    "Updating Riot": "Leqqem Riot",
+    "I don't want my encrypted messages": "Ur bɣiɣ ara izan-inu iwgelhanen",
+    "Manually export keys": "Sifeḍ s ufus tisura",
+    "Session ID": "Asulay n tqimit",
+    "Session key": "Tasarut n tɣimit",
+    "Please check your email and click on the link it contains. Once this is done, click continue.": "Ma ulac aɣilif, senqed imayl-ik/im syen sit ɣef useɣwen i yellan. Akken ara yemmed waya, sit ad tkemmleḍ.",
+    "This will allow you to reset your password and receive notifications.": "Ayagi ad ak(akem)-yeǧǧ ad twennzeḍ awal-ik/im uffir yerna ad d-tremseḍ ilɣa.",
+    "A username can only contain lower case letters, numbers and '=_-./'": "Isem n useqdac yezmer kan ad yegber isekkilen imeẓyanen, izwilen neɣ '=_-./'",
+    "Username invalid: %(errMessage)s": "Isem n useqdac d armeɣtu",
+    "An error occurred: %(error_string)s": "Tella-d tuccḍa: %(error_string)s",
+    "To get started, please pick a username!": "I wakken ad tebduḍ, ttxil-k/m fren isem n useqdac!",
+    "This will be your account name on the <span></span> homeserver, or you can pick a <a>different server</a>.": "Wagi ad yili d isem-ik/im deg <span></span> usebter agejdan, neɣ tzemreḍ ad tferneḍ <a>aqeddac-nniḍen</a>.",
+    "If you already have a Matrix account you can <a>log in</a> instead.": "Ma yella tesεiḍ yakan amiḍan di Matrix, tzemreḍ <a>ad tkecmeḍ</a> deg umḍq-nni."
 }
