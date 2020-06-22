@@ -291,7 +291,18 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
                     });
 
+                    const badgeContainer = (
+                        <div className="mx_RoomSublist2_badgeContainer">
+                            {badge}
+                        </div>
+                    );
+
                     // TODO: a11y (see old component)
+                    // Note: the addRoomButton conditionally gets moved around
+                    // the DOM depending on whether or not the list is minimized.
+                    // If we're minimized, we want it below the header so it
+                    // doesn't become sticky.
+                    // The same applies to the notification badge.
                     return (
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
@@ -307,11 +318,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     <span>{this.props.label}</span>
                                 </AccessibleButton>
                                 {this.renderMenu()}
-                                {addRoomButton}
-                                <div className="mx_RoomSublist2_badgeContainer">
-                                    {badge}
-                                </div>
+                                {this.props.isMinimized ? null : addRoomButton}
+                                {this.props.isMinimized ? null : badgeContainer}
                             </div>
+                            {this.props.isMinimized ? badgeContainer : null}
+                            {this.props.isMinimized ? addRoomButton : null}
                         </div>
                     );
                 }}

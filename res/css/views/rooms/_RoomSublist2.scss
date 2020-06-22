@@ -304,18 +304,18 @@ limitations under the License.
             position: relative;
 
             .mx_RoomSublist2_badgeContainer {
-                order: 1;
+                order: 0;
                 align-self: flex-end;
                 margin-right: 0;
             }
 
-            .mx_RoomSublist2_headerText {
-                order: 2;
+            .mx_RoomSublist2_stickable {
+                order: 1;
                 max-width: 100%;
             }
 
             .mx_RoomSublist2_auxButton {
-                order: 4;
+                order: 2;
                 visibility: visible;
                 width: 32px !important; // !important to override hover styles
                 height: 32px !important; // !important to override hover styles
