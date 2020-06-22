@@ -30,7 +30,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     padding: 15px;
-    background: $font-slider-bg-color;
+    background: rgba($appearance-tab-border-color, 0.2);
     border-radius: 10px;
     font-size: 10px;
     margin-top: 24px;
@@ -38,7 +38,7 @@ limitations under the License.
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider_preview {
-    border: 1px solid $input-darker-bg-color;
+    border: 1px solid $appearance-tab-border-color;
     border-radius: 10px;
     padding: 0 16px 9px 16px;
     pointer-events: none;
@@ -56,12 +56,14 @@ limitations under the License.
     font-size: 15px;
     padding-right: 20px;
     padding-left: 5px;
+    font-weight: 500;
 }
 
 .mx_AppearanceUserSettingsTab_fontSlider_largeText {
     font-size: 18px;
     padding-left: 20px;
     padding-right: 5px;
+    font-weight: 500;
 }
 
 .mx_AppearanceUserSettingsTab {
@@ -115,7 +117,8 @@ limitations under the License.
             }
 
             &.mx_ThemeSelector_dark {
-                background-color: #181b21;
+                // 5% lightened version of 181b21
+                background-color: #25282e;
                 color: #f3f8fd;
 
                 > input > div {
@@ -163,10 +166,11 @@ limitations under the License.
 
         width: 300px;
 
-        border: 1px solid $input-darker-bg-color;
+        border: 1px solid $appearance-tab-border-color;
         border-radius: 10px;
 
-        .mx_EventTile_msgOption {
+        .mx_EventTile_msgOption,
+        .mx_MessageActionBar {
             display: none;
         }
 
@@ -175,6 +179,7 @@ limitations under the License.
             display: flex;
             align-items: center;
             padding: 10px;
+            pointer-events: none;
         }
 
         .mx_RadioButton {
@@ -188,7 +193,7 @@ limitations under the License.
     }
 
     .mx_RadioButton {
-        border-top: 1px solid $input-darker-bg-color;
+        border-top: 1px solid $appearance-tab-border-color;
 
         > input + div {
             border-color: rgba($muted-fg-color, 0.2);
