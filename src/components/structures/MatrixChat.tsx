@@ -151,9 +151,9 @@ interface IProps { // TODO type things better
     // Represents the screen to display as a result of parsing the initial window.location
     initialScreenAfterLogin?: IScreen;
     // displayname, if any, to set on the device when logging in/registering.
-    defaultDeviceDisplayName?: string,
+    defaultDeviceDisplayName?: string;
     // A function that makes a registration URL
-    makeRegistrationUrl: (object) => string,
+    makeRegistrationUrl: (object) => string;
 }
 
 interface IState {
@@ -1870,42 +1870,35 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.accountPasswordTimer = null;
         }, 60 * 5 * 1000);
 
-        // Wait for the client to be logged in (but not started)
-        // which is enough to ask the server about account data.
-        const loggedIn = new Promise(resolve => {
-            const actionHandlerRef = dis.register(payload => {
-                if (payload.action !== "on_logged_in") {
-                    return;
-                }
-                dis.unregister(actionHandlerRef);
-                resolve();
-            });
-        });
-
-        // Create and start the client in the background
-        const setLoggedInPromise = Lifecycle.setLoggedIn(credentials);
-        await loggedIn;
+        // Create and start the client
+        await Lifecycle.setLoggedIn(credentials);
 
         const cli = MatrixClientPeg.get();
-        // We're checking `isCryptoAvailable` here instead of `isCryptoEnabled`
-        // because the client hasn't been started yet.
-        const cryptoAvailable = isCryptoAvailable();
-        if (!cryptoAvailable) {
+        const cryptoEnabled = cli.isCryptoEnabled();
+        if (!cryptoEnabled) {
             this.onLoggedIn();
         }
 
-        this.setState({ pendingInitialSync: true });
-        await this.firstSyncPromise.promise;
-
-        if (!cryptoAvailable) {
-            this.setState({ pendingInitialSync: false });
-            return setLoggedInPromise;
+        const promisesList = [this.firstSyncPromise.promise];
+        if (cryptoEnabled) {
+            // wait for the client to finish downloading cross-signing keys for us so we
+            // know whether or not we have keys set up on this account
+            promisesList.push(cli.downloadKeys([cli.getUserId()]));
         }
 
-        // Test for the master cross-signing key in SSSS as a quick proxy for
-        // whether cross-signing has been set up on the account.
-        const masterKeyInStorage = !!cli.getAccountData("m.cross_signing.master");
-        if (masterKeyInStorage) {
+        // Now update the state to say we're waiting for the first sync to complete rather
+        // than for the login to finish.
+        this.setState({ pendingInitialSync: true });
+
+        await Promise.all(promisesList);
+
+        if (!cryptoEnabled) {
+            this.setState({ pendingInitialSync: false });
+            return;
+        }
+
+        const crossSigningIsSetUp = cli.getStoredCrossSigningForUser(cli.getUserId());
+        if (crossSigningIsSetUp) {
             this.setStateForNewView({ view: Views.COMPLETE_SECURITY });
         } else if (await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")) {
             this.setStateForNewView({ view: Views.E2E_SETUP });
@@ -1913,8 +1906,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.onLoggedIn();
         }
         this.setState({ pendingInitialSync: false });
-
-        return setLoggedInPromise;
     };
 
     // complete security / e2e setup has finished

@@ -15,6 +15,6 @@ limitations under the License.
 */
 
 export default interface IWatcher {
-    start(): void
-    stop(): void
+    start(): void;
+    stop(): void;
 }

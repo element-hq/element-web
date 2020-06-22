@@ -46,7 +46,7 @@ export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props
 });
 
 interface IPillCompletionProps extends ITextualCompletionProps {
-    children?: React.ReactNode,
+    children?: React.ReactNode;
 }
 
 export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref) => {

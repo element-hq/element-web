@@ -23,6 +23,8 @@ import PlatformPeg from "../PlatformPeg";
 import EventIndex from "../indexing/EventIndex";
 import SettingsStore, {SettingLevel} from '../settings/SettingsStore';
 
+const INDEX_VERSION = 1;
+
 class EventIndexPeg {
     constructor() {
         this.index = null;
@@ -66,8 +68,25 @@ class EventIndexPeg {
      */
     async initEventIndex() {
         const index = new EventIndex();
+        const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         try {
+            await indexManager.initEventIndex();
+
+            const userVersion = await indexManager.getUserVersion();
+            const eventIndexIsEmpty = await indexManager.isEventIndexEmpty();
+
+            if (eventIndexIsEmpty) {
+                await indexManager.setUserVersion(INDEX_VERSION);
+            } else if (userVersion === 0 && !eventIndexIsEmpty) {
+                await indexManager.closeEventIndex();
+                await this.deleteEventIndex();
+
+                await indexManager.initEventIndex();
+                await indexManager.setUserVersion(INDEX_VERSION);
+            }
+
+            console.log("EventIndex: Successfully initialized the event index");
             await index.init();
         } catch (e) {
             console.log("EventIndex: Error initializing the event index", e);

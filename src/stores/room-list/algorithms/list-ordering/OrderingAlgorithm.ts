@@ -67,6 +67,5 @@ export abstract class OrderingAlgorithm {
      * @param cause The cause of the update.
      * @returns True if the update requires the Algorithm to update the presentation layers.
      */
-    // XXX: TODO: We assume this will only ever be a position update and NOT a NewRoom or RemoveRoom change!!
     public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean>;
 }
