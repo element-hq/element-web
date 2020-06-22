@@ -26,7 +26,11 @@ import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
-import NotificationBadge, { INotificationState, NotificationColor, RoomNotificationState } from "./NotificationBadge";
+import NotificationBadge, {
+    INotificationState,
+    NotificationColor,
+    TagSpecificNotificationState
+} from "./NotificationBadge";
 import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -79,7 +83,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-            notificationState: new RoomNotificationState(this.props.room),
+            notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             generalMenuDisplayed: false,
         };
@@ -248,7 +252,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const badge = <NotificationBadge notification={this.state.notificationState} allowNoCount={true} />;
+        const badge = (
+            <NotificationBadge
+                notification={this.state.notificationState}
+                forceCount={false}
+                roomId={this.props.room.roomId}
+            />
+        );
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
