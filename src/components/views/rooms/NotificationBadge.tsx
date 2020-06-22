@@ -27,6 +27,7 @@ import { EventEmitter } from "events";
 import { arrayDiff } from "../../../utils/arrays";
 import { IDestroyable } from "../../../utils/IDestroyable";
 import SettingsStore from "../../../settings/SettingsStore";
+import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 
 export const NOTIFICATION_STATE_UPDATE = "update";
 
@@ -139,7 +140,7 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
     }
 }
 
-export class RoomNotificationState extends EventEmitter implements IDestroyable {
+export class RoomNotificationState extends EventEmitter implements IDestroyable, INotificationState {
     private _symbol: string;
     private _count: number;
     private _color: NotificationColor;
@@ -237,13 +238,38 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable 
     }
 }
 
-export class ListNotificationState extends EventEmitter implements IDestroyable {
+export class TagSpecificNotificationState extends RoomNotificationState {
+    private static TAG_TO_COLOR: {
+        // @ts-ignore - TS wants this to be a string key, but we know better
+        [tagId: TagID]: NotificationColor,
+    } = {
+        [DefaultTagID.DM]: NotificationColor.Red,
+    };
+
+    private readonly colorWhenNotIdle?: NotificationColor;
+
+    constructor(room: Room, tagId: TagID) {
+        super(room);
+
+        const specificColor = TagSpecificNotificationState.TAG_TO_COLOR[tagId];
+        if (specificColor) this.colorWhenNotIdle = specificColor;
+    }
+
+    public get color(): NotificationColor {
+        if (!this.colorWhenNotIdle) return super.color;
+
+        if (super.color !== NotificationColor.None) return this.colorWhenNotIdle;
+        return super.color;
+    }
+}
+
+export class ListNotificationState extends EventEmitter implements IDestroyable, INotificationState {
     private _count: number;
     private _color: NotificationColor;
     private rooms: Room[] = [];
     private states: { [roomId: string]: RoomNotificationState } = {};
 
-    constructor(private byTileCount = false) {
+    constructor(private byTileCount = false, private tagId: TagID) {
         super();
     }
 
@@ -278,7 +304,7 @@ export class ListNotificationState extends EventEmitter implements IDestroyable 
             state.destroy();
         }
         for (const newRoom of diff.added) {
-            const state = new RoomNotificationState(newRoom);
+            const state = new TagSpecificNotificationState(newRoom, this.tagId);
             state.on(NOTIFICATION_STATE_UPDATE, this.onRoomNotificationStateUpdate);
             if (this.states[newRoom.roomId]) {
                 // "Should never happen" disclaimer.
@@ -289,6 +315,12 @@ export class ListNotificationState extends EventEmitter implements IDestroyable 
         }
 
         this.calculateTotalState();
+    }
+
+    public getForRoom(room: Room) {
+        const state = this.states[room.roomId];
+        if (!state) throw new Error("Unknown room for notification state");
+        return state;
     }
 
     public destroy() {

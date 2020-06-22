@@ -32,6 +32,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
+import { TagID } from "../../../stores/room-list/models";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -56,6 +57,7 @@ interface IProps {
     isInvite: boolean;
     layout: ListLayout;
     isMinimized: boolean;
+    tagId: TagID;
 
     // TODO: Collapsed state
     // TODO: Group invites
@@ -78,7 +80,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            notificationState: new ListNotificationState(this.props.isInvite),
+            notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
             menuDisplayed: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
@@ -130,13 +132,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onUnreadFirstChanged = async () => {
-        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
+        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
-        await RoomListStore.instance.setListOrder(this.props.layout.tagId, newAlgorithm);
+        await RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
     };
 
     private onTagSortChanged = async (sort: SortAlgorithm) => {
-        await RoomListStore.instance.setTagSorting(this.props.layout.tagId, sort);
+        await RoomListStore.instance.setTagSorting(this.props.tagId, sort);
     };
 
     private onMessagePreviewChanged = () => {
@@ -176,7 +178,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.props.layout.showPreviews}
                         isMinimized={this.props.isMinimized}
-                        tag={this.props.layout.tagId}
+                        tag={this.props.tagId}
                     />
                 );
             }
@@ -189,8 +191,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.menuDisplayed) {
             const elementRect = this.menuButtonRef.current.getBoundingClientRect();
-            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.layout.tagId) === SortAlgorithm.Alphabetic;
-            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
+            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
@@ -204,14 +206,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <StyledRadioButton
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
                                 checked={!isAlphabetical}
-                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                                name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("Activity")}
                             </StyledRadioButton>
                             <StyledRadioButton
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Alphabetic)}
                                 checked={isAlphabetical}
-                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                                name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("A-Z")}
                             </StyledRadioButton>
