@@ -162,7 +162,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         const event = cli.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return JSON.parse(JSON.stringify(event.getContent())); // clone to prevent mutation
     }
 
     _notifyBreadcrumbsUpdate(event) {
