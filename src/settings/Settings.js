@@ -190,7 +190,7 @@ export const SETTINGS = {
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
-        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        supportedLevels: ['account'],
         default: false,
     },
     "useCompactLayout": {
