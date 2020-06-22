@@ -117,7 +117,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
         const newTheme = this.state.isDarkTheme ? "light" : "dark";
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
     private onSettingsOpen = (ev: ButtonEvent, tabId: string) => {
