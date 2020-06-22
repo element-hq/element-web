@@ -2526,5 +2526,7 @@
     "Create a Recovery Key to store encryption keys & secrets with your account data. If you lose access to this login you’ll need it to unlock your data.": "Créez une clé de récupération pour stocker vos clé et secrets de chiffrement avec les données de votre compte. Si vous n’avez plus accès à cette connexion, vous en aurez besoin pour déverrouiller vos données.",
     "Create a Recovery Key": "Créer une clé de récupération",
     "Upgrade your Recovery Key": "Mettre à jour votre clé de récupération",
-    "Store your Recovery Key": "Stocker votre clé de récupération"
+    "Store your Recovery Key": "Stocker votre clé de récupération",
+    "Use the improved room list (in development - will refresh to apply changes)": "Utiliser la liste de salons améliorée (en développement − actualisera pour appliquer les changements)",
+    "Use the improved room list (will refresh to apply changes)": "Utiliser la liste de salons améliorée (actualisera pour appliquer les changements)"
 }
