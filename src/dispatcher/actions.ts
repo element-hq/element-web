@@ -73,10 +73,10 @@ export enum Action {
     /**
      * Sets the apps root font size. Should be used with UpdateFontSizePayload
      */
-    UpdateFontSize = "update-font-size",
+    UpdateFontSize = "update_font_size",
 
     /**
      * Sets a system font. Should be used with UpdateSystemFontPayload
      */
-    UpdateSystemFont = "update-system-font",
+    UpdateSystemFont = "update_system_font",
 }
