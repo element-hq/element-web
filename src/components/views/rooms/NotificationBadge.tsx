@@ -28,6 +28,7 @@ import { arrayDiff } from "../../../utils/arrays";
 import { IDestroyable } from "../../../utils/IDestroyable";
 import SettingsStore from "../../../settings/SettingsStore";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { readReceiptChangeIsFor } from "../../../utils/read-receipts";
 
 export const NOTIFICATION_STATE_UPDATE = "update";
 
@@ -147,7 +148,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
 
     constructor(private room: Room) {
         super();
-        this.room.on("Room.receipt", this.handleRoomEventUpdate);
+        this.room.on("Room.receipt", this.handleReadReceipt);
         this.room.on("Room.timeline", this.handleRoomEventUpdate);
         this.room.on("Room.redaction", this.handleRoomEventUpdate);
         MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
@@ -171,13 +172,19 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
     }
 
     public destroy(): void {
-        this.room.removeListener("Room.receipt", this.handleRoomEventUpdate);
+        this.room.removeListener("Room.receipt", this.handleReadReceipt);
         this.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
         this.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
         }
     }
+
+    private handleReadReceipt = (event: MatrixEvent, room: Room) => {
+        if (!readReceiptChangeIsFor(event, MatrixClientPeg.get())) return; // not our own - ignore
+        if (room.roomId !== this.room.roomId) return; // not for us - ignore
+        this.updateNotificationState();
+    };
 
     private handleRoomEventUpdate = (event: MatrixEvent) => {
         const roomId = event.getRoomId();
