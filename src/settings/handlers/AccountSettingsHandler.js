@@ -18,7 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
-import {objectKeyChanges} from "../../utils/objects";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
@@ -162,7 +162,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         const event = cli.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
-        return JSON.parse(JSON.stringify(event.getContent())); // clone to prevent mutation
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 
     _notifyBreadcrumbsUpdate(event) {

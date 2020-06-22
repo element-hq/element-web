@@ -18,7 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
-import {objectKeyChanges} from "../../utils/objects";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 /**
  * Gets and sets settings at the "room" level.
@@ -117,6 +117,6 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
         const event = room.currentState.getStateEvents(eventType, "");
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 }

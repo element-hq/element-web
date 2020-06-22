@@ -47,3 +47,14 @@ export function objectKeyChanges(a: any, b: any): string[] {
     const diff = objectDiff(a, b);
     return arrayMerge(diff.removed, diff.added, diff.changed);
 }
+
+/**
+ * Clones an object by running it through JSON parsing. Note that this
+ * will destroy any complicated object types which do not translate to
+ * JSON.
+ * @param obj The object to clone.
+ * @returns The cloned object
+ */
+export function objectClone(obj: any): any {
+    return JSON.parse(JSON.stringify(obj));
+}
