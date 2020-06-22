@@ -55,9 +55,12 @@ interface IState extends IThemeState {
     customThemeUrl: string;
     customThemeMessage: CustomThemeMessage;
     useCustomFontSize: boolean;
+    useIRCLayout: boolean;
 }
 
+
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
+    private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 
     private themeTimer: NodeJS.Timeout;
 
@@ -70,6 +73,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
+            useIRCLayout: SettingsStore.getValue("useIRCLayout"),
         };
     }
 
@@ -200,6 +204,16 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({customThemeUrl: e.target.value});
     };
 
+    private onLayoutChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const val = e.target.value === "true";
+
+        this.setState({
+            useIRCLayout: val,
+        });
+
+        SettingsStore.setValue("useIRCLayout", null, SettingLevel.DEVICE, val);
+    };
+
     private renderThemeSection() {
         const themeWatcher = new ThemeWatcher();
         let systemThemeSection: JSX.Element;
@@ -262,7 +276,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         return <StyledRadioButton
                             key={theme.id}
                             value={theme.id}
-                            name={"theme"}
+                            name="theme"
                             disabled={this.state.useSystemTheme}
                             checked={!this.state.useSystemTheme && theme.id === this.state.theme}
                             className={"mx_ThemeSelector_" + theme.id}
@@ -283,8 +297,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <span className="mx_SettingsTab_subheading">{_t("Font size")}</span>
             <EventTilePreview
                 className="mx_AppearanceUserSettingsTab_fontSlider_preview"
-                message={_t("Hey you. You're the best!")}
-                useIRCLayout={false}
+                message={this.MESSAGE_PREVIEW_TEXT}
+                useIRCLayout={this.state.useIRCLayout}
             />
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
@@ -320,6 +334,46 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     }
 
+    private renderLayoutSection = () => {
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
+            <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
+
+            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons" >
+                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
+                    <EventTilePreview
+                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                        message={this.MESSAGE_PREVIEW_TEXT}
+                        useIRCLayout={true}
+                    />
+                    <StyledRadioButton
+                        name="layout"
+                        value="true"
+                        checked={this.state.useIRCLayout}
+                        onChange={this.onLayoutChange}
+                    >
+                        {_t("Compact")}
+                    </StyledRadioButton>
+                </div>
+                <div className="mx_AppearanceUserSettingsTab_spacer" />
+                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
+                    <EventTilePreview
+                        className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
+                        message={this.MESSAGE_PREVIEW_TEXT}
+                        useIRCLayout={false}
+                    />
+                    <StyledRadioButton
+                        name="layout"
+                        value="false"
+                        checked={!this.state.useIRCLayout}
+                        onChange={this.onLayoutChange}
+                    >
+                        {_t("Modern")}
+                    </StyledRadioButton>
+                </div>
+            </div>
+        </div>;
+    };
+
     render() {
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
@@ -329,6 +383,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
+                {SettingsStore.isFeatureEnabled("feature_irc_ui") ? this.renderLayoutSection() : null}
             </div>
         );
     }

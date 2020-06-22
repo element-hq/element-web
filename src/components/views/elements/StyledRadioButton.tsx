@@ -36,6 +36,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
             {
                 "mx_RadioButton_disabled": disabled,
                 "mx_RadioButton_enabled": !disabled,
+                "mx_RadioButton_checked": this.props.checked,
             });
         return <label className={_className}>
             <input type='radio' disabled={disabled} {...otherProps} />
