@@ -43,8 +43,23 @@ function clearCustomTheme() {
             document.body.style.removeProperty(prop);
         }
     }
+    const customFontFaceStyle = document.querySelector("head > style[title='custom-theme-font-faces']");
+    if (customFontFaceStyle) {
+        customFontFaceStyle.remove();
+    }
 }
 
+function generateCustomFontFaceCSS(faces) {
+    return Object.entries(faces).map(([fontName, face]) => {
+        const src = Object.entries(face.src).map(([format, url]) => {
+            return `url('${url}') format('${format}')`;
+        }).join(", ");
+        return `@font-face {` +
+        `    font-family: '${fontName}';` +
+        `    src: ${src};` +
+        `}`;
+    }).join("\n");
+}
 
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
@@ -72,6 +87,14 @@ function setCustomThemeVars(customTheme) {
     }
     if (customTheme.fonts) {
         const {fonts} = customTheme;
+        if (fonts.faces) {
+            const css = generateCustomFontFaceCSS(fonts.faces);
+            const style = document.createElement("style");
+            style.setAttribute("title", "custom-theme-font-faces");
+            style.setAttribute("type", "text/css");
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+        }
         if (fonts.general) {
             style.setProperty("--font-family", fonts.general);
         }
