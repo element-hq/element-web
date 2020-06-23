@@ -28,14 +28,6 @@ import {
     PHASE_FINISHED,
 } from '../../../stores/SetupEncryptionStore';
 
-function keyHasPassphrase(keyInfo) {
-    return (
-        keyInfo.passphrase &&
-        keyInfo.passphrase.salt &&
-        keyInfo.passphrase.iterations
-    );
-}
-
 export default class SetupEncryptionBody extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
