@@ -60,6 +60,15 @@ function setCustomThemeVars(customTheme) {
             }
         }
     }
+    if (customTheme.fonts) {
+        const {fonts} = customTheme;
+        if (fonts.general) {
+            style.setProperty("--font-family", fonts.general);
+        }
+        if (fonts.monospace) {
+            style.setProperty("--font-family-monospace", fonts.monospace);
+        }
+    }
 }
 
 export function getCustomTheme(themeName) {
