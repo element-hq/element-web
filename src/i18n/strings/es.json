@@ -16,7 +16,7 @@
     "Room Directory": "Directorio de salas",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Puedes usar las opciones personalizadas del servidor para iniciar sesión en otros servidores Matrix, especificando la dirección URL del servidor. Esto te permite usar una cuenta Matrix en un servidor diferente.",
     "Unexpected error preparing the app. See console for details.": "Error inesperado preparando la aplicación. Vea la consola para más detalles.",
-    "Your Riot is misconfigured": "Riot tiene un error de configuración",
+    "Your Riot is misconfigured": "Tu Riot está mal configurado",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuración errónea: sólo puede especificar uno de default_server_config, default_server_name, o default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuración errónea: no se ha especificado servidor.",
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Tu configuración de Riot contiene JSON inválido. Por favor corrige el error y recarga la página.",

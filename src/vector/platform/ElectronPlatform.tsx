@@ -153,6 +153,10 @@ class SeshatIndexManager extends BaseEventIndexManager {
         return this._ipcCall('isEventIndexEmpty');
     }
 
+    async isRoomIndexed(roomId: string): Promise<boolean> {
+        return this._ipcCall('isRoomIndexed', roomId);
+    }
+
     async commitLiveEvents(): Promise<void> {
         return this._ipcCall('commitLiveEvents');
     }
@@ -191,6 +195,14 @@ class SeshatIndexManager extends BaseEventIndexManager {
 
     async getStats(): Promise<IndexStats> {
         return this._ipcCall('getStats');
+    }
+
+    async getUserVersion(): Promise<number> {
+        return this._ipcCall('getUserVersion');
+    }
+
+    async setUserVersion(version: number): Promise<void> {
+        return this._ipcCall('setUserVersion', version);
     }
 
     async deleteEventIndex(): Promise<void> {

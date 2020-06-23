@@ -1,3 +1,49 @@
+Changes in [1.6.6](https://github.com/vector-im/riot-web/releases/tag/v1.6.6) (2020-06-23)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.6-rc.1...v1.6.6)
+
+ * Upgrade to JS SDK 7.0.0 and React SDK 2.8.0
+
+Changes in [1.6.6-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.6-rc.1) (2020-06-17)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.5...v1.6.6-rc.1)
+
+ * Upgrade to JS SDK 7.0.0-rc.1 and React SDK 2.8.0-rc.1
+ * Update from Weblate
+   [\#14067](https://github.com/vector-im/riot-web/pull/14067)
+ * Update from Weblate
+   [\#14032](https://github.com/vector-im/riot-web/pull/14032)
+ * Attempt to fix decoder ring for relative hosted riots
+   [\#13987](https://github.com/vector-im/riot-web/pull/13987)
+ * Upgrade deps
+   [\#13952](https://github.com/vector-im/riot-web/pull/13952)
+ * Fix riot-desktop manual update check getting stuck on Downloading...
+   [\#13946](https://github.com/vector-im/riot-web/pull/13946)
+ * Bump websocket-extensions from 0.1.3 to 0.1.4
+   [\#13943](https://github.com/vector-im/riot-web/pull/13943)
+ * Add e2ee-default:false docs
+   [\#13914](https://github.com/vector-im/riot-web/pull/13914)
+ * make IPC calls to get pickle key
+   [\#13846](https://github.com/vector-im/riot-web/pull/13846)
+ * fix loading test for new sso pattern
+   [\#13913](https://github.com/vector-im/riot-web/pull/13913)
+ * Fix login loop where the sso flow returns to `#/login`
+   [\#13889](https://github.com/vector-im/riot-web/pull/13889)
+ * Fix typo in docs
+   [\#13905](https://github.com/vector-im/riot-web/pull/13905)
+ * Remove cross-signing from labs
+   [\#13904](https://github.com/vector-im/riot-web/pull/13904)
+ * Add PWA Platform with PWA-specific badge controls
+   [\#13890](https://github.com/vector-im/riot-web/pull/13890)
+ * Modernizr check for subtle crypto as we require it all over the place
+   [\#13828](https://github.com/vector-im/riot-web/pull/13828)
+
+Changes in [1.6.5](https://github.com/vector-im/riot-web/releases/tag/v1.6.5) (2020-06-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.4...v1.6.5)
+
+* Upgrade to JS SDK 6.2.2 and React SDK 2.7.2
+
 Changes in [1.6.4](https://github.com/vector-im/riot-web/releases/tag/v1.6.4) (2020-06-05)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.3...v1.6.4)
