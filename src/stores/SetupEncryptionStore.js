@@ -36,7 +36,7 @@ export class SetupEncryptionStore extends EventEmitter {
             return;
         }
         this._started = true;
-        this.phase = PHASE_INTRO;
+        this.phase = PHASE_BUSY;
         this.verificationRequest = null;
         this.backupInfo = null;
 
