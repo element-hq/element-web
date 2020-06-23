@@ -21,7 +21,6 @@ import {_t} from "../../../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
-import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
@@ -32,6 +31,7 @@ import { IValidationResult, IFieldState } from '../../../elements/Validation';
 import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
+import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 
 interface IProps {
@@ -55,6 +55,9 @@ interface IState extends IThemeState {
     customThemeUrl: string;
     customThemeMessage: CustomThemeMessage;
     useCustomFontSize: boolean;
+    useSystemFont: boolean;
+    systemFont: string;
+    showAdvanced: boolean;
     useIRCLayout: boolean;
 }
 
@@ -73,6 +76,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
+            useSystemFont: SettingsStore.getValue("useSystemFont"),
+            systemFont: SettingsStore.getValue("systemFont"),
+            showAdvanced: false,
             useIRCLayout: SettingsStore.getValue("useIRCLayout"),
         };
     }
@@ -374,6 +380,47 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     };
 
+    private renderAdvancedSection() {
+        const toggle = <div
+            className="mx_AppearanceUserSettingsTab_AdvancedToggle"
+            onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
+        >
+            {this.state.showAdvanced ? "Hide advanced" : "Show advanced"}
+        </div>;
+
+        let advanced: React.ReactNode;
+
+        if (this.state.showAdvanced) {
+            advanced = <div>
+                <SettingsFlag
+                    name="useSystemFont"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    onChange={(checked) => this.setState({useSystemFont: checked})}
+                />
+                <Field
+                    className="mx_AppearanceUserSettingsTab_systemFont"
+                    label={SettingsStore.getDisplayName("systemFont")}
+                    onChange={(value) => {
+                        this.setState({
+                            systemFont: value.target.value,
+                        });
+
+                        SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
+                    }}
+                    tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    forceTooltipVisible={true}
+                    disabled={!this.state.useSystemFont}
+                    value={this.state.systemFont}
+                />
+            </div>;
+        }
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
+            {toggle}
+            {advanced}
+        </div>;
+    }
+
     render() {
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
@@ -384,6 +431,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
                 {SettingsStore.isFeatureEnabled("feature_irc_ui") ? this.renderLayoutSection() : null}
+                {this.renderAdvancedSection()}
             </div>
         );
     }
