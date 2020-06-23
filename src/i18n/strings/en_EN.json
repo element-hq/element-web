@@ -2198,6 +2198,8 @@
     "Unable to query secret storage status": "Unable to query secret storage status",
     "Retry": "Retry",
     "You can now verify your other devices, and other users to keep your chats safe.": "You can now verify your other devices, and other users to keep your chats safe.",
+    "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.",
+    "You can also set up Secure Backup & manage your keys in Settings.": "You can also set up Secure Backup & manage your keys in Settings.",
     "Set up Secure backup": "Set up Secure backup",
     "Upgrade your encryption": "Upgrade your encryption",
     "Confirm recovery passphrase": "Confirm recovery passphrase",

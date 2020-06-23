@@ -378,12 +378,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this._bootstrapSecretStorage();
     }
 
-    _onSkipSetupClick = () => {
+    _onCancelClick = () => {
         this.setState({phase: PHASE_CONFIRM_SKIP});
     }
 
-    _onSetUpClick = () => {
-        this.setState({phase: PHASE_PASSPHRASE});
+    _onGoBackClick = () => {
+        this.setState({phase: PHASE_CHOOSE_KEY_PASSPHRASE});
     }
 
     _onSkipPassPhraseClick = async () => {
@@ -496,7 +496,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <DialogButtons
                 primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._onChooseKeyPassphraseFormSubmit}
-                onCancel={this._onCancel}
+                onCancel={this._onCancelClick}
                 hasCancel={true}
             />
         </form>;
@@ -750,15 +750,17 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhaseSkipConfirm() {
         return <div>
-            {_t(
-                "Without completing security on this session, it won’t have " +
-                "access to encrypted messages.",
-        )}
+            <p>{_t(
+                "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.",
+            )}</p>
+            <p>{_t(
+                "You can also set up Secure Backup & manage your keys in Settings.",
+            )}</p>
             <DialogButtons primaryButton={_t('Go back')}
-                onPrimaryButtonClick={this._onSetUpClick}
+                onPrimaryButtonClick={this._onGoBackClick}
                 hasCancel={false}
             >
-                <button type="button" className="danger" onClick={this._onCancel}>{_t('Skip')}</button>
+                <button type="button" className="danger" onClick={this._onCancel}>{_t('Cancel')}</button>
             </DialogButtons>
         </div>;
     }
