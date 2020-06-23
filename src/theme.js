@@ -39,7 +39,7 @@ export function enumerateThemes() {
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
 
-    function setCSSVariable(name, hexColor, doPct = true) {
+    function setCSSColorVariable(name, hexColor, doPct = true) {
         style.setProperty(`--${name}`, hexColor);
         if (doPct) {
             // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
@@ -53,10 +53,10 @@ function setCustomThemeVars(customTheme) {
         for (const [name, value] of Object.entries(customTheme.colors)) {
             if (Array.isArray(value)) {
                 for (let i = 0; i < value.length; i += 1) {
-                    setCSSVariable(`${name}_${i}`, value[i], false);
+                    setCSSColorVariable(`${name}_${i}`, value[i], false);
                 }
             } else {
-                setCSSVariable(name, value);
+                setCSSColorVariable(name, value);
             }
         }
     }
