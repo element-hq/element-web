@@ -35,6 +35,16 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
+function clearCustomTheme() {
+    // remove all css variables, we assume these are there because of the custom theme
+    const inlineStyleProps = Object.values(document.body.style);
+    for (const prop of inlineStyleProps) {
+        if (prop.startsWith("--")) {
+            document.body.style.removeProperty(prop);
+        }
+    }
+}
+
 
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
@@ -97,6 +107,7 @@ export async function setTheme(theme) {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
     }
+    clearCustomTheme();
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
         const customTheme = getCustomTheme(theme.substr(7));
