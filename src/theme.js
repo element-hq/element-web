@@ -179,7 +179,7 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
-            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            const bodyStyles = global.getComputedStyle(document.body);
             if (bodyStyles.backgroundColor) {
                 document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
             }
