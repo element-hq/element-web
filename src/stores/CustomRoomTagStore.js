@@ -20,7 +20,8 @@ import { throttle } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
 import {RoomListStoreTempProxy} from "./room-list/RoomListStoreTempProxy";
 
-const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+const STANDARD_TAGS_REGEX =
+  /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function commonPrefix(a, b) {
     const len = Math.min(a.length, b.length);

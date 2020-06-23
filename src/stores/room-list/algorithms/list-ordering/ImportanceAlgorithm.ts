@@ -290,6 +290,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
             if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
+                // eslint-disable-next-line max-len
                 console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
                 // TODO: Regenerate index when this happens

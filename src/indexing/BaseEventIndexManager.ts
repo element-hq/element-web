@@ -18,14 +18,14 @@ export interface MatrixEvent {
     type: string;
     sender: string;
     content: {};
-    event_id: string;
-    origin_server_ts: number;
+    eventId: string;
+    originServerTs: number;
     unsigned?: {};
-    room_id: string;
+    roomId: string;
 }
 
 export interface MatrixProfile {
-    avatar_url: string;
+    avatarUrl: string;
     displayname: string;
 }
 
@@ -37,9 +37,9 @@ export interface CrawlerCheckpoint {
 }
 
 export interface ResultContext {
-    events_before: [MatrixEvent];
-    events_after: [MatrixEvent];
-    profile_info: Map<string, MatrixProfile>;
+    eventsBefore: [MatrixEvent];
+    eventsAfter: [MatrixEvent];
+    profileInfo: Map<string, MatrixProfile>;
 }
 
 export interface ResultsElement {
@@ -55,11 +55,11 @@ export interface SearchResult {
 }
 
 export interface SearchArgs {
-    search_term: string;
-    before_limit: number;
-    after_limit: number;
-    order_by_recency: boolean;
-    room_id?: string;
+    searchTerm: string;
+    beforeLimit: number;
+    afterLimit: number;
+    orderByRecency: boolean;
+    roomId?: string;
 }
 
 export interface EventAndProfile {
@@ -76,8 +76,8 @@ export interface LoadArgs {
 
 export interface IndexStats {
     size: number;
-    event_count: number;
-    room_count: number;
+    eventCount: number;
+    roomCount: number;
 }
 
 /**

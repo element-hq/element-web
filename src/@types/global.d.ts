@@ -29,10 +29,10 @@ declare global {
             init: () => Promise<void>;
         };
 
-        mx_ContentMessages: ContentMessages;
-        mx_ToastStore: ToastStore;
-        mx_DeviceListener: DeviceListener;
-        mx_RoomListStore2: RoomListStore2;
+        mxContentMessages: ContentMessages;
+        mxToastStore: ToastStore;
+        mxDeviceListener: DeviceListener;
+        mxRoomListStore2: RoomListStore2;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933

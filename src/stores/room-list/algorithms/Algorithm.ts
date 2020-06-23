@@ -27,7 +27,7 @@ import {
     ITagMap,
     ITagSortingMap,
     ListAlgorithm,
-    SortAlgorithm
+    SortAlgorithm,
 } from "./models";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, splitRoomsByMembership } from "../membership";
@@ -305,7 +305,7 @@ export class Algorithm extends EventEmitter {
 
         if (!this._stickyRoom) {
             // If there's no sticky room, just do nothing useful.
-            if (!!this._cachedStickyRooms) {
+            if (this._cachedStickyRooms) {
                 // Clear the cache if we won't be needing it
                 this._cachedStickyRooms = null;
                 this.emit(LIST_UPDATED_EVENT);
@@ -518,13 +518,12 @@ export class Algorithm extends EventEmitter {
             }
         }
 
-        let tags = this.roomIdsToTags[room.roomId];
+        const tags = this.roomIdsToTags[room.roomId];
         if (!tags) {
             console.warn(`No tags known for "${room.name}" (${room.roomId})`);
             return false;
         }
 
-        let changed = false;
         for (const tag of tags) {
             const algorithm: OrderingAlgorithm = this.algorithms[tag];
             if (!algorithm) throw new Error(`No algorithm for ${tag}`);
@@ -535,7 +534,6 @@ export class Algorithm extends EventEmitter {
             // Flag that we've done something
             this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
             this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
-            changed = true;
         }
 
         return true;

@@ -25,7 +25,7 @@ import * as Unread from "../../../../Unread";
  * useful to the user.
  */
 export class RecentAlgorithm implements IAlgorithm {
-    public async sortRooms(rooms: Room[], tagId: TagID): Promise<Room[]> {
+    public async sortRooms(rooms: Room[], _: TagID): Promise<Room[]> {
         // We cache the timestamp lookup to avoid iterating forever on the timeline
         // of events. This cache only survives a single sort though.
         // We wouldn't need this if `.sort()` didn't constantly try and compare all

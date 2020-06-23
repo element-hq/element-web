@@ -61,7 +61,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     /**
      * Gets the pre-translated preview for a given room
      * @param room The room to get the preview for.
-     * @returns The preview, or null if none present.
+     * @returns {string} The preview, or null if none present.
      */
     public getPreviewForRoom(room: Room): string {
         if (!room) return null; // invalid room, just return nothing

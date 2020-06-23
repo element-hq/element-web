@@ -162,5 +162,4 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             await SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
         }
     }
-
 }

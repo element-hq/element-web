@@ -180,7 +180,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
-                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
+                console.log(
+                    `[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`,
+                );
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
                     console.log(`[RoomListDebug] Got tombstone event - regenerating room list`);
                     // TODO: We could probably be smarter about this
@@ -380,4 +382,4 @@ export default class RoomListStore {
     }
 }
 
-window.mx_RoomListStore2 = RoomListStore.instance;
+window.mxRoomListStore2 = RoomListStore.instance;

@@ -25,7 +25,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
  * additional behavioural changes are present.
  */
 export class NaturalAlgorithm extends OrderingAlgorithm {
-
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
         console.log(`[RoomListDebug] Constructed a NaturalAlgorithm for ${tagId}`);
@@ -51,7 +50,11 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
 
         // TODO: Optimize this to avoid useless operations
         // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
-        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(this.cachedOrderedRooms, this.tagId, this.sortingAlgorithm);
+        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(
+            this.cachedOrderedRooms,
+            this.tagId,
+            this.sortingAlgorithm,
+        );
 
         return true;
     }
