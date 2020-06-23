@@ -244,9 +244,8 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
-            const addClassName = tooltipClassName ? tooltipClassName : '';
             fieldTooltip = <Tooltip
-                tooltipClassName={`mx_Field_tooltip ${addClassName}`}
+                tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
                 visible={(this.state.focused && this.props.forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
             />;
