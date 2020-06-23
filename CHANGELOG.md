@@ -2,6 +2,7 @@ Changes in [2.8.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.8.0-rc.1...v2.8.0)
 
+ * Upgrade to JS SDK 7.0.0
  * Update read receipt remainder for internal font size change
    [\#4807](https://github.com/matrix-org/matrix-react-sdk/pull/4807)
  * Revert "Use recovery keys over passphrases"
