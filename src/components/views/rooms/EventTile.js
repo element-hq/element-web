@@ -313,35 +313,52 @@ export default createReactClass({
             return;
         }
 
-        // If we directly trust the device, short-circuit here
-        const verified = await this.context.isEventSenderVerified(mxEvent);
-        if (verified) {
+        const encryptionInfo = this.context.getEventEncryptionInfo(mxEvent);
+        const senderId = mxEvent.getSender();
+        const userTrust = this.context.checkUserTrust(senderId);
+
+        if (encryptionInfo.mismatchedSender) {
+            // something definitely wrong is going on here
             this.setState({
-                verified: E2E_STATE.VERIFIED,
-            }, () => {
-                // Decryption may have caused a change in size
-                this.props.onHeightChanged();
-            });
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
+        if (!userTrust.isCrossSigningVerified()) {
+            // user is not verified, so default to everything is normal
             this.setState({
                 verified: E2E_STATE.NORMAL,
-            }, this.props.onHeightChanged);
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
+        const eventSenderTrust = this.context.checkDeviceTrust(
+            senderId, encryptionInfo.sender.deviceId,
+        );
         if (!eventSenderTrust) {
             this.setState({
                 verified: E2E_STATE.UNKNOWN,
-            }, this.props.onHeightChanged); // Decryption may have cause a change in size
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!eventSenderTrust.isVerified()) {
+            this.setState({
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!encryptionInfo.authenticated) {
+            this.setState({
+                verified: E2E_STATE.UNAUTHENTICATED,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         this.setState({
-            verified: eventSenderTrust.isVerified() ? E2E_STATE.VERIFIED : E2E_STATE.WARNING,
+            verified: E2E_STATE.VERIFIED,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
@@ -526,6 +543,8 @@ export default createReactClass({
                 return; // no icon if we've not even cross-signed the user
             } else if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
+            } else if (this.state.verified === E2E_STATE.UNAUTHENTICATED) {
+                return (<E2ePadlockUnauthenticated />);
             } else if (this.state.verified === E2E_STATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
             } else {
@@ -973,6 +992,12 @@ function E2ePadlockUnencrypted(props) {
 function E2ePadlockUnknown(props) {
     return (
         <E2ePadlock title={_t("Encrypted by a deleted session")} icon="unknown" {...props} />
+    );
+}
+
+function E2ePadlockUnauthenticated(props) {
+    return (
+        <E2ePadlock title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")} icon="unauthenticated" {...props} />
     );
 }
 
