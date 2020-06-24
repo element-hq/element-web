@@ -49,7 +49,7 @@ eg. in config.json:
                         }
                     ],
                     "general": "Inter, sans",
-                    "monospace": "'Courrier New'"
+                    "monospace": "'Courier New'"
                 },
                 "colors": {
                     "accent-color": "#3596fc",
