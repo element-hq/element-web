@@ -85,8 +85,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
-            // status of the key backup toggle switch
-            useKeyBackup: true,
 
             passPhraseKeySelected: CREATESTORAGE_OPTION_KEY,
         };
@@ -170,12 +168,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _collectRecoveryKeyNode = (n) => {
         this._recoveryKeyNode = n;
-    }
-
-    _onUseKeyBackupChange = (enabled) => {
-        this.setState({
-            useKeyBackup: enabled,
-        });
     }
 
     _onChooseKeyPassphraseFormSubmit = async () => {
@@ -291,22 +283,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._recoveryKey,
-                    setupNewKeyBackup: this.state.useKeyBackup,
+                    setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
-                if (!this.state.useKeyBackup && this.state.backupInfo) {
-                    // If the user is resetting their cross-signing keys and doesn't want
-                    // key backup (but had it enabled before), delete the key backup as it's
-                    // no longer valid.
-                    console.log("Deleting invalid key backup (secrets have been reset; key backup not requested)");
-                    await cli.deleteKeyBackupVersion(this.state.backupInfo.version);
-                }
             } else {
                 await cli.bootstrapSecretStorage({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
-                    setupNewKeyBackup: !this.state.backupInfo && this.state.useKeyBackup,
+                    setupNewKeyBackup: !this.state.backupInfo,
                     getKeyBackupPassphrase: () => {
                         // We may already have the backup key if we earlier went
                         // through the restore backup path, so pass it along
@@ -384,16 +369,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _onGoBackClick = () => {
         this.setState({phase: PHASE_CHOOSE_KEY_PASSPHRASE});
-    }
-
-    _onSkipPassPhraseClick = async () => {
-        this._recoveryKey =
-            await MatrixClientPeg.get().createRecoveryKeyFromPassphrase();
-        this.setState({
-            copied: false,
-            downloaded: false,
-            phase: PHASE_SHOWKEY,
-        });
     }
 
     _onPassPhraseNextClick = async (e) => {
@@ -548,7 +523,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 hasCancel={false}
                 primaryDisabled={this.state.canUploadKeysWithPasswordOnly && !this.state.accountPassword}
             >
-                <button type="button" className="danger" onClick={this._onSkipSetupClick}>
+                <button type="button" className="danger" onClick={this._onCancelClick}>
                     {_t('Skip')}
                 </button>
             </DialogButtons>
@@ -556,12 +531,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _renderPhasePassPhrase() {
-        const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
-
         return <form onSubmit={this._onPassPhraseNextClick}>
             <p>{_t(
-                "Set a recovery passphrase to secure encrypted information and recover it if you log out. " +
-                "This should be different to your account password:",
+                "Enter a security phrase only you know, as it’s used to safeguard your data. " +
+                "To be secure, you shouldn’t re-use your account password.",
             )}</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
@@ -580,11 +553,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 />
             </div>
 
-            <LabelledToggleSwitch
-                label={ _t("Back up encrypted message keys")}
-                onChange={this._onUseKeyBackupChange} value={this.state.useKeyBackup}
-            />
-
             <DialogButtons
                 primaryButton={_t('Continue')}
                 onPrimaryButtonClick={this._onPassPhraseNextClick}
@@ -592,17 +560,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 disabled={!this.state.passPhraseValid}
             >
                 <button type="button"
-                    onClick={this._onSkipSetupClick}
+                    onClick={this._onCancelClick}
                     className="danger"
-                >{_t("Skip")}</button>
+                >{_t("Cancel")}</button>
             </DialogButtons>
-
-            <details>
-                <summary>{_t("Advanced")}</summary>
-                <AccessibleButton kind='primary' onClick={this._onSkipPassPhraseClick} >
-                    {_t("Set up with a recovery key")}
-                </AccessibleButton>
-            </details>
         </form>;
     }
 
@@ -662,7 +623,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 disabled={this.state.passPhrase !== this.state.passPhraseConfirm}
             >
                 <button type="button"
-                    onClick={this._onSkipSetupClick}
+                    onClick={this._onCancelClick}
                     className="danger"
                 >{_t("Skip")}</button>
             </DialogButtons>
@@ -772,9 +733,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             case PHASE_MIGRATE:
                 return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
-                return _t('Set up encryption');
+                return _t('Set a Security Phrase');
             case PHASE_PASSPHRASE_CONFIRM:
-                return _t('Confirm recovery passphrase');
+                return _t('Confirm Security Phrase');
             case PHASE_CONFIRM_SKIP:
                 return _t('Are you sure?');
             case PHASE_SHOWKEY:
