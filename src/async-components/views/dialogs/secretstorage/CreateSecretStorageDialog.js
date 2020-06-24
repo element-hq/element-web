@@ -437,7 +437,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
     _renderPhaseChooseKeyPassphrase() {
         return <form onSubmit={this._onChooseKeyPassphraseFormSubmit}>
-            <p>{_t(
+            <p className="mx_CreateSecretStorageDialog_centeredBody">{_t(
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
@@ -802,15 +802,27 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             }
         }
 
-        let headerImage;
-        if (this._titleForPhase(this.state.phase)) {
-            headerImage = require("../../../../../res/img/e2e/normal.svg");
+        let headerImage = null;
+        switch (this.state.phase) {
+            case PHASE_PASSPHRASE:
+            case PHASE_PASSPHRASE_CONFIRM:
+                headerImage = require("../../../../../res/img/feather-customised/secure-phrase.svg");
+                break;
+            case PHASE_SHOWKEY:
+                headerImage = require("../../../../../res/img/feather-customised/secure-backup.svg");
+                break;
+        }
+
+        let titleClass = null;
+        if (this.state.phase === PHASE_CHOOSE_KEY_PASSPHRASE) {
+            titleClass = 'mx_CreateSecretStorageDialog_centeredTitle';
         }
 
         return (
             <BaseDialog className='mx_CreateSecretStorageDialog'
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
+                titleClass={titleClass}
                 headerImage={headerImage}
                 hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
                 fixedWidth={false}
