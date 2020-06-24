@@ -100,15 +100,14 @@ limitations under the License.
     }
 
     .mx_IconizedContextMenu_icon {
-        position: relative;
         width: 16px;
         height: 16px;
+        display: block;
 
         &::before {
             content: '';
             width: 16px;
             height: 16px;
-            position: absolute;
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
