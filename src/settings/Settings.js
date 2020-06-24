@@ -197,7 +197,7 @@ export const SETTINGS = {
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use compact timeline layout'),
+        displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
     "showRedactions": {
