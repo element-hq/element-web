@@ -2522,5 +2522,11 @@
     "Create a Recovery Key": "Crea una chiave di recupero",
     "Upgrade your Recovery Key": "Aggiorna la chiave di recupero",
     "Store your Recovery Key": "Salva la chiave di recupero",
-    "Use the improved room list (will refresh to apply changes)": "Usa l'elenco stanze migliorato (verrà ricaricato per applicare le modifiche)"
+    "Use the improved room list (will refresh to apply changes)": "Usa l'elenco stanze migliorato (verrà ricaricato per applicare le modifiche)",
+    "Enable IRC layout option in the appearance tab": "Attiva l'opzione per il layout IRC nella scheda dell'aspetto",
+    "Use custom size": "Usa dimensione personalizzata",
+    "Hey you. You're the best!": "Ehi tu. Sei il migliore!",
+    "Message layout": "Layout messaggio",
+    "Compact": "Compatto",
+    "Modern": "Moderno"
 }
