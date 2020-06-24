@@ -49,15 +49,46 @@ function clearCustomTheme() {
     }
 }
 
+const allowedFontFaceProps = [
+    "font-display",
+    "font-family",
+    "font-stretch",
+    "font-style",
+    "font-weight",
+    "font-variant",
+    "font-feature-settings",
+    "font-variation-settings",
+    "src",
+    "unicode-range"
+];
+
 function generateCustomFontFaceCSS(faces) {
-    return Object.entries(faces).map(([fontName, face]) => {
-        const src = Object.entries(face.src).map(([format, url]) => {
-            return `url('${url}') format('${format}')`;
+    return faces.map(face => {
+        const src = face.src && face.src.map(srcElement => {
+            let format;
+            if (srcElement.format) {
+                format = `format("${srcElement.format}")`;
+            }
+            if (srcElement.url) {
+                return `url("${srcElement.url}") ${format}`;
+            } else if (srcElement.local) {
+                return `local("${srcElement.local}") ${format}`;
+            }
+            return "";
         }).join(", ");
-        return `@font-face {` +
-        `    font-family: '${fontName}';` +
-        `    src: ${src};` +
-        `}`;
+        const props = Object.keys(face).filter(prop => allowedFontFaceProps.includes(prop));
+        const body = props.map(prop => {
+            let value;
+            if (prop === "src") {
+                value = src;
+            } else if (prop === "font-family") {
+                value = `"${face[prop]}"`;
+            } else {
+                value = face[prop];
+            }
+            return `${prop}: ${value}`;
+        }).join(";");
+        return `@font-face {${body}}`;
     }).join("\n");
 }
 
