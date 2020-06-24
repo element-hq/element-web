@@ -190,7 +190,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                 homeButton = (
                     <li>
                         <AccessibleButton onClick={this.onHomeClick}>
-                            <img src={require("../../../res/img/feather-customised/home.svg")} width={16} />
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconHome" />
                             <span>{_t("Home")}</span>
                         </AccessibleButton>
                     </li>
@@ -233,31 +233,31 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                                 {homeButton}
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                        <img src={require("../../../res/img/feather-customised/notifications.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconBell" />
                                         <span>{_t("Notification settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                        <img src={require("../../../res/img/feather-customised/lock.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconLock" />
                                         <span>{_t("Security & privacy")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                        <img src={require("../../../res/img/feather-customised/settings.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSettings" />
                                         <span>{_t("All settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onShowArchived}>
-                                        <img src={require("../../../res/img/feather-customised/archive.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconArchive" />
                                         <span>{_t("Archived rooms")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onProvideFeedback}>
-                                        <img src={require("../../../res/img/feather-customised/message-circle.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconMessage" />
                                         <span>{_t("Feedback")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -267,7 +267,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                             <ul>
                                 <li>
                                     <AccessibleButton onClick={this.onSignOutClick}>
-                                        <img src={require("../../../res/img/feather-customised/sign-out.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSignOut" />
                                         <span>{_t("Sign out")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -287,7 +287,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                     label={_t("Account settings")}
                     isExpanded={this.state.menuDisplayed}
                 >
-                    <img src={require("../../../res/img/feather-customised/more-horizontal.svg")} alt="..." width={14} />
+                    <span>{/* masked image in CSS */}</span>
                 </ContextMenuButton>
                 {contextMenu}
             </React.Fragment>
