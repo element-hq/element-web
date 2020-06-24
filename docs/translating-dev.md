@@ -4,7 +4,7 @@
 
 - A working [Development Setup](../../#setting-up-a-dev-environment)
   - Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
-- Node 8 or later
+- Latest LTS version of Node.js installed
 - Be able to understand English
 - Be able to understand the language you want to translate riot-web into
 
@@ -32,14 +32,14 @@ function getColorName(hex) {
 
  1. Check if the import ``import { _t } from 'matrix-react-sdk/lib/languageHandler';`` is present. If not add it to the other import statements. Also import `_td` if needed.
  1. Add ``_t()`` to your string. (Don't forget curly braces when you assign an expression to JSX attributes in the render method). If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
- 1. Run `npm run i18n` to update ``src/i18n/strings/en_EN.json``
+ 1. Run `yarn i18n` to update ``src/i18n/strings/en_EN.json``
  1. If you added a string with a plural, you can add other English plural variants to ``src/i18n/strings/en_EN.json`` (remeber to edit the one in the same project as the source file containing your new translation).
 
 ## Editing existing strings
 
 1. Edit every occurrence of the string inside `_t()` and `_td()` in the JSX files.
-1. Run `npm run i18n` to update `src/i18n/strings/en_EN.json`. (Be sure to run this in the same project as the JSX files you just edited.)
-1. Run `npm run prunei18n` to remove the old string from `src/i18n/strings/*.json`.
+1. Run `yarn i18n` to update `src/i18n/strings/en_EN.json`. (Be sure to run this in the same project as the JSX files you just edited.)
+1. Run `yarn prunei18n` to remove the old string from `src/i18n/strings/*.json`.
 
 ## Adding variables inside a string.
 

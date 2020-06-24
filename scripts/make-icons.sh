@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Converts an svg logo into the various image resources required by
+# the various platforms deployments.
+#
+# On debian-based systems you need these deps:
+#   apt-get install xmlstarlet python3-cairosvg icnsutils
 
 if [ $# != 1 ]
 then
@@ -52,7 +58,23 @@ cp "$tmpdir/256.png" "$tmpdir/Riot.iconset/icon_256x256.png"
 cp "$tmpdir/512.png" "$tmpdir/Riot.iconset/icon_256x256@2x.png"
 cp "$tmpdir/512.png" "$tmpdir/Riot.iconset/icon_512x512.png"
 cp "$tmpdir/1024.png" "$tmpdir/Riot.iconset/icon_512x512@2x.png"
-iconutil -c icns -o electron_app/build/icon.icns "$tmpdir/Riot.iconset"
+
+if [ -x "$(command -v iconutil)" ]; then
+  # available on macos
+  iconutil -c icns -o electron_app/build/icon.icns "$tmpdir/Riot.iconset"
+elif [ -x "$(command -v png2icns)" ]; then
+  # available on linux
+  # png2icns is more finicky about its input than iconutil
+  # 1. it doesn't support a 64x64 (aka 32x32@2x)
+  # 2. it doesn't like duplicates (128x128@2x == 256x256)
+  rm "$tmpdir/Riot.iconset/icon_128x128@2x.png"
+  rm "$tmpdir/Riot.iconset/icon_256x256@2x.png"
+  rm "$tmpdir/Riot.iconset/icon_16x16@2x.png"
+  rm "$tmpdir/Riot.iconset/icon_32x32@2x.png"
+  png2icns electron_app/build/icon.icns "$tmpdir"/Riot.iconset/*png
+else
+  echo "WARNING: Unsupported platform. Skipping icns build"
+fi
 
 cp "$tmpdir/36.png" "res/vector-icons/android-chrome-36x36.png"
 cp "$tmpdir/48.png" "res/vector-icons/android-chrome-48x48.png"

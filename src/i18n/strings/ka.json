@@ -1,0 +1,12 @@
+{
+    "Riot Desktop on %(platformName)s": "Riot Desktop-ი %(platformName)s-ზე",
+    "Unknown device": "უცნობი მოწყობილობა",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s-ი %(browserName)s-ით %(osName)s-იდან",
+    "You need to be using HTTPS to place a screen-sharing call.": "ეკრანის გაზიარების ფუნქციის მქონე ზარისთვის საჭიროა, იყენებდეთ HTTPS-ს.",
+    "Custom Server Options": "პერსონალიზებული სერვერის პარამეტრები",
+    "Dismiss": "უარის თქმა",
+    "powered by Matrix": "Matrix-ზე დაფუძნებული",
+    "Welcome to Riot.im": "კეთილი იყოს თქვენი მობრძანება Riot.im-ზე",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "დეცენტრალიზებული, დაშიფრული ჩატი &amp; კოლაბორაცია, დაფუძნებული [matrix]-ზე",
+    "Chat with Riot Bot": "ისაუბრეთ Riot-ის Bot-თან"
+}

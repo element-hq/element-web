@@ -3,24 +3,41 @@
   <head>
     <meta charset="utf-8">
     <title>Riot</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="vector-icons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="vector-icons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="vector-icons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="vector-icons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="vector-icons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="vector-icons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="vector-icons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="vector-icons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="vector-icons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="<%= require('../../res/vector-icons/apple-touch-icon-57x57.png') %>">
+    <link rel="apple-touch-icon" sizes="60x60" href="<%= require('../../res/vector-icons/apple-touch-icon-60x60.png') %>">
+    <link rel="apple-touch-icon" sizes="72x72" href="<%= require('../../res/vector-icons/apple-touch-icon-72x72.png') %>">
+    <link rel="apple-touch-icon" sizes="76x76" href="<%= require('../../res/vector-icons/apple-touch-icon-76x76.png') %>">
+    <link rel="apple-touch-icon" sizes="114x114" href="<%= require('../../res/vector-icons/apple-touch-icon-114x114.png') %>">
+    <link rel="apple-touch-icon" sizes="120x120" href="<%= require('../../res/vector-icons/apple-touch-icon-120x120.png') %>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<%= require('../../res/vector-icons/apple-touch-icon-144x144.png') %>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../../res/vector-icons/apple-touch-icon-152x152.png') %>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../../res/vector-icons/apple-touch-icon-180x180.png') %>">
     <link rel="manifest" href="manifest.json">
-    <link rel="shortcut icon" href="vector-icons/favicon.ico">
+    <meta name="referrer" content="no-referrer">
+    <link rel="shortcut icon" href="<%= require('../../res/vector-icons/favicon.ico') %>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-title" content="Riot">
     <meta name="application-name" content="Riot">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="vector-icons/mstile-144x144.png">
-    <meta name="msapplication-config" content="vector-icons/browserconfig.xml">
+    <meta name="msapplication-TileImage" content="<%= require('../../res/vector-icons/mstile-144x144.png') %>">
+    <meta name="msapplication-config" content="<%= require('../../res/vector-icons/browserconfig.xml') %>">
     <meta name="theme-color" content="#ffffff">
     <meta property="og:image" content="<%= htmlWebpackPlugin.options.vars.og_image_url %>" />
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-eval' https://www.recaptcha.net https://www.gstatic.com;
+        img-src * blob: data:;
+        connect-src *;
+        font-src 'self' data:;
+        media-src * blob: data:;
+        child-src * blob: data:;
+        worker-src 'self';
+        frame-src * blob: data:;
+        form-action 'self';
+        object-src 'self';
+        manifest-src 'self';
+    ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
         var file = htmlWebpackPlugin.files.css[i];
         var match = file.match(/^bundles\/.*?\/theme-(.*)\.css$/);
@@ -33,24 +50,21 @@
         <% }
     } %>
   </head>
-  <body style="height: 100%;">
-    <section id="matrixchat" style="height: 100%;"></section>
+  <body style="height: 100%; margin: 0;" data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.chunks['indexeddb-worker'].entry %>">
     <noscript>Sorry, Riot requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <% for (var i=0; i < htmlWebpackPlugin.files.js.length; i++) {
-        // Not a particularly graceful way of not putting the indexeddb worker script
-        // into the main page
-        if (_.endsWith(htmlWebpackPlugin.files.js[i], 'indexeddb-worker.js')) {
-            %>
-            <script>
-                window.vector_indexeddb_worker_script = '<%= htmlWebpackPlugin.files.js[i] %>';
-            </script>
-            <%
-            continue;
-        }
-        %>
-        <script src="<%= htmlWebpackPlugin.files.js[i] %>"></script>
-    <% } %>
-    <img src="img/warning.svg" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
+    <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
+
+    <!-- Legacy supporting Prefetch images -->
+    <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />
@@ -73,6 +87,6 @@
     </audio>
     <audio id="remoteAudio"></audio>
     <!-- let CSS themes pass constants to the app -->
-    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"/></div><div id="mx_theme_tertiaryAccentColor"/></div>
+    <div id="mx_theme_accentColor"></div><div id="mx_theme_secondaryAccentColor"></div><div id="mx_theme_tertiaryAccentColor"></div>
   </body>
 </html>

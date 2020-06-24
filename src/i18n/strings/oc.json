@@ -1,0 +1,22 @@
+{
+    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Vòstra configuracion Riot conten de JSON invalid. Mercés de corregir lo problèma e d’actualizar la pagina.",
+    "The message from the parser is: %(message)s": "Lo messatge de l’analisaire es : %(message)s",
+    "Invalid JSON": "Invalid JSON",
+    "Your Riot is misconfigured": "Vòstre Riot es mal configurat",
+    "Unexpected error preparing the app. See console for details.": "Error inesperada en preparant l’aplicacion. Vejatz la consòla pels detalhs.",
+    "Riot Desktop on %(platformName)s": "Riot Desktop sus %(platformName)s",
+    "Go to your browser to complete Sign In": "Anatz al navegador per acabar la connexion",
+    "Unknown device": "Periferic desconegut",
+    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s sus %(osName)s",
+    "powered by Matrix": "propulsat per Matrix",
+    "Custom Server Options": "Opcions de servidor personalizat",
+    "Dismiss": "Refusar",
+    "Welcome to Riot.im": "La benvenguda a Riot.im",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Messatjariá chifrada, descentralizada e collaborativa propulsada per [matrix]",
+    "Sign In": "Se connectar",
+    "Create Account": "Crear un compte",
+    "Need help?": "Besonh d’ajuda ?",
+    "Chat with Riot Bot": "Charrar amb lo robòt Riot",
+    "Explore rooms": "Percórrer las salas",
+    "Room Directory": "Annuari de las sala"
+}

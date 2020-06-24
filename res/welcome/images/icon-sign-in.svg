@@ -1,0 +1,16 @@
+
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Experiments" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Home" transform="translate(-673.000000, -478.000000)" stroke="#FFFFFF" stroke-width="1.6">
+            <g id="Group-11" transform="translate(621.000000, 176.000000)">
+                <g id="Group-7" transform="translate(40.000000, 283.000000)">
+                    <g id="log-in" transform="translate(13.000000, 20.000000)">
+                        <path d="M12,0 L16,0 C17.1045695,0 18,0.8954305 18,2 L18,16 C18,17.1045695 17.1045695,18 16,18 L12,18" id="Path"></path>
+                        <polyline id="Path" points="7 14 12 9 7 4"></polyline>
+                        <path d="M12,9 L0,9" id="Path"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <title>Rageshake decoder ring</title>
+        <script crossorigin src="https://unpkg.com/source-map@0.7.3/dist/source-map.js"></script>
+        <script>
+            sourceMap.SourceMapConsumer.initialize({
+                "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
+            });
+        </script>
+        <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+        <!--<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>-->
+        <script crossorigin src="https://unpkg.com/rxjs/bundles/rxjs.umd.min.js"></script>
+        <script src="datatypes.js"></script>
+        <script src="decoder.js"></script>
+
+        <style>
+            @keyframes spin {
+                from {transform:rotate(0deg);}
+                to {transform:rotate(359deg);}
+            }
+
+            body {
+                font-family: sans-serif
+            }
+
+            .spinner {
+                animation: spin 4s infinite linear;
+                display: inline-block;
+                text-align: center;
+                vertical-align: middle;
+                font-size: larger;
+            }
+
+            .progress {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+
+            .bundle input {
+                width: 24ex;
+            }
+
+            .valid::after {
+                content: "✓"
+            }
+
+            label {
+                width: 3em;
+                margin-right: 1em;
+                display: inline-block;
+            }
+
+            input:valid {
+                border: 1px solid green;
+            }
+
+            .inputs > div {
+                margin-bottom: 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <header><h2>Decoder ring</h2></header>
+        <content id="main">Waiting for javascript to run...</content>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", () => {
+                try {
+                    ReactDOM.render(React.createElement(Decoder.BundlePicker), document.getElementById("main"))
+                } catch (e) {
+                    const n = document.createElement("div");
+                    n.innerText = `Error starting: ${e.message}`;
+                    document.getElementById("main").appendChild(n);
+                }
+            });
+        </script>
+    </body>
+</html>
