@@ -217,7 +217,7 @@ export class Algorithm extends EventEmitter {
         // a room while filtering and it'll disappear. We don't update the filter earlier in
         // this function simply because we don't have to.
         this.recalculateFilteredRoomsForTag(tag);
-        if (lastStickyRoom && lastStickyRoom.tag !== tag) this.recalculateFilteredRoomsForTag(tag);
+        if (lastStickyRoom && lastStickyRoom.tag !== tag) this.recalculateFilteredRoomsForTag(lastStickyRoom.tag);
         this.recalculateStickyRoom();
 
         // Finally, trigger an update
