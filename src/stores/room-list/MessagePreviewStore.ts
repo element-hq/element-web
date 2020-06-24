@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { ActionPayload } from "../dispatcher/payloads";
-import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import { RoomListStoreTempProxy } from "./room-list/RoomListStoreTempProxy";
-import { textForEvent } from "../TextForEvent";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { RoomListStoreTempProxy } from "./RoomListStoreTempProxy";
+import { textForEvent } from "../../TextForEvent";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { _t } from "../languageHandler";
+import { _t } from "../../languageHandler";
 
 const PREVIEWABLE_EVENTS = [
     // This is the same list from RiotX
