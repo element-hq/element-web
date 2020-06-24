@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {User} from "matrix-js-sdk/src/models/user";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -34,12 +33,13 @@ import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 interface IProps {
 }
 
 interface IState {
-    user: User;
     menuDisplayed: boolean;
     isDarkTheme: boolean;
 }
@@ -54,19 +54,10 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
 
         this.state = {
             menuDisplayed: false,
-            user: MatrixClientPeg.get().getUser(MatrixClientPeg.get().getUserId()),
             isDarkTheme: this.isUserOnDarkTheme(),
         };
-    }
 
-    private get displayName(): string {
-        if (MatrixClientPeg.get().isGuest()) {
-            return _t("Guest");
-        } else if (this.state.user) {
-            return this.state.user.displayName;
-        } else {
-            return MatrixClientPeg.get().getUserId();
-        }
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     private get hasHomePage(): boolean {
@@ -81,6 +72,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
     public componentWillUnmount() {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     private isUserOnDarkTheme(): boolean {
@@ -90,6 +82,12 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         }
         return theme === "dark";
     }
+
+    private onProfileUpdate = async () => {
+        // the store triggered an update, so force a layout update. We don't
+        // have any state to store here for that to magically happen.
+        this.forceUpdate();
+    };
 
     private onThemeChanged = () => {
         this.setState({isDarkTheme: this.isUserOnDarkTheme()});
@@ -209,7 +207,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         <div className="mx_UserMenuButton_contextMenu_header">
                             <div className="mx_UserMenuButton_contextMenu_name">
                                 <span className="mx_UserMenuButton_contextMenu_displayName">
-                                    {this.displayName}
+                                    {OwnProfileStore.instance.displayName}
                                 </span>
                                 <span className="mx_UserMenuButton_contextMenu_userId">
                                     {MatrixClientPeg.get().getUserId()}

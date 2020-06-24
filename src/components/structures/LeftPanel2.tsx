@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
+import { createRef } from "react";
 import TagPanel from "./TagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
@@ -30,7 +31,9 @@ import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { createRef } from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { throttle } from 'lodash';
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -73,12 +76,31 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // We watch the middle panel because we don't actually get resized, the middle panel does.
         // We listen to the noisy channel to avoid choppy reaction times.
         this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
+
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     public componentWillUnmount() {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
     }
+
+    // TSLint wants this to be a member, but we don't want that.
+    // tslint:disable-next-line
+    private onRoomStateUpdate = throttle((ev: MatrixEvent) => {
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (ev.getType() === 'm.room.member' && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.onProfileUpdate();
+        }
+    }, 200, {trailing: true, leading: true});
+
+    private onProfileUpdate = async () => {
+        // the store triggered an update, so force a layout update. We don't
+        // have any state to store here for that to magically happen.
+        this.forceUpdate();
+    };
 
     private onSearch = (term: string): void => {
         this.setState({searchFilter: term});
@@ -149,16 +171,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // TODO: Presence
         // TODO: Breadcrumbs toggle
         // TODO: Menu button
-        const avatarSize = 32;
-        // TODO: Don't do this profile lookup in render()
-        const client = MatrixClientPeg.get();
-        let displayName = client.getUserId();
-        let avatarUrl: string = null;
-        const myUser = client.getUser(client.getUserId());
-        if (myUser) {
-            displayName = myUser.rawDisplayName;
-            avatarUrl = myUser.avatarUrl;
-        }
+        const avatarSize = 32; // should match border-radius of the avatar
 
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
@@ -169,7 +182,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             );
         }
 
-        let name = <span className="mx_LeftPanel2_userName">{displayName}</span>;
+        let name = <span className="mx_LeftPanel2_userName">{OwnProfileStore.instance.displayName}</span>;
         let buttons = (
             <span className="mx_LeftPanel2_headerButtons">
                 <UserMenuButton />
@@ -186,8 +199,8 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     <span className="mx_LeftPanel2_userAvatarContainer">
                         <BaseAvatar
                             idName={MatrixClientPeg.get().getUserId()}
-                            name={displayName}
-                            url={avatarUrl}
+                            name={OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId()}
+                            url={OwnProfileStore.instance.getHttpAvatarUrl(avatarSize)}
                             width={avatarSize}
                             height={avatarSize}
                             resizeMethod="crop"
