@@ -41,6 +41,16 @@ eg. in config.json:
             {
                 "name": "Electric Blue",
                 "is_dark": false,
+                "fonts": {
+                    "faces": [
+                        {
+                            "font-family": "Inter",
+                            "src": [{"url": "/fonts/Inter.ttf", "format": "ttf"}]
+                        }
+                    ],
+                    "general": "Inter, sans",
+                    "monospace": "'Courier New'"
+                },
                 "colors": {
                     "accent-color": "#3596fc",
                     "primary-color": "#368bd6",
@@ -84,3 +94,5 @@ eg. in config.json:
 `username-colors` is expected to contain 8 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme.
 
 These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
+
+All properties in `fonts` are optional, and will default to the standard Riot fonts.
