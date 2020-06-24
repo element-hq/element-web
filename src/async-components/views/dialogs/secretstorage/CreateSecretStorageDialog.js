@@ -78,6 +78,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             passPhraseConfirm: '',
             copied: false,
             downloaded: false,
+            setPassphrase: false,
             backupInfo: null,
             backupSigStatus: null,
             // does the server offer a UI auth flow with just m.login.password
@@ -177,6 +178,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             this.setState({
                 copied: false,
                 downloaded: false,
+                setPassphrase: false,
                 phase: PHASE_SHOWKEY,
             });
         } else {
@@ -395,6 +397,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         this.setState({
             copied: false,
             downloaded: false,
+            setPassphrase: true,
             phase: PHASE_SHOWKEY,
         });
     }
@@ -634,7 +637,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         let continueButton;
         if (this.state.phase === PHASE_SHOWKEY) {
             continueButton = <DialogButtons primaryButton={_t("Continue")}
-                disabled={!this.state.downloaded && !this.state.copied}
+                disabled={!this.state.downloaded && !this.state.copied && !this.state.setPassphrase}
                 onPrimaryButtonClick={this._onShowKeyContinueClick}
                 hasCancel={false}
             />;
