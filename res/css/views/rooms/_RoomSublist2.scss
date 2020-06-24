@@ -22,9 +22,11 @@ limitations under the License.
     flex-direction: column;
 
     margin-left: 8px;
-    margin-top: 12px;
-    margin-bottom: 12px;
     width: 100%;
+
+    &:first-child {
+        margin-top: 12px; // so we're not up against the search/filter
+    }
 
     .mx_RoomSublist2_headerContainer {
         // Create a flexbox to make alignment easy
