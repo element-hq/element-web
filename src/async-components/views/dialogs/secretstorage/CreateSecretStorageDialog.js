@@ -39,7 +39,6 @@ const PHASE_PASSPHRASE = 4;
 const PHASE_PASSPHRASE_CONFIRM = 5;
 const PHASE_SHOWKEY = 6;
 const PHASE_STORING = 8;
-const PHASE_DONE = 9;
 const PHASE_CONFIRM_SKIP = 10;
 
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
@@ -305,9 +304,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     },
                 });
             }
-            this.setState({
-                phase: PHASE_DONE,
-            });
+            this.props.onFinished(true);
         } catch (e) {
             if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {
                 this.setState({
@@ -699,19 +696,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         </div>;
     }
 
-    _renderPhaseDone() {
-        return <div>
-            <p>{_t(
-                "You can now verify your other devices, " +
-                "and other users to keep your chats safe.",
-            )}</p>
-            <DialogButtons primaryButton={_t('OK')}
-                onPrimaryButtonClick={this._onDone}
-                hasCancel={false}
-            />
-        </div>;
-    }
-
     _renderPhaseSkipConfirm() {
         return <div>
             <p>{_t(
@@ -745,8 +729,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 return _t('Save your Security Key');
             case PHASE_STORING:
                 return _t('Setting up keys');
-            case PHASE_DONE:
-                return _t("You're done!");
             default:
                 return '';
         }
@@ -792,9 +774,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     break;
                 case PHASE_STORING:
                     content = this._renderBusyPhase();
-                    break;
-                case PHASE_DONE:
-                    content = this._renderPhaseDone();
                     break;
                 case PHASE_CONFIRM_SKIP:
                     content = this._renderPhaseSkipConfirm();
