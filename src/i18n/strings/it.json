@@ -2528,5 +2528,8 @@
     "Hey you. You're the best!": "Ehi tu. Sei il migliore!",
     "Message layout": "Layout messaggio",
     "Compact": "Compatto",
-    "Modern": "Moderno"
+    "Modern": "Moderno",
+    "Use a system font": "Usa un carattere di sistema",
+    "System font name": "Nome carattere di sistema",
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo."
 }
