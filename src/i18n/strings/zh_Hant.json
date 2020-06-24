@@ -2533,5 +2533,8 @@
     "Hey you. You're the best!": "你是最棒的！",
     "Message layout": "訊息佈局",
     "Compact": "簡潔",
-    "Modern": "現代"
+    "Modern": "現代",
+    "Use a system font": "使用系統字型",
+    "System font name": "系統字型名稱",
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "無法在此裝置上保證加密訊息的真實性。"
 }
