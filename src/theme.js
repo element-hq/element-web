@@ -59,7 +59,7 @@ const allowedFontFaceProps = [
     "font-feature-settings",
     "font-variation-settings",
     "src",
-    "unicode-range"
+    "unicode-range",
 ];
 
 function generateCustomFontFaceCSS(faces) {
