@@ -35,9 +35,6 @@ limitations under the License.
             // Create another flexbox of columns to handle large user IDs
             display: flex;
             flex-direction: column;
-
-            // fit the container
-            flex: 1;
             width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
 
             * {
