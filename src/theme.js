@@ -35,11 +35,67 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
+function clearCustomTheme() {
+    // remove all css variables, we assume these are there because of the custom theme
+    const inlineStyleProps = Object.values(document.body.style);
+    for (const prop of inlineStyleProps) {
+        if (prop.startsWith("--")) {
+            document.body.style.removeProperty(prop);
+        }
+    }
+    const customFontFaceStyle = document.querySelector("head > style[title='custom-theme-font-faces']");
+    if (customFontFaceStyle) {
+        customFontFaceStyle.remove();
+    }
+}
+
+const allowedFontFaceProps = [
+    "font-display",
+    "font-family",
+    "font-stretch",
+    "font-style",
+    "font-weight",
+    "font-variant",
+    "font-feature-settings",
+    "font-variation-settings",
+    "src",
+    "unicode-range",
+];
+
+function generateCustomFontFaceCSS(faces) {
+    return faces.map(face => {
+        const src = face.src && face.src.map(srcElement => {
+            let format;
+            if (srcElement.format) {
+                format = `format("${srcElement.format}")`;
+            }
+            if (srcElement.url) {
+                return `url("${srcElement.url}") ${format}`;
+            } else if (srcElement.local) {
+                return `local("${srcElement.local}") ${format}`;
+            }
+            return "";
+        }).join(", ");
+        const props = Object.keys(face).filter(prop => allowedFontFaceProps.includes(prop));
+        const body = props.map(prop => {
+            let value;
+            if (prop === "src") {
+                value = src;
+            } else if (prop === "font-family") {
+                value = `"${face[prop]}"`;
+            } else {
+                value = face[prop];
+            }
+            return `${prop}: ${value}`;
+        }).join(";");
+        return `@font-face {${body}}`;
+    }).join("\n");
+}
 
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
 
-    function setCSSVariable(name, hexColor, doPct = true) {
+    function setCSSColorVariable(name, hexColor, doPct = true) {
         style.setProperty(`--${name}`, hexColor);
         if (doPct) {
             // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
@@ -53,11 +109,28 @@ function setCustomThemeVars(customTheme) {
         for (const [name, value] of Object.entries(customTheme.colors)) {
             if (Array.isArray(value)) {
                 for (let i = 0; i < value.length; i += 1) {
-                    setCSSVariable(`${name}_${i}`, value[i], false);
+                    setCSSColorVariable(`${name}_${i}`, value[i], false);
                 }
             } else {
-                setCSSVariable(name, value);
+                setCSSColorVariable(name, value);
             }
+        }
+    }
+    if (customTheme.fonts) {
+        const {fonts} = customTheme;
+        if (fonts.faces) {
+            const css = generateCustomFontFaceCSS(fonts.faces);
+            const style = document.createElement("style");
+            style.setAttribute("title", "custom-theme-font-faces");
+            style.setAttribute("type", "text/css");
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+        }
+        if (fonts.general) {
+            style.setProperty("--font-family", fonts.general);
+        }
+        if (fonts.monospace) {
+            style.setProperty("--font-family-monospace", fonts.monospace);
         }
     }
 }
@@ -88,6 +161,7 @@ export async function setTheme(theme) {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
     }
+    clearCustomTheme();
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
         const customTheme = getCustomTheme(theme.substr(7));
@@ -136,7 +210,7 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
-            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            const bodyStyles = global.getComputedStyle(document.body);
             if (bodyStyles.backgroundColor) {
                 document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
             }
