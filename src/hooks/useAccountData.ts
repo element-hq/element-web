@@ -33,7 +33,7 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
     }, [cli, eventType]);
     useEventEmitter(cli, "accountData", handler);
 
-    return value || {};
+    return value || {} as T;
 };
 
 // Hook to simplify listening to Matrix room account data
@@ -46,5 +46,5 @@ export const useRoomAccountData = <T extends {}>(room: Room, eventType: string) 
     }, [room, eventType]);
     useEventEmitter(room, "Room.accountData", handler);
 
-    return value || {};
+    return value || {} as T;
 };
