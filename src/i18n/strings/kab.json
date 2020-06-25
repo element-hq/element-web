@@ -451,5 +451,15 @@
     "Show typing notifications": "Azen ilɣa yettuszemlen",
     "Room Colour": "Initen n texxamt",
     "Show developer tools": "Sken ifecka n uneflay",
-    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Ma yella tseqdaceḍ askar n Richtext n umaẓrag n uḍris anesbaɣur"
+    "Whether or not you're using the Richtext mode of the Rich Text Editor": "Ama tseqdaceḍ askar-inek.inem n umaẓrag n uḍris anesbaɣur neɣ xaṭi",
+    "Whether you're using Riot on a device where touch is the primary input mechanism": "Γas ma tseqdaceḍ Riot inek.inem deg yibenk anida asami d ametwi agejdan n unekcum",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Γas ma tseqdaceḍ tamahilt 'breadcrumbs' neɣ xaṭi(avatar nnig tebdert n texxamt)",
+    "Whether you're using Riot as an installed Progressive Web App": "Γas ma tseqdaceḍ Riot d asnas web n usfari i ibedden",
+    "The information being sent to us to help make Riot better includes:": "Talɣut i aɣ-d-yettwaznen ɣef tallalt n usnerni n Riot deg-s:",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Ma yili asebter-a degs talɣut tummilt, am texxamt neɣ aseqdac neɣ asulay n ugraw, isefka-a ad ttwakksen send ad ttwaznen i uqeddac.",
+    "Unable to load! Check your network connectivity and try again.": "Yegguma ad d-yali! Senqed tuqqna-inek.inem ɣer uzeṭṭa syen tεerḍeḍ tikkelt-nniḍen.",
+    "Failure to create room": "Timerna n texxamt ur teddi ara",
+    "If you cancel now, you won't complete verifying your other session.": "Ma yella teffɣeḍ tura, ur tessawaḍeḍ ara ad tesneqdeḍ akk tiɣimiyin-inek.inem.",
+    "If you cancel now, you won't complete your operation.": "Ma yella teffɣeḍ tura, tamhelt-ik.im ur tettemmed ara.",
+    "Show these rooms to non-members on the community page and room list?": "Sken tixxamin-a i wid ur nettekka ara deg usebter n temɣiwent d tebdert n texxamt?"
 }
