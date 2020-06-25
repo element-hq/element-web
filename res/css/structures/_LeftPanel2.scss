@@ -48,7 +48,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         flex-direction: column;
 
         .mx_LeftPanel2_userHeader {
-            padding: 14px 12px 20px; // 14px top, 12px sides, 20px bottom
+            padding: 12px 12px 20px; // 12px top, 12px sides, 20px bottom
 
             // Create another flexbox column for the rows to stack within
             display: flex;
@@ -65,6 +65,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             .mx_LeftPanel2_userAvatarContainer {
                 position: relative; // to make default avatars work
                 margin-right: 8px;
+                height: 32px; // to remove the unknown 4px gap the browser puts below it
 
                 .mx_LeftPanel2_userAvatar {
                     border-radius: 32px; // should match avatar size
