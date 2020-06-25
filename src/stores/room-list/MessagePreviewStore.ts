@@ -19,32 +19,86 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { RoomListStoreTempProxy } from "./RoomListStoreTempProxy";
-import { textForEvent } from "../../TextForEvent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { _t } from "../../languageHandler";
+import { MessageEventPreview } from "./previews/MessageEventPreview";
+import { NameEventPreview } from "./previews/NameEventPreview";
+import { TagID } from "./models";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { TopicEventPreview } from "./previews/TopicEventPreview";
+import { MembershipEventPreview } from "./previews/MembershipEventPreview";
+import { HistoryVisibilityEventPreview } from "./previews/HistoryVisibilityEventPreview";
+import { CallInviteEventPreview } from "./previews/CallInviteEventPreview";
+import { CallAnswerEventPreview } from "./previews/CallAnswerEventPreview";
+import { CallHangupEvent } from "./previews/CallHangupEvent";
+import { EncryptionEventPreview } from "./previews/EncryptionEventPreview";
+import { ThirdPartyInviteEventPreview } from "./previews/ThirdPartyInviteEventPreview";
+import { StickerEventPreview } from "./previews/StickerEventPreview";
+import { ReactionEventPreview } from "./previews/ReactionEventPreview";
+import { CreationEventPreview } from "./previews/CreationEventPreview";
 
-const PREVIEWABLE_EVENTS = [
-    // This is the same list from RiotX
-    {type: "m.room.message", isState: false},
-    {type: "m.room.name", isState: true},
-    {type: "m.room.topic", isState: true},
-    {type: "m.room.member", isState: true},
-    {type: "m.room.history_visibility", isState: true},
-    {type: "m.call.invite", isState: false},
-    {type: "m.call.hangup", isState: false},
-    {type: "m.call.answer", isState: false},
-    {type: "m.room.encrypted", isState: false},
-    {type: "m.room.encryption", isState: true},
-    {type: "m.room.third_party_invite", isState: true},
-    {type: "m.sticker", isState: false},
-    {type: "m.room.create", isState: true},
-];
+const PREVIEWS = {
+    'm.room.message': {
+        isState: false,
+        previewer: new MessageEventPreview(),
+    },
+    'm.room.name': {
+        isState: true,
+        previewer: new NameEventPreview(),
+    },
+    'm.room.topic': {
+        isState: true,
+        previewer: new TopicEventPreview(),
+    },
+    'm.room.member': {
+        isState: true,
+        previewer: new MembershipEventPreview(),
+    },
+    'm.room.history_visibility': {
+        isState: true,
+        previewer: new HistoryVisibilityEventPreview(),
+    },
+    'm.call.invite': {
+        isState: false,
+        previewer: new CallInviteEventPreview(),
+    },
+    'm.call.answer': {
+        isState: false,
+        previewer: new CallAnswerEventPreview(),
+    },
+    'm.call.hangup': {
+        isState: false,
+        previewer: new CallHangupEvent(),
+    },
+    'm.room.encryption': {
+        isState: true,
+        previewer: new EncryptionEventPreview(),
+    },
+    'm.room.third_party_invite': {
+        isState: true,
+        previewer: new ThirdPartyInviteEventPreview(),
+    },
+    'm.sticker': {
+        isState: false,
+        previewer: new StickerEventPreview(),
+    },
+    'm.reaction': {
+        isState: false,
+        previewer: new ReactionEventPreview(),
+    },
+    'm.room.create': {
+        isState: true,
+        previewer: new CreationEventPreview(),
+    },
+};
 
 // The maximum number of events we're willing to look back on to get a preview.
 const MAX_EVENTS_BACKWARDS = 50;
 
+// type merging ftw
+type TAG_ANY = "im.vector.any";
+const TAG_ANY: TAG_ANY = "im.vector.any";
+
 interface IState {
-    [roomId: string]: string | null; // null indicates the preview is empty
+    [roomId: string]: Map<TagID | TAG_ANY, string | null>; // null indicates the preview is empty / irrelevant
 }
 
 export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
@@ -61,39 +115,76 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     /**
      * Gets the pre-translated preview for a given room
      * @param room The room to get the preview for.
+     * @param inTagId The tag ID in which the room resides
      * @returns The preview, or null if none present.
      */
-    public getPreviewForRoom(room: Room): string {
+    public getPreviewForRoom(room: Room, inTagId: TagID): string {
         if (!room) return null; // invalid room, just return nothing
 
-        // It's faster to do a lookup this way than it is to use Object.keys().includes()
-        // We only want to generate a preview if there's one actually missing and not explicitly
-        // set as 'none'.
         const val = this.state[room.roomId];
-        if (val !== null && typeof(val) !== "string") {
-            this.generatePreview(room);
-        }
+        if (!val) this.generatePreview(room, inTagId);
 
-        return this.state[room.roomId];
+        const previews = this.state[room.roomId];
+        if (!previews) return null;
+
+        if (!previews.has(inTagId)) {
+            return previews.get(TAG_ANY);
+        }
+        return previews.get(inTagId);
     }
 
-    private generatePreview(room: Room) {
+    private generatePreview(room: Room, tagId?: TagID) {
         const events = room.timeline;
         if (!events) return; // should only happen in tests
 
+        let map = this.state[room.roomId];
+        if (!map) {
+            map = new Map<TagID | TAG_ANY, string | null>();
+
+            // We set the state later with the map, so no need to send an update now
+        }
+
+        // Set the tags so we know what to generate
+        if (!map.has(TAG_ANY)) map.set(TAG_ANY, null);
+        if (tagId && !map.has(tagId)) map.set(tagId, null);
+
+        let changed = false;
         for (let i = events.length - 1; i >= 0; i--) {
             if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached
 
             const event = events[i];
-            const preview = this.generatePreviewForEvent(event);
-            if (preview.isPreviewable) {
-                // noinspection JSIgnoredPromiseFromCall - the AsyncStore handles concurrent calls
-                this.updateState({[room.roomId]: preview.preview});
-                return; // break - we found some text
+            const previewDef = PREVIEWS[event.getType()];
+            if (!previewDef) continue;
+            if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
+
+            const anyPreview = previewDef.previewer.getTextFor(event, null);
+            if (!anyPreview) continue; // not previewable for some reason
+
+            changed = changed || anyPreview !== map.get(TAG_ANY);
+            map.set(TAG_ANY, anyPreview);
+
+            const tagsToGenerate = Array.from(map.keys()).filter(t => t !== TAG_ANY); // we did the any tag above
+            for (const genTagId of tagsToGenerate) {
+                const realTagId: TagID = genTagId === TAG_ANY ? null : genTagId;
+                const preview = previewDef.previewer.getTextFor(event, realTagId);
+                if (preview === anyPreview) {
+                    changed = changed || anyPreview !== map.get(genTagId);
+                    map.delete(genTagId);
+                } else {
+                    changed = changed || preview !== map.get(genTagId);
+                    map.set(genTagId, preview);
+                }
             }
+
+            if (changed) {
+                // Update state for good measure - causes emit for update
+                // noinspection JSIgnoredPromiseFromCall - the AsyncStore handles concurrent calls
+                this.updateState({[room.roomId]: map});
+            }
+            return; // we're done
         }
 
-        // if we didn't find anything, subscribe ourselves to an update
+        // At this point, we didn't generate a preview so clear it
         // noinspection JSIgnoredPromiseFromCall - the AsyncStore handles concurrent calls
         this.updateState({[room.roomId]: null});
     }
@@ -107,28 +198,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
             if (!Object.keys(this.state).includes(event.getRoomId())) return; // not important
-
-            const preview = this.generatePreviewForEvent(event);
-            if (preview.isPreviewable) {
-                await this.updateState({[event.getRoomId()]: preview.preview});
-                return; // break - we found some text
-            }
+            this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }
-    }
-
-    private generatePreviewForEvent(event: MatrixEvent): { isPreviewable: boolean, preview: string } {
-        if (PREVIEWABLE_EVENTS.some(p => p.type === event.getType() && p.isState === event.isState())) {
-            const isSelf = event.getSender() === this.matrixClient.getUserId();
-            let text = textForEvent(event, /*skipUserPrefix=*/isSelf);
-            if (!text || text.trim().length === 0) text = null; // force null if useless to us
-            if (text && isSelf) {
-                // XXX: i18n doesn't really work here if the language doesn't support prefixing.
-                // We'd ideally somehow route the `You:` bit to the textForEvent call, however
-                // threading that through is non-trivial.
-                text = _t("You: %(message)s", {message: text});
-            }
-            return {isPreviewable: true, preview: text};
-        }
-        return {isPreviewable: false, preview: null};
     }
 }
