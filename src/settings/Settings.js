@@ -97,6 +97,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_new_spinner": {
+        isFeature: true,
+        displayName: _td("New spinner design"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_font_scaling": {
         isFeature: true,
         displayName: _td("Font scaling"),
