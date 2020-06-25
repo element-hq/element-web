@@ -45,11 +45,6 @@ limitations under the License.
         display: flex;
         align-items: center;
 
-        &:nth-child(n + 1) {
-            // The first header will have appropriate padding, subsequent ones need a margin.
-            margin-top: 10px;
-        }
-
         .mx_UserMenuButton_contextMenu_name {
             // Create another flexbox of columns to handle large user IDs
             display: flex;
