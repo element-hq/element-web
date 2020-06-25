@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import { createClient } from "matrix-js-sdk";
+import { createClient } from "matrix-js-sdk/src";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -1948,8 +1948,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        // console.log(`Rendering MatrixChat with view ${this.state.view}`);
-
         const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view;
 
