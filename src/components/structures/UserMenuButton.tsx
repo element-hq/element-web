@@ -263,7 +263,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         </div>
                         <div className="mx_IconizedContextMenu_optionList">
                             <ul>
-                                <li>
+                                <li className="mx_UserMenuButton_contextMenu_redRow">
                                     <AccessibleButton onClick={this.onSignOutClick}>
                                         <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSignOut" />
                                         <span>{_t("Sign out")}</span>

@@ -40,6 +40,16 @@ limitations under the License.
 .mx_UserMenuButton_contextMenu {
     width: 247px;
 
+    .mx_UserMenuButton_contextMenu_redRow {
+        .mx_AccessibleButton {
+            color: $warning-color !important; // !important to override styles from context menu
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $warning-color;
+        }
+    }
+
     .mx_UserMenuButton_contextMenu_header {
         // Create a flexbox to organize the header a bit easier
         display: flex;
