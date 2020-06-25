@@ -130,9 +130,9 @@ limitations under the License.
             flex: 1;
             max-width: calc(100% - 16px); // 16px is the badge width
             text-transform: uppercase;
-            opacity: 0.5;
             line-height: $font-16px;
             font-size: $font-12px;
+            font-weight: 600;
 
             // Ellipsize any text overflow
             text-overflow: ellipsis;
@@ -414,6 +414,7 @@ limitations under the License.
         margin-bottom: 16px;
         margin-right: 16px; // additional 16px
         border: 1px solid $roomsublist2-divider-color;
+        opacity: 0.1;
     }
 
     .mx_RoomSublist2_contextMenu_title {
