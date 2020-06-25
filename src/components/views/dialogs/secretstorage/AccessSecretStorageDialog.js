@@ -21,7 +21,6 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 
 import { _t } from '../../../../languageHandler';
-import { accessSecretStorage } from '../../../../CrossSigningManager';
 
 /*
  * Access Secure Secret Storage by requesting the user's passphrase.
@@ -53,12 +52,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         this.setState({
             forceRecoveryKey: true,
         });
-    }
-
-    _onResetRecoveryClick = () => {
-        // Re-enter the access flow, but resetting storage this time around.
-        this.props.onFinished(false);
-        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
