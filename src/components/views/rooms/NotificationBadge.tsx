@@ -141,6 +141,20 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
     }
 }
 
+export class StaticNotificationState extends EventEmitter implements INotificationState {
+    constructor(public symbol: string, public count: number, public color: NotificationColor) {
+        super();
+    }
+
+    public static forCount(count: number, color: NotificationColor): StaticNotificationState {
+        return new StaticNotificationState(null, count, color);
+    }
+
+    public static forSymbol(symbol: string, color: NotificationColor): StaticNotificationState {
+        return new StaticNotificationState(symbol, 0, color);
+    }
+}
+
 export class RoomNotificationState extends EventEmitter implements IDestroyable, INotificationState {
     private _symbol: string;
     private _count: number;
