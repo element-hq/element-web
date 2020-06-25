@@ -97,8 +97,10 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             this.algorithm.stickyRoom = null;
         } else if (activeRoomId) {
             const activeRoom = this.matrixClient.getRoom(activeRoomId);
-            if (!activeRoom) throw new Error(`${activeRoomId} is current in RVS but missing from client`);
-            if (activeRoom !== this.algorithm.stickyRoom) {
+            if (!activeRoom) {
+                console.warn(`${activeRoomId} is current in RVS but missing from client - clearing sticky room`);
+                this.algorithm.stickyRoom = null;
+            } else if (activeRoom !== this.algorithm.stickyRoom) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`Changing sticky room to ${activeRoomId}`);
                 this.algorithm.stickyRoom = activeRoom;
@@ -187,10 +189,13 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.log(`[RoomListDebug] Got tombstone event - regenerating room list`);
-                    // TODO: We could probably be smarter about this: https://github.com/vector-im/riot-web/issues/14035
-                    await this.regenerateAllLists();
-                    return; // don't pass the update down - we will have already handled it in the regen
+                    console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
+                    const newRoom = this.matrixClient.getRoom(eventPayload.event.getContent()['replacement_room']);
+                    if (newRoom) {
+                        // If we have the new room, then the new room check will have seen the predecessor
+                        // and did the required updates, so do nothing here.
+                        return;
+                    }
                 }
                 await this.handleRoomUpdate(updatedRoom, RoomUpdateCause.Timeline);
             };
@@ -245,7 +250,29 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             if (membershipPayload.oldMembership !== "join" && membershipPayload.membership === "join") {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
-                await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+
+                // If we're joining an upgraded room, we'll want to make sure we don't proliferate
+                // the dead room in the list.
+                const createEvent = membershipPayload.room.currentState.getStateEvents("m.room.create", "");
+                if (createEvent && createEvent.getContent()['predecessor']) {
+                    console.log(`[RoomListDebug] Room has a predecessor`);
+                    const prevRoom = this.matrixClient.getRoom(createEvent.getContent()['predecessor']['room_id']);
+                    if (prevRoom) {
+                        const isSticky = this.algorithm.stickyRoom === prevRoom;
+                        if (isSticky) {
+                            console.log(`[RoomListDebug] Clearing sticky room due to room upgrade`);
+                            await this.algorithm.setStickyRoomAsync(null);
+                        }
+
+                        // Note: we hit the algorithm instead of our handleRoomUpdate() function to
+                        // avoid redundant updates.
+                        console.log(`[RoomListDebug] Removing previous room from room list`);
+                        await this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
+                    }
+                }
+
+                console.log(`[RoomListDebug] Adding new room to room list`);
+                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
                 return;
             }
 
@@ -253,7 +280,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             if (membershipPayload.oldMembership !== membershipPayload.membership) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
-                await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
+                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
                 return;
             }
         }
