@@ -2029,7 +2029,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome {...this.getServerProperties()} />;
+            view = <Welcome />;
         } else if (this.state.view === Views.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (
