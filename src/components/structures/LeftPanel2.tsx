@@ -161,7 +161,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private onResize = () => {
-        console.log("Resize width");
         if (!this.listContainerRef.current) return; // ignore: no headers to sticky
         this.handleStickyHeaders(this.listContainerRef.current);
     };
