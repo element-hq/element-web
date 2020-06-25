@@ -1828,7 +1828,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     updateStatusIndicator(state: string, prevState: string) {
-        const notifCount = countRoomsWithNotif(MatrixClientPeg.get().getRooms()).count;
+        // only count visible rooms to not torment the user with notification counts in rooms they can't see
+        // it will include highlights from the previous version of the room internally
+        const notifCount = countRoomsWithNotif(MatrixClientPeg.get().getVisibleRooms()).count;
 
         if (PlatformPeg.get()) {
             PlatformPeg.get().setErrorStatus(state === 'ERROR');
