@@ -2428,8 +2428,8 @@
     "Set a room address to easily share your room with other people.": "Vergebe eine Raum-Adresse, um diesen Raum auf einfache Weise mit anderen Personen teilen zu können.",
     "You've previously used a newer version of Riot with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Du hast für diese Sitzung zuvor eine neuere Version von Riot verwendet. Um diese Version mit Ende-zu-Ende-Verschlüsselung wieder zu benutzen, musst du dich erst ab- und dann wieder anmelden.",
     "Delete the room address %(alias)s and remove %(name)s from the directory?": "Soll die Raum-Adresse %(alias)s gelöscht und %(name)s aus dem Raum-Verzeichnis entfernt werden?",
-    "Switch to light mode": "Zum Light Mode wechseln",
-    "Switch to dark mode": "Zum Dark Mode wechseln",
+    "Switch to light mode": "Zum hellen Thema wechseln",
+    "Switch to dark mode": "Zum dunklen Thema wechseln",
     "Switch theme": "Design ändern",
     "Security & privacy": "Sicherheit & Datenschutz",
     "All settings": "Alle Einstellungen",
@@ -2470,5 +2470,11 @@
     "Hey you. You're the best!": "Hey du. Du bist der Beste!",
     "Message layout": "Nachrichtenlayout",
     "Compact": "Kompakt",
-    "Modern": "Modern"
+    "Modern": "Modern",
+    "Enable IRC layout option in the appearance tab": "Option für IRC Layout in den Erscheinungsbild-Einstellungen aktivieren",
+    "Use a system font": "Verwende die System-Schriftart",
+    "System font name": "System-Schriftart",
+    "Customise your appearance": "Verändere das Erscheinungsbild",
+    "Appearance Settings only affect this Riot session.": "Einstellungen zum Erscheinungsbild wirken sich nur auf diese Riot Sitzung aus.",
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "Die Echtheit dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."
 }
