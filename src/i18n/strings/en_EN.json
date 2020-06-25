@@ -1790,7 +1790,6 @@
     "This looks like a valid recovery key!": "This looks like a valid recovery key!",
     "Not a valid recovery key": "Not a valid recovery key",
     "Use your Security Key to continue.": "Use your Security Key to continue.",
-    "If you've forgotten your recovery key you can <button>set up new recovery options</button>.": "If you've forgotten your recovery key you can <button>set up new recovery options</button>.",
     "Restoring keys from backup": "Restoring keys from backup",
     "Fetching keys from server...": "Fetching keys from server...",
     "%(completed)s of %(total)s keys restored": "%(completed)s of %(total)s keys restored",
