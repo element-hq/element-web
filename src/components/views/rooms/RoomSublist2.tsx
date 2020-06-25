@@ -117,7 +117,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowLessClick = () => {
-        this.props.layout.visibleTiles = this.props.layout.minVisibleTiles;
+        this.props.layout.visibleTiles = this.props.layout.defaultVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
