@@ -158,6 +158,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         value={this.state.passPhrase}
                         autoFocus={true}
                         autoComplete="new-password"
+                        placeholder={_t("Security Phrase")}
                     />
                     {keyStatus}
                     <DialogButtons
