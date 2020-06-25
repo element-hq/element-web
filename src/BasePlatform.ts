@@ -227,6 +227,15 @@ export default abstract class BasePlatform {
         return url;
     }
 
+    // persist hs url and is url for when the user is returned to the app with the login token
+    // MUST be called before using URLs from getSSOCallbackUrl, internally called by startSingleSignOn
+    persistSSODetails(mxClient: MatrixClient) {
+        localStorage.setItem(HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
+        if (mxClient.getIdentityServerUrl()) {
+            localStorage.setItem(ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
+        }
+    }
+
     /**
      * Begin Single Sign On flows.
      * @param {MatrixClient} mxClient the matrix client using which we should start the flow
@@ -234,11 +243,7 @@ export default abstract class BasePlatform {
      * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
      */
     startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
-        // persist hs url and is url for when the user is returned to the app with the login token
-        localStorage.setItem(HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
-        if (mxClient.getIdentityServerUrl()) {
-            localStorage.setItem(ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
-        }
+        this.persistSSODetails(mxClient);
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
