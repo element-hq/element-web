@@ -2517,5 +2517,14 @@
     "Create a Recovery Key to store encryption keys & secrets with your account data. If you lose access to this login you’ll need it to unlock your data.": "Krijoni një Kyç Rimarrjesh që të depozitoni kyçe & të fshehta fshehtëzimi me të dhënat e llogarisë tuaj. Nëse humbni këto kredenciale, do t’ju duhet të shkyçni të dhënat tuaja.",
     "Create a Recovery Key": "Krijoni një Kyç Rimarrjesh",
     "Upgrade your Recovery Key": "Përmirësoni Kyçin tuaj të Rimarrjeve",
-    "Store your Recovery Key": "Depozitoni Kyçin tuaj të Rimarrjeve"
+    "Store your Recovery Key": "Depozitoni Kyçin tuaj të Rimarrjeve",
+    "Use the improved room list (will refresh to apply changes)": "Përdor listën e përmirësuar të dhomave (do të rifreskohet, që të aplikohen ndryshimet)",
+    "Enable IRC layout option in the appearance tab": "Aktivizoni te skeda e dukjes mundësinë për skemë IRC",
+    "Use custom size": "Përdor madhësi vetjake",
+    "Hey you. You're the best!": "Hej, ju. S’u ka kush shokun!",
+    "Message layout": "Skemë mesazhesh",
+    "Compact": "Kompakte",
+    "Modern": "Moderne",
+    "Use a system font": "Përdor një palë shkronja sistemi",
+    "System font name": "Emër shkronjash sistemi"
 }
