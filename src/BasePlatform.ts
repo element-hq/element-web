@@ -25,8 +25,8 @@ import {CheckUpdatesPayload} from "./dispatcher/payloads/CheckUpdatesPayload";
 import {Action} from "./dispatcher/actions";
 import {hideToast as hideUpdateToast} from "./toasts/UpdateToast";
 
-export const HOMESERVER_URL_KEY = "mx_hs_url";
-export const ID_SERVER_URL_KEY = "mx_is_url";
+export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
+export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
 
 export enum UpdateCheckStatus {
     Checking = "CHECKING",
@@ -221,19 +221,10 @@ export default abstract class BasePlatform {
 
     setLanguage(preferredLangs: string[]) {}
 
-    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = new URL(window.location.href);
         url.hash = fragmentAfterLogin || "";
         return url;
-    }
-
-    // persist hs url and is url for when the user is returned to the app with the login token
-    // MUST be called before using URLs from getSSOCallbackUrl, internally called by startSingleSignOn
-    persistSSODetails(mxClient: MatrixClient) {
-        localStorage.setItem(HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
-        if (mxClient.getIdentityServerUrl()) {
-            localStorage.setItem(ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
-        }
     }
 
     /**
@@ -243,7 +234,11 @@ export default abstract class BasePlatform {
      * @param {string} fragmentAfterLogin the hash to pass to the app during sso callback.
      */
     startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string) {
-        this.persistSSODetails(mxClient);
+        // persist hs url and is url for when the user is returned to the app with the login token
+        localStorage.setItem(SSO_HOMESERVER_URL_KEY, mxClient.getHomeserverUrl());
+        if (mxClient.getIdentityServerUrl()) {
+            localStorage.setItem(SSO_ID_SERVER_URL_KEY, mxClient.getIdentityServerUrl());
+        }
         const callbackUrl = this.getSSOCallbackUrl(fragmentAfterLogin);
         window.location.href = mxClient.getSsoLoginUrl(callbackUrl.toString(), loginType); // redirect to SSO
     }
