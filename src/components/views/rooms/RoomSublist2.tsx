@@ -320,8 +320,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     <span>{this.props.label}</span>
                                 </AccessibleButton>
                                 {this.renderMenu()}
-                                {this.props.isMinimized ? null : addRoomButton}
                                 {this.props.isMinimized ? null : badgeContainer}
+                                {this.props.isMinimized ? null : addRoomButton}
                             </div>
                             {this.props.isMinimized ? badgeContainer : null}
                             {this.props.isMinimized ? addRoomButton : null}
