@@ -2516,5 +2516,14 @@
     "Upgrade your Recovery Key": "A Visszaállítási kulcs fejlesztése",
     "Store your Recovery Key": "Visszaállítási kulcs tárolása",
     "Use the improved room list (in development - will refresh to apply changes)": "Használd a fejlesztett szoba listát (fejlesztés alatt - a változások a frissítés után aktiválódnak)",
-    "Use the improved room list (will refresh to apply changes)": "Használd a fejlesztett szoba listát (a változások életbe lépéséhez újra fog tölteni)"
+    "Use the improved room list (will refresh to apply changes)": "Használd a fejlesztett szoba listát (a változások életbe lépéséhez újra fog tölteni)",
+    "Enable IRC layout option in the appearance tab": "IRC kinézet lehetőségének megjelenítése a kinézet fülön",
+    "Use custom size": "Egyedi méret használata",
+    "Use a system font": "Rendszer betűtípus használata",
+    "System font name": "Rendszer betűtípus neve",
+    "Hey you. You're the best!": "Hé te! Te vagy a legjobb!",
+    "Message layout": "Üzenet kinézete",
+    "Compact": "Egyszerű",
+    "Modern": "Modern",
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."
 }
