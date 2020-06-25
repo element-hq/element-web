@@ -43,7 +43,7 @@ import { TagID } from "../../../stores/room-list/models";
  *******************************************************************/
 
 const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
-const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+const RESIZE_HANDLE_HEIGHT = 3; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 
@@ -356,6 +356,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const nVisible = Math.floor(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
 
+            const maxTilesFactored = layout.tilesWithResizerBoxFactor(tiles.length);
+            const showMoreBtnClasses = classNames({
+                'mx_RoomSublist2_showNButton': true,
+                'mx_RoomSublist2_isCutting': layout.visibleTiles < maxTilesFactored,
+            });
+
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
@@ -370,7 +376,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
-                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowAllClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
@@ -386,7 +392,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
-                    <div onClick={this.onShowLessClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowLessClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
