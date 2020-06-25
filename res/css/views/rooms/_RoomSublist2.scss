@@ -97,6 +97,12 @@ limitations under the License.
             }
         }
 
+        &:not(.mx_RoomSublist2_headerContainer_withAux) {
+            .mx_NotificationBadge {
+                margin-right: 4px; // just to push it over a bit, aligning it with the other elements
+            }
+        }
+
         .mx_RoomSublist2_auxButton,
         .mx_RoomSublist2_menuButton {
             margin-left: 8px; // should be the same as the notification badge
