@@ -2462,5 +2462,13 @@
     "Enter your Recovery Key to continue.": "Gib deinen Wiederherstellungsschlüssel ein um fortzufahren.",
     "Create a Recovery Key": "Erzeuge einen Wiederherstellungsschlüssel",
     "Upgrade your Recovery Key": "Aktualisiere deinen Wiederherstellungsschlüssel",
-    "Store your Recovery Key": "Speichere deinen Wiederherstellungsschlüssel"
+    "Store your Recovery Key": "Speichere deinen Wiederherstellungsschlüssel",
+    "Light": "Hell",
+    "Dark": "Dunkel",
+    "Use the improved room list (will refresh to apply changes)": "Verwende die verbesserte Raumliste (lädt die Anwendung neu)",
+    "Use custom size": "Verwende individuelle Größe",
+    "Hey you. You're the best!": "Hey du. Du bist der Beste!",
+    "Message layout": "Nachrichtenlayout",
+    "Compact": "Kompakt",
+    "Modern": "Modern"
 }
