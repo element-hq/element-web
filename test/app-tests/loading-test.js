@@ -589,8 +589,8 @@ describe('loading:', function() {
 
     describe('Token login:', function() {
         it('logs in successfully', function() {
-            localStorage.setItem("mx_hs_url", "https://homeserver");
-            localStorage.setItem("mx_is_url", "https://idserver");
+            localStorage.setItem("mx_sso_hs_url", "https://homeserver");
+            localStorage.setItem("mx_sso_is_url", "https://idserver");
             loadApp({
                 queryString: "?loginToken=secretToken",
             });
