@@ -2205,5 +2205,22 @@
     "Account settings": "Axustes da conta",
     "Could not load user profile": "Non se cargou o perfil da usuaria",
     "Verify this login": "Verifcar esta conexión",
-    "Session verified": "Sesión verificada"
+    "Session verified": "Sesión verificada",
+    "Changing your password will reset any end-to-end encryption keys on all of your sessions, making encrypted chat history unreadable. Set up Key Backup or export your room keys from another session before resetting your password.": "Ao cambiar o contrasinal vas restablecer todas as chaves de cifrado das túas sesións, impedindo ler o historial de conversa. Configura a Copia de Apoio das Chaves ou exporta as chaves da sala desde outra sesión antes de restablecer o contrasinal.",
+    "Your Matrix account on %(serverName)s": "A túa conta Matrix en %(serverName)s",
+    "Your Matrix account on <underlinedServerName />": "A túa conta Matrix en <underlinedServerName />",
+    "No identity server is configured: add one in server settings to reset your password.": "Non hai un Servidor de Identidade configurado: engade un nos axustes para restablecer o contrasinal.",
+    "You have been logged out of all sessions and will no longer receive push notifications. To re-enable notifications, sign in again on each device.": "Desconectaches todas as sesións e non recibirás notificacións push. Para reactivalas, conéctate outra vez nos dispositivos.",
+    "Set a new password": "Novo contrasinal",
+    "Invalid homeserver discovery response": "Resposta de descubrimento do servidor non válida",
+    "Failed to get autodiscovery configuration from server": "Fallo ó obter a configuración de autodescubrimento desde o servidor",
+    "Invalid base_url for m.homeserver": "base_url non válido para m.homeserver",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "O URL do servidor non semella ser un servidor Matrix válido",
+    "Invalid identity server discovery response": "Resposta de descubrimento de identidade do servidor non válida",
+    "Invalid base_url for m.identity_server": "base_url para m.identity_server non válida",
+    "Identity server URL does not appear to be a valid identity server": "O URL do servidor de identidade non semella ser un servidor de identidade válido",
+    "This account has been deactivated.": "Esta conta foi desactivada.",
+    "Failed to perform homeserver discovery": "Fallo ao intentar o descubrimento do servidor",
+    "Syncing...": "Sincronizando...",
+    "Signing In...": "Conectando con..."
 }
