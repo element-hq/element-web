@@ -77,8 +77,8 @@ limitations under the License.
         }
 
         &:checked:disabled + label > .mx_Checkbox_background {
-            background-color: $muted-fg-color;
-            border-color: rgba($muted-fg-color, 0.5);
+            background-color: $accent-color;
+            border-color: $accent-color;
         }
     }
 }
