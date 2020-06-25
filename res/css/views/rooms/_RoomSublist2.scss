@@ -226,6 +226,16 @@ limitations under the License.
             .mx_RoomSublist2_showLessButtonChevron {
                 mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
             }
+
+            &.mx_RoomSublist2_isCutting::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                box-shadow: 0px -2px 3px rgba(46, 47, 50, 0.08);
+            }
         }
 
         // Class name comes from the ResizableBox component
@@ -233,31 +243,31 @@ limitations under the License.
         // so that selector is below and one level higher.
         .react-resizable-handle {
             cursor: ns-resize;
-            border-radius: 2px;
+            border-radius: 3px;
+
+            // Update the render() function for RoomSublist2 if this changes
+            height: 3px;
 
             // This is positioned directly below the 'show more' button.
             position: absolute;
             bottom: 0;
-            left: 0;
-            right: 0;
 
-            // This is to visually align the bar in the list. Should be 12px from
-            // either side of the list. We define this after the positioning to
-            // trick the browser.
-            margin-left: 4px;
-            margin-right: 4px;
+            // Together, these make the bar 48px wide
+            left: calc(50% - 24px);
+            right: calc(50% - 24px);
+        }
+
+        // TODO: Use less sketchy selector by replacing the resize component entirely
+        // This causes flickering.
+        .mx_RoomSublist2_showNButton:hover + .react-resizable-handle,
+        .react-resizable-handle:hover {
+            opacity: 0.8;
+            background-color: $primary-fg-color;
         }
     }
 
     // The aforementioned selector for the hover state.
     &:hover, &.mx_RoomSublist2_hasMenuOpen {
-        .react-resizable-handle {
-            opacity: 0.2;
-
-            // Update the render() function for RoomSublist2 if this changes
-            border: 2px solid $primary-fg-color;
-        }
-
         &:not(.mx_RoomSublist2_minimized) > .mx_RoomSublist2_headerContainer {
             // If the header doesn't have an aux button we still need to hide the badge for
             // the menu button.
