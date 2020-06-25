@@ -118,10 +118,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
         let content;
         let title;
+        let headerImage;
         if (hasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-            title = _t("Enter recovery passphrase");
+            title = _t("Security Phrase");
+            headerImage = require("../../../../../res/img/feather-customised/secure-phrase.svg");
 
             let keyStatus;
             if (this.state.keyMatches === false) {
@@ -137,12 +139,15 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
             content = <div>
                 <p>{_t(
-                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
-                    { b: sub => <b>{sub}</b> },
-                )}</p>
-                <p>{_t(
-                    "Access your secure message history and your cross-signing " +
-                    "identity for verifying other sessions by entering your recovery passphrase.",
+                    "Enter your Security Phrase or <button>Use your Security Key</button> to continue.", {},
+                    {
+                        button: s => <AccessibleButton className="mx_linkButton"
+                            element="span"
+                            onClick={this._onUseRecoveryKeyClick}
+                        >
+                            {s}
+                        </AccessibleButton>,
+                    },
                 )}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onPassPhraseNext}>
@@ -156,7 +161,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     />
                     {keyStatus}
                     <DialogButtons
-                        primaryButton={_t('Next')}
+                        primaryButton={_t('Continue')}
                         onPrimaryButtonClick={this._onPassPhraseNext}
                         hasCancel={true}
                         onCancel={this._onCancel}
@@ -164,29 +169,11 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         primaryDisabled={this.state.passPhrase.length === 0}
                     />
                 </form>
-                {_t(
-                    "If you've forgotten your recovery passphrase you can "+
-                    "<button1>use your recovery key</button1> or " +
-                    "<button2>set up new recovery options</button2>."
-                , {}, {
-                    button1: s => <AccessibleButton className="mx_linkButton"
-                        element="span"
-                        onClick={this._onUseRecoveryKeyClick}
-                    >
-                        {s}
-                    </AccessibleButton>,
-                    button2: s => <AccessibleButton className="mx_linkButton"
-                        element="span"
-                        onClick={this._onResetRecoveryClick}
-                    >
-                        {s}
-                    </AccessibleButton>,
-                })}
             </div>;
         } else {
-            title = _t("Enter recovery key");
+            title = _t("Security Key");
+            headerImage = require("../../../../../res/img/feather-customised/secure-backup.svg");
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
             let keyStatus;
             if (this.state.recoveryKey.length === 0) {
@@ -209,14 +196,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             }
 
             content = <div>
-                <p>{_t(
-                    "<b>Warning</b>: You should only do this on a trusted computer.", {},
-                    { b: sub => <b>{sub}</b> },
-                )}</p>
-                <p>{_t(
-                    "Access your secure message history and your cross-signing " +
-                    "identity for verifying other sessions by entering your recovery key.",
-                )}</p>
+                <p>{_t("Use your Security Key to continue.")}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onRecoveryKeyNext}>
                     <input className="mx_AccessSecretStorageDialog_recoveryKeyInput"
@@ -226,7 +206,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                     />
                     {keyStatus}
                     <DialogButtons
-                        primaryButton={_t('Next')}
+                        primaryButton={_t('Continue')}
                         onPrimaryButtonClick={this._onRecoveryKeyNext}
                         hasCancel={true}
                         onCancel={this._onCancel}
@@ -234,22 +214,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         primaryDisabled={!this.state.recoveryKeyValid}
                     />
                 </form>
-                {_t(
-                    "If you've forgotten your recovery key you can "+
-                    "<button>set up new recovery options</button>."
-                , {}, {
-                    button: s => <AccessibleButton className="mx_linkButton"
-                        element="span"
-                        onClick={this._onResetRecoveryClick}
-                    >
-                        {s}
-                    </AccessibleButton>,
-                })}
             </div>;
         }
 
         return (
             <BaseDialog className='mx_AccessSecretStorageDialog'
+                headerImage={headerImage}
                 onFinished={this.props.onFinished}
                 title={title}
             >
