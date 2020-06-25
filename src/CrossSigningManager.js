@@ -54,11 +54,11 @@ async function confirmToDismiss(name) {
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
         description,
-        danger: true,
-        cancelButton: _t("Enter passphrase"),
-        button: _t("Cancel"),
+        danger: false,
+        button: _t("Enter passphrase"),
+        cancelButton: _t("Cancel"),
     }).finished;
-    return sure;
+    return !sure;
 }
 
 async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
