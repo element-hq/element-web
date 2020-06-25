@@ -65,6 +65,10 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             .mx_LeftPanel2_userAvatarContainer {
                 position: relative; // to make default avatars work
                 margin-right: 8px;
+
+                .mx_LeftPanel2_userAvatar {
+                    border-radius: 32px; // should match avatar size
+                }
             }
 
             .mx_LeftPanel2_userName {
@@ -72,6 +76,11 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
                 font-size: $font-15px;
                 line-height: $font-20px;
                 flex: 1;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
 
             .mx_LeftPanel2_headerButtons {
@@ -131,6 +140,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             overflow-y: auto;
             width: 100%;
             max-width: 100%;
+            position: relative; // for sticky headers
 
             // Create a flexbox to trick the layout engine
             display: flex;

@@ -18,6 +18,8 @@ import dis from '../../dispatcher/dispatcher';
 import SettingsStore, {SettingLevel} from '../SettingsStore';
 import IWatcher from "./Watcher";
 import { toPx } from '../../utils/units';
+import { Action } from '../../dispatcher/actions';
+import { UpdateSystemFontPayload } from '../../dispatcher/payloads/UpdateSystemFontPayload';
 
 export class FontWatcher implements IWatcher {
     public static readonly MIN_SIZE = 8;
@@ -33,6 +35,10 @@ export class FontWatcher implements IWatcher {
 
     public start() {
         this.setRootFontSize(SettingsStore.getValue("baseFontSize"));
+        this.setSystemFont({
+            useSystemFont: SettingsStore.getValue("useSystemFont"),
+            font: SettingsStore.getValue("systemFont"),
+        });
         this.dispatcherRef = dis.register(this.onAction);
     }
 
@@ -41,8 +47,10 @@ export class FontWatcher implements IWatcher {
     }
 
     private onAction = (payload) => {
-        if (payload.action === 'update-font-size') {
+        if (payload.action === Action.UpdateFontSize) {
             this.setRootFontSize(payload.size);
+        } else if (payload.action === Action.UpdateSystemFont) {
+            this.setSystemFont(payload);
         }
     };
 
@@ -53,5 +61,9 @@ export class FontWatcher implements IWatcher {
             SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, fontSize);
         }
         (<HTMLElement>document.querySelector(":root")).style.fontSize = toPx(fontSize);
+    };
+
+    private setSystemFont = ({useSystemFont, font}) => {
+        document.body.style.fontFamily = useSystemFont ? font : "";
     };
 }

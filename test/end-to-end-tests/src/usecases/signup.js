@@ -79,7 +79,20 @@ module.exports = async function signup(session, username, password, homeserver) 
     const acceptButton = await session.query('.mx_InteractiveAuthEntryComponents_termsSubmit');
     await acceptButton.click();
 
-    const xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
+    //plow through cross-signing setup by entering arbitrary details
+    //TODO: It's probably important for the tests to know the passphrase
+    const xsigningPassphrase = 'a7eaXcjpa9!Yl7#V^h$B^%dovHUVX'; // https://xkcd.com/221/
+    let passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
+    await session.replaceInputText(passphraseField, xsigningPassphrase);
+    await session.delay(1000); // give it a second to analyze our passphrase for security
+    let xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
+    await xsignContButton.click();
+
+    //repeat passphrase entry
+    passphraseField = await session.query('.mx_CreateSecretStorageDialog_passPhraseField input');
+    await session.replaceInputText(passphraseField, xsigningPassphrase);
+    await session.delay(1000); // give it a second to analyze our passphrase for security
+    xsignContButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary');
     await xsignContButton.click();
 
     //ignore the recovery key
@@ -88,10 +101,12 @@ module.exports = async function signup(session, username, password, homeserver) 
     await copyButton.click();
 
     //acknowledge that we copied the recovery key to a safe place
-    const copyContinueButton = await session.query(
-        '.mx_CreateSecretStorageDialog .mx_Dialog_buttons .mx_Dialog_primary',
-    );
+    const copyContinueButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_primary');
     await copyContinueButton.click();
+
+    //acknowledge that we're done cross-signing setup and our keys are safe
+    const doneOkButton = await session.query('.mx_CreateSecretStorageDialog .mx_Dialog_primary');
+    await doneOkButton.click();
 
     //wait for registration to finish so the hash gets set
     //onhashchange better?

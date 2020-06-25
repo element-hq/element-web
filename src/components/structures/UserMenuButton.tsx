@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {User} from "matrix-js-sdk/src/models/user";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -34,12 +33,13 @@ import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 interface IProps {
 }
 
 interface IState {
-    user: User;
     menuDisplayed: boolean;
     isDarkTheme: boolean;
 }
@@ -54,19 +54,10 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
 
         this.state = {
             menuDisplayed: false,
-            user: MatrixClientPeg.get().getUser(MatrixClientPeg.get().getUserId()),
             isDarkTheme: this.isUserOnDarkTheme(),
         };
-    }
 
-    private get displayName(): string {
-        if (MatrixClientPeg.get().isGuest()) {
-            return _t("Guest");
-        } else if (this.state.user) {
-            return this.state.user.displayName;
-        } else {
-            return MatrixClientPeg.get().getUserId();
-        }
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     private get hasHomePage(): boolean {
@@ -81,6 +72,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
     public componentWillUnmount() {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     private isUserOnDarkTheme(): boolean {
@@ -90,6 +82,12 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         }
         return theme === "dark";
     }
+
+    private onProfileUpdate = async () => {
+        // the store triggered an update, so force a layout update. We don't
+        // have any state to store here for that to magically happen.
+        this.forceUpdate();
+    };
 
     private onThemeChanged = () => {
         this.setState({isDarkTheme: this.isUserOnDarkTheme()});
@@ -117,7 +115,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
         const newTheme = this.state.isDarkTheme ? "light" : "dark";
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme);
+        SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
     private onSettingsOpen = (ev: ButtonEvent, tabId: string) => {
@@ -190,7 +188,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                 homeButton = (
                     <li>
                         <AccessibleButton onClick={this.onHomeClick}>
-                            <img src={require("../../../res/img/feather-customised/home.svg")} width={16} />
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconHome" />
                             <span>{_t("Home")}</span>
                         </AccessibleButton>
                     </li>
@@ -209,7 +207,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                         <div className="mx_UserMenuButton_contextMenu_header">
                             <div className="mx_UserMenuButton_contextMenu_name">
                                 <span className="mx_UserMenuButton_contextMenu_displayName">
-                                    {this.displayName}
+                                    {OwnProfileStore.instance.displayName}
                                 </span>
                                 <span className="mx_UserMenuButton_contextMenu_userId">
                                     {MatrixClientPeg.get().getUserId()}
@@ -233,31 +231,31 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                                 {homeButton}
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                        <img src={require("../../../res/img/feather-customised/notifications.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconBell" />
                                         <span>{_t("Notification settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                        <img src={require("../../../res/img/feather-customised/lock.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconLock" />
                                         <span>{_t("Security & privacy")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                        <img src={require("../../../res/img/feather-customised/settings.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSettings" />
                                         <span>{_t("All settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onShowArchived}>
-                                        <img src={require("../../../res/img/feather-customised/archive.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconArchive" />
                                         <span>{_t("Archived rooms")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onProvideFeedback}>
-                                        <img src={require("../../../res/img/feather-customised/message-circle.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconMessage" />
                                         <span>{_t("Feedback")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -267,7 +265,7 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                             <ul>
                                 <li>
                                     <AccessibleButton onClick={this.onSignOutClick}>
-                                        <img src={require("../../../res/img/feather-customised/sign-out.svg")} width={16} />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSignOut" />
                                         <span>{_t("Sign out")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -287,10 +285,10 @@ export default class UserMenuButton extends React.Component<IProps, IState> {
                     label={_t("Account settings")}
                     isExpanded={this.state.menuDisplayed}
                 >
-                    <img src={require("../../../res/img/feather-customised/more-horizontal.svg")} alt="..." width={14} />
+                    <span>{/* masked image in CSS */}</span>
                 </ContextMenuButton>
                 {contextMenu}
             </React.Fragment>
-        )
+        );
     }
 }

@@ -19,12 +19,9 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
-import withValidation from '../../views/elements/Validation';
-import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import {
     SetupEncryptionStore,
     PHASE_INTRO,
-    PHASE_RECOVERY_KEY,
     PHASE_BUSY,
     PHASE_DONE,
     PHASE_CONFIRM_SKIP,
@@ -56,11 +53,6 @@ export default class SetupEncryptionBody extends React.Component {
             // Because of the latter, it lives in the state.
             verificationRequest: store.verificationRequest,
             backupInfo: store.backupInfo,
-            recoveryKey: '',
-            // whether the recovery key is a valid recovery key
-            recoveryKeyValid: null,
-            // whether the recovery key is the correct key or not
-            recoveryKeyCorrect: null,
         };
     }
 
@@ -83,19 +75,9 @@ export default class SetupEncryptionBody extends React.Component {
         store.stop();
     }
 
-    _onResetClick = () => {
+    _onUsePassphraseClick = async () => {
         const store = SetupEncryptionStore.sharedInstance();
-        store.startKeyReset();
-    }
-
-    _onUseRecoveryKeyClick = async () => {
-        const store = SetupEncryptionStore.sharedInstance();
-        store.useRecoveryKey();
-    }
-
-    _onRecoveryKeyCancelClick() {
-        const store = SetupEncryptionStore.sharedInstance();
-        store.cancelUseRecoveryKey();
+        store.usePassPhrase();
     }
 
     onSkipClick = () => {
@@ -118,66 +100,6 @@ export default class SetupEncryptionBody extends React.Component {
         store.done();
     }
 
-    _onUsePassphraseClick = () => {
-        const store = SetupEncryptionStore.sharedInstance();
-        store.usePassPhrase();
-    }
-
-    _onRecoveryKeyChange = (e) => {
-        this.setState({recoveryKey: e.target.value});
-    }
-
-    _onRecoveryKeyValidate = async (fieldState) => {
-        const result = await this._validateRecoveryKey(fieldState);
-        this.setState({recoveryKeyValid: result.valid});
-        return result;
-    }
-
-    _validateRecoveryKey = withValidation({
-        rules: [
-            {
-                key: "required",
-                test: async (state) => {
-                    try {
-                        const decodedKey = decodeRecoveryKey(state.value);
-                        const correct = await MatrixClientPeg.get().checkSecretStorageKey(
-                            decodedKey, SetupEncryptionStore.sharedInstance().keyInfo,
-                        );
-                        this.setState({
-                            recoveryKeyValid: true,
-                            recoveryKeyCorrect: correct,
-                        });
-                        return correct;
-                    } catch (e) {
-                        this.setState({
-                            recoveryKeyValid: false,
-                            recoveryKeyCorrect: false,
-                        });
-                        return false;
-                    }
-                },
-                invalid: function() {
-                    if (this.state.recoveryKeyValid) {
-                        return _t("This isn't the recovery key for your account");
-                    } else {
-                        return _t("This isn't a valid recovery key");
-                    }
-                },
-                valid: function() {
-                    return _t("Looks good!");
-                },
-            },
-        ],
-    })
-
-    _onRecoveryKeyFormSubmit = (e) => {
-        e.preventDefault();
-        if (!this.state.recoveryKeyCorrect) return;
-
-        const store = SetupEncryptionStore.sharedInstance();
-        store.setupWithRecoveryKey(decodeRecoveryKey(this.state.recoveryKey));
-    }
-
     render() {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
 
@@ -196,11 +118,19 @@ export default class SetupEncryptionBody extends React.Component {
         } else if (phase === PHASE_INTRO) {
             const store = SetupEncryptionStore.sharedInstance();
             let recoveryKeyPrompt;
-            if (keyHasPassphrase(store.keyInfo)) {
+            if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
                 recoveryKeyPrompt = _t("Use Recovery Key or Passphrase");
-            } else {
+            } else if (store.keyInfo) {
                 recoveryKeyPrompt = _t("Use Recovery Key");
             }
+
+            let useRecoveryKeyButton;
+            if (recoveryKeyPrompt) {
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
+                    {recoveryKeyPrompt}
+                </AccessibleButton>;
+            }
+
             return (
                 <div>
                     <p>{_t(
@@ -224,67 +154,13 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="link" onClick={this._onUseRecoveryKeyClick}>
-                            {recoveryKeyPrompt}
-                        </AccessibleButton>
+                        {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
                         </AccessibleButton>
                     </div>
-                    <div className="mx_CompleteSecurity_resetText">{_t(
-                        "If you've forgotten your recovery key you can " +
-                        "<button>set up new recovery options</button>", {}, {
-                            button: sub => <AccessibleButton
-                                element="span" className="mx_linkButton" onClick={this._onResetClick}
-                            >
-                                {sub}
-                            </AccessibleButton>,
-                        },
-                    )}</div>
                 </div>
             );
-        } else if (phase === PHASE_RECOVERY_KEY) {
-            const store = SetupEncryptionStore.sharedInstance();
-            let keyPrompt;
-            if (keyHasPassphrase(store.keyInfo)) {
-                keyPrompt = _t(
-                    "Enter your Recovery Key or enter a <a>Recovery Passphrase</a> to continue.", {},
-                    {
-                        a: sub => <AccessibleButton
-                            element="span"
-                            className="mx_linkButton"
-                            onClick={this._onUsePassphraseClick}
-                        >{sub}</AccessibleButton>,
-                    },
-                );
-            } else {
-                keyPrompt = _t("Enter your Recovery Key to continue.");
-            }
-
-            const Field = sdk.getComponent('elements.Field');
-            return <form onSubmit={this._onRecoveryKeyFormSubmit}>
-                <p>{keyPrompt}</p>
-                <div className="mx_CompleteSecurity_recoveryKeyEntry">
-                    <Field
-                        type="text"
-                        label={_t('Recovery Key')}
-                        value={this.state.recoveryKey}
-                        onChange={this._onRecoveryKeyChange}
-                        onValidate={this._onRecoveryKeyValidate}
-                    />
-                </div>
-                <div className="mx_CompleteSecurity_actionRow">
-                    <AccessibleButton kind="secondary" onClick={this._onRecoveryKeyCancelClick}>
-                        {_t("Cancel")}
-                    </AccessibleButton>
-                    <AccessibleButton kind="primary"
-                        disabled={!this.state.recoveryKeyCorrect}
-                        onClick={this._onRecoveryKeyFormSubmit}
-                    >
-                        {_t("Continue")}
-                    </AccessibleButton>
-                </div>
-            </form>;
         } else if (phase === PHASE_DONE) {
             let message;
             if (this.state.backupInfo) {

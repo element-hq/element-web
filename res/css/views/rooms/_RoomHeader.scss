@@ -267,3 +267,12 @@ limitations under the License.
 .mx_RoomHeader_pinsIndicatorUnread {
     background-color: $pinned-unread-color;
 }
+
+@media only screen and (max-width: 480px) {
+    .mx_RoomHeader_wrapper {
+        padding: 0;
+    }
+    .mx_RoomHeader {
+        overflow: hidden;
+    }
+}

@@ -10,7 +10,7 @@ interface Client {
     getStoredDevicesForUser: (userId: string) => [{ deviceId: string }];
     checkDeviceTrust: (userId: string, deviceId: string) => {
         isVerified: () => boolean
-    }
+    };
 }
 
 interface Room {

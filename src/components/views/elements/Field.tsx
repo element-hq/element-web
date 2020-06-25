@@ -54,6 +54,8 @@ interface IProps {
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
     tooltipContent?: React.ReactNode;
+    // If specified the tooltip will be shown regardless of feedback
+    forceTooltipVisible?: boolean;
     // If specified alongside tooltipContent, the class name to apply to the
     // tooltip itself.
     tooltipClassName?: string;
@@ -85,20 +87,20 @@ interface ITextareaProps extends IProps, TextareaHTMLAttributes<HTMLTextAreaElem
 type PropShapes = IInputProps | ISelectProps | ITextareaProps;
 
 interface IState {
-    valid: boolean,
-    feedback: React.ReactNode,
-    feedbackVisible: boolean,
-    focused: boolean,
+    valid: boolean;
+    feedback: React.ReactNode;
+    feedbackVisible: boolean;
+    focused: boolean;
 }
 
 export default class Field extends React.PureComponent<PropShapes, IState> {
     private id: string;
     private input: HTMLInputElement;
 
-    private static defaultProps = {
+    public static readonly defaultProps = {
         element: "input",
         type: "text",
-    }
+    };
 
     /*
      * This was changed from throttle to debounce: this is more traditional for
@@ -242,10 +244,9 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let fieldTooltip;
         if (tooltipContent || this.state.feedback) {
-            const addlClassName = tooltipClassName ? tooltipClassName : '';
             fieldTooltip = <Tooltip
-                tooltipClassName={`mx_Field_tooltip ${addlClassName}`}
-                visible={this.state.feedbackVisible}
+                tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
+                visible={(this.state.focused && this.props.forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
             />;
         }

@@ -30,6 +30,8 @@ import PushToMatrixClientController from './controllers/PushToMatrixClientContro
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 import FontSizeController from './controllers/FontSizeController';
+import SystemFontController from './controllers/SystemFontController';
+import UseSystemFontController from './controllers/UseSystemFontController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -140,9 +142,10 @@ export const SETTINGS = {
     },
     "feature_new_room_list": {
         isFeature: true,
-        displayName: _td("Use the improved room list (in development - refresh to apply changes)"),
+        displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
+        controller: new ReloadOnChangeController(),
     },
     "feature_custom_themes": {
         isFeature: true,
@@ -152,7 +155,7 @@ export const SETTINGS = {
     },
     "feature_irc_ui": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use IRC layout'),
+        displayName: _td('Enable IRC layout option in the appearance tab'),
         default: false,
         isFeature: true,
     },
@@ -177,7 +180,7 @@ export const SETTINGS = {
         controller: new FontSizeController(),
     },
     "useCustomFontSize": {
-        displayName: _td("Custom font size"),
+        displayName: _td("Use custom size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
@@ -186,6 +189,11 @@ export const SETTINGS = {
         displayName: _td('Enable Emoji suggestions while typing'),
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
+    },
+    // TODO: Wire up appropriately to UI (FTUE notifications)
+    "Notifications.alwaysShowBadgeCounts": {
+        supportedLevels: ['account'],
+        default: false,
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -312,6 +320,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         displayName: _td("Match system theme"),
+    },
+    "useSystemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("Use a system font"),
+        controller: new UseSystemFontController(),
+    },
+    "systemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "",
+        displayName: _td("System font name"),
+        controller: new SystemFontController(),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -520,11 +540,6 @@ export const SETTINGS = {
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
-    "keepSecretStoragePassphraseForSession": {
-         supportedLevels: ['device', 'config'],
-         displayName: _td("Keep recovery passphrase in memory for this session"),
-         default: false,
-    },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("How fast should messages be downloaded."),
@@ -548,5 +563,10 @@ export const SETTINGS = {
         supportedLevels: ['room-device', 'device'],
         displayName: _td("IRC display name width"),
         default: 80,
+    },
+    "useIRCLayout": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Use IRC layout"),
+        default: false,
     },
 };

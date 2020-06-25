@@ -31,6 +31,7 @@ import {IntegrationManagers} from "../integrations/IntegrationManagers";
 import {Capability} from "../widgets/WidgetApi";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
+import {objectClone} from "./objects";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -222,7 +223,7 @@ export default class WidgetUtils {
         const client = MatrixClientPeg.get();
         // Get the current widgets and clone them before we modify them, otherwise
         // we'll modify the content of the old event.
-        const userWidgets = JSON.parse(JSON.stringify(WidgetUtils.getUserWidgets()));
+        const userWidgets = objectClone(WidgetUtils.getUserWidgets());
 
         // Delete existing widget with ID
         try {
