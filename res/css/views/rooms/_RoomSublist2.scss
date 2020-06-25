@@ -245,24 +245,23 @@ limitations under the License.
             cursor: ns-resize;
             border-radius: 3px;
 
-            // Update the render() function for RoomSublist2 if this changes
-            height: 3px;
+            // Update RESIZE_HANDLE_HEIGHT if this changes
+            height: 4px;
 
             // This is positioned directly below the 'show more' button.
             position: absolute;
             bottom: 0;
 
-            // Together, these make the bar 48px wide
-            left: calc(50% - 24px);
-            right: calc(50% - 24px);
+            // Together, these make the bar 64px wide
+            left: calc(50% - 32px);
+            right: calc(50% - 32px);
         }
 
-        // TODO: Use less sketchy selector by replacing the resize component entirely
-        // This causes flickering.
-        .mx_RoomSublist2_showNButton:hover + .react-resizable-handle,
-        .react-resizable-handle:hover {
-            opacity: 0.8;
-            background-color: $primary-fg-color;
+        &:hover, &.mx_RoomSublist2_hasMenuOpen {
+            .react-resizable-handle {
+                opacity: 0.8;
+                background-color: $primary-fg-color;
+            }
         }
     }
 
