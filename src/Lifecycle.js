@@ -43,8 +43,8 @@ import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 
-export const HOMESERVER_URL_KEY = "mx_hs_url";
-export const ID_SERVER_URL_KEY = "mx_is_url";
+const HOMESERVER_URL_KEY = "mx_hs_url";
+const ID_SERVER_URL_KEY = "mx_is_url";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
