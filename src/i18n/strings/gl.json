@@ -2222,5 +2222,6 @@
     "This account has been deactivated.": "Esta conta foi desactivada.",
     "Failed to perform homeserver discovery": "Fallo ao intentar o descubrimento do servidor",
     "Syncing...": "Sincronizando...",
-    "Signing In...": "Conectando con..."
+    "Signing In...": "Conectando con...",
+    "If you've joined lots of rooms, this might take a while": "Se te uniches a moitas salas, esto podería levarnos un anaco"
 }
