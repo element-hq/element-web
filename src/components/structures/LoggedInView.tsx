@@ -123,7 +123,7 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-class LoggedInView extends React.PureComponent<IProps, IState> {
+class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
     static propTypes = {
