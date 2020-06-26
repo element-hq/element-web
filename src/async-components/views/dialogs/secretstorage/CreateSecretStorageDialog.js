@@ -44,8 +44,8 @@ const PHASE_CONFIRM_SKIP = 10;
 const PASSWORD_MIN_SCORE = 4; // So secure, many characters, much complex, wow, etc, etc.
 
 // these end up as strings from being values in the radio buttons, so just use strings
-const CREATESTORAGE_OPTION_KEY = 'key';
-const CREATESTORAGE_OPTION_PASSPHRASE = 'passphrase';
+const CREATE_STORAGE_OPTION_KEY = 'key';
+const CREATE_STORAGE_OPTION_PASSPHRASE = 'passphrase';
 
 /*
  * Walks the user through the process of creating a passphrase to guard Secure
@@ -86,7 +86,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
 
-            passPhraseKeySelected: CREATESTORAGE_OPTION_KEY,
+            passPhraseKeySelected: CREATE_STORAGE_OPTION_KEY,
         };
 
         this._passphraseField = createRef();
@@ -171,7 +171,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     }
 
     _onChooseKeyPassphraseFormSubmit = async () => {
-        if (this.state.passPhraseKeySelected === CREATESTORAGE_OPTION_KEY) {
+        if (this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY) {
             this._recoveryKey =
                 await MatrixClientPeg.get().createRecoveryKeyFromPassphrase();
             this.setState({
@@ -440,10 +440,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             )}</p>
             <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
                 <StyledRadioButton
-                    key={CREATESTORAGE_OPTION_KEY}
-                    value={CREATESTORAGE_OPTION_KEY}
+                    key={CREATE_STORAGE_OPTION_KEY}
+                    value={CREATE_STORAGE_OPTION_KEY}
                     name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATESTORAGE_OPTION_KEY}
+                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
                         <img className="mx_CreateSecretStorageDialog_optionIcon"
@@ -454,10 +454,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
                 </StyledRadioButton>
                 <StyledRadioButton
-                    key={CREATESTORAGE_OPTION_PASSPHRASE}
-                    value={CREATESTORAGE_OPTION_PASSPHRASE}
+                    key={CREATE_STORAGE_OPTION_PASSPHRASE}
+                    value={CREATE_STORAGE_OPTION_PASSPHRASE}
                     name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATESTORAGE_OPTION_PASSPHRASE}
+                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
                         <img className="mx_CreateSecretStorageDialog_optionIcon"

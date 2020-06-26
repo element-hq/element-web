@@ -35,11 +35,10 @@ limitations under the License.
         flex-grow: 1;
 
         display: flex;
+        flex-direction: column;
 
         margin-left: 8px;
         margin-right: 8px;
-
-        flex-direction: column;
     }
 
     .mx_RadioButton_spacer {
