@@ -23,7 +23,6 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import Field from '../../elements/Field';
 import AccessibleButton from '../../elements/AccessibleButton';
-import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 
 import { _t } from '../../../../languageHandler';
 
@@ -86,8 +85,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         }
 
         try {
-            const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
-            const correct = await MatrixClientPeg.get().checkSecretStorageKey(
+            const cli = MatrixClientPeg.get();
+            const decodedKey = cli.keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+            const correct = await cli.checkSecretStorageKey(
                 decodedKey, this.props.keyInfo,
             );
             this.setState({
