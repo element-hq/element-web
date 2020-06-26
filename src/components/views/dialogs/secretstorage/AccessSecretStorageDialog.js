@@ -298,6 +298,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                                 label={_t('Security Key')}
                                 value={this.state.recoveryKey}
                                 onChange={this._onRecoveryKeyChange}
+                                forceValidity={this.state.recoveryKeyCorrect}
                             />
                         </div>
                         <span className="mx_AccessSecretStorageDialog_recoveryKeyEntry_entryControlSeparatorText">

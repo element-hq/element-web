@@ -491,7 +491,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     label={_t("Password")}
                     value={this.state.accountPassword}
                     onChange={this._onAccountPasswordChange}
-                    flagInvalid={this.state.accountPasswordCorrect === false}
+                    forceValidity={this.state.accountPasswordCorrect === false ? false : null}
                     autoFocus={true}
                 /></div>
             </div>;
