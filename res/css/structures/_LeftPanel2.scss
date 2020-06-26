@@ -38,6 +38,12 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         // TagPanel handles its own CSS
     }
 
+    &:not(.mx_LeftPanel2_hasTagPanel) {
+        .mx_LeftPanel2_roomListContainer {
+            width: 100%;
+        }
+    }
+
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel2_roomListContainer {
@@ -127,7 +133,12 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         min-width: unset;
 
         // We have to forcefully set the width to override the resizer's style attribute.
-        width: calc(68px + $tagPanelWidth) !important;
+        &.mx_LeftPanel2_hasTagPanel {
+            width: calc(68px + $tagPanelWidth) !important;
+        }
+        &:not(.mx_LeftPanel2_hasTagPanel) {
+            width: 68px !important;
+        }
 
         .mx_LeftPanel2_roomListContainer {
             width: 68px;

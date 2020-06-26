@@ -29,6 +29,7 @@ import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import SettingsStore from "../../settings/SettingsStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -46,10 +47,12 @@ interface IProps {
 interface IState {
     searchFilter: string; // TODO: Move search into room list?
     showBreadcrumbs: boolean;
+    showTagPanel: boolean;
 }
 
 export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
+    private tagPanelWatcherRef: string;
 
     // TODO: Properly support TagPanel
     // TODO: Properly support searching/filtering
@@ -64,9 +67,13 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         this.state = {
             searchFilter: "",
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
+            showTagPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        this.tagPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
+            this.setState({showTagPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
+        });
 
         // We watch the middle panel because we don't actually get resized, the middle panel does.
         // We listen to the noisy channel to avoid choppy reaction times.
@@ -74,6 +81,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
+        SettingsStore.unwatchSetting(this.tagPanelWatcherRef);
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
@@ -181,7 +189,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactNode {
-        const tagPanel = (
+        const tagPanel = !this.state.showTagPanel ? null : (
             <div className="mx_LeftPanel2_tagPanelContainer">
                 <TagPanel/>
             </div>
@@ -202,6 +210,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
         const containerClasses = classNames({
             "mx_LeftPanel2": true,
+            "mx_LeftPanel2_hasTagPanel": !!tagPanel,
             "mx_LeftPanel2_minimized": this.props.isMinimized,
         });
 
