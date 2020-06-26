@@ -44,7 +44,7 @@ interface IState {
     isDarkTheme: boolean;
 }
 
-export default class UserMenuButton extends React.Component<IProps, IState> {
+export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();

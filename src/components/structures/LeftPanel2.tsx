@@ -24,7 +24,7 @@ import RoomList2 from "../views/rooms/RoomList2";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseAvatar from '../views/avatars/BaseAvatar';
-import UserMenuButton from "./UserMenuButton";
+import UserMenu from "./UserMenuButton";
 import RoomSearch from "./RoomSearch";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
@@ -184,7 +184,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         let name = <span className="mx_LeftPanel2_userName">{OwnProfileStore.instance.displayName}</span>;
         let buttons = (
             <span className="mx_LeftPanel2_headerButtons">
-                <UserMenuButton />
+                <UserMenu />
             </span>
         );
         if (this.props.isMinimized) {
