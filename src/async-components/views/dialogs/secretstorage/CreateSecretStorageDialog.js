@@ -446,9 +446,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <img className="mx_CreateSecretStorageDialog_optionIcon"
-                            src={require("../../../../../res/img/feather-customised/secure-backup.svg")}
-                        />
+                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
                         {_t("Generate a Security Key")}
                     </div>
                     <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
@@ -460,9 +458,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <img className="mx_CreateSecretStorageDialog_optionIcon"
-                            src={require("../../../../../res/img/feather-customised/secure-phrase.svg")}
-                        />
+                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
                         {_t("Enter a Security Phrase")}
                     </div>
                     <div>{_t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.")}</div>
@@ -781,20 +777,18 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             }
         }
 
-        let headerImage = null;
+        let titleClass = null;
         switch (this.state.phase) {
             case PHASE_PASSPHRASE:
             case PHASE_PASSPHRASE_CONFIRM:
-                headerImage = require("../../../../../res/img/feather-customised/secure-phrase.svg");
+                titleClass = ['mx_CreateSecretStorageDialog_titleWithIcon', 'mx_CreateSecretStorageDialog_securePhraseTitle'];
                 break;
             case PHASE_SHOWKEY:
-                headerImage = require("../../../../../res/img/feather-customised/secure-backup.svg");
+                titleClass = ['mx_CreateSecretStorageDialog_titleWithIcon', 'mx_CreateSecretStorageDialog_secureBackupTitle'];
                 break;
-        }
-
-        let titleClass = null;
-        if (this.state.phase === PHASE_CHOOSE_KEY_PASSPHRASE) {
-            titleClass = 'mx_CreateSecretStorageDialog_centeredTitle';
+            case PHASE_CHOOSE_KEY_PASSPHRASE:
+                titleClass = 'mx_CreateSecretStorageDialog_centeredTitle';
+                break;
         }
 
         return (
@@ -802,7 +796,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={this._titleForPhase(this.state.phase)}
                 titleClass={titleClass}
-                headerImage={headerImage}
                 hasCancel={this.props.hasCancel && [PHASE_PASSPHRASE].includes(this.state.phase)}
                 fixedWidth={false}
             >
