@@ -1620,6 +1620,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const {hsUrl, isUrl} = this.props.serverConfig;
                 cli = createClient({
                     baseUrl: hsUrl,
+                    // @ts-ignore - XXX: remove me when it doesn't break tests
                     idBaseUrl: isUrl,
                 });
             }
