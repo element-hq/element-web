@@ -148,7 +148,7 @@ export default createReactClass({
             return (
                 <span className="mx_MVideoBody">
                     <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner">
-                        <InlineSpinner alt={content.body} />
+                        <InlineSpinner />
                     </div>
                 </span>
             );

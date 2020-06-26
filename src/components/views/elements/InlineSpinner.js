@@ -26,7 +26,6 @@ export default createReactClass({
         const w = this.props.w || 16;
         const h = this.props.h || 16;
         const imgClass = this.props.imgClassName || "";
-        const alt = this.props.alt || _t("Loading...");
 
         let divClass;
         let imageSource;
@@ -45,7 +44,7 @@ export default createReactClass({
                     width={w}
                     height={h}
                     className={imgClass}
-                    alt={alt}
+                    aria-label={_t("Loading...")}
                 />
             </div>
         );

@@ -95,7 +95,7 @@ export default class MAudioBody extends React.Component {
             // Not sure how tall the audio player is so not sure how tall it should actually be.
             return (
                 <span className="mx_MAudioBody">
-                    <InlineSpinner alt={content.body} />
+                    <InlineSpinner />
                 </span>
             );
         }

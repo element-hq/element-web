@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import {_t} from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 
-const Spinner = ({w = 32, h = 32, imgClassName, alt, message}) => {
+const Spinner = ({w = 32, h = 32, imgClassName, message}) => {
     let divClass;
     let imageSource;
     if (SettingsStore.isFeatureEnabled('feature_new_spinner')) {
@@ -39,7 +39,7 @@ const Spinner = ({w = 32, h = 32, imgClassName, alt, message}) => {
                     width={w}
                     height={h}
                     className={imgClassName}
-                    alt={alt || _t("Loading...")}
+                    aria-label={_t("Loading...")}
                 />
         </div>
     );
@@ -48,7 +48,6 @@ Spinner.propTypes = {
     w: PropTypes.number,
     h: PropTypes.number,
     imgClassName: PropTypes.string,
-    alt: PropTypes.string,
     message: PropTypes.node,
 };
 
