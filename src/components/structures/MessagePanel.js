@@ -770,7 +770,7 @@ export default class MessagePanel extends React.Component {
             topSpinner = <li key="_topSpinner"><Spinner /></li>;
         }
         if (this.props.forwardPaginating) {
-            bottomSpinner = <li key="_bottomSpinner"><Spinner w={20} h={20} /></li>;
+            bottomSpinner = <li key="_bottomSpinner"><Spinner /></li>;
         }
 
         const style = this.props.hidden ? { display: 'none' } : {};
