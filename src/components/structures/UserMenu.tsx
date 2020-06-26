@@ -327,7 +327,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     {this.renderContextMenu()}
                 </ContextMenuButton>
             </React.Fragment>
-
         );
     }
 }
