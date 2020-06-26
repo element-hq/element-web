@@ -390,7 +390,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         let advanced: React.ReactNode;
 
         if (this.state.showAdvanced) {
-            advanced = <div>
+            advanced = <>
+                <SettingsFlag
+                    name="useCompactLayout"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    disabled={this.state.useIRCLayout}
+                />
                 <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}
@@ -412,7 +418,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     disabled={!this.state.useSystemFont}
                     value={this.state.systemFont}
                 />
-            </div>;
+            </>;
         }
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
             {toggle}

@@ -34,7 +34,7 @@ import NotificationBadge, {
 import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreviewStore } from "../../../stores/MessagePreviewStore";
+import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomTileIcon from "./RoomTileIcon";
 
 /*******************************************************************
@@ -271,7 +271,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         let messagePreview = null;
         if (this.props.showMessagePreview && !this.props.isMinimized) {
             // The preview store heavily caches this info, so should be safe to hammer.
-            const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room);
+            const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
 
             // Only show the preview if there is one to show.
             if (text) {

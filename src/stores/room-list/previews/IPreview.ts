@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,25 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_Spinner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    flex: 1;
-}
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { TagID } from "../models";
 
-.mx_Spinner_spin img {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.mx_MatrixChat_middlePanel .mx_Spinner {
-    height: auto;
+/**
+ * Represents an event preview.
+ */
+export interface IPreview {
+    /**
+     * Gets the text which represents the event as a preview.
+     * @param event The event to preview.
+     * @param tagId Optional. The tag where the room the event was sent in resides.
+     * @returns The preview.
+     */
+    getTextFor(event: MatrixEvent, tagId?: TagID): string;
 }
