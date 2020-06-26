@@ -26,6 +26,7 @@
     "defaultCountryCode": "GB",
     "showLabsSettings": false,
     "features": {
+        "feature_new_spinner": "labs",
         "feature_font_scaling": "labs",
         "feature_pinning": "labs",
         "feature_custom_status": "labs",

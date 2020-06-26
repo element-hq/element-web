@@ -13,6 +13,7 @@
     "hosting_signup_link": "https://modular.im/services/matrix-hosting-riot?utm_source=riot-web&utm_medium=web",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
     "features": {
+        "feature_new_spinner": "labs",
         "feature_font_scaling": "labs",
         "feature_pinning": "labs",
         "feature_custom_status": "labs",
