@@ -30,6 +30,8 @@ import PushToMatrixClientController from './controllers/PushToMatrixClientContro
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
 import FontSizeController from './controllers/FontSizeController';
+import SystemFontController from './controllers/SystemFontController';
+import UseSystemFontController from './controllers/UseSystemFontController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -95,6 +97,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_new_spinner": {
+        isFeature: true,
+        displayName: _td("New spinner design"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_font_scaling": {
         isFeature: true,
         displayName: _td("Font scaling"),
@@ -188,9 +196,14 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    // TODO: Wire up appropriately to UI (FTUE notifications)
+    "Notifications.alwaysShowBadgeCounts": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
+    },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use compact timeline layout'),
+        displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
     "showRedactions": {
@@ -313,6 +326,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         displayName: _td("Match system theme"),
+    },
+    "useSystemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("Use a system font"),
+        controller: new UseSystemFontController(),
+    },
+    "systemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "",
+        displayName: _td("System font name"),
+        controller: new SystemFontController(),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,

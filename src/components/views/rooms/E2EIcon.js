@@ -28,6 +28,7 @@ export const E2E_STATE = {
     WARNING: "warning",
     UNKNOWN: "unknown",
     NORMAL: "normal",
+    UNAUTHENTICATED: "unauthenticated",
 };
 
 const crossSigningUserTitles = {

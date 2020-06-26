@@ -108,7 +108,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             },
         };
 
-
+        return event;
     }
 
     public render() {

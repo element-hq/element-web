@@ -78,9 +78,8 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     private generatePreview(room: Room) {
-        const timeline = room.getLiveTimeline();
-        if (!timeline) return; // usually only happens in tests
-        const events = timeline.getEvents();
+        const events = room.timeline;
+        if (!events) return; // should only happen in tests
 
         for (let i = events.length - 1; i >= 0; i--) {
             if (i === events.length - MAX_EVENTS_BACKWARDS) return; // limit reached

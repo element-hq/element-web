@@ -193,6 +193,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             components.push(
                 <RoomSublist2
                     key={`sublist-${orderedTagId}`}
+                    tagId={orderedTagId}
                     forRooms={true}
                     rooms={orderedRooms}
                     startAsHidden={aesthetics.defaultHidden}

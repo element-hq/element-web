@@ -154,13 +154,6 @@ export default class CrossSigningPanel extends React.PureComponent {
             errorSection = <div className="error">{error.toString()}</div>;
         }
 
-        // Whether the various keys exist on your account (but not necessarily
-        // on this device).
-        const enabledForAccount = (
-            crossSigningPrivateKeysInStorage &&
-            secretStorageKeyInAccount
-        );
-
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
             const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
@@ -184,8 +177,19 @@ export default class CrossSigningPanel extends React.PureComponent {
             )}</p>;
         }
 
+        const keysExistAnywhere = (
+            secretStorageKeyInAccount ||
+            crossSigningPrivateKeysInStorage ||
+            crossSigningPublicKeysOnDevice
+        );
+        const keysExistEverywhere = (
+            secretStorageKeyInAccount &&
+            crossSigningPrivateKeysInStorage &&
+            crossSigningPublicKeysOnDevice
+        );
+
         let resetButton;
-        if (enabledForAccount) {
+        if (keysExistAnywhere) {
             resetButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
                     <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
@@ -197,10 +201,7 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         // TODO: determine how better to expose this to users in addition to prompts at login/toast
         let bootstrapButton;
-        if (
-            (!enabledForAccount || !crossSigningPublicKeysOnDevice) &&
-            homeserverSupportsCrossSigning
-        ) {
+        if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
             bootstrapButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Simple utils for formatting style values
- */
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-// converts a pixel value to rem.
-export function toRem(pixelValue: number): string {
-    return pixelValue / 10 + "rem";
-}
+export interface UpdateFontSizePayload extends ActionPayload {
+    action: Action.UpdateFontSize;
 
-export function toPx(pixelValue: number): string {
-    return pixelValue + "px";
+    /**
+     * The font size to set the root to
+     */
+    size: number;
 }

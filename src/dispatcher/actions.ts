@@ -69,4 +69,14 @@ export enum Action {
      * Opens the user menu (previously known as the top left menu). No additional payload information required.
      */
     ToggleUserMenu = "toggle_user_menu",
+
+    /**
+     * Sets the apps root font size. Should be used with UpdateFontSizePayload
+     */
+    UpdateFontSize = "update_font_size",
+
+    /**
+     * Sets a system font. Should be used with UpdateSystemFontPayload
+     */
+    UpdateSystemFont = "update_system_font",
 }

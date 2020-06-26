@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import * as React from "react";
+import { createRef } from "react";
 import TagPanel from "./TagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import SearchBox from "./SearchBox";
 import RoomList2 from "../views/rooms/RoomList2";
 import { Action } from "../../dispatcher/actions";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -30,6 +30,10 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import ResizeNotifier from "../../utils/ResizeNotifier";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { throttle } from 'lodash';
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -41,6 +45,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 interface IProps {
     isMinimized: boolean;
+    resizeNotifier: ResizeNotifier;
 }
 
 interface IState {
@@ -49,6 +54,8 @@ interface IState {
 }
 
 export default class LeftPanel2 extends React.Component<IProps, IState> {
+    private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
+
     // TODO: Properly support TagPanel
     // TODO: Properly support searching/filtering
     // TODO: Properly support breadcrumbs
@@ -65,11 +72,35 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+
+        // We watch the middle panel because we don't actually get resized, the middle panel does.
+        // We listen to the noisy channel to avoid choppy reaction times.
+        this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
+
+        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     public componentWillUnmount() {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
+        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
     }
+
+    // TSLint wants this to be a member, but we don't want that.
+    // tslint:disable-next-line
+    private onRoomStateUpdate = throttle((ev: MatrixEvent) => {
+        const myUserId = MatrixClientPeg.get().getUserId();
+        if (ev.getType() === 'm.room.member' && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.onProfileUpdate();
+        }
+    }, 200, {trailing: true, leading: true});
+
+    private onProfileUpdate = async () => {
+        // the store triggered an update, so force a layout update. We don't
+        // have any state to store here for that to magically happen.
+        this.forceUpdate();
+    };
 
     private onSearch = (term: string): void => {
         this.setState({searchFilter: term});
@@ -86,9 +117,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     };
 
-    // TODO: Apply this on resize, init, etc for reliability
-    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
-        const list = ev.target as HTMLDivElement;
+    private handleStickyHeaders(list: HTMLDivElement) {
         const rlRect = list.getBoundingClientRect();
         const bottom = rlRect.bottom;
         const top = rlRect.top;
@@ -123,6 +152,17 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.style.top = `unset`;
             }
         }
+    }
+
+    // TODO: Apply this on resize, init, etc for reliability
+    private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
+        const list = ev.target as HTMLDivElement;
+        this.handleStickyHeaders(list);
+    };
+
+    private onResize = () => {
+        if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+        this.handleStickyHeaders(this.listContainerRef.current);
     };
 
     private renderHeader(): React.ReactNode {
@@ -130,16 +170,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // TODO: Presence
         // TODO: Breadcrumbs toggle
         // TODO: Menu button
-        const avatarSize = 32;
-        // TODO: Don't do this profile lookup in render()
-        const client = MatrixClientPeg.get();
-        let displayName = client.getUserId();
-        let avatarUrl: string = null;
-        const myUser = client.getUser(client.getUserId());
-        if (myUser) {
-            displayName = myUser.rawDisplayName;
-            avatarUrl = myUser.avatarUrl;
-        }
+        const avatarSize = 32; // should match border-radius of the avatar
 
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
@@ -150,7 +181,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             );
         }
 
-        let name = <span className="mx_LeftPanel2_userName">{displayName}</span>;
+        let name = <span className="mx_LeftPanel2_userName">{OwnProfileStore.instance.displayName}</span>;
         let buttons = (
             <span className="mx_LeftPanel2_headerButtons">
                 <UserMenuButton />
@@ -167,8 +198,8 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     <span className="mx_LeftPanel2_userAvatarContainer">
                         <BaseAvatar
                             idName={MatrixClientPeg.get().getUserId()}
-                            name={displayName}
-                            url={avatarUrl}
+                            name={OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId()}
+                            url={OwnProfileStore.instance.getHttpAvatarUrl(avatarSize)}
                             width={avatarSize}
                             height={avatarSize}
                             resizeMethod="crop"
@@ -230,9 +261,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div className="mx_LeftPanel2_actualRoomListContainer" onScroll={this.onScroll}>
-                        {roomList}
-                    </div>
+                    <div
+                        className="mx_LeftPanel2_actualRoomListContainer"
+                        onScroll={this.onScroll}
+                        ref={this.listContainerRef}
+                    >{roomList}</div>
                 </aside>
             </div>
         );
