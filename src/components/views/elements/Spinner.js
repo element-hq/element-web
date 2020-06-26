@@ -34,13 +34,13 @@ const Spinner = ({w = 32, h = 32, imgClassName, message}) => {
     return (
         <div className={divClass}>
             { message && <React.Fragment><div className="mx_Spinner_Msg">{ message}</div>&nbsp;</React.Fragment> }
-                <img
-                    src={imageSource}
-                    width={w}
-                    height={h}
-                    className={imgClassName}
-                    aria-label={_t("Loading...")}
-                />
+            <img
+                src={imageSource}
+                width={w}
+                height={h}
+                className={imgClassName}
+                aria-label={_t("Loading...")}
+            />
         </div>
     );
 };
