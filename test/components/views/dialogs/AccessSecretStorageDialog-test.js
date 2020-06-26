@@ -77,7 +77,8 @@ describe("AccessSecretStorageDialog", function() {
         expect(recoveryKeyValid).toBe(false);
         expect(recoveryKeyCorrect).toBe(false);
         const notification = testInstance.root.findByProps({
-            className: "mx_AccessSecretStorageDialog_recoveryKeyFeedback mx_AccessSecretStorageDialog_recoveryKeyFeedback_invalid",
+            className: "mx_AccessSecretStorageDialog_recoveryKeyFeedback " +
+                "mx_AccessSecretStorageDialog_recoveryKeyFeedback_invalid",
         });
         expect(notification.props.children).toEqual("Invalid Recovery Key");
         done();
