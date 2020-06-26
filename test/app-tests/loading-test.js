@@ -29,7 +29,7 @@ import * as jssdk from 'matrix-js-sdk';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
-import dis from 'matrix-react-sdk/src/dispatcher';
+import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
@@ -589,8 +589,10 @@ describe('loading:', function() {
 
     describe('Token login:', function() {
         it('logs in successfully', function() {
+            localStorage.setItem("mx_hs_url", "https://homeserver");
+            localStorage.setItem("mx_is_url", "https://idserver");
             loadApp({
-                queryString: "?loginToken=secretToken&homeserver=https%3A%2F%2Fhomeserver&identityServer=https%3A%2F%2Fidserver",
+                queryString: "?loginToken=secretToken",
             });
 
             return sleep(1).then(() => {

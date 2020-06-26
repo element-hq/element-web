@@ -21,5 +21,16 @@
     "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Jūsu Riot konfigurācijā ir nederīgs JSON. Lūdzu, izlabojiet problēmu un ielādējiet lapu atkārtoti.",
     "The message from the parser is: %(message)s": "Ziņojums no parsētāja ir: %(message)s",
     "Invalid JSON": "Nederīgs JSON",
-    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts"
+    "Your Riot is misconfigured": "Jūsu Riot ir nepareizi konfigurēts",
+    "Unable to load config file: please refresh the page to try again.": "Neizdevās ielādēt config datni: lūdzu pārlādē lapu lai mēģinātu vēlreiz.",
+    "Open user settings": "Atver lietotāja iestatījumus",
+    "Go to your browser to complete Sign In": "Aizej uz savu pārlūku lai pabeigtu Piekļuvi",
+    "Unsupported browser": "Neatbalstīts pārlūks",
+    "Your browser can't run Riot": "Tavs pārlūks nevar palaist Riot",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Lūdzu instalē <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, vai <safariLink>Safari</safariLink> priekš labākās pieredzes.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Tu vari turpināt izmantot savu pašreizējo pārlūku, bet dažas vai visas funkcijas nestrādās, un lietotnes izskats var būt nepareizs.",
+    "I understand the risks and wish to continue": "Es pieņemu riskus un vēlos turpināt",
+    "Go to Riot.im": "Ej uz Riot.im",
+    "Failed to start": "Neizdevās palaist"
 }

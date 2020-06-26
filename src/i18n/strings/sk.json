@@ -26,5 +26,15 @@
     "Unable to load config file: please refresh the page to try again.": "Nemožno načítať konfiguračný súbor: prosím, obnovte stránku a skúste to znova.",
     "Open user settings": "Otvoriť používateľské nastavenia",
     "Previous/next recently visited room or community": "Predchádzajúca/ďalšia nedávno navštívená miestnosť alebo komunita",
-    "Go to your browser to complete Sign In": "Prejdite do prehliadača a dokončite prihlásenie"
+    "Go to your browser to complete Sign In": "Prejdite do prehliadača a dokončite prihlásenie",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Nepodporovaný prehliadač",
+    "Your browser can't run Riot": "Váš prehliadač nerozbehne Riot",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot používa komplexnejšie funkcie prehliadača, ktoré nie sú podporované vo vašom prehliadači.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Prosím, nainštalujte si <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> alebo <safariLink>Safari</safariLink> pre najlepší zážitok.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Môžete naďalej používať váš súčasný prehliadač, ale niektoré alebo všetky funkcie nemusia fungovať a zážitok z aplikácie nemusí byť optimálny.",
+    "I understand the risks and wish to continue": "Rozumiem riziku a chcem pokračovať",
+    "Go to Riot.im": "Prejsť na Riot.im",
+    "Failed to start": "Zapnutie zlyhalo"
 }

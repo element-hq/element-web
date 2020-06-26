@@ -213,10 +213,10 @@ module.exports = (env, argv) => {
                                     // Note that we use slightly different plugins for SCSS.
 
                                     require('postcss-import')(),
+                                    require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
                                     require("postcss-extend")(),
                                     require("postcss-nested")(),
-                                    require("postcss-mixins")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),

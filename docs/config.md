@@ -91,7 +91,7 @@ For a good example, see https://riot.im/develop/config.json.
        call buttons - integration managers may use a different domain.
 1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
     and its value defines whether to enable/disable the presence status display
-    from that homeserver. If no options are configurd, presence is shown for all
+    from that homeserver. If no options are configured, presence is shown for all
     homeservers.
 1. `disable_guests`: Disables guest access tokens and auto-guest registrations.
     Defaults to false (guests are allowed).

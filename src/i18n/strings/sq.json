@@ -35,5 +35,6 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Mund të vazhdoni të përdorni shfletuesin tuaj të tanishëm, por disa ose krejt veçoritë mund të mos funksionojnë dhe pamja dhe ndjesitë prej aplikacionit të mos jenë të sakta.",
     "I understand the risks and wish to continue": "I kuptoj rreziqet dhe dëshiroj të vazhdoj",
     "Go to Riot.im": "Shko te Riot.im",
-    "Failed to start": "S’u arrit të nisej"
+    "Failed to start": "S’u arrit të nisej",
+    "Missing indexeddb worker script!": "Mungon programth worker-i indexeddb-je!"
 }

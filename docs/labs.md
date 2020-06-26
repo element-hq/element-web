@@ -7,6 +7,11 @@ to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
 
+## Font scaling (`feature_font_scaling`)
+
+Enables font scaling options for accessibility. To alter the scale check the
+appearance tab in settings.
+
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
@@ -67,22 +72,6 @@ An implementation of [MSC2241](https://github.com/matrix-org/matrix-doc/pull/224
 
 This also includes a new implementation of the user & member info panel, designed to share more code between showing community members & room members. Built on top of this new panel is also a new UX for verification from the member panel.
 
-## Cross-signing
-
-Cross-signing ([MSC1756](https://github.com/matrix-org/matrix-doc/pull/1756))
-improves the device verification experience by allowing you to verify a user
-instead of verifying each of their devices.
-
-The feature is enabled by default and does not follow a traditional labs flag
-at the moment. If something goes wrong, add this to your config to disable it:
-```json
-{
-  "settingDefaults": {
-    "feature_cross_signing": false  
-  }
-}
-```
-
 The setting will be removed in a future release, enabling it non-optionally for
 all users.
 
@@ -106,3 +95,15 @@ adds an ability for end users to add themes themselves by using a URL to the JSO
 theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
+
+## New room list (`feature_new_room_list`) (in development)
+
+A complete rewrite of the room list is underway to increase performance, stability,
+and general usability. This is expected to take a while to complete and as such might
+be missing critical features - please use at your own risk, though do report bugs!
+
+## IRC message layout (`feature_irc_ui`)
+
+Adds an option to change the message layout to an IRC style ` timestamp | avatar
+| name | message `
+
