@@ -781,10 +781,16 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         switch (this.state.phase) {
             case PHASE_PASSPHRASE:
             case PHASE_PASSPHRASE_CONFIRM:
-                titleClass = ['mx_CreateSecretStorageDialog_titleWithIcon', 'mx_CreateSecretStorageDialog_securePhraseTitle'];
+                titleClass = [
+                    'mx_CreateSecretStorageDialog_titleWithIcon',
+                    'mx_CreateSecretStorageDialog_securePhraseTitle',
+                ];
                 break;
             case PHASE_SHOWKEY:
-                titleClass = ['mx_CreateSecretStorageDialog_titleWithIcon', 'mx_CreateSecretStorageDialog_secureBackupTitle'];
+                titleClass = [
+                    'mx_CreateSecretStorageDialog_titleWithIcon',
+                    'mx_CreateSecretStorageDialog_secureBackupTitle',
+                ];
                 break;
             case PHASE_CHOOSE_KEY_PASSPHRASE:
                 titleClass = 'mx_CreateSecretStorageDialog_centeredTitle';
