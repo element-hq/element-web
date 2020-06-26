@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+// @ts-ignore - XXX: no idea why this import fails
 import * as Matrix from "matrix-js-sdk";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
