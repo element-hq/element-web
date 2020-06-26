@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { createClient } from "matrix-js-sdk/src";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -1612,6 +1613,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         } else if (screen === 'directory') {
             dis.fire(Action.ViewRoomDirectory);
+        } else if (screen === "start_sso" || screen === "start_cas") {
+            // TODO if logged in, skip SSO
+            let cli = MatrixClientPeg.get();
+            if (!cli) {
+                const {hsUrl, isUrl} = this.props.serverConfig;
+                cli = createClient({
+                    baseUrl: hsUrl,
+                    idBaseUrl: isUrl,
+                });
+            }
+
+            const type = screen === "start_sso" ? "sso" : "cas";
+            PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
         } else if (screen === 'groups') {
             dis.dispatch({
                 action: 'view_my_groups',
@@ -1915,9 +1929,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.onLoggedIn();
     };
 
-    render() {
-        // console.log(`Rendering MatrixChat with view ${this.state.view}`);
-
+    getFragmentAfterLogin() {
         let fragmentAfterLogin = "";
         if (this.props.initialScreenAfterLogin &&
             // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
@@ -1925,7 +1937,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         ) {
             fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
         }
+        return fragmentAfterLogin;
+    }
 
+    render() {
+        const fragmentAfterLogin = this.getFragmentAfterLogin();
         let view;
 
         if (this.state.view === Views.LOADING) {
@@ -2004,7 +2020,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
-            view = <Welcome {...this.getServerProperties()} fragmentAfterLogin={fragmentAfterLogin} />;
+            view = <Welcome />;
         } else if (this.state.view === Views.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             view = (
