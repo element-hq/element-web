@@ -35,8 +35,10 @@ import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import BaseAvatar from '../views/avatars/BaseAvatar';
 
 interface IProps {
+    isMinimized: boolean;
 }
 
 interface IState {
@@ -158,14 +160,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
         defaultDispatcher.dispatch({action: 'view_home_page'});
     };
 
-    public render() {
+    private renderMenuButton(): React.ReactNode {
         let contextMenu;
         if (this.state.menuDisplayed) {
             let hostingLink;
             const signupLink = getHostingLink("user-context-menu");
             if (signupLink) {
                 hostingLink = (
-                    <div className="mx_UserMenuButton_contextMenu_header">
+                    <div className="mx_UserMenu_contextMenu_header">
                         {_t(
                             "<a>Upgrade</a> to your own domain", {},
                             {
@@ -188,7 +190,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 homeButton = (
                     <li>
                         <AccessibleButton onClick={this.onHomeClick}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconHome" />
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
                             <span>{_t("Home")}</span>
                         </AccessibleButton>
                     </li>
@@ -203,18 +205,18 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     top={elementRect.top + elementRect.height}
                     onFinished={this.onCloseMenu}
                 >
-                    <div className="mx_IconizedContextMenu mx_UserMenuButton_contextMenu">
-                        <div className="mx_UserMenuButton_contextMenu_header">
-                            <div className="mx_UserMenuButton_contextMenu_name">
-                                <span className="mx_UserMenuButton_contextMenu_displayName">
+                    <div className="mx_IconizedContextMenu mx_UserMenu_contextMenu">
+                        <div className="mx_UserMenu_contextMenu_header">
+                            <div className="mx_UserMenu_contextMenu_name">
+                                <span className="mx_UserMenu_contextMenu_displayName">
                                     {OwnProfileStore.instance.displayName}
                                 </span>
-                                <span className="mx_UserMenuButton_contextMenu_userId">
+                                <span className="mx_UserMenu_contextMenu_userId">
                                     {MatrixClientPeg.get().getUserId()}
                                 </span>
                             </div>
                             <div
-                                className="mx_UserMenuButton_contextMenu_themeButton"
+                                className="mx_UserMenu_contextMenu_themeButton"
                                 onClick={this.onSwitchThemeClick}
                                 title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
                             >
@@ -231,31 +233,31 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 {homeButton}
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconBell" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
                                         <span>{_t("Notification settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconLock" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
                                         <span>{_t("Security & privacy")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSettings" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
                                         <span>{_t("All settings")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onShowArchived}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconArchive" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
                                         <span>{_t("Archived rooms")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
                                     <AccessibleButton onClick={this.onProvideFeedback}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconMessage" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
                                         <span>{_t("Feedback")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -263,9 +265,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         </div>
                         <div className="mx_IconizedContextMenu_optionList">
                             <ul>
-                                <li className="mx_UserMenuButton_contextMenu_redRow">
+                                <li className="mx_UserMenu_contextMenu_redRow">
                                     <AccessibleButton onClick={this.onSignOutClick}>
-                                        <span className="mx_IconizedContextMenu_icon mx_UserMenuButton_iconSignOut" />
+                                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
                                         <span>{_t("Sign out")}</span>
                                     </AccessibleButton>
                                 </li>
@@ -289,6 +291,39 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </ContextMenuButton>
                 {contextMenu}
             </React.Fragment>
+        );
+    }
+
+    public render() {
+        const avatarSize = 32; // should match border-radius of the avatar
+
+        let name = <span className="mx_UserMenu_userName">{OwnProfileStore.instance.displayName}</span>;
+        let buttons = (
+            <span className="mx_UserMenu_headerButtons">
+                {this.renderMenuButton()}
+            </span>
+        );
+        if (this.props.isMinimized) {
+            name = null;
+            buttons = null;
+        }
+
+        return (
+            <div className="mx_UserMenu">
+                    <span className="mx_UserMenu_userAvatarContainer">
+                        <BaseAvatar
+                            idName={MatrixClientPeg.get().getUserId()}
+                            name={OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId()}
+                            url={OwnProfileStore.instance.getHttpAvatarUrl(avatarSize)}
+                            width={avatarSize}
+                            height={avatarSize}
+                            resizeMethod="crop"
+                            className="mx_UserMenu_userAvatar"
+                        />
+                    </span>
+                {name}
+                {buttons}
+            </div>
         );
     }
 }

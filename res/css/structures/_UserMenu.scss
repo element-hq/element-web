@@ -14,6 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_UserMenu {
+    // Create a row-based flexbox to ensure items stay aligned correctly.
+    display: flex;
+    align-items: center;
+
+    .mx_UserMenu_userAvatarContainer {
+        position: relative; // to make default avatars work
+        margin-right: 8px;
+        height: 32px; // to remove the unknown 4px gap the browser puts below it
+
+        .mx_UserMenu_userAvatar {
+            border-radius: 32px; // should match avatar size
+        }
+    }
+
+    .mx_UserMenu_userName {
+        font-weight: 600;
+        font-size: $font-15px;
+        line-height: $font-20px;
+        flex: 1;
+
+        // Ellipsize any text overflow
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .mx_UserMenu_headerButtons {
+        // No special styles: the rest of the layout happens to make it work.
+    }
+}
+
 .mx_UserMenuButton {
     > span {
         width: 16px;
@@ -37,10 +69,10 @@ limitations under the License.
     }
 }
 
-.mx_UserMenuButton_contextMenu {
+.mx_UserMenu_contextMenu {
     width: 247px;
 
-    .mx_UserMenuButton_contextMenu_redRow {
+    .mx_UserMenu_contextMenu_redRow {
         .mx_AccessibleButton {
             color: $warning-color !important; // !important to override styles from context menu
         }
@@ -50,12 +82,12 @@ limitations under the License.
         }
     }
 
-    .mx_UserMenuButton_contextMenu_header {
+    .mx_UserMenu_contextMenu_header {
         // Create a flexbox to organize the header a bit easier
         display: flex;
         align-items: center;
 
-        .mx_UserMenuButton_contextMenu_name {
+        .mx_UserMenu_contextMenu_name {
             // Create another flexbox of columns to handle large user IDs
             display: flex;
             flex-direction: column;
@@ -72,19 +104,19 @@ limitations under the License.
                 white-space: nowrap;
             }
 
-            .mx_UserMenuButton_contextMenu_displayName {
+            .mx_UserMenu_contextMenu_displayName {
                 font-weight: bold;
                 font-size: $font-15px;
                 line-height: $font-20px;
             }
 
-            .mx_UserMenuButton_contextMenu_userId {
+            .mx_UserMenu_contextMenu_userId {
                 font-size: $font-15px;
                 line-height: $font-24px;
             }
         }
 
-        .mx_UserMenuButton_contextMenu_themeButton {
+        .mx_UserMenu_contextMenu_themeButton {
             min-width: 32px;
             max-width: 32px;
             width: 32px;
@@ -118,31 +150,31 @@ limitations under the License.
         }
     }
 
-    .mx_UserMenuButton_iconHome::before {
+    .mx_UserMenu_iconHome::before {
         mask-image: url('$(res)/img/feather-customised/home.svg');
     }
 
-    .mx_UserMenuButton_iconBell::before {
+    .mx_UserMenu_iconBell::before {
         mask-image: url('$(res)/img/feather-customised/notifications.svg');
     }
 
-    .mx_UserMenuButton_iconLock::before {
+    .mx_UserMenu_iconLock::before {
         mask-image: url('$(res)/img/feather-customised/lock.svg');
     }
 
-    .mx_UserMenuButton_iconSettings::before {
+    .mx_UserMenu_iconSettings::before {
         mask-image: url('$(res)/img/feather-customised/settings.svg');
     }
 
-    .mx_UserMenuButton_iconArchive::before {
+    .mx_UserMenu_iconArchive::before {
         mask-image: url('$(res)/img/feather-customised/archive.svg');
     }
 
-    .mx_UserMenuButton_iconMessage::before {
+    .mx_UserMenu_iconMessage::before {
         mask-image: url('$(res)/img/feather-customised/message-circle.svg');
     }
 
-    .mx_UserMenuButton_iconSignOut::before {
+    .mx_UserMenu_iconSignOut::before {
         mask-image: url('$(res)/img/feather-customised/sign-out.svg');
     }
 }

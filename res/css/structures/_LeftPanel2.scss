@@ -54,38 +54,12 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             display: flex;
             flex-direction: column;
 
-            // There's 2 rows when breadcrumbs are present: the top bit and the breadcrumbs
+            // This is basically just breadcrumbs. The row above that is handled by the UserMenu
             .mx_LeftPanel2_headerRow {
                 // Create yet another flexbox, this time within the row, to ensure items stay
                 // aligned correctly. This is also a row-based flexbox.
                 display: flex;
                 align-items: center;
-            }
-
-            .mx_LeftPanel2_userAvatarContainer {
-                position: relative; // to make default avatars work
-                margin-right: 8px;
-                height: 32px; // to remove the unknown 4px gap the browser puts below it
-
-                .mx_LeftPanel2_userAvatar {
-                    border-radius: 32px; // should match avatar size
-                }
-            }
-
-            .mx_LeftPanel2_userName {
-                font-weight: 600;
-                font-size: $font-15px;
-                line-height: $font-20px;
-                flex: 1;
-
-                // Ellipsize any text overflow
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-
-            .mx_LeftPanel2_headerButtons {
-                // No special styles: the rest of the layout happens to make it work.
             }
 
             .mx_LeftPanel2_breadcrumbsContainer {

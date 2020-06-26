@@ -22,18 +22,13 @@ import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList2 from "../views/rooms/RoomList2";
 import { Action } from "../../dispatcher/actions";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
-import BaseAvatar from '../views/avatars/BaseAvatar';
-import UserMenu from "./UserMenuButton";
+import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { throttle } from 'lodash';
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -76,31 +71,12 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // We watch the middle panel because we don't actually get resized, the middle panel does.
         // We listen to the noisy channel to avoid choppy reaction times.
         this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
-
-        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
     }
 
     public componentWillUnmount() {
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
-        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
     }
-
-    // TSLint wants this to be a member, but we don't want that.
-    // tslint:disable-next-line
-    private onRoomStateUpdate = throttle((ev: MatrixEvent) => {
-        const myUserId = MatrixClientPeg.get().getUserId();
-        if (ev.getType() === 'm.room.member' && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.onProfileUpdate();
-        }
-    }, 200, {trailing: true, leading: true});
-
-    private onProfileUpdate = async () => {
-        // the store triggered an update, so force a layout update. We don't
-        // have any state to store here for that to magically happen.
-        this.forceUpdate();
-    };
 
     private onSearch = (term: string): void => {
         this.setState({searchFilter: term});
@@ -170,7 +146,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // TODO: Presence
         // TODO: Breadcrumbs toggle
         // TODO: Menu button
-        const avatarSize = 32; // should match border-radius of the avatar
 
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
@@ -181,34 +156,9 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             );
         }
 
-        let name = <span className="mx_LeftPanel2_userName">{OwnProfileStore.instance.displayName}</span>;
-        let buttons = (
-            <span className="mx_LeftPanel2_headerButtons">
-                <UserMenu />
-            </span>
-        );
-        if (this.props.isMinimized) {
-            name = null;
-            buttons = null;
-        }
-
         return (
             <div className="mx_LeftPanel2_userHeader">
-                <div className="mx_LeftPanel2_headerRow">
-                    <span className="mx_LeftPanel2_userAvatarContainer">
-                        <BaseAvatar
-                            idName={MatrixClientPeg.get().getUserId()}
-                            name={OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId()}
-                            url={OwnProfileStore.instance.getHttpAvatarUrl(avatarSize)}
-                            width={avatarSize}
-                            height={avatarSize}
-                            resizeMethod="crop"
-                            className="mx_LeftPanel2_userAvatar"
-                        />
-                    </span>
-                    {name}
-                    {buttons}
-                </div>
+                <UserMenu isMinimized={this.props.isMinimized} />
                 {breadcrumbs}
             </div>
         );
