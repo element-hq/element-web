@@ -427,6 +427,7 @@
     "Sorry, your homeserver is too old to participate in this room.": "Sorry, your homeserver is too old to participate in this room.",
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
     "Failed to join room": "Failed to join room",
+    "New spinner design": "New spinner design",
     "Font scaling": "Font scaling",
     "Message Pinning": "Message Pinning",
     "Custom user status messages": "Custom user status messages",
