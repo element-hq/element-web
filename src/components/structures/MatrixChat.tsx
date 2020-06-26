@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import { createClient } from "matrix-js-sdk/src";
+import * as Matrix from "matrix-js-sdk";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -1618,9 +1618,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             let cli = MatrixClientPeg.get();
             if (!cli) {
                 const {hsUrl, isUrl} = this.props.serverConfig;
-                cli = createClient({
+                cli = Matrix.createClient({
                     baseUrl: hsUrl,
-                    // @ts-ignore - XXX: remove me when it doesn't break tests
                     idBaseUrl: isUrl,
                 });
             }
