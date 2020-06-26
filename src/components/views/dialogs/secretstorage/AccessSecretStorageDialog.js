@@ -111,12 +111,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
         let content;
         let title;
-        let headerImage;
+        let titleClass;
         if (hasPassphrase && !this.state.forceRecoveryKey) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             title = _t("Security Phrase");
-            headerImage = require("../../../../../res/img/feather-customised/secure-phrase.svg");
+            titleClass = ['mx_AccessSecretStorageDialog_titleWithIcon mx_AccessSecretStorageDialog_securePhraseTitle'];
 
             let keyStatus;
             if (this.state.keyMatches === false) {
@@ -166,7 +166,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             </div>;
         } else {
             title = _t("Security Key");
-            headerImage = require("../../../../../res/img/feather-customised/secure-backup.svg");
+            titleClass = ['mx_AccessSecretStorageDialog_titleWithIcon mx_AccessSecretStorageDialog_secureBackupTitle'];
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
             let keyStatus;
@@ -213,9 +213,9 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
         return (
             <BaseDialog className='mx_AccessSecretStorageDialog'
-                headerImage={headerImage}
                 onFinished={this.props.onFinished}
                 title={title}
+                titleClass={titleClass}
             >
             <div>
                 {content}
