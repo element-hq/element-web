@@ -110,7 +110,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
         // also clear the file upload control so that the user can upload the same file
         // the did before (otherwise the onchange wouldn't fire)
-        this._fileUpload.current.value = null;
+        if (this._fileUpload.current) this._fileUpload.current.value = null;
 
 
         // We don't use Field's validation here because a) we want it in a separate place rather
