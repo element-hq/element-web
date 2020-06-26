@@ -24,14 +24,12 @@ import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 
 const onAccept = () => {
-    console.log("DEBUG onAccept AnalyticsToast");
     dis.dispatch({
         action: 'accept_cookies',
     });
 };
 
 const onReject = () => {
-    console.log("DEBUG onReject AnalyticsToast");
     dis.dispatch({
         action: "reject_cookies",
     });

@@ -41,7 +41,10 @@ import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
-import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "./BasePlatform";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+
+const HOMESERVER_URL_KEY = "mx_hs_url";
+const ID_SERVER_URL_KEY = "mx_is_url";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -164,8 +167,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    const homeserver = localStorage.getItem(HOMESERVER_URL_KEY);
-    const identityServer = localStorage.getItem(ID_SERVER_URL_KEY);
+    const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
     if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);

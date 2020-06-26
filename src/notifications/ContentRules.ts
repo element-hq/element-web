@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,9 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import {PushRuleVectorState, State} from "./PushRuleVectorState";
+import {IExtendedPushRule, IPushRuleSet, IRuleSets} from "./types";
 
-import {PushRuleVectorState} from "./PushRuleVectorState";
+export interface IContentRules {
+    vectorState: State;
+    rules: IExtendedPushRule[];
+    externalRules: IExtendedPushRule[];
+}
+
+export const SCOPE = "global";
+export const KIND = "content";
 
 export class ContentRules {
     /**
@@ -31,7 +39,7 @@ export class ContentRules {
      *   externalRules: a list of other keyword rules, with states other than
      *      vectorState
      */
-    static parseContentRules(rulesets) {
+    static parseContentRules(rulesets: IRuleSets): IContentRules {
         // first categorise the keyword rules in terms of their actions
         const contentRules = this._categoriseContentRules(rulesets);
 
@@ -51,59 +59,72 @@ export class ContentRules {
 
         if (contentRules.loud.length) {
             return {
-                vectorState: PushRuleVectorState.LOUD,
+                vectorState: State.Loud,
                 rules: contentRules.loud,
-                externalRules: [].concat(contentRules.loud_but_disabled, contentRules.on, contentRules.on_but_disabled, contentRules.other),
+                externalRules: [
+                    ...contentRules.loud_but_disabled,
+                    ...contentRules.on,
+                    ...contentRules.on_but_disabled,
+                    ...contentRules.other,
+                ],
             };
         } else if (contentRules.loud_but_disabled.length) {
             return {
-                vectorState: PushRuleVectorState.OFF,
+                vectorState: State.Off,
                 rules: contentRules.loud_but_disabled,
-                externalRules: [].concat(contentRules.on, contentRules.on_but_disabled, contentRules.other),
+                externalRules: [...contentRules.on, ...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on.length) {
             return {
-                vectorState: PushRuleVectorState.ON,
+                vectorState: State.On,
                 rules: contentRules.on,
-                externalRules: [].concat(contentRules.on_but_disabled, contentRules.other),
+                externalRules: [...contentRules.on_but_disabled, ...contentRules.other],
             };
         } else if (contentRules.on_but_disabled.length) {
             return {
-                vectorState: PushRuleVectorState.OFF,
+                vectorState: State.Off,
                 rules: contentRules.on_but_disabled,
                 externalRules: contentRules.other,
             };
         } else {
             return {
-                vectorState: PushRuleVectorState.ON,
+                vectorState: State.On,
                 rules: [],
                 externalRules: contentRules.other,
             };
         }
     }
 
-    static _categoriseContentRules(rulesets) {
-        const contentRules = {on: [], on_but_disabled: [], loud: [], loud_but_disabled: [], other: []};
+    static _categoriseContentRules(rulesets: IRuleSets) {
+        const contentRules: Record<"on"|"on_but_disabled"|"loud"|"loud_but_disabled"|"other", IExtendedPushRule[]> = {
+            on: [],
+            on_but_disabled: [],
+            loud: [],
+            loud_but_disabled: [],
+            other: [],
+        };
+
         for (const kind in rulesets.global) {
             for (let i = 0; i < Object.keys(rulesets.global[kind]).length; ++i) {
                 const r = rulesets.global[kind][i];
 
                 // check it's not a default rule
-                if (r.rule_id[0] === '.' || kind !== 'content') {
+                if (r.rule_id[0] === '.' || kind !== "content") {
                     continue;
                 }
 
-                r.kind = kind; // is this needed? not sure
+                // this is needed as we are flattening an object of arrays into a single array
+                r.kind = kind;
 
                 switch (PushRuleVectorState.contentRuleVectorStateKind(r)) {
-                    case PushRuleVectorState.ON:
+                    case State.On:
                         if (r.enabled) {
                             contentRules.on.push(r);
                         } else {
                             contentRules.on_but_disabled.push(r);
                         }
                         break;
-                    case PushRuleVectorState.LOUD:
+                    case State.Loud:
                         if (r.enabled) {
                             contentRules.loud.push(r);
                         } else {

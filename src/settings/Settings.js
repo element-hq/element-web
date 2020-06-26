@@ -97,6 +97,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_new_spinner": {
+        isFeature: true,
+        displayName: _td("New spinner design"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_font_scaling": {
         isFeature: true,
         displayName: _td("Font scaling"),
@@ -192,12 +198,12 @@ export const SETTINGS = {
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
-        supportedLevels: ['account'],
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,
     },
     "useCompactLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use compact timeline layout'),
+        displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
     "showRedactions": {

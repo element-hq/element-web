@@ -70,6 +70,7 @@ interface IProps {
 interface IState {
     notificationState: ListNotificationState;
     menuDisplayed: boolean;
+    isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
@@ -82,6 +83,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
             menuDisplayed: false,
+            isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
@@ -111,13 +113,21 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
+    private onResizeStart = () => {
+        this.setState({isResizing: true});
+    };
+
+    private onResizeStop = () => {
+        this.setState({isResizing: false});
+    };
+
     private onShowAllClick = () => {
         this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
     private onShowLessClick = () => {
-        this.props.layout.visibleTiles = this.props.layout.minVisibleTiles;
+        this.props.layout.visibleTiles = this.props.layout.defaultVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -320,8 +330,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     <span>{this.props.label}</span>
                                 </AccessibleButton>
                                 {this.renderMenu()}
-                                {this.props.isMinimized ? null : addRoomButton}
                                 {this.props.isMinimized ? null : badgeContainer}
+                                {this.props.isMinimized ? null : addRoomButton}
                             </div>
                             {this.props.isMinimized ? badgeContainer : null}
                             {this.props.isMinimized ? addRoomButton : null}
@@ -356,6 +366,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const nVisible = Math.floor(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
 
+            const maxTilesFactored = layout.tilesWithResizerBoxFactor(tiles.length);
+            const showMoreBtnClasses = classNames({
+                'mx_RoomSublist2_showNButton': true,
+                'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
+            });
+
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
@@ -370,7 +386,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
-                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowAllClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
@@ -386,7 +402,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
-                    <div onClick={this.onShowLessClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowLessClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
@@ -432,6 +448,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
+                    onResizeStart={this.onResizeStart}
+                    onResizeStop={this.onResizeStop}
                 >
                     {visibleTiles}
                     {showNButton}
