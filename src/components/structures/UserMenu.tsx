@@ -282,7 +282,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     public render() {
-        console.log(this.state);
         const avatarSize = 32; // should match border-radius of the avatar
 
         let name = <span className="mx_UserMenu_userName">{OwnProfileStore.instance.displayName}</span>;
