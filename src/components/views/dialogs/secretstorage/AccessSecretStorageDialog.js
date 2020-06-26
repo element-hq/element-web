@@ -295,7 +295,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry_textInput">
                             <Field
                                 type="text"
-                                label={_t('Recovery Key')}
+                                label={_t('Security Key')}
                                 value={this.state.recoveryKey}
                                 onChange={this._onRecoveryKeyChange}
                             />
@@ -319,6 +319,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                         primaryButton={_t('Continue')}
                         onPrimaryButtonClick={this._onRecoveryKeyNext}
                         hasCancel={true}
+                        cancelButton={_t("Go Back")}
+                        cancelButtonClass='danger'
                         onCancel={this._onCancel}
                         focus={false}
                         primaryDisabled={!this.state.recoveryKeyValid}

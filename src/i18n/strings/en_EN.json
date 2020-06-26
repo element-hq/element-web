@@ -1796,7 +1796,6 @@
     "Enter your Security Phrase or <button>Use your Security Key</button> to continue.": "Enter your Security Phrase or <button>Use your Security Key</button> to continue.",
     "Security Key": "Security Key",
     "Use your Security Key to continue.": "Use your Security Key to continue.",
-    "Recovery Key": "Recovery Key",
     "Restoring keys from backup": "Restoring keys from backup",
     "Fetching keys from server...": "Fetching keys from server...",
     "%(completed)s of %(total)s keys restored": "%(completed)s of %(total)s keys restored",
