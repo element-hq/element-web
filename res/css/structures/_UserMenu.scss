@@ -15,39 +15,7 @@ limitations under the License.
 */
 
 .mx_UserMenu {
-    // Create a row-based flexbox to ensure items stay aligned correctly.
-    display: flex;
-    align-items: center;
-
-    .mx_UserMenu_userAvatarContainer {
-        position: relative; // to make default avatars work
-        margin-right: 8px;
-        height: 32px; // to remove the unknown 4px gap the browser puts below it
-
-        .mx_UserMenu_userAvatar {
-            border-radius: 32px; // should match avatar size
-        }
-    }
-
-    .mx_UserMenu_userName {
-        font-weight: 600;
-        font-size: $font-15px;
-        line-height: $font-20px;
-        flex: 1;
-
-        // Ellipsize any text overflow
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
     .mx_UserMenu_headerButtons {
-        // No special styles: the rest of the layout happens to make it work.
-    }
-}
-
-.mx_UserMenuButton {
-    > span {
         width: 16px;
         height: 16px;
         position: relative;
@@ -65,6 +33,50 @@ limitations under the License.
             mask-repeat: no-repeat;
             background: $primary-fg-color;
             mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
+        }
+    }
+
+    .mx_UserMenu_row {
+        // Create a row-based flexbox to ensure items stay aligned correctly.
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_userAvatarContainer {
+            position: relative; // to make default avatars work
+            margin-right: 8px;
+            height: 32px; // to remove the unknown 4px gap the browser puts below it
+
+            .mx_UserMenu_userAvatar {
+                border-radius: 32px; // should match avatar size
+            }
+        }
+
+        .mx_UserMenu_userName {
+            font-weight: 600;
+            font-size: $font-15px;
+            line-height: $font-20px;
+            flex: 1;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .mx_UserMenu_headerButtons {
+            // No special styles: the rest of the layout happens to make it work.
+        }
+    }
+
+    &.mx_UserMenu_minimized {
+        .mx_UserMenu_userHeader {
+            .mx_UserMenu_row {
+                justify-content: center;
+            }
+
+            .mx_UserMenu_userAvatarContainer {
+                margin-right: 0;
+            }
         }
     }
 }

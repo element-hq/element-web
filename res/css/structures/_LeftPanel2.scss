@@ -132,16 +132,6 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         .mx_LeftPanel2_roomListContainer {
             width: 68px;
 
-            .mx_LeftPanel2_userHeader {
-                .mx_LeftPanel2_headerRow {
-                    justify-content: center;
-                }
-
-                .mx_LeftPanel2_userAvatarContainer {
-                    margin-right: 0;
-                }
-            }
-
             .mx_LeftPanel2_filterContainer {
                 // Organize the flexbox into a centered column layout
                 flex-direction: column;
