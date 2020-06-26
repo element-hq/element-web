@@ -33,6 +33,7 @@ import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
+import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 
 interface IProps {
 }
@@ -116,8 +117,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         };
     }
 
-    private onThemeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const newTheme = e.target.value;
+    private onThemeChange = (newTheme: string): void => {
         if (this.state.theme === newTheme) return;
 
         // doing getValue in the .catch will still return the value we failed to set,
@@ -277,19 +277,18 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <div className="mx_ThemeSelectors" onChange={this.onThemeChange}>
-                    {orderedThemes.map(theme => {
-                        return <StyledRadioButton
-                            key={theme.id}
-                            value={theme.id}
-                            name="theme"
-                            disabled={this.state.useSystemTheme}
-                            checked={!this.state.useSystemTheme && theme.id === this.state.theme}
-                            className={"mx_ThemeSelector_" + theme.id}
-                        >
-                            {theme.name}
-                        </StyledRadioButton>;
-                    })}
+                <div className="mx_ThemeSelectors">
+                    <StyledRadioGroup
+                        name="theme"
+                        definitions={orderedThemes.map(t => ({
+                            value: t.id,
+                            label: t.name,
+                            disabled: this.state.useSystemTheme,
+                            className: "mx_ThemeSelector_" + t.id,
+                        }))}
+                        onChange={this.onThemeChange}
+                        value={this.state.useSystemTheme ? undefined : this.state.theme}
+                    />
                 </div>
                 {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} useCheckbox={true} />

@@ -43,7 +43,7 @@ import { TagID } from "../../../stores/room-list/models";
  *******************************************************************/
 
 const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
-const RESIZE_HANDLE_HEIGHT = 3; // As defined by CSS
+const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 
@@ -70,6 +70,7 @@ interface IProps {
 interface IState {
     notificationState: ListNotificationState;
     menuDisplayed: boolean;
+    isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
@@ -82,6 +83,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
             menuDisplayed: false,
+            isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
@@ -109,6 +111,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         const tileDiff = this.props.layout.pixelsToTiles(Math.abs(e.movementY)) * direction;
         this.props.layout.visibleTiles += tileDiff;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onResizeStart = () => {
+        this.setState({isResizing: true});
+    };
+
+    private onResizeStop = () => {
+        this.setState({isResizing: false});
     };
 
     private onShowAllClick = () => {
@@ -359,7 +369,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const maxTilesFactored = layout.tilesWithResizerBoxFactor(tiles.length);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
-                'mx_RoomSublist2_isCutting': layout.visibleTiles < maxTilesFactored,
+                'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
             });
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -438,6 +448,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
+                    onResizeStart={this.onResizeStart}
+                    onResizeStop={this.onResizeStop}
                 >
                     {visibleTiles}
                     {showNButton}
