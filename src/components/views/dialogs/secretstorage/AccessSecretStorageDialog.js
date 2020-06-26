@@ -15,12 +15,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { debounce } from 'lodash';
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from "prop-types";
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
+import Field from '../../elements/Field';
+import AccessibleButton from '../../elements/AccessibleButton';
+import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 
 import { _t } from '../../../../languageHandler';
+
+// Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
+// so this should be plenty and allow for people putting extra whitespace in the file because
+// maybe that's a thing people would do?
+const KEY_FILE_MAX_SIZE = 128;
+
+// Don't shout at the user that their key is invalid every time they type a key: wait a short time
+const VALIDATION_THROTTLE_MS = 200;
 
 /*
  * Access Secure Secret Storage by requesting the user's passphrase.
@@ -35,9 +48,14 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
 
     constructor(props) {
         super(props);
+
+        this._fileUpload = React.createRef();
+
         this.state = {
             recoveryKey: "",
-            recoveryKeyValid: false,
+            recoveryKeyValid: null,
+            recoveryKeyCorrect: null,
+            recoveryKeyFileError: null,
             forceRecoveryKey: false,
             passPhrase: '',
             keyMatches: null,
@@ -54,12 +72,89 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _validateRecoveryKeyOnChange = debounce(() => {
+        this._validateRecoveryKey();
+    }, VALIDATION_THROTTLE_MS);
+
+    async _validateRecoveryKey() {
+        if (this.state.recoveryKey === '') {
+            this.setState({
+                recoveryKeyValid: null,
+                recoveryKeyCorrect: null,
+            });
+            return;
+        }
+
+        try {
+            const decodedKey = decodeRecoveryKey(this.state.recoveryKey);
+            const correct = await MatrixClientPeg.get().checkSecretStorageKey(
+                decodedKey, this.props.keyInfo,
+            );
+            this.setState({
+                recoveryKeyValid: true,
+                recoveryKeyCorrect: correct,
+            });
+        } catch (e) {
+            this.setState({
+                recoveryKeyValid: false,
+                recoveryKeyCorrect: false,
+            });
+        }
+    }
+
     _onRecoveryKeyChange = (e) => {
         this.setState({
             recoveryKey: e.target.value,
-            recoveryKeyValid: MatrixClientPeg.get().isValidRecoveryKey(e.target.value),
-            keyMatches: null,
+            recoveryKeyFileError: null,
         });
+
+        // also clear the file upload control so that the user can upload the same file
+        // the did before (otherwise the onchange wouldn't fire)
+        this._fileUpload.current.value = null;
+
+
+        // We don't use Field's validation here because a) we want it in a separate place rather
+        // than in a tooltip and b) we want it to display feedback based on the uploaded file
+        // as well as the text box. Ideally we would refactor Field's validation logic so we could
+        // re-use some of it.
+        this._validateRecoveryKeyOnChange();
+    }
+
+    _onRecoveryKeyFileChange = async e => {
+        if (e.target.files.length === 0) return;
+
+        const f = e.target.files[0];
+
+        if (f.size > KEY_FILE_MAX_SIZE) {
+            this.setState({
+                recoveryKeyFileError: true,
+                recoveryKeyCorrect: false,
+                recoveryKeyValid: false,
+            });
+        } else {
+            const contents = await f.text();
+            // test it's within the base58 alphabet. We could be more strict here, eg. require the
+            // right number of characters, but it's really just to make sure that what we're reading is
+            // text because we'll put it in the text field.
+            if (/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz\s]+$/.test(contents)) {
+                this.setState({
+                    recoveryKeyFileError: null,
+                    recoveryKey: contents.trim(),
+                });
+                this._validateRecoveryKey();
+            } else {
+                this.setState({
+                    recoveryKeyFileError: true,
+                    recoveryKeyCorrect: false,
+                    recoveryKeyValid: false,
+                    recoveryKey: '',
+                });
+            }
+        }
+    }
+
+    _onRecoveryKeyFileUploadClick = () => {
+        this._fileUpload.current.click();
     }
 
     _onPassPhraseNext = async (e) => {
@@ -97,6 +192,20 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             passPhrase: e.target.value,
             keyMatches: null,
         });
+    }
+
+    getKeyValidationText() {
+        if (this.state.recoveryKeyFileError) {
+            return _t("Wrong file type");
+        } else if (this.state.recoveryKeyCorrect) {
+            return _t("Looks good!");
+        } else if (this.state.recoveryKeyValid) {
+            return _t("Wrong Recovery Key");
+        } else if (this.state.recoveryKeyValid === null) {
+            return '';
+        } else {
+            return _t("Invalid Recovery Key");
+        }
     }
 
     render() {
@@ -169,36 +278,43 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             titleClass = ['mx_AccessSecretStorageDialog_titleWithIcon mx_AccessSecretStorageDialog_secureBackupTitle'];
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
-            let keyStatus;
-            if (this.state.recoveryKey.length === 0) {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus" />;
-            } else if (this.state.keyMatches === false) {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
-                    {"\uD83D\uDC4E "}{_t(
-                        "Unable to access secret storage. " +
-                        "Please verify that you entered the correct recovery key.",
-                    )}
-                </div>;
-            } else if (this.state.recoveryKeyValid) {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
-                    {"\uD83D\uDC4D "}{_t("This looks like a valid recovery key!")}
-                </div>;
-            } else {
-                keyStatus = <div className="mx_AccessSecretStorageDialog_keyStatus">
-                    {"\uD83D\uDC4E "}{_t("Not a valid recovery key")}
-                </div>;
-            }
+            const feedbackClasses = classNames({
+                'mx_AccessSecretStorageDialog_recoveryKeyFeedback': true,
+                'mx_AccessSecretStorageDialog_recoveryKeyFeedback_valid': this.state.recoveryKeyCorrect === true,
+                'mx_AccessSecretStorageDialog_recoveryKeyFeedback_invalid': this.state.recoveryKeyCorrect === false,
+            });
+            const recoveryKeyFeedback = <div className={feedbackClasses}>
+                {this.getKeyValidationText()}
+            </div>;
 
             content = <div>
                 <p>{_t("Use your Security Key to continue.")}</p>
 
                 <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onRecoveryKeyNext}>
-                    <input className="mx_AccessSecretStorageDialog_recoveryKeyInput"
-                        onChange={this._onRecoveryKeyChange}
-                        value={this.state.recoveryKey}
-                        autoFocus={true}
-                    />
-                    {keyStatus}
+                    <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry">
+                        <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry_textInput">
+                            <Field
+                                type="text"
+                                label={_t('Recovery Key')}
+                                value={this.state.recoveryKey}
+                                onChange={this._onRecoveryKeyChange}
+                            />
+                        </div>
+                        <span className="mx_AccessSecretStorageDialog_recoveryKeyEntry_entryControlSeparatorText">
+                            {_t("or")}
+                        </span>
+                        <div>
+                            <input type="file"
+                                className="mx_AccessSecretStorageDialog_recoveryKeyEntry_fileInput"
+                                ref={this._fileUpload}
+                                onChange={this._onRecoveryKeyFileChange}
+                            />
+                            <AccessibleButton kind="primary" onClick={this._onRecoveryKeyFileUploadClick}>
+                                {_t("Upload")}
+                            </AccessibleButton>
+                        </div>
+                    </div>
+                    {recoveryKeyFeedback}
                     <DialogButtons
                         primaryButton={_t('Continue')}
                         onPrimaryButtonClick={this._onRecoveryKeyNext}
