@@ -2537,5 +2537,6 @@
     "Modern": "Moderne",
     "Use a system font": "Utiliser une police du système",
     "System font name": "Nom de la police du système",
-    "The authenticity of this encrypted message can't be guaranteed on this device.": "L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil."
+    "The authenticity of this encrypted message can't be guaranteed on this device.": "L’authenticité de ce message chiffré ne peut pas être garantie sur cet appareil.",
+    "Use a more compact ‘Modern’ layout": "Utiliser une mise en page « moderne » plus compacte"
 }
