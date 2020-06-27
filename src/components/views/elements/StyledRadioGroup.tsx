@@ -41,9 +41,8 @@ function StyledRadioGroup<T extends string>({name, definitions, value, className
     };
 
     return <React.Fragment>
-        {definitions.map(d => <React.Fragment>
+        {definitions.map(d => <React.Fragment key={d.value}>
             <StyledRadioButton
-                key={d.value}
                 className={classNames(className, d.className)}
                 onChange={_onChange}
                 checked={d.value === value}
