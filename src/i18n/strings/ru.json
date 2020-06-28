@@ -2154,5 +2154,7 @@
     "Cancelled signature upload": "Отправка отпечатка отменена",
     "Unable to upload": "Невозможно отправить",
     "Signature upload success": "Отпечаток успешно отправлен",
-    "Signature upload failed": "Сбой отправки отпечатка"
+    "Signature upload failed": "Сбой отправки отпечатка",
+    "Room name or address": "Имя или адрес комнаты",
+    "Unrecognised room address:": "Не удалось найти адрес комнаты:"
 }
