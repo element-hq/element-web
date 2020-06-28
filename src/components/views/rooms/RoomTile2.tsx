@@ -135,11 +135,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (tagId === DefaultTagID.DM) {
-            // TODO: DM Flagging
-        } else {
-            // TODO: XOR favourites and low priority
-        }
+        // TODO: Support tagging: https://github.com/vector-im/riot-web/issues/14211
+        // TODO: XOR favourites and low priority: https://github.com/vector-im/riot-web/issues/14210
     };
 
     private onLeaveRoomClick = (ev: ButtonEvent) => {
@@ -194,12 +191,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                                     <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.LowPriority)}>
                                         <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconArrowDown" />
                                         <span>{_t("Low Priority")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.DM)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconUser" />
-                                        <span>{_t("Direct Chat")}</span>
                                     </AccessibleButton>
                                 </li>
                                 <li>
