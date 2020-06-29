@@ -36,6 +36,7 @@ import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomTileIcon from "./RoomTileIcon";
+import { getRoomNotifsState, ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -61,6 +62,7 @@ interface IState {
     hover: boolean;
     notificationState: INotificationState;
     selected: boolean;
+    notificationsMenuDisplayed: boolean;
     generalMenuDisplayed: boolean;
 }
 
@@ -72,6 +74,7 @@ export const contextMenuBelow = (elementRect) => {
 };
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
+    private notificationsMenuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
     private generalMenuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
 
     // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
@@ -83,6 +86,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             hover: false,
             notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
+            notificationsMenuDisplayed: false,
             generalMenuDisplayed: false,
         };
 
@@ -115,6 +119,18 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     private onActiveRoomUpdate = (isActive: boolean) => {
         this.setState({selected: isActive});
+    };
+
+    private onNotificationsMenuOpenClick = (ev: InputEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({notificationsMenuDisplayed: true});
+    };
+
+    private onCloseNotificationsMenu = (ev: InputEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({notificationsMenuDisplayed: false});
     };
 
     private onGeneralMenuOpenClick = (ev: InputEvent) => {
@@ -159,12 +175,78 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false}); // hide the menu
     };
 
+    private renderNotificationsMenu(): React.ReactElement {
+        if (this.props.isMinimized) return null; // no menu when minimized
+
+        let contextMenu = null;
+        if (this.state.notificationsMenuDisplayed) {
+            const elementRect = this.notificationsMenuButtonRef.current.getBoundingClientRect();
+            contextMenu = (
+                <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseNotificationsMenu}>
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
+                        <div className="mx_IconizedContextMenu_optionList">
+                            <ul>
+                                <li>
+                                    <AccessibleButton onClick={console.log}>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBell" />
+                                        <span>{_t("All messages")}</span>
+                                    </AccessibleButton>
+                                </li>
+                                <li>
+                                    <AccessibleButton onClick={console.log}>
+                                        <span className="mx_IconizedContextMenu_icon" />
+                                        <span>{_t("Default")}</span>
+                                    </AccessibleButton>
+                                </li>
+                                <li>
+                                    <AccessibleButton onClick={console.log}>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellDot" />
+                                        <span>{_t("Mentions & Keywords")}</span>
+                                    </AccessibleButton>
+                                </li>
+                                <li>
+                                    <AccessibleButton onClick={console.log}>
+                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellCrossed" />
+                                        <span>{_t("None")}</span>
+                                    </AccessibleButton>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ContextMenu>
+            );
+        }
+
+        const state = getRoomNotifsState(this.props.room.roomId);
+        const classes = classNames("mx_RoomTile2_notificationsButton", {
+            // Show bell icon for the default case too.
+            mx_RoomTile2_iconBell: state === ALL_MESSAGES_LOUD || state === ALL_MESSAGES,
+            mx_RoomTile2_iconBellDot: state === MENTIONS_ONLY,
+            mx_RoomTile2_iconBellCrossed: state === MUTE,
+            // XXX: RoomNotifs assumes ALL_MESSAGES is default, this is wrong,
+            // but cannot be fixed until FTUE Notifications lands.
+            mx_RoomTile2_notificationsButton_show: state !== ALL_MESSAGES,
+        });
+
+        return (
+            <React.Fragment>
+                <ContextMenuButton
+                    className={classes}
+                    onClick={this.onNotificationsMenuOpenClick}
+                    inputRef={this.notificationsMenuButtonRef}
+                    label={_t("Notification options")}
+                    isExpanded={this.state.notificationsMenuDisplayed}
+                />
+                {contextMenu}
+            </React.Fragment>
+        );
+    }
+
     private renderGeneralMenu(): React.ReactElement {
         if (this.props.isMinimized) return null; // no menu when minimized
 
         let contextMenu = null;
         if (this.state.generalMenuDisplayed) {
-            // The context menu appears within the list, so use the room tile as a reference point
             const elementRect = this.generalMenuButtonRef.current.getBoundingClientRect();
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseGeneralMenu}>
@@ -227,7 +309,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const classes = classNames({
             'mx_RoomTile2': true,
             'mx_RoomTile2_selected': this.state.selected,
-            'mx_RoomTile2_hasMenuOpen': this.state.generalMenuDisplayed,
+            'mx_RoomTile2_hasMenuOpen': this.state.generalMenuDisplayed || this.state.notificationsMenuDisplayed,
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
@@ -298,6 +380,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             <div className="mx_RoomTile2_badgeContainer">
                                 {badge}
                             </div>
+                            {this.renderNotificationsMenu()}
                             {this.renderGeneralMenu()}
                         </AccessibleButton>
                     }
