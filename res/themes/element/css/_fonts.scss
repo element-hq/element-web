@@ -14,23 +14,73 @@
 
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.
  */
+
 @font-face {
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 400;
-    src: url('$(res)/fonts/Nunito/Nunito-Regular.ttf') format('truetype');
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-Regular.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-Regular.woff?v=3.13") format("woff");
 }
 @font-face {
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 600;
-    src: url('$(res)/fonts/Nunito/Nunito-SemiBold.ttf') format('truetype');
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-Italic.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-Italic.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-Medium.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-Medium.woff?v=3.13") format("woff");
 }
 @font-face {
-    font-family: 'Nunito';
-    font-style: normal;
-    font-weight: 700;
-    src: url('$(res)/fonts/Nunito/Nunito-Bold.ttf') format('truetype');
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-MediumItalic.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-MediumItalic.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-SemiBold.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-SemiBold.woff?v=3.13") format("woff");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-SemiBoldItalic.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-SemiBoldItalic.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-Bold.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-Bold.woff?v=3.13") format("woff");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style:  italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("$(res)/fonts/Inter/Inter-BoldItalic.woff2?v=3.13") format("woff2"),
+       url("$(res)/fonts/Inter/Inter-BoldItalic.woff?v=3.13") format("woff");
 }
 
 /* latin-ext */

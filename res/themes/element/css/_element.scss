@@ -8,7 +8,7 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+$font-family: Inter, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
 
 $monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
 
