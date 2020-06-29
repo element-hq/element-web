@@ -28,6 +28,14 @@ import {
     PHASE_FINISHED,
 } from '../../../stores/SetupEncryptionStore';
 
+function keyHasPassphrase(keyInfo) {
+    return (
+        keyInfo.passphrase &&
+        keyInfo.passphrase.salt &&
+        keyInfo.passphrase.iterations
+    );
+}
+
 export default class SetupEncryptionBody extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
@@ -108,6 +116,21 @@ export default class SetupEncryptionBody extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
+            const store = SetupEncryptionStore.sharedInstance();
+            let recoveryKeyPrompt;
+            if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
+                recoveryKeyPrompt = _t("Use Recovery Key or Passphrase");
+            } else if (store.keyInfo) {
+                recoveryKeyPrompt = _t("Use Recovery Key");
+            }
+
+            let useRecoveryKeyButton;
+            if (recoveryKeyPrompt) {
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
+                    {recoveryKeyPrompt}
+                </AccessibleButton>;
+            }
+
             return (
                 <div>
                     <p>{_t(
@@ -131,9 +154,7 @@ export default class SetupEncryptionBody extends React.Component {
                     </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
-                            {_t("Use Recovery Passphrase or Key")}
-                        </AccessibleButton>
+                        {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
                         </AccessibleButton>
