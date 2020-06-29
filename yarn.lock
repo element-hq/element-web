@@ -6975,7 +6975,7 @@ mathml-tag-names@^2.1.1:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "7.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f683f4544aa5da150836b01c754062809119fa97"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68c7273f56d5e88b9af783c396963d03e2de4a92"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -7026,7 +7026,7 @@ matrix-react-sdk@2.8.1:
     is-ip "^2.0.0"
     linkifyjs "^2.1.6"
     lodash "^4.17.14"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "7.0.0"
     minimist "^1.2.0"
     pako "^1.0.5"
     parse5 "^5.1.1"
