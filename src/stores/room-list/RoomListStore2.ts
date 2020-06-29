@@ -72,7 +72,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return this._matrixClient;
     }
 
-    // TODO: Remove enabled flag when the old RoomListStore goes away
+    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14231
     private checkEnabled() {
         this.enabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
         if (this.enabled) {
@@ -89,7 +89,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onRVSUpdate = () => {
-        if (!this.enabled) return; // TODO: Remove enabled flag when RoomListStore2 takes over
+        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = RoomViewStore.getRoomId();
@@ -99,6 +99,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const activeRoom = this.matrixClient.getRoom(activeRoomId);
             if (!activeRoom) throw new Error(`${activeRoomId} is current in RVS but missing from client`);
             if (activeRoom !== this.algorithm.stickyRoom) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`Changing sticky room to ${activeRoomId}`);
                 this.algorithm.stickyRoom = activeRoom;
             }
@@ -112,7 +113,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
-            // TODO: Remove this once the RoomListStore becomes default
+            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
             this.checkEnabled();
             if (!this.enabled) return;
 
@@ -163,12 +164,14 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                     console.warn(`Own read receipt was in unknown room ${room.roomId}`);
                     return;
                 }
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Got own read receipt in ${room.roomId}`);
                 await this.handleRoomUpdate(room, RoomUpdateCause.ReadReceipt);
                 return;
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
             const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Got tag change in ${roomPayload.room.roomId}`);
             await this.handleRoomUpdate(roomPayload.room, RoomUpdateCause.PossibleTagChange);
         } else if (payload.action === 'MatrixActions.Room.timeline') {
@@ -180,10 +183,12 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`[RoomListDebug] Got tombstone event - regenerating room list`);
-                    // TODO: We could probably be smarter about this
+                    // TODO: We could probably be smarter about this: https://github.com/vector-im/riot-web/issues/14035
                     await this.regenerateAllLists();
                     return; // don't pass the update down - we will have already handled it in the regen
                 }
@@ -208,13 +213,15 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.warn(`Event ${eventPayload.event.getId()} was decrypted in an unknown room ${roomId}`);
                 return;
             }
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
-            // TODO: Check that e2e rooms are calculated correctly on initial load.
+            // TODO: Verify that e2e rooms are handled on init: https://github.com/vector-im/riot-web/issues/14238
             // It seems like when viewing the room the timeline is decrypted, rather than at startup. This could
             // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Received updated DM map`);
             const dmMap = eventPayload.event.getContent();
             for (const userId of Object.keys(dmMap)) {
@@ -236,6 +243,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
             const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
             if (membershipPayload.oldMembership !== "join" && membershipPayload.membership === "join") {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
                 await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
                 return;
@@ -243,6 +251,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
             // If it's not a join, it's transitioning into a different list (possibly historical)
             if (membershipPayload.oldMembership !== membershipPayload.membership) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
                 await this.algorithm.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
                 return;
@@ -253,6 +262,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
             this.emit(LISTS_UPDATE_EVENT, this);
         }
@@ -260,6 +270,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
         await this.algorithm.setTagSorting(tagId, sort);
+        // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_tagSort_${tagId}`, sort);
     }
 
@@ -269,11 +280,13 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
     // noinspection JSMethodCanBeStatic
     private getStoredTagSorting(tagId: TagID): SortAlgorithm {
+        // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         return <SortAlgorithm>localStorage.getItem(`mx_tagSort_${tagId}`);
     }
 
     public async setListOrder(tagId: TagID, order: ListAlgorithm) {
         await this.algorithm.setListOrdering(tagId, order);
+        // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_listOrder_${tagId}`, order);
     }
 
@@ -283,6 +296,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
     // noinspection JSMethodCanBeStatic
     private getStoredListOrder(tagId: TagID): ListAlgorithm {
+        // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         return <ListAlgorithm>localStorage.getItem(`mx_listOrder_${tagId}`);
     }
 
@@ -319,6 +333,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onAlgorithmListUpdated = () => {
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log("Underlying algorithm has triggered a list update - refiring");
         this.emit(LISTS_UPDATE_EVENT, this);
     };
@@ -334,8 +349,10 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         }
 
         if (this.state.tagsEnabled) {
-            // TODO: Find a more reliable way to get tags (this doesn't work)
+            // TODO: Fix custom tags: https://github.com/vector-im/riot-web/issues/14091
             const roomTags = TagOrderStore.getOrderedTags() || [];
+
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log("rtags", roomTags);
         }
 
@@ -348,6 +365,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public addFilter(filter: IFilterCondition): void {
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log("Adding filter condition:", filter);
         this.filterConditions.push(filter);
         if (this.algorithm) {
@@ -356,6 +374,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public removeFilter(filter: IFilterCondition): void {
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log("Removing filter condition:", filter);
         const idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {

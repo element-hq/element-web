@@ -23,7 +23,10 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
+
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -86,7 +89,9 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
     };
 
     public render(): React.ReactElement {
-        // TODO: Decorate crumbs with icons
+        // TODO: Decorate crumbs with icons: https://github.com/vector-im/riot-web/issues/14040
+        // TODO: Scrolling: https://github.com/vector-im/riot-web/issues/14040
+        // TODO: Tooltips: https://github.com/vector-im/riot-web/issues/14040
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
             return (
                 <AccessibleButton

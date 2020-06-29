@@ -30,6 +30,9 @@ import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+
 /*******************************************************************
  *   CAUTION                                                       *
  *******************************************************************
@@ -120,6 +123,8 @@ const TAG_AESTHETICS: {
         isInvite: false,
         defaultHidden: false,
     },
+
+    // TODO: Replace with archived view: https://github.com/vector-im/riot-web/issues/14038
     [DefaultTagID.Archived]: {
         sectionLabel: _td("Historical"),
         isInvite: false,
@@ -174,11 +179,11 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         for (const orderedTagId of TAG_ORDER) {
             if (COMMUNITY_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate community invites if we have the chance
-                // TODO
+                // TODO: Community invites: https://github.com/vector-im/riot-web/issues/14179
             }
             if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate custom tags if needed
-                // TODO
+                // TODO: Custom tags: https://github.com/vector-im/riot-web/issues/14091
             }
 
             const orderedRooms = this.state.sublists[orderedTagId] || [];

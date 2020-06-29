@@ -25,6 +25,8 @@ import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+
 /*******************************************************************
  *   CAUTION                                                       *
  *******************************************************************

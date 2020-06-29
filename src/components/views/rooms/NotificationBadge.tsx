@@ -35,7 +35,8 @@ export const NOTIFICATION_STATE_UPDATE = "update";
 export enum NotificationColor {
     // Inverted (None -> Red) because we do integer comparisons on this
     None, // nothing special
-    Bold, // no badge, show as unread // TODO: This goes away with new notification structures
+    // TODO: Remove bold with notifications: https://github.com/vector-im/riot-web/issues/14227
+    Bold, // no badge, show as unread
     Grey, // unread notified messages
     Red,  // unread pings
 }
@@ -140,6 +141,8 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
         );
     }
 }
+
+// TODO: Clean up these state classes: https://github.com/vector-im/riot-web/issues/14153
 
 export class StaticNotificationState extends EventEmitter implements INotificationState {
     constructor(public symbol: string, public count: number, public color: NotificationColor) {
