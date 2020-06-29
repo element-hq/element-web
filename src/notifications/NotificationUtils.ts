@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
+import {Action, Actions} from "./types";
+
+interface IEncodedActions {
+    notify: boolean;
+    sound?: string;
+    highlight?: boolean;
+}
 
 export class NotificationUtils {
     // Encodes a dictionary of {
@@ -24,12 +30,12 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // to a list of push actions.
-    static encodeActions(action) {
+    static encodeActions(action: IEncodedActions) {
         const notify = action.notify;
         const sound = action.sound;
         const highlight = action.highlight;
         if (notify) {
-            const actions = ["notify"];
+            const actions: Action[] = [Actions.Notify];
             if (sound) {
                 actions.push({"set_tweak": "sound", "value": sound});
             }
@@ -40,7 +46,7 @@ export class NotificationUtils {
             }
             return actions;
         } else {
-            return ["dont_notify"];
+            return [Actions.DontNotify];
         }
     }
 
@@ -50,18 +56,18 @@ export class NotificationUtils {
     //   "highlight: true/false,
     // }
     // If the actions couldn't be decoded then returns null.
-    static decodeActions(actions) {
+    static decodeActions(actions: Action[]): IEncodedActions {
         let notify = false;
         let sound = null;
         let highlight = false;
 
         for (let i = 0; i < actions.length; ++i) {
             const action = actions[i];
-            if (action === "notify") {
+            if (action === Actions.Notify) {
                 notify = true;
-            } else if (action === "dont_notify") {
+            } else if (action === Actions.DontNotify) {
                 notify = false;
-            } else if (typeof action === 'object') {
+            } else if (typeof action === "object") {
                 if (action.set_tweak === "sound") {
                     sound = action.value;
                 } else if (action.set_tweak === "highlight") {
@@ -81,7 +87,7 @@ export class NotificationUtils {
             highlight = true;
         }
 
-        const result = {notify: notify, highlight: highlight};
+        const result: IEncodedActions = { notify, highlight };
         if (sound !== null) {
             result.sound = sound;
         }

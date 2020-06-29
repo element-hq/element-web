@@ -18,6 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
@@ -45,7 +46,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         newClient.on("accountData", this._onAccountData);
     }
 
-    _onAccountData(event) {
+    _onAccountData(event, prevEvent) {
         if (event.getType() === "org.matrix.preview_urls") {
             let val = event.getContent()['disable'];
             if (typeof(val) !== "boolean") {
@@ -56,8 +57,10 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
             this._watchers.notifyUpdate("urlPreviewsEnabled", null, SettingLevel.ACCOUNT, val);
         } else if (event.getType() === "im.vector.web.settings") {
-            // We can't really discern what changed, so trigger updates for everything
-            for (const settingName of Object.keys(event.getContent())) {
+            // Figure out what changed and fire those updates
+            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const changedSettings = objectKeyChanges(prevContent, event.getContent());
+            for (const settingName of changedSettings) {
                 const val = event.getContent()[settingName];
                 this._watchers.notifyUpdate(settingName, null, SettingLevel.ACCOUNT, val);
             }
@@ -159,7 +162,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         const event = cli.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 
     _notifyBreadcrumbsUpdate(event) {

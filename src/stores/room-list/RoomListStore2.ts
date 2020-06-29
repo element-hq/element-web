@@ -158,12 +158,12 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // First see if the receipt event is for our own user. If it was, trigger
             // a room update (we probably read the room on a different device).
             if (readReceiptChangeIsFor(payload.event, this.matrixClient)) {
-                console.log(`[RoomListDebug] Got own read receipt in ${payload.event.roomId}`);
-                const room = this.matrixClient.getRoom(payload.event.roomId);
+                const room = payload.room;
                 if (!room) {
-                    console.warn(`Own read receipt was in unknown room ${payload.event.roomId}`);
+                    console.warn(`Own read receipt was in unknown room ${room.roomId}`);
                     return;
                 }
+                console.log(`[RoomListDebug] Got own read receipt in ${room.roomId}`);
                 await this.handleRoomUpdate(room, RoomUpdateCause.ReadReceipt);
                 return;
             }

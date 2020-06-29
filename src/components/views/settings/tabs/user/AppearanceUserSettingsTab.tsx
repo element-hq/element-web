@@ -21,7 +21,6 @@ import {_t} from "../../../../../languageHandler";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
-import Field from "../../../elements/Field";
 import Slider from "../../../elements/Slider";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
@@ -32,7 +31,9 @@ import { IValidationResult, IFieldState } from '../../../elements/Validation';
 import StyledRadioButton from '../../../elements/StyledRadioButton';
 import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
+import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
+import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 
 interface IProps {
 }
@@ -55,6 +56,9 @@ interface IState extends IThemeState {
     customThemeUrl: string;
     customThemeMessage: CustomThemeMessage;
     useCustomFontSize: boolean;
+    useSystemFont: boolean;
+    systemFont: string;
+    showAdvanced: boolean;
     useIRCLayout: boolean;
 }
 
@@ -73,6 +77,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             customThemeUrl: "",
             customThemeMessage: {isError: false, text: ""},
             useCustomFontSize: SettingsStore.getValue("useCustomFontSize"),
+            useSystemFont: SettingsStore.getValue("useSystemFont"),
+            systemFont: SettingsStore.getValue("systemFont"),
+            showAdvanced: false,
             useIRCLayout: SettingsStore.getValue("useIRCLayout"),
         };
     }
@@ -110,8 +117,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         };
     }
 
-    private onThemeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const newTheme = e.target.value;
+    private onThemeChange = (newTheme: string): void => {
         if (this.state.theme === newTheme) return;
 
         // doing getValue in the .catch will still return the value we failed to set,
@@ -271,19 +277,18 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_themeSection">
                 <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
                 {systemThemeSection}
-                <div className="mx_ThemeSelectors" onChange={this.onThemeChange}>
-                    {orderedThemes.map(theme => {
-                        return <StyledRadioButton
-                            key={theme.id}
-                            value={theme.id}
-                            name="theme"
-                            disabled={this.state.useSystemTheme}
-                            checked={!this.state.useSystemTheme && theme.id === this.state.theme}
-                            className={"mx_ThemeSelector_" + theme.id}
-                        >
-                            {theme.name}
-                        </StyledRadioButton>;
-                    })}
+                <div className="mx_ThemeSelectors">
+                    <StyledRadioGroup
+                        name="theme"
+                        definitions={orderedThemes.map(t => ({
+                            value: t.id,
+                            label: t.name,
+                            disabled: this.state.useSystemTheme,
+                            className: "mx_ThemeSelector_" + t.id,
+                        }))}
+                        onChange={this.onThemeChange}
+                        value={this.state.useSystemTheme ? undefined : this.state.theme}
+                    />
                 </div>
                 {customThemeForm}
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} useCheckbox={true} />
@@ -374,6 +379,53 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         </div>;
     };
 
+    private renderAdvancedSection() {
+        const toggle = <div
+            className="mx_AppearanceUserSettingsTab_AdvancedToggle"
+            onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
+        >
+            {this.state.showAdvanced ? "Hide advanced" : "Show advanced"}
+        </div>;
+
+        let advanced: React.ReactNode;
+
+        if (this.state.showAdvanced) {
+            advanced = <>
+                <SettingsFlag
+                    name="useCompactLayout"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    disabled={this.state.useIRCLayout}
+                />
+                <SettingsFlag
+                    name="useSystemFont"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    onChange={(checked) => this.setState({useSystemFont: checked})}
+                />
+                <Field
+                    className="mx_AppearanceUserSettingsTab_systemFont"
+                    label={SettingsStore.getDisplayName("systemFont")}
+                    onChange={(value) => {
+                        this.setState({
+                            systemFont: value.target.value,
+                        });
+
+                        SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
+                    }}
+                    tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    forceTooltipVisible={true}
+                    disabled={!this.state.useSystemFont}
+                    value={this.state.systemFont}
+                />
+            </>;
+        }
+        return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Advanced">
+            {toggle}
+            {advanced}
+        </div>;
+    }
+
     render() {
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
@@ -384,6 +436,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
                 {SettingsStore.isFeatureEnabled("feature_irc_ui") ? this.renderLayoutSection() : null}
+                {this.renderAdvancedSection()}
             </div>
         );
     }

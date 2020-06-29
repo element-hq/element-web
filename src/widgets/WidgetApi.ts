@@ -19,6 +19,7 @@ limitations under the License.
 
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { EventEmitter } from "events";
+import { objectClone } from "../utils/objects";
 
 export enum Capability {
     Screenshot = "m.capability.screenshot",
@@ -140,7 +141,7 @@ export class WidgetApi extends EventEmitter {
     private replyToRequest(payload: ToWidgetRequest, reply: any) {
         if (!window.parent) return;
 
-        const request = JSON.parse(JSON.stringify(payload));
+        const request = objectClone(payload);
         request.response = reply;
 
         window.parent.postMessage(request, this.origin);

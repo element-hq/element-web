@@ -170,12 +170,16 @@ export class Algorithm extends EventEmitter {
         // When we do have a room though, we expect to be able to find it
         const tag = this.roomIdsToTags[val.roomId][0];
         if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
-        let position = this.cachedRooms[tag].indexOf(val);
+
+        // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
+        // means we'll be off by 1 when the user is switching rooms. This leads to visual jumping
+        // when the user is moving south in the list (not north, because of math).
+        let position = this.getOrderedRoomsWithoutSticky()[tag].indexOf(val);
         if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
 
         // 🐉 Here be dragons.
         // Before we can go through with lying to the underlying algorithm about a room
-        // we need to ensure that when we do we're ready for the innevitable sticky room
+        // we need to ensure that when we do we're ready for the inevitable sticky room
         // update we'll receive. To prepare for that, we first remove the sticky room and
         // recalculate the state ourselves so that when the underlying algorithm calls for
         // the same thing it no-ops. After we're done calling the algorithm, we'll issue
@@ -208,6 +212,12 @@ export class Algorithm extends EventEmitter {
             position: position,
             tag: tag,
         };
+
+        // We update the filtered rooms just in case, as otherwise users will end up visiting
+        // a room while filtering and it'll disappear. We don't update the filter earlier in
+        // this function simply because we don't have to.
+        this.recalculateFilteredRoomsForTag(tag);
+        if (lastStickyRoom && lastStickyRoom.tag !== tag) this.recalculateFilteredRoomsForTag(lastStickyRoom.tag);
         this.recalculateStickyRoom();
 
         // Finally, trigger an update
@@ -231,9 +241,7 @@ export class Algorithm extends EventEmitter {
             // We optimize our lookups by trying to reduce sample size as much as possible
             // to the rooms we know will be deduped by the Set.
             const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
-            if (this._stickyRoom && this._stickyRoom.tag === tagId && this._stickyRoom.room) {
-                rooms.push(this._stickyRoom.room);
-            }
+            this.tryInsertStickyRoomToFilterSet(rooms, tagId);
             let remainingRooms = rooms.map(r => r);
             let allowedRoomsInThisTag = [];
             let lastFilterPriority = orderedFilters[0].relativePriority;
@@ -263,6 +271,7 @@ export class Algorithm extends EventEmitter {
         this.emit(LIST_UPDATED_EVENT);
     }
 
+    // TODO: Remove or use.
     protected addPossiblyFilteredRoomsToTag(tagId: TagID, added: Room[]): void {
         const filters = this.allowedByFilter.keys();
         for (const room of added) {
@@ -281,12 +290,24 @@ export class Algorithm extends EventEmitter {
     protected recalculateFilteredRoomsForTag(tagId: TagID): void {
         console.log(`Recalculating filtered rooms for ${tagId}`);
         delete this.filteredRooms[tagId];
-        const rooms = this.cachedRooms[tagId];
+        const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
+        this.tryInsertStickyRoomToFilterSet(rooms, tagId);
         const filteredRooms = rooms.filter(r => this.allowedRoomsByFilters.has(r));
         if (filteredRooms.length > 0) {
             this.filteredRooms[tagId] = filteredRooms;
         }
         console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
+    }
+
+    protected tryInsertStickyRoomToFilterSet(rooms: Room[], tagId: TagID) {
+        if (!this._stickyRoom || !this._stickyRoom.room || this._stickyRoom.tag !== tagId) return;
+
+        const position = this._stickyRoom.position;
+        if (position >= rooms.length) {
+            rooms.push(this._stickyRoom.room);
+        } else {
+            rooms.splice(position, 0, this._stickyRoom.room);
+        }
     }
 
     /**
@@ -373,6 +394,20 @@ export class Algorithm extends EventEmitter {
     public getOrderedRooms(): ITagMap {
         if (!this.hasFilters) {
             return this._cachedStickyRooms || this.cachedRooms;
+        }
+        return this.filteredRooms;
+    }
+
+    /**
+     * This returns the same as getOrderedRooms(), but without the sticky room
+     * map as it causes issues for sticky room handling (see sticky room handling
+     * for more information).
+     * @returns {ITagMap} The cached list of rooms, ordered,
+     * for each tag. May be empty, but never null/undefined.
+     */
+    private getOrderedRoomsWithoutSticky(): ITagMap {
+        if (!this.hasFilters) {
+            return this.cachedRooms;
         }
         return this.filteredRooms;
     }

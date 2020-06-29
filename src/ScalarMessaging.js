@@ -244,16 +244,17 @@ import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {WidgetType} from "./widgets/WidgetType";
+import {objectClone} from "./utils/objects";
 
 function sendResponse(event, res) {
-    const data = JSON.parse(JSON.stringify(event.data));
+    const data = objectClone(event.data);
     data.response = res;
     event.source.postMessage(data, event.origin);
 }
 
 function sendError(event, msg, nestedError) {
     console.error("Action:" + event.data.action + " failed with message: " + msg);
-    const data = JSON.parse(JSON.stringify(event.data));
+    const data = objectClone(event.data);
     data.response = {
         error: {
             message: msg,

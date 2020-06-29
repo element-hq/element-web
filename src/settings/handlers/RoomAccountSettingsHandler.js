@@ -18,6 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
 
@@ -40,7 +41,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         newClient.on("Room.accountData", this._onAccountData);
     }
 
-    _onAccountData(event, room) {
+    _onAccountData(event, room, prevEvent) {
         const roomId = room.roomId;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
@@ -55,8 +56,10 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         } else if (event.getType() === "org.matrix.room.color_scheme") {
             this._watchers.notifyUpdate("roomColor", roomId, SettingLevel.ROOM_ACCOUNT, event.getContent());
         } else if (event.getType() === "im.vector.web.settings") {
-            // We can't really discern what changed, so trigger updates for everything
-            for (const settingName of Object.keys(event.getContent())) {
+            // Figure out what changed and fire those updates
+            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const changedSettings = objectKeyChanges(prevContent, event.getContent());
+            for (const settingName of changedSettings) {
                 const val = event.getContent()[settingName];
                 this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_ACCOUNT, val);
             }
@@ -134,6 +137,6 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
 
         const event = room.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 }

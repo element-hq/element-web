@@ -67,7 +67,7 @@ limitations under the License.
         }
 
         .mx_RoomTile2_name.mx_RoomTile2_nameHasUnreadEvents {
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .mx_RoomTile2_messagePreview {
@@ -191,10 +191,6 @@ limitations under the License.
 
     .mx_RoomTile2_iconArrowDown::before {
         mask-image: url('$(res)/img/feather-customised/arrow-down.svg');
-    }
-
-    .mx_RoomTile2_iconUser::before {
-        mask-image: url('$(res)/img/feather-customised/user.svg');
     }
 
     .mx_RoomTile2_iconSettings::before {

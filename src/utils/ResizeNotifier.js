@@ -15,8 +15,12 @@ limitations under the License.
 */
 
 /**
- * Fires when the middle panel has been resized.
+ * Fires when the middle panel has been resized (throttled).
  * @event module:utils~ResizeNotifier#"middlePanelResized"
+ */
+/**
+ * Fires when the middle panel has been resized by a pixel.
+ * @event module:utils~ResizeNotifier#"middlePanelResizedNoisy"
  */
 import { EventEmitter } from "events";
 import { throttle } from "lodash";
@@ -29,15 +33,24 @@ export default class ResizeNotifier extends EventEmitter {
         this._throttledMiddlePanel = throttle(() => this.emit("middlePanelResized"), 200);
     }
 
+    _noisyMiddlePanel() {
+        this.emit("middlePanelResizedNoisy");
+    }
+
+    _updateMiddlePanel() {
+        this._throttledMiddlePanel();
+        this._noisyMiddlePanel();
+    }
+
     // can be called in quick succession
     notifyLeftHandleResized() {
         // don't emit event for own region
-        this._throttledMiddlePanel();
+        this._updateMiddlePanel();
     }
 
     // can be called in quick succession
     notifyRightHandleResized() {
-        this._throttledMiddlePanel();
+        this._updateMiddlePanel();
     }
 
     // can be called in quick succession
@@ -48,7 +61,7 @@ export default class ResizeNotifier extends EventEmitter {
         // taller than the available space
         this.emit("leftPanelResized");
 
-        this._throttledMiddlePanel();
+        this._updateMiddlePanel();
     }
 }
 

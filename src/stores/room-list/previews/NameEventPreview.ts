@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingController from "./SettingController";
-import dis from "../../dispatcher/dispatcher";
+import { IPreview } from "./IPreview";
+import { TagID } from "../models";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { getSenderName, isSelf } from "./utils";
+import { _t } from "../../../languageHandler";
 
-export default class FontSizeController extends SettingController {
-    constructor() {
-        super();
-    }
-
-    onChange(level, roomId, newValue) {
-        // Dispatch font size change so that everything open responds to the change.
-        dis.dispatch({
-            action: "update-font-size",
-            size: newValue,
-        });
+export class NameEventPreview implements IPreview {
+    public getTextFor(event: MatrixEvent, tagId?: TagID): string {
+        if (isSelf(event)) {
+            return _t("You changed the room name");
+        } else {
+            return _t("%(senderName)s changed the room name", {senderName: getSenderName(event)});
+        }
     }
 }

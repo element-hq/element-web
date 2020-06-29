@@ -16,9 +16,12 @@ limitations under the License.
 
 .mx_AppearanceUserSettingsTab_fontSlider,
 .mx_AppearanceUserSettingsTab_fontSlider_preview,
-.mx_AppearanceUserSettingsTab_Layout,
-.mx_AppearanceUserSettingsTab .mx_Field {
+.mx_AppearanceUserSettingsTab_Layout {
     @mixin mx_Settings_fullWidthField;
+}
+
+.mx_AppearanceUserSettingsTab .mx_Field {
+    width: 256px;
 }
 
 .mx_AppearanceUserSettingsTab_fontScaling {
@@ -202,5 +205,22 @@ limitations under the License.
 
     .mx_RadioButton_checked {
         background-color: rgba($accent-color, 0.08);
+    }
+}
+
+.mx_AppearanceUserSettingsTab_Advanced {
+    color: $primary-fg-color;
+
+    > * {
+        margin-bottom: 16px;
+    }
+
+    .mx_AppearanceUserSettingsTab_AdvancedToggle {
+        color: $accent-color;
+        cursor: pointer;
+    }
+
+    .mx_AppearanceUserSettingsTab_systemFont {
+        margin-left: calc($font-16px + 10px);
     }
 }

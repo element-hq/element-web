@@ -428,6 +428,10 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border-radius: 8px;
     padding: 0px;
     box-shadow: none;
+
+    /* Don't show scroll-bars on spinner dialogs */
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
@@ -596,14 +600,14 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         }
 
         &:last-child {
-            padding-bottom: 20px;
+            padding-bottom: 16px;
         }
     }
 
     .mx_IconizedContextMenu_optionList {
         // the notFirst class is for cases where the optionList might be under a header of sorts.
         &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
-            margin-top: 20px;
+            margin-top: 12px;
 
             // This is a bit of a hack when we could just use a simple border-top property,
             // however we have a (kinda) good reason for doing it this way: we need opacity.
@@ -634,7 +638,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
             li {
                 margin: 0;
-                padding: 20px 0 0;
+                padding: 12px 0 0;
 
                 .mx_AccessibleButton {
                     text-decoration: none;

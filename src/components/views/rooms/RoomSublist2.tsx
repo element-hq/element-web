@@ -32,6 +32,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
+import { TagID } from "../../../stores/room-list/models";
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -56,6 +57,7 @@ interface IProps {
     isInvite: boolean;
     layout: ListLayout;
     isMinimized: boolean;
+    tagId: TagID;
 
     // TODO: Collapsed state
     // TODO: Group invites
@@ -68,6 +70,7 @@ interface IProps {
 interface IState {
     notificationState: ListNotificationState;
     menuDisplayed: boolean;
+    isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
@@ -78,8 +81,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            notificationState: new ListNotificationState(this.props.isInvite),
+            notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
             menuDisplayed: false,
+            isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
@@ -109,13 +113,21 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
+    private onResizeStart = () => {
+        this.setState({isResizing: true});
+    };
+
+    private onResizeStop = () => {
+        this.setState({isResizing: false});
+    };
+
     private onShowAllClick = () => {
         this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
     private onShowLessClick = () => {
-        this.props.layout.visibleTiles = this.props.layout.minVisibleTiles;
+        this.props.layout.visibleTiles = this.props.layout.defaultVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -130,13 +142,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onUnreadFirstChanged = async () => {
-        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
+        const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
         const newAlgorithm = isUnreadFirst ? ListAlgorithm.Natural : ListAlgorithm.Importance;
-        await RoomListStore.instance.setListOrder(this.props.layout.tagId, newAlgorithm);
+        await RoomListStore.instance.setListOrder(this.props.tagId, newAlgorithm);
     };
 
     private onTagSortChanged = async (sort: SortAlgorithm) => {
-        await RoomListStore.instance.setTagSorting(this.props.layout.tagId, sort);
+        await RoomListStore.instance.setTagSorting(this.props.tagId, sort);
     };
 
     private onMessagePreviewChanged = () => {
@@ -176,7 +188,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.props.layout.showPreviews}
                         isMinimized={this.props.isMinimized}
-                        tag={this.props.layout.tagId}
+                        tag={this.props.tagId}
                     />
                 );
             }
@@ -189,8 +201,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.menuDisplayed) {
             const elementRect = this.menuButtonRef.current.getBoundingClientRect();
-            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.layout.tagId) === SortAlgorithm.Alphabetic;
-            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.layout.tagId) === ListAlgorithm.Importance;
+            const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
+            const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
@@ -204,14 +216,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <StyledRadioButton
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
                                 checked={!isAlphabetical}
-                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                                name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("Activity")}
                             </StyledRadioButton>
                             <StyledRadioButton
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Alphabetic)}
                                 checked={isAlphabetical}
-                                name={`mx_${this.props.layout.tagId}_sortBy`}
+                                name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("A-Z")}
                             </StyledRadioButton>
@@ -267,7 +279,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     // TODO: Collapsed state
 
-                    const badge = <NotificationBadge allowNoCount={false} notification={this.state.notificationState}/>;
+                    const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
 
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {
@@ -291,7 +303,18 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
                     });
 
+                    const badgeContainer = (
+                        <div className="mx_RoomSublist2_badgeContainer">
+                            {badge}
+                        </div>
+                    );
+
                     // TODO: a11y (see old component)
+                    // Note: the addRoomButton conditionally gets moved around
+                    // the DOM depending on whether or not the list is minimized.
+                    // If we're minimized, we want it below the header so it
+                    // doesn't become sticky.
+                    // The same applies to the notification badge.
                     return (
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
@@ -307,11 +330,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     <span>{this.props.label}</span>
                                 </AccessibleButton>
                                 {this.renderMenu()}
-                                {addRoomButton}
-                                <div className="mx_RoomSublist2_badgeContainer">
-                                    {badge}
-                                </div>
+                                {this.props.isMinimized ? null : badgeContainer}
+                                {this.props.isMinimized ? null : addRoomButton}
                             </div>
+                            {this.props.isMinimized ? badgeContainer : null}
+                            {this.props.isMinimized ? addRoomButton : null}
                         </div>
                     );
                 }}
@@ -343,6 +366,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const nVisible = Math.floor(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
 
+            const maxTilesFactored = layout.tilesWithResizerBoxFactor(tiles.length);
+            const showMoreBtnClasses = classNames({
+                'mx_RoomSublist2_showNButton': true,
+                'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
+            });
+
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
@@ -357,14 +386,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
-                    <div onClick={this.onShowAllClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowAllClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showMoreText}
                     </div>
                 );
-            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.minVisibleTiles) {
+            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
@@ -373,7 +402,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
-                    <div onClick={this.onShowLessClick} className='mx_RoomSublist2_showNButton'>
+                    <div onClick={this.onShowLessClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
@@ -419,6 +448,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     resizeHandles={handles}
                     onResize={this.onResize}
                     className="mx_RoomSublist2_resizeBox"
+                    onResizeStart={this.onResizeStart}
+                    onResizeStop={this.onResizeStop}
                 >
                     {visibleTiles}
                     {showNButton}

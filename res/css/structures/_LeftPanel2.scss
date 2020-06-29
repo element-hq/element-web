@@ -38,6 +38,12 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         // TagPanel handles its own CSS
     }
 
+    &:not(.mx_LeftPanel2_hasTagPanel) {
+        .mx_LeftPanel2_roomListContainer {
+            width: 100%;
+        }
+    }
+
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel2_roomListContainer {
@@ -48,34 +54,18 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         flex-direction: column;
 
         .mx_LeftPanel2_userHeader {
-            padding: 14px 12px 20px; // 14px top, 12px sides, 20px bottom
+            padding: 12px 12px 20px; // 12px top, 12px sides, 20px bottom
 
             // Create another flexbox column for the rows to stack within
             display: flex;
             flex-direction: column;
 
-            // There's 2 rows when breadcrumbs are present: the top bit and the breadcrumbs
+            // This is basically just breadcrumbs. The row above that is handled by the UserMenu
             .mx_LeftPanel2_headerRow {
                 // Create yet another flexbox, this time within the row, to ensure items stay
                 // aligned correctly. This is also a row-based flexbox.
                 display: flex;
                 align-items: center;
-            }
-
-            .mx_LeftPanel2_userAvatarContainer {
-                position: relative; // to make default avatars work
-                margin-right: 8px;
-            }
-
-            .mx_LeftPanel2_userName {
-                font-weight: 600;
-                font-size: $font-15px;
-                line-height: $font-20px;
-                flex: 1;
-            }
-
-            .mx_LeftPanel2_headerButtons {
-                // No special styles: the rest of the layout happens to make it work.
             }
 
             .mx_LeftPanel2_breadcrumbsContainer {
@@ -143,20 +133,15 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         min-width: unset;
 
         // We have to forcefully set the width to override the resizer's style attribute.
-        width: calc(68px + $tagPanelWidth) !important;
+        &.mx_LeftPanel2_hasTagPanel {
+            width: calc(68px + $tagPanelWidth) !important;
+        }
+        &:not(.mx_LeftPanel2_hasTagPanel) {
+            width: 68px !important;
+        }
 
         .mx_LeftPanel2_roomListContainer {
             width: 68px;
-
-            .mx_LeftPanel2_userHeader {
-                .mx_LeftPanel2_headerRow {
-                    justify-content: center;
-                }
-
-                .mx_LeftPanel2_userAvatarContainer {
-                    margin-right: 0;
-                }
-            }
 
             .mx_LeftPanel2_filterContainer {
                 // Organize the flexbox into a centered column layout
