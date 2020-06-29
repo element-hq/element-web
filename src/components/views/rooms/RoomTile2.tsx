@@ -64,8 +64,14 @@ interface IState {
     generalMenuDisplayed: boolean;
 }
 
+export const contextMenuBelow = (elementRect) => {
+    const left = elementRect.left + window.pageXOffset - 6;
+    let top = elementRect.bottom + window.pageYOffset + 21;
+    const chevronFace = "none";
+    return {left, top, chevronFace};
+};
+
 export default class RoomTile2 extends React.Component<IProps, IState> {
-    private roomTileRef: React.RefObject<HTMLDivElement> = createRef();
     private generalMenuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
 
     // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
@@ -159,18 +165,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         let contextMenu = null;
         if (this.state.generalMenuDisplayed) {
             // The context menu appears within the list, so use the room tile as a reference point
-            const elementRect = this.roomTileRef.current.getBoundingClientRect();
+            const elementRect = this.generalMenuButtonRef.current.getBoundingClientRect();
             contextMenu = (
-                <ContextMenu
-                    chevronFace="none"
-                    left={elementRect.left}
-                    top={elementRect.top + elementRect.height + 8}
-                    onFinished={this.onCloseGeneralMenu}
-                >
-                    <div
-                        className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu"
-                        style={{width: elementRect.width}}
-                    >
+                <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseGeneralMenu}>
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <ul>
                                 <li>
@@ -280,7 +278,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const avatarSize = 32;
         return (
             <React.Fragment>
-                <RovingTabIndexWrapper inputRef={this.roomTileRef}>
+                <RovingTabIndexWrapper>
                     {({onFocus, isActive, ref}) =>
                         <AccessibleButton
                             onFocus={onFocus}

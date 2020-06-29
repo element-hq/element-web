@@ -118,8 +118,7 @@ limitations under the License.
     }
 
     .mx_RoomTile2_menuButton::before {
-        top: 8px;
-        left: -1px; // this is off-center to align it with the badges
+        left: 1px; // this is off-center to align it with the badges
         mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
     }
 
@@ -133,9 +132,10 @@ limitations under the License.
             }
 
             .mx_RoomTile2_menuButton {
-                width: 18px;
-                height: 32px;
+                width: 16px;
+                height: 16px;
                 visibility: visible;
+                margin: auto 0;
             }
         }
     }
