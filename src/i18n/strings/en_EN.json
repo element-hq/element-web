@@ -1427,6 +1427,7 @@
     "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>": "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
     "Message deleted": "Message deleted",
     "Message deleted by %(name)s": "Message deleted by %(name)s",
+    "Message deleted on %(date)s": "Message deleted on %(date)s",
     "%(senderDisplayName)s changed the avatar for %(roomName)s": "%(senderDisplayName)s changed the avatar for %(roomName)s",
     "%(senderDisplayName)s removed the room avatar.": "%(senderDisplayName)s removed the room avatar.",
     "%(senderDisplayName)s changed the room avatar to <img/>": "%(senderDisplayName)s changed the room avatar to <img/>",
