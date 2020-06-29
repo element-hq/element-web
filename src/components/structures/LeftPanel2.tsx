@@ -31,6 +31,9 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
 
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+
 /*******************************************************************
  *   CAUTION                                                       *
  *******************************************************************
@@ -45,7 +48,7 @@ interface IProps {
 }
 
 interface IState {
-    searchFilter: string; // TODO: Move search into room list?
+    searchFilter: string;
     showBreadcrumbs: boolean;
     showTagPanel: boolean;
 }
@@ -54,12 +57,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
 
-    // TODO: Properly support TagPanel
-    // TODO: Properly support searching/filtering
-    // TODO: Properly support breadcrumbs
-    // TODO: a11y
-    // TODO: actually make this useful in general (match design proposals)
-    // TODO: Fadable support (is this still needed?)
+    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
 
     constructor(props: IProps) {
         super(props);
@@ -138,7 +136,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     }
 
-    // TODO: Apply this on resize, init, etc for reliability
+    // TODO: Improve header reliability: https://github.com/vector-im/riot-web/issues/14232
     private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
@@ -150,11 +148,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private renderHeader(): React.ReactNode {
-        // TODO: Update when profile info changes
-        // TODO: Presence
-        // TODO: Breadcrumbs toggle
-        // TODO: Menu button
-
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
             breadcrumbs = (
@@ -173,8 +166,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     private renderSearchExplore(): React.ReactNode {
-        // TODO: Collapsed support
-
         return (
             <div className="mx_LeftPanel2_filterContainer">
                 <RoomSearch onQueryUpdate={this.onSearch} isMinimized={this.props.isMinimized} />
@@ -195,7 +186,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             </div>
         );
 
-        // TODO: Improve props for RoomList2
+        // TODO: Determine what these onWhatever handlers do: https://github.com/vector-im/riot-web/issues/14180
         const roomList = <RoomList2
             onKeyDown={() => {/*TODO*/}}
             resizeNotifier={null}
@@ -206,7 +197,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             isMinimized={this.props.isMinimized}
         />;
 
-        // TODO: Conference handling / calls
+        // TODO: Conference handling / calls: https://github.com/vector-im/riot-web/issues/14177
 
         const containerClasses = classNames({
             "mx_LeftPanel2": true,

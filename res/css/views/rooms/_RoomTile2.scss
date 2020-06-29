@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename to mx_RoomTile during replacement of old component
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
 
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
@@ -96,7 +96,8 @@ limitations under the License.
     // TODO: [Notifications] Use mx_RoomTile2_notificationsButton, similar to the following approach:
     // https://github.com/matrix-org/matrix-react-sdk/blob/2180a56074f3698fc0241c309a72ba6cad802d1c/res/css/views/rooms/_RoomSublist2.scss#L48-L76
     // You'll need to do the same down below on the &:hover selector for the tile.
-    // ... also remove this 4 line TODO comment.
+    // See https://github.com/vector-im/riot-web/issues/13961.
+    // ... also remove this 5 line TODO comment.
     .mx_RoomTile2_menuButton,
     .mx_RoomTile2_notificationsButton {
         width: 0;

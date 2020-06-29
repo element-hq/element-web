@@ -41,6 +41,7 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
     public set search(val: string) {
         this._search = val;
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log("Updating filter for room name search:", this._search);
         this.emit(FILTER_CHANGED);
     }
@@ -57,7 +58,7 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
             }
         }
 
-        if (!room.name) return false; // should realisitically not happen: the js-sdk always calculates a name
+        if (!room.name) return false; // should realistically not happen: the js-sdk always calculates a name
 
         // Note: we have to match the filter with the removeHiddenChars() room name because the
         // function strips spaces and other characters (M becomes RN for example, in lowercase).

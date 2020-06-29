@@ -32,6 +32,7 @@ export class RecentAlgorithm implements IAlgorithm {
         // of the rooms to each other.
 
         // TODO: We could probably improve the sorting algorithm here by finding changes.
+        // See https://github.com/vector-im/riot-web/issues/14035
         // For example, if we spent a little bit of time to determine which elements have
         // actually changed (probably needs to be done higher up?) then we could do an
         // insertion sort or similar on the limited set of changes.

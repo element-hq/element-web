@@ -63,7 +63,7 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
     if (membership === 'invite') {
         return EffectiveMembership.Invite;
     } else if (membership === 'join') {
-        // TODO: Do the same for knock? Update docs as needed in the enum.
+        // TODO: Include knocks? Update docs as needed in the enum. https://github.com/vector-im/riot-web/issues/14237
         return EffectiveMembership.Join;
     } else {
         // Probably a leave, kick, or ban

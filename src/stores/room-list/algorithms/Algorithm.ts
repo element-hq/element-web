@@ -34,7 +34,7 @@ import { EffectiveMembership, splitRoomsByMembership } from "../membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 
-// TODO: Add locking support to avoid concurrent writes?
+// TODO: Add locking support to avoid concurrent writes? https://github.com/vector-im/riot-web/issues/14235
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -185,7 +185,6 @@ export class Algorithm extends EventEmitter {
         // the same thing it no-ops. After we're done calling the algorithm, we'll issue
         // a new update for ourselves.
         const lastStickyRoom = this._stickyRoom;
-        console.log(`Last sticky room:`, lastStickyRoom);
         this._stickyRoom = null;
         this.recalculateStickyRoom();
 
@@ -262,6 +261,8 @@ export class Algorithm extends EventEmitter {
                 }
             }
             newMap[tagId] = allowedRoomsInThisTag;
+
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
         }
 
@@ -296,6 +297,8 @@ export class Algorithm extends EventEmitter {
         if (filteredRooms.length > 0) {
             this.filteredRooms[tagId] = filteredRooms;
         }
+
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
     }
 
@@ -335,6 +338,7 @@ export class Algorithm extends EventEmitter {
         }
 
         if (!this._cachedStickyRooms || !updatedTag) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`Generating clone of cached rooms for sticky room handling`);
             const stickiedTagMap: ITagMap = {};
             for (const tagId of Object.keys(this.cachedRooms)) {
@@ -346,6 +350,7 @@ export class Algorithm extends EventEmitter {
         if (updatedTag) {
             // Update the tag indicated by the caller, if possible. This is mostly to ensure
             // our cache is up to date.
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`Replacing cached sticky rooms for ${updatedTag}`);
             this._cachedStickyRooms[updatedTag] = this.cachedRooms[updatedTag].map(r => r); // shallow clone
         }
@@ -355,6 +360,7 @@ export class Algorithm extends EventEmitter {
         // we might have updated from the cache is also our sticky room.
         const sticky = this._stickyRoom;
         if (!updatedTag || updatedTag === sticky.tag) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
             this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
         }
@@ -440,10 +446,12 @@ export class Algorithm extends EventEmitter {
         // Split out the easy rooms first (leave and invite)
         const memberships = splitRoomsByMembership(rooms);
         for (const room of memberships[EffectiveMembership.Invite]) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[DEBUG] "${room.name}" (${room.roomId}) is an Invite`);
             newTags[DefaultTagID.Invite].push(room);
         }
         for (const room of memberships[EffectiveMembership.Leave]) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Historical`);
             newTags[DefaultTagID.Archived].push(room);
         }
@@ -462,8 +470,10 @@ export class Algorithm extends EventEmitter {
             let inTag = false;
             if (tags.length > 0) {
                 for (const tag of tags) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged as ${tag}`);
                     if (!isNullOrUndefined(newTags[tag])) {
+                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                         console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged with VALID tag ${tag}`);
                         newTags[tag].push(room);
                         inTag = true;
@@ -472,8 +482,10 @@ export class Algorithm extends EventEmitter {
             }
 
             if (!inTag) {
-                // TODO: Determine if DM and push there instead
+                // TODO: Determine if DM and push there instead: https://github.com/vector-im/riot-web/issues/14236
                 newTags[DefaultTagID.Untagged].push(room);
+
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Untagged`);
             }
         }
@@ -537,8 +549,8 @@ export class Algorithm extends EventEmitter {
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
         if (cause === RoomUpdateCause.PossibleTagChange) {
-            // TODO: Be smarter and splice rather than regen the planet.
-            // TODO: No-op if no change.
+            // TODO: Be smarter and splice rather than regen the planet. https://github.com/vector-im/riot-web/issues/14035
+            // TODO: No-op if no change. https://github.com/vector-im/riot-web/issues/14035
             await this.setKnownRooms(this.rooms);
             return true;
         }
@@ -548,6 +560,7 @@ export class Algorithm extends EventEmitter {
         // as the sticky room relies on this.
         if (cause !== RoomUpdateCause.NewRoom && cause !== RoomUpdateCause.RoomRemoved) {
             if (this.stickyRoom === room) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
                 return false;
             }

@@ -34,6 +34,9 @@ import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { TagID } from "../../../stores/room-list/models";
 
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+
 /*******************************************************************
  *   CAUTION                                                       *
  *******************************************************************
@@ -59,12 +62,7 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
 
-    // TODO: Collapsed state
-    // TODO: Group invites
-    // TODO: Calls
-    // TODO: forceExpand?
-    // TODO: Header clicking
-    // TODO: Spinner support for historical
+    // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
 interface IState {
@@ -89,7 +87,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numTiles(): number {
-        // TODO: Account for group invites
+        // TODO: Account for group invites: https://github.com/vector-im/riot-web/issues/14179
         return (this.props.rooms || []).length;
     }
 
@@ -268,16 +266,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderHeader(): React.ReactElement {
-        // TODO: Title on collapsed
-        // TODO: Incoming call box
-
         return (
             <RovingTabIndexWrapper inputRef={this.headerButton}>
                 {({onFocus, isActive, ref}) => {
-                    // TODO: Use onFocus
+                    // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
-
-                    // TODO: Collapsed state
 
                     const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
 
@@ -309,7 +302,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         </div>
                     );
 
-                    // TODO: a11y (see old component)
+                    // TODO: a11y (see old component): https://github.com/vector-im/riot-web/issues/14180
                     // Note: the addRoomButton conditionally gets moved around
                     // the DOM depending on whether or not the list is minimized.
                     // If we're minimized, we want it below the header so it
@@ -343,15 +336,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactElement {
-        // TODO: Proper rendering
-        // TODO: Error boundary
+        // TODO: Error boundary: https://github.com/vector-im/riot-web/issues/14185
 
         const tiles = this.renderTiles();
 
         const classes = classNames({
-            // TODO: Proper collapse support
             'mx_RoomSublist2': true,
-            'mx_RoomSublist2_collapsed': false, // len && isCollapsed
             'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
             'mx_RoomSublist2_minimized': this.props.isMinimized,
         });
@@ -359,9 +349,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let content = null;
         if (tiles.length > 0) {
             const layout = this.props.layout; // to shorten calls
-
-            // TODO: Lazy list rendering
-            // TODO: Whatever scrolling magic needs to happen here
 
             const nVisible = Math.floor(layout.visibleTiles);
             const visibleTiles = tiles.slice(0, nVisible);
@@ -457,7 +444,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             );
         }
 
-        // TODO: onKeyDown support
+        // TODO: onKeyDown support: https://github.com/vector-im/riot-web/issues/14180
         return (
             <div
                 className={classes}

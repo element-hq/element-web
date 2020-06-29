@@ -85,7 +85,8 @@ export class ListLayout {
     }
 
     public get defaultVisibleTiles(): number {
-        // TODO: Remove dogfood flag
+        // TODO: Remove dogfood flag: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Resolve dogfooding: https://github.com/vector-im/riot-web/issues/14137
         const val = Number(localStorage.getItem("mx_dogfood_rl_defTiles") || 4);
         return val + RESIZER_BOX_FACTOR;
     }

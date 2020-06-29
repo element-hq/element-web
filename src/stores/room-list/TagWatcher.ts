@@ -23,7 +23,7 @@ import { arrayDiff, arrayHasDiff } from "../../utils/arrays";
  * Watches for changes in tags/groups to manage filters on the provided RoomListStore
  */
 export class TagWatcher {
-    // TODO: Support custom tags, somehow (deferred to later work - need support elsewhere)
+    // TODO: Support custom tags, somehow: https://github.com/vector-im/riot-web/issues/14091
     private filters = new Map<string, CommunityFilterCondition>();
 
     constructor(private store: RoomListStore2) {
@@ -44,7 +44,7 @@ export class TagWatcher {
 
             const newFilters = new Map<string, CommunityFilterCondition>();
 
-            // TODO: Support custom tags properly
+            // TODO: Support custom tags, somehow: https://github.com/vector-im/riot-web/issues/14091
             const filterableTags = newTags.filter(t => t.startsWith("+"));
 
             for (const tag of filterableTags) {
@@ -61,6 +61,7 @@ export class TagWatcher {
             const diff = arrayDiff(lastTags, newTags);
             for (const tag of diff.added) {
                 // TODO: Remove this check when custom tags are supported (as we shouldn't be losing filters)
+                // Ref https://github.com/vector-im/riot-web/issues/14091
                 const filter = newFilters.get(tag);
                 if (!filter) continue;
 

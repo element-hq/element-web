@@ -87,6 +87,8 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
+
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log(`[RoomListDebug] Constructed an ImportanceAlgorithm for ${tagId}`);
     }
 
@@ -292,7 +294,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
                 // "should never happen" disclaimer goes here
                 console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
-                // TODO: Regenerate index when this happens
+                // TODO: Regenerate index when this happens: https://github.com/vector-im/riot-web/issues/14234
             }
         }
     }

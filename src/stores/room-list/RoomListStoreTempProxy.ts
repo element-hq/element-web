@@ -24,7 +24,7 @@ import { ITagMap } from "./algorithms/models";
  * Temporary RoomListStore proxy. Should be replaced with RoomListStore2 when
  * it is available to everyone.
  *
- * TODO: Remove this when RoomListStore gets fully replaced.
+ * TODO: Delete this: https://github.com/vector-im/riot-web/issues/14231
  */
 export class RoomListStoreTempProxy {
     public static isUsingNewStore(): boolean {
