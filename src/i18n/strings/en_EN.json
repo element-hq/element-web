@@ -300,6 +300,7 @@
     "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s updated a ban rule that was matching %(oldGlob)s to matching %(newGlob)s for %(reason)s",
     "Light": "Light",
     "Dark": "Dark",
+    "Element Light": "Element Light",
     "You signed in to a new session without verifying it:": "You signed in to a new session without verifying it:",
     "Verify your other session using one of the options below.": "Verify your other session using one of the options below.",
     "%(name)s (%(userId)s) signed in to a new session without verifying it:": "%(name)s (%(userId)s) signed in to a new session without verifying it:",
