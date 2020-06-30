@@ -233,29 +233,29 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         {homeButton}
                         <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
-                            <span>{_t("Notification settings")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("Notification settings")}</span>
                         </AccessibleButton>
                         <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
-                            <span>{_t("Security & privacy")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("Security & privacy")}</span>
                         </AccessibleButton>
                         <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
-                            <span>{_t("All settings")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("All settings")}</span>
                         </AccessibleButton>
                         <AccessibleButton onClick={this.onShowArchived}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
-                            <span>{_t("Archived rooms")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("Archived rooms")}</span>
                         </AccessibleButton>
                         <AccessibleButton onClick={this.onProvideFeedback}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
-                            <span>{_t("Feedback")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("Feedback")}</span>
                         </AccessibleButton>
                     </div>
                     <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
                         <AccessibleButton onClick={this.onSignOutClick}>
                             <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
-                            <span>{_t("Sign out")}</span>
+                            <span className="mx_IconizedContextMenu_label">{_t("Sign out")}</span>
                         </AccessibleButton>
                     </div>
                 </div>

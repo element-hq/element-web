@@ -32,7 +32,7 @@ import NotificationBadge, {
     TagSpecificNotificationState
 } from "./NotificationBadge";
 import { _t } from "../../../languageHandler";
-import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import { ContextMenu, ContextMenuButton, MenuItemRadio } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomTileIcon from "./RoomTileIcon";
@@ -71,6 +71,34 @@ const contextMenuBelow = (elementRect) => {
     let top = elementRect.bottom + window.pageYOffset + 21;
     const chevronFace = "none";
     return {left, top, chevronFace};
+};
+
+type State = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
+
+interface INotifOptionProps {
+    active: boolean;
+    iconClassName: string;
+    label: string;
+    onClick();
+}
+
+const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassName, label}) => {
+    const classes = classNames({
+        mx_RoomTile2_contextMenu_activeRow: active,
+    });
+
+    let activeIcon;
+    if (active) {
+        activeIcon = <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconCheck" />;
+    }
+
+    return (
+        <MenuItemRadio className={classes} onClick={onClick} active={active} label={label}>
+            <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+            <span className="mx_IconizedContextMenu_label">{ label }</span>
+            { activeIcon }
+        </MenuItemRadio>
+    );
 };
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
@@ -178,6 +206,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private renderNotificationsMenu(): React.ReactElement {
         if (this.props.isMinimized) return null; // no menu when minimized
 
+        const state = getRoomNotifsState(this.props.room.roomId);
+
         let contextMenu = null;
         if (this.state.notificationsMenuDisplayed) {
             const elementRect = this.notificationsMenuButtonRef.current.getBoundingClientRect();
@@ -185,29 +215,36 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseNotificationsMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
-                            <AccessibleButton onClick={console.log}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBell" />
-                                <span>{_t("All messages")}</span>
-                            </AccessibleButton>
-                            <AccessibleButton onClick={console.log}>
-                                <span className="mx_IconizedContextMenu_icon" />
-                                <span>{_t("Default")}</span>
-                            </AccessibleButton>
-                            <AccessibleButton onClick={console.log}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellDot" />
-                                <span>{_t("Mentions & Keywords")}</span>
-                            </AccessibleButton>
-                            <AccessibleButton onClick={console.log}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellCrossed" />
-                                <span>{_t("None")}</span>
-                            </AccessibleButton>
+                            <NotifOption
+                                label={_t("Use default")}
+                                active={state === ALL_MESSAGES}
+                                iconClassName="mx_RoomTile2_iconBell"
+                                onClick={this._onClickAllNotifs}
+                            />
+                            <NotifOption
+                                label={_t("All messages")}
+                                active={state === ALL_MESSAGES_LOUD}
+                                iconClassName="mx_RoomTile2_iconBellDot"
+                                onClick={this._onClickAlertMe}
+                            />
+                            <NotifOption
+                                label={_t("Mentions & Keywords")}
+                                active={state === MENTIONS_ONLY}
+                                iconClassName=""
+                                onClick={this._onClickMentions}
+                            />
+                            <NotifOption
+                                label={_t("None")}
+                                active={state === MUTE}
+                                iconClassName="mx_RoomTile2_iconBellCrossed"
+                                onClick={this._onClickMute}
+                            />
                         </div>
                     </div>
                 </ContextMenu>
             );
         }
 
-        const state = getRoomNotifsState(this.props.room.roomId);
         const classes = classNames("mx_RoomTile2_notificationsButton", {
             // Show bell icon for the default case too.
             mx_RoomTile2_iconBell: state === ALL_MESSAGES_LOUD || state === ALL_MESSAGES,
@@ -244,17 +281,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                         <div className="mx_IconizedContextMenu_optionList">
                             <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
-                                <span>{_t("Favourite")}</span>
+                                <span className="mx_IconizedContextMenu_label">{_t("Favourite")}</span>
                             </AccessibleButton>
                             <AccessibleButton onClick={this.onOpenRoomSettings}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
-                                <span>{_t("Settings")}</span>
+                                <span className="mx_IconizedContextMenu_label">{_t("Settings")}</span>
                             </AccessibleButton>
                         </div>
                         <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
                             <AccessibleButton onClick={this.onLeaveRoomClick}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
-                                <span>{_t("Leave Room")}</span>
+                                <span className="mx_IconizedContextMenu_label">{_t("Leave Room")}</span>
                             </AccessibleButton>
                         </div>
                     </div>

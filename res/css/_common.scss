@@ -652,7 +652,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
                 max-width: 16px;
             }
 
-            span:last-child { // labels
+            span.mx_IconizedContextMenu_label { // labels
                 padding-left: 14px;
                 width: 100%;
                 flex: 1;
