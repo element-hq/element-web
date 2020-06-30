@@ -58,7 +58,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
         return <div className="mx_DecoratedRoomAvatar">
             <RoomAvatar room={this.props.room} width={this.props.avatarSize} height={this.props.avatarSize} />
-            <RoomTileIcon room={this.props.room} tag={this.props.tag} isBlah={true}/>
+            <RoomTileIcon room={this.props.room} tag={this.props.tag} />
             {badge}
         </div>
     }
