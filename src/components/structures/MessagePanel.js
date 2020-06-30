@@ -388,8 +388,11 @@ export default class MessagePanel extends React.Component {
             }
 
             return (
-                <li key={"readMarker_"+eventId} ref={this._readMarkerNode}
-                      className="mx_RoomView_myReadMarker_container">
+                <li key={"readMarker_"+eventId}
+                    ref={this._readMarkerNode}
+                    className="mx_RoomView_myReadMarker_container"
+                    data-scroll-tokens={eventId}
+                >
                     { hr }
                 </li>
             );
