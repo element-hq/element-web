@@ -670,4 +670,15 @@ export class Algorithm extends EventEmitter {
 
         return true;
     }
+
+    /**
+     * Returns the tags for a given room as known by the algorithm. May be null or
+     * empty.
+     * @param room The room to get known tags for.
+     * @returns The known tags for the room.
+     */
+    public getTagsForRoom(room: Room): TagID[] {
+        if (!room) throw new Error("A room is required");
+        return this.roomIdsToTags[room.roomId];
+    }
 }

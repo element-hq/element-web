@@ -22,7 +22,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
@@ -35,7 +34,7 @@ import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
-import RoomTileIcon from "./RoomTileIcon";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -233,13 +232,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const badge = (
-            <NotificationBadge
+        const avatarSize = 32;
+        const roomAvatar = <DecoratedRoomAvatar
+            room={this.props.room}
+            avatarSize={avatarSize}
+            tag={this.props.tag}
+            displayBadge={this.props.isMinimized}
+        />
+
+        let badge: React.ReactNode; 
+        if (!this.props.isMinimized) {
+        badge = <NotificationBadge
                 notification={this.state.notificationState}
                 forceCount={false}
                 roomId={this.props.room.roomId}
             />
-        );
+        }
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
@@ -277,7 +285,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
-        const avatarSize = 32;
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
@@ -292,10 +299,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             onClick={this.onTileClick}
                             role="treeitem"
                         >
-                            <div className="mx_RoomTile2_avatarContainer">
-                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} />
-                                <RoomTileIcon room={this.props.room} tag={this.props.tag} />
-                            </div>
+                            {roomAvatar}
                             {nameContainer}
                             <div className="mx_RoomTile2_badgeContainer">
                                 {badge}

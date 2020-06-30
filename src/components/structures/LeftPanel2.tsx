@@ -151,7 +151,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
             breadcrumbs = (
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
+                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar">
                     {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
                 </div>
             );

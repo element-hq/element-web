@@ -70,7 +70,8 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
 
             .mx_LeftPanel2_breadcrumbsContainer {
                 width: 100%;
-                overflow: hidden;
+                overflow-y: hidden;
+                overflow-x: scroll;
                 margin-top: 8px;
             }
         }

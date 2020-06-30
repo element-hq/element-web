@@ -17,7 +17,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
-import { OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
+import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import TagOrderStore from "../TagOrderStore";
 import { AsyncStore } from "../AsyncStore";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -187,7 +187,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
+                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()}` +
+                            ` in ${updatedRoom.roomId}`);
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
@@ -421,6 +422,19 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 this.algorithm.removeFilterCondition(filter);
             }
         }
+    }
+
+    /**
+     * Gets the tags for a room identified by the store. The returned set
+     * should never be empty, and will contain DefaultTagID.Untagged if
+     * the store is not aware of any tags.
+     * @param room The room to get the tags for.
+     * @returns The tags for the room.
+     */
+    public getTagsForRoom(room: Room): TagID[] {
+        const algorithmTags = this.algorithm.getTagsForRoom(room);
+        if (!algorithmTags) return [DefaultTagID.Untagged];
+        return algorithmTags;
     }
 }
 
