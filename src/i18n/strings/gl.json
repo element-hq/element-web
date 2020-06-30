@@ -2424,5 +2424,6 @@
     "You invited %(targetName)s": "Convidaches a %(targetName)s",
     "%(senderName)s invited %(targetName)s": "%(senderName)s convidou a %(targetName)s",
     "You changed the room topic": "Cambiaches o tema da sala",
-    "%(senderName)s changed the room topic": "%(senderName)s cambiou o asunto da sala"
+    "%(senderName)s changed the room topic": "%(senderName)s cambiou o asunto da sala",
+    "Message deleted on %(date)s": "Mensaxe eliminada o %(date)s"
 }
