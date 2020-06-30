@@ -29,6 +29,7 @@ import { IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
+import { EffectiveMembership, getEffectiveMembership } from "./membership";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -247,7 +248,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             }
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
             const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
-            if (membershipPayload.oldMembership !== "join" && membershipPayload.membership === "join") {
+            const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
+            const newMembership = getEffectiveMembership(membershipPayload.membership);
+            if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
 
@@ -276,8 +279,15 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
+            if (oldMembership !== EffectiveMembership.Invite && newMembership === EffectiveMembership.Invite) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[RoomListDebug] Handling invite to ${membershipPayload.room.roomId}`);
+                await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+                return;
+            }
+
             // If it's not a join, it's transitioning into a different list (possibly historical)
-            if (membershipPayload.oldMembership !== membershipPayload.membership) {
+            if (oldMembership !== newMembership) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
                 await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
