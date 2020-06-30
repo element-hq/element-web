@@ -86,11 +86,14 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
         // Don't show a badge if we don't need to
         if (this.props.notification.color <= NotificationColor.None) return null;
 
+        // TODO: Update these booleans for FTUE Notifications: https://github.com/vector-im/riot-web/issues/14261
+        // As of writing, that is "if red, show count always" and "optionally show counts instead of dots".
+        // See git diff for what that boolean state looks like.
+        // XXX: We ignore this.state.showCounts (the setting which controls counts vs dots).
         const hasNotif = this.props.notification.color >= NotificationColor.Red;
         const hasCount = this.props.notification.color >= NotificationColor.Grey;
-        const hasUnread = this.props.notification.color >= NotificationColor.Bold;
-        const couldBeEmpty = (!this.state.showCounts || hasUnread) && !hasNotif;
-        let isEmptyBadge = couldBeEmpty && (!this.state.showCounts || !hasCount);
+        const hasAnySymbol = this.props.notification.symbol || this.props.notification.count > 0;
+        let isEmptyBadge = !hasAnySymbol || !hasCount;
         if (this.props.forceCount) {
             isEmptyBadge = false;
             if (!hasCount) return null; // Can't render a badge

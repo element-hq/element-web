@@ -16,7 +16,7 @@ limitations under the License.
 
 import { NotificationColor } from "./NotificationColor";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { DefaultTagID, TagID } from "../room-list/models";
+import { TagID } from "../room-list/models";
 import { RoomNotificationState } from "./RoomNotificationState";
 
 export class TagSpecificNotificationState extends RoomNotificationState {
@@ -24,7 +24,8 @@ export class TagSpecificNotificationState extends RoomNotificationState {
         // @ts-ignore - TS wants this to be a string key, but we know better
         [tagId: TagID]: NotificationColor,
     } = {
-        [DefaultTagID.DM]: NotificationColor.Red,
+        // TODO: Update for FTUE Notifications: https://github.com/vector-im/riot-web/issues/14261
+        //[DefaultTagID.DM]: NotificationColor.Red,
     };
 
     private readonly colorWhenNotIdle?: NotificationColor;
