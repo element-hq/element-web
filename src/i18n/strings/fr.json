@@ -2593,5 +2593,6 @@
     "%(senderName)s invited %(targetName)s": "%(senderName)s a invité %(targetName)s",
     "You changed the room topic": "Vous avez changé le sujet du salon",
     "%(senderName)s changed the room topic": "%(senderName)s a changé le sujet du salon",
-    "New spinner design": "Nouveau design du spinner"
+    "New spinner design": "Nouveau design du spinner",
+    "Message deleted on %(date)s": "Message supprimé le %(date)s"
 }
