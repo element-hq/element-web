@@ -2588,5 +2588,6 @@
     "%(senderName)s changed the room topic": "%(senderName)s ha cambiato l'argomento della stanza",
     "New spinner design": "Nuovo design dello spinner",
     "Use a more compact ‘Modern’ layout": "Usa un layout più compatto e moderno",
-    "Always show first": "Mostra sempre per prime"
+    "Always show first": "Mostra sempre per prime",
+    "Message deleted on %(date)s": "Messaggio eliminato il %(date)s"
 }
