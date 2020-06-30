@@ -112,7 +112,6 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
         // the did before (otherwise the onchange wouldn't fire)
         if (this._fileUpload.current) this._fileUpload.current.value = null;
 
-
         // We don't use Field's validation here because a) we want it in a separate place rather
         // than in a tooltip and b) we want it to display feedback based on the uploaded file
         // as well as the text box. Ideally we would refactor Field's validation logic so we could
