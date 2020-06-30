@@ -19,7 +19,7 @@ import React, {ReactChild} from "react";
 import FormButton from "../elements/FormButton";
 import {XOR} from "../../../@types/common";
 
-interface IProps {
+export interface IProps {
     description: ReactChild;
     acceptLabel: string;
 

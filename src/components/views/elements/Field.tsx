@@ -50,7 +50,7 @@ interface IProps {
     // to the user.
     onValidate?: (input: IFieldState) => Promise<IValidationResult>;
     // If specified, overrides the value returned by onValidate.
-    flagInvalid?: boolean;
+    forceValidity?: boolean;
     // If specified, contents will appear as a tooltip on the element and
     // validation feedback tooltips will be suppressed.
     tooltipContent?: React.ReactNode;
@@ -203,7 +203,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
     public render() {
         const {
             element, prefixComponent, postfixComponent, className, onValidate, children,
-            tooltipContent, flagInvalid, tooltipClassName, list, ...inputProps} = this.props;
+            tooltipContent, forceValidity, tooltipClassName, list, ...inputProps} = this.props;
 
         // Set some defaults for the <input> element
         const ref = input => this.input = input;
@@ -228,15 +228,15 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
             postfixContainer = <span className="mx_Field_postfix">{postfixComponent}</span>;
         }
 
-        const hasValidationFlag = flagInvalid !== null && flagInvalid !== undefined;
+        const hasValidationFlag = forceValidity !== null && forceValidity !== undefined;
         const fieldClasses = classNames("mx_Field", `mx_Field_${this.props.element}`, className, {
             // If we have a prefix element, leave the label always at the top left and
             // don't animate it, as it looks a bit clunky and would add complexity to do
             // properly.
             mx_Field_labelAlwaysTopLeft: prefixComponent,
-            mx_Field_valid: onValidate && this.state.valid === true,
+            mx_Field_valid: hasValidationFlag ? forceValidity : onValidate && this.state.valid === true,
             mx_Field_invalid: hasValidationFlag
-                ? flagInvalid
+                ? !forceValidity
                 : onValidate && this.state.valid === false,
         });
 
