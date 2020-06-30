@@ -2532,5 +2532,6 @@
     "You changed the room topic": "Du hast das Raumthema geändert",
     "%(senderName)s changed the room topic": "%(senderName)s hat das Raumthema geändert",
     "New spinner design": "Neue Warteanimation",
-    "Use a more compact ‘Modern’ layout": "Verwende ein kompakteres 'modernes' Layout"
+    "Use a more compact ‘Modern’ layout": "Verwende ein kompakteres 'modernes' Layout",
+    "Message deleted on %(date)s": "Nachricht am %(date)s gelöscht"
 }
