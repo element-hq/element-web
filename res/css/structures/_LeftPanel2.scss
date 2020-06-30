@@ -48,6 +48,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel2_roomListContainer {
         width: calc(100% - $tagPanelWidth);
+        background-color: $roomlist2-bg-color;
 
         // Create another flexbox (this time a column) for the room list components
         display: flex;

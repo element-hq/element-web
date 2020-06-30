@@ -1,0 +1,21 @@
+// if backdrop-filter is supported,
+// set the user avatar (if any) as a background so
+// it can be blurred by the tag panel and room list
+
+@supports (backdrop-filter: blur(100px)) {
+    .mx_LeftPanel2 {
+        background-image: var(--avatar-url);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .mx_TagPanel
+    {
+        backdrop-filter: blur(100px);
+    }
+
+    .mx_LeftPanel2 .mx_LeftPanel2_roomListContainer {
+        backdrop-filter: blur(175px);
+    }
+}
