@@ -2146,5 +2146,15 @@
     "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Сообщения в этой комнате зашифрованы сквозным шифрованием. Посмотрите подробности и подтвердите пользователя в его профиле.",
     "Send a Direct Message": "Отправить сообщение",
     "Light": "Светлая",
-    "Dark": "Темная"
+    "Dark": "Темная",
+    "Recent Conversations": "Недавние Диалоги",
+    "Suggestions": "Предложения",
+    "a key signature": "отпечаток ключа",
+    "Upload completed": "Отправка успешно завершена",
+    "Cancelled signature upload": "Отправка отпечатка отменена",
+    "Unable to upload": "Невозможно отправить",
+    "Signature upload success": "Отпечаток успешно отправлен",
+    "Signature upload failed": "Сбой отправки отпечатка",
+    "Room name or address": "Имя или адрес комнаты",
+    "Unrecognised room address:": "Не удалось найти адрес комнаты:"
 }
