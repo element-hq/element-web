@@ -37,6 +37,8 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomTileIcon from "./RoomTileIcon";
 import { getRoomNotifsState, ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { setRoomNotifsState } from "../../../RoomNotifs";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -73,13 +75,11 @@ const contextMenuBelow = (elementRect) => {
     return {left, top, chevronFace};
 };
 
-type State = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
-
 interface INotifOptionProps {
     active: boolean;
     iconClassName: string;
     label: string;
-    onClick();
+    onClick(ev: ButtonEvent);
 }
 
 const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassName, label}) => {
@@ -203,8 +203,32 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuDisplayed: false}); // hide the menu
     };
 
+    private async saveNotifState(ev: ButtonEvent, newState: ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (MatrixClientPeg.get().isGuest()) return;
+
+        try {
+            // TODO add local echo
+            await setRoomNotifsState(this.props.room.roomId, newState);
+        } catch (error) {
+            // TODO: some form of error notification to the user to inform them that their state change failed.
+            console.error(error);
+        }
+
+        // Close the context menu
+        this.setState({
+            notificationsMenuDisplayed: false,
+        });
+    }
+
+    private onClickAllNotifs = ev => this.saveNotifState(ev, ALL_MESSAGES);
+    private onClickAlertMe = ev => this.saveNotifState(ev, ALL_MESSAGES_LOUD);
+    private onClickMentions = ev => this.saveNotifState(ev, MENTIONS_ONLY);
+    private onClickMute = ev => this.saveNotifState(ev, MUTE);
+
     private renderNotificationsMenu(): React.ReactElement {
-        if (this.props.isMinimized) return null; // no menu when minimized
+        if (this.props.isMinimized || MatrixClientPeg.get().isGuest()) return null; // no menu when minimized or guest
 
         const state = getRoomNotifsState(this.props.room.roomId);
 
@@ -219,25 +243,25 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                                 label={_t("Use default")}
                                 active={state === ALL_MESSAGES}
                                 iconClassName="mx_RoomTile2_iconBell"
-                                onClick={this._onClickAllNotifs}
+                                onClick={this.onClickAllNotifs}
                             />
                             <NotifOption
                                 label={_t("All messages")}
                                 active={state === ALL_MESSAGES_LOUD}
                                 iconClassName="mx_RoomTile2_iconBellDot"
-                                onClick={this._onClickAlertMe}
+                                onClick={this.onClickAlertMe}
                             />
                             <NotifOption
                                 label={_t("Mentions & Keywords")}
                                 active={state === MENTIONS_ONLY}
                                 iconClassName=""
-                                onClick={this._onClickMentions}
+                                onClick={this.onClickMentions}
                             />
                             <NotifOption
                                 label={_t("None")}
                                 active={state === MUTE}
                                 iconClassName="mx_RoomTile2_iconBellCrossed"
-                                onClick={this._onClickMute}
+                                onClick={this.onClickMute}
                             />
                         </div>
                     </div>
