@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
+import classnames from 'classnames';
 import { createRef } from "react";
 import TagPanel from "./TagPanel";
 import classNames from "classnames";
@@ -205,6 +206,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             "mx_LeftPanel2_minimized": this.props.isMinimized,
         });
 
+        const className = classnames(
+            "mx_LeftPanel2_actualRoomListContainer",
+            "mx_AutoHideScrollbar",
+        );
+
         return (
             <div className={containerClasses}>
                 {tagPanel}
@@ -212,7 +218,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     <div
-                        className="mx_LeftPanel2_actualRoomListContainer"
+                        className={className}
                         onScroll={this.onScroll}
                         ref={this.listContainerRef}
                     >{roomList}</div>
