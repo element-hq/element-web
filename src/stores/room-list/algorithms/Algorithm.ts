@@ -441,6 +441,13 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
+        console.warn("Resetting known rooms, initiating regeneration");
+
+        // Before we go any further we need to clear (but remember) the sticky room to
+        // avoid accidentally duplicating it in the list.
+        const oldStickyRoom = this._stickyRoom;
+        await this.updateStickyRoom(null);
+
         this.rooms = rooms;
 
         const newTags: ITagMap = {};
@@ -500,6 +507,21 @@ export class Algorithm extends EventEmitter {
 
         this.cachedRooms = newTags;
         this.updateTagsFromCache();
+        this.recalculateFilteredRooms();
+
+        // Now that we've finished generation, we need to update the sticky room to what
+        // it was. It's entirely possible that it changed lists though, so if it did then
+        // we also have to update the position of it.
+        if (oldStickyRoom && oldStickyRoom.room) {
+            await this.updateStickyRoom(oldStickyRoom.room);
+            if (this._stickyRoom && this._stickyRoom.room) { // just in case the update doesn't go according to plan
+                if (this._stickyRoom.tag !== oldStickyRoom.tag) {
+                    // We put the sticky room at the top of the list to treat it as an obvious tag change.
+                    this._stickyRoom.position = 0;
+                    this.recalculateStickyRoom(this._stickyRoom.tag);
+                }
+            }
+        }
     }
 
     private getTagsForRoom(room: Room): TagID[] {
