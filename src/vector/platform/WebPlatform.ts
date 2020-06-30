@@ -173,7 +173,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        return "unknown browser";
+        return "unknown browser " + Math.round(Number.MAX_SAFE_INTEGER * Math.random());
 
         // strip query-string and fragment from uri
         const u = url.parse(window.location.href);
