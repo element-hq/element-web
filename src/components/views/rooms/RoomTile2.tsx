@@ -66,7 +66,7 @@ interface IState {
     generalMenuDisplayed: boolean;
 }
 
-export const contextMenuBelow = (elementRect) => {
+const contextMenuBelow = (elementRect) => {
     const left = elementRect.left + window.pageXOffset - 6;
     let top = elementRect.bottom + window.pageYOffset + 21;
     const chevronFace = "none";
@@ -185,32 +185,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseNotificationsMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
-                            <ul>
-                                <li>
-                                    <AccessibleButton onClick={console.log}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBell" />
-                                        <span>{_t("All messages")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={console.log}>
-                                        <span className="mx_IconizedContextMenu_icon" />
-                                        <span>{_t("Default")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={console.log}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellDot" />
-                                        <span>{_t("Mentions & Keywords")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={console.log}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellCrossed" />
-                                        <span>{_t("None")}</span>
-                                    </AccessibleButton>
-                                </li>
-                            </ul>
+                            <AccessibleButton onClick={console.log}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBell" />
+                                <span>{_t("All messages")}</span>
+                            </AccessibleButton>
+                            <AccessibleButton onClick={console.log}>
+                                <span className="mx_IconizedContextMenu_icon" />
+                                <span>{_t("Default")}</span>
+                            </AccessibleButton>
+                            <AccessibleButton onClick={console.log}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellDot" />
+                                <span>{_t("Mentions & Keywords")}</span>
+                            </AccessibleButton>
+                            <AccessibleButton onClick={console.log}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconBellCrossed" />
+                                <span>{_t("None")}</span>
+                            </AccessibleButton>
                         </div>
                     </div>
                 </ContextMenu>
@@ -252,36 +242,20 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
-                            <ul>
-                                <li>
-                                    <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
-                                        <span>{_t("Favourite")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.LowPriority)}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconArrowDown" />
-                                        <span>{_t("Low Priority")}</span>
-                                    </AccessibleButton>
-                                </li>
-                                <li>
-                                    <AccessibleButton onClick={this.onOpenRoomSettings}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
-                                        <span>{_t("Settings")}</span>
-                                    </AccessibleButton>
-                                </li>
-                            </ul>
+                            <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
+                                <span>{_t("Favourite")}</span>
+                            </AccessibleButton>
+                            <AccessibleButton onClick={this.onOpenRoomSettings}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
+                                <span>{_t("Settings")}</span>
+                            </AccessibleButton>
                         </div>
-                        <div className="mx_IconizedContextMenu_optionList">
-                            <ul>
-                                <li className="mx_RoomTile2_contextMenu_redRow">
-                                    <AccessibleButton onClick={this.onLeaveRoomClick}>
-                                        <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
-                                        <span>{_t("Leave Room")}</span>
-                                    </AccessibleButton>
-                                </li>
-                            </ul>
+                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
+                            <AccessibleButton onClick={this.onLeaveRoomClick}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
+                                <span>{_t("Leave Room")}</span>
+                            </AccessibleButton>
                         </div>
                     </div>
                 </ContextMenu>

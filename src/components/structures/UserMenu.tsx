@@ -191,12 +191,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
-                <li>
-                    <AccessibleButton onClick={this.onHomeClick}>
-                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
-                        <span>{_t("Home")}</span>
-                    </AccessibleButton>
-                </li>
+                <AccessibleButton onClick={this.onHomeClick}>
+                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
+                    <span>{_t("Home")}</span>
+                </AccessibleButton>
             );
         }
 
@@ -232,49 +230,33 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     </div>
                     {hostingLink}
                     <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
-                        <ul>
-                            {homeButton}
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
-                                    <span>{_t("Notification settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
-                                    <span>{_t("Security & privacy")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
-                                    <span>{_t("All settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onShowArchived}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
-                                    <span>{_t("Archived rooms")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onProvideFeedback}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
-                                    <span>{_t("Feedback")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                        {homeButton}
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
+                            <span>{_t("Notification settings")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
+                            <span>{_t("Security & privacy")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
+                            <span>{_t("All settings")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={this.onShowArchived}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
+                            <span>{_t("Archived rooms")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={this.onProvideFeedback}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
+                            <span>{_t("Feedback")}</span>
+                        </AccessibleButton>
                     </div>
-                    <div className="mx_IconizedContextMenu_optionList">
-                        <ul>
-                            <li className="mx_UserMenu_contextMenu_redRow">
-                                <AccessibleButton onClick={this.onSignOutClick}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
-                                    <span>{_t("Sign out")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                    <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
+                        <AccessibleButton onClick={this.onSignOutClick}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
+                            <span>{_t("Sign out")}</span>
+                        </AccessibleButton>
                     </div>
                 </div>
             </ContextMenu>
