@@ -204,7 +204,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return (
             <ContextMenu
                 chevronFace="none"
-                left={elementRect.width + elementRect.left}
+                left={elementRect.width + elementRect.left - 20}
                 top={elementRect.top + elementRect.height}
                 onFinished={this.onCloseMenu}
             >
