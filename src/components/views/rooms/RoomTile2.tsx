@@ -26,16 +26,15 @@ import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
-import NotificationBadge, {
-    INotificationState,
-    NotificationColor,
-    TagSpecificNotificationState
-} from "./NotificationBadge";
 import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import RoomTileIcon from "./RoomTileIcon";
+import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
+import { INotificationState } from "../../../stores/notifications/INotificationState";
+import NotificationBadge from "./NotificationBadge";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
