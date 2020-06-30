@@ -1932,11 +1932,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     getFragmentAfterLogin() {
         let fragmentAfterLogin = "";
-        if (this.props.initialScreenAfterLogin &&
+        const initialScreenAfterLogin = this.props.initialScreenAfterLogin;
+        if (initialScreenAfterLogin &&
             // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
-            !["welcome", "login", "register"].includes(this.props.initialScreenAfterLogin.screen)
+            !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
         ) {
-            fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
+            fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
         }
         return fragmentAfterLogin;
     }
