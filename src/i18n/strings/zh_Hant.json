@@ -2592,5 +2592,6 @@
     "You changed the room topic": "您變更了聊天室主題",
     "%(senderName)s changed the room topic": "%(senderName)s 變更了聊天室主題",
     "New spinner design": "新的微調器設計",
-    "Use a more compact ‘Modern’ layout": "使用更簡潔的「現代」佈局"
+    "Use a more compact ‘Modern’ layout": "使用更簡潔的「現代」佈局",
+    "Message deleted on %(date)s": "訊息刪除於 %(date)s"
 }
