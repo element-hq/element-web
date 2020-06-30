@@ -41,12 +41,10 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
         this.state = {
             notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
-        }
+        };
     }
 
     public render(): React.ReactNode {
-        console.log({tag: this.props.tag})
-
         let badge: React.ReactNode;
         if (this.props.displayBadge) {
             badge = <NotificationBadge
@@ -60,6 +58,6 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
             <RoomAvatar room={this.props.room} width={this.props.avatarSize} height={this.props.avatarSize} />
             <RoomTileIcon room={this.props.room} tag={this.props.tag} />
             {badge}
-        </div>
+        </div>;
     }
 }
