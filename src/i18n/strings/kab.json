@@ -11,7 +11,7 @@
     "Dismiss": "Agwi",
     "Sign In": "Kcem",
     "Explore rooms": "Snirem tixxamin",
-    "Missing indexeddb worker script!": "Asekript n uxeddam IndexedB ulac-it!",
+    "Missing indexeddb worker script!": "Asekript n uxeddam Indexeddb ulac-it!",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Tawila d tarmeɣtut: mudd-d kan yiwen seg default_server_config, default_server_name, neɣ default_hs_url.",
     "Invalid configuration: no default server specified.": "Tawila d tarmeɣtut: ulac aqeddac amezwer i d-yettwafernen.",
     "Your Riot is misconfigured": "Riot inek(inem) ur ittusbadu ara",
