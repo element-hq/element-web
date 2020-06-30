@@ -587,6 +587,14 @@ export class Algorithm extends EventEmitter {
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
+        if (cause === RoomUpdateCause.NewRoom) {
+            const roomTags = this.roomIdsToTags[room.roomId];
+            if (roomTags && roomTags.length > 0) {
+                console.warn(`${room.roomId} is reportedly new but is already known - assuming TagChange instead`);
+                cause = RoomUpdateCause.PossibleTagChange;
+            }
+        }
+
         if (cause === RoomUpdateCause.PossibleTagChange) {
             // TODO: Be smarter and splice rather than regen the planet. https://github.com/vector-im/riot-web/issues/14035
             // TODO: No-op if no change. https://github.com/vector-im/riot-web/issues/14035
