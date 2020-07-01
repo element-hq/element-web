@@ -53,8 +53,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
     public get visible(): boolean {
         // @ts-ignore - TypeScript really wants this to be [tagId: string] but we know better.
-        const roomCount = _reduce(RoomListStoreTempProxy.getRoomLists(), (result, rooms) => result + rooms.length, 0)
-        console.log(`calculating roomlist size: ${roomCount}`)
+        const roomCount = _reduce(RoomListStoreTempProxy.getRoomLists(), (result, rooms) => result + rooms.length, 0);
         return roomCount >= 20;
     }
 
