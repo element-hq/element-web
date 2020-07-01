@@ -202,6 +202,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         return (
             <ContextMenu
                 chevronFace="none"
+                // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
                 left={elementRect.width + elementRect.left - 20}
                 top={elementRect.top + elementRect.height}
                 onFinished={this.onCloseMenu}

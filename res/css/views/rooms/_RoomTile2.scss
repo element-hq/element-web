@@ -92,6 +92,7 @@ limitations under the License.
         justify-content: center;
     }
 
+    // The context menu buttons are hidden by default
     .mx_RoomTile2_menuButton,
     .mx_RoomTile2_notificationsButton {
         width: 20px;
@@ -114,6 +115,7 @@ limitations under the License.
         }
     }
 
+    // If the room has an overriden notification setting then we always show the notifications menu button
     .mx_RoomTile2_notificationsButton.mx_RoomTile2_notificationsButton_show {
         display: block;
     }
@@ -165,6 +167,9 @@ limitations under the License.
 }
 .mx_RoomTile2_iconBellCrossed::before {
     mask-image: url('$(res)/img/feather-customised/bell-crossed.svg');
+}
+.mx_RoomTile2_iconBellMentions::before {
+    mask-image: url('$(res)/img/feather-customised/bell-mentions.custom.svg');
 }
 .mx_RoomTile2_iconCheck::before {
     mask-image: url('$(res)/img/feather-customised/check.svg');

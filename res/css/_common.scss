@@ -631,6 +631,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         }
 
         .mx_AccessibleButton {
+            // pad the inside of the button so that the hover background is padded too
             padding-top: 12px;
             padding-bottom: 12px;
             text-decoration: none;

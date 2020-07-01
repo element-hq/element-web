@@ -70,7 +70,7 @@ interface IState {
 
 const contextMenuBelow = (elementRect) => {
     const left = elementRect.left + window.pageXOffset - 6;
-    let top = elementRect.bottom + window.pageYOffset + 21;
+    let top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = "none";
     return {left, top, chevronFace};
 };
@@ -209,10 +209,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         if (MatrixClientPeg.get().isGuest()) return;
 
         try {
-            // TODO add local echo
+            // TODO add local echo - https://github.com/vector-im/riot-web/issues/14280
             await setRoomNotifsState(this.props.room.roomId, newState);
         } catch (error) {
             // TODO: some form of error notification to the user to inform them that their state change failed.
+            // https://github.com/vector-im/riot-web/issues/14281
             console.error(error);
         }
 
@@ -254,7 +255,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             <NotifOption
                                 label={_t("Mentions & Keywords")}
                                 active={state === MENTIONS_ONLY}
-                                iconClassName=""
+                                iconClassName="mx_RoomTile2_iconBellMentions"
                                 onClick={this.onClickMentions}
                             />
                             <NotifOption
