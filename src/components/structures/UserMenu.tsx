@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
+import {createRef} from "react";
+import {MatrixClientPeg} from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
-import { Action } from "../../dispatcher/actions";
-import { createRef } from "react";
-import { _t } from "../../languageHandler";
-import {ContextMenu, ContextMenuButton} from "./ContextMenu";
+import {ActionPayload} from "../../dispatcher/payloads";
+import {Action} from "../../dispatcher/actions";
+import {_t} from "../../languageHandler";
+import {ChevronFace, ContextMenu, ContextMenuButton} from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
-import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import {OpenToTabPayload} from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
@@ -33,8 +33,8 @@ import {getHostingLink} from "../../utils/HostingLink";
 import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
-import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import {OwnProfileStore} from "../../stores/OwnProfileStore";
+import {UPDATE_EVENT} from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
 
@@ -105,7 +105,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (this.buttonRef.current) this.buttonRef.current.click();
     };
 
-    private onOpenMenuClick = (ev: InputEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -214,7 +214,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         return (
             <ContextMenu
-                chevronFace="none"
+                chevronFace={ChevronFace.None}
                 // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
                 left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
                 top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}

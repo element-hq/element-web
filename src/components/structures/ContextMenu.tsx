@@ -21,7 +21,7 @@ import ReactDOM from "react-dom";
 import classNames from "classnames";
 
 import {Key} from "../../Keyboard";
-import AccessibleButton, { IAccessibleButtonProps } from "../views/elements/AccessibleButton";
+import AccessibleButton, { IAccessibleButtonProps, ButtonEvent } from "../views/elements/AccessibleButton";
 import {Writeable} from "../../@types/common";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
@@ -81,7 +81,7 @@ interface IProps extends IPosition {
     // Function to be called on menu close
     onFinished();
     // on resize callback
-    windowResize();
+    windowResize?();
 }
 
 interface IState {
@@ -407,7 +407,7 @@ export const ContextMenuButton: React.FC<IContextMenuButtonProps> = ({ label, is
 interface IMenuItemProps extends IAccessibleButtonProps {
     label?: string;
     className?: string;
-    onClick();
+    onClick(ev: ButtonEvent);
 }
 
 // Semantic component for representing a role=menuitem
@@ -436,7 +436,7 @@ interface IMenuItemCheckboxProps extends IAccessibleButtonProps {
     active: boolean;
     disabled?: boolean;
     className?: string;
-    onClick();
+    onClick(ev: ButtonEvent);
 }
 
 // Semantic component for representing a role=menuitemcheckbox
@@ -453,7 +453,7 @@ interface IMenuItemRadioProps extends IAccessibleButtonProps {
     active: boolean;
     disabled?: boolean;
     className?: string;
-    onClick();
+    onClick(ev: ButtonEvent);
 }
 
 // Semantic component for representing a role=menuitemradio

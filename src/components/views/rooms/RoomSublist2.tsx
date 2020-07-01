@@ -17,22 +17,21 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { createRef } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import {Room} from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
-import { _t } from "../../../languageHandler";
+import {RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import {_t} from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
-import { ResizableBox, ResizeCallbackData } from "react-resizable";
-import { ListLayout } from "../../../stores/room-list/ListLayout";
-import NotificationBadge, { ListNotificationState } from "./NotificationBadge";
-import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
+import {ResizableBox, ResizeCallbackData} from "react-resizable";
+import {ListLayout} from "../../../stores/room-list/ListLayout";
+import NotificationBadge, {ListNotificationState} from "./NotificationBadge";
+import {ChevronFace, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
-import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import {ListAlgorithm, SortAlgorithm} from "../../../stores/room-list/algorithms/models";
+import {DefaultTagID, TagID} from "../../../stores/room-list/models";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -128,7 +127,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
-    private onOpenMenuClick = (ev: InputEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -219,7 +218,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
-                    chevronFace="none"
+                    chevronFace={ChevronFace.None}
                     left={this.state.contextMenuPosition.left}
                     top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
