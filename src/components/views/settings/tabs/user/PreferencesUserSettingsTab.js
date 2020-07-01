@@ -38,7 +38,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
     ];
 
     // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14231
-    static ELIGIBLE_ROOM_LIST_SETTINGS = () => {
+    static eligibleRoomListSettings = () => {
         if (RoomListStoreTempProxy.isUsingNewStore()) {
             return PreferencesUserSettingsTab.ROOM_LIST_2_SETTINGS;
         }
@@ -189,7 +189,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ELIGIBLE_ROOM_LIST_SETTINGS())}
+                    {this._renderGroup(PreferencesUserSettingsTab.eligibleRoomListSettings())}
                 </div>
 
                 <div className="mx_SettingsTab_section">
