@@ -36,5 +36,7 @@
     "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
     "Go to Riot.im": "Aller vers Riot.im",
     "Failed to start": "Échec au démarrage",
-    "Riot Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)"
+    "Riot Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)",
+    "Download Completed": "Téléchargement terminé",
+    "Open": "Ouvrir"
 }

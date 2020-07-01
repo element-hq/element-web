@@ -36,5 +36,7 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Folytathatod a jelenlegi böngésződdel, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",
     "I understand the risks and wish to continue": "Megértettem a kockázatot és folytatom",
     "Go to Riot.im": "Irány a Riot.im",
-    "Failed to start": "Az indítás sikertelen"
+    "Failed to start": "Az indítás sikertelen",
+    "Download Completed": "A letöltés befejeződött",
+    "Open": "Megnyitás"
 }
