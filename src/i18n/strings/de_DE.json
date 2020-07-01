@@ -2533,5 +2533,8 @@
     "%(senderName)s changed the room topic": "%(senderName)s hat das Raumthema geändert",
     "New spinner design": "Neue Warteanimation",
     "Use a more compact ‘Modern’ layout": "Verwende ein kompakteres 'modernes' Layout",
-    "Message deleted on %(date)s": "Nachricht am %(date)s gelöscht"
+    "Message deleted on %(date)s": "Nachricht am %(date)s gelöscht",
+    "Wrong file type": "Falscher Dateityp",
+    "Wrong Recovery Key": "Falscher Wiederherstellungsschlüssel",
+    "Invalid Recovery Key": "Ungültiger Wiederherstellungsschlüssel"
 }
