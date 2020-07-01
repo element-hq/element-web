@@ -55,7 +55,7 @@ limitations under the License.
     border-radius: 4px;
     box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     background-color: $menu-bg-color;
-    z-index: 4000; // Higher than dialogs so tooltips can be used in dialogs
+    z-index: 6000; // Higher than context menu so tooltips can be used everywhere
     padding: 10px;
     pointer-events: none;
     line-height: $font-14px;

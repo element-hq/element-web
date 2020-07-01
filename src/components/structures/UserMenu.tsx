@@ -37,6 +37,7 @@ import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
+import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 
 interface IProps {
     isMinimized: boolean;
@@ -218,7 +219,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 {MatrixClientPeg.get().getUserId()}
                             </span>
                         </div>
-                        <div
+                        <AccessibleTooltipButton
                             className="mx_UserMenu_contextMenu_themeButton"
                             onClick={this.onSwitchThemeClick}
                             title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
@@ -228,7 +229,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 alt={_t("Switch theme")}
                                 width={16}
                             />
-                        </div>
+                        </AccessibleTooltipButton>
                     </div>
                     {hostingLink}
                     <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
