@@ -230,7 +230,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(): React.ReactElement {
-        if (this.props.isMinimized || MatrixClientPeg.get().isGuest()) return null; // no menu when minimized or guest
+        if (this.props.isMinimized || MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Invite) {
+            // the menu makes no sense in these cases so do not show one
+            return null;
+        }
 
         const state = getRoomNotifsState(this.props.room.roomId);
 
