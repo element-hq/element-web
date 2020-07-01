@@ -86,6 +86,8 @@ limitations under the License.
 
     .mx_UserMenu_contextMenu_redRow {
         .mx_AccessibleButton {
+            padding-top: 16px;
+            padding-bottom: 16px;
             color: $warning-color !important; // !important to override styles from context menu
         }
 
@@ -95,6 +97,8 @@ limitations under the License.
     }
 
     .mx_UserMenu_contextMenu_header {
+        padding: 20px;
+
         // Create a flexbox to organize the header a bit easier
         display: flex;
         align-items: center;

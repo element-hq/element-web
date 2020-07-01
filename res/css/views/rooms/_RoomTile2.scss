@@ -92,20 +92,18 @@ limitations under the License.
         justify-content: center;
     }
 
-    // The menu button is hidden by default
-    // TODO: [Notifications] Use mx_RoomTile2_notificationsButton, similar to the following approach:
-    // https://github.com/matrix-org/matrix-react-sdk/blob/2180a56074f3698fc0241c309a72ba6cad802d1c/res/css/views/rooms/_RoomSublist2.scss#L48-L76
-    // You'll need to do the same down below on the &:hover selector for the tile.
-    // See https://github.com/vector-im/riot-web/issues/13961.
-    // ... also remove this 5 line TODO comment.
+    // The context menu buttons are hidden by default
     .mx_RoomTile2_menuButton,
     .mx_RoomTile2_notificationsButton {
-        width: 0;
-        height: 0;
-        visibility: hidden;
+        width: 20px;
+        height: 20px;
+        margin: auto 0 auto 8px;
         position: relative;
+        display: none;
 
         &::before {
+            top: 2px;
+            left: 2px;
             content: '';
             width: 16px;
             height: 16px;
@@ -117,9 +115,12 @@ limitations under the License.
         }
     }
 
+    // If the room has an overriden notification setting then we always show the notifications menu button
+    .mx_RoomTile2_notificationsButton.mx_RoomTile2_notificationsButton_show {
+        display: block;
+    }
+
     .mx_RoomTile2_menuButton::before {
-        top: 8px;
-        left: -1px; // this is off-center to align it with the badges
         mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
     }
 
@@ -132,10 +133,9 @@ limitations under the License.
                 visibility: hidden;
             }
 
+            .mx_RoomTile2_notificationsButton,
             .mx_RoomTile2_menuButton {
-                width: 18px;
-                height: 32px;
-                visibility: visible;
+                display: block;
             }
         }
     }
@@ -158,6 +158,23 @@ limitations under the License.
     }
 }
 
+// We use these both in context menus and the room tiles
+.mx_RoomTile2_iconBell::before {
+    mask-image: url('$(res)/img/feather-customised/bell.svg');
+}
+.mx_RoomTile2_iconBellDot::before {
+    mask-image: url('$(res)/img/feather-customised/bell-notification.custom.svg');
+}
+.mx_RoomTile2_iconBellCrossed::before {
+    mask-image: url('$(res)/img/feather-customised/bell-crossed.svg');
+}
+.mx_RoomTile2_iconBellMentions::before {
+    mask-image: url('$(res)/img/feather-customised/bell-mentions.custom.svg');
+}
+.mx_RoomTile2_iconCheck::before {
+    mask-image: url('$(res)/img/feather-customised/check.svg');
+}
+
 .mx_RoomTile2_contextMenu {
     .mx_RoomTile2_contextMenu_redRow {
         .mx_AccessibleButton {
@@ -166,6 +183,16 @@ limitations under the License.
 
         .mx_IconizedContextMenu_icon::before {
             background-color: $warning-color;
+        }
+    }
+
+    .mx_RoomTile2_contextMenu_activeRow {
+        &.mx_AccessibleButton, .mx_AccessibleButton {
+            color: $accent-color !important; // !important to override styles from context menu
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $accent-color;
         }
     }
 
