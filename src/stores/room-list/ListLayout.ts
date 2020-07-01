@@ -120,6 +120,10 @@ export class ListLayout {
         return px / this.tileHeight;
     }
 
+    public reset() {
+        localStorage.removeItem(this.key);
+    }
+
     private save() {
         localStorage.setItem(this.key, JSON.stringify(this.serialize()));
     }
