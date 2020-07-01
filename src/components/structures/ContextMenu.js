@@ -116,6 +116,7 @@ export class ContextMenu extends React.Component {
             this.props.onFinished();
 
             e.preventDefault();
+            e.stopPropagation();
             const x = e.clientX;
             const y = e.clientY;
 
@@ -131,6 +132,12 @@ export class ContextMenu extends React.Component {
                 document.elementFromPoint(x, y).dispatchEvent(clickEvent);
             });
         }
+    };
+
+    onContextMenuPreventBubbling = (e) => {
+        // stop propagation so that any context menu handlers don't leak out of this context menu
+        // but do not inhibit the default browser menu
+        e.stopPropagation();
     };
 
     _onMoveFocus = (element, up) => {
@@ -324,7 +331,7 @@ export class ContextMenu extends React.Component {
         }
 
         return (
-            <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown}>
+            <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown} onContextMenu={this.onContextMenuPreventBubbling}>
                 <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role={this.props.managed ? "menu" : undefined}>
                     { chevron }
                     { props.children }
