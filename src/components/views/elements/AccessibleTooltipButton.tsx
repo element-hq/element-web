@@ -33,7 +33,7 @@ interface IState {
 
 export default class AccessibleTooltipButton extends React.PureComponent<ITooltipProps, IState> {
     constructor(props: ITooltipProps) {
-        super(props)
+        super(props);
         this.state = {
             hover: false,
         };
