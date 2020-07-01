@@ -89,6 +89,14 @@ export class ListLayout {
         return 10 + RESIZER_BOX_FACTOR;
     }
 
+    public setVisibleTilesWithin(diff: number, maxPossible: number) {
+        if (this.visibleTiles > maxPossible) {
+            this.visibleTiles = maxPossible + diff;
+        } else {
+            this.visibleTiles += diff;
+        }
+    }
+
     public calculateTilesToPixelsMin(maxTiles: number, n: number, possiblePadding: number): number {
         // Only apply the padding if we're about to use maxTiles as we need to
         // plan for the padding. If we're using n, the padding is already accounted
