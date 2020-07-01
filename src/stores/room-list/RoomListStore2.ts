@@ -50,8 +50,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private tagWatcher = new TagWatcher(this);
 
     private readonly watchedSettings = [
-        'RoomList.orderAlphabetically',
-        'RoomList.orderByImportance',
         'feature_custom_tags',
     ];
 
@@ -338,11 +336,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private async updateAlgorithmInstances() {
-        const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
-        const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
-
-        const defaultSort = orderAlphabetically ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
-        const defaultOrder = orderByImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
+        const defaultSort = SortAlgorithm.Alphabetic;
+        const defaultOrder = ListAlgorithm.Natural;
 
         for (const tag of Object.keys(this.orderedLists)) {
             const definedSort = this.getTagSorting(tag);
