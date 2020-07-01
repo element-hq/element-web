@@ -21,6 +21,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { RoomListStoreTempProxy } from "./room-list/RoomListStoreTempProxy";
+import _reduce from 'lodash/reduce';
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -51,7 +52,10 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     public get visible(): boolean {
-        return this.state.enabled;
+        // @ts-ignore - TypeScript really wants this to be [tagId: string] but we know better.
+        const roomCount = _reduce(RoomListStoreTempProxy.getRoomLists(), (result, rooms) => result + rooms.length, 0)
+        console.log(`calculating roomlist size: ${roomCount}`)
+        return roomCount >= 20;
     }
 
     protected async onAction(payload: ActionPayload) {
