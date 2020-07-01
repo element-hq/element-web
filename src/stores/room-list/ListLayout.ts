@@ -18,9 +18,9 @@ import { TagID } from "./models";
 
 const TILE_HEIGHT_PX = 44;
 
-// the .65 comes from the CSS where the show more button is
-// mathematically 65% of a tile when floating.
-const RESIZER_BOX_FACTOR = 0.65;
+// this comes from the CSS where the show more button is
+// mathematically this percent of a tile when floating.
+const RESIZER_BOX_FACTOR = 0.78;
 
 interface ISerializedListLayout {
     numTiles: number;
