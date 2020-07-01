@@ -42,7 +42,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     onClick?(e?: ButtonEvent): void;
 }
 
-interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
+export interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
     ref?: React.Ref<Element>;
 }
 
