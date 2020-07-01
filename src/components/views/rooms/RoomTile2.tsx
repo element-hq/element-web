@@ -298,6 +298,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private renderGeneralMenu(): React.ReactElement {
         if (this.props.isMinimized) return null; // no menu when minimized
 
+        // TODO: Get a proper invite context menu, or take invites out of the room list.
+        if (this.props.tag === DefaultTagID.Invite) {
+            return null;
+        }
+
         let contextMenu = null;
         if (this.state.generalMenuDisplayed) {
             const elementRect = this.generalMenuButtonRef.current.getBoundingClientRect();
