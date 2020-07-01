@@ -125,9 +125,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         });
     };
 
-    private onCloseMenu = (ev: InputEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+    private onCloseMenu = () => {
         this.setState({contextMenuPosition: null});
     };
 
