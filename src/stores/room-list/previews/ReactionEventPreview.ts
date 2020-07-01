@@ -22,8 +22,11 @@ import { _t } from "../../../languageHandler";
 
 export class ReactionEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
-        const reaction = event.getRelation().key;
-        if (!reaction) return;
+        const relation = event.getRelation();
+        if (!relation) return null; // invalid reaction (probably redacted)
+
+        const reaction = relation.key;
+        if (!reaction) return null; // invalid reaction (unknown format)
 
         if (isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
             return reaction;
