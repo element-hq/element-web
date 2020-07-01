@@ -65,22 +65,21 @@ interface IProps {
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
+type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
+
 interface IState {
     notificationState: ListNotificationState;
-    menuDisplayed: boolean;
+    contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
-    private headerButton = createRef();
-    private menuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
-
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
-            menuDisplayed: false,
+            contextMenuPosition: null,
             isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
@@ -132,11 +131,24 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onOpenMenuClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({contextMenuPosition: target.getBoundingClientRect()});
+    };
+
+    private onContextMenu = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            contextMenuPosition: {
+                left: ev.clientX,
+                top: ev.clientY,
+                height: 0,
+            },
+        });
     };
 
     private onCloseMenu = () => {
-        this.setState({menuDisplayed: false});
+        this.setState({contextMenuPosition: null});
     };
 
     private onUnreadFirstChanged = async () => {
@@ -202,15 +214,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
 
         let contextMenu = null;
-        if (this.state.menuDisplayed) {
-            const elementRect = this.menuButtonRef.current.getBoundingClientRect();
+        if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
-                    left={elementRect.left}
-                    top={elementRect.top + elementRect.height}
+                    left={this.state.contextMenuPosition.left}
+                    top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
                 >
                     <div className="mx_RoomSublist2_contextMenu">
@@ -261,9 +272,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className="mx_RoomSublist2_menuButton"
                     onClick={this.onOpenMenuClick}
-                    inputRef={this.menuButtonRef}
                     label={_t("List options")}
-                    isExpanded={this.state.menuDisplayed}
+                    isExpanded={!!this.state.contextMenuPosition}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -272,7 +282,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactElement {
         return (
-            <RovingTabIndexWrapper inputRef={this.headerButton}>
+            <RovingTabIndexWrapper>
                 {({onFocus, isActive, ref}) => {
                     // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
@@ -317,12 +327,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
                                 <AccessibleButton
+                                    onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
                                     className={"mx_RoomSublist2_headerText"}
                                     role="treeitem"
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
+                                    onContextMenu={this.onContextMenu}
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
@@ -347,7 +359,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const classes = classNames({
             'mx_RoomSublist2': true,
-            'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
+            'mx_RoomSublist2_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist2_minimized': this.props.isMinimized,
         });
 
