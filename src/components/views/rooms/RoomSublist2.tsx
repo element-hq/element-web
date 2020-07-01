@@ -32,7 +32,7 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
-import { TagID } from "../../../stores/room-list/models";
+import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -196,6 +196,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderMenu(): React.ReactElement {
+        // TODO: Get a proper invite context menu, or take invites out of the room list.
+        if (this.props.tagId === DefaultTagID.Invite) {
+            return null;
+        }
+
         let contextMenu = null;
         if (this.state.menuDisplayed) {
             const elementRect = this.menuButtonRef.current.getBoundingClientRect();
