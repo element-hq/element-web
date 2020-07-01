@@ -232,10 +232,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const avatarSize = 32;
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
-            avatarSize={avatarSize}
+            avatarSize={32}
             tag={this.props.tag}
             displayBadge={this.props.isMinimized}
         />;
