@@ -73,7 +73,7 @@ interface IState {
 const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.pageXOffset - 9;
-    let top = elementRect.bottom + window.pageYOffset + 17;
+    const top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = "none";
     return {left, top, chevronFace};
 };
