@@ -370,7 +370,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
             let showNButton = null;
-            if (this.numTiles > this.numVisibleTiles) {
+            if (this.numTiles > visibleTiles.length) {
                 // we have a cutoff condition - add the button to show all
                 const numMissing = this.numTiles - visibleTiles.length;
                 let showMoreText = (
@@ -387,7 +387,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </div>
                 );
-            } else if (this.numTiles <= this.numVisibleTiles && this.numTiles > this.props.layout.defaultVisibleTiles) {
+            } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.props.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
