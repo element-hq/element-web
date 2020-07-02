@@ -23,7 +23,6 @@ import * as Matrix from "matrix-js-sdk";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
