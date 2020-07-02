@@ -284,9 +284,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             mx_RoomTile2_iconBell: state === ALL_MESSAGES_LOUD || state === ALL_MESSAGES,
             mx_RoomTile2_iconBellDot: state === MENTIONS_ONLY,
             mx_RoomTile2_iconBellCrossed: state === MUTE,
-            // XXX: RoomNotifs assumes ALL_MESSAGES is default, this is wrong,
-            // but cannot be fixed until FTUE Notifications lands.
-            mx_RoomTile2_notificationsButton_show: state !== ALL_MESSAGES,
+
+            // Only show the icon by default if the room is overridden to muted.
+            // TODO: [FTUE Notifications] Probably need to detect global mute state
+            mx_RoomTile2_notificationsButton_show: state === MUTE,
         });
 
         return (
