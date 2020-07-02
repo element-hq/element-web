@@ -600,8 +600,8 @@
     "Language and region": "Мова та регіон",
     "Account management": "Керування обліківкою",
     "Deactivating your account is a permanent action - be careful!": "Деактивація вашої обліківки є безповоротною дією — будьте обережні!",
-    "Deactivate Account": "Деактивувати обліківку",
-    "Deactivate account": "Деактивувати обліківку",
+    "Deactivate Account": "Знедіяти обліківку",
+    "Deactivate account": "Знедіяти обліківку",
     "Legal": "Правова інформація",
     "Credits": "Подяки",
     "For help with using Riot, click <a>here</a>.": "Якщо необхідна допомога у користуванні Riot'ом, клацніть <a>тут</a>.",
@@ -624,7 +624,7 @@
     "Link this email with your account in Settings to receive invites directly in Riot.": "Зв'яжіть цю е-пошту з вашою обліківкою у Налаштуваннях щоб отримувати сповіщення прямо у Riot.",
     "This invite to %(roomName)s was sent to %(email)s": "Це запрошення до %(roomName)s було надіслане на %(email)s",
     "Use an identity server in Settings to receive invites directly in Riot.": "Використовувати сервер ідентифікації у Налаштуваннях щоб отримувати запрошення прямо у Riot.",
-    "Are you sure you want to deactivate your account? This is irreversible.": "Ви впевнені у тому, що бажаєте деактивувати вашу обліківку? Це є безповоротним.",
+    "Are you sure you want to deactivate your account? This is irreversible.": "Ви впевнені у тому, що бажаєте знедіяти вашу обліківку? Це є безповоротним.",
     "Confirm account deactivation": "Підтвердьте деактивацію обліківки",
     "To continue, please enter your password:": "Щоб продовжити, введіть, будь ласка, ваш пароль:",
     "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible.</b>": "Ваша обліківка стане назавжди невикористовною. Ви не матимете змоги увійти в неї і ніхто не зможе перереєструватись під цим користувацьким ID. Це призведе до виходу вашої обліківки з усіх кімнат та до видалення деталей вашої обліківки з вашого серверу ідентифікації. <b>Ця дія є безповоротною.</b>",
@@ -660,5 +660,12 @@
     "Room": "Кімната",
     "Failed to reject invite": "Не вдалось відхилити запрошення",
     "You have %(count)s unread notifications in a prior version of this room.|other": "Ви маєте %(count)s непрочитаних сповіщень у попередній версії цієї кімнати.",
-    "You have %(count)s unread notifications in a prior version of this room.|one": "У вас одне непрочитане сповіщення у попередній версії цієї кімнати."
+    "You have %(count)s unread notifications in a prior version of this room.|one": "У вас одне непрочитане сповіщення у попередній версії цієї кімнати.",
+    "Deactivate user?": "Знедіяти користувача?",
+    "Deactivating this user will log them out and prevent them from logging back in. Additionally, they will leave all the rooms they are in. This action cannot be reversed. Are you sure you want to deactivate this user?": "Знедіювання цього користувача виведе їх з системи і унеможливить вхід у майбутньому. До того ж, вони залишать усі кімнати, в яких перебувають. Ця дія є безповоротною. Ви впевнені, що хочете знедіяти цього користувача?",
+    "Deactivate user": "Знедіяти користувача",
+    "Failed to deactivate user": "Не вдалось знедіяти користувача",
+    "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "Знедіювання вашої обліківки <b>типово не призводить до забуття надісланих вами повідомлень.</b> Якщо ви бажаєте щоб ми забули ваші повідомлення, поставте прапорець внизу.",
+    "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Видність повідомлень у Matrix є схожою до е-пошти. Забування нами ваших повідомлень означає, що надіслані вами повідомлення не будуть поширені будь-яким новим чи незареєстрованим користувачам, але зареєстровані користувачі, які мають доступ до цих повідомлень, і надалі матимуть доступ до їхніх копій.",
+    "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "Забудьте, будь ласка, усі надіслані мною повідомлення після знедіювання моєї обліківки. (<b>Попередження:</b> після цього майбутні користувачі бачитимуть неповні бесіди)"
 }

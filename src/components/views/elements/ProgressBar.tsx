@@ -14,24 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$PassphraseStrengthHigh: $accent-color;
-$PassphraseStrengthMedium: $username-variant5-color;
-$PassphraseStrengthLow: $notice-primary-color;
+import React from "react";
 
-progress.mx_PassphraseField_progress {
-    appearance: none;
-    width: 100%;
-    border: 0;
-    height: 4px;
-    position: absolute;
-    top: -12px;
-
-    @mixin ProgressBarBorderRadius "2px";
-    @mixin ProgressBarColour $PassphraseStrengthLow;
-    &[value="2"], &[value="3"] {
-        @mixin ProgressBarColour $PassphraseStrengthMedium;
-    }
-    &[value="4"] {
-        @mixin ProgressBarColour $PassphraseStrengthHigh;
-    }
+interface IProps {
+    value: number;
+    max: number;
 }
+
+const ProgressBar: React.FC<IProps> = ({value, max}) => {
+    return <progress className="mx_ProgressBar" max={max} value={value} />;
+};
+
+export default ProgressBar;

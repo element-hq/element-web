@@ -42,7 +42,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
             <input type='radio' disabled={disabled} {...otherProps} />
             {/* Used to render the radio button circle */}
             <div><div></div></div>
-            <span>{children}</span>
+            <div className="mx_RadioButton_content">{children}</div>
             <div className="mx_RadioButton_spacer" />
         </label>;
     }

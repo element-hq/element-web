@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
+import AwaitLock from "await-lock";
 
 /**
  * Represents a list ordering algorithm. Subclasses should populate the
@@ -25,6 +26,7 @@ import { SortAlgorithm } from "../models";
 export abstract class OrderingAlgorithm {
     protected cachedOrderedRooms: Room[];
     protected sortingAlgorithm: SortAlgorithm;
+    protected readonly updateLock = new AwaitLock();
 
     protected constructor(protected tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         // noinspection JSIgnoredPromiseFromCall

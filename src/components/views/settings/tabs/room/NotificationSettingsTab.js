@@ -28,6 +28,8 @@ export default class NotificationsSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
+    _soundUpload = createRef();
+
     constructor() {
         super();
 
@@ -44,8 +46,6 @@ export default class NotificationsSettingsTab extends React.Component {
             return;
         }
         this.setState({currentSound: soundData.name || soundData.url});
-
-        this._soundUpload = createRef();
     }
 
     async _triggerUploader(e) {
