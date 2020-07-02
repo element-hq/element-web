@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {MatrixClient} from "matrix-js-sdk/src/client";
-import {Room} from "matrix-js-sdk/src/models/Room";
+import {Room} from "matrix-js-sdk/src/models/room";
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';
