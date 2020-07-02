@@ -37,6 +37,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
         this.room.on("Room.timeline", this.handleRoomEventUpdate);
         this.room.on("Room.redaction", this.handleRoomEventUpdate);
         MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
+        MatrixClientPeg.get().on("accountData", this.handleAccountDataUpdate);
         this.updateNotificationState();
     }
 
@@ -62,6 +63,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
         this.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
+            MatrixClientPeg.get().removeListener("accountData", this.handleAccountDataUpdate);
         }
     }
 
@@ -76,6 +78,12 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
 
         if (roomId !== this.room.roomId) return; // ignore - not for us
         this.updateNotificationState();
+    };
+
+    private handleAccountDataUpdate = (ev: MatrixEvent) => {
+        if (ev.getType() === "m.push_rules") {
+            this.updateNotificationState();
+        }
     };
 
     private updateNotificationState() {
