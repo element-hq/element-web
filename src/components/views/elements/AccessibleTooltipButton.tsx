@@ -16,21 +16,28 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
-import * as sdk from "../../../index";
+import {IProps} from "./AccessibleButton";
+import Tooltip from './Tooltip';
 
-export default class AccessibleTooltipButton extends React.PureComponent {
-    static propTypes = {
-        ...AccessibleButton.propTypes,
-        // The tooltip to render on hover
-        title: PropTypes.string.isRequired,
-    };
+interface ITooltipProps extends IProps {
+    title: string;
+    tooltipClassName?: string;
+}
 
-    state = {
-        hover: false,
-    };
+interface IState {
+    hover: boolean;
+}
+
+export default class AccessibleTooltipButton extends React.PureComponent<ITooltipProps, IState> {
+    constructor(props: ITooltipProps) {
+        super(props);
+        this.state = {
+            hover: false,
+        };
+    }
 
     onMouseOver = () => {
         this.setState({
@@ -45,14 +52,15 @@ export default class AccessibleTooltipButton extends React.PureComponent {
     };
 
     render() {
-        const Tooltip = sdk.getComponent("elements.Tooltip");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         const {title, children, ...props} = this.props;
+        const tooltipClassName = classnames(
+            "mx_AccessibleTooltipButton_tooltip",
+            this.props.tooltipClassName,
+        );
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
-            tooltipClassName="mx_AccessibleTooltipButton_tooltip"
+            tooltipClassName={tooltipClassName}
             label={title}
         /> : <div />;
         return (

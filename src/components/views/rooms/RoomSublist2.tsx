@@ -35,6 +35,8 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
+import Tooltip from "../elements/Tooltip";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -350,11 +352,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {
                         addRoomButton = (
-                            <AccessibleButton
+                            <AccessibleTooltipButton
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoom}
                                 className="mx_RoomSublist2_auxButton"
                                 aria-label={this.props.addRoomLabel || _t("Add room")}
+                                title={this.props.addRoomLabel}
+                                tooltipClassName={"mx_RoomSublist2_addRoomTooltip"}
                             />
                         );
                     }
