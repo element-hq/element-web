@@ -20,7 +20,9 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { TagID } from '../../../stores/room-list/models';
 import RoomAvatar from "./RoomAvatar";
 import RoomTileIcon from "../rooms/RoomTileIcon";
-import NotificationBadge, { INotificationState, TagSpecificNotificationState } from '../rooms/NotificationBadge';
+import NotificationBadge from '../rooms/NotificationBadge';
+import { INotificationState } from "../../../stores/notifications/INotificationState";
+import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
 
 interface IProps {
     room: Room;

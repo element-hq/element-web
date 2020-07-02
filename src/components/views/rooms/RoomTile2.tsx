@@ -25,11 +25,6 @@ import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleBu
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
-import NotificationBadge, {
-    INotificationState,
-    NotificationColor,
-    TagSpecificNotificationState
-} from "./NotificationBadge";
 import { _t } from "../../../languageHandler";
 import { ContextMenu, ContextMenuButton, MenuItemRadio } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -39,6 +34,10 @@ import RoomTileIcon from "./RoomTileIcon";
 import { getRoomNotifsState, ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { setRoomNotifsState } from "../../../RoomNotifs";
+import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
+import { INotificationState } from "../../../stores/notifications/INotificationState";
+import NotificationBadge from "./NotificationBadge";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231

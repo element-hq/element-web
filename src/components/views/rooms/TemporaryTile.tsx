@@ -18,7 +18,9 @@ import React from "react";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
-import NotificationBadge, { INotificationState, NotificationColor } from "./NotificationBadge";
+import { INotificationState } from "../../../stores/notifications/INotificationState";
+import NotificationBadge from "./NotificationBadge";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 interface IProps {
     isMinimized: boolean;

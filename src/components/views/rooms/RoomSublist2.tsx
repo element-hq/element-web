@@ -26,7 +26,6 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
-import NotificationBadge, { ListNotificationState } from "./NotificationBadge";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
@@ -34,6 +33,8 @@ import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
+import NotificationBadge from "./NotificationBadge";
+import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
