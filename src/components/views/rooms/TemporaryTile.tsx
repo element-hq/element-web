@@ -56,6 +56,7 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         // XXX: We copy classes because it's easier
         const classes = classNames({
             'mx_RoomTile2': true,
+            'mx_TemporaryTile': true,
             'mx_RoomTile2_selected': this.props.isSelected,
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
@@ -85,7 +86,6 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
-        const avatarSize = 32;
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper>

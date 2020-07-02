@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_DecoratedRoomAvatar {
+// XXX: We shouldn't be using TemporaryTile anywhere - delete it.
+.mx_DecoratedRoomAvatar, .mx_TemporaryTile {
     position: relative;
 
     .mx_RoomTileIcon {
