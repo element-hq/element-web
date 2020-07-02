@@ -47,6 +47,10 @@ declare global {
         hasStorageAccess?: () => Promise<boolean>;
     }
 
+    interface Navigator {
+        userLanguage?: string;
+    }
+
     interface StorageEstimate {
         usageDetails?: {[key: string]: number};
     }

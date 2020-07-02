@@ -1257,6 +1257,11 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.10.tgz#cc658ca319b6355399efc1f5b9e818f1a24bf999"
   integrity sha512-1UzDldn9GfYYEsWWnn/P4wkTlkZDH7lDb0wBMGbtIQc9zXEQq7FlKBdZUn6OBqD8sKZZ2RQO2mAjGpXiDGoRmQ==
 
+"@types/counterpart@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.1.tgz#b1b784d9e54d9879f0a8cb12f2caedab65430fe8"
+  integrity sha512-PRuFlBBkvdDOtxlIASzTmkEFar+S66Ek48NVVTWMUjtJAdn5vyMSN8y6IZIoIymGpR36q2nZbIYazBWyFxL+IQ==
+
 "@types/fbemitter@*":
   version "2.0.32"
   resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
