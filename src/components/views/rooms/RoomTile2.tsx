@@ -287,8 +287,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         const classes = classNames("mx_RoomTile2_notificationsButton", {
             // Show bell icon for the default case too.
-            mx_RoomTile2_iconBell: state === ALL_MESSAGES_LOUD || state === ALL_MESSAGES,
-            mx_RoomTile2_iconBellDot: state === MENTIONS_ONLY,
+            mx_RoomTile2_iconBell: state === state === ALL_MESSAGES,
+            mx_RoomTile2_iconBellDot: state === ALL_MESSAGES_LOUD,
+            mx_RoomTile2_iconBellMentions: state === MENTIONS_ONLY,
             mx_RoomTile2_iconBellCrossed: state === MUTE,
 
             // Only show the icon by default if the room is overridden to muted.
