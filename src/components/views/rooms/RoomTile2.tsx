@@ -119,6 +119,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
     }
 
+    private get showContextMenu(): boolean {
+        return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
+    }
+
     public componentWillUnmount() {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
@@ -170,6 +174,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
+        // If we don't have a context menu to show, ignore the action.
+        if (!this.showContextMenu) return;
+
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -239,7 +246,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(): React.ReactElement {
-        if (this.props.isMinimized || MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Invite) {
+        if (MatrixClientPeg.get().isGuest() || !this.showContextMenu) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
@@ -306,12 +313,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     }
 
     private renderGeneralMenu(): React.ReactElement {
-        if (this.props.isMinimized) return null; // no menu when minimized
+        if (!this.showContextMenu) return null; // no menu to show
 
-        // TODO: Get a proper invite context menu, or take invites out of the room list.
-        if (this.props.tag === DefaultTagID.Invite) {
-            return null;
-        }
+        // TODO: We could do with a proper invite context menu, unlike what showContextMenu suggests
 
         let contextMenu = null;
         if (this.state.generalMenuPosition) {
