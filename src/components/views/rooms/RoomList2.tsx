@@ -166,18 +166,25 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store: RoomListStore2) => {
-            const newLists = store.orderedLists;
-            console.log("new lists", newLists);
-
-            const layoutMap = new Map<TagID, ListLayout>();
-            for (const tagId of Object.keys(newLists)) {
-                layoutMap.set(tagId, new ListLayout(tagId));
-            }
-
-            this.setState({sublists: newLists, layouts: layoutMap});
-        });
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
+        this.updateLists(); // trigger the first update
     }
+
+    public componentWillUnmount() {
+        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
+    }
+
+    private updateLists = () => {
+        const newLists = RoomListStore.instance.orderedLists;
+        console.log("new lists", newLists);
+
+        const layoutMap = new Map<TagID, ListLayout>();
+        for (const tagId of Object.keys(newLists)) {
+            layoutMap.set(tagId, new ListLayout(tagId));
+        }
+
+        this.setState({sublists: newLists, layouts: layoutMap});
+    };
 
     private renderCommunityInvites(): React.ReactElement[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
