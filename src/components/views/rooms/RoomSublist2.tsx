@@ -167,9 +167,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         let room;
         if (this.props.tagId === DefaultTagID.Invite) {
-            // switch to first room in sortedList as that'll be the top of the list for the user
+            // switch to first room as that'll be the top of the list for the user
             room = this.props.rooms && this.props.rooms[0];
         } else {
+            // find the first room with a count of the same colour as the badge count
             room = this.props.rooms.find((r: Room) => {
                 const notifState = this.state.notificationState.getForRoom(r);
                 return notifState.count > 0 && notifState.color === this.state.notificationState.color;
