@@ -140,6 +140,13 @@ export class ContextMenu extends React.Component {
         e.stopPropagation();
     };
 
+    // Prevent clicks on the background from going through to the component which opened the menu.
+    _onFinished = (ev: InputEvent) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        if (this.props.onFinished) this.props.onFinished();
+    };
+
     _onMoveFocus = (element, up) => {
         let descending = false; // are we currently descending or ascending through the DOM tree?
 
@@ -326,7 +333,7 @@ export class ContextMenu extends React.Component {
         let background;
         if (hasBackground) {
             background = (
-                <div className="mx_ContextualMenu_background" style={wrapperStyle} onClick={props.onFinished} onContextMenu={this.onContextMenu} />
+                <div className="mx_ContextualMenu_background" style={wrapperStyle} onClick={this._onFinished} onContextMenu={this.onContextMenu} />
             );
         }
 
