@@ -33,6 +33,7 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import dis from "../../../dispatcher/dispatcher";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -158,6 +159,29 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onMessagePreviewChanged = () => {
         this.props.layout.showPreviews = !this.props.layout.showPreviews;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onBadgeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        let room;
+        if (this.props.tagId === DefaultTagID.Invite) {
+            // switch to first room in sortedList as that'll be the top of the list for the user
+            room = this.props.rooms && this.props.rooms[0];
+        } else {
+            room = this.props.rooms.find((r: Room) => {
+                const notifState = this.state.notificationState.getForRoom(r);
+                return notifState.count > 0 && notifState.color === this.state.notificationState.color;
+            });
+        }
+
+        if (room) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId,
+            });
+        }
     };
 
     private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
@@ -287,7 +311,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
 
-                    const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
+                    const badge = (
+                        <NotificationBadge
+                            forceCount={true}
+                            notification={this.state.notificationState}
+                            onClick={this.onBadgeClick}
+                            tabIndex={tabIndex}
+                        />
+                    );
 
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {

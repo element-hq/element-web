@@ -29,6 +29,8 @@ import { IDestroyable } from "../../../utils/IDestroyable";
 import SettingsStore from "../../../settings/SettingsStore";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { readReceiptChangeIsFor } from "../../../utils/read-receipts";
+import AccessibleButton from "../elements/AccessibleButton";
+import { XOR } from "../../../@types/common";
 
 export const NOTIFICATION_STATE_UPDATE = "update";
 
@@ -62,11 +64,18 @@ interface IProps {
     roomId?: string;
 }
 
+interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
+    /**
+     * If specified will return an AccessibleButton instead of a div.
+     */
+    onClick?(ev: React.MouseEvent);
+}
+
 interface IState {
     showCounts: boolean; // whether or not to show counts. Independent of props.forceCount
 }
 
-export default class NotificationBadge extends React.PureComponent<IProps, IState> {
+export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 
     constructor(props: IProps) {
@@ -109,20 +118,22 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
     };
 
     public render(): React.ReactElement {
-        // Don't show a badge if we don't need to
-        if (this.props.notification.color <= NotificationColor.None) return null;
+        const {notification, forceCount, roomId, onClick, ...props} = this.props;
 
-        const hasNotif = this.props.notification.color >= NotificationColor.Red;
-        const hasCount = this.props.notification.color >= NotificationColor.Grey;
-        const hasUnread = this.props.notification.color >= NotificationColor.Bold;
+        // Don't show a badge if we don't need to
+        if (notification.color <= NotificationColor.None) return null;
+
+        const hasNotif = notification.color >= NotificationColor.Red;
+        const hasCount = notification.color >= NotificationColor.Grey;
+        const hasUnread = notification.color >= NotificationColor.Bold;
         const couldBeEmpty = (!this.state.showCounts || hasUnread) && !hasNotif;
         let isEmptyBadge = couldBeEmpty && (!this.state.showCounts || !hasCount);
-        if (this.props.forceCount) {
+        if (forceCount) {
             isEmptyBadge = false;
             if (!hasCount) return null; // Can't render a badge
         }
 
-        let symbol = this.props.notification.symbol || formatMinimalBadgeCount(this.props.notification.count);
+        let symbol = notification.symbol || formatMinimalBadgeCount(notification.count);
         if (isEmptyBadge) symbol = "";
 
         const classes = classNames({
@@ -133,6 +144,14 @@ export default class NotificationBadge extends React.PureComponent<IProps, IStat
             'mx_NotificationBadge_2char': symbol.length > 0 && symbol.length < 3,
             'mx_NotificationBadge_3char': symbol.length > 2,
         });
+
+        if (onClick) {
+            return (
+                <AccessibleButton {...props} className={classes} onClick={onClick}>
+                    <span className="mx_NotificationBadge_count">{symbol}</span>
+                </AccessibleButton>
+            );
+        }
 
         return (
             <div className={classes}>
