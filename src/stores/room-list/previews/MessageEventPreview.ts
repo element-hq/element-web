@@ -30,6 +30,8 @@ export class MessageEventPreview implements IPreview {
             eventContent = event.getContent()['m.new_content'];
         }
 
+        if (!eventContent || !eventContent['body']) return null; // invalid for our purposes
+
         let body = (eventContent['body'] || '').trim();
         const msgtype = eventContent['msgtype'];
         if (!body || !msgtype) return null; // invalid event, no preview
