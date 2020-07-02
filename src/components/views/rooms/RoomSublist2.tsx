@@ -32,8 +32,9 @@ import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
+import dis from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
+import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -63,33 +64,35 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
 
+    // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
+    // You should feel bad if you use this.
+    extraBadTilesThatShouldntExist?: React.ReactElement[];
+
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
+type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
+
 interface IState {
     notificationState: ListNotificationState;
-    menuDisplayed: boolean;
+    contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
-    private headerButton = createRef();
-    private menuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
-
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
-            menuDisplayed: false,
+            contextMenuPosition: null,
             isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
 
     private get numTiles(): number {
-        // TODO: Account for group invites: https://github.com/vector-im/riot-web/issues/14179
-        return (this.props.rooms || []).length;
+        return (this.props.rooms || []).length + (this.props.extraBadTilesThatShouldntExist || []).length;
     }
 
     private get numVisibleTiles(): number {
@@ -139,11 +142,24 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onOpenMenuClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({contextMenuPosition: target.getBoundingClientRect()});
+    };
+
+    private onContextMenu = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            contextMenuPosition: {
+                left: ev.clientX,
+                top: ev.clientY,
+                height: 0,
+            },
+        });
     };
 
     private onCloseMenu = () => {
-        this.setState({menuDisplayed: false});
+        this.setState({contextMenuPosition: null});
     };
 
     private onUnreadFirstChanged = async () => {
@@ -159,6 +175,30 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onMessagePreviewChanged = () => {
         this.props.layout.showPreviews = !this.props.layout.showPreviews;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onBadgeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        let room;
+        if (this.props.tagId === DefaultTagID.Invite) {
+            // switch to first room as that'll be the top of the list for the user
+            room = this.props.rooms && this.props.rooms[0];
+        } else {
+            // find the first room with a count of the same colour as the badge count
+            room = this.props.rooms.find((r: Room) => {
+                const notifState = this.state.notificationState.getForRoom(r);
+                return notifState.count > 0 && notifState.color === this.state.notificationState.color;
+            });
+        }
+
+        if (room) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId,
+            });
+        }
     };
 
     private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
@@ -188,6 +228,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        }
+
         if (this.props.rooms) {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
@@ -203,6 +247,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             }
         }
 
+        // We only have to do this because of the extra tiles. We do it conditionally
+        // to avoid spending cycles on slicing. It's generally fine to do this though
+        // as users are unlikely to have more than a handful of tiles when the extra
+        // tiles are used.
+        if (tiles.length > this.numVisibleTiles) {
+            return tiles.slice(0, this.numVisibleTiles);
+        }
+
         return tiles;
     }
 
@@ -213,15 +265,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
 
         let contextMenu = null;
-        if (this.state.menuDisplayed) {
-            const elementRect = this.menuButtonRef.current.getBoundingClientRect();
+        if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
-                    left={elementRect.left}
-                    top={elementRect.top + elementRect.height}
+                    left={this.state.contextMenuPosition.left}
+                    top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
                 >
                     <div className="mx_RoomSublist2_contextMenu">
@@ -272,9 +323,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className="mx_RoomSublist2_menuButton"
                     onClick={this.onOpenMenuClick}
-                    inputRef={this.menuButtonRef}
                     label={_t("List options")}
-                    isExpanded={this.state.menuDisplayed}
+                    isExpanded={!!this.state.contextMenuPosition}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -283,12 +333,19 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactElement {
         return (
-            <RovingTabIndexWrapper inputRef={this.headerButton}>
+            <RovingTabIndexWrapper>
                 {({onFocus, isActive, ref}) => {
                     // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
 
-                    const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
+                    const badge = (
+                        <NotificationBadge
+                            forceCount={true}
+                            notification={this.state.notificationState}
+                            onClick={this.onBadgeClick}
+                            tabIndex={tabIndex}
+                        />
+                    );
 
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {
@@ -328,12 +385,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
                                 <AccessibleButton
+                                    onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
                                     className={"mx_RoomSublist2_headerText"}
                                     role="treeitem"
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
+                                    onContextMenu={this.onContextMenu}
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
@@ -358,7 +417,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const classes = classNames({
             'mx_RoomSublist2': true,
-            'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
+            'mx_RoomSublist2_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist2_minimized': this.props.isMinimized,
         });
 

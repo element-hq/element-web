@@ -524,7 +524,7 @@ export class Algorithm extends EventEmitter {
         }
     }
 
-    private getTagsForRoom(room: Room): TagID[] {
+    public getTagsForRoom(room: Room): TagID[] {
         // XXX: This duplicates a lot of logic from setKnownRooms above, but has a slightly
         // different use case and therefore different performance curve
 

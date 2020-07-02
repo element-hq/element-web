@@ -17,13 +17,15 @@ limitations under the License.
 import React from "react";
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
 import AccessibleButton from "../elements/AccessibleButton";
-import RoomAvatar from "../avatars/RoomAvatar";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { _t } from "../../../languageHandler";
 import { Room } from "matrix-js-sdk/src/models/room";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { CSSTransition } from "react-transition-group";
+import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import { DefaultTagID } from "../../../stores/room-list/models";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -93,6 +95,8 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
         // TODO: Scrolling: https://github.com/vector-im/riot-web/issues/14040
         // TODO: Tooltips: https://github.com/vector-im/riot-web/issues/14040
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
+            const roomTags = RoomListStore.instance.getTagsForRoom(r);
+            const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
             return (
                 <AccessibleButton
                     className="mx_RoomBreadcrumbs2_crumb"
@@ -100,7 +104,13 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
                     onClick={() => this.viewRoom(r, i)}
                     aria-label={_t("Room %(name)s", {name: r.name})}
                 >
-                    <RoomAvatar room={r} width={32} height={32}/>
+                    <DecoratedRoomAvatar
+                        room={r}
+                        avatarSize={32}
+                        tag={roomTag}
+                        displayBadge={true}
+                        forceCount={true}
+                    />
                 </AccessibleButton>
             );
         });

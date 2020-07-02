@@ -42,8 +42,10 @@ interface IProps {
     isMinimized: boolean;
 }
 
+type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
+
 interface IState {
-    menuDisplayed: boolean;
+    contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
 }
 
@@ -56,7 +58,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            menuDisplayed: false,
+            contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
         };
 
@@ -106,13 +108,25 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private onOpenMenuClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({contextMenuPosition: target.getBoundingClientRect()});
     };
 
-    private onCloseMenu = (ev: InputEvent) => {
+    private onContextMenu = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: false});
+        this.setState({
+            contextMenuPosition: {
+                left: ev.clientX,
+                top: ev.clientY,
+                width: 20,
+                height: 0,
+            },
+        });
+    };
+
+    private onCloseMenu = () => {
+        this.setState({contextMenuPosition: null});
     };
 
     private onSwitchThemeClick = () => {
@@ -129,7 +143,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         const payload: OpenToTabPayload = {action: Action.ViewUserSettings, initialTabId: tabId};
         defaultDispatcher.dispatch(payload);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onShowArchived = (ev: ButtonEvent) => {
@@ -145,7 +159,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onSignOutClick = (ev: ButtonEvent) => {
@@ -153,7 +167,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onHomeClick = (ev: ButtonEvent) => {
@@ -164,7 +178,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private renderContextMenu = (): React.ReactNode => {
-        if (!this.state.menuDisplayed) return null;
+        if (!this.state.contextMenuPosition) return null;
 
         let hostingLink;
         const signupLink = getHostingLink("user-context-menu");
@@ -191,21 +205,19 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
-                <li>
-                    <AccessibleButton onClick={this.onHomeClick}>
-                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
-                        <span>{_t("Home")}</span>
-                    </AccessibleButton>
-                </li>
+                <AccessibleButton onClick={this.onHomeClick}>
+                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
+                    <span>{_t("Home")}</span>
+                </AccessibleButton>
             );
         }
 
-        const elementRect = this.buttonRef.current.getBoundingClientRect();
         return (
             <ContextMenu
                 chevronFace="none"
-                left={elementRect.width + elementRect.left}
-                top={elementRect.top + elementRect.height}
+                // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
+                left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
+                top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                 onFinished={this.onCloseMenu}
             >
                 <div className="mx_IconizedContextMenu mx_UserMenu_contextMenu">
@@ -232,49 +244,33 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     </div>
                     {hostingLink}
                     <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
-                        <ul>
-                            {homeButton}
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
-                                    <span>{_t("Notification settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
-                                    <span>{_t("Security & privacy")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
-                                    <span>{_t("All settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onShowArchived}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
-                                    <span>{_t("Archived rooms")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onProvideFeedback}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
-                                    <span>{_t("Feedback")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                        {homeButton}
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
+                            <span className="mx_IconizedContextMenu_label">{_t("Notification settings")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
+                            <span className="mx_IconizedContextMenu_label">{_t("Security & privacy")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
+                            <span className="mx_IconizedContextMenu_label">{_t("All settings")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={this.onShowArchived}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
+                            <span className="mx_IconizedContextMenu_label">{_t("Archived rooms")}</span>
+                        </AccessibleButton>
+                        <AccessibleButton onClick={this.onProvideFeedback}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
+                            <span className="mx_IconizedContextMenu_label">{_t("Feedback")}</span>
+                        </AccessibleButton>
                     </div>
-                    <div className="mx_IconizedContextMenu_optionList">
-                        <ul>
-                            <li className="mx_UserMenu_contextMenu_redRow">
-                                <AccessibleButton onClick={this.onSignOutClick}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
-                                    <span>{_t("Sign out")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                    <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
+                        <AccessibleButton onClick={this.onSignOutClick}>
+                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
+                            <span className="mx_IconizedContextMenu_label">{_t("Sign out")}</span>
+                        </AccessibleButton>
                     </div>
                 </div>
             </ContextMenu>
@@ -307,7 +303,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     onClick={this.onOpenMenuClick}
                     inputRef={this.buttonRef}
                     label={_t("Account settings")}
-                    isExpanded={this.state.menuDisplayed}
+                    isExpanded={!!this.state.contextMenuPosition}
+                    onContextMenu={this.onContextMenu}
                 >
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">
