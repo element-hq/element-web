@@ -60,18 +60,20 @@ interface IProps {
     // TODO: Incoming call boxes: https://github.com/vector-im/riot-web/issues/14177
 }
 
+type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
+
 interface IState {
     hover: boolean;
     notificationState: INotificationState;
     selected: boolean;
-    notificationsMenuDisplayed: boolean;
-    generalMenuDisplayed: boolean;
+    notificationsMenuPosition: PartialDOMRect;
+    generalMenuPosition: PartialDOMRect;
 }
 
-const contextMenuBelow = (elementRect) => {
+const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.pageXOffset - 9;
-    let top = elementRect.bottom + window.pageYOffset + 17;
+    const top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = "none";
     return {left, top, chevronFace};
 };
@@ -103,9 +105,6 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
 };
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
-    private notificationsMenuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
-    private generalMenuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
-
     // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
 
     constructor(props: IProps) {
@@ -115,8 +114,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             hover: false,
             notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
-            notificationsMenuDisplayed: false,
-            generalMenuDisplayed: false,
+            notificationsMenuPosition: null,
+            generalMenuPosition: null,
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
@@ -137,6 +136,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     };
 
     private onTileClick = (ev: React.KeyboardEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
         dis.dispatch({
             action: 'view_room',
             // TODO: Support show_room_tile in new room list: https://github.com/vector-im/riot-web/issues/14233
@@ -153,25 +154,34 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onNotificationsMenuOpenClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({notificationsMenuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({notificationsMenuPosition: target.getBoundingClientRect()});
     };
 
-    private onCloseNotificationsMenu = (ev: InputEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.setState({notificationsMenuDisplayed: false});
+    private onCloseNotificationsMenu = () => {
+        this.setState({notificationsMenuPosition: null});
     };
 
     private onGeneralMenuOpenClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({generalMenuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({generalMenuPosition: target.getBoundingClientRect()});
     };
 
-    private onCloseGeneralMenu = (ev: InputEvent) => {
+    private onContextMenu = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({generalMenuDisplayed: false});
+        this.setState({
+            generalMenuPosition: {
+                left: ev.clientX,
+                bottom: ev.clientY,
+            },
+        });
+    };
+
+    private onCloseGeneralMenu = () => {
+        this.setState({generalMenuPosition: null});
     };
 
     private onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
@@ -190,7 +200,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             action: 'leave_room',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuDisplayed: false}); // hide the menu
+        this.setState({generalMenuPosition: null}); // hide the menu
     };
 
     private onOpenRoomSettings = (ev: ButtonEvent) => {
@@ -201,7 +211,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             action: 'open_room_settings',
             room_id: this.props.room.roomId,
         });
-        this.setState({generalMenuDisplayed: false}); // hide the menu
+        this.setState({generalMenuPosition: null}); // hide the menu
     };
 
     private async saveNotifState(ev: ButtonEvent, newState: ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE) {
@@ -218,10 +228,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             console.error(error);
         }
 
-        // Close the context menu
-        this.setState({
-            notificationsMenuDisplayed: false,
-        });
+        this.setState({notificationsMenuPosition: null}); // Close the context menu
     }
 
     private onClickAllNotifs = ev => this.saveNotifState(ev, ALL_MESSAGES);
@@ -238,10 +245,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const state = getRoomNotifsState(this.props.room.roomId);
 
         let contextMenu = null;
-        if (this.state.notificationsMenuDisplayed) {
-            const elementRect = this.notificationsMenuButtonRef.current.getBoundingClientRect();
+        if (this.state.notificationsMenuPosition) {
             contextMenu = (
-                <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseNotificationsMenu}>
+                <ContextMenu {...contextMenuBelow(this.state.notificationsMenuPosition)} onFinished={this.onCloseNotificationsMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <NotifOption
@@ -289,9 +295,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className={classes}
                     onClick={this.onNotificationsMenuOpenClick}
-                    inputRef={this.notificationsMenuButtonRef}
                     label={_t("Notification options")}
-                    isExpanded={this.state.notificationsMenuDisplayed}
+                    isExpanded={!!this.state.notificationsMenuPosition}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -307,10 +312,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         }
 
         let contextMenu = null;
-        if (this.state.generalMenuDisplayed) {
-            const elementRect = this.generalMenuButtonRef.current.getBoundingClientRect();
+        if (this.state.generalMenuPosition) {
             contextMenu = (
-                <ContextMenu {...contextMenuBelow(elementRect)} onFinished={this.onCloseGeneralMenu}>
+                <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
@@ -338,9 +342,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className="mx_RoomTile2_menuButton"
                     onClick={this.onGeneralMenuOpenClick}
-                    inputRef={this.generalMenuButtonRef}
                     label={_t("Room options")}
-                    isExpanded={this.state.generalMenuDisplayed}
+                    isExpanded={!!this.state.generalMenuPosition}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -354,7 +357,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const classes = classNames({
             'mx_RoomTile2': true,
             'mx_RoomTile2_selected': this.state.selected,
-            'mx_RoomTile2_hasMenuOpen': this.state.generalMenuDisplayed || this.state.notificationsMenuDisplayed,
+            'mx_RoomTile2_hasMenuOpen': !!(this.state.generalMenuPosition || this.state.notificationsMenuPosition),
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
@@ -416,6 +419,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             onMouseLeave={this.onTileMouseLeave}
                             onClick={this.onTileClick}
                             role="treeitem"
+                            onContextMenu={this.onContextMenu}
                         >
                             <div className="mx_RoomTile2_avatarContainer">
                                 <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} />
