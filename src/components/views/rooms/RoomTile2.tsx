@@ -369,11 +369,15 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         let badge: React.ReactNode;
         if (!this.props.isMinimized) {
-        badge = <NotificationBadge
-                notification={this.state.notificationState}
-                forceCount={false}
-                roomId={this.props.room.roomId}
-            />;
+            badge = (
+                <div className="mx_RoomTile2_badgeContainer">
+                    <NotificationBadge
+                        notification={this.state.notificationState}
+                        forceCount={false}
+                        roomId={this.props.room.roomId}
+                    />
+                </div>
+            );
         }
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
@@ -429,9 +433,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                         >
                             {roomAvatar}
                             {nameContainer}
-                            <div className="mx_RoomTile2_badgeContainer">
-                                {badge}
-                            </div>
+                            {badge}
                             {this.renderNotificationsMenu()}
                             {this.renderGeneralMenu()}
                         </AccessibleButton>
