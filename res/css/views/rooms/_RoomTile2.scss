@@ -81,36 +81,33 @@ limitations under the License.
         }
     }
 
-    //.mx_RoomTile2_badgeContainer,
-    .mx_RoomTile2_menuButton,
-    .mx_RoomTile2_notificationsButton {
-        width: 20px;
-        min-width: 20px; // yay flex
-        height: 20px;
-        margin: auto 0;
-    }
-
     .mx_RoomTile2_menuButton {
         margin-left: 4px; // spacing between buttons
     }
 
     .mx_RoomTile2_badgeContainer {
-        height: 32px;
-
-        // Create another flexbox row because it's super easy to position the badge at
-        // the end this way.
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 16px;
+        // don't set width so that it takes no space when there is no badge to show
+        margin: auto 0; // vertically align
 
         .mx_NotificationBadge {
-            margin-right: 2px;
+            margin-right: 2px; // centering
+        }
+
+        .mx_NotificationBadge_dot {
+            // make the smaller dot occupy the same width for centering
+            margin-left: 5px;
+            margin-right: 7px;
         }
     }
 
     // The context menu buttons are hidden by default
     .mx_RoomTile2_menuButton,
     .mx_RoomTile2_notificationsButton {
+        width: 20px;
+        min-width: 20px; // yay flex
+        height: 20px;
+        margin: auto 0;
         position: relative;
         display: none;
 
