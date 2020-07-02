@@ -33,7 +33,8 @@ import { ListLayout } from "../../../stores/room-list/ListLayout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
 import TemporaryTile from "./TemporaryTile";
-import { NotificationColor, StaticNotificationState } from "./NotificationBadge";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
