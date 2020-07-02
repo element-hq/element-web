@@ -81,7 +81,12 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
     private updateNotificationState() {
         const before = {count: this.count, symbol: this.symbol, color: this.color};
 
-        if (this.roomIsInvite) {
+        if (RoomNotifs.getRoomNotifsState(this.room.roomId) === RoomNotifs.MUTE) {
+            // When muted we suppress all notification states, even if we have context on them.
+            this._color = NotificationColor.None;
+            this._symbol = null;
+            this._count = 0;
+        } else if (this.roomIsInvite) {
             this._color = NotificationColor.Red;
             this._symbol = "!";
             this._count = 1; // not used, technically
