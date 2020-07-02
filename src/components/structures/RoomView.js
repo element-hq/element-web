@@ -1819,6 +1819,7 @@ export default createReactClass({
         );
 
         const showRoomRecoveryReminder = (
+            this.context.isCryptoEnabled() &&
             SettingsStore.getValue("showRoomRecoveryReminder") &&
             this.context.isRoomEncrypted(this.state.room.roomId) &&
             this.context.getKeyBackupEnabled() === false
