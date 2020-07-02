@@ -18,9 +18,9 @@ import { TagID } from "./models";
 
 const TILE_HEIGHT_PX = 44;
 
-// the .65 comes from the CSS where the show more button is
-// mathematically 65% of a tile when floating.
-const RESIZER_BOX_FACTOR = 0.65;
+// this comes from the CSS where the show more button is
+// mathematically this percent of a tile when floating.
+const RESIZER_BOX_FACTOR = 0.78;
 
 interface ISerializedListLayout {
     numTiles: number;
@@ -85,10 +85,16 @@ export class ListLayout {
     }
 
     public get defaultVisibleTiles(): number {
-        // TODO: Remove dogfood flag: https://github.com/vector-im/riot-web/issues/14231
-        // TODO: Resolve dogfooding: https://github.com/vector-im/riot-web/issues/14137
-        const val = Number(localStorage.getItem("mx_dogfood_rl_defTiles") || 4);
-        return val + RESIZER_BOX_FACTOR;
+        // 10 is what "feels right", and mostly subject to design's opinion.
+        return 10 + RESIZER_BOX_FACTOR;
+    }
+
+    public setVisibleTilesWithin(diff: number, maxPossible: number) {
+        if (this.visibleTiles > maxPossible) {
+            this.visibleTiles = maxPossible + diff;
+        } else {
+            this.visibleTiles += diff;
+        }
     }
 
     public calculateTilesToPixelsMin(maxTiles: number, n: number, possiblePadding: number): number {
@@ -120,6 +126,10 @@ export class ListLayout {
 
     public pixelsToTiles(px: number): number {
         return px / this.tileHeight;
+    }
+
+    public reset() {
+        localStorage.removeItem(this.key);
     }
 
     private save() {

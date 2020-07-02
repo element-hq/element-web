@@ -23,6 +23,7 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
+import {RoomListStoreTempProxy} from "../../../../../stores/room-list/RoomListStoreTempProxy";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
@@ -30,6 +31,19 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'RoomList.orderByImportance',
         'breadcrumbs',
     ];
+
+    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14231
+    static ROOM_LIST_2_SETTINGS = [
+        'breadcrumbs',
+    ];
+
+    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14231
+    static eligibleRoomListSettings = () => {
+        if (RoomListStoreTempProxy.isUsingNewStore()) {
+            return PreferencesUserSettingsTab.ROOM_LIST_2_SETTINGS;
+        }
+        return PreferencesUserSettingsTab.ROOM_LIST_SETTINGS;
+    };
 
     static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
@@ -175,7 +189,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Room list")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS)}
+                    {this._renderGroup(PreferencesUserSettingsTab.eligibleRoomListSettings())}
                 </div>
 
                 <div className="mx_SettingsTab_section">

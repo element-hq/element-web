@@ -25,10 +25,15 @@ import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
 import dis from "../../../dispatcher/dispatcher";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import GroupAvatar from "../avatars/GroupAvatar";
+import TemporaryTile from "./TemporaryTile";
+import { NotificationColor, StaticNotificationState } from "./NotificationBadge";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -173,6 +178,40 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         });
     }
 
+    private renderCommunityInvites(): React.ReactElement[] {
+        // TODO: Put community invites in a more sensible place (not in the room list)
+        return MatrixClientPeg.get().getGroups().filter(g => {
+           if (g.myMembership !== 'invite') return false;
+           return !this.searchFilter || this.searchFilter.matches(g.name);
+        }).map(g => {
+            const avatar = (
+                <GroupAvatar
+                    groupId={g.groupId}
+                    groupName={g.name}
+                    groupAvatarUrl={g.avatarUrl}
+                    width={32} height={32} resizeMethod='crop'
+                />
+            );
+            const openGroup = () => {
+                defaultDispatcher.dispatch({
+                    action: 'view_group',
+                    group_id: g.groupId,
+                });
+            };
+            return (
+                <TemporaryTile
+                    isMinimized={this.props.isMinimized}
+                    isSelected={false}
+                    displayName={g.name}
+                    avatar={avatar}
+                    notificationState={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                    onClick={openGroup}
+                    key={`temporaryGroupTile_${g.groupId}`}
+                />
+            );
+        });
+    }
+
     private renderSublists(): React.ReactElement[] {
         const components: React.ReactElement[] = [];
 
@@ -195,6 +234,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
+            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
             components.push(
                 <RoomSublist2
                     key={`sublist-${orderedTagId}`}
@@ -208,6 +248,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
                     isMinimized={this.props.isMinimized}
+                    extraBadTilesThatShouldntExist={extraTiles}
                 />
             );
         }

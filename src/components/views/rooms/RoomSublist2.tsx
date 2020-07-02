@@ -32,7 +32,8 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
-import { TagID } from "../../../stores/room-list/models";
+import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import dis from "../../../dispatcher/dispatcher";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -62,33 +63,41 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
 
+    // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
+    // You should feel bad if you use this.
+    extraBadTilesThatShouldntExist?: React.ReactElement[];
+
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
+type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
+
 interface IState {
     notificationState: ListNotificationState;
-    menuDisplayed: boolean;
+    contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
-    private headerButton = createRef();
-    private menuButtonRef: React.RefObject<HTMLButtonElement> = createRef();
-
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
-            menuDisplayed: false,
+            contextMenuPosition: null,
             isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
     }
 
     private get numTiles(): number {
-        // TODO: Account for group invites: https://github.com/vector-im/riot-web/issues/14179
-        return (this.props.rooms || []).length;
+        return (this.props.rooms || []).length + (this.props.extraBadTilesThatShouldntExist || []).length;
+    }
+
+    private get numVisibleTiles(): number {
+        if (!this.props.layout) return 0;
+        const nVisible = Math.floor(this.props.layout.visibleTiles);
+        return Math.min(nVisible, this.numTiles);
     }
 
     public componentDidUpdate() {
@@ -107,7 +116,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
         const direction = e.movementY < 0 ? -1 : +1;
         const tileDiff = this.props.layout.pixelsToTiles(Math.abs(e.movementY)) * direction;
-        this.props.layout.visibleTiles += tileDiff;
+        this.props.layout.setVisibleTilesWithin(tileDiff, this.numTiles);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -132,11 +141,24 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onOpenMenuClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({contextMenuPosition: target.getBoundingClientRect()});
+    };
+
+    private onContextMenu = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            contextMenuPosition: {
+                left: ev.clientX,
+                top: ev.clientY,
+                height: 0,
+            },
+        });
     };
 
     private onCloseMenu = () => {
-        this.setState({menuDisplayed: false});
+        this.setState({contextMenuPosition: null});
     };
 
     private onUnreadFirstChanged = async () => {
@@ -152,6 +174,30 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private onMessagePreviewChanged = () => {
         this.props.layout.showPreviews = !this.props.layout.showPreviews;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
+    };
+
+    private onBadgeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        let room;
+        if (this.props.tagId === DefaultTagID.Invite) {
+            // switch to first room as that'll be the top of the list for the user
+            room = this.props.rooms && this.props.rooms[0];
+        } else {
+            // find the first room with a count of the same colour as the badge count
+            room = this.props.rooms.find((r: Room) => {
+                const notifState = this.state.notificationState.getForRoom(r);
+                return notifState.count > 0 && notifState.color === this.state.notificationState.color;
+            });
+        }
+
+        if (room) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: room.roomId,
+            });
+        }
     };
 
     private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
@@ -173,13 +219,21 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
     };
 
-    private renderTiles(): React.ReactElement[] {
-        if (this.props.layout && this.props.layout.isCollapsed) return []; // don't waste time on rendering
+    private renderVisibleTiles(): React.ReactElement[] {
+        if (this.props.layout && this.props.layout.isCollapsed) {
+            // don't waste time on rendering
+            return [];
+        }
 
         const tiles: React.ReactElement[] = [];
 
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        }
+
         if (this.props.rooms) {
-            for (const room of this.props.rooms) {
+            const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
+            for (const room of visibleRooms) {
                 tiles.push(
                     <RoomTile2
                         room={room}
@@ -192,20 +246,32 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             }
         }
 
+        // We only have to do this because of the extra tiles. We do it conditionally
+        // to avoid spending cycles on slicing. It's generally fine to do this though
+        // as users are unlikely to have more than a handful of tiles when the extra
+        // tiles are used.
+        if (tiles.length > this.numVisibleTiles) {
+            return tiles.slice(0, this.numVisibleTiles);
+        }
+
         return tiles;
     }
 
     private renderMenu(): React.ReactElement {
+        // TODO: Get a proper invite context menu, or take invites out of the room list.
+        if (this.props.tagId === DefaultTagID.Invite) {
+            return null;
+        }
+
         let contextMenu = null;
-        if (this.state.menuDisplayed) {
-            const elementRect = this.menuButtonRef.current.getBoundingClientRect();
+        if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
-                    left={elementRect.left}
-                    top={elementRect.top + elementRect.height}
+                    left={this.state.contextMenuPosition.left}
+                    top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
                 >
                     <div className="mx_RoomSublist2_contextMenu">
@@ -256,9 +322,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 <ContextMenuButton
                     className="mx_RoomSublist2_menuButton"
                     onClick={this.onOpenMenuClick}
-                    inputRef={this.menuButtonRef}
                     label={_t("List options")}
-                    isExpanded={this.state.menuDisplayed}
+                    isExpanded={!!this.state.contextMenuPosition}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -267,12 +332,19 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactElement {
         return (
-            <RovingTabIndexWrapper inputRef={this.headerButton}>
+            <RovingTabIndexWrapper>
                 {({onFocus, isActive, ref}) => {
                     // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
 
-                    const badge = <NotificationBadge forceCount={true} notification={this.state.notificationState}/>;
+                    const badge = (
+                        <NotificationBadge
+                            forceCount={true}
+                            notification={this.state.notificationState}
+                            onClick={this.onBadgeClick}
+                            tabIndex={tabIndex}
+                        />
+                    );
 
                     let addRoomButton = null;
                     if (!!this.props.onAddRoom) {
@@ -312,12 +384,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
                                 <AccessibleButton
+                                    onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
                                     className={"mx_RoomSublist2_headerText"}
                                     role="treeitem"
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
+                                    onContextMenu={this.onContextMenu}
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
@@ -338,22 +412,19 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         // TODO: Error boundary: https://github.com/vector-im/riot-web/issues/14185
 
-        const tiles = this.renderTiles();
+        const visibleTiles = this.renderVisibleTiles();
 
         const classes = classNames({
             'mx_RoomSublist2': true,
-            'mx_RoomSublist2_hasMenuOpen': this.state.menuDisplayed,
+            'mx_RoomSublist2_hasMenuOpen': !!this.state.contextMenuPosition,
             'mx_RoomSublist2_minimized': this.props.isMinimized,
         });
 
         let content = null;
-        if (tiles.length > 0) {
+        if (visibleTiles.length > 0) {
             const layout = this.props.layout; // to shorten calls
 
-            const nVisible = Math.floor(layout.visibleTiles);
-            const visibleTiles = tiles.slice(0, nVisible);
-
-            const maxTilesFactored = layout.tilesWithResizerBoxFactor(tiles.length);
+            const maxTilesFactored = layout.tilesWithResizerBoxFactor(this.numTiles);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
                 'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
@@ -363,9 +434,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
             let showNButton = null;
-            if (tiles.length > nVisible) {
+            if (this.numTiles > visibleTiles.length) {
                 // we have a cutoff condition - add the button to show all
-                const numMissing = tiles.length - visibleTiles.length;
+                const numMissing = this.numTiles - visibleTiles.length;
                 let showMoreText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
                         {_t("Show %(count)s more", {count: numMissing})}
@@ -380,7 +451,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </div>
                 );
-            } else if (tiles.length <= nVisible && tiles.length > this.props.layout.defaultVisibleTiles) {
+            } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.props.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
@@ -400,7 +471,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
             // Figure out if we need a handle
             let handles = ['s'];
-            if (layout.visibleTiles >= tiles.length && tiles.length <= layout.minVisibleTiles) {
+            if (layout.visibleTiles >= this.numTiles && this.numTiles <= layout.minVisibleTiles) {
                 handles = []; // no handles, we're at a minimum
             }
 
@@ -419,9 +490,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
             padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
 
-            const relativeTiles = layout.tilesWithPadding(tiles.length, padding);
+            const relativeTiles = layout.tilesWithPadding(this.numTiles, padding);
             const minTilesPx = layout.calculateTilesToPixelsMin(relativeTiles, layout.minVisibleTiles, padding);
-            const maxTilesPx = layout.tilesToPixelsWithPadding(tiles.length, padding);
+            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, padding);
             const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
             const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
 

@@ -30,6 +30,7 @@ import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "./membership";
+import { ListLayout } from "./ListLayout";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -50,8 +51,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private tagWatcher = new TagWatcher(this);
 
     private readonly watchedSettings = [
-        'RoomList.orderAlphabetically',
-        'RoomList.orderByImportance',
         'feature_custom_tags',
     ];
 
@@ -339,11 +338,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private async updateAlgorithmInstances() {
-        const orderByImportance = SettingsStore.getValue("RoomList.orderByImportance");
-        const orderAlphabetically = SettingsStore.getValue("RoomList.orderAlphabetically");
-
-        const defaultSort = orderAlphabetically ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
-        const defaultOrder = orderByImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
+        const defaultSort = SortAlgorithm.Alphabetic;
+        const defaultOrder = ListAlgorithm.Natural;
 
         for (const tag of Object.keys(this.orderedLists)) {
             const definedSort = this.getTagSorting(tag);
@@ -400,6 +396,15 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.initialListsGenerated = true;
 
         this.emit(LISTS_UPDATE_EVENT, this);
+    }
+
+    // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
+    public async resetLayouts() {
+        console.warn("Resetting layouts for room list");
+        for (const tagId of Object.keys(this.orderedLists)) {
+            new ListLayout(tagId).reset();
+        }
+        await this.regenerateAllLists();
     }
 
     public addFilter(filter: IFilterCondition): void {
