@@ -148,7 +148,7 @@ limitations under the License.
         align-items: center;
         position: relative;
 
-        .mx_DecoratedRoomAvatar {
+        .mx_DecoratedRoomAvatar, .mx_RoomTile2_avatarContainer {
             margin-right: 0;
         }
     }
