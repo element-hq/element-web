@@ -101,8 +101,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.warn(`${activeRoomId} is current in RVS but missing from client - clearing sticky room`);
                 this.algorithm.stickyRoom = null;
             } else if (activeRoom !== this.algorithm.stickyRoom) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`Changing sticky room to ${activeRoomId}`);
                 this.algorithm.stickyRoom = activeRoom;
             }
         }
@@ -299,8 +297,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
             this.emit(LISTS_UPDATE_EVENT, this);
         }
     }
@@ -367,8 +363,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onAlgorithmListUpdated = () => {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Underlying algorithm has triggered a list update - refiring");
         this.emit(LISTS_UPDATE_EVENT, this);
     };
 
@@ -408,8 +402,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public addFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Adding filter condition:", filter);
         this.filterConditions.push(filter);
         if (this.algorithm) {
             this.algorithm.addFilterCondition(filter);
@@ -417,8 +409,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public removeFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Removing filter condition:", filter);
         const idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
