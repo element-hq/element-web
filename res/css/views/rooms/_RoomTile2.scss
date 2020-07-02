@@ -29,15 +29,8 @@ limitations under the License.
         border-radius: 32px;
     }
 
-    .mx_RoomTile2_avatarContainer {
+    .mx_DecoratedRoomAvatar {
         margin-right: 8px;
-        position: relative;
-
-        .mx_RoomTileIcon {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
     }
 
     .mx_RoomTile2_nameContainer {
@@ -155,15 +148,8 @@ limitations under the License.
         align-items: center;
         position: relative;
 
-        .mx_RoomTile2_avatarContainer {
+        .mx_DecoratedRoomAvatar {
             margin-right: 0;
-        }
-
-        .mx_RoomTile2_badgeContainer {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 18px;
         }
     }
 }
