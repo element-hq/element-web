@@ -60,11 +60,15 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
         if (!room.name) return false; // should realistically not happen: the js-sdk always calculates a name
 
+        return this.matches(room.name);
+    }
+
+    public matches(val: string): boolean {
         // Note: we have to match the filter with the removeHiddenChars() room name because the
         // function strips spaces and other characters (M becomes RN for example, in lowercase).
         // We also doubly convert to lowercase to work around oddities of the library.
-        const noSecretsFilter = removeHiddenChars(lcFilter).toLowerCase();
-        const noSecretsName = removeHiddenChars(room.name.toLowerCase()).toLowerCase();
+        const noSecretsFilter = removeHiddenChars(this.search.toLowerCase()).toLowerCase();
+        const noSecretsName = removeHiddenChars(val.toLowerCase()).toLowerCase();
         return noSecretsName.includes(noSecretsFilter);
     }
 }

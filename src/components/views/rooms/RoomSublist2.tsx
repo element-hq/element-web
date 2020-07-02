@@ -62,6 +62,10 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
 
+    // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
+    // You should feel bad if you use this.
+    extraBadTilesThatShouldntExist?: React.ReactElement[];
+
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
@@ -87,8 +91,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numTiles(): number {
-        // TODO: Account for group invites: https://github.com/vector-im/riot-web/issues/14179
-        return (this.props.rooms || []).length;
+        return (this.props.rooms || []).length + (this.props.extraBadTilesThatShouldntExist || []).length;
     }
 
     private get numVisibleTiles(): number {
@@ -187,6 +190,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        }
+
         if (this.props.rooms) {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
@@ -200,6 +207,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     />
                 );
             }
+        }
+
+        // We only have to do this because of the extra tiles. We do it conditionally
+        // to avoid spending cycles on slicing. It's generally fine to do this though
+        // as users are unlikely to have more than a handful of tiles when the extra
+        // tiles are used.
+        if (tiles.length > this.numVisibleTiles) {
+            return tiles.slice(0, this.numVisibleTiles);
         }
 
         return tiles;
