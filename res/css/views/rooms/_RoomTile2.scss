@@ -83,6 +83,10 @@ limitations under the License.
         // don't set width so that it takes no space when there is no badge to show
         margin: auto 0; // vertically align
 
+        // Create a flexbox to make aligning dot badges easier
+        display: flex;
+        align-items: center;
+
         .mx_NotificationBadge {
             margin-right: 2px; // centering
         }
