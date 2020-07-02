@@ -114,7 +114,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         this.initialFocus.focus();
     }
 
-    collectContextMenuRect = (element) => {
+    private collectContextMenuRect = (element) => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
@@ -131,7 +131,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         });
     };
 
-    onContextMenu = (e) => {
+    private onContextMenu = (e) => {
         if (this.props.onFinished) {
             this.props.onFinished();
 
@@ -154,20 +154,20 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
-    onContextMenuPreventBubbling = (e) => {
+    private onContextMenuPreventBubbling = (e) => {
         // stop propagation so that any context menu handlers don't leak out of this context menu
         // but do not inhibit the default browser menu
         e.stopPropagation();
     };
 
     // Prevent clicks on the background from going through to the component which opened the menu.
-    _onFinished = (ev: InputEvent) => {
+    private onFinished = (ev: React.MouseEvent) => {
         ev.stopPropagation();
         ev.preventDefault();
         if (this.props.onFinished) this.props.onFinished();
     };
 
-    _onMoveFocus = (element, up) => {
+    private onMoveFocus = (element: Element, up: boolean) => {
         let descending = false; // are we currently descending or ascending through the DOM tree?
 
         do {
@@ -201,25 +201,25 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         } while (element && !ARIA_MENU_ITEM_ROLES.has(element.getAttribute("role")));
 
         if (element) {
-            element.focus();
+            (element as HTMLElement).focus();
         }
     };
 
-    _onMoveFocusHomeEnd = (element, up) => {
+    private onMoveFocusHomeEnd = (element: Element, up: boolean) => {
         let results = element.querySelectorAll('[role^="menuitem"]');
         if (!results) {
             results = element.querySelectorAll('[tab-index]');
         }
         if (results && results.length) {
             if (up) {
-                results[0].focus();
+                (results[0] as HTMLElement).focus();
             } else {
-                results[results.length - 1].focus();
+                (results[results.length - 1] as HTMLElement).focus();
             }
         }
     };
 
-    _onKeyDown = (ev) => {
+    private onKeyDown = (ev: React.KeyboardEvent) => {
         if (!this.props.managed) {
             if (ev.key === Key.ESCAPE) {
                 this.props.onFinished();
@@ -237,16 +237,16 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 this.props.onFinished();
                 break;
             case Key.ARROW_UP:
-                this._onMoveFocus(ev.target, true);
+                this.onMoveFocus(ev.target as Element, true);
                 break;
             case Key.ARROW_DOWN:
-                this._onMoveFocus(ev.target, false);
+                this.onMoveFocus(ev.target as Element, false);
                 break;
             case Key.HOME:
-                this._onMoveFocusHomeEnd(this.state.contextMenuElem, true);
+                this.onMoveFocusHomeEnd(this.state.contextMenuElem, true);
                 break;
             case Key.END:
-                this._onMoveFocusHomeEnd(this.state.contextMenuElem, false);
+                this.onMoveFocusHomeEnd(this.state.contextMenuElem, false);
                 break;
             default:
                 handled = false;
@@ -259,7 +259,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         }
     };
 
-    renderMenu(hasBackground = this.props.hasBackground) {
+    protected renderMenu(hasBackground = this.props.hasBackground) {
         const position: Partial<Writeable<DOMRect>> = {};
         const props = this.props;
 
@@ -356,7 +356,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 <div
                     className="mx_ContextualMenu_background"
                     style={wrapperStyle}
-                    onClick={this._onFinished}
+                    onClick={this.onFinished}
                     onContextMenu={this.onContextMenu}
                 />
             );
@@ -366,7 +366,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             <div
                 className="mx_ContextualMenu_wrapper"
                 style={{...position, ...wrapperStyle}}
-                onKeyDown={this._onKeyDown}
+                onKeyDown={this.onKeyDown}
                 onContextMenu={this.onContextMenuPreventBubbling}
             >
                 <div
