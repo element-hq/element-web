@@ -206,6 +206,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     avatar={avatar}
                     notificationState={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
                     onClick={openGroup}
+                    key={`temporaryGroupTile_${g.groupId}`}
                 />
             );
         });
