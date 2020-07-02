@@ -40,7 +40,7 @@ export class PlatformPeg {
      * application.
      * This should be an instance of a class extending BasePlatform.
      */
-    set(plaf) {
+    set(plaf: BasePlatform) {
         this.platform = plaf;
     }
 }
