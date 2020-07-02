@@ -188,7 +188,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const tryUpdate = async (updatedRoom: Room) => {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()}` +
-                            ` in ${updatedRoom.roomId}`);
+                ` in ${updatedRoom.roomId}`);
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
