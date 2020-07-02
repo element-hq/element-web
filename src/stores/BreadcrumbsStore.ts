@@ -51,7 +51,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     public get visible(): boolean {
-        return this.state.enabled;
+        return this.state.enabled && this.matrixClient.getVisibleRooms().length >= 20;
     }
 
     protected async onAction(payload: ActionPayload) {

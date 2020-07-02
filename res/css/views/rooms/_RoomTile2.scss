@@ -23,27 +23,20 @@ limitations under the License.
 
     // The tile is also a flexbox row itself
     display: flex;
-    flex-wrap: wrap;
 
     &.mx_RoomTile2_selected, &:hover, &.mx_RoomTile2_hasMenuOpen {
         background-color: $roomtile2-selected-bg-color;
         border-radius: 32px;
     }
 
-    .mx_RoomTile2_avatarContainer {
+    .mx_DecoratedRoomAvatar, .mx_RoomTile2_avatarContainer {
         margin-right: 8px;
-        position: relative;
-
-        .mx_RoomTileIcon {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
     }
 
     .mx_RoomTile2_nameContainer {
         flex-grow: 1;
-        max-width: calc(100% - 58px); // 32px avatar, 18px badge area, 8px margin on avatar
+        min-width: 0; // allow flex to shrink it
+        margin-right: 8px; // spacing to buttons/badges
 
         // Create a new column layout flexbox for the name parts
         display: flex;
@@ -81,23 +74,37 @@ limitations under the License.
         }
     }
 
-    .mx_RoomTile2_badgeContainer {
-        width: 18px;
-        height: 32px;
+    .mx_RoomTile2_menuButton {
+        margin-left: 4px; // spacing between buttons
+    }
 
-        // Create another flexbox row because it's super easy to position the badge at
-        // the end this way.
+    .mx_RoomTile2_badgeContainer {
+        height: 16px;
+        // don't set width so that it takes no space when there is no badge to show
+        margin: auto 0; // vertically align
+
+        // Create a flexbox to make aligning dot badges easier
         display: flex;
         align-items: center;
-        justify-content: center;
+
+        .mx_NotificationBadge {
+            margin-right: 2px; // centering
+        }
+
+        .mx_NotificationBadge_dot {
+            // make the smaller dot occupy the same width for centering
+            margin-left: 5px;
+            margin-right: 7px;
+        }
     }
 
     // The context menu buttons are hidden by default
     .mx_RoomTile2_menuButton,
     .mx_RoomTile2_notificationsButton {
         width: 20px;
+        min-width: 20px; // yay flex
         height: 20px;
-        margin: auto 0 auto 8px;
+        margin: auto 0;
         position: relative;
         display: none;
 
@@ -130,7 +137,7 @@ limitations under the License.
             .mx_RoomTile2_badgeContainer {
                 width: 0;
                 height: 0;
-                visibility: hidden;
+                display: none;
             }
 
             .mx_RoomTile2_notificationsButton,
@@ -145,15 +152,8 @@ limitations under the License.
         align-items: center;
         position: relative;
 
-        .mx_RoomTile2_avatarContainer {
+        .mx_DecoratedRoomAvatar, .mx_RoomTile2_avatarContainer {
             margin-right: 0;
-        }
-
-        .mx_RoomTile2_badgeContainer {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 18px;
         }
     }
 }

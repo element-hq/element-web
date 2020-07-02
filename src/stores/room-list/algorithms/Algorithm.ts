@@ -272,9 +272,6 @@ export class Algorithm extends EventEmitter {
                 }
             }
             newMap[tagId] = allowedRoomsInThisTag;
-
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
         }
 
         const allowedRooms = Object.values(newMap).reduce((rv, v) => { rv.push(...v); return rv; }, <Room[]>[]);
@@ -310,9 +307,6 @@ export class Algorithm extends EventEmitter {
         if (filteredRooms.length > 0) {
             this.filteredRooms[tagId] = filteredRooms;
         }
-
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
     }
 
     protected tryInsertStickyRoomToFilterSet(rooms: Room[], tagId: TagID) {
@@ -351,8 +345,6 @@ export class Algorithm extends EventEmitter {
         }
 
         if (!this._cachedStickyRooms || !updatedTag) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`Generating clone of cached rooms for sticky room handling`);
             const stickiedTagMap: ITagMap = {};
             for (const tagId of Object.keys(this.cachedRooms)) {
                 stickiedTagMap[tagId] = this.cachedRooms[tagId].map(r => r); // shallow clone
@@ -363,8 +355,6 @@ export class Algorithm extends EventEmitter {
         if (updatedTag) {
             // Update the tag indicated by the caller, if possible. This is mostly to ensure
             // our cache is up to date.
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`Replacing cached sticky rooms for ${updatedTag}`);
             this._cachedStickyRooms[updatedTag] = this.cachedRooms[updatedTag].map(r => r); // shallow clone
         }
 
@@ -373,8 +363,6 @@ export class Algorithm extends EventEmitter {
         // we might have updated from the cache is also our sticky room.
         const sticky = this._stickyRoom;
         if (!updatedTag || updatedTag === sticky.tag) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
             this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
         }
 
@@ -466,13 +454,9 @@ export class Algorithm extends EventEmitter {
         // Split out the easy rooms first (leave and invite)
         const memberships = splitRoomsByMembership(rooms);
         for (const room of memberships[EffectiveMembership.Invite]) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] "${room.name}" (${room.roomId}) is an Invite`);
             newTags[DefaultTagID.Invite].push(room);
         }
         for (const room of memberships[EffectiveMembership.Leave]) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Historical`);
             newTags[DefaultTagID.Archived].push(room);
         }
 
@@ -483,11 +467,7 @@ export class Algorithm extends EventEmitter {
             let inTag = false;
             if (tags.length > 0) {
                 for (const tag of tags) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged as ${tag}`);
                     if (!isNullOrUndefined(newTags[tag])) {
-                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                        console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged with VALID tag ${tag}`);
                         newTags[tag].push(room);
                         inTag = true;
                     }
@@ -497,9 +477,6 @@ export class Algorithm extends EventEmitter {
             if (!inTag) {
                 // TODO: Determine if DM and push there instead: https://github.com/vector-im/riot-web/issues/14236
                 newTags[DefaultTagID.Untagged].push(room);
-
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Untagged`);
             }
         }
 
@@ -524,7 +501,7 @@ export class Algorithm extends EventEmitter {
         }
     }
 
-    private getTagsForRoom(room: Room): TagID[] {
+    public getTagsForRoom(room: Room): TagID[] {
         // XXX: This duplicates a lot of logic from setKnownRooms above, but has a slightly
         // different use case and therefore different performance curve
 

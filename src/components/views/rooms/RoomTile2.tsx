@@ -17,28 +17,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import RoomAvatar from "../../views/avatars/RoomAvatar";
 import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
-import NotificationBadge, {
-    INotificationState,
-    NotificationColor,
-    TagSpecificNotificationState
-} from "./NotificationBadge";
 import { _t } from "../../../languageHandler";
 import {ChevronFace, ContextMenu, ContextMenuButton, MenuItemRadio} from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
-import RoomTileIcon from "./RoomTileIcon";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { getRoomNotifsState, ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { setRoomNotifsState } from "../../../RoomNotifs";
+import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
+import { INotificationState } from "../../../stores/notifications/INotificationState";
+import NotificationBadge from "./NotificationBadge";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -121,6 +119,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
     }
 
+    private get showContextMenu(): boolean {
+        return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
+    }
+
     public componentWillUnmount() {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
@@ -170,6 +172,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     };
 
     private onContextMenu = (ev: React.MouseEvent) => {
+        // If we don't have a context menu to show, ignore the action.
+        if (!this.showContextMenu) return;
+
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
@@ -237,7 +242,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(): React.ReactElement {
-        if (this.props.isMinimized || MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Invite) {
+        if (MatrixClientPeg.get().isGuest() || !this.showContextMenu) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
@@ -282,12 +287,14 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         const classes = classNames("mx_RoomTile2_notificationsButton", {
             // Show bell icon for the default case too.
-            mx_RoomTile2_iconBell: state === ALL_MESSAGES_LOUD || state === ALL_MESSAGES,
-            mx_RoomTile2_iconBellDot: state === MENTIONS_ONLY,
+            mx_RoomTile2_iconBell: state === state === ALL_MESSAGES,
+            mx_RoomTile2_iconBellDot: state === ALL_MESSAGES_LOUD,
+            mx_RoomTile2_iconBellMentions: state === MENTIONS_ONLY,
             mx_RoomTile2_iconBellCrossed: state === MUTE,
-            // XXX: RoomNotifs assumes ALL_MESSAGES is default, this is wrong,
-            // but cannot be fixed until FTUE Notifications lands.
-            mx_RoomTile2_notificationsButton_show: state !== ALL_MESSAGES,
+
+            // Only show the icon by default if the room is overridden to muted.
+            // TODO: [FTUE Notifications] Probably need to detect global mute state
+            mx_RoomTile2_notificationsButton_show: state === MUTE,
         });
 
         return (
@@ -304,12 +311,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     }
 
     private renderGeneralMenu(): React.ReactElement {
-        if (this.props.isMinimized) return null; // no menu when minimized
+        if (!this.showContextMenu) return null; // no menu to show
 
-        // TODO: Get a proper invite context menu, or take invites out of the room list.
-        if (this.props.tag === DefaultTagID.Invite) {
-            return null;
-        }
+        // TODO: We could do with a proper invite context menu, unlike what showContextMenu suggests
 
         let contextMenu = null;
         if (this.state.generalMenuPosition) {
@@ -361,13 +365,25 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             'mx_RoomTile2_minimized': this.props.isMinimized,
         });
 
-        const badge = (
-            <NotificationBadge
-                notification={this.state.notificationState}
-                forceCount={false}
-                roomId={this.props.room.roomId}
-            />
-        );
+        const roomAvatar = <DecoratedRoomAvatar
+            room={this.props.room}
+            avatarSize={32}
+            tag={this.props.tag}
+            displayBadge={this.props.isMinimized}
+        />;
+
+        let badge: React.ReactNode;
+        if (!this.props.isMinimized) {
+            badge = (
+                <div className="mx_RoomTile2_badgeContainer">
+                    <NotificationBadge
+                        notification={this.state.notificationState}
+                        forceCount={false}
+                        roomId={this.props.room.roomId}
+                    />
+                </div>
+            );
+        }
 
         // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
@@ -405,7 +421,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
-        const avatarSize = 32;
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper>
@@ -421,14 +436,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             role="treeitem"
                             onContextMenu={this.onContextMenu}
                         >
-                            <div className="mx_RoomTile2_avatarContainer">
-                                <RoomAvatar room={this.props.room} width={avatarSize} height={avatarSize} />
-                                <RoomTileIcon room={this.props.room} tag={this.props.tag} />
-                            </div>
+                            {roomAvatar}
                             {nameContainer}
-                            <div className="mx_RoomTile2_badgeContainer">
-                                {badge}
-                            </div>
+                            {badge}
                             {this.renderNotificationsMenu()}
                             {this.renderGeneralMenu()}
                         </AccessibleButton>

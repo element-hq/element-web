@@ -30,6 +30,7 @@ import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
+import RoomListStore, { RoomListStore2, LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -69,6 +70,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         };
 
         BreadcrumbsStore.instance.on(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         this.tagPanelWatcherRef = SettingsStore.watchSetting("TagPanel.enableTagPanel", null, () => {
             this.setState({showTagPanel: SettingsStore.getValue("TagPanel.enableTagPanel")});
         });
@@ -81,6 +83,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     public componentWillUnmount() {
         SettingsStore.unwatchSetting(this.tagPanelWatcherRef);
         BreadcrumbsStore.instance.off(UPDATE_EVENT, this.onBreadcrumbsUpdate);
+        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onBreadcrumbsUpdate);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
 
@@ -151,7 +154,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
             breadcrumbs = (
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer">
+                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar">
                     {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
                 </div>
             );
@@ -205,6 +208,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             "mx_LeftPanel2_minimized": this.props.isMinimized,
         });
 
+        const roomListClasses = classNames(
+            "mx_LeftPanel2_actualRoomListContainer",
+            "mx_AutoHideScrollbar",
+        );
+
         return (
             <div className={containerClasses}>
                 {tagPanel}
@@ -212,7 +220,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     <div
-                        className="mx_LeftPanel2_actualRoomListContainer"
+                        className={roomListClasses}
                         onScroll={this.onScroll}
                         ref={this.listContainerRef}
                     >{roomList}</div>

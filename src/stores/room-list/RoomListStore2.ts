@@ -17,7 +17,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
-import { OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
+import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import TagOrderStore from "../TagOrderStore";
 import { AsyncStore } from "../AsyncStore";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -30,6 +30,7 @@ import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "./membership";
+import { ListLayout } from "./ListLayout";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -100,8 +101,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.warn(`${activeRoomId} is current in RVS but missing from client - clearing sticky room`);
                 this.algorithm.stickyRoom = null;
             } else if (activeRoom !== this.algorithm.stickyRoom) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`Changing sticky room to ${activeRoomId}`);
                 this.algorithm.stickyRoom = activeRoom;
             }
         }
@@ -185,7 +184,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()} in ${updatedRoom.roomId}`);
+                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()}` +
+                    ` in ${updatedRoom.roomId}`);
                 if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
@@ -297,8 +297,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
             this.emit(LISTS_UPDATE_EVENT, this);
         }
     }
@@ -365,8 +363,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onAlgorithmListUpdated = () => {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Underlying algorithm has triggered a list update - refiring");
         this.emit(LISTS_UPDATE_EVENT, this);
     };
 
@@ -396,9 +392,16 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.emit(LISTS_UPDATE_EVENT, this);
     }
 
+    // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
+    public async resetLayouts() {
+        console.warn("Resetting layouts for room list");
+        for (const tagId of Object.keys(this.orderedLists)) {
+            new ListLayout(tagId).reset();
+        }
+        await this.regenerateAllLists();
+    }
+
     public addFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Adding filter condition:", filter);
         this.filterConditions.push(filter);
         if (this.algorithm) {
             this.algorithm.addFilterCondition(filter);
@@ -406,8 +409,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public removeFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Removing filter condition:", filter);
         const idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
@@ -416,6 +417,19 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 this.algorithm.removeFilterCondition(filter);
             }
         }
+    }
+
+    /**
+     * Gets the tags for a room identified by the store. The returned set
+     * should never be empty, and will contain DefaultTagID.Untagged if
+     * the store is not aware of any tags.
+     * @param room The room to get the tags for.
+     * @returns The tags for the room.
+     */
+    public getTagsForRoom(room: Room): TagID[] {
+        const algorithmTags = this.algorithm.getTagsForRoom(room);
+        if (!algorithmTags) return [DefaultTagID.Untagged];
+        return algorithmTags;
     }
 }
 

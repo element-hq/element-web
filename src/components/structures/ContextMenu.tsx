@@ -160,6 +160,13 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         e.stopPropagation();
     };
 
+    // Prevent clicks on the background from going through to the component which opened the menu.
+    _onFinished = (ev: InputEvent) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        if (this.props.onFinished) this.props.onFinished();
+    };
+
     _onMoveFocus = (element, up) => {
         let descending = false; // are we currently descending or ascending through the DOM tree?
 
@@ -262,7 +269,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
             position.bottom = props.bottom;
         }
 
-        let chevronFace: IProps["chevronFace"];
+        let chevronFace: ChevronFace;
         if (props.left) {
             position.left = props.left;
             chevronFace = ChevronFace.Left;
@@ -349,7 +356,7 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
                 <div
                     className="mx_ContextualMenu_background"
                     style={wrapperStyle}
-                    onClick={props.onFinished}
+                    onClick={this._onFinished}
                     onContextMenu={this.onContextMenu}
                 />
             );
