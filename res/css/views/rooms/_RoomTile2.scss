@@ -24,7 +24,10 @@ limitations under the License.
     // The tile is also a flexbox row itself
     display: flex;
 
-    &.mx_RoomTile2_selected, &:hover, &.mx_RoomTile2_hasMenuOpen {
+    &.mx_RoomTile2_selected,
+    &:hover,
+    &:focus-within,
+    &.mx_RoomTile2_hasMenuOpen {
         background-color: $roomtile2-selected-bg-color;
         border-radius: 32px;
     }
@@ -132,7 +135,9 @@ limitations under the License.
     }
 
     &:not(.mx_RoomTile2_minimized) {
-        &:hover, &.mx_RoomTile2_hasMenuOpen {
+        &:hover,
+        &:focus-within,
+        &.mx_RoomTile2_hasMenuOpen {
             // Hide the badge container on hover because it'll be a menu button
             .mx_RoomTile2_badgeContainer {
                 width: 0;

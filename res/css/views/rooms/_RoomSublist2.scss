@@ -278,6 +278,7 @@ limitations under the License.
     }
 
     &.mx_RoomSublist2_hasMenuOpen,
+    &:not(.mx_RoomSublist2_minimized) > .mx_RoomSublist2_headerContainer:focus-within,
     &:not(.mx_RoomSublist2_minimized) > .mx_RoomSublist2_headerContainer:hover {
         .mx_RoomSublist2_menuButton {
             visibility: visible;
