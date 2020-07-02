@@ -160,9 +160,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({notificationsMenuPosition: target.getBoundingClientRect()});
     };
 
-    private onCloseNotificationsMenu = (ev: InputEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+    private onCloseNotificationsMenu = (ev?: InputEvent) => {
+        if (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
         this.setState({notificationsMenuPosition: null});
     };
 
@@ -187,9 +189,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         });
     };
 
-    private onCloseGeneralMenu = (ev: InputEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+    private onCloseGeneralMenu = (ev?: InputEvent) => {
+        if (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
         this.setState({generalMenuPosition: null});
     };
 
