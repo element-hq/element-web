@@ -150,7 +150,7 @@ export const SETTINGS = {
         isFeature: true,
         displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
     },
     "feature_custom_themes": {
