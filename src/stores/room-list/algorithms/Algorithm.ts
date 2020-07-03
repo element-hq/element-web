@@ -641,10 +641,14 @@ export class Algorithm extends EventEmitter {
             }
 
             if (cause === RoomUpdateCause.NewRoom && !this.roomIdsToTags[room.roomId]) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[RoomListDebug] Updating tags for new room ${room.roomId} (${room.name})`);
 
                 // Get the tags for the room and populate the cache
                 const roomTags = this.getTagsForRoom(room).filter(t => !isNullOrUndefined(this.cachedRooms[t]));
+
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[RoomListDebug] Updated tags for ${room.roomId}:`, roomTags);
 
                 // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
                 // which means we should *always* have a tag to go off of.
