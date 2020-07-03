@@ -30,7 +30,8 @@ import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStore, { RoomListStore2, LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
+import {Key} from "../../Keyboard";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -57,6 +58,7 @@ interface IState {
 export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
+    private focusedElement = null;
 
     // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
 
@@ -150,6 +152,69 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         this.handleStickyHeaders(this.listContainerRef.current);
     };
 
+    private onFocus = (ev: React.FocusEvent) => {
+        this.focusedElement = ev.target;
+    };
+
+    private onBlur = () => {
+        this.focusedElement = null;
+    };
+
+    private onKeyDown = (ev: React.KeyboardEvent) => {
+        if (!this.focusedElement) return;
+
+        switch (ev.key) {
+            case Key.ARROW_UP:
+            case Key.ARROW_DOWN:
+                ev.stopPropagation();
+                ev.preventDefault();
+                this.onMoveFocus(ev.key === Key.ARROW_UP);
+                break;
+        }
+    };
+
+    private onMoveFocus = (up: boolean) => {
+        let element = this.focusedElement;
+
+        let descending = false; // are we currently descending or ascending through the DOM tree?
+        let classes: DOMTokenList;
+
+        do {
+            const child = up ? element.lastElementChild : element.firstElementChild;
+            const sibling = up ? element.previousElementSibling : element.nextElementSibling;
+
+            if (descending) {
+                if (child) {
+                    element = child;
+                } else if (sibling) {
+                    element = sibling;
+                } else {
+                    descending = false;
+                    element = element.parentElement;
+                }
+            } else {
+                if (sibling) {
+                    element = sibling;
+                    descending = true;
+                } else {
+                    element = element.parentElement;
+                }
+            }
+
+            if (element) {
+                classes = element.classList;
+            }
+        } while (element && !(
+            classes.contains("mx_RoomTile2") ||
+            classes.contains("mx_RoomSublist2_headerText") ||
+            classes.contains("mx_RoomSearch_input")));
+
+        if (element) {
+            element.focus();
+            this.focusedElement = element;
+        }
+    };
+
     private renderHeader(): React.ReactNode {
         let breadcrumbs;
         if (this.state.showBreadcrumbs) {
@@ -170,11 +235,15 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderSearchExplore(): React.ReactNode {
         return (
-            <div className="mx_LeftPanel2_filterContainer">
-                <RoomSearch onQueryUpdate={this.onSearch} isMinimized={this.props.isMinimized} />
+            <div className="mx_LeftPanel2_filterContainer" onFocus={this.onFocus} onBlur={this.onBlur}>
+                <RoomSearch
+                    onQueryUpdate={this.onSearch}
+                    isMinimized={this.props.isMinimized}
+                    onVerticalArrow={this.onKeyDown}
+                />
                 <AccessibleButton
-                    tabIndex={-1}
-                    className='mx_LeftPanel2_exploreButton'
+                    // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
+                    className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
                     alt={_t("Explore rooms")}
                 />
@@ -189,14 +258,13 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             </div>
         );
 
-        // TODO: Determine what these onWhatever handlers do: https://github.com/vector-im/riot-web/issues/14180
         const roomList = <RoomList2
-            onKeyDown={() => {/*TODO*/}}
+            onKeyDown={this.onKeyDown}
             resizeNotifier={null}
             collapsed={false}
             searchFilter={this.state.searchFilter}
-            onFocus={() => {/*TODO*/}}
-            onBlur={() => {/*TODO*/}}
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
         />;
 
@@ -223,7 +291,12 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                         className={roomListClasses}
                         onScroll={this.onScroll}
                         ref={this.listContainerRef}
-                    >{roomList}</div>
+                        // Firefox sometimes makes this element focusable due to
+                        // overflow:scroll;, so force it out of tab order.
+                        tabIndex={-1}
+                    >
+                        {roomList}
+                    </div>
                 </aside>
             </div>
         );

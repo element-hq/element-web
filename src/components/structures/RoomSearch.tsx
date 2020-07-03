@@ -38,6 +38,7 @@ import { Action } from "../../dispatcher/actions";
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
     isMinimized: boolean;
+    onVerticalArrow(ev: React.KeyboardEvent);
 }
 
 interface IState {
@@ -111,6 +112,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (ev.key === Key.ESCAPE) {
             this.clearInput();
             defaultDispatcher.fire(Action.FocusComposer);
+        } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
+            this.props.onVerticalArrow(ev);
         }
     };
 

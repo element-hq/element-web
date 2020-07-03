@@ -37,6 +37,7 @@ import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import Tooltip from "../elements/Tooltip";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { Key } from "../../../Keyboard";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -82,6 +83,9 @@ interface IState {
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
+    private headerButton = createRef<HTMLDivElement>();
+    private sublistRef = createRef<HTMLDivElement>();
+
     constructor(props: IProps) {
         super(props);
 
@@ -217,8 +221,52 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             sublist.scrollIntoView({behavior: 'smooth'});
         } else {
             // on screen - toggle collapse
-            this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
-            this.forceUpdate(); // because the layout doesn't trigger an update
+            this.toggleCollapsed();
+        }
+    };
+
+    private toggleCollapsed = () => {
+        this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
+        this.forceUpdate(); // because the layout doesn't trigger an update
+    };
+
+    private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
+        const isCollapsed = this.props.layout && this.props.layout.isCollapsed;
+        switch (ev.key) {
+            case Key.ARROW_LEFT:
+                ev.stopPropagation();
+                if (!isCollapsed) {
+                    // On ARROW_LEFT collapse the room sublist if it isn't already
+                    this.toggleCollapsed();
+                }
+                break;
+            case Key.ARROW_RIGHT: {
+                ev.stopPropagation();
+                if (isCollapsed) {
+                    // On ARROW_RIGHT expand the room sublist if it isn't already
+                    this.toggleCollapsed();
+                } else if (this.sublistRef.current) {
+                    // otherwise focus the first room
+                    const element = this.sublistRef.current.querySelector(".mx_RoomTile2") as HTMLDivElement;
+                    if (element) {
+                        element.focus();
+                    }
+                }
+                break;
+            }
+        }
+    };
+
+    private onKeyDown = (ev: React.KeyboardEvent) => {
+        switch (ev.key) {
+            // On ARROW_LEFT go to the sublist header
+            case Key.ARROW_LEFT:
+                ev.stopPropagation();
+                this.headerButton.current.focus();
+                break;
+            // Consume ARROW_RIGHT so it doesn't cause focus to get sent to composer
+            case Key.ARROW_RIGHT:
+                ev.stopPropagation();
         }
     };
 
@@ -337,7 +385,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         return (
             <RovingTabIndexWrapper>
                 {({onFocus, isActive, ref}) => {
-                    // TODO: Use onFocus: https://github.com/vector-im/riot-web/issues/14180
                     const tabIndex = isActive ? 0 : -1;
 
                     const badge = (
@@ -386,13 +433,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // doesn't become sticky.
                     // The same applies to the notification badge.
                     return (
-                        <div className={classes}>
-                            <div className='mx_RoomSublist2_stickable'>
+                        <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus}>
+                            <div className="mx_RoomSublist2_stickable">
                                 <AccessibleButton
                                     onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
-                                    className={"mx_RoomSublist2_headerText"}
+                                    className="mx_RoomSublist2_headerText"
                                     role="treeitem"
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
@@ -520,12 +567,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             );
         }
 
-        // TODO: onKeyDown support: https://github.com/vector-im/riot-web/issues/14180
         return (
             <div
+                ref={this.sublistRef}
                 className={classes}
                 role="group"
                 aria-label={this.props.label}
+                onKeyDown={this.onKeyDown}
             >
                 {this.renderHeader()}
                 {content}

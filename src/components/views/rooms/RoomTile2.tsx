@@ -241,7 +241,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMentions = ev => this.saveNotifState(ev, MENTIONS_ONLY);
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
-    private renderNotificationsMenu(): React.ReactElement {
+    private renderNotificationsMenu(isActive: boolean): React.ReactElement {
         if (MatrixClientPeg.get().isGuest() || !this.showContextMenu) {
             // the menu makes no sense in these cases so do not show one
             return null;
@@ -304,6 +304,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                     onClick={this.onNotificationsMenuOpenClick}
                     label={_t("Notification options")}
                     isExpanded={!!this.state.notificationsMenuPosition}
+                    tabIndex={isActive ? 0 : -1}
                 />
                 {contextMenu}
             </React.Fragment>
@@ -439,7 +440,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             {roomAvatar}
                             {nameContainer}
                             {badge}
-                            {this.renderNotificationsMenu()}
+                            {this.renderNotificationsMenu(isActive)}
                             {this.renderGeneralMenu()}
                         </AccessibleButton>
                     }
