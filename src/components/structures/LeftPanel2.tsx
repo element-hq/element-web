@@ -119,7 +119,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             if (slRect.top + headerHeight > bottom && !gotBottom) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.top = `unset`;
+                header.style.removeProperty("top");
                 gotBottom = true;
             } else if ((slRect.top - (headerHeight / 3)) < top) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
@@ -135,7 +135,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.top = `unset`;
+                header.style.removeProperty("top");
             }
         }
     }
