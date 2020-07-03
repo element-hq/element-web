@@ -2,6 +2,7 @@ Changes in [2.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.9.0-rc.1...v2.9.0)
 
+ * Upgrade to JS SDK 7.1.0
  * Remove duplicate compact settings, handle device level updates
    [\#4889](https://github.com/matrix-org/matrix-react-sdk/pull/4889)
 
