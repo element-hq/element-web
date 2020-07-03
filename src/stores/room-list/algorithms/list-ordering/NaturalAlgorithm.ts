@@ -28,6 +28,9 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
+
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+        console.log(`[RoomListDebug] Constructed a NaturalAlgorithm for ${tagId}`);
     }
 
     public async setRooms(rooms: Room[]): Promise<any> {
