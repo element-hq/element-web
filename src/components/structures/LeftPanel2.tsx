@@ -166,20 +166,18 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         switch (ev.key) {
             case Key.ARROW_UP:
             case Key.ARROW_DOWN:
-                this.onMoveFocus(ev, ev.key === Key.ARROW_UP);
+                ev.stopPropagation();
+                ev.preventDefault();
+                this.onMoveFocus(ev.key === Key.ARROW_UP);
                 break;
         }
     };
 
-    private onMoveFocus = (ev: React.KeyboardEvent, up: boolean) => {
+    private onMoveFocus = (up: boolean) => {
         let element = this.focusedElement;
 
-        // unclear why this isn't needed
-        // var descending = (up == this.focusDirection) ? this.focusDescending : !this.focusDescending;
-        // this.focusDirection = up;
-
         let descending = false; // are we currently descending or ascending through the DOM tree?
-        let classes;
+        let classes: DOMTokenList;
 
         do {
             const child = up ? element.lastElementChild : element.firstElementChild;
@@ -212,14 +210,8 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             classes.contains("mx_RoomSearch_input")));
 
         if (element) {
-            ev.stopPropagation();
-            ev.preventDefault();
             element.focus();
             this.focusedElement = element;
-        } else {
-            // if navigation is via up/down arrow-keys, trap in the widget so it doesn't send to composer
-            ev.stopPropagation();
-            ev.preventDefault();
         }
     };
 
