@@ -188,8 +188,6 @@ limitations under the License.
         .mx_RadioButton {
             flex-grow: 0;
             padding: 10px;
-            // create a horizontal separation line between the preview and the radio interaction
-            border-top: 1px solid $input-darker-bg-color;
         }
 
         .mx_EventTile_content {
