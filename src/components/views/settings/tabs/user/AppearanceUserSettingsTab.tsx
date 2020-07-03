@@ -288,6 +288,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         }))}
                         onChange={this.onThemeChange}
                         value={this.state.useSystemTheme ? undefined : this.state.theme}
+                        outlined
                     />
                 </div>
                 {customThemeForm}
@@ -355,6 +356,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         value="true"
                         checked={this.state.useIRCLayout}
                         onChange={this.onLayoutChange}
+                        outlined
                     >
                         {_t("Compact")}
                     </StyledRadioButton>
@@ -371,6 +373,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         value="false"
                         checked={!this.state.useIRCLayout}
                         onChange={this.onLayoutChange}
+                        outlined
                     >
                         {_t("Modern")}
                     </StyledRadioButton>

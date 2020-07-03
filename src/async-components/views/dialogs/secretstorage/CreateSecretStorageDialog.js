@@ -444,6 +444,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     value={CREATE_STORAGE_OPTION_KEY}
                     name="keyPassphrase"
                     checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                    outlined
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
                         <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
@@ -456,6 +457,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     value={CREATE_STORAGE_OPTION_PASSPHRASE}
                     name="keyPassphrase"
                     checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                    outlined
                 >
                     <div className="mx_CreateSecretStorageDialog_optionTitle">
                         <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
