@@ -250,8 +250,8 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onVerticalArrow={this.onKeyDown}
                 />
                 <AccessibleButton
-                    tabIndex={-1}
-                    className='mx_LeftPanel2_exploreButton'
+                    // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
+                    className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
                     alt={_t("Explore rooms")}
                 />
