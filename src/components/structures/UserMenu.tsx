@@ -130,7 +130,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({contextMenuPosition: null});
     };
 
-    private onSwitchThemeClick = () => {
+    private onSwitchThemeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
