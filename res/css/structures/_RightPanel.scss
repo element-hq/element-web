@@ -67,17 +67,17 @@ limitations under the License.
 }
 
 .mx_RightPanel_membersButton::before {
-    mask-image: url('$(res)/img/feather-customised/user.svg');
+    mask-image: url('$(res)/img/element-icons/room/members.svg');
     mask-position: center;
 }
 
 .mx_RightPanel_filesButton::before {
-    mask-image: url('$(res)/img/feather-customised/files.svg');
+    mask-image: url('$(res)/img/element-icons/room/files.svg');
     mask-position: center;
 }
 
 .mx_RightPanel_notifsButton::before {
-    mask-image: url('$(res)/img/feather-customised/notifications.svg');
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
     mask-position: center;
 }
 
