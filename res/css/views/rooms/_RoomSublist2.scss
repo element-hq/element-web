@@ -92,7 +92,7 @@ limitations under the License.
 
             // Apply the width and margin to the badge so the container doesn't occupy dead space
             .mx_NotificationBadge {
-                width: 16px;
+                // Do not set a width so the badges get properly sized
                 margin-left: 8px; // same as menu+aux buttons
             }
         }

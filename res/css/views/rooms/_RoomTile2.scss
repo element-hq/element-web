@@ -85,6 +85,7 @@ limitations under the License.
         height: 16px;
         // don't set width so that it takes no space when there is no badge to show
         margin: auto 0; // vertically align
+        position: relative; // fixes badge alignment in some scenarios
 
         // Create a flexbox to make aligning dot badges easier
         display: flex;
