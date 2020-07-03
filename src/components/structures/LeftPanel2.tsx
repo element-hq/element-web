@@ -121,7 +121,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
                 header.style.top = `unset`;
                 gotBottom = true;
-            } else if (slRect.top < top) {
+            } else if ((slRect.top - (headerHeight / 3)) < top) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
                 header.style.top = `${rlRect.top}px`;
