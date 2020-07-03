@@ -19,4 +19,18 @@
     .mx_LeftPanel2 .mx_LeftPanel2_roomListContainer {
         backdrop-filter: blur(175px);
     }
+
+    // sticky headers need their own blur
+
+    .mx_RoomSublist2_headerContainer_sticky {
+        background-size: cover;
+        background-image: var(--avatar-url);
+        background-position: center;
+    }
+
+    .mx_RoomSublist2_headerContainer_sticky .mx_RoomSublist2_stickyHeaderBlur {
+        backdrop-filter: blur(100px);
+        background-color: $roomlist2-bg-color;
+    }
+}
 }

@@ -311,20 +311,22 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     return (
                         <div className={classes}>
                             <div className='mx_RoomSublist2_stickable'>
-                                <AccessibleButton
-                                    inputRef={ref}
-                                    tabIndex={tabIndex}
-                                    className={"mx_RoomSublist2_headerText"}
-                                    role="treeitem"
-                                    aria-level={1}
-                                    onClick={this.onHeaderClick}
-                                >
-                                    <span className={collapseClasses} />
-                                    <span>{this.props.label}</span>
-                                </AccessibleButton>
-                                {this.renderMenu()}
-                                {this.props.isMinimized ? null : badgeContainer}
-                                {this.props.isMinimized ? null : addRoomButton}
+                                <div className="mx_RoomSublist2_stickyHeaderBlur">
+                                    <AccessibleButton
+                                        inputRef={ref}
+                                        tabIndex={tabIndex}
+                                        className={"mx_RoomSublist2_headerText"}
+                                        role="treeitem"
+                                        aria-level={1}
+                                        onClick={this.onHeaderClick}
+                                    >
+                                        <span className={collapseClasses} />
+                                        <span>{this.props.label}</span>
+                                    </AccessibleButton>
+                                    {this.renderMenu()}
+                                    {this.props.isMinimized ? null : badgeContainer}
+                                    {this.props.isMinimized ? null : addRoomButton}
+                                </div>
                             </div>
                             {this.props.isMinimized ? badgeContainer : null}
                             {this.props.isMinimized ? addRoomButton : null}
