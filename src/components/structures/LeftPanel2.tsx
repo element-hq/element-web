@@ -110,6 +110,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const headerStickyWidth = rlRect.width - headerRightMargin;
 
         let gotBottom = false;
+        let lastTopHeader;
         for (const sublist of sublists) {
             const slRect = sublist.getBoundingClientRect();
 
@@ -126,6 +127,12 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
                 header.style.width = `${headerStickyWidth}px`;
                 header.style.top = `${rlRect.top}px`;
+                if (lastTopHeader) {
+                    lastTopHeader.style.display = "none";
+                }
+                // first unset it, if set in last iteration
+                header.style.removeProperty("display");
+                lastTopHeader = header;
             } else {
                 header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
