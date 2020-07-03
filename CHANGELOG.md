@@ -1,3 +1,10 @@
+Changes in [2.9.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.9.0) (2020-07-03)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.9.0-rc.1...v2.9.0)
+
+ * Remove duplicate compact settings, handle device level updates
+   [\#4889](https://github.com/matrix-org/matrix-react-sdk/pull/4889)
+
 Changes in [2.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.9.0-rc.1) (2020-07-01)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.8.1...v2.9.0-rc.1)
