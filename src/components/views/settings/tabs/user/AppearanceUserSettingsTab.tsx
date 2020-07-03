@@ -291,7 +291,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                 </div>
                 {customThemeForm}
-                <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} useCheckbox={true} />
            </div>
         );
     }
