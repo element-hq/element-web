@@ -33,5 +33,8 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Você pode continuar usando o navegador atual, mas alguns dos recursos podem não funcionar e a aparência do aplicativo pode estar incorreta.",
     "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
     "Go to Riot.im": "Vá para Riot.im",
-    "Failed to start": "Falha ao iniciar"
+    "Failed to start": "Falha ao iniciar",
+    "Missing indexeddb worker script!": "Script de trabalho indexeddb não encontrado!",
+    "Open": "Abrir",
+    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente"
 }
