@@ -36,5 +36,7 @@
     "Failed to start": "Falha ao iniciar",
     "Missing indexeddb worker script!": "Script de trabalho indexeddb não encontrado!",
     "Open": "Abrir",
-    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente"
+    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login"
 }
