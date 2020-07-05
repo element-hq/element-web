@@ -80,6 +80,8 @@ interface IState {
     generalMenuPosition: PartialDOMRect;
 }
 
+const messagePreviewId = (roomId: string) => `mx_RoomTile2_messagePreview_${roomId}`;
+
 const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.pageXOffset - 9;
@@ -133,6 +135,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     private get showContextMenu(): boolean {
         return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
+    }
+
+    private get showMessagePreview(): boolean {
+        return !this.props.isMinimized && this.props.showMessagePreview;
     }
 
     public componentWillUnmount() {
@@ -408,14 +414,14 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         let messagePreview = null;
-        if (this.props.showMessagePreview && !this.props.isMinimized) {
+        if (this.showMessagePreview) {
             // The preview store heavily caches this info, so should be safe to hammer.
             const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
 
             // Only show the preview if there is one to show.
             if (text) {
                 messagePreview = (
-                    <div className="mx_RoomTile2_messagePreview">
+                    <div className="mx_RoomTile2_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
                         {text}
                     </div>
                 );
@@ -455,6 +461,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             ariaLabel += " " + _t("Unread messages.");
         }
 
+        let ariaDescribedBy: string;
+        if (this.showMessagePreview) {
+            ariaDescribedBy = messagePreviewId(this.props.room.roomId);
+        }
+
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper>
@@ -471,6 +482,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             role="treeitem"
                             aria-label={ariaLabel}
                             aria-selected={this.state.selected}
+                            aria-describedby={ariaDescribedBy}
                         >
                             {roomAvatar}
                             {nameContainer}
