@@ -26,16 +26,18 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
-import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
-import StyledCheckbox from "../elements/StyledCheckbox";
-import StyledRadioButton from "../elements/StyledRadioButton";
+import {
+    ContextMenu,
+    ContextMenuButton,
+    StyledMenuItemCheckbox,
+    StyledMenuItemRadio,
+} from "../../structures/ContextMenu";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
-import Tooltip from "../elements/Tooltip";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
 
@@ -329,40 +331,40 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <div className="mx_RoomSublist2_contextMenu">
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Sort by")}</div>
-                            <StyledRadioButton
+                            <StyledMenuItemRadio
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
                                 checked={!isAlphabetical}
                                 name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("Activity")}
-                            </StyledRadioButton>
-                            <StyledRadioButton
+                            </StyledMenuItemRadio>
+                            <StyledMenuItemRadio
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Alphabetic)}
                                 checked={isAlphabetical}
                                 name={`mx_${this.props.tagId}_sortBy`}
                             >
                                 {_t("A-Z")}
-                            </StyledRadioButton>
+                            </StyledMenuItemRadio>
                         </div>
                         <hr />
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
-                            <StyledCheckbox
+                            <StyledMenuItemCheckbox
                                 onChange={this.onUnreadFirstChanged}
                                 checked={isUnreadFirst}
                             >
                                 {_t("Always show first")}
-                            </StyledCheckbox>
+                            </StyledMenuItemCheckbox>
                         </div>
                         <hr />
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
-                            <StyledCheckbox
+                            <StyledMenuItemCheckbox
                                 onChange={this.onMessagePreviewChanged}
                                 checked={this.props.layout.showPreviews}
                             >
                                 {_t("Message preview")}
-                            </StyledCheckbox>
+                            </StyledMenuItemCheckbox>
                         </div>
                     </div>
                 </ContextMenu>

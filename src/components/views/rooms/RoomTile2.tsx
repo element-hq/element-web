@@ -26,7 +26,13 @@ import dis from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
-import { ContextMenu, ContextMenuButton, MenuItemRadio } from "../../structures/ContextMenu";
+import {
+    ContextMenu,
+    ContextMenuButton,
+    MenuItemRadio,
+    MenuItemCheckbox,
+    MenuItem,
+} from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
@@ -328,20 +334,24 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
-                            <AccessibleButton onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}>
+                            <MenuItemCheckbox
+                                onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}
+                                active={false} // TODO: https://github.com/vector-im/riot-web/issues/14283
+                                label={_t("Favourite")}
+                            >
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Favourite")}</span>
-                            </AccessibleButton>
-                            <AccessibleButton onClick={this.onOpenRoomSettings}>
+                            </MenuItemCheckbox>
+                            <MenuItem onClick={this.onOpenRoomSettings} label={_t("Settings")}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Settings")}</span>
-                            </AccessibleButton>
+                            </MenuItem>
                         </div>
                         <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
-                            <AccessibleButton onClick={this.onLeaveRoomClick}>
+                            <MenuItem onClick={this.onLeaveRoomClick} label={_t("Leave Room")}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Leave Room")}</span>
-                            </AccessibleButton>
+                            </MenuItem>
                         </div>
                     </div>
                 </ContextMenu>
