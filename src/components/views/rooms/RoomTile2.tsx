@@ -397,8 +397,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         let badge: React.ReactNode;
         if (!this.props.isMinimized) {
+            // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
             badge = (
-                <div className="mx_RoomTile2_badgeContainer">
+                <div className="mx_RoomTile2_badgeContainer" aria-hidden="true">
                     <NotificationBadge
                         notification={this.state.notificationState}
                         forceCount={false}
