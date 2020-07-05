@@ -424,9 +424,17 @@ MenuItemCheckbox.propTypes = {
 };
 
 // Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox = ({children, label, active=false, disabled=false, ...props}) => {
+export const StyledMenuItemCheckbox = ({children, label, checked=false, disabled=false, ...props}) => {
     return (
-        <StyledCheckbox {...props} role="menuitemcheckbox" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
+        <StyledCheckbox
+            {...props}
+            role="menuitemcheckbox"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+        >
             { children }
         </StyledCheckbox>
     );
@@ -434,7 +442,7 @@ export const StyledMenuItemCheckbox = ({children, label, active=false, disabled=
 StyledMenuItemCheckbox.propTypes = {
     ...AccessibleButton.propTypes,
     label: PropTypes.string, // optional
-    active: PropTypes.bool.isRequired,
+    checked: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
     className: PropTypes.string, // optional
     onClick: PropTypes.func.isRequired,
@@ -459,9 +467,17 @@ MenuItemRadio.propTypes = {
 };
 
 // Semantic component for representing a styled role=menuitemradio
-export const StyledMenuItemRadio = ({children, label, active=false, disabled=false, ...props}) => {
+export const StyledMenuItemRadio = ({children, label, checked=false, disabled=false, ...props}) => {
     return (
-        <StyledRadioButton {...props} role="menuitemradio" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
+        <StyledRadioButton
+            {...props}
+            role="menuitemradio"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+        >
             { children }
         </StyledRadioButton>
     );
@@ -469,7 +485,7 @@ export const StyledMenuItemRadio = ({children, label, active=false, disabled=fal
 StyledMenuItemRadio.propTypes = {
     ...StyledMenuItemRadio.propTypes,
     label: PropTypes.string, // optional
-    active: PropTypes.bool.isRequired,
+    checked: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
     className: PropTypes.string, // optional
     onClick: PropTypes.func.isRequired,
