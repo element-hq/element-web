@@ -30,9 +30,15 @@ import { ContextMenu, ContextMenuButton, MenuItemRadio } from "../../structures/
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { getRoomNotifsState, ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
+import {
+    getRoomNotifsState,
+    setRoomNotifsState,
+    ALL_MESSAGES,
+    ALL_MESSAGES_LOUD,
+    MENTIONS_ONLY,
+    MUTE,
+} from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { setRoomNotifsState } from "../../../RoomNotifs";
 import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
 import { INotificationState } from "../../../stores/notifications/INotificationState";
 import NotificationBadge from "./NotificationBadge";
@@ -406,10 +412,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             }
         }
 
+        const notificationColor = this.state.notificationState.color;
         const nameClasses = classNames({
             "mx_RoomTile2_name": true,
             "mx_RoomTile2_nameWithPreview": !!messagePreview,
-            "mx_RoomTile2_nameHasUnreadEvents": this.state.notificationState.color >= NotificationColor.Bold,
+            "mx_RoomTile2_nameHasUnreadEvents": notificationColor >= NotificationColor.Bold,
         });
 
         let nameContainer = (
@@ -421,6 +428,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             </div>
         );
         if (this.props.isMinimized) nameContainer = null;
+
+        let ariaLabel = name;
+        // The following labels are written in such a fashion to increase screen reader efficiency (speed).
+        if (this.props.tag === DefaultTagID.Invite) {
+            // append nothing
+        } else if (notificationColor >= NotificationColor.Red) {
+            ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
+                count: this.state.notificationState.count,
+            });
+        } else if (notificationColor >= NotificationColor.Grey) {
+            ariaLabel += " " + _t("%(count)s unread messages.", {
+                count: this.state.notificationState.count,
+            });
+        } else if (notificationColor >= NotificationColor.Bold) {
+            ariaLabel += " " + _t("Unread messages.");
+        }
 
         return (
             <React.Fragment>
@@ -434,8 +457,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             onMouseEnter={this.onTileMouseEnter}
                             onMouseLeave={this.onTileMouseLeave}
                             onClick={this.onTileClick}
-                            role="treeitem"
                             onContextMenu={this.onContextMenu}
+                            role="treeitem"
+                            aria-label={ariaLabel}
+                            aria-selected={this.state.selected}
                         >
                             {roomAvatar}
                             {nameContainer}

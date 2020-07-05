@@ -149,7 +149,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         let clearButton = (
             <AccessibleButton
                 tabIndex={-1}
-                className='mx_RoomSearch_clearButton'
+                title={_t("Clear filter")}
+                className="mx_RoomSearch_clearButton"
                 onClick={this.clearInput}
             />
         );
@@ -157,8 +158,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (this.props.isMinimized) {
             icon = (
                 <AccessibleButton
-                    tabIndex={-1}
-                    className='mx_RoomSearch_icon'
+                    title={_t("Search rooms")}
+                    className="mx_RoomSearch_icon"
                     onClick={this.openSearch}
                 />
             );

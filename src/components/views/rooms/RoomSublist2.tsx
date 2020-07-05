@@ -63,7 +63,7 @@ interface IProps {
     onAddRoom?: () => void;
     addRoomLabel: string;
     isInvite: boolean;
-    layout: ListLayout;
+    layout?: ListLayout;
     isMinimized: boolean;
     tagId: TagID;
 
@@ -203,6 +203,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             dis.dispatch({
                 action: 'view_room',
                 room_id: room.roomId,
+                show_room_tile: true, // to make sure the room gets scrolled into view
             });
         }
     };
@@ -383,9 +384,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactElement {
         return (
-            <RovingTabIndexWrapper>
+            <RovingTabIndexWrapper inputRef={this.headerButton}>
                 {({onFocus, isActive, ref}) => {
                     const tabIndex = isActive ? 0 : -1;
+
+                    let ariaLabel = _t("Jump to first unread room.");
+                    if (this.props.tagId === DefaultTagID.Invite) {
+                        ariaLabel = _t("Jump to first invite.");
+                    }
 
                     const badge = (
                         <NotificationBadge
@@ -393,6 +399,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             notification={this.state.notificationState}
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
+                            aria-label={ariaLabel}
                         />
                     );
 
@@ -433,7 +440,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // doesn't become sticky.
                     // The same applies to the notification badge.
                     return (
-                        <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus}>
+                        <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus} aria-label={this.props.label}>
                             <div className="mx_RoomSublist2_stickable">
                                 <AccessibleButton
                                     onFocus={onFocus}
@@ -441,6 +448,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     tabIndex={tabIndex}
                                     className="mx_RoomSublist2_headerText"
                                     role="treeitem"
+                                    aria-expanded={!this.props.layout || !this.props.layout.isCollapsed}
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
                                     onContextMenu={this.onContextMenu}
@@ -496,12 +504,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
-                    <div onClick={this.onShowAllClick} className={showMoreBtnClasses}>
+                    <AccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses} tabIndex={-1}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showMoreText}
-                    </div>
+                    </AccessibleButton>
                 );
             } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.props.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
@@ -512,12 +520,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
-                    <div onClick={this.onShowLessClick} className={showMoreBtnClasses}>
+                    <AccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses} tabIndex={-1}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showLessText}
-                    </div>
+                    </AccessibleButton>
                 );
             }
 

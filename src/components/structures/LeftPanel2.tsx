@@ -235,7 +235,12 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderSearchExplore(): React.ReactNode {
         return (
-            <div className="mx_LeftPanel2_filterContainer" onFocus={this.onFocus} onBlur={this.onBlur}>
+            <div
+                className="mx_LeftPanel2_filterContainer"
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                onKeyDown={this.onKeyDown}
+            >
                 <RoomSearch
                     onQueryUpdate={this.onSearch}
                     isMinimized={this.props.isMinimized}
@@ -245,7 +250,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
-                    alt={_t("Explore rooms")}
+                    title={_t("Explore rooms")}
                 />
             </div>
         );
