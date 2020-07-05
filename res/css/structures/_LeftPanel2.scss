@@ -86,11 +86,15 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
 
             .mx_RoomSearch_expanded + .mx_LeftPanel2_exploreButton {
                 // Cheaty way to return the occupied space to the filter input
+                flex-basis: 0;
                 margin: 0;
                 width: 0;
 
-                // Don't forget to hide the masked ::before icon
-                visibility: hidden;
+                // Don't forget to hide the masked ::before icon,
+                // using display:none or visibility:hidden would break accessibility
+                &::before {
+                    content: none;
+                }
             }
 
             .mx_LeftPanel2_exploreButton {
