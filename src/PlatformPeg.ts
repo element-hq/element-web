@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import BasePlatform from "./BasePlatform";
+
 /*
  * Holds the current Platform object used by the code to do anything
  * specific to the platform we're running on (eg. web, electron)
@@ -21,10 +24,8 @@ limitations under the License.
  * This allows the app layer to set a Platform without necessarily
  * having to have a MatrixChat object
  */
-class PlatformPeg {
-    constructor() {
-        this.platform = null;
-    }
+export class PlatformPeg {
+    platform: BasePlatform = null;
 
     /**
      * Returns the current Platform object for the application.
@@ -39,12 +40,12 @@ class PlatformPeg {
      * application.
      * This should be an instance of a class extending BasePlatform.
      */
-    set(plaf) {
+    set(plaf: BasePlatform) {
         this.platform = plaf;
     }
 }
 
-if (!global.mxPlatformPeg) {
-    global.mxPlatformPeg = new PlatformPeg();
+if (!window.mxPlatformPeg) {
+    window.mxPlatformPeg = new PlatformPeg();
 }
-export default global.mxPlatformPeg;
+export default window.mxPlatformPeg;

@@ -20,6 +20,7 @@ import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
+import { PlatformPeg } from "../PlatformPeg";
 
 declare global {
     interface Window {
@@ -33,6 +34,7 @@ declare global {
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
         mx_RoomListStore2: RoomListStore2;
+        mxPlatformPeg: PlatformPeg;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
@@ -43,6 +45,10 @@ declare global {
     interface Document {
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasStorageAccess
         hasStorageAccess?: () => Promise<boolean>;
+    }
+
+    interface Navigator {
+        userLanguage?: string;
     }
 
     interface StorageEstimate {

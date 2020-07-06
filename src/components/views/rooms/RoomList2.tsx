@@ -57,6 +57,7 @@ interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
+    onResize: () => void;
     resizeNotifier: ResizeNotifier;
     collapsed: boolean;
     searchFilter: string;
@@ -234,14 +235,16 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             layoutMap.set(tagId, new ListLayout(tagId));
         }
 
-        this.setState({sublists: newLists, layouts: layoutMap});
+        this.setState({sublists: newLists, layouts: layoutMap}, () => {
+            this.props.onResize();
+        });
     };
 
     private renderCommunityInvites(): React.ReactElement[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         return MatrixClientPeg.get().getGroups().filter(g => {
            if (g.myMembership !== 'invite') return false;
-           return !this.searchFilter || this.searchFilter.matches(g.name);
+           return !this.searchFilter || this.searchFilter.matches(g.name || "");
         }).map(g => {
             const avatar = (
                 <GroupAvatar
@@ -307,6 +310,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
                     isMinimized={this.props.isMinimized}
+                    onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
                 />
             );
