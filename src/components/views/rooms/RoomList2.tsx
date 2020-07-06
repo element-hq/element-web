@@ -206,6 +206,8 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             let listRooms = lists[t];
 
             if (unread) {
+                // TODO Be smarter and not spin up a bunch of wasted listeners just to kill them 4 lines later
+                // https://github.com/vector-im/riot-web/issues/14035
                 const notificationStates = rooms.map(r => new TagSpecificNotificationState(r, t));
                 // filter to only notification rooms (and our current active room so we can index properly)
                 listRooms = notificationStates.filter(state => {
