@@ -103,12 +103,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_font_scaling": {
-        isFeature: true,
-        displayName: _td("Font scaling"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),

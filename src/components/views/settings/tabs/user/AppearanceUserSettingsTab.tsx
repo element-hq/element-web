@@ -439,7 +439,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     {_t("Appearance Settings only affect this Riot session.")}
                 </div>
                 {this.renderThemeSection()}
-                {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
+                {this.renderFontSection()}
                 {SettingsStore.isFeatureEnabled("feature_irc_ui") ? this.renderLayoutSection() : null}
                 {this.renderAdvancedSection()}
             </div>
