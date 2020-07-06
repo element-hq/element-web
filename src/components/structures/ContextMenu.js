@@ -425,15 +425,23 @@ MenuItemCheckbox.propTypes = {
 
 // Semantic component for representing a styled role=menuitemcheckbox
 export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
-    const onKeyDown = (ev) => {
-        // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-        if (ev.key === Key.ENTER || ev.key === Key.SPACE) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            onChange(ev);
-            if (ev.key === Key.ENTER) {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
                 onClose();
             }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
         }
     };
     return (
@@ -447,6 +455,7 @@ export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, chec
             aria-label={label}
             onChange={onChange}
             onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
         >
             { children }
         </StyledCheckbox>
@@ -482,15 +491,23 @@ MenuItemRadio.propTypes = {
 
 // Semantic component for representing a styled role=menuitemradio
 export const StyledMenuItemRadio = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
-    const onKeyDown = (ev) => {
-        // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-        if (ev.key === Key.ENTER || ev.key === Key.SPACE) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            onChange(ev);
-            if (ev.key === Key.ENTER) {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
                 onClose();
             }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
         }
     };
     return (
@@ -504,6 +521,7 @@ export const StyledMenuItemRadio = ({children, label, onChange, onClose, checked
             aria-label={label}
             onChange={onChange}
             onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
         >
             { children }
         </StyledRadioButton>
