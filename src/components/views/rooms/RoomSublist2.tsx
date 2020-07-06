@@ -138,11 +138,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = () => {
+        // TODO a11y keep focus somewhere useful: https://github.com/vector-im/riot-web/issues/14180
         this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
     private onShowLessClick = () => {
+        // TODO a11y keep focus somewhere useful: https://github.com/vector-im/riot-web/issues/14180
         this.props.layout.visibleTiles = this.props.layout.defaultVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
@@ -521,6 +523,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     </span>
                 );
                 if (this.props.isMinimized) showLessText = null;
+                // TODO Roving tab index / treeitem?: https://github.com/vector-im/riot-web/issues/14180
                 showNButton = (
                     <AccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses} tabIndex={-1}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
