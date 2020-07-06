@@ -316,7 +316,8 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
-$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$inverted-bg-color: #27303a;
+$tooltip-timeline-bg-color: $inverted-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: #27303a;
