@@ -63,11 +63,11 @@ limitations under the License.
 }
 
 .mx_GroupHeader_editButton::before {
-    mask-image: url('$(res)/img/feather-customised/settings.svg');
+    mask-image: url('$(res)/img/element-icons/settings.svg');
 }
 
 .mx_GroupHeader_shareButton::before {
-    mask-image: url('$(res)/img/icons-share.svg');
+    mask-image: url('$(res)/img/element-icons/room/share.svg');
 }
 
 .mx_GroupView_hostingSignup img {

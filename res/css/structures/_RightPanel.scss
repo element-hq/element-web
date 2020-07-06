@@ -82,12 +82,12 @@ limitations under the License.
 }
 
 .mx_RightPanel_groupMembersButton::before {
-    mask-image: url('$(res)/img/icons-people.svg');
+    mask-image: url('$(res)/img/element-icons/community-members.svg');
     mask-position: center;
 }
 
 .mx_RightPanel_roomsButton::before {
-    mask-image: url('$(res)/img/icons-room-nobg.svg');
+    mask-image: url('$(res)/img/element-icons/community-rooms.svg');
     mask-position: center;
 }
 

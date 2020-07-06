@@ -132,7 +132,7 @@ limitations under the License.
     }
 
     .mx_RoomTile2_menuButton::before {
-        mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
+        mask-image: url('$(res)/img/element-icons/context-menu.svg');
     }
 
     &:not(.mx_RoomTile2_minimized) {
@@ -178,7 +178,7 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
 }
 .mx_RoomTile2_iconCheck::before {
-    mask-image: url('$(res)/img/feather-customised/check.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
 }
 
 .mx_RoomTile2_contextMenu {

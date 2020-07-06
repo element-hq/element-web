@@ -60,7 +60,7 @@ export default class TagTileContextMenu extends React.Component {
             <MenuItem className="mx_TagTileContextMenu_item" onClick={this._onViewCommunityClick}>
                 <TintableSvg
                     className="mx_TagTileContextMenu_item_icon"
-                    src={require("../../../../res/img/icons-groups.svg")}
+                    src={require("../../../../res/img/element-icons/view-community.svg")}
                     width="15"
                     height="15"
                 />
