@@ -171,26 +171,26 @@ limitations under the License.
     }
 
     .mx_UserMenu_iconBell::before {
-        mask-image: url('$(res)/img/feather-customised/notifications.svg');
+        mask-image: url('$(res)/img/element-icons/notifications.svg');
     }
 
     .mx_UserMenu_iconLock::before {
-        mask-image: url('$(res)/img/feather-customised/lock.svg');
+        mask-image: url('$(res)/img/element-icons/security.svg');
     }
 
     .mx_UserMenu_iconSettings::before {
-        mask-image: url('$(res)/img/feather-customised/settings.svg');
+        mask-image: url('$(res)/img/element-icons/settings.svg');
     }
 
     .mx_UserMenu_iconArchive::before {
-        mask-image: url('$(res)/img/feather-customised/archive.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/archived.svg');
     }
 
     .mx_UserMenu_iconMessage::before {
-        mask-image: url('$(res)/img/feather-customised/message-circle.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/feedback.svg');
     }
 
     .mx_UserMenu_iconSignOut::before {
-        mask-image: url('$(res)/img/feather-customised/sign-out.svg');
+        mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 }
