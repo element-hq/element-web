@@ -53,6 +53,7 @@ import {
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel2 from "./LeftPanel2";
+import CallContainer from '../views/voip/CallContainer';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -703,6 +704,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                         </div>
                     </DragDropContext>
                 </div>
+                <CallContainer />
             </MatrixClientContext.Provider>
         );
     }

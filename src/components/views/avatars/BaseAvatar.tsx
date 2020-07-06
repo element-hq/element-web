@@ -18,7 +18,6 @@ limitations under the License.
 */
 
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import PropTypes from 'prop-types';
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -26,9 +25,24 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 
-const useImageUrl = ({url, urls}) => {
-    const [imageUrls, setUrls] = useState([]);
-    const [urlsIndex, setIndex] = useState();
+interface IProps {
+    name: string; // The name (first initial used as default)
+    idName?: string; // ID for generating hash colours
+    title?: string; // onHover title text
+    url?: string; // highest priority of them all, shortcut to set in urls[0]
+    urls?: string[]; // [highest_priority, ... , lowest_priority]
+    width?: number;
+    height?: number;
+    // XXX: resizeMethod not actually used.
+    resizeMethod?: string;
+    defaultToInitialLetter?: boolean; // true to add default url
+    onClick?: React.MouseEventHandler;
+    inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
+}
+
+const useImageUrl = ({url, urls}): [string, () => void] => {
+    const [imageUrls, setUrls] = useState<string[]>([]);
+    const [urlsIndex, setIndex] = useState<number>();
 
     const onError = useCallback(() => {
         setIndex(i => i + 1); // try the next one
@@ -70,7 +84,7 @@ const useImageUrl = ({url, urls}) => {
     return [imageUrl, onError];
 };
 
-const BaseAvatar = (props) => {
+const BaseAvatar = (props: IProps) => {
     const {
         name,
         idName,
@@ -173,26 +187,5 @@ const BaseAvatar = (props) => {
     }
 };
 
-BaseAvatar.displayName = "BaseAvatar";
-
-BaseAvatar.propTypes = {
-    name: PropTypes.string.isRequired, // The name (first initial used as default)
-    idName: PropTypes.string, // ID for generating hash colours
-    title: PropTypes.string, // onHover title text
-    url: PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
-    urls: PropTypes.array, // [highest_priority, ... , lowest_priority]
-    width: PropTypes.number,
-    height: PropTypes.number,
-    // XXX resizeMethod not actually used.
-    resizeMethod: PropTypes.string,
-    defaultToInitialLetter: PropTypes.bool, // true to add default url
-    onClick: PropTypes.func,
-    inputRef: PropTypes.oneOfType([
-        // Either a function
-        PropTypes.func,
-        // Or the instance of a DOM native element
-        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-    ]),
-};
-
 export default BaseAvatar;
+export type BaseAvatarType = React.FC<IProps>;
