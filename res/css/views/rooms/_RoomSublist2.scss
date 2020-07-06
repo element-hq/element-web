@@ -70,7 +70,6 @@ limitations under the License.
                 z-index: 1; // over top of other elements, but still under the ones in the visible list
                 height: 32px; // to match the header container
                 // width set by JS
-                width: calc(100% - 22px);
             }
 
             &.mx_RoomSublist2_headerContainer_stickyBottom {
