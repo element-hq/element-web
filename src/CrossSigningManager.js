@@ -40,22 +40,13 @@ export class AccessCancelledError extends Error {
     }
 }
 
-async function confirmToDismiss(name) {
-    let description;
-    if (name === "m.cross_signing.user_signing") {
-        description = _t("If you cancel now, you won't complete verifying the other user.");
-    } else if (name === "m.cross_signing.self_signing") {
-        description = _t("If you cancel now, you won't complete verifying your other session.");
-    } else {
-        description = _t("If you cancel now, you won't complete your operation.");
-    }
-
+async function confirmToDismiss() {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
-        description,
+        description: _t("Are you sure you want to cancel entering passphrase?"),
         danger: false,
-        button: _t("Enter passphrase"),
+        button: _t("Go Back"),
         cancelButton: _t("Cancel"),
     }).finished;
     return !sure;
@@ -102,7 +93,7 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         /* options= */ {
             onBeforeClose: async (reason) => {
                 if (reason === "backgroundClick") {
-                    return confirmToDismiss(ssssItemName);
+                    return confirmToDismiss();
                 }
                 return true;
             },
