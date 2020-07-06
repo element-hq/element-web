@@ -424,7 +424,7 @@ MenuItemCheckbox.propTypes = {
 };
 
 // Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
+export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
     const onKeyDown = (ev) => {
         // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
         if (ev.key === Key.ENTER || ev.key === Key.SPACE) {
