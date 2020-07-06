@@ -266,6 +266,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
+            onResize={this.onResize}
         />;
 
         // TODO: Conference handling / calls: https://github.com/vector-im/riot-web/issues/14177

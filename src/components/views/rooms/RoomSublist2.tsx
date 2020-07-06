@@ -66,6 +66,7 @@ interface IProps {
     layout: ListLayout;
     isMinimized: boolean;
     tagId: TagID;
+    onResize();
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
@@ -228,6 +229,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private toggleCollapsed = () => {
         this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
         this.forceUpdate(); // because the layout doesn't trigger an update
+        setImmediate(() => this.props.onResize()); // needs to happen when the DOM is updated
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {

@@ -55,6 +55,7 @@ interface IProps {
     collapsed: boolean;
     searchFilter: string;
     isMinimized: boolean;
+    onResize();
 }
 
 interface IState {
@@ -183,7 +184,9 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             layoutMap.set(tagId, new ListLayout(tagId));
         }
 
-        this.setState({sublists: newLists, layouts: layoutMap});
+        this.setState({sublists: newLists, layouts: layoutMap}, () => {
+            this.props.onResize();
+        });
     };
 
     private renderCommunityInvites(): React.ReactElement[] {
@@ -256,6 +259,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
                     isMinimized={this.props.isMinimized}
+                    onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
                 />
             );
