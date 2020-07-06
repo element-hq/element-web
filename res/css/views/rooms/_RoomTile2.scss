@@ -166,16 +166,16 @@ limitations under the License.
 
 // We use these both in context menus and the room tiles
 .mx_RoomTile2_iconBell::before {
-    mask-image: url('$(res)/img/feather-customised/bell.svg');
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
 }
 .mx_RoomTile2_iconBellDot::before {
-    mask-image: url('$(res)/img/feather-customised/bell-notification.custom.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
 }
 .mx_RoomTile2_iconBellCrossed::before {
-    mask-image: url('$(res)/img/feather-customised/bell-crossed.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
 }
 .mx_RoomTile2_iconBellMentions::before {
-    mask-image: url('$(res)/img/feather-customised/bell-mentions.custom.svg');
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
 }
 .mx_RoomTile2_iconCheck::before {
     mask-image: url('$(res)/img/feather-customised/check.svg');
@@ -220,18 +220,18 @@ limitations under the License.
     }
 
     .mx_RoomTile2_iconStar::before {
-        mask-image: url('$(res)/img/feather-customised/star.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
     }
 
     .mx_RoomTile2_iconArrowDown::before {
-        mask-image: url('$(res)/img/feather-customised/arrow-down.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/low-priority.svg');
     }
 
     .mx_RoomTile2_iconSettings::before {
-        mask-image: url('$(res)/img/feather-customised/settings.svg');
+        mask-image: url('$(res)/img/element-icons/settings.svg');
     }
 
     .mx_RoomTile2_iconSignOut::before {
-        mask-image: url('$(res)/img/feather-customised/sign-out.svg');
+        mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 }
