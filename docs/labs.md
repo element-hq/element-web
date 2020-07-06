@@ -11,11 +11,6 @@ dropped. Ask in the room if you are unclear about any details here.**
 
 Replaces the old spinner image with a new, svg-based one featuring a sleeker design.
 
-## Font scaling (`feature_font_scaling`)
-
-Enables font scaling options for accessibility. To alter the scale check the
-appearance tab in settings.
-
 ## Message pinning (`feature_pinning`)
 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
