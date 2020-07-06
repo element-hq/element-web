@@ -424,7 +424,18 @@ MenuItemCheckbox.propTypes = {
 };
 
 // Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox = ({children, label, checked=false, disabled=false, ...props}) => {
+export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
+    const onKeyDown = (ev) => {
+        // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+        if (ev.key === Key.ENTER || ev.key === Key.SPACE) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            onChange(ev);
+            if (ev.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
     return (
         <StyledCheckbox
             {...props}
@@ -434,18 +445,21 @@ export const StyledMenuItemCheckbox = ({children, label, checked=false, disabled
             aria-disabled={disabled}
             tabIndex={-1}
             aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
         >
             { children }
         </StyledCheckbox>
     );
 };
 StyledMenuItemCheckbox.propTypes = {
-    ...AccessibleButton.propTypes,
+    ...StyledCheckbox.propTypes,
     label: PropTypes.string, // optional
     checked: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
     className: PropTypes.string, // optional
-    onClick: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
 };
 
 // Semantic component for representing a role=menuitemradio
@@ -467,7 +481,18 @@ MenuItemRadio.propTypes = {
 };
 
 // Semantic component for representing a styled role=menuitemradio
-export const StyledMenuItemRadio = ({children, label, checked=false, disabled=false, ...props}) => {
+export const StyledMenuItemRadio = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
+    const onKeyDown = (ev) => {
+        // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+        if (ev.key === Key.ENTER || ev.key === Key.SPACE) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            onChange(ev);
+            if (ev.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
     return (
         <StyledRadioButton
             {...props}
@@ -477,6 +502,8 @@ export const StyledMenuItemRadio = ({children, label, checked=false, disabled=fa
             aria-disabled={disabled}
             tabIndex={-1}
             aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
         >
             { children }
         </StyledRadioButton>
@@ -488,7 +515,8 @@ StyledMenuItemRadio.propTypes = {
     checked: PropTypes.bool.isRequired,
     disabled: PropTypes.bool, // optional
     className: PropTypes.string, // optional
-    onClick: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
 };
 
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset

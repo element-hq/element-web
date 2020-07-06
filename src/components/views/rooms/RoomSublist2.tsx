@@ -334,6 +334,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Sort by")}</div>
                             <StyledMenuItemRadio
+                                onClose={this.onCloseMenu}
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
                                 checked={!isAlphabetical}
                                 name={`mx_${this.props.tagId}_sortBy`}
@@ -341,6 +342,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                 {_t("Activity")}
                             </StyledMenuItemRadio>
                             <StyledMenuItemRadio
+                                onClose={this.onCloseMenu}
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Alphabetic)}
                                 checked={isAlphabetical}
                                 name={`mx_${this.props.tagId}_sortBy`}
@@ -352,6 +354,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
                             <StyledMenuItemCheckbox
+                                onClose={this.onCloseMenu}
                                 onChange={this.onUnreadFirstChanged}
                                 checked={isUnreadFirst}
                             >
@@ -362,6 +365,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         <div>
                             <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
                             <StyledMenuItemCheckbox
+                                onClose={this.onCloseMenu}
                                 onChange={this.onMessagePreviewChanged}
                                 checked={this.props.layout.showPreviews}
                             >

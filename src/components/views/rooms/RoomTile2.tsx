@@ -80,6 +80,8 @@ interface IState {
     generalMenuPosition: PartialDOMRect;
 }
 
+type Volume = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
+
 const messagePreviewId = (roomId: string) => `mx_RoomTile2_messagePreview_${roomId}`;
 
 const contextMenuBelow = (elementRect: PartialDOMRect) => {
@@ -213,6 +215,11 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         // TODO: Support tagging: https://github.com/vector-im/riot-web/issues/14211
         // TODO: XOR favourites and low priority: https://github.com/vector-im/riot-web/issues/14210
+
+        if ((ev as React.KeyboardEvent).key === Key.ENTER) {
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            this.setState({generalMenuPosition: null}); // hide the menu
+        }
     };
 
     private onLeaveRoomClick = (ev: ButtonEvent) => {
@@ -237,11 +244,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
-    private async saveNotifState(ev: ButtonEvent, newState: ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE) {
+    private async saveNotifState(ev: ButtonEvent, newState: Volume) {
         ev.preventDefault();
         ev.stopPropagation();
         if (MatrixClientPeg.get().isGuest()) return;
 
+        // get key before we go async and React discards the nativeEvent
+        const key = (ev as React.KeyboardEvent).key;
         try {
             // TODO add local echo - https://github.com/vector-im/riot-web/issues/14280
             await setRoomNotifsState(this.props.room.roomId, newState);
@@ -251,7 +260,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             console.error(error);
         }
 
-        this.setState({notificationsMenuPosition: null}); // Close the context menu
+        if (key === Key.ENTER) {
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            this.setState({notificationsMenuPosition: null}); // hide the menu
+        }
     }
 
     private onClickAllNotifs = ev => this.saveNotifState(ev, ALL_MESSAGES);
