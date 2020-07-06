@@ -66,12 +66,11 @@ interface IProps {
     layout: ListLayout;
     isMinimized: boolean;
     tagId: TagID;
+    onResize: () => void;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
     extraBadTilesThatShouldntExist?: React.ReactElement[];
-
-    onResize();
 
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }

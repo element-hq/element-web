@@ -51,11 +51,11 @@ interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
     onBlur: (ev: React.FocusEvent) => void;
+    onResize: () => void;
     resizeNotifier: ResizeNotifier;
     collapsed: boolean;
     searchFilter: string;
     isMinimized: boolean;
-    onResize();
 }
 
 interface IState {
