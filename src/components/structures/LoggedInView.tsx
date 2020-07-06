@@ -19,7 +19,6 @@ limitations under the License.
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
