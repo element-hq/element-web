@@ -32,6 +32,7 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
 import {Key} from "../../Keyboard";
+import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -221,11 +222,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactNode {
         let breadcrumbs;
-        if (this.state.showBreadcrumbs) {
+        if (this.state.showBreadcrumbs && !this.props.isMinimized) {
             breadcrumbs = (
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar">
-                    {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
-                </div>
+                <IndicatorScrollbar
+                    className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
+                    verticalScrollsHorizontally={true}
+                >
+                    <RoomBreadcrumbs2 />
+                </IndicatorScrollbar>
             );
         }
 
