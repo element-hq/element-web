@@ -45,6 +45,8 @@ import {Action} from "matrix-react-sdk/src/dispatcher/actions";
 import {ActionPayload} from "matrix-react-sdk/src/dispatcher/payloads";
 import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
 import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
+import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
+import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -245,6 +247,26 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
         ipcRenderer.on('preferences', () => {
             dis.fire(Action.ViewUserSettings);
+        });
+
+        ipcRenderer.on('userDownloadCompleted', (ev, {path, name}) => {
+            const onAccept = () => {
+                ipcRenderer.send('userDownloadOpen', {path});
+            };
+
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: `DOWNLOAD_TOAST_${path}`,
+                title: _t("Download Completed"),
+                props: {
+                    description: name,
+                    acceptLabel: _t("Open"),
+                    onAccept,
+                    dismissLabel: _t("Dismiss"),
+                    numSeconds: 10,
+                },
+                component: GenericExpiringToast,
+                priority: 99,
+            });
         });
 
         // register OS-specific shortcuts

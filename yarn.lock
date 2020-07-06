@@ -6974,8 +6974,8 @@ mathml-tag-names@^2.1.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "7.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/68c7273f56d5e88b9af783c396963d03e2de4a92"
+  version "7.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a688bdac828dc62916437d83c72cef1e525d5f9"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -6996,8 +6996,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "2.8.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/0059d44e1512e87a108b91d93e820b0dcc7be2a9"
+  version "2.9.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/511e0682fcd49fab9a508c7075b7100cefd4bcc4"
   dependencies:
     "@babel/runtime" "^7.8.3"
     await-lock "^2.0.1"

@@ -1,3 +1,35 @@
+Changes in [1.6.8](https://github.com/vector-im/riot-web/releases/tag/v1.6.8) (2020-07-03)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8-rc.1...v1.6.8)
+
+ * Upgrade to JS SDK 7.1.0 and React SDK 2.9.0
+
+Changes in [1.6.8-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.6.8-rc.1) (2020-07-01)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.7...v1.6.8-rc.1)
+
+ * Upgrade to JS SDK 7.1.0-rc.1 and React SDK 2.9.0-rc.1
+ * Update from Weblate
+   [\#14282](https://github.com/vector-im/riot-web/pull/14282)
+ * Show a download completed toast in electron
+   [\#14248](https://github.com/vector-im/riot-web/pull/14248)
+ * Add the new spinner feature labs flag
+   [\#14213](https://github.com/vector-im/riot-web/pull/14213)
+ * Fix loading-test for SSO plaf changes
+   [\#14212](https://github.com/vector-im/riot-web/pull/14212)
+ * Fix spelling on startup error page
+   [\#14199](https://github.com/vector-im/riot-web/pull/14199)
+ * Document fonts in custom theme
+   [\#14175](https://github.com/vector-im/riot-web/pull/14175)
+ * Update from Weblate
+   [\#14129](https://github.com/vector-im/riot-web/pull/14129)
+ * ElectronPlatform: Implement the isRoomIndexed method.
+   [\#13957](https://github.com/vector-im/riot-web/pull/13957)
+ * ElectronPlatform: Add support to set and get the index user version.
+   [\#14080](https://github.com/vector-im/riot-web/pull/14080)
+ * Mark the new room list as ready for general testing
+   [\#14102](https://github.com/vector-im/riot-web/pull/14102)
+
 Changes in [1.6.7](https://github.com/vector-im/riot-web/releases/tag/v1.6.7) (2020-06-29)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.6...v1.6.7)
