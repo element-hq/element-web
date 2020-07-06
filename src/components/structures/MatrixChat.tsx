@@ -596,14 +596,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case 'view_prev_room':
-                this.viewNextRoom(-1);
-                break;
             case 'view_next_room':
                 this.viewNextRoom(1);
-                break;
-            case 'view_indexed_room':
-                this.viewIndexedRoom(payload.roomIndex);
                 break;
             case Action.ViewUserSettings: {
                 const tabPayload = payload as OpenToTabPayload;
@@ -810,19 +804,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             action: 'view_room',
             room_id: allRooms[roomIndex].roomId,
         });
-    }
-
-    // TODO: Move to RoomViewStore
-    private viewIndexedRoom(roomIndex: number) {
-        const allRooms = RoomListSorter.mostRecentActivityFirst(
-            MatrixClientPeg.get().getRooms(),
-        );
-        if (allRooms[roomIndex]) {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: allRooms[roomIndex].roomId,
-            });
-        }
     }
 
     // switch view to the given room

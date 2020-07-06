@@ -409,20 +409,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     _onKeyDown = (ev) => {
-            /*
-            // Remove this for now as ctrl+alt = alt-gr so this breaks keyboards which rely on alt-gr for numbers
-            // Will need to find a better meta key if anyone actually cares about using this.
-            if (ev.altKey && ev.ctrlKey && ev.keyCode > 48 && ev.keyCode < 58) {
-                dis.dispatch({
-                    action: 'view_indexed_room',
-                    roomIndex: ev.keyCode - 49,
-                });
-                ev.stopPropagation();
-                ev.preventDefault();
-                return;
-            }
-            */
-
         let handled = false;
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
         const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
