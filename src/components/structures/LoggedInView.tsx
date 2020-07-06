@@ -53,6 +53,7 @@ import {
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel2 from "./LeftPanel2";
+import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -460,8 +461,8 @@ class LoggedInView extends React.Component<IProps, IState> {
             case Key.ARROW_UP:
             case Key.ARROW_DOWN:
                 if (ev.altKey && !ev.ctrlKey && !ev.metaKey) {
-                    dis.dispatch({
-                        action: 'view_room_delta',
+                    dis.dispatch<ViewRoomDeltaPayload>({
+                        action: Action.ViewRoomDelta,
                         delta: ev.key === Key.ARROW_UP ? -1 : 1,
                         unread: ev.shiftKey,
                     });
