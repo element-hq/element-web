@@ -190,7 +190,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         // TODO: Put community invites in a more sensible place (not in the room list)
         return MatrixClientPeg.get().getGroups().filter(g => {
            if (g.myMembership !== 'invite') return false;
-           return !this.searchFilter || this.searchFilter.matches(g.name);
+           return !this.searchFilter || this.searchFilter.matches(g.name || "");
         }).map(g => {
             const avatar = (
                 <GroupAvatar
