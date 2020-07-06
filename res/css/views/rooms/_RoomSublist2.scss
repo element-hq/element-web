@@ -69,8 +69,7 @@ limitations under the License.
                 position: fixed;
                 z-index: 1; // over top of other elements, but still under the ones in the visible list
                 height: 32px; // to match the header container
-                // width set by JS
-                width: calc(100% - 22px);
+                width: calc(100% - 22px); // 22px is an offset for aligning the header to the container
             }
 
             &.mx_RoomSublist2_headerContainer_stickyBottom {
