@@ -150,7 +150,7 @@ export const SETTINGS = {
         isFeature: true,
         displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
-        default: false,
+        default: true,
         controller: new ReloadOnChangeController(),
     },
     "feature_custom_themes": {
@@ -202,7 +202,7 @@ export const SETTINGS = {
         default: false,
     },
     "useCompactLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
@@ -478,11 +478,13 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14231
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: false,
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14231
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show rooms with unread notifications first"),

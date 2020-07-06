@@ -32,24 +32,25 @@ interface IProps<T extends string> {
     className?: string;
     definitions: IDefinition<T>[];
     value?: T; // if not provided no options will be selected
+    outlined?: boolean;
     onChange(newValue: T);
 }
 
-function StyledRadioGroup<T extends string>({name, definitions, value, className, onChange}: IProps<T>) {
+function StyledRadioGroup<T extends string>({name, definitions, value, className, outlined, onChange}: IProps<T>) {
     const _onChange = e => {
         onChange(e.target.value);
     };
 
     return <React.Fragment>
-        {definitions.map(d => <React.Fragment>
+        {definitions.map(d => <React.Fragment key={d.value}>
             <StyledRadioButton
-                key={d.value}
                 className={classNames(className, d.className)}
                 onChange={_onChange}
                 checked={d.value === value}
                 name={name}
                 value={d.value}
                 disabled={d.disabled}
+                outlined={outlined}
             >
                 {d.label}
             </StyledRadioButton>

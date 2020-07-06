@@ -23,7 +23,6 @@ import * as Matrix from "matrix-js-sdk";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { isCryptoAvailable } from 'matrix-js-sdk/src/crypto';
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
@@ -1932,11 +1931,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     getFragmentAfterLogin() {
         let fragmentAfterLogin = "";
-        if (this.props.initialScreenAfterLogin &&
+        const initialScreenAfterLogin = this.props.initialScreenAfterLogin;
+        if (initialScreenAfterLogin &&
             // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
-            !["welcome", "login", "register"].includes(this.props.initialScreenAfterLogin.screen)
+            !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
         ) {
-            fragmentAfterLogin = `/${this.props.initialScreenAfterLogin.screen}`;
+            fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
         }
         return fragmentAfterLogin;
     }

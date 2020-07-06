@@ -21,7 +21,7 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { createRef } from "react";
 import { _t } from "../../languageHandler";
-import {ContextMenu, ContextMenuButton} from "./ContextMenu";
+import {ContextMenu, ContextMenuButton, MenuItem} from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
@@ -30,22 +30,38 @@ import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
+import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 
 interface IProps {
     isMinimized: boolean;
 }
 
+type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
+
 interface IState {
-    menuDisplayed: boolean;
+    contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
 }
+
+interface IMenuButtonProps {
+    iconClassName: string;
+    label: string;
+    onClick(ev: ButtonEvent);
+}
+
+const MenuButton: React.FC<IMenuButtonProps> = ({iconClassName, label, onClick}) => {
+    return <MenuItem label={label} onClick={onClick}>
+        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+        <span className="mx_IconizedContextMenu_label">{label}</span>
+    </MenuItem>;
+};
 
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
@@ -56,7 +72,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            menuDisplayed: false,
+            contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
         };
 
@@ -99,23 +115,41 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private onAction = (ev: ActionPayload) => {
         if (ev.action !== Action.ToggleUserMenu) return; // not interested
 
-        // For accessibility
-        if (this.buttonRef.current) this.buttonRef.current.click();
+        if (this.state.contextMenuPosition) {
+            this.setState({contextMenuPosition: null});
+        } else {
+            if (this.buttonRef.current) this.buttonRef.current.click();
+        }
     };
 
     private onOpenMenuClick = (ev: InputEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: true});
+        const target = ev.target as HTMLButtonElement;
+        this.setState({contextMenuPosition: target.getBoundingClientRect()});
     };
 
-    private onCloseMenu = (ev: InputEvent) => {
+    private onContextMenu = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
-        this.setState({menuDisplayed: false});
+        this.setState({
+            contextMenuPosition: {
+                left: ev.clientX,
+                top: ev.clientY,
+                width: 20,
+                height: 0,
+            },
+        });
     };
 
-    private onSwitchThemeClick = () => {
+    private onCloseMenu = () => {
+        this.setState({contextMenuPosition: null});
+    };
+
+    private onSwitchThemeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
@@ -129,7 +163,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         const payload: OpenToTabPayload = {action: Action.ViewUserSettings, initialTabId: tabId};
         defaultDispatcher.dispatch(payload);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onShowArchived = (ev: ButtonEvent) => {
@@ -145,7 +179,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         Modal.createTrackedDialog('Report bugs & give feedback', '', RedesignFeedbackDialog);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onSignOutClick = (ev: ButtonEvent) => {
@@ -153,7 +187,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
-        this.setState({menuDisplayed: false}); // also close the menu
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onHomeClick = (ev: ButtonEvent) => {
@@ -164,7 +198,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     };
 
     private renderContextMenu = (): React.ReactNode => {
-        if (!this.state.menuDisplayed) return null;
+        if (!this.state.contextMenuPosition) return null;
 
         let hostingLink;
         const signupLink = getHostingLink("user-context-menu");
@@ -191,21 +225,20 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
-                <li>
-                    <AccessibleButton onClick={this.onHomeClick}>
-                        <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
-                        <span>{_t("Home")}</span>
-                    </AccessibleButton>
-                </li>
+                <MenuButton
+                    iconClassName="mx_UserMenu_iconHome"
+                    label={_t("Home")}
+                    onClick={this.onHomeClick}
+                />
             );
         }
 
-        const elementRect = this.buttonRef.current.getBoundingClientRect();
         return (
             <ContextMenu
                 chevronFace="none"
-                left={elementRect.width + elementRect.left}
-                top={elementRect.top + elementRect.height}
+                // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
+                left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
+                top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                 onFinished={this.onCloseMenu}
             >
                 <div className="mx_IconizedContextMenu mx_UserMenu_contextMenu">
@@ -218,7 +251,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 {MatrixClientPeg.get().getUserId()}
                             </span>
                         </div>
-                        <div
+                        <AccessibleTooltipButton
                             className="mx_UserMenu_contextMenu_themeButton"
                             onClick={this.onSwitchThemeClick}
                             title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
@@ -228,53 +261,43 @@ export default class UserMenu extends React.Component<IProps, IState> {
                                 alt={_t("Switch theme")}
                                 width={16}
                             />
-                        </div>
+                        </AccessibleTooltipButton>
                     </div>
                     {hostingLink}
                     <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
-                        <ul>
-                            {homeButton}
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
-                                    <span>{_t("Notification settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
-                                    <span>{_t("Security & privacy")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
-                                    <span>{_t("All settings")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onShowArchived}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
-                                    <span>{_t("Archived rooms")}</span>
-                                </AccessibleButton>
-                            </li>
-                            <li>
-                                <AccessibleButton onClick={this.onProvideFeedback}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
-                                    <span>{_t("Feedback")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                        {homeButton}
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconBell"
+                            label={_t("Notification settings")}
+                            onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconLock"
+                            label={_t("Security & privacy")}
+                            onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconSettings"
+                            label={_t("All settings")}
+                            onClick={(e) => this.onSettingsOpen(e, null)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconArchive"
+                            label={_t("Archived rooms")}
+                            onClick={this.onShowArchived}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconMessage"
+                            label={_t("Feedback")}
+                            onClick={this.onProvideFeedback}
+                        />
                     </div>
-                    <div className="mx_IconizedContextMenu_optionList">
-                        <ul>
-                            <li className="mx_UserMenu_contextMenu_redRow">
-                                <AccessibleButton onClick={this.onSignOutClick}>
-                                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
-                                    <span>{_t("Sign out")}</span>
-                                </AccessibleButton>
-                            </li>
-                        </ul>
+                    <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconSignOut"
+                            label={_t("Sign out")}
+                            onClick={this.onSignOutClick}
+                        />
                     </div>
                 </div>
             </ContextMenu>
@@ -310,7 +333,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     onClick={this.onOpenMenuClick}
                     inputRef={this.buttonRef}
                     label={_t("Account settings")}
-                    isExpanded={this.state.menuDisplayed}
+                    isExpanded={!!this.state.contextMenuPosition}
+                    onContextMenu={this.onContextMenu}
                 >
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">

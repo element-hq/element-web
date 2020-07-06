@@ -30,7 +30,7 @@ import {
     SortAlgorithm
 } from "./models";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
-import { EffectiveMembership, splitRoomsByMembership } from "../membership";
+import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 
@@ -99,6 +99,14 @@ export class Algorithm extends EventEmitter {
         return this._cachedRooms;
     }
 
+    /**
+     * Awaitable version of the sticky room setter.
+     * @param val The new room to sticky.
+     */
+    public async setStickyRoomAsync(val: Room) {
+        await this.updateStickyRoom(val);
+    }
+
     public getTagSorting(tagId: TagID): SortAlgorithm {
         return this.sortAlgorithms[tagId];
     }
@@ -160,10 +168,13 @@ export class Algorithm extends EventEmitter {
         // It's possible to have no selected room. In that case, clear the sticky room
         if (!val) {
             if (this._stickyRoom) {
+                const stickyRoom = this._stickyRoom.room;
+                this._stickyRoom = null; // clear before we go to update the algorithm
+
                 // Lie to the algorithm and re-add the room to the algorithm
-                await this.handleRoomUpdate(this._stickyRoom.room, RoomUpdateCause.NewRoom);
+                await this.handleRoomUpdate(stickyRoom, RoomUpdateCause.NewRoom);
+                return;
             }
-            this._stickyRoom = null;
             return;
         }
 
@@ -289,6 +300,8 @@ export class Algorithm extends EventEmitter {
     }
 
     protected recalculateFilteredRoomsForTag(tagId: TagID): void {
+        if (!this.hasFilters) return; // don't bother doing work if there's nothing to do
+
         console.log(`Recalculating filtered rooms for ${tagId}`);
         delete this.filteredRooms[tagId];
         const rooms = this.cachedRooms[tagId].map(r => r); // cheap clone
@@ -428,6 +441,13 @@ export class Algorithm extends EventEmitter {
         if (isNullOrUndefined(rooms)) throw new Error(`Array of rooms cannot be null`);
         if (!this.sortAlgorithms) throw new Error(`Cannot set known rooms without a tag sorting map`);
 
+        console.warn("Resetting known rooms, initiating regeneration");
+
+        // Before we go any further we need to clear (but remember) the sticky room to
+        // avoid accidentally duplicating it in the list.
+        const oldStickyRoom = this._stickyRoom;
+        await this.updateStickyRoom(null);
+
         this.rooms = rooms;
 
         const newTags: ITagMap = {};
@@ -458,14 +478,7 @@ export class Algorithm extends EventEmitter {
 
         // Now process all the joined rooms. This is a bit more complicated
         for (const room of memberships[EffectiveMembership.Join]) {
-            let tags = Object.keys(room.tags || {});
-
-            if (tags.length === 0) {
-                // Check to see if it's a DM if it isn't anything else
-                if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
-                    tags = [DefaultTagID.DM];
-                }
-            }
+            const tags = this.getTagsOfJoinedRoom(room);
 
             let inTag = false;
             if (tags.length > 0) {
@@ -494,6 +507,54 @@ export class Algorithm extends EventEmitter {
 
         this.cachedRooms = newTags;
         this.updateTagsFromCache();
+        this.recalculateFilteredRooms();
+
+        // Now that we've finished generation, we need to update the sticky room to what
+        // it was. It's entirely possible that it changed lists though, so if it did then
+        // we also have to update the position of it.
+        if (oldStickyRoom && oldStickyRoom.room) {
+            await this.updateStickyRoom(oldStickyRoom.room);
+            if (this._stickyRoom && this._stickyRoom.room) { // just in case the update doesn't go according to plan
+                if (this._stickyRoom.tag !== oldStickyRoom.tag) {
+                    // We put the sticky room at the top of the list to treat it as an obvious tag change.
+                    this._stickyRoom.position = 0;
+                    this.recalculateStickyRoom(this._stickyRoom.tag);
+                }
+            }
+        }
+    }
+
+    public getTagsForRoom(room: Room): TagID[] {
+        // XXX: This duplicates a lot of logic from setKnownRooms above, but has a slightly
+        // different use case and therefore different performance curve
+
+        const tags: TagID[] = [];
+
+        const membership = getEffectiveMembership(room.getMyMembership());
+        if (membership === EffectiveMembership.Invite) {
+            tags.push(DefaultTagID.Invite);
+        } else if (membership === EffectiveMembership.Leave) {
+            tags.push(DefaultTagID.Archived);
+        } else {
+            tags.push(...this.getTagsOfJoinedRoom(room));
+        }
+
+        if (!tags.length) tags.push(DefaultTagID.Untagged);
+
+        return tags;
+    }
+
+    private getTagsOfJoinedRoom(room: Room): TagID[] {
+        let tags = Object.keys(room.tags || {});
+
+        if (tags.length === 0) {
+            // Check to see if it's a DM if it isn't anything else
+            if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
+                tags = [DefaultTagID.DM];
+            }
+        }
+
+        return tags;
     }
 
     /**
@@ -548,6 +609,14 @@ export class Algorithm extends EventEmitter {
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
+        if (cause === RoomUpdateCause.NewRoom) {
+            const roomTags = this.roomIdsToTags[room.roomId];
+            if (roomTags && roomTags.length > 0) {
+                console.warn(`${room.roomId} is reportedly new but is already known - assuming TagChange instead`);
+                cause = RoomUpdateCause.PossibleTagChange;
+            }
+        }
+
         if (cause === RoomUpdateCause.PossibleTagChange) {
             // TODO: Be smarter and splice rather than regen the planet. https://github.com/vector-im/riot-web/issues/14035
             // TODO: No-op if no change. https://github.com/vector-im/riot-web/issues/14035
@@ -564,6 +633,19 @@ export class Algorithm extends EventEmitter {
                 console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
                 return false;
             }
+        }
+
+        if (cause === RoomUpdateCause.NewRoom && !this.roomIdsToTags[room.roomId]) {
+            console.log(`[RoomListDebug] Updating tags for new room ${room.roomId} (${room.name})`);
+
+            // Get the tags for the room and populate the cache
+            const roomTags = this.getTagsForRoom(room).filter(t => !isNullOrUndefined(this.cachedRooms[t]));
+
+            // "This should never happen" condition - we specify DefaultTagID.Untagged in getTagsForRoom(),
+            // which means we should *always* have a tag to go off of.
+            if (!roomTags.length) throw new Error(`Tags cannot be determined for ${room.roomId}`);
+
+            this.roomIdsToTags[room.roomId] = roomTags;
         }
 
         let tags = this.roomIdsToTags[room.roomId];

@@ -495,8 +495,7 @@ export const Commands = [
                     });
                     return success();
                 } else if (params[0][0] === '!') {
-                    const roomId = params[0];
-                    const viaServers = params.splice(0);
+                    const [roomId, ...viaServers] = params;
 
                     dis.dispatch({
                         action: 'view_room',

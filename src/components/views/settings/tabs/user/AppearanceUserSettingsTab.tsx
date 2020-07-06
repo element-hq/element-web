@@ -34,6 +34,7 @@ import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
+import classNames from 'classnames';
 
 interface IProps {
 }
@@ -288,10 +289,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                         }))}
                         onChange={this.onThemeChange}
                         value={this.state.useSystemTheme ? undefined : this.state.theme}
+                        outlined
                     />
                 </div>
                 {customThemeForm}
-                <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} useCheckbox={true} />
            </div>
         );
     }
@@ -343,8 +344,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return <div className="mx_SettingsTab_section mx_AppearanceUserSettingsTab_Layout">
             <span className="mx_SettingsTab_subheading">{_t("Message layout")}</span>
 
-            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons" >
-                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
+            <div className="mx_AppearanceUserSettingsTab_Layout_RadioButtons">
+                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: this.state.useIRCLayout,
+                })}>
                     <EventTilePreview
                         className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
                         message={this.MESSAGE_PREVIEW_TEXT}
@@ -360,7 +363,9 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     </StyledRadioButton>
                 </div>
                 <div className="mx_AppearanceUserSettingsTab_spacer" />
-                <div className="mx_AppearanceUserSettingsTab_Layout_RadioButton">
+                <div className={classNames("mx_AppearanceUserSettingsTab_Layout_RadioButton", {
+                    mx_AppearanceUserSettingsTab_Layout_RadioButton_selected: !this.state.useIRCLayout,
+                })}>
                     <EventTilePreview
                         className="mx_AppearanceUserSettingsTab_Layout_RadioButton_preview"
                         message={this.MESSAGE_PREVIEW_TEXT}

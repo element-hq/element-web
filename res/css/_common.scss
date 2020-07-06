@@ -319,7 +319,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_titleImage {
-    vertical-align: middle;
+    vertical-align: sub;
     width: 25px;
     height: 25px;
     margin-left: -2px;
@@ -588,27 +588,16 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 // A context menu that largely fits the | [icon]    [label] | format.
 .mx_IconizedContextMenu {
-    // Put 20px of padding around the whole menu. We do this instead of a
-    // simple `padding: 20px` rule so the horizontal rules added by the
-    // optionLists is rendered correctly (full width).
-    > * {
-        padding-left: 20px;
-        padding-right: 20px;
-
-        &:first-child {
-            padding-top: 20px;
-        }
-
-        &:last-child {
-            padding-bottom: 16px;
-        }
-    }
+    min-width: 146px;
 
     .mx_IconizedContextMenu_optionList {
+        & > * {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
         // the notFirst class is for cases where the optionList might be under a header of sorts.
         &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
-            margin-top: 12px;
-
             // This is a bit of a hack when we could just use a simple border-top property,
             // however we have a (kinda) good reason for doing it this way: we need opacity.
             // To get the right color, we need an opacity modifier which means we have to work
@@ -631,72 +620,76 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
             }
         }
 
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
+        // round the top corners of the top button for the hover effect to be bounded
+        &:first-child .mx_AccessibleButton:first-child {
+            border-radius: 4px 4px 0 0; // radius matches .mx_ContextualMenu
+        }
 
-            li {
-                margin: 0;
-                padding: 12px 0 0;
+        // round the bottom corners of the bottom button for the hover effect to be bounded
+        &:last-child .mx_AccessibleButton:last-child {
+            border-radius: 0 0 4px 4px; // radius matches .mx_ContextualMenu
+        }
 
-                .mx_AccessibleButton {
-                    text-decoration: none;
-                    color: $primary-fg-color;
-                    font-size: $font-15px;
-                    line-height: $font-24px;
+        .mx_AccessibleButton {
+            // pad the inside of the button so that the hover background is padded too
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
+            color: $primary-fg-color;
+            font-size: $font-15px;
+            line-height: $font-24px;
 
-                    // Create a flexbox to more easily define the list items
-                    display: flex;
-                    align-items: center;
+            // Create a flexbox to more easily define the list items
+            display: flex;
+            align-items: center;
 
-                    img, .mx_IconizedContextMenu_icon { // icons
-                        width: 16px;
-                        min-width: 16px;
-                        max-width: 16px;
-                    }
+            &:hover {
+                background-color: $menu-selected-color;
+            }
 
-                    span:last-child { // labels
-                        padding-left: 14px;
-                        width: 100%;
-                        flex: 1;
+            img, .mx_IconizedContextMenu_icon { // icons
+                width: 16px;
+                min-width: 16px;
+                max-width: 16px;
+            }
 
-                        // Ellipsize any text overflow
-                        text-overflow: ellipsis;
-                        overflow: hidden;
-                        white-space: nowrap;
-                    }
-                }
+            span.mx_IconizedContextMenu_label { // labels
+                padding-left: 14px;
+                width: 100%;
+                flex: 1;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
         }
     }
 
     &.mx_IconizedContextMenu_compact {
-        > * {
-            padding-left: 11px;
-            padding-right: 16px;
-
-            &:first-child {
-                padding-top: 13px;
-            }
-
-            &:last-child {
-                padding-bottom: 13px;
-            }
+        .mx_IconizedContextMenu_optionList > * {
+            padding: 8px 16px 8px 11px;
         }
+    }
+}
 
-        .mx_IconizedContextMenu_optionList {
-            &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
-                margin-top: 10px;
+@define-mixin ProgressBarColour $colour {
+    color: $colour;
+    &::-moz-progress-bar {
+        background-color: $colour;
+    }
+    &::-webkit-progress-value {
+        background-color: $colour;
+    }
+}
 
-                li:first-child {
-                    padding-top: 10px;
-                }
-            }
-
-            li:first-child {
-                padding-top: 0;
-            }
-        }
+@define-mixin ProgressBarBorderRadius $radius {
+    border-radius: $radius;
+    &::-moz-progress-bar {
+        border-radius: $radius;
+    }
+    &::-webkit-progress-bar,
+    &::-webkit-progress-value {
+        border-radius: $radius;
     }
 }
