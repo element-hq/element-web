@@ -18,6 +18,10 @@ import { TagID } from "./models";
 
 const TILE_HEIGHT_PX = 44;
 
+// this comes from the CSS where the show more button is
+// mathematically this percent of a tile when floating.
+const RESIZER_BOX_FACTOR = 0.78;
+
 interface ISerializedListLayout {
     numTiles: number;
     showPreviews: boolean;
@@ -67,6 +71,7 @@ export class ListLayout {
     }
 
     public get visibleTiles(): number {
+        if (this._n === 0) return this.defaultVisibleTiles;
         return Math.max(this._n, this.minVisibleTiles);
     }
 
@@ -76,9 +81,20 @@ export class ListLayout {
     }
 
     public get minVisibleTiles(): number {
-        // the .65 comes from the CSS where the show more button is
-        // mathematically 65% of a tile when floating.
-        return 4.65;
+        return 1 + RESIZER_BOX_FACTOR;
+    }
+
+    public get defaultVisibleTiles(): number {
+        // 10 is what "feels right", and mostly subject to design's opinion.
+        return 10 + RESIZER_BOX_FACTOR;
+    }
+
+    public setVisibleTilesWithin(diff: number, maxPossible: number) {
+        if (this.visibleTiles > maxPossible) {
+            this.visibleTiles = maxPossible + diff;
+        } else {
+            this.visibleTiles += diff;
+        }
     }
 
     public calculateTilesToPixelsMin(maxTiles: number, n: number, possiblePadding: number): number {
@@ -90,6 +106,10 @@ export class ListLayout {
             padding = possiblePadding;
         }
         return this.tilesToPixels(Math.min(maxTiles, n)) + padding;
+    }
+
+    public tilesWithResizerBoxFactor(n: number): number {
+        return n + RESIZER_BOX_FACTOR;
     }
 
     public tilesWithPadding(n: number, paddingPx: number): number {
@@ -106,6 +126,10 @@ export class ListLayout {
 
     public pixelsToTiles(px: number): number {
         return px / this.tileHeight;
+    }
+
+    public reset() {
+        localStorage.removeItem(this.key);
     }
 
     private save() {

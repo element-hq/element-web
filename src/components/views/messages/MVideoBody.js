@@ -23,6 +23,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
+import InlineSpinner from '../elements/InlineSpinner';
 
 export default createReactClass({
     displayName: 'MVideoBody',
@@ -147,7 +148,7 @@ export default createReactClass({
             return (
                 <span className="mx_MVideoBody">
                     <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner">
-                        <img src={require("../../../../res/img/spinner.gif")} alt={content.body} width="16" height="16" />
+                        <InlineSpinner />
                     </div>
                 </span>
             );

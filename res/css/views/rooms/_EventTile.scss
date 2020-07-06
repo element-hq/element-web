@@ -354,6 +354,11 @@ limitations under the License.
     opacity: 1;
 }
 
+.mx_EventTile_e2eIcon_unauthenticated {
+    background-image: url('$(res)/img/e2e/normal.svg');
+    opacity: 1;
+}
+
 .mx_EventTile_e2eIcon_hidden {
     display: none;
 }

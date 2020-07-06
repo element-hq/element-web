@@ -30,7 +30,7 @@
 @import "./structures/_ToastContainer.scss";
 @import "./structures/_TopLeftMenuButton.scss";
 @import "./structures/_UploadBar.scss";
-@import "./structures/_UserMenuButton.scss";
+@import "./structures/_UserMenu.scss";
 @import "./structures/_ViewSource.scss";
 @import "./structures/auth/_CompleteSecurity.scss";
 @import "./structures/auth/_Login.scss";
@@ -49,6 +49,7 @@
 @import "./views/auth/_ServerTypeSelector.scss";
 @import "./views/auth/_Welcome.scss";
 @import "./views/avatars/_BaseAvatar.scss";
+@import "./views/avatars/_DecoratedRoomAvatar.scss";
 @import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
 @import "./views/context_menus/_RoomTileContextMenu.scss";

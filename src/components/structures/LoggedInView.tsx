@@ -123,7 +123,7 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-class LoggedInView extends React.PureComponent<IProps, IState> {
+class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
     static propTypes = {
@@ -146,6 +146,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     protected readonly _resizeContainer: React.RefObject<ResizeHandle>;
     protected readonly _sessionStore: sessionStore;
     protected readonly _sessionStoreToken: { remove: () => void };
+    protected readonly _compactLayoutWatcherRef: string;
     protected resizer: Resizer;
 
     constructor(props, context) {
@@ -177,6 +178,10 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         this._matrixClient.on("sync", this.onSync);
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
 
+        this._compactLayoutWatcherRef = SettingsStore.watchSetting(
+            "useCompactLayout", null, this.onCompactLayoutChanged,
+        );
+
         fixupColorFonts();
 
         this._roomView = React.createRef();
@@ -194,6 +199,7 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
+        SettingsStore.unwatchSetting(this._compactLayoutWatcherRef);
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
@@ -263,14 +269,15 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
     }
 
     onAccountData = (event) => {
-        if (event.getType() === "im.vector.web.settings") {
-            this.setState({
-                useCompactLayout: event.getContent().useCompactLayout,
-            });
-        }
         if (event.getType() === "m.ignored_user_list") {
             dis.dispatch({action: "ignore_state_changed"});
         }
+    };
+
+    onCompactLayoutChanged = (setting, roomId, level, valueAtLevel, newValue) => {
+        this.setState({
+            useCompactLayout: valueAtLevel,
+        });
     };
 
     onSync = (syncState, oldSyncState, data) => {
@@ -677,7 +684,10 @@ class LoggedInView extends React.PureComponent<IProps, IState> {
         if (SettingsStore.isFeatureEnabled("feature_new_room_list")) {
             // TODO: Supply props like collapsed and disabled to LeftPanel2
             leftPanel = (
-                <LeftPanel2 isMinimized={this.props.collapseLhs || false} />
+                <LeftPanel2
+                    isMinimized={this.props.collapseLhs || false}
+                    resizeNotifier={this.props.resizeNotifier}
+                />
             );
         }
 

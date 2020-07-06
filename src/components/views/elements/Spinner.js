@@ -16,19 +16,39 @@ limitations under the License.
 */
 
 import React from "react";
-import createReactClass from 'create-react-class';
+import PropTypes from "prop-types";
+import {_t} from "../../../languageHandler";
+import SettingsStore from "../../../settings/SettingsStore";
 
-export default createReactClass({
-    displayName: 'Spinner',
+const Spinner = ({w = 32, h = 32, imgClassName, message}) => {
+    let divClass;
+    let imageSource;
+    if (SettingsStore.isFeatureEnabled('feature_new_spinner')) {
+        divClass = "mx_Spinner mx_Spinner_spin";
+        imageSource = require("../../../../res/img/spinner.svg");
+    } else {
+        divClass = "mx_Spinner";
+        imageSource = require("../../../../res/img/spinner.gif");
+    }
 
-    render: function() {
-        const w = this.props.w || 32;
-        const h = this.props.h || 32;
-        const imgClass = this.props.imgClassName || "";
-        return (
-            <div className="mx_Spinner">
-                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
-            </div>
-        );
-    },
-});
+    return (
+        <div className={divClass}>
+            { message && <React.Fragment><div className="mx_Spinner_Msg">{ message}</div>&nbsp;</React.Fragment> }
+            <img
+                src={imageSource}
+                width={w}
+                height={h}
+                className={imgClassName}
+                aria-label={_t("Loading...")}
+            />
+        </div>
+    );
+};
+Spinner.propTypes = {
+    w: PropTypes.number,
+    h: PropTypes.number,
+    imgClassName: PropTypes.string,
+    message: PropTypes.node,
+};
+
+export default Spinner;

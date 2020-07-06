@@ -25,10 +25,19 @@ import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { Dispatcher } from "flux";
 import dis from "../../../dispatcher/dispatcher";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import GroupAvatar from "../avatars/GroupAvatar";
+import TemporaryTile from "./TemporaryTile";
+import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
+import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -120,6 +129,8 @@ const TAG_AESTHETICS: {
         isInvite: false,
         defaultHidden: false,
     },
+
+    // TODO: Replace with archived view: https://github.com/vector-im/riot-web/issues/14038
     [DefaultTagID.Archived]: {
         sectionLabel: _td("Historical"),
         isInvite: false,
@@ -155,16 +166,57 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT, (store: RoomListStore2) => {
-            const newLists = store.orderedLists;
-            console.log("new lists", newLists);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
+        this.updateLists(); // trigger the first update
+    }
 
-            const layoutMap = new Map<TagID, ListLayout>();
-            for (const tagId of Object.keys(newLists)) {
-                layoutMap.set(tagId, new ListLayout(tagId));
-            }
+    public componentWillUnmount() {
+        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
+    }
 
-            this.setState({sublists: newLists, layouts: layoutMap});
+    private updateLists = () => {
+        const newLists = RoomListStore.instance.orderedLists;
+        console.log("new lists", newLists);
+
+        const layoutMap = new Map<TagID, ListLayout>();
+        for (const tagId of Object.keys(newLists)) {
+            layoutMap.set(tagId, new ListLayout(tagId));
+        }
+
+        this.setState({sublists: newLists, layouts: layoutMap});
+    };
+
+    private renderCommunityInvites(): React.ReactElement[] {
+        // TODO: Put community invites in a more sensible place (not in the room list)
+        return MatrixClientPeg.get().getGroups().filter(g => {
+           if (g.myMembership !== 'invite') return false;
+           return !this.searchFilter || this.searchFilter.matches(g.name);
+        }).map(g => {
+            const avatar = (
+                <GroupAvatar
+                    groupId={g.groupId}
+                    groupName={g.name}
+                    groupAvatarUrl={g.avatarUrl}
+                    width={32} height={32} resizeMethod='crop'
+                />
+            );
+            const openGroup = () => {
+                defaultDispatcher.dispatch({
+                    action: 'view_group',
+                    group_id: g.groupId,
+                });
+            };
+            return (
+                <TemporaryTile
+                    isMinimized={this.props.isMinimized}
+                    isSelected={false}
+                    displayName={g.name}
+                    avatar={avatar}
+                    notificationState={StaticNotificationState.forSymbol("!", NotificationColor.Red)}
+                    onClick={openGroup}
+                    key={`temporaryGroupTile_${g.groupId}`}
+                />
+            );
         });
     }
 
@@ -174,11 +226,11 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         for (const orderedTagId of TAG_ORDER) {
             if (COMMUNITY_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate community invites if we have the chance
-                // TODO
+                // TODO: Community invites: https://github.com/vector-im/riot-web/issues/14179
             }
             if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate custom tags if needed
-                // TODO
+                // TODO: Custom tags: https://github.com/vector-im/riot-web/issues/14091
             }
 
             const orderedRooms = this.state.sublists[orderedTagId] || [];
@@ -190,9 +242,11 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
+            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
             components.push(
                 <RoomSublist2
                     key={`sublist-${orderedTagId}`}
+                    tagId={orderedTagId}
                     forRooms={true}
                     rooms={orderedRooms}
                     startAsHidden={aesthetics.defaultHidden}
@@ -202,6 +256,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     isInvite={aesthetics.isInvite}
                     layout={this.state.layouts.get(orderedTagId)}
                     isMinimized={this.props.isMinimized}
+                    extraBadTilesThatShouldntExist={extraTiles}
                 />
             );
         }

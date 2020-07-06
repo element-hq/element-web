@@ -87,6 +87,8 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
+
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
         console.log(`[RoomListDebug] Constructed an ImportanceAlgorithm for ${tagId}`);
     }
 
@@ -177,45 +179,51 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        if (cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved) {
-            return this.handleSplice(room, cause);
+        try {
+            await this.updateLock.acquireAsync();
+
+            if (cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved) {
+                return this.handleSplice(room, cause);
+            }
+
+            if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+                throw new Error(`Unsupported update cause: ${cause}`);
+            }
+
+            const category = this.getRoomCategory(room);
+            if (this.sortingAlgorithm === SortAlgorithm.Manual) {
+                return; // Nothing to do here.
+            }
+
+            const roomIdx = this.getRoomIndex(room);
+            if (roomIdx === -1) {
+                throw new Error(`Room ${room.roomId} has no index in ${this.tagId}`);
+            }
+
+            // Try to avoid doing array operations if we don't have to: only move rooms within
+            // the categories if we're jumping categories
+            const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
+            if (oldCategory !== category) {
+                // Move the room and update the indices
+                this.moveRoomIndexes(1, oldCategory, category, this.indices);
+                this.cachedOrderedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
+                this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+                // Note: if moveRoomIndexes() is called after the splice then the insert operation
+                // will happen in the wrong place. Because we would have already adjusted the index
+                // for the category, we don't need to determine how the room is moving in the list.
+                // If we instead tried to insert before updating the indices, we'd have to determine
+                // whether the room was moving later (towards IDLE) or earlier (towards RED) from its
+                // current position, as it'll affect the category's start index after we remove the
+                // room from the array.
+            }
+
+            // Sort the category now that we've dumped the room in
+            await this.sortCategory(category);
+
+            return true; // change made
+        } finally {
+            await this.updateLock.release();
         }
-
-        if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
-            throw new Error(`Unsupported update cause: ${cause}`);
-        }
-
-        const category = this.getRoomCategory(room);
-        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
-            return; // Nothing to do here.
-        }
-
-        const roomIdx = this.getRoomIndex(room);
-        if (roomIdx === -1) {
-            throw new Error(`Room ${room.roomId} has no index in ${this.tagId}`);
-        }
-
-        // Try to avoid doing array operations if we don't have to: only move rooms within
-        // the categories if we're jumping categories
-        const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
-        if (oldCategory !== category) {
-            // Move the room and update the indices
-            this.moveRoomIndexes(1, oldCategory, category, this.indices);
-            this.cachedOrderedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
-            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
-            // Note: if moveRoomIndexes() is called after the splice then the insert operation
-            // will happen in the wrong place. Because we would have already adjusted the index
-            // for the category, we don't need to determine how the room is moving in the list.
-            // If we instead tried to insert before updating the indices, we'd have to determine
-            // whether the room was moving later (towards IDLE) or earlier (towards RED) from its
-            // current position, as it'll affect the category's start index after we remove the
-            // room from the array.
-        }
-
-        // Sort the category now that we've dumped the room in
-        await this.sortCategory(category);
-
-        return true; // change made
     }
 
     private async sortCategory(category: Category) {
@@ -292,7 +300,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
                 // "should never happen" disclaimer goes here
                 console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
-                // TODO: Regenerate index when this happens
+                // TODO: Regenerate index when this happens: https://github.com/vector-im/riot-web/issues/14234
             }
         }
     }

@@ -25,13 +25,14 @@ limitations under the License.
     position: relative;
 
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-grow: 1;
 
-    > span {
+    > .mx_RadioButton_content {
         flex-grow: 1;
 
         display: flex;
+        flex-direction: column;
 
         margin-left: 8px;
         margin-right: 8px;
@@ -104,4 +105,13 @@ limitations under the License.
             }
         }
     }
+}
+
+.mx_RadioButton_outlined {
+    border: 1px solid $input-darker-bg-color;
+    border-radius: 8px;
+}
+
+.mx_RadioButton_checked {
+    border-color: $accent-color;
 }

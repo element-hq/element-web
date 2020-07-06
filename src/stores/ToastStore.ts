@@ -24,7 +24,7 @@ export interface IToast<C extends keyof JSX.IntrinsicElements | JSXElementConstr
     title: string;
     icon?: string;
     component: C;
-    props?: React.ComponentProps<C>;
+    props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 
 /**

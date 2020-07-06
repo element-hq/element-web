@@ -122,7 +122,7 @@ const Notifier = {
         }
     },
 
-    getSoundForRoom: async function(roomId) {
+    getSoundForRoom: function(roomId) {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         const content = SettingsStore.getValue("notificationSound", roomId);
@@ -151,7 +151,7 @@ const Notifier = {
     },
 
     _playAudioNotification: async function(ev, room) {
-        const sound = await this.getSoundForRoom(room.roomId);
+        const sound = this.getSoundForRoom(room.roomId);
         console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
 
         try {

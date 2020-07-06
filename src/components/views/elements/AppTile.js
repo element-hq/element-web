@@ -29,7 +29,7 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
-import MessageSpinner from './MessageSpinner';
+import Spinner from './Spinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
@@ -740,7 +740,7 @@ export default class AppTile extends React.Component {
         if (this.props.show) {
             const loadingElement = (
                 <div className="mx_AppLoading_spinner_fadeIn">
-                    <MessageSpinner msg='Loading...' />
+                    <Spinner message={_t("Loading...")} />
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {

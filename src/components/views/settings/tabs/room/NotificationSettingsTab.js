@@ -28,6 +28,8 @@ export default class NotificationsSettingsTab extends React.Component {
         roomId: PropTypes.string.isRequired,
     };
 
+    _soundUpload = createRef();
+
     constructor() {
         super();
 
@@ -39,14 +41,11 @@ export default class NotificationsSettingsTab extends React.Component {
 
     // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount() { // eslint-disable-line camelcase
-        Notifier.getSoundForRoom(this.props.roomId).then((soundData) => {
-            if (!soundData) {
-                return;
-            }
-            this.setState({currentSound: soundData.name || soundData.url});
-        });
-
-        this._soundUpload = createRef();
+        const soundData = Notifier.getSoundForRoom(this.props.roomId);
+        if (!soundData) {
+            return;
+        }
+        this.setState({currentSound: soundData.name || soundData.url});
     }
 
     async _triggerUploader(e) {

@@ -47,6 +47,28 @@ export function arrayDiff<T>(a: T[], b: T[]): { added: T[], removed: T[] } {
 }
 
 /**
+ * Returns the union of two arrays.
+ * @param a The first array. Must be defined.
+ * @param b The second array. Must be defined.
+ * @returns The union of the arrays.
+ */
+export function arrayUnion<T>(a: T[], b: T[]): T[] {
+    return a.filter(i => b.includes(i));
+}
+
+/**
+ * Merges arrays, deduping contents using a Set.
+ * @param a The arrays to merge.
+ * @returns The merged array.
+ */
+export function arrayMerge<T>(...a: T[][]): T[] {
+    return Array.from(a.reduce((c, v) => {
+        v.forEach(i => c.add(i));
+        return c;
+    }, new Set<T>()));
+}
+
+/**
  * Helper functions to perform LINQ-like queries on arrays.
  */
 export class ArrayUtil<T> {
