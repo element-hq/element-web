@@ -279,10 +279,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
-        if (this.props.extraBadTilesThatShouldntExist) {
-            tiles.push(...this.props.extraBadTilesThatShouldntExist);
-        }
-
         if (this.props.rooms) {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
@@ -296,6 +292,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     />
                 );
             }
+        }
+
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
         }
 
         // We only have to do this because of the extra tiles. We do it conditionally
