@@ -28,9 +28,6 @@ limitations under the License.
     align-items: baseline;
     flex-grow: 1;
 
-    border: 1px solid $input-darker-bg-color;
-    border-radius: 8px;
-
     > .mx_RadioButton_content {
         flex-grow: 1;
 
@@ -108,6 +105,11 @@ limitations under the License.
             }
         }
     }
+}
+
+.mx_RadioButton_outlined {
+    border: 1px solid $input-darker-bg-color;
+    border-radius: 8px;
 }
 
 .mx_RadioButton_checked {

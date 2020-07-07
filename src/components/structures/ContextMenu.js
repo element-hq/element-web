@@ -23,6 +23,8 @@ import classNames from 'classnames';
 import {Key} from "../../Keyboard";
 import * as sdk from "../../index";
 import AccessibleButton from "../views/elements/AccessibleButton";
+import StyledCheckbox from "../views/elements/StyledCheckbox";
+import StyledRadioButton from "../views/elements/StyledRadioButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -421,6 +423,54 @@ MenuItemCheckbox.propTypes = {
     onClick: PropTypes.func.isRequired,
 };
 
+// Semantic component for representing a styled role=menuitemcheckbox
+export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
+    return (
+        <StyledCheckbox
+            {...props}
+            role="menuitemcheckbox"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
+        >
+            { children }
+        </StyledCheckbox>
+    );
+};
+StyledMenuItemCheckbox.propTypes = {
+    ...StyledCheckbox.propTypes,
+    label: PropTypes.string, // optional
+    checked: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool, // optional
+    className: PropTypes.string, // optional
+    onChange: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
+};
+
 // Semantic component for representing a role=menuitemradio
 export const MenuItemRadio = ({children, label, active=false, disabled=false, ...props}) => {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -437,6 +487,54 @@ MenuItemRadio.propTypes = {
     disabled: PropTypes.bool, // optional
     className: PropTypes.string, // optional
     onClick: PropTypes.func.isRequired,
+};
+
+// Semantic component for representing a styled role=menuitemradio
+export const StyledMenuItemRadio = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
+    return (
+        <StyledRadioButton
+            {...props}
+            role="menuitemradio"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
+        >
+            { children }
+        </StyledRadioButton>
+    );
+};
+StyledMenuItemRadio.propTypes = {
+    ...StyledMenuItemRadio.propTypes,
+    label: PropTypes.string, // optional
+    checked: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool, // optional
+    className: PropTypes.string, // optional
+    onChange: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
 };
 
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
