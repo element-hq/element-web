@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import classNames from 'classnames';
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -38,6 +39,7 @@ interface IProps {
     defaultToInitialLetter?: boolean; // true to add default url
     onClick?: React.MouseEventHandler;
     inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
+    className?: string;
 }
 
 const useImageUrl = ({url, urls}): [string, () => void] => {
@@ -106,7 +108,7 @@ const BaseAvatar = (props: IProps) => {
         const initialLetter = AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
-                className="mx_BaseAvatar_initial"
+                className={classNames("mx_BaseAvatar_initial", props.className)}
                 aria-hidden="true"
                 style={{
                     fontSize: toPx(width * 0.65),
@@ -119,7 +121,7 @@ const BaseAvatar = (props: IProps) => {
         );
         const imgNode = (
             <img
-                className="mx_BaseAvatar_image"
+                className={classNames("mx_BaseAvatar_image", props.className)}
                 src={AvatarLogic.defaultAvatarUrlForString(idName || name)}
                 alt=""
                 title={title}
@@ -136,7 +138,7 @@ const BaseAvatar = (props: IProps) => {
                 <AccessibleButton
                     {...otherProps}
                     element="span"
-                    className="mx_BaseAvatar"
+                    className={classNames("mx_BaseAvatar", props.className)}
                     onClick={onClick}
                     inputRef={inputRef}
                 >
@@ -146,7 +148,12 @@ const BaseAvatar = (props: IProps) => {
             );
         } else {
             return (
-                <span className="mx_BaseAvatar" ref={inputRef} {...otherProps} role="presentation">
+                <span
+                    className={classNames("mx_BaseAvatar", props.className)}
+                    ref={inputRef}
+                    {...otherProps}
+                    role="presentation"
+                >
                     { textNode }
                     { imgNode }
                 </span>
@@ -157,7 +164,7 @@ const BaseAvatar = (props: IProps) => {
     if (onClick != null) {
         return (
             <AccessibleButton
-                className="mx_BaseAvatar mx_BaseAvatar_image"
+                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", props.className)}
                 element='img'
                 src={imageUrl}
                 onClick={onClick}
@@ -173,7 +180,7 @@ const BaseAvatar = (props: IProps) => {
     } else {
         return (
             <img
-                className="mx_BaseAvatar mx_BaseAvatar_image"
+                className={classNames("mx_BaseAvatar", "mx_BaseAvatar_image", props.className)}
                 src={imageUrl}
                 onError={onError}
                 style={{

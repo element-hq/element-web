@@ -63,6 +63,7 @@ interface IState {
 export default class CallView extends React.Component<IProps, IState> {
     private videoref: React.RefObject<any>;
     private dispatcherRef: string;
+    public call: any;
 
     constructor(props: IProps) {
         super(props);
