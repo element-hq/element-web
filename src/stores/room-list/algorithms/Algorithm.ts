@@ -215,7 +215,10 @@ export class Algorithm extends EventEmitter {
         // When we do have the room, re-add the old room (if needed) to the algorithm
         // and remove the sticky room from the algorithm. This is so the underlying
         // algorithm doesn't try and confuse itself with the sticky room concept.
-        if (lastStickyRoom) {
+        // We don't add the new room if the sticky room isn't changing because that's
+        // an easy way to cause duplication. We have to do room ID checks instead of
+        // referential checks as the references can differ through the lifecycle.
+        if (lastStickyRoom && lastStickyRoom.room && lastStickyRoom.room.roomId !== val.roomId) {
             // Lie to the algorithm and re-add the room to the algorithm
             await this.handleRoomUpdate(lastStickyRoom.room, RoomUpdateCause.NewRoom);
         }
@@ -643,7 +646,8 @@ export class Algorithm extends EventEmitter {
         console.log(`Handle room update for ${room.roomId} called with cause ${cause}`);
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
-        const isSticky = this._stickyRoom && this._stickyRoom.room === room;
+        // Note: check the isSticky against the room ID just in case the reference is wrong
+        const isSticky = this._stickyRoom && this._stickyRoom.room && this._stickyRoom.room.roomId === room.roomId;
         if (cause === RoomUpdateCause.NewRoom) {
             const isForLastSticky = this._lastStickyRoom && this._lastStickyRoom.room === room;
             const roomTags = this.roomIdsToTags[room.roomId];
