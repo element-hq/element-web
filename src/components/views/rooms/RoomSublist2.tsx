@@ -27,7 +27,6 @@ import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import { ContextMenu, ContextMenuButton } from "../../structures/ContextMenu";
-import StyledCheckbox from "../elements/StyledCheckbox";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
@@ -35,9 +34,9 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
-import Tooltip from "../elements/Tooltip";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -280,10 +279,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
-        if (this.props.extraBadTilesThatShouldntExist) {
-            tiles.push(...this.props.extraBadTilesThatShouldntExist);
-        }
-
         if (this.props.rooms) {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
@@ -299,6 +294,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             }
         }
 
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        }
+
         // We only have to do this because of the extra tiles. We do it conditionally
         // to avoid spending cycles on slicing. It's generally fine to do this though
         // as users are unlikely to have more than a handful of tiles when the extra
@@ -311,15 +310,40 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderMenu(): React.ReactElement {
-        // TODO: Get a proper invite context menu, or take invites out of the room list.
-        if (this.props.tagId === DefaultTagID.Invite) {
-            return null;
-        }
-
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
+
+            // Invites don't get some nonsense options, so only add them if we have to.
+            let otherSections = null;
+            if (this.props.tagId !== DefaultTagID.Invite) {
+                otherSections = (
+                    <React.Fragment>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
+                            <StyledCheckbox
+                                onChange={this.onUnreadFirstChanged}
+                                checked={isUnreadFirst}
+                            >
+                                {_t("Always show first")}
+                            </StyledCheckbox>
+                        </div>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
+                            <StyledCheckbox
+                                onChange={this.onMessagePreviewChanged}
+                                checked={this.props.layout.showPreviews}
+                            >
+                                {_t("Message preview")}
+                            </StyledCheckbox>
+                        </div>
+                    </React.Fragment>
+                );
+            }
+
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
@@ -345,26 +369,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                 {_t("A-Z")}
                             </StyledRadioButton>
                         </div>
-                        <hr />
-                        <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
-                            <StyledCheckbox
-                                onChange={this.onUnreadFirstChanged}
-                                checked={isUnreadFirst}
-                            >
-                                {_t("Always show first")}
-                            </StyledCheckbox>
-                        </div>
-                        <hr />
-                        <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
-                            <StyledCheckbox
-                                onChange={this.onMessagePreviewChanged}
-                                checked={this.props.layout.showPreviews}
-                            >
-                                {_t("Message preview")}
-                            </StyledCheckbox>
-                        </div>
+                        {otherSections}
                     </div>
                 </ContextMenu>
             );
