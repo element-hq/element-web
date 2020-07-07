@@ -85,8 +85,8 @@ export class ListLayout {
     }
 
     public get defaultVisibleTiles(): number {
-        // 10 is what "feels right", and mostly subject to design's opinion.
-        return 10 + RESIZER_BOX_FACTOR;
+        // This number is what "feels right", and mostly subject to design's opinion.
+        return 5 + RESIZER_BOX_FACTOR;
     }
 
     public setVisibleTilesWithin(diff: number, maxPossible: number) {
