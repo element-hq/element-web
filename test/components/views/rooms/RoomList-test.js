@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import lolex from 'lolex';
 
 import * as TestUtils from '../../../test-utils';
 
