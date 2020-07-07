@@ -27,7 +27,7 @@ interface IState {
 
 }
 
-export default class CallContainer extends React.Component<IProps, IState> {
+export default class CallContainer extends React.PureComponent<IProps, IState> {
     public render() {
         return <div className="mx_CallContainer">
             <IncomingCallBox2 />

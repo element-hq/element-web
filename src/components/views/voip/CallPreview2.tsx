@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+
 import React from 'react';
-import classNames from 'classnames';
 
 import CallView from "./CallView2";
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -27,10 +28,10 @@ import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
-        // A Conference Handler implementation
-        // Must have a function signature:
-        //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: any;
+    // A Conference Handler implementation
+    // Must have a function signature:
+    //  getConferenceCallForRoom(roomId: string): MatrixCall
+    ConferenceHandler: any;
 }
 
 interface IState {
@@ -42,6 +43,7 @@ interface IState {
 export default class CallPreview extends React.Component<IProps, IState> {
     private roomStoreToken: any;
     private dispatcherRef: string;
+    private settingsWatcherRef: string;
 
     constructor(props: IProps) {
         super(props);
@@ -52,7 +54,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             newRoomListActive: SettingsStore.getValue("feature_new_room_list"),
         };
 
-        SettingsStore.watchSetting("feature_new_room_list", null, (name, roomId, level, valAtLevel, newVal) => this.setState({
+        this.settingsWatcherRef = SettingsStore.watchSetting("feature_new_room_list", null, (name, roomId, level, valAtLevel, newVal) => this.setState({
             newRoomListActive: newVal,
         }));
     }
@@ -67,6 +69,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             this.roomStoreToken.remove();
         }
         dis.unregister(this.dispatcherRef);
+        SettingsStore.unwatchSetting(this.settingsWatcherRef)
     }
 
     private onRoomViewStoreUpdate = (payload) => {
