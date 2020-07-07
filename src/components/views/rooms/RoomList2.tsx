@@ -64,8 +64,6 @@ interface IState {
 }
 
 const TAG_ORDER: TagID[] = [
-    // -- Community Invites Placeholder --
-
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
@@ -77,7 +75,6 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Archived,
 ];
-const COMMUNITY_TAGS_BEFORE_TAG = DefaultTagID.Invite;
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
@@ -227,10 +224,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         const components: React.ReactElement[] = [];
 
         for (const orderedTagId of TAG_ORDER) {
-            if (COMMUNITY_TAGS_BEFORE_TAG === orderedTagId) {
-                // Populate community invites if we have the chance
-                // TODO: Community invites: https://github.com/vector-im/riot-web/issues/14179
-            }
             if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate custom tags if needed
                 // TODO: Custom tags: https://github.com/vector-im/riot-web/issues/14091
