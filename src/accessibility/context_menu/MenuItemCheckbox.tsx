@@ -18,14 +18,11 @@ limitations under the License.
 
 import React from "react";
 
-import AccessibleButton, {ButtonEvent, IProps as IAccessibleButtonProps} from "../../components/views/elements/AccessibleButton";
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-interface IProps extends IAccessibleButtonProps {
+interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     label?: string;
     active: boolean;
-    disabled?: boolean;
-    className?: string;
-    onClick(ev: ButtonEvent);
 }
 
 // Semantic component for representing a role=menuitemcheckbox
@@ -36,6 +33,7 @@ export const MenuItemCheckbox: React.FC<IProps> = ({children, label, active, dis
             role="menuitemcheckbox"
             aria-checked={active}
             aria-disabled={disabled}
+            disabled={disabled}
             tabIndex={-1}
             aria-label={label}
         >

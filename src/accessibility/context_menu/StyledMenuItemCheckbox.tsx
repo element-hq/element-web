@@ -23,7 +23,7 @@ import StyledCheckbox from "../../components/views/elements/StyledCheckbox";
 
 interface IProps extends React.ComponentProps<typeof StyledCheckbox> {
     label?: string;
-    onChange();
+    onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on Key.ENTER
 }
 

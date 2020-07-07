@@ -23,8 +23,7 @@ import StyledRadioButton from "../../components/views/elements/StyledRadioButton
 
 interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
     label?: string;
-    disabled?: boolean;
-    onChange(): void;
+    onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
     onClose(): void; // gets called after onChange on Key.ENTER
 }
 

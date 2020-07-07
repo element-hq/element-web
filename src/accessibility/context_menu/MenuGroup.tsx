@@ -20,7 +20,6 @@ import React from "react";
 
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
     label: string;
-    className?: string;
 }
 
 // Semantic component for representing a role=group for grouping menu radios/checkboxes
