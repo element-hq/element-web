@@ -6974,8 +6974,8 @@ mathml-tag-names@^2.1.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "7.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f683f4544aa5da150836b01c754062809119fa97"
+  version "7.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a688bdac828dc62916437d83c72cef1e525d5f9"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -6996,7 +6996,7 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:navgurukul/matrix-react-sdk#develop":
-  version "2.8.0"
+  version "2.7.1"
   resolved "https://codeload.github.com/navgurukul/matrix-react-sdk/tar.gz/8905b02b81bea6898ba5d2893d364646d39fc4e9"
   dependencies:
     "@babel/runtime" "^7.8.3"
@@ -7039,7 +7039,6 @@ matrix-mock-request@^1.2.3:
     react-dom "^16.9.0"
     react-focus-lock "^2.2.1"
     react-resizable "^1.10.1"
-    react-transition-group "^4.4.1"
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     text-encoding-utf-8 "^1.0.1"
