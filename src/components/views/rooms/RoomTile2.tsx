@@ -49,6 +49,7 @@ import { TagSpecificNotificationState } from "../../../stores/notifications/TagS
 import { INotificationState } from "../../../stores/notifications/INotificationState";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { Volume } from "../../../RoomNotifsTypes";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -79,8 +80,6 @@ interface IState {
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
 }
-
-type Volume = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile2_messagePreview_${roomId}`;
 
