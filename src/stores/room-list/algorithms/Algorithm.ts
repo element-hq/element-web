@@ -530,9 +530,11 @@ export class Algorithm extends EventEmitter {
             }
 
             if (!inTag) {
-                // TODO: Determine if DM and push there instead: https://github.com/vector-im/riot-web/issues/14236
-                newTags[DefaultTagID.Untagged].push(room);
-
+                if (DMRoomMap.getUserIdForRoomId(room.roomId)) {
+                    newTags[DefaultTagID.DM].push(room);
+                } else {
+                    newTags[DefaultTagID.Untagged].push(room);
+                }
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                 console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Untagged`);
             }
