@@ -69,6 +69,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
     private focusedElement = null;
+    private isDoingStickyHeaders = false;
 
     constructor(props: IProps) {
         super(props);
@@ -113,6 +114,23 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private handleStickyHeaders(list: HTMLDivElement) {
+        // TODO: Evaluate if this has any performance benefit or detriment.
+        // See https://github.com/vector-im/riot-web/issues/14035
+
+        if (this.isDoingStickyHeaders) return;
+        this.isDoingStickyHeaders = true;
+        if (window.requestAnimationFrame) {
+            window.requestAnimationFrame(() => {
+                this.doStickyHeaders(list);
+                this.isDoingStickyHeaders = false;
+            });
+        } else {
+            this.doStickyHeaders(list);
+            this.isDoingStickyHeaders = false;
+        }
+    }
+
+    private doStickyHeaders(list: HTMLDivElement) {
         const rlRect = list.getBoundingClientRect();
         const bottom = rlRect.bottom;
         const top = rlRect.top;
