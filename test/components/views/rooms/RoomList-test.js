@@ -56,6 +56,11 @@ describe('RoomList', () => {
 
         DMRoomMap.makeShared();
 
+        // Lie to the room list store about DMs not existing
+        DMRoomMap.getUserIdForRoomId = () => {
+            return null;
+        }
+
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
 
