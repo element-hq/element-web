@@ -274,9 +274,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         className="mx_RoomList2"
                         role="tree"
                         aria-label={_t("Rooms")}
-                        // Firefox sometimes makes this element focusable due to
-                        // overflow:scroll;, so force it out of tab order.
-                        tabIndex={-1}
                     >{sublists}</div>
                 )}
             </RovingTabIndexProvider>

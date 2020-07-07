@@ -56,6 +56,15 @@ interface IState {
     showTagPanel: boolean;
 }
 
+// List of CSS classes which should be included in keyboard navigation within the room list
+const cssClasses = [
+    "mx_RoomSearch_input",
+    "mx_RoomSearch_icon", // minimized <RoomSearch />
+    "mx_RoomSublist2_headerText",
+    "mx_RoomTile2",
+    "mx_RoomSublist2_showNButton",
+];
+
 export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
@@ -212,10 +221,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             if (element) {
                 classes = element.classList;
             }
-        } while (element && !(
-            classes.contains("mx_RoomTile2") ||
-            classes.contains("mx_RoomSublist2_headerText") ||
-            classes.contains("mx_RoomSearch_input")));
+        } while (element && !cssClasses.some(c => classes.contains(c)));
 
         if (element) {
             element.focus();
@@ -246,7 +252,12 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderSearchExplore(): React.ReactNode {
         return (
-            <div className="mx_LeftPanel2_filterContainer" onFocus={this.onFocus} onBlur={this.onBlur}>
+            <div
+                className="mx_LeftPanel2_filterContainer"
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                onKeyDown={this.onKeyDown}
+            >
                 <RoomSearch
                     onQueryUpdate={this.onSearch}
                     isMinimized={this.props.isMinimized}
@@ -256,7 +267,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
-                    alt={_t("Explore rooms")}
+                    title={_t("Explore rooms")}
                 />
             </div>
         );
