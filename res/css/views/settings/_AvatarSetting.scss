@@ -27,28 +27,6 @@ limitations under the License.
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
         margin-top: 8px;
-
-        div {
-            position: relative;
-            height: 12px;
-            width: 12px;
-            display: inline;
-            padding-right: 6px; // 0.5 * 12px
-            left: -6px; // 0.5 * 12px
-            top: 3px;
-        }
-
-        div::before {
-            content: '';
-            position: absolute;
-            height: 12px;
-            width: 12px;
-
-            background-color: $button-primary-fg-color;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-image: url('$(res)/img/feather-customised/upload.svg');
-        }
     }
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_link_sm {
