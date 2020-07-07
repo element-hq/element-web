@@ -72,9 +72,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return this._matrixClient;
     }
 
-    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14231
+    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
     private checkEnabled() {
-        this.enabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
+        this.enabled = SettingsStore.getValue("feature_new_room_list");
         if (this.enabled) {
             console.log("⚡ new room list store engaged");
         }
