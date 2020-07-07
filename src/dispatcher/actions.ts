@@ -79,4 +79,9 @@ export enum Action {
      * Sets a system font. Should be used with UpdateSystemFontPayload
      */
     UpdateSystemFont = "update_system_font",
+
+    /**
+     * Changes room based on room list order and payload parameters. Should be used with ViewRoomDeltaPayload.
+     */
+    ViewRoomDelta = "view_room_delta",
 }
