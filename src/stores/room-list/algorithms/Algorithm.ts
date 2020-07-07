@@ -501,13 +501,9 @@ export class Algorithm extends EventEmitter {
         // Split out the easy rooms first (leave and invite)
         const memberships = splitRoomsByMembership(rooms);
         for (const room of memberships[EffectiveMembership.Invite]) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] "${room.name}" (${room.roomId}) is an Invite`);
             newTags[DefaultTagID.Invite].push(room);
         }
         for (const room of memberships[EffectiveMembership.Leave]) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Historical`);
             newTags[DefaultTagID.Archived].push(room);
         }
 
@@ -518,11 +514,7 @@ export class Algorithm extends EventEmitter {
             let inTag = false;
             if (tags.length > 0) {
                 for (const tag of tags) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged as ${tag}`);
                     if (!isNullOrUndefined(newTags[tag])) {
-                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                        console.log(`[DEBUG] "${room.name}" (${room.roomId}) is tagged with VALID tag ${tag}`);
                         newTags[tag].push(room);
                         inTag = true;
                     }
@@ -530,11 +522,11 @@ export class Algorithm extends EventEmitter {
             }
 
             if (!inTag) {
-                // TODO: Determine if DM and push there instead: https://github.com/vector-im/riot-web/issues/14236
-                newTags[DefaultTagID.Untagged].push(room);
-
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[DEBUG] "${room.name}" (${room.roomId}) is Untagged`);
+                if (DMRoomMap.getUserIdForRoomId(room.roomId)) {
+                    newTags[DefaultTagID.DM].push(room);
+                } else {
+                    newTags[DefaultTagID.Untagged].push(room);
+                }
             }
         }
 
