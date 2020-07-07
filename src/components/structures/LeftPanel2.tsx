@@ -131,7 +131,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     private doStickyHeaders(list: HTMLDivElement) {
-        this.isDoingStickyHeaders = true;
         const rlRect = list.getBoundingClientRect();
         const bottom = rlRect.bottom;
         const top = rlRect.top;
