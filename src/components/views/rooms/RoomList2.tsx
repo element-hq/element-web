@@ -70,8 +70,6 @@ interface IState {
 }
 
 const TAG_ORDER: TagID[] = [
-    // -- Community Invites Placeholder --
-
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
@@ -83,7 +81,6 @@ const TAG_ORDER: TagID[] = [
     DefaultTagID.ServerNotice,
     DefaultTagID.Archived,
 ];
-const COMMUNITY_TAGS_BEFORE_TAG = DefaultTagID.Invite;
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
     DefaultTagID.DM,
@@ -278,17 +275,15 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         const components: React.ReactElement[] = [];
 
         for (const orderedTagId of TAG_ORDER) {
-            if (COMMUNITY_TAGS_BEFORE_TAG === orderedTagId) {
-                // Populate community invites if we have the chance
-                // TODO: Community invites: https://github.com/vector-im/riot-web/issues/14179
-            }
             if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
                 // Populate custom tags if needed
                 // TODO: Custom tags: https://github.com/vector-im/riot-web/issues/14091
             }
 
             const orderedRooms = this.state.sublists[orderedTagId] || [];
-            if (orderedRooms.length === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
+            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
+            const totalTiles = orderedRooms.length + (extraTiles ? extraTiles.length : 0);
+            if (totalTiles === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
                 continue; // skip tag - not needed
             }
 
@@ -296,7 +291,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
-            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
             components.push(
                 <RoomSublist2
                     key={`sublist-${orderedTagId}`}

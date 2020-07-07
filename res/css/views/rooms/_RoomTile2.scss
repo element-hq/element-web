@@ -81,7 +81,7 @@ limitations under the License.
         }
     }
 
-    .mx_RoomTile2_menuButton {
+    .mx_RoomTile2_notificationsButton {
         margin-left: 4px; // spacing between buttons
     }
 
@@ -112,7 +112,8 @@ limitations under the License.
         width: 20px;
         min-width: 20px; // yay flex
         height: 20px;
-        margin: auto 0;
+        margin-top: auto;
+        margin-bottom: auto;
         position: relative;
         display: none;
 

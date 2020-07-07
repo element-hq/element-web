@@ -49,6 +49,7 @@ import { TagSpecificNotificationState } from "../../../stores/notifications/TagS
 import { INotificationState } from "../../../stores/notifications/INotificationState";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { Volume } from "../../../RoomNotifsTypes";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 
@@ -81,8 +82,6 @@ interface IState {
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
 }
-
-type Volume = ALL_MESSAGES_LOUD | ALL_MESSAGES | MENTIONS_ONLY | MUTE;
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile2_messagePreview_${roomId}`;
 
@@ -529,8 +528,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             {roomAvatar}
                             {nameContainer}
                             {badge}
-                            {this.renderNotificationsMenu(isActive)}
                             {this.renderGeneralMenu()}
+                            {this.renderNotificationsMenu(isActive)}
                         </AccessibleButton>
                     }
                 </RovingTabIndexWrapper>

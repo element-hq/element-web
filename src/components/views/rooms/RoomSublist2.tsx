@@ -40,6 +40,7 @@ import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
+import StyledCheckbox from "../elements/StyledCheckbox";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 
@@ -310,10 +311,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
-        if (this.props.extraBadTilesThatShouldntExist) {
-            tiles.push(...this.props.extraBadTilesThatShouldntExist);
-        }
-
         if (this.props.rooms) {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
@@ -329,6 +326,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             }
         }
 
+        if (this.props.extraBadTilesThatShouldntExist) {
+            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        }
+
         // We only have to do this because of the extra tiles. We do it conditionally
         // to avoid spending cycles on slicing. It's generally fine to do this though
         // as users are unlikely to have more than a handful of tiles when the extra
@@ -341,15 +342,42 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private renderMenu(): React.ReactElement {
-        // TODO: Get a proper invite context menu, or take invites out of the room list.
-        if (this.props.tagId === DefaultTagID.Invite) {
-            return null;
-        }
-
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
+
+            // Invites don't get some nonsense options, so only add them if we have to.
+            let otherSections = null;
+            if (this.props.tagId !== DefaultTagID.Invite) {
+                otherSections = (
+                    <React.Fragment>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
+                            <StyledMenuItemCheckbox
+                                onClose={this.onCloseMenu}
+                                onChange={this.onUnreadFirstChanged}
+                                checked={isUnreadFirst}
+                            >
+                                {_t("Always show first")}
+                            </StyledMenuItemCheckbox>
+                        </div>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
+                            <StyledMenuItemCheckbox
+                                onClose={this.onCloseMenu}
+                                onChange={this.onMessagePreviewChanged}
+                                checked={this.props.layout.showPreviews}
+                            >
+                                {_t("Message preview")}
+                            </StyledMenuItemCheckbox>
+                        </div>
+                    </React.Fragment>
+                );
+            }
+
             contextMenu = (
                 <ContextMenu
                     chevronFace="none"
@@ -377,28 +405,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                 {_t("A-Z")}
                             </StyledMenuItemRadio>
                         </div>
-                        <hr />
-                        <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
-                            <StyledMenuItemCheckbox
-                                onClose={this.onCloseMenu}
-                                onChange={this.onUnreadFirstChanged}
-                                checked={isUnreadFirst}
-                            >
-                                {_t("Always show first")}
-                            </StyledMenuItemCheckbox>
-                        </div>
-                        <hr />
-                        <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
-                            <StyledMenuItemCheckbox
-                                onClose={this.onCloseMenu}
-                                onChange={this.onMessagePreviewChanged}
-                                checked={this.props.layout.showPreviews}
-                            >
-                                {_t("Message preview")}
-                            </StyledMenuItemCheckbox>
-                        </div>
+                        {otherSections}
                     </div>
                 </ContextMenu>
             );

@@ -19,6 +19,7 @@ import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
+import { EffectiveMembership, getEffectiveMembership } from "../../membership";
 
 /**
  * Sorts rooms according to the last event's timestamp in each room that seems
@@ -37,6 +38,8 @@ export class RecentAlgorithm implements IAlgorithm {
         // actually changed (probably needs to be done higher up?) then we could do an
         // insertion sort or similar on the limited set of changes.
 
+        const myUserId = MatrixClientPeg.get().getUserId();
+
         const tsCache: { [roomId: string]: number } = {};
         const getLastTs = (r: Room) => {
             if (tsCache[r.roomId]) {
@@ -50,13 +53,23 @@ export class RecentAlgorithm implements IAlgorithm {
                     return Number.MAX_SAFE_INTEGER;
                 }
 
+                // If the room hasn't been joined yet, it probably won't have a timeline to
+                // parse. We'll still fall back to the timeline if this fails, but chances
+                // are we'll at least have our own membership event to go off of.
+                const effectiveMembership = getEffectiveMembership(r.getMyMembership());
+                if (effectiveMembership !== EffectiveMembership.Join) {
+                    const membershipEvent = r.currentState.getStateEvents("m.room.member", myUserId);
+                    if (membershipEvent && !Array.isArray(membershipEvent)) {
+                        return membershipEvent.getTs();
+                    }
+                }
+
                 for (let i = r.timeline.length - 1; i >= 0; --i) {
                     const ev = r.timeline[i];
                     if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
                     // TODO: Don't assume we're using the same client as the peg
-                    if (ev.getSender() === MatrixClientPeg.get().getUserId()
-                        || Unread.eventTriggersUnreadCount(ev)) {
+                    if (ev.getSender() === myUserId || Unread.eventTriggersUnreadCount(ev)) {
                         return ev.getTs();
                     }
                 }
