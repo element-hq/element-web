@@ -460,7 +460,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         </div>
                     );
 
-                    // TODO: a11y (see old component): https://github.com/vector-im/riot-web/issues/14180
                     // Note: the addRoomButton conditionally gets moved around
                     // the DOM depending on whether or not the list is minimized.
                     // If we're minimized, we want it below the header so it
