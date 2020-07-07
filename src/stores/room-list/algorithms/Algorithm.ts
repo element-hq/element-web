@@ -524,7 +524,7 @@ export class Algorithm extends EventEmitter {
             }
 
             if (!inTag) {
-                if (DMRoomMap.getUserIdForRoomId(room.roomId)) {
+                if (DMRoomMap.shared().getUserIdForRoomId(room.roomId)) {
                     newTags[DefaultTagID.DM].push(room);
                 } else {
                     newTags[DefaultTagID.Untagged].push(room);
