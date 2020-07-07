@@ -259,3 +259,13 @@ export const RovingTabIndexWrapper: React.FC<IRovingTabIndexWrapperProps> = ({ch
     return children({onFocus, isActive, ref});
 };
 
+interface IRovingAccessibleButtonProps extends React.ComponentProps<typeof AccessibleButton> {
+    inputRef?: Ref;
+}
+
+// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
+export const RovingAccessibleButton: React.FC<IRovingAccessibleButtonProps> = ({inputRef, ...props}) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
+    return <AccessibleButton {...props} onFocus={onFocus} inputRef={ref} tabIndex={isActive ? 0 : -1} />;
+};
+

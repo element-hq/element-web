@@ -20,7 +20,7 @@ import * as React from "react";
 import { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
+import {RovingAccessibleButton, RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
@@ -531,12 +531,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 if (this.props.isMinimized) showMoreText = null;
                 // TODO Roving tab index / treeitem?: https://github.com/vector-im/riot-web/issues/14180
                 showNButton = (
-                    <AccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses} tabIndex={-1}>
+                    <RovingAccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showMoreText}
-                    </AccessibleButton>
+                    </RovingAccessibleButton>
                 );
             } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.props.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
@@ -548,12 +548,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 if (this.props.isMinimized) showLessText = null;
                 // TODO Roving tab index / treeitem?: https://github.com/vector-im/riot-web/issues/14180
                 showNButton = (
-                    <AccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses} tabIndex={-1}>
+                    <RovingAccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showLessText}
-                    </AccessibleButton>
+                    </RovingAccessibleButton>
                 );
             }
 
