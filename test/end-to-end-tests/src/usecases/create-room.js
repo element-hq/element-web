@@ -20,7 +20,7 @@ async function openRoomDirectory(session) {
     await roomDirectoryButton.click();
 }
 
-async function findSublist(name) {
+async function findSublist(session, name) {
     const sublists = await session.queryAll('.mx_RoomSublist2');
     for (const sublist of sublists) {
         const header = await sublist.$('.mx_RoomSublist2_headerText');
@@ -35,7 +35,7 @@ async function findSublist(name) {
 async function createRoom(session, roomName, encrypted=false) {
     session.log.step(`creates room "${roomName}"`);
 
-    const roomsSublist = await findSublist("rooms");
+    const roomsSublist = await findSublist(session, "rooms");
     const addRoomButton = await roomsSublist.$(".mx_RoomSublist2_auxButton");
     await addRoomButton.click();
 
@@ -57,7 +57,7 @@ async function createRoom(session, roomName, encrypted=false) {
 async function createDm(session, invitees) {
     session.log.step(`creates DM with ${JSON.stringify(invitees)}`);
 
-    const dmsSublist = await findSublist("people");
+    const dmsSublist = await findSublist(session, "people");
     const startChatButton = await dmsSublist.$(".mx_RoomSublist2_auxButton");
     await startChatButton.click();
 
