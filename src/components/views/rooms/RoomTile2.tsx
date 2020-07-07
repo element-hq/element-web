@@ -499,8 +499,8 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             {roomAvatar}
                             {nameContainer}
                             {badge}
-                            {this.renderNotificationsMenu(isActive)}
                             {this.renderGeneralMenu()}
+                            {this.renderNotificationsMenu(isActive)}
                         </AccessibleButton>
                     }
                 </RovingTabIndexWrapper>
