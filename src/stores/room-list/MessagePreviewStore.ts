@@ -192,7 +192,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
 
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {

@@ -89,7 +89,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onRVSUpdate = () => {
-        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
+        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = RoomViewStore.getRoomId();
@@ -115,7 +115,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
-            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
+            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
             this.checkEnabled();
             if (!this.enabled) return;
 

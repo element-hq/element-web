@@ -51,8 +51,8 @@ import NotificationBadge from "./NotificationBadge";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Volume } from "../../../RoomNotifsTypes";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 /*******************************************************************
  *   CAUTION                                                       *
