@@ -23,6 +23,7 @@ import React from 'react';
 // this incidentally means we can forget our React imports in JSX files without penalty.
 window.React = React;
 
+import url from 'url';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
@@ -31,15 +32,12 @@ import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
-
-import url from 'url';
-
-import {parseQs, parseQsFromFragment} from './url_utils';
-
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-
 import CallHandler from 'matrix-react-sdk/src/CallHandler';
+
+import {parseQs, parseQsFromFragment} from './url_utils';
+import VectorBasePlatform from "./platform/VectorBasePlatform";
 
 let lastLocationHashSet: string = null;
 
@@ -149,7 +147,7 @@ export async function loadApp(fragParams: {}) {
     const urlWithoutQuery = window.location.protocol + '//' + window.location.host + window.location.pathname;
     console.log("Vector starting at " + urlWithoutQuery);
 
-    platform.startUpdater();
+    (platform as VectorBasePlatform).startUpdater();
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();
