@@ -134,7 +134,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 if (isCollapsed && roomIndex > -1) {
                     this.toggleCollapsed();
                 }
-                // extend the visible section to include the room
+                // extend the visible section to include the room if it is entirely invisible
                 if (roomIndex >= this.numVisibleTiles) {
                     this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(roomIndex + 1, MAX_PADDING_HEIGHT);
                     this.forceUpdate(); // because the layout doesn't trigger a re-render
