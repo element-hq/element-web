@@ -57,11 +57,11 @@ describe('RoomList', () => {
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
 
-        const RoomList = sdk.getComponent('views.rooms.RoomList');
+        const RoomList = sdk.getComponent('views.rooms.RoomList2');
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
             <DragDropContext>
-                <WrappedRoomList searchFilter="" />
+                <WrappedRoomList searchFilter="" onResize={() => {}} />
             </DragDropContext>
         , parentDiv);
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
@@ -117,8 +117,8 @@ describe('RoomList', () => {
     });
 
     function expectRoomInSubList(room, subListTest) {
-        const RoomSubList = sdk.getComponent('structures.RoomSubList');
-        const RoomTile = sdk.getComponent('views.rooms.RoomTile');
+        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist2');
+        const RoomTile = sdk.getComponent('views.rooms.RoomTile2');
 
         const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSubList);
         const containingSubList = subLists.find(subListTest);
@@ -140,20 +140,20 @@ describe('RoomList', () => {
         expect(expectedRoomTile.props.room).toBe(room);
     }
 
-    function expectCorrectMove(oldTag, newTag) {
-        const getTagSubListTest = (tag) => {
-            if (tag === undefined) return (s) => s.props.label.endsWith('Rooms');
-            return (s) => s.props.tagName === tag;
+    function expectCorrectMove(oldTagId, newTagId) {
+        const getTagSubListTest = (tagId) => {
+            return (s) => s.props.tagId === tagId;
         };
 
         // Default to finding the destination sublist with newTag
-        const destSubListTest = getTagSubListTest(newTag);
-        const srcSubListTest = getTagSubListTest(oldTag);
+        const destSubListTest = getTagSubListTest(newTagId);
+        const srcSubListTest = getTagSubListTest(oldTagId);
 
         // Set up the room that will be moved such that it has the correct state for a room in
-        // the section for oldTag
-        if (['m.favourite', 'm.lowpriority'].includes(oldTag)) movingRoom.tags = {[oldTag]: {}};
-        if (oldTag === DefaultTagID.DM) {
+        // the section for oldTagId
+        if (oldTagId === DefaultTagID.Favourite || oldTagId === DefaultTagID.LowPriority) {
+            movingRoom.tags = {[oldTagId]: {}};
+        } else if (oldTagId === DefaultTagID.DM) {
             // Mock inverse m.direct
             DMRoomMap.shared().roomToUser = {
                 [movingRoom.roomId]: '@someotheruser:domain',
@@ -167,7 +167,7 @@ describe('RoomList', () => {
         expectRoomInSubList(movingRoom, srcSubListTest);
 
         dis.dispatch({action: 'RoomListActions.tagRoom.pending', request: {
-            oldTag, newTag, room: movingRoom,
+            oldTagId, newTagId, room: movingRoom,
         }});
 
         // Run all setTimeouts for dispatches and room list rate limiting
@@ -287,7 +287,7 @@ describe('RoomList', () => {
             clock.runAll();
 
             // By default, the test will
-            expectRoomInSubList(otherRoom, (s) => s.props.label.endsWith('Rooms'));
+            expectRoomInSubList(otherRoom, (s) => s.props.tagId === DefaultTagID.Untagged);
         });
 
         itDoesCorrectOptimisticUpdatesForDraggedRoomTiles();
