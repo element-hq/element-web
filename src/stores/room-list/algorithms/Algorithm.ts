@@ -236,6 +236,9 @@ export class Algorithm extends EventEmitter {
                 }
             }
 
+            console.warn(`Sticky room changed tag & position from ${tag} / ${position} `
+                + `to ${this._stickyRoom.tag} / ${this._stickyRoom.position}`);
+
             tag = this._stickyRoom.tag;
             position = this._stickyRoom.position;
         }
@@ -639,17 +642,13 @@ export class Algorithm extends EventEmitter {
      */
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
         // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.trace(`Handle room update for ${room.roomId} called with cause ${cause}`);
+        console.log(`Handle room update for ${room.roomId} called with cause ${cause}`);
         try {
             await this.lock.acquireAsync();
 
             if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
             const isSticky = this._stickyRoom && this._stickyRoom.room === room;
-
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[RoomListDebug] @@ ${room.roomId} with ${cause} for tags ${this.roomIdsToTags[room.roomId]} and sticky is currently ${this._stickyRoom && this._stickyRoom.room ? this._stickyRoom.room.roomId : '<none>'} and last is ${this._lastStickyRoom && this._lastStickyRoom.room ? this._lastStickyRoom.room.roomId : '<none>'}`);
-
             if (cause === RoomUpdateCause.NewRoom) {
                 const isForLastSticky = this._lastStickyRoom && this._lastStickyRoom.room === room;
                 const roomTags = this.roomIdsToTags[room.roomId];
@@ -708,12 +707,12 @@ export class Algorithm extends EventEmitter {
                     this.roomIdsToTags[room.roomId] = newTags;
 
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.log(`Changing update cause for ${room.roomId} to TIMELINE to sort rooms`);
+                    console.log(`Changing update cause for ${room.roomId} to Timeline to sort rooms`);
                     cause = RoomUpdateCause.Timeline;
                     didTagChange = true;
                 } else {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.warn(`Received no-op update for ${room.roomId} - changing to TIMELINE update`);
+                    console.warn(`Received no-op update for ${room.roomId} - changing to Timeline update`);
                     cause = RoomUpdateCause.Timeline;
                 }
 
