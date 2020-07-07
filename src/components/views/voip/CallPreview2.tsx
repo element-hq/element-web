@@ -69,7 +69,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
             this.roomStoreToken.remove();
         }
         dis.unregister(this.dispatcherRef);
-        SettingsStore.unwatchSetting(this.settingsWatcherRef)
+        SettingsStore.unwatchSetting(this.settingsWatcherRef);
     }
 
     private onRoomViewStoreUpdate = (payload) => {
@@ -77,7 +77,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.setState({
             roomId: RoomViewStore.getRoomId(),
         });
-    }
+    };
 
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
@@ -89,7 +89,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
                 });
                 break;
         }
-    }
+    };
 
     private onCallViewClick = () => {
         const call = CallHandler.getAnyActiveCall();
@@ -99,13 +99,13 @@ export default class CallPreview extends React.Component<IProps, IState> {
                 room_id: call.groupRoomId || call.roomId,
             });
         }
-    }
+    };
 
     public render() {
         if (this.state.newRoomListActive) {
             const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
             const showCall = (
-                this.state.activeCall && 
+                this.state.activeCall &&
                 this.state.activeCall.call_state === 'connected' &&
                 !callForRoom
             );

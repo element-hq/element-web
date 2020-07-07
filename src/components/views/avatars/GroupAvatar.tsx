@@ -19,13 +19,13 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import BaseAvatar from './BaseAvatar';
 
 export interface IProps {
-        groupId?: string,
-        groupName?: string,
-        groupAvatarUrl?: string,
-        width?: number,
-        height?: number,
-        resizeMethod?: string,
-        onClick?: React.MouseEventHandler,
+        groupId?: string;
+        groupName?: string;
+        groupAvatarUrl?: string;
+        width?: number;
+        height?: number;
+        resizeMethod?: string;
+        onClick?: React.MouseEventHandler;
 }
 
 export default class GroupAvatar extends React.Component<IProps> {

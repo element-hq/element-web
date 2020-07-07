@@ -41,10 +41,10 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        this.dispatcherRef = dis.register(this.onAction)
+        this.dispatcherRef = dis.register(this.onAction);
         this.state = {
             incomingCall: null,
-        }
+        };
     }
 
     public componentWillUnmount() {
@@ -54,7 +54,7 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
     private onAction = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'call_state':
-                var call = CallHandler.getCall(payload.room_id);
+                const call = CallHandler.getCall(payload.room_id);
                 if (call && call.call_state === 'ringing') {
                     this.setState({
                         incomingCall: call,
@@ -65,7 +65,7 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
                     });
                 }
         }
-    }
+    };
 
     private onAnswerClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
@@ -73,7 +73,7 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
             action: 'answer',
             room_id: this.state.incomingCall.roomId,
         });
-    }
+    };
 
     private onRejectClick: React.MouseEventHandler = (e) => {
         e.stopPropagation();
@@ -81,7 +81,7 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
             action: 'hangup',
             room_id: this.state.incomingCall.roomId,
         });
-    }
+    };
 
     public render() {
         if (!this.state.incomingCall) {

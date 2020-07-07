@@ -53,7 +53,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
 
         this.state = {
             urls: RoomAvatar.getImageUrls(this.props),
-        }
+        };
     }
 
     public componentDidMount() {
@@ -83,7 +83,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         this.setState({
             urls: RoomAvatar.getImageUrls(this.props),
         });
-    }
+    };
 
     private static getImageUrls(props: IProps): string[] {
         return [
@@ -98,7 +98,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
             ), // highest priority
             RoomAvatar.getRoomAvatarUrl(props),
         ].filter(function(url) {
-            return (url != null && url != "");
+            return (url !== null && url !== "");
         });
     }
 
@@ -123,7 +123,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
         };
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    }
+    };
 
     public render() {
         /*eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/

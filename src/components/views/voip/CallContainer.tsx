@@ -32,6 +32,6 @@ export default class CallContainer extends React.PureComponent<IProps, IState> {
         return <div className="mx_CallContainer">
             <IncomingCallBox2 />
             <CallPreview ConferenceHandler={VectorConferenceHandler} />
-        </div>
+        </div>;
     }
 }

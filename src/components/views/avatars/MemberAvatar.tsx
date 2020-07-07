@@ -52,7 +52,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        this.state = MemberAvatar.getState(props)
+        this.state = MemberAvatar.getState(props);
     }
 
     public static getDerivedStateFromProps(nextProps: IProps): IState {

@@ -22,7 +22,7 @@ interface IProps {
 const PulsedAvatar: React.FC<IProps> = (props) => {
     return <div className="mx_PulsedAvatar">
         {props.children}
-    </div>
-}
+    </div>;
+};
 
 export default PulsedAvatar;

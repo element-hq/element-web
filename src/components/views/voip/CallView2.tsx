@@ -31,29 +31,28 @@ import PulsedAvatar from '../avatars/PulsedAvatar';
 interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
         // room; if not, we will show any active call.
-        room?: Room,
+        room?: Room;
 
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler?: any,
+        ConferenceHandler?: any;
 
         // maxHeight style attribute for the video panel
-        maxVideoHeight?: number,
+        maxVideoHeight?: number;
 
         // a callback which is called when the user clicks on the video div
-        onClick?: React.MouseEventHandler,
+        onClick?: React.MouseEventHandler;
 
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
-        onResize?: any,
+        onResize?: any;
 
         // classname applied to view,
-        className?: string,
+        className?: string;
 
         // Whether to show the hang up icon:W
-        showHangup?: boolean,
-
+        showHangup?: boolean;
 }
 
 interface IState {
@@ -71,7 +70,7 @@ export default class CallView extends React.Component<IProps, IState> {
         this.state = {
             // the call this view is displaying (if any)
             call: null,
-        }
+        };
 
         this.videoref = createRef();
     }
@@ -92,7 +91,7 @@ export default class CallView extends React.Component<IProps, IState> {
             return;
         }
         this.showCall();
-    }
+    };
 
     private showCall() {
         let call;
@@ -154,7 +153,7 @@ export default class CallView extends React.Component<IProps, IState> {
     public render() {
         let view: React.ReactNode;
         if (this.state.call && this.state.call.type === "voice") {
-            const client = MatrixClientPeg.get()
+            const client = MatrixClientPeg.get();
             const callRoom = client.getRoom(this.state.call.roomId);
 
             view = <AccessibleButton className="mx_CallView2_voice" onClick={this.props.onClick}>
@@ -189,7 +188,7 @@ export default class CallView extends React.Component<IProps, IState> {
                         room_id: this.state.call.roomId,
                     });
                 }}
-            />
+            />;
         }
 
         return <div className={this.props.className}>

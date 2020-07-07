@@ -93,10 +93,10 @@ const BaseAvatar = (props: IProps) => {
         title,
         url,
         urls,
-        width=40,
-        height=40,
-        resizeMethod="crop", // eslint-disable-line no-unused-vars
-        defaultToInitialLetter=true,
+        width = 40,
+        height = 40,
+        resizeMethod = "crop", // eslint-disable-line no-unused-vars
+        defaultToInitialLetter = true,
         onClick,
         inputRef,
         ...otherProps
@@ -133,7 +133,7 @@ const BaseAvatar = (props: IProps) => {
                 aria-hidden="true" />
         );
 
-        if (onClick != null) {
+        if (onClick !== null) {
             return (
                 <AccessibleButton
                     {...otherProps}
@@ -161,7 +161,7 @@ const BaseAvatar = (props: IProps) => {
         }
     }
 
-    if (onClick != null) {
+    if (onClick !== null) {
         return (
             <AccessibleButton
                 className={classNames("mx_BaseAvatar mx_BaseAvatar_image", props.className)}
