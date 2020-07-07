@@ -108,7 +108,7 @@ const BaseAvatar = (props: IProps) => {
         const initialLetter = AvatarLogic.getInitialLetter(name);
         const textNode = (
             <span
-                className={classNames("mx_BaseAvatar_initial", props.className)}
+                className="mx_BaseAvatar_initial"
                 aria-hidden="true"
                 style={{
                     fontSize: toPx(width * 0.65),
@@ -121,7 +121,7 @@ const BaseAvatar = (props: IProps) => {
         );
         const imgNode = (
             <img
-                className={classNames("mx_BaseAvatar_image", props.className)}
+                className="mx_BaseAvatar_image"
                 src={AvatarLogic.defaultAvatarUrlForString(idName || name)}
                 alt=""
                 title={title}
@@ -138,7 +138,7 @@ const BaseAvatar = (props: IProps) => {
                 <AccessibleButton
                     {...otherProps}
                     element="span"
-                    className={classNames("mx_BaseAvatar", props.className)}
+                    className="mx_BaseAvatar"
                     onClick={onClick}
                     inputRef={inputRef}
                 >
@@ -149,7 +149,7 @@ const BaseAvatar = (props: IProps) => {
         } else {
             return (
                 <span
-                    className={classNames("mx_BaseAvatar", props.className)}
+                    className="mx_BaseAvatar"
                     ref={inputRef}
                     {...otherProps}
                     role="presentation"
@@ -164,7 +164,7 @@ const BaseAvatar = (props: IProps) => {
     if (onClick !== null) {
         return (
             <AccessibleButton
-                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", props.className)}
+                className="mx_BaseAvatar mx_BaseAvatar_image"
                 element='img'
                 src={imageUrl}
                 onClick={onClick}
@@ -180,7 +180,7 @@ const BaseAvatar = (props: IProps) => {
     } else {
         return (
             <img
-                className={classNames("mx_BaseAvatar", "mx_BaseAvatar_image", props.className)}
+                className="mx_BaseAvatar mx_BaseAvatar_image"
                 src={imageUrl}
                 onError={onError}
                 style={{
