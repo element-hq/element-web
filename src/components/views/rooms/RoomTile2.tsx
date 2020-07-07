@@ -364,7 +364,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
 
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
-        const favoriteClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar"
+        const favoriteClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar";
 
         let contextMenu = null;
         if (this.state.generalMenuPosition) {
