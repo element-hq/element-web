@@ -966,6 +966,8 @@
     "Room version:": "Room version:",
     "Developer options": "Developer options",
     "Open Devtools": "Open Devtools",
+    "Make this room low priority": "Make this room low priority",
+    "Low priority rooms show up at the bottom of your room list in a dedicated section at the bottom of your room list": "Low priority rooms show up at the bottom of your room list in a dedicated section at the bottom of your room list",
     "This room is bridging messages to the following platforms. <a>Learn more.</a>": "This room is bridging messages to the following platforms. <a>Learn more.</a>",
     "This room isn’t bridging messages to any platforms. <a>Learn more.</a>": "This room isn’t bridging messages to any platforms. <a>Learn more.</a>",
     "Bridges": "Bridges",
