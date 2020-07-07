@@ -21,10 +21,7 @@ import ReactDOM from "react-dom";
 import classNames from "classnames";
 
 import {Key} from "../../Keyboard";
-import AccessibleButton, { IProps as IAccessibleButtonProps, ButtonEvent } from "../views/elements/AccessibleButton";
 import {Writeable} from "../../@types/common";
-import StyledCheckbox from "../views/elements/StyledCheckbox";
-import StyledRadioButton from "../views/elements/StyledRadioButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -390,187 +387,6 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
     }
 }
 
-interface IContextMenuButtonProps extends IAccessibleButtonProps {
-    label?: string;
-    // whether or not the context menu is currently open
-    isExpanded: boolean;
-}
-
-// Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuButton: React.FC<IContextMenuButtonProps> = ({ label, isExpanded, children, onClick, onContextMenu, ...props }) => {
-    return (
-        <AccessibleButton
-            {...props}
-            onClick={onClick}
-            onContextMenu={onContextMenu || onClick}
-            title={label}
-            aria-label={label}
-            aria-haspopup={true}
-            aria-expanded={isExpanded}
-        >
-            { children }
-        </AccessibleButton>
-    );
-};
-
-interface IMenuItemProps extends IAccessibleButtonProps {
-    label?: string;
-    className?: string;
-    onClick(ev: ButtonEvent);
-}
-
-// Semantic component for representing a role=menuitem
-export const MenuItem: React.FC<IMenuItemProps> = ({children, label, ...props}) => {
-    return (
-        <AccessibleButton {...props} role="menuitem" tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-
-interface IMenuGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-    label: string;
-    className?: string;
-}
-
-// Semantic component for representing a role=group for grouping menu radios/checkboxes
-export const MenuGroup: React.FC<IMenuGroupProps> = ({children, label, ...props}) => {
-    return <div {...props} role="group" aria-label={label}>
-        { children }
-    </div>;
-};
-
-interface IMenuItemCheckboxProps extends IAccessibleButtonProps {
-    label?: string;
-    active: boolean;
-    disabled?: boolean;
-    className?: string;
-    onClick(ev: ButtonEvent);
-}
-
-// Semantic component for representing a role=menuitemcheckbox
-export const MenuItemCheckbox: React.FC<IMenuItemCheckboxProps> = ({children, label, active = false, disabled = false, ...props}) => {
-    return (
-        <AccessibleButton {...props} role="menuitemcheckbox" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-
-interface IStyledMenuItemCheckboxProps extends IAccessibleButtonProps {
-    label?: string;
-    active: boolean;
-    disabled?: boolean;
-    className?: string;
-    onChange();
-    onClose(): void; // gets called after onChange on Key.ENTER
-}
-
-// Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox: React.FC<IStyledMenuItemCheckboxProps> = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
-    const onKeyDown = (e) => {
-        if (e.key === Key.ENTER || e.key === Key.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            onChange();
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            if (e.key === Key.ENTER) {
-                onClose();
-            }
-        }
-    };
-    const onKeyUp = (e) => {
-        // prevent the input default handler as we handle it on keydown to match
-        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
-        if (e.key === Key.SPACE || e.key === Key.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-    return (
-        <StyledCheckbox
-            {...props}
-            role="menuitemcheckbox"
-            aria-checked={checked}
-            checked={checked}
-            aria-disabled={disabled}
-            tabIndex={-1}
-            aria-label={label}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-        >
-            { children }
-        </StyledCheckbox>
-    );
-};
-
-interface IMenuItemRadioProps extends IAccessibleButtonProps {
-    label?: string;
-    active: boolean;
-    disabled?: boolean;
-    className?: string;
-    onClick(ev: ButtonEvent);
-}
-
-// Semantic component for representing a role=menuitemradio
-export const MenuItemRadio: React.FC<IMenuItemRadioProps> = ({children, label, active = false, disabled = false, ...props}) => {
-    return (
-        <AccessibleButton {...props} role="menuitemradio" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-
-
-interface IStyledMenuItemRadioProps extends IAccessibleButtonProps {
-    label?: string;
-    active: boolean;
-    disabled?: boolean;
-    className?: string;
-    onChange();
-    onClose(): void; // gets called after onChange on Key.ENTER
-}
-
-// Semantic component for representing a styled role=menuitemradio
-export const StyledMenuItemRadio: React.FC<IStyledMenuItemRadioProps> = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
-    const onKeyDown = (e) => {
-        if (e.key === Key.ENTER || e.key === Key.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            onChange();
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            if (e.key === Key.ENTER) {
-                onClose();
-            }
-        }
-    };
-    const onKeyUp = (e) => {
-        // prevent the input default handler as we handle it on keydown to match
-        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
-        if (e.key === Key.SPACE || e.key === Key.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-    return (
-        <StyledRadioButton
-            {...props}
-            role="menuitemradio"
-            aria-checked={checked}
-            checked={checked}
-            aria-disabled={disabled}
-            tabIndex={-1}
-            aria-label={label}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-        >
-            { children }
-        </StyledRadioButton>
-    );
-};
-
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
 export const toRightOf = (elementRect: DOMRect, chevronOffset = 12) => {
     const left = elementRect.right + window.pageXOffset + 3;
@@ -639,3 +455,12 @@ export function createMenu(ElementClass, props) {
 
     return {close: onFinished};
 }
+
+// re-export the semantic helper components for simplicity
+export {ContextMenuButton} from "../../accessibility/context_menu/ContextMenuButton";
+export {MenuGroup} from "../../accessibility/context_menu/MenuGroup";
+export {MenuItem} from "../../accessibility/context_menu/MenuItem";
+export {MenuItemCheckbox} from "../../accessibility/context_menu/MenuItemCheckbox";
+export {MenuItemRadio} from "../../accessibility/context_menu/MenuItemRadio";
+export {StyledMenuItemCheckbox} from "../../accessibility/context_menu/StyledMenuItemCheckbox";
+export {StyledMenuItemRadio} from "../../accessibility/context_menu/StyledMenuItemRadio";
