@@ -58,7 +58,7 @@ export class Algorithm extends EventEmitter {
     private _cachedStickyRooms: ITagMap = {}; // a clone of the _cachedRooms, with the sticky room
     private filteredRooms: ITagMap = {};
     private _stickyRoom: IStickyRoom = null;
-    private _lastStickyRoom: IStickyRoom = null;
+    private _lastStickyRoom: IStickyRoom = null; // only not-null when changing the sticky room
     private sortAlgorithms: ITagSortingMap;
     private listAlgorithms: IListOrderingMap;
     private algorithms: IOrderingAlgorithmMap;
@@ -165,15 +165,26 @@ export class Algorithm extends EventEmitter {
     }
 
     private async updateStickyRoom(val: Room) {
+        try {
+            return await this.doUpdateStickyRoom(val);
+        } finally {
+            this._lastStickyRoom = null; // clear to indicate we're done changing
+        }
+    }
+
+    private async doUpdateStickyRoom(val: Room) {
         // Note throughout: We need async so we can wait for handleRoomUpdate() to do its thing,
         // otherwise we risk duplicating rooms.
+
+        // Set the last sticky room to indicate that we're in a change. The code throughout the
+        // class can safely handle a null room, so this should be safe to do as a backup.
+        this._lastStickyRoom = this._stickyRoom || <IStickyRoom>{};
 
         // It's possible to have no selected room. In that case, clear the sticky room
         if (!val) {
             if (this._stickyRoom) {
                 const stickyRoom = this._stickyRoom.room;
                 this._stickyRoom = null; // clear before we go to update the algorithm
-                this._lastStickyRoom = stickyRoom;
 
                 // Lie to the algorithm and re-add the room to the algorithm
                 await this.handleRoomUpdate(stickyRoom, RoomUpdateCause.NewRoom);
@@ -183,7 +194,7 @@ export class Algorithm extends EventEmitter {
         }
 
         // When we do have a room though, we expect to be able to find it
-        const tag = this.roomIdsToTags[val.roomId][0];
+        let tag = this.roomIdsToTags[val.roomId][0];
         if (!tag) throw new Error(`${val.roomId} does not belong to a tag and cannot be sticky`);
 
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
@@ -201,7 +212,6 @@ export class Algorithm extends EventEmitter {
         // a new update for ourselves.
         const lastStickyRoom = this._stickyRoom;
         this._stickyRoom = null; // clear before we update the algorithm
-        this._lastStickyRoom = lastStickyRoom;
         this.recalculateStickyRoom();
 
         // When we do have the room, re-add the old room (if needed) to the algorithm
@@ -213,6 +223,22 @@ export class Algorithm extends EventEmitter {
         }
         // Lie to the algorithm and remove the room from it's field of view
         await this.handleRoomUpdate(val, RoomUpdateCause.RoomRemoved);
+
+        // Check for tag & position changes while we're here. We also check the room to ensure
+        // it is still the same room.
+        if (this._stickyRoom) {
+            if (this._stickyRoom.room !== val) {
+                // Check the room IDs just in case
+                if (this._stickyRoom.room.roomId === val.roomId) {
+                    console.warn("Sticky room changed references");
+                } else {
+                    throw new Error("Sticky room changed while the sticky room was changing");
+                }
+            }
+
+            tag = this._stickyRoom.tag;
+            position = this._stickyRoom.position;
+        }
 
         // Now that we're done lying to the algorithm, we need to update our position
         // marker only if the user is moving further down the same list. If they're switching
@@ -619,6 +645,8 @@ export class Algorithm extends EventEmitter {
 
             if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
 
+            const isSticky = this._stickyRoom && this._stickyRoom.room === room;
+
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] @@ ${room.roomId} with ${cause} for tags ${this.roomIdsToTags[room.roomId]} and sticky is currently ${this._stickyRoom && this._stickyRoom.room ? this._stickyRoom.room.roomId : '<none>'} and last is ${this._lastStickyRoom && this._lastStickyRoom.room ? this._lastStickyRoom.room.roomId : '<none>'}`);
 
@@ -637,7 +665,7 @@ export class Algorithm extends EventEmitter {
 
                 // If we have tags for a room and don't have the room referenced, the room reference
                 // probably changed. We need to swap out the problematic reference.
-                if (hasTags && !this.rooms.includes(room)) {
+                if (hasTags && !this.rooms.includes(room) && !isSticky) {
                     console.warn(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
                     this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
 
@@ -646,9 +674,17 @@ export class Algorithm extends EventEmitter {
                         throw new Error(`Failed to replace ${room.roomId} with an updated reference`);
                     }
                 }
+
+                // Like above, update the reference to the sticky room if we need to
+                if (hasTags && isSticky) {
+                    // Go directly in and set the sticky room's new reference, being careful not
+                    // to trigger a sticky room update ourselves.
+                    this._stickyRoom.room = room;
+                }
             }
 
             if (cause === RoomUpdateCause.PossibleTagChange) {
+                let didTagChange = false;
                 const oldTags = this.roomIdsToTags[room.roomId] || [];
                 const newTags = this.getTagsForRoom(room);
                 const diff = arrayDiff(oldTags, newTags);
@@ -674,10 +710,29 @@ export class Algorithm extends EventEmitter {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.log(`Changing update cause for ${room.roomId} to TIMELINE to sort rooms`);
                     cause = RoomUpdateCause.Timeline;
+                    didTagChange = true;
                 } else {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
                     console.warn(`Received no-op update for ${room.roomId} - changing to TIMELINE update`);
                     cause = RoomUpdateCause.Timeline;
+                }
+
+                if (didTagChange && isSticky) {
+                    // Manually update the tag for the sticky room without triggering a sticky room
+                    // update. The update will be handled implicitly by the sticky room handling and
+                    // requires no changes on our part, if we're in the middle of a sticky room change.
+                    if (this._lastStickyRoom) {
+                        this._stickyRoom = {
+                            room,
+                            tag: this.roomIdsToTags[room.roomId][0],
+                            position: 0, // right at the top as it changed tags
+                        };
+                    } else {
+                        // We have to clear the lock as the sticky room change will trigger updates.
+                        this.lock.release();
+                        await this.setStickyRoomAsync(room);
+                        await this.lock.acquireAsync();
+                    }
                 }
             }
 
