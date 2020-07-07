@@ -72,6 +72,34 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return this._matrixClient;
     }
 
+    // Intended for test usage
+    public async resetStore() {
+        await this.reset();
+        this.tagWatcher = new TagWatcher(this);
+        this.filterConditions = [];
+        this.initialListsGenerated = false;
+        this._matrixClient = null;
+
+        this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm = new Algorithm();
+        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+    }
+
+    // Public for test usage. Do not call this.
+    public async makeReady(client: MatrixClient) {
+        // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
+        this.checkEnabled();
+        if (!this.enabled) return;
+
+        this._matrixClient = client;
+
+        // Update any settings here, as some may have happened before we were logically ready.
+        console.log("Regenerating room lists: Startup");
+        await this.readAndCacheSettingsFromStore();
+        await this.regenerateAllLists();
+        this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
+    }
+
     // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
     private checkEnabled() {
         this.enabled = SettingsStore.getValue("feature_new_room_list");
@@ -115,17 +143,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
-            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
-            this.checkEnabled();
-            if (!this.enabled) return;
-
-            this._matrixClient = payload.matrixClient;
-
-            // Update any settings here, as some may have happened before we were logically ready.
-            console.log("Regenerating room lists: Startup");
-            await this.readAndCacheSettingsFromStore();
-            await this.regenerateAllLists();
-            this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
+            await this.makeReady(payload.matrixClient);
         }
 
         // TODO: Remove this once the RoomListStore becomes default
@@ -372,7 +390,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.emit(LISTS_UPDATE_EVENT, this);
     };
 
-    private async regenerateAllLists() {
+    // This is only exposed externally for the tests. Do not call this within the app.
+    public async regenerateAllLists() {
         console.warn("Regenerating all room lists");
 
         const sorts: ITagSortingMap = {};

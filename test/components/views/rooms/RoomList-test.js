@@ -15,11 +15,17 @@ import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
+import RoomListStore, {LISTS_UPDATE_EVENT} from "../../../../src/stores/room-list/RoomListStore2";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
 }
 
+function waitForRoomListStoreUpdate() {
+    return new Promise((resolve) => {
+        RoomListStore.instance.once(LISTS_UPDATE_EVENT, () => resolve());
+    });
+}
 
 describe('RoomList', () => {
     function createRoom(opts) {
@@ -34,7 +40,6 @@ describe('RoomList', () => {
     let client = null;
     let root = null;
     const myUserId = '@me:domain';
-    let clock = null;
 
     const movingRoomId = '!someroomid';
     let movingRoom;
@@ -43,14 +48,12 @@ describe('RoomList', () => {
     let myMember;
     let myOtherMember;
 
-    beforeEach(function() {
+    beforeEach(async function(done) {
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
         //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
         client.getUserId = MatrixClient.prototype.getUserId;
-
-        clock = lolex.install();
 
         DMRoomMap.makeShared();
 
@@ -102,16 +105,22 @@ describe('RoomList', () => {
         });
 
         client.getRoom = (roomId) => roomMap[roomId];
+
+        // Now that everything has been set up, prepare and update the store
+        await RoomListStore.instance.makeReady(client);
+
+        done();
     });
 
-    afterEach((done) => {
+    afterEach(async (done) => {
         if (parentDiv) {
             ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
             parentDiv = null;
         }
 
-        clock.uninstall();
+        await RoomListStore.instance.resetLayouts();
+        await RoomListStore.instance.resetStore();
 
         done();
     });
@@ -127,6 +136,7 @@ describe('RoomList', () => {
         try {
             const roomTiles = ReactTestUtils.scryRenderedComponentsWithType(containingSubList, RoomTile);
             console.info({roomTiles: roomTiles.length});
+            console.log("IS SAME?", room === roomTiles[0].props.room, room, roomTiles[0].props.room);
             expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
         } catch (err) {
             // truncate the error message because it's spammy
@@ -162,16 +172,11 @@ describe('RoomList', () => {
 
         dis.dispatch({action: 'MatrixActions.sync', prevState: null, state: 'PREPARED', matrixClient: client});
 
-        clock.runAll();
-
         expectRoomInSubList(movingRoom, srcSubListTest);
 
         dis.dispatch({action: 'RoomListActions.tagRoom.pending', request: {
             oldTagId, newTagId, room: movingRoom,
         }});
-
-        // Run all setTimeouts for dispatches and room list rate limiting
-        clock.runAll();
 
         expectRoomInSubList(movingRoom, destSubListTest);
     }
@@ -269,6 +274,12 @@ describe('RoomList', () => {
             };
             GroupStore._notifyListeners();
 
+            // We also have to mock the client's getGroup function for the room list to filter it.
+            // It's not smart enough to tell the difference between a real group and a template though.
+            client.getGroup = (groupId) => {
+                return {groupId};
+            };
+
             // Select tag
             dis.dispatch({action: 'select_tag', tag: '+group:domain'}, true);
         }
@@ -277,16 +288,13 @@ describe('RoomList', () => {
             setupSelectedTag();
         });
 
-        it('displays the correct rooms when the groups rooms are changed', () => {
+        it('displays the correct rooms when the groups rooms are changed', async () => {
             GroupStore.getGroupRooms = (groupId) => {
                 return [movingRoom, otherRoom];
             };
             GroupStore._notifyListeners();
 
-            // Run through RoomList debouncing
-            clock.runAll();
-
-            // By default, the test will
+            await waitForRoomListStoreUpdate();
             expectRoomInSubList(otherRoom, (s) => s.props.tagId === DefaultTagID.Untagged);
         });
 
