@@ -32,6 +32,7 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
 import {Key} from "../../Keyboard";
+import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -124,6 +125,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             if (slRect.top + headerHeight > bottom && !gotBottom) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                header.style.width = `${headerStickyWidth}px`;
                 header.style.removeProperty("top");
                 gotBottom = true;
             } else if ((slRect.top - (headerHeight / 3)) < top) {
@@ -140,6 +142,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                header.style.removeProperty("width");
                 header.style.removeProperty("top");
             }
         }
@@ -221,11 +224,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactNode {
         let breadcrumbs;
-        if (this.state.showBreadcrumbs) {
+        if (this.state.showBreadcrumbs && !this.props.isMinimized) {
             breadcrumbs = (
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar">
-                    {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
-                </div>
+                <IndicatorScrollbar
+                    className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
+                    verticalScrollsHorizontally={true}
+                >
+                    <RoomBreadcrumbs2 />
+                </IndicatorScrollbar>
             );
         }
 
@@ -270,6 +276,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
+            onResize={this.onResize}
         />;
 
         // TODO: Conference handling / calls: https://github.com/vector-im/riot-web/issues/14177
