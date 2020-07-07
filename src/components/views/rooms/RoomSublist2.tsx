@@ -315,34 +315,32 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
             const isUnreadFirst = RoomListStore.instance.getListOrder(this.props.tagId) === ListAlgorithm.Importance;
 
-            // Invites don't get some nonsense options, so only add them if we have to. We do
-            // this with an array instead of a containing div to ensure that the DOM structure
-            // is relatively sane.
-            let otherSections = [];
+            // Invites don't get some nonsense options, so only add them if we have to.
+            let otherSections = null;
             if (this.props.tagId !== DefaultTagID.Invite) {
-                otherSections.push(<hr key={otherSections.length} />);
-                otherSections.push(
-                    <div key={otherSections.length}>
-                        <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
-                        <StyledCheckbox
-                            onChange={this.onUnreadFirstChanged}
-                            checked={isUnreadFirst}
-                        >
-                            {_t("Always show first")}
-                        </StyledCheckbox>
-                    </div>,
-                );
-                otherSections.push(<hr key={otherSections.length} />);
-                otherSections.push(
-                    <div key={otherSections.length}>
-                        <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
-                        <StyledCheckbox
-                            onChange={this.onMessagePreviewChanged}
-                            checked={this.props.layout.showPreviews}
-                        >
-                            {_t("Message preview")}
-                        </StyledCheckbox>
-                    </div>,
+                otherSections = (
+                    <React.Fragment>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
+                            <StyledCheckbox
+                                onChange={this.onUnreadFirstChanged}
+                                checked={isUnreadFirst}
+                            >
+                                {_t("Always show first")}
+                            </StyledCheckbox>
+                        </div>
+                        <hr />
+                        <div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
+                            <StyledCheckbox
+                                onChange={this.onMessagePreviewChanged}
+                                checked={this.props.layout.showPreviews}
+                            >
+                                {_t("Message preview")}
+                            </StyledCheckbox>
+                        </div>
+                    </React.Fragment>
                 );
             }
 
