@@ -230,7 +230,9 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             }
 
             const orderedRooms = this.state.sublists[orderedTagId] || [];
-            if (orderedRooms.length === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
+            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
+            const totalTiles = orderedRooms.length + (extraTiles ? extraTiles.length : 0);
+            if (totalTiles === 0 && !ALWAYS_VISIBLE_TAGS.includes(orderedTagId)) {
                 continue; // skip tag - not needed
             }
 
@@ -238,7 +240,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
-            const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
             components.push(
                 <RoomSublist2
                     key={`sublist-${orderedTagId}`}
