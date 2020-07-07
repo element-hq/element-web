@@ -529,7 +529,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     </span>
                 );
                 if (this.props.isMinimized) showMoreText = null;
-                // TODO Roving tab index / treeitem?: https://github.com/vector-im/riot-web/issues/14180
                 showNButton = (
                     <RovingAccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
@@ -546,7 +545,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     </span>
                 );
                 if (this.props.isMinimized) showLessText = null;
-                // TODO Roving tab index / treeitem?: https://github.com/vector-im/riot-web/issues/14180
                 showNButton = (
                     <RovingAccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses}>
                         <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
