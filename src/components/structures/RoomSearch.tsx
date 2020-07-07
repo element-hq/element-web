@@ -81,7 +81,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
     private openSearch = () => {
         defaultDispatcher.dispatch({action: "show_left_panel"});
-        defaultDispatcher.dispatch({action: "focus_room_filter"})
+        defaultDispatcher.dispatch({action: "focus_room_filter"});
     };
 
     private onChange = () => {
