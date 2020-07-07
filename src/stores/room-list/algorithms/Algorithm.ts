@@ -109,6 +109,7 @@ export class Algorithm extends EventEmitter {
     }
 
     public getTagSorting(tagId: TagID): SortAlgorithm {
+        if (!this.sortAlgorithms) return null;
         return this.sortAlgorithms[tagId];
     }
 
@@ -125,6 +126,7 @@ export class Algorithm extends EventEmitter {
     }
 
     public getListOrdering(tagId: TagID): ListAlgorithm {
+        if (!this.listAlgorithms) return null;
         return this.listAlgorithms[tagId];
     }
 
