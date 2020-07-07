@@ -36,7 +36,7 @@ $focus-bg-color: #dddddd;
 $accent-fg-color: #ffffff;
 $accent-color-50pct: rgba(3, 179, 129, 0.5);    //#03b381 in rgb
 $accent-color-darker: #92caad;
-$accent-color-alt: #238CF5;
+$accent-color-alt: #238cf5;
 
 $selection-fg-color: $primary-bg-color;
 
@@ -46,8 +46,8 @@ $focus-brightness: 105%;
 $warning-color: $notice-primary-color; // red
 $orange-warning-color: #ff8d13; // used for true warnings
 // background colour for warnings
-$warning-bg-color: #DF2A8B;
-$info-bg-color: #2A9EDF;
+$warning-bg-color: #df2a8b;
+$info-bg-color: #2a9edf;
 $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -71,7 +71,7 @@ $tagpanel-bg-color: #27303a;
 $plinth-bg-color: $secondary-accent-color;
 
 // used by RoomDropTarget
-$droptarget-bg-color: rgba(255,255,255,0.5);
+$droptarget-bg-color: rgba(255, 255, 255, 0.5);
 
 // used by AddressSelector
 $selected-color: $secondary-accent-color;
@@ -157,18 +157,18 @@ $rte-group-pill-color: #aaa;
 
 $topleftmenu-color: #212121;
 $roomheader-color: #45474a;
-$roomheader-addroom-bg-color: #91A1C0;
+$roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
-$tagpanel-button-color: #91A1C0;
-$roomheader-button-color: #91A1C0;
-$groupheader-button-color: #91A1C0;
-$rightpanel-button-color: #91A1C0;
-$composer-button-color: #91A1C0;
+$tagpanel-button-color: #91a1c0;
+$roomheader-button-color: #91a1c0;
+$groupheader-button-color: #91a1c0;
+$rightpanel-button-color: #91a1c0;
+$composer-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
 $composer-e2e-icon-color: #c9ced6;
-$header-divider-color: #91A1C0;
+$header-divider-color: #91a1c0;
 
 // ********************
 
@@ -184,11 +184,11 @@ $roomsublist2-divider-color: $primary-fg-color;
 
 $roomtile2-preview-color: #9e9e9e;
 $roomtile2-default-badge-bg-color: #61708b;
-$roomtile2-selected-bg-color: #FFF;
+$roomtile2-selected-bg-color: #fff;
 
 $presence-online: $accent-color;
-$presence-away: orange; // TODO: Get color
-$presence-offline: #E3E8F0;
+$presence-away: #d9b072;
+$presence-offline: #e3e8f0;
 
 // ********************
 
