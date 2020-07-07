@@ -135,7 +135,6 @@ describe('RoomList', () => {
         try {
             const roomTiles = ReactTestUtils.scryRenderedComponentsWithType(containingSubList, RoomTile);
             console.info({roomTiles: roomTiles.length});
-            console.log("IS SAME?", room === roomTiles[0].props.room, room, roomTiles[0].props.room);
             expectedRoomTile = roomTiles.find((tile) => tile.props.room === room);
         } catch (err) {
             // truncate the error message because it's spammy
