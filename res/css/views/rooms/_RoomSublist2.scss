@@ -203,10 +203,11 @@ limitations under the License.
             // Update the render() function for RoomSublist2 if these change
             // Update the ListLayout class for minVisibleTiles if these change.
             //
-            // At 28px high and 8px padding on the top this equates to 0.73 of
+            // At 24px high, 8px padding on the top and 4px padding on the bottom  this equates to 0.73 of
             // a tile due to how the padding calculations work.
-            height: 28px;
+            height: 24px;
             padding-top: 8px;
+            padding-bottom: 4px;
 
             // We force this to the bottom so it will overlap rooms as needed.
             // We account for the space it takes up (24px) in the code through padding.
