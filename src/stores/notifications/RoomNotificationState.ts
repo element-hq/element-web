@@ -31,7 +31,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
     private _count: number;
     private _color: NotificationColor;
 
-    constructor(private room: Room) {
+    constructor(public readonly room: Room) {
         super();
         this.room.on("Room.receipt", this.handleReadReceipt);
         this.room.on("Room.timeline", this.handleRoomEventUpdate);
