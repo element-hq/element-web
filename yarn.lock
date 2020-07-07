@@ -1257,6 +1257,11 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.10.tgz#cc658ca319b6355399efc1f5b9e818f1a24bf999"
   integrity sha512-1UzDldn9GfYYEsWWnn/P4wkTlkZDH7lDb0wBMGbtIQc9zXEQq7FlKBdZUn6OBqD8sKZZ2RQO2mAjGpXiDGoRmQ==
 
+"@types/counterpart@^0.18.1":
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/@types/counterpart/-/counterpart-0.18.1.tgz#b1b784d9e54d9879f0a8cb12f2caedab65430fe8"
+  integrity sha512-PRuFlBBkvdDOtxlIASzTmkEFar+S66Ek48NVVTWMUjtJAdn5vyMSN8y6IZIoIymGpR36q2nZbIYazBWyFxL+IQ==
+
 "@types/fbemitter@*":
   version "2.0.32"
   resolved "https://registry.yarnpkg.com/@types/fbemitter/-/fbemitter-2.0.32.tgz#8ed204da0f54e9c8eaec31b1eec91e25132d082c"
@@ -5821,8 +5826,8 @@ mathml-tag-names@^2.0.1:
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "7.0.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/f683f4544aa5da150836b01c754062809119fa97"
+  version "7.1.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2a688bdac828dc62916437d83c72cef1e525d5f9"
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"

@@ -193,6 +193,10 @@ limitations under the License.
         .mx_EventTile_content {
             margin-right: 0;
         }
+
+        &.mx_AppearanceUserSettingsTab_Layout_RadioButton_selected {
+            border-color: $accent-color;
+        }
     }
 
     .mx_RadioButton {

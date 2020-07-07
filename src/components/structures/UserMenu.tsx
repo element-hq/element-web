@@ -14,27 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
-import {createRef} from "react";
-import {MatrixClientPeg} from "../../MatrixClientPeg";
+import React, { createRef } from "react";
+import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import {ActionPayload} from "../../dispatcher/payloads";
-import {Action} from "../../dispatcher/actions";
-import {_t} from "../../languageHandler";
-import {ChevronFace, ContextMenu, ContextMenuButton} from "./ContextMenu";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { Action } from "../../dispatcher/actions";
+import { _t } from "../../languageHandler";
+import { ChevronFace, ContextMenu, ContextMenuButton, MenuItem } from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
-import {OpenToTabPayload} from "../../dispatcher/payloads/OpenToTabPayload";
+import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
-import AccessibleButton, {ButtonEvent} from "../views/elements/AccessibleButton";
+import {ButtonEvent} from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
 import {getHomePageUrl} from "../../utils/pages";
-import {OwnProfileStore} from "../../stores/OwnProfileStore";
-import {UPDATE_EVENT} from "../../stores/AsyncStore";
+import { OwnProfileStore } from "../../stores/OwnProfileStore";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
@@ -49,6 +48,19 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
 }
+
+interface IMenuButtonProps {
+    iconClassName: string;
+    label: string;
+    onClick(ev: ButtonEvent);
+}
+
+const MenuButton: React.FC<IMenuButtonProps> = ({iconClassName, label, onClick}) => {
+    return <MenuItem label={label} onClick={onClick}>
+        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+        <span className="mx_IconizedContextMenu_label">{label}</span>
+    </MenuItem>;
+};
 
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
@@ -102,8 +114,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private onAction = (ev: ActionPayload) => {
         if (ev.action !== Action.ToggleUserMenu) return; // not interested
 
-        // For accessibility
-        if (this.buttonRef.current) this.buttonRef.current.click();
+        if (this.state.contextMenuPosition) {
+            this.setState({contextMenuPosition: null});
+        } else {
+            if (this.buttonRef.current) this.buttonRef.current.click();
+        }
     };
 
     private onOpenMenuClick = (ev: React.MouseEvent) => {
@@ -130,7 +145,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({contextMenuPosition: null});
     };
 
-    private onSwitchThemeClick = () => {
+    private onSwitchThemeClick = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
@@ -206,10 +224,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
-                <AccessibleButton onClick={this.onHomeClick}>
-                    <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconHome" />
-                    <span>{_t("Home")}</span>
-                </AccessibleButton>
+                <MenuButton
+                    iconClassName="mx_UserMenu_iconHome"
+                    label={_t("Home")}
+                    onClick={this.onHomeClick}
+                />
             );
         }
 
@@ -246,32 +265,38 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     {hostingLink}
                     <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
                         {homeButton}
-                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconBell" />
-                            <span className="mx_IconizedContextMenu_label">{_t("Notification settings")}</span>
-                        </AccessibleButton>
-                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconLock" />
-                            <span className="mx_IconizedContextMenu_label">{_t("Security & privacy")}</span>
-                        </AccessibleButton>
-                        <AccessibleButton onClick={(e) => this.onSettingsOpen(e, null)}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSettings" />
-                            <span className="mx_IconizedContextMenu_label">{_t("All settings")}</span>
-                        </AccessibleButton>
-                        <AccessibleButton onClick={this.onShowArchived}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconArchive" />
-                            <span className="mx_IconizedContextMenu_label">{_t("Archived rooms")}</span>
-                        </AccessibleButton>
-                        <AccessibleButton onClick={this.onProvideFeedback}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconMessage" />
-                            <span className="mx_IconizedContextMenu_label">{_t("Feedback")}</span>
-                        </AccessibleButton>
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconBell"
+                            label={_t("Notification settings")}
+                            onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconLock"
+                            label={_t("Security & privacy")}
+                            onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconSettings"
+                            label={_t("All settings")}
+                            onClick={(e) => this.onSettingsOpen(e, null)}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconArchive"
+                            label={_t("Archived rooms")}
+                            onClick={this.onShowArchived}
+                        />
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconMessage"
+                            label={_t("Feedback")}
+                            onClick={this.onProvideFeedback}
+                        />
                     </div>
                     <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
-                        <AccessibleButton onClick={this.onSignOutClick}>
-                            <span className="mx_IconizedContextMenu_icon mx_UserMenu_iconSignOut" />
-                            <span className="mx_IconizedContextMenu_label">{_t("Sign out")}</span>
-                        </AccessibleButton>
+                        <MenuButton
+                            iconClassName="mx_UserMenu_iconSignOut"
+                            label={_t("Sign out")}
+                            onClick={this.onSignOutClick}
+                        />
                     </div>
                 </div>
             </ContextMenu>
@@ -303,7 +328,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     className={classes}
                     onClick={this.onOpenMenuClick}
                     inputRef={this.buttonRef}
-                    label={_t("Account settings")}
+                    label={_t("User menu")}
                     isExpanded={!!this.state.contextMenuPosition}
                     onContextMenu={this.onContextMenu}
                 >

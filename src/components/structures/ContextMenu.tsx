@@ -23,6 +23,8 @@ import classNames from "classnames";
 import {Key} from "../../Keyboard";
 import AccessibleButton, { IProps as IAccessibleButtonProps, ButtonEvent } from "../views/elements/AccessibleButton";
 import {Writeable} from "../../@types/common";
+import StyledCheckbox from "../views/elements/StyledCheckbox";
+import StyledRadioButton from "../views/elements/StyledRadioButton";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -455,6 +457,54 @@ export const MenuItemCheckbox: React.FC<IMenuItemCheckboxProps> = ({children, la
     );
 };
 
+interface IStyledMenuItemCheckboxProps extends IAccessibleButtonProps {
+    label?: string;
+    active: boolean;
+    disabled?: boolean;
+    className?: string;
+    onChange();
+    onClose(): void; // gets called after onChange on Key.ENTER
+}
+
+// Semantic component for representing a styled role=menuitemcheckbox
+export const StyledMenuItemCheckbox: React.FC<IStyledMenuItemCheckboxProps> = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
+    return (
+        <StyledCheckbox
+            {...props}
+            role="menuitemcheckbox"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
+        >
+            { children }
+        </StyledCheckbox>
+    );
+};
+
 interface IMenuItemRadioProps extends IAccessibleButtonProps {
     label?: string;
     active: boolean;
@@ -469,6 +519,55 @@ export const MenuItemRadio: React.FC<IMenuItemRadioProps> = ({children, label, a
         <AccessibleButton {...props} role="menuitemradio" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
             { children }
         </AccessibleButton>
+    );
+};
+
+
+interface IStyledMenuItemRadioProps extends IAccessibleButtonProps {
+    label?: string;
+    active: boolean;
+    disabled?: boolean;
+    className?: string;
+    onChange();
+    onClose(): void; // gets called after onChange on Key.ENTER
+}
+
+// Semantic component for representing a styled role=menuitemradio
+export const StyledMenuItemRadio: React.FC<IStyledMenuItemRadioProps> = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
+    const onKeyDown = (e) => {
+        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+            e.stopPropagation();
+            e.preventDefault();
+            onChange();
+            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+            if (e.key === Key.ENTER) {
+                onClose();
+            }
+        }
+    };
+    const onKeyUp = (e) => {
+        // prevent the input default handler as we handle it on keydown to match
+        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+        if (e.key === Key.SPACE || e.key === Key.ENTER) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    };
+    return (
+        <StyledRadioButton
+            {...props}
+            role="menuitemradio"
+            aria-checked={checked}
+            checked={checked}
+            aria-disabled={disabled}
+            tabIndex={-1}
+            aria-label={label}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
+        >
+            { children }
+        </StyledRadioButton>
     );
 };
 

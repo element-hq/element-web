@@ -87,6 +87,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
+
+        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+        console.log(`[RoomListDebug] Constructed an ImportanceAlgorithm for ${tagId}`);
     }
 
     // noinspection JSMethodCanBeStatic

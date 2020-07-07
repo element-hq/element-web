@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "2.8.1",
+  "version": "2.9.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -120,6 +120,7 @@
     "@babel/register": "^7.7.4",
     "@peculiar/webcrypto": "^1.0.22",
     "@types/classnames": "^2.2.10",
+    "@types/counterpart": "^0.18.1",
     "@types/flux": "^3.1.9",
     "@types/lodash": "^4.14.152",
     "@types/modernizr": "^3.5.3",

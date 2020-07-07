@@ -132,7 +132,7 @@ const BaseAvatar = (props) => {
             );
         } else {
             return (
-                <span className="mx_BaseAvatar" ref={inputRef} {...otherProps}>
+                <span className="mx_BaseAvatar" ref={inputRef} {...otherProps} role="presentation">
                     { textNode }
                     { imgNode }
                 </span>

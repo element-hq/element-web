@@ -202,7 +202,7 @@ export const SETTINGS = {
         default: false,
     },
     "useCompactLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
