@@ -239,9 +239,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             }
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
-            // TODO: Verify that e2e rooms are handled on init: https://github.com/vector-im/riot-web/issues/14238
-            // It seems like when viewing the room the timeline is decrypted, rather than at startup. This could
-            // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
