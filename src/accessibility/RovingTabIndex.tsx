@@ -22,9 +22,13 @@ import React, {
     useMemo,
     useRef,
     useReducer,
+    Reducer,
+    RefObject,
+    Dispatch,
 } from "react";
-import PropTypes from "prop-types";
+
 import {Key} from "../Keyboard";
+import AccessibleButton from "../components/views/elements/AccessibleButton";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
@@ -41,7 +45,19 @@ import {Key} from "../Keyboard";
 
 const DOCUMENT_POSITION_PRECEDING = 2;
 
-const RovingTabIndexContext = createContext({
+type Ref = RefObject<HTMLElement>;
+
+interface IState {
+    activeRef: Ref;
+    refs: Ref[];
+}
+
+interface IContext {
+    state: IState;
+    dispatch: Dispatch<IAction>;
+}
+
+const RovingTabIndexContext = createContext<IContext>({
     state: {
         activeRef: null,
         refs: [], // list of refs in DOM order
@@ -50,16 +66,22 @@ const RovingTabIndexContext = createContext({
 });
 RovingTabIndexContext.displayName = "RovingTabIndexContext";
 
-// TODO use a TypeScript type here
-const types = {
-    REGISTER: "REGISTER",
-    UNREGISTER: "UNREGISTER",
-    SET_FOCUS: "SET_FOCUS",
-};
+enum Type {
+    Register = "REGISTER",
+    Unregister = "UNREGISTER",
+    SetFocus = "SET_FOCUS",
+}
 
-const reducer = (state, action) => {
+interface IAction {
+    type: Type;
+    payload: {
+        ref: Ref;
+    };
+}
+
+const reducer = (state: IState, action: IAction) => {
     switch (action.type) {
-        case types.REGISTER: {
+        case Type.Register: {
             if (state.refs.length === 0) {
                 // Our list of refs was empty, set activeRef to this first item
                 return {
@@ -92,7 +114,7 @@ const reducer = (state, action) => {
                 ],
             };
         }
-        case types.UNREGISTER: {
+        case Type.Unregister: {
             // filter out the ref which we are removing
             const refs = state.refs.filter(r => r !== action.payload.ref);
 
@@ -117,7 +139,7 @@ const reducer = (state, action) => {
                 refs,
             };
         }
-        case types.SET_FOCUS: {
+        case Type.SetFocus: {
             // update active ref
             return {
                 ...state,
@@ -129,13 +151,21 @@ const reducer = (state, action) => {
     }
 };
 
-export const RovingTabIndexProvider = ({children, handleHomeEnd, onKeyDown}) => {
-    const [state, dispatch] = useReducer(reducer, {
+interface IProps {
+    handleHomeEnd?: boolean;
+    children(renderProps: {
+        onKeyDownHandler(ev: React.KeyboardEvent);
+    });
+    onKeyDown?(ev: React.KeyboardEvent);
+}
+
+export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEnd, onKeyDown}) => {
+    const [state, dispatch] = useReducer<Reducer<IState, IAction>>(reducer, {
         activeRef: null,
         refs: [],
     });
 
-    const context = useMemo(() => ({state, dispatch}), [state]);
+    const context = useMemo<IContext>(() => ({state, dispatch}), [state]);
 
     const onKeyDownHandler = useCallback((ev) => {
         let handled = false;
@@ -171,19 +201,17 @@ export const RovingTabIndexProvider = ({children, handleHomeEnd, onKeyDown}) => 
         { children({onKeyDownHandler}) }
     </RovingTabIndexContext.Provider>;
 };
-RovingTabIndexProvider.propTypes = {
-    handleHomeEnd: PropTypes.bool,
-    onKeyDown: PropTypes.func,
-};
+
+type FocusHandler = () => void;
 
 // Hook to register a roving tab index
 // inputRef parameter specifies the ref to use
 // onFocus should be called when the index gained focus in any manner
 // isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`
 // ref should be passed to a DOM node which will be used for DOM compareDocumentPosition
-export const useRovingTabIndex = (inputRef) => {
+export const useRovingTabIndex = (inputRef: Ref): [FocusHandler, boolean, Ref] => {
     const context = useContext(RovingTabIndexContext);
-    let ref = useRef(null);
+    let ref = useRef<HTMLElement>(null);
 
     if (inputRef) {
         // if we are given a ref, use it instead of ours
@@ -193,13 +221,13 @@ export const useRovingTabIndex = (inputRef) => {
     // setup (after refs)
     useLayoutEffect(() => {
         context.dispatch({
-            type: types.REGISTER,
+            type: Type.Register,
             payload: {ref},
         });
         // teardown
         return () => {
             context.dispatch({
-                type: types.UNREGISTER,
+                type: Type.Unregister,
                 payload: {ref},
             });
         };
@@ -207,7 +235,7 @@ export const useRovingTabIndex = (inputRef) => {
 
     const onFocus = useCallback(() => {
         context.dispatch({
-            type: types.SET_FOCUS,
+            type: Type.SetFocus,
             payload: {ref},
         });
     }, [ref, context]);
@@ -216,9 +244,28 @@ export const useRovingTabIndex = (inputRef) => {
     return [onFocus, isActive, ref];
 };
 
+interface IRovingTabIndexWrapperProps {
+    inputRef?: Ref;
+    children(renderProps: {
+        onFocus: FocusHandler;
+        isActive: boolean;
+        ref: Ref;
+    });
+}
+
 // Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
-export const RovingTabIndexWrapper = ({children, inputRef}) => {
+export const RovingTabIndexWrapper: React.FC<IRovingTabIndexWrapperProps> = ({children, inputRef}) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
     return children({onFocus, isActive, ref});
+};
+
+interface IRovingAccessibleButtonProps extends React.ComponentProps<typeof AccessibleButton> {
+    inputRef?: Ref;
+}
+
+// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
+export const RovingAccessibleButton: React.FC<IRovingAccessibleButtonProps> = ({inputRef, ...props}) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
+    return <AccessibleButton {...props} onFocus={onFocus} inputRef={ref} tabIndex={isActive ? 0 : -1} />;
 };
 

@@ -70,8 +70,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     private tagPanelWatcherRef: string;
     private focusedElement = null;
 
-    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
-
     constructor(props: IProps) {
         super(props);
 
@@ -264,7 +262,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onVerticalArrow={this.onKeyDown}
                 />
                 <AccessibleButton
-                    // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}

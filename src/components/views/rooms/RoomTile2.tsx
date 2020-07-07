@@ -118,8 +118,6 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
 };
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
-    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
-
     constructor(props: IProps) {
         super(props);
 
@@ -390,7 +388,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement {
         // TODO: Invites: https://github.com/vector-im/riot-web/issues/14198
-        // TODO: a11y proper: https://github.com/vector-im/riot-web/issues/14180
 
         const classes = classNames({
             'mx_RoomTile2': true,
