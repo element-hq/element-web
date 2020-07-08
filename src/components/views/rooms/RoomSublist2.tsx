@@ -58,6 +58,7 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 
 const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+export const HEADER_HEIGHT = 32; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 
@@ -259,7 +260,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const possibleSticky = target.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
-        if (possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky')) {
+        const list = sublist.parentElement.parentElement;
+        // the scrollTop is capped at the height of the header in LeftPanel2
+        const isAtTop = list.scrollTop <= HEADER_HEIGHT;
+        const isSticky = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky');
+        if (isSticky && !isAtTop) {
             // is sticky - jump to list
             sublist.scrollIntoView({behavior: 'smooth'});
         } else {

@@ -21,6 +21,7 @@ import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList2 from "../views/rooms/RoomList2";
+import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
@@ -135,7 +136,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const bottom = rlRect.bottom;
         const top = rlRect.top;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
-        const headerHeight = 32; // Note: must match the CSS!
         const headerRightMargin = 24; // calculated from margins and widths to align with non-sticky tiles
 
         const headerStickyWidth = rlRect.width - headerRightMargin;
@@ -148,17 +148,22 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
             header.style.removeProperty("display"); // always clear display:none first
 
-            if (slRect.top + headerHeight > bottom && !gotBottom) {
+            if (slRect.top + HEADER_HEIGHT > bottom && !gotBottom) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
                 header.style.width = `${headerStickyWidth}px`;
                 header.style.removeProperty("top");
                 gotBottom = true;
-            } else if ((slRect.top - (headerHeight / 3)) < top) {
+            } else if (((slRect.top - (HEADER_HEIGHT * 0.6) + HEADER_HEIGHT) < top) || sublist === sublists[0]) {
+                // the header should become sticky once it is 60% or less out of view at the top.
+                // We also add HEADER_HEIGHT because the sticky header is put above the scrollable area,
+                // into the padding of .mx_LeftPanel2_roomListWrapper,
+                // by subtracting HEADER_HEIGHT from the top below.
+                // We also always try to make the first sublist header sticky.
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
                 header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${rlRect.top}px`;
+                header.style.top = `${rlRect.top - HEADER_HEIGHT}px`;
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
                 }
@@ -170,6 +175,26 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.style.removeProperty("width");
                 header.style.removeProperty("top");
             }
+        }
+
+        // add appropriate sticky classes to wrapper so it has
+        // the necessary top/bottom padding to put the sticky header in
+        const listWrapper = list.parentElement;
+        if (gotBottom) {
+            listWrapper.classList.add("stickyBottom");
+        } else {
+            listWrapper.classList.remove("stickyBottom");
+        }
+        if (lastTopHeader) {
+            listWrapper.classList.add("stickyTop");
+        } else {
+            listWrapper.classList.remove("stickyTop");
+        }
+
+        // ensure scroll doesn't go above the gap left by the header of
+        // the first sublist always being sticky if no other header is sticky
+        if (list.scrollTop < HEADER_HEIGHT) {
+            list.scrollTop = HEADER_HEIGHT;
         }
     }
 
@@ -324,15 +349,17 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div
-                        className={roomListClasses}
-                        onScroll={this.onScroll}
-                        ref={this.listContainerRef}
-                        // Firefox sometimes makes this element focusable due to
-                        // overflow:scroll;, so force it out of tab order.
-                        tabIndex={-1}
-                    >
-                        {roomList}
+                    <div className="mx_LeftPanel2_roomListWrapper">
+                        <div
+                            className={roomListClasses}
+                            onScroll={this.onScroll}
+                            ref={this.listContainerRef}
+                            // Firefox sometimes makes this element focusable due to
+                            // overflow:scroll;, so force it out of tab order.
+                            tabIndex={-1}
+                        >
+                            {roomList}
+                        </div>
                     </div>
                 </aside>
             </div>
