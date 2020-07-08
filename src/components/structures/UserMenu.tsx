@@ -280,11 +280,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             label={_t("All settings")}
                             onClick={(e) => this.onSettingsOpen(e, null)}
                         />
-                        <MenuButton
+                        {/* <MenuButton
                             iconClassName="mx_UserMenu_iconArchive"
                             label={_t("Archived rooms")}
                             onClick={this.onShowArchived}
-                        />
+                        /> */}
                         <MenuButton
                             iconClassName="mx_UserMenu_iconMessage"
                             label={_t("Feedback")}
