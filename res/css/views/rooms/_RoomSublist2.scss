@@ -251,24 +251,26 @@ limitations under the License.
         // Class name comes from the ResizableBox component
         // The hover state needs to use the whole sublist, not just the resizable box,
         // so that selector is below and one level higher.
-        .react-resizable-handle {
+        .mx_RoomSublist2_resizerHandle {
             cursor: ns-resize;
             border-radius: 3px;
 
-            // Update RESIZE_HANDLE_HEIGHT if this changes
-            height: 4px;
+            // Override styles from library
+            width: unset !important;
+            height: 4px !important; // Update RESIZE_HANDLE_HEIGHT if this changes
 
             // This is positioned directly below the 'show more' button.
             position: absolute;
-            bottom: 0;
+            bottom: 0 !important; // override from library
 
             // Together, these make the bar 64px wide
-            left: calc(50% - 32px);
-            right: calc(50% - 32px);
+            // These are also overridden from the library
+            left: calc(50% - 32px) !important;
+            right: calc(50% - 32px) !important;
         }
 
         &:hover, &.mx_RoomSublist2_hasMenuOpen {
-            .react-resizable-handle {
+            .mx_RoomSublist2_resizerHandle {
                 opacity: 0.8;
                 background-color: $primary-fg-color;
             }
