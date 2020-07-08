@@ -26,6 +26,7 @@ import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
+    ChevronFace,
     ContextMenu,
     ContextMenuButton,
     StyledMenuItemCheckbox,
@@ -39,6 +40,8 @@ import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import {ActionPayload} from "../../../dispatcher/payloads";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
@@ -56,6 +59,7 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 
 const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
+export const HEADER_HEIGHT = 32; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
 
@@ -93,6 +97,7 @@ interface IState {
 export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
+    private dispatcherRef: string;
 
     constructor(props: IProps) {
         super(props);
@@ -103,6 +108,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             isResizing: false,
         };
         this.state.notificationState.setRooms(this.props.rooms);
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
 
     private get numTiles(): number {
@@ -121,7 +127,28 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     public componentWillUnmount() {
         this.state.notificationState.destroy();
+        defaultDispatcher.unregister(this.dispatcherRef);
     }
+
+    private onAction = (payload: ActionPayload) => {
+        if (payload.action === "view_room" && payload.show_room_tile && this.props.rooms) {
+            // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
+            // where we lose the room we are changing from temporarily and then it comes back in an update right after.
+            setImmediate(() => {
+                const isCollapsed = this.props.layout.isCollapsed;
+                const roomIndex = this.props.rooms.findIndex((r) => r.roomId === payload.room_id);
+
+                if (isCollapsed && roomIndex > -1) {
+                    this.toggleCollapsed();
+                }
+                // extend the visible section to include the room if it is entirely invisible
+                if (roomIndex >= this.numVisibleTiles) {
+                    this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(roomIndex + 1, MAX_PADDING_HEIGHT);
+                    this.forceUpdate(); // because the layout doesn't trigger a re-render
+                }
+            });
+        }
+    };
 
     private onAddRoom = (e) => {
         e.stopPropagation();
@@ -180,7 +207,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: InputEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -252,7 +279,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         const possibleSticky = target.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
-        if (possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky')) {
+        const list = sublist.parentElement.parentElement;
+        // the scrollTop is capped at the height of the header in LeftPanel2
+        const isAtTop = list.scrollTop <= HEADER_HEIGHT;
+        const isSticky = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky');
+        if (isSticky && !isAtTop) {
             // is sticky - jump to list
             sublist.scrollIntoView({behavior: 'smooth'});
         } else {
@@ -384,7 +415,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
             contextMenu = (
                 <ContextMenu
-                    chevronFace="none"
+                    chevronFace={ChevronFace.None}
                     left={this.state.contextMenuPosition.left}
                     top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}

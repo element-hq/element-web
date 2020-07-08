@@ -54,9 +54,6 @@ limitations under the License.
             max-width: 100%;
             z-index: 2; // Prioritize headers in the visible list over sticky ones
 
-            // Set the same background color as the room list for sticky headers
-            background-color: $roomlist2-bg-color;
-
             // Create a flexbox to make ordering easy
             display: flex;
             align-items: center;
