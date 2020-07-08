@@ -15,43 +15,36 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import BaseAvatar from './BaseAvatar';
 
-export default createReactClass({
-    displayName: 'GroupAvatar',
+export interface IProps {
+        groupId?: string;
+        groupName?: string;
+        groupAvatarUrl?: string;
+        width?: number;
+        height?: number;
+        resizeMethod?: string;
+        onClick?: React.MouseEventHandler;
+}
 
-    propTypes: {
-        groupId: PropTypes.string,
-        groupName: PropTypes.string,
-        groupAvatarUrl: PropTypes.string,
-        width: PropTypes.number,
-        height: PropTypes.number,
-        resizeMethod: PropTypes.string,
-        onClick: PropTypes.func,
-    },
+export default class GroupAvatar extends React.Component<IProps> {
+    public static defaultProps = {
+        width: 36,
+        height: 36,
+        resizeMethod: 'crop',
+    };
 
-    getDefaultProps: function() {
-        return {
-            width: 36,
-            height: 36,
-            resizeMethod: 'crop',
-        };
-    },
-
-    getGroupAvatarUrl: function() {
+    getGroupAvatarUrl() {
         return MatrixClientPeg.get().mxcUrlToHttp(
             this.props.groupAvatarUrl,
             this.props.width,
             this.props.height,
             this.props.resizeMethod,
         );
-    },
+    }
 
-    render: function() {
-        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
+    render() {
         // extract the props we use from props so we can pass any others through
         // should consider adding this as a global rule in js-sdk?
         /*eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
@@ -65,5 +58,5 @@ export default createReactClass({
                 {...otherProps}
             />
         );
-    },
-});
+    }
+}

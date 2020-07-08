@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import React, {useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -26,9 +26,25 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {toPx} from "../../../utils/units";
 
-const useImageUrl = ({url, urls}) => {
-    const [imageUrls, setUrls] = useState([]);
-    const [urlsIndex, setIndex] = useState();
+interface IProps {
+    name: string; // The name (first initial used as default)
+    idName?: string; // ID for generating hash colours
+    title?: string; // onHover title text
+    url?: string; // highest priority of them all, shortcut to set in urls[0]
+    urls?: string[]; // [highest_priority, ... , lowest_priority]
+    width?: number;
+    height?: number;
+    // XXX: resizeMethod not actually used.
+    resizeMethod?: string;
+    defaultToInitialLetter?: boolean; // true to add default url
+    onClick?: React.MouseEventHandler;
+    inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
+    className?: string;
+}
+
+const useImageUrl = ({url, urls}): [string, () => void] => {
+    const [imageUrls, setUrls] = useState<string[]>([]);
+    const [urlsIndex, setIndex] = useState<number>();
 
     const onError = useCallback(() => {
         setIndex(i => i + 1); // try the next one
@@ -70,17 +86,17 @@ const useImageUrl = ({url, urls}) => {
     return [imageUrl, onError];
 };
 
-const BaseAvatar = (props) => {
+const BaseAvatar = (props: IProps) => {
     const {
         name,
         idName,
         title,
         url,
         urls,
-        width=40,
-        height=40,
-        resizeMethod="crop", // eslint-disable-line no-unused-vars
-        defaultToInitialLetter=true,
+        width = 40,
+        height = 40,
+        resizeMethod = "crop", // eslint-disable-line no-unused-vars
+        defaultToInitialLetter = true,
         onClick,
         inputRef,
         ...otherProps
@@ -117,7 +133,7 @@ const BaseAvatar = (props) => {
                 aria-hidden="true" />
         );
 
-        if (onClick != null) {
+        if (onClick !== null) {
             return (
                 <AccessibleButton
                     {...otherProps}
@@ -132,7 +148,12 @@ const BaseAvatar = (props) => {
             );
         } else {
             return (
-                <span className="mx_BaseAvatar" ref={inputRef} {...otherProps} role="presentation">
+                <span
+                    className="mx_BaseAvatar"
+                    ref={inputRef}
+                    {...otherProps}
+                    role="presentation"
+                >
                     { textNode }
                     { imgNode }
                 </span>
@@ -140,7 +161,7 @@ const BaseAvatar = (props) => {
         }
     }
 
-    if (onClick != null) {
+    if (onClick !== null) {
         return (
             <AccessibleButton
                 className="mx_BaseAvatar mx_BaseAvatar_image"
@@ -173,26 +194,5 @@ const BaseAvatar = (props) => {
     }
 };
 
-BaseAvatar.displayName = "BaseAvatar";
-
-BaseAvatar.propTypes = {
-    name: PropTypes.string.isRequired, // The name (first initial used as default)
-    idName: PropTypes.string, // ID for generating hash colours
-    title: PropTypes.string, // onHover title text
-    url: PropTypes.string, // highest priority of them all, shortcut to set in urls[0]
-    urls: PropTypes.array, // [highest_priority, ... , lowest_priority]
-    width: PropTypes.number,
-    height: PropTypes.number,
-    // XXX resizeMethod not actually used.
-    resizeMethod: PropTypes.string,
-    defaultToInitialLetter: PropTypes.bool, // true to add default url
-    onClick: PropTypes.func,
-    inputRef: PropTypes.oneOfType([
-        // Either a function
-        PropTypes.func,
-        // Or the instance of a DOM native element
-        PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-    ]),
-};
-
 export default BaseAvatar;
+export type BaseAvatarType = React.FC<IProps>;

@@ -51,6 +51,8 @@ import { INotificationState } from "../../../stores/notifications/INotificationS
 import NotificationBadge from "./NotificationBadge";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Volume } from "../../../RoomNotifsTypes";
+import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListActions from "../../../actions/RoomListActions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 
@@ -241,8 +243,22 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        // TODO: Support tagging: https://github.com/vector-im/riot-web/issues/14211
-        // TODO: XOR favourites and low priority: https://github.com/vector-im/riot-web/issues/14210
+        if (tagId === DefaultTagID.Favourite) {
+            const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
+            const isFavourite = roomTags.includes(DefaultTagID.Favourite);
+            const removeTag = isFavourite ? DefaultTagID.Favourite : DefaultTagID.LowPriority;
+            const addTag = isFavourite ? null : DefaultTagID.Favourite;
+            dis.dispatch(RoomListActions.tagRoom(
+                MatrixClientPeg.get(),
+                this.props.room,
+                removeTag,
+                addTag,
+                undefined,
+                0
+            ));
+        } else {
+            console.log(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
+        }
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
@@ -374,6 +390,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         // TODO: We could do with a proper invite context menu, unlike what showContextMenu suggests
 
+        const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
+
+        const isFavorite = roomTags.includes(DefaultTagID.Favourite);
+        const favouriteIconClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar";
+        const favouriteLabelClassName = isFavorite ? "mx_RoomTile2_contextMenu_activeRow" : "";
+        const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
+
         let contextMenu = null;
         if (this.state.generalMenuPosition) {
             contextMenu = (
@@ -381,12 +404,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <MenuItemCheckbox
+                                className={favouriteLabelClassName}
                                 onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}
-                                active={false} // TODO: https://github.com/vector-im/riot-web/issues/14283
-                                label={_t("Favourite")}
+                                active={isFavorite}
+                                label={favouriteLabel}
                             >
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconStar" />
-                                <span className="mx_IconizedContextMenu_label">{_t("Favourite")}</span>
+                                <span className={classNames("mx_IconizedContextMenu_icon", favouriteIconClassName)} />
+                                <span className="mx_IconizedContextMenu_label">{favouriteLabel}</span>
                             </MenuItemCheckbox>
                             <MenuItem onClick={this.onOpenRoomSettings} label={_t("Settings")}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />

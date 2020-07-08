@@ -52,6 +52,7 @@ import {
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel2 from "./LeftPanel2";
+import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 
 // We need to fetch each pinned message individually (if we don't already have it)
@@ -696,6 +697,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                         </div>
                     </DragDropContext>
                 </div>
+                <CallContainer />
             </MatrixClientContext.Provider>
         );
     }
