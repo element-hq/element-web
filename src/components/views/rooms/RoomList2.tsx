@@ -194,6 +194,17 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     show_room_tile: true, // to make sure the room gets scrolled into view
                 });
             }
+        } else if (payload.action === Action.StartRoomFilter) {
+            this.state.layouts.forEach(x => {
+                x.saveCollapsedState();
+                x.isCollapsed = false;
+            });
+            this.forceUpdate();
+        } else if (payload.action === Action.StopRoomFilter) {
+            this.state.layouts.forEach(x => {
+                x.restoreCollapsedState();
+            });
+            this.forceUpdate();
         }
     };
 

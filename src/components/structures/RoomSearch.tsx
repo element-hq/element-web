@@ -76,6 +76,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private clearInput = () => {
         if (!this.inputRef.current) return;
         this.inputRef.current.value = "";
+        defaultDispatcher.dispatch({action: Action.StopRoomFilter})
         this.onChange();
     };
 
@@ -102,9 +103,15 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private onFocus = (ev: React.FocusEvent<HTMLInputElement>) => {
         this.setState({focused: true});
         ev.target.select();
+        if (ev.target.value === "") {
+            defaultDispatcher.dispatch({action: Action.StartRoomFilter})
+        }
     };
 
-    private onBlur = () => {
+    private onBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
+        if (ev.target.value === "") {
+            defaultDispatcher.dispatch({action: Action.StopRoomFilter})
+        }
         this.setState({focused: false});
     };
 
