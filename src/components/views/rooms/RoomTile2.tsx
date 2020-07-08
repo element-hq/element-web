@@ -364,7 +364,9 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
 
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
-        const favoriteClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar";
+        const favouriteIconClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar";
+        const favouriteLabelClassName = isFavorite ? "mx_RoomTile2_contextMenu_activeRow" : "";
+        const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
 
         let contextMenu = null;
         if (this.state.generalMenuPosition) {
@@ -373,12 +375,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <MenuItemCheckbox
+                                className={favouriteLabelClassName}
                                 onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}
                                 active={isFavorite}
-                                label={_t("Favourite")}
+                                label={favouriteLabel}
                             >
-                                <span className={classNames("mx_IconizedContextMenu_icon", favoriteClassName)} />
-                                <span className="mx_IconizedContextMenu_label">{_t("Favourite")}</span>
+                                <span className={classNames("mx_IconizedContextMenu_icon", favouriteIconClassName)} />
+                                <span className="mx_IconizedContextMenu_label">{favouriteLabel}</span>
                             </MenuItemCheckbox>
                             <MenuItem onClick={this.onOpenRoomSettings} label={_t("Settings")}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
