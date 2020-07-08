@@ -41,6 +41,11 @@ limitations under the License.
     // with text-align in parent
     display: inline-block;
     padding: 0 4px;
+    color: $roomtile-badge-fg-color;
+    background-color: $roomtile-name-color;
+}
+
+.mx_JumpToBottomButton_highlight .mx_JumpToBottomButton_badge {
     color: $secondary-accent-color;
     background-color: $warning-color;
 }
