@@ -153,11 +153,16 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.style.width = `${headerStickyWidth}px`;
                 header.style.removeProperty("top");
                 gotBottom = true;
-            } else if ((slRect.top - (headerHeight / 3)) < top) {
+            } else if (((slRect.top - (headerHeight * 0.6) + headerHeight) < top) || sublist === sublists[0]) {
+                // the header should become sticky once it is 60% or less out of view at the top.
+                // We also add headerHeight because the sticky header is put above the scrollable area,
+                // into the padding of .mx_LeftPanel2_roomListWrapper,
+                // by subtracting headerHeight from the top below.
+                // We also always try to make the first sublist header sticky.
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
                 header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${rlRect.top}px`;
+                header.style.top = `${rlRect.top - headerHeight}px`;
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
                 }
@@ -171,6 +176,26 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 header.style.removeProperty("width");
                 header.style.removeProperty("top");
             }
+        }
+
+        // add appropriate sticky classes to wrapper so it has
+        // the necessary top/bottom padding to put the sticky header in
+        const listWrapper = list.parentElement;
+        if (gotBottom) {
+            listWrapper.classList.add("stickyBottom");
+        } else {
+            listWrapper.classList.remove("stickyBottom");
+        }
+        if (lastTopHeader) {
+            listWrapper.classList.add("stickyTop");
+        } else {
+            listWrapper.classList.remove("stickyTop");
+        }
+
+        // ensure scroll doesn't go above the gap left by the header of
+        // the first sublist always being sticky if no other header is sticky
+        if (list.scrollTop < headerHeight) {
+            list.scrollTop = headerHeight;
         }
     }
 

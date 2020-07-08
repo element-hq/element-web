@@ -127,6 +127,13 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             overflow: hidden;
             min-height: 0;
 
+            &.stickyBottom {
+                padding-bottom: 32px;
+            }
+
+            &.stickyTop {
+                padding-top: 32px;
+            }
         }
 
         .mx_LeftPanel2_actualRoomListContainer {
