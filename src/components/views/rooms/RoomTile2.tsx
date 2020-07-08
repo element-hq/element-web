@@ -27,6 +27,7 @@ import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import {
+    ChevronFace,
     ContextMenu,
     ContextMenuButton,
     MenuItemRadio,
@@ -87,7 +88,7 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.pageXOffset - 9;
     const top = elementRect.bottom + window.pageYOffset + 17;
-    const chevronFace = "none";
+    const chevronFace = ChevronFace.None;
     return {left, top, chevronFace};
 };
 
@@ -170,7 +171,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({selected: isActive});
     };
 
-    private onNotificationsMenuOpenClick = (ev: InputEvent) => {
+    private onNotificationsMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -181,7 +182,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({notificationsMenuPosition: null});
     };
 
-    private onGeneralMenuOpenClick = (ev: InputEvent) => {
+    private onGeneralMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;

@@ -27,6 +27,7 @@ import RoomTile2 from "./RoomTile2";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
+    ChevronFace,
     ContextMenu,
     ContextMenuButton,
     StyledMenuItemCheckbox,
@@ -161,7 +162,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: InputEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -365,7 +366,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
             contextMenu = (
                 <ContextMenu
-                    chevronFace="none"
+                    chevronFace={ChevronFace.None}
                     left={this.state.contextMenuPosition.left}
                     top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
