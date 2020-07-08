@@ -325,15 +325,17 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div
-                        className={roomListClasses}
-                        onScroll={this.onScroll}
-                        ref={this.listContainerRef}
-                        // Firefox sometimes makes this element focusable due to
-                        // overflow:scroll;, so force it out of tab order.
-                        tabIndex={-1}
-                    >
-                        {roomList}
+                    <div className="mx_LeftPanel2_roomListWrapper">
+                        <div
+                            className={roomListClasses}
+                            onScroll={this.onScroll}
+                            ref={this.listContainerRef}
+                            // Firefox sometimes makes this element focusable due to
+                            // overflow:scroll;, so force it out of tab order.
+                            tabIndex={-1}
+                        >
+                            {roomList}
+                        </div>
                     </div>
                 </aside>
             </div>
