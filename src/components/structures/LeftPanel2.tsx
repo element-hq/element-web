@@ -124,42 +124,42 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     }
 
     private doStickyHeaders(list: HTMLDivElement) {
-        const rlRect = list.getBoundingClientRect();
-        const bottom = rlRect.bottom;
-        const top = rlRect.top;
+        const topEdge = list.scrollTop;
+        const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
-        const headerRightMargin = 24; // calculated from margins and widths to align with non-sticky tiles
 
-        const headerStickyWidth = rlRect.width - headerRightMargin;
+        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerStickyWidth = list.clientWidth - headerRightMargin;
 
-        let gotBottom = false;
         let lastTopHeader;
+        let firstBottomHeader;
         for (const sublist of sublists) {
-            const slRect = sublist.getBoundingClientRect();
-
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
             header.style.removeProperty("display"); // always clear display:none first
+            headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
 
-            if (slRect.top + HEADER_HEIGHT > bottom && !gotBottom) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.removeProperty("top");
-                gotBottom = true;
-            } else if (((slRect.top - (HEADER_HEIGHT * 0.6) + HEADER_HEIGHT) < top) || sublist === sublists[0]) {
-                // the header should become sticky once it is 60% or less out of view at the top.
-                // We also add HEADER_HEIGHT because the sticky header is put above the scrollable area,
-                // into the padding of .mx_LeftPanel2_roomListWrapper,
-                // by subtracting HEADER_HEIGHT from the top below.
-                // We also always try to make the first sublist header sticky.
+            // When an element is <=40% off screen, make it take over
+            const offScreenFactor = 0.4;
+            const isOffTop = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) <= topEdge;
+            const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
+
+            if (isOffTop || sublist === sublists[0]) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
                 header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${rlRect.top - HEADER_HEIGHT}px`;
+                header.style.top = `${list.parentElement.offsetTop}px`;
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
                 }
                 lastTopHeader = header;
+            } else if (isOffBottom && !firstBottomHeader) {
+                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
+                header.style.width = `${headerStickyWidth}px`;
+                firstBottomHeader = header;
             } else {
                 header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
@@ -171,22 +171,16 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
         // add appropriate sticky classes to wrapper so it has
         // the necessary top/bottom padding to put the sticky header in
-        const listWrapper = list.parentElement;
-        if (gotBottom) {
-            listWrapper.classList.add("stickyBottom");
-        } else {
-            listWrapper.classList.remove("stickyBottom");
-        }
+        const listWrapper = list.parentElement; // .mx_LeftPanel2_roomListWrapper
         if (lastTopHeader) {
-            listWrapper.classList.add("stickyTop");
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyTop");
         } else {
-            listWrapper.classList.remove("stickyTop");
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyTop");
         }
-
-        // ensure scroll doesn't go above the gap left by the header of
-        // the first sublist always being sticky if no other header is sticky
-        if (list.scrollTop < HEADER_HEIGHT) {
-            list.scrollTop = HEADER_HEIGHT;
+        if (firstBottomHeader) {
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyBottom");
+        } else {
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyBottom");
         }
     }
 
