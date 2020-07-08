@@ -24,7 +24,6 @@ import {RovingAccessibleButton, RovingTabIndexWrapper} from "../../../accessibil
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
-import { ResizableBox, ResizeCallbackData } from "react-resizable";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
     ChevronFace,
@@ -41,9 +40,11 @@ import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
-import StyledCheckbox from "../elements/StyledCheckbox";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
+import { Enable, Resizable } from "re-resizable";
+import { Direction } from "re-resizable/lib/resizer";
+import { polyfillTouchEvent } from "../../../@types/polyfill";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -61,6 +62,9 @@ const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
 export const HEADER_HEIGHT = 32; // As defined by CSS
 
 const MAX_PADDING_HEIGHT = SHOW_N_BUTTON_HEIGHT + RESIZE_HANDLE_HEIGHT;
+
+// HACK: We really shouldn't have to do this.
+polyfillTouchEvent();
 
 interface IProps {
     forRooms: boolean;
@@ -151,10 +155,25 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
 
-    private onResize = (e: React.MouseEvent, data: ResizeCallbackData) => {
-        const direction = e.movementY < 0 ? -1 : +1;
-        const tileDiff = this.props.layout.pixelsToTiles(Math.abs(e.movementY)) * direction;
-        this.props.layout.setVisibleTilesWithin(tileDiff, this.numTiles);
+    private onResize = (
+        e: MouseEvent | TouchEvent,
+        travelDirection: Direction,
+        refToElement: HTMLDivElement,
+        delta: { width: number, height: number }, // TODO: Use re-resizer's NumberSize when it is exposed as the type
+    ) => {
+        // Do some sanity checks, but in reality we shouldn't need these.
+        if (travelDirection !== "bottom") return;
+        if (delta.height === 0) return; // something went wrong, so just ignore it.
+
+        // NOTE: the movement in the MouseEvent (not present on a TouchEvent) is inaccurate
+        // for our purposes. The delta provided by the library is also a change *from when
+        // resizing started*, meaning it is fairly useless for us. This is why we just use
+        // the client height and run with it.
+
+        const heightBefore = this.props.layout.visibleTiles;
+        const heightInTiles = this.props.layout.pixelsToTiles(refToElement.clientHeight);
+        this.props.layout.setVisibleTilesWithin(heightInTiles, this.numTiles);
+        if (heightBefore === this.props.layout.visibleTiles) return; // no-op
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -587,9 +606,19 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             }
 
             // Figure out if we need a handle
-            let handles = ['s'];
+            const handles: Enable = {
+                bottom: true, // the only one we need, but the others must be explicitly false
+                bottomLeft: false,
+                bottomRight: false,
+                left: false,
+                right: false,
+                top: false,
+                topLeft: false,
+                topRight: false,
+            };
             if (layout.visibleTiles >= this.numTiles && this.numTiles <= layout.minVisibleTiles) {
-                handles = []; // no handles, we're at a minimum
+                // we're at a minimum, don't have a bottom handle
+                handles.bottom = false;
             }
 
             // We have to account for padding so we can accommodate a 'show more' button and
@@ -613,22 +642,25 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
             const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
 
+            const dimensions = {
+                height: tilesPx,
+            };
             content = (
-                <ResizableBox
-                    width={-1}
-                    height={tilesPx}
-                    axis="y"
-                    minConstraints={[-1, minTilesPx]}
-                    maxConstraints={[-1, maxTilesPx]}
-                    resizeHandles={handles}
-                    onResize={this.onResize}
-                    className="mx_RoomSublist2_resizeBox"
+                <Resizable
+                    size={dimensions as any}
+                    minHeight={minTilesPx}
+                    maxHeight={maxTilesPx}
                     onResizeStart={this.onResizeStart}
                     onResizeStop={this.onResizeStop}
+                    onResize={this.onResize}
+                    handleWrapperClass="mx_RoomSublist2_resizerHandles"
+                    handleClasses={{bottom: "mx_RoomSublist2_resizerHandle"}}
+                    className="mx_RoomSublist2_resizeBox"
+                    enable={handles}
                 >
                     {visibleTiles}
                     {showNButton}
-                </ResizableBox>
+                </Resizable>
             );
         }
 
