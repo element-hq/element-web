@@ -146,6 +146,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             const slRect = sublist.getBoundingClientRect();
 
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+            header.style.removeProperty("display"); // always clear display:none first
 
             if (slRect.top + headerHeight > bottom && !gotBottom) {
                 header.classList.add("mx_RoomSublist2_headerContainer_sticky");
@@ -161,8 +162,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
                 }
-                // first unset it, if set in last iteration
-                header.style.removeProperty("display");
                 lastTopHeader = header;
             } else {
                 header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
