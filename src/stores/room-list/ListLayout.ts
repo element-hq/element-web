@@ -89,11 +89,12 @@ export class ListLayout {
         return 5 + RESIZER_BOX_FACTOR;
     }
 
-    public setVisibleTilesWithin(diff: number, maxPossible: number) {
+    public setVisibleTilesWithin(newVal: number, maxPossible: number) {
+        maxPossible = maxPossible + RESIZER_BOX_FACTOR;
         if (this.visibleTiles > maxPossible) {
-            this.visibleTiles = maxPossible + diff;
+            this.visibleTiles = maxPossible;
         } else {
-            this.visibleTiles += diff;
+            this.visibleTiles = newVal;
         }
     }
 
