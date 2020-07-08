@@ -170,7 +170,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     };
 
     private scrollIntoView = () => {
-        console.log("DEBUG scrollIntoView", this.roomTileRef.current);
         if (!this.roomTileRef.current) return;
         this.roomTileRef.current.scrollIntoView({
             block: "nearest",
