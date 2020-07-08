@@ -190,7 +190,7 @@ export default class AdvancedRoomSettingsTab extends React.Component {
                         onChange={this._onToggleLowPriorityTag}
                         label={_t(
                             "Low priority rooms show up at the bottom of your room list" +
-                            " in a dedicated section at the bottom of your room list"
+                            " in a dedicated section at the bottom of your room list",
                         )}
                     />
                 </div>
