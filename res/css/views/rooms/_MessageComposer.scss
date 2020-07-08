@@ -196,22 +196,27 @@ limitations under the License.
         mask-size: contain;
         mask-position: center;
     }
+
+    &.mx_MessageComposer_hangup::before {
+        background-color: $warning-color;
+    }
 }
+
 
 .mx_MessageComposer_upload::before {
     mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }
 
 .mx_MessageComposer_hangup::before {
-    mask-image: url('$(res)/img/hangup.svg');
+    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
 }
 
 .mx_MessageComposer_voicecall::before {
-    mask-image: url('$(res)/img/element-icons/voice-call.svg');
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
 }
 
 .mx_MessageComposer_videocall::before {
-    mask-image: url('$(res)/img/element-icons/video-call.svg');
+    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
 }
 
 .mx_MessageComposer_emoji::before {
