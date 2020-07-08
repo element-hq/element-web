@@ -132,7 +132,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         e: MouseEvent | TouchEvent,
         travelDirection: Direction,
         refToElement: HTMLDivElement,
-        delta: { width: number, height: number }, // TODO: Use NumberSize from re-resizer when it is exposed
+        delta: { width: number, height: number }, // TODO: Use re-resizer's NumberSize when it is exposed as the type
     ) => {
         // Do some sanity checks, but in reality we shouldn't need these.
         if (travelDirection !== "bottom") return;
