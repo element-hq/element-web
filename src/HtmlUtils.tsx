@@ -125,6 +125,13 @@ export function sanitizedHtmlNode(insaneHtml: string) {
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
 }
 
+export function sanitizedHtmlNodeInnerText(insaneHtml: string) {
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+    const contentDiv = document.createElement("div");
+    contentDiv.innerHTML = saneHtml;
+    return contentDiv.innerText;
+}
+
 /**
  * Tests if a URL from an untrusted source may be safely put into the DOM
  * The biggest threat here is javascript: URIs.
