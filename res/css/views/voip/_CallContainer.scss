@@ -1,0 +1,89 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CallContainer {
+    position: absolute;
+    right: 20px;
+    bottom: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 100;
+    box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.08);
+
+    cursor: pointer;
+
+    .mx_CallPreview {
+        .mx_VideoView {
+            width: 350px;
+        }
+
+        .mx_VideoView_localVideoFeed {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    }
+
+    .mx_IncomingCallBox2 {
+        min-width: 250px;
+        background-color: $primary-bg-color;
+        padding: 8px;
+
+        .mx_IncomingCallBox2_CallerInfo {
+            display: flex;
+            direction: row;
+
+            img {
+                margin: 8px;
+            }
+
+            > div {
+                display: flex;
+                flex-direction: column;
+
+                justify-content: center;
+            }
+
+            h1, p {
+                margin: 0px;
+                padding: 0px;
+                font-size: $font-14px;
+                line-height: $font-16px;
+            }
+
+            h1 {
+                font-weight: bold;
+            }
+        }
+
+        .mx_IncomingCallBox2_buttons {
+            padding: 8px;
+            display: flex;
+            flex-direction: row;
+
+            > .mx_IncomingCallBox2_spacer {
+                width: 8px;
+            }
+
+            > * {
+                flex-shrink: 0;
+                flex-grow: 1;
+                margin-right: 0;
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+        }
+    }
+}
