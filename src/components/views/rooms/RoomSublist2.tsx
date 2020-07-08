@@ -437,24 +437,22 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     return (
                         <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus}>
                             <div className="mx_RoomSublist2_stickable">
-                                <div className="mx_RoomSublist2_stickyHeaderBlur">
-                                    <AccessibleButton
-                                        onFocus={onFocus}
-                                        inputRef={ref}
-                                        tabIndex={tabIndex}
-                                        className="mx_RoomSublist2_headerText"
-                                        role="treeitem"
-                                        aria-level={1}
-                                        onClick={this.onHeaderClick}
-                                        onContextMenu={this.onContextMenu}
-                                    >
-                                        <span className={collapseClasses} />
-                                        <span>{this.props.label}</span>
-                                    </AccessibleButton>
-                                    {this.renderMenu()}
-                                    {this.props.isMinimized ? null : badgeContainer}
-                                    {this.props.isMinimized ? null : addRoomButton}
-                                </div>
+                                <AccessibleButton
+                                    onFocus={onFocus}
+                                    inputRef={ref}
+                                    tabIndex={tabIndex}
+                                    className="mx_RoomSublist2_headerText"
+                                    role="treeitem"
+                                    aria-level={1}
+                                    onClick={this.onHeaderClick}
+                                    onContextMenu={this.onContextMenu}
+                                >
+                                    <span className={collapseClasses} />
+                                    <span>{this.props.label}</span>
+                                </AccessibleButton>
+                                {this.renderMenu()}
+                                {this.props.isMinimized ? null : badgeContainer}
+                                {this.props.isMinimized ? null : addRoomButton}
                             </div>
                             {this.props.isMinimized ? badgeContainer : null}
                             {this.props.isMinimized ? addRoomButton : null}

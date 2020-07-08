@@ -19,19 +19,6 @@
     .mx_LeftPanel2 .mx_LeftPanel2_roomListContainer {
         backdrop-filter: blur(175px);
     }
-
-    // sticky headers need their own blur, and their own background to make it opaque
-    .mx_RoomSublist2_headerContainer_sticky {
-        background-size: cover;
-        background-image: var(--avatar-url);
-        background-position: center;
-    }
-}
-
-/* outside of @supports as the backdrop-filter will be ignored, and we still apply the mostly-opaque background color */
-.mx_RoomSublist2_headerContainer_sticky .mx_RoomSublist2_stickyHeaderBlur {
-    backdrop-filter: blur(100px);
-    background-color: $roomlist2-bg-color;
 }
 
 .mx_RoomSublist2_showNButton {
