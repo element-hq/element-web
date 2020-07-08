@@ -17,10 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
-import ReplyThread from "./components/views/elements/ReplyThread";
-
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
 import * as linkify from 'linkifyjs';
@@ -28,12 +24,13 @@ import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
 import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
-import {MatrixClientPeg} from './MatrixClientPeg';
+import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 
-import EMOJIBASE_REGEX from 'emojibase-regex';
+import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
 import {SHORTCODE_TO_EMOJI, getEmojiFromUnicode} from "./emoji";
+import ReplyThread from "./components/views/elements/ReplyThread";
 
 linkifyMatrix(linkify);
 
@@ -64,7 +61,7 @@ const PERMITTED_URL_SCHEMES = ['http', 'https', 'ftp', 'mailto', 'magnet'];
  * need emojification.
  * unicodeToImage uses this function.
  */
-function mightContainEmoji(str) {
+function mightContainEmoji(str: string) {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -74,7 +71,7 @@ function mightContainEmoji(str) {
  * @param {String} char The emoji character
  * @return {String} The shortcode (such as :thumbup:)
  */
-export function unicodeToShortcode(char) {
+export function unicodeToShortcode(char: string) {
     const data = getEmojiFromUnicode(char);
     return (data && data.shortcodes ? `:${data.shortcodes[0]}:` : '');
 }
@@ -85,7 +82,7 @@ export function unicodeToShortcode(char) {
  * @param {String} shortcode The shortcode (such as :thumbup:)
  * @return {String} The emoji character; null if none exists
  */
-export function shortcodeToUnicode(shortcode) {
+export function shortcodeToUnicode(shortcode: string) {
     shortcode = shortcode.slice(1, shortcode.length - 1);
     const data = SHORTCODE_TO_EMOJI.get(shortcode);
     return data ? data.unicode : null;
@@ -100,7 +97,7 @@ export function processHtmlForSending(html: string): string {
     }
 
     let contentHTML = "";
-    for (let i=0; i < contentDiv.children.length; i++) {
+    for (let i = 0; i < contentDiv.children.length; i++) {
         const element = contentDiv.children[i];
         if (element.tagName.toLowerCase() === 'p') {
             contentHTML += element.innerHTML;
@@ -122,10 +119,17 @@ export function processHtmlForSending(html: string): string {
  * Given an untrusted HTML string, return a React node with an sanitized version
  * of that HTML.
  */
-export function sanitizedHtmlNode(insaneHtml) {
+export function sanitizedHtmlNode(insaneHtml: string) {
     const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
 
     return <div dangerouslySetInnerHTML={{ __html: saneHtml }} dir="auto" />;
+}
+
+export function sanitizedHtmlNodeInnerText(insaneHtml: string) {
+    const saneHtml = sanitizeHtml(insaneHtml, sanitizeHtmlParams);
+    const contentDiv = document.createElement("div");
+    contentDiv.innerHTML = saneHtml;
+    return contentDiv.innerText;
 }
 
 /**
@@ -136,7 +140,7 @@ export function sanitizedHtmlNode(insaneHtml) {
  * other places we need to sanitise URLs.
  * @return true if permitted, otherwise false
  */
-export function isUrlPermitted(inputUrl) {
+export function isUrlPermitted(inputUrl: string) {
     try {
         const parsed = url.parse(inputUrl);
         if (!parsed.protocol) return false;
@@ -147,9 +151,9 @@ export function isUrlPermitted(inputUrl) {
     }
 }
 
-const transformTags = { // custom to matrix
+const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
-    'a': function(tagName, attribs) {
+    'a': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         if (attribs.href) {
             attribs.target = '_blank'; // by default
 
@@ -162,7 +166,7 @@ const transformTags = { // custom to matrix
         attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
-    'img': function(tagName, attribs) {
+    'img': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         // Strip out imgs that aren't `mxc` here instead of using allowedSchemesByTag
         // because transformTags is used _before_ we filter by allowedSchemesByTag and
         // we don't want to allow images with `https?` `src`s.
@@ -176,7 +180,7 @@ const transformTags = { // custom to matrix
         );
         return { tagName, attribs };
     },
-    'code': function(tagName, attribs) {
+    'code': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         if (typeof attribs.class !== 'undefined') {
             // Filter out all classes other than ones starting with language- for syntax highlighting.
             const classes = attribs.class.split(/\s/).filter(function(cl) {
@@ -186,7 +190,7 @@ const transformTags = { // custom to matrix
         }
         return { tagName, attribs };
     },
-    '*': function(tagName, attribs) {
+    '*': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         // Delete any style previously assigned, style is an allowedTag for font and span
         // because attributes are stripped after transforming
         delete attribs.style;
@@ -220,7 +224,7 @@ const transformTags = { // custom to matrix
     },
 };
 
-const sanitizeHtmlParams = {
+const sanitizeHtmlParams: sanitizeHtml.IOptions = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
@@ -247,16 +251,16 @@ const sanitizeHtmlParams = {
 };
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams = Object.assign({}, sanitizeHtmlParams);
-composerSanitizeHtmlParams.transformTags = {
-    'code': transformTags['code'],
-    '*': transformTags['*'],
+const composerSanitizeHtmlParams: sanitizeHtml.IOptions = {
+    ...sanitizeHtmlParams,
+    transformTags: {
+        'code': transformTags['code'],
+        '*': transformTags['*'],
+    },
 };
 
-class BaseHighlighter {
-    constructor(highlightClass, highlightLink) {
-        this.highlightClass = highlightClass;
-        this.highlightLink = highlightLink;
+abstract class BaseHighlighter<T extends React.ReactNode> {
+    constructor(public highlightClass: string, public highlightLink: string) {
     }
 
     /**
@@ -270,47 +274,49 @@ class BaseHighlighter {
      * returns a list of results (strings for HtmlHighligher, react nodes for
      * TextHighlighter).
      */
-    applyHighlights(safeSnippet, safeHighlights) {
+    public applyHighlights(safeSnippet: string, safeHighlights: string[]): T[] {
         let lastOffset = 0;
         let offset;
-        let nodes = [];
+        let nodes: T[] = [];
 
         const safeHighlight = safeHighlights[0];
         while ((offset = safeSnippet.toLowerCase().indexOf(safeHighlight.toLowerCase(), lastOffset)) >= 0) {
             // handle preamble
             if (offset > lastOffset) {
-                var subSnippet = safeSnippet.substring(lastOffset, offset);
-                nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
+                const subSnippet = safeSnippet.substring(lastOffset, offset);
+                nodes = nodes.concat(this.applySubHighlights(subSnippet, safeHighlights));
             }
 
             // do highlight. use the original string rather than safeHighlight
             // to preserve the original casing.
             const endOffset = offset + safeHighlight.length;
-            nodes.push(this._processSnippet(safeSnippet.substring(offset, endOffset), true));
+            nodes.push(this.processSnippet(safeSnippet.substring(offset, endOffset), true));
 
             lastOffset = endOffset;
         }
 
         // handle postamble
         if (lastOffset !== safeSnippet.length) {
-            subSnippet = safeSnippet.substring(lastOffset, undefined);
-            nodes = nodes.concat(this._applySubHighlights(subSnippet, safeHighlights));
+            const subSnippet = safeSnippet.substring(lastOffset, undefined);
+            nodes = nodes.concat(this.applySubHighlights(subSnippet, safeHighlights));
         }
         return nodes;
     }
 
-    _applySubHighlights(safeSnippet, safeHighlights) {
+    private applySubHighlights(safeSnippet: string, safeHighlights: string[]): T[] {
         if (safeHighlights[1]) {
             // recurse into this range to check for the next set of highlight matches
             return this.applyHighlights(safeSnippet, safeHighlights.slice(1));
         } else {
             // no more highlights to be found, just return the unhighlighted string
-            return [this._processSnippet(safeSnippet, false)];
+            return [this.processSnippet(safeSnippet, false)];
         }
     }
+
+    protected abstract processSnippet(snippet: string, highlight: boolean): T;
 }
 
-class HtmlHighlighter extends BaseHighlighter {
+class HtmlHighlighter extends BaseHighlighter<string> {
     /* highlight the given snippet if required
      *
      * snippet: content of the span; must have been sanitised
@@ -318,28 +324,23 @@ class HtmlHighlighter extends BaseHighlighter {
      *
      * returns an HTML string
      */
-    _processSnippet(snippet, highlight) {
+    protected processSnippet(snippet: string, highlight: boolean): string {
         if (!highlight) {
             // nothing required here
             return snippet;
         }
 
-        let span = "<span class=\""+this.highlightClass+"\">"
-            + snippet + "</span>";
+        let span = `<span class="${this.highlightClass}">${snippet}</span>`;
 
         if (this.highlightLink) {
-            span = "<a href=\""+encodeURI(this.highlightLink)+"\">"
-                +span+"</a>";
+            span = `<a href="${encodeURI(this.highlightLink)}">${span}</a>`;
         }
         return span;
     }
 }
 
-class TextHighlighter extends BaseHighlighter {
-    constructor(highlightClass, highlightLink) {
-        super(highlightClass, highlightLink);
-        this._key = 0;
-    }
+class TextHighlighter extends BaseHighlighter<React.ReactNode> {
+    private key = 0;
 
     /* create a <span> node to hold the given content
      *
@@ -348,13 +349,12 @@ class TextHighlighter extends BaseHighlighter {
      *
      * returns a React node
      */
-    _processSnippet(snippet, highlight) {
-        const key = this._key++;
+    protected processSnippet(snippet: string, highlight: boolean): React.ReactNode {
+        const key = this.key++;
 
-        let node =
-            <span key={key} className={highlight ? this.highlightClass : null}>
-                { snippet }
-            </span>;
+        let node = <span key={key} className={highlight ? this.highlightClass : null}>
+            { snippet }
+        </span>;
 
         if (highlight && this.highlightLink) {
             node = <a key={key} href={this.highlightLink}>{ node }</a>;
@@ -364,6 +364,20 @@ class TextHighlighter extends BaseHighlighter {
     }
 }
 
+interface IContent {
+    format?: string;
+    formatted_body?: string;
+    body: string;
+}
+
+interface IOpts {
+    highlightLink?: string;
+    disableBigEmoji?: boolean;
+    stripReplyFallback?: boolean;
+    returnString?: boolean;
+    forComposerQuote?: boolean;
+    ref?: React.Ref<any>;
+}
 
 /* turn a matrix event body into html
  *
@@ -378,7 +392,7 @@ class TextHighlighter extends BaseHighlighter {
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
  * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
-export function bodyToHtml(content, highlights, opts={}) {
+export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts = {}) {
     const isHtmlMessage = content.format === "org.matrix.custom.html" && content.formatted_body;
     let bodyHasEmoji = false;
 
@@ -387,9 +401,9 @@ export function bodyToHtml(content, highlights, opts={}) {
         sanitizeParams = composerSanitizeHtmlParams;
     }
 
-    let strippedBody;
-    let safeBody;
-    let isDisplayedWithHtml;
+    let strippedBody: string;
+    let safeBody: string;
+    let isDisplayedWithHtml: boolean;
     // XXX: We sanitize the HTML whilst also highlighting its text nodes, to avoid accidentally trying
     // to highlight HTML tags themselves.  However, this does mean that we don't highlight textnodes which
     // are interrupted by HTML tags (not that we did before) - e.g. foo<span/>bar won't get highlighted
@@ -471,7 +485,7 @@ export function bodyToHtml(content, highlights, opts={}) {
  * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string} Linkified string
  */
-export function linkifyString(str, options = linkifyMatrix.options) {
+export function linkifyString(str: string, options = linkifyMatrix.options) {
     return _linkifyString(str, options);
 }
 
@@ -482,7 +496,7 @@ export function linkifyString(str, options = linkifyMatrix.options) {
  * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
  * @returns {object}
  */
-export function linkifyElement(element, options = linkifyMatrix.options) {
+export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options) {
     return _linkifyElement(element, options);
 }
 
@@ -493,7 +507,7 @@ export function linkifyElement(element, options = linkifyMatrix.options) {
  * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml, options = linkifyMatrix.options) {
+export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrix.options) {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
 
@@ -504,7 +518,7 @@ export function linkifyAndSanitizeHtml(dirtyHtml, options = linkifyMatrix.option
  * @param {Node} node
  * @returns {bool}
  */
-export function checkBlockNode(node) {
+export function checkBlockNode(node: Node) {
     switch (node.nodeName) {
         case "H1":
         case "H2":

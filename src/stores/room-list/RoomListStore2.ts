@@ -31,6 +31,7 @@ import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "./membership";
 import { ListLayout } from "./ListLayout";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -221,9 +222,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             }
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
-            // TODO: Verify that e2e rooms are handled on init: https://github.com/vector-im/riot-web/issues/14238
-            // It seems like when viewing the room the timeline is decrypted, rather than at startup. This could
-            // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
@@ -321,6 +319,28 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return <SortAlgorithm>localStorage.getItem(`mx_tagSort_${tagId}`);
     }
 
+    // logic must match calculateListOrder
+    private calculateTagSorting(tagId: TagID): SortAlgorithm {
+        const defaultSort = SortAlgorithm.Alphabetic;
+        const settingAlphabetical = SettingsStore.getValue("RoomList.orderAlphabetically", null, true);
+        const definedSort = this.getTagSorting(tagId);
+        const storedSort = this.getStoredTagSorting(tagId);
+
+        // We use the following order to determine which of the 4 flags to use:
+        // Stored > Settings > Defined > Default
+
+        let tagSort = defaultSort;
+        if (storedSort) {
+            tagSort = storedSort;
+        } else if (!isNullOrUndefined(settingAlphabetical)) {
+            tagSort = settingAlphabetical ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
+        } else if (definedSort) {
+            tagSort = definedSort;
+        } // else default (already set)
+
+        return tagSort;
+    }
+
     public async setListOrder(tagId: TagID, order: ListAlgorithm) {
         await this.algorithm.setListOrdering(tagId, order);
         // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
@@ -337,19 +357,35 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return <ListAlgorithm>localStorage.getItem(`mx_listOrder_${tagId}`);
     }
 
-    private async updateAlgorithmInstances() {
-        const defaultSort = SortAlgorithm.Alphabetic;
+    // logic must match calculateTagSorting
+    private calculateListOrder(tagId: TagID): ListAlgorithm {
         const defaultOrder = ListAlgorithm.Natural;
+        const settingImportance = SettingsStore.getValue("RoomList.orderByImportance", null, true);
+        const definedOrder = this.getListOrder(tagId);
+        const storedOrder = this.getStoredListOrder(tagId);
 
+        // We use the following order to determine which of the 4 flags to use:
+        // Stored > Settings > Defined > Default
+
+        let listOrder = defaultOrder;
+        if (storedOrder) {
+            listOrder = storedOrder;
+        } else if (!isNullOrUndefined(settingImportance)) {
+            listOrder = settingImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
+        } else if (definedOrder) {
+            listOrder = definedOrder;
+        } // else default (already set)
+
+        return listOrder;
+    }
+
+    private async updateAlgorithmInstances() {
         for (const tag of Object.keys(this.orderedLists)) {
             const definedSort = this.getTagSorting(tag);
             const definedOrder = this.getListOrder(tag);
 
-            const storedSort = this.getStoredTagSorting(tag);
-            const storedOrder = this.getStoredListOrder(tag);
-
-            const tagSort = storedSort ? storedSort : (definedSort ? definedSort : defaultSort);
-            const listOrder = storedOrder ? storedOrder : (definedOrder ? definedOrder : defaultOrder);
+            const tagSort = this.calculateTagSorting(tag);
+            const listOrder = this.calculateListOrder(tag);
 
             if (tagSort !== definedSort) {
                 await this.setTagSorting(tag, tagSort);
@@ -378,8 +414,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         const sorts: ITagSortingMap = {};
         const orders: IListOrderingMap = {};
         for (const tagId of OrderedDefaultTagIDs) {
-            sorts[tagId] = this.getStoredTagSorting(tagId) || SortAlgorithm.Alphabetic;
-            orders[tagId] = this.getStoredListOrder(tagId) || ListAlgorithm.Natural;
+            sorts[tagId] = this.calculateTagSorting(tagId);
+            orders[tagId] = this.calculateListOrder(tagId);
         }
 
         if (this.state.tagsEnabled) {
