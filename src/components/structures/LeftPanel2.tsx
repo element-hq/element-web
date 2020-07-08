@@ -131,13 +131,19 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
 
+        // We track which styles we want on a target before making the changes to avoid
+        // excessive layout updates.
+        const targetStyles = new Map<HTMLDivElement, {
+            stickyTop?: boolean;
+            stickyBottom?: boolean;
+            makeInvisible?: boolean;
+        }>();
+
         let lastTopHeader;
         let firstBottomHeader;
         for (const sublist of sublists) {
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
-            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
             header.style.removeProperty("display"); // always clear display:none first
-            headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
 
             // When an element is <=40% off screen, make it take over
             const offScreenFactor = 0.4;
@@ -145,27 +151,79 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
 
             if (isOffTop || sublist === sublists[0]) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
-                headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${list.parentElement.offsetTop}px`;
+                targetStyles.set(header, { stickyTop: true });
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
+                    targetStyles.set(lastTopHeader, { makeInvisible: true });
                 }
                 lastTopHeader = header;
             } else if (isOffBottom && !firstBottomHeader) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
-                headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
-                header.style.width = `${headerStickyWidth}px`;
+                targetStyles.set(header, { stickyBottom: true });
                 firstBottomHeader = header;
             } else {
-                header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.removeProperty("width");
-                header.style.removeProperty("top");
+                targetStyles.set(header, {}); // nothing == clear
+            }
+        }
+
+        // Run over the style changes and make them reality. We check to see if we're about to
+        // cause a no-op update, as adding/removing properties that are/aren't there cause
+        // layout updates.
+        for (const header of targetStyles.keys()) {
+            const style = targetStyles.get(header);
+            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
+
+            if (style.makeInvisible) {
+                // we will have already removed the 'display: none', so add it back.
+                header.style.display = "none";
+                continue; // nothing else to do, even if sticky somehow
+            }
+
+            if (style.stickyTop) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+
+                const newTop = `${list.parentElement.offsetTop}px`;
+                if (header.style.top !== newTop) {
+                    header.style.top = newTop;
+                }
+            } else if (style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+            }
+
+            if (style.stickyTop || style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (!headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+
+                const newWidth = `${headerStickyWidth}px`;
+                if (header.style.width !== newWidth) {
+                    header.style.width = newWidth;
+                }
+            } else if (!style.stickyTop && !style.stickyBottom) {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+                if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+                if (header.style.width) {
+                    header.style.removeProperty('width');
+                }
+                if (header.style.top) {
+                    header.style.removeProperty('top');
+                }
             }
         }
 
