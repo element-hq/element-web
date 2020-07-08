@@ -26,7 +26,7 @@
     "Unable to load config file: please refresh the page to try again.": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
     "Open user settings": "Avaa käyttäjäasetukset",
     "Previous/next recently visited room or community": "Edellinen/seuraava hiljattain vierailtu huone tai yhteisö",
-    "Riot Desktop (%(platformName)s)": "Riot työpöytäversio (%(platformName)s)",
+    "Riot Desktop (%(platformName)s)": "Riotin työpöytäversio (%(platformName)s)",
     "Go to your browser to complete Sign In": "Tee kirjautuminen loppuun selaimessasi",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Selainta ei tueta",
@@ -37,5 +37,6 @@
     "I understand the risks and wish to continue": "Ymmärrän riskit ja haluan jatkaa",
     "Failed to start": "Käynnistys ei onnistunut",
     "Download Completed": "Lataus valmis",
-    "Open": "Avaa"
+    "Open": "Avaa",
+    "Go to Riot.im": "Mene osoitteeseen riot.im"
 }
