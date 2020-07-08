@@ -305,7 +305,7 @@ export const SETTINGS = {
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Mirror local video feed'),
-        default: true,
+        default: false,
     },
     "TagPanel.enableTagPanel": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
