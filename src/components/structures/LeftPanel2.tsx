@@ -69,8 +69,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
     private focusedElement = null;
-
-    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
+    private isDoingStickyHeaders = false;
 
     constructor(props: IProps) {
         super(props);
@@ -115,6 +114,23 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private handleStickyHeaders(list: HTMLDivElement) {
+        // TODO: Evaluate if this has any performance benefit or detriment.
+        // See https://github.com/vector-im/riot-web/issues/14035
+
+        if (this.isDoingStickyHeaders) return;
+        this.isDoingStickyHeaders = true;
+        if (window.requestAnimationFrame) {
+            window.requestAnimationFrame(() => {
+                this.doStickyHeaders(list);
+                this.isDoingStickyHeaders = false;
+            });
+        } else {
+            this.doStickyHeaders(list);
+            this.isDoingStickyHeaders = false;
+        }
+    }
+
+    private doStickyHeaders(list: HTMLDivElement) {
         const rlRect = list.getBoundingClientRect();
         const bottom = rlRect.bottom;
         const top = rlRect.top;
@@ -264,7 +280,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onVerticalArrow={this.onKeyDown}
                 />
                 <AccessibleButton
-                    // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
