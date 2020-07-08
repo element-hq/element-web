@@ -54,9 +54,6 @@ limitations under the License.
             max-width: 100%;
             z-index: 2; // Prioritize headers in the visible list over sticky ones
 
-            // Set the same background color as the room list for sticky headers
-            background-color: $roomlist2-bg-color;
-
             // Create a flexbox to make ordering easy
             display: flex;
             align-items: center;
@@ -203,15 +200,16 @@ limitations under the License.
             // Update the render() function for RoomSublist2 if these change
             // Update the ListLayout class for minVisibleTiles if these change.
             //
-            // At 24px high and 8px padding on the top this equates to 0.65 of
+            // At 24px high, 8px padding on the top and 4px padding on the bottom  this equates to 0.73 of
             // a tile due to how the padding calculations work.
             height: 24px;
             padding-top: 8px;
+            padding-bottom: 4px;
 
             // We force this to the bottom so it will overlap rooms as needed.
             // We account for the space it takes up (24px) in the code through padding.
             position: absolute;
-            bottom: 4px; // the height of the resize handle
+            bottom: 0; // the height of the resize handle
             left: 0;
             right: 0;
 
@@ -253,24 +251,26 @@ limitations under the License.
         // Class name comes from the ResizableBox component
         // The hover state needs to use the whole sublist, not just the resizable box,
         // so that selector is below and one level higher.
-        .react-resizable-handle {
+        .mx_RoomSublist2_resizerHandle {
             cursor: ns-resize;
             border-radius: 3px;
 
-            // Update RESIZE_HANDLE_HEIGHT if this changes
-            height: 4px;
+            // Override styles from library
+            width: unset !important;
+            height: 4px !important; // Update RESIZE_HANDLE_HEIGHT if this changes
 
             // This is positioned directly below the 'show more' button.
             position: absolute;
-            bottom: 0;
+            bottom: 0 !important; // override from library
 
             // Together, these make the bar 64px wide
-            left: calc(50% - 32px);
-            right: calc(50% - 32px);
+            // These are also overridden from the library
+            left: calc(50% - 32px) !important;
+            right: calc(50% - 32px) !important;
         }
 
         &:hover, &.mx_RoomSublist2_hasMenuOpen {
-            .react-resizable-handle {
+            .mx_RoomSublist2_resizerHandle {
                 opacity: 0.8;
                 background-color: $primary-fg-color;
             }

@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, {createRef} from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -27,6 +27,7 @@ import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import {
+    ChevronFace,
     ContextMenu,
     ContextMenuButton,
     MenuItemRadio,
@@ -52,6 +53,8 @@ import { NotificationColor } from "../../../stores/notifications/NotificationCol
 import { Volume } from "../../../RoomNotifsTypes";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import RoomListActions from "../../../actions/RoomListActions";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import {ActionPayload} from "../../../dispatcher/payloads";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -89,7 +92,7 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
     const left = elementRect.left + window.pageXOffset - 9;
     const top = elementRect.bottom + window.pageYOffset + 17;
-    const chevronFace = "none";
+    const chevronFace = ChevronFace.None;
     return {left, top, chevronFace};
 };
 
@@ -120,6 +123,8 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
 };
 
 export default class RoomTile2 extends React.Component<IProps, IState> {
+    private dispatcherRef: string;
+    private roomTileRef = createRef<HTMLDivElement>();
     // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
 
     constructor(props: IProps) {
@@ -134,6 +139,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
 
     private get showContextMenu(): boolean {
@@ -144,11 +150,35 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return !this.props.isMinimized && this.props.showMessagePreview;
     }
 
+    public componentDidMount() {
+        // when we're first rendered (or our sublist is expanded) make sure we are visible if we're active
+        if (this.state.selected) {
+            this.scrollIntoView();
+        }
+    }
+
     public componentWillUnmount() {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
+        defaultDispatcher.unregister(this.dispatcherRef);
     }
+
+    private onAction = (payload: ActionPayload) => {
+        if (payload.action === "view_room" && payload.room_id === this.props.room.roomId && payload.show_room_tile) {
+            setImmediate(() => {
+                this.scrollIntoView();
+            });
+        }
+    };
+
+    private scrollIntoView = () => {
+        if (!this.roomTileRef.current) return;
+        this.roomTileRef.current.scrollIntoView({
+            block: "nearest",
+            behavior: "auto",
+        });
+    };
 
     private onTileMouseEnter = () => {
         this.setState({hover: true});
@@ -163,7 +193,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         ev.stopPropagation();
         dis.dispatch({
             action: 'view_room',
-            // TODO: Support show_room_tile in new room list: https://github.com/vector-im/riot-web/issues/14233
             show_room_tile: true, // make sure the room is visible in the list
             room_id: this.props.room.roomId,
             clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
@@ -174,7 +203,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({selected: isActive});
     };
 
-    private onNotificationsMenuOpenClick = (ev: InputEvent) => {
+    private onNotificationsMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -185,7 +214,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({notificationsMenuPosition: null});
     };
 
-    private onGeneralMenuOpenClick = (ev: InputEvent) => {
+    private onGeneralMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -414,7 +443,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement {
         // TODO: Invites: https://github.com/vector-im/riot-web/issues/14198
-        // TODO: a11y proper: https://github.com/vector-im/riot-web/issues/14180
 
         const classes = classNames({
             'mx_RoomTile2': true,
@@ -504,7 +532,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         return (
             <React.Fragment>
-                <RovingTabIndexWrapper>
+                <RovingTabIndexWrapper inputRef={this.roomTileRef}>
                     {({onFocus, isActive, ref}) =>
                         <AccessibleButton
                             onFocus={onFocus}
