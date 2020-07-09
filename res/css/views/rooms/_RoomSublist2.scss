@@ -44,6 +44,7 @@ limitations under the License.
         // to work correctly.
         padding-bottom: 8px;
         height: 24px;
+        color: $roomlist2-header-color;
 
         // Hide the header container if the contained element is stickied.
         // We don't use display:none as that causes the header to go away too.
