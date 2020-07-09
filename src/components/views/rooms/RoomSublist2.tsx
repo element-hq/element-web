@@ -46,6 +46,7 @@ import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -74,7 +75,6 @@ interface IProps {
     label: string;
     onAddRoom?: () => void;
     addRoomLabel: string;
-    layout?: ListLayout;
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
@@ -98,9 +98,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
     private dispatcherRef: string;
+    private layout: ListLayout;
 
     constructor(props: IProps) {
         super(props);
+
+        this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
 
         this.state = {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
@@ -116,8 +119,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numVisibleTiles(): number {
-        if (!this.props.layout) return 0;
-        const nVisible = Math.floor(this.props.layout.visibleTiles);
+        const nVisible = Math.floor(this.layout.visibleTiles);
         return Math.min(nVisible, this.numTiles);
     }
 
@@ -135,7 +137,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
             setImmediate(() => {
-                const isCollapsed = this.props.layout.isCollapsed;
+                const isCollapsed = this.layout.isCollapsed;
                 const roomIndex = this.props.rooms.findIndex((r) => r.roomId === payload.room_id);
 
                 if (isCollapsed && roomIndex > -1) {
@@ -143,7 +145,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 }
                 // extend the visible section to include the room if it is entirely invisible
                 if (roomIndex >= this.numVisibleTiles) {
-                    this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(roomIndex + 1, MAX_PADDING_HEIGHT);
+                    this.layout.visibleTiles = this.layout.tilesWithPadding(roomIndex + 1, MAX_PADDING_HEIGHT);
                     this.forceUpdate(); // because the layout doesn't trigger a re-render
                 }
             });
@@ -170,10 +172,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         // resizing started*, meaning it is fairly useless for us. This is why we just use
         // the client height and run with it.
 
-        const heightBefore = this.props.layout.visibleTiles;
-        const heightInTiles = this.props.layout.pixelsToTiles(refToElement.clientHeight);
-        this.props.layout.setVisibleTilesWithin(heightInTiles, this.numTiles);
-        if (heightBefore === this.props.layout.visibleTiles) return; // no-op
+        const heightBefore = this.layout.visibleTiles;
+        const heightInTiles = this.layout.pixelsToTiles(refToElement.clientHeight);
+        this.layout.setVisibleTilesWithin(heightInTiles, this.numTiles);
+        if (heightBefore === this.layout.visibleTiles) return; // no-op
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -187,13 +189,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private onShowAllClick = () => {
         const numVisibleTiles = this.numVisibleTiles;
-        this.props.layout.visibleTiles = this.props.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
+        this.layout.visibleTiles = this.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
         this.forceUpdate(); // because the layout doesn't trigger a re-render
         setImmediate(this.focusRoomTile, numVisibleTiles); // focus the tile after the current bottom one
     };
 
     private onShowLessClick = () => {
-        this.props.layout.visibleTiles = this.props.layout.defaultVisibleTiles;
+        this.layout.visibleTiles = this.layout.defaultVisibleTiles;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
         // focus will flow to the show more button here
     };
@@ -241,7 +243,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onMessagePreviewChanged = () => {
-        this.props.layout.showPreviews = !this.props.layout.showPreviews;
+        this.layout.showPreviews = !this.layout.showPreviews;
         this.forceUpdate(); // because the layout doesn't trigger a re-render
     };
 
@@ -293,13 +295,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private toggleCollapsed = () => {
-        this.props.layout.isCollapsed = !this.props.layout.isCollapsed;
+        this.layout.isCollapsed = !this.layout.isCollapsed;
         this.forceUpdate(); // because the layout doesn't trigger an update
         setImmediate(() => this.props.onResize()); // needs to happen when the DOM is updated
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
-        const isCollapsed = this.props.layout && this.props.layout.isCollapsed;
+        const isCollapsed = this.layout && this.layout.isCollapsed;
         switch (ev.key) {
             case Key.ARROW_LEFT:
                 ev.stopPropagation();
@@ -339,7 +341,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private renderVisibleTiles(): React.ReactElement[] {
-        if (this.props.layout && this.props.layout.isCollapsed) {
+        if (this.layout && this.layout.isCollapsed) {
             // don't waste time on rendering
             return [];
         }
@@ -353,7 +355,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <RoomTile2
                         room={room}
                         key={`room-${room.roomId}`}
-                        showMessagePreview={this.props.layout.showPreviews}
+                        showMessagePreview={this.layout.showPreviews}
                         isMinimized={this.props.isMinimized}
                         tag={this.props.tagId}
                     />
@@ -404,7 +406,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onMessagePreviewChanged}
-                                checked={this.props.layout.showPreviews}
+                                checked={this.layout.showPreviews}
                             >
                                 {_t("Message preview")}
                             </StyledMenuItemCheckbox>
@@ -496,7 +498,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     const collapseClasses = classNames({
                         'mx_RoomSublist2_collapseBtn': true,
-                        'mx_RoomSublist2_collapseBtn_collapsed': this.props.layout && this.props.layout.isCollapsed,
+                        'mx_RoomSublist2_collapseBtn_collapsed': this.layout && this.layout.isCollapsed,
                     });
 
                     const classes = classNames({
@@ -524,7 +526,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     tabIndex={tabIndex}
                                     className="mx_RoomSublist2_headerText"
                                     role="treeitem"
-                                    aria-expanded={!this.props.layout || !this.props.layout.isCollapsed}
+                                    aria-expanded={!this.layout.isCollapsed}
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
                                     onContextMenu={this.onContextMenu}
@@ -558,7 +560,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         let content = null;
         if (visibleTiles.length > 0) {
-            const layout = this.props.layout; // to shorten calls
+            const layout = this.layout; // to shorten calls
 
             const maxTilesFactored = layout.tilesWithResizerBoxFactor(this.numTiles);
             const showMoreBtnClasses = classNames({
@@ -587,7 +589,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </RovingAccessibleButton>
                 );
-            } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.props.layout.defaultVisibleTiles) {
+            } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>

@@ -32,7 +32,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import RoomSublist2 from "./RoomSublist2";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
-import { ListLayout } from "../../../stores/room-list/ListLayout";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
 import TemporaryTile from "./TemporaryTile";
@@ -66,7 +65,6 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
-    layouts: Map<TagID, ListLayout>;
 }
 
 const TAG_ORDER: TagID[] = [
@@ -151,7 +149,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
         this.state = {
             sublists: {},
-            layouts: new Map<TagID, ListLayout>(),
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -224,12 +221,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
         const newLists = RoomListStore.instance.orderedLists;
         console.log("new lists", newLists);
 
-        const layoutMap = new Map<TagID, ListLayout>();
-        for (const tagId of Object.keys(newLists)) {
-            layoutMap.set(tagId, new ListLayout(tagId));
-        }
-
-        this.setState({sublists: newLists, layouts: layoutMap}, () => {
+        this.setState({sublists: newLists}, () => {
             this.props.onResize();
         });
     };
@@ -298,7 +290,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     label={_t(aesthetics.sectionLabel)}
                     onAddRoom={onAddRoomFn}
                     addRoomLabel={aesthetics.addRoomLabel}
-                    layout={this.state.layouts.get(orderedTagId)}
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}

@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
-import AccessibleButton from "../elements/AccessibleButton";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { _t } from "../../../languageHandler";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -92,9 +91,6 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
     };
 
     public render(): React.ReactElement {
-        // TODO: Decorate crumbs with icons: https://github.com/vector-im/riot-web/issues/14040
-        // TODO: Scrolling: https://github.com/vector-im/riot-web/issues/14040
-        // TODO: Tooltips: https://github.com/vector-im/riot-web/issues/14040
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
             const roomTags = RoomListStore.instance.getTagsForRoom(r);
             const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
