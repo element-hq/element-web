@@ -187,15 +187,15 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
-        .mx_RoomSublist2_placeholder {
-            height: 44px; // Height of a room tile plus margins
-        }
-
         .mx_RoomSublist2_showNButton {
             cursor: pointer;
             font-size: $font-13px;
             line-height: $font-18px;
             color: $roomtile2-preview-color;
+
+            // This is the same color as the left panel background because it needs
+            // to occlude the lastmost tile in the list.
+            background-color: $roomlist2-bg-color;
 
             // Update the render() function for RoomSublist2 if these change
             // Update the ListLayout class for minVisibleTiles if these change.
@@ -209,7 +209,7 @@ limitations under the License.
             // We force this to the bottom so it will overlap rooms as needed.
             // We account for the space it takes up (24px) in the code through padding.
             position: absolute;
-            bottom: 0;
+            bottom: 0; // the height of the resize handle
             left: 0;
             right: 0;
 
@@ -235,6 +235,16 @@ limitations under the License.
 
             .mx_RoomSublist2_showLessButtonChevron {
                 mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
+            }
+
+            &.mx_RoomSublist2_isCutting::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                box-shadow: 0px -2px 3px rgba(46, 47, 50, 0.08);
             }
         }
 

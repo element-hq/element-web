@@ -109,6 +109,10 @@ export class ListLayout {
         return this.tilesToPixels(Math.min(maxTiles, n)) + padding;
     }
 
+    public tilesWithResizerBoxFactor(n: number): number {
+        return n + RESIZER_BOX_FACTOR;
+    }
+
     public tilesWithPadding(n: number, paddingPx: number): number {
         return this.pixelsToTiles(this.tilesToPixelsWithPadding(n, paddingPx));
     }
