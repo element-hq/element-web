@@ -41,6 +41,7 @@ module.exports = (env, argv) => {
 
             // CSS themes
             "theme-element": "./node_modules/matrix-react-sdk/res/themes/element/css/element.scss",
+            "theme-element-dark": "./node_modules/matrix-react-sdk/res/themes/element-dark/css/element-dark.scss",
             "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
             "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
             "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
