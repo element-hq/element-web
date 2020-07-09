@@ -562,10 +562,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (visibleTiles.length > 0) {
             const layout = this.layout; // to shorten calls
 
-            const maxTilesFactored = layout.tilesWithResizerBoxFactor(this.numTiles);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
-                'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
             });
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -643,6 +641,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, padding);
             const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
             const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
+
+            // Now that we know our padding constraints, let's find out if we need to chop off the
+            // last rendered visible tile so it doesn't collide with the 'show more' button
+            let visibleUnpaddedTiles = Math.round(layout.visibleTiles - layout.pixelsToTiles(padding));
+            if (visibleUnpaddedTiles === visibleTiles.length - 1) {
+                const placeholder = <div className="mx_RoomSublist2_placeholder" key='placeholder' />;
+                visibleTiles.splice(visibleUnpaddedTiles, 1, placeholder);
+            }
 
             const dimensions = {
                 height: tilesPx,
