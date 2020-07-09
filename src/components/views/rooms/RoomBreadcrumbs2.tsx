@@ -87,19 +87,13 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
 
     private viewRoom = (room: Room, index: number) => {
         Analytics.trackEvent("Breadcrumbs", "click_node", index);
-        // If we're rendering the first breadcrumb and this is it no-op
-        if (!this.state.skipFirst && index === 0) {
-            return;
-        } else {
-            defaultDispatcher.dispatch({action: "view_room", room_id: room.roomId});
-        }
+        defaultDispatcher.dispatch({action: "view_room", room_id: room.roomId});
     };
 
     public render(): React.ReactElement {
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
             const roomTags = RoomListStore.instance.getTagsForRoom(r);
             const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
-            const anon = () => this.viewRoom(r, i);
             return (
                 <AccessibleTooltipButton
                     className="mx_RoomBreadcrumbs2_crumb"
