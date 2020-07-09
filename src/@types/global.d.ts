@@ -21,6 +21,7 @@ import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
 import { PlatformPeg } from "../PlatformPeg";
+import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 
 declare global {
     interface Window {
@@ -34,6 +35,7 @@ declare global {
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
         mx_RoomListStore2: RoomListStore2;
+        mx_RoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
     }
 
