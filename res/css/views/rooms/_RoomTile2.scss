@@ -33,7 +33,7 @@ limitations under the License.
     &:focus-within,
     &.mx_RoomTile2_hasMenuOpen {
         background-color: $roomtile2-selected-bg-color;
-        border-radius: 32px;
+        border-radius: 8px;
     }
 
     .mx_DecoratedRoomAvatar, .mx_RoomTile2_avatarContainer {
