@@ -191,7 +191,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     show_room_tile: true, // to make sure the room gets scrolled into view
                 });
             }
-        } 
+        }
     };
 
     private getRoomDelta = (roomId: string, delta: number, unread = false) => {
