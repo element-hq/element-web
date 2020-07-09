@@ -1819,7 +1819,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else {
             subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
-        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
+        document.title = `${SdkConfig.get().brand} ${subtitle}`;
     }
 
     updateStatusIndicator(state: string, prevState: string) {
