@@ -55,11 +55,6 @@ export class ListNotificationState extends NotificationState {
         for (const newRoom of diff.added) {
             const state = this.getRoomFn(newRoom);
             state.on(NOTIFICATION_STATE_UPDATE, this.onRoomNotificationStateUpdate);
-            if (this.states[newRoom.roomId]) {
-                // "Should never happen" disclaimer.
-                console.warn("Overwriting notification state for room:", newRoom.roomId);
-                this.states[newRoom.roomId].destroy();
-            }
             this.states[newRoom.roomId] = state;
         }
 
