@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
-import { INotificationState, NOTIFICATION_STATE_UPDATE } from "./INotificationState";
 import { NotificationColor } from "./NotificationColor";
 import { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -25,12 +23,9 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as RoomNotifs from '../../RoomNotifs';
 import * as Unread from '../../Unread';
+import { NotificationState } from "./NotificationState";
 
-export class RoomNotificationState extends EventEmitter implements IDestroyable, INotificationState {
-    private _symbol: string;
-    private _count: number;
-    private _color: NotificationColor;
-
+export class RoomNotificationState extends NotificationState implements IDestroyable {
     constructor(public readonly room: Room) {
         super();
         this.room.on("Room.receipt", this.handleReadReceipt);
@@ -41,23 +36,12 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
         this.updateNotificationState();
     }
 
-    public get symbol(): string {
-        return this._symbol;
-    }
-
-    public get count(): number {
-        return this._count;
-    }
-
-    public get color(): NotificationColor {
-        return this._color;
-    }
-
     private get roomIsInvite(): boolean {
         return getEffectiveMembership(this.room.getMyMembership()) === EffectiveMembership.Invite;
     }
 
     public destroy(): void {
+        super.destroy();
         this.room.removeListener("Room.receipt", this.handleReadReceipt);
         this.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
         this.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
@@ -87,7 +71,7 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
     };
 
     private updateNotificationState() {
-        const before = {count: this.count, symbol: this.symbol, color: this.color};
+        const snapshot = this.snapshot();
 
         if (RoomNotifs.getRoomNotifsState(this.room.roomId) === RoomNotifs.MUTE) {
             // When muted we suppress all notification states, even if we have context on them.
@@ -136,9 +120,6 @@ export class RoomNotificationState extends EventEmitter implements IDestroyable,
         }
 
         // finally, publish an update if needed
-        const after = {count: this.count, symbol: this.symbol, color: this.color};
-        if (JSON.stringify(before) !== JSON.stringify(after)) {
-            this.emit(NOTIFICATION_STATE_UPDATE);
-        }
+        this.emitIfUpdated(snapshot);
     }
 }

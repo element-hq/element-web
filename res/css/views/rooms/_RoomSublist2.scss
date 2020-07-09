@@ -24,10 +24,6 @@ limitations under the License.
     margin-left: 8px;
     width: 100%;
 
-    &:first-child {
-        margin-top: 12px; // so we're not up against the search/filter
-    }
-
     .mx_RoomSublist2_headerContainer {
         // Create a flexbox to make alignment easy
         display: flex;
@@ -49,10 +45,15 @@ limitations under the License.
         padding-bottom: 8px;
         height: 24px;
 
+        // Hide the header container if the contained element is stickied.
+        // We don't use display:none as that causes the header to go away too.
+        &.mx_RoomSublist2_headerContainer_hasSticky {
+            height: 0;
+        }
+
         .mx_RoomSublist2_stickable {
             flex: 1;
             max-width: 100%;
-            z-index: 2; // Prioritize headers in the visible list over sticky ones
 
             // Create a flexbox to make ordering easy
             display: flex;
@@ -64,7 +65,6 @@ limitations under the License.
             // when sticky scrolls instead of collapses the list.
             &.mx_RoomSublist2_headerContainer_sticky {
                 position: fixed;
-                z-index: 1; // over top of other elements, but still under the ones in the visible list
                 height: 32px; // to match the header container
                 // width set by JS
                 width: calc(100% - 22px);
@@ -188,15 +188,15 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
+        .mx_RoomSublist2_placeholder {
+            height: 44px; // Height of a room tile plus margins
+        }
+
         .mx_RoomSublist2_showNButton {
             cursor: pointer;
             font-size: $font-13px;
             line-height: $font-18px;
             color: $roomtile2-preview-color;
-
-            // This is the same color as the left panel background because it needs
-            // to occlude the lastmost tile in the list.
-            background-color: $roomlist2-bg-color;
 
             // Update the render() function for RoomSublist2 if these change
             // Update the ListLayout class for minVisibleTiles if these change.
@@ -210,7 +210,7 @@ limitations under the License.
             // We force this to the bottom so it will overlap rooms as needed.
             // We account for the space it takes up (24px) in the code through padding.
             position: absolute;
-            bottom: 0; // the height of the resize handle
+            bottom: 0;
             left: 0;
             right: 0;
 
@@ -236,16 +236,6 @@ limitations under the License.
 
             .mx_RoomSublist2_showLessButtonChevron {
                 mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
-            }
-
-            &.mx_RoomSublist2_isCutting::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                height: 4px;
-                box-shadow: 0px -2px 3px rgba(46, 47, 50, 0.08);
             }
         }
 

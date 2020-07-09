@@ -123,16 +123,19 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         }
 
         .mx_LeftPanel2_roomListWrapper {
+            // Create a flexbox to ensure the containing items cause appropriate overflow.
             display: flex;
+
             flex-grow: 1;
             overflow: hidden;
             min-height: 0;
+            margin-top: 12px; // so we're not up against the search/filter
 
-            &.stickyBottom {
+            &.mx_LeftPanel2_roomListWrapper_stickyBottom {
                 padding-bottom: 32px;
             }
 
-            &.stickyTop {
+            &.mx_LeftPanel2_roomListWrapper_stickyTop {
                 padding-top: 32px;
             }
         }

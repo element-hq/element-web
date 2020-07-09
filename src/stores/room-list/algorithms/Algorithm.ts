@@ -655,16 +655,33 @@ export class Algorithm extends EventEmitter {
                 cause = RoomUpdateCause.PossibleTagChange;
             }
 
-            // If we have tags for a room and don't have the room referenced, the room reference
-            // probably changed. We need to swap out the problematic reference.
-            if (hasTags && !this.rooms.includes(room) && !isSticky) {
-                console.warn(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
+            // Check to see if the room is known first
+            let knownRoomRef = this.rooms.includes(room);
+            if (hasTags && !knownRoomRef) {
+                console.warn(`${room.roomId} might be a reference change - attempting to update reference`);
                 this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
-
-                // Sanity check
-                if (!this.rooms.includes(room)) {
-                    throw new Error(`Failed to replace ${room.roomId} with an updated reference`);
+                knownRoomRef = this.rooms.includes(room);
+                if (!knownRoomRef) {
+                    console.warn(`${room.roomId} is still not referenced. It may be sticky.`);
                 }
+            }
+
+            if (hasTags && isForLastSticky && !knownRoomRef) {
+                // we have a fairly good chance at losing a room right now. Under some circumstances,
+                // we can end up with a room which transitions references and tag changes, then gets
+                // lost when the sticky room changes. To counter this, we try and add the room to the
+                // list manually as the condition below to update the reference will fail.
+                //
+                // Other conditions *should* result in the room being sorted into the right place.
+                console.warn(`${room.roomId} was about to be lost - inserting at end of room list`);
+                this.rooms.push(room);
+                knownRoomRef = true;
+            }
+
+            // If we have tags for a room and don't have the room referenced, something went horribly
+            // wrong - the reference should have been updated above.
+            if (hasTags && !knownRoomRef && !isSticky) {
+                throw new Error(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
             }
 
             // Like above, update the reference to the sticky room if we need to
