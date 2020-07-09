@@ -22,11 +22,10 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { readReceiptChangeIsFor } from "../../../utils/read-receipts";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
-import { INotificationState, NOTIFICATION_STATE_UPDATE } from "../../../stores/notifications/INotificationState";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
 
 interface IProps {
-    notification: INotificationState;
+    notification: NotificationState;
 
     /**
      * If true, the badge will show a count if at all possible. This is typically
@@ -97,19 +96,17 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
         const {notification, forceCount, roomId, onClick, ...props} = this.props;
 
         // Don't show a badge if we don't need to
-        if (notification.color <= NotificationColor.None) return null;
+        if (notification.isIdle) return null;
 
         // TODO: Update these booleans for FTUE Notifications: https://github.com/vector-im/riot-web/issues/14261
         // As of writing, that is "if red, show count always" and "optionally show counts instead of dots".
         // See git diff for what that boolean state looks like.
         // XXX: We ignore this.state.showCounts (the setting which controls counts vs dots).
-        const hasNotif = notification.color >= NotificationColor.Red;
-        const hasCount = notification.color >= NotificationColor.Grey;
         const hasAnySymbol = notification.symbol || notification.count > 0;
-        let isEmptyBadge = !hasAnySymbol || !hasCount;
+        let isEmptyBadge = !hasAnySymbol || !notification.hasUnreadCount;
         if (forceCount) {
             isEmptyBadge = false;
-            if (!hasCount) return null; // Can't render a badge
+            if (!notification.hasUnreadCount) return null; // Can't render a badge
         }
 
         let symbol = notification.symbol || formatMinimalBadgeCount(notification.count);
@@ -117,8 +114,8 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
         const classes = classNames({
             'mx_NotificationBadge': true,
-            'mx_NotificationBadge_visible': isEmptyBadge ? true : hasCount,
-            'mx_NotificationBadge_highlighted': hasNotif,
+            'mx_NotificationBadge_visible': isEmptyBadge ? true : notification.hasUnreadCount,
+            'mx_NotificationBadge_highlighted': notification.hasMentions,
             'mx_NotificationBadge_dot': isEmptyBadge,
             'mx_NotificationBadge_2char': symbol.length > 0 && symbol.length < 3,
             'mx_NotificationBadge_3char': symbol.length > 2,

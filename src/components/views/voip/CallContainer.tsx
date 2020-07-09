@@ -14,13 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
-import { NotificationColor } from "./NotificationColor";
+import React from 'react';
+import IncomingCallBox2 from './IncomingCallBox2';
+import CallPreview from './CallPreview2';
+import * as VectorConferenceHandler from '../../../VectorConferenceHandler';
 
-export const NOTIFICATION_STATE_UPDATE = "update";
+interface IProps {
 
-export interface INotificationState extends EventEmitter {
-    symbol?: string;
-    count: number;
-    color: NotificationColor;
+}
+
+interface IState {
+
+}
+
+export default class CallContainer extends React.PureComponent<IProps, IState> {
+    public render() {
+        return <div className="mx_CallContainer">
+            <IncomingCallBox2 />
+            <CallPreview ConferenceHandler={VectorConferenceHandler} />
+        </div>;
+    }
 }

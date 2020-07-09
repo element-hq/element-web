@@ -21,8 +21,8 @@ import { TagID } from '../../../stores/room-list/models';
 import RoomAvatar from "./RoomAvatar";
 import RoomTileIcon from "../rooms/RoomTileIcon";
 import NotificationBadge from '../rooms/NotificationBadge';
-import { INotificationState } from "../../../stores/notifications/INotificationState";
-import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
 
 interface IProps {
     room: Room;
@@ -33,7 +33,7 @@ interface IProps {
 }
 
 interface IState {
-    notificationState?: INotificationState;
+    notificationState?: NotificationState;
 }
 
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
@@ -42,7 +42,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         super(props);
 
         this.state = {
-            notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
+            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room, this.props.tag),
         };
     }
 

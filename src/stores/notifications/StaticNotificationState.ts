@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
-import { INotificationState } from "./INotificationState";
 import { NotificationColor } from "./NotificationColor";
+import { NotificationState } from "./NotificationState";
 
-export class StaticNotificationState extends EventEmitter implements INotificationState {
-    constructor(public symbol: string, public count: number, public color: NotificationColor) {
+export class StaticNotificationState extends NotificationState {
+    constructor(symbol: string, count: number, color: NotificationColor) {
         super();
+        this._symbol = symbol;
+        this._count = count;
+        this._color = color;
     }
 
     public static forCount(count: number, color: NotificationColor): StaticNotificationState {

@@ -18,16 +18,15 @@ import React from "react";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
-import { INotificationState } from "../../../stores/notifications/INotificationState";
 import NotificationBadge from "./NotificationBadge";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
 
 interface IProps {
     isMinimized: boolean;
     isSelected: boolean;
     displayName: string;
     avatar: React.ReactElement;
-    notificationState: INotificationState;
+    notificationState: NotificationState;
     onClick: () => void;
 }
 
@@ -74,7 +73,7 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
 
         const nameClasses = classNames({
             "mx_RoomTile2_name": true,
-            "mx_RoomTile2_nameHasUnreadEvents": this.props.notificationState.color >= NotificationColor.Bold,
+            "mx_RoomTile2_nameHasUnreadEvents": this.props.notificationState.isUnread,
         });
 
         let nameContainer = (

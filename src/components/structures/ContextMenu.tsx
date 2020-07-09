@@ -16,15 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useRef, useState} from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import React, {CSSProperties, useRef, useState} from "react";
+import ReactDOM from "react-dom";
+import classNames from "classnames";
+
 import {Key} from "../../Keyboard";
-import * as sdk from "../../index";
-import AccessibleButton from "../views/elements/AccessibleButton";
-import StyledCheckbox from "../views/elements/StyledCheckbox";
-import StyledRadioButton from "../views/elements/StyledRadioButton";
+import {Writeable} from "../../@types/common";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -32,8 +29,8 @@ import StyledRadioButton from "../views/elements/StyledRadioButton";
 
 const ContextualMenuContainerId = "mx_ContextualMenu_Container";
 
-function getOrCreateContainer() {
-    let container = document.getElementById(ContextualMenuContainerId);
+function getOrCreateContainer(): HTMLDivElement {
+    let container = document.getElementById(ContextualMenuContainerId) as HTMLDivElement;
 
     if (!container) {
         container = document.createElement("div");
@@ -45,50 +42,70 @@ function getOrCreateContainer() {
 }
 
 const ARIA_MENU_ITEM_ROLES = new Set(["menuitem", "menuitemcheckbox", "menuitemradio"]);
+
+interface IPosition {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+}
+
+export enum ChevronFace {
+    Top = "top",
+    Bottom = "bottom",
+    Left = "left",
+    Right = "right",
+    None = "none",
+}
+
+interface IProps extends IPosition {
+    menuWidth?: number;
+    menuHeight?: number;
+
+    chevronOffset?: number;
+    chevronFace?: ChevronFace;
+
+    menuPaddingTop?: number;
+    menuPaddingBottom?: number;
+    menuPaddingLeft?: number;
+    menuPaddingRight?: number;
+
+    zIndex?: number;
+
+    // If true, insert an invisible screen-sized element behind the menu that when clicked will close it.
+    hasBackground?: boolean;
+    // whether this context menu should be focus managed. If false it must handle itself
+    managed?: boolean;
+
+    // Function to be called on menu close
+    onFinished();
+    // on resize callback
+    windowResize?();
+}
+
+interface IState {
+    contextMenuElem: HTMLDivElement;
+}
+
 // Generic ContextMenu Portal wrapper
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
-export class ContextMenu extends React.Component {
-    static propTypes = {
-        top: PropTypes.number,
-        bottom: PropTypes.number,
-        left: PropTypes.number,
-        right: PropTypes.number,
-        menuWidth: PropTypes.number,
-        menuHeight: PropTypes.number,
-        chevronOffset: PropTypes.number,
-        chevronFace: PropTypes.string, // top, bottom, left, right or none
-        // Function to be called on menu close
-        onFinished: PropTypes.func.isRequired,
-        menuPaddingTop: PropTypes.number,
-        menuPaddingRight: PropTypes.number,
-        menuPaddingBottom: PropTypes.number,
-        menuPaddingLeft: PropTypes.number,
-        zIndex: PropTypes.number,
-
-        // If true, insert an invisible screen-sized element behind the
-        // menu that when clicked will close it.
-        hasBackground: PropTypes.bool,
-
-        // on resize callback
-        windowResize: PropTypes.func,
-
-        managed: PropTypes.bool, // whether this context menu should be focus managed. If false it must handle itself
-    };
+export class ContextMenu extends React.PureComponent<IProps, IState> {
+    private initialFocus: HTMLElement;
 
     static defaultProps = {
         hasBackground: true,
         managed: true,
     };
 
-    constructor() {
-        super();
+    constructor(props, context) {
+        super(props, context);
         this.state = {
             contextMenuElem: null,
         };
 
         // persist what had focus when we got initialized so we can return it after
-        this.initialFocus = document.activeElement;
+        this.initialFocus = document.activeElement as HTMLElement;
     }
 
     componentWillUnmount() {
@@ -96,7 +113,7 @@ export class ContextMenu extends React.Component {
         this.initialFocus.focus();
     }
 
-    collectContextMenuRect = (element) => {
+    private collectContextMenuRect = (element) => {
         // We don't need to clean up when unmounting, so ignore
         if (!element) return;
 
@@ -113,7 +130,7 @@ export class ContextMenu extends React.Component {
         });
     };
 
-    onContextMenu = (e) => {
+    private onContextMenu = (e) => {
         if (this.props.onFinished) {
             this.props.onFinished();
 
@@ -136,20 +153,20 @@ export class ContextMenu extends React.Component {
         }
     };
 
-    onContextMenuPreventBubbling = (e) => {
+    private onContextMenuPreventBubbling = (e) => {
         // stop propagation so that any context menu handlers don't leak out of this context menu
         // but do not inhibit the default browser menu
         e.stopPropagation();
     };
 
     // Prevent clicks on the background from going through to the component which opened the menu.
-    _onFinished = (ev: InputEvent) => {
+    private onFinished = (ev: React.MouseEvent) => {
         ev.stopPropagation();
         ev.preventDefault();
         if (this.props.onFinished) this.props.onFinished();
     };
 
-    _onMoveFocus = (element, up) => {
+    private onMoveFocus = (element: Element, up: boolean) => {
         let descending = false; // are we currently descending or ascending through the DOM tree?
 
         do {
@@ -183,25 +200,25 @@ export class ContextMenu extends React.Component {
         } while (element && !ARIA_MENU_ITEM_ROLES.has(element.getAttribute("role")));
 
         if (element) {
-            element.focus();
+            (element as HTMLElement).focus();
         }
     };
 
-    _onMoveFocusHomeEnd = (element, up) => {
+    private onMoveFocusHomeEnd = (element: Element, up: boolean) => {
         let results = element.querySelectorAll('[role^="menuitem"]');
         if (!results) {
             results = element.querySelectorAll('[tab-index]');
         }
         if (results && results.length) {
             if (up) {
-                results[0].focus();
+                (results[0] as HTMLElement).focus();
             } else {
-                results[results.length - 1].focus();
+                (results[results.length - 1] as HTMLElement).focus();
             }
         }
     };
 
-    _onKeyDown = (ev) => {
+    private onKeyDown = (ev: React.KeyboardEvent) => {
         if (!this.props.managed) {
             if (ev.key === Key.ESCAPE) {
                 this.props.onFinished();
@@ -219,16 +236,16 @@ export class ContextMenu extends React.Component {
                 this.props.onFinished();
                 break;
             case Key.ARROW_UP:
-                this._onMoveFocus(ev.target, true);
+                this.onMoveFocus(ev.target as Element, true);
                 break;
             case Key.ARROW_DOWN:
-                this._onMoveFocus(ev.target, false);
+                this.onMoveFocus(ev.target as Element, false);
                 break;
             case Key.HOME:
-                this._onMoveFocusHomeEnd(this.state.contextMenuElem, true);
+                this.onMoveFocusHomeEnd(this.state.contextMenuElem, true);
                 break;
             case Key.END:
-                this._onMoveFocusHomeEnd(this.state.contextMenuElem, false);
+                this.onMoveFocusHomeEnd(this.state.contextMenuElem, false);
                 break;
             default:
                 handled = false;
@@ -241,9 +258,8 @@ export class ContextMenu extends React.Component {
         }
     };
 
-    renderMenu(hasBackground=this.props.hasBackground) {
-        const position = {};
-        let chevronFace = null;
+    protected renderMenu(hasBackground = this.props.hasBackground) {
+        const position: Partial<Writeable<DOMRect>> = {};
         const props = this.props;
 
         if (props.top) {
@@ -252,23 +268,24 @@ export class ContextMenu extends React.Component {
             position.bottom = props.bottom;
         }
 
+        let chevronFace: ChevronFace;
         if (props.left) {
             position.left = props.left;
-            chevronFace = 'left';
+            chevronFace = ChevronFace.Left;
         } else {
             position.right = props.right;
-            chevronFace = 'right';
+            chevronFace = ChevronFace.Right;
         }
 
         const contextMenuRect = this.state.contextMenuElem ? this.state.contextMenuElem.getBoundingClientRect() : null;
 
-        const chevronOffset = {};
+        const chevronOffset: CSSProperties = {};
         if (props.chevronFace) {
             chevronFace = props.chevronFace;
         }
-        const hasChevron = chevronFace && chevronFace !== "none";
+        const hasChevron = chevronFace && chevronFace !== ChevronFace.None;
 
-        if (chevronFace === 'top' || chevronFace === 'bottom') {
+        if (chevronFace === ChevronFace.Top || chevronFace === ChevronFace.Bottom) {
             chevronOffset.left = props.chevronOffset;
         } else if (position.top !== undefined) {
             const target = position.top;
@@ -298,13 +315,13 @@ export class ContextMenu extends React.Component {
             'mx_ContextualMenu_right': !hasChevron && position.right,
             'mx_ContextualMenu_top': !hasChevron && position.top,
             'mx_ContextualMenu_bottom': !hasChevron && position.bottom,
-            'mx_ContextualMenu_withChevron_left': chevronFace === 'left',
-            'mx_ContextualMenu_withChevron_right': chevronFace === 'right',
-            'mx_ContextualMenu_withChevron_top': chevronFace === 'top',
-            'mx_ContextualMenu_withChevron_bottom': chevronFace === 'bottom',
+            'mx_ContextualMenu_withChevron_left': chevronFace === ChevronFace.Left,
+            'mx_ContextualMenu_withChevron_right': chevronFace === ChevronFace.Right,
+            'mx_ContextualMenu_withChevron_top': chevronFace === ChevronFace.Top,
+            'mx_ContextualMenu_withChevron_bottom': chevronFace === ChevronFace.Bottom,
         });
 
-        const menuStyle = {};
+        const menuStyle: CSSProperties = {};
         if (props.menuWidth) {
             menuStyle.width = props.menuWidth;
         }
@@ -335,13 +352,28 @@ export class ContextMenu extends React.Component {
         let background;
         if (hasBackground) {
             background = (
-                <div className="mx_ContextualMenu_background" style={wrapperStyle} onClick={this._onFinished} onContextMenu={this.onContextMenu} />
+                <div
+                    className="mx_ContextualMenu_background"
+                    style={wrapperStyle}
+                    onClick={this.onFinished}
+                    onContextMenu={this.onContextMenu}
+                />
             );
         }
 
         return (
-            <div className="mx_ContextualMenu_wrapper" style={{...position, ...wrapperStyle}} onKeyDown={this._onKeyDown} onContextMenu={this.onContextMenuPreventBubbling}>
-                <div className={menuClasses} style={menuStyle} ref={this.collectContextMenuRect} role={this.props.managed ? "menu" : undefined}>
+            <div
+                className="mx_ContextualMenu_wrapper"
+                style={{...position, ...wrapperStyle}}
+                onKeyDown={this.onKeyDown}
+                onContextMenu={this.onContextMenuPreventBubbling}
+            >
+                <div
+                    className={menuClasses}
+                    style={menuStyle}
+                    ref={this.collectContextMenuRect}
+                    role={this.props.managed ? "menu" : undefined}
+                >
                     { chevron }
                     { props.children }
                 </div>
@@ -350,195 +382,13 @@ export class ContextMenu extends React.Component {
         );
     }
 
-    render() {
+    render(): React.ReactChild {
         return ReactDOM.createPortal(this.renderMenu(), getOrCreateContainer());
     }
 }
 
-// Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuButton = ({ label, isExpanded, children, onClick, onContextMenu, ...props }) => {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-    return (
-        <AccessibleButton
-            {...props}
-            onClick={onClick}
-            onContextMenu={onContextMenu || onClick}
-            title={label}
-            aria-label={label}
-            aria-haspopup={true}
-            aria-expanded={isExpanded}
-        >
-            { children }
-        </AccessibleButton>
-    );
-};
-ContextMenuButton.propTypes = {
-    ...AccessibleButton.propTypes,
-    label: PropTypes.string,
-    isExpanded: PropTypes.bool.isRequired, // whether or not the context menu is currently open
-};
-
-// Semantic component for representing a role=menuitem
-export const MenuItem = ({children, label, ...props}) => {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-    return (
-        <AccessibleButton {...props} role="menuitem" tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-MenuItem.propTypes = {
-    ...AccessibleButton.propTypes,
-    label: PropTypes.string, // optional
-    className: PropTypes.string, // optional
-    onClick: PropTypes.func.isRequired,
-};
-
-// Semantic component for representing a role=group for grouping menu radios/checkboxes
-export const MenuGroup = ({children, label, ...props}) => {
-    return <div {...props} role="group" aria-label={label}>
-        { children }
-    </div>;
-};
-MenuGroup.propTypes = {
-    label: PropTypes.string.isRequired,
-    className: PropTypes.string, // optional
-};
-
-// Semantic component for representing a role=menuitemcheckbox
-export const MenuItemCheckbox = ({children, label, active=false, disabled=false, ...props}) => {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-    return (
-        <AccessibleButton {...props} role="menuitemcheckbox" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-MenuItemCheckbox.propTypes = {
-    ...AccessibleButton.propTypes,
-    label: PropTypes.string, // optional
-    active: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool, // optional
-    className: PropTypes.string, // optional
-    onClick: PropTypes.func.isRequired,
-};
-
-// Semantic component for representing a styled role=menuitemcheckbox
-export const StyledMenuItemCheckbox = ({children, label, onChange, onClose, checked, disabled=false, ...props}) => {
-    const onKeyDown = (e) => {
-        if (e.key === Key.ENTER || e.key === Key.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            onChange();
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            if (e.key === Key.ENTER) {
-                onClose();
-            }
-        }
-    };
-    const onKeyUp = (e) => {
-        // prevent the input default handler as we handle it on keydown to match
-        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
-        if (e.key === Key.SPACE || e.key === Key.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-    return (
-        <StyledCheckbox
-            {...props}
-            role="menuitemcheckbox"
-            aria-checked={checked}
-            checked={checked}
-            aria-disabled={disabled}
-            tabIndex={-1}
-            aria-label={label}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-        >
-            { children }
-        </StyledCheckbox>
-    );
-};
-StyledMenuItemCheckbox.propTypes = {
-    ...StyledCheckbox.propTypes,
-    label: PropTypes.string, // optional
-    checked: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool, // optional
-    className: PropTypes.string, // optional
-    onChange: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
-};
-
-// Semantic component for representing a role=menuitemradio
-export const MenuItemRadio = ({children, label, active=false, disabled=false, ...props}) => {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-    return (
-        <AccessibleButton {...props} role="menuitemradio" aria-checked={active} aria-disabled={disabled} tabIndex={-1} aria-label={label}>
-            { children }
-        </AccessibleButton>
-    );
-};
-MenuItemRadio.propTypes = {
-    ...AccessibleButton.propTypes,
-    label: PropTypes.string, // optional
-    active: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool, // optional
-    className: PropTypes.string, // optional
-    onClick: PropTypes.func.isRequired,
-};
-
-// Semantic component for representing a styled role=menuitemradio
-export const StyledMenuItemRadio = ({children, label, onChange, onClose, checked=false, disabled=false, ...props}) => {
-    const onKeyDown = (e) => {
-        if (e.key === Key.ENTER || e.key === Key.SPACE) {
-            e.stopPropagation();
-            e.preventDefault();
-            onChange();
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            if (e.key === Key.ENTER) {
-                onClose();
-            }
-        }
-    };
-    const onKeyUp = (e) => {
-        // prevent the input default handler as we handle it on keydown to match
-        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
-        if (e.key === Key.SPACE || e.key === Key.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    };
-    return (
-        <StyledRadioButton
-            {...props}
-            role="menuitemradio"
-            aria-checked={checked}
-            checked={checked}
-            aria-disabled={disabled}
-            tabIndex={-1}
-            aria-label={label}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            onKeyUp={onKeyUp}
-        >
-            { children }
-        </StyledRadioButton>
-    );
-};
-StyledMenuItemRadio.propTypes = {
-    ...StyledMenuItemRadio.propTypes,
-    label: PropTypes.string, // optional
-    checked: PropTypes.bool.isRequired,
-    disabled: PropTypes.bool, // optional
-    className: PropTypes.string, // optional
-    onChange: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired, // gets called after onChange on Key.ENTER
-};
-
 // Placement method for <ContextMenu /> to position context menu to right of elementRect with chevronOffset
-export const toRightOf = (elementRect, chevronOffset=12) => {
+export const toRightOf = (elementRect: DOMRect, chevronOffset = 12) => {
     const left = elementRect.right + window.pageXOffset + 3;
     let top = elementRect.top + (elementRect.height / 2) + window.pageYOffset;
     top -= chevronOffset + 8; // where 8 is half the height of the chevron
@@ -546,8 +396,8 @@ export const toRightOf = (elementRect, chevronOffset=12) => {
 };
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
-export const aboveLeftOf = (elementRect, chevronFace="none") => {
-    const menuOptions = { chevronFace };
+export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None) => {
+    const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.pageXOffset;
     const buttonBottom = elementRect.bottom + window.pageYOffset;
@@ -605,3 +455,12 @@ export function createMenu(ElementClass, props) {
 
     return {close: onFinished};
 }
+
+// re-export the semantic helper components for simplicity
+export {ContextMenuButton} from "../../accessibility/context_menu/ContextMenuButton";
+export {MenuGroup} from "../../accessibility/context_menu/MenuGroup";
+export {MenuItem} from "../../accessibility/context_menu/MenuItem";
+export {MenuItemCheckbox} from "../../accessibility/context_menu/MenuItemCheckbox";
+export {MenuItemRadio} from "../../accessibility/context_menu/MenuItemRadio";
+export {StyledMenuItemCheckbox} from "../../accessibility/context_menu/StyledMenuItemCheckbox";
+export {StyledMenuItemRadio} from "../../accessibility/context_menu/StyledMenuItemRadio";

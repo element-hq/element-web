@@ -16,48 +16,50 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
-import * as sdk from "../../../index";
 import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
+import BaseAvatar from "./BaseAvatar";
 
-export default createReactClass({
-    displayName: 'MemberAvatar',
+interface IProps {
+    // TODO: replace with correct type
+    member: any;
+    fallbackUserId: string;
+    width: number;
+    height: number;
+    resizeMethod: string;
+    // The onClick to give the avatar
+    onClick: React.MouseEventHandler;
+    // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
+    viewUserOnClick: boolean;
+    title: string;
+}
 
-    propTypes: {
-        member: PropTypes.object,
-        fallbackUserId: PropTypes.string,
-        width: PropTypes.number,
-        height: PropTypes.number,
-        resizeMethod: PropTypes.string,
-        // The onClick to give the avatar
-        onClick: PropTypes.func,
-        // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
-        viewUserOnClick: PropTypes.bool,
-        title: PropTypes.string,
-    },
+interface IState {
+    name: string;
+    title: string;
+    imageUrl?: string;
+}
 
-    getDefaultProps: function() {
-        return {
-            width: 40,
-            height: 40,
-            resizeMethod: 'crop',
-            viewUserOnClick: false,
-        };
-    },
+export default class MemberAvatar extends React.Component<IProps, IState> {
+    public static defaultProps = {
+        width: 40,
+        height: 40,
+        resizeMethod: 'crop',
+        viewUserOnClick: false,
+    };
 
-    getInitialState: function() {
-        return this._getState(this.props);
-    },
+    constructor(props: IProps) {
+        super(props);
 
-    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps: function(nextProps) {
-        this.setState(this._getState(nextProps));
-    },
+        this.state = MemberAvatar.getState(props);
+    }
 
-    _getState: function(props) {
+    public static getDerivedStateFromProps(nextProps: IProps): IState {
+        return MemberAvatar.getState(nextProps);
+    }
+
+    private static getState(props: IProps): IState {
         if (props.member && props.member.name) {
             return {
                 name: props.member.name,
@@ -79,11 +81,9 @@ export default createReactClass({
         } else {
             console.error("MemberAvatar called somehow with null member or fallbackUserId");
         }
-    },
+    }
 
-    render: function() {
-        const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
-
+    render() {
         let {member, fallbackUserId, onClick, viewUserOnClick, ...otherProps} = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
@@ -100,5 +100,5 @@ export default createReactClass({
             <BaseAvatar {...otherProps} name={this.state.name} title={this.state.title}
                 idName={userId} url={this.state.imageUrl} onClick={onClick} />
         );
-    },
-});
+    }
+}
