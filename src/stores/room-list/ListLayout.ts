@@ -26,14 +26,12 @@ interface ISerializedListLayout {
     numTiles: number;
     showPreviews: boolean;
     collapsed: boolean;
-    savedCollapsed: boolean;
 }
 
 export class ListLayout {
     private _n = 0;
     private _previews = false;
     private _collapsed = false;
-    private _savedCollapsed = false;
 
     constructor(public readonly tagId: TagID) {
         const serialized = localStorage.getItem(this.key);
@@ -43,7 +41,6 @@ export class ListLayout {
             this._n = parsed.numTiles;
             this._previews = parsed.showPreviews;
             this._collapsed = parsed.collapsed;
-            this._savedCollapsed = parsed.savedCollapsed;
         }
     }
 
@@ -136,20 +133,11 @@ export class ListLayout {
         localStorage.setItem(this.key, JSON.stringify(this.serialize()));
     }
 
-    public saveCollapsedState() {
-        this._savedCollapsed = this.isCollapsed;
-    }
-
-    public restoreCollapsedState() {
-        this.isCollapsed = this._savedCollapsed;
-    }
-
     private serialize(): ISerializedListLayout {
         return {
             numTiles: this.visibleTiles,
             showPreviews: this.showPreviews,
             collapsed: this.isCollapsed,
-            savedCollapsed: this._savedCollapsed,
         };
     }
 }

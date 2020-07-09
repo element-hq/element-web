@@ -47,6 +47,7 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
+import { Action } from "../../../dispatcher/actions";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -78,6 +79,7 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
+    isFiltered: boolean;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
@@ -92,6 +94,7 @@ interface IState {
     notificationState: ListNotificationState;
     contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
+    isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
@@ -109,6 +112,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
+            isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed
         };
         this.state.notificationState.setRooms(this.props.rooms);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -123,8 +127,15 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         return Math.min(nVisible, this.numTiles);
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(prevProps: Readonly<IProps>) {
         this.state.notificationState.setRooms(this.props.rooms);
+        if (prevProps.isFiltered !== this.props.isFiltered) {
+            if (this.props.isFiltered) {
+                this.setState({isExpanded: true});
+            } else {
+                this.setState({isExpanded: !this.layout.isCollapsed});
+            }
+        }
     }
 
     public componentWillUnmount() {
@@ -137,10 +148,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
             setImmediate(() => {
-                const isCollapsed = this.layout.isCollapsed;
                 const roomIndex = this.props.rooms.findIndex((r) => r.roomId === payload.room_id);
 
-                if (isCollapsed && roomIndex > -1) {
+                if (!this.state.isExpanded && roomIndex > -1) {
                     this.toggleCollapsed();
                 }
                 // extend the visible section to include the room if it is entirely invisible
@@ -295,24 +305,23 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private toggleCollapsed = () => {
-        this.layout.isCollapsed = !this.layout.isCollapsed;
-        this.forceUpdate(); // because the layout doesn't trigger an update
+        this.layout.isCollapsed = this.state.isExpanded;
+        this.setState({isExpanded: !this.layout.isCollapsed});
         setImmediate(() => this.props.onResize()); // needs to happen when the DOM is updated
     };
 
     private onHeaderKeyDown = (ev: React.KeyboardEvent) => {
-        const isCollapsed = this.layout && this.layout.isCollapsed;
         switch (ev.key) {
             case Key.ARROW_LEFT:
                 ev.stopPropagation();
-                if (!isCollapsed) {
+                if (this.state.isExpanded) {
                     // On ARROW_LEFT collapse the room sublist if it isn't already
                     this.toggleCollapsed();
                 }
                 break;
             case Key.ARROW_RIGHT: {
                 ev.stopPropagation();
-                if (isCollapsed) {
+                if (!this.state.isExpanded) {
                     // On ARROW_RIGHT expand the room sublist if it isn't already
                     this.toggleCollapsed();
                 } else if (this.sublistRef.current) {
@@ -341,7 +350,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private renderVisibleTiles(): React.ReactElement[] {
-        if (this.layout && this.layout.isCollapsed) {
+        if (!this.state.isExpanded) {
             // don't waste time on rendering
             return [];
         }
@@ -498,7 +507,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
                     const collapseClasses = classNames({
                         'mx_RoomSublist2_collapseBtn': true,
-                        'mx_RoomSublist2_collapseBtn_collapsed': this.layout && this.layout.isCollapsed,
+                        'mx_RoomSublist2_collapseBtn_collapsed': !this.state.isExpanded,
                     });
 
                     const classes = classNames({
@@ -526,7 +535,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     tabIndex={tabIndex}
                                     className="mx_RoomSublist2_headerText"
                                     role="treeitem"
-                                    aria-expanded={!this.layout.isCollapsed}
+                                    aria-expanded={this.state.isExpanded}
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
                                     onContextMenu={this.onContextMenu}
