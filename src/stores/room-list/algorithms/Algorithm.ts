@@ -41,6 +41,17 @@ import { getListAlgorithmInstance } from "./list-ordering";
  */
 export const LIST_UPDATED_EVENT = "list_updated_event";
 
+// These are the causes which require a room to be known in order for us to handle them. If
+// a cause in this list is raised and we don't know about the room, we don't handle the update.
+//
+// Note: these typically happen when a new room is coming in, such as the user creating or
+// joining the room. For these cases, we need to know about the room prior to handling it otherwise
+// we'll make bad assumptions.
+const CAUSES_REQUIRING_ROOM = [
+    RoomUpdateCause.Timeline,
+    RoomUpdateCause.ReadReceipt,
+];
+
 interface IStickyRoom {
     room: Room;
     position: number;
@@ -755,6 +766,11 @@ export class Algorithm extends EventEmitter {
         }
 
         if (!this.roomIdsToTags[room.roomId]) {
+            if (CAUSES_REQUIRING_ROOM.includes(cause)) {
+                console.warn(`Skipping tag update for ${room.roomId} because we don't know about the room`);
+                return false;
+            }
+
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Updating tags for room ${room.roomId} (${room.name})`);
 
