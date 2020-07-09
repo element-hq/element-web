@@ -46,15 +46,14 @@ import {
     MUTE,
 } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
-import { INotificationState } from "../../../stores/notifications/INotificationState";
 import NotificationBadge from "./NotificationBadge";
-import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { Volume } from "../../../RoomNotifsTypes";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import RoomListActions from "../../../actions/RoomListActions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -80,7 +79,7 @@ type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
     hover: boolean;
-    notificationState: INotificationState;
+    notificationState: NotificationState;
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
@@ -132,7 +131,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-            notificationState: new TagSpecificNotificationState(this.props.room, this.props.tag),
+            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room, this.props.tag),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
@@ -492,11 +491,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             }
         }
 
-        const notificationColor = this.state.notificationState.color;
         const nameClasses = classNames({
             "mx_RoomTile2_name": true,
             "mx_RoomTile2_nameWithPreview": !!messagePreview,
-            "mx_RoomTile2_nameHasUnreadEvents": notificationColor >= NotificationColor.Bold,
+            "mx_RoomTile2_nameHasUnreadEvents": this.state.notificationState.isUnread,
         });
 
         let nameContainer = (
@@ -513,15 +511,15 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
         if (this.props.tag === DefaultTagID.Invite) {
             // append nothing
-        } else if (notificationColor >= NotificationColor.Red) {
+        } else if (this.state.notificationState.hasMentions) {
             ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
                 count: this.state.notificationState.count,
             });
-        } else if (notificationColor >= NotificationColor.Grey) {
+        } else if (this.state.notificationState.hasUnreadCount) {
             ariaLabel += " " + _t("%(count)s unread messages.", {
                 count: this.state.notificationState.count,
             });
-        } else if (notificationColor >= NotificationColor.Bold) {
+        } else if (this.state.notificationState.isUnread) {
             ariaLabel += " " + _t("Unread messages.");
         }
 
