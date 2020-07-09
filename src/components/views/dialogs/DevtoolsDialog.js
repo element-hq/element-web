@@ -412,13 +412,13 @@ class RoomStateExplorer extends React.PureComponent {
         if (this.state.eventType === null) {
             list = <FilteredList query={this.state.queryEventType} onChange={this.onQueryEventType}>
                 {
-                    Object.keys(this.roomStateEvents).map((evType) => {
-                        const stateGroup = this.roomStateEvents[evType];
-                        const stateKeys = Object.keys(stateGroup);
+                    Array.from(this.roomStateEvents.keys()).map((evType) => {
+                        const stateGroup = this.roomStateEvents.get(evType);
+                        const stateKeys = Array.from(stateGroup.keys());
 
                         let onClickFn;
                         if (stateKeys.length === 1 && stateKeys[0] === '') {
-                            onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
+                            onClickFn = this.onViewSourceClick(stateGroup.get(stateKeys[0]));
                         } else {
                             onClickFn = this.browseEventType(evType);
                         }
@@ -430,12 +430,12 @@ class RoomStateExplorer extends React.PureComponent {
                 }
             </FilteredList>;
         } else {
-            const stateGroup = this.roomStateEvents[this.state.eventType];
+            const stateGroup = this.roomStateEvents.get(this.state.eventType);
 
             list = <FilteredList query={this.state.queryStateKey} onChange={this.onQueryStateKey}>
                 {
-                    Object.keys(stateGroup).map((stateKey) => {
-                        const ev = stateGroup[stateKey];
+                    Array.from(stateGroup.keys()).map((stateKey) => {
+                        const ev = stateGroup.get(stateKey);
                         return <button className={classes} key={stateKey} onClick={this.onViewSourceClick(ev)}>
                             { stateKey }
                         </button>;
