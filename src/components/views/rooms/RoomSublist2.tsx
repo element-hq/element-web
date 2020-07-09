@@ -119,7 +119,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numVisibleTiles(): number {
-        const nVisible = Math.floor(this.layout.visibleTiles);
+        const nVisible = Math.ceil(this.layout.visibleTiles);
         return Math.min(nVisible, this.numTiles);
     }
 
@@ -635,8 +635,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
             // The padding is variable though, so figure out what we need padding for.
             let padding = 0;
-            if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
-            padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
+            //if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
+            //padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
 
             const relativeTiles = layout.tilesWithPadding(this.numTiles, padding);
             const minTilesPx = layout.calculateTilesToPixelsMin(relativeTiles, layout.minVisibleTiles, padding);
@@ -644,25 +644,32 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
             const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
 
+            const handleWrapperClasses = classNames({
+                'mx_RoomSublist2_resizerHandles': true,
+                'mx_RoomSublist2_resizerHandles_showNButton': !!showNButton,
+            });
+
             const dimensions = {
                 height: tilesPx,
             };
             content = (
-                <Resizable
-                    size={dimensions as any}
-                    minHeight={minTilesPx}
-                    maxHeight={maxTilesPx}
-                    onResizeStart={this.onResizeStart}
-                    onResizeStop={this.onResizeStop}
-                    onResize={this.onResize}
-                    handleWrapperClass="mx_RoomSublist2_resizerHandles"
-                    handleClasses={{bottom: "mx_RoomSublist2_resizerHandle"}}
-                    className="mx_RoomSublist2_resizeBox"
-                    enable={handles}
-                >
-                    {visibleTiles}
+                <React.Fragment>
+                    <Resizable
+                        size={dimensions as any}
+                        minHeight={minTilesPx}
+                        maxHeight={maxTilesPx}
+                        onResizeStart={this.onResizeStart}
+                        onResizeStop={this.onResizeStop}
+                        onResize={this.onResize}
+                        handleWrapperClass={handleWrapperClasses}
+                        handleClasses={{bottom: "mx_RoomSublist2_resizerHandle"}}
+                        className="mx_RoomSublist2_resizeBox"
+                        enable={handles}
+                    >
+                        {visibleTiles}
+                    </Resizable>
                     {showNButton}
-                </Resizable>
+                </React.Fragment>
             );
         }
 
