@@ -160,22 +160,16 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
-            if (roomIdx === -1) return false; // no change
+            if (roomIdx === -1) {
+                console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                return false; // no change
+            }
             const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
             this.alterCategoryPositionBy(oldCategory, -1, this.indices);
             this.cachedOrderedRooms.splice(roomIdx, 1); // remove the room
         } else {
             throw new Error(`Unhandled splice: ${cause}`);
         }
-    }
-
-    private getRoomIndex(room: Room): number {
-        let roomIdx = this.cachedOrderedRooms.indexOf(room);
-        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
-            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
-            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
-        }
-        return roomIdx;
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
