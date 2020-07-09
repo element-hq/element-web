@@ -677,18 +677,6 @@ export class Algorithm extends EventEmitter {
                 }
             }
 
-            if (hasTags && isForLastSticky && !knownRoomRef) {
-                // we have a fairly good chance at losing a room right now. Under some circumstances,
-                // we can end up with a room which transitions references and tag changes, then gets
-                // lost when the sticky room changes. To counter this, we try and add the room to the
-                // list manually as the condition below to update the reference will fail.
-                //
-                // Other conditions *should* result in the room being sorted into the right place.
-                console.warn(`${room.roomId} was about to be lost - inserting at end of room list`);
-                this.rooms.push(room);
-                knownRoomRef = true;
-            }
-
             // If we have tags for a room and don't have the room referenced, something went horribly
             // wrong - the reference should have been updated above.
             if (hasTags && !knownRoomRef && !isSticky) {
@@ -700,6 +688,13 @@ export class Algorithm extends EventEmitter {
                 // Go directly in and set the sticky room's new reference, being careful not
                 // to trigger a sticky room update ourselves.
                 this._stickyRoom.room = room;
+            }
+
+            // If after all that we're still a NewRoom update, add the room if applicable.
+            // We don't do this for the sticky room (because it causes duplication issues)
+            // or if we know about the reference (as it should be replaced).
+            if (cause === RoomUpdateCause.NewRoom && !isSticky && !knownRoomRef) {
+                this.rooms.push(room);
             }
         }
 
@@ -715,6 +710,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    this.cachedRooms[rmTag] = algorithm.orderedRooms;
                 }
                 for (const addTag of diff.added) {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
@@ -722,6 +718,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[addTag];
                     if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
+                    this.cachedRooms[addTag] = algorithm.orderedRooms;
                 }
 
                 // Update the tag map so we don't regen it in a moment
