@@ -31,6 +31,13 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
         super(defaultDispatcher);
     }
 
+    public static get instance(): RoomListLayoutStore {
+        if (!RoomListLayoutStore.internalInstance) {
+            RoomListLayoutStore.internalInstance = new RoomListLayoutStore();
+        }
+        return RoomListLayoutStore.internalInstance;
+    }
+
     public ensureLayoutExists(tagId: TagID) {
         if (!this.layoutMap.has(tagId)) {
             this.layoutMap.set(tagId, new ListLayout(tagId));
@@ -50,13 +57,6 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
         for (const layout of this.layoutMap.values()) {
             layout.reset();
         }
-    }
-
-    public static get instance(): RoomListLayoutStore {
-        if (!RoomListLayoutStore.internalInstance) {
-            RoomListLayoutStore.internalInstance = new RoomListLayoutStore();
-        }
-        return RoomListLayoutStore.internalInstance;
     }
 
     protected async onNotReady(): Promise<any> {
