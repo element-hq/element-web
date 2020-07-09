@@ -37,9 +37,9 @@ import GroupAvatar from "../avatars/GroupAvatar";
 import TemporaryTile from "./TemporaryTile";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { TagSpecificNotificationState } from "../../../stores/notifications/TagSpecificNotificationState";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -201,14 +201,11 @@ export default class RoomList2 extends React.Component<IProps, IState> {
             let listRooms = lists[t];
 
             if (unread) {
-                // TODO Be smarter and not spin up a bunch of wasted listeners just to kill them 4 lines later
-                // https://github.com/vector-im/riot-web/issues/14035
-                const notificationStates = rooms.map(r => new TagSpecificNotificationState(r, t));
                 // filter to only notification rooms (and our current active room so we can index properly)
-                listRooms = notificationStates.filter(state => {
-                    return state.room.roomId === roomId || state.color >= NotificationColor.Bold;
+                listRooms = listRooms.filter(r => {
+                    const state = RoomNotificationStateStore.instance.getRoomState(r, t);
+                    return state.room.roomId === roomId || state.isUnread;
                 });
-                notificationStates.forEach(state => state.destroy());
             }
 
             rooms.push(...listRooms);
@@ -293,7 +290,6 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     label={_t(aesthetics.sectionLabel)}
                     onAddRoom={onAddRoomFn}
                     addRoomLabel={aesthetics.addRoomLabel}
-                    isInvite={aesthetics.isInvite}
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}

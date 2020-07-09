@@ -45,6 +45,7 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 
 // TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
@@ -74,7 +75,6 @@ interface IProps {
     label: string;
     onAddRoom?: () => void;
     addRoomLabel: string;
-    isInvite: boolean;
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
@@ -106,7 +106,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
 
         this.state = {
-            notificationState: new ListNotificationState(this.props.isInvite, this.props.tagId),
+            notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
         };
