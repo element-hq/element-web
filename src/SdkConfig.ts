@@ -21,7 +21,7 @@ export interface ConfigOptions {
 
 export const DEFAULTS: ConfigOptions = {
     // Brand name of the app
-    brand: "Riot",
+    brand: "Element",
     // URL to a page we show in an iframe to configure integrations
     integrations_ui_url: "https://scalar.vector.im/",
     // Base URL to the REST interface of the integrations server
