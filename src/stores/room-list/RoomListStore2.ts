@@ -114,7 +114,13 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (!quiet) this.updateFn.trigger();
     };
 
-    protected async onDispatch(payload: ActionPayload) {
+    protected onDispatch(payload: ActionPayload) {
+        // We do this to intentionally break out of the current event loop task, allowing
+        // us to instead wait for a more convenient time to run our updates.
+        setImmediate(() => this.onDispatchAsync(payload));
+    }
+
+    protected async onDispatchAsync(payload: ActionPayload) {
         if (payload.action === 'MatrixActions.sync') {
             // Filter out anything that isn't the first PREPARED sync.
             if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
