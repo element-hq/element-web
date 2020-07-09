@@ -16,11 +16,20 @@ limitations under the License.
 
 import { TagID } from "./models";
 import { ListLayout } from "./ListLayout";
+import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { ActionPayload } from "../../dispatcher/payloads";
 
-export default class RoomListLayoutStore {
+interface IState {}
+
+export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
     private static internalInstance: RoomListLayoutStore;
 
     private readonly layoutMap = new Map<TagID, ListLayout>();
+
+    constructor() {
+        super(defaultDispatcher);
+    }
 
     public ensureLayoutExists(tagId: TagID) {
         if (!this.layoutMap.has(tagId)) {
@@ -48,6 +57,16 @@ export default class RoomListLayoutStore {
             RoomListLayoutStore.internalInstance = new RoomListLayoutStore();
         }
         return RoomListLayoutStore.internalInstance;
+    }
+
+    protected async onNotReady(): Promise<any> {
+        // On logout, clear the map.
+        this.layoutMap.clear();
+    }
+
+    // We don't need this function, but our contract says we do
+    protected async onAction(payload: ActionPayload): Promise<any> {
+        return Promise.resolve();
     }
 }
 
