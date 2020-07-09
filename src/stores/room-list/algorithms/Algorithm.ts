@@ -87,12 +87,6 @@ export class Algorithm extends EventEmitter {
         return this._stickyRoom ? this._stickyRoom.room : null;
     }
 
-    public set stickyRoom(val: Room) {
-        // setters can't be async, so we call a private function to do the work
-        // noinspection JSIgnoredPromiseFromCall
-        this.updateStickyRoom(val);
-    }
-
     protected get hasFilters(): boolean {
         return this.allowedByFilter.size > 0;
     }
@@ -115,7 +109,7 @@ export class Algorithm extends EventEmitter {
      * Awaitable version of the sticky room setter.
      * @param val The new room to sticky.
      */
-    public async setStickyRoomAsync(val: Room) {
+    public async setStickyRoom(val: Room) {
         await this.updateStickyRoom(val);
     }
 
@@ -746,7 +740,7 @@ export class Algorithm extends EventEmitter {
                     };
                 } else {
                     // We have to clear the lock as the sticky room change will trigger updates.
-                    await this.setStickyRoomAsync(room);
+                    await this.setStickyRoom(room);
                 }
             }
         }
