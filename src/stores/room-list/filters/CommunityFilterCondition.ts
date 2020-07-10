@@ -52,8 +52,6 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
         const beforeRoomIds = this.roomIds;
         this.roomIds = (await GroupStore.getGroupRooms(this.community.groupId)).map(r => r.roomId);
         if (arrayHasDiff(beforeRoomIds, this.roomIds)) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log("Updating filter for group: ", this.community.groupId);
             this.emit(FILTER_CHANGED);
         }
     };
