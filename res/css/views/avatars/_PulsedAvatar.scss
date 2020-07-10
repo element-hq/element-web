@@ -14,21 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// XXX: We shouldn't be using TemporaryTile anywhere - delete it.
-.mx_DecoratedRoomAvatar, .mx_TemporaryTile {
-    position: relative;
-
-    .mx_RoomTileIcon {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+.mx_PulsedAvatar {
+    @keyframes shadow-pulse {
+        0% {
+            box-shadow: 0 0 0 0px rgba($accent-color, 0.2);
+        }
+        100% {
+            box-shadow: 0 0 0 6px rgba($accent-color, 0);
+        }
     }
 
-    .mx_NotificationBadge, .mx_RoomTile2_badgeContainer {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 18px;
-        width: 18px;
+    img {
+        animation: shadow-pulse 1s infinite;
     }
 }

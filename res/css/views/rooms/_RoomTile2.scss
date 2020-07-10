@@ -21,6 +21,10 @@ limitations under the License.
     margin-bottom: 4px;
     padding: 4px;
 
+    // allow scrollIntoView to ignore the sticky headers, must match combined height of .mx_RoomSublist2_headerContainer
+    scroll-margin-top: 32px;
+    scroll-margin-bottom: 32px;
+
     // The tile is also a flexbox row itself
     display: flex;
 
@@ -85,7 +89,6 @@ limitations under the License.
         height: 16px;
         // don't set width so that it takes no space when there is no badge to show
         margin: auto 0; // vertically align
-        position: relative; // fixes badge alignment in some scenarios
 
         // Create a flexbox to make aligning dot badges easier
         display: flex;
@@ -165,6 +168,11 @@ limitations under the License.
     }
 }
 
+// do not apply scroll-margin-bottom to the sublist which will not have a sticky header below it
+.mx_RoomSublist2:last-child .mx_RoomTile2 {
+    scroll-margin-bottom: 0;
+}
+
 // We use these both in context menus and the room tiles
 .mx_RoomTile2_iconBell::before {
     mask-image: url('$(res)/img/feather-customised/bell.svg');
@@ -222,6 +230,10 @@ limitations under the License.
 
     .mx_RoomTile2_iconStar::before {
         mask-image: url('$(res)/img/feather-customised/star.svg');
+    }
+
+    .mx_RoomTile2_iconFavorite::before {
+        mask-image: url('$(res)/img/feather-customised/favourites.svg');
     }
 
     .mx_RoomTile2_iconArrowDown::before {

@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
+import React, { createRef } from "react";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
-import { createRef } from "react";
 import { _t } from "../../languageHandler";
-import {ContextMenu, ContextMenuButton, MenuItem} from "./ContextMenu";
+import { ChevronFace, ContextMenu, ContextMenuButton, MenuItem } from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
@@ -122,7 +121,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
     };
 
-    private onOpenMenuClick = (ev: InputEvent) => {
+    private onOpenMenuClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -235,7 +234,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
         return (
             <ContextMenu
-                chevronFace="none"
+                chevronFace={ChevronFace.None}
                 // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
                 left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
                 top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
@@ -281,11 +280,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             label={_t("All settings")}
                             onClick={(e) => this.onSettingsOpen(e, null)}
                         />
-                        <MenuButton
+                        {/* <MenuButton
                             iconClassName="mx_UserMenu_iconArchive"
                             label={_t("Archived rooms")}
                             onClick={this.onShowArchived}
-                        />
+                        /> */}
                         <MenuButton
                             iconClassName="mx_UserMenu_iconMessage"
                             label={_t("Feedback")}
@@ -348,8 +347,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         {name}
                         {buttons}
                     </div>
-                    {this.renderContextMenu()}
                 </ContextMenuButton>
+                {this.renderContextMenu()}
             </React.Fragment>
         );
     }

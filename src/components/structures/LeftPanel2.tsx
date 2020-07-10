@@ -21,6 +21,7 @@ import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList2 from "../views/rooms/RoomList2";
+import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
@@ -114,63 +115,130 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private handleStickyHeaders(list: HTMLDivElement) {
-        // TODO: Evaluate if this has any performance benefit or detriment.
-        // See https://github.com/vector-im/riot-web/issues/14035
-
         if (this.isDoingStickyHeaders) return;
         this.isDoingStickyHeaders = true;
-        if (window.requestAnimationFrame) {
-            window.requestAnimationFrame(() => {
-                this.doStickyHeaders(list);
-                this.isDoingStickyHeaders = false;
-            });
-        } else {
+        window.requestAnimationFrame(() => {
             this.doStickyHeaders(list);
             this.isDoingStickyHeaders = false;
-        }
+        });
     }
 
     private doStickyHeaders(list: HTMLDivElement) {
-        const rlRect = list.getBoundingClientRect();
-        const bottom = rlRect.bottom;
-        const top = rlRect.top;
+        const topEdge = list.scrollTop;
+        const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
-        const headerHeight = 32; // Note: must match the CSS!
-        const headerRightMargin = 24; // calculated from margins and widths to align with non-sticky tiles
 
-        const headerStickyWidth = rlRect.width - headerRightMargin;
+        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerStickyWidth = list.clientWidth - headerRightMargin;
 
-        let gotBottom = false;
+        // We track which styles we want on a target before making the changes to avoid
+        // excessive layout updates.
+        const targetStyles = new Map<HTMLDivElement, {
+            stickyTop?: boolean;
+            stickyBottom?: boolean;
+            makeInvisible?: boolean;
+        }>();
+
         let lastTopHeader;
+        let firstBottomHeader;
         for (const sublist of sublists) {
-            const slRect = sublist.getBoundingClientRect();
-
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+            header.style.removeProperty("display"); // always clear display:none first
 
-            if (slRect.top + headerHeight > bottom && !gotBottom) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.removeProperty("top");
-                gotBottom = true;
-            } else if ((slRect.top - (headerHeight / 3)) < top) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${rlRect.top}px`;
+            // When an element is <=40% off screen, make it take over
+            const offScreenFactor = 0.4;
+            const isOffTop = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) <= topEdge;
+            const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
+
+            if (isOffTop || sublist === sublists[0]) {
+                targetStyles.set(header, { stickyTop: true });
                 if (lastTopHeader) {
                     lastTopHeader.style.display = "none";
+                    targetStyles.set(lastTopHeader, { makeInvisible: true });
                 }
-                // first unset it, if set in last iteration
-                header.style.removeProperty("display");
                 lastTopHeader = header;
+            } else if (isOffBottom && !firstBottomHeader) {
+                targetStyles.set(header, { stickyBottom: true });
+                firstBottomHeader = header;
             } else {
-                header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.removeProperty("width");
-                header.style.removeProperty("top");
+                targetStyles.set(header, {}); // nothing == clear
             }
+        }
+
+        // Run over the style changes and make them reality. We check to see if we're about to
+        // cause a no-op update, as adding/removing properties that are/aren't there cause
+        // layout updates.
+        for (const header of targetStyles.keys()) {
+            const style = targetStyles.get(header);
+            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
+
+            if (style.makeInvisible) {
+                // we will have already removed the 'display: none', so add it back.
+                header.style.display = "none";
+                continue; // nothing else to do, even if sticky somehow
+            }
+
+            if (style.stickyTop) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+
+                const newTop = `${list.parentElement.offsetTop}px`;
+                if (header.style.top !== newTop) {
+                    header.style.top = newTop;
+                }
+            } else if (style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+            }
+
+            if (style.stickyTop || style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (!headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+
+                const newWidth = `${headerStickyWidth}px`;
+                if (header.style.width !== newWidth) {
+                    header.style.width = newWidth;
+                }
+            } else if (!style.stickyTop && !style.stickyBottom) {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+                if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+                if (header.style.width) {
+                    header.style.removeProperty('width');
+                }
+                if (header.style.top) {
+                    header.style.removeProperty('top');
+                }
+            }
+        }
+
+        // add appropriate sticky classes to wrapper so it has
+        // the necessary top/bottom padding to put the sticky header in
+        const listWrapper = list.parentElement; // .mx_LeftPanel2_roomListWrapper
+        if (lastTopHeader) {
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyTop");
+        } else {
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyTop");
+        }
+        if (firstBottomHeader) {
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyBottom");
+        } else {
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyBottom");
         }
     }
 
@@ -325,15 +393,17 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div
-                        className={roomListClasses}
-                        onScroll={this.onScroll}
-                        ref={this.listContainerRef}
-                        // Firefox sometimes makes this element focusable due to
-                        // overflow:scroll;, so force it out of tab order.
-                        tabIndex={-1}
-                    >
-                        {roomList}
+                    <div className="mx_LeftPanel2_roomListWrapper">
+                        <div
+                            className={roomListClasses}
+                            onScroll={this.onScroll}
+                            ref={this.listContainerRef}
+                            // Firefox sometimes makes this element focusable due to
+                            // overflow:scroll;, so force it out of tab order.
+                            tabIndex={-1}
+                        >
+                            {roomList}
+                        </div>
                     </div>
                 </aside>
             </div>

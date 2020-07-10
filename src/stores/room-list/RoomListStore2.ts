@@ -32,6 +32,7 @@ import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "./membership";
 import { ListLayout } from "./ListLayout";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import RoomListLayoutStore from "./RoomListLayoutStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -50,6 +51,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
+    private layoutMap: Map<TagID, ListLayout> = new Map<TagID, ListLayout>();
 
     private readonly watchedSettings = [
         'feature_custom_tags',
@@ -435,6 +437,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         for (const tagId of OrderedDefaultTagIDs) {
             sorts[tagId] = this.calculateTagSorting(tagId);
             orders[tagId] = this.calculateListOrder(tagId);
+
+            RoomListLayoutStore.instance.ensureLayoutExists(tagId);
         }
 
         if (this.state.tagsEnabled) {
@@ -451,15 +455,6 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.initialListsGenerated = true;
 
         this.emit(LISTS_UPDATE_EVENT, this);
-    }
-
-    // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
-    public async resetLayouts() {
-        console.warn("Resetting layouts for room list");
-        for (const tagId of Object.keys(this.orderedLists)) {
-            new ListLayout(tagId).reset();
-        }
-        await this.regenerateAllLists();
     }
 
     public addFilter(filter: IFilterCondition): void {

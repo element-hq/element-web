@@ -403,6 +403,12 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     disabled={this.state.useIRCLayout}
                 />
                 <SettingsFlag
+                    name="useIRCLayout"
+                    level={SettingLevel.DEVICE}
+                    useCheckbox={true}
+                    onChange={(checked) => this.setState({useIRCLayout: checked})}
+                />
+                <SettingsFlag
                     name="useSystemFont"
                     level={SettingLevel.DEVICE}
                     useCheckbox={true}
@@ -440,7 +446,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                 </div>
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
-                {SettingsStore.isFeatureEnabled("feature_irc_ui") ? this.renderLayoutSection() : null}
                 {this.renderAdvancedSection()}
             </div>
         );

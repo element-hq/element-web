@@ -41,6 +41,17 @@ import { getListAlgorithmInstance } from "./list-ordering";
  */
 export const LIST_UPDATED_EVENT = "list_updated_event";
 
+// These are the causes which require a room to be known in order for us to handle them. If
+// a cause in this list is raised and we don't know about the room, we don't handle the update.
+//
+// Note: these typically happen when a new room is coming in, such as the user creating or
+// joining the room. For these cases, we need to know about the room prior to handling it otherwise
+// we'll make bad assumptions.
+const CAUSES_REQUIRING_ROOM = [
+    RoomUpdateCause.Timeline,
+    RoomUpdateCause.ReadReceipt,
+];
+
 interface IStickyRoom {
     room: Room;
     position: number;
@@ -655,16 +666,21 @@ export class Algorithm extends EventEmitter {
                 cause = RoomUpdateCause.PossibleTagChange;
             }
 
-            // If we have tags for a room and don't have the room referenced, the room reference
-            // probably changed. We need to swap out the problematic reference.
-            if (hasTags && !this.rooms.includes(room) && !isSticky) {
-                console.warn(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
+            // Check to see if the room is known first
+            let knownRoomRef = this.rooms.includes(room);
+            if (hasTags && !knownRoomRef) {
+                console.warn(`${room.roomId} might be a reference change - attempting to update reference`);
                 this.rooms = this.rooms.map(r => r.roomId === room.roomId ? room : r);
-
-                // Sanity check
-                if (!this.rooms.includes(room)) {
-                    throw new Error(`Failed to replace ${room.roomId} with an updated reference`);
+                knownRoomRef = this.rooms.includes(room);
+                if (!knownRoomRef) {
+                    console.warn(`${room.roomId} is still not referenced. It may be sticky.`);
                 }
+            }
+
+            // If we have tags for a room and don't have the room referenced, something went horribly
+            // wrong - the reference should have been updated above.
+            if (hasTags && !knownRoomRef && !isSticky) {
+                throw new Error(`${room.roomId} is missing from room array but is known - trying to find duplicate`);
             }
 
             // Like above, update the reference to the sticky room if we need to
@@ -672,6 +688,13 @@ export class Algorithm extends EventEmitter {
                 // Go directly in and set the sticky room's new reference, being careful not
                 // to trigger a sticky room update ourselves.
                 this._stickyRoom.room = room;
+            }
+
+            // If after all that we're still a NewRoom update, add the room if applicable.
+            // We don't do this for the sticky room (because it causes duplication issues)
+            // or if we know about the reference (as it should be replaced).
+            if (cause === RoomUpdateCause.NewRoom && !isSticky && !knownRoomRef) {
+                this.rooms.push(room);
             }
         }
 
@@ -687,6 +710,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
+                    this.cachedRooms[rmTag] = algorithm.orderedRooms;
                 }
                 for (const addTag of diff.added) {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
@@ -694,6 +718,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[addTag];
                     if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
+                    this.cachedRooms[addTag] = algorithm.orderedRooms;
                 }
 
                 // Update the tag map so we don't regen it in a moment
@@ -738,6 +763,11 @@ export class Algorithm extends EventEmitter {
         }
 
         if (!this.roomIdsToTags[room.roomId]) {
+            if (CAUSES_REQUIRING_ROOM.includes(cause)) {
+                console.warn(`Skipping tag update for ${room.roomId} because we don't know about the room`);
+                return false;
+            }
+
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log(`[RoomListDebug] Updating tags for room ${room.roomId} (${room.name})`);
 

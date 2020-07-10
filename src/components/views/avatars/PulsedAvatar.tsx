@@ -14,21 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// XXX: We shouldn't be using TemporaryTile anywhere - delete it.
-.mx_DecoratedRoomAvatar, .mx_TemporaryTile {
-    position: relative;
+import React from 'react';
 
-    .mx_RoomTileIcon {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-    }
-
-    .mx_NotificationBadge, .mx_RoomTile2_badgeContainer {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 18px;
-        width: 18px;
-    }
+interface IProps {
 }
+
+const PulsedAvatar: React.FC<IProps> = (props) => {
+    return <div className="mx_PulsedAvatar">
+        {props.children}
+    </div>;
+};
+
+export default PulsedAvatar;

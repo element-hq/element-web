@@ -1,5 +1,7 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2018 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,21 +16,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// XXX: We shouldn't be using TemporaryTile anywhere - delete it.
-.mx_DecoratedRoomAvatar, .mx_TemporaryTile {
-    position: relative;
+import React from "react";
 
-    .mx_RoomTileIcon {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-    }
-
-    .mx_NotificationBadge, .mx_RoomTile2_badgeContainer {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 18px;
-        width: 18px;
-    }
+interface IProps extends React.HTMLAttributes<HTMLDivElement> {
+    label: string;
 }
+
+// Semantic component for representing a role=group for grouping menu radios/checkboxes
+export const MenuGroup: React.FC<IProps> = ({children, label, ...props}) => {
+    return <div {...props} role="group" aria-label={label}>
+        { children }
+    </div>;
+};
