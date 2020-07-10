@@ -15,6 +15,7 @@ import GroupStore from '../../../../src/stores/GroupStore.js';
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
 import RoomListStore, {LISTS_UPDATE_EVENT} from "../../../../src/stores/room-list/RoomListStore2";
+import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -118,7 +119,7 @@ describe('RoomList', () => {
             parentDiv = null;
         }
 
-        await RoomListStore.instance.resetLayouts();
+        await RoomListLayoutStore.instance.resetLayouts();
         await RoomListStore.instance.resetStore();
 
         done();
