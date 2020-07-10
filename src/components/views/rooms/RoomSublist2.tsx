@@ -142,7 +142,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numTiles(): number {
-        return (this.props.rooms || []).length + (this.props.extraBadTilesThatShouldntExist || []).length;
+        return RoomSublist2.calcNumTiles(this.props);
+    }
+
+    private static calcNumTiles(props) {
+        return (props.rooms || []).length + (props.extraBadTilesThatShouldntExist || []).length;
     }
 
     private get numVisibleTiles(): number {
@@ -150,8 +154,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         return Math.min(nVisible, this.numTiles);
     }
 
-    public componentDidUpdate() {
+    public componentDidUpdate(prevProps) {
         this.state.notificationState.setRooms(this.props.rooms);
+        // as the rooms can come in one by one we need to reevaluate
+        // the amount of available rooms to cap the amount of requested visible rooms by the layout
+        if (RoomSublist2.calcNumTiles(prevProps) !== this.numTiles) {
+            this.setState({height: this.calculateInitialHeight()});
+        }
     }
 
     public componentWillUnmount() {
