@@ -666,9 +666,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         className="mx_RoomSublist2_resizeBox"
                         enable={handles}
                     >
-                        {visibleTiles}
+                        <div className="mx_RoomSublist2_tiles">
+                            {visibleTiles}
+                        </div>
+                        {showNButton}
                     </Resizable>
-                    {showNButton}
                 </React.Fragment>
             );
         }

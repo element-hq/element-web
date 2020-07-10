@@ -186,12 +186,22 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
+        .mx_RoomSublist2_tiles {
+            flex: 1 0 0;
+            overflow: hidden;
+            // need this to be flex otherwise the overflow hidden from above
+            // sometimes vertically centers the clipped list ... no idea why it would do this
+            // as the box model should be top aligned. Happens in both FF and Chromium
+            display: flex;
+            flex-direction: column;
+        }
+
         .mx_RoomSublist2_resizerHandles_showNButton {
-            position: absolute;
-            bottom: -32px; // height of the button
-            left: 0;
-            right: 0;
-            height: 4px; // height of the handle
+            flex: 0 0 32px;
+        }
+
+        .mx_RoomSublist2_resizerHandles {
+            flex: 0 0 4px;
         }
 
         // Class name comes from the ResizableBox component
