@@ -26,7 +26,7 @@ export enum RebrandDialogKind {
 };
 
 interface IProps {
-    onFinished: () => void;
+    onFinished: (bool) => void;
     kind: RebrandDialogKind,
     targetUrl?: string,
 }

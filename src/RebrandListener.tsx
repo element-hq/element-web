@@ -25,7 +25,7 @@ import { _t } from './languageHandler';
 const TOAST_KEY = 'rebrand';
 const NAG_INTERVAL = 24 * 60 * 60 * 1000;
 
-function getRedirectUrl(url) {
+function getRedirectUrl(url): string {
     const redirectUrl = new URL(url);
     redirectUrl.hash = '';
 
@@ -34,7 +34,7 @@ function getRedirectUrl(url) {
         if (url.hostname !== newUrl.hostname || url.pathname !== newUrl.pathname) {
             redirectUrl.hostname = newUrl.hostname;
             redirectUrl.pathname = newUrl.pathname;
-            return redirectUrl;
+            return redirectUrl.toString();
         }
         return null;
     } else if (url.hostname === 'riot.im') {
