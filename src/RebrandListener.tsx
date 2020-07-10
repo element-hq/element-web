@@ -163,7 +163,8 @@ export default class RebrandListener {
         }
 
         if (!this._reshowTimer && this.nagAgainAt) {
-            this._reshowTimer = setTimeout(this.onNagTimerFired, (this.nagAgainAt - Date.now()) + 100);
+            // XXX: Our build system picks up NodeJS bindings when we need browser bindings.
+            this._reshowTimer = setTimeout(this.onNagTimerFired, (this.nagAgainAt - Date.now()) + 100) as any as number;
         }
     }
 }
