@@ -86,6 +86,12 @@ interface IProps {
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
 
+// TODO: Use re-resizer's NumberSize when it is exposed as the type
+interface ResizeDelta {
+    width: number,
+    height: number,
+}
+
 type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
 
 interface IState {
@@ -161,7 +167,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         e: MouseEvent | TouchEvent,
         travelDirection: Direction,
         refToElement: HTMLDivElement,
-        delta: { width: number, height: number }, // TODO: Use re-resizer's NumberSize when it is exposed as the type
+        delta: ResizeDelta,
     ) => {
         // Do some sanity checks, but in reality we shouldn't need these.
         if (travelDirection !== "bottom") return;
