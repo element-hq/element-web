@@ -130,7 +130,7 @@ export default createReactClass({
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
-        const avatarHeight = 40;
+        const avatarHeight = 32;
 
         const httpUrl = profile.avatarUrl ? this.context.mxcUrlToHttp(
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
