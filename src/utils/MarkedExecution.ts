@@ -50,8 +50,8 @@ export class MarkedExecution {
      */
     public trigger() {
         if (!this.marked) return;
+        this.reset(); // reset first just in case the fn() causes a trigger()
         this.fn();
-        this.reset();
     }
 
     /**
