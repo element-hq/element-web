@@ -105,7 +105,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         ev.target.select();
     };
 
-    private onBlur = () => {
+    private onBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
         this.setState({focused: false});
     };
 
