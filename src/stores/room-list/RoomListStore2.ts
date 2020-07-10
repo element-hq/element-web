@@ -92,8 +92,10 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this._matrixClient = null;
 
         this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
         this.algorithm = new Algorithm();
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmListUpdated);
     }
 
     // Public for test usage. Do not call this.
