@@ -59,7 +59,7 @@ import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
  * warning disappears.                                             *
  *******************************************************************/
 
-const SHOW_N_BUTTON_HEIGHT = 32; // As defined by CSS
+const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
 export const HEADER_HEIGHT = 32; // As defined by CSS
 
