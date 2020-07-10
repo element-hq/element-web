@@ -111,13 +111,34 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
 
+        const height = this.calculateInitialHeight();
         this.state = {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
+            height,
         };
         this.state.notificationState.setRooms(this.props.rooms);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+    }
+
+    private calculateInitialHeight() {
+        const requestedVisibleTiles = Math.max(Math.floor(this.layout.visibleTiles), this.layout.minVisibleTiles);
+        const tileCount = Math.min(this.numTiles, requestedVisibleTiles);
+        const height = this.layout.tilesToPixelsWithPadding(tileCount, this.padding);
+        return height;
+    }
+
+    private get padding() {
+        let padding = RESIZE_HANDLE_HEIGHT;
+        // this is used for calculating the max height of the whole container,
+        // and takes into account whether there should be room reserved for the show less button
+        // when fully expanded. Note that the show more button might still be shown when not fully expanded,
+        // but in this case it will take the space of a tile and we don't need to reserve space for it.
+        if (this.numTiles > this.layout.defaultVisibleTiles) {
+            padding += SHOW_N_BUTTON_HEIGHT;
+        }
+        return padding;
     }
 
     private get numTiles(): number {
@@ -568,7 +589,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (visibleTiles.length > 0) {
             const layout = this.layout; // to shorten calls
 
-            const maxTilesFactored = layout.tilesWithResizerBoxFactor(this.numTiles);
+            const minTiles = Math.min(layout.minVisibleTiles, this.numTiles);
+            const showMoreAtMinHeight = minTiles < this.numTiles;
+            const minHeightPadding = RESIZE_HANDLE_HEIGHT + (showMoreAtMinHeight ? SHOW_N_BUTTON_HEIGHT : 0);
+            const minTilesPx = layout.tilesToPixelsWithPadding(minTiles, minHeightPadding);
+            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
                 'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
@@ -578,9 +603,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
             let showNButton = null;
-            if (this.numTiles > visibleTiles.length) {
                 // we have a cutoff condition - add the button to show all
                 const numMissing = this.numTiles - visibleTiles.length;
+            if (maxTilesPx > this.state.height) {
                 let showMoreText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
                         {_t("Show %(count)s more", {count: numMissing})}
@@ -595,7 +620,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         {showMoreText}
                     </RovingAccessibleButton>
                 );
-            } else if (this.numTiles <= visibleTiles.length && this.numTiles > this.layout.defaultVisibleTiles) {
+            } else if (this.numTiles > this.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
                     <span className='mx_RoomSublist2_showNButtonText'>
@@ -639,29 +664,15 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // goes backwards and can become wildly incorrect (visibleTiles says 18 when there's
             // only mathematically 7 possible).
 
-            // The padding is variable though, so figure out what we need padding for.
-            let padding = 0;
-            //if (showNButton) padding += SHOW_N_BUTTON_HEIGHT;
-            //padding += RESIZE_HANDLE_HEIGHT; // always append the handle height
-
-            const relativeTiles = layout.tilesWithPadding(this.numTiles, padding);
-            const minTilesPx = layout.calculateTilesToPixelsMin(relativeTiles, layout.minVisibleTiles, padding);
-            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, padding);
-            const tilesWithoutPadding = Math.min(relativeTiles, layout.visibleTiles);
-            const tilesPx = layout.calculateTilesToPixelsMin(relativeTiles, tilesWithoutPadding, padding);
-
             const handleWrapperClasses = classNames({
                 'mx_RoomSublist2_resizerHandles': true,
                 'mx_RoomSublist2_resizerHandles_showNButton': !!showNButton,
             });
 
-            const dimensions = {
-                height: tilesPx,
-            };
             content = (
                 <React.Fragment>
                     <Resizable
-                        size={dimensions as any}
+                        size={{height: this.state.height}}
                         minHeight={minTilesPx}
                         maxHeight={maxTilesPx}
                         onResizeStart={this.onResizeStart}
