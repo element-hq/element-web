@@ -256,7 +256,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                 0
             ));
         } else {
-            console.log(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
+            console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
         }
 
         if ((ev as React.KeyboardEvent).key === Key.ENTER) {

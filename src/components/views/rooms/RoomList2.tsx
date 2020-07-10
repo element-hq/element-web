@@ -219,7 +219,10 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
-        console.log("new lists", newLists);
+        if (!window.mx_QuietRoomListLogging) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+            console.log("new lists", newLists);
+        }
 
         this.setState({sublists: newLists}, () => {
             this.props.onResize();
