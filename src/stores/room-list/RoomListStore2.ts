@@ -98,10 +98,13 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this._matrixClient = client;
 
         // Update any settings here, as some may have happened before we were logically ready.
+        // Update any settings here, as some may have happened before we were logically ready.
         console.log("Regenerating room lists: Startup");
         await this.readAndCacheSettingsFromStore();
-        await this.regenerateAllLists();
-        this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
+        await this.regenerateAllLists({trigger: false});
+        await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
+
+        this.updateFn.trigger();
     }
 
     // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
@@ -162,25 +165,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
-<<<<<<<
             await this.makeReady(payload.matrixClient);
-=======
-            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
-            this.checkEnabled();
-            if (!this.enabled) return;
-
-            this._matrixClient = payload.matrixClient;
-
-            // Update any settings here, as some may have happened before we were logically ready.
-            console.log("Regenerating room lists: Startup");
-            await this.readAndCacheSettingsFromStore();
-            await this.regenerateAllLists({trigger: false});
-            await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
-
-            this.updateFn.trigger();
 
             return; // no point in running the next conditions - they won't match
->>>>>>>
         }
 
         // TODO: Remove this once the RoomListStore becomes default
@@ -511,17 +498,15 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.updateFn.mark();
     };
 
-<<<<<<<
-    // This is only exposed externally for the tests. Do not call this within the app.
-    public async regenerateAllLists() {
-=======
     /**
      * Regenerates the room whole room list, discarding any previous results.
+     *
+     * Note: This is only exposed externally for the tests. Do not call this from within
+     * the app.
      * @param trigger Set to false to prevent a list update from being sent. Should only
      * be used if the calling code will manually trigger the update.
      */
-    private async regenerateAllLists({trigger = true}) {
->>>>>>>
+    public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
         const sorts: ITagSortingMap = {};
