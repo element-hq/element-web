@@ -214,8 +214,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         this.setState({isResizing: true});
     };
 
-    private onResizeStop = (e, direction, ref, d) => {
-        const newHeight = this.heightAtStart + d.height;
+    private onResizeStop = (
+        e: MouseEvent | TouchEvent,
+        travelDirection: Direction,
+        refToElement: HTMLDivElement,
+        delta: ResizeDelta,
+    ) => {
+        const newHeight = this.heightAtStart + delta.height;
         this.applyHeightChange(newHeight);
         this.setState({isResizing: false, height: newHeight});
     };
