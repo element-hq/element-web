@@ -181,7 +181,6 @@ limitations under the License.
     }
 
     .mx_RoomSublist2_resizeBox {
-        margin-bottom: 4px; // for the resize handle
         position: relative;
 
         // Create another flexbox column for the tiles
@@ -189,55 +188,22 @@ limitations under the License.
         flex-direction: column;
         overflow: hidden;
 
-        .mx_RoomSublist2_placeholder {
-            height: 44px; // Height of a room tile plus margins
+        .mx_RoomSublist2_tiles {
+            flex: 1 0 0;
+            overflow: hidden;
+            // need this to be flex otherwise the overflow hidden from above
+            // sometimes vertically centers the clipped list ... no idea why it would do this
+            // as the box model should be top aligned. Happens in both FF and Chromium
+            display: flex;
+            flex-direction: column;
         }
 
-        .mx_RoomSublist2_showNButton {
-            cursor: pointer;
-            font-size: $font-13px;
-            line-height: $font-18px;
-            color: $roomtile2-preview-color;
+        .mx_RoomSublist2_resizerHandles_showNButton {
+            flex: 0 0 32px;
+        }
 
-            // Update the render() function for RoomSublist2 if these change
-            // Update the ListLayout class for minVisibleTiles if these change.
-            //
-            // At 24px high, 8px padding on the top and 4px padding on the bottom  this equates to 0.73 of
-            // a tile due to how the padding calculations work.
-            height: 24px;
-            padding-top: 8px;
-            padding-bottom: 4px;
-
-            // We force this to the bottom so it will overlap rooms as needed.
-            // We account for the space it takes up (24px) in the code through padding.
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-
-            // We create a flexbox to cheat at alignment
-            display: flex;
-            align-items: center;
-
-            .mx_RoomSublist2_showNButtonChevron {
-                position: relative;
-                width: 16px;
-                height: 16px;
-                margin-left: 12px;
-                margin-right: 18px;
-                mask-position: center;
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                background: $roomtile2-preview-color;
-            }
-
-            .mx_RoomSublist2_showMoreButtonChevron {
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
-            }
-
-            .mx_RoomSublist2_showLessButtonChevron {
-                mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
-            }
+        .mx_RoomSublist2_resizerHandles {
+            flex: 0 0 4px;
         }
 
         // Class name comes from the ResizableBox component
@@ -266,6 +232,42 @@ limitations under the License.
                 opacity: 0.8;
                 background-color: $primary-fg-color;
             }
+        }
+    }
+
+    .mx_RoomSublist2_showNButton {
+        cursor: pointer;
+        font-size: $font-13px;
+        line-height: $font-18px;
+        color: $roomtile2-preview-color;
+
+        // Update the render() function for RoomSublist2 if these change
+        // Update the ListLayout class for minVisibleTiles if these change.
+        height: 24px;
+        padding-bottom: 4px;
+
+        // We create a flexbox to cheat at alignment
+        display: flex;
+        align-items: center;
+
+        .mx_RoomSublist2_showNButtonChevron {
+            position: relative;
+            width: 16px;
+            height: 16px;
+            margin-left: 12px;
+            margin-right: 18px;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $roomtile2-preview-color;
+        }
+
+        .mx_RoomSublist2_showMoreButtonChevron {
+            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+        }
+
+        .mx_RoomSublist2_showLessButtonChevron {
+            mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
         }
     }
 
@@ -314,13 +316,13 @@ limitations under the License.
 
         .mx_RoomSublist2_resizeBox {
             align-items: center;
+        }
 
-            .mx_RoomSublist2_showNButton {
-                flex-direction: column;
+        .mx_RoomSublist2_showNButton {
+            flex-direction: column;
 
-                .mx_RoomSublist2_showNButtonChevron {
-                    margin-right: 12px; // to center
-                }
+            .mx_RoomSublist2_showNButtonChevron {
+                margin-right: 12px; // to center
             }
         }
 

@@ -25,7 +25,7 @@ import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm
 import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
-import { IFilterCondition } from "./filters/IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
@@ -71,6 +71,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
         RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
     }
 
     public get orderedLists(): ITagMap {
@@ -510,6 +511,11 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             console.log("Underlying algorithm has triggered a list update - marking");
         }
         this.updateFn.mark();
+    };
+
+    private onAlgorithmFilterUpdated = () => {
+        // The filter can happen off-cycle, so trigger an update if we need to.
+        this.updateFn.triggerIfWillMark();
     };
 
     /**

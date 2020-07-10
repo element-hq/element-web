@@ -153,11 +153,11 @@ export class Algorithm extends EventEmitter {
         // Populate the cache of the new filter
         this.allowedByFilter.set(filterCondition, this.rooms.filter(r => filterCondition.isVisible(r)));
         this.recalculateFilteredRooms();
-        filterCondition.on(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+        filterCondition.on(FILTER_CHANGED, this.handleFilterChange.bind(this));
     }
 
     public removeFilterCondition(filterCondition: IFilterCondition): void {
-        filterCondition.off(FILTER_CHANGED, this.recalculateFilteredRooms.bind(this));
+        filterCondition.off(FILTER_CHANGED, this.handleFilterChange.bind(this));
         if (this.allowedByFilter.has(filterCondition)) {
             this.allowedByFilter.delete(filterCondition);
 
@@ -167,6 +167,13 @@ export class Algorithm extends EventEmitter {
                 this.emit(LIST_UPDATED_EVENT);
             }
         }
+    }
+
+    private async handleFilterChange() {
+        await this.recalculateFilteredRooms();
+
+        // re-emit the update so the list store can fire an off-cycle update if needed
+        this.emit(FILTER_CHANGED);
     }
 
     private async updateStickyRoom(val: Room) {

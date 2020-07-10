@@ -20,7 +20,8 @@ const TILE_HEIGHT_PX = 44;
 
 // this comes from the CSS where the show more button is
 // mathematically this percent of a tile when floating.
-const RESIZER_BOX_FACTOR = 0.78;
+//const RESIZER_BOX_FACTOR = 0.78;
+const RESIZER_BOX_FACTOR = 0;
 
 interface ISerializedListLayout {
     numTiles: number;
@@ -107,6 +108,10 @@ export class ListLayout {
             padding = possiblePadding;
         }
         return this.tilesToPixels(Math.min(maxTiles, n)) + padding;
+    }
+
+    public tilesWithResizerBoxFactor(n: number): number {
+        return n + RESIZER_BOX_FACTOR;
     }
 
     public tilesWithPadding(n: number, paddingPx: number): number {
