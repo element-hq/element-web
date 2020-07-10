@@ -63,7 +63,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.checkEnabled();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
-        RoomViewStore.addListener(this.onRVSUpdate);
+        RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
     }
 
@@ -97,7 +97,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
      * @param trigger Set to false to prevent a list update from being sent. Should only
      * be used if the calling code will manually trigger the update.
      */
-    private onRVSUpdate = async ({trigger = true}) => {
+    private async handleRVSUpdate({trigger = true}) {
         if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
@@ -119,7 +119,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         }
 
         if (trigger) this.updateFn.trigger();
-    };
+    }
 
     protected onDispatch(payload: ActionPayload) {
         // We do this to intentionally break out of the current event loop task, allowing
@@ -144,7 +144,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             console.log("Regenerating room lists: Startup");
             await this.readAndCacheSettingsFromStore();
             await this.regenerateAllLists({trigger: false});
-            await this.onRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
+            await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
 
             this.updateFn.trigger();
 
