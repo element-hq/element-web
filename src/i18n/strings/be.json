@@ -21,7 +21,7 @@
     "Close": "Зачыніць",
     "Notifications": "Апавяшчэнні",
     "Low Priority": "Нізкі прыярытэт",
-    "Riot does not know how to join a room on this network": "Riot не ведае, як увайсці ў пакой у гэтай сетке",
+    "%(brand)s does not know how to join a room on this network": "%(brand)s не ведае, як увайсці ў пакой у гэтай сетке",
     "Members": "Удзельнікі",
     "Can't update user notification settings": "Немагчыма абнавіць налады апавяшчэнняў карыстальніка",
     "Failed to change settings": "Не атрымалася змяніць налады",
