@@ -19,47 +19,29 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
-import * as Unread from '../../../../Unread';
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
-
-/**
- * The determined category of a room.
- */
-export enum Category {
-    /**
-     * The room has unread mentions within.
-     */
-    Red = "RED",
-    /**
-     * The room has unread notifications within. Note that these are not unread
-     * mentions - they are simply messages which the user has asked to cause a
-     * badge count update or push notification.
-     */
-    Grey = "GREY",
-    /**
-     * The room has unread messages within (grey without the badge).
-     */
-    Bold = "BOLD",
-    /**
-     * The room has no relevant unread messages within.
-     */
-    Idle = "IDLE",
-}
+import { NotificationColor } from "../../../notifications/NotificationColor";
+import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 interface ICategorizedRoomMap {
     // @ts-ignore - TS wants this to be a string, but we know better
-    [category: Category]: Room[];
+    [category: NotificationColor]: Room[];
 }
 
 interface ICategoryIndex {
     // @ts-ignore - TS wants this to be a string, but we know better
-    [category: Category]: number; // integer
+    [category: NotificationColor]: number; // integer
 }
 
 // Caution: changing this means you'll need to update a bunch of assumptions and
 // comments! Check the usage of Category carefully to figure out what needs changing
 // if you're going to change this array's order.
-const CATEGORY_ORDER = [Category.Red, Category.Grey, Category.Bold, Category.Idle];
+const CATEGORY_ORDER = [
+    NotificationColor.Red,
+    NotificationColor.Grey,
+    NotificationColor.Bold,
+    NotificationColor.None, // idle
+];
 
 /**
  * An implementation of the "importance" algorithm for room list sorting. Where
@@ -92,10 +74,10 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     // noinspection JSMethodCanBeStatic
     private categorizeRooms(rooms: Room[]): ICategorizedRoomMap {
         const map: ICategorizedRoomMap = {
-            [Category.Red]: [],
-            [Category.Grey]: [],
-            [Category.Bold]: [],
-            [Category.Idle]: [],
+            [NotificationColor.Red]: [],
+            [NotificationColor.Grey]: [],
+            [NotificationColor.Bold]: [],
+            [NotificationColor.None]: [],
         };
         for (const room of rooms) {
             const category = this.getRoomCategory(room);
@@ -105,25 +87,11 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private getRoomCategory(room: Room): Category {
-        // Function implementation borrowed from old RoomListStore
-
-        const mentions = room.getUnreadNotificationCount('highlight') > 0;
-        if (mentions) {
-            return Category.Red;
-        }
-
-        let unread = room.getUnreadNotificationCount() > 0;
-        if (unread) {
-            return Category.Grey;
-        }
-
-        unread = Unread.doesRoomHaveUnreadMessages(room);
-        if (unread) {
-            return Category.Bold;
-        }
-
-        return Category.Idle;
+    private getRoomCategory(room: Room): NotificationColor {
+        // It's fine for us to call this a lot because it's cached, and we shouldn't be
+        // wasting anything by doing so as the store holds single references
+        const state = RoomNotificationStateStore.instance.getRoomState(room, this.tagId);
+        return state.color;
     }
 
     public async setRooms(rooms: Room[]): Promise<any> {
@@ -217,7 +185,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         }
     }
 
-    private async sortCategory(category: Category) {
+    private async sortCategory(category: NotificationColor) {
         // This should be relatively quick because the room is usually inserted at the top of the
         // category, and most popular sorting algorithms will deal with trying to keep the active
         // room at the top/start of the category. For the few algorithms that will have to move the
@@ -234,7 +202,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private getCategoryFromIndices(index: number, indices: ICategoryIndex): Category {
+    private getCategoryFromIndices(index: number, indices: ICategoryIndex): NotificationColor {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
             const isLast = i === (CATEGORY_ORDER.length - 1);
@@ -250,7 +218,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private moveRoomIndexes(nRooms: number, fromCategory: Category, toCategory: Category, indices: ICategoryIndex) {
+    private moveRoomIndexes(nRooms: number, fromCategory: NotificationColor, toCategory: NotificationColor, indices: ICategoryIndex) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
@@ -261,7 +229,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         this.alterCategoryPositionBy(toCategory, +nRooms, indices);
     }
 
-    private alterCategoryPositionBy(category: Category, n: number, indices: ICategoryIndex) {
+    private alterCategoryPositionBy(category: NotificationColor, n: number, indices: ICategoryIndex) {
         // Note: when we alter a category's index, we actually have to modify the ones following
         // the target and not the target itself.
 
