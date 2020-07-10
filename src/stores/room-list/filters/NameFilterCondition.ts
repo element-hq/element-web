@@ -41,8 +41,6 @@ export class NameFilterCondition extends EventEmitter implements IFilterConditio
 
     public set search(val: string) {
         this._search = val;
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Updating filter for room name search:", this._search);
         this.emit(FILTER_CHANGED);
     }
 
