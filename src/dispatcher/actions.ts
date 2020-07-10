@@ -84,14 +84,4 @@ export enum Action {
      * Changes room based on room list order and payload parameters. Should be used with ViewRoomDeltaPayload.
      */
     ViewRoomDelta = "view_room_delta",
-
-    /**
-     * Informs the room list when room filtering has begun. No additional payload information required.
-     */
-    StartRoomFilter = "start_room_filter",
-
-     /**
-      * Informs the room list when room filtering has ended. No additional payload information required.
-      */
-    StopRoomFilter = "stop_room_filter",
 }
