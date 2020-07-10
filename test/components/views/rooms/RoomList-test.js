@@ -14,7 +14,7 @@ import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
-import RoomListStore, {LISTS_UPDATE_EVENT} from "../../../../src/stores/room-list/RoomListStore2";
+import RoomListStore, {LISTS_UPDATE_EVENT, RoomListStore2} from "../../../../src/stores/room-list/RoomListStore2";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {
@@ -49,6 +49,8 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(async function(done) {
+        RoomListStore2.TEST_MODE = true;
+
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
         client.credentials = {userId: myUserId};
