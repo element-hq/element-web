@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
@@ -23,21 +21,31 @@ import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 export default class VectorAuthPage extends React.PureComponent {
     static replaces = 'AuthPage'
 
-    render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+    static welcomeBackgroundUrl;
+
+    // cache the url as a static to prevent it changing without refreshing
+    static getWelcomeBackgroundUrl() {
+        if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.get().branding;
-        let backgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
+        VectorAuthPage.welcomeBackgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
         if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
             if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                backgroundUrl = brandingConfig.welcomeBackgroundUrl[Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length)];
+                const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
+                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl[index];
             } else {
-                backgroundUrl = brandingConfig.welcomeBackgroundUrl;
+                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl;
             }
         }
 
+        return VectorAuthPage.welcomeBackgroundUrl;
+    }
+
+    render() {
+        const AuthFooter = sdk.getComponent('auth.AuthFooter');
+
         const pageStyle = {
-            background: `center/cover fixed url(${backgroundUrl})`,
+            background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
 
         const modalStyle = {
@@ -65,7 +73,7 @@ export default class VectorAuthPage extends React.PureComponent {
         return (
             <div className="mx_AuthPage" style={pageStyle}>
                 <div className="mx_AuthPage_modal" style={modalStyle}>
-                    <div className="mx_AuthPage_modalBlur" style={blurStyle}></div>
+                    <div className="mx_AuthPage_modalBlur" style={blurStyle} />
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>
                         { this.props.children }
                     </div>
