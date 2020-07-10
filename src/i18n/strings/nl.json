@@ -1631,7 +1631,6 @@
     "Show less": "Minder tonen",
     "Show more": "Meer tonen",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Momenteel stelt een wachtwoordswijziging alle berichtsleutels in alle sessies opnieuw in, en maakt zo oude versleutelde berichten onleesbaar - tenzij u uw sleutels eerst wegschrijft, en na afloop weer inleest. Dit zal verbeterd worden.",
-    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Geef hier te negeren gebruikers en servers in. Asterisken staan voor willekeurige tekenreeksen; zo leidt <code>@bot:*</code> tot het negeren van  alle gebruikers die ‘bot’ heten op alle servers.",
     "in memory": "in het geheugen",
     "not found": "niet gevonden",
     "Your homeserver does not support session management.": "Uw thuisserver ondersteunt geen sessiebeheer.",

@@ -208,7 +208,6 @@
     "Cannot reach homeserver": "Không thể kết nối tới máy chủ",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Đảm bảo bạn có kết nối Internet ổn địn, hoặc liên hệ Admin để được hỗ trợ",
     "Your %(brand)s is misconfigured": "Hệ thống %(brand)s của bạn bị thiết lập sai",
-    "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.": "Liên hệ Admin để kiểm tra <a>thiết lập của bạn</a> để sửa lỗi.",
     "Cannot reach identity server": "Không thể kết nối server định danh",
     "You can register, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Bạn có thể đăng ký, nhưng một vài chức năng sẽ không sử đụng dược cho đến khi server định danh hoạt động trở lại. Nếu bạn thấy thông báo này, hãy kiểm tra thiết lập hoặc liên hệ Admin.",
     "You can reset your password, but some features will be unavailable until the identity server is back online. If you keep seeing this warning, check your configuration or contact a server admin.": "Bạn có thể đặt lại mật khẩu, nhưng một vài chức năng sẽ không sử đụng dược cho đến khi server định danh hoạt động trở lại. Nếu bạn thấy thông báo này, hãy kiểm tra thiết lập hoặc liên hệ Admin.",

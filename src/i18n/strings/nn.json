@@ -1224,7 +1224,6 @@
     "Secret storage public key:": "Public-nøkkel for hemmeleg lager:",
     "Keyboard Shortcuts": "Tastatursnarvegar",
     "Ignored users": "Ignorerte brukarar",
-    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Legg til brukarar og tenarar du vil ignorera her. Bruk stjerne/wildcard (*) for at markere eitkvart teikn. Til dømes, <code>@bot*</code> vil ignorere alle brukarar med namn 'bot' på uansett tenar.",
     "Server or user ID to ignore": "Tenar eller brukar-ID for å ignorere",
     "If this isn't what you want, please use a different tool to ignore users.": "Om det ikkje var dette du ville, bruk eit anna verktøy til å ignorera brukarar.",
     "Enter the name of a new server you want to explore.": "Skriv inn namn på ny tenar du ynskjer å utforske.",

@@ -1269,7 +1269,6 @@
     "Waiting for partner to confirm...": "상대방이 확인하기를 기다리는 중...",
     "Incoming Verification Request": "수신 확인 요청",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "이전에 구성원의 불러오기 지연이 켜진 %(host)s에서 %(brand)s을 사용했습니다. 이 버전에서 불러오기 지연은 꺼집니다. 로컬 캐시가 이 두 설정 간에 호환되지 않으므로, %(brand)s은 계정을 다시 동기화 해야 합니다.",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "다른 버전의 %(brand)s이 다른 탭에서 열려있다면, 같은 호스트에서 불러오기 지연이 동시에 켜지고 꺼지면서 오류가 발생할 수 있으니 닫아주세요.",
     "Incompatible local cache": "호환하지 않는 로컬 캐시",
     "Clear cache and resync": "캐시를 지우고 다시 동기화",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s은 이제 필요할 때만 다른 사용자에 대한 정보를 불러와 메모리를 3배에서 5배 덜 잡아먹습니다. 서버와 다시 동기화하는 동안 기다려주세요!",

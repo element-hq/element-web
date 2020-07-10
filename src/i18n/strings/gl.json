@@ -1919,7 +1919,6 @@
     "Signature upload success": "Subeuse correctamente a sinatura",
     "Signature upload failed": "Fallou a subida da sinatura",
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Anteriormente utilizaches %(brand)s en %(host)s con carga preguiceira de membros. Nesta versión a carga preguiceira está desactivada. Como a caché local non é compatible entre as dúas configuracións, %(brand)s precisa voltar a sincronizar a conta.",
-    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Se a outra versión de %(brand)s aínda está aberta noutra lapela, péchaa por favor, pois podería haber fallos ao estar as dúas sesións traballando simultáneamente.",
     "Incompatible local cache": "Caché local incompatible",
     "Clear cache and resync": "Baleirar caché e sincronizar",
     "%(brand)s now uses 3-5x less memory, by only loading information about other users when needed. Please wait whilst we resynchronise with the server!": "%(brand)s utiliza agora entre 3 e 5 veces menos memoria, cargando só información sobre as usuarias cando é preciso. Agarda mentras se sincroniza co servidor!",

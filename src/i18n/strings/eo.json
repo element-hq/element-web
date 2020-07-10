@@ -1828,7 +1828,6 @@
     "Server rules": "Servilaj reguloj",
     "User rules": "Uzantulaj reguloj",
     "You are currently ignoring:": "Vi nun malatentas:",
-    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Aldonu ĉi tien uzantojn kaj servilojn, kiujn vi volas malatenti. Uzu steleton por akordigi ĉiajn signojn. Ekzemple, <code>@bot:*</code> malatentigus ĉiujn uzantojn kun la nomo «bot» sur ĉiu servilo.",
     "Ignoring people is done through ban lists which contain rules for who to ban. Subscribing to a ban list means the users/servers blocked by that list will be hidden from you.": "Malatento de homoj okazas per listoj de forbaroj, kiuj enhavas regulojn pri tio, kiun forbari. Abono de listo de forbaroj signifas, ke la uzantoj/serviloj blokataj de la listo estos kaŝitaj de vi.",
     "Personal ban list": "Persona listo de forbaroj",
     "Your personal ban list holds all the users/servers you personally don't want to see messages from. After ignoring your first user/server, a new room will show up in your room list named 'My Ban List' - stay in this room to keep the ban list in effect.": "Via persona listo de forbaroj tenas ĉiujn uzantojn/servilojn, kies mesaĝoj vi persone ne volas vidi. Post via unua malatento, nova ĉambro aperos en via listo de ĉambroj, nomita «Mia listo de forbaroj» – restu en ĝi por efikigi la liston de forbaroj.",

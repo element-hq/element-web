@@ -990,7 +990,6 @@
     "COPY": "Kopijuoti",
     "Enter recovery key": "Įveskite atgavimo raktą",
     "Keep going...": "Tęskite...",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "%(brand)s geriausiai veikia su <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, arba <safariLink>Safari</safariLink> naršyklėmis.",
     "Syncing...": "Sinchronizuojama...",
     "Signing In...": "Prijungiama...",
     "If you've joined lots of rooms, this might take a while": "Jei esate prisijungę prie daug kambarių, tai gali užtrukti",
