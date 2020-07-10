@@ -55,6 +55,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
 
         .mx_LeftPanel2_userHeader {
             padding: 12px 12px 20px; // 12px top, 12px sides, 20px bottom
+            flex-shrink: 0;
 
             // Create another flexbox column for the rows to stack within
             display: flex;
@@ -79,6 +80,8 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
         .mx_LeftPanel2_filterContainer {
             margin-left: 12px;
             margin-right: 12px;
+
+            flex-shrink: 0;
 
             // Create a flexbox to organize the inputs
             display: flex;
