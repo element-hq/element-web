@@ -30,14 +30,14 @@ export default class VectorAuthHeaderLogo extends React.PureComponent {
 
     render() {
         const brandingConfig = SdkConfig.get().branding;
-        let logoUrl = "themes/riot/img/logos/riot-im-logo-black-text.svg";
+        let logoUrl = "themes/element/img/logos/element-logo.svg";
         if (brandingConfig && brandingConfig.authHeaderLogoUrl) {
             logoUrl = brandingConfig.authHeaderLogoUrl;
         }
 
         return (
             <div className="mx_AuthHeaderLogo">
-                <img src={logoUrl} alt="Riot" />
+                <img src={logoUrl} alt="Element" />
             </div>
         );
     }
