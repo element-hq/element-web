@@ -46,6 +46,12 @@ interface IState {
 export const LISTS_UPDATE_EVENT = "lists_update";
 
 export class RoomListStore2 extends AsyncStore<ActionPayload> {
+    /**
+     * Set to true if you're running tests on the store. Should not be touched in
+     * any other environment.
+     */
+    public static TEST_MODE = false;
+
     private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
@@ -104,6 +110,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         await this.regenerateAllLists({trigger: false});
         await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
 
+        this.updateFn.mark(); // we almost certainly want to trigger an update.
         this.updateFn.trigger();
     }
 
@@ -152,7 +159,14 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (trigger) this.updateFn.trigger();
     }
 
-    protected onDispatch(payload: ActionPayload) {
+    protected async onDispatch(payload: ActionPayload) {
+        // When we're running tests we can't reliably use setImmediate out of timing concerns.
+        // As such, we use a more synchronous model.
+        if (RoomListStore2.TEST_MODE) {
+            await this.onDispatchAsync(payload);
+            return;
+        }
+
         // We do this to intentionally break out of the current event loop task, allowing
         // us to instead wait for a more convenient time to run our updates.
         setImmediate(() => this.onDispatchAsync(payload));
