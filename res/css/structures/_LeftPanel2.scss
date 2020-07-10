@@ -55,7 +55,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
 
         .mx_LeftPanel2_userHeader {
             padding: 12px 12px 20px; // 12px top, 12px sides, 20px bottom
-            flex-shrink: 0;
+            flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
 
             // Create another flexbox column for the rows to stack within
             display: flex;
@@ -93,7 +93,7 @@ $tagPanelWidth: 70px; // only applies in this file, used for calculations
             margin-left: 12px;
             margin-right: 12px;
 
-            flex-shrink: 0;
+            flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
 
             // Create a flexbox to organize the inputs
             display: flex;
