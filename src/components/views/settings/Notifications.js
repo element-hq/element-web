@@ -842,11 +842,16 @@ export default createReactClass({
 
         let advancedSettings;
         if (externalRules.length) {
+            const brand = SdkConfig.get().brand;
             advancedSettings = (
                 <div>
                     <h3>{ _t('Advanced notification settings') }</h3>
-                    { _t('There are advanced notifications which are not shown here') }.<br />
-                    { _t('You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply') }.
+                    { _t('There are advanced notifications which are not shown here.') }<br />
+                    {_t(
+                        'You might have configured them in a client other than %(brand)s. ' +
+                        'You cannot tune them in %(brand)s but they still apply.',
+                        { brand },
+                    )}
                     <ul>
                         { externalRules }
                     </ul>

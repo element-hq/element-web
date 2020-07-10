@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
+import SdkConfig from "../../../../../SdkConfig";
 import CallMediaHandler from "../../../../../CallMediaHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -80,10 +82,14 @@ export default class VoiceUserSettingsTab extends React.Component {
             }
         }
         if (error) {
+            const brand = SdkConfig.get().brand;
             const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
             Modal.createTrackedDialog('No media permissions', '', ErrorDialog, {
                 title: _t('No media permissions'),
-                description: _t('You may need to manually permit Riot to access your microphone/webcam'),
+                description: _t(
+                    'You may need to manually permit %(brand)s to access your microphone/webcam',
+                    { brand },
+                ),
             });
         } else {
             this._refreshMediaDevices(stream);

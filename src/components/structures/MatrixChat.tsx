@@ -1445,16 +1445,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
+                    const brand = SdkConfig.get().brand;
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
-                            "Data from an older version of Riot has been detected. " +
+                            "Data from an older version of %(brand)s has been detected. " +
                             "This will have caused end-to-end cryptography to malfunction " +
                             "in the older version. End-to-end encrypted messages exchanged " +
                             "recently whilst using the older version may not be decryptable " +
                             "in this version. This may also cause messages exchanged with this " +
                             "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
+                            { brand },
                         ),
                     });
                     break;

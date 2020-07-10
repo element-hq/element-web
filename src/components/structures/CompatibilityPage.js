@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
+import SdkConfig from '../../SdkConfig';
 
 export default createReactClass({
     displayName: 'CompatibilityPage',
@@ -38,14 +39,25 @@ export default createReactClass({
     },
 
     render: function() {
+        const brand = SdkConfig.get().brand;
+
         return (
         <div className="mx_CompatibilityPage">
             <div className="mx_CompatibilityPage_box">
-                <p>{ _t("Sorry, your browser is <b>not</b> able to run Riot.", {}, { 'b': (sub) => <b>{sub}</b> }) } </p>
+                <p>{_t(
+                    "Sorry, your browser is <b>not</b> able to run %(brand)s.",
+                    {
+                        brand,
+                    },
+                    {
+                        'b': (sub) => <b>{sub}</b>,
+                    })
+                }</p>
                 <p>
                 { _t(
-                    "Riot uses many advanced browser features, some of which are not available " +
+                    "%(brand)s uses many advanced browser features, some of which are not available " +
                     "or experimental in your current browser.",
+                    { brand },
                 ) }
                 </p>
                 <p>
