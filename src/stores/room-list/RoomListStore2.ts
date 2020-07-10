@@ -92,7 +92,12 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         await this.updateAlgorithmInstances();
     }
 
-    private onRVSUpdate = async (quiet = false) => {
+    /**
+     * Handles suspected RoomViewStore changes.
+     * @param trigger Set to false to prevent a list update from being sent. Should only
+     * be used if the calling code will manually trigger the update.
+     */
+    private onRVSUpdate = async ({trigger = true}) => {
         if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
@@ -113,7 +118,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             }
         }
 
-        if (!quiet) this.updateFn.trigger();
+        if (trigger) this.updateFn.trigger();
     };
 
     protected onDispatch(payload: ActionPayload) {
@@ -138,8 +143,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             // Update any settings here, as some may have happened before we were logically ready.
             console.log("Regenerating room lists: Startup");
             await this.readAndCacheSettingsFromStore();
-            await this.regenerateAllLists(true);
-            await this.onRVSUpdate(true); // fake an RVS update to adjust sticky room, if needed
+            await this.regenerateAllLists({trigger: false});
+            await this.onRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
 
             this.updateFn.trigger();
 
@@ -166,7 +171,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.log("Regenerating room lists: Settings changed");
                 await this.readAndCacheSettingsFromStore();
 
-                await this.regenerateAllLists(true); // regenerate the lists now
+                await this.regenerateAllLists({trigger: false}); // regenerate the lists now
                 this.updateFn.trigger();
             }
         }
@@ -474,7 +479,12 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.updateFn.mark();
     };
 
-    private async regenerateAllLists(quiet = false) {
+    /**
+     * Regenerates the room whole room list, discarding any previous results.
+     * @param trigger Set to false to prevent a list update from being sent. Should only
+     * be used if the calling code will manually trigger the update.
+     */
+    private async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
         const sorts: ITagSortingMap = {};
@@ -499,7 +509,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.initialListsGenerated = true;
 
-        if (!quiet) this.updateFn.trigger();
+        if (trigger) this.updateFn.trigger();
     }
 
     public addFilter(filter: IFilterCondition): void {
