@@ -293,6 +293,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
+                    isFiltered={!!this.searchFilter.search}
                 />
             );
         }
