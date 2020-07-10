@@ -19,6 +19,7 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
+import RebrandListener from "../RebrandListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
 import { PlatformPeg } from "../PlatformPeg";
 
@@ -33,6 +34,7 @@ declare global {
         mx_ContentMessages: ContentMessages;
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
+        mx_RebrandListener: RebrandListener;
         mx_RoomListStore2: RoomListStore2;
         mxPlatformPeg: PlatformPeg;
     }

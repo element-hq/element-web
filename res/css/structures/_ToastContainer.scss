@@ -56,6 +56,8 @@ limitations under the License.
                 grid-row: 1;
                 mask-size: 100%;
                 mask-repeat: no-repeat;
+                background-size: 100%;
+                background-repeat: no-repeat;
             }
 
             &.mx_Toast_icon_verification::after {
@@ -65,6 +67,10 @@ limitations under the License.
 
             &.mx_Toast_icon_verification_warning::after {
                 background-image: url("$(res)/img/e2e/warning.svg");
+            }
+
+            &.mx_Toast_icon_element_logo::after {
+                background-image: url("$(res)/img/element-logo.svg");
             }
 
             .mx_Toast_title, .mx_Toast_body {

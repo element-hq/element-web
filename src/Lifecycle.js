@@ -40,6 +40,7 @@ import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
+import RebrandListener from "./RebrandListener";
 import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
 
@@ -627,6 +628,8 @@ async function startMatrixClient(startSyncing=true) {
     // Now that we have a MatrixClientPeg, update the Jitsi info
     await Jitsi.getInstance().start();
 
+    RebrandListener.sharedInstance().start();
+
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
     dis.dispatch({action: 'client_started'});
@@ -688,6 +691,7 @@ export function stopMatrixClient(unsetClient=true) {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    RebrandListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
