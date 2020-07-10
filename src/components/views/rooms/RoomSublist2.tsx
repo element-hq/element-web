@@ -585,7 +585,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         // TODO: Error boundary: https://github.com/vector-im/riot-web/issues/14185
 
         const visibleTiles = this.renderVisibleTiles();
-
         const classes = classNames({
             'mx_RoomSublist2': true,
             'mx_RoomSublist2_hasMenuOpen': !!this.state.contextMenuPosition,
@@ -603,7 +602,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
-                'mx_RoomSublist2_isCutting': this.state.isResizing && layout.visibleTiles < maxTilesFactored,
             });
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
