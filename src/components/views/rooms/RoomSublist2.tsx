@@ -110,7 +110,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         super(props);
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
-
+        this.heightAtStart = 0;
         const height = this.calculateInitialHeight();
         this.state = {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
@@ -184,47 +184,45 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         if (this.props.onAddRoom) this.props.onAddRoom();
     };
 
+    private applyHeightChange(newHeight: number) {
+        const heightInTiles = Math.ceil(this.layout.pixelsToTiles(newHeight - this.padding));
+        this.layout.visibleTiles = Math.min(this.numTiles, heightInTiles);
+    }
+
     private onResize = (
         e: MouseEvent | TouchEvent,
         travelDirection: Direction,
         refToElement: HTMLDivElement,
         delta: ResizeDelta,
     ) => {
-        // Do some sanity checks, but in reality we shouldn't need these.
-        if (travelDirection !== "bottom") return;
-        if (delta.height === 0) return; // something went wrong, so just ignore it.
-
-        // NOTE: the movement in the MouseEvent (not present on a TouchEvent) is inaccurate
-        // for our purposes. The delta provided by the library is also a change *from when
-        // resizing started*, meaning it is fairly useless for us. This is why we just use
-        // the client height and run with it.
-
-        const heightBefore = this.layout.visibleTiles;
-        const heightInTiles = this.layout.pixelsToTiles(refToElement.clientHeight);
-        this.layout.setVisibleTilesWithin(heightInTiles, this.numTiles);
-        if (heightBefore === this.layout.visibleTiles) return; // no-op
-        this.forceUpdate(); // because the layout doesn't trigger a re-render
+        const newHeight = this.heightAtStart + delta.height;
+        this.applyHeightChange(newHeight);
+        this.setState({height: newHeight});
     };
 
     private onResizeStart = () => {
+        this.heightAtStart = this.state.height;
         this.setState({isResizing: true});
     };
 
-    private onResizeStop = () => {
-        this.setState({isResizing: false});
+    private onResizeStop = (e, direction, ref, d) => {
+        const newHeight = this.heightAtStart + d.height;
+        this.applyHeightChange(newHeight);
+        this.setState({isResizing: false, height: newHeight});
     };
 
     private onShowAllClick = () => {
-        const numVisibleTiles = this.numVisibleTiles;
-        this.layout.visibleTiles = this.layout.tilesWithPadding(this.numTiles, MAX_PADDING_HEIGHT);
-        this.forceUpdate(); // because the layout doesn't trigger a re-render
-        setImmediate(this.focusRoomTile, numVisibleTiles); // focus the tile after the current bottom one
+        const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
+        this.applyHeightChange(newHeight);
+        this.setState({height: newHeight}, () => {
+            this.focusRoomTile(this.numTiles - 1);
+        });
     };
 
     private onShowLessClick = () => {
-        this.layout.visibleTiles = this.layout.defaultVisibleTiles;
-        this.forceUpdate(); // because the layout doesn't trigger a re-render
-        // focus will flow to the show more button here
+        const newHeight = this.layout.tilesToPixelsWithPadding(this.layout.defaultVisibleTiles, this.padding);
+        this.applyHeightChange(newHeight);
+        this.setState({height: newHeight});
     };
 
     private focusRoomTile = (index: number) => {
