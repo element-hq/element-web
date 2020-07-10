@@ -120,7 +120,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
-            isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed
+            isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed,
             height,
         };
         this.state.notificationState.setRooms(this.props.rooms);
