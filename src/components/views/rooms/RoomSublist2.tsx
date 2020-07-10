@@ -88,8 +88,8 @@ interface IProps {
 
 // TODO: Use re-resizer's NumberSize when it is exposed as the type
 interface ResizeDelta {
-    width: number,
-    height: number,
+    width: number;
+    height: number;
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
@@ -98,6 +98,7 @@ interface IState {
     notificationState: ListNotificationState;
     contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
+    height: number;
 }
 
 export default class RoomSublist2 extends React.Component<IProps, IState> {
@@ -105,6 +106,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private sublistRef = createRef<HTMLDivElement>();
     private dispatcherRef: string;
     private layout: ListLayout;
+    private heightAtStart: number;
 
     constructor(props: IProps) {
         super(props);
@@ -684,7 +686,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             content = (
                 <React.Fragment>
                     <Resizable
-                        size={{height: this.state.height}}
+                        size={{height: this.state.height} as any}
                         minHeight={minTilesPx}
                         maxHeight={maxTilesPx}
                         onResizeStart={this.onResizeStart}
