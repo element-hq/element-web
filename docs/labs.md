@@ -116,8 +116,3 @@ In the event the new room list needs to be disabled, add this to your config.jso
 
 **Note**: In a future release the new room list will not be optional.
 
-## IRC message layout (`feature_irc_ui`)
-
-Adds an option to change the message layout to an IRC style ` timestamp | avatar
-| name | message `
-
