@@ -20,7 +20,7 @@ import * as React from "react";
 import { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
-import {RovingAccessibleButton, RovingTabIndexWrapper} from "../../../accessibility/RovingTabIndex";
+import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import RoomTile2 from "./RoomTile2";
@@ -36,12 +36,12 @@ import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {ActionPayload} from "../../../dispatcher/payloads";
+import { ActionPayload } from "../../../dispatcher/payloads";
 import { Enable, Resizable } from "re-resizable";
 import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
@@ -130,8 +130,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private calculateInitialHeight() {
         const requestedVisibleTiles = Math.max(Math.floor(this.layout.visibleTiles), this.layout.minVisibleTiles);
         const tileCount = Math.min(this.numTiles, requestedVisibleTiles);
-        const height = this.layout.tilesToPixelsWithPadding(tileCount, this.padding);
-        return height;
+        return this.layout.tilesToPixelsWithPadding(tileCount, this.padding);
     }
 
     private get padding() {
