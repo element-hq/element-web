@@ -516,8 +516,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     };
 
     private onAlgorithmFilterUpdated = () => {
-        // The filter can happen off-cycle, so trigger an update if we need to.
-        this.updateFn.triggerIfWillMark();
+        // The filter can happen off-cycle, so trigger an update. The filter will have
+        // already caused a mark.
+        this.updateFn.trigger();
     };
 
     /**
