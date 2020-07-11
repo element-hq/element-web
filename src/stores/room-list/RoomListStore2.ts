@@ -368,10 +368,14 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+        await this.setAndPersistTagSorting(tagId, sort);
+        this.updateFn.trigger();
+    }
+
+    private async setAndPersistTagSorting(tagId: TagID, sort: SortAlgorithm) {
         await this.algorithm.setTagSorting(tagId, sort);
         // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_tagSort_${tagId}`, sort);
-        this.updateFn.triggerIfWillMark();
     }
 
     public getTagSorting(tagId: TagID): SortAlgorithm {
@@ -407,10 +411,14 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public async setListOrder(tagId: TagID, order: ListAlgorithm) {
+        await this.setAndPersistListOrder(tagId, order);
+        this.updateFn.trigger();
+    }
+
+    private async setAndPersistListOrder(tagId: TagID, order: ListAlgorithm) {
         await this.algorithm.setListOrdering(tagId, order);
         // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_listOrder_${tagId}`, order);
-        this.updateFn.triggerIfWillMark();
     }
 
     public getListOrder(tagId: TagID): ListAlgorithm {
@@ -458,10 +466,10 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const listOrder = this.calculateListOrder(tag);
 
             if (tagSort !== definedSort) {
-                await this.setTagSorting(tag, tagSort);
+                await this.setAndPersistTagSorting(tag, tagSort);
             }
             if (listOrder !== definedOrder) {
-                await this.setListOrder(tag, listOrder);
+                await this.setAndPersistListOrder(tag, listOrder);
             }
         }
     }
