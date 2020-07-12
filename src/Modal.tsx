@@ -65,13 +65,7 @@ export class ModalManager {
     private staticModal: IModal<any> = null;
     // A list of the modals we have stacked up, with the most recent at [0]
     // Neither the static nor priority modal will be in this list.
-    private modals: IModal<any>[] = [
-        /* {
-           elem: React component for this dialog
-           onFinished: caller-supplied onFinished callback
-           className: CSS class for the dialog wrapper div
-           } */
-    ];
+    private modals: IModal<any>[] = [];
 
     private static getOrCreateContainer() {
         let container = document.getElementById(DIALOG_CONTAINER_ID);
