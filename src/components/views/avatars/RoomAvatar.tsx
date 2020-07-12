@@ -135,7 +135,7 @@ export default class RoomAvatar extends React.Component<IProps, IState> {
             <BaseAvatar {...otherProps} name={roomName}
                 idName={room ? room.roomId : null}
                 urls={this.state.urls}
-                onClick={this.props.viewAvatarOnClick && !this.state.urls[0] ? this.onRoomAvatarClick : null}
+                onClick={this.props.viewAvatarOnClick && this.state.urls[0] ? this.onRoomAvatarClick : null}
             />
         );
     }
