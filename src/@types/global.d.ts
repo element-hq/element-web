@@ -22,6 +22,7 @@ import DeviceListener from "../DeviceListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
+import {ModalManager} from "../Modal";
 
 declare global {
     interface Window {
@@ -37,6 +38,7 @@ declare global {
         mx_RoomListStore2: RoomListStore2;
         mx_RoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
+        singletonModalManager: ModalManager;
 
         // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
         mx_QuietRoomListLogging: boolean;
