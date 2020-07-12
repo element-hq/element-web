@@ -44,7 +44,9 @@ interface IHandle<T extends any[]> {
 }
 
 interface IProps<T extends any[]> {
-    onFinished(...args: T): void;
+    onFinished?(...args: T): void;
+    // TODO improve typing here once all Modals are TS and we can exhaustively check the props
+    [key: string]: any;
 }
 
 interface IOptions<T extends any[]> {
@@ -95,48 +97,54 @@ export class ModalManager {
         return this.priorityModal || this.staticModal || this.modals.length > 0;
     }
 
-    public createTrackedDialog(
+    public createTrackedDialog<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
         ...rest: Parameters<ModalManager["createDialog"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialog(...rest);
+        return this.createDialog<T>(...rest);
     }
 
-    public appendTrackedDialog(
+    public appendTrackedDialog<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
         ...rest: Parameters<ModalManager["appendDialog"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.appendDialog(...rest);
+        return this.appendDialog<T>(...rest);
     }
 
-    public createDialog(Element: React.ComponentType, ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>) {
-        return this.createDialogAsync(Promise.resolve(Element), ...rest);
+    public createDialog<T extends any[]>(
+        Element: React.ComponentType,
+        ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
+    ) {
+        return this.createDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
-    public appendDialog(Element: React.ComponentType, ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>) {
-        return this.appendDialogAsync(Promise.resolve(Element), ...rest);
+    public appendDialog<T extends any[]>(
+        Element: React.ComponentType,
+        ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
+    ) {
+        return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);
     }
 
-    public createTrackedDialogAsync(
+    public createTrackedDialogAsync<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
         ...rest: Parameters<ModalManager["appendDialogAsync"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialogAsync(...rest);
+        return this.createDialogAsync<T>(...rest);
     }
 
-    public appendTrackedDialogAsync(
+    public appendTrackedDialogAsync<T extends any[]>(
         analyticsAction: string,
         analyticsInfo: string,
         ...rest: Parameters<ModalManager["appendDialogAsync"]>
     ) {
         Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.appendDialogAsync(...rest);
+        return this.appendDialogAsync<T>(...rest);
     }
 
     private buildModal<T extends any[]>(
@@ -250,9 +258,9 @@ export class ModalManager {
      * @param {onBeforeClose} options.onBeforeClose a callback to decide whether to close the dialog
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
-    private createDialogAsync<T extends any[], CT extends React.ComponentType>(
-        prom: Promise<CT>,
-        props?: IProps<T> & React.ComponentProps<CT>,
+    private createDialogAsync<T extends any[]>(
+        prom: Promise<React.ComponentType>,
+        props?: IProps<T>,
         className?: string,
         isPriorityModal = false,
         isStaticModal = false,
