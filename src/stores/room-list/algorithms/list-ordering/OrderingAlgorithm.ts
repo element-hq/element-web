@@ -70,4 +70,13 @@ export abstract class OrderingAlgorithm {
      * @returns True if the update requires the Algorithm to update the presentation layers.
      */
     public abstract handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean>;
+
+    protected getRoomIndex(room: Room): number {
+        let roomIdx = this.cachedOrderedRooms.indexOf(room);
+        if (roomIdx === -1) { // can only happen if the js-sdk's store goes sideways.
+            console.warn(`Degrading performance to find missing room in "${this.tagId}": ${room.roomId}`);
+            roomIdx = this.cachedOrderedRooms.findIndex(r => r.roomId === room.roomId);
+        }
+        return roomIdx;
+    }
 }

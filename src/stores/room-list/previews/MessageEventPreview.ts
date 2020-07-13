@@ -20,6 +20,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
 import ReplyThread from "../../../components/views/elements/ReplyThread";
+import { sanitizedHtmlNodeInnerText } from "../../../HtmlUtils";
 
 export class MessageEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
@@ -36,12 +37,25 @@ export class MessageEventPreview implements IPreview {
         const msgtype = eventContent['msgtype'];
         if (!body || !msgtype) return null; // invalid event, no preview
 
+        const hasHtml = eventContent.format === "org.matrix.custom.html" && eventContent.formatted_body;
+        if (hasHtml) {
+            body = eventContent.formatted_body;
+        }
+
         // XXX: Newer relations have a getRelation() function which is not compatible with replies.
         const mRelatesTo = event.getWireContent()['m.relates_to'];
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             // If this is a reply, get the real reply and use that
-            body = (ReplyThread.stripPlainReply(body) || '').trim();
+            if (hasHtml) {
+                body = (ReplyThread.stripHTMLReply(body) || '').trim();
+            } else {
+                body = (ReplyThread.stripPlainReply(body) || '').trim();
+            }
             if (!body) return null; // invalid event, no preview
+        }
+
+        if (hasHtml) {
+            body = sanitizedHtmlNodeInnerText(body);
         }
 
         if (msgtype === 'm.emote') {

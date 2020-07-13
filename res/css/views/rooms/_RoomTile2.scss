@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
@@ -77,7 +77,7 @@ limitations under the License.
         }
     }
 
-    .mx_RoomTile2_menuButton {
+    .mx_RoomTile2_notificationsButton {
         margin-left: 4px; // spacing between buttons
     }
 
@@ -85,7 +85,6 @@ limitations under the License.
         height: 16px;
         // don't set width so that it takes no space when there is no badge to show
         margin: auto 0; // vertically align
-        position: relative; // fixes badge alignment in some scenarios
 
         // Create a flexbox to make aligning dot badges easier
         display: flex;
@@ -108,7 +107,8 @@ limitations under the License.
         width: 20px;
         min-width: 20px; // yay flex
         height: 20px;
-        margin: auto 0;
+        margin-top: auto;
+        margin-bottom: auto;
         position: relative;
         display: none;
 
@@ -221,6 +221,10 @@ limitations under the License.
 
     .mx_RoomTile2_iconStar::before {
         mask-image: url('$(res)/img/feather-customised/star.svg');
+    }
+
+    .mx_RoomTile2_iconFavorite::before {
+        mask-image: url('$(res)/img/feather-customised/favourites.svg');
     }
 
     .mx_RoomTile2_iconArrowDown::before {

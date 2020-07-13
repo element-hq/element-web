@@ -57,7 +57,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
 
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         if (payload.action === 'setting_updated') {
@@ -80,7 +80,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady() {
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         await this.updateRooms();
@@ -91,7 +91,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady() {
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         this.matrixClient.removeListener("Room.myMembership", this.onMyMembership);
@@ -125,6 +125,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private async appendRoom(room: Room) {
+        let updated = false;
         const rooms = (this.state.rooms || []).slice(); // cheap clone
 
         // If the room is upgraded, use that room instead. We'll also splice out
@@ -136,30 +137,42 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             // Take out any room that isn't the most recent room
             for (let i = 0; i < history.length - 1; i++) {
                 const idx = rooms.findIndex(r => r.roomId === history[i].roomId);
-                if (idx !== -1) rooms.splice(idx, 1);
+                if (idx !== -1) {
+                    rooms.splice(idx, 1);
+                    updated = true;
+                }
             }
         }
 
         // Remove the existing room, if it is present
         const existingIdx = rooms.findIndex(r => r.roomId === room.roomId);
-        if (existingIdx !== -1) {
-            rooms.splice(existingIdx, 1);
-        }
 
-        // Splice the room to the start of the list
-        rooms.splice(0, 0, room);
+        // If we're focusing on the first room no-op
+        if (existingIdx !== 0) {
+            if (existingIdx !== -1) {
+                rooms.splice(existingIdx, 1);
+            }
+
+            // Splice the room to the start of the list
+            rooms.splice(0, 0, room);
+            updated = true;
+        }
 
         if (rooms.length > MAX_ROOMS) {
             // This looks weird, but it's saying to start at the MAX_ROOMS point in the
             // list and delete everything after it.
             rooms.splice(MAX_ROOMS, rooms.length - MAX_ROOMS);
+            updated = true;
         }
 
-        // Update the breadcrumbs
-        await this.updateState({rooms});
-        const roomIds = rooms.map(r => r.roomId);
-        if (roomIds.length > 0) {
-            await SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
+
+        if (updated) {
+            // Update the breadcrumbs
+            await this.updateState({rooms});
+            const roomIds = rooms.map(r => r.roomId);
+            if (roomIds.length > 0) {
+                await SettingsStore.setValue("breadcrumb_rooms", null, SettingLevel.ACCOUNT, roomIds);
+            }
         }
     }
 

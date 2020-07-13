@@ -141,7 +141,8 @@ export const SETTINGS = {
         default: false,
     },
     "feature_new_room_list": {
-        isFeature: true,
+        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
+        // XXX: We shouldn't have non-features appear like features.
         displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: true,
@@ -152,12 +153,6 @@ export const SETTINGS = {
         displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
-    },
-    "feature_irc_ui": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable IRC layout option in the appearance tab'),
-        default: false,
-        isFeature: true,
     },
     "mjolnirRooms": {
         supportedLevels: ['account'],
@@ -472,13 +467,13 @@ export const SETTINGS = {
             deny: [],
         },
     },
-    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14231
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: false,
     },
-    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14231
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show rooms with unread notifications first"),
@@ -568,7 +563,7 @@ export const SETTINGS = {
     },
     "useIRCLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Use IRC layout"),
+        displayName: _td("Enable experimental, compact IRC style layout"),
         default: false,
     },
 };

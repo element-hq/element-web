@@ -20,6 +20,8 @@ import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
+import { PlatformPeg } from "../PlatformPeg";
+import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 
 declare global {
     interface Window {
@@ -33,6 +35,11 @@ declare global {
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
         mx_RoomListStore2: RoomListStore2;
+        mx_RoomListLayoutStore: RoomListLayoutStore;
+        mxPlatformPeg: PlatformPeg;
+
+        // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
+        mx_QuietRoomListLogging: boolean;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
@@ -43,6 +50,10 @@ declare global {
     interface Document {
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasStorageAccess
         hasStorageAccess?: () => Promise<boolean>;
+    }
+
+    interface Navigator {
+        userLanguage?: string;
     }
 
     interface StorageEstimate {

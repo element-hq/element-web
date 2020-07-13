@@ -99,7 +99,7 @@ class RoomListStore extends Store {
     }
 
     _checkDisabled() {
-        this.disabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
+        this.disabled = SettingsStore.getValue("feature_new_room_list");
         if (this.disabled) {
             console.warn("👋 legacy room list store has been disabled");
         }

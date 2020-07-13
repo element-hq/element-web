@@ -21,6 +21,7 @@ import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList2 from "../views/rooms/RoomList2";
+import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
@@ -32,9 +33,10 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
 import {Key} from "../../Keyboard";
+import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -55,12 +57,20 @@ interface IState {
     showTagPanel: boolean;
 }
 
+// List of CSS classes which should be included in keyboard navigation within the room list
+const cssClasses = [
+    "mx_RoomSearch_input",
+    "mx_RoomSearch_icon", // minimized <RoomSearch />
+    "mx_RoomSublist2_headerText",
+    "mx_RoomTile2",
+    "mx_RoomSublist2_showNButton",
+];
+
 export default class LeftPanel2 extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
     private focusedElement = null;
-
-    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
+    private isDoingStickyHeaders = false;
 
     constructor(props: IProps) {
         super(props);
@@ -105,39 +115,130 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private handleStickyHeaders(list: HTMLDivElement) {
-        const rlRect = list.getBoundingClientRect();
-        const bottom = rlRect.bottom;
-        const top = rlRect.top;
+        if (this.isDoingStickyHeaders) return;
+        this.isDoingStickyHeaders = true;
+        window.requestAnimationFrame(() => {
+            this.doStickyHeaders(list);
+            this.isDoingStickyHeaders = false;
+        });
+    }
+
+    private doStickyHeaders(list: HTMLDivElement) {
+        const topEdge = list.scrollTop;
+        const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
-        const headerHeight = 32; // Note: must match the CSS!
-        const headerRightMargin = 24; // calculated from margins and widths to align with non-sticky tiles
 
-        const headerStickyWidth = rlRect.width - headerRightMargin;
+        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerStickyWidth = list.clientWidth - headerRightMargin;
 
-        let gotBottom = false;
+        // We track which styles we want on a target before making the changes to avoid
+        // excessive layout updates.
+        const targetStyles = new Map<HTMLDivElement, {
+            stickyTop?: boolean;
+            stickyBottom?: boolean;
+            makeInvisible?: boolean;
+        }>();
+
+        let lastTopHeader;
+        let firstBottomHeader;
         for (const sublist of sublists) {
-            const slRect = sublist.getBoundingClientRect();
-
             const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+            header.style.removeProperty("display"); // always clear display:none first
 
-            if (slRect.top + headerHeight > bottom && !gotBottom) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `unset`;
-                gotBottom = true;
-            } else if (slRect.top < top) {
-                header.classList.add("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
-                header.style.width = `${headerStickyWidth}px`;
-                header.style.top = `${rlRect.top}px`;
+            // When an element is <=40% off screen, make it take over
+            const offScreenFactor = 0.4;
+            const isOffTop = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) <= topEdge;
+            const isOffBottom = (sublist.offsetTop + (offScreenFactor * HEADER_HEIGHT)) >= bottomEdge;
+
+            if (isOffTop || sublist === sublists[0]) {
+                targetStyles.set(header, { stickyTop: true });
+                if (lastTopHeader) {
+                    lastTopHeader.style.display = "none";
+                    targetStyles.set(lastTopHeader, { makeInvisible: true });
+                }
+                lastTopHeader = header;
+            } else if (isOffBottom && !firstBottomHeader) {
+                targetStyles.set(header, { stickyBottom: true });
+                firstBottomHeader = header;
             } else {
-                header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
-                header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                header.style.width = `unset`;
-                header.style.top = `unset`;
+                targetStyles.set(header, {}); // nothing == clear
             }
+        }
+
+        // Run over the style changes and make them reality. We check to see if we're about to
+        // cause a no-op update, as adding/removing properties that are/aren't there cause
+        // layout updates.
+        for (const header of targetStyles.keys()) {
+            const style = targetStyles.get(header);
+            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
+
+            if (style.makeInvisible) {
+                // we will have already removed the 'display: none', so add it back.
+                header.style.display = "none";
+                continue; // nothing else to do, even if sticky somehow
+            }
+
+            if (style.stickyTop) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+
+                const newTop = `${list.parentElement.offsetTop}px`;
+                if (header.style.top !== newTop) {
+                    header.style.top = newTop;
+                }
+            } else if (style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+            }
+
+            if (style.stickyTop || style.stickyBottom) {
+                if (!header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (!headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+
+                const newWidth = `${headerStickyWidth}px`;
+                if (header.style.width !== newWidth) {
+                    header.style.width = newWidth;
+                }
+            } else if (!style.stickyTop && !style.stickyBottom) {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+                if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
+                    headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
+                }
+                if (header.style.width) {
+                    header.style.removeProperty('width');
+                }
+                if (header.style.top) {
+                    header.style.removeProperty('top');
+                }
+            }
+        }
+
+        // add appropriate sticky classes to wrapper so it has
+        // the necessary top/bottom padding to put the sticky header in
+        const listWrapper = list.parentElement; // .mx_LeftPanel2_roomListWrapper
+        if (lastTopHeader) {
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyTop");
+        } else {
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyTop");
+        }
+        if (firstBottomHeader) {
+            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyBottom");
+        } else {
+            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyBottom");
         }
     }
 
@@ -173,6 +274,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     };
 
+    private onEnter = () => {
+        const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile2");
+        if (firstRoom) {
+            firstRoom.click();
+            this.onSearch(""); // clear the search field
+        }
+    };
+
     private onMoveFocus = (up: boolean) => {
         let element = this.focusedElement;
 
@@ -204,10 +313,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             if (element) {
                 classes = element.classList;
             }
-        } while (element && !(
-            classes.contains("mx_RoomTile2") ||
-            classes.contains("mx_RoomSublist2_headerText") ||
-            classes.contains("mx_RoomSearch_input")));
+        } while (element && !cssClasses.some(c => classes.contains(c)));
 
         if (element) {
             element.focus();
@@ -217,11 +323,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactNode {
         let breadcrumbs;
-        if (this.state.showBreadcrumbs) {
+        if (this.state.showBreadcrumbs && !this.props.isMinimized) {
             breadcrumbs = (
-                <div className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar">
-                    {this.props.isMinimized ? null : <RoomBreadcrumbs2 />}
-                </div>
+                <IndicatorScrollbar
+                    className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
+                    verticalScrollsHorizontally={true}
+                >
+                    <RoomBreadcrumbs2 />
+                </IndicatorScrollbar>
             );
         }
 
@@ -235,17 +344,22 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderSearchExplore(): React.ReactNode {
         return (
-            <div className="mx_LeftPanel2_filterContainer" onFocus={this.onFocus} onBlur={this.onBlur}>
+            <div
+                className="mx_LeftPanel2_filterContainer"
+                onFocus={this.onFocus}
+                onBlur={this.onBlur}
+                onKeyDown={this.onKeyDown}
+            >
                 <RoomSearch
                     onQueryUpdate={this.onSearch}
                     isMinimized={this.props.isMinimized}
                     onVerticalArrow={this.onKeyDown}
+                    onEnter={this.onEnter}
                 />
                 <AccessibleButton
-                    // TODO fix the accessibility of this: https://github.com/vector-im/riot-web/issues/14180
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
-                    alt={_t("Explore rooms")}
+                    title={_t("Explore rooms")}
                 />
             </div>
         );
@@ -266,6 +380,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}
+            onResize={this.onResize}
         />;
 
         // TODO: Conference handling / calls: https://github.com/vector-im/riot-web/issues/14177
@@ -287,15 +402,17 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
-                    <div
-                        className={roomListClasses}
-                        onScroll={this.onScroll}
-                        ref={this.listContainerRef}
-                        // Firefox sometimes makes this element focusable due to
-                        // overflow:scroll;, so force it out of tab order.
-                        tabIndex={-1}
-                    >
-                        {roomList}
+                    <div className="mx_LeftPanel2_roomListWrapper">
+                        <div
+                            className={roomListClasses}
+                            onScroll={this.onScroll}
+                            ref={this.listContainerRef}
+                            // Firefox sometimes makes this element focusable due to
+                            // overflow:scroll;, so force it out of tab order.
+                            tabIndex={-1}
+                        >
+                            {roomList}
+                        </div>
                     </div>
                 </aside>
             </div>

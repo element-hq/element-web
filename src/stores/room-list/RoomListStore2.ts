@@ -25,12 +25,15 @@ import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm
 import { ActionPayload } from "../../dispatcher/payloads";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { readReceiptChangeIsFor } from "../../utils/read-receipts";
-import { IFilterCondition } from "./filters/IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
 import { EffectiveMembership, getEffectiveMembership } from "./membership";
 import { ListLayout } from "./ListLayout";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import RoomListLayoutStore from "./RoomListLayoutStore";
+import { MarkedExecution } from "../../utils/MarkedExecution";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -43,12 +46,19 @@ interface IState {
 export const LISTS_UPDATE_EVENT = "lists_update";
 
 export class RoomListStore2 extends AsyncStore<ActionPayload> {
+    /**
+     * Set to true if you're running tests on the store. Should not be touched in
+     * any other environment.
+     */
+    public static TEST_MODE = false;
+
     private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
+    private updateFn = new MarkedExecution(() => this.emit(LISTS_UPDATE_EVENT));
 
     private readonly watchedSettings = [
         'feature_custom_tags',
@@ -59,8 +69,9 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.checkEnabled();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
-        RoomViewStore.addListener(this.onRVSUpdate);
+        RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
     }
 
     public get orderedLists(): ITagMap {
@@ -72,9 +83,43 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return this._matrixClient;
     }
 
-    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14231
+    // Intended for test usage
+    public async resetStore() {
+        await this.reset();
+        this.tagWatcher = new TagWatcher(this);
+        this.filterConditions = [];
+        this.initialListsGenerated = false;
+        this._matrixClient = null;
+
+        this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
+        this.algorithm = new Algorithm();
+        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmListUpdated);
+    }
+
+    // Public for test usage. Do not call this.
+    public async makeReady(client: MatrixClient) {
+        // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
+        this.checkEnabled();
+        if (!this.enabled) return;
+
+        this._matrixClient = client;
+
+        // Update any settings here, as some may have happened before we were logically ready.
+        // Update any settings here, as some may have happened before we were logically ready.
+        console.log("Regenerating room lists: Startup");
+        await this.readAndCacheSettingsFromStore();
+        await this.regenerateAllLists({trigger: false});
+        await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
+
+        this.updateFn.mark(); // we almost certainly want to trigger an update.
+        this.updateFn.trigger();
+    }
+
+    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
     private checkEnabled() {
-        this.enabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
+        this.enabled = SettingsStore.getValue("feature_new_room_list");
         if (this.enabled) {
             console.log("⚡ new room list store engaged");
         }
@@ -88,44 +133,58 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         await this.updateAlgorithmInstances();
     }
 
-    private onRVSUpdate = () => {
-        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
+    /**
+     * Handles suspected RoomViewStore changes.
+     * @param trigger Set to false to prevent a list update from being sent. Should only
+     * be used if the calling code will manually trigger the update.
+     */
+    private async handleRVSUpdate({trigger = true}) {
+        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = RoomViewStore.getRoomId();
         if (!activeRoomId && this.algorithm.stickyRoom) {
-            this.algorithm.stickyRoom = null;
+            await this.algorithm.setStickyRoom(null);
         } else if (activeRoomId) {
             const activeRoom = this.matrixClient.getRoom(activeRoomId);
             if (!activeRoom) {
                 console.warn(`${activeRoomId} is current in RVS but missing from client - clearing sticky room`);
-                this.algorithm.stickyRoom = null;
+                await this.algorithm.setStickyRoom(null);
             } else if (activeRoom !== this.algorithm.stickyRoom) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`Changing sticky room to ${activeRoomId}`);
-                this.algorithm.stickyRoom = activeRoom;
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`Changing sticky room to ${activeRoomId}`);
+                }
+                await this.algorithm.setStickyRoom(activeRoom);
             }
         }
-    };
+
+        if (trigger) this.updateFn.trigger();
+    }
 
     protected async onDispatch(payload: ActionPayload) {
+        // When we're running tests we can't reliably use setImmediate out of timing concerns.
+        // As such, we use a more synchronous model.
+        if (RoomListStore2.TEST_MODE) {
+            await this.onDispatchAsync(payload);
+            return;
+        }
+
+        // We do this to intentionally break out of the current event loop task, allowing
+        // us to instead wait for a more convenient time to run our updates.
+        setImmediate(() => this.onDispatchAsync(payload));
+    }
+
+    protected async onDispatchAsync(payload: ActionPayload) {
         if (payload.action === 'MatrixActions.sync') {
             // Filter out anything that isn't the first PREPARED sync.
             if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
                 return;
             }
 
-            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
-            this.checkEnabled();
-            if (!this.enabled) return;
+            await this.makeReady(payload.matrixClient);
 
-            this._matrixClient = payload.matrixClient;
-
-            // Update any settings here, as some may have happened before we were logically ready.
-            console.log("Regenerating room lists: Startup");
-            await this.readAndCacheSettingsFromStore();
-            await this.regenerateAllLists();
-            this.onRVSUpdate(); // fake an RVS update to adjust sticky room, if needed
+            return; // no point in running the next conditions - they won't match
         }
 
         // TODO: Remove this once the RoomListStore becomes default
@@ -134,7 +193,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (payload.action === 'on_client_not_viable' || payload.action === 'on_logged_out') {
             // Reset state without causing updates as the client will have been destroyed
             // and downstream code will throw NPE errors.
-            this.reset(null, true);
+            await this.reset(null, true);
             this._matrixClient = null;
             this.initialListsGenerated = false; // we'll want to regenerate them
         }
@@ -148,7 +207,8 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.log("Regenerating room lists: Settings changed");
                 await this.readAndCacheSettingsFromStore();
 
-                await this.regenerateAllLists(); // regenerate the lists now
+                await this.regenerateAllLists({trigger: false}); // regenerate the lists now
+                this.updateFn.trigger();
             }
         }
 
@@ -166,16 +226,22 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                     console.warn(`Own read receipt was in unknown room ${room.roomId}`);
                     return;
                 }
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Got own read receipt in ${room.roomId}`);
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`[RoomListDebug] Got own read receipt in ${room.roomId}`);
+                }
                 await this.handleRoomUpdate(room, RoomUpdateCause.ReadReceipt);
+                this.updateFn.trigger();
                 return;
             }
         } else if (payload.action === 'MatrixActions.Room.tags') {
             const roomPayload = (<any>payload); // TODO: Type out the dispatcher types
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[RoomListDebug] Got tag change in ${roomPayload.room.roomId}`);
+            if (!window.mx_QuietRoomListLogging) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[RoomListDebug] Got tag change in ${roomPayload.room.roomId}`);
+            }
             await this.handleRoomUpdate(roomPayload.room, RoomUpdateCause.PossibleTagChange);
+            this.updateFn.trigger();
         } else if (payload.action === 'MatrixActions.Room.timeline') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
 
@@ -185,12 +251,16 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
             const roomId = eventPayload.event.getRoomId();
             const room = this.matrixClient.getRoom(roomId);
             const tryUpdate = async (updatedRoom: Room) => {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()}` +
-                    ` in ${updatedRoom.roomId}`);
-                if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
+                if (!window.mx_QuietRoomListLogging) {
                     // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                    console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
+                    console.log(`[RoomListDebug] Live timeline event ${eventPayload.event.getId()}` +
+                        ` in ${updatedRoom.roomId}`);
+                }
+                if (eventPayload.event.getType() === 'm.room.tombstone' && eventPayload.event.getStateKey() === '') {
+                    if (!window.mx_QuietRoomListLogging) {
+                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                        console.log(`[RoomListDebug] Got tombstone event - trying to remove now-dead room`);
+                    }
                     const newRoom = this.matrixClient.getRoom(eventPayload.event.getContent()['replacement_room']);
                     if (newRoom) {
                         // If we have the new room, then the new room check will have seen the predecessor
@@ -199,6 +269,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                     }
                 }
                 await this.handleRoomUpdate(updatedRoom, RoomUpdateCause.Timeline);
+                this.updateFn.trigger();
             };
             if (!room) {
                 console.warn(`Live timeline event ${eventPayload.event.getId()} received without associated room`);
@@ -219,16 +290,18 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 console.warn(`Event ${eventPayload.event.getId()} was decrypted in an unknown room ${roomId}`);
                 return;
             }
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
-            // TODO: Verify that e2e rooms are handled on init: https://github.com/vector-im/riot-web/issues/14238
-            // It seems like when viewing the room the timeline is decrypted, rather than at startup. This could
-            // cause inaccuracies with the list ordering. We may have to decrypt the last N messages of every room :(
+            if (!window.mx_QuietRoomListLogging) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[RoomListDebug] Decrypted timeline event ${eventPayload.event.getId()} in ${roomId}`);
+            }
             await this.handleRoomUpdate(room, RoomUpdateCause.Timeline);
+            this.updateFn.trigger();
         } else if (payload.action === 'MatrixActions.accountData' && payload.event_type === 'm.direct') {
             const eventPayload = (<any>payload); // TODO: Type out the dispatcher types
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[RoomListDebug] Received updated DM map`);
+            if (!window.mx_QuietRoomListLogging) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[RoomListDebug] Received updated DM map`);
+            }
             const dmMap = eventPayload.event.getContent();
             for (const userId of Object.keys(dmMap)) {
                 const roomIds = dmMap[userId];
@@ -246,51 +319,73 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                     await this.handleRoomUpdate(room, RoomUpdateCause.PossibleTagChange);
                 }
             }
+            this.updateFn.trigger();
         } else if (payload.action === 'MatrixActions.Room.myMembership') {
             const membershipPayload = (<any>payload); // TODO: Type out the dispatcher types
             const oldMembership = getEffectiveMembership(membershipPayload.oldMembership);
             const newMembership = getEffectiveMembership(membershipPayload.membership);
             if (oldMembership !== EffectiveMembership.Join && newMembership === EffectiveMembership.Join) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`[RoomListDebug] Handling new room ${membershipPayload.room.roomId}`);
+                }
 
                 // If we're joining an upgraded room, we'll want to make sure we don't proliferate
                 // the dead room in the list.
                 const createEvent = membershipPayload.room.currentState.getStateEvents("m.room.create", "");
                 if (createEvent && createEvent.getContent()['predecessor']) {
-                    console.log(`[RoomListDebug] Room has a predecessor`);
+                    if (!window.mx_QuietRoomListLogging) {
+                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                        console.log(`[RoomListDebug] Room has a predecessor`);
+                    }
                     const prevRoom = this.matrixClient.getRoom(createEvent.getContent()['predecessor']['room_id']);
                     if (prevRoom) {
                         const isSticky = this.algorithm.stickyRoom === prevRoom;
                         if (isSticky) {
-                            console.log(`[RoomListDebug] Clearing sticky room due to room upgrade`);
-                            await this.algorithm.setStickyRoomAsync(null);
+                            if (!window.mx_QuietRoomListLogging) {
+                                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                                console.log(`[RoomListDebug] Clearing sticky room due to room upgrade`);
+                            }
+                            await this.algorithm.setStickyRoom(null);
                         }
 
                         // Note: we hit the algorithm instead of our handleRoomUpdate() function to
                         // avoid redundant updates.
-                        console.log(`[RoomListDebug] Removing previous room from room list`);
+                        if (!window.mx_QuietRoomListLogging) {
+                            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                            console.log(`[RoomListDebug] Removing previous room from room list`);
+                        }
                         await this.algorithm.handleRoomUpdate(prevRoom, RoomUpdateCause.RoomRemoved);
                     }
                 }
 
-                console.log(`[RoomListDebug] Adding new room to room list`);
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`[RoomListDebug] Adding new room to room list`);
+                }
                 await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+                this.updateFn.trigger();
                 return;
             }
 
             if (oldMembership !== EffectiveMembership.Invite && newMembership === EffectiveMembership.Invite) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Handling invite to ${membershipPayload.room.roomId}`);
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`[RoomListDebug] Handling invite to ${membershipPayload.room.roomId}`);
+                }
                 await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.NewRoom);
+                this.updateFn.trigger();
                 return;
             }
 
             // If it's not a join, it's transitioning into a different list (possibly historical)
             if (oldMembership !== newMembership) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-                console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
+                if (!window.mx_QuietRoomListLogging) {
+                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                    console.log(`[RoomListDebug] Handling membership change in ${membershipPayload.room.roomId}`);
+                }
                 await this.handleRoomUpdate(membershipPayload.room, RoomUpdateCause.PossibleTagChange);
+                this.updateFn.trigger();
                 return;
             }
         }
@@ -299,13 +394,20 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     private async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<any> {
         const shouldUpdate = await this.algorithm.handleRoomUpdate(room, cause);
         if (shouldUpdate) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
-            this.emit(LISTS_UPDATE_EVENT, this);
+            if (!window.mx_QuietRoomListLogging) {
+                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+                console.log(`[DEBUG] Room "${room.name}" (${room.roomId}) triggered by ${cause} requires list update`);
+            }
+            this.updateFn.mark();
         }
     }
 
     public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+        await this.setAndPersistTagSorting(tagId, sort);
+        this.updateFn.trigger();
+    }
+
+    private async setAndPersistTagSorting(tagId: TagID, sort: SortAlgorithm) {
         await this.algorithm.setTagSorting(tagId, sort);
         // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_tagSort_${tagId}`, sort);
@@ -321,7 +423,34 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return <SortAlgorithm>localStorage.getItem(`mx_tagSort_${tagId}`);
     }
 
+    // logic must match calculateListOrder
+    private calculateTagSorting(tagId: TagID): SortAlgorithm {
+        const defaultSort = SortAlgorithm.Alphabetic;
+        const settingAlphabetical = SettingsStore.getValue("RoomList.orderAlphabetically", null, true);
+        const definedSort = this.getTagSorting(tagId);
+        const storedSort = this.getStoredTagSorting(tagId);
+
+        // We use the following order to determine which of the 4 flags to use:
+        // Stored > Settings > Defined > Default
+
+        let tagSort = defaultSort;
+        if (storedSort) {
+            tagSort = storedSort;
+        } else if (!isNullOrUndefined(settingAlphabetical)) {
+            tagSort = settingAlphabetical ? SortAlgorithm.Alphabetic : SortAlgorithm.Recent;
+        } else if (definedSort) {
+            tagSort = definedSort;
+        } // else default (already set)
+
+        return tagSort;
+    }
+
     public async setListOrder(tagId: TagID, order: ListAlgorithm) {
+        await this.setAndPersistListOrder(tagId, order);
+        this.updateFn.trigger();
+    }
+
+    private async setAndPersistListOrder(tagId: TagID, order: ListAlgorithm) {
         await this.algorithm.setListOrdering(tagId, order);
         // TODO: Per-account? https://github.com/vector-im/riot-web/issues/14114
         localStorage.setItem(`mx_listOrder_${tagId}`, order);
@@ -337,25 +466,45 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return <ListAlgorithm>localStorage.getItem(`mx_listOrder_${tagId}`);
     }
 
-    private async updateAlgorithmInstances() {
-        const defaultSort = SortAlgorithm.Alphabetic;
+    // logic must match calculateTagSorting
+    private calculateListOrder(tagId: TagID): ListAlgorithm {
         const defaultOrder = ListAlgorithm.Natural;
+        const settingImportance = SettingsStore.getValue("RoomList.orderByImportance", null, true);
+        const definedOrder = this.getListOrder(tagId);
+        const storedOrder = this.getStoredListOrder(tagId);
+
+        // We use the following order to determine which of the 4 flags to use:
+        // Stored > Settings > Defined > Default
+
+        let listOrder = defaultOrder;
+        if (storedOrder) {
+            listOrder = storedOrder;
+        } else if (!isNullOrUndefined(settingImportance)) {
+            listOrder = settingImportance ? ListAlgorithm.Importance : ListAlgorithm.Natural;
+        } else if (definedOrder) {
+            listOrder = definedOrder;
+        } // else default (already set)
+
+        return listOrder;
+    }
+
+    private async updateAlgorithmInstances() {
+        // We'll require an update, so mark for one. Marking now also prevents the calls
+        // to setTagSorting and setListOrder from causing triggers.
+        this.updateFn.mark();
 
         for (const tag of Object.keys(this.orderedLists)) {
             const definedSort = this.getTagSorting(tag);
             const definedOrder = this.getListOrder(tag);
 
-            const storedSort = this.getStoredTagSorting(tag);
-            const storedOrder = this.getStoredListOrder(tag);
-
-            const tagSort = storedSort ? storedSort : (definedSort ? definedSort : defaultSort);
-            const listOrder = storedOrder ? storedOrder : (definedOrder ? definedOrder : defaultOrder);
+            const tagSort = this.calculateTagSorting(tag);
+            const listOrder = this.calculateListOrder(tag);
 
             if (tagSort !== definedSort) {
-                await this.setTagSorting(tag, tagSort);
+                await this.setAndPersistTagSorting(tag, tagSort);
             }
             if (listOrder !== definedOrder) {
-                await this.setListOrder(tag, listOrder);
+                await this.setAndPersistListOrder(tag, listOrder);
             }
         }
     }
@@ -367,19 +516,37 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     private onAlgorithmListUpdated = () => {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Underlying algorithm has triggered a list update - refiring");
-        this.emit(LISTS_UPDATE_EVENT, this);
+        if (!window.mx_QuietRoomListLogging) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+            console.log("Underlying algorithm has triggered a list update - marking");
+        }
+        this.updateFn.mark();
     };
 
-    private async regenerateAllLists() {
+    private onAlgorithmFilterUpdated = () => {
+        // The filter can happen off-cycle, so trigger an update. The filter will have
+        // already caused a mark.
+        this.updateFn.trigger();
+    };
+
+    /**
+     * Regenerates the room whole room list, discarding any previous results.
+     *
+     * Note: This is only exposed externally for the tests. Do not call this from within
+     * the app.
+     * @param trigger Set to false to prevent a list update from being sent. Should only
+     * be used if the calling code will manually trigger the update.
+     */
+    public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
         const sorts: ITagSortingMap = {};
         const orders: IListOrderingMap = {};
         for (const tagId of OrderedDefaultTagIDs) {
-            sorts[tagId] = this.getStoredTagSorting(tagId) || SortAlgorithm.Alphabetic;
-            orders[tagId] = this.getStoredListOrder(tagId) || ListAlgorithm.Natural;
+            sorts[tagId] = this.calculateTagSorting(tagId);
+            orders[tagId] = this.calculateListOrder(tagId);
+
+            RoomListLayoutStore.instance.ensureLayoutExists(tagId);
         }
 
         if (this.state.tagsEnabled) {
@@ -395,30 +562,26 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
         this.initialListsGenerated = true;
 
-        this.emit(LISTS_UPDATE_EVENT, this);
-    }
-
-    // Note: this primarily exists for debugging, and isn't really intended to be used by anything.
-    public async resetLayouts() {
-        console.warn("Resetting layouts for room list");
-        for (const tagId of Object.keys(this.orderedLists)) {
-            new ListLayout(tagId).reset();
-        }
-        await this.regenerateAllLists();
+        if (trigger) this.updateFn.trigger();
     }
 
     public addFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Adding filter condition:", filter);
+        if (!window.mx_QuietRoomListLogging) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+            console.log("Adding filter condition:", filter);
+        }
         this.filterConditions.push(filter);
         if (this.algorithm) {
             this.algorithm.addFilterCondition(filter);
         }
+        this.updateFn.trigger();
     }
 
     public removeFilter(filter: IFilterCondition): void {
-        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-        console.log("Removing filter condition:", filter);
+        if (!window.mx_QuietRoomListLogging) {
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+            console.log("Removing filter condition:", filter);
+        }
         const idx = this.filterConditions.indexOf(filter);
         if (idx >= 0) {
             this.filterConditions.splice(idx, 1);
@@ -427,6 +590,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 this.algorithm.removeFilterCondition(filter);
             }
         }
+        this.updateFn.trigger();
     }
 
     /**

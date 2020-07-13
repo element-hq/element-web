@@ -15,6 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from "matrix-js-sdk/src/client";
+import {Room} from "matrix-js-sdk/src/models/room";
+
 import {MatrixClientPeg} from './MatrixClientPeg';
 import Modal from './Modal';
 import * as sdk from './index';
@@ -25,6 +28,56 @@ import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
 
 const E2EE_WK_KEY = "im.vector.riot.e2ee";
+
+// TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
+enum Visibility {
+    Public = "public",
+    Private = "private",
+}
+
+enum Preset {
+    PrivateChat = "private_chat",
+    TrustedPrivateChat = "trusted_private_chat",
+    PublicChat = "public_chat",
+}
+
+interface Invite3PID {
+    id_server: string;
+    id_access_token?: string; // this gets injected by the js-sdk
+    medium: string;
+    address: string;
+}
+
+interface IStateEvent {
+    type: string;
+    state_key?: string; // defaults to an empty string
+    content: object;
+}
+
+interface ICreateOpts {
+    visibility?: Visibility;
+    room_alias_name?: string;
+    name?: string;
+    topic?: string;
+    invite?: string[];
+    invite_3pid?: Invite3PID[];
+    room_version?: string;
+    creation_content?: object;
+    initial_state?: IStateEvent[];
+    preset?: Preset;
+    is_direct?: boolean;
+    power_level_content_override?: object;
+}
+
+interface IOpts {
+    dmUserId?: string;
+    createOpts?: ICreateOpts;
+    spinner?: boolean;
+    guestAccess?: boolean;
+    encryption?: boolean;
+    inlineErrors?: boolean;
+    andView?: boolean;
+}
 
 /**
  * Create a new room, and switch to it.
@@ -40,11 +93,12 @@ const E2EE_WK_KEY = "im.vector.riot.e2ee";
  *     Default: False
  * @param {bool=} opts.inlineErrors True to raise errors off the promise instead of resolving to null.
  *     Default: False
+ * @param {bool=} opts.andView True to dispatch an action to view the room once it has been created.
  *
  * @returns {Promise} which resolves to the room id, or null if the
  * action was aborted or failed.
  */
-export default function createRoom(opts) {
+export default function createRoom(opts: IOpts): Promise<string | null> {
     opts = opts || {};
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
@@ -59,12 +113,12 @@ export default function createRoom(opts) {
         return Promise.resolve(null);
     }
 
-    const defaultPreset = opts.dmUserId ? 'trusted_private_chat' : 'private_chat';
+    const defaultPreset = opts.dmUserId ? Preset.TrustedPrivateChat : Preset.PrivateChat;
 
     // set some defaults for the creation
     const createOpts = opts.createOpts || {};
     createOpts.preset = createOpts.preset || defaultPreset;
-    createOpts.visibility = createOpts.visibility || 'private';
+    createOpts.visibility = createOpts.visibility || Visibility.Private;
     if (opts.dmUserId && createOpts.invite === undefined) {
         switch (getAddressType(opts.dmUserId)) {
             case 'mx-user-id':
@@ -166,7 +220,7 @@ export default function createRoom(opts) {
     });
 }
 
-export function findDMForUser(client, userId) {
+export function findDMForUser(client: MatrixClient, userId: string): Room {
     const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
     const rooms = roomIds.map(id => client.getRoom(id));
     const suitableDMRooms = rooms.filter(r => {
@@ -189,7 +243,7 @@ export function findDMForUser(client, userId) {
  * NOTE: this assumes you've just created the room and there's not been an opportunity
  * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
  */
-export async function _waitForMember(client, roomId, userId, opts = { timeout: 1500 }) {
+export async function _waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
     const { timeout } = opts;
     let handler;
     return new Promise((resolve) => {
@@ -212,7 +266,7 @@ export async function _waitForMember(client, roomId, userId, opts = { timeout: 1
  * Ensure that for every user in a room, there is at least one device that we
  * can encrypt to.
  */
-export async function canEncryptToAllUsers(client, userIds) {
+export async function canEncryptToAllUsers(client: MatrixClient, userIds: string[]) {
     const usersDeviceMap = await client.downloadKeys(userIds);
     // { "@user:host": { "DEVICE": {...}, ... }, ... }
     return Object.values(usersDeviceMap).every((userDevices) =>
@@ -221,7 +275,7 @@ export async function canEncryptToAllUsers(client, userIds) {
     );
 }
 
-export async function ensureDMExists(client, userId) {
+export async function ensureDMExists(client: MatrixClient, userId: string): Promise<string> {
     const existingDMRoom = findDMForUser(client, userId);
     let roomId;
     if (existingDMRoom) {
