@@ -137,9 +137,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         let padding = RESIZE_HANDLE_HEIGHT;
         // this is used for calculating the max height of the whole container,
         // and takes into account whether there should be room reserved for the show less button
-        // when fully expanded. Note that the show more button might still be shown when not fully expanded,
-        // but in this case it will take the space of a tile and we don't need to reserve space for it.
-        if (this.numTiles > this.layout.defaultVisibleTiles) {
+        // when fully expanded. We cannot check against the layout's defaultVisible tile count
+        // because there are conditions in which we need to know that the 'show more' button
+        // is present while well under the default tile limit.
+        if (this.numTiles > this.numVisibleTiles) {
             padding += SHOW_N_BUTTON_HEIGHT;
         }
         return padding;
