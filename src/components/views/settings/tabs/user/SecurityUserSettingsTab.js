@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
+import SdkConfig from "../../../../../SdkConfig";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
@@ -281,6 +283,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     render() {
+        const brand = SdkConfig.get().brand;
         const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
         const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
@@ -355,7 +358,10 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Riot collects anonymous analytics to allow us to improve the application.")}
+                        {_t(
+                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                            { brand },
+                        )}
                         &nbsp;
                         {_t("Privacy is important to us, so we don't collect any personal or " +
                             "identifiable data for our analytics.")}

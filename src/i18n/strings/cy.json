@@ -5,8 +5,8 @@
     "Failed to verify email address: make sure you clicked the link in the email": "Methiant gwirio cyfeiriad e-bost: gwnewch yn siŵr eich bod wedi clicio'r ddolen yn yr e-bost",
     "Add Phone Number": "Ychwanegu Rhif Ffôn",
     "The platform you're on": "Y platfform rydych chi arno",
-    "The version of Riot.im": "Fersiwn Riot.im",
+    "The version of %(brand)s": "Fersiwn %(brand)s",
     "Whether or not you're logged in (we don't record your username)": "Os ydych wedi mewngofnodi ai peidio (nid ydym yn cofnodi'ch enw defnyddiwr)",
     "Your language of choice": "Eich iaith o ddewis",
-    "The version of Riot": "Fersiwn Riot"
+    "The version of %(brand)s": "Fersiwn %(brand)s"
 }

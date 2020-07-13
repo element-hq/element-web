@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import * as sdk from "../../../index";
 
 export default class IntegrationsImpossibleDialog extends React.Component {
@@ -29,6 +30,7 @@ export default class IntegrationsImpossibleDialog extends React.Component {
     };
 
     render() {
+        const brand = SdkConfig.get().brand;
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
@@ -39,8 +41,9 @@ export default class IntegrationsImpossibleDialog extends React.Component {
                 <div className='mx_IntegrationsImpossibleDialog_content'>
                     <p>
                         {_t(
-                            "Your Riot doesn't allow you to use an Integration Manager to do this. " +
+                            "Your %(brand)s doesn't allow you to use an Integration Manager to do this. " +
                             "Please contact an admin.",
+                            { brand },
                         )}
                     </p>
                 </div>

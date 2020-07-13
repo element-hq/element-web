@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ export interface ConfigOptions {
 }
 
 export const DEFAULTS: ConfigOptions = {
+    // Brand name of the app
+    brand: "Element",
     // URL to a page we show in an iframe to configure integrations
     integrations_ui_url: "https://scalar.vector.im/",
     // Base URL to the REST interface of the integrations server

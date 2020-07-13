@@ -2,7 +2,6 @@
 Copyright 2019 New Vector Ltd
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -18,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
+import SdkConfig from "../../../../../SdkConfig";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
@@ -438,11 +438,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     render() {
+        const brand = SdkConfig.get().brand;
+
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
                 <div className="mx_SettingsTab_SubHeading">
-                    {_t("Appearance Settings only affect this Riot session.")}
+                    {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
                 </div>
                 {this.renderThemeSection()}
                 {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
