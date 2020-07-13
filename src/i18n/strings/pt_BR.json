@@ -21,5 +21,22 @@
     "Your Riot is misconfigured": "Riot possui um erro de configuração",
     "Unexpected error preparing the app. See console for details.": "Erro inesperado preparando o aplicativo. Veja o console para mais detalhes.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuração inválida: somente se pode especificar um valor entre default_server_config, default_server_name, ou default_hs_url.",
-    "Invalid configuration: no default server specified.": "Configuração inválida: servidor padrão não especificado."
+    "Invalid configuration: no default server specified.": "Configuração inválida: servidor padrão não especificado.",
+    "Unable to load config file: please refresh the page to try again.": "Não foi possível carregar o arquivo de configuração: por favor atualize a página e tente novamente.",
+    "Download Completed": "Download Concluído",
+    "Open user settings": "Abrir configurações do usuário",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Unsupported browser": "Navegador não suportado",
+    "Your browser can't run Riot": "Riot não funciona em seu navegador",
+    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot usa recursos avançados do navegador que não são suportados pelo seu navegador atual.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instale o <chromeLink> Chrome </chromeLink>, o <firefoxLink> Firefox </firefoxLink> ou o <safariLink> Safari </safariLink> para obter uma melhor experiência.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Você pode continuar usando o navegador atual, mas alguns dos recursos podem não funcionar e a aparência do aplicativo pode estar incorreta.",
+    "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
+    "Go to Riot.im": "Vá para Riot.im",
+    "Failed to start": "Falha ao iniciar",
+    "Missing indexeddb worker script!": "Script de trabalho indexeddb não encontrado!",
+    "Open": "Abrir",
+    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente",
+    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login"
 }

@@ -13,7 +13,7 @@
     "Your Riot is misconfigured": "あなたのRiotは設定が間違っています",
     "Invalid configuration: no default server specified.": "不正な設定です：デフォルトのサーバーが設定されていません。",
     "Sign In": "サインイン",
-    "Create Account": "アカウントを作成する",
+    "Create Account": "アカウント作成",
     "Need help?": "助けが必要ですか？",
     "Explore rooms": "部屋を探索する",
     "Room Directory": "部屋のディレクトリー",
@@ -26,5 +26,16 @@
     "Riot uses advanced browser features which aren't supported by your current browser.": "Riot ではこのブラウザでサポートされていない高度な機能を利用しています。",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>や<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "現在のブラウザを使い続けることもできますが、いくつか (もしくは全ての) 機能が動作しない可能性や、外観が崩れる可能性があります。",
-    "I understand the risks and wish to continue": "リスクを理解したうえで続行する"
+    "I understand the risks and wish to continue": "リスクを理解したうえで続行する",
+    "Missing indexeddb worker script!": "IndexedDBのワーカースクリプトがありません！",
+    "Unable to load config file: please refresh the page to try again.": "設定ファイルの読み込みに失敗しました: ページを再読み込みしてもう一度お試しください。",
+    "Download Completed": "ダウンロード完了",
+    "Open": "開く",
+    "Open user settings": "ユーザー設定を開く",
+    "Riot Desktop (%(platformName)s)": "Riotデスクトップ版(%(platformName)s)",
+    "Go to your browser to complete Sign In": "サインインを完了させるためにブラウザへ移動してください",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s(%(browserName)s, %(osName)s)",
+    "Unsupported browser": "サポートされていないブラウザ",
+    "Go to Riot.im": "Riot.imへ移動",
+    "Failed to start": "起動に失敗しました"
 }
