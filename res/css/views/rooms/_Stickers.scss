@@ -31,7 +31,7 @@
 .mx_Stickers_addLink {
     display: inline;
     cursor: pointer;
-    text-decoration: underline;
+    color: $button-link-fg-color;
 }
 
 .mx_Stickers_hideStickers {
