@@ -64,33 +64,30 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             // Create another flexbox column for the rows to stack within
             display: flex;
             flex-direction: column;
+        }
 
-            // This is basically just breadcrumbs. The row above that is handled by the UserMenu
-            .mx_LeftPanel2_headerRow {
-                // Create yet another flexbox, this time within the row, to ensure items stay
-                // aligned correctly. This is also a row-based flexbox.
-                display: flex;
-                align-items: center;
+        .mx_LeftPanel2_breadcrumbsContainer {
+            width: 100%;
+            overflow-y: hidden;
+            overflow-x: scroll;
+            margin-top: 20px;
+            padding-bottom: 2px;
+            flex: 0 0 auto;
+            // Create yet another flexbox, this time within the row, to ensure items stay
+            // aligned correctly. This is also a row-based flexbox.
+            display: flex;
+            align-items: center;
+
+            &.mx_IndicatorScrollbar_leftOverflow {
+                mask-image: linear-gradient(90deg, transparent, black 10%);
             }
 
-            .mx_LeftPanel2_breadcrumbsContainer {
-                width: 100%;
-                overflow-y: hidden;
-                overflow-x: scroll;
-                margin-top: 20px;
-                padding-bottom: 2px;
+            &.mx_IndicatorScrollbar_rightOverflow {
+                mask-image: linear-gradient(90deg, black, black 90%, transparent);
+            }
 
-                &.mx_IndicatorScrollbar_leftOverflow {
-                    mask-image: linear-gradient(90deg, transparent, black 10%);
-                }
-
-                &.mx_IndicatorScrollbar_rightOverflow {
-                    mask-image: linear-gradient(90deg, black, black 90%, transparent);
-                }
-
-                &.mx_IndicatorScrollbar_rightOverflow.mx_IndicatorScrollbar_leftOverflow {
-                    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-                }
+            &.mx_IndicatorScrollbar_rightOverflow.mx_IndicatorScrollbar_leftOverflow {
+                mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
             }
         }
 
