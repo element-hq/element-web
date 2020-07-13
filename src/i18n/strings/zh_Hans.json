@@ -17,7 +17,7 @@
     "Unable to load config file: please refresh the page to try again.": "无法加载配置文件：请再次刷新页面。",
     "Open user settings": "打开用户设置",
     "Previous/next recently visited room or community": "上一个 / 下一个最近访问的聊天室或社区",
-    "%(brand)s Desktop (%(platformName)s)": "Riot 桌面版 (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s 桌面版 (%(platformName)s)",
     "Go to your browser to complete Sign In": "去您的浏览器完成登录",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "不支持的浏览器",

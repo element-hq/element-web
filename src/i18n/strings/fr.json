@@ -25,7 +25,7 @@
     "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
     "Go to element.io": "Aller vers element.io",
     "Failed to start": "Échec au démarrage",
-    "%(brand)s Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s pour bureau (%(platformName)s)",
     "Download Completed": "Téléchargement terminé",
     "Open": "Ouvrir"
 }

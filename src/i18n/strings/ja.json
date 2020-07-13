@@ -21,10 +21,10 @@
     "Download Completed": "ダウンロード完了",
     "Open": "開く",
     "Open user settings": "ユーザー設定を開く",
-    "%(brand)s Desktop (%(platformName)s)": "Riotデスクトップ版(%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)sデスクトップ版(%(platformName)s)",
     "Go to your browser to complete Sign In": "サインインを完了させるためにブラウザへ移動してください",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s(%(browserName)s, %(osName)s)",
     "Unsupported browser": "サポートされていないブラウザ",
-    "Go to element.io": "Riot.imへ移動",
+    "Go to element.io": "element.ioへ移動",
     "Failed to start": "起動に失敗しました"
 }
