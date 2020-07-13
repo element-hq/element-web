@@ -27,6 +27,6 @@
     "Go to your browser to complete Sign In": "サインインを完了させるためにブラウザへ移動してください",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s(%(browserName)s, %(osName)s)",
     "Unsupported browser": "サポートされていないブラウザ",
-    "Go to Riot.im": "Riot.imへ移動",
+    "Go to element.io": "Riot.imへ移動",
     "Failed to start": "起動に失敗しました"
 }

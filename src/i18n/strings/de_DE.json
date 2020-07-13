@@ -21,7 +21,7 @@
     "Missing indexeddb worker script!": "Indexeddb worker Skript fehlt!",
     "Previous/next recently visited room or community": "Vorheriger/nächster kürzlich besuchter Raum oder Community",
     "Unsupported browser": "Nicht unterstützter Browser",
-    "Go to Riot.im": "Gehe zu Riot.im",
+    "Go to element.io": "Gehe zu element.io",
     "Failed to start": "Start fehlgeschlagen",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
