@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_RoomHeader {
-    flex: 0 0 56px;
+    flex: 0 0 50px;
     border-bottom: 1px solid $primary-hairline-color;
     background-color: $roomheader-bg-color;
 
@@ -31,7 +31,7 @@ limitations under the License.
 
 .mx_RoomHeader_wrapper {
     margin: auto;
-    height: 56px;
+    height: 50px;
     display: flex;
     align-items: center;
     min-width: 0;
