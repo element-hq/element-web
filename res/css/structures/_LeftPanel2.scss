@@ -77,15 +77,15 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             align-items: center;
 
             &.mx_IndicatorScrollbar_leftOverflow {
-                mask-image: linear-gradient(90deg, transparent, black 10%);
+                mask-image: linear-gradient(90deg, transparent, black 5%);
             }
 
             &.mx_IndicatorScrollbar_rightOverflow {
-                mask-image: linear-gradient(90deg, black, black 90%, transparent);
+                mask-image: linear-gradient(90deg, black, black 95%, transparent);
             }
 
             &.mx_IndicatorScrollbar_rightOverflow.mx_IndicatorScrollbar_leftOverflow {
-                mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+                mask-image: linear-gradient(90deg, transparent, black 5%, black 95%, transparent);
             }
         }
 
