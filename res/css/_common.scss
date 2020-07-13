@@ -161,9 +161,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid $dialog-close-fg-color;
-        // these things should probably not be defined
-        // globally
+        border: 1px solid rgba($primary-fg-color, .1);
+        // these things should probably not be defined globally
         margin: 9px;
         flex: 0 0 auto;
     }
