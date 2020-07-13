@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+$left-gutter: 64px;
+
 .mx_EventTile {
     max-width: 100%;
     clear: both;
@@ -45,7 +47,7 @@ limitations under the License.
 
 .mx_EventTile.mx_EventTile_info .mx_EventTile_avatar {
     top: $font-8px;
-    left: 65px;
+    left: $left-gutter;
 }
 
 .mx_EventTile_continuation {
@@ -73,7 +75,7 @@ limitations under the License.
     /* the next three lines, along with overflow hidden, truncate long display names */
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: calc(100% - 65px);
+    max-width: calc(100% - $left-gutter);
 }
 
 .mx_EventTile .mx_SenderProfile .mx_Flair {
@@ -111,7 +113,7 @@ limitations under the License.
 
 .mx_EventTile_line, .mx_EventTile_reply {
     position: relative;
-    padding-left: 65px; /* left gutter */
+    padding-left: $left-gutter;
     border-radius: 4px;
 }
 
