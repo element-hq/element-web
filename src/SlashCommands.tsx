@@ -660,7 +660,7 @@ export const Commands = [
             if (args) {
                 const cli = MatrixClientPeg.get();
 
-                const matches = args.match(/^(\S+)$/);
+                const matches = args.match(/^(@[^:]+:\S+)$/);
                 if (matches) {
                     const userId = matches[1];
                     const ignoredUsers = cli.getIgnoredUsers();
@@ -690,7 +690,7 @@ export const Commands = [
             if (args) {
                 const cli = MatrixClientPeg.get();
 
-                const matches = args.match(/^(\S+)$/);
+                const matches = args.match(/(^@[^:]+:\S+$)/);
                 if (matches) {
                     const userId = matches[1];
                     const ignoredUsers = cli.getIgnoredUsers();
