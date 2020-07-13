@@ -20,7 +20,7 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
-    padding-left: 84px;
+    padding-left: 83px;
 }
 
 .mx_MessageComposer_replaced_wrapper {
@@ -60,7 +60,7 @@ limitations under the License.
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
     position: absolute;
-    left: 27px;
+    left: 26px;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
@@ -76,8 +76,8 @@ limitations under the License.
     left: 60px;
     margin-right: 0; // Counteract the E2EIcon class
     margin-left: 3px; // Counteract the E2EIcon class
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
 }
 
 .mx_MessageComposer_noperm_error {
