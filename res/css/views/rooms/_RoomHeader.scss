@@ -36,6 +36,10 @@ limitations under the License.
     align-items: center;
     min-width: 0;
     padding: 0 10px 0 18px;
+
+    .mx_InviteOnlyIcon_large {
+        margin: 0;
+    }
 }
 
 .mx_RoomHeader_spinner {
