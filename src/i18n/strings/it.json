@@ -1188,7 +1188,6 @@
     "Set status": "Imposta stato",
     "Hide": "Nascondi",
     "This homeserver would like to make sure you are not a robot.": "Questo homeserver vorrebbe assicurarsi che non sei un robot.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Puoi usare le opzioni server personalizzate per accedere ad altri server Matrix specificando un URL homeserver diverso. Ciò ti permette di usare questa app con un account Matrix esistente su un homeserver differente.",
     "Your Modular server": "Il tuo server Modular",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Inserisci l'indirizzo del tuo homeserver Modular. Potrebbe usare il tuo nome di dominio o essere un sottodominio di <a>modular.im</a>.",
     "Server Name": "Nome server",

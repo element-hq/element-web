@@ -1082,7 +1082,6 @@
     "powered by Matrix": "meuglik gemakt deur Matrix",
     "This homeserver would like to make sure you are not a robot.": "Deze thuusserver wil geirn weetn of da je gy geen robot zyt.",
     "Custom Server Options": "Angepaste serverinstelliengn",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Je kut de angepaste serveropties gebruukn vo jen an te meldn by andere Matrix-servers, deur een andere thuusserver-URL in te geevn. Dit biedt je de meuglikheid vo deze toepassienge te gebruukn met een bestoande Matrix-account ip een andere thuusserver.",
     "Please review and accept all of the homeserver's policies": "Gelieve ’t beleid van de thuusserver te leezn en ’anveirdn",
     "Please review and accept the policies of this homeserver:": "Gelieve ’t beleid van deze thuusserver te leezn en t’anveirdn:",
     "An email has been sent to %(emailAddress)s": "’t Is een e-mail noa %(emailAddress)s verstuurd gewist",

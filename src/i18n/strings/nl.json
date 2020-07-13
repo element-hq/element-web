@@ -1159,7 +1159,6 @@
     "Set a new status...": "Stel een nieuwe status in…",
     "Hide": "Verbergen",
     "This homeserver would like to make sure you are not a robot.": "Deze thuisserver wil graag weten of u geen robot bent.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Middels de aangepaste serveropties kunt u zich aanmelden bij andere Matrix-servers, door een andere thuisserver-URL op te geven. Zo kunt u deze toepassing met een bestaande Matrix-account op een andere thuisserver gebruiken.",
     "Please review and accept all of the homeserver's policies": "Gelieve het beleid van de thuisserver door te nemen en te aanvaarden",
     "Please review and accept the policies of this homeserver:": "Gelieve het beleid van deze thuisserver door te nemen en te aanvaarden:",
     "Your Modular server": "Uw Modular-server",
