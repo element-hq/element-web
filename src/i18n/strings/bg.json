@@ -1,12 +1,10 @@
 {
     "Unknown device": "Непознато устройство",
     "You need to be using HTTPS to place a screen-sharing call.": "Трябва да използвате HTTPS, за да споделите екрана си.",
-    "Custom Server Options": "Потребителски опции за сървър",
     "Dismiss": "Затвори",
     "powered by Matrix": "базирано на Matrix",
     "Welcome to Element": "Добре дошли в Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализиран, шифрован чат и съвместна работа, базирани на [matrix]",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Може да използвате настройките за собствен сървър за да влезете в друг Matrix сървър, чрез указване на адреса му. Това ви позволява да използвате Riot със съществуващ Matrix акаунт, принадлежащ към друг сървър.",
     "Sign In": "Вписване",
     "Create Account": "Създай профил",
     "Explore rooms": "Открий стаи",

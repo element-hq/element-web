@@ -1,12 +1,10 @@
 {
-    "Custom Server Options": "Options de serveur personnalisées",
     "Dismiss": "Ignorer",
     "powered by Matrix": "propulsé par Matrix",
     "Unknown device": "Appareil inconnu",
     "You need to be using HTTPS to place a screen-sharing call.": "Vous devez utiliser HTTPS pour effectuer un appel avec partage d’écran.",
     "Welcome to Element": "Bienvenue sur Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Discussion &amp; collaboration décentralisées et chiffrées, propulsées par [matrix]",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Vous pouvez utiliser les options de serveur personnalisé pour vous connecter à d'autres serveurs Matrix en renseignant l'URL d'un autre serveur d'accueil. Cela vous permet d'utiliser Riot avec un compte Matrix existant sur un serveur d'accueil différent.",
     "Sign In": "Se connecter",
     "Create Account": "Créer un compte",
     "Explore rooms": "Explorer les salons",

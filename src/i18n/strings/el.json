@@ -1,5 +1,4 @@
 {
-    "Custom Server Options": "Προσαρμοσμένες ρυθμίσεις διακομιστή",
     "Dismiss": "Απόρριψη",
     "Unknown device": "Άγνωστη συσκευή",
     "You need to be using HTTPS to place a screen-sharing call.": "Απαιτείται η χρήση HTTPS για την πραγματοποίηση κλήσης διαμοιρασμού επιφάνειας εργασίας.",
@@ -13,6 +12,5 @@
     "Unexpected error preparing the app. See console for details.": "Απρόοπτο σφάλμα κατά την προετοιμασία της εφαρμογής. Δείτε το τερματικό για λεπτομέρειες.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Μη έγκυρη ρύθμιση παραμέτρων: δυνατότητα ορισμού μόνο ένα από τα default_server_config, default_server_name, ή default_hs_url.",
     "Invalid configuration: no default server specified.": "Μη έγκυρη ρύθμιση παραμέτρων: δεν έχει οριστεί προκαθορισμένος διακομιστής.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Μπορείτε να χρησιμοποιήσετε τις επιλογές προσαρμοσμένου διακομιστή για να κάνετε σύνδεση σε άλλους διακομιστές Matrix με το να ορίσετε διαφορετικό URL διακομιστή φιλοξενίας. Αυτό σας επιτρέπει να χρησιμοποιήσετε το Riot με έναν υπάρχον λογαριασμό Matrix σε ένα διαφορετικό διακομιστή φιλοξενίας.",
     "Explore rooms": "Εξερευνήστε δωμάτια"
 }

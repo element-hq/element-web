@@ -1,12 +1,10 @@
 {
-    "Custom Server Options": "Zerbitzari pertsonalizatuaren aukerak",
     "Dismiss": "Baztertu",
     "powered by Matrix": "Matrix mamian",
     "Unknown device": "Gailu ezezaguna",
     "You need to be using HTTPS to place a screen-sharing call.": "HTTPS erabili behar duzu sekretuak partekatzeko dei bat ezartzeko.",
     "Welcome to Element": "Ongi etorri Element mezularitzara",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Deszentralizatutako eta zifratutako txat eta elkarlana [matrix] sareari esker",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Zerbitzari pertsonalizatuaren aukera erabili dezakezu bestelako Matrix zerbitzari batera konektatzeko, bere URL-a adierazita. Honek Riot beste zerbitzari batean duzun Matrix kontuarekin erabiltzea ahalbidetzen dizu.",
     "Sign In": "Hasi saioa",
     "Create Account": "Sortu kontua",
     "Explore rooms": "Arakatu gelak",

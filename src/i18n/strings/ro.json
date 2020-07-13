@@ -1,12 +1,10 @@
 {
     "Unknown device": "Device necunoscut",
-    "Custom Server Options": "Opțiuni Server Personalizate",
     "Dismiss": "Închide",
     "powered by Matrix": "propulsat de Matrix",
     "Welcome to Element": "Bun venit pe Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat decentralizat, criptat &amp; colaborare propulsata de [matrix]",
     "You need to be using HTTPS to place a screen-sharing call.": "Trebuie să folosești HTTPS pentru a plasa un apel de tip screen-sharing.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Puteți utiliza opțiunile personalizate ale serverului pentru a vă conecta la alte servere Matrix specificând o adresă URL diferită pentru homeserver. Acest lucru vă permite să utilizați Riot cu un cont Matrix existent pe un alt server de domiciliu.",
     "Sign In": "Autentificare",
     "Create Account": "Înregistare",
     "Explore rooms": "Explorează camerele",

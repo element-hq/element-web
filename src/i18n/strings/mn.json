@@ -7,8 +7,6 @@
     "Unknown device": "Үл мэдэгдэх төхөөрөмж",
     "You need to be using HTTPS to place a screen-sharing call.": "Та дэлгэц хуваалцах дуудлага хийхдээ HTTPS ашиглах ёстой.",
     "powered by Matrix": "Matrix - Ивээв",
-    "Custom Server Options": "Кастом серверийн сонголтууд",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Та кастом серверийн сонголтууд ашиглан серверийн хаягийг зааж, өөр сервер рүү нэвтэрч болно. Энэ нь танд Риотыг одоо байгаа матрикс аккаунтаараа өөр сервер дээр ашиглах боломж олгоно.",
     "Dismiss": "Орхих",
     "Welcome to Element": "Element -д тавтай морил",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Төвлөрсөн бус, нууцлалтай чат &amp;  хамтын ажиллагааг [matrix] - ивээв",

@@ -1,7 +1,6 @@
 {
     "Dismiss": "Rezigni",
     "powered by Matrix": "povigita per Matrix",
-    "Custom Server Options": "Propraj servilaj elektoj",
     "Unknown device": "Nekonata aparato",
     "You need to be using HTTPS to place a screen-sharing call.": "Vi devas uzi HTTPS por ekranvidadi.",
     "Welcome to Element": "Bonvenon al Element",
@@ -9,7 +8,6 @@
     "Sign In": "Saluti",
     "Create Account": "Krei konton",
     "Explore rooms": "Esplori ĉambrojn",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Vi povas uzi proprajn servilajn elekteblojn por saluti al aliaj serviloj de Matrix per doni alian hejmeservilan URL-on. Tio povigos vin uzi Riot kun jama konto de Matrix en alia hejmservilo.",
     "Unexpected error preparing the app. See console for details.": "Neatendita eraro okazis dum la preparado de la aplikaĵo. Rigardu la konzolon por detaloj.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Nevalida agordo: vi povas specifi nur unu elekteblon el « default_server_config », « default_server_name », aŭ « default_hs_url ».",
     "Invalid configuration: no default server specified.": "Nevalida agordo: neniu implicita servilo estas specifita.",

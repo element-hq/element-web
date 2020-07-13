@@ -1,7 +1,6 @@
 {
     "Unknown device": "Thiết bị không được nhận biết",
     "You need to be using HTTPS to place a screen-sharing call.": "Bạn phải sử dụng HTTPS để dùng chức năng chia sẻ màn hình.",
-    "Custom Server Options": "Các lựa chọn máy chủ",
     "Dismiss": "Bỏ qua",
     "powered by Matrix": "tài trợ bởi Matrix",
     "Welcome to Element": "Chào mừng tới Element",
@@ -11,7 +10,6 @@
     "Invalid JSON": "JSON không hợp lệ",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Thiết lập không hợp lệ: chỉ có thể điền một trong số default_server_config, default_server_name, hoặc default_hs_url.",
     "Invalid configuration: no default server specified.": "Cấu hình không hợp lệ: máy chủ mặc định không được thiết lập.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Bạn có thể sử dụng lựa chọn máy chủ khác để đăng nhập vào máy chủ Matrix bằng cách nhập đường dẫn máy chủ riêng. Cách này giúp bạn sử dụng Riot với máy chủ riêng của bạn.",
     "Sign In": "Đăng nhập",
     "Create Account": "Tạo tài khoản",
     "Explore rooms": "Khám phá phòng chat"

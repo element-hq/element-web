@@ -1,5 +1,4 @@
 {
-    "Custom Server Options": "விருப்பிற்கேற்ற வழங்கி இடப்புகள்",
     "Dismiss": "நீக்கு",
     "powered by Matrix": "Matrix-ஆல் ஆனது",
     "Unknown device": "தெரியாத கருவி",
@@ -10,7 +9,6 @@
     "Unexpected error preparing the app. See console for details.": "பயன்பாட்டைத் தயாரிப்பதில் எதிர்பாராத பிழை. விவரங்களுக்கு console ஐப் பார்க்கவும்.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "தவறான உள்ளமைவு: default_server_config, default_server_name அல்லது default_hs_url இல் ஒன்றை மட்டுமே குறிப்பிட முடியும்.",
     "Invalid configuration: no default server specified.": "தவறான உள்ளமைவு: இயல்புநிலை சேவையகம் குறிப்பிடப்படவில்லை.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "வேறுபட்ட ஹோம்சர்வர் URL ஐக் குறிப்பிடுவதன் மூலம் பிற Matrix சேவையகங்களில் உள்நுழைய தனிப்பயன் சேவையக விருப்பங்களைப் பயன்படுத்தலாம். இது வேறு வீட்டு சேவையகத்தில் ஏற்கனவே உள்ள Matrix கணக்கைக் கொண்ட Riot ஐப் பயன்படுத்த உங்களை அனுமதிக்கிறது.",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] ஆல் இயக்கப்படும் பரவலாக்கப்பட்ட, மறைகுறியாக்கப்பட்ட அரட்டை &amp; ஒத்துழைப்பு",
     "Sign In": "உள்நுழைக",
     "Create Account": "உங்கள் கணக்கை துவங்குங்கள்",

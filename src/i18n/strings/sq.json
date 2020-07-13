@@ -1,12 +1,10 @@
 {
     "Unknown device": "Pajisje e panjohur",
     "You need to be using HTTPS to place a screen-sharing call.": "Që të bëni një thirrje me ndarje ekrani, duhet të jeni duke përdorur HTTPS-në.",
-    "Custom Server Options": "Mundësi Vetjake Shërbyesi",
     "Dismiss": "Mos e merr parasysh",
     "powered by Matrix": "bazuar në Matrix",
     "Welcome to Element": "Mirë se vini te Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Fjalosje &amp; bashkëpunim të decentralizuar, të fshehtëzuar, bazuar në [matrix]",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Mund të përdorni mundësitë mbi shërbyes vetjak, për të bërë hyrjen në shërbyes të tjerë Matrix, duke dhënë një tjetër URL shërbyesi Home. Kjo ju lejon ta përdorni këtë aplikacion në një tjetër shërbyes Home, me një llogari ekzistuese Matrix.",
     "Sign In": "Hyni",
     "Create Account": "Krijoni Llogari",
     "Explore rooms": "Eksploroni dhoma",

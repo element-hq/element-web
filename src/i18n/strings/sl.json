@@ -2,8 +2,6 @@
     "Unknown device": "Neznana naprava",
     "You need to be using HTTPS to place a screen-sharing call.": "Za klic s skupno rabo zaslona potrebujete HTTPS.",
     "powered by Matrix": "poganja Matrix",
-    "Custom Server Options": "Možnosti strežnika po meri",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Možnosti strežnika po meri lahko uporabite za prijavo v druge Matrix strežnike, s tem da podate drug URL domačega strežnika. To vam omogoča, da uporabljate Riot z obstoječim Matrix računom na drugem strežniku.",
     "Dismiss": "Opusti",
     "Welcome to Element": "Dobrodošli v Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizirano šifrirano sporočanje &amp; sodelovanje s pomočjo [matrix]",

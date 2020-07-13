@@ -1,12 +1,10 @@
 {
-    "Custom Server Options": "Custom Server Options",
     "Dismiss": "Dismiss",
     "powered by Matrix": "powered by Matrix",
     "Unknown device": "Unknown device",
     "You need to be using HTTPS to place a screen-sharing call.": "You need to be using HTTPS to place a screen-sharing call.",
     "Welcome to Element": "Welcome to Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.",
     "Sign In": "Sign In",
     "Create Account": "Create Account",
     "Explore rooms": "Explore rooms",

@@ -1,5 +1,4 @@
 {
-    "Custom Server Options": "自定义服务器选项",
     "Dismiss": "标记为已读",
     "powered by Matrix": "由 Matrix 驱动",
     "Unknown device": "未知设备",
@@ -9,7 +8,6 @@
     "Sign In": "登入",
     "Create Account": "创建帐号",
     "Explore rooms": "探索房间",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以在自定义服务器选项中通过指定其他主服务器的 URL 来登录其他 Matrix 服务器。 这允许您在不同的主服务器上通过已有的 Matrix 帐户来使用 Riot 。",
     "The message from the parser is: %(message)s": "语法分析器的信息：%(message)s",
     "Invalid JSON": "无效的 JSON",
     "Unexpected error preparing the app. See console for details.": "软件准备时出错，详细信息请查看控制台。",

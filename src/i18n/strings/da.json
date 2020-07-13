@@ -1,5 +1,4 @@
 {
-    "Custom Server Options": "Brugerdefinerede serverindstillinger",
     "Dismiss": "Afslut",
     "powered by Matrix": "Drevet af Matrix",
     "Unknown device": "Ukendt enhed",
@@ -11,7 +10,6 @@
     "Unexpected error preparing the app. See console for details.": "Uventet fejl ved forberedelse af appen. Se konsollen for detaljer.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfiguration: kan kun angive en af default_server_config, default_server_name eller default_hs_url.",
     "Invalid configuration: no default server specified.": "Ugyldig konfiguration: ingen standardserver angivet.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruge de brugertilpassede serverindstillinger til at logge på andre Matrix-servere ved at angive en anden homeserver URL. Dette giver dig mulighed for at bruge Riot med en eksisterende Matrix konto på en anden homeserver.",
     "Sign In": "Log ind",
     "Create Account": "Opret brugerkonto",
     "Explore rooms": "Udforsk rum",

@@ -10,8 +10,6 @@
     "Invalid configuration: no default server specified.": "Yanlış konfiqurasiya: ilkin server təyin edilməyib",
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "powered by Matrix": "Matrix tərəfindən təchiz edilmişdir",
-    "Custom Server Options": "Fərdi Server Seçimləri",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Fərqli server URL-ni təyin etməklə digər Matrix serverlərinə daxil olmaq üçün fərdi server seçimlərini istifadə edə bilərsiniz. Bu sizə başqa serverdə qaldırılmış mövcud Matrix hesabınızla Riot-u işlətməyə imkan verir.",
     "Dismiss": "Nəzərə almayın",
     "Welcome to Element": "Element-ə xoş gəlmişsiniz",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] tərəfindən təchiz edilmiş mərkəziləşdirilməmiş, şifrələnmiş çat və əməkdaşlıq platforması"

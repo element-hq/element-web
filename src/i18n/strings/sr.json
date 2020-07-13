@@ -1,7 +1,6 @@
 {
     "Unknown device": "Непознати уређај",
     "You need to be using HTTPS to place a screen-sharing call.": "Морате користити HTTPS да бисте започели позив са дељењем екрана.",
-    "Custom Server Options": "Прилагођене опције сервера",
     "Dismiss": "Одбаци",
     "powered by Matrix": "покреће Матрикс",
     "Welcome to Element": "Добродошли у Element",
@@ -9,7 +8,6 @@
     "Sign In": "Пријава",
     "Create Account": "Направи налог",
     "Explore rooms": "Истражи собе",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Можете користити опције прилагођеног сервера да бисте се пријавили на друге Матрикс сервере тако што ћете навести другачију адресу кућног сервера. Ово вам омогућава да користите Riot са постојећим Матрикс налогом на другом кућном серверу.",
     "Invalid configuration: no default server specified.": "Погрешно подешавање: подразумевани сервер није наведен.",
     "The message from the parser is: %(message)s": "Порука из парсера: %(message)s",
     "Invalid JSON": "Погрешан JSON",

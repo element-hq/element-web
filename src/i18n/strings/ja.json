@@ -1,7 +1,6 @@
 {
     "Welcome to Element": "Element へようこそ",
     "Unknown device": "不明な端末",
-    "Custom Server Options": "カスタムサーバのオプション",
     "Dismiss": "やめる",
     "powered by Matrix": "powered by Matrix",
     "You need to be using HTTPS to place a screen-sharing call.": "画面共有通話を行うにはHTTPS通信を使う必要があります。",
@@ -14,7 +13,6 @@
     "The message from the parser is: %(message)s": "パーザーのメッセージ: %(message)s",
     "Invalid JSON": "妥当でないJSON",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "無効な設定: default_server_config、default_server_name、または default_hs_urlのいずれか一つのみが指定できます。",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "サーバーのカスタムオプションに別のホームサーバーURLを指定することで他のMatrixサーバーにサインインすることができます。これにより別のホームサーバー上で既にあるMatrixのアカウントでRiotを使うことができます。",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "最高のユーザー体験を得るためには、<chromeLink>Chrome</chromeLink>や<firefoxLink>Firefox</firefoxLink>、もしくは<safariLink>Safari</safariLink>をインストールしてください。",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "現在のブラウザを使い続けることもできますが、いくつか (もしくは全ての) 機能が動作しない可能性や、外観が崩れる可能性があります。",
     "I understand the risks and wish to continue": "リスクを理解したうえで続行する",
