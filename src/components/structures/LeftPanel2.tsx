@@ -187,9 +187,22 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (header.style.top !== newTop) {
                     header.style.top = newTop;
                 }
-            } else if (style.stickyBottom) {
+            } else {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+                if (header.style.top) {
+                    header.style.removeProperty('top');
+                }
+            }
+
+            if (style.stickyBottom) {
                 if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+            } else {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
                 }
             }
 
@@ -209,20 +222,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 }
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
-                }
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                }
                 if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
                     headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
                 }
                 if (header.style.width) {
                     header.style.removeProperty('width');
-                }
-                if (header.style.top) {
-                    header.style.removeProperty('top');
                 }
             }
         }
