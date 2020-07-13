@@ -50,7 +50,7 @@ import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
-import { _t, getCurrentLanguage } from '../../languageHandler';
+import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
@@ -553,6 +553,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'leave_room':
                 this.leaveRoom(payload.room_id);
+                break;
+            case 'forget_room':
+                this.forgetRoom(payload.room_id);
                 break;
             case 'reject_invite':
                 Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
@@ -1121,6 +1124,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     });
                 }
             },
+        });
+    }
+
+    private forgetRoom(roomId: string) {
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        MatrixClientPeg.get().forget(roomId).then(() => {
+            // Switch to another room view if we're currently viewing the historical room
+            if (this.state.currentRoomId === roomId) {
+                dis.dispatch({ action: "view_next_room" });
+            }
+        }, function(err) {
+            const errCode = err.errcode || _td("unknown error code");
+            Modal.createTrackedDialog("Failed to forget room", '', ErrorDialog, {
+                title: _t("Failed to forget room %(errCode)s", {errCode}),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
         });
     }
 

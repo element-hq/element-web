@@ -1380,15 +1380,9 @@ export default createReactClass({
     },
 
     onForgetClick: function() {
-        this.context.forget(this.state.room.roomId).then(function() {
-            dis.dispatch({ action: 'view_next_room' });
-        }, function(err) {
-            const errCode = err.errcode || _t("unknown error code");
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Failed to forget room', '', ErrorDialog, {
-                title: _t("Error"),
-                description: _t("Failed to forget room %(errCode)s", { errCode: errCode }),
-            });
+        dis.dispatch({
+            action: 'forget_room',
+            room_id: this.state.room.roomId,
         });
     },
 
