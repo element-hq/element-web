@@ -196,7 +196,7 @@ limitations under the License.
 
 .mx_RoomView_MessageList {
     list-style-type: none;
-    padding: 18px;
+    padding: 12px;
     margin: 0;
     /* needed as min-height is set to clientHeight in ScrollPanel
     to prevent shrinking when WhoIsTypingTile is hidden */
