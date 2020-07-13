@@ -23,16 +23,6 @@ limitations under the License.
     flex: 1;
 }
 
-.mx_Spinner_spin img {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 .mx_MatrixChat_middlePanel .mx_Spinner {
     height: auto;
 }
