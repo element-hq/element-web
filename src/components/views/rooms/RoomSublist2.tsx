@@ -321,25 +321,29 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
     };
 
-    private onHeaderClick = (ev: React.MouseEvent<HTMLDivElement>) => {
-        let target = ev.target as HTMLDivElement;
-        if (!target.classList.contains('mx_RoomSublist2_headerText')) {
-            // If we don't have the headerText class, the user clicked the span in the headerText.
-            target = target.parentElement as HTMLDivElement;
-        }
-
-        const possibleSticky = target.parentElement;
+    private onHeaderClick = () => {
+        const possibleSticky = this.headerButton.current.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
         const list = sublist.parentElement.parentElement;
-        // the scrollTop is capped at the height of the header in LeftPanel2
+        // the scrollTop is capped at the height of the header in LeftPanel2, the top header is always sticky
         const isAtTop = list.scrollTop <= HEADER_HEIGHT;
-        const isSticky = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_sticky');
-        if (isSticky && !isAtTop) {
+        const isAtBottom = list.scrollTop >= list.scrollHeight - list.offsetHeight;
+        const isStickyTop = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_stickyTop');
+        const isStickyBottom = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_stickyBottom');
+
+        if ((isStickyBottom && !isAtBottom) || (isStickyTop && !isAtTop)) {
             // is sticky - jump to list
             sublist.scrollIntoView({behavior: 'smooth'});
         } else {
             // on screen - toggle collapse
+            const isExpanded = this.state.isExpanded;
             this.toggleCollapsed();
+            // if the bottom list is collapsed then scroll it in so it doesn't expand off screen
+            if (!isExpanded && isStickyBottom) {
+                setImmediate(() => {
+                    sublist.scrollIntoView({behavior: 'smooth'});
+                });
+            }
         }
     };
 

@@ -50,7 +50,7 @@ import PageTypes from '../../PageTypes';
 import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
-import { _t, getCurrentLanguage } from '../../languageHandler';
+import {_t, _td, getCurrentLanguage} from '../../languageHandler';
 import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
@@ -74,6 +74,7 @@ import {
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
+import ErrorDialog from "../views/dialogs/ErrorDialog";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -460,7 +461,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     onAction = (payload) => {
         // console.log(`MatrixClientPeg.onAction: ${payload.action}`);
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
         // Start the onboarding process for certain actions
@@ -553,6 +553,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'leave_room':
                 this.leaveRoom(payload.room_id);
+                break;
+            case 'forget_room':
+                this.forgetRoom(payload.room_id);
                 break;
             case 'reject_invite':
                 Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
@@ -1060,7 +1063,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoom(roomId: string) {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
@@ -1121,6 +1123,21 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     });
                 }
             },
+        });
+    }
+
+    private forgetRoom(roomId: string) {
+        MatrixClientPeg.get().forget(roomId).then(() => {
+            // Switch to another room view if we're currently viewing the historical room
+            if (this.state.currentRoomId === roomId) {
+                dis.dispatch({ action: "view_next_room" });
+            }
+        }).catch((err) => {
+            const errCode = err.errcode || _td("unknown error code");
+            Modal.createTrackedDialog("Failed to forget room", '', ErrorDialog, {
+                title: _t("Failed to forget room %(errCode)s", {errCode}),
+                description: ((err && err.message) ? err.message : _t("Operation failed")),
+            });
         });
     }
 
@@ -1372,7 +1389,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return;
             }
 
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
@@ -1442,7 +1458,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
         });
         cli.on("crypto.warning", (type) => {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {

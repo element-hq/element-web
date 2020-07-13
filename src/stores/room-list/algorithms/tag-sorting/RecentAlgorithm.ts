@@ -38,7 +38,11 @@ export class RecentAlgorithm implements IAlgorithm {
         // actually changed (probably needs to be done higher up?) then we could do an
         // insertion sort or similar on the limited set of changes.
 
-        const myUserId = MatrixClientPeg.get().getUserId();
+        // TODO: Don't assume we're using the same client as the peg
+        let myUserId = '';
+        if (MatrixClientPeg.get()) {
+            myUserId = MatrixClientPeg.get().getUserId();
+        }
 
         const tsCache: { [roomId: string]: number } = {};
         const getLastTs = (r: Room) => {
@@ -68,7 +72,6 @@ export class RecentAlgorithm implements IAlgorithm {
                     const ev = r.timeline[i];
                     if (!ev.getTs()) continue; // skip events that don't have timestamps (tests only?)
 
-                    // TODO: Don't assume we're using the same client as the peg
                     if (ev.getSender() === myUserId || Unread.eventTriggersUnreadCount(ev)) {
                         return ev.getTs();
                     }
