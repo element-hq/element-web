@@ -3,7 +3,7 @@
     "Dismiss": "Descartar",
     "powered by Matrix": "powered by Matrix",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s em %(osName)s",
-    "Riot Desktop on %(platformName)s": "Riot Desktop em %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop em %(platformName)s",
     "Unknown device": "Dispositivo desconhecido",
     "You need to be using HTTPS to place a screen-sharing call.": "Necessita de estar a usar HTTPS para poder iniciar uma chamada com partilha de ecrã.",
     "Welcome to Riot.im": "Bem-vindo ao Riot.im",

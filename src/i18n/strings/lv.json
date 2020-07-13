@@ -3,7 +3,7 @@
     "Custom Server Options": "Iestatāmās servera opcijas",
     "Dismiss": "Atteikt",
     "powered by Matrix": "Tiek darbināta ar Matrix",
-    "Riot Desktop on %(platformName)s": "Riot darbvirsma %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot darbvirsma %(platformName)s",
     "Unknown device": "Nezināma ierīce",
     "You need to be using HTTPS to place a screen-sharing call.": "Lai izmantotu ekrāna kopīgošanas zvanu, nepieciešams izmantot HTTPS savienojumu.",
     "Welcome to Riot.im": "Esiet gaidīti Riot.im",

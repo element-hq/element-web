@@ -1,7 +1,7 @@
 {
     "Custom Server Options": "Server-instillinger",
     "powered by Matrix": "Drevet av Matrix",
-    "Riot Desktop on %(platformName)s": "Riot Desktop på %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop på %(platformName)s",
     "Unknown device": "Ukjent enhet",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s på %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Du er nødt til å bruke HTTPS for å ha en samtale med skjermdeling.",

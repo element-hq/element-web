@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Leagan gnáthríomhaire Riot ar %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Leagan gnáthríomhaire Riot ar %(platformName)s",
     "Unknown device": "Gléas nár aithníodh",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s trí %(browserName)s ar %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Ní mór HTTPS a úsáid chun glaoch comhroinnt scáileáin a chur.",

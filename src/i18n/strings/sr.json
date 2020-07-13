@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Riot стони програм за %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot стони програм за %(platformName)s",
     "Unknown device": "Непознати уређај",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s преко прегледача %(browserName)s на систему %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Морате користити HTTPS да бисте започели позив са дељењем екрана.",

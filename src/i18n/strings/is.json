@@ -2,7 +2,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s með %(browserName)s á %(osName)s",
     "powered by Matrix": "keyrt með Matrix",
     "Welcome to Riot.im": "Velkomin í Riot.im",
-    "Riot Desktop on %(platformName)s": "Riot skjáborðsforrit á %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot skjáborðsforrit á %(platformName)s",
     "Unknown device": "Óþekkt tæki",
     "Dismiss": "Hafna",
     "Custom Server Options": "Sérsniðnir valkostir vefþjóns",

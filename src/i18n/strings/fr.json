@@ -3,7 +3,7 @@
     "Dismiss": "Ignorer",
     "powered by Matrix": "propulsé par Matrix",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s dans %(browserName)s sous %(osName)s",
-    "Riot Desktop on %(platformName)s": "Version bureau de Riot sur %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Version bureau de Riot sur %(platformName)s",
     "Unknown device": "Appareil inconnu",
     "You need to be using HTTPS to place a screen-sharing call.": "Vous devez utiliser HTTPS pour effectuer un appel avec partage d’écran.",
     "Welcome to Riot.im": "Bienvenue sur Riot.im",
@@ -36,7 +36,7 @@
     "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
     "Go to Riot.im": "Aller vers Riot.im",
     "Failed to start": "Échec au démarrage",
-    "Riot Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)",
     "Download Completed": "Téléchargement terminé",
     "Open": "Ouvrir"
 }

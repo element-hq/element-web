@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "la skami nu zunti ci'e la'o gy. %(platformName)s .gy.",
+    "%(brand)s Desktop on %(platformName)s": "la skami nu zunti ci'e la'o gy. %(platformName)s .gy.",
     "Unknown device": "lo na'e te djuno se pilno",
     "%(appName)s via %(browserName)s on %(osName)s": "la'o gy. %(appName)s .gy. xe be'i la'o gy. %(browserName)s .gy. ci'e la'o gy. %(osName)s .gy.",
     "You need to be using HTTPS to place a screen-sharing call.": ".i la .hytytypysys. sarcu lo nu co'a vidni jorne",

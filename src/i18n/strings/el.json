@@ -2,7 +2,7 @@
     "Custom Server Options": "Προσαρμοσμένες ρυθμίσεις διακομιστή",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s μέσω %(browserName)s σε %(osName)s",
     "Dismiss": "Απόρριψη",
-    "Riot Desktop on %(platformName)s": "Riot Desktop σε %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop σε %(platformName)s",
     "Unknown device": "Άγνωστη συσκευή",
     "You need to be using HTTPS to place a screen-sharing call.": "Απαιτείται η χρήση HTTPS για την πραγματοποίηση κλήσης διαμοιρασμού επιφάνειας εργασίας.",
     "powered by Matrix": "λειτουργεί με το Matrix",

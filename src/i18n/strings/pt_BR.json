@@ -3,7 +3,7 @@
     "Dismiss": "Descartar",
     "powered by Matrix": "oferecido por Matrix",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s em %(osName)s",
-    "Riot Desktop on %(platformName)s": "Riot para computadores desktop em %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot para computadores desktop em %(platformName)s",
     "Unknown device": "Dispositivo desconhecido",
     "You need to be using HTTPS to place a screen-sharing call.": "Você precisa estar usando HTTPS para poder iniciar uma chamada com compartilhamento de tela.",
     "Welcome to Riot.im": "Seja bem-vinda(o) a Riot.im",
@@ -37,6 +37,6 @@
     "Missing indexeddb worker script!": "Script de trabalho indexeddb não encontrado!",
     "Open": "Abrir",
     "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente",
-    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login"
 }

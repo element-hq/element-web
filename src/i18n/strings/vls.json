@@ -2,7 +2,7 @@
     "Unexpected error preparing the app. See console for details.": "’t Is een onverwachte foute ipgetreedn by ’t voorbereidn van den app. Bekykt de console vo details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Oungeldige configuroasje: ku moar één van default_server_config, default_server_name, of default_hs_url ingeevn.",
     "Invalid configuration: no default server specified.": "Oungeldige configuroasje: geen standoardserver ingegeevn.",
-    "Riot Desktop on %(platformName)s": "Riot Desktop ip %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop ip %(platformName)s",
     "Unknown device": "Ounbekend toestel",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s ip %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Je moet HTTPS gebruukn vo een iproep me schermdeeln te kunn startn.",

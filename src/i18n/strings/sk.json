@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Riot Desktop pre %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop pre %(platformName)s",
     "Unknown device": "Neznáme zariadenie",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s cez %(browserName)s pre %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Ak si želáte spustiť zdieľanie obrazovky, musíte byť pripojení cez protokol HTTPS.",
@@ -27,7 +27,7 @@
     "Open user settings": "Otvoriť používateľské nastavenia",
     "Previous/next recently visited room or community": "Predchádzajúca/ďalšia nedávno navštívená miestnosť alebo komunita",
     "Go to your browser to complete Sign In": "Prejdite do prehliadača a dokončite prihlásenie",
-    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Nepodporovaný prehliadač",
     "Your browser can't run Riot": "Váš prehliadač nedokáže spustiť Riot",

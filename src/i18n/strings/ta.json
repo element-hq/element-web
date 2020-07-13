@@ -4,7 +4,7 @@
     "Dismiss": "நீக்கு",
     "powered by Matrix": "Matrix-ஆல் ஆனது",
     "Unknown device": "தெரியாத கருவி",
-    "Riot Desktop on %(platformName)s": "%(platformName)s ற்க்கான Riot",
+    "%(brand)s Desktop on %(platformName)s": "%(platformName)s ற்க்கான Riot",
     "You need to be using HTTPS to place a screen-sharing call.": "நீங்கள் திரைபகிர்வு அழைப்பை மேற்க்கொள்ள  HTTPS-ஐ பயன்படுத்த வேண்டும்.",
     "Welcome to Riot.im": "Riot.im -ற்க்கு வரவேற்க்கிறோம்",
     "Chat with Riot Bot": "Riot இயங்கியிடம் உரையாடவும்",

@@ -5,7 +5,7 @@
     "Unknown device": "Dispositiu desconegut",
     "Welcome to Riot.im": "Us donem la benvinguda a Riot.im",
     "Chat with Riot Bot": "Conversa amb el Bot de Riot",
-    "Riot Desktop on %(platformName)s": "Riot d'escriptori per a %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot d'escriptori per a %(platformName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Heu d'utilitzar HTTPS per poder fer una trucada amb pantalla compartida.",
     "powered by Matrix": "amb tecnologia de Matrix",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Xat descentralitzat, encriptat i col·laboratiu amb tecnologia de [matrix]",

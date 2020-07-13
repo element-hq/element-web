@@ -6,7 +6,7 @@
     "Unexpected error preparing the app. See console for details.": "Апп бэлдэх үед гарах ёсгүй алдаа. Дэлгэрэнгүйг консолоос харна уу.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Буруу тохиргоо: default_server_config, default_server_name, эсвэл default_hs_url утгын зөвхөн аль нэгийг л зааж болно.",
     "Invalid configuration: no default server specified.": "Буруу тохиргоо: Өгөгдсөл серверийг зааж өгөөгүй байна.",
-    "Riot Desktop on %(platformName)s": "%(platformName)s дээрх Риот Десктоп",
+    "%(brand)s Desktop on %(platformName)s": "%(platformName)s дээрх Риот Десктоп",
     "Unknown device": "Үл мэдэгдэх төхөөрөмж",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s дээр %(browserName)s -ээр дамжсан %(appName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Та дэлгэц хуваалцах дуудлага хийхдээ HTTPS ашиглах ёстой.",

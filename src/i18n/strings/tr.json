@@ -3,7 +3,7 @@
     "Custom Server Options": "Özelleştirilebilir Sunucu Seçenekleri",
     "Dismiss": "Kapat",
     "powered by Matrix": "Matrix'den besleniyor",
-    "Riot Desktop on %(platformName)s": "%(platformName)s platformunda Riot Masaüstü",
+    "%(brand)s Desktop on %(platformName)s": "%(platformName)s platformunda Riot Masaüstü",
     "Unknown device": "Bilinmeyen aygıt",
     "You need to be using HTTPS to place a screen-sharing call.": "Ekran paylaşımlı arama yapmak için HTTPS kullanıyor olmalısınız.",
     "Welcome to Riot.im": "Riot.im'e hoş geldiniz",

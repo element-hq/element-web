@@ -6,7 +6,7 @@
     "Unexpected error preparing the app. See console for details.": "Gwall annisgwyl wrth baratoi'r app. Gweler y consol am fanylion.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Gosodiad annilys: dim ond un o default_server_config, default_server_name, neu default_hs_url y gall ei nodi.",
     "Invalid configuration: no default server specified.": "Gosodiad annilys: ni nodwyd gweinydd diofyn.",
-    "Riot Desktop on %(platformName)s": "Riot Cyfrifiadur ar %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Riot Cyfrifiadur ar %(platformName)s",
     "Unknown device": "Dyfais anhysbys",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s trwy %(browserName)s ar %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Mae angen i chi fod yn defnyddio HTTPS i osod galwad rhannu sgrin.",

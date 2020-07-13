@@ -5,7 +5,7 @@
     "Chat with Riot Bot": "Konverzovat s Riot Botem",
     "Dismiss": "Zahodit",
     "powered by Matrix": "používá protokol Matrix",
-    "Riot Desktop on %(platformName)s": "Riot Desktop pro %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop pro %(platformName)s",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s přes %(browserName)s na %(osName)s",
     "Custom Server Options": "Vlastní nastavení serveru",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizovaný, šifrovaný chat a spolupráce na platformě [matrix]",

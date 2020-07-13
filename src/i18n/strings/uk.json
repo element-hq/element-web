@@ -3,7 +3,7 @@
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s через %(browserName)s на %(osName)s",
     "Dismiss": "Відхилити",
     "powered by Matrix": "працює на Matrix",
-    "Riot Desktop on %(platformName)s": "Riot Desktop на %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop на %(platformName)s",
     "Unknown device": "Невідомий пристрій",
     "You need to be using HTTPS to place a screen-sharing call.": "Ви маєте використовувати HTTPS щоб зробити виклик із поширенням екрану.",
     "Welcome to Riot.im": "Ласкаво просимо до Riot.im",

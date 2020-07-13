@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Riot Desktop-ი %(platformName)s-ზე",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop-ი %(platformName)s-ზე",
     "Unknown device": "უცნობი მოწყობილობა",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s-ი %(browserName)s-ით %(osName)s-იდან",
     "You need to be using HTTPS to place a screen-sharing call.": "ეკრანის გაზიარების ფუნქციის მქონე ზარისთვის საჭიროა, იყენებდეთ HTTPS-ს.",

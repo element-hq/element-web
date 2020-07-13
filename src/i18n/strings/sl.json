@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Namizni Riot za %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "Namizni Riot za %(platformName)s",
     "Unknown device": "Neznana naprava",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s s %(browserName)s na %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Za klic s skupno rabo zaslona potrebujete HTTPS.",

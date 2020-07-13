@@ -2,7 +2,7 @@
     "Custom Server Options": "Brugerdefinerede serverindstillinger",
     "Dismiss": "Afslut",
     "powered by Matrix": "Drevet af Matrix",
-    "Riot Desktop on %(platformName)s": "Riot Desktop på %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop på %(platformName)s",
     "Unknown device": "Ukendt enhed",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s via %(browserName)s på %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Du skal bruge HTTPS for at lave skærmdelings opkald.",

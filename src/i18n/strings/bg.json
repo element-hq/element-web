@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "Riot Desktop под %(platformName)s",
+    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop под %(platformName)s",
     "Unknown device": "Непознато устройство",
     "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s в %(browserName)s под %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Трябва да използвате HTTPS, за да споделите екрана си.",
@@ -27,7 +27,7 @@
     "Missing indexeddb worker script!": "Липсва indexdb worker скриптът!",
     "Unable to load config file: please refresh the page to try again.": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
     "Previous/next recently visited room or community": "Предишна/следваща наскоро-посетена стая или общност",
-    "Riot Desktop (%(platformName)s)": "Riot Desktop (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Неподдържан браузър",
     "Your browser can't run Riot": "Браузърът ви не може да подкара Riot",

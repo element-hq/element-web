@@ -1,5 +1,5 @@
 {
-    "Riot Desktop on %(platformName)s": "%(platformName)s पर रायट डेस्कटॉप",
+    "%(brand)s Desktop on %(platformName)s": "%(platformName)s पर रायट डेस्कटॉप",
     "Unknown device": "अज्ञात यन्त्र",
     "%(appName)s via %(browserName)s on %(osName)s": "%(osName)s पर %(browserName)s के माध्यम से %(appName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "स्क्रीन साझा की कॉल करने के लिए आपको HTTPS का उपयोग करने की आवश्यकता है।",
