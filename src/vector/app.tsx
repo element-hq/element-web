@@ -86,11 +86,11 @@ function onNewScreen(screen: string) {
 //
 // If we're in electron, we should never pass through a file:// URL otherwise
 // the identity server will try to 302 the browser to it, which breaks horribly.
-// so in that instance, hardcode to use riot.im/app for now instead.
+// so in that instance, hardcode to use app.element.io for now instead.
 function makeRegistrationUrl(params: object) {
     let url;
     if (window.location.protocol === "vector:") {
-        url = 'https://riot.im/app/#/register';
+        url = 'https://app.element.io/#/register';
     } else {
         url = (
             window.location.protocol + '//' +
