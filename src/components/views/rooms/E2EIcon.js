@@ -42,11 +42,12 @@ const crossSigningRoomTitles = {
     [E2E_STATE.VERIFIED]: _td("Everyone in this room is verified"),
 };
 
-const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip}) => {
+const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordered}) => {
     const [hover, setHover] = useState(false);
 
     const classes = classNames({
         mx_E2EIcon: true,
+        mx_E2EIcon_bordered: bordered,
         mx_E2EIcon_warning: status === E2E_STATE.WARNING,
         mx_E2EIcon_normal: status === E2E_STATE.NORMAL,
         mx_E2EIcon_verified: status === E2E_STATE.VERIFIED,

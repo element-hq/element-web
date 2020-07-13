@@ -341,23 +341,58 @@ $left-gutter: 64px;
     background-size: contain;
 }
 
+.mx_EventTile_e2eIcon {
+    &::before, &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+    }
+
+    &::before {
+        background-color: #ffffff;
+        mask: url('$(res)/img/e2e/normal.svg');
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 90%;
+    }
+}
+
 .mx_EventTile_e2eIcon_undecryptable, .mx_EventTile_e2eIcon_unverified {
-    background-image: url('$(res)/img/e2e/warning.svg');
+    &::after {
+        mask-image: url('$(res)/img/e2e/warning.svg');
+        background-color: $notice-primary-color;
+    }
     opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_unknown {
-    background-image: url('$(res)/img/e2e/warning.svg');
+    &::after {
+        mask-image: url('$(res)/img/e2e/warning.svg');
+        background-color: $notice-primary-color;
+    }
     opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_unencrypted {
-    background-image: url('$(res)/img/e2e/warning.svg');
+    &::after {
+        mask-image: url('$(res)/img/e2e/warning.svg');
+        background-color: $notice-primary-color;
+    }
     opacity: 1;
 }
 
 .mx_EventTile_e2eIcon_unauthenticated {
-    background-image: url('$(res)/img/e2e/normal.svg');
+    &::after {
+        mask-image: url('$(res)/img/e2e/normal.svg');
+        background-color: #020202; // TODO theme this
+    }
     opacity: 1;
 }
 
