@@ -33,6 +33,7 @@ import { EffectiveMembership, getEffectiveMembership } from "./membership";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
+import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -44,14 +45,13 @@ interface IState {
  */
 export const LISTS_UPDATE_EVENT = "lists_update";
 
-export class RoomListStore2 extends AsyncStore<ActionPayload> {
+export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.
      */
     public static TEST_MODE = false;
 
-    private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
     private algorithm = new Algorithm();
@@ -79,7 +79,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     public get matrixClient(): MatrixClient {
-        return this._matrixClient;
+        return super.matrixClient;
     }
 
     // Intended for test usage
@@ -88,22 +88,27 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         this.tagWatcher = new TagWatcher(this);
         this.filterConditions = [];
         this.initialListsGenerated = false;
-        this._matrixClient = null;
 
         this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
         this.algorithm = new Algorithm();
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmListUpdated);
+
+        // Reset state without causing updates as the client will have been destroyed
+        // and downstream code will throw NPE errors.
+        await this.reset(null, true);
     }
 
     // Public for test usage. Do not call this.
-    public async makeReady(client: MatrixClient) {
+    public async makeReady(forcedClient?: MatrixClient) {
+        if (forcedClient) {
+            super.matrixClient = forcedClient;
+        }
+
         // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         this.checkEnabled();
         if (!this.enabled) return;
-
-        this._matrixClient = client;
 
         // Update any settings here, as some may have happened before we were logically ready.
         // Update any settings here, as some may have happened before we were logically ready.
@@ -161,7 +166,15 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (trigger) this.updateFn.trigger();
     }
 
-    protected async onDispatch(payload: ActionPayload) {
+    protected async onReady(): Promise<any> {
+        await this.makeReady();
+    }
+
+    protected async onNotReady(): Promise<any> {
+        await this.resetStore();
+    }
+
+    protected async onAction(payload: ActionPayload) {
         // When we're running tests we can't reliably use setImmediate out of timing concerns.
         // As such, we use a more synchronous model.
         if (RoomListStore2.TEST_MODE) {
@@ -175,29 +188,10 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
     }
 
     protected async onDispatchAsync(payload: ActionPayload) {
-        if (payload.action === 'MatrixActions.sync') {
-            // Filter out anything that isn't the first PREPARED sync.
-            if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
-                return;
-            }
-
-            await this.makeReady(payload.matrixClient);
-
-            return; // no point in running the next conditions - they won't match
-        }
-
         // TODO: Remove this once the RoomListStore becomes default
         if (!this.enabled) return;
 
-        if (payload.action === 'on_client_not_viable' || payload.action === 'on_logged_out') {
-            // Reset state without causing updates as the client will have been destroyed
-            // and downstream code will throw NPE errors.
-            await this.reset(null, true);
-            this._matrixClient = null;
-            this.initialListsGenerated = false; // we'll want to regenerate them
-        }
-
-        // Everything below here requires a MatrixClient or some sort of logical readiness.
+        // Everything here requires a MatrixClient or some sort of logical readiness.
         const logicallyReady = this.matrixClient && this.initialListsGenerated;
         if (!logicallyReady) return;
 
