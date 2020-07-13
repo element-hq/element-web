@@ -146,9 +146,8 @@ limitations under the License.
         .mx_RoomSublist2_headerText {
             flex: 1;
             max-width: calc(100% - 16px); // 16px is the badge width
-            text-transform: uppercase;
             line-height: $font-16px;
-            font-size: $font-12px;
+            font-size: $font-13px;
             font-weight: 600;
 
             // Ellipsize any text overflow
