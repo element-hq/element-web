@@ -25,6 +25,11 @@ limitations under the License.
     flex-direction: column;
     border-radius: 8px;
     margin: 5px;
+    padding: 4px 0;
+
+    .mx_RoomView_MessageList {
+        padding: 14px 18px; // top and bottom is 4px smaller to balance with the padding set above
+    }
 }
 
 .mx_RightPanel_header {
