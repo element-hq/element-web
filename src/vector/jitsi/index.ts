@@ -55,7 +55,7 @@ let widgetApi: WidgetApi;
         const parentUrl = qsParam('parentUrl', true);
         const widgetId = qsParam('widgetId', true);
 
-        // Set this up as early as possible because Riot will be hitting it almost immediately.
+        // Set this up as early as possible because Element will be hitting it almost immediately.
         if (parentUrl && widgetId) {
             widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
                 Capability.AlwaysOnScreen,

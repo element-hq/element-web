@@ -121,7 +121,7 @@ async function start() {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
-                if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
                     window.location.href = "mobile_guide/";
                     return;
                 }
