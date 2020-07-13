@@ -99,6 +99,7 @@ const BaseAvatar = (props: IProps) => {
         defaultToInitialLetter = true,
         onClick,
         inputRef,
+        className,
         ...otherProps
     } = props;
 
@@ -138,7 +139,7 @@ const BaseAvatar = (props: IProps) => {
                 <AccessibleButton
                     {...otherProps}
                     element="span"
-                    className="mx_BaseAvatar"
+                    className={classNames("mx_BaseAvatar", className)}
                     onClick={onClick}
                     inputRef={inputRef}
                 >
@@ -149,7 +150,7 @@ const BaseAvatar = (props: IProps) => {
         } else {
             return (
                 <span
-                    className="mx_BaseAvatar"
+                    className={classNames("mx_BaseAvatar", className)}
                     ref={inputRef}
                     {...otherProps}
                     role="presentation"
@@ -164,7 +165,7 @@ const BaseAvatar = (props: IProps) => {
     if (onClick !== null) {
         return (
             <AccessibleButton
-                className="mx_BaseAvatar mx_BaseAvatar_image"
+                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
                 element='img'
                 src={imageUrl}
                 onClick={onClick}
@@ -180,7 +181,7 @@ const BaseAvatar = (props: IProps) => {
     } else {
         return (
             <img
-                className="mx_BaseAvatar mx_BaseAvatar_image"
+                className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}
                 src={imageUrl}
                 onError={onError}
                 style={{
