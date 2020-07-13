@@ -16,21 +16,27 @@ limitations under the License.
 */
 
 async function openRoomDirectory(session) {
-    const roomDirectoryButton = await session.query('.mx_LeftPanel_explore .mx_AccessibleButton');
+    const roomDirectoryButton = await session.query('.mx_LeftPanel2_exploreButton');
     await roomDirectoryButton.click();
+}
+
+async function findSublist(session, name) {
+    const sublists = await session.queryAll('.mx_RoomSublist2');
+    for (const sublist of sublists) {
+        const header = await sublist.$('.mx_RoomSublist2_headerText');
+        const headerText = await session.innerText(header);
+        if (headerText.toLowerCase().includes(name.toLowerCase())) {
+            return sublist;
+        }
+    }
+    throw new Error(`could not find room list section that contains '${name}' in header`);
 }
 
 async function createRoom(session, roomName, encrypted=false) {
     session.log.step(`creates room "${roomName}"`);
 
-    const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
-    const roomListHeaderLabels = await Promise.all(roomListHeaders.map(h => session.innerText(h)));
-    const roomsIndex = roomListHeaderLabels.findIndex(l => l.toLowerCase().includes("rooms"));
-    if (roomsIndex === -1) {
-        throw new Error("could not find room list section that contains 'rooms' in header");
-    }
-    const roomsHeader = roomListHeaders[roomsIndex];
-    const addRoomButton = await roomsHeader.$(".mx_RoomSubList_addRoom");
+    const roomsSublist = await findSublist(session, "rooms");
+    const addRoomButton = await roomsSublist.$(".mx_RoomSublist2_auxButton");
     await addRoomButton.click();
 
     const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');
@@ -51,14 +57,8 @@ async function createRoom(session, roomName, encrypted=false) {
 async function createDm(session, invitees) {
     session.log.step(`creates DM with ${JSON.stringify(invitees)}`);
 
-    const roomListHeaders = await session.queryAll('.mx_RoomSubList_labelContainer');
-    const roomListHeaderLabels = await Promise.all(roomListHeaders.map(h => session.innerText(h)));
-    const dmsIndex = roomListHeaderLabels.findIndex(l => l.toLowerCase().includes('direct messages'));
-    if (dmsIndex === -1) {
-        throw new Error("could not find room list section that contains 'direct messages' in header");
-    }
-    const dmsHeader = roomListHeaders[dmsIndex];
-    const startChatButton = await dmsHeader.$(".mx_RoomSubList_addRoom");
+    const dmsSublist = await findSublist(session, "people");
+    const startChatButton = await dmsSublist.$(".mx_RoomSublist2_auxButton");
     await startChatButton.click();
 
     const inviteesEditor = await session.query('.mx_InviteDialog_editor textarea');
@@ -83,4 +83,4 @@ async function createDm(session, invitees) {
     session.log.done();
 }
 
-module.exports = {openRoomDirectory, createRoom, createDm};
+module.exports = {openRoomDirectory, findSublist, createRoom, createDm};

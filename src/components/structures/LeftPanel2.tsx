@@ -35,8 +35,8 @@ import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomLi
 import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -274,6 +274,14 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     };
 
+    private onEnter = () => {
+        const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile2");
+        if (firstRoom) {
+            firstRoom.click();
+            this.onSearch(""); // clear the search field
+        }
+    };
+
     private onMoveFocus = (up: boolean) => {
         let element = this.focusedElement;
 
@@ -346,6 +354,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onQueryUpdate={this.onSearch}
                     isMinimized={this.props.isMinimized}
                     onVerticalArrow={this.onKeyDown}
+                    onEnter={this.onEnter}
                 />
                 <AccessibleButton
                     className="mx_LeftPanel2_exploreButton"

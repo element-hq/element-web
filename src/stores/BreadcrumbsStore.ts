@@ -57,7 +57,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
 
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         if (payload.action === 'setting_updated') {
@@ -80,7 +80,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady() {
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         await this.updateRooms();
@@ -91,7 +91,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady() {
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
         if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         this.matrixClient.removeListener("Room.myMembership", this.onMyMembership);

@@ -147,7 +147,8 @@ export const SETTINGS = {
         default: false,
     },
     "feature_new_room_list": {
-        isFeature: true,
+        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
+        // XXX: We shouldn't have non-features appear like features.
         displayName: _td("Use the improved room list (will refresh to apply changes)"),
         supportedLevels: LEVELS_FEATURE,
         default: true,

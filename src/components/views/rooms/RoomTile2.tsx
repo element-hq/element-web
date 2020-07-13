@@ -55,8 +55,8 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 /*******************************************************************
  *   CAUTION                                                       *
@@ -276,6 +276,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
+    private onForgetRoomClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'forget_room',
+            room_id: this.props.room.roomId,
+        });
+        this.setState({generalMenuPosition: null}); // hide the menu
+    };
+
     private onOpenRoomSettings = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -315,7 +326,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(isActive: boolean): React.ReactElement {
-        if (MatrixClientPeg.get().isGuest() || !this.showContextMenu) {
+        if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived || !this.showContextMenu) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
@@ -397,7 +408,20 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
 
         let contextMenu = null;
-        if (this.state.generalMenuPosition) {
+        if (this.state.generalMenuPosition && this.props.tag === DefaultTagID.Archived) {
+            contextMenu = (
+                <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
+                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
+                            <MenuItem onClick={this.onForgetRoomClick} label={_t("Leave Room")}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
+                                <span className="mx_IconizedContextMenu_label">{_t("Forget Room")}</span>
+                            </MenuItem>
+                        </div>
+                    </div>
+                </ContextMenu>
+            );
+        } else if (this.state.generalMenuPosition) {
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">

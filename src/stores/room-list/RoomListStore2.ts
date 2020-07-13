@@ -46,6 +46,12 @@ interface IState {
 export const LISTS_UPDATE_EVENT = "lists_update";
 
 export class RoomListStore2 extends AsyncStore<ActionPayload> {
+    /**
+     * Set to true if you're running tests on the store. Should not be touched in
+     * any other environment.
+     */
+    public static TEST_MODE = false;
+
     private _matrixClient: MatrixClient;
     private initialListsGenerated = false;
     private enabled = false;
@@ -77,9 +83,43 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         return this._matrixClient;
     }
 
-    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14231
+    // Intended for test usage
+    public async resetStore() {
+        await this.reset();
+        this.tagWatcher = new TagWatcher(this);
+        this.filterConditions = [];
+        this.initialListsGenerated = false;
+        this._matrixClient = null;
+
+        this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
+        this.algorithm = new Algorithm();
+        this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
+        this.algorithm.on(FILTER_CHANGED, this.onAlgorithmListUpdated);
+    }
+
+    // Public for test usage. Do not call this.
+    public async makeReady(client: MatrixClient) {
+        // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
+        this.checkEnabled();
+        if (!this.enabled) return;
+
+        this._matrixClient = client;
+
+        // Update any settings here, as some may have happened before we were logically ready.
+        // Update any settings here, as some may have happened before we were logically ready.
+        console.log("Regenerating room lists: Startup");
+        await this.readAndCacheSettingsFromStore();
+        await this.regenerateAllLists({trigger: false});
+        await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
+
+        this.updateFn.mark(); // we almost certainly want to trigger an update.
+        this.updateFn.trigger();
+    }
+
+    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
     private checkEnabled() {
-        this.enabled = SettingsStore.isFeatureEnabled("feature_new_room_list");
+        this.enabled = SettingsStore.getValue("feature_new_room_list");
         if (this.enabled) {
             console.log("⚡ new room list store engaged");
         }
@@ -99,7 +139,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
      * be used if the calling code will manually trigger the update.
      */
     private async handleRVSUpdate({trigger = true}) {
-        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
+        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = RoomViewStore.getRoomId();
@@ -122,7 +162,14 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
         if (trigger) this.updateFn.trigger();
     }
 
-    protected onDispatch(payload: ActionPayload) {
+    protected async onDispatch(payload: ActionPayload) {
+        // When we're running tests we can't reliably use setImmediate out of timing concerns.
+        // As such, we use a more synchronous model.
+        if (RoomListStore2.TEST_MODE) {
+            await this.onDispatchAsync(payload);
+            return;
+        }
+
         // We do this to intentionally break out of the current event loop task, allowing
         // us to instead wait for a more convenient time to run our updates.
         setImmediate(() => this.onDispatchAsync(payload));
@@ -135,19 +182,7 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
                 return;
             }
 
-            // TODO: Remove with https://github.com/vector-im/riot-web/issues/14231
-            this.checkEnabled();
-            if (!this.enabled) return;
-
-            this._matrixClient = payload.matrixClient;
-
-            // Update any settings here, as some may have happened before we were logically ready.
-            console.log("Regenerating room lists: Startup");
-            await this.readAndCacheSettingsFromStore();
-            await this.regenerateAllLists({trigger: false});
-            await this.handleRVSUpdate({trigger: false}); // fake an RVS update to adjust sticky room, if needed
-
-            this.updateFn.trigger();
+            await this.makeReady(payload.matrixClient);
 
             return; // no point in running the next conditions - they won't match
         }
@@ -496,10 +531,13 @@ export class RoomListStore2 extends AsyncStore<ActionPayload> {
 
     /**
      * Regenerates the room whole room list, discarding any previous results.
+     *
+     * Note: This is only exposed externally for the tests. Do not call this from within
+     * the app.
      * @param trigger Set to false to prevent a list update from being sent. Should only
      * be used if the calling code will manually trigger the update.
      */
-    private async regenerateAllLists({trigger = true}) {
+    public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
         const sorts: ITagSortingMap = {};
