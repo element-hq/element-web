@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import { _t } from "matrix-react-sdk/src/languageHandler";
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // scss variables will be accessible.
@@ -26,6 +27,7 @@ interface IProps {
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
+    const brand = SdkConfig.get().brand;
     return <div className="mx_ErrorView">
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">
@@ -38,10 +40,12 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <div className="mx_HomePage_col">
                 <div className="mx_HomePage_row">
                     <div>
-                        <h2 id="step1_heading">{ _t("Your browser can't run Riot") }</h2>
+                        <h2 id="step1_heading">{ _t("Your browser can't run %(brand)s", { brand }) }</h2>
                         <p>
                             { _t(
-                                "Riot uses advanced browser features which aren't supported by your current browser.",
+                                "%(brand)s uses advanced browser features which aren't " +
+                                "supported by your current browser.",
+                                { brand },
                             ) }
                         </p>
                         <p>
