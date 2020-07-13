@@ -76,17 +76,16 @@ limitations under the License.
 }
 
 .mx_Tooltip_timeline {
-    box-shadow: none;
-    background-color: $tooltip-timeline-bg-color;
-    color: $tooltip-timeline-fg-color;
-    text-align: center;
-    border: none;
-    border-radius: 3px;
-    font-size: $font-14px;
-    line-height: 1.2;
-    padding: 6px 8px;
+    margin-left: -42px;
+    margin-top: -42px;
 
-    .mx_Tooltip_chevron::after {
-        border-right-color: $tooltip-timeline-bg-color;
+    &.mx_Tooltip {
+        background-color: $inverted-bg-color;
+        color: $accent-fg-color;
+        border: 0;
+
+        .mx_Tooltip_chevron {
+            display: none;
+        }
     }
 }
