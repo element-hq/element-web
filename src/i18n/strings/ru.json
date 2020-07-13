@@ -1277,7 +1277,6 @@
     "Set a new status...": "Установка нового статуса...",
     "Hide": "Скрыть",
     "This homeserver would like to make sure you are not a robot.": "Этот сервер хотел бы убедиться, что вы не робот.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Пользовательские серверные параметры можно использовать для входа на другой сервер Matrix по его адресу. Таким образом, вы сможете использовать это приложение с существующим аккаунтом Matrix на другом домашнем сервере.",
     "Please review and accept all of the homeserver's policies": "Пожалуйста, просмотрите и примите все правила сервера",
     "Please review and accept the policies of this homeserver:": "Пожалуйста, просмотрите и примите политику этого сервера:",
     "Unable to validate homeserver/identity server": "Невозможно проверить сервер/сервер идентификации",

@@ -204,8 +204,11 @@ class Analytics {
 
         this._setVisitVariable('Chosen Language', getCurrentLanguage());
 
-        if (window.location.hostname === 'riot.im') {
+        const hostname = window.location.hostname;
+        if (hostname === 'riot.im') {
             this._setVisitVariable('Instance', window.location.pathname);
+        } else if (hostname.endsWith('.element.io')) {
+            this._setVisitVariable('Instance', hostname);
         }
 
         let installedPWA = "unknown";

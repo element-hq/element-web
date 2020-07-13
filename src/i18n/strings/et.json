@@ -1545,7 +1545,6 @@
     "Failed to forget room %(errCode)s": "Jututoa unustamine ei õnnestunud %(errCode)s",
     "This homeserver would like to make sure you are not a robot.": "See server soovib kindlaks teha, et sa ei ole robot.",
     "Country Dropdown": "Riikide valik",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Sa võid kasutada serveri kohandatud valikuid selleks, et määrates teise aadressi logida sisse teise Matrix'i serverisse. See võimaldab sul kasutada seda rakendust teises koduserveris hallatava olemasoleva Matrix'i kontoga.",
     "Confirm your identity by entering your account password below.": "Tuvasta oma isik sisestades salasõna alljärgnevalt.",
     "Please review and accept all of the homeserver's policies": "Palun vaata üle kõik koduserveri kasutustingimused ja nõustu nendega",
     "Please review and accept the policies of this homeserver:": "Palun vaata üle selle koduserveri kasutustingimused ja nõustu nendega:",
