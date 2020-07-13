@@ -67,11 +67,9 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         }
 
         .mx_LeftPanel2_breadcrumbsContainer {
-            width: 100%;
             overflow-y: hidden;
             overflow-x: scroll;
-            margin-top: 20px;
-            padding-bottom: 2px;
+            margin: 12px 12px 0 12px;
             flex: 0 0 auto;
             // Create yet another flexbox, this time within the row, to ensure items stay
             // aligned correctly. This is also a row-based flexbox.
