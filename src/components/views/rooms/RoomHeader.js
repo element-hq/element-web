@@ -33,7 +33,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import E2EIcon from './E2EIcon';
-import InviteOnlyIcon from './InviteOnlyIcon';
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import {DefaultTagID} from "../../../stores/room-list/models";
 
 export default createReactClass({
     displayName: 'RoomHeader',
@@ -152,25 +153,14 @@ export default createReactClass({
     },
 
     render: function() {
-        const RoomAvatar = sdk.getComponent("avatars.RoomAvatar");
-
         let searchStatus = null;
         let cancelButton = null;
         let settingsButton = null;
         let pinnedEventsButton = null;
 
-        const e2eIcon = this.props.e2eStatus ?
-            <E2EIcon status={this.props.e2eStatus} /> :
-            undefined;
-
         const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
         const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
-        let privateIcon;
-        // Don't show an invite-only icon for DMs. Users know they're invite-only.
-        if (!dmUserId && joinRule === "invite") {
-            privateIcon = <InviteOnlyIcon />;
-        }
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
@@ -221,15 +211,16 @@ export default createReactClass({
         }
         const topicElement =
             <div className="mx_RoomHeader_topic" ref={this._topic} title={topic} dir="auto">{ topic }</div>;
-        const avatarSize = 32;
+
         let roomAvatar;
         if (this.props.room) {
-            roomAvatar = (<RoomAvatar
+            roomAvatar = <DecoratedRoomAvatar
                 room={this.props.room}
-                width={avatarSize}
-                height={avatarSize}
+                avatarSize={32}
+                tag={DefaultTagID.Untagged} // to apply room publicity badging
                 oobData={this.props.oobData}
-                viewAvatarOnClick={true} />);
+                viewAvatarOnClick={true}
+            />;
         }
 
         if (this.props.onSettingsClick) {
@@ -311,11 +302,13 @@ export default createReactClass({
                 { searchButton }
             </div>;
 
+        const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
+
         return (
             <div className="mx_RoomHeader light-panel">
                 <div className="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
-                    <div className="mx_RoomHeader_avatar">{ roomAvatar }{ e2eIcon }</div>
-                    { privateIcon }
+                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                    <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
                     { name }
                     { topicElement }
                     { cancelButton }

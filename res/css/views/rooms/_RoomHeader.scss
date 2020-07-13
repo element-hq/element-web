@@ -19,13 +19,16 @@ limitations under the License.
     border-bottom: 1px solid $primary-hairline-color;
     background-color: $roomheader-bg-color;
 
-    .mx_E2EIcon {
-        margin: 0;
-        position: absolute;
-        bottom: -2px;
-        right: -6px;
-        height: 15px;
-        width: 15px;
+    .mx_RoomHeader_e2eIcon {
+        height: 12px;
+        width: 12px;
+
+        .mx_E2EIcon {
+            margin: 0;
+            position: absolute;
+            height: 12px;
+            width: 12px;
+        }
     }
 }
 
@@ -178,7 +181,7 @@ limitations under the License.
 
 .mx_RoomHeader_avatar {
     flex: 0;
-    margin: 0 7px 0 6px;
+    margin: 0 6px 0 7px;
     position: relative;
 }
 
