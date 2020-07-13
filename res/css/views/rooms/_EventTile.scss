@@ -182,7 +182,7 @@ limitations under the License.
  * TODO: ultimately we probably want some transition on here.
  */
 .mx_EventTile_selected > .mx_EventTile_line {
-    border-left: $accent-color 5px solid;
+    border-left: $accent-color 4px solid;
     padding-left: 60px;
     background-color: $event-selected-color;
 }
@@ -412,11 +412,11 @@ limitations under the License.
 }
 
 .mx_EventTile:hover.mx_EventTile_unverified .mx_EventTile_line {
-    border-left: $e2e-unverified-color 5px solid;
+    border-left: $e2e-unverified-color 4px solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_unknown .mx_EventTile_line {
-    border-left: $e2e-unknown-color 5px solid;
+    border-left: $e2e-unknown-color 4px solid;
 }
 
 .mx_EventTile:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
