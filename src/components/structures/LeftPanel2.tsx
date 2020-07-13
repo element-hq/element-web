@@ -314,24 +314,24 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     };
 
     private renderHeader(): React.ReactNode {
-        let breadcrumbs;
+        return (
+            <div className="mx_LeftPanel2_userHeader">
+                <UserMenu isMinimized={this.props.isMinimized} />
+            </div>
+        );
+    }
+
+    private renderBreadcrumbs(): React.ReactNode {
         if (this.state.showBreadcrumbs && !this.props.isMinimized) {
-            breadcrumbs = (
+            return (
                 <IndicatorScrollbar
-                    className="mx_LeftPanel2_headerRow mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
+                    className="mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
                 >
                     <RoomBreadcrumbs2 />
                 </IndicatorScrollbar>
             );
         }
-
-        return (
-            <div className="mx_LeftPanel2_userHeader">
-                <UserMenu isMinimized={this.props.isMinimized} />
-                {breadcrumbs}
-            </div>
-        );
     }
 
     private renderSearchExplore(): React.ReactNode {
@@ -393,6 +393,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel2_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
+                    {this.renderBreadcrumbs()}
                     <div className="mx_LeftPanel2_roomListWrapper">
                         <div
                             className={roomListClasses}

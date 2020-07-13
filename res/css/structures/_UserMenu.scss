@@ -15,6 +15,10 @@ limitations under the License.
 */
 
 .mx_UserMenu {
+
+    // to make the ... button sort of aligned with the explore button below
+    padding-right: 6px;
+
     .mx_UserMenu_headerButtons {
         width: 16px;
         height: 16px;
@@ -48,6 +52,7 @@ limitations under the License.
 
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size
+                object-fit: cover;
             }
         }
 
