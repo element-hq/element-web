@@ -53,15 +53,4 @@ export class MarkedExecution {
         this.reset(); // reset first just in case the fn() causes a trigger()
         this.fn();
     }
-
-    /**
-     * Triggers the function if a mark() call would mark it. If the function
-     * has already been marked this will do nothing.
-     */
-    public triggerIfWillMark() {
-        if (!this.marked) {
-            this.mark();
-            this.trigger();
-        }
-    }
 }
