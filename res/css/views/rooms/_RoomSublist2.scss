@@ -52,6 +52,7 @@ limitations under the License.
         // We don't use display:none as that causes the header to go away too.
         &.mx_RoomSublist2_headerContainer_hasSticky {
             height: 0;
+            padding-bottom: 4px; // to get even spacing between sticky and non-sticky headers
         }
 
         .mx_RoomSublist2_stickable {
