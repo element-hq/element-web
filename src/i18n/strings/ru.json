@@ -4,7 +4,7 @@
     "powered by Matrix": "основано на Matrix",
     "Unknown device": "Неизвестное устройство",
     "You need to be using HTTPS to place a screen-sharing call.": "Для трансляции рабочего стола требуется использование HTTPS.",
-    "Welcome to Riot.im": "Добро пожаловать в Riot.im",
+    "Welcome to Element": "Добро пожаловать в Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализованный, шифрованный чат и совместное рабочее пространство на основе [matrix]",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Вы можете изменить параметры для входа на другие Matrix серверы, указав другой URL.\nЭто позволит использовать Riot с учетной записью Matrix, существующей на другом сервере.",
     "Sign In": "Войти",

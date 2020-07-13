@@ -4,7 +4,7 @@
     "powered by Matrix": "由 Matrix 提供",
     "Unknown device": "未知裝置",
     "You need to be using HTTPS to place a screen-sharing call.": "你需要使用 HTTPS 來撥打螢幕分享的通話。",
-    "Welcome to Riot.im": "歡迎來到 Riot.im",
+    "Welcome to Element": "歡迎來到 Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "去中心化、保密的聊天與協作，由 [matrix] 提供",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "您可以以使用自訂伺服器選項指定不同的家伺服器 URL 以登入其他 Matrix 伺服器。這讓您可以在不同的家伺服器上使用既有的 Matrix 帳號登入 Riot。",
     "Sign In": "登入",

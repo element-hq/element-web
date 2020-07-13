@@ -4,7 +4,7 @@
     "Unknown device": "Ukjent enhet",
     "You need to be using HTTPS to place a screen-sharing call.": "Du er nødt til å bruke HTTPS for å ha en samtale med skjermdeling.",
     "Dismiss": "Avvis",
-    "Welcome to Riot.im": "Velkommen til Riot.im",
+    "Welcome to Element": "Velkommen til Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert chat &amp; samarbeid drevet av [matrix]",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Du kan bruke instillinger for «egendefinert tjener» til å logge inn på andre Matrix-tjenere ved å spesifisere en annen URL. Dette lar deg bruke Riot med en eksisterende Matrix-konto på en annen hjemmetjener.",
     "Sign In": "Logg inn",

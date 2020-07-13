@@ -17,7 +17,7 @@
     "powered by Matrix": "põhineb Matrix'il",
     "Custom Server Options": "Serveri kohaldatud seadistused",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Selleks et sisse logida teistesse Matrix'i serveritesse võid sa määrates vajaliku koduserveri aadreesi kasutada kohaldatud serveriseadistusi. See võimaldab sul kasutada Riot'it olemasoleva Matrix'i kontoga teisest koduserverist.",
-    "Welcome to Riot.im": "Tere tulemast Riot.im kasutajaks",
+    "Welcome to Element": "Tere tulemast Element kasutajaks",
     "Sign In": "Logi sisse",
     "Create Account": "Loo konto",
     "%(brand)s Desktop (%(platformName)s)": "Riot'i töölauaversioon (%(platformName)s)",

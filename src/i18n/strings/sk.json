@@ -4,7 +4,7 @@
     "Custom Server Options": "Vlastné možnosti servera",
     "Dismiss": "Zamietnuť",
     "powered by Matrix": "poháňa Matrix",
-    "Welcome to Riot.im": "Víta vás Riot.im",
+    "Welcome to Element": "Víta vás Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizovaný, šifrovaný chat a spolupráca na platforme [matrix]",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Môžete použiť vlastné možnosti servera na prihlásenie sa k ďalším serverom Matrix zadaním URL adresy domovského servera. Toto vám umožní použiť Riot na prihlásenie sa k existujúcemu Matrix účtu na inom domovskom servery.",
     "Sign In": "Prihlásiť sa",

@@ -4,7 +4,7 @@
     "powered by Matrix": "a gépházban: Matrix",
     "Unknown device": "Ismeretlen eszköz",
     "You need to be using HTTPS to place a screen-sharing call.": "Képernyőmegosztás indításához HTTPS-t kell használnod.",
-    "Welcome to Riot.im": "Üdvözöl a Riot.im",
+    "Welcome to Element": "Üdvözöl a Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizált, titkosított csevegés és kollaboráció [matrix] alapokon",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "Használhatsz egyéni kiszolgálóbeállításokat, hogy más Matrix-kiszolgálóra jelentkezz be, úgy, hogy megadod a másik kiszolgáló URL-jét. Ezzel a Riotot használhatod más Matrix kiszolgálón lévő fiókkal.",
     "Sign In": "Bejelentkezés",

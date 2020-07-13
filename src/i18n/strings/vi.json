@@ -4,7 +4,7 @@
     "Custom Server Options": "Các lựa chọn máy chủ",
     "Dismiss": "Bỏ qua",
     "powered by Matrix": "tài trợ bởi Matrix",
-    "Welcome to Riot.im": "Chào mừng tới Riot.im",
+    "Welcome to Element": "Chào mừng tới Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat phân tán, mã hóa &amp; giao tiếp được tài trợ bởi [matrix]",
     "Unexpected error preparing the app. See console for details.": "Lỗi xảy ra trong lúc chuẩn bị app. Xem console log để biết chi tiết.",
     "The message from the parser is: %(message)s": "Nội dung tin là: %(message)s",
