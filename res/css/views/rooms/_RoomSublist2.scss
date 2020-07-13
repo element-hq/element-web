@@ -198,6 +198,8 @@ limitations under the License.
             // as the box model should be top aligned. Happens in both FF and Chromium
             display: flex;
             flex-direction: column;
+
+            mask-image: linear-gradient(0deg, transparent, black 3px)
         }
 
         .mx_RoomSublist2_resizerHandles_showNButton {
