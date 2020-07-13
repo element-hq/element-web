@@ -35,8 +35,8 @@ import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomLi
 import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 /*******************************************************************
  *   CAUTION                                                       *

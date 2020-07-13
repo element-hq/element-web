@@ -668,8 +668,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 disabled={this.props.leftDisabled}
             />
         );
-        if (SettingsStore.isFeatureEnabled("feature_new_room_list")) {
-            // TODO: Supply props like collapsed and disabled to LeftPanel2
+        if (SettingsStore.getValue("feature_new_room_list")) {
             leftPanel = (
                 <LeftPanel2
                     isMinimized={this.props.collapseLhs || false}

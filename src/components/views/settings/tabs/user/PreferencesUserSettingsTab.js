@@ -32,12 +32,12 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'breadcrumbs',
     ];
 
-    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14231
+    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14367
     static ROOM_LIST_2_SETTINGS = [
         'breadcrumbs',
     ];
 
-    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14231
+    // TODO: Remove temp structures: https://github.com/vector-im/riot-web/issues/14367
     static eligibleRoomListSettings = () => {
         if (RoomListStoreTempProxy.isUsingNewStore()) {
             return PreferencesUserSettingsTab.ROOM_LIST_2_SETTINGS;
