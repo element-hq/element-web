@@ -109,7 +109,7 @@ describe('RoomList', () => {
         client.getRoom = (roomId) => roomMap[roomId];
 
         // Now that everything has been set up, prepare and update the store
-        await RoomListStore.instance.makeReady(client);
+        await RoomListStore.instance.makeReady();
 
         done();
     });
