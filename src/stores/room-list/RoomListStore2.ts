@@ -101,7 +101,11 @@ export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
     }
 
     // Public for test usage. Do not call this.
-    public async makeReady() {
+    public async makeReady(forcedClient?: MatrixClient) {
+        if (forcedClient) {
+            super.matrixClient = forcedClient;
+        }
+
         // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         this.checkEnabled();
         if (!this.enabled) return;
