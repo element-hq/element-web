@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { createRef } from "react";
+import {createRef, UIEventHandler} from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -595,6 +595,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         );
     }
 
+    private onScrollPrevent(e: React.UIEvent<HTMLDivElement>) {
+        // the RoomTile calls scrollIntoView and the browser may scroll a div we do not wish to be scrollable
+        // this fixes https://github.com/vector-im/riot-web/issues/14413
+        (e.target as HTMLDivElement).scrollTop = 0;
+    }
+
     public render(): React.ReactElement {
         // TODO: Error boundary: https://github.com/vector-im/riot-web/issues/14185
 
@@ -704,7 +710,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         className="mx_RoomSublist2_resizeBox"
                         enable={handles}
                     >
-                        <div className="mx_RoomSublist2_tiles">
+                        <div className="mx_RoomSublist2_tiles" onScroll={this.onScrollPrevent}>
                             {visibleTiles}
                         </div>
                         {showNButton}
