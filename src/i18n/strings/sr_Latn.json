@@ -1,14 +1,10 @@
 {
-    "Your Riot configuration contains invalid JSON. Please correct the problem and reload the page.": "Vaša Riot konfiguracija sadrži pogrešan JSON. Molim ispravite problem i ponovo učitajte stranu.",
     "The message from the parser is: %(message)s": "Poruka iz parsera je: %(message)s",
     "Invalid JSON": "Pogrešan JSON",
-    "Your Riot is misconfigured": "Vaš Riot nije dobro podešen",
     "Unexpected error preparing the app. See console for details.": "Neočekivana greška prilikom pripreme aplikacije. Pogledajte konzolu za više detalja.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Pogrešno podešavanje: možete navesti samo jednu vrednost od default_server_config, default_server_name, or default_hs_url.",
     "Invalid configuration: no default server specified.": "Pogrešno podešavanje: podrazumevani server nije naveden.",
-    "%(brand)s Desktop on %(platformName)s": "%(brand)s Desktop na %(platformName)s",
     "Unknown device": "Nepoznat uređaj",
-    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s preko %(browserName)s na %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Treba da koristite HTTPS da bi ste započeli poziv sa deljenjem ekrana.",
     "powered by Matrix": "pokreće Matriks",
     "Custom Server Options": "Prilagođene opcije servera",
@@ -18,8 +14,5 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizovano, šifrovano ćaskanje &amp; i saradnja koju pokreće [matrix]",
     "Sign In": "Prijavite se",
     "Create Account": "Napravite nalog",
-    "Need help?": "Potrebna pomoć?",
-    "Chat with Riot Bot": "Ćaskajte sa Riot botom",
-    "Explore rooms": "Istražite sobe",
-    "Room Directory": "Spisak soba"
+    "Explore rooms": "Istražite sobe"
 }

@@ -1,7 +1,5 @@
 {
-    "%(brand)s Desktop on %(platformName)s": "Leagan gnáthríomhaire Riot ar %(platformName)s",
     "Unknown device": "Gléas nár aithníodh",
-    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s trí %(browserName)s ar %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Ní mór HTTPS a úsáid chun glaoch comhroinnt scáileáin a chur.",
     "powered by Matrix": "cumhachtaithe ag Matrix",
     "Custom Server Options": "Socruithe do fhreastalaí saincheaptha",
@@ -11,8 +9,5 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Meán comhrá agus comhoibriú, díláraithe agus criptithe, cumhachtaithe ag [matrix]",
     "Sign In": "Sínigh Isteach",
     "Create Account": "Déan cuntas a chruthú",
-    "Need help?": "An bhfuil cabhair uait?",
-    "Chat with Riot Bot": "Labhair le Riot Bot",
-    "Explore rooms": "Breathnaigh thart ar na seomraí",
-    "Room Directory": "Eolaire na Seomraí"
+    "Explore rooms": "Breathnaigh thart ar na seomraí"
 }

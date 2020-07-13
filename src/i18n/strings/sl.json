@@ -1,7 +1,5 @@
 {
-    "%(brand)s Desktop on %(platformName)s": "Namizni Riot za %(platformName)s",
     "Unknown device": "Neznana naprava",
-    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s s %(browserName)s na %(osName)s",
     "You need to be using HTTPS to place a screen-sharing call.": "Za klic s skupno rabo zaslona potrebujete HTTPS.",
     "powered by Matrix": "poganja Matrix",
     "Custom Server Options": "Možnosti strežnika po meri",
@@ -11,8 +9,5 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralizirano šifrirano sporočanje &amp; sodelovanje s pomočjo [matrix]",
     "Sign In": "Prijava",
     "Create Account": "Registracija",
-    "Need help?": "Potrebujete pomoč?",
-    "Chat with Riot Bot": "Klepetajte z Riot Botom",
-    "Explore rooms": "Raziščite sobe",
-    "Room Directory": "Imenik sob"
+    "Explore rooms": "Raziščite sobe"
 }
