@@ -9,7 +9,8 @@ ARG REACT_SDK_BRANCH="master"
 ARG JS_SDK_REPO="https://github.com/matrix-org/matrix-js-sdk.git"
 ARG JS_SDK_BRANCH="master"
 
-RUN apt-get update && apt-get install -y git dos2unix
+RUN apt-get update && apt-get install -y git dos2unix \
+  build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 WORKDIR /src
 
