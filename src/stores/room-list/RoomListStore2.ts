@@ -19,7 +19,6 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import TagOrderStore from "../TagOrderStore";
-import { AsyncStore } from "../AsyncStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { ActionPayload } from "../../dispatcher/payloads";

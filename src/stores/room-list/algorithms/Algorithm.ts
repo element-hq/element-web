@@ -34,8 +34,6 @@ import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } f
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 
-// TODO: Add locking support to avoid concurrent writes? https://github.com/vector-im/riot-web/issues/14235
-
 /**
  * Fired when the Algorithm has determined a list has been updated.
  */
