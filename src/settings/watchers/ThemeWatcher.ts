@@ -125,8 +125,8 @@ export default class ThemeWatcher {
         // If the user hasn't really made a preference in either direction, assume the defaults of the
         // settings and use those.
         if (SettingsStore.getValue('use_system_theme')) {
-            if (this.preferDark.matches) return 'dark';
-            if (this.preferLight.matches) return 'light';
+            if (this.preferDark.matches) return 'element-dark';
+            if (this.preferLight.matches) return 'element';
         }
         console.log("returning theme value");
         return SettingsStore.getValue('theme');
