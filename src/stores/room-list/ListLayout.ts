@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TagID } from "./models";
+import { DefaultTagID, TagID } from "./models";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 const TILE_HEIGHT_PX = 44;
 
@@ -26,7 +27,7 @@ interface ISerializedListLayout {
 
 export class ListLayout {
     private _n = 0;
-    private _previews = false;
+    private _previews: boolean | null = null;
     private _collapsed = false;
 
     constructor(public readonly tagId: TagID) {
@@ -50,7 +51,12 @@ export class ListLayout {
     }
 
     public get showPreviews(): boolean {
-        return this._previews;
+        if (!isNullOrUndefined(this._previews)) {
+            return this._previews;
+        }
+
+        // Turn it on for DMs by default, but not for other rooms
+        return this.tagId === DefaultTagID.DM;
     }
 
     public set showPreviews(v: boolean) {

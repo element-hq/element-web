@@ -711,11 +711,6 @@ export class Algorithm extends EventEmitter {
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
                     this.cachedRooms[rmTag] = algorithm.orderedRooms;
-
-                    // Later on we won't update the filtered rooms or sticky room for removed
-                    // tags, so do so now.
-                    this.recalculateFilteredRoomsForTag(rmTag);
-                    this.recalculateStickyRoom(rmTag);
                 }
                 for (const addTag of diff.added) {
                     if (!window.mx_QuietRoomListLogging) {
