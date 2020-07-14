@@ -95,13 +95,19 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
 
-## New room list (`feature_new_room_list`)
+## New room list
 
 A complete rewrite of the room list is underway to increase performance, stability,
-and general usability. This is still rapidly changing, but feel free to give it a test.
+and general usability.
 
-## IRC message layout (`feature_irc_ui`)
+In the event the new room list needs to be disabled, add this to your config.json:
+```json
+{
+    "settingDefaults": {
+        "feature_new_room_list": false
+    }
+}
+```
 
-Adds an option to change the message layout to an IRC style ` timestamp | avatar
-| name | message `
+**Note**: In a future release the new room list will not be optional.
 
