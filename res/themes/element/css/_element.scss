@@ -66,7 +66,7 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
 $tertiary-accent-color: #d3efe1;
 
-$tagpanel-bg-color: rgba(232, 232, 232, 0.82);
+$tagpanel-bg-color: rgba(232, 232, 232, 0.77);
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
@@ -332,8 +332,8 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 $appearance-tab-border-color: $input-darker-bg-color;
 
 // blur amounts for left left panel (only for element theme, used in _mods.scss)
-$roomlist-background-blur-amount: 175px;
-$tagpanel-background-blur-amount: 100px;
+$roomlist-background-blur-amount: 40px;
+$tagpanel-background-blur-amount: 20px;
 
 
 // ***** Mixins! *****
