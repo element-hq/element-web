@@ -8,7 +8,7 @@
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: Inter, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
 
 $monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
 
@@ -18,12 +18,11 @@ $accent-color: #03b381;
 $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
-$primary-fg-color: #2e2f32;
-$roomlist2-header-color: $primary-fg-color;
-$notice-secondary-color: $roomlist2-header-color;
+$notice-secondary-color: #61708b;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
+$primary-fg-color: #2e2f32;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
@@ -37,7 +36,7 @@ $focus-bg-color: #dddddd;
 $accent-fg-color: #ffffff;
 $accent-color-50pct: rgba(3, 179, 129, 0.5);    //#03b381 in rgb
 $accent-color-darker: #92caad;
-$accent-color-alt: #238CF5;
+$accent-color-alt: #238cf5;
 
 $selection-fg-color: $primary-bg-color;
 
@@ -47,8 +46,8 @@ $focus-brightness: 105%;
 $warning-color: $notice-primary-color; // red
 $orange-warning-color: #ff8d13; // used for true warnings
 // background colour for warnings
-$warning-bg-color: #DF2A8B;
-$info-bg-color: #2A9EDF;
+$warning-bg-color: #df2a8b;
+$info-bg-color: #2a9edf;
 $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
@@ -66,13 +65,14 @@ $preview-bar-bg-color: #f7f7f7;
 $secondary-accent-color: #f2f5f8;
 $tertiary-accent-color: #d3efe1;
 
-$tagpanel-bg-color: rgba(232, 232, 232, 0.77);
+$tagpanel-bg-color: #27303a;
+$inverted-bg-color: $tagpanel-bg-color;
 
 // used by RoomDirectory permissions
 $plinth-bg-color: $secondary-accent-color;
 
 // used by RoomDropTarget
-$droptarget-bg-color: rgba(255,255,255,0.5);
+$droptarget-bg-color: rgba(255, 255, 255, 0.5);
 
 // used by AddressSelector
 $selected-color: $secondary-accent-color;
@@ -81,7 +81,7 @@ $selected-color: $secondary-accent-color;
 $event-selected-color: $header-panel-bg-color;
 
 // used for the hairline dividers in RoomView
-$primary-hairline-color: transparent;
+$primary-hairline-color: #e5e5e5;
 
 // used for the border of input text fields
 $input-border-color: #e7e7e7;
@@ -159,18 +159,18 @@ $rte-group-pill-color: #aaa;
 $topleftmenu-color: #212121;
 $roomheader-color: #45474a;
 $roomheader-bg-color: $primary-bg-color;
-$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.2);
-$roomheader-addroom-fg-color: #5c6470;
-$tagpanel-button-color: #91A1C0;
-$roomheader-button-color: #91A1C0;
-$groupheader-button-color: #91A1C0;
-$rightpanel-button-color: #91A1C0;
-$composer-button-color: #91A1C0;
+$roomheader-addroom-bg-color: #91a1c0;
+$roomheader-addroom-fg-color: $accent-fg-color;
+$tagpanel-button-color: #91a1c0;
+$roomheader-button-color: #91a1c0;
+$groupheader-button-color: #91a1c0;
+$rightpanel-button-color: #91a1c0;
+$composer-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
-$composer-e2e-icon-color: #91A1C0;
-$header-divider-color: #91A1C0;
+$composer-e2e-icon-color: #91a1c0;
+$header-divider-color: #91a1c0;
 
 // ********************
 
@@ -180,16 +180,17 @@ $header-divider-color: #91A1C0;
 $theme-button-bg-color: #e3e8f0;
 
 $roomlist2-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
-$roomlist2-bg-color: rgba(245, 245, 245, 0.90);
+$roomlist2-bg-color: $header-panel-bg-color;
+$roomlist2-header-color: $primary-fg-color;
 $roomsublist2-divider-color: $primary-fg-color;
 
 $roomtile2-preview-color: #9e9e9e;
 $roomtile2-default-badge-bg-color: #61708b;
-$roomtile2-selected-bg-color: #FFF;
+$roomtile2-selected-bg-color: #fff;
 
 $presence-online: $accent-color;
-$presence-away: orange; // TODO: Get color
-$presence-offline: #E3E8F0;
+$presence-away: #d9b072;
+$presence-offline: #e3e8f0;
 
 // ********************
 
@@ -216,7 +217,7 @@ $roomsublist-label-fg-color: $roomtile-name-color;
 $roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
 
-$panel-divider-color: transparent;
+$panel-divider-color: #dee1f3;
 
 // ********************
 
@@ -317,8 +318,7 @@ $reaction-row-button-selected-border-color: $accent-color;
 
 $kbd-border-color: $reaction-row-button-border-color;
 
-$inverted-bg-color: #27303a;
-$tooltip-timeline-bg-color: $inverted-bg-color;
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $interactive-tooltip-bg-color: #27303a;
@@ -330,11 +330,6 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
-
-// blur amounts for left left panel (only for element theme, used in _mods.scss)
-$roomlist-background-blur-amount: 40px;
-$tagpanel-background-blur-amount: 20px;
-
 
 // ***** Mixins! *****
 

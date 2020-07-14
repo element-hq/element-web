@@ -26,8 +26,6 @@ export function enumerateThemes() {
     const BUILTIN_THEMES = {
         "light": _t("Light"),
         "dark": _t("Dark"),
-        "element": _t("Element Light"),
-        "element-dark": _t("Element Dark"),
     };
     const customThemes = SettingsStore.getValue("custom_themes");
     const customThemeNames = {};
