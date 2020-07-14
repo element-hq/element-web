@@ -29,7 +29,7 @@ import { FILTER_CHANGED, IFilterCondition } from "./filters/IFilterCondition";
 import { TagWatcher } from "./TagWatcher";
 import RoomViewStore from "../RoomViewStore";
 import { Algorithm, LIST_UPDATED_EVENT } from "./algorithms/Algorithm";
-import { EffectiveMembership, getEffectiveMembership } from "./membership";
+import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";

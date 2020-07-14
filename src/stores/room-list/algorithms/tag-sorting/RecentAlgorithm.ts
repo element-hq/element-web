@@ -19,7 +19,7 @@ import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
-import { EffectiveMembership, getEffectiveMembership } from "../../membership";
+import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
 
 /**
  * Sorts rooms according to the last event's timestamp in each room that seems
