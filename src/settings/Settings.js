@@ -310,7 +310,7 @@ export const SETTINGS = {
     },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        default: "element",
+        default: "light",
         controller: new ThemeController(),
     },
     "custom_themes": {

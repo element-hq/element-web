@@ -24,7 +24,7 @@ export default class ThemeController extends SettingController {
     getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
         if (!calculatedValue) return null; // Don't override null themes
 
-        if (ThemeController.isLogin) return 'element';
+        if (ThemeController.isLogin) return 'light';
 
         const themes = enumerateThemes();
         // Override in case some no longer supported theme is stored here
