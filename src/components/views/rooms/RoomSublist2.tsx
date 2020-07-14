@@ -624,10 +624,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const showMoreAtMinHeight = minTiles < this.numTiles;
             const minHeightPadding = RESIZE_HANDLE_HEIGHT + (showMoreAtMinHeight ? SHOW_N_BUTTON_HEIGHT : 0);
             const minTilesPx = layout.tilesToPixelsWithPadding(minTiles, minHeightPadding);
-            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
+            let maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
             });
+
+            if (this.numTiles > this.layout.defaultVisibleTiles) {
+                maxTilesPx += SHOW_N_BUTTON_HEIGHT;
+            }
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all
