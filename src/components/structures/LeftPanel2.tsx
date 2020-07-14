@@ -111,6 +111,10 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const newVal = BreadcrumbsStore.instance.visible;
         if (newVal !== this.state.showBreadcrumbs) {
             this.setState({showBreadcrumbs: newVal});
+
+            // Update the sticky headers too as the breadcrumbs will be popping in or out.
+            if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+            this.handleStickyHeaders(this.listContainerRef.current);
         }
     };
 
