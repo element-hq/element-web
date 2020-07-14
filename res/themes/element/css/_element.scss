@@ -331,6 +331,11 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 // FontSlider colors
 $appearance-tab-border-color: $input-darker-bg-color;
 
+// blur amounts for left left panel (only for element theme, used in _mods.scss)
+$roomlist-background-blur-amount: 175px;
+$tagpanel-background-blur-amount: 100px;
+
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

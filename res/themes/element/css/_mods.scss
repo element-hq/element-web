@@ -13,11 +13,11 @@
     }
 
     .mx_TagPanel {
-        backdrop-filter: blur(100px);
+        backdrop-filter: blur($tagpanel-background-blur-amount);
     }
 
     .mx_LeftPanel2 .mx_LeftPanel2_roomListContainer {
-        backdrop-filter: blur(175px);
+        backdrop-filter: blur($roomlist-background-blur-amount);
     }
 }
 

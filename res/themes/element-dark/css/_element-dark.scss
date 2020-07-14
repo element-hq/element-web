@@ -204,6 +204,10 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
 
+// blur amounts for left left panel (only for element theme, used in _mods.scss)
+$roomlist-background-blur-amount: 40px;
+$tagpanel-background-blur-amount: 20px;
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {
