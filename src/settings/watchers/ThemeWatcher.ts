@@ -99,7 +99,7 @@ export default class ThemeWatcher {
         // controller that honours the same flag, although probablt better would be to
         // have the theme logic in one place rather than split between however many
         // different places.
-        if (ThemeController.isLogin) return 'light';
+        if (ThemeController.isLogin) return 'element';
 
         // If the user has specifically enabled the system matching option (excluding default),
         // then use that over anything else. We pick the lowest possible level for the setting
@@ -108,8 +108,8 @@ export default class ThemeWatcher {
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
         if (systemThemeExplicit) {
             console.log("returning explicit system theme");
-            if (this.preferDark.matches) return 'dark';
-            if (this.preferLight.matches) return 'light';
+            if (this.preferDark.matches) return 'element-dark';
+            if (this.preferLight.matches) return 'element';
         }
 
         // If the user has specifically enabled the theme (without the system matching option being
@@ -125,8 +125,8 @@ export default class ThemeWatcher {
         // If the user hasn't really made a preference in either direction, assume the defaults of the
         // settings and use those.
         if (SettingsStore.getValue('use_system_theme')) {
-            if (this.preferDark.matches) return 'dark';
-            if (this.preferLight.matches) return 'light';
+            if (this.preferDark.matches) return 'element-dark';
+            if (this.preferLight.matches) return 'element';
         }
         console.log("returning theme value");
         return SettingsStore.getValue('theme');
