@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {MatrixClientPeg as peg} from '../src/MatrixClientPeg';
-import dis from '../src/dispatcher';
+import dis from '../src/dispatcher/dispatcher';
 import {makeType} from "../src/utils/TypeUtils";
 import {ValidatedServerConfig} from "../src/utils/AutoDiscoveryUtils";
 import ShallowRenderer from 'react-test-renderer/shallow';

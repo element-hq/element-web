@@ -21,7 +21,7 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import classNames from 'classnames';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import * as sdk from '../../../index';
@@ -153,9 +153,6 @@ export default createReactClass({
     _updateE2eStatus: async function() {
         const cli = MatrixClientPeg.get();
         if (!cli.isRoomEncrypted(this.props.room.roomId)) {
-            return;
-        }
-        if (!SettingsStore.getValue("feature_cross_signing")) {
             return;
         }
 
@@ -515,10 +512,8 @@ export default createReactClass({
         }
 
         let privateIcon = null;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            if (this.state.joinRule == "invite" && !dmUserId) {
-                privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
-            }
+        if (this.state.joinRule === "invite" && !dmUserId) {
+            privateIcon = <InviteOnlyIcon collapsedPanel={this.props.collapsed} />;
         }
 
         let e2eIcon = null;

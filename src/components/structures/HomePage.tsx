@@ -21,10 +21,11 @@ import { getHomePageUrl } from "../../utils/pages";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import * as sdk from "../../index";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
+import { Action } from "../../dispatcher/actions";
 
 const onClickSendDm = () => dis.dispatch({action: 'view_create_chat'});
-const onClickExplore = () => dis.dispatch({action: 'view_room_directory'});
+const onClickExplore = () => dis.fire(Action.ViewRoomDirectory);
 const onClickNewRoom = () => dis.dispatch({action: 'view_create_room'});
 
 const HomePage = () => {

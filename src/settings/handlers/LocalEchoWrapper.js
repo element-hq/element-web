@@ -39,7 +39,7 @@ export default class LocalEchoWrapper extends SettingsHandler {
         const cacheRoomId = roomId ? roomId : "UNDEFINED"; // avoid weird keys
         const bySetting = this._cache[settingName];
         if (bySetting && bySetting.hasOwnProperty(cacheRoomId)) {
-            return bySetting[roomId];
+            return bySetting[cacheRoomId];
         }
 
         return this._handler.getValue(settingName, roomId);

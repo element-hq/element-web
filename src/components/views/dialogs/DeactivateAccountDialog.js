@@ -25,6 +25,7 @@ import * as Lifecycle from '../../../Lifecycle';
 import { _t } from '../../../languageHandler';
 import InteractiveAuth, {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
 import {DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 export default class DeactivateAccountDialog extends React.Component {
     constructor(props) {
@@ -209,21 +210,18 @@ export default class DeactivateAccountDialog extends React.Component {
 
                     <div className="mx_DeactivateAccountDialog_input_section">
                         <p>
-                            <label htmlFor="mx_DeactivateAccountDialog_erase_account_input">
-                                <input
-                                    id="mx_DeactivateAccountDialog_erase_account_input"
-                                    type="checkbox"
-                                    checked={this.state.shouldErase}
-                                    onChange={this._onEraseFieldChange}
-                                />
-                                { _t(
+                            <StyledCheckbox
+                                checked={this.state.shouldErase}
+                                onChange={this._onEraseFieldChange}
+                            >
+                                {_t(
                                     "Please forget all messages I have sent when my account is deactivated " +
                                     "(<b>Warning:</b> this will cause future users to see an incomplete view " +
                                     "of conversations)",
                                     {},
                                     { b: (sub) => <b>{ sub }</b> },
-                                ) }
-                            </label>
+                                )}
+                            </StyledCheckbox>
                         </p>
 
                         {error}

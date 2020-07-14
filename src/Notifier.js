@@ -21,11 +21,14 @@ import PlatformPeg from './PlatformPeg';
 import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
 import * as Avatar from './Avatar';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import {
+    hideToast as hideNotificationsToast,
+} from "./toasts/DesktopNotificationsToast";
 
 /*
  * Dispatches:
@@ -119,7 +122,7 @@ const Notifier = {
         }
     },
 
-    getSoundForRoom: async function(roomId) {
+    getSoundForRoom: function(roomId) {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         const content = SettingsStore.getValue("notificationSound", roomId);
@@ -148,7 +151,7 @@ const Notifier = {
     },
 
     _playAudioNotification: async function(ev, room) {
-        const sound = await this.getSoundForRoom(room.roomId);
+        const sound = this.getSoundForRoom(room.roomId);
         console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
 
         try {
@@ -278,12 +281,7 @@ const Notifier = {
 
         Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
 
-        // XXX: why are we dispatching this here?
-        // this is nothing to do with notifier_enabled
-        dis.dispatch({
-            action: "notifier_enabled",
-            value: this.isEnabled(),
-        });
+        hideNotificationsToast();
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {

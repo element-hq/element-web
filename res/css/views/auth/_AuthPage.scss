@@ -29,3 +29,9 @@ limitations under the License.
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.33);
     background-color: $authpage-modal-bg-color;
 }
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthPage_modal {
+        margin-top: 0;
+    }
+}

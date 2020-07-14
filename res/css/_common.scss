@@ -19,7 +19,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 
 :root {
-    font-size: 15px;
+    font-size: 10px;
 }
 
 html {
@@ -319,7 +319,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_titleImage {
-    vertical-align: middle;
+    vertical-align: sub;
     width: 25px;
     height: 25px;
     margin-left: -2px;
@@ -334,6 +334,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
     text-align: center;
+}
+.mx_Dialog_header.mx_Dialog_headerWithCancel > .mx_Dialog_title {
+    margin-right: 20px; // leave space for the 'X' cancel button
 }
 
 .mx_Dialog_title.danger {
@@ -425,6 +428,10 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border-radius: 8px;
     padding: 0px;
     box-shadow: none;
+
+    /* Don't show scroll-bars on spinner dialogs */
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
@@ -577,4 +584,112 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 @define-mixin mx_Settings_tooltip {
     // So it fits in the space provided by the page
     max-width: 120px;
+}
+
+// A context menu that largely fits the | [icon]    [label] | format.
+.mx_IconizedContextMenu {
+    min-width: 146px;
+
+    .mx_IconizedContextMenu_optionList {
+        & > * {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        // the notFirst class is for cases where the optionList might be under a header of sorts.
+        &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
+            // This is a bit of a hack when we could just use a simple border-top property,
+            // however we have a (kinda) good reason for doing it this way: we need opacity.
+            // To get the right color, we need an opacity modifier which means we have to work
+            // around the problem. PostCSS doesn't support the opacity() function, and if we
+            // use something like postcss-functions we quickly run into an issue where the
+            // function we would define gets passed a CSS variable for custom themes, which
+            // can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379
+            //
+            // Therefore, we just hack in a line and border the thing ourselves
+            &::before {
+                border-top: 1px solid $primary-fg-color;
+                opacity: 0.1;
+                content: '';
+
+                // Counteract the padding problems (width: 100% ignores the 40px padding,
+                // unless we position it absolutely then it does the right thing).
+                width: 100%;
+                position: absolute;
+                left: 0;
+            }
+        }
+
+        // round the top corners of the top button for the hover effect to be bounded
+        &:first-child .mx_AccessibleButton:first-child {
+            border-radius: 4px 4px 0 0; // radius matches .mx_ContextualMenu
+        }
+
+        // round the bottom corners of the bottom button for the hover effect to be bounded
+        &:last-child .mx_AccessibleButton:last-child {
+            border-radius: 0 0 4px 4px; // radius matches .mx_ContextualMenu
+        }
+
+        .mx_AccessibleButton {
+            // pad the inside of the button so that the hover background is padded too
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
+            color: $primary-fg-color;
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            // Create a flexbox to more easily define the list items
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                background-color: $menu-selected-color;
+            }
+
+            img, .mx_IconizedContextMenu_icon { // icons
+                width: 16px;
+                min-width: 16px;
+                max-width: 16px;
+            }
+
+            span.mx_IconizedContextMenu_label { // labels
+                padding-left: 14px;
+                width: 100%;
+                flex: 1;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    &.mx_IconizedContextMenu_compact {
+        .mx_IconizedContextMenu_optionList > * {
+            padding: 8px 16px 8px 11px;
+        }
+    }
+}
+
+@define-mixin ProgressBarColour $colour {
+    color: $colour;
+    &::-moz-progress-bar {
+        background-color: $colour;
+    }
+    &::-webkit-progress-value {
+        background-color: $colour;
+    }
+}
+
+@define-mixin ProgressBarBorderRadius $radius {
+    border-radius: $radius;
+    &::-moz-progress-bar {
+        border-radius: $radius;
+    }
+    &::-webkit-progress-bar,
+    &::-webkit-progress-value {
+        border-radius: $radius;
+    }
 }

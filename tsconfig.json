@@ -14,7 +14,9 @@
     "jsx": "react",
     "types": [
       "node",
-      "react"
+      "react",
+      "flux",
+      "react-transition-group"
     ]
   },
   "include": [

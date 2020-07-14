@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -27,6 +25,7 @@ import AccessibleButton from "./AccessibleButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
+import FocusLock from "react-focus-lock";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -48,16 +47,6 @@ export default class ImageView extends React.Component {
     constructor(props) {
         super(props);
         this.state = { rotationDegrees: 0 };
-    }
-
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal
-    // dialog base class somehow, surely...
-    componentDidMount() {
-        document.addEventListener("keydown", this.onKeyDown);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeyDown);
     }
 
     onKeyDown = (ev) => {
@@ -195,7 +184,14 @@ export default class ImageView extends React.Component {
         const effectiveStyle = {transform: `rotate(${rotationDegrees}deg)`, ...style};
 
         return (
-            <div className="mx_ImageView">
+            <FocusLock
+                returnFocus={true}
+                lockProps={{
+                    onKeyDown: this.onKeyDown,
+                    role: "dialog",
+                }}
+                className="mx_ImageView"
+            >
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
@@ -231,7 +227,7 @@ export default class ImageView extends React.Component {
                 </div>
                 <div className="mx_ImageView_rhs">
                 </div>
-            </div>
+            </FocusLock>
         );
     }
 }

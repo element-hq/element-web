@@ -25,9 +25,9 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
-import _sortBy from 'lodash/sortBy';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
+import { uniqBy, sortBy } from 'lodash';
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -91,10 +91,11 @@ export default class RoomProvider extends AutocompleteProvider {
             this.matcher.setObjects(matcherObjects);
             const matchedString = command[0];
             completions = this.matcher.match(matchedString);
-            completions = _sortBy(completions, [
+            completions = sortBy(completions, [
                 (c) => score(matchedString, c.displayedAlias),
                 (c) => c.displayedAlias.length,
             ]);
+            completions = uniqBy(completions, (match) => match.room);
             completions = completions.map((room) => {
                 return {
                     completion: room.displayedAlias,
@@ -103,7 +104,9 @@ export default class RoomProvider extends AutocompleteProvider {
                     suffix: ' ',
                     href: makeRoomPermalink(room.displayedAlias),
                     component: (
-                        <PillCompletion initialComponent={<RoomAvatar width={24} height={24} room={room.room} />} title={room.room.name} description={room.displayedAlias} />
+                        <PillCompletion title={room.room.name} description={room.displayedAlias}>
+                            <RoomAvatar width={24} height={24} room={room.room} />
+                        </PillCompletion>
                     ),
                     range,
                 };

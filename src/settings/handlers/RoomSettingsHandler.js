@@ -18,6 +18,7 @@ limitations under the License.
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import {SettingLevel} from "../SettingsStore";
+import {objectClone, objectKeyChanges} from "../../utils/objects";
 
 /**
  * Gets and sets settings at the "room" level.
@@ -38,8 +39,18 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         newClient.on("RoomState.events", this._onEvent);
     }
 
-    _onEvent(event) {
+    _onEvent(event, state, prevEvent) {
         const roomId = event.getRoomId();
+        const room = this.client.getRoom(roomId);
+
+        // Note: in tests and during the encryption setup on initial load we might not have
+        // rooms in the store, so we just quietly ignore the problem. If we log it then we'll
+        // just end up spamming the logs a few thousand times. It is perfectly fine for us
+        // to ignore the problem as the app will not have loaded enough to care yet.
+        if (!room) return;
+
+        // ignore state updates which are not current
+        if (room && state !== room.currentState) return;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
             let val = event.getContent()['disable'];
@@ -51,8 +62,10 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
             this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
         } else if (event.getType() === "im.vector.web.settings") {
-            // We can't really discern what changed, so trigger updates for everything
-            for (const settingName of Object.keys(event.getContent())) {
+            // Figure out what changed and fire those updates
+            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const changedSettings = objectKeyChanges(prevContent, event.getContent());
+            for (const settingName of changedSettings) {
                 this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
             }
         }
@@ -107,6 +120,6 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
         const event = room.currentState.getStateEvents(eventType, "");
         if (!event || !event.getContent()) return null;
-        return event.getContent();
+        return objectClone(event.getContent()); // clone to prevent mutation
     }
 }

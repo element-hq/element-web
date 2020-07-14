@@ -21,11 +21,11 @@ import React, {useCallback, useMemo, useState, useEffect, useContext} from 'reac
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {Group, RoomMember, User} from 'matrix-js-sdk';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
+import createRoom, {privateShouldBeEncrypted} from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -44,6 +44,7 @@ import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
+import {Action} from "../../../dispatcher/actions";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -63,10 +64,6 @@ const _disambiguateDevices = (devices) => {
 };
 
 export const getE2EStatus = (cli, userId, devices) => {
-    if (!SettingsStore.getValue("feature_cross_signing")) {
-        const hasUnverifiedDevice = devices.some((device) => device.isUnverified());
-        return hasUnverifiedDevice ? "warning" : "verified";
-    }
     const isMe = userId === cli.getUserId();
     const userTrust = cli.checkUserTrust(userId);
     if (!userTrust.isCrossSigningVerified()) {
@@ -111,7 +108,7 @@ async function openDMForUser(matrixClient, userId) {
         dmUserId: userId,
     };
 
-    if (SettingsStore.getValue("feature_cross_signing")) {
+    if (privateShouldBeEncrypted()) {
         // Check whether all users have uploaded device keys before.
         // If so, enable encryption in the new room.
         const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
@@ -166,9 +163,7 @@ function DeviceItem({userId, device}) {
     // cross-signing so that other users can then safely trust you.
     // For other people's devices, the more general verified check that
     // includes locally verified devices can be used.
-    const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
-        deviceTrust.isCrossSigningVerified() :
-        deviceTrust.isVerified();
+    const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
 
     const classes = classNames("mx_UserInfo_device", {
         mx_UserInfo_device_verified: isVerified,
@@ -247,9 +242,7 @@ function DevicesSection({devices, userId, loading}) {
             // cross-signing so that other users can then safely trust you.
             // For other people's devices, the more general verified check that
             // includes locally verified devices can be used.
-            const isVerified = (isMe && SettingsStore.getValue("feature_cross_signing")) ?
-                deviceTrust.isCrossSigningVerified() :
-                deviceTrust.isVerified();
+            const isVerified = isMe ? deviceTrust.isCrossSigningVerified() : deviceTrust.isVerified();
 
             if (isVerified) {
                 expandSectionDevices.push(device);
@@ -755,19 +748,26 @@ const RoomAdminToolsContainer = ({room, children, member, startUpdating, stopUpd
         powerLevels.state_default
     );
 
+    // if these do not exist in the event then they should default to 50 as per the spec
+    const {
+        ban: banPowerLevel = 50,
+        kick: kickPowerLevel = 50,
+        redact: redactPowerLevel = 50,
+    } = powerLevels;
+
     const me = room.getMember(cli.getUserId());
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+    if (canAffectUser && me.powerLevel >= kickPowerLevel) {
         kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (me.powerLevel >= powerLevels.redact) {
+    if (me.powerLevel >= redactPowerLevel) {
         redactButton = (
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
-    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+    if (canAffectUser && me.powerLevel >= banPowerLevel) {
         banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (canAffectUser && me.powerLevel >= editPowerLevel) {
@@ -841,7 +841,7 @@ const GroupAdminToolsSection = ({children, groupId, groupMember, startUpdating, 
             cli.removeUserFromGroup(groupId, groupMember.userId).then(() => {
                 // return to the user list
                 dis.dispatch({
-                    action: "view_user",
+                    action: Action.ViewUser,
                     member: null,
                 });
             }).catch((e) => {
@@ -1308,8 +1308,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cli.checkUserTrust(member.userId);
     const userVerified = userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = SettingsStore.getValue("feature_cross_signing") &&
-                        homeserverSupportsCrossSigning && !userVerified && !isMe;
+    const canVerify = homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));

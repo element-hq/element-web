@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and

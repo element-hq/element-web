@@ -51,8 +51,17 @@ export class WatchManager {
         const roomWatchers = this._watchers[settingName];
         const callbacks = [];
 
-        if (inRoomId !== null && roomWatchers[inRoomId]) callbacks.push(...roomWatchers[inRoomId]);
-        if (roomWatchers[null]) callbacks.push(...roomWatchers[null]);
+        if (inRoomId !== null && roomWatchers[inRoomId]) {
+            callbacks.push(...roomWatchers[inRoomId]);
+        }
+
+        if (!inRoomId) {
+            // Fire updates to all the individual room watchers too, as they probably
+            // care about the change higher up.
+            callbacks.push(...Object.values(roomWatchers).reduce((r, a) => [...r, ...a], []));
+        } else if (roomWatchers[null]) {
+            callbacks.push(...roomWatchers[null]);
+        }
 
         for (const callback of callbacks) {
             callback(inRoomId, atLevel, newValueAtLevel);

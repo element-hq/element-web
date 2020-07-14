@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import {pendingVerificationRequestForUser} from '../verification';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";

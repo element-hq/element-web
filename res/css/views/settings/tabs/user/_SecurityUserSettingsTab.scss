@@ -63,4 +63,25 @@ limitations under the License.
             font-size: inherit;
         }
     }
+
+    .mx_SecurityUserSettingsTab_warning {
+        color: $notice-primary-color;
+        position: relative;
+        padding-left: 40px;
+        margin-top: 30px;
+
+        &::before {
+            mask-repeat: no-repeat;
+            mask-position: 0 center;
+            mask-size: $font-24px;
+            position: absolute;
+            width: $font-24px;
+            height: $font-24px;
+            content: "";
+            top: 0;
+            left: 0;
+            background-color: $notice-primary-color;
+            mask-image: url('$(res)/img/feather-customised/alert-triangle.svg');
+        }
+    }
 }

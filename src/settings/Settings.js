@@ -29,6 +29,9 @@ import ThemeController from './controllers/ThemeController';
 import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
+import FontSizeController from './controllers/FontSizeController';
+import SystemFontController from './controllers/SystemFontController';
+import UseSystemFontController from './controllers/UseSystemFontController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -94,6 +97,18 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_new_spinner": {
+        isFeature: true,
+        displayName: _td("New spinner design"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_font_scaling": {
+        isFeature: true,
+        displayName: _td("Font scaling"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -131,6 +146,14 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_new_room_list": {
+        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
+        // XXX: We shouldn't have non-features appear like features.
+        displayName: _td("Use the improved room list (will refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
@@ -145,17 +168,21 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
-    "feature_cross_signing": {
-        // XXX: We shouldn't be using the feature prefix for non-feature settings. There is an exception
-        // for this case though as we're converting a feature to a setting for a temporary safety net.
-        displayName: _td("Enable cross-signing to verify per-user instead of per-session"),
-        supportedLevels: ['device', 'config'], // we shouldn't use LEVELS_FEATURE for non-features, so copy it here.
-        default: true,
-    },
     "feature_bridge_state": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
+        default: false,
+    },
+    "baseFontSize": {
+        displayName: _td("Font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 10,
+        controller: new FontSizeController(),
+    },
+    "useCustomFontSize": {
+        displayName: _td("Use custom size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: false,
     },
     "MessageComposerInput.suggestEmoji": {
@@ -164,9 +191,14 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    // TODO: Wire up appropriately to UI (FTUE notifications)
+    "Notifications.alwaysShowBadgeCounts": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
+    },
     "useCompactLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use compact timeline layout'),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
     "showRedactions": {
@@ -289,6 +321,18 @@ export const SETTINGS = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
         displayName: _td("Match system theme"),
+    },
+    "useSystemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("Use a system font"),
+        controller: new UseSystemFontController(),
+    },
+    "systemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "",
+        displayName: _td("System font name"),
+        controller: new SystemFontController(),
     },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
@@ -429,11 +473,13 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: false,
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show rooms with unread notifications first"),
@@ -497,11 +543,6 @@ export const SETTINGS = {
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
-    "keepSecretStoragePassphraseForSession": {
-         supportedLevels: ['device', 'config'],
-         displayName: _td("Keep recovery passphrase in memory for this session"),
-         default: false,
-    },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("How fast should messages be downloaded."),
@@ -518,5 +559,17 @@ export const SETTINGS = {
         controller: new PushToMatrixClientController(
             MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
         ),
+    },
+    "ircDisplayNameWidth": {
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        displayName: _td("IRC display name width"),
+        default: 80,
+    },
+    "useIRCLayout": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Enable experimental, compact IRC style layout"),
+        default: false,
     },
 };

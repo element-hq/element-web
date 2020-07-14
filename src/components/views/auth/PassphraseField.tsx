@@ -36,7 +36,7 @@ interface IProps {
     labelStrongPassword?: string;
     labelAllowedButUnsafe?: string;
 
-    onChange(ev: KeyboardEvent);
+    onChange(ev: React.FormEvent<HTMLElement>);
     onValidate(result: IValidationResult);
 }
 
@@ -118,7 +118,7 @@ class PassphraseField extends PureComponent<IProps, IState> {
             value={this.props.value}
             onChange={this.props.onChange}
             onValidate={this.onValidate}
-        />
+        />;
     }
 }
 

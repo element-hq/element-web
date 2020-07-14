@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Analytics from './Analytics';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import {defer} from './utils/promise';
 import AsyncWrapper from './AsyncWrapper';
 

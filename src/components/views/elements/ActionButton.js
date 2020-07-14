@@ -18,7 +18,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import AccessibleButton from './AccessibleButton';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import Analytics from '../../../Analytics';
 

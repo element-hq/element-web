@@ -19,119 +19,13 @@ import {_t} from "./languageHandler";
 
 export const DEFAULT_THEME = "light";
 import Tinter from "./Tinter";
-import dis from "./dispatcher";
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
-import ThemeController from "./settings/controllers/ThemeController";
-
-export class ThemeWatcher {
-    static _instance = null;
-
-    constructor() {
-        this._themeWatchRef = null;
-        this._systemThemeWatchRef = null;
-        this._dispatcherRef = null;
-
-        // we have both here as each may either match or not match, so by having both
-        // we can get the tristate of dark/light/unsupported
-        this._preferDark = global.matchMedia("(prefers-color-scheme: dark)");
-        this._preferLight = global.matchMedia("(prefers-color-scheme: light)");
-
-        this._currentTheme = this.getEffectiveTheme();
-    }
-
-    start() {
-        this._themeWatchRef = SettingsStore.watchSetting("theme", null, this._onChange);
-        this._systemThemeWatchRef = SettingsStore.watchSetting("use_system_theme", null, this._onChange);
-        if (this._preferDark.addEventListener) {
-            this._preferDark.addEventListener('change', this._onChange);
-            this._preferLight.addEventListener('change', this._onChange);
-        }
-        this._dispatcherRef = dis.register(this._onAction);
-    }
-
-    stop() {
-        if (this._preferDark.addEventListener) {
-            this._preferDark.removeEventListener('change', this._onChange);
-            this._preferLight.removeEventListener('change', this._onChange);
-        }
-        SettingsStore.unwatchSetting(this._systemThemeWatchRef);
-        SettingsStore.unwatchSetting(this._themeWatchRef);
-        dis.unregister(this._dispatcherRef);
-    }
-
-    _onChange = () => {
-        this.recheck();
-    };
-
-    _onAction = (payload) => {
-        if (payload.action === 'recheck_theme') {
-            // XXX forceTheme
-            this.recheck(payload.forceTheme);
-        }
-    };
-
-    // XXX: forceTheme param added here as local echo appears to be unreliable
-    // https://github.com/vector-im/riot-web/issues/11443
-    recheck(forceTheme) {
-        const oldTheme = this._currentTheme;
-        this._currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;
-        if (oldTheme !== this._currentTheme) {
-            setTheme(this._currentTheme);
-        }
-    }
-
-    getEffectiveTheme() {
-        // Dev note: Much of this logic is replicated in the GeneralUserSettingsTab
-
-        // XXX: checking the isLight flag here makes checking it in the ThemeController
-        // itself completely redundant since we just override the result here and we're
-        // now effectively just using the ThemeController as a place to store the static
-        // variable. The system theme setting probably ought to have an equivalent
-        // controller that honours the same flag, although probablt better would be to
-        // have the theme logic in one place rather than split between however many
-        // different places.
-        if (ThemeController.isLogin) return 'light';
-
-        // If the user has specifically enabled the system matching option (excluding default),
-        // then use that over anything else. We pick the lowest possible level for the setting
-        // to ensure the ordering otherwise works.
-        const systemThemeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, true);
-        if (systemThemeExplicit) {
-            console.log("returning explicit system theme");
-            if (this._preferDark.matches) return 'dark';
-            if (this._preferLight.matches) return 'light';
-        }
-
-        // If the user has specifically enabled the theme (without the system matching option being
-        // enabled specifically and excluding the default), use that theme. We pick the lowest possible
-        // level for the setting to ensure the ordering otherwise works.
-        const themeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, true);
-        if (themeExplicit) {
-            console.log("returning explicit theme: " + themeExplicit);
-            return themeExplicit;
-        }
-
-        // If the user hasn't really made a preference in either direction, assume the defaults of the
-        // settings and use those.
-        if (SettingsStore.getValue('use_system_theme')) {
-            if (this._preferDark.matches) return 'dark';
-            if (this._preferLight.matches) return 'light';
-        }
-        console.log("returning theme value");
-        return SettingsStore.getValue('theme');
-    }
-
-    isSystemThemeSupported() {
-        return this._preferDark.matches || this._preferLight.matches;
-    }
-}
+import SettingsStore from "./settings/SettingsStore";
+import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 
 export function enumerateThemes() {
     const BUILTIN_THEMES = {
-        "light": _t("Light theme"),
-        "dark": _t("Dark theme"),
+        "light": _t("Light"),
+        "dark": _t("Dark"),
     };
     const customThemes = SettingsStore.getValue("custom_themes");
     const customThemeNames = {};
@@ -141,11 +35,67 @@ export function enumerateThemes() {
     return Object.assign({}, customThemeNames, BUILTIN_THEMES);
 }
 
+function clearCustomTheme() {
+    // remove all css variables, we assume these are there because of the custom theme
+    const inlineStyleProps = Object.values(document.body.style);
+    for (const prop of inlineStyleProps) {
+        if (prop.startsWith("--")) {
+            document.body.style.removeProperty(prop);
+        }
+    }
+    const customFontFaceStyle = document.querySelector("head > style[title='custom-theme-font-faces']");
+    if (customFontFaceStyle) {
+        customFontFaceStyle.remove();
+    }
+}
+
+const allowedFontFaceProps = [
+    "font-display",
+    "font-family",
+    "font-stretch",
+    "font-style",
+    "font-weight",
+    "font-variant",
+    "font-feature-settings",
+    "font-variation-settings",
+    "src",
+    "unicode-range",
+];
+
+function generateCustomFontFaceCSS(faces) {
+    return faces.map(face => {
+        const src = face.src && face.src.map(srcElement => {
+            let format;
+            if (srcElement.format) {
+                format = `format("${srcElement.format}")`;
+            }
+            if (srcElement.url) {
+                return `url("${srcElement.url}") ${format}`;
+            } else if (srcElement.local) {
+                return `local("${srcElement.local}") ${format}`;
+            }
+            return "";
+        }).join(", ");
+        const props = Object.keys(face).filter(prop => allowedFontFaceProps.includes(prop));
+        const body = props.map(prop => {
+            let value;
+            if (prop === "src") {
+                value = src;
+            } else if (prop === "font-family") {
+                value = `"${face[prop]}"`;
+            } else {
+                value = face[prop];
+            }
+            return `${prop}: ${value}`;
+        }).join(";");
+        return `@font-face {${body}}`;
+    }).join("\n");
+}
 
 function setCustomThemeVars(customTheme) {
     const {style} = document.body;
 
-    function setCSSVariable(name, hexColor, doPct = true) {
+    function setCSSColorVariable(name, hexColor, doPct = true) {
         style.setProperty(`--${name}`, hexColor);
         if (doPct) {
             // uses #rrggbbaa to define the color with alpha values at 0%, 15% and 50%
@@ -159,16 +109,33 @@ function setCustomThemeVars(customTheme) {
         for (const [name, value] of Object.entries(customTheme.colors)) {
             if (Array.isArray(value)) {
                 for (let i = 0; i < value.length; i += 1) {
-                    setCSSVariable(`${name}_${i}`, value[i], false);
+                    setCSSColorVariable(`${name}_${i}`, value[i], false);
                 }
             } else {
-                setCSSVariable(name, value);
+                setCSSColorVariable(name, value);
             }
+        }
+    }
+    if (customTheme.fonts) {
+        const {fonts} = customTheme;
+        if (fonts.faces) {
+            const css = generateCustomFontFaceCSS(fonts.faces);
+            const style = document.createElement("style");
+            style.setAttribute("title", "custom-theme-font-faces");
+            style.setAttribute("type", "text/css");
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+        }
+        if (fonts.general) {
+            style.setProperty("--font-family", fonts.general);
+        }
+        if (fonts.monospace) {
+            style.setProperty("--font-family-monospace", fonts.monospace);
         }
     }
 }
 
-function getCustomTheme(themeName) {
+export function getCustomTheme(themeName) {
     // set css variables
     const customThemes = SettingsStore.getValue("custom_themes");
     if (!customThemes) {
@@ -194,6 +161,7 @@ export async function setTheme(theme) {
         const themeWatcher = new ThemeWatcher();
         theme = themeWatcher.getEffectiveTheme();
     }
+    clearCustomTheme();
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
         const customTheme = getCustomTheme(theme.substr(7));
@@ -242,7 +210,7 @@ export async function setTheme(theme) {
                 if (a == styleElements[stylesheetName]) return;
                 a.disabled = true;
             });
-            const bodyStyles = global.getComputedStyle(document.getElementsByTagName("body")[0]);
+            const bodyStyles = global.getComputedStyle(document.body);
             if (bodyStyles.backgroundColor) {
                 document.querySelector('meta[name="theme-color"]').content = bodyStyles.backgroundColor;
             }

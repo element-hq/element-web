@@ -29,7 +29,7 @@ import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as ObjectUtils from "../../ObjectUtils";
 import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
-import dis from "../../dispatcher";
+import dis from "../../dispatcher/dispatcher";
 import * as sdk from "../../index";
 import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
@@ -112,6 +112,9 @@ const TimelinePanel = createReactClass({
 
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
+
+        // whether to use the irc layout
+        useIRCLayout: PropTypes.bool,
     },
 
     statics: {
@@ -795,6 +798,9 @@ const TimelinePanel = createReactClass({
                 readMarkerVisible: false,
             });
         }
+
+        // Send the updated read marker (along with read receipt) to the server
+        this.sendReadReceipt();
     },
 
 
@@ -1447,6 +1453,7 @@ const TimelinePanel = createReactClass({
                 getRelationsForEvent={this.getRelationsForEvent}
                 editState={this.state.editState}
                 showReactions={this.props.showReactions}
+                useIRCLayout={this.props.useIRCLayout}
             />
         );
     },
