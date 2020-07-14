@@ -385,6 +385,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     };
 
     private renderAdvancedSection() {
+        const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
             onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
@@ -395,6 +396,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         let advanced: React.ReactNode;
 
         if (this.state.showAdvanced) {
+            const tooltipContent = _t(
+                "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
+                { brand },
+            );
             advanced = <>
                 <SettingsFlag
                     name="useCompactLayout"
@@ -424,7 +429,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
                         SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
                     }}
-                    tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    tooltipContent={tooltipContent}
                     forceTooltipVisible={true}
                     disabled={!this.state.useSystemFont}
                     value={this.state.systemFont}

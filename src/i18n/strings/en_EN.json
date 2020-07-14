@@ -850,6 +850,7 @@
     "Message layout": "Message layout",
     "Compact": "Compact",
     "Modern": "Modern",
+    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
     "Customise your appearance": "Customise your appearance",
     "Appearance Settings only affect this %(brand)s session.": "Appearance Settings only affect this %(brand)s session.",
     "Flair": "Flair",
