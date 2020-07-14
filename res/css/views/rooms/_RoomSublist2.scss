@@ -183,6 +183,7 @@ limitations under the License.
     // See also https://github.com/vector-im/riot-web/issues/14429.
     &:first-child .mx_RoomSublist2_headerContainer {
         height: 0;
+        padding-bottom: 4px;
     }
 
     .mx_RoomSublist2_resizeBox {
