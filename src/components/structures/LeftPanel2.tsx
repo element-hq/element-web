@@ -165,7 +165,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         // layout updates.
         for (const header of targetStyles.keys()) {
             const style = targetStyles.get(header);
-            const headerContainer = header.parentElement; // .mx_RoomSublist2_headerContainer
 
             if (style.makeInvisible) {
                 // we will have already removed the 'display: none', so add it back.
@@ -205,9 +204,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
                     header.classList.add("mx_RoomSublist2_headerContainer_sticky");
                 }
-                if (!headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
-                    headerContainer.classList.add("mx_RoomSublist2_headerContainer_hasSticky");
-                }
 
                 const newWidth = `${headerStickyWidth}px`;
                 if (header.style.width !== newWidth) {
@@ -216,9 +212,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             } else if (!style.stickyTop && !style.stickyBottom) {
                 if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
-                }
-                if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
-                    headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
                 }
                 if (header.style.width) {
                     header.style.removeProperty('width');
