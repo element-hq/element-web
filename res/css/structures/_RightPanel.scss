@@ -51,20 +51,18 @@ limitations under the License.
 .mx_RightPanel_headerButton {
     cursor: pointer;
     flex: 0 0 auto;
-    vertical-align: top;
-    margin-left: 5px;
-    margin-right: 5px;
-    text-align: center;
-    border-bottom: 2px solid transparent;
-    height: 20px;
-    width: 20px;
+    margin-left: 1px;
+    margin-right: 1px;
+    height: 32px;
+    width: 32px;
     position: relative;
+    border-radius: 100%;
 
     &::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 6px; // center with parent of 32px
+        left: 6px; // center with parent of 32px
         height: 20px;
         width: 20px;
         background-color: $rightpanel-button-color;
@@ -98,14 +96,22 @@ limitations under the License.
     mask-position: center;
 }
 
-.mx_RightPanel_headerButton_highlight::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: $button-bg-color;
+.mx_RightPanel_headerButton_highlight {
+    background: rgba($accent-color, 0.25);
+    // make the icon the accent color too
+    &::before {
+        background-color: $accent-color;
+    }
+}
+
+.mx_RightPanel_headerButton:not(.mx_RightPanel_headerButton_highlight) {
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
+    }
 }
 
 .mx_RightPanel_headerButton_badge {
