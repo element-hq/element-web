@@ -30,7 +30,7 @@ import {
     SortAlgorithm
 } from "./models";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
-import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../membership";
+import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 
