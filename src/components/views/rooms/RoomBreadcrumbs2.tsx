@@ -27,16 +27,7 @@ import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 interface IProps {
 }

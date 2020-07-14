@@ -14,16 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 // Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile2 {
     margin-bottom: 4px;
     padding: 4px;
-
-    // allow scrollIntoView to ignore the sticky headers, must match combined height of .mx_RoomSublist2_headerContainer
-    scroll-margin-top: 32px;
-    scroll-margin-bottom: 32px;
 
     // The tile is also a flexbox row itself
     display: flex;
@@ -166,11 +162,6 @@ limitations under the License.
             margin-right: 0;
         }
     }
-}
-
-// do not apply scroll-margin-bottom to the sublist which will not have a sticky header below it
-.mx_RoomSublist2:last-child .mx_RoomTile2 {
-    scroll-margin-bottom: 0;
 }
 
 // We use these both in context menus and the room tiles

@@ -30,11 +30,9 @@ import {
     SortAlgorithm
 } from "./models";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
-import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../membership";
+import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
-
-// TODO: Add locking support to avoid concurrent writes? https://github.com/vector-im/riot-web/issues/14235
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -698,8 +696,8 @@ export class Algorithm extends EventEmitter {
             }
         }
 
+        let didTagChange = false;
         if (cause === RoomUpdateCause.PossibleTagChange) {
-            let didTagChange = false;
             const oldTags = this.roomIdsToTags[room.roomId] || [];
             const newTags = this.getTagsForRoom(room);
             const diff = arrayDiff(oldTags, newTags);
@@ -713,6 +711,11 @@ export class Algorithm extends EventEmitter {
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
                     this.cachedRooms[rmTag] = algorithm.orderedRooms;
+
+                    // Later on we won't update the filtered rooms or sticky room for removed
+                    // tags, so do so now.
+                    this.recalculateFilteredRoomsForTag(rmTag);
+                    this.recalculateStickyRoom(rmTag);
                 }
                 for (const addTag of diff.added) {
                     if (!window.mx_QuietRoomListLogging) {
@@ -812,7 +815,7 @@ export class Algorithm extends EventEmitter {
             return false;
         }
 
-        let changed = false;
+        let changed = didTagChange;
         for (const tag of tags) {
             const algorithm: OrderingAlgorithm = this.algorithms[tag];
             if (!algorithm) throw new Error(`No algorithm for ${tag}`);

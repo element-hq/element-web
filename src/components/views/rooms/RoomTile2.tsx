@@ -55,16 +55,7 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
+// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 interface IProps {
     room: Room;
@@ -124,7 +115,6 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
 export default class RoomTile2 extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
-    // TODO: a11y: https://github.com/vector-im/riot-web/issues/14180
 
     constructor(props: IProps) {
         super(props);
@@ -276,6 +266,17 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         this.setState({generalMenuPosition: null}); // hide the menu
     };
 
+    private onForgetRoomClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        dis.dispatch({
+            action: 'forget_room',
+            room_id: this.props.room.roomId,
+        });
+        this.setState({generalMenuPosition: null}); // hide the menu
+    };
+
     private onOpenRoomSettings = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -299,7 +300,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             await setRoomNotifsState(this.props.room.roomId, newState);
         } catch (error) {
             // TODO: some form of error notification to the user to inform them that their state change failed.
-            // https://github.com/vector-im/riot-web/issues/14281
+            // See https://github.com/vector-im/riot-web/issues/14281
             console.error(error);
         }
 
@@ -315,7 +316,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(isActive: boolean): React.ReactElement {
-        if (MatrixClientPeg.get().isGuest() || !this.showContextMenu) {
+        if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived || !this.showContextMenu) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
@@ -387,8 +388,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     private renderGeneralMenu(): React.ReactElement {
         if (!this.showContextMenu) return null; // no menu to show
 
-        // TODO: We could do with a proper invite context menu, unlike what showContextMenu suggests
-
         const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
 
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
@@ -397,7 +396,20 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
 
         let contextMenu = null;
-        if (this.state.generalMenuPosition) {
+        if (this.state.generalMenuPosition && this.props.tag === DefaultTagID.Archived) {
+            contextMenu = (
+                <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
+                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
+                            <MenuItem onClick={this.onForgetRoomClick} label={_t("Leave Room")}>
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
+                                <span className="mx_IconizedContextMenu_label">{_t("Forget Room")}</span>
+                            </MenuItem>
+                        </div>
+                    </div>
+                </ContextMenu>
+            );
+        } else if (this.state.generalMenuPosition) {
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
@@ -441,8 +453,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactElement {
-        // TODO: Invites: https://github.com/vector-im/riot-web/issues/14198
-
         const classes = classNames({
             'mx_RoomTile2': true,
             'mx_RoomTile2_selected': this.state.selected,
@@ -471,7 +481,6 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             );
         }
 
-        // TODO: the original RoomTile uses state for the room name. Do we need to?
         let name = this.props.room.name;
         if (typeof name !== 'string') name = '';
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
