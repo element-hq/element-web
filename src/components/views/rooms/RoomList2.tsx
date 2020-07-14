@@ -210,7 +210,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
-        if (!window.mx_QuietRoomListLogging) {
+        if (window.mx_LoudRoomListLogging) {
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log("new lists", newLists);
         }

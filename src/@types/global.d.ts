@@ -41,7 +41,7 @@ declare global {
         mxPlatformPeg: PlatformPeg;
 
         // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
-        mx_QuietRoomListLogging: boolean;
+        mx_LoudRoomListLogging: boolean;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
