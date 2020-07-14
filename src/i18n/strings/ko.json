@@ -1338,7 +1338,6 @@
     "Set a new status...": "새 상태를 설정...",
     "Hide": "숨기기",
     "This homeserver would like to make sure you are not a robot.": "이 홈서버는 당신이 로봇이 아닌지 확인하고 싶어합니다.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "맞춤 서버 설정을 사용해 다른 홈서버 URL을 지정함으로써 다른 Matrix 서버에 로그인할 수 있습니다. 이를 통해 다른 홈서버의 기존 Matrix 계정으로 이 앱을 사용할 수 있습니다.",
     "Please review and accept all of the homeserver's policies": "모든 홈서버의 정책을 검토하고 수락해주세요",
     "Please review and accept the policies of this homeserver:": "이 홈서버의 정책을 검토하고 수락해주세요:",
     "Unable to validate homeserver/identity server": "홈서버/ID서버를 확인할 수 없음",

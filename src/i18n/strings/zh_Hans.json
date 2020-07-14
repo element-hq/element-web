@@ -1138,7 +1138,6 @@
     "Set a new status...": "设置新状态...",
     "Hide": "隐藏",
     "This homeserver would like to make sure you are not a robot.": "此主服务器想要确认您不是机器人。",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "您可以通过在自定义服务器选项中指定不同的主服务器网址来登入其他 Matrix 服务器。这让您可以通过不同的主服务器上已有的 Matrix 账号来使用此应用程序。",
     "Please review and accept all of the homeserver's policies": "请阅读并接受该主服务器的所有政策",
     "Please review and accept the policies of this homeserver:": "请阅读并接受此主服务器的政策：",
     "Your Modular server": "您的模组服务器",

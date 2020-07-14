@@ -21,6 +21,7 @@ import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { RoomListStoreTempProxy } from "./room-list/RoomListStoreTempProxy";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -51,7 +52,11 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     public get visible(): boolean {
-        return this.state.enabled && this.matrixClient.getVisibleRooms().length >= 20;
+        return this.state.enabled && this.meetsRoomRequirement;
+    }
+
+    private get meetsRoomRequirement(): boolean {
+        return this.matrixClient.getVisibleRooms().length >= 20;
     }
 
     protected async onAction(payload: ActionPayload) {
@@ -99,8 +104,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private onMyMembership = async (room: Room) => {
-        // We turn on breadcrumbs by default once the user has at least 1 room to show.
-        if (!this.state.enabled) {
+        // Only turn on breadcrumbs is the user hasn't explicitly turned it off again.
+        const settingValueRaw = SettingsStore.getValue("breadcrumbs", null, /*excludeDefault=*/true);
+        if (this.meetsRoomRequirement && isNullOrUndefined(settingValueRaw)) {
             await SettingsStore.setValue("breadcrumbs", null, SettingLevel.ACCOUNT, true);
         }
     };

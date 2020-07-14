@@ -1147,7 +1147,6 @@
     "Set a new status...": "Nastavit status...",
     "Hide": "Skrýt",
     "This homeserver would like to make sure you are not a robot.": "Domovský server se potřebuje přesvědčit, že nejste robot.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Ve vlastním nastavení serveru můžete nastavit použití vlastního domovského serveru. To vám umožní používat tuto aplikaci s existujícím Matrix účtem na jiném serveru.",
     "Please review and accept all of the homeserver's policies": "Pročtěte si a odsouhlaste prosím všechna pravidla domovského serveru",
     "Please review and accept the policies of this homeserver:": "Pročtěte si a odsouhlaste prosím pravidla domovského serveru:",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Zadejte adresu serveru Modular. Můžete použít svou vlastní doménu a nebo subdoménu <a>modular.im</a>.",

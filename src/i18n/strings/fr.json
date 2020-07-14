@@ -1056,7 +1056,6 @@
     "Report bugs & give feedback": "Rapporter des anomalies & Donner son avis",
     "Update status": "Mettre à jour le statut",
     "Set status": "Définir le statut",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Vous pouvez utiliser les options de serveur personnalisé pour vous connecter à d'autres serveurs Matrix en renseignant un autre URL de serveur d'accueil. Cela vous permet d'utiliser cette application avec un compte Matrix existant sur un autre serveur d'accueil.",
     "Your Modular server": "Votre serveur Modular",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Saisissez l'emplacement de votre serveur d'accueil Modular. Il peut utiliser votre nom de domaine personnel ou être un sous-domaine de <a>modular.im</a>.",
     "Server Name": "Nom du serveur",
