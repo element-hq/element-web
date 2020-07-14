@@ -48,15 +48,15 @@ limitations under the License.
         }
 
         &.mx_NotificationBadge_2char {
-            width: 16px;
-            height: 16px;
-            border-radius: 16px;
+            width: $font-16px;
+            height: $font-16px;
+            border-radius: $font-16px;
         }
 
         &.mx_NotificationBadge_3char {
-            width: 26px;
-            height: 16px;
-            border-radius: 16px;
+            width: $font-26px;
+            height: $font-16px;
+            border-radius: $font-16px;
         }
 
         // The following is the floating badge

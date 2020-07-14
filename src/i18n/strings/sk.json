@@ -1183,7 +1183,6 @@
     "Set status": "Nastaviť stav",
     "Hide": "Skryť",
     "This homeserver would like to make sure you are not a robot.": "Tento domovský server by sa rád uistil, že nie ste robot.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Vlastné nastavenia servera môžete použiť na pripojenie k inému domovskému serveru Matrix zadaním URL adresy. Umožní vám to prihlásiť sa cez túto aplikáciu k existujúcemu Matrix účtu na inom domovskom servery.",
     "Your Modular server": "Váš server Modular",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Zadajte umiestnenie vášho domovského servera modular. Môže to byť buď vaša doména alebo subdoména <a>modular.im</a>.",
     "Server Name": "Názov servera",

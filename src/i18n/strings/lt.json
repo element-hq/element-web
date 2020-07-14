@@ -1031,7 +1031,6 @@
     "Your email address hasn't been verified yet": "Jūsų el. pašto adresas dar nebuvo patvirtintas",
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Išsiuntėme jums el. laišką, kad patvirtintumėme jūsų adresą. Sekite ten esančiais nurodymais ir tada paspauskite žemiau esantį mygtuką.",
     "Email Address": "El. pašto adresas",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Jūs galite naudoti pasirinktinius serverio nustatymus, kad prisijungtumėte prie kitų Matrix serverių, nurodydami kito serverio URL. Tai leidžia jums naudotis šia programa su kitame serveryje esančia Matrix paskyra.",
     "Enter your custom homeserver URL <a>What does this mean?</a>": "Įveskite pasirinktinio serverio URL <a>Ką tai reiškia?</a>",
     "Homeserver URL": "Serverio URL",
     "Homeserver URL does not appear to be a valid Matrix homeserver": "Serverio adresas neatrodo esantis tinkamas Matrix serveris",

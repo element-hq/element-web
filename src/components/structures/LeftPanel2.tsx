@@ -35,16 +35,7 @@ import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomLi
 import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
 
 interface IProps {
     isMinimized: boolean;
@@ -111,6 +102,10 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const newVal = BreadcrumbsStore.instance.visible;
         if (newVal !== this.state.showBreadcrumbs) {
             this.setState({showBreadcrumbs: newVal});
+
+            // Update the sticky headers too as the breadcrumbs will be popping in or out.
+            if (!this.listContainerRef.current) return; // ignore: no headers to sticky
+            this.handleStickyHeaders(this.listContainerRef.current);
         }
     };
 
@@ -187,9 +182,22 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (header.style.top !== newTop) {
                     header.style.top = newTop;
                 }
-            } else if (style.stickyBottom) {
+            } else {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                }
+                if (header.style.top) {
+                    header.style.removeProperty('top');
+                }
+            }
+
+            if (style.stickyBottom) {
                 if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                }
+            } else {
+                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
                 }
             }
 
@@ -209,20 +217,11 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                 if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
                     header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
                 }
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
-                }
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
-                }
                 if (headerContainer.classList.contains("mx_RoomSublist2_headerContainer_hasSticky")) {
                     headerContainer.classList.remove("mx_RoomSublist2_headerContainer_hasSticky");
                 }
                 if (header.style.width) {
                     header.style.removeProperty('width');
-                }
-                if (header.style.top) {
-                    header.style.removeProperty('top');
                 }
             }
         }
@@ -242,7 +241,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         }
     }
 
-    // TODO: Improve header reliability: https://github.com/vector-im/riot-web/issues/14232
     private onScroll = (ev: React.MouseEvent<HTMLDivElement>) => {
         const list = ev.target as HTMLDivElement;
         this.handleStickyHeaders(list);
@@ -382,8 +380,6 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
             isMinimized={this.props.isMinimized}
             onResize={this.onResize}
         />;
-
-        // TODO: Conference handling / calls: https://github.com/vector-im/riot-web/issues/14177
 
         const containerClasses = classNames({
             "mx_LeftPanel2": true,

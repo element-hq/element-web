@@ -2038,7 +2038,6 @@
     "User Status": "Estado da usuaria",
     "This homeserver would like to make sure you are not a robot.": "Este servidor quere asegurarse de que non es un robot.",
     "Country Dropdown": "Despregable de países",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Podes usar as opcións dun servidor personalizado para conectarte a outros servidores Matrix indicando o URL do servidor. Así poderás usar esta app cunha conta Matrix dun servidor diferente.",
     "Confirm your identity by entering your account password below.": "Confirma a túa identidade escribindo o contrasinal da conta embaixo.",
     "Missing captcha public key in homeserver configuration. Please report this to your homeserver administrator.": "Falta a chave pública do captcha na configuración do servidor. Informa desto á administración do teu servidor.",
     "Please review and accept all of the homeserver's policies": "Revisa e acepta todas as cláusulas do servidor",

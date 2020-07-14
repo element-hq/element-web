@@ -1188,7 +1188,6 @@
     "Success!": "Ongi!",
     "A new recovery passphrase and key for Secure Messages have been detected.": "Berreskuratze pasaesaldi eta mezu seguruen gako berriak antzeman dira.",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Ez baduzu berreskuratze metodoa kendu, agian erasotzaile bat zure mezuen historialera sarbidea lortu nahi du. Aldatu kontuaren pasahitza eta ezarri berreskuratze metodo berri bat berehala ezarpenetan.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Zerbitzari pertsonalizatuaren aukera erabili dezakezu beste Matrix zerbitzarietan saioa hasteko beste hasiera-zerbitzari batek URLa adieraziz. Honek aplikazio hau beste Matrix zerbitzari batean duzun Matrix kontua erabiltzea baimentzen dizu.",
     "Changes your display nickname in the current room only": "Zure pantailako izena aldatzen du gela honetan bakarrik",
     "Your Matrix account on %(serverName)s": "Zure %(serverName)s zerbitzariko Matrix kontua",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "¯\\_(ツ)_/¯ jartzen du testu soileko mezu baten aurrean",

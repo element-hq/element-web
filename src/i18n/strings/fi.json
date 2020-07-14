@@ -1159,7 +1159,6 @@
     "Access your secure message history and set up secure messaging by entering your recovery key.": "Pääse turvattuun viestihistoriaasi ja ota käyttöön turvallinen viestintä syöttämällä palautusavaimesi.",
     "Share Permalink": "Jaa ikilinkki",
     "Collapse Reply Thread": "Supista vastaussäie",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Voit käyttää mukautettuja palvelinasetuksia kirjautuaksesi toiselle Matrix-palvelimelle. Tämä sallii tämän sovelluksen käytön toisella kotipalvelimella olevalla Matrix-tilillä.",
     "Please review and accept all of the homeserver's policies": "Tarkistathan tämän kotipalvelimen käytännöt",
     "Please review and accept the policies of this homeserver:": "Tarkistathan tämän kotipalvelimen käytännöt:",
     "Code": "Koodi",

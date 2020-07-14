@@ -1055,7 +1055,6 @@
     "Go back": "Vissza",
     "Update status": "Állapot frissítése",
     "Set status": "Állapot beállítása",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Az egyedi szerver beállítással beléphetsz másik Matrix szerverbe ha megadod annak URL-jét. Ezzel használhatod az alkalmazást megy másik Matrix szerveren meglévő felhasználói fiókkal.",
     "Your Modular server": "A te Modular servered",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Add meg a Modular Matrix szerveredet. Ami vagy saját domaint használ vagy a <a>modular.im</a> aldomainját.",
     "Server Name": "Szerver neve",

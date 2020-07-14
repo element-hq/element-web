@@ -1054,7 +1054,6 @@
     "Go back": "返回",
     "Update status": "更新狀態",
     "Set status": "設定狀態",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "您可以透過指定不同的家伺服器 URL 來使用自訂的伺服器選項來登入其他 Matrix 伺服器。這讓您可以與既有的在不同家伺服器上 Matrix 帳號一同使用此應用程式。",
     "Your Modular server": "您的模組化伺服器",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "輸入您模組化伺服器的位置。它可能會使用您自己的域名或是 <a>modular.im</a> 的子網域。",
     "Server Name": "伺服器名稱",

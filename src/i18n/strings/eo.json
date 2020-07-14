@@ -1184,7 +1184,6 @@
     "Unable to load backup status": "Ne povas legi staton de savkopio",
     "Collapse Reply Thread": "Maletendi respondan fadenon",
     "This homeserver would like to make sure you are not a robot.": "Ĉi tiu hejmservilo volas certigi, ke vi ne estas roboto.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Vi povas uzi proprajn servilajn elektojn por saluti aliajn servilojn de Matrix per alia hejmservila URL. Tio ebligos uzi ĉi tiun aplikaĵon kun jama Matrix-konto en alia hejmservilo.",
     "Please review and accept all of the homeserver's policies": "Bonvolu tralegi kaj akcepti ĉioman politikon de ĉi tiu hejmservilo",
     "Please review and accept the policies of this homeserver:": "Bonvolu tralegi kaj akcepti la politikon de ĉi tiu hejmservilo:",
     "Unable to validate homeserver/identity server": "Ne povas kontroli hejmservilon aŭ identigan servilon",
