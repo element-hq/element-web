@@ -1049,7 +1049,6 @@
     "Go back": "Kthehu mbrapsht",
     "Update status": "Përditëso gendjen",
     "Set status": "Caktojini gjendjen",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Mund të përdorni mundësitë mbi shërbyes vetjak, për të bërë hyrjen në shërbyes të tjerë Matrix, duke dhënë URL-në e një tjetër shërbyesi Home. Kjo ju lejon ta përdorni këtë aplikacion në një tjetër shërbyes Home, me një llogari ekzistuese Matrix.",
     "Your Modular server": "Shërbyesi juaj Modular",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Jepni vendndodhjen e shërbyesit tuaj Home Modular. Mund të përdorë emrin e përkatësisë tuaj ose të jetë një nënpërkatësi e <a>modular.im</a>.",
     "Server Name": "Emër Shërbyesi",

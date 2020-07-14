@@ -1185,7 +1185,6 @@
     "Recovery Method Removed": "Wiederherstellungsmethode gelöscht",
     "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Wenn du die Wiederherstellungsmethode nicht gelöscht hast, kann ein Angreifer versuchen Zugang zu deinem Konto zu bekommen. Ändere dein Passwort und richte sofort eine neue Wiederherstellungsmethode in den Einstellungen ein.",
     "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Warnung</b>: Du solltest die Schlüsselsicherung nur auf einem vertrauenswürdigen Gerät einrichten.",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use this app with an existing Matrix account on a different homeserver.": "Du kannst die angepassten Serveroptionen benutzen um dich an einem anderen Matrixserver anzumelden indem du eine andere Heimserver-Adresse angibst. Dies erlaubt dir diese Anwendung mit einem anderen Matrixkonto auf einem anderen Heimserver zu nutzen.",
     "Enter the location of your Modular homeserver. It may use your own domain name or be a subdomain of <a>modular.im</a>.": "Gib die Adresse deines Modular-Heimservers an. Es kann deine eigene Domain oder eine Subdomain von <a>modular.im</a> sein.",
     "Unable to query for supported registration methods.": "Konnte unterstützte Registrierungsmethoden nicht abrufen.",
     "Bulk options": "Sammeloptionen",
