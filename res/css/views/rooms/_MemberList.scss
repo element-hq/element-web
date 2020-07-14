@@ -78,7 +78,6 @@ limitations under the License.
     position: relative;
     background-color: $button-bg-color;
     border-radius: 4px;
-    padding: 8px;
     margin: 5px 9px 9px;
     display: flex;
     justify-content: center;
@@ -97,8 +96,9 @@ limitations under the License.
 }
 
 .mx_MemberList_invite span {
-    background-image: url('$(res)/img/feather-customised/user-add.svg');
+    background-image: url('$(res)/img/element-icons/room/invite.svg');
     background-repeat: no-repeat;
     background-position: center left;
-    padding-left: 25px;
+    background-size: 20px;
+    padding: 8px 0 8px 25px;
 }
