@@ -72,7 +72,7 @@ limitations under the License.
 
             &:hover {
                 color: $accent-color;
-                background: rgba(#03b381, 0.06);
+                background: rgba($accent-color, 0.06);
 
                 &::before {
                     background-color: $accent-color;
