@@ -54,6 +54,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
@@ -128,6 +129,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        MessagePreviewStore.instance.on(UPDATE_EVENT, this.onPreviewUpdated);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
     }
 
@@ -150,8 +152,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         if (this.props.room) {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
+        MessagePreviewStore.instance.off(UPDATE_EVENT, this.onPreviewUpdated);
         defaultDispatcher.unregister(this.dispatcherRef);
     }
+
+    private onPreviewUpdated = () => {
+        this.forceUpdate(); // we don't track the preview in state, so just re-render
+    };
 
     private onAction = (payload: ActionPayload) => {
         if (payload.action === "view_room" && payload.room_id === this.props.room.roomId && payload.show_room_tile) {
