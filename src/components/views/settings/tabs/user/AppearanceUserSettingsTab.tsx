@@ -309,7 +309,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
-                    values={[13, 15, 16, 18, 20]}
+                    values={[13, 14, 15, 16, 18]}
                     value={parseInt(this.state.fontSize, 10)}
                     onSelectionChange={this.onFontSizeChanged}
                     displayFunc={_ => ""}
