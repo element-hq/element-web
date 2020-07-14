@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import {createRef, UIEventHandler} from "react";
+import {createRef} from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
@@ -48,16 +48,7 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -237,10 +228,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = () => {
+        // read number of visible tiles before we mutate it
+        const numVisibleTiles = this.numVisibleTiles;
         const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
         this.applyHeightChange(newHeight);
         this.setState({height: newHeight}, () => {
-            this.focusRoomTile(this.numTiles - 1);
+            // focus the top-most new room
+            this.focusRoomTile(numVisibleTiles);
         });
     };
 
@@ -607,8 +601,6 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     public render(): React.ReactElement {
-        // TODO: Error boundary: https://github.com/vector-im/riot-web/issues/14185
-
         const visibleTiles = this.renderVisibleTiles();
         const classes = classNames({
             'mx_RoomSublist2': true,
@@ -624,10 +616,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const showMoreAtMinHeight = minTiles < this.numTiles;
             const minHeightPadding = RESIZE_HANDLE_HEIGHT + (showMoreAtMinHeight ? SHOW_N_BUTTON_HEIGHT : 0);
             const minTilesPx = layout.tilesToPixelsWithPadding(minTiles, minHeightPadding);
-            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
+            let maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist2_showNButton': true,
             });
+
+            if (this.numTiles > this.layout.defaultVisibleTiles) {
+                maxTilesPx += SHOW_N_BUTTON_HEIGHT;
+            }
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all

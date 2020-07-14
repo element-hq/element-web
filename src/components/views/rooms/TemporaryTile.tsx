@@ -34,6 +34,7 @@ interface IState {
     hover: boolean;
 }
 
+// TODO: Remove with community invites in the room list: https://github.com/vector-im/riot-web/issues/14456
 export default class TemporaryTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
