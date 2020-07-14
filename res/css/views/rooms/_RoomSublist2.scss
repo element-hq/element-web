@@ -47,12 +47,6 @@ limitations under the License.
         padding-bottom: 8px;
         height: 24px;
 
-        // Hide the header container if the contained element is stickied.
-        // We don't use display:none as that causes the header to go away too.
-        &.mx_RoomSublist2_headerContainer_hasSticky {
-            height: 0;
-        }
-
         .mx_RoomSublist2_stickable {
             flex: 1;
             max-width: 100%;
@@ -180,6 +174,15 @@ limitations under the License.
         }
     }
 
+    // In the general case, we leave height of headers alone even if sticky, so
+    // that the sublists below them do not jump. However, that leaves a gap
+    // when scrolled to the top above the first sublist (whose header can only
+    // ever stick to top), so we force height to 0 for only that first header.
+    // See also https://github.com/vector-im/riot-web/issues/14429.
+    &:first-child .mx_RoomSublist2_headerContainer {
+        height: 0;
+    }
+
     .mx_RoomSublist2_resizeBox {
         position: relative;
 
@@ -196,6 +199,8 @@ limitations under the License.
             // as the box model should be top aligned. Happens in both FF and Chromium
             display: flex;
             flex-direction: column;
+
+            mask-image: linear-gradient(0deg, transparent, black 3px);
         }
 
         .mx_RoomSublist2_resizerHandles_showNButton {

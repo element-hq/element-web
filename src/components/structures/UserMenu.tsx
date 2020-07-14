@@ -170,6 +170,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         // TODO: Archived room view: https://github.com/vector-im/riot-web/issues/14038
+        // Note: You'll need to uncomment the button too.
         console.log("TODO: Show archived rooms");
     };
 

@@ -19,7 +19,7 @@ import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import * as Unread from "../../../../Unread";
-import { EffectiveMembership, getEffectiveMembership } from "../../membership";
+import { EffectiveMembership, getEffectiveMembership } from "../../../../utils/membership";
 
 /**
  * Sorts rooms according to the last event's timestamp in each room that seems
@@ -33,12 +33,13 @@ export class RecentAlgorithm implements IAlgorithm {
         // of the rooms to each other.
 
         // TODO: We could probably improve the sorting algorithm here by finding changes.
-        // See https://github.com/vector-im/riot-web/issues/14035
+        // See https://github.com/vector-im/riot-web/issues/14459
         // For example, if we spent a little bit of time to determine which elements have
         // actually changed (probably needs to be done higher up?) then we could do an
         // insertion sort or similar on the limited set of changes.
 
         // TODO: Don't assume we're using the same client as the peg
+        // See https://github.com/vector-im/riot-web/issues/14458
         let myUserId = '';
         if (MatrixClientPeg.get()) {
             myUserId = MatrixClientPeg.get().getUserId();

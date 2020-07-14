@@ -41,16 +41,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14367
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -218,19 +209,14 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     };
 
     private updateLists = () => {
-        const newLists = RoomListStore.instance.orderedLists;
-        if (!window.mx_QuietRoomListLogging) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
-            console.log("new lists", newLists);
-        }
-
-        this.setState({sublists: newLists}, () => {
+        this.setState({sublists: RoomListStore.instance.orderedLists}, () => {
             this.props.onResize();
         });
     };
 
     private renderCommunityInvites(): React.ReactElement[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
+        // See https://github.com/vector-im/riot-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
            if (g.myMembership !== 'invite') return false;
            return !this.searchFilter || this.searchFilter.matches(g.name || "");

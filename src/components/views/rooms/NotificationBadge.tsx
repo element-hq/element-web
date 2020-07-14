@@ -18,8 +18,6 @@ import React from "react";
 import classNames from "classnames";
 import { formatMinimalBadgeCount } from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { readReceiptChangeIsFor } from "../../../utils/read-receipts";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
