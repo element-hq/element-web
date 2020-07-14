@@ -26,6 +26,10 @@ limitations under the License.
         flex: 1 0 auto;
     }
 
+    .mx_SearchBox {
+        margin-bottom: 5px;
+    }
+
     h2 {
         text-transform: uppercase;
         color: $h3-color;
@@ -75,7 +79,7 @@ limitations under the License.
     background-color: $button-bg-color;
     border-radius: 4px;
     padding: 8px;
-    margin: 9px;
+    margin: 5px 9px 9px;
     display: flex;
     justify-content: center;
     color: $button-fg-color;

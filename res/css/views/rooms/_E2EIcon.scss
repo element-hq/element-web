@@ -22,28 +22,58 @@ limitations under the License.
     display: block;
 }
 
-.mx_E2EIcon_warning::after,
-.mx_E2EIcon_normal::after,
-.mx_E2EIcon_verified::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-repeat: no-repeat;
-    background-size: contain;
+.mx_E2EIcon_warning,
+.mx_E2EIcon_normal,
+.mx_E2EIcon_verified {
+    &::before, &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+    }
+}
+
+// white infill for the transparency
+.mx_E2EIcon::before {
+    background-color: #ffffff;
+    mask: url('$(res)/img/e2e/normal.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 90%;
+}
+
+// transparent-looking border surrounding the shield for when overlain over avatars
+.mx_E2EIcon_bordered {
+    mask-image: url('$(res)/img/e2e/normal.svg');
+    background-color: $header-panel-bg-color;
+
+    // shrink the actual badge
+    &::after {
+        mask-size: 75%;
+    }
+    // shrink the infill of the badge
+    &::before {
+        mask-size: 65%;
+    }
 }
 
 .mx_E2EIcon_warning::after {
-    background-image: url('$(res)/img/e2e/warning.svg');
+    mask-image: url('$(res)/img/e2e/warning.svg');
+    background-color: $notice-primary-color;
 }
 
 .mx_E2EIcon_normal::after {
-    background-image: url('$(res)/img/e2e/normal.svg');
+    mask-image: url('$(res)/img/e2e/normal.svg');
+    background-color: $composer-e2e-icon-color;
 }
 
 .mx_E2EIcon_verified::after {
-    background-image: url('$(res)/img/e2e/verified.svg');
+    mask-image: url('$(res)/img/e2e/verified.svg');
+    background-color: $accent-color;
 }

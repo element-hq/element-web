@@ -15,27 +15,34 @@ limitations under the License.
 */
 
 .mx_RoomHeader {
-    flex: 0 0 56px;
+    flex: 0 0 50px;
     border-bottom: 1px solid $primary-hairline-color;
     background-color: $roomheader-bg-color;
 
-    .mx_E2EIcon {
-        margin: 0;
-        position: absolute;
-        bottom: -2px;
-        right: -6px;
-        height: 15px;
-        width: 15px;
+    .mx_RoomHeader_e2eIcon {
+        height: 12px;
+        width: 12px;
+
+        .mx_E2EIcon {
+            margin: 0;
+            position: absolute;
+            height: 12px;
+            width: 12px;
+        }
     }
 }
 
 .mx_RoomHeader_wrapper {
     margin: auto;
-    height: 56px;
+    height: 50px;
     display: flex;
     align-items: center;
     min-width: 0;
-    padding: 0 10px 0 19px;
+    padding: 0 10px 0 18px;
+
+    .mx_InviteOnlyIcon_large {
+        margin: 0;
+    }
 }
 
 .mx_RoomHeader_spinner {
@@ -174,7 +181,7 @@ limitations under the License.
 
 .mx_RoomHeader_avatar {
     flex: 0;
-    margin: 0 7px 0 6px;
+    margin: 0 6px 0 7px;
     position: relative;
 }
 

@@ -160,9 +160,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid $dialog-close-fg-color;
-        // these things should probably not be defined
-        // globally
+        border: 1px solid rgba($primary-fg-color, .1);
+        // these things should probably not be defined globally
         margin: 9px;
         flex: 0 0 auto;
     }
@@ -264,7 +263,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     padding: 25px 30px 30px 30px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow-y: auto;
 }
 
@@ -622,12 +621,12 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
         // round the top corners of the top button for the hover effect to be bounded
         &:first-child .mx_AccessibleButton:first-child {
-            border-radius: 4px 4px 0 0; // radius matches .mx_ContextualMenu
+            border-radius: 8px 8px 0 0; // radius matches .mx_ContextualMenu
         }
 
         // round the bottom corners of the bottom button for the hover effect to be bounded
         &:last-child .mx_AccessibleButton:last-child {
-            border-radius: 0 0 4px 4px; // radius matches .mx_ContextualMenu
+            border-radius: 0 0 8px 8px; // radius matches .mx_ContextualMenu
         }
 
         .mx_AccessibleButton {

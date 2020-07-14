@@ -22,6 +22,7 @@ limitations under the License.
     flex-direction: column;
 
     margin-left: 8px;
+    margin-bottom: 4px;
     width: 100%;
 
     flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
@@ -138,9 +139,8 @@ limitations under the License.
         .mx_RoomSublist2_headerText {
             flex: 1;
             max-width: calc(100% - 16px); // 16px is the badge width
-            text-transform: uppercase;
             line-height: $font-16px;
-            font-size: $font-12px;
+            font-size: $font-13px;
             font-weight: 600;
 
             // Ellipsize any text overflow
@@ -183,6 +183,7 @@ limitations under the License.
     // See also https://github.com/vector-im/riot-web/issues/14429.
     &:first-child .mx_RoomSublist2_headerContainer {
         height: 0;
+        padding-bottom: 4px;
     }
 
     .mx_RoomSublist2_resizeBox {
@@ -202,7 +203,7 @@ limitations under the License.
             display: flex;
             flex-direction: column;
 
-            mask-image: linear-gradient(0deg, transparent, black 3px);
+            mask-image: linear-gradient(0deg, transparent, black 4px)
         }
 
         .mx_RoomSublist2_resizerHandles_showNButton {

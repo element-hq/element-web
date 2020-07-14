@@ -35,7 +35,7 @@ $info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: $header-panel-bg-color;
 
-$tagpanel-bg-color: rgba(44, 50, 56, 0.92);
+$tagpanel-bg-color: rgba(38, 39, 43, 0.82);
 $inverted-bg-color: $base-color;
 
 // used by AddressSelector
@@ -93,7 +93,7 @@ $settings-subsection-fg-color: $text-secondary-color;
 $topleftmenu-color: $text-primary-color;
 $roomheader-color: $text-primary-color;
 $roomheader-bg-color: rgba(21, 25, 30, 0.6);
-$roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
+$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
 $roomheader-button-color: $header-panel-text-primary-color;
@@ -104,6 +104,7 @@ $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
+$composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // ********************
 
@@ -114,7 +115,7 @@ $theme-button-bg-color: #e3e8f0;
 
 
 $roomlist2-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
-$roomlist2-bg-color: rgba(33, 38, 44, 0.92);
+$roomlist2-bg-color: rgba(33, 38, 44, 0.90);
 $roomlist2-header-color: #8E99A4;
 $roomsublist2-divider-color: $primary-fg-color;
 
@@ -203,6 +204,10 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
+
+// blur amounts for left left panel (only for element theme, used in _mods.scss)
+$roomlist-background-blur-amount: 60px;
+$tagpanel-background-blur-amount: 30px;
 
 // ***** Mixins! *****
 
