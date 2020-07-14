@@ -127,11 +127,17 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     private get padding() {
         let padding = RESIZE_HANDLE_HEIGHT;
         // this is used for calculating the max height of the whole container,
-        // and takes into account whether there should be room reserved for the show less button
-        // when fully expanded. We cannot check against the layout's defaultVisible tile count
+        // and takes into account whether there should be room reserved for the show more/less button
+        // when fully expanded. We can't rely purely on the layout's defaultVisible tile count
         // because there are conditions in which we need to know that the 'show more' button
         // is present while well under the default tile limit.
-        if (this.numTiles > this.numVisibleTiles) {
+        const needsShowMore = this.numTiles > this.numVisibleTiles;
+
+        // ...but also check this or we'll miss if the section is expanded and we need a
+        // 'show less'
+        const needsShowLess = this.numTiles > this.layout.defaultVisibleTiles;
+
+        if (needsShowMore || needsShowLess) {
             padding += SHOW_N_BUTTON_HEIGHT;
         }
         return padding;
@@ -621,16 +627,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 'mx_RoomSublist2_showNButton': true,
             });
 
-            if (this.numTiles > this.layout.defaultVisibleTiles) {
-                maxTilesPx += SHOW_N_BUTTON_HEIGHT;
-            }
-
             // If we're hiding rooms, show a 'show more' button to the user. This button
             // floats above the resize handle, if we have one present. If the user has all
             // tiles visible, it becomes 'show less'.
             let showNButton = null;
 
             if (maxTilesPx > this.state.height) {
+                // the height of all the tiles is greater than the section height: we need a 'show more' button
                 const nonPaddedHeight = this.state.height - RESIZE_HANDLE_HEIGHT - SHOW_N_BUTTON_HEIGHT;
                 const amountFullyShown = Math.floor(nonPaddedHeight / this.layout.tileHeight);
                 const numMissing = this.numTiles - amountFullyShown;
