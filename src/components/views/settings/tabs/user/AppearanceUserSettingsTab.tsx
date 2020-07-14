@@ -89,7 +89,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
         // show the right values for things.
 
-        const themeChoice: string = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
+        const themeChoice: string = SettingsStore.getValue("theme");
         const systemThemeExplicit: boolean = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
         const themeExplicit: string = SettingsStore.getValueAt(
