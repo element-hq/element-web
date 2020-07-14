@@ -98,7 +98,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         if (theme.startsWith("custom-")) {
             return getCustomTheme(theme.substring("custom-".length)).is_dark;
         }
-        return theme === "dark" || theme === "element-dark";
+        return theme === "dark";
     }
 
     private onProfileUpdate = async () => {
@@ -152,7 +152,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);
 
-        const newTheme = this.state.isDarkTheme ? "element" : "element-dark";
+        const newTheme = this.state.isDarkTheme ? "light" : "dark";
         SettingsStore.setValue("theme", null, SettingLevel.DEVICE, newTheme); // set at same level as Appearance tab
     };
 
