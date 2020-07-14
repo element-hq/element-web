@@ -19,11 +19,10 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import dis from "../../../dispatcher/dispatcher";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {unicodeToShortcode} from "../../../HtmlUtils";
 
 export default class ReactionsRowButton extends React.PureComponent {
     static propTypes = {
@@ -37,6 +36,14 @@ export default class ReactionsRowButton extends React.PureComponent {
         reactionEvents: PropTypes.object.isRequired,
         // A possible Matrix event if the current user has voted for this type
         myReactionEvent: PropTypes.object,
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tooltipVisible: false,
+        };
     }
 
     onClick = (ev) => {
@@ -58,7 +65,24 @@ export default class ReactionsRowButton extends React.PureComponent {
         }
     };
 
+    onMouseOver = () => {
+        this.setState({
+            // To avoid littering the DOM with a tooltip for every reaction,
+            // only render it on first use.
+            tooltipRendered: true,
+            tooltipVisible: true,
+        });
+    }
+
+    onMouseOut = () => {
+        this.setState({
+            tooltipVisible: false,
+        });
+    }
+
     render() {
+        const ReactionsRowButtonTooltip =
+            sdk.getComponent('messages.ReactionsRowButtonTooltip');
         const { mxEvent, content, count, reactionEvents, myReactionEvent } = this.props;
 
         const classes = classNames({
@@ -66,9 +90,18 @@ export default class ReactionsRowButton extends React.PureComponent {
             mx_ReactionsRowButton_selected: !!myReactionEvent,
         });
 
+        let tooltip;
+        if (this.state.tooltipRendered) {
+            tooltip = <ReactionsRowButtonTooltip
+                mxEvent={this.props.mxEvent}
+                content={content}
+                reactionEvents={reactionEvents}
+                visible={this.state.tooltipVisible}
+            />;
+        }
+
         const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
         let label;
-        let tooltip;
         if (room) {
             const senders = [];
             for (const reactionEvent of reactionEvents) {
@@ -93,37 +126,14 @@ export default class ReactionsRowButton extends React.PureComponent {
                     },
                 },
             );
-
-            const shortName = unicodeToShortcode(content);
-            tooltip = <div>{_t(
-                "<reactors/><reactedWith>reacted with %(shortName)s</reactedWith>",
-                {
-                    shortName,
-                },
-                {
-                    reactors: () => {
-                        return <div className="mx_ReactionsRowButtonTooltip_senders">
-                            {formatCommaSeparatedList(senders, 6)}
-                        </div>;
-                    },
-                    reactedWith: (sub) => {
-                        if (!shortName) {
-                            return null;
-                        }
-                        return <div className="mx_ReactionsRowButtonTooltip_reactedWith">
-                            {sub}
-                        </div>;
-                    },
-                },
-            )}</div>;
         }
 
-        return <AccessibleTooltipButton
-            className={classes}
+        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        return <AccessibleButton className={classes}
+            aria-label={label}
             onClick={this.onClick}
-            title={label}
-            tooltip={tooltip}
-            tooltipClassName="mx_Tooltip_timeline"
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
         >
             <span className="mx_ReactionsRowButton_content" aria-hidden="true">
                 {content}
@@ -131,6 +141,7 @@ export default class ReactionsRowButton extends React.PureComponent {
             <span className="mx_ReactionsRowButton_count" aria-hidden="true">
                 {count}
             </span>
-        </AccessibleTooltipButton>;
+            {tooltip}
+        </AccessibleButton>;
     }
 }
