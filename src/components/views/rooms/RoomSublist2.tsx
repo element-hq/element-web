@@ -228,10 +228,13 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     };
 
     private onShowAllClick = () => {
+        // read number of visible tiles before we mutate it
+        const numVisibleTiles = this.numVisibleTiles;
         const newHeight = this.layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
         this.applyHeightChange(newHeight);
         this.setState({height: newHeight}, () => {
-            this.focusRoomTile(this.numTiles - 1);
+            // focus the top-most new room
+            this.focusRoomTile(numVisibleTiles);
         });
     };
 
