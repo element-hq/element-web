@@ -339,9 +339,7 @@ $left-gutter: 64px;
     opacity: 0.2;
     background-repeat: no-repeat;
     background-size: contain;
-}
 
-.mx_EventTile_e2eIcon {
     &::before, &::after {
         content: "";
         display: block;
