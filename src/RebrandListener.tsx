@@ -40,10 +40,13 @@ function getRedirectUrl(url): string {
     } else if (url.hostname === 'riot.im') {
         if (url.pathname.startsWith('/app')) {
             redirectUrl.hostname = 'app.element.io';
+            redirectUrl.pathname = '/';
         } else if (url.pathname.startsWith('/staging')) {
             redirectUrl.hostname = 'staging.element.io';
+            redirectUrl.pathname = '/';
         } else if (url.pathname.startsWith('/develop')) {
             redirectUrl.hostname = 'develop.element.io';
+            redirectUrl.pathname = '/';
         }
 
         return redirectUrl.href;
