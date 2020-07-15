@@ -128,6 +128,11 @@ limitations under the License.
         margin-top: 16px;
         font-size: $font-15px;
         line-height: $font-24px;
+
+        .mx_InlineSpinner img {
+            vertical-align: sub;
+            margin-right: 5px;
+        }
     }
 
     .mx_AuthBody_paddedFooter_subtitle {
