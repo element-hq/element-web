@@ -15,27 +15,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import AutocompleteWrapperModel from "./autocomplete";
+import {MatrixClient} from "matrix-js-sdk/src/client";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+import {Room} from "matrix-js-sdk/src/models/room";
+
+import AutocompleteWrapperModel, {GetAutocompleterComponent, UpdateCallback, UpdateQuery} from "./autocomplete";
 import * as Avatar from "../Avatar";
 
-class BasePart {
+export interface ISerializedPart {
+    type: string;
+    text: string;
+}
+
+export abstract class BasePart {
+    protected _text: string;
+
     constructor(text = "") {
         this._text = text;
     }
 
-    acceptsInsertion(chr, offset, inputType) {
+    acceptsInsertion(chr: string, offset: number, inputType: string) {
         return true;
     }
 
-    acceptsRemoval(position, chr) {
+    acceptsRemoval(position: number, chr: string) {
         return true;
     }
 
-    merge(part) {
+    merge(part: BasePart) {
         return false;
     }
 
-    split(offset) {
+    split(offset: number) {
         const splitText = this.text.substr(offset);
         this._text = this.text.substr(0, offset);
         return new PlainPart(splitText);
@@ -43,7 +54,7 @@ class BasePart {
 
     // removes len chars, or returns the plain text this part should be replaced with
     // if the part would become invalid if it removed everything.
-    remove(offset, len) {
+    remove(offset: number, len: number) {
         // validate
         const strWithRemoval = this.text.substr(0, offset) + this.text.substr(offset + len);
         for (let i = offset; i < (len + offset); ++i) {
@@ -56,7 +67,7 @@ class BasePart {
     }
 
     // append str, returns the remaining string if a character was rejected.
-    appendUntilRejected(str, inputType) {
+    appendUntilRejected(str: string, inputType: string) {
         const offset = this.text.length;
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
@@ -70,7 +81,7 @@ class BasePart {
 
     // inserts str at offset if all the characters in str were accepted, otherwise don't do anything
     // return whether the str was accepted or not.
-    validateAndInsert(offset, str, inputType) {
+    validateAndInsert(offset: number, str: string, inputType: string) {
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
             if (!this.acceptsInsertion(chr, offset + i, inputType)) {
@@ -83,9 +94,9 @@ class BasePart {
         return true;
     }
 
-    createAutoComplete() {}
+    createAutoComplete(updateCallback): AutocompleteWrapperModel | void {}
 
-    trim(len) {
+    trim(len: number) {
         const remaining = this._text.substr(len);
         this._text = this._text.substr(0, len);
         return remaining;
@@ -95,6 +106,8 @@ class BasePart {
         return this._text;
     }
 
+    abstract get type(): string;
+
     get canEdit() {
         return true;
     }
@@ -103,14 +116,18 @@ class BasePart {
         return `${this.type}(${this.text})`;
     }
 
-    serialize() {
+    serialize(): ISerializedPart {
         return {type: this.type, text: this.text};
     }
+
+    abstract updateDOMNode(node: Node);
+    abstract canUpdateDOMNode(node: Node);
+    abstract toDOMNode(): Node;
 }
 
 // exported for unit tests, should otherwise only be used through PartCreator
 export class PlainPart extends BasePart {
-    acceptsInsertion(chr, offset, inputType) {
+    acceptsInsertion(chr: string, offset: number, inputType: string) {
         if (chr === "\n") {
             return false;
         }
@@ -137,28 +154,27 @@ export class PlainPart extends BasePart {
         return "plain";
     }
 
-    updateDOMNode(node) {
+    updateDOMNode(node: Node) {
         if (node.textContent !== this.text) {
             node.textContent = this.text;
         }
     }
 
-    canUpdateDOMNode(node) {
+    canUpdateDOMNode(node: Node) {
         return node.nodeType === Node.TEXT_NODE;
     }
 }
 
-class PillPart extends BasePart {
-    constructor(resourceId, label) {
+export abstract class PillPart extends BasePart {
+    constructor(public resourceId: string, label) {
         super(label);
-        this.resourceId = resourceId;
     }
 
-    acceptsInsertion(chr) {
+    acceptsInsertion(chr: string) {
         return chr !== " ";
     }
 
-    acceptsRemoval(position, chr) {
+    acceptsRemoval(position: number, chr: string) {
         return position !== 0;  //if you remove initial # or @, pill should become plain
     }
 
@@ -171,7 +187,7 @@ class PillPart extends BasePart {
         return container;
     }
 
-    updateDOMNode(node) {
+    updateDOMNode(node: HTMLElement) {
         const textNode = node.childNodes[0];
         if (textNode.textContent !== this.text) {
             textNode.textContent = this.text;
@@ -182,7 +198,7 @@ class PillPart extends BasePart {
         this.setAvatar(node);
     }
 
-    canUpdateDOMNode(node) {
+    canUpdateDOMNode(node: HTMLElement) {
         return node.nodeType === Node.ELEMENT_NODE &&
                node.nodeName === "SPAN" &&
                node.childNodes.length === 1 &&
@@ -190,7 +206,7 @@ class PillPart extends BasePart {
     }
 
     // helper method for subclasses
-    _setAvatarVars(node, avatarUrl, initialLetter) {
+    _setAvatarVars(node: HTMLElement, avatarUrl: string, initialLetter: string) {
         const avatarBackground = `url('${avatarUrl}')`;
         const avatarLetter = `'${initialLetter}'`;
         // check if the value is changing,
@@ -206,14 +222,18 @@ class PillPart extends BasePart {
     get canEdit() {
         return false;
     }
+
+    abstract get className(): string;
+
+    abstract setAvatar(node: HTMLElement): void;
 }
 
 class NewlinePart extends BasePart {
-    acceptsInsertion(chr, offset) {
+    acceptsInsertion(chr: string, offset: number) {
         return offset === 0 && chr === "\n";
     }
 
-    acceptsRemoval(position, chr) {
+    acceptsRemoval(position: number, chr: string) {
         return true;
     }
 
@@ -227,7 +247,7 @@ class NewlinePart extends BasePart {
 
     updateDOMNode() {}
 
-    canUpdateDOMNode(node) {
+    canUpdateDOMNode(node: HTMLElement) {
         return node.tagName === "BR";
     }
 
@@ -245,21 +265,20 @@ class NewlinePart extends BasePart {
 }
 
 class RoomPillPart extends PillPart {
-    constructor(displayAlias, room) {
+    constructor(displayAlias, private room: Room) {
         super(displayAlias, displayAlias);
-        this._room = room;
     }
 
-    setAvatar(node) {
+    setAvatar(node: HTMLElement) {
         let initialLetter = "";
         let avatarUrl = Avatar.avatarUrlForRoom(
-            this._room,
+            this.room,
             16 * window.devicePixelRatio,
             16 * window.devicePixelRatio,
             "crop");
         if (!avatarUrl) {
-            initialLetter = Avatar.getInitialLetter(this._room ? this._room.name : this.resourceId);
-            avatarUrl = Avatar.defaultAvatarUrlForString(this._room ? this._room.roomId : this.resourceId);
+            initialLetter = Avatar.getInitialLetter(this.room ? this.room.name : this.resourceId);
+            avatarUrl = Avatar.defaultAvatarUrlForString(this.room ? this.room.roomId : this.resourceId);
         }
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
@@ -280,19 +299,18 @@ class AtRoomPillPart extends RoomPillPart {
 }
 
 class UserPillPart extends PillPart {
-    constructor(userId, displayName, member) {
+    constructor(userId, displayName, private member: RoomMember) {
         super(userId, displayName);
-        this._member = member;
     }
 
-    setAvatar(node) {
-        if (!this._member) {
+    setAvatar(node: HTMLElement) {
+        if (!this.member) {
             return;
         }
-        const name = this._member.name || this._member.userId;
-        const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this._member.userId);
+        const name = this.member.name || this.member.userId;
+        const defaultAvatarUrl = Avatar.defaultAvatarUrlForString(this.member.userId);
         const avatarUrl = Avatar.avatarUrlForMember(
-            this._member,
+            this.member,
             16 * window.devicePixelRatio,
             16 * window.devicePixelRatio,
             "crop");
@@ -312,24 +330,23 @@ class UserPillPart extends PillPart {
     }
 
     serialize() {
-        const obj = super.serialize();
-        obj.resourceId = this.resourceId;
-        return obj;
+        return {
+            ...super.serialize(),
+            resourceId: this.resourceId,
+        };
     }
 }
 
-
 class PillCandidatePart extends PlainPart {
-    constructor(text, autoCompleteCreator) {
+    constructor(text: string, private autoCompleteCreator: IAutocompleteCreator) {
         super(text);
-        this._autoCompleteCreator = autoCompleteCreator;
     }
 
-    createAutoComplete(updateCallback) {
-        return this._autoCompleteCreator.create(updateCallback);
+    createAutoComplete(updateCallback): AutocompleteWrapperModel {
+        return this.autoCompleteCreator.create(updateCallback);
     }
 
-    acceptsInsertion(chr, offset, inputType) {
+    acceptsInsertion(chr: string, offset: number, inputType: string) {
         if (offset === 0) {
             return true;
         } else {
@@ -341,7 +358,7 @@ class PillCandidatePart extends PlainPart {
         return false;
     }
 
-    acceptsRemoval(position, chr) {
+    acceptsRemoval(position: number, chr: string) {
         return true;
     }
 
@@ -350,9 +367,9 @@ class PillCandidatePart extends PlainPart {
     }
 }
 
-export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
-    return (partCreator) => {
-        return (updateCallback) => {
+export function getAutoCompleteCreator(getAutocompleterComponent: GetAutocompleterComponent, updateQuery: UpdateQuery) {
+    return (partCreator: PartCreator) => {
+        return (updateCallback: UpdateCallback) => {
             return new AutocompleteWrapperModel(
                 updateCallback,
                 getAutocompleterComponent,
@@ -363,20 +380,26 @@ export function autoCompleteCreator(getAutocompleterComponent, updateQuery) {
     };
 }
 
+type AutoCompleteCreator = ReturnType<typeof getAutoCompleteCreator>;
+
+interface IAutocompleteCreator {
+    create(updateCallback: UpdateCallback): AutocompleteWrapperModel;
+}
+
 export class PartCreator {
-    constructor(room, client, autoCompleteCreator = null) {
-        this._room = room;
-        this._client = client;
+    protected readonly autoCompleteCreator: IAutocompleteCreator;
+
+    constructor(private room: Room, private client: MatrixClient, autoCompleteCreator: AutoCompleteCreator = null) {
         // pre-create the creator as an object even without callback so it can already be passed
         // to PillCandidatePart (e.g. while deserializing) and set later on
-        this._autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
+        this.autoCompleteCreator = {create: autoCompleteCreator && autoCompleteCreator(this)};
     }
 
-    setAutoCompleteCreator(autoCompleteCreator) {
-        this._autoCompleteCreator.create = autoCompleteCreator(this);
+    setAutoCompleteCreator(autoCompleteCreator: AutoCompleteCreator) {
+        this.autoCompleteCreator.create = autoCompleteCreator(this);
     }
 
-    createPartForInput(input) {
+    createPartForInput(input: string, partIndex: number, inputType?: string): BasePart {
         switch (input[0]) {
             case "#":
             case "@":
@@ -389,11 +412,11 @@ export class PartCreator {
         }
     }
 
-    createDefaultPart(text) {
+    createDefaultPart(text: string) {
         return this.plain(text);
     }
 
-    deserializePart(part) {
+    deserializePart(part: ISerializedPart) {
         switch (part.type) {
             case "plain":
                 return this.plain(part.text);
@@ -406,11 +429,11 @@ export class PartCreator {
             case "room-pill":
                 return this.roomPill(part.text);
             case "user-pill":
-                return this.userPill(part.text, part.resourceId);
+                return this.userPill(part.text, (part as PillPart).resourceId);
         }
     }
 
-    plain(text) {
+    plain(text: string) {
         return new PlainPart(text);
     }
 
@@ -418,16 +441,16 @@ export class PartCreator {
         return new NewlinePart("\n");
     }
 
-    pillCandidate(text) {
-        return new PillCandidatePart(text, this._autoCompleteCreator);
+    pillCandidate(text: string) {
+        return new PillCandidatePart(text, this.autoCompleteCreator);
     }
 
-    roomPill(alias, roomId) {
+    roomPill(alias: string, roomId?: string) {
         let room;
         if (roomId || alias[0] !== "#") {
-            room = this._client.getRoom(roomId || alias);
+            room = this.client.getRoom(roomId || alias);
         } else {
-            room = this._client.getRooms().find((r) => {
+            room = this.client.getRooms().find((r) => {
                 return r.getCanonicalAlias() === alias ||
                        r.getAltAliases().includes(alias);
             });
@@ -435,16 +458,16 @@ export class PartCreator {
         return new RoomPillPart(alias, room);
     }
 
-    atRoomPill(text) {
-        return new AtRoomPillPart(text, this._room);
+    atRoomPill(text: string) {
+        return new AtRoomPillPart(text, this.room);
     }
 
-    userPill(displayName, userId) {
-        const member = this._room.getMember(userId);
+    userPill(displayName: string, userId: string) {
+        const member = this.room.getMember(userId);
         return new UserPillPart(userId, displayName, member);
     }
 
-    createMentionParts(partIndex, displayName, userId) {
+    createMentionParts(partIndex: number, displayName: string, userId: string) {
         const pill = this.userPill(displayName, userId);
         const postfix = this.plain(partIndex === 0 ? ": " : " ");
         return [pill, postfix];
@@ -454,7 +477,7 @@ export class PartCreator {
 // part creator that support auto complete for /commands,
 // used in SendMessageComposer
 export class CommandPartCreator extends PartCreator {
-    createPartForInput(text, partIndex) {
+    createPartForInput(text: string, partIndex: number) {
         // at beginning and starts with /? create
         if (partIndex === 0 && text[0] === "/") {
             // text will be inserted by model, so pass empty string
@@ -464,11 +487,11 @@ export class CommandPartCreator extends PartCreator {
         }
     }
 
-    command(text) {
-        return new CommandPart(text, this._autoCompleteCreator);
+    command(text: string) {
+        return new CommandPart(text, this.autoCompleteCreator);
     }
 
-    deserializePart(part) {
+    deserializePart(part: BasePart) {
         if (part.type === "command") {
             return this.command(part.text);
         } else {

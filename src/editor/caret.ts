@@ -17,8 +17,13 @@ limitations under the License.
 
 import {needsCaretNodeBefore, needsCaretNodeAfter} from "./render";
 import Range from "./range";
+import EditorModel from "./model";
+import DocumentPosition, {IPosition} from "./position";
+import {BasePart} from "./parts";
 
-export function setSelection(editor, model, selection) {
+export type Caret = Range | DocumentPosition;
+
+export function setSelection(editor: HTMLDivElement, model: EditorModel, selection: Range | IPosition) {
     if (selection instanceof Range) {
         setDocumentRangeSelection(editor, model, selection);
     } else {
@@ -26,7 +31,7 @@ export function setSelection(editor, model, selection) {
     }
 }
 
-function setDocumentRangeSelection(editor, model, range) {
+function setDocumentRangeSelection(editor: HTMLDivElement, model: EditorModel, range: Range) {
     const sel = document.getSelection();
     sel.removeAllRanges();
     const selectionRange = document.createRange();
@@ -37,7 +42,7 @@ function setDocumentRangeSelection(editor, model, range) {
     sel.addRange(selectionRange);
 }
 
-export function setCaretPosition(editor, model, caretPosition) {
+export function setCaretPosition(editor: HTMLDivElement, model: EditorModel, caretPosition: IPosition) {
     const range = document.createRange();
     const {node, offset} = getNodeAndOffsetForPosition(editor, model, caretPosition);
     range.setStart(node, offset);
@@ -62,7 +67,7 @@ export function setCaretPosition(editor, model, caretPosition) {
     sel.addRange(range);
 }
 
-function getNodeAndOffsetForPosition(editor, model, position) {
+function getNodeAndOffsetForPosition(editor: HTMLDivElement, model: EditorModel, position: IPosition) {
     const {offset, lineIndex, nodeIndex} = getLineAndNodePosition(model, position);
     const lineNode = editor.childNodes[lineIndex];
 
@@ -80,7 +85,7 @@ function getNodeAndOffsetForPosition(editor, model, position) {
     return {node: focusNode, offset};
 }
 
-export function getLineAndNodePosition(model, caretPosition) {
+export function getLineAndNodePosition(model: EditorModel, caretPosition: IPosition) {
     const {parts} = model;
     const partIndex = caretPosition.index;
     const lineResult = findNodeInLineForPart(parts, partIndex);
@@ -99,7 +104,7 @@ export function getLineAndNodePosition(model, caretPosition) {
     return {lineIndex, nodeIndex, offset};
 }
 
-function findNodeInLineForPart(parts, partIndex) {
+function findNodeInLineForPart(parts: BasePart[], partIndex: number) {
     let lineIndex = 0;
     let nodeIndex = -1;
 
@@ -135,7 +140,7 @@ function findNodeInLineForPart(parts, partIndex) {
     return {lineIndex, nodeIndex};
 }
 
-function moveOutOfUneditablePart(parts, partIndex, nodeIndex, offset) {
+function moveOutOfUneditablePart(parts: BasePart[], partIndex: number, nodeIndex: number, offset: number) {
     // move caret before or after uneditable part
     const part = parts[partIndex];
     if (part && !part.canEdit) {

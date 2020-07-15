@@ -14,32 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EditorModel from "./model";
+import DocumentPosition from "./position";
+
 export default class Range {
-    constructor(model, positionA, positionB = positionA) {
-        this._model = model;
+    private _start: DocumentPosition;
+    private _end: DocumentPosition;
+
+    constructor(public readonly model: EditorModel, positionA: DocumentPosition, positionB = positionA) {
         const bIsLarger = positionA.compare(positionB) < 0;
         this._start = bIsLarger ? positionA : positionB;
         this._end = bIsLarger ? positionB : positionA;
     }
 
     moveStart(delta) {
-        this._start = this._start.forwardsWhile(this._model, () => {
+        this._start = this._start.forwardsWhile(this.model, () => {
             delta -= 1;
             return delta >= 0;
         });
     }
 
     expandBackwardsWhile(predicate) {
-        this._start = this._start.backwardsWhile(this._model, predicate);
-    }
-
-    get model() {
-        return this._model;
+        this._start = this._start.backwardsWhile(this.model, predicate);
     }
 
     get text() {
         let text = "";
-        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+        this._start.iteratePartsBetween(this._end, this.model, (part, startIdx, endIdx) => {
             const t = part.text.substring(startIdx, endIdx);
             text = text + t;
         });
@@ -55,10 +56,10 @@ export default class Range {
     replace(parts) {
         const newLength = parts.reduce((sum, part) => sum + part.text.length, 0);
         let oldLength = 0;
-        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+        this._start.iteratePartsBetween(this._end, this.model, (part, startIdx, endIdx) => {
             oldLength += endIdx - startIdx;
         });
-        this._model._replaceRange(this._start, this._end, parts);
+        this.model.replaceRange(this._start, this._end, parts);
         return newLength - oldLength;
     }
 
@@ -68,10 +69,10 @@ export default class Range {
      */
     get parts() {
         const parts = [];
-        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+        this._start.iteratePartsBetween(this._end, this.model, (part, startIdx, endIdx) => {
             const serializedPart = part.serialize();
             serializedPart.text = part.text.substring(startIdx, endIdx);
-            const newPart = this._model.partCreator.deserializePart(serializedPart);
+            const newPart = this.model.partCreator.deserializePart(serializedPart);
             parts.push(newPart);
         });
         return parts;
@@ -79,7 +80,7 @@ export default class Range {
 
     get length() {
         let len = 0;
-        this._start.iteratePartsBetween(this._end, this._model, (part, startIdx, endIdx) => {
+        this._start.iteratePartsBetween(this._end, this.model, (part, startIdx, endIdx) => {
             len += endIdx - startIdx;
         });
         return len;

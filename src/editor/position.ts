@@ -15,30 +15,30 @@ limitations under the License.
 */
 
 import DocumentOffset from "./offset";
+import EditorModel from "./model";
+import {BasePart} from "./parts";
 
-export default class DocumentPosition {
-    constructor(index, offset) {
-        this._index = index;
-        this._offset = offset;
+export interface IPosition {
+    index: number;
+    offset: number;
+}
+
+type Callback = (part: BasePart, startIdx: number, endIdx: number) => void;
+type Predicate = (index: number, offset: number, part: BasePart) => boolean;
+
+export default class DocumentPosition implements IPosition {
+    constructor(public readonly index: number, public readonly offset: number) {
     }
 
-    get index() {
-        return this._index;
-    }
-
-    get offset() {
-        return this._offset;
-    }
-
-    compare(otherPos) {
-        if (this._index === otherPos._index) {
-            return this._offset - otherPos._offset;
+    compare(otherPos: DocumentPosition) {
+        if (this.index === otherPos.index) {
+            return this.offset - otherPos.offset;
         } else {
-            return this._index - otherPos._index;
+            return this.index - otherPos.index;
         }
     }
 
-    iteratePartsBetween(other, model, callback) {
+    iteratePartsBetween(other: DocumentPosition, model: EditorModel, callback: Callback) {
         if (this.index === -1 || other.index === -1) {
             return;
         }
@@ -57,7 +57,7 @@ export default class DocumentPosition {
         }
     }
 
-    forwardsWhile(model, predicate) {
+    forwardsWhile(model: EditorModel, predicate: Predicate) {
         if (this.index === -1) {
             return this;
         }
@@ -82,7 +82,7 @@ export default class DocumentPosition {
         }
     }
 
-    backwardsWhile(model, predicate) {
+    backwardsWhile(model: EditorModel, predicate: Predicate) {
         if (this.index === -1) {
             return this;
         }
@@ -107,7 +107,7 @@ export default class DocumentPosition {
         }
     }
 
-    asOffset(model) {
+    asOffset(model: EditorModel) {
         if (this.index === -1) {
             return new DocumentOffset(0, true);
         }
@@ -121,7 +121,7 @@ export default class DocumentPosition {
         return new DocumentOffset(offset, atEnd);
     }
 
-    isAtEnd(model) {
+    isAtEnd(model: EditorModel) {
         if (model.parts.length === 0) {
             return true;
         }

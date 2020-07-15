@@ -15,9 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {diffAtCaret, diffDeletion} from "./diff";
-import DocumentPosition from "./position";
+import {diffAtCaret, diffDeletion, IDiff} from "./diff";
+import DocumentPosition, {IPosition} from "./position";
 import Range from "./range";
+import {BasePart, ISerializedPart, PartCreator} from "./parts";
+import AutocompleteWrapperModel, {ICallback} from "./autocomplete";
+import DocumentOffset from "./offset";
 
 /**
  * @callback ModelCallback
@@ -40,16 +43,23 @@ import Range from "./range";
  * @return the caret position
  */
 
+type TransformCallback = (caretPosition: IPosition, inputType: string, diff: IDiff) => number | void;
+type UpdateCallback = (caret: Range | IPosition, inputType?: string, diff?: IDiff) => void;
+type ManualTransformCallback = () => Range | DocumentPosition;
+
 export default class EditorModel {
-    constructor(parts, partCreator, updateCallback = null) {
+    private _parts: BasePart[];
+    private readonly _partCreator: PartCreator;
+    private activePartIdx: number = null;
+    private _autoComplete: AutocompleteWrapperModel = null;
+    private autoCompletePartIdx: number = null;
+    private autoCompletePartCount = 0;
+    private transformCallback: TransformCallback = null;
+
+    constructor(parts: BasePart[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
         this._parts = parts;
         this._partCreator = partCreator;
-        this._activePartIdx = null;
-        this._autoComplete = null;
-        this._autoCompletePartIdx = null;
-        this._autoCompletePartCount = 0;
-        this._transformCallback = null;
-        this.setUpdateCallback(updateCallback);
+        this.transformCallback = null;
     }
 
     /**
@@ -59,16 +69,16 @@ export default class EditorModel {
      * on the model that can span multiple parts. Also see `startRange()`.
      * @param {TransformCallback} transformCallback
      */
-    setTransformCallback(transformCallback) {
-        this._transformCallback = transformCallback;
+    setTransformCallback(transformCallback: TransformCallback) {
+        this.transformCallback = transformCallback;
     }
 
     /**
      * Set a callback for rerendering the model after it has been updated.
      * @param {ModelCallback} updateCallback
      */
-    setUpdateCallback(updateCallback) {
-        this._updateCallback = updateCallback;
+    setUpdateCallback(updateCallback: UpdateCallback) {
+        this.updateCallback = updateCallback;
     }
 
     get partCreator() {
@@ -80,34 +90,34 @@ export default class EditorModel {
     }
 
     clone() {
-        return new EditorModel(this._parts, this._partCreator, this._updateCallback);
+        return new EditorModel(this._parts, this._partCreator, this.updateCallback);
     }
 
-    _insertPart(index, part) {
+    private insertPart(index: number, part: BasePart) {
         this._parts.splice(index, 0, part);
-        if (this._activePartIdx >= index) {
-            ++this._activePartIdx;
+        if (this.activePartIdx >= index) {
+            ++this.activePartIdx;
         }
-        if (this._autoCompletePartIdx >= index) {
-            ++this._autoCompletePartIdx;
+        if (this.autoCompletePartIdx >= index) {
+            ++this.autoCompletePartIdx;
         }
     }
 
-    _removePart(index) {
+    private removePart(index: number) {
         this._parts.splice(index, 1);
-        if (index === this._activePartIdx) {
-            this._activePartIdx = null;
-        } else if (this._activePartIdx > index) {
-            --this._activePartIdx;
+        if (index === this.activePartIdx) {
+            this.activePartIdx = null;
+        } else if (this.activePartIdx > index) {
+            --this.activePartIdx;
         }
-        if (index === this._autoCompletePartIdx) {
-            this._autoCompletePartIdx = null;
-        } else if (this._autoCompletePartIdx > index) {
-            --this._autoCompletePartIdx;
+        if (index === this.autoCompletePartIdx) {
+            this.autoCompletePartIdx = null;
+        } else if (this.autoCompletePartIdx > index) {
+            --this.autoCompletePartIdx;
         }
     }
 
-    _replacePart(index, part) {
+    private replacePart(index: number, part: BasePart) {
         this._parts.splice(index, 1, part);
     }
 
@@ -116,7 +126,7 @@ export default class EditorModel {
     }
 
     get autoComplete() {
-        if (this._activePartIdx === this._autoCompletePartIdx) {
+        if (this.activePartIdx === this.autoCompletePartIdx) {
             return this._autoComplete;
         }
         return null;
@@ -137,7 +147,7 @@ export default class EditorModel {
         return this._parts.map(p => p.serialize());
     }
 
-    _diff(newValue, inputType, caret) {
+    private diff(newValue: string, inputType: string, caret: DocumentOffset) {
         const previousValue = this.parts.reduce((text, p) => text + p.text, "");
         // can't use caret position with drag and drop
         if (inputType === "deleteByDrag") {
@@ -147,7 +157,7 @@ export default class EditorModel {
         }
     }
 
-    reset(serializedParts, caret, inputType) {
+    reset(serializedParts: ISerializedPart[], caret: Range | IPosition, inputType: string) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
@@ -157,9 +167,9 @@ export default class EditorModel {
         // a message with the autocomplete still open
         if (this._autoComplete) {
             this._autoComplete = null;
-            this._autoCompletePartIdx = null;
+            this.autoCompletePartIdx = null;
         }
-        this._updateCallback(caret, inputType);
+        this.updateCallback(caret, inputType);
     }
 
     /**
@@ -169,19 +179,19 @@ export default class EditorModel {
      * @param {DocumentPosition} position the position to start inserting at
      * @return {Number} the amount of characters added
      */
-    insert(parts, position) {
-        const insertIndex = this._splitAt(position);
+    insert(parts: BasePart[], position: IPosition) {
+        const insertIndex = this.splitAt(position);
         let newTextLength = 0;
         for (let i = 0; i < parts.length; ++i) {
             const part = parts[i];
             newTextLength += part.text.length;
-            this._insertPart(insertIndex + i, part);
+            this.insertPart(insertIndex + i, part);
         }
         return newTextLength;
     }
 
-    update(newValue, inputType, caret) {
-        const diff = this._diff(newValue, inputType, caret);
+    update(newValue: string, inputType: string, caret: DocumentOffset) {
+        const diff = this.diff(newValue, inputType, caret);
         const position = this.positionForOffset(diff.at, caret.atNodeEnd);
         let removedOffsetDecrease = 0;
         if (diff.removed) {
@@ -189,40 +199,40 @@ export default class EditorModel {
         }
         let addedLen = 0;
         if (diff.added) {
-            addedLen = this._addText(position, diff.added, inputType);
+            addedLen = this.addText(position, diff.added, inputType);
         }
-        this._mergeAdjacentParts();
+        this.mergeAdjacentParts();
         const caretOffset = diff.at - removedOffsetDecrease + addedLen;
         let newPosition = this.positionForOffset(caretOffset, true);
         const canOpenAutoComplete = inputType !== "insertFromPaste" && inputType !== "insertFromDrop";
-        const acPromise = this._setActivePart(newPosition, canOpenAutoComplete);
-        if (this._transformCallback) {
-            const transformAddedLen = this._transform(newPosition, inputType, diff);
+        const acPromise = this.setActivePart(newPosition, canOpenAutoComplete);
+        if (this.transformCallback) {
+            const transformAddedLen = this.getTransformAddedLen(newPosition, inputType, diff);
             newPosition = this.positionForOffset(caretOffset + transformAddedLen, true);
         }
-        this._updateCallback(newPosition, inputType, diff);
+        this.updateCallback(newPosition, inputType, diff);
         return acPromise;
     }
 
-    _transform(newPosition, inputType, diff) {
-        const result = this._transformCallback(newPosition, inputType, diff);
-        return Number.isFinite(result) ? result : 0;
+    private getTransformAddedLen(newPosition: IPosition, inputType: string, diff: IDiff): number {
+        const result = this.transformCallback(newPosition, inputType, diff);
+        return Number.isFinite(result) ? result as number : 0;
     }
 
-    _setActivePart(pos, canOpenAutoComplete) {
+    private setActivePart(pos: DocumentPosition, canOpenAutoComplete: boolean) {
         const {index} = pos;
         const part = this._parts[index];
         if (part) {
-            if (index !== this._activePartIdx) {
-                this._activePartIdx = index;
-                if (canOpenAutoComplete && this._activePartIdx !== this._autoCompletePartIdx) {
+            if (index !== this.activePartIdx) {
+                this.activePartIdx = index;
+                if (canOpenAutoComplete && this.activePartIdx !== this.autoCompletePartIdx) {
                     // else try to create one
-                    const ac = part.createAutoComplete(this._onAutoComplete);
+                    const ac = part.createAutoComplete(this.onAutoComplete);
                     if (ac) {
                         // make sure that react picks up the difference between both acs
                         this._autoComplete = ac;
-                        this._autoCompletePartIdx = index;
-                        this._autoCompletePartCount = 1;
+                        this.autoCompletePartIdx = index;
+                        this.autoCompletePartCount = 1;
                     }
                 }
             }
@@ -231,35 +241,35 @@ export default class EditorModel {
                 return this.autoComplete.onPartUpdate(part, pos);
             }
         } else {
-            this._activePartIdx = null;
+            this.activePartIdx = null;
             this._autoComplete = null;
-            this._autoCompletePartIdx = null;
-            this._autoCompletePartCount = 0;
+            this.autoCompletePartIdx = null;
+            this.autoCompletePartCount = 0;
         }
         return Promise.resolve();
     }
 
-    _onAutoComplete = ({replaceParts, close}) => {
+    private onAutoComplete = ({replaceParts, close}: ICallback) => {
         let pos;
         if (replaceParts) {
-            this._parts.splice(this._autoCompletePartIdx, this._autoCompletePartCount, ...replaceParts);
-            this._autoCompletePartCount = replaceParts.length;
+            this._parts.splice(this.autoCompletePartIdx, this.autoCompletePartCount, ...replaceParts);
+            this.autoCompletePartCount = replaceParts.length;
             const lastPart = replaceParts[replaceParts.length - 1];
-            const lastPartIndex = this._autoCompletePartIdx + replaceParts.length - 1;
+            const lastPartIndex = this.autoCompletePartIdx + replaceParts.length - 1;
             pos = new DocumentPosition(lastPartIndex, lastPart.text.length);
         }
         if (close) {
             this._autoComplete = null;
-            this._autoCompletePartIdx = null;
-            this._autoCompletePartCount = 0;
+            this.autoCompletePartIdx = null;
+            this.autoCompletePartCount = 0;
         }
         // rerender even if editor contents didn't change
         // to make sure the MessageEditor checks
         // model.autoComplete being empty and closes it
-        this._updateCallback(pos);
-    }
+        this.updateCallback(pos);
+    };
 
-    _mergeAdjacentParts() {
+    private mergeAdjacentParts() {
         let prevPart;
         for (let i = 0; i < this._parts.length; ++i) {
             let part = this._parts[i];
@@ -268,7 +278,7 @@ export default class EditorModel {
             if (isEmpty || isMerged) {
                 // remove empty or merged part
                 part = prevPart;
-                this._removePart(i);
+                this.removePart(i);
                 //repeat this index, as it's removed now
                 --i;
             }
@@ -283,7 +293,7 @@ export default class EditorModel {
      * @return {Number} how many characters before pos were also removed,
      * usually because of non-editable parts that can only be removed in their entirety.
      */
-    removeText(pos, len) {
+    removeText(pos: IPosition, len: number) {
         let {index, offset} = pos;
         let removedOffsetDecrease = 0;
         while (len > 0) {
@@ -295,18 +305,18 @@ export default class EditorModel {
                 if (part.canEdit) {
                     const replaceWith = part.remove(offset, amount);
                     if (typeof replaceWith === "string") {
-                        this._replacePart(index, this._partCreator.createDefaultPart(replaceWith));
+                        this.replacePart(index, this._partCreator.createDefaultPart(replaceWith));
                     }
                     part = this._parts[index];
                     // remove empty part
                     if (!part.text.length) {
-                        this._removePart(index);
+                        this.removePart(index);
                     } else {
                         index += 1;
                     }
                 } else {
                     removedOffsetDecrease += offset;
-                    this._removePart(index);
+                    this.removePart(index);
                 }
             } else {
                 index += 1;
@@ -316,8 +326,9 @@ export default class EditorModel {
         }
         return removedOffsetDecrease;
     }
+
     // return part index where insertion will insert between at offset
-    _splitAt(pos) {
+    private splitAt(pos: IPosition) {
         if (pos.index === -1) {
             return 0;
         }
@@ -330,7 +341,7 @@ export default class EditorModel {
         }
 
         const secondPart = part.split(pos.offset);
-        this._insertPart(pos.index + 1, secondPart);
+        this.insertPart(pos.index + 1, secondPart);
         return pos.index + 1;
     }
 
@@ -344,7 +355,7 @@ export default class EditorModel {
      * @return {Number} how far from position (in characters) the insertion ended.
      * This can be more than the length of `str` when crossing non-editable parts, which are skipped.
      */
-    _addText(pos, str, inputType) {
+    private addText(pos: IPosition, str: string, inputType: string) {
         let {index} = pos;
         const {offset} = pos;
         let addLen = str.length;
@@ -356,7 +367,7 @@ export default class EditorModel {
                 } else {
                     const splitPart = part.split(offset);
                     index += 1;
-                    this._insertPart(index, splitPart);
+                    this.insertPart(index, splitPart);
                 }
             } else if (offset !== 0) {
                 // not-editable part, caret is not at start,
@@ -372,13 +383,13 @@ export default class EditorModel {
         while (str) {
             const newPart = this._partCreator.createPartForInput(str, index, inputType);
             str = newPart.appendUntilRejected(str, inputType);
-            this._insertPart(index, newPart);
+            this.insertPart(index, newPart);
             index += 1;
         }
         return addLen;
     }
 
-    positionForOffset(totalOffset, atPartEnd) {
+    positionForOffset(totalOffset: number, atPartEnd: boolean) {
         let currentOffset = 0;
         const index = this._parts.findIndex(part => {
             const partLen = part.text.length;
@@ -404,28 +415,27 @@ export default class EditorModel {
      * @param {DocumentPosition?} positionB the other boundary of the range, optional
      * @return {Range}
      */
-    startRange(positionA, positionB = positionA) {
+    startRange(positionA: DocumentPosition, positionB = positionA) {
         return new Range(this, positionA, positionB);
     }
 
-    // called from Range.replace
-    _replaceRange(startPosition, endPosition, parts) {
+    replaceRange(startPosition: DocumentPosition, endPosition: DocumentPosition, parts: BasePart[]) {
         // convert end position to offset, so it is independent of how the document is split into parts
         // which we'll change when splitting up at the start position
         const endOffset = endPosition.asOffset(this);
-        const newStartPartIndex = this._splitAt(startPosition);
+        const newStartPartIndex = this.splitAt(startPosition);
         // convert it back to position once split at start
         endPosition = endOffset.asPosition(this);
-        const newEndPartIndex = this._splitAt(endPosition);
+        const newEndPartIndex = this.splitAt(endPosition);
         for (let i = newEndPartIndex - 1; i >= newStartPartIndex; --i) {
-            this._removePart(i);
+            this.removePart(i);
         }
         let insertIdx = newStartPartIndex;
         for (const part of parts) {
-            this._insertPart(insertIdx, part);
+            this.insertPart(insertIdx, part);
             insertIdx += 1;
         }
-        this._mergeAdjacentParts();
+        this.mergeAdjacentParts();
     }
 
     /**
@@ -434,15 +444,15 @@ export default class EditorModel {
      * @param {ManualTransformCallback} callback to run the transformations in
      * @return {Promise} a promise when auto-complete (if applicable) is done updating
      */
-    transform(callback) {
+    transform(callback: ManualTransformCallback) {
         const pos = callback();
         let acPromise = null;
         if (!(pos instanceof Range)) {
-            acPromise = this._setActivePart(pos, true);
+            acPromise = this.setActivePart(pos, true);
         } else {
             acPromise = Promise.resolve();
         }
-        this._updateCallback(pos);
+        this.updateCallback(pos);
         return acPromise;
     }
 }

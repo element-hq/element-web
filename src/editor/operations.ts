@@ -14,11 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Range from "./range";
+import {BasePart} from "./parts";
+
 /**
  * Some common queries and transformations on the editor model
  */
 
-export function replaceRangeAndExpandSelection(range, newParts) {
+export function replaceRangeAndExpandSelection(range: Range, newParts: BasePart[]) {
     const {model} = range;
     model.transform(() => {
         const oldLen = range.length;
@@ -29,7 +32,7 @@ export function replaceRangeAndExpandSelection(range, newParts) {
     });
 }
 
-export function replaceRangeAndMoveCaret(range, newParts) {
+export function replaceRangeAndMoveCaret(range: Range, newParts: BasePart[]) {
     const {model} = range;
     model.transform(() => {
         const oldLen = range.length;
@@ -40,7 +43,7 @@ export function replaceRangeAndMoveCaret(range, newParts) {
     });
 }
 
-export function rangeStartsAtBeginningOfLine(range) {
+export function rangeStartsAtBeginningOfLine(range: Range) {
     const {model} = range;
     const startsWithPartial = range.start.offset !== 0;
     const isFirstPart = range.start.index === 0;
@@ -48,16 +51,16 @@ export function rangeStartsAtBeginningOfLine(range) {
     return !startsWithPartial && (isFirstPart || previousIsNewline);
 }
 
-export function rangeEndsAtEndOfLine(range) {
+export function rangeEndsAtEndOfLine(range: Range) {
     const {model} = range;
     const lastPart = model.parts[range.end.index];
-    const endsWithPartial = range.end.offset !== lastPart.length;
+    const endsWithPartial = range.end.offset !== lastPart.text.length;
     const isLastPart = range.end.index === model.parts.length - 1;
     const nextIsNewline = !isLastPart && model.parts[range.end.index + 1].type === "newline";
     return !endsWithPartial && (isLastPart || nextIsNewline);
 }
 
-export function formatRangeAsQuote(range) {
+export function formatRangeAsQuote(range: Range) {
     const {model, parts} = range;
     const {partCreator} = model;
     for (let i = 0; i < parts.length; ++i) {
@@ -78,7 +81,7 @@ export function formatRangeAsQuote(range) {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatRangeAsCode(range) {
+export function formatRangeAsCode(range: Range) {
     const {model, parts} = range;
     const {partCreator} = model;
     const needsBlock = parts.some(p => p.type === "newline");
@@ -104,7 +107,7 @@ export function formatRangeAsCode(range) {
 const isBlank = part => !part.text || !/\S/.test(part.text);
 const isNL = part => part.type === "newline";
 
-export function toggleInlineFormat(range, prefix, suffix = prefix) {
+export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix) {
     const {model, parts} = range;
     const {partCreator} = model;
 
@@ -140,10 +143,10 @@ export function toggleInlineFormat(range, prefix, suffix = prefix) {
 
     // keep track of how many things we have inserted as an offset:=0
     let offset = 0;
-    paragraphIndexes.forEach(([startIndex, endIndex]) => {
+    paragraphIndexes.forEach(([startIdx, endIdx]) => {
         // for each paragraph apply the same rule
-        const base = startIndex + offset;
-        const index = endIndex + offset;
+        const base = startIdx + offset;
+        const index = endIdx + offset;
 
         const isFormatted = (index - base > 0) &&
             parts[base].text.startsWith(prefix) &&

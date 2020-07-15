@@ -257,7 +257,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
     return parts;
 }
 
-export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage: boolean) {
+export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean) {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {

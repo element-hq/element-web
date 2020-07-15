@@ -17,8 +17,12 @@ limitations under the License.
 
 import {CARET_NODE_CHAR, isCaretNode} from "./render";
 import DocumentOffset from "./offset";
+import EditorModel from "./model";
 
-export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback) {
+type Predicate = (node: Node) => boolean;
+type Callback = (node: Node) => void;
+
+export function walkDOMDepthFirst(rootNode: Node, enterNodeCallback: Predicate, leaveNodeCallback: Callback) {
     let node = rootNode.firstChild;
     while (node && node !== rootNode) {
         const shouldDescend = enterNodeCallback(node);
@@ -40,12 +44,12 @@ export function walkDOMDepthFirst(rootNode, enterNodeCallback, leaveNodeCallback
     }
 }
 
-export function getCaretOffsetAndText(editor, sel) {
+export function getCaretOffsetAndText(editor: HTMLDivElement, sel: Selection) {
     const {offset, text} = getSelectionOffsetAndText(editor, sel.focusNode, sel.focusOffset);
     return {caret: offset, text};
 }
 
-function tryReduceSelectionToTextNode(selectionNode, selectionOffset) {
+function tryReduceSelectionToTextNode(selectionNode: Node, selectionOffset: number) {
     // if selectionNode is an element, the selected location comes after the selectionOffset-th child node,
     // which can point past any childNode, in which case, the end of selectionNode is selected.
     // we try to simplify this to point at a text node with the offset being
@@ -82,7 +86,7 @@ function tryReduceSelectionToTextNode(selectionNode, selectionOffset) {
     };
 }
 
-function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
+function getSelectionOffsetAndText(editor: HTMLDivElement, selectionNode: Node, selectionOffset: number) {
     const {node, characterOffset} = tryReduceSelectionToTextNode(selectionNode, selectionOffset);
     const {text, offsetToNode} = getTextAndOffsetToNode(editor, node);
     const offset = getCaret(node, offsetToNode, characterOffset);
@@ -91,7 +95,7 @@ function getSelectionOffsetAndText(editor, selectionNode, selectionOffset) {
 
 // gets the caret position details, ignoring and adjusting to
 // the ZWS if you're typing in a caret node
-function getCaret(node, offsetToNode, offsetWithinNode) {
+function getCaret(node: Node, offsetToNode: number, offsetWithinNode: number) {
     // if no node is selected, return an offset at the start
     if (!node) {
         return new DocumentOffset(0, false);
@@ -114,7 +118,7 @@ function getCaret(node, offsetToNode, offsetWithinNode) {
 // gets the text of the editor as a string,
 // and the offset in characters where the selectionNode starts in that string
 // all ZWS from caret nodes are filtered out
-function getTextAndOffsetToNode(editor, selectionNode) {
+function getTextAndOffsetToNode(editor: HTMLDivElement, selectionNode: Node) {
     let offsetToNode = 0;
     let foundNode = false;
     let text = "";

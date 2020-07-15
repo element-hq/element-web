@@ -18,6 +18,7 @@ limitations under the License.
 import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
+import {PillPart} from "./parts";
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -31,7 +32,7 @@ export function mdSerialize(model: EditorModel) {
                 return html + part.text;
             case "room-pill":
             case "user-pill":
-                return html + `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink(part.resourceId)})`;
+                return html + `[${part.text.replace(/[[\\\]]/g, c => "\\" + c)}](${makeGenericPermalink((part as PillPart).resourceId)})`;
         }
     }, "");
 }

@@ -15,7 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-function firstDiff(a, b) {
+export interface IDiff {
+    removed?: string;
+    added?: string;
+    at?: number;
+}
+
+function firstDiff(a: string, b: string) {
     const compareLen = Math.min(a.length, b.length);
     for (let i = 0; i < compareLen; ++i) {
         if (a[i] !== b[i]) {
@@ -25,7 +31,7 @@ function firstDiff(a, b) {
     return compareLen;
 }
 
-function diffStringsAtEnd(oldStr, newStr) {
+function diffStringsAtEnd(oldStr: string, newStr: string): IDiff {
     const len = Math.min(oldStr.length, newStr.length);
     const startInCommon = oldStr.substr(0, len) === newStr.substr(0, len);
     if (startInCommon && oldStr.length > newStr.length) {
@@ -43,7 +49,7 @@ function diffStringsAtEnd(oldStr, newStr) {
 }
 
 // assumes only characters have been deleted at one location in the string, and none added
-export function diffDeletion(oldStr, newStr) {
+export function diffDeletion(oldStr: string, newStr: string): IDiff {
     if (oldStr === newStr) {
         return {};
     }
@@ -61,7 +67,7 @@ export function diffDeletion(oldStr, newStr) {
  *                  `added` with the added string (if any), and
  *                  `removed` with the removed string (if any)
  */
-export function diffAtCaret(oldValue, newValue, caretPosition) {
+export function diffAtCaret(oldValue: string, newValue: string, caretPosition: number): IDiff {
     const diffLen = newValue.length - oldValue.length;
     const caretPositionBeforeInput = caretPosition - diffLen;
     const oldValueBeforeCaret = oldValue.substr(0, caretPositionBeforeInput);
