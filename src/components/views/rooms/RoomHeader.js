@@ -31,7 +31,6 @@ import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
-import DMRoomMap from '../../../utils/DMRoomMap';
 import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {DefaultTagID} from "../../../stores/room-list/models";
@@ -157,10 +156,6 @@ export default createReactClass({
         let cancelButton = null;
         let settingsButton = null;
         let pinnedEventsButton = null;
-
-        const dmUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
-        const joinRules = this.props.room && this.props.room.currentState.getStateEvents("m.room.join_rules", "");
-        const joinRule = joinRules && joinRules.getContent().join_rule;
 
         if (this.props.onCancelClick) {
             cancelButton = <CancelButton onClick={this.props.onCancelClick} />;
