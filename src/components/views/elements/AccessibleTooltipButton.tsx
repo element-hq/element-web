@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
 import {IProps} from "./AccessibleButton";
@@ -52,15 +52,11 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
     };
 
     render() {
-        const {title, children, ...props} = this.props;
-        const tooltipClassName = classnames(
-            "mx_AccessibleTooltipButton_tooltip",
-            this.props.tooltipClassName,
-        );
+        const {title, children, tooltipClassName, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
-            tooltipClassName={tooltipClassName}
+            tooltipClassName={classNames("mx_AccessibleTooltipButton_tooltip", tooltipClassName)}
             label={title}
         /> : <div />;
         return (
