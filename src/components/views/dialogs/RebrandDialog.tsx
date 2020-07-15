@@ -23,26 +23,26 @@ import DialogButtons from '../elements/DialogButtons';
 export enum RebrandDialogKind {
     NAG,
     ONE_TIME,
-};
+}
 
 interface IProps {
     onFinished: (bool) => void;
-    kind: RebrandDialogKind,
-    targetUrl?: string,
+    kind: RebrandDialogKind;
+    targetUrl?: string;
 }
 
 export default class RebrandDialog extends React.PureComponent<IProps> {
     private onDoneClick = () => {
         this.props.onFinished(true);
-    }
+    };
 
     private onGoToElementClick = () => {
         this.props.onFinished(true);
-    }
+    };
 
     private onRemindMeLaterClick = () => {
         this.props.onFinished(false);
-    }
+    };
 
     private getPrettyTargetUrl() {
         const u = new URL(this.props.targetUrl);
@@ -79,14 +79,14 @@ export default class RebrandDialog extends React.PureComponent<IProps> {
                 cancelButton={"Remind me later"}
                 onCancel={this.onRemindMeLaterClick}
                 focus={true}
-            />
+            />;
         } else {
             return <DialogButtons primaryButton={_t("Done")}
                 primaryButtonClass='primary'
                 hasCancel={false}
                 onPrimaryButtonClick={this.onDoneClick}
                 focus={true}
-            />
+            />;
         }
     }
 
