@@ -173,21 +173,18 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     getDefaultDeviceDisplayName(): string {
-        // TODO: Revert this after launch
-        // // strip query-string and fragment from uri
-        // const u = url.parse(window.location.href);
-        // u.protocol = "";
-        // u.search = "";
-        // u.hash = "";
-        // // Remove trailing slash if present
-        // u.pathname = u.pathname.replace(/\/$/, "");
+        // strip query-string and fragment from uri
+        const u = url.parse(window.location.href);
+        u.protocol = "";
+        u.search = "";
+        u.hash = "";
+        // Remove trailing slash if present
+        u.pathname = u.pathname.replace(/\/$/, "");
 
-        // let appName = u.format();
-        // // Remove leading slashes if present
-        // appName = appName.replace(/^\/\//, "");
-        // // `appName` is now in the format `develop.element.io`.
-
-        const appName = "Riot Web";
+        let appName = u.format();
+        // Remove leading slashes if present
+        appName = appName.replace(/^\/\//, "");
+        // `appName` is now in the format `develop.element.io`.
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";
