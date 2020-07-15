@@ -47,7 +47,7 @@ const DOCUMENT_POSITION_PRECEDING = 2;
 
 type Ref = RefObject<HTMLElement>;
 
-interface IState {
+export interface IState {
     activeRef: Ref;
     refs: Ref[];
 }
@@ -156,7 +156,7 @@ interface IProps {
     children(renderProps: {
         onKeyDownHandler(ev: React.KeyboardEvent);
     });
-    onKeyDown?(ev: React.KeyboardEvent);
+    onKeyDown?(ev: React.KeyboardEvent, state: IState);
 }
 
 export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEnd, onKeyDown}) => {
@@ -193,7 +193,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
             ev.preventDefault();
             ev.stopPropagation();
         } else if (onKeyDown) {
-            return onKeyDown(ev);
+            return onKeyDown(ev, state);
         }
     }, [context.state, onKeyDown, handleHomeEnd]);
 
