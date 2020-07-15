@@ -23,14 +23,6 @@ import {getVectorConfig} from "../getconfig";
 
 import Favicon from "../../favicon";
 
-export const updateCheckStatusEnum = {
-    CHECKING: 'CHECKING',
-    ERROR: 'ERROR',
-    NOTAVAILABLE: 'NOTAVAILABLE',
-    DOWNLOADING: 'DOWNLOADING',
-    READY: 'READY',
-};
-
 /**
  * Vector-specific extensions to the BasePlatform template
  */
