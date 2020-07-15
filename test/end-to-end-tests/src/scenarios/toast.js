@@ -24,8 +24,14 @@ module.exports = async function toastScenarios(alice, bob) {
     await rejectToast(alice, "Notifications");
     alice.log.done();
 
+    alice.log.step(`accepts rebrand toast`);
+    await acceptToast(alice, "Riot is now Element!");
+    const doneButton = await alice.query('.mx_Dialog_primary');
+    await doneButton.click(); // also accept the resulting dialog
+    alice.log.done();
+
     alice.log.step(`accepts analytics toast`);
-    await acceptToast(alice, "Help us improve Riot");
+    await acceptToast(alice, "Help us improve Element");
     alice.log.done();
 
     alice.log.step(`checks no remaining toasts`);
