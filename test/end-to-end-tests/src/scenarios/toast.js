@@ -26,7 +26,7 @@ module.exports = async function toastScenarios(alice, bob) {
 
     alice.log.step(`accepts rebrand toast`);
     await acceptToast(alice, "Riot is now Element!");
-    const doneButton = await alice.query('.mx_Dialog_primary');
+    let doneButton = await alice.query('.mx_Dialog_primary');
     await doneButton.click(); // also accept the resulting dialog
     alice.log.done();
 
@@ -42,6 +42,12 @@ module.exports = async function toastScenarios(alice, bob) {
     bob.log.startGroup(`clears toasts`);
     bob.log.step(`reject desktop notifications toast`);
     await rejectToast(bob, "Notifications");
+    bob.log.done();
+
+    bob.log.step(`accepts rebrand toast`);
+    await acceptToast(bob, "Riot is now Element!");
+    doneButton = await bob.query('.mx_Dialog_primary');
+    await doneButton.click(); // also accept the resulting dialog
     bob.log.done();
 
     bob.log.step(`reject analytics toast`);
