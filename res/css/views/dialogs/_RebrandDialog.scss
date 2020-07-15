@@ -50,7 +50,7 @@ limitations under the License.
     height: 64px;
 }
 
-.mx_RebrandDialog_chevron:after {
+.mx_RebrandDialog_chevron::after {
     content: '';
     display: inline-block;
     width: 24px;
