@@ -40,8 +40,8 @@ limitations under the License.
         textarea,
         textarea:focus {
             height: 34px;
-            line-height: 34px;
-            font-size: 14px;
+            line-height: $font-34px;
+            font-size: $font-14px;
             padding-left: 12px;
             margin: 0 !important;
             border: 0 !important;
@@ -65,7 +65,7 @@ limitations under the License.
         min-width: 48px;
         margin-left: 10px;
         height: 25px;
-        line-height: 25px;
+        line-height: $font-25px;
     }
 
     .mx_InviteDialog_buttonAndSpinner {
@@ -84,7 +84,7 @@ limitations under the License.
     padding-bottom: 10px;
 
     h3 {
-        font-size: 12px;
+        font-size: $font-12px;
         color: $muted-fg-color;
         font-weight: bold;
         text-transform: uppercase;
@@ -143,23 +143,23 @@ limitations under the License.
 
     .mx_InviteDialog_roomTile_name {
         font-weight: 600;
-        font-size: 14px;
+        font-size: $font-14px;
         color: $primary-fg-color;
         margin-left: 7px;
     }
 
     .mx_InviteDialog_roomTile_userId {
-        font-size: 12px;
+        font-size: $font-12px;
         color: $muted-fg-color;
         margin-left: 7px;
     }
 
     .mx_InviteDialog_roomTile_time {
         text-align: right;
-        font-size: 12px;
+        font-size: $font-12px;
         color: $muted-fg-color;
         float: right;
-        line-height: 36px; // Height of the avatar to keep the time vertically aligned
+        line-height: $font-36px; // Height of the avatar to keep the time vertically aligned
     }
 
     .mx_InviteDialog_roomTile_highlight {
@@ -176,7 +176,7 @@ limitations under the License.
         border-radius: 12px;
         display: inline-block;
         height: 24px;
-        line-height: 24px;
+        line-height: $font-24px;
         padding-left: 8px;
         padding-right: 8px;
         color: #ffffff; // this is fine without a var because it's for both themes

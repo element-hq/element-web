@@ -39,7 +39,7 @@ limitations under the License.
     cursor: pointer;
     display: block;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: $font-14px;
     min-height: 24px; // use min-height instead of height to allow the label to overflow a bit
     margin-bottom: 6px;
     position: relative;

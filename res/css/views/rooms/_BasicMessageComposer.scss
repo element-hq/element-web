@@ -44,27 +44,26 @@ limitations under the License.
         outline: none;
         overflow-x: hidden;
 
-        span.mx_UserPill, span.mx_RoomPill {
-            padding-left: 21px;
-            position: relative;
+        &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
+            span.mx_UserPill, span.mx_RoomPill {
+                position: relative;
 
-            // avatar psuedo element
-            &::before {
-                position: absolute;
-                left: 2px;
-                top: 2px;
-                content: var(--avatar-letter);
-                width: 16px;
-                height: 16px;
-                background: var(--avatar-background), $avatar-bg-color;
-                color: $avatar-initial-color;
-                background-repeat: no-repeat;
-                background-size: 16px;
-                border-radius: 8px;
-                text-align: center;
-                font-weight: normal;
-                line-height: 16px;
-                font-size: 10.4px;
+                // avatar psuedo element
+                &::before {
+                    content: var(--avatar-letter);
+                    width: $font-16px;
+                    height: $font-16px;
+                    margin-right: 0.24rem;
+                    background: var(--avatar-background), $avatar-bg-color;
+                    color: $avatar-initial-color;
+                    background-repeat: no-repeat;
+                    background-size: $font-16px;
+                    border-radius: $font-16px;
+                    text-align: center;
+                    font-weight: normal;
+                    line-height: $font-16px;
+                    font-size: $font-10-4px;
+                }
             }
         }
     }

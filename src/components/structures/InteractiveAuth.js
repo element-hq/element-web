@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd.
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import PropTypes from 'prop-types';
 import getEntryComponentForLoginType from '../views/auth/InteractiveAuthEntryComponents';
 
 import * as sdk from '../../index';
+
+export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
 export default createReactClass({
     displayName: 'InteractiveAuth',
@@ -47,7 +49,7 @@ export default createReactClass({
         // @param {bool} status True if the operation requiring
         //     auth was completed sucessfully, false if canceled.
         // @param {object} result The result of the authenticated call
-        //     if successful, otherwise the error object
+        //     if successful, otherwise the error object.
         // @param {object} extra Additional information about the UI Auth
         //     process:
         //      * emailSid {string} If email auth was performed, the sid of
@@ -75,6 +77,15 @@ export default createReactClass({
         // is managed by some other party and should not be managed by
         // the component itself.
         continueIsManaged: PropTypes.bool,
+
+        // Called when the stage changes, or the stage's phase changes. First
+        // argument is the stage, second is the phase. Some stages do not have
+        // phases and will be counted as 0 (numeric).
+        onStagePhaseChange: PropTypes.func,
+
+        // continueText and continueKind are passed straight through to the AuthEntryComponent.
+        continueText: PropTypes.string,
+        continueKind: PropTypes.string,
     },
 
     getInitialState: function() {
@@ -87,7 +98,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
         this._authLogic = new InteractiveAuth({
             authData: this.props.authData,
@@ -161,6 +173,7 @@ export default createReactClass({
     _authStateUpdated: function(stageType, stageState) {
         const oldStage = this.state.authStage;
         this.setState({
+            busy: false,
             authStage: stageType,
             stageState: stageState,
             errorText: stageState.error,
@@ -184,11 +197,13 @@ export default createReactClass({
                 errorText: null,
                 stageErrorText: null,
             });
-        } else {
-            this.setState({
-                busy: false,
-            });
         }
+        // The JS SDK eagerly reports itself as "not busy" right after any
+        // immediate work has completed, but that's not really what we want at
+        // the UI layer, so we ignore this signal and show a spinner until
+        // there's a new screen to show the user. This is implemented by setting
+        // `busy: false` in `_authStateUpdated`.
+        // See also https://github.com/vector-im/riot-web/issues/12546
     },
 
     _setFocus: function() {
@@ -199,6 +214,16 @@ export default createReactClass({
 
     _submitAuthDict: function(authData) {
         this._authLogic.submitAuthDict(authData);
+    },
+
+    _onPhaseChange: function(newPhase) {
+        if (this.props.onStagePhaseChange) {
+            this.props.onStagePhaseChange(this.state.authStage, newPhase || 0);
+        }
+    },
+
+    _onStageCancel: function() {
+        this.props.onAuthFinished(false, ERROR_USER_CANCELLED);
     },
 
     _renderCurrentStage: function() {
@@ -229,6 +254,10 @@ export default createReactClass({
                 fail={this._onAuthStageFailed}
                 setEmailSid={this._setEmailSid}
                 showContinue={!this.props.continueIsManaged}
+                onPhaseChange={this._onPhaseChange}
+                continueText={this.props.continueText}
+                continueKind={this.props.continueKind}
+                onCancel={this._onStageCancel}
             />
         );
     },

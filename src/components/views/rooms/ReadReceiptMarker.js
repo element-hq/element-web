@@ -18,11 +18,12 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import('../../../VelocityBounce');
+import '../../../VelocityBounce';
 import { _t } from '../../../languageHandler';
 import {formatDate} from '../../../DateUtils';
 import Velociraptor from "../../../Velociraptor";
 import * as sdk from "../../../index";
+import {toPx} from "../../../utils/units";
 
 let bounce = false;
 try {
@@ -87,6 +88,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._avatar = createRef();
     },
@@ -147,7 +149,7 @@ export default createReactClass({
             // start at the old height and in the old h pos
 
             startStyles.push({ top: startTopOffset+"px",
-                               left: oldInfo.left+"px" });
+                               left: toPx(oldInfo.left) });
 
             const reorderTransitionOpts = {
                 duration: 100,
@@ -180,7 +182,7 @@ export default createReactClass({
         }
 
         const style = {
-            left: this.props.leftOffset+'px',
+            left: toPx(this.props.leftOffset),
             top: '0px',
             visibility: this.props.hidden ? 'hidden' : 'visible',
         };

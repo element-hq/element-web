@@ -26,6 +26,7 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import classNames from 'classnames';
+import RedactedBody from "./RedactedBody";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
@@ -132,8 +133,7 @@ export default class EditHistoryMessage extends React.PureComponent {
         const content = getReplacedContent(mxEvent);
         let contentContainer;
         if (mxEvent.isRedacted()) {
-            const UnknownBody = sdk.getComponent('messages.UnknownBody');
-            contentContainer = <UnknownBody mxEvent={this.props.mxEvent} />;
+            contentContainer = <RedactedBody mxEvent={this.props.mxEvent} />;
         } else {
             let contentElements;
             if (this.props.previousEdit) {
@@ -158,7 +158,6 @@ export default class EditHistoryMessage extends React.PureComponent {
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.state.sendStatus) !== -1);
         const classes = classNames({
             "mx_EventTile": true,
-            "mx_EventTile_redacted": mxEvent.isRedacted(),
             "mx_EventTile_sending": isSending,
             "mx_EventTile_notSent": this.state.sendStatus === 'not_sent',
         });

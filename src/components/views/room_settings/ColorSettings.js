@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import Tinter from '../../../Tinter';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 
 const ROOM_COLORS = [

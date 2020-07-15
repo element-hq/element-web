@@ -168,6 +168,7 @@ export default class DMRoomMap {
     }
 
     getUniqueRoomsWithIndividuals(): {[userId: string]: Room} {
+        if (!this.roomToUser) return {}; // No rooms means no map.
         return Object.keys(this.roomToUser)
             .map(r => ({userId: this.getUserIdForRoomId(r), room: this.matrixClient.getRoom(r)}))
             .filter(r => r.userId && r.room && r.room.getInvitedAndJoinedMemberCount() === 2)

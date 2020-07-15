@@ -54,17 +54,18 @@ export default class NewSessionReviewDialog extends React.PureComponent {
         });
     }
 
-    onContinueClick = async () => {
+    onContinueClick = () => {
         const { userId, device } = this.props;
         const cli = MatrixClientPeg.get();
-        const request = await cli.requestVerification(
+        const requestPromise = cli.requestVerification(
             userId,
             [device.deviceId],
         );
 
         this.props.onFinished(true);
         Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
-            verificationRequest: request,
+            verificationRequestPromise: requestPromise,
+            member: cli.getUser(userId),
         });
     }
 

@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// TODO: Generify the name of this and all components within - it's not just for scalar.
+
 /*
 Listens for incoming postMessage requests from the integrations UI URL. The following API is exposed:
 {
@@ -172,6 +174,7 @@ Request:
 Response:
 [
     {
+        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
         type: "im.vector.modular.widgets",
         state_key: "wid1",
         content: {
@@ -190,6 +193,7 @@ Example:
     room_id: "!foo:bar",
     response: [
         {
+            // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
             type: "im.vector.modular.widgets",
             state_key: "wid1",
             content: {
@@ -234,21 +238,23 @@ Example:
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
+import {WidgetType} from "./widgets/WidgetType";
+import {objectClone} from "./utils/objects";
 
 function sendResponse(event, res) {
-    const data = JSON.parse(JSON.stringify(event.data));
+    const data = objectClone(event.data);
     data.response = res;
     event.source.postMessage(data, event.origin);
 }
 
 function sendError(event, msg, nestedError) {
     console.error("Action:" + event.data.action + " failed with message: " + msg);
-    const data = JSON.parse(JSON.stringify(event.data));
+    const data = objectClone(event.data);
     data.response = {
         error: {
             message: msg,
@@ -290,7 +296,7 @@ function inviteUser(event, roomId, userId) {
 
 function setWidget(event, roomId) {
     const widgetId = event.data.widget_id;
-    const widgetType = event.data.type;
+    let widgetType = event.data.type;
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
@@ -321,6 +327,9 @@ function setWidget(event, roomId) {
             return;
         }
     }
+
+    // convert the widget type to a known widget type
+    widgetType = WidgetType.fromString(widgetType);
 
     if (userWidget) {
         WidgetUtils.setUserWidget(widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {

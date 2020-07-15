@@ -642,7 +642,7 @@ enable_registration: true
 # Explicitly disable asking for MSISDNs from the registration
 # flow (overrides registrations_require_3pid if MSISDNs are set as required)
 #
-#disable_msisdn_registration: true
+disable_msisdn_registration: false
 
 # Mandate that users are only allowed to associate certain formats of
 # 3PIDs with accounts on this server.
@@ -882,22 +882,22 @@ password_config:
 # If your SMTP server requires authentication, the optional smtp_user &
 # smtp_pass variables should be used
 #
-#email:
-#   enable_notifs: false
-#   smtp_host: "localhost"
-#   smtp_port: 25
-#   smtp_user: "exampleusername"
-#   smtp_pass: "examplepassword"
-#   require_transport_security: False
-#   notif_from: "Your Friendly %(app)s Home Server <noreply@example.com>"
-#   app_name: Matrix
-#   # if template_dir is unset, uses the example templates that are part of
-#   # the Synapse distribution.
-#   #template_dir: res/templates
-#   notif_template_html: notif_mail.html
-#   notif_template_text: notif_mail.txt
-#   notif_for_new_users: True
-#   riot_base_url: "http://localhost/riot"
+email:
+   enable_notifs: false
+   smtp_host: "localhost"
+   smtp_port: 25
+   smtp_user: "exampleusername"
+   smtp_pass: "examplepassword"
+   require_transport_security: False
+   notif_from: "Your Friendly %(app)s Home Server <noreply@example.com>"
+   app_name: Matrix
+   # if template_dir is unset, uses the example templates that are part of
+   # the Synapse distribution.
+   #template_dir: res/templates
+   notif_template_html: notif_mail.html
+   notif_template_text: notif_mail.txt
+   notif_for_new_users: True
+   riot_base_url: "http://localhost/riot"
 
 
 #password_providers:

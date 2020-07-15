@@ -18,7 +18,7 @@ import {MatrixClientPeg} from "../MatrixClientPeg";
 import {ALL_RULE_TYPES, BanList} from "./BanList";
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {_t} from "../languageHandler";
-import dis from "../dispatcher";
+import dis from "../dispatcher/dispatcher";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
@@ -65,14 +65,14 @@ export class Mjolnir {
     }
 
     stop() {
-        SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+        if (this._mjolnirWatchRef) {
+            SettingsStore.unwatchSetting(this._mjolnirWatchRef);
+            this._mjolnirWatchRef = null;
+        }
 
-        try {
-            if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
-        } catch (e) {
-            console.error(e);
-            // Only the tests cause problems with this particular block of code. We should
-            // never be here in production.
+        if (this._dispatcherRef) {
+            dis.unregister(this._dispatcherRef);
+            this._dispatcherRef = null;
         }
 
         if (!MatrixClientPeg.get()) return;

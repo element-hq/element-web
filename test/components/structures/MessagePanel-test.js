@@ -142,128 +142,42 @@ describe('MessagePanel', function() {
         return events;
     }
 
-    it('should show the events', function() {
-        const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} />,
-        );
+    // A list of membership events only with nothing else
+    function mkMelsEventsOnly() {
+        const events = [];
+        const ts0 = Date.now();
 
-        // just check we have the right number of tiles for now
-        const tiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('rooms.EventTile'));
-        expect(tiles.length).toEqual(10);
-    });
+        let i = 0;
 
-    it('should collapse adjacent member events', function() {
-        const res = TestUtils.renderIntoDocument(
-            <WrappedMessagePanel className="cls" events={mkMelsEvents()} />,
-        );
+        for (i = 0; i < 10; i++) {
+            events.push(test_utils.mkMembership({
+                event: true, room: "!room:id", user: "@user:id",
+                target: {
+                    userId: "@user:id",
+                    name: "Bob",
+                    getAvatarUrl: () => {
+                        return "avatar.jpeg";
+                    },
+                },
+                ts: ts0 + i*1000,
+                mship: 'join',
+                prevMship: 'join',
+                name: 'A user',
+            }));
+        }
 
-        // just check we have the right number of tiles for now
-        const tiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('rooms.EventTile'),
-        );
-        expect(tiles.length).toEqual(2);
+        return events;
+    }
 
-        const summaryTiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('elements.MemberEventListSummary'),
-        );
-        expect(summaryTiles.length).toEqual(1);
-    });
-
-    it('should show the read-marker in the right place', function() {
-        const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true} />,
-        );
-
-        const tiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('rooms.EventTile'));
-
-        // find the <li> which wraps the read marker
-        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
-
-        // it should follow the <li> which wraps the event tile for event 4
-        const eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
-        expect(rm.previousSibling).toEqual(eventContainer);
-    });
-
-    it('should show the read-marker that fall in summarised events after the summary', function() {
-        const melsEvents = mkMelsEvents();
-        const res = TestUtils.renderIntoDocument(
-                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
-                    readMarkerVisible={true} />,
-        );
-
-        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
-
-        // find the <li> which wraps the read marker
-        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
-
-        expect(rm.previousSibling).toEqual(summary);
-    });
-
-    it('shows a ghost read-marker when the read-marker moves', function(done) {
-        // fake the clock so that we can test the velocity animation.
-        clock.install();
-        clock.mockDate();
-
-        const parentDiv = document.createElement('div');
-
-        // first render with the RM in one place
-        let mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
-
-        const tiles = TestUtils.scryRenderedComponentsWithType(
-            mp, sdk.getComponent('rooms.EventTile'));
-        const tileContainers = tiles.map(function(t) {
-            return ReactDOM.findDOMNode(t).parentNode;
-        });
-
-        // find the <li> which wraps the read marker
-        const rm = TestUtils.findRenderedDOMComponentWithClass(mp, 'mx_RoomView_myReadMarker_container');
-        expect(rm.previousSibling).toEqual(tileContainers[4]);
-
-        // now move the RM
-        mp = ReactDOM.render(
-                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
-                    readMarkerVisible={true}
-                />, parentDiv);
-
-        // now there should be two RM containers
-        const found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
-        expect(found.length).toEqual(2);
-
-        // the first should be the ghost
-        expect(found[0].previousSibling).toEqual(tileContainers[4]);
-        const hr = found[0].children[0];
-
-        // the second should be the real thing
-        expect(found[1].previousSibling).toEqual(tileContainers[6]);
-
-        // advance the clock, and then let the browser run an animation frame,
-        // to let the animation start
-        clock.tick(1500);
-
-        realSetTimeout(() => {
-            // then advance it again to let it complete
-            clock.tick(1000);
-            realSetTimeout(() => {
-                // the ghost should now have finished
-                expect(hr.style.opacity).toEqual('0');
-                done();
-            }, 100);
-        }, 100);
-    });
-
-    it('should collapse creation events', function() {
+    // A list of room creation, encryption, and invite events.
+    function mkCreationEvents() {
         const mkEvent = test_utils.mkEvent;
         const mkMembership = test_utils.mkMembership;
         const roomId = "!someroom";
         const alice = "@alice:example.org";
         const ts0 = Date.now();
-        const events = [
+
+        return [
             mkEvent({
                 event: true,
                 type: "m.room.create",
@@ -341,6 +255,150 @@ describe('MessagePanel', function() {
                 name: 'Bob',
             }),
         ];
+    }
+
+    function isReadMarkerVisible(rmContainer) {
+        return rmContainer && rmContainer.children.length > 0;
+    }
+
+    it('should show the events', function() {
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={events} />,
+        );
+
+        // just check we have the right number of tiles for now
+        const tiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('rooms.EventTile'));
+        expect(tiles.length).toEqual(10);
+    });
+
+    it('should collapse adjacent member events', function() {
+        const res = TestUtils.renderIntoDocument(
+            <WrappedMessagePanel className="cls" events={mkMelsEvents()} />,
+        );
+
+        // just check we have the right number of tiles for now
+        const tiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('rooms.EventTile'),
+        );
+        expect(tiles.length).toEqual(2);
+
+        const summaryTiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('elements.MemberEventListSummary'),
+        );
+        expect(summaryTiles.length).toEqual(1);
+    });
+
+    it('should insert the read-marker in the right place', function() {
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                    readMarkerVisible={true} />,
+        );
+
+        const tiles = TestUtils.scryRenderedComponentsWithType(
+            res, sdk.getComponent('rooms.EventTile'));
+
+        // find the <li> which wraps the read marker
+        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
+
+        // it should follow the <li> which wraps the event tile for event 4
+        const eventContainer = ReactDOM.findDOMNode(tiles[4]).parentNode;
+        expect(rm.previousSibling).toEqual(eventContainer);
+    });
+
+    it('should show the read-marker that fall in summarised events after the summary', function() {
+        const melsEvents = mkMelsEvents();
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[4].getId()}
+                    readMarkerVisible={true} />,
+        );
+
+        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
+
+        // find the <li> which wraps the read marker
+        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
+
+        expect(rm.previousSibling).toEqual(summary);
+
+        // read marker should be visible given props and not at the last event
+        expect(isReadMarkerVisible(rm)).toBeTruthy();
+    });
+
+    it('should hide the read-marker at the end of summarised events', function() {
+        const melsEvents = mkMelsEventsOnly();
+        const res = TestUtils.renderIntoDocument(
+                <WrappedMessagePanel className="cls" events={melsEvents} readMarkerEventId={melsEvents[9].getId()}
+                    readMarkerVisible={true} />,
+        );
+
+        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
+
+        // find the <li> which wraps the read marker
+        const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
+
+        expect(rm.previousSibling).toEqual(summary);
+
+        // read marker should be hidden given props and at the last event
+        expect(isReadMarkerVisible(rm)).toBeFalsy();
+    });
+
+    it('shows a ghost read-marker when the read-marker moves', function(done) {
+        // fake the clock so that we can test the velocity animation.
+        clock.install();
+        clock.mockDate();
+
+        const parentDiv = document.createElement('div');
+
+        // first render with the RM in one place
+        let mp = ReactDOM.render(
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[4].getId()}
+                    readMarkerVisible={true}
+                />, parentDiv);
+
+        const tiles = TestUtils.scryRenderedComponentsWithType(
+            mp, sdk.getComponent('rooms.EventTile'));
+        const tileContainers = tiles.map(function(t) {
+            return ReactDOM.findDOMNode(t).parentNode;
+        });
+
+        // find the <li> which wraps the read marker
+        const rm = TestUtils.findRenderedDOMComponentWithClass(mp, 'mx_RoomView_myReadMarker_container');
+        expect(rm.previousSibling).toEqual(tileContainers[4]);
+
+        // now move the RM
+        mp = ReactDOM.render(
+                <WrappedMessagePanel className="cls" events={events} readMarkerEventId={events[6].getId()}
+                    readMarkerVisible={true}
+                />, parentDiv);
+
+        // now there should be two RM containers
+        const found = TestUtils.scryRenderedDOMComponentsWithClass(mp, 'mx_RoomView_myReadMarker_container');
+        expect(found.length).toEqual(2);
+
+        // the first should be the ghost
+        expect(found[0].previousSibling).toEqual(tileContainers[4]);
+        const hr = found[0].children[0];
+
+        // the second should be the real thing
+        expect(found[1].previousSibling).toEqual(tileContainers[6]);
+
+        // advance the clock, and then let the browser run an animation frame,
+        // to let the animation start
+        clock.tick(1500);
+
+        realSetTimeout(() => {
+            // then advance it again to let it complete
+            clock.tick(1000);
+            realSetTimeout(() => {
+                // the ghost should now have finished
+                expect(hr.style.opacity).toEqual('0');
+                done();
+            }, 100);
+        }, 100);
+    });
+
+    it('should collapse creation events', function() {
+        const events = mkCreationEvents();
         const res = mount(
             <WrappedMessagePanel className="cls" events={events} />,
         );
@@ -362,5 +420,27 @@ describe('MessagePanel', function() {
         // every event except for the room creation, room encryption, and Bob's
         // invite event should be in the event summary
         expect(summaryEventTiles.length).toEqual(tiles.length - 3);
+    });
+
+    it('should hide read-marker at the end of creation event summary', function() {
+        const events = mkCreationEvents();
+        const res = mount(
+            <WrappedMessagePanel
+                className="cls"
+                events={events}
+                readMarkerEventId={events[5].getId()}
+                readMarkerVisible={true}
+            />,
+        );
+
+        // find the <li> which wraps the read marker
+        const rm = res.find('.mx_RoomView_myReadMarker_container').getDOMNode();
+
+        const rows = res.find('.mx_RoomView_MessageList').children();
+        expect(rows.length).toEqual(6);
+        expect(rm.previousSibling).toEqual(rows.at(4).getDOMNode());
+
+        // read marker should be hidden given props and at the last event
+        expect(isReadMarkerVisible(rm)).toBeFalsy();
     });
 });

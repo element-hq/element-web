@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
 import * as sdk from "../../../index";
@@ -78,7 +78,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._sessionStore = sessionStore;
         this._sessionStoreToken = this._sessionStore.addListener(
             this._setStateFromSessionStore,
@@ -141,6 +141,12 @@ export default createReactClass({
     _changePassword: function(cli, oldPassword, newPassword) {
         const authDict = {
             type: 'm.login.password',
+            identifier: {
+                type: 'm.id.user',
+                user: cli.credentials.userId,
+            },
+            // TODO: Remove `user` once servers support proper UIA
+            // See https://github.com/matrix-org/synapse/issues/5665
             user: cli.credentials.userId,
             password: oldPassword,
         };
@@ -235,7 +241,7 @@ export default createReactClass({
         if (!this.state.cachedPassword) {
             currentPassword = (
                 <div className={rowClassName}>
-                    <Field id="mx_ChangePassword_oldPassword"
+                    <Field
                         type="password"
                         label={_t('Current password')}
                         value={this.state.oldPassword}
@@ -254,7 +260,6 @@ export default createReactClass({
                         { currentPassword }
                         <div className={rowClassName}>
                             <Field
-                                id="mx_ChangePassword_newPassword"
                                 type="password"
                                 label={passwordLabel}
                                 value={this.state.newPassword}
@@ -265,7 +270,6 @@ export default createReactClass({
                         </div>
                         <div className={rowClassName}>
                             <Field
-                                id="mx_ChangePassword_newPasswordConfirm"
                                 type="password"
                                 label={_t("Confirm password")}
                                 value={this.state.newPasswordConfirm}

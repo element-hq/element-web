@@ -27,6 +27,7 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
 import WidgetOpenIDPermissionsDialog from "./components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetUtils from "./utils/WidgetUtils";
+import {KnownWidgetActions} from "./widgets/WidgetApi";
 
 if (!global.mxFromWidgetMessaging) {
     global.mxFromWidgetMessaging = new FromWidgetPostMessageApi();
@@ -40,9 +41,18 @@ if (!global.mxToWidgetMessaging) {
 const OUTBOUND_API_NAME = 'toWidget';
 
 export default class WidgetMessaging {
-    constructor(widgetId, widgetUrl, isUserWidget, target) {
+    /**
+     * @param {string} widgetId The widget's ID
+     * @param {string} wurl The raw URL of the widget as in the event (the 'wURL')
+     * @param {string} renderedUrl The url used in the widget's iframe (either similar to the wURL
+     *     or a different URL of the clients choosing if it is using its own impl).
+     * @param {bool} isUserWidget If true, the widget is a user widget, otherwise it's a room widget
+     * @param {object} target Where widget messages should be sent (eg. the iframe object)
+     */
+    constructor(widgetId, wurl, renderedUrl, isUserWidget, target) {
         this.widgetId = widgetId;
-        this.widgetUrl = widgetUrl;
+        this.wurl = wurl;
+        this.renderedUrl = renderedUrl;
         this.isUserWidget = isUserWidget;
         this.target = target;
         this.fromWidget = global.mxFromWidgetMessaging;
@@ -76,11 +86,33 @@ export default class WidgetMessaging {
     }
 
     /**
+     * Tells the widget that the client is ready to handle further widget requests.
+     * @returns {Promise<*>} Resolves after the widget has acknowledged the ready message.
+     */
+    flagReadyToContinue() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.ClientReady,
+        });
+    }
+
+    /**
+     * Tells the widget that it should terminate now.
+     * @returns {Promise<*>} Resolves when widget has acknowledged the message.
+     */
+    terminate() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.Terminate,
+        });
+    }
+
+    /**
      * Request a screenshot from a widget
      * @return {Promise} To be resolved with screenshot data when it has been generated
      */
     getScreenshot() {
-        console.warn('Requesting screenshot for', this.widgetId);
+        console.log('Requesting screenshot for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "screenshot",
@@ -94,12 +126,12 @@ export default class WidgetMessaging {
      * @return {Promise} To be resolved with an array of requested widget capabilities
      */
     getCapabilities() {
-        console.warn('Requesting capabilities for', this.widgetId);
+        console.log('Requesting capabilities for', this.widgetId);
         return this.messageToWidget({
                 api: OUTBOUND_API_NAME,
                 action: "capabilities",
             }).then((response) => {
-                console.warn('Got capabilities for', this.widgetId, response.capabilities);
+                console.log('Got capabilities for', this.widgetId, response.capabilities);
                 return response.capabilities;
             });
     }
@@ -116,19 +148,19 @@ export default class WidgetMessaging {
     }
 
     start() {
-        this.fromWidget.addEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.addEndpoint(this.widgetId, this.renderedUrl);
         this.fromWidget.addListener("get_openid", this._onOpenIdRequest);
     }
 
     stop() {
-        this.fromWidget.removeEndpoint(this.widgetId, this.widgetUrl);
+        this.fromWidget.removeEndpoint(this.widgetId, this.renderedUrl);
         this.fromWidget.removeListener("get_openid", this._onOpenIdRequest);
     }
 
     async _onOpenIdRequest(ev, rawEv) {
         if (ev.widgetId !== this.widgetId) return; // not interesting
 
-        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, this.widgetUrl, this.isUserWidget);
+        const widgetSecurityKey = WidgetUtils.getWidgetSecurityKey(this.widgetId, this.wurl, this.isUserWidget);
 
         const settings = SettingsStore.getValue("widgetOpenIDPermissions");
         if (settings.deny && settings.deny.includes(widgetSecurityKey)) {
@@ -149,7 +181,7 @@ export default class WidgetMessaging {
         // Actually ask for permission to send the user's data
         Modal.createTrackedDialog("OpenID widget permissions", '',
             WidgetOpenIDPermissionsDialog, {
-                widgetUrl: this.widgetUrl,
+                widgetUrl: this.wurl,
                 widgetId: this.widgetId,
                 isUserWidget: this.isUserWidget,
 

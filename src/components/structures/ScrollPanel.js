@@ -144,6 +144,11 @@ export default createReactClass({
         /* resizeNotifier: ResizeNotifier to know when middle column has changed size
          */
         resizeNotifier: PropTypes.object,
+
+        /* fixedChildren: allows for children to be passed which are rendered outside
+         * of the wrapper
+         */
+        fixedChildren: PropTypes.node,
     },
 
     getDefaultProps: function() {
@@ -156,9 +161,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
-        this._fillRequestWhileRunning = false;
-        this._isFilling = false;
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         this._pendingFillRequests = {b: null, f: null};
 
         if (this.props.resizeNotifier) {
@@ -523,7 +527,7 @@ export default createReactClass({
     scrollRelative: function(mult) {
         const scrollNode = this._getScrollNode();
         const delta = mult * scrollNode.clientHeight * 0.5;
-        scrollNode.scrollTop = scrollNode.scrollTop + delta;
+        scrollNode.scrollBy(0, delta);
         this._saveScrollState();
     },
 
@@ -705,17 +709,15 @@ export default createReactClass({
             // the currently filled piece of the timeline
             if (trackedNode) {
                 const oldTop = trackedNode.offsetTop;
-                // changing the height might change the scrollTop
-                // if the new height is smaller than the scrollTop.
-                // We calculate the diff that needs to be applied
-                // ourselves, so be sure to measure the
-                // scrollTop before changing the height.
-                const preexistingScrollTop = sn.scrollTop;
                 itemlist.style.height = `${newHeight}px`;
                 const newTop = trackedNode.offsetTop;
                 const topDiff = newTop - oldTop;
-                sn.scrollTop = preexistingScrollTop + topDiff;
-                debuglog("updateHeight to", {newHeight, topDiff, preexistingScrollTop});
+                // important to scroll by a relative amount as
+                // reading scrollTop and then setting it might
+                // yield out of date values and cause a jump
+                // when setting it
+                sn.scrollBy(0, topDiff);
+                debuglog("updateHeight to", {newHeight, topDiff});
             }
         }
     },
@@ -767,6 +769,7 @@ export default createReactClass({
     },
 
     _topFromBottom(node) {
+        // current capped height - distance from top = distance from bottom of container to top of tracked element
         return this._itemlist.current.clientHeight - node.offsetTop;
     },
 
@@ -783,7 +786,7 @@ export default createReactClass({
         if (!this._divScroll) {
             // Likewise, we should have the ref by this point, but if not
             // turn the NPE into something meaningful.
-            throw new Error("ScrollPanel._getScrollNode called before gemini ref collected");
+            throw new Error("ScrollPanel._getScrollNode called before AutoHideScrollbar ref collected");
         }
 
         return this._divScroll;
@@ -883,6 +886,7 @@ export default createReactClass({
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
+                    { this.props.fixedChildren }
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
                             { this.props.children }

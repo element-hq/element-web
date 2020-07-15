@@ -21,11 +21,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Key } from '../../Keyboard';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import * as VectorConferenceHandler from '../../VectorConferenceHandler';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import Analytics from "../../Analytics";
+import {Action} from "../../dispatcher/actions";
 
 
 const LeftPanel = createReactClass({
@@ -44,7 +45,8 @@ const LeftPanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this.focusedElement = null;
 
         this._breadcrumbsWatcherRef = SettingsStore.watchSetting(
@@ -196,7 +198,7 @@ const LeftPanel = createReactClass({
 
     onSearchCleared: function(source) {
         if (source === "keyboard") {
-            dis.dispatch({action: 'focus_composer'});
+            dis.fire(Action.FocusComposer);
         }
         this.setState({searchExpanded: false});
     },
@@ -250,7 +252,7 @@ const LeftPanel = createReactClass({
         if (!this.props.collapsed) {
             exploreButton = (
                 <div className={classNames("mx_LeftPanel_explore", {"mx_LeftPanel_explore_hidden": this.state.searchExpanded})}>
-                    <AccessibleButton onClick={() => dis.dispatch({action: 'view_room_directory'})}>{_t("Explore")}</AccessibleButton>
+                    <AccessibleButton onClick={() => dis.fire(Action.ViewRoomDirectory)}>{_t("Explore")}</AccessibleButton>
                 </div>
             );
         }
@@ -272,6 +274,16 @@ const LeftPanel = createReactClass({
             breadcrumbs = (<RoomBreadcrumbs collapsed={this.props.collapsed} />);
         }
 
+        const roomList = <RoomList
+            onKeyDown={this._onKeyDown}
+            onFocus={this._onFocus}
+            onBlur={this._onBlur}
+            ref={this.collectRoomList}
+            resizeNotifier={this.props.resizeNotifier}
+            collapsed={this.props.collapsed}
+            searchFilter={this.state.searchFilter}
+            ConferenceHandler={VectorConferenceHandler} />;
+
         return (
             <div className={containerClasses}>
                 { tagPanelContainer }
@@ -283,15 +295,7 @@ const LeftPanel = createReactClass({
                         { exploreButton }
                         { searchBox }
                     </div>
-                    <RoomList
-                        onKeyDown={this._onKeyDown}
-                        onFocus={this._onFocus}
-                        onBlur={this._onBlur}
-                        ref={this.collectRoomList}
-                        resizeNotifier={this.props.resizeNotifier}
-                        collapsed={this.props.collapsed}
-                        searchFilter={this.state.searchFilter}
-                        ConferenceHandler={VectorConferenceHandler} />
+                    {roomList}
                 </aside>
             </div>
         );

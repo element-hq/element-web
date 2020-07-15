@@ -54,6 +54,7 @@ export default createReactClass({
         }
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._topic = createRef();
     },

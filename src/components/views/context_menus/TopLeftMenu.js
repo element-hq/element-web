@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import LogoutDialog from "../dialogs/LogoutDialog";
 import Modal from "../../../Modal";
@@ -26,6 +26,8 @@ import { getHostingLink } from '../../../utils/HostingLink';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {MenuItem} from "../../structures/ContextMenu";
 import * as sdk from "../../../index";
+import {getHomePageUrl} from "../../../utils/pages";
+import {Action} from "../../../dispatcher/actions";
 
 export default class TopLeftMenu extends React.Component {
     static propTypes = {
@@ -47,15 +49,7 @@ export default class TopLeftMenu extends React.Component {
     }
 
     hasHomePage() {
-        const config = SdkConfig.get();
-        const pagesConfig = config.embeddedPages;
-        if (pagesConfig && pagesConfig.homeUrl) {
-            return true;
-        }
-        // This is a deprecated config option for the home page
-        // (despite the name, given we also now have a welcome
-        // page, which is not the same).
-        return !!config.welcomePageUrl;
+        return !!getHomePageUrl(SdkConfig.get());
     }
 
     render() {
@@ -141,7 +135,7 @@ export default class TopLeftMenu extends React.Component {
     }
 
     openSettings() {
-        dis.dispatch({action: 'view_user_settings'});
+        dis.fire(Action.ViewUserSettings);
         this.closeMenu();
     }
 

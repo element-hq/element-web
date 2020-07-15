@@ -19,13 +19,14 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
 import TintableSvg from '../elements/TintableSvg';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -46,7 +47,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         this._initGroupStore(this.props.groupId);
     },
@@ -172,7 +173,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.fetching || this.state.fetchingInvitedMembers) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return (<div className="mx_MemberList">
@@ -225,10 +225,10 @@ export default createReactClass({
         return (
             <div className="mx_MemberList" role="tabpanel">
                 { inviteButton }
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     { joined }
                     { invited }
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
                 { inputBox }
             </div>
         );

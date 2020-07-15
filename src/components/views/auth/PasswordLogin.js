@@ -23,6 +23,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
+import AccessibleButton from "../elements/AccessibleButton";
 
 /**
  * A pure UI component which displays a username/password form.
@@ -44,6 +45,7 @@ export default class PasswordLogin extends React.Component {
         loginIncorrect: PropTypes.bool,
         disableSubmit: PropTypes.bool,
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
+        busy: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -183,7 +185,7 @@ export default class PasswordLogin extends React.Component {
         this.props.onPasswordChanged(ev.target.value);
     }
 
-    renderLoginField(loginType) {
+    renderLoginField(loginType, autoFocus) {
         const Field = sdk.getComponent('elements.Field');
 
         const classes = {};
@@ -193,7 +195,6 @@ export default class PasswordLogin extends React.Component {
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_email"
                     name="username" // make it a little easier for browser's remember-password
                     key="email_input"
                     type="text"
@@ -203,13 +204,12 @@ export default class PasswordLogin extends React.Component {
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             case PasswordLogin.LOGIN_FIELD_MXID:
                 classes.error = this.props.loginIncorrect && !this.state.username;
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_username"
                     name="username" // make it a little easier for browser's remember-password
                     key="username_input"
                     type="text"
@@ -218,7 +218,7 @@ export default class PasswordLogin extends React.Component {
                     onChange={this.onUsernameChanged}
                     onBlur={this.onUsernameBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             case PasswordLogin.LOGIN_FIELD_PHONE: {
                 const CountryDropdown = sdk.getComponent('views.auth.CountryDropdown');
@@ -233,17 +233,16 @@ export default class PasswordLogin extends React.Component {
 
                 return <Field
                     className={classNames(classes)}
-                    id="mx_PasswordLogin_phoneNumber"
                     name="phoneNumber"
                     key="phone_input"
                     type="text"
                     label={_t("Phone")}
                     value={this.state.phoneNumber}
-                    prefix={phoneCountry}
+                    prefixComponent={phoneCountry}
                     onChange={this.onPhoneNumberChanged}
                     onBlur={this.onPhoneNumberBlur}
                     disabled={this.props.disableSubmit}
-                    autoFocus
+                    autoFocus={autoFocus}
                 />;
             }
         }
@@ -268,12 +267,16 @@ export default class PasswordLogin extends React.Component {
         if (this.props.onForgotPasswordClick) {
             forgotPasswordJsx = <span>
                 {_t('Not sure of your password? <a>Set a new one</a>', {}, {
-                    a: sub => <a className="mx_Login_forgot"
-                        onClick={this.onForgotPasswordClick}
-                        href="#"
-                    >
-                        {sub}
-                    </a>,
+                    a: sub => (
+                        <AccessibleButton
+                            className="mx_Login_forgot"
+                            disabled={this.props.busy}
+                            kind="link"
+                            onClick={this.onForgotPasswordClick}
+                        >
+                            {sub}
+                        </AccessibleButton>
+                    ),
                 })}
             </span>;
         }
@@ -282,7 +285,10 @@ export default class PasswordLogin extends React.Component {
             error: this.props.loginIncorrect && !this.isLoginEmpty(), // only error password if error isn't top field
         });
 
-        const loginField = this.renderLoginField(this.state.loginType);
+        // If login is empty, autoFocus login, otherwise autoFocus password.
+        // this is for when auto server discovery remounts us when the user tries to tab from username to password
+        const autoFocusPassword = !this.isLoginEmpty();
+        const loginField = this.renderLoginField(this.state.loginType, !autoFocusPassword);
 
         let loginType;
         if (!SdkConfig.get().disable_3pid_login) {
@@ -290,7 +296,6 @@ export default class PasswordLogin extends React.Component {
                 <div className="mx_Login_type_container">
                     <label className="mx_Login_type_label">{ _t('Sign in with') }</label>
                     <Field
-                        id="mx_PasswordLogin_type"
                         element="select"
                         value={this.state.loginType}
                         onChange={this.onLoginTypeChange}
@@ -328,20 +333,20 @@ export default class PasswordLogin extends React.Component {
                     {loginField}
                     <Field
                         className={pwFieldClass}
-                        id="mx_PasswordLogin_password"
                         type="password"
                         name="password"
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
                         disabled={this.props.disableSubmit}
+                        autoFocus={autoFocusPassword}
                     />
                     {forgotPasswordJsx}
-                    <input className="mx_Login_submit"
+                    { !this.props.busy && <input className="mx_Login_submit"
                         type="submit"
                         value={_t('Sign in')}
                         disabled={this.props.disableSubmit}
-                    />
+                    /> }
                 </form>
             </div>
         );

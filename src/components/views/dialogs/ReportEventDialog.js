@@ -123,7 +123,6 @@ export default class ReportEventDialog extends PureComponent {
                     </p>
                     {adminMessage}
                     <Field
-                        id="mx_ReportEventDialog_reason"
                         className="mx_ReportEventDialog_reason"
                         element="textarea"
                         label={_t("Reason")}

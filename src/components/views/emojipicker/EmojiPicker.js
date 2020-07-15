@@ -22,6 +22,7 @@ import { _t } from '../../../languageHandler';
 
 import * as recent from '../../../emojipicker/recent';
 import {DATA_BY_CATEGORY, getEmojiFromUnicode} from "../../../emoji";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
@@ -146,8 +147,12 @@ class EmojiPicker extends React.Component {
             // We update this here instead of through React to avoid re-render on scroll.
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", true);
+                cat.ref.current.setAttribute("tabindex", 0);
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
+                cat.ref.current.setAttribute("aria-selected", false);
+                cat.ref.current.setAttribute("tabindex", -1);
             }
         }
     }
@@ -214,7 +219,7 @@ class EmojiPicker extends React.Component {
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory} />
                 <Search query={this.state.filter} onChange={this.onChangeFilter} />
-                <div className="mx_EmojiPicker_body" ref={this.bodyRef} onScroll={this.onScroll}>
+                <AutoHideScrollbar className="mx_EmojiPicker_body" wrappedRef={e => this.bodyRef.current = e} onScroll={this.onScroll}>
                     {this.categories.map(category => {
                         const emojis = this.memoizedDataByCategory[category.id];
                         const categoryElement = (<Category key={category.id} id={category.id} name={category.name}
@@ -226,7 +231,7 @@ class EmojiPicker extends React.Component {
                         heightBefore += height;
                         return categoryElement;
                     })}
-                </div>
+                </AutoHideScrollbar>
                 {this.state.previewEmoji || !this.props.showQuickReactions
                     ? <Preview emoji={this.state.previewEmoji} />
                     : <QuickReactions onClick={this.onClickEmoji} selectedEmojis={this.props.selectedEmojis} /> }

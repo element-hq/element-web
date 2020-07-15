@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,16 +17,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
+import SdkConfig from './SdkConfig';
 import PlatformPeg from './PlatformPeg';
 import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
 import * as Avatar from './Avatar';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import {
+    hideToast as hideNotificationsToast,
+} from "./toasts/DesktopNotificationsToast";
 
 /*
  * Dispatches:
@@ -37,6 +42,18 @@ import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
 
 const MAX_PENDING_ENCRYPTED = 20;
 
+/*
+Override both the content body and the TextForEvent handler for specific msgtypes, in notifications.
+This is useful when the content body contains fallback text that would explain that the client can't handle a particular
+type of tile.
+*/
+const typehandlers = {
+    "m.key.verification.request": (event) => {
+        const name = (event.sender || {}).name;
+        return _t("%(name)s is requesting verification", { name });
+    },
+};
+
 const Notifier = {
     notifsByRoom: {},
 
@@ -46,6 +63,9 @@ const Notifier = {
     pendingEncryptedEventIds: [],
 
     notificationMessageForEvent: function(ev) {
+        if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
+            return typehandlers[ev.getContent().msgtype](ev);
+        }
         return TextForEvent.textForEvent(ev);
     },
 
@@ -69,7 +89,9 @@ const Notifier = {
             title = room.name;
             // notificationMessageForEvent includes sender,
             // but we already have the sender here
-            if (ev.getContent().body) msg = ev.getContent().body;
+            if (ev.getContent().body && !typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
+                msg = ev.getContent().body;
+            }
         } else if (ev.getType() === 'm.room.member') {
             // context is all in the message here, we don't need
             // to display sender info
@@ -78,7 +100,9 @@ const Notifier = {
             title = ev.sender.name + " (" + room.name + ")";
             // notificationMessageForEvent includes sender,
             // but we've just out sender in the title
-            if (ev.getContent().body) msg = ev.getContent().body;
+            if (ev.getContent().body && !typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
+                msg = ev.getContent().body;
+            }
         }
 
         if (!this.isBodyEnabled()) {
@@ -100,7 +124,7 @@ const Notifier = {
         }
     },
 
-    getSoundForRoom: async function(roomId) {
+    getSoundForRoom: function(roomId) {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         const content = SettingsStore.getValue("notificationSound", roomId);
@@ -129,7 +153,7 @@ const Notifier = {
     },
 
     _playAudioNotification: async function(ev, room) {
-        const sound = await this.getSoundForRoom(room.roomId);
+        const sound = this.getSoundForRoom(room.roomId);
         console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
 
         try {
@@ -204,10 +228,11 @@ const Notifier = {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
+                    const brand = SdkConfig.get().brand;
                     const description = result === 'denied'
-                        ? _t('Riot does not have permission to send you notifications - ' +
-                            'please check your browser settings')
-                        : _t('Riot was not given permission to send notifications - please try again');
+                        ? _t('%(brand)s does not have permission to send you notifications - ' +
+                            'please check your browser settings', { brand })
+                        : _t('%(brand)s was not given permission to send notifications - please try again', { brand });
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
                         title: _t('Unable to enable Notifications'),
@@ -259,12 +284,7 @@ const Notifier = {
 
         Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
 
-        // XXX: why are we dispatching this here?
-        // this is nothing to do with notifier_enabled
-        dis.dispatch({
-            action: "notifier_enabled",
-            value: this.isEnabled(),
-        });
+        hideNotificationsToast();
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {

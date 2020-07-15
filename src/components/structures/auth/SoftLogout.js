@@ -18,13 +18,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from '../../../languageHandler';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as Lifecycle from '../../../Lifecycle';
 import Modal from '../../../Modal';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {sendLoginRequest} from "../../../Login";
-import url from 'url';
 import AuthPage from "../../views/auth/AuthPage";
+import SSOButton from "../../views/elements/SSOButton";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "../../../BasePlatform";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -43,7 +44,7 @@ const FLOWS_TO_VIEWS = {
 export default class SoftLogout extends React.Component {
     static propTypes = {
         // Query parameters from MatrixChat
-        realQueryParams: PropTypes.object, // {homeserver, identityServer, loginToken}
+        realQueryParams: PropTypes.object, // {loginToken}
 
         // Called when the SSO login completes
         onTokenLoginCompleted: PropTypes.func,
@@ -54,8 +55,7 @@ export default class SoftLogout extends React.Component {
 
         this.state = {
             loginView: LOGIN_VIEW.LOADING,
-            keyBackupNeeded: true, // assume we do while we figure it out (see componentWillMount)
-            ssoUrl: null,
+            keyBackupNeeded: true, // assume we do while we figure it out (see componentDidMount)
 
             busy: false,
             password: "",
@@ -91,7 +91,7 @@ export default class SoftLogout extends React.Component {
 
     async _initLogin() {
         const queryParams = this.props.realQueryParams;
-        const hasAllParams = queryParams && queryParams['homeserver'] && queryParams['loginToken'];
+        const hasAllParams = queryParams && queryParams['loginToken'];
         if (hasAllParams) {
             this.setState({loginView: LOGIN_VIEW.LOADING});
             this.trySsoLogin();
@@ -105,18 +105,6 @@ export default class SoftLogout extends React.Component {
 
         const chosenView = loginViews.filter(f => !!f)[0] || LOGIN_VIEW.UNSUPPORTED;
         this.setState({loginView: chosenView});
-
-        if (chosenView === LOGIN_VIEW.CAS || chosenView === LOGIN_VIEW.SSO) {
-            const client = MatrixClientPeg.get();
-
-            const appUrl = url.parse(window.location.href, true);
-            appUrl.hash = ""; // Clear #/soft_logout off the URL
-            appUrl.query["homeserver"] = client.getHomeserverUrl();
-            appUrl.query["identityServer"] = client.getIdentityServerUrl();
-
-            const ssoUrl = client.getSsoLoginUrl(url.format(appUrl), chosenView === LOGIN_VIEW.CAS ? "cas" : "sso");
-            this.setState({ssoUrl});
-        }
     }
 
     onPasswordChange = (ev) => {
@@ -170,8 +158,8 @@ export default class SoftLogout extends React.Component {
     async trySsoLogin() {
         this.setState({busy: true});
 
-        const hsUrl = this.props.realQueryParams['homeserver'];
-        const isUrl = this.props.realQueryParams['identityServer'] || MatrixClientPeg.get().getIdentityServerUrl();
+        const hsUrl = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
+        const isUrl = localStorage.getItem(SSO_ID_SERVER_URL_KEY) || MatrixClientPeg.get().getIdentityServerUrl();
         const loginType = "m.login.token";
         const loginParams = {
             token: this.props.realQueryParams['loginToken'],
@@ -194,14 +182,6 @@ export default class SoftLogout extends React.Component {
             this.setState({busy: false, loginView: LOGIN_VIEW.UNSUPPORTED});
         });
     }
-
-    onSsoLogin = async (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        this.setState({busy: true});
-        window.location.href = this.state.ssoUrl;
-    };
 
     _renderSignInSection() {
         if (this.state.loginView === LOGIN_VIEW.LOADING) {
@@ -234,7 +214,6 @@ export default class SoftLogout extends React.Component {
                     <p>{introText}</p>
                     {error}
                     <Field
-                        id="softlogout_password"
                         type="password"
                         label={_t("Password")}
                         onChange={this.onPasswordChange}
@@ -257,8 +236,6 @@ export default class SoftLogout extends React.Component {
         }
 
         if (this.state.loginView === LOGIN_VIEW.SSO || this.state.loginView === LOGIN_VIEW.CAS) {
-            const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
             if (!introText) {
                 introText = _t("Sign in and regain access to your account.");
             } // else we already have a message and should use it (key backup warning)
@@ -266,9 +243,11 @@ export default class SoftLogout extends React.Component {
             return (
                 <div>
                     <p>{introText}</p>
-                    <AccessibleButton kind='primary' onClick={this.onSsoLogin}>
-                        {_t('Sign in with single sign-on')}
-                    </AccessibleButton>
+                    <SSOButton
+                        matrixClient={MatrixClientPeg.get()}
+                        loginType={this.state.loginView === LOGIN_VIEW.CAS ? "cas" : "sso"}
+                        fragmentAfterLogin={this.props.fragmentAfterLogin}
+                    />
                 </div>
             );
         }

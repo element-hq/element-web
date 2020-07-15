@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import SettingsStore from '../../../settings/SettingsStore';
 
 export default class InviteOnlyIcon extends React.Component {
     constructor() {
@@ -38,10 +37,6 @@ export default class InviteOnlyIcon extends React.Component {
 
     render() {
         const classes = this.props.collapsedPanel ? "mx_InviteOnlyIcon_small": "mx_InviteOnlyIcon_large";
-
-        if (!SettingsStore.isFeatureEnabled("feature_invite_only_padlocks")) {
-            return null;
-        }
 
         const Tooltip = sdk.getComponent("elements.Tooltip");
         let tooltip;

@@ -24,20 +24,25 @@ limitations under the License.
     margin: 0;
     padding: 0 8px 0 10px;
     position: relative;
+
+    .mx_RoomTile_menuButton {
+        display: none;
+        flex: 0 0 16px;
+        height: 16px;
+        background-image: url('$(res)/img/icon_context.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .mx_UserOnlineDot {
+        display: block;
+        margin-right: 5px;
+    }
 }
 
 .mx_RoomTile:focus {
     filter: none !important;
     background-color: $roomtile-focused-bg-color;
-}
-
-.mx_RoomTile_menuButton {
-    display: none;
-    flex: 0 0 16px;
-    height: 16px;
-    background-image: url('$(res)/img/icon_context.svg');
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .mx_RoomTile_tooltip {
@@ -64,7 +69,7 @@ limitations under the License.
 
 .mx_RoomTile_subtext {
     display: inline-block;
-    font-size: 11px;
+    font-size: $font-11px;
     padding: 0 0 0 7px;
     margin: 0;
     overflow: hidden;
@@ -76,6 +81,7 @@ limitations under the License.
 
 .mx_RoomTile_avatar_container {
     position: relative;
+    display: flex;
 }
 
 .mx_RoomTile_avatar {
@@ -112,7 +118,7 @@ limitations under the License.
 }
 
 .mx_RoomTile_name {
-    font-size: 14px;
+    font-size: $font-14px;
     padding: 0 4px;
     color: $roomtile-name-color;
     white-space: nowrap;
@@ -126,7 +132,7 @@ limitations under the License.
     padding: 0 0.4em;
     color: $roomtile-badge-fg-color;
     font-weight: 600;
-    font-size: 12px;
+    font-size: $font-12px;
 }
 
 .collapsed {
@@ -151,7 +157,10 @@ limitations under the License.
     }
 
     .mx_RoomTile_menuButton {
-        display: none;  //no design for this for now
+        display: none; // no design for this for now
+    }
+    .mx_UserOnlineDot {
+        display: none; // no design for this for now
     }
 }
 
@@ -163,6 +172,9 @@ limitations under the License.
 .mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
     .mx_RoomTile_menuButton {
         display: block;
+    }
+    .mx_UserOnlineDot {
+        display: none;
     }
 }
 

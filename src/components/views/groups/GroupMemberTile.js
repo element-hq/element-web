@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
@@ -60,6 +60,7 @@ export default createReactClass({
 
         const av = (
             <BaseAvatar
+                aria-hidden="true"
                 name={this.props.member.displayname || this.props.member.userId}
                 idName={this.props.member.userId}
                 width={36} height={36}

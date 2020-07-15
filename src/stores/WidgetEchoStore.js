@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
+import {WidgetType} from "../widgets/WidgetType";
 
 /**
  * Acts as a place to get & set widget state, storing local echo state and
@@ -64,7 +65,7 @@ class WidgetEchoStore extends EventEmitter {
         return echoedWidgets;
     }
 
-    roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type) {
+    roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, type: WidgetType) {
         const roomEchoState = Object.assign({}, this._roomWidgetEcho[roomId]);
 
         // any widget IDs that are already in the room are not pending, so
@@ -79,7 +80,7 @@ class WidgetEchoStore extends EventEmitter {
             return Object.keys(roomEchoState).length > 0;
         } else {
             return Object.values(roomEchoState).some((widget) => {
-                return widget.type === type;
+                return type.matches(widget.type);
             });
         }
     }

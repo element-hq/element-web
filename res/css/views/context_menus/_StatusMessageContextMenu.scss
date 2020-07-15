@@ -44,7 +44,7 @@ input.mx_StatusMessageContextMenu_message {
 .mx_StatusMessageContextMenu_clear {
     @mixin mx_DialogButton;
     align-self: start;
-    font-size: 12px;
+    font-size: $font-12px;
     padding: 6px 1em;
     border: 1px solid transparent;
     margin-right: 10px;

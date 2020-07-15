@@ -31,9 +31,10 @@
 }
 
 .mx_Autocomplete_Completion_pill {
-    border-radius: 17px;
-    height: 34px;
-    padding: 0px 5px;
+    box-sizing: border-box;
+    border-radius: 2rem;
+    height: $font-34px;
+    padding: 0.4rem;
     display: flex;
     user-select: none;
     cursor: pointer;
@@ -42,7 +43,7 @@
 }
 
 .mx_Autocomplete_Completion_pill > * {
-    margin: 0 3px;
+    margin-right: 0.3rem;
 }
 
 /* styling for common completion elements */

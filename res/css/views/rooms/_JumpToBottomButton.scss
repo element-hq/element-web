@@ -34,13 +34,18 @@ limitations under the License.
     top: -12px;
     border-radius: 16px;
     font-weight: bold;
-    font-size: 12px;
-    line-height: 14px;
+    font-size: $font-12px;
+    line-height: $font-14px;
     text-align: center;
     // to be able to get it centered
     // with text-align in parent
     display: inline-block;
     padding: 0 4px;
+    color: $roomtile-badge-fg-color;
+    background-color: $roomtile-name-color;
+}
+
+.mx_JumpToBottomButton_highlight .mx_JumpToBottomButton_badge {
     color: $secondary-accent-color;
     background-color: $warning-color;
 }

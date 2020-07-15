@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
@@ -55,13 +55,10 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
-    },
-
-    componentDidMount: function() {
         this.dispatcherRef = dis.register(this.onAction);
     },
 
@@ -71,10 +68,11 @@ export default createReactClass({
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         // Room has changed probably, update apps
         this._updateApps();
     },
@@ -83,12 +81,14 @@ export default createReactClass({
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
+                // Note: these booleans are awkward because localstorage is fundamentally
+                // string-based. We also do exact equality on the strings later on.
                 if (action.show) {
-                    localStorage.removeItem(hideWidgetKey);
+                    localStorage.setItem(hideWidgetKey, "false");
                 } else {
                     // Store hidden state of widget
                     // Don't show if previously hidden
-                    localStorage.setItem(hideWidgetKey, true);
+                    localStorage.setItem(hideWidgetKey, "true");
                 }
 
                 break;
@@ -160,11 +160,7 @@ export default createReactClass({
 
             return (<AppTile
                 key={app.id}
-                id={app.id}
-                eventId={app.eventId}
-                url={app.url}
-                name={app.name}
-                type={app.type}
+                app={app}
                 fullWidth={arr.length<2 ? true : false}
                 room={this.props.room}
                 userId={this.props.userId}

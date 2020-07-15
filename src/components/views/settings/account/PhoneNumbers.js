@@ -232,7 +232,7 @@ export default class PhoneNumbers extends React.Component {
                         {this.state.verifyError}
                     </div>
                     <form onSubmit={this._onContinueClick} autoComplete="off" noValidate={true}>
-                        <Field id="mx_PhoneNumbers_newPhoneNumberCode"
+                        <Field
                             type="text"
                             label={_t("Verification code")}
                             autoComplete="off"
@@ -262,12 +262,12 @@ export default class PhoneNumbers extends React.Component {
                 {existingPhoneElements}
                 <form onSubmit={this._onAddClick} autoComplete="off" noValidate={true} className="mx_PhoneNumbers_new">
                     <div className="mx_PhoneNumbers_input">
-                        <Field id="mx_PhoneNumbers_newPhoneNumber"
+                        <Field
                             type="text"
                             label={_t("Phone Number")}
                             autoComplete="off"
                             disabled={this.state.verifying}
-                            prefix={phoneCountry}
+                            prefixComponent={phoneCountry}
                             value={this.state.newPhoneNumber}
                             onChange={this._onChangeNewPhoneNumber}
                         />

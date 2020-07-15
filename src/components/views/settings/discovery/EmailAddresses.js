@@ -58,7 +58,8 @@ export class EmailAddress extends React.Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
         const { bound } = nextProps.email;
         this.setState({ bound });
     }

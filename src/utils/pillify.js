@@ -111,7 +111,7 @@ export function pillifyLinks(nodes, mxEvent, pills) {
                             type={Pill.TYPE_AT_ROOM_MENTION}
                             inMessage={true}
                             room={room}
-                            shouldShowPillAvatar={true}
+                            shouldShowPillAvatar={shouldShowPillAvatar}
                         />;
 
                         ReactDOM.render(pill, pillContainer);

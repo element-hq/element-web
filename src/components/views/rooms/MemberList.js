@@ -20,7 +20,7 @@ import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
@@ -49,7 +49,8 @@ export default createReactClass({
         }
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._mounted = true;
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {

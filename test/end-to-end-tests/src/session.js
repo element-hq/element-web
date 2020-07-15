@@ -75,6 +75,10 @@ module.exports = class RiotSession {
         return this.getElementProperty(field, 'outerHTML');
     }
 
+    isChecked(field) {
+        return this.getElementProperty(field, 'checked');
+    }
+
     consoleLogs() {
         return this.consoleLog.buffer;
     }
@@ -118,8 +122,8 @@ module.exports = class RiotSession {
         await input.type(text);
     }
 
-    query(selector, timeout = DEFAULT_TIMEOUT) {
-        return this.page.waitForSelector(selector, {visible: true, timeout});
+    query(selector, timeout = DEFAULT_TIMEOUT, hidden = false) {
+        return this.page.waitForSelector(selector, {visible: true, timeout, hidden});
     }
 
     async queryAll(selector) {

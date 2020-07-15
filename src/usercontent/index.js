@@ -27,6 +27,10 @@ function remoteRender(event) {
     // Don't display scrollbars if the link takes more than one line to display.
     body.style = "margin: 0px; overflow: hidden";
     body.appendChild(a);
+
+    if (event.data.auto) {
+        a.click(); // try to trigger download automatically
+    }
 }
 
 function remoteSetTint(event) {

@@ -17,7 +17,7 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -57,6 +57,7 @@ export default createReactClass({
         };
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._video = createRef();
     },

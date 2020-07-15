@@ -15,7 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher';
+import dis from '../dispatcher/dispatcher';
 import {Store} from 'flux/utils';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import * as sdk from '../index';
@@ -46,7 +46,6 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
-    matrixClientIsReady: false,
 };
 
 /**
@@ -60,9 +59,6 @@ class RoomViewStore extends Store {
 
         // Initialise state
         this._state = INITIAL_STATE;
-        if (MatrixClientPeg.get()) {
-            this._state.matrixClientIsReady = MatrixClientPeg.get().isInitialSyncComplete();
-        }
     }
 
     _setState(newState) {
@@ -123,6 +119,9 @@ class RoomViewStore extends Store {
             case 'join_room_error':
                 this._joinRoomError(payload);
                 break;
+            case 'join_room_ready':
+                this._setState({ shouldPeek: false });
+                break;
             case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
@@ -154,11 +153,6 @@ class RoomViewStore extends Store {
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
-            case 'sync_state':
-                this._setState({
-                    matrixClientIsReady: MatrixClientPeg.get().isInitialSyncComplete(),
-                });
-                break;
         }
     }
 
@@ -221,6 +215,7 @@ class RoomViewStore extends Store {
                     storeRoomAliasInCache(payload.room_alias, result.room_id);
                     roomId = result.room_id;
                 } catch (err) {
+                    console.error("RVS failed to get room id for alias: ", err);
                     dis.dispatch({
                         action: 'view_room_error',
                         room_id: null,
@@ -259,20 +254,18 @@ class RoomViewStore extends Store {
         MatrixClientPeg.get().joinRoom(
             this._state.roomAlias || this._state.roomId, payload.opts,
         ).then(() => {
-            // We don't actually need to do anything here: we do *not*
-            // clear the 'joining' flag because the Room object and/or
-            // our 'joined' member event may not have come down the sync
-            // stream yet, and that's the point at which we'd consider
-            // the user joined to the room.
+            // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
+            // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
+            // room.
+            dis.dispatch({ action: 'join_room_ready' });
         }, (err) => {
             dis.dispatch({
                 action: 'join_room_error',
                 err: err,
             });
             let msg = err.message ? err.message : JSON.stringify(err);
-            // XXX: We are relying on the error message returned by browsers here.
-            // This isn't great, but it does generalize the error being shown to users.
-            if (msg && msg.startsWith("CORS request rejected")) {
+            console.log("Failed to join room:", msg);
+            if (err.name === "ConnectionError") {
                 msg = _t("There was an error joining the room");
             }
             if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
@@ -373,7 +366,7 @@ class RoomViewStore extends Store {
     }
 
     shouldPeek() {
-        return this._state.shouldPeek && this._state.matrixClientIsReady;
+        return this._state.shouldPeek;
     }
 }
 

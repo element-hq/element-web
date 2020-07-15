@@ -170,12 +170,13 @@ const EntityTile = createReactClass({
         let e2eIcon;
         const { e2eStatus } = this.props;
         if (e2eStatus) {
-            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} />;
+            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} bordered={true} />;
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
 
-        const av = this.props.avatarJsx || <BaseAvatar name={this.props.name} width={36} height={36} />;
+        const av = this.props.avatarJsx ||
+            <BaseAvatar name={this.props.name} width={36} height={36} aria-hidden="true" />;
 
         // The wrapping div is required to make the magic mouse listener work, for some reason.
         return (

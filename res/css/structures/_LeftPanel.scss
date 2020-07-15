@@ -19,6 +19,7 @@ limitations under the License.
     display: flex;
     /* LeftPanel 260px */
     min-width: 260px;
+    max-width: 50%;
     flex: 0 0 auto;
 }
 
@@ -147,7 +148,7 @@ limitations under the License.
     }
 
     .mx_AccessibleButton {
-        font-size: 14px;
+        font-size: $font-14px;
         margin: 4px 0 1px 9px;
         padding: 9px;
         padding-left: 42px;

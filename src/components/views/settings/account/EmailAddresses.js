@@ -237,7 +237,7 @@ export default class EmailAddresses extends React.Component {
                 {existingEmailElements}
                 <form onSubmit={this._onAddClick} autoComplete="off"
                       noValidate={true} className="mx_EmailAddresses_new">
-                    <Field id="mx_EmailAddressses_newEmailAddress"
+                    <Field
                         type="text"
                         label={_t("Email Address")}
                         autoComplete="off"

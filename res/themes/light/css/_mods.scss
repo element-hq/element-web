@@ -1,0 +1,32 @@
+// sidebar blurred avatar background
+//
+// if backdrop-filter is supported,
+// set the user avatar (if any) as a background so
+// it can be blurred by the tag panel and room list
+
+@supports (backdrop-filter: none) {
+    .mx_LeftPanel2 {
+        background-image: var(--avatar-url);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: left top;
+    }
+
+    .mx_TagPanel {
+        backdrop-filter: blur($tagpanel-background-blur-amount);
+    }
+
+    .mx_LeftPanel2 .mx_LeftPanel2_roomListContainer {
+        backdrop-filter: blur($roomlist-background-blur-amount);
+    }
+}
+
+.mx_RoomSublist2_showNButton {
+    background-color: transparent !important;
+}
+
+a:hover,
+a:link,
+a:visited {
+    text-decoration: none;
+}

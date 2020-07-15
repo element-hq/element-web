@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, {createRef} from "react";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -49,7 +49,8 @@ export default class RoomBreadcrumbs extends React.Component {
         this._scroller = createRef();
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         this._dispatcherRef = dis.register(this.onAction);
 
         const storedRooms = SettingsStore.getValue("breadcrumb_rooms");
@@ -362,17 +363,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 badge = <div className={badgeClasses}>{r.formattedCount}</div>;
             }
 
-            let dmIndicator;
-            if (this._isDmRoom(r.room) && !SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-                dmIndicator = <img
-                    src={require("../../../../res/img/icon_person.svg")}
-                    className="mx_RoomBreadcrumbs_dmIndicator"
-                    width="13"
-                    height="15"
-                    alt={_t("Direct Chat")}
-                />;
-            }
-
             return (
                 <AccessibleButton
                     className={classes}
@@ -384,7 +374,6 @@ export default class RoomBreadcrumbs extends React.Component {
                 >
                     <RoomAvatar room={r.room} width={32} height={32} />
                     {badge}
-                    {dmIndicator}
                     {tooltip}
                 </AccessibleButton>
             );

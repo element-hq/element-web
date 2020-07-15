@@ -75,8 +75,12 @@ export default createReactClass({
         // If provided, this is used to add a aria-describedby attribute
         contentId: PropTypes.string,
 
-        // optional additional class for the title element
-        titleClass: PropTypes.string,
+        // optional additional class for the title element (basically anything that can be passed to classnames)
+        titleClass: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.object,
+            PropTypes.arrayOf(PropTypes.string),
+        ]),
     },
 
     getDefaultProps: function() {
@@ -86,7 +90,8 @@ export default createReactClass({
         };
     },
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() {
         this._matrixClient = MatrixClientPeg.get();
     },
 
@@ -143,6 +148,7 @@ export default createReactClass({
                 >
                     <div className={classNames('mx_Dialog_header', {
                         'mx_Dialog_headerWithButton': !!this.props.headerButton,
+                        'mx_Dialog_headerWithCancel': !!cancelButton,
                     })}>
                         <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
                             {headerImage}

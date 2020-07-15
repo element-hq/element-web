@@ -15,40 +15,18 @@ limitations under the License.
 */
 
 .mx_AvatarSetting_avatar {
-    width: 88px;
-    height: 88px;
+    width: $font-88px;
+    height: $font-88px;
     margin-left: 13px;
     position: relative;
 
     & > * {
-        width: 88px;
+        width: $font-88px;
         box-sizing: border-box;
     }
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
         margin-top: 8px;
-
-        div {
-            position: relative;
-            height: 12px;
-            width: 12px;
-            display: inline;
-            padding-right: 6px; // 0.5 * 12px
-            left: -6px; // 0.5 * 12px
-            top: 3px;
-        }
-
-        div::before {
-            content: '';
-            position: absolute;
-            height: 12px;
-            width: 12px;
-
-            background-color: $button-primary-fg-color;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            mask-image: url('$(res)/img/feather-customised/upload.svg');
-        }
     }
 
     .mx_AccessibleButton.mx_AccessibleButton_kind_link_sm {
@@ -63,7 +41,7 @@ limitations under the License.
     & > img,
     .mx_AvatarSetting_avatarPlaceholder {
         display: block;
-        height: 88px;
+        height: $font-88px;
         border-radius: 4px;
     }
 

@@ -51,8 +51,30 @@ limitations under the License.
     position: absolute;
     width: 38px;
     height: 38px;
-    mask: url('$(res)/img/icon-jump-to-first-unread.svg');
+    mask-image: url('$(res)/img/icon-jump-to-first-unread.svg');
     mask-repeat: no-repeat;
     mask-position: 9px 13px;
+    background: $roomtile-name-color;
+}
+
+.mx_TopUnreadMessagesBar_markAsRead {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background: $primary-bg-color;
+    border: 1.3px solid $roomtile-name-color;
+    border-radius: 10px;
+    margin: 5px auto;
+}
+
+.mx_TopUnreadMessagesBar_markAsRead::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    mask-image: url('$(res)/img/cancel.svg');
+    mask-repeat: no-repeat;
+    mask-size: 10px;
+    mask-position: 4px 4px;
     background: $roomtile-name-color;
 }

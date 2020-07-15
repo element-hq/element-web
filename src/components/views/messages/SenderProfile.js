@@ -42,7 +42,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this._updateRelatedGroups();
 
@@ -131,7 +131,9 @@ export default createReactClass({
 
         return (
             <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
-                { content }
+                <div className="mx_SenderProfile_hover">
+                    { content }
+                </div>
             </div>
         );
     },

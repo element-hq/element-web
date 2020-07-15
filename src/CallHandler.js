@@ -59,13 +59,13 @@ import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
-import dis from './dispatcher';
-import SdkConfig from './SdkConfig';
-import { showUnknownDeviceDialogForCalls } from './cryptodevices';
+import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
-import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
+import {generateHumanReadableId} from "./utils/NamingUtils";
+import {Jitsi} from "./widgets/Jitsi";
+import {WidgetType} from "./widgets/WidgetType";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -118,62 +118,22 @@ function pause(audioId) {
     }
 }
 
-function _reAttemptCall(call) {
-    if (call.direction === 'outbound') {
-        dis.dispatch({
-            action: 'place_call',
-            room_id: call.roomId,
-            type: call.type,
-        });
-    } else {
-        call.answer();
-    }
-}
-
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error:", err);
-        if (err.code === 'unknown_devices') {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
-                title: _t('Call Failed'),
-                description: _t(
-                    "There are unknown sessions in this room: "+
-                    "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call.",
-                ),
-                button: _t('Review Devices'),
-                onFinished: function(confirmed) {
-                    if (confirmed) {
-                        const room = MatrixClientPeg.get().getRoom(call.roomId);
-                        showUnknownDeviceDialogForCalls(
-                            MatrixClientPeg.get(),
-                            room,
-                            () => {
-                                _reAttemptCall(call);
-                            },
-                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
-                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
-                        );
-                    }
-                },
-            });
-        } else {
-            if (
-                MatrixClientPeg.get().getTurnServers().length === 0 &&
-                SettingsStore.getValue("fallbackICEServerAllowed") === null
-            ) {
-                _showICEFallbackPrompt();
-                return;
-            }
-
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
-                title: _t('Call Failed'),
-                description: err.message,
-            });
+        if (
+            MatrixClientPeg.get().getTurnServers().length === 0 &&
+            SettingsStore.getValue("fallbackICEServerAllowed") === null
+        ) {
+            _showICEFallbackPrompt();
+            return;
         }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+            title: _t('Call Failed'),
+            description: err.message,
+        });
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
@@ -395,41 +355,15 @@ function _onAction(payload) {
 }
 
 async function _startCallApp(roomId, type) {
-    // check for a working integration manager. Technically we could put
-    // the state event in anyway, but the resulting widget would then not
-    // work for us. Better that the user knows before everyone else in the
-    // room sees it.
-    const managers = IntegrationManagers.sharedInstance();
-    let haveScalar = false;
-    if (managers.hasManager()) {
-        try {
-            const scalarClient = managers.getPrimaryManager().getScalarClient();
-            await scalarClient.connect();
-            haveScalar = scalarClient.hasCredentials();
-        } catch (e) {
-            // ignore
-        }
-    }
-
-    if (!haveScalar) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
-        Modal.createTrackedDialog('Could not connect to the integration server', '', ErrorDialog, {
-            title: _t('Could not connect to the integration server'),
-            description: _t('A conference call could not be started because the integrations server is not available'),
-        });
-        return;
-    }
-
     dis.dispatch({
         action: 'appsDrawer',
         show: true,
     });
 
     const room = MatrixClientPeg.get().getRoom(roomId);
-    const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
+    const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
 
-    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
+    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
@@ -439,9 +373,6 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    const currentJitsiWidgets = currentRoomWidgets.filter((ev) => {
-        return ev.getContent().type === 'jitsi';
-    });
     if (currentJitsiWidgets.length > 0) {
         console.warn(
             "Refusing to start conference call widget in " + roomId +
@@ -456,31 +387,22 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    // This inherits its poor naming from the field of the same name that goes into
-    // the event. It's just a random string to make the Jitsi URLs unique.
-    const widgetSessionId = Math.random().toString(36).substring(2);
-    const confId = room.roomId.replace(/[^A-Za-z0-9]/g, '') + widgetSessionId;
-    // NB. we can't just encodeURICompoent all of these because the $ signs need to be there
-    // (but currently the only thing that needs encoding is the confId)
-    const queryString = [
-        'confId='+encodeURIComponent(confId),
-        'isAudioConf='+(type === 'voice' ? 'true' : 'false'),
-        'displayName=$matrix_display_name',
-        'avatarUrl=$matrix_avatar_url',
-        'email=$matrix_user_id',
-    ].join('&');
+    const confId = `JitsiConference${generateHumanReadableId()}`;
+    const jitsiDomain = Jitsi.getInstance().preferredDomain;
 
-    let widgetUrl;
-    if (SdkConfig.get().integrations_jitsi_widget_url) {
-        // Try this config key. This probably isn't ideal as a way of discovering this
-        // URL, but this will at least allow the integration manager to not be hardcoded.
-        widgetUrl = SdkConfig.get().integrations_jitsi_widget_url + '?' + queryString;
-    } else {
-        const apiUrl = IntegrationManagers.sharedInstance().getPrimaryManager().apiUrl;
-        widgetUrl = apiUrl + '/widgets/jitsi.html?' + queryString;
-    }
+    let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
-    const widgetData = { widgetSessionId };
+    // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
+    const parsedUrl = new URL(widgetUrl);
+    parsedUrl.search = ''; // set to empty string to make the URL class use searchParams instead
+    parsedUrl.searchParams.set('confId', confId);
+    widgetUrl = parsedUrl.toString();
+
+    const widgetData = {
+        conferenceId: confId,
+        isAudioOnly: type === 'voice',
+        domain: jitsiDomain,
+    };
 
     const widgetId = (
         'jitsi_' +
@@ -489,7 +411,7 @@ async function _startCallApp(roomId, type) {
         Date.now()
     );
 
-    WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
+    WidgetUtils.setRoomWidget(roomId, widgetId, WidgetType.JITSI, widgetUrl, 'Jitsi', widgetData).then(() => {
         console.log('Jitsi widget added');
     }).catch((e) => {
         if (e.errcode === 'M_FORBIDDEN') {

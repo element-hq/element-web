@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 .mx_CreateRoomDialog_details {
+    margin-top: 15px;
+
     .mx_CreateRoomDialog_details_summary {
         outline: none;
         list-style: none;
@@ -49,7 +51,7 @@ limitations under the License.
 }
 
 .mx_CreateRoomDialog_input {
-    font-size: 15px;
+    font-size: $font-15px;
     border-radius: 3px;
     border: 1px solid $input-border-color;
     padding: 9px;
@@ -71,9 +73,17 @@ limitations under the License.
 }
 
 .mx_CreateRoomDialog {
-
     &.mx_Dialog_fixedWidth {
         width: 450px;
+    }
+
+    .mx_Dialog_content {
+        margin-bottom: 40px;
+    }
+
+    p,
+    .mx_Field_input label {
+        color: $muted-fg-color;
     }
 
     .mx_SettingsFlag {
@@ -89,6 +99,19 @@ limitations under the License.
     .mx_ToggleSwitch {
         flex: 0 0 auto;
         margin-left: 30px;
+    }
+
+    .mx_CreateRoomDialog_topic {
+        margin-bottom: 36px;
+    }
+
+    .mx_Dialog_content > .mx_SettingsFlag {
+        margin-top: 24px;
+    }
+
+    p {
+        margin: 0 85px 0 0;
+        font-size: $font-12px;
     }
 }
 

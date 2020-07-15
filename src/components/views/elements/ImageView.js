@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-'use strict';
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
@@ -27,6 +25,7 @@ import AccessibleButton from "./AccessibleButton";
 import Modal from "../../../Modal";
 import * as sdk from "../../../index";
 import {Key} from "../../../Keyboard";
+import FocusLock from "react-focus-lock";
 
 export default class ImageView extends React.Component {
     static propTypes = {
@@ -50,16 +49,6 @@ export default class ImageView extends React.Component {
         this.state = { rotationDegrees: 0 };
     }
 
-    // XXX: keyboard shortcuts for managing dialogs should be done by the modal
-    // dialog base class somehow, surely...
-    componentDidMount() {
-        document.addEventListener("keydown", this.onKeyDown);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeyDown);
-    }
-
     onKeyDown = (ev) => {
         if (ev.key === Key.ESCAPE) {
             ev.stopPropagation();
@@ -73,6 +62,7 @@ export default class ImageView extends React.Component {
         Modal.createTrackedDialog('Confirm Redact Dialog', 'Image View', ConfirmRedactDialog, {
             onFinished: (proceed) => {
                 if (!proceed) return;
+                this.props.onFinished();
                 MatrixClientPeg.get().redactEvent(
                     this.props.mxEvent.getRoomId(), this.props.mxEvent.getId(),
                 ).catch(function(e) {
@@ -194,7 +184,14 @@ export default class ImageView extends React.Component {
         const effectiveStyle = {transform: `rotate(${rotationDegrees}deg)`, ...style};
 
         return (
-            <div className="mx_ImageView">
+            <FocusLock
+                returnFocus={true}
+                lockProps={{
+                    onKeyDown: this.onKeyDown,
+                    role: "dialog",
+                }}
+                className="mx_ImageView"
+            >
                 <div className="mx_ImageView_lhs">
                 </div>
                 <div className="mx_ImageView_content">
@@ -216,7 +213,7 @@ export default class ImageView extends React.Component {
                                 { this.getName() }
                             </div>
                             { eventMeta }
-                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } rel="noreferrer noopener">
+                            <a className="mx_ImageView_link" href={ this.props.src } download={ this.props.name } target="_blank" rel="noopener">
                                 <div className="mx_ImageView_download">
                                         { _t('Download this file') }<br />
                                          <span className="mx_ImageView_size">{ sizeRes }</span>
@@ -230,7 +227,7 @@ export default class ImageView extends React.Component {
                 </div>
                 <div className="mx_ImageView_rhs">
                 </div>
-            </div>
+            </FocusLock>
         );
     }
 }

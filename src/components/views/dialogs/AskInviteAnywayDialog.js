@@ -72,7 +72,7 @@ export default createReactClass({
                     <button onClick={this._onInviteNeverWarnClicked}>
                         { _t('Invite anyway and never warn me again') }
                     </button>
-                    <button onClick={this._onInviteClicked} autoFocus="true">
+                    <button onClick={this._onInviteClicked} autoFocus={true}>
                         { _t('Invite anyway') }
                     </button>
                 </div>

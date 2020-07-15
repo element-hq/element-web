@@ -2,6 +2,8 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2016",
@@ -9,11 +11,16 @@
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,
+    "jsx": "react",
     "types": [
-      "node"
+      "node",
+      "react",
+      "flux",
+      "react-transition-group"
     ]
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
   ]
 }

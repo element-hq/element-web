@@ -19,12 +19,13 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import classNames from 'classnames';
+import AccessibleButton from "../elements/AccessibleButton";
 
 export default class MessageComposerFormatBar extends React.PureComponent {
     static propTypes = {
         onAction: PropTypes.func.isRequired,
         shortcuts: PropTypes.object.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -64,7 +65,7 @@ class FormatButton extends React.PureComponent {
         icon: PropTypes.string.isRequired,
         shortcut: PropTypes.string,
         visible: PropTypes.bool,
-    }
+    };
 
     render() {
         const InteractiveTooltip = sdk.getComponent('elements.InteractiveTooltip');
@@ -82,11 +83,12 @@ class FormatButton extends React.PureComponent {
 
         return (
             <InteractiveTooltip content={tooltipContent} forceHidden={!this.props.visible}>
-                <span aria-label={this.props.label}
-                   role="button"
-                   onClick={this.props.onClick}
-                   className={className}>
-                </span>
+                <AccessibleButton
+                    as="span"
+                    role="button"
+                    onClick={this.props.onClick}
+                    aria-label={this.props.label}
+                    className={className} />
             </InteractiveTooltip>
         );
     }

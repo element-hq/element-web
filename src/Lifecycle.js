@@ -26,7 +26,7 @@ import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
 import * as sdk from './index';
@@ -40,6 +40,12 @@ import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
+import RebrandListener from "./RebrandListener";
+import {Jitsi} from "./widgets/Jitsi";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+
+const HOMESERVER_URL_KEY = "mx_hs_url";
+const ID_SERVER_URL_KEY = "mx_is_url";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -162,14 +168,16 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    if (!queryParams.homeserver) {
+    const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
+    if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);
     }
 
     return sendLoginRequest(
-        queryParams.homeserver,
-        queryParams.identityServer,
+        homeserver,
+        identityServer,
         "m.login.token", {
             token: queryParams.loginToken,
             initial_device_display_name: defaultDeviceDisplayName,
@@ -255,8 +263,8 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
  * @returns {Object} Information about the session - see implementation for variables.
  */
 export function getLocalStorageSessionVars() {
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url");
+    const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+    const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
     const accessToken = localStorage.getItem("mx_access_token");
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
@@ -297,6 +305,8 @@ async function _restoreFromLocalStorage(opts) {
             return false;
         }
 
+        const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
@@ -305,6 +315,7 @@ async function _restoreFromLocalStorage(opts) {
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: isGuest,
+            pickleKey: pickleKey,
         }, false);
         return true;
     } else {
@@ -313,7 +324,7 @@ async function _restoreFromLocalStorage(opts) {
     }
 }
 
-function _handleLoadSessionFailure(e) {
+async function _handleLoadSessionFailure(e) {
     console.error("Unable to load session", e);
 
     const SessionRestoreErrorDialog =
@@ -323,16 +334,15 @@ function _handleLoadSessionFailure(e) {
         error: e.message,
     });
 
-    return modal.finished.then(([success]) => {
-        if (success) {
-            // user clicked continue.
-            _clearStorage();
-            return false;
-        }
+    const [success] = await modal.finished;
+    if (success) {
+        // user clicked continue.
+        await _clearStorage();
+        return false;
+    }
 
-        // try, try again
-        return loadSession();
-    });
+    // try, try again
+    return loadSession();
 }
 
 /**
@@ -348,9 +358,13 @@ function _handleLoadSessionFailure(e) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function setLoggedIn(credentials) {
+export async function setLoggedIn(credentials) {
     stopMatrixClient();
-    return _doSetLoggedIn(credentials, true);
+    const pickleKey = credentials.userId && credentials.deviceId
+          ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+          : null;
+
+    return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
 
 /**
@@ -479,9 +493,9 @@ function _showStorageEvictedDialog() {
 class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
-    localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
+    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
-        localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
     }
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_access_token", credentials.accessToken);
@@ -516,7 +530,9 @@ export function logout() {
     }
 
     _isLoggingOut = true;
-    MatrixClientPeg.get().logout().then(onLoggedOut,
+    const client = MatrixClientPeg.get();
+    PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
+    client.logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
@@ -575,13 +591,12 @@ async function startMatrixClient(startSyncing=true) {
     // to work).
     dis.dispatch({action: 'will_start_client'}, true);
 
+    // reset things first just in case
+    TypingStore.sharedInstance().reset();
+    ToastStore.sharedInstance().reset();
+
     Notifier.start();
     UserActivity.sharedInstance().start();
-    TypingStore.sharedInstance().reset(); // just in case
-    ToastStore.sharedInstance().reset();
-    if (!SettingsStore.getValue("lowBandwidth")) {
-        Presence.start();
-    }
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
@@ -604,6 +619,16 @@ async function startMatrixClient(startSyncing=true) {
 
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start();
+    // Similarly, don't start sending presence updates until we've started
+    // the client
+    if (!SettingsStore.getValue("lowBandwidth")) {
+        Presence.start();
+    }
+
+    // Now that we have a MatrixClientPeg, update the Jitsi info
+    await Jitsi.getInstance().start();
+
+    RebrandListener.sharedInstance().start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
@@ -638,6 +663,10 @@ async function _clearStorage() {
         window.localStorage.clear();
     }
 
+    if (window.sessionStorage) {
+        window.sessionStorage.clear();
+    }
+
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({
         // we'll never make any requests, so can pass a bogus HS URL
@@ -662,6 +691,7 @@ export function stopMatrixClient(unsetClient=true) {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    RebrandListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

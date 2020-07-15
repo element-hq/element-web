@@ -60,3 +60,14 @@ limitations under the License.
 .mx_InteractiveAuthEntryComponents_passwordSection {
     width: 300px;
 }
+
+.mx_InteractiveAuthEntryComponents_sso_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    .mx_AccessibleButton {
+        margin-left: 5px;
+    }
+}

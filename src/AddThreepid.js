@@ -21,6 +21,7 @@ import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
+import {SSOAuthEntry} from "./components/views/auth/InteractiveAuthEntryComponents";
 
 function getIdServerDomain() {
     return MatrixClientPeg.get().idBaseUrl.split("://")[1];
@@ -188,11 +189,31 @@ export default class AddThreepid {
                         // pop up an interactive auth dialog
                         const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
+
+                        const dialogAesthetics = {
+                            [SSOAuthEntry.PHASE_PREAUTH]: {
+                                title: _t("Use Single Sign On to continue"),
+                                body: _t("Confirm adding this email address by using " +
+                                    "Single Sign On to prove your identity."),
+                                continueText: _t("Single Sign On"),
+                                continueKind: "primary",
+                            },
+                            [SSOAuthEntry.PHASE_POSTAUTH]: {
+                                title: _t("Confirm adding email"),
+                                body: _t("Click the button below to confirm adding this email address."),
+                                continueText: _t("Confirm"),
+                                continueKind: "primary",
+                            },
+                        };
                         const { finished } = Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
                             title: _t("Add Email Address"),
                             matrixClient: MatrixClientPeg.get(),
                             authData: e.data,
                             makeRequest: this._makeAddThreepidOnlyRequest,
+                            aestheticsForStagePhases: {
+                                [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                                [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                            },
                         });
                         return finished;
                     }
@@ -285,11 +306,30 @@ export default class AddThreepid {
                     // pop up an interactive auth dialog
                     const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
+                    const dialogAesthetics = {
+                        [SSOAuthEntry.PHASE_PREAUTH]: {
+                            title: _t("Use Single Sign On to continue"),
+                            body: _t("Confirm adding this phone number by using " +
+                                "Single Sign On to prove your identity."),
+                            continueText: _t("Single Sign On"),
+                            continueKind: "primary",
+                        },
+                        [SSOAuthEntry.PHASE_POSTAUTH]: {
+                            title: _t("Confirm adding phone number"),
+                            body: _t("Click the button below to confirm adding this phone number."),
+                            continueText: _t("Confirm"),
+                            continueKind: "primary",
+                        },
+                    };
                     const { finished } = Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
                         title: _t("Add Phone Number"),
                         matrixClient: MatrixClientPeg.get(),
                         authData: e.data,
                         makeRequest: this._makeAddThreepidOnlyRequest,
+                        aestheticsForStagePhases: {
+                            [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                            [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                        },
                     });
                     return finished;
                 }

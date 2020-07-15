@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import {MatrixClient} from 'matrix-js-sdk';
+
 import {_td} from '../languageHandler';
 import {
     AudioNotificationsEnabledController,
@@ -24,8 +26,12 @@ import {
 } from "./controllers/NotificationControllers";
 import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
+import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
 import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
+import FontSizeController from './controllers/FontSizeController';
+import SystemFontController from './controllers/SystemFontController';
+import UseSystemFontController from './controllers/UseSystemFontController';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = ['device', 'room-device', 'room-account', 'account', 'config'];
@@ -91,6 +97,12 @@ export const SETTINGS = {
     //     // not use this for new settings.
     //     invertedSettingName: "my-negative-setting",
     // },
+    "feature_new_spinner": {
+        isFeature: true,
+        displayName: _td("New spinner design"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -128,9 +140,17 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_presence_in_room_list": {
+    "feature_new_room_list": {
+        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
+        // XXX: We shouldn't have non-features appear like features.
+        displayName: _td("Use the improved room list (will refresh to apply changes)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: true,
+        controller: new ReloadOnChangeController(),
+    },
+    "feature_custom_themes": {
         isFeature: true,
-        displayName: _td("Show a presence dot next to DMs in the room list"),
+        displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -142,29 +162,22 @@ export const SETTINGS = {
         supportedLevels: ['account'],
         default: null,
     },
-    "feature_cross_signing": {
-        isFeature: true,
-        displayName: _td("Enable cross-signing to verify per-user instead of per-session (in development)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_event_indexing": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Enable local event indexing and E2EE search (requires restart)"),
-        default: false,
-    },
     "feature_bridge_state": {
         isFeature: true,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
-    "feature_invite_only_padlocks": {
-        isFeature: true,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Show padlocks on invite only rooms"),
-        default: true,
+    "baseFontSize": {
+        displayName: _td("Font size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: 10,
+        controller: new FontSizeController(),
+    },
+    "useCustomFontSize": {
+        displayName: _td("Use custom size"),
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: false,
     },
     "MessageComposerInput.suggestEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -172,9 +185,14 @@ export const SETTINGS = {
         default: true,
         invertedSettingName: 'MessageComposerInput.dontSuggestEmoji',
     },
+    // TODO: Wire up appropriately to UI (FTUE notifications)
+    "Notifications.alwaysShowBadgeCounts": {
+        supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
+        default: false,
+    },
     "useCompactLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Use compact timeline layout'),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
     "showRedactions": {
@@ -298,6 +316,18 @@ export const SETTINGS = {
         default: true,
         displayName: _td("Match system theme"),
     },
+    "useSystemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: false,
+        displayName: _td("Use a system font"),
+        controller: new UseSystemFontController(),
+    },
+    "systemFont": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        default: "",
+        displayName: _td("System font name"),
+        controller: new SystemFontController(),
+    },
     "webRtcAllowPeerToPeer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         displayName: _td('Allow Peer-to-Peer for 1:1 calls'),
@@ -321,6 +351,10 @@ export const SETTINGS = {
         default: "en",
     },
     "breadcrumb_rooms": {
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "room_directory_servers": {
         supportedLevels: ['account'],
         default: [],
     },
@@ -433,14 +467,21 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
+    "RoomList.orderAlphabetically": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Order rooms by name"),
+        default: false,
+    },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Order rooms in the room list by most important first instead of most recent'),
+        displayName: _td("Show rooms with unread notifications first"),
         default: true,
     },
     "breadcrumbs": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Show recently visited rooms above the room list"),
+        displayName: _td("Show shortcuts to recently viewed rooms above the room list"),
         default: true,
     },
     "showHiddenEventsInTimeline": {
@@ -496,14 +537,33 @@ export const SETTINGS = {
         displayName: _td("Enable message search in encrypted rooms"),
         default: true,
     },
-    "keepSecretStoragePassphraseForSession": {
-         supportedLevels: ['device', 'config'],
-         displayName: _td("Keep secret storage passphrase in memory for this session"),
-         default: false,
-    },
     "crawlerSleepTime": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("How fast should messages be downloaded."),
         default: 3000,
+    },
+    "showCallButtonsInComposer": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: true,
+    },
+    "e2ee.manuallyVerifyAllSessions": {
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
+        displayName: _td("Manually verify all remote sessions"),
+        default: false,
+        controller: new PushToMatrixClientController(
+            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+        ),
+    },
+    "ircDisplayNameWidth": {
+        // We specifically want to have room-device > device so that users may set a device default
+        // with a per-room override.
+        supportedLevels: ['room-device', 'device'],
+        displayName: _td("IRC display name width"),
+        default: 80,
+    },
+    "useIRCLayout": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Enable experimental, compact IRC style layout"),
+        default: false,
     },
 };

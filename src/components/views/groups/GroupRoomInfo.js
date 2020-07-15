@@ -18,12 +18,13 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import GroupStore from '../../../stores/GroupStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 export default createReactClass({
     displayName: 'GroupRoomInfo',
@@ -46,11 +47,12 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._initGroupStore(this.props.groupId);
     },
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.groupId !== this.props.groupId) {
             this._unregisterGroupStore(this.props.groupId);
             this._initGroupStore(newProps.groupId);
@@ -153,7 +155,6 @@ export default createReactClass({
     render: function() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
-        const GeminiScrollbarWrapper = sdk.getComponent("elements.GeminiScrollbarWrapper");
         if (this.state.groupRoomRemoveLoading || !this.state.groupRoom) {
             const Spinner = sdk.getComponent("elements.Spinner");
             return <div className="mx_MemberInfo">
@@ -216,7 +217,7 @@ export default createReactClass({
         const groupRoomName = this.state.groupRoom.displayname;
         return (
             <div className="mx_MemberInfo" role="tabpanel">
-                <GeminiScrollbarWrapper autoshow={true}>
+                <AutoHideScrollbar>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
                         <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
@@ -231,7 +232,7 @@ export default createReactClass({
                     </div>
 
                     { adminTools }
-                </GeminiScrollbarWrapper>
+                </AutoHideScrollbar>
             </div>
         );
     },

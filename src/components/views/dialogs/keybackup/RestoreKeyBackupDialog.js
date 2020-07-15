@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
-import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 
@@ -36,6 +35,9 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         // if false, will close the dialog as soon as the restore completes succesfully
         // default: true
         showSummary: PropTypes.bool,
+        // If specified, gather the key from the user but then call the function with the backup
+        // key rather than actually (necessarily) restoring the backup.
+        keyCallback: PropTypes.func,
     };
 
     static defaultProps = {
@@ -56,6 +58,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             forceRecoveryKey: false,
             passPhrase: '',
             restoreType: null,
+            progress: { stage: "prefetch" },
         };
     }
 
@@ -77,16 +80,15 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         });
     }
 
+    _progressCallback = (data) => {
+        this.setState({
+            progress: data,
+        });
+    }
+
     _onResetRecoveryClick = () => {
         this.props.onFinished(false);
-        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
-            {
-                onFinished: () => {
-                    this._loadBackupStatus();
-                },
-            }, null, /* priority = */ false, /* static = */ true,
-        );
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
@@ -103,9 +105,19 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             restoreType: RESTORE_TYPE_PASSPHRASE,
         });
         try {
+            // We do still restore the key backup: we must ensure that the key backup key
+            // is the right one and restoring it is currently the only way we can do this.
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithPassword(
                 this.state.passPhrase, undefined, undefined, this.state.backupInfo,
+                { progressCallback: this._progressCallback },
             );
+            if (this.props.keyCallback) {
+                const key = await MatrixClientPeg.get().keyBackupKeyFromPassword(
+                    this.state.passPhrase, this.state.backupInfo,
+                );
+                this.props.keyCallback(key);
+            }
+
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
@@ -134,7 +146,12 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         try {
             const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithRecoveryKey(
                 this.state.recoveryKey, undefined, undefined, this.state.backupInfo,
+                { progressCallback: this._progressCallback },
             );
+            if (this.props.keyCallback) {
+                const key = MatrixClientPeg.get().keyBackupKeyFromRecoveryKey(this.state.recoveryKey);
+                this.props.keyCallback(key);
+            }
             if (!this.props.showSummary) {
                 this.props.onFinished(true);
                 return;
@@ -168,7 +185,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             // `accessSecretStorage` may prompt for storage access as needed.
             const recoverInfo = await accessSecretStorage(async () => {
                 return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
+                    this.state.backupInfo, undefined, undefined,
+                    { progressCallback: this._progressCallback },
                 );
             });
             this.setState({
@@ -184,18 +202,48 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         }
     }
 
+    async _restoreWithCachedKey(backupInfo) {
+        if (!backupInfo) return false;
+        try {
+            const recoverInfo = await MatrixClientPeg.get().restoreKeyBackupWithCache(
+                undefined, /* targetRoomId */
+                undefined, /* targetSessionId */
+                backupInfo,
+                { progressCallback: this._progressCallback },
+            );
+            this.setState({
+                recoverInfo,
+            });
+            return true;
+        } catch (e) {
+            console.log("restoreWithCachedKey failed:", e);
+            return false;
+        }
+    }
+
     async _loadBackupStatus() {
         this.setState({
             loading: true,
             loadError: null,
         });
         try {
-            const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            const cli = MatrixClientPeg.get();
+            const backupInfo = await cli.getKeyBackupVersion();
+            const has4S = await cli.hasSecretStorageKey();
+            const backupKeyStored = has4S && await cli.isKeyBackupKeyStored();
             this.setState({
                 backupInfo,
                 backupKeyStored,
             });
+
+            const gotCache = await this._restoreWithCachedKey(backupInfo);
+            if (gotCache) {
+                console.log("RestoreKeyBackupDialog: found cached backup key");
+                this.setState({
+                    loading: false,
+                });
+                return;
+            }
 
             // If the backup key is stored, we can proceed directly to restore.
             if (backupKeyStored) {
@@ -229,8 +277,20 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
         let content;
         let title;
         if (this.state.loading) {
-            title = _t("Loading...");
-            content = <Spinner />;
+            title = _t("Restoring keys from backup");
+            let details;
+            if (this.state.progress.stage === "fetch") {
+                details = _t("Fetching keys from server...");
+            } else if (this.state.progress.stage === "load_keys") {
+                const { total, successes, failures } = this.state.progress;
+                details = _t("%(completed)s of %(total)s keys restored", { total, completed: successes + failures });
+            } else if (this.state.progress.stage === "prefetch") {
+                details = _t("Fetching keys from server...");
+            }
+            content = <div>
+                <div>{details}</div>
+                <Spinner />
+            </div>;
         } else if (this.state.loadError) {
             title = _t("Error");
             content = _t("Unable to load backup status");
@@ -240,7 +300,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     title = _t("Recovery key mismatch");
                     content = <div>
                         <p>{_t(
-                            "Backup could not be decrypted with this key: " +
+                            "Backup could not be decrypted with this recovery key: " +
                             "please verify that you entered the correct recovery key.",
                         )}</p>
                     </div>;
@@ -248,7 +308,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                     title = _t("Incorrect recovery passphrase");
                     content = <div>
                         <p>{_t(
-                            "Backup could not be decrypted with this passphrase: " +
+                            "Backup could not be decrypted with this recovery passphrase: " +
                             "please verify that you entered the correct recovery passphrase.",
                         )}</p>
                     </div>;
@@ -262,7 +322,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             content = _t("No backup found!");
         } else if (this.state.recoverInfo) {
             const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-            title = _t("Backup restored");
+            title = _t("Keys restored");
             let failedToDecrypt;
             if (this.state.recoverInfo.total > this.state.recoverInfo.imported) {
                 failedToDecrypt = <p>{_t(
@@ -271,7 +331,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 )}</p>;
             }
             content = <div>
-                <p>{_t("Restored %(sessionCount)s session keys", {sessionCount: this.state.recoverInfo.imported})}</p>
+                <p>{_t("Successfully restored %(sessionCount)s keys", {sessionCount: this.state.recoverInfo.imported})}</p>
                 {failedToDecrypt}
                 <DialogButtons primaryButton={_t('OK')}
                     onPrimaryButtonClick={this._onDone}
@@ -392,7 +452,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
                 onFinished={this.props.onFinished}
                 title={title}
             >
-            <div>
+            <div className='mx_RestoreKeyBackupDialog_content'>
                 {content}
             </div>
             </BaseDialog>

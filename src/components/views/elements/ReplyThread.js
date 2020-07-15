@@ -19,13 +19,14 @@ import React from 'react';
 import * as sdk from '../../../index';
 import {_t} from '../../../languageHandler';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import {wantsDateSeparator} from '../../../DateUtils';
 import {MatrixEvent} from 'matrix-js-sdk';
 import {makeUserPermalink, RoomPermalinkCreator} from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -37,6 +38,8 @@ export default class ReplyThread extends React.Component {
         // called when the ReplyThread contents has changed, including EventTiles thereof
         onHeightChanged: PropTypes.func.isRequired,
         permalinkCreator: PropTypes.instanceOf(RoomPermalinkCreator).isRequired,
+        // Specifies which layout to use.
+        useIRCLayout: PropTypes.bool,
     };
 
     static contextType = MatrixClientContext;
@@ -176,15 +179,20 @@ export default class ReplyThread extends React.Component {
         };
     }
 
-    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref) {
+    static makeThread(parentEv, onHeightChanged, permalinkCreator, ref, useIRCLayout) {
         if (!ReplyThread.getParentEventId(parentEv)) {
-            return <div />;
+            return <div className="mx_ReplyThread_wrapper_empty" />;
         }
-        return <ReplyThread parentEv={parentEv} onHeightChanged={onHeightChanged}
-            ref={ref} permalinkCreator={permalinkCreator} />;
+        return <ReplyThread
+            parentEv={parentEv}
+            onHeightChanged={onHeightChanged}
+            ref={ref}
+            permalinkCreator={permalinkCreator}
+            useIRCLayout={useIRCLayout}
+        />;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.unmounted = false;
         this.room = this.context.getRoom(this.props.parentEv.getRoomId());
         this.room.on("Room.redaction", this.onRoomRedaction);
@@ -283,7 +291,7 @@ export default class ReplyThread extends React.Component {
             events,
         }, this.loadNextEvent);
 
-        dis.dispatch({action: 'focus_composer'});
+        dis.fire(Action.FocusComposer);
     }
 
     render() {
@@ -331,11 +339,13 @@ export default class ReplyThread extends React.Component {
                     onHeightChanged={this.props.onHeightChanged}
                     permalinkCreator={this.props.permalinkCreator}
                     isRedacted={ev.isRedacted()}
-                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")} />
+                    isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
+                    useIRCLayout={this.props.useIRCLayout}
+                />
             </blockquote>;
         });
 
-        return <div>
+        return <div className="mx_ReplyThread_wrapper">
             <div>{ header }</div>
             <div>{ evTiles }</div>
         </div>;

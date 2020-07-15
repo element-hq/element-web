@@ -28,9 +28,35 @@ import {MatrixClientPeg} from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import {_t} from "../../languageHandler";
 import {haveTileForEvent} from "../views/rooms/EventTile";
+import {textForEvent} from "../../TextForEvent";
+import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = ['m.sticker', 'm.room.message'];
+
+// check if there is a previous event and it has the same sender as this event
+// and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
+function shouldFormContinuation(prevEvent, mxEvent) {
+    // sanity check inputs
+    if (!prevEvent || !prevEvent.sender || !mxEvent.sender) return false;
+    // check if within the max continuation period
+    if (mxEvent.getTs() - prevEvent.getTs() > CONTINUATION_MAX_INTERVAL) return false;
+
+    // Some events should appear as continuations from previous events of different types.
+    if (mxEvent.getType() !== prevEvent.getType() &&
+        (!continuedTypes.includes(mxEvent.getType()) ||
+            !continuedTypes.includes(prevEvent.getType()))) return false;
+
+    // Check if the sender is the same and hasn't changed their displayname/avatar between these events
+    if (mxEvent.sender.userId !== prevEvent.sender.userId ||
+        mxEvent.sender.name !== prevEvent.sender.name ||
+        mxEvent.sender.getMxcAvatarUrl() !== prevEvent.sender.getMxcAvatarUrl()) return false;
+
+    // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
+    if (!haveTileForEvent(prevEvent)) return false;
+
+    return true;
+}
 
 const isMembershipChange = (e) => e.getType() === 'm.room.member' || e.getType() === 'm.room.third_party_invite';
 
@@ -106,10 +132,14 @@ export default class MessagePanel extends React.Component {
 
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
+
+        // whether to use the irc layout
+        useIRCLayout: PropTypes.bool,
     };
 
-    constructor() {
-        super();
+    // Force props to be loaded for useIRCLayout
+    constructor(props) {
+        super(props);
 
         this.state = {
             // previous positions the read marker has been in, so we can
@@ -358,8 +388,11 @@ export default class MessagePanel extends React.Component {
             }
 
             return (
-                <li key={"readMarker_"+eventId} ref={this._readMarkerNode}
-                      className="mx_RoomView_myReadMarker_container">
+                <li key={"readMarker_"+eventId}
+                    ref={this._readMarkerNode}
+                    className="mx_RoomView_myReadMarker_container"
+                    data-scroll-tokens={eventId}
+                >
                     { hr }
                 </li>
             );
@@ -502,44 +535,13 @@ export default class MessagePanel extends React.Component {
     }
 
     _getTilesForEvent(prevEvent, mxEv, last) {
+        const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const ret = [];
 
         const isEditing = this.props.editState &&
             this.props.editState.getEvent().getId() === mxEv.getId();
-        // is this a continuation of the previous message?
-        let continuation = false;
-
-        // Some events should appear as continuations from previous events of
-        // different types.
-
-        const eventTypeContinues =
-            prevEvent !== null &&
-            continuedTypes.includes(mxEv.getType()) &&
-            continuedTypes.includes(prevEvent.getType());
-
-        // if there is a previous event and it has the same sender as this event
-        // and the types are the same/is in continuedTypes and the time between them is <= CONTINUATION_MAX_INTERVAL
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender && mxEv.sender.userId === prevEvent.sender.userId &&
-            (mxEv.getType() === prevEvent.getType() || eventTypeContinues) &&
-            (mxEv.getTs() - prevEvent.getTs() <= CONTINUATION_MAX_INTERVAL)) {
-            continuation = true;
-        }
-
-/*
-        // Work out if this is still a continuation, as we are now showing commands
-        // and /me messages with their own little avatar. The case of a change of
-        // event type (commands) is handled above, but we need to handle the /me
-        // messages seperately as they have a msgtype of 'm.emote' but are classed
-        // as normal messages
-        if (prevEvent !== null && prevEvent.sender && mxEv.sender
-                && mxEv.sender.userId === prevEvent.sender.userId
-                && mxEv.getType() == prevEvent.getType()
-                && prevEvent.getContent().msgtype === 'm.emote') {
-            continuation = false;
-        }
-*/
 
         // local echoes have a fake date, which could even be yesterday. Treat them
         // as 'today' for the date separators.
@@ -551,11 +553,14 @@ export default class MessagePanel extends React.Component {
         }
 
         // do we need a date separator since the last event?
-        if (this._wantsDateSeparator(prevEvent, eventDate)) {
+        const wantsDateSeparator = this._wantsDateSeparator(prevEvent, eventDate);
+        if (wantsDateSeparator) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
-            continuation = false;
         }
+
+        // is this a continuation of the previous message?
+        const continuation = !wantsDateSeparator && shouldFormContinuation(prevEvent, mxEv);
 
         const eventId = mxEv.getId();
         const highlight = (eventId === this.props.highlightedEventId);
@@ -575,25 +580,28 @@ export default class MessagePanel extends React.Component {
                 ref={this._collectEventNode.bind(this, eventId)}
                 data-scroll-tokens={scrollToken}
             >
-                <EventTile mxEvent={mxEv}
-                    continuation={continuation}
-                    isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
-                    editState={isEditing && this.props.editState}
-                    onHeightChanged={this._onHeightChanged}
-                    readReceipts={readReceipts}
-                    readReceiptMap={this._readReceiptMap}
-                    showUrlPreview={this.props.showUrlPreview}
-                    checkUnmounting={this._isUnmounting.bind(this)}
-                    eventSendStatus={mxEv.getAssociatedStatus()}
-                    tileShape={this.props.tileShape}
-                    isTwelveHour={this.props.isTwelveHour}
-                    permalinkCreator={this.props.permalinkCreator}
-                    last={last}
-                    isSelectedEvent={highlight}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
-                    showReactions={this.props.showReactions}
-                />
+                <TileErrorBoundary mxEvent={mxEv}>
+                    <EventTile mxEvent={mxEv}
+                        continuation={continuation}
+                        isRedacted={mxEv.isRedacted()}
+                        replacingEventId={mxEv.replacingEventId()}
+                        editState={isEditing && this.props.editState}
+                        onHeightChanged={this._onHeightChanged}
+                        readReceipts={readReceipts}
+                        readReceiptMap={this._readReceiptMap}
+                        showUrlPreview={this.props.showUrlPreview}
+                        checkUnmounting={this._isUnmounting.bind(this)}
+                        eventSendStatus={mxEv.getAssociatedStatus()}
+                        tileShape={this.props.tileShape}
+                        isTwelveHour={this.props.isTwelveHour}
+                        permalinkCreator={this.props.permalinkCreator}
+                        last={last}
+                        isSelectedEvent={highlight}
+                        getRelationsForEvent={this.props.getRelationsForEvent}
+                        showReactions={this.props.showReactions}
+                        useIRCLayout={this.props.useIRCLayout}
+                    />
+                </TileErrorBoundary>
             </li>,
         );
 
@@ -755,6 +763,7 @@ export default class MessagePanel extends React.Component {
     }
 
     render() {
+        const ErrorBoundary = sdk.getComponent('elements.ErrorBoundary');
         const ScrollPanel = sdk.getComponent("structures.ScrollPanel");
         const WhoIsTypingTile = sdk.getComponent("rooms.WhoIsTypingTile");
         const Spinner = sdk.getComponent("elements.Spinner");
@@ -786,23 +795,35 @@ export default class MessagePanel extends React.Component {
             );
         }
 
+        let ircResizer = null;
+        if (this.props.useIRCLayout) {
+            ircResizer = <IRCTimelineProfileResizer
+                minWidth={20}
+                maxWidth={600}
+                roomId={this.props.room ? this.props.room.roomId : null}
+            />;
+        }
+
         return (
-            <ScrollPanel
-                ref={this._scrollPanel}
-                className={className}
-                onScroll={this.props.onScroll}
-                onResize={this.onResize}
-                onFillRequest={this.props.onFillRequest}
-                onUnfillRequest={this.props.onUnfillRequest}
-                style={style}
-                stickyBottom={this.props.stickyBottom}
-                resizeNotifier={this.props.resizeNotifier}
-            >
-                { topSpinner }
-                { this._getEventTiles() }
-                { whoIsTyping }
-                { bottomSpinner }
-            </ScrollPanel>
+            <ErrorBoundary>
+                <ScrollPanel
+                    ref={this._scrollPanel}
+                    className={className}
+                    onScroll={this.props.onScroll}
+                    onResize={this.onResize}
+                    onFillRequest={this.props.onFillRequest}
+                    onUnfillRequest={this.props.onUnfillRequest}
+                    style={style}
+                    stickyBottom={this.props.stickyBottom}
+                    resizeNotifier={this.props.resizeNotifier}
+                    fixedChildren={ircResizer}
+                >
+                    { topSpinner }
+                    { this._getEventTiles() }
+                    { whoIsTyping }
+                    { bottomSpinner }
+                </ScrollPanel>
+            </ErrorBoundary>
         );
     }
 }
@@ -836,14 +857,16 @@ class CreationGrouper {
         // events that we include in the group but then eject out and place
         // above the group.
         this.ejectedEvents = [];
-        this.readMarker = panel._readMarkerForEvent(createEvent.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            createEvent.getId(),
+            createEvent === lastShownEvent,
+        );
     }
 
     shouldGroup(ev) {
         const panel = this.panel;
         const createEvent = this.createEvent;
         if (!panel._shouldShowEvent(ev)) {
-            this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
             return true;
         }
         if (panel._wantsDateSeparator(this.createEvent, ev.getDate())) {
@@ -861,7 +884,10 @@ class CreationGrouper {
 
     add(ev) {
         const panel = this.panel;
-        this.readMarker = this.readMarker || panel._readMarkerForEvent(ev.getId());
+        this.readMarker = this.readMarker || panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         if (!panel._shouldShowEvent(ev)) {
             return;
         }
@@ -948,18 +974,34 @@ class MemberGrouper {
 
     constructor(panel, ev, prevEvent, lastShownEvent) {
         this.panel = panel;
-        this.readMarker = panel._readMarkerForEvent(ev.getId());
+        this.readMarker = panel._readMarkerForEvent(
+            ev.getId(),
+            ev === lastShownEvent,
+        );
         this.events = [ev];
         this.prevEvent = prevEvent;
         this.lastShownEvent = lastShownEvent;
     }
 
     shouldGroup(ev) {
+        if (this.panel._wantsDateSeparator(this.events[0], ev.getDate())) {
+            return false;
+        }
         return isMembershipChange(ev);
     }
 
     add(ev) {
-        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(ev.getId());
+        if (ev.getType() === 'm.room.member') {
+            // We'll just double check that it's worth our time to do so, through an
+            // ugly hack. If textForEvent returns something, we should group it for
+            // rendering but if it doesn't then we'll exclude it.
+            const renderText = textForEvent(ev);
+            if (!renderText || renderText.trim().length === 0) return; // quietly ignore
+        }
+        this.readMarker = this.readMarker || this.panel._readMarkerForEvent(
+            ev.getId(),
+            ev === this.lastShownEvent,
+        );
         this.events.push(ev);
     }
 

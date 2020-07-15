@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { Room, RoomMember } from 'matrix-js-sdk';
 import PropTypes from 'prop-types';
@@ -26,6 +26,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
 import {getPrimaryPermalinkEntity} from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import {Action} from "../../../dispatcher/actions";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
@@ -82,7 +83,8 @@ const Pill = createReactClass({
         };
     },
 
-    async componentWillReceiveProps(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
 
@@ -155,10 +157,12 @@ const Pill = createReactClass({
         this.setState({resourceId, pillType, member, group, room});
     },
 
-    componentWillMount() {
+    componentDidMount() {
         this._unmounted = false;
         this._matrixClient = MatrixClientPeg.get();
-        this.componentWillReceiveProps(this.props);
+
+        // eslint-disable-next-line new-cap
+        this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     },
 
     componentWillUnmount() {
@@ -188,7 +192,7 @@ const Pill = createReactClass({
 
     onUserPillClicked: function() {
         dis.dispatch({
-            action: 'view_user',
+            action: Action.ViewUser,
             member: this.state.member,
         });
     },

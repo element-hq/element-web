@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
+import SdkConfig from "../../../../../SdkConfig";
 import {Mjolnir} from "../../../../../mjolnir/Mjolnir";
 import {ListRule} from "../../../../../mjolnir/ListRule";
 import {BanList, RULE_SERVER, RULE_USER} from "../../../../../mjolnir/BanList";
@@ -84,7 +85,7 @@ export default class MjolnirUserSettingsTab extends React.Component {
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
                 title: _t('Error subscribing to list'),
-                description: _t('Please verify the room ID or alias and try again.'),
+                description: _t('Please verify the room ID or address and try again.'),
             });
         } finally {
             this.setState({busy: false});
@@ -234,6 +235,7 @@ export default class MjolnirUserSettingsTab extends React.Component {
     render() {
         const Field = sdk.getComponent('elements.Field');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const brand = SdkConfig.get().brand;
 
         return (
             <div className="mx_SettingsTab mx_MjolnirUserSettingsTab">
@@ -244,9 +246,9 @@ export default class MjolnirUserSettingsTab extends React.Component {
                         <br />
                         {_t(
                             "Add users and servers you want to ignore here. Use asterisks " +
-                            "to have Riot match any characters. For example, <code>@bot:*</code> " +
+                            "to have %(brand)s match any characters. For example, <code>@bot:*</code> " +
                             "would ignore all users that have the name 'bot' on any server.",
-                            {}, {code: (s) => <code>{s}</code>},
+                            { brand }, {code: (s) => <code>{s}</code>},
                         )}<br />
                         <br />
                         {_t(
@@ -272,7 +274,6 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onAddPersonalRule} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_personalAdd"
                                 type="text"
                                 label={_t("Server or user ID to ignore")}
                                 placeholder={_t("eg: @bot:* or example.org")}
@@ -305,9 +306,8 @@ export default class MjolnirUserSettingsTab extends React.Component {
                     <div>
                         <form onSubmit={this._onSubscribeList} autoComplete="off">
                             <Field
-                                id="mx_MjolnirUserSettingsTab_subscriptionAdd"
                                 type="text"
-                                label={_t("Room ID or alias of ban list")}
+                                label={_t("Room ID or address of ban list")}
                                 value={this.state.newList}
                                 onChange={this._onNewListChanged}
                             />

@@ -20,13 +20,14 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
 import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
+import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 
 export default createReactClass({
@@ -264,14 +265,14 @@ export default createReactClass({
         }
 
         return (
-            <div className={classes} style={style} >
+            <AutoHideScrollbar className={classes} style={style} >
                 { stateViews }
                 { appsDrawer }
                 { fileDropTarget }
                 { callView }
                 { conferenceCallNotification }
                 { this.props.children }
-            </div>
+            </AutoHideScrollbar>
         );
     },
 });

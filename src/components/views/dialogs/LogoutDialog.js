@@ -18,10 +18,9 @@ limitations under the License.
 import React from 'react';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import SettingsStore from "../../../settings/SettingsStore";
 
 export default class LogoutDialog extends React.Component {
     defaultProps = {
@@ -36,8 +35,8 @@ export default class LogoutDialog extends React.Component {
         this._onSetRecoveryMethodClick = this._onSetRecoveryMethodClick.bind(this);
         this._onLogoutConfirm = this._onLogoutConfirm.bind(this);
 
-        const lowBandwidth = SettingsStore.getValue("lowBandwidth");
-        const shouldLoadBackupStatus = !lowBandwidth && !MatrixClientPeg.get().getKeyBackupEnabled();
+        const cli = MatrixClientPeg.get();
+        const shouldLoadBackupStatus = cli.isCryptoEnabled() && !cli.getKeyBackupEnabled();
 
         this.state = {
             shouldLoadBackupStatus: shouldLoadBackupStatus,

@@ -68,11 +68,11 @@ limitations under the License.
     width: 240px;
     color: $input-fg-color;
     font-family: $font-family;
-    font-size: 16px;
+    font-size: $font-16px;
 }
 
 .mx_DevTools_textarea {
-    font-size: 12px;
+    font-size: $font-12px;
     max-width: 684px;
     min-height: 250px;
     padding: 10px;

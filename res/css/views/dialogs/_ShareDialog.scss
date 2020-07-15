@@ -55,6 +55,7 @@ limitations under the License.
     margin-left: 5px;
     width: 20px;
     height: 20px;
+    background-repeat: none;
 }
 
 .mx_ShareDialog_split {
@@ -64,9 +65,6 @@ limitations under the License.
 
 .mx_ShareDialog_qrcode_container {
     float: left;
-    background-color: #ffffff;
-    padding: 5px; // makes qr code more readable in dark theme
-    border-radius: 5px;
     height: 256px;
     width: 256px;
     margin-right: 64px;
