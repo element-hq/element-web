@@ -18,7 +18,7 @@ limitations under the License.
 
 import _at from 'lodash/at';
 import _uniq from 'lodash/uniq';
-import {removeHiddenChars} from "../../../matrix-js-sdk/src/utils";
+import {removeHiddenChars} from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
