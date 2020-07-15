@@ -1,3 +1,24 @@
+Changes in [1.7.0](https://github.com/vector-im/riot-web/releases/tag/v1.7.0) (2020-07-15)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8...v1.7.0)
+
+ * App name changed from Riot to Element
+ * Upgrade to React SDK 2.10.0
+ * Remove redundant enum
+   [\#14472](https://github.com/vector-im/riot-web/pull/14472)
+ * Remove font scaling from labs
+   [\#14355](https://github.com/vector-im/riot-web/pull/14355)
+ * Update documentation and remove labs flag for new room list
+   [\#14375](https://github.com/vector-im/riot-web/pull/14375)
+ * Update from Weblate
+   [\#14434](https://github.com/vector-im/riot-web/pull/14434)
+ * Release the irc layout from labs
+   [\#14350](https://github.com/vector-im/riot-web/pull/14350)
+ * Fix welcomeBackgroundUrl array causing background to change during use
+   [\#14368](https://github.com/vector-im/riot-web/pull/14368)
+ * Be more explicit about type when calling platform startUpdater
+   [\#14299](https://github.com/vector-im/riot-web/pull/14299)
+
 Changes in [1.6.8](https://github.com/vector-im/riot-web/releases/tag/v1.6.8) (2020-07-03)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8-rc.1...v1.6.8)
