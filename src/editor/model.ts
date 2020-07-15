@@ -21,6 +21,7 @@ import Range from "./range";
 import {BasePart, ISerializedPart, PartCreator} from "./parts";
 import AutocompleteWrapperModel, {ICallback} from "./autocomplete";
 import DocumentOffset from "./offset";
+import {Caret} from "./caret";
 
 /**
  * @callback ModelCallback
@@ -43,9 +44,9 @@ import DocumentOffset from "./offset";
  * @return the caret position
  */
 
-type TransformCallback = (caretPosition: IPosition, inputType: string, diff: IDiff) => number | void;
-type UpdateCallback = (caret: Range | IPosition, inputType?: string, diff?: IDiff) => void;
-type ManualTransformCallback = () => Range | DocumentPosition;
+type TransformCallback = (caretPosition: DocumentPosition, inputType: string, diff: IDiff) => number | void;
+type UpdateCallback = (caret: Caret, inputType?: string, diff?: IDiff) => void;
+type ManualTransformCallback = () => Caret;
 
 export default class EditorModel {
     private _parts: BasePart[];
@@ -157,7 +158,7 @@ export default class EditorModel {
         }
     }
 
-    reset(serializedParts: ISerializedPart[], caret: Range | IPosition, inputType: string) {
+    reset(serializedParts: ISerializedPart[], caret: Caret, inputType: string) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
@@ -214,7 +215,7 @@ export default class EditorModel {
         return acPromise;
     }
 
-    private getTransformAddedLen(newPosition: IPosition, inputType: string, diff: IDiff): number {
+    private getTransformAddedLen(newPosition: DocumentPosition, inputType: string, diff: IDiff): number {
         const result = this.transformCallback(newPosition, inputType, diff);
         return Number.isFinite(result) ? result as number : 0;
     }
