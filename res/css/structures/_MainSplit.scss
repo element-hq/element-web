@@ -26,23 +26,3 @@ limitations under the License.
     margin: 0 -10px 0 0;
     padding: 0 10px 0 0;
 }
-
-.mx_MainSplit > .mx_ResizeHandle_horizontal:hover {
-    position: relative;
-
-    &::before {
-        position: absolute;
-        left: 4px;
-        top: 50%;
-        transform: translate(0, -50%);
-
-        height: 30%;
-        width: 4px;
-        border-radius: 4px;
-
-        content: ' ';
-
-        background-color: $primary-fg-color;
-        opacity: 0.8;
-    }
-}
