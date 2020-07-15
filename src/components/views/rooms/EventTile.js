@@ -686,8 +686,7 @@ export default createReactClass({
         });
 
         // If the tile is in the Sending state, don't speak the message.
-        const ariaLive = (isSending) ? "off" : undefined;
-        const ariaBusy = (isSending) ? "true" : undefined;
+        const ariaLive = (this.props.eventSendStatus !== null) ? 'off' : undefined;
 
         let permalink = "#";
         if (this.props.permalinkCreator) {
@@ -823,7 +822,7 @@ export default createReactClass({
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-busy={ariaBusy}>
+                    <div className={classes} aria-live={ariaLive}>
                         <div className="mx_EventTile_roomName">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
@@ -849,7 +848,7 @@ export default createReactClass({
             }
             case 'file_grid': {
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-busy={ariaBusy}>
+                    <div className={classes} aria-live={ariaLive}>
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -885,7 +884,7 @@ export default createReactClass({
                     );
                 }
                 return (
-                    <div className={classes} aria-live={ariaLive} aria-busy={ariaBusy}>
+                    <div className={classes} aria-live={ariaLive}>
                         { ircTimestamp }
                         { avatar }
                         { sender }
@@ -915,7 +914,7 @@ export default createReactClass({
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    <div className={classes} tabIndex={-1} aria-live={ariaLive} aria-busy={ariaBusy}>
+                    <div className={classes} tabIndex={-1} aria-live={ariaLive}>
                         { ircTimestamp }
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
