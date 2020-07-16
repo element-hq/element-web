@@ -40,6 +40,7 @@ import { NotificationColor } from "../../../stores/notifications/NotificationCol
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
@@ -210,7 +211,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
-        if (window.mx_LoudRoomListLogging) {
+        if (SettingsStore.getValue("advancedRoomListLogging")) {
             // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
             console.log("new lists", newLists);
         }
