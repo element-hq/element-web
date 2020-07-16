@@ -1,3 +1,21 @@
+Changes in [1.7.1](https://github.com/vector-im/riot-web/releases/tag/v1.7.1) (2020-07-16)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.0...v1.7.1)
+
+ * Upgrade to React SDK 2.10.1
+ * Fix SSO session ID paramater
+   [\#14544](https://github.com/vector-im/riot-web/pull/14544)
+ * Run pngcrush on vector-icons
+   [\#14488](https://github.com/vector-im/riot-web/pull/14488)
+ * Fix hosting signup link
+   [\#14502](https://github.com/vector-im/riot-web/pull/14502)
+ * Use the right protocol for SSO URLs
+   [\#14513](https://github.com/vector-im/riot-web/pull/14513)
+ * Fix mstile-310x150 by renaming it
+   [\#14485](https://github.com/vector-im/riot-web/pull/14485)
+ * Update blog and twitter links to point to Element
+   [\#14478](https://github.com/vector-im/riot-web/pull/14478)
+
 Changes in [1.7.0](https://github.com/vector-im/riot-web/releases/tag/v1.7.0) (2020-07-15)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.6.8...v1.7.0)

@@ -78,7 +78,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                     <div>
                         <h2 id="step2_heading">Use Element on mobile</h2>
                         <p><strong>iOS</strong> (iPhone or iPad)</p>
-                        <a href="https://itunes.apple.com/app/riot-im/id1083446067?mt=8" target="_blank"
+                        <a href="https://apps.apple.com/app/vector/id1083446067" target="_blank"
                            className="mx_ClearDecoration">
                             <img height="48" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
                         </a>
