@@ -16,7 +16,7 @@
     "Failed to set direct chat tag": "Kunne ikke angi direkte chat-tagg",
     "Today": "I dag",
     "Files": "Filer",
-    "You are not receiving desktop notifications": "Du mottar ikke skrivebords varsler",
+    "You are not receiving desktop notifications": "Du mottar ikke skrivebordsvarsler",
     "Friday": "Fredag",
     "Notifications": "Varsler",
     "Unable to fetch notification target list": "Kunne ikke hente varsel-mål liste",
@@ -1401,5 +1401,11 @@
     "Toggle Bold": "Veksle fet",
     "Toggle Italics": "Veksle kursiv",
     "Toggle Quote": "Veksle siteringsformat",
-    "Upload a file": "Last opp en fil"
+    "Upload a file": "Last opp en fil",
+    "Confirm the emoji below are displayed on both sessions, in the same order:": "Bekreft at emotene nedenfor vises på begge økter, i samme rekkefølge:",
+    "Not sure of your password? <a>Set a new one</a>": "Er du usikker på passordet ditt? <a>Velg et nytt et</a>",
+    "Sign in to your Matrix account on %(serverName)s": "Logg inn på Matrix-kontoen din på %(serverName)s",
+    "Sign in to your Matrix account on <underlinedServerName />": "Logg inn på Matrix-kontoen din på <underlinedServerName />",
+    "If you've joined lots of rooms, this might take a while": "Hvis du har blitt med i mange rom, kan dette ta en stund",
+    "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Den nye økten din er nå verifisert. Den har tilgang til dine krypterte meldinger, og andre brukere vil se at den blir stolt på."
 }
