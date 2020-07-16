@@ -43,6 +43,7 @@ import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -730,9 +731,11 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-
+                        const member = room.getMember(args);
+                        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+                            return reject(_t("Could not find user in room"));
+                        }
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }

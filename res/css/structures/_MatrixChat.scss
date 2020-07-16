@@ -78,23 +78,3 @@ limitations under the License.
     */
     height: 100%;
 }
-
-.mx_MatrixChat > .mx_ResizeHandle_horizontal:hover {
-    position: relative;
-
-    &::before {
-        position: absolute;
-        left: -2px;
-        top: 50%;
-        transform: translate(0, -50%);
-
-        height: 30%;
-        width: 4px;
-        border-radius: 4px;
-
-        content: ' ';
-
-        background-color: $primary-fg-color;
-        opacity: 0.8;
-    }
-}

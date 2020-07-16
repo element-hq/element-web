@@ -158,6 +158,7 @@ export class Algorithm extends EventEmitter {
         filterCondition.off(FILTER_CHANGED, this.handleFilterChange.bind(this));
         if (this.allowedByFilter.has(filterCondition)) {
             this.allowedByFilter.delete(filterCondition);
+            this.recalculateFilteredRooms();
 
             // If we removed the last filter, tell consumers that we've "updated" our filtered
             // view. This will trick them into getting the complete room list.
