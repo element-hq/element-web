@@ -16,6 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 import { _t } from "matrix-react-sdk/src/languageHandler";
+import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 // directly import the style here as this layer does not support rethemedex at this time so no matrix-react-sdk
 // scss variables will be accessible.
@@ -26,11 +27,12 @@ interface IProps {
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
+    const brand = SdkConfig.get().brand;
     return <div className="mx_ErrorView">
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">
                 <span className="mx_HomePage_logo">
-                    <img height="42" src="themes/riot/img/logos/riot-logo.svg" alt="Riot" />
+                    <img height="42" src="themes/element/img/logos/element-logo.svg" alt="Element" />
                 </span>
                 <h1>{ _t("Unsupported browser") }</h1>
             </div>
@@ -38,10 +40,12 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <div className="mx_HomePage_col">
                 <div className="mx_HomePage_row">
                     <div>
-                        <h2 id="step1_heading">{ _t("Your browser can't run Riot") }</h2>
+                        <h2 id="step1_heading">{ _t("Your browser can't run %(brand)s", { brand }) }</h2>
                         <p>
                             { _t(
-                                "Riot uses advanced browser features which aren't supported by your current browser.",
+                                "%(brand)s uses advanced browser features which aren't " +
+                                "supported by your current browser.",
+                                { brand },
                             ) }
                         </p>
                         <p>
@@ -72,20 +76,20 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
             <div className="mx_HomePage_col">
                 <div className="mx_HomePage_row">
                     <div>
-                        <h2 id="step2_heading">Use Riot on mobile</h2>
+                        <h2 id="step2_heading">Use Element on mobile</h2>
                         <p><strong>iOS</strong> (iPhone or iPad)</p>
                         <a href="https://itunes.apple.com/app/riot-im/id1083446067?mt=8" target="_blank"
                            className="mx_ClearDecoration">
-                            <img height="48" src="themes/riot/img/download/apple.svg" alt="Apple App Store" />
+                            <img height="48" src="themes/element/img/download/apple.svg" alt="Apple App Store" />
                         </a>
                         <p className="mx_Spacer"><strong>Android</strong></p>
                         <a href="https://play.google.com/store/apps/details?id=im.vector.app" target="_blank"
                            className="mx_ClearDecoration">
-                            <img height="48" src="themes/riot/img/download/google.svg" alt="Google Play Store" />
+                            <img height="48" src="themes/element/img/download/google.svg" alt="Google Play Store" />
                         </a>
                         <a href="https://f-droid.org/repository/browse/?fdid=im.vector.alpha" target="_blank"
                            className="mx_ClearDecoration">
-                            <img height="48" src="themes/riot/img/download/fdroid.svg" alt="F-Droid" />
+                            <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
                         </a>
                     </div>
                 </div>
@@ -93,8 +97,8 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
 
             <div className="mx_HomePage_row mx_Center mx_Spacer">
                 <p className="mx_Spacer">
-                    <a href="https://riot.im" target="_blank" className="mx_FooterLink">
-                        { _t("Go to Riot.im") }
+                    <a href="https://element.io" target="_blank" className="mx_FooterLink">
+                        { _t("Go to element.io") }
                     </a>
                 </p>
             </div>

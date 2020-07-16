@@ -6,7 +6,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const webpack = require("webpack");
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
-if (!og_image_url) og_image_url = 'https://riot.im/app/themes/riot/img/logos/opengraph.png';
+if (!og_image_url) og_image_url = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
 module.exports = (env, argv) => {
     if (process.env.CI_PACKAGE) {
@@ -40,6 +40,8 @@ module.exports = (env, argv) => {
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
             // CSS themes
+            "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+            "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
             "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
             "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
             "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",

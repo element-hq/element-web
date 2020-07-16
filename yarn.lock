@@ -2638,7 +2638,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.1.2, classnames@^2.2.5:
+classnames@^2.1.2:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -4349,6 +4349,11 @@ fast-levenshtein@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
+
+fast-memoize@^2.5.1:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/fast-memoize/-/fast-memoize-2.5.2.tgz#79e3bb6a4ec867ea40ba0e7146816f6cdce9b57e"
+  integrity sha512-Ue0LwpDYErFbmNnZSF0UH6eImUwDmogUO1jyE+JbN2gsQz/jICm1Ve7t9QT0rNSsfJt+Hs4/S3GnsDVjL4HVrw==
 
 faye-websocket@^0.10.0:
   version "0.10.0"
@@ -6995,9 +7000,15 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
+<<<<<<< HEAD
 "matrix-react-sdk@github:navgurukul/matrix-react-sdk#develop":
   version "2.7.1"
   resolved "https://codeload.github.com/navgurukul/matrix-react-sdk/tar.gz/8905b02b81bea6898ba5d2893d364646d39fc4e9"
+=======
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
+  version "2.10.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/7098cbfce1bd1e6e14a49e9b2e11c8041ae8a86a"
+>>>>>>> 8e67450477535ea3791a97999190768644fb7c91
   dependencies:
     "@babel/runtime" "^7.8.3"
     await-lock "^2.0.1"
@@ -7034,11 +7045,16 @@ matrix-mock-request@^1.2.3:
     prop-types "^15.5.8"
     qrcode "^1.4.4"
     qs "^6.6.0"
+    re-resizable "^6.5.2"
     react "^16.9.0"
     react-beautiful-dnd "^4.0.1"
     react-dom "^16.9.0"
     react-focus-lock "^2.2.1"
+<<<<<<< HEAD
     react-resizable "^1.10.1"
+=======
+    react-transition-group "^4.4.1"
+>>>>>>> 8e67450477535ea3791a97999190768644fb7c91
     resize-observer-polyfill "^1.5.0"
     sanitize-html "^1.18.4"
     text-encoding-utf-8 "^1.0.1"
@@ -9147,7 +9163,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.4"
 
-prop-types@15.x, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -9348,6 +9364,13 @@ rc@1.2.8, rc@^1.2.7, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+re-resizable@^6.5.2:
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.5.4.tgz#909a1e37f9d1a3afd356893a5779a030167be641"
+  integrity sha512-7T3L1lexB2zkZIDmzRJbwdq+xGFuRkrEVQIf5hBPnh7JuS9kG9Yc8XgIaxTWic1kU7jVlDgqzfId/gvmpBCjpA==
+  dependencies:
+    fast-memoize "^2.5.1"
+
 react-beautiful-dnd@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-4.0.1.tgz#3b0a49bf6be75af351176c904f012611dd292b81"
@@ -9380,14 +9403,6 @@ react-dom@^16.9.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.19.1"
-
-react-draggable@^4.0.3:
-  version "4.4.2"
-  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.4.2.tgz#f3cefecee25f467f865144cda0d066e5f05f94a0"
-  integrity sha512-zLQs4R4bnBCGnCVTZiD8hPsHtkiJxgMpGDlRESM+EHQo8ysXhKJ2GKdJ8UxxLJdRVceX1j19jy+hQS2wHislPQ==
-  dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.6.0"
 
 react-focus-lock@^2.2.1:
   version "2.3.1"
@@ -9432,14 +9447,6 @@ react-redux@^5.0.6:
     prop-types "^15.6.1"
     react-is "^16.6.0"
     react-lifecycles-compat "^3.0.0"
-
-react-resizable@^1.10.1:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/react-resizable/-/react-resizable-1.10.1.tgz#f0c2cf1d83b3470b87676ce6d6b02bbe3f4d8cd4"
-  integrity sha512-Jd/bKOKx6+19NwC4/aMLRu/J9/krfxlDnElP41Oc+oLiUWs/zwV1S9yBfBZRnqAwQb6vQ/HRSk3bsSWGSgVbpw==
-  dependencies:
-    prop-types "15.x"
-    react-draggable "^4.0.3"
 
 react-transition-group@^4.4.1:
   version "4.4.1"

@@ -28,7 +28,7 @@ export default class VectorAuthPage extends React.PureComponent {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.get().branding;
-        VectorAuthPage.welcomeBackgroundUrl = "themes/riot/img/backgrounds/valley.jpg";
+        VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
         if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
             if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
                 const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
@@ -59,7 +59,7 @@ export default class VectorAuthPage extends React.PureComponent {
             right: 0,
             bottom: 0,
             left: 0,
-            filter: 'blur(10px)',
+            filter: 'blur(40px)',
             background: pageStyle.background,
         };
 
@@ -67,7 +67,7 @@ export default class VectorAuthPage extends React.PureComponent {
             display: 'flex',
             zIndex: 1,
             background: 'rgba(255, 255, 255, 0.59)',
-            borderRadius: '4px',
+            borderRadius: '8px',
         };
 
         return (
