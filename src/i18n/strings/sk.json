@@ -1652,5 +1652,6 @@
     "%(senderName)s: %(reaction)s": "%(senderName)s: %(reaction)s",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
     "You uninvited %(targetName)s": "Odpozvali ste používateľa %(targetName)s",
-    "%(senderName)s uninvited %(targetName)s": "%(senderName)s odpozval/a používateľa %(targetName)s"
+    "%(senderName)s uninvited %(targetName)s": "%(senderName)s odpozval/a používateľa %(targetName)s",
+    "You invited %(targetName)s": "Pozvali ste používateľa %(targetName)s"
 }
