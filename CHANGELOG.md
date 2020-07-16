@@ -1,3 +1,40 @@
+Changes in [2.10.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.10.1) (2020-07-16)
+=====================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.10.0...v2.10.1)
+
+ * Post-launch Element Web polish
+   [\#5002](https://github.com/matrix-org/matrix-react-sdk/pull/5002)
+ * Move e2e icon
+   [\#4992](https://github.com/matrix-org/matrix-react-sdk/pull/4992)
+ * Wire up new room list breadcrumbs as an ARIA Toolbar
+   [\#4976](https://github.com/matrix-org/matrix-react-sdk/pull/4976)
+ * Fix Room Tile Icon to not ignore DMs in other tags
+   [\#4999](https://github.com/matrix-org/matrix-react-sdk/pull/4999)
+ * Fix filtering by community not showing DM rooms with community members
+   [\#4997](https://github.com/matrix-org/matrix-react-sdk/pull/4997)
+ * Fix enter in new room list filter breaking things
+   [\#4996](https://github.com/matrix-org/matrix-react-sdk/pull/4996)
+ * Notify left panel of resizing when it is collapsed&expanded
+   [\#4995](https://github.com/matrix-org/matrix-react-sdk/pull/4995)
+ * When removing a filter condition, try recalculate in case it wasn't last
+   [\#4994](https://github.com/matrix-org/matrix-react-sdk/pull/4994)
+ * Create a generic ARIA toolbar component
+   [\#4975](https://github.com/matrix-org/matrix-react-sdk/pull/4975)
+ * Fix /op Slash Command
+   [\#4604](https://github.com/matrix-org/matrix-react-sdk/pull/4604)
+ * Fix copy button in share dialog
+   [\#4998](https://github.com/matrix-org/matrix-react-sdk/pull/4998)
+ * Add tooltip to Room Tile Icon
+   [\#4987](https://github.com/matrix-org/matrix-react-sdk/pull/4987)
+ * Fix names jumping on hover in irc layout
+   [\#4991](https://github.com/matrix-org/matrix-react-sdk/pull/4991)
+ * check that encryptionInfo.sender is set
+   [\#4988](https://github.com/matrix-org/matrix-react-sdk/pull/4988)
+ * Update help link
+   [\#4986](https://github.com/matrix-org/matrix-react-sdk/pull/4986)
+ * Update cover photo link
+   [\#4985](https://github.com/matrix-org/matrix-react-sdk/pull/4985)
+
 Changes in [2.10.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v2.10.0) (2020-07-15)
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.9.0...v2.10.0)
