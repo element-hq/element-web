@@ -675,12 +675,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'hide_left_panel':
                 this.setState({
                     collapseLhs: true,
+                }, () => {
+                    this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
             case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
+                }, () => {
+                    this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
             case 'panel_disable': {
