@@ -66,7 +66,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
                 oobData={this.props.oobData}
                 viewAvatarOnClick={this.props.viewAvatarOnClick}
             />
-            <RoomTileIcon room={this.props.room} tag={this.props.tag} />
+            <RoomTileIcon room={this.props.room} />
             {badge}
         </div>;
     }
