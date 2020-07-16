@@ -106,7 +106,7 @@ export default class ReplyThread extends React.Component {
                 allowedTags: false, // false means allow everything
                 allowedAttributes: false,
                 exclusiveFilter: (frame) => frame.tag === "mx-reply",
-            }
+            },
         );
     }
 
