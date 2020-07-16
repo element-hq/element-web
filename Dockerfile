@@ -1,5 +1,5 @@
 # Builder
-FROM node:10 as builder
+FROM node:12 as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
 # images of riot-web develop.
