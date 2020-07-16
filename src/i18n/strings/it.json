@@ -2381,5 +2381,7 @@
     "Set up Secure backup": "Imposta il Backup Sicuro",
     "Set a Security Phrase": "Imposta una frase di sicurezza",
     "Confirm Security Phrase": "Conferma frase di sicurezza",
-    "Save your Security Key": "Salva la tua chiave di sicurezza"
+    "Save your Security Key": "Salva la tua chiave di sicurezza",
+    "This room is public": "Questa stanza è pubblica",
+    "Away": "Assente"
 }
