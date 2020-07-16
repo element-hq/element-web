@@ -444,24 +444,20 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <React.Fragment>
                         <hr />
                         <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Unread rooms")}</div>
+                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Appearance")}</div>
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onUnreadFirstChanged}
                                 checked={isUnreadFirst}
                             >
-                                {_t("Always show first")}
+                                {_t("Show rooms with unread messages first")}
                             </StyledMenuItemCheckbox>
-                        </div>
-                        <hr />
-                        <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Show")}</div>
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onMessagePreviewChanged}
                                 checked={this.layout.showPreviews}
                             >
-                                {_t("Message preview")}
+                                {_t("Show previews of messages")}
                             </StyledMenuItemCheckbox>
                         </div>
                     </React.Fragment>
