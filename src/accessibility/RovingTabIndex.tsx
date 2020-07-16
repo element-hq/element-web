@@ -23,12 +23,11 @@ import React, {
     useRef,
     useReducer,
     Reducer,
-    RefObject,
     Dispatch,
 } from "react";
 
 import {Key} from "../Keyboard";
-import AccessibleButton from "../components/views/elements/AccessibleButton";
+import {FocusHandler, Ref} from "./roving/types";
 
 /**
  * Module to simplify implementing the Roving TabIndex accessibility technique
@@ -44,8 +43,6 @@ import AccessibleButton from "../components/views/elements/AccessibleButton";
  */
 
 const DOCUMENT_POSITION_PRECEDING = 2;
-
-type Ref = RefObject<HTMLElement>;
 
 export interface IState {
     activeRef: Ref;
@@ -202,8 +199,6 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
     </RovingTabIndexContext.Provider>;
 };
 
-type FocusHandler = () => void;
-
 // Hook to register a roving tab index
 // inputRef parameter specifies the ref to use
 // onFocus should be called when the index gained focus in any manner
@@ -244,28 +239,7 @@ export const useRovingTabIndex = (inputRef: Ref): [FocusHandler, boolean, Ref] =
     return [onFocus, isActive, ref];
 };
 
-interface IRovingTabIndexWrapperProps {
-    inputRef?: Ref;
-    children(renderProps: {
-        onFocus: FocusHandler;
-        isActive: boolean;
-        ref: Ref;
-    });
-}
-
-// Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
-export const RovingTabIndexWrapper: React.FC<IRovingTabIndexWrapperProps> = ({children, inputRef}) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return children({onFocus, isActive, ref});
-};
-
-interface IRovingAccessibleButtonProps extends Omit<React.ComponentProps<typeof AccessibleButton>, "onFocus" | "inputRef" | "tabIndex"> {
-    inputRef?: Ref;
-}
-
-// Wrapper to allow use of useRovingTabIndex for simple AccessibleButtons outside of React Functional Components.
-export const RovingAccessibleButton: React.FC<IRovingAccessibleButtonProps> = ({inputRef, ...props}) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return <AccessibleButton {...props} onFocus={onFocus} inputRef={ref} tabIndex={isActive ? 0 : -1} />;
-};
-
+// re-export the semantic helper components for simplicity
+export {RovingTabIndexWrapper} from "./roving/RovingTabIndexWrapper";
+export {RovingAccessibleButton} from "./roving/RovingAccessibleButton";
+export {RovingAccessibleTooltipButton} from "./roving/RovingAccessibleTooltipButton";
