@@ -19,13 +19,12 @@ limitations under the License.
     overflow-x: hidden;
     flex: 0 0 auto;
     position: relative;
-    min-width: 264px;
-    max-width: 50%;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    margin: 5px;
     padding: 4px 0;
+    box-sizing: border-box;
+    height: 100%;
 
     .mx_RoomView_MessageList {
         padding: 14px 18px; // top and bottom is 4px smaller to balance with the padding set above

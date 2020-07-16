@@ -79,12 +79,13 @@ limitations under the License.
     height: 100%;
 }
 
+.mx_MatrixChat > .mx_LeftPanel2:hover + .mx_ResizeHandle_horizontal,
 .mx_MatrixChat > .mx_ResizeHandle_horizontal:hover {
     position: relative;
 
     &::before {
         position: absolute;
-        left: -2px;
+        left: 5px;
         top: 50%;
         transform: translate(0, -50%);
 
