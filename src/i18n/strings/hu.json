@@ -2370,5 +2370,7 @@
     "%(brand)s Web": "%(brand)s Web",
     "%(brand)s Desktop": "Asztali %(brand)s",
     "%(brand)s iOS": "%(brand)s iOS",
-    "%(brand)s X for Android": "%(brand)s X Android"
+    "%(brand)s X for Android": "%(brand)s X Android",
+    "This room is public": "Ez egy nyilvános szoba",
+    "Away": "Távol"
 }
