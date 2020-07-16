@@ -22,9 +22,10 @@ limitations under the License.
     border: 1px solid $primary-hairline-color;
     background: $primary-bg-color;
     border-bottom: none;
-    border-radius: 4px 4px 0 0;
+    border-radius: 8px 8px 0 0;
     max-height: 50vh;
     overflow: auto;
+    box-shadow: 0px -16px 32px $composer-shadow-color;
 }
 
 .mx_ReplyPreview_section {
