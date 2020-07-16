@@ -120,7 +120,7 @@ export default class HelpUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
                 <ul>
                     <li>
-                        The <a href="themes/riot/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
+                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
                         default cover photo</a> is ©&nbsp;
                         <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
@@ -158,7 +158,7 @@ export default class HelpUserSettingsTab extends React.Component {
             },
             {
                 'a': (sub) => <a
-                    href="https://about.riot.im/need-help/"
+                    href="https://element.io/help"
                     rel="noreferrer noopener"
                     target="_blank"
                 >
@@ -177,7 +177,7 @@ export default class HelpUserSettingsTab extends React.Component {
                         },
                         {
                             'a': (sub) => <a
-                                href="https://about.riot.im/need-help/"
+                                href="https://element.io/help"
                                 rel='noreferrer noopener'
                                 target='_blank'
                             >

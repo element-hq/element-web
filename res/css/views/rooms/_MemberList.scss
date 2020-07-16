@@ -63,6 +63,11 @@ limitations under the License.
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
     flex: 1 1 0;
+
+    // stricter rule to override the one in _common.scss
+    &[type="text"] {
+        font-size: $font-12px;
+    }
 }
 
 

@@ -97,7 +97,7 @@ $irc-line-height: $font-18px;
         }
 
         > .mx_EventTile_e2eIcon {
-            position: relative;
+            position: absolute;
             right: unset;
             left: unset;
             top: 0;
@@ -184,6 +184,7 @@ $irc-line-height: $font-18px;
             > .mx_SenderProfile_name {
                 overflow: hidden;
                 text-overflow: ellipsis;
+                min-width: var(--name-width);
             }
         }
     }

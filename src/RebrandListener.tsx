@@ -40,10 +40,13 @@ function getRedirectUrl(url): string {
     } else if (url.hostname === 'riot.im') {
         if (url.pathname.startsWith('/app')) {
             redirectUrl.hostname = 'app.element.io';
+            redirectUrl.pathname = '/';
         } else if (url.pathname.startsWith('/staging')) {
             redirectUrl.hostname = 'staging.element.io';
+            redirectUrl.pathname = '/';
         } else if (url.pathname.startsWith('/develop')) {
             redirectUrl.hostname = 'develop.element.io';
+            redirectUrl.pathname = '/';
         }
 
         return redirectUrl.href;
@@ -99,7 +102,7 @@ export default class RebrandListener {
         // to, well, remind them later.
         this.nagAgainAt = Date.now() + NAG_INTERVAL;
         this.recheck();
-    }
+    };
 
     onOneTimeToastLearnMore = async () => {
         const [doneClicked] = await Modal.createDialog(RebrandDialog, {
@@ -109,13 +112,13 @@ export default class RebrandListener {
             localStorage.setItem('mx_rename_dialog_dismissed', 'true');
             this.recheck();
         }
-    }
+    };
 
     onNagTimerFired = () => {
         this._reshowTimer = null;
         this.nagAgainAt = null;
         this.recheck();
-    }
+    };
 
     private async recheck() {
         // There are two types of toast/dialog we show: a 'one time' informing the user that

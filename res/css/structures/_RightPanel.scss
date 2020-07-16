@@ -60,10 +60,10 @@ limitations under the License.
     &::before {
         content: '';
         position: absolute;
-        top: 6px; // center with parent of 32px
-        left: 6px; // center with parent of 32px
-        height: 20px;
-        width: 20px;
+        top: 4px; // center with parent of 32px
+        left: 4px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
         background-color: $rightpanel-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;

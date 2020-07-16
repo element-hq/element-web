@@ -269,7 +269,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile2");
         if (firstRoom) {
             firstRoom.click();
-            this.onSearch(""); // clear the search field
+            return true; // to get the field to clear
         }
     };
 

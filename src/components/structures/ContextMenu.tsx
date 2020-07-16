@@ -233,6 +233,9 @@ export class ContextMenu extends React.PureComponent<IProps, IState> {
         switch (ev.key) {
             case Key.TAB:
             case Key.ESCAPE:
+            // close on left and right arrows too for when it is a context menu on a <Toolbar />
+            case Key.ARROW_LEFT:
+            case Key.ARROW_RIGHT:
                 this.props.onFinished();
                 break;
             case Key.ARROW_UP:

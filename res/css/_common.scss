@@ -174,7 +174,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
     .mx_textinput input::placeholder {
-        color: $roomsublist-label-fg-color;
+        color: rgba($input-darker-fg-color, .75);
     }
 }
 

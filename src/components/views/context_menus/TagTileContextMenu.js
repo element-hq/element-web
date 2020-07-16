@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';
-import * as sdk from '../../../index';
 import {MenuItem} from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 

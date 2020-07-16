@@ -25,7 +25,8 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { CSSTransition } from "react-transition-group";
 import RoomListStore from "../../../stores/room-list/RoomListStore2";
 import { DefaultTagID } from "../../../stores/room-list/models";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
+import Toolbar from "../../../accessibility/Toolbar";
 
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
@@ -86,7 +87,7 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
             const roomTags = RoomListStore.instance.getTagsForRoom(r);
             const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
             return (
-                <AccessibleTooltipButton
+                <RovingAccessibleTooltipButton
                     className="mx_RoomBreadcrumbs2_crumb"
                     key={r.roomId}
                     onClick={() => this.viewRoom(r, i)}
@@ -101,7 +102,7 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
                         displayBadge={true}
                         forceCount={true}
                     />
-                </AccessibleTooltipButton>
+                </RovingAccessibleTooltipButton>
             );
         });
 
@@ -112,9 +113,9 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
                     appear={true} in={this.state.doAnimation} timeout={640}
                     classNames='mx_RoomBreadcrumbs2'
                 >
-                    <div className='mx_RoomBreadcrumbs2'>
+                    <Toolbar className='mx_RoomBreadcrumbs2'>
                         {tiles.slice(this.state.skipFirst ? 1 : 0)}
-                    </div>
+                    </Toolbar>
                 </CSSTransition>
             );
         } else {
