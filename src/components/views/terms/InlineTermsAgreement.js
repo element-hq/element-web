@@ -91,9 +91,9 @@ export default class InlineTermsAgreement extends React.Component {
                 <div key={i} className='mx_InlineTermsAgreement_cbContainer'>
                     <div>{introText}</div>
                     <div className='mx_InlineTermsAgreement_checkbox'>
-                      <StyledCheckbox onChange={() => this._togglePolicy(i)} checked={policy.checked}>
-                        {_t("Accept")}
-                      </StyledCheckbox>
+                        <StyledCheckbox onChange={() => this._togglePolicy(i)} checked={policy.checked}>
+                            {_t("Accept")}
+                        </StyledCheckbox>
                     </div>
                 </div>,
             );
