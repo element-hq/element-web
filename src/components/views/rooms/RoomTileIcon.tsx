@@ -22,6 +22,8 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { isPresenceEnabled } from "../../../utils/presence";
+import { _t } from "../../../languageHandler";
+import TextWithTooltip from "../elements/TextWithTooltip";
 
 enum Icon {
     // Note: the names here are used in CSS class names
@@ -30,6 +32,19 @@ enum Icon {
     PresenceOnline = "ONLINE",
     PresenceAway = "AWAY",
     PresenceOffline = "OFFLINE",
+}
+
+function tooltipText(variant: Icon) {
+    switch (variant) {
+        case Icon.Globe:
+            return _t("This room is public");
+        case Icon.PresenceOnline:
+            return _t("Online");
+        case Icon.PresenceAway:
+            return _t("Away");
+        case Icon.PresenceOffline:
+            return _t("Offline");
+    }
 }
 
 interface IProps {
@@ -145,6 +160,10 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         if (this.state.icon === Icon.None) return null;
 
-        return <span className={`mx_RoomTileIcon mx_RoomTileIcon_${this.state.icon.toLowerCase()}`} />;
+        return <TextWithTooltip
+            tooltip={tooltipText(this.state.icon)}
+            tooltipClass="mx_Tooltip_timeline"
+            class={`mx_RoomTileIcon mx_RoomTileIcon_${this.state.icon.toLowerCase()}`}
+        />;
     }
 }
