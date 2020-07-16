@@ -2347,5 +2347,20 @@
     "Set up Secure backup": "Configurer la sauvegarde sécurisée",
     "Set a Security Phrase": "Définir une phrase de sécurité",
     "Confirm Security Phrase": "Confirmer la phrase de sécurité",
-    "Save your Security Key": "Sauvegarder votre clé de sécurité"
+    "Save your Security Key": "Sauvegarder votre clé de sécurité",
+    "Use your account to sign in to the latest version": "Connectez-vous à la nouvelle version",
+    "We’re excited to announce Riot is now Element": "Nous sommes heureux de vous annoncer que Riot est désormais Element",
+    "Riot is now Element!": "Riot est maintenant Element !",
+    "Learn More": "Plus d'infos",
+    "Enable experimental, compact IRC style layout": "Disposition expérimentale compacte style IRC",
+    "Incoming voice call": "Appel vocal entrant",
+    "Incoming video call": "Appel vidéo entrant",
+    "Incoming call": "Appel entrant",
+    "Make this room low priority": "Définir ce salon en priorité basse",
+    "Low priority rooms show up at the bottom of your room list in a dedicated section at the bottom of your room list": "Les salons de priorité basse s'affichent en bas de votre liste de salons, dans une section dédiée",
+    "Show rooms with unread messages first": "Afficher les salons non lus en premier",
+    "Show previews of messages": "Afficher un aperçu des messages",
+    "Use default": "Utiliser la valeur par défaut",
+    "Mentions & Keywords": "Mentions et mots-clés",
+    "Notification options": "Paramètres de notifications"
 }
