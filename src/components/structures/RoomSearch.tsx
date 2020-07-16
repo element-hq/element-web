@@ -28,8 +28,8 @@ import { Action } from "../../dispatcher/actions";
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
     isMinimized: boolean;
-    onVerticalArrow(ev: React.KeyboardEvent);
-    onEnter(ev: React.KeyboardEvent);
+    onVerticalArrow(ev: React.KeyboardEvent): void;
+    onEnter(ev: React.KeyboardEvent): boolean;
 }
 
 interface IState {
