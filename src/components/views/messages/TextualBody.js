@@ -376,11 +376,21 @@ export default createReactClass({
         const date = this.props.mxEvent.replacingEventDate();
         const dateString = date && formatDate(date);
 
+        const tooltip = <div>
+            <div className="mx_Tooltip_title">
+                {_t("Edited at %(date)s", {date: dateString})}
+            </div>
+            <div className="mx_Tooltip_sub">
+                {_t("Click to view edits")}
+            </div>
+        </div>;
+
         return (
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
                 title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
+                tooltip={tooltip}
                 tooltipClassName="mx_Tooltip_timeline"
             >
                 <span>{`(${_t("edited")})`}</span>

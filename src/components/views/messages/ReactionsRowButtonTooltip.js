@@ -55,7 +55,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                 },
                 {
                     reactors: () => {
-                        return <div className="mx_ReactionsRowButtonTooltip_senders">
+                        return <div className="mx_Tooltip_title">
                             {formatCommaSeparatedList(senders, 6)}
                         </div>;
                     },
@@ -63,7 +63,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
                         if (!shortName) {
                             return null;
                         }
-                        return <div className="mx_ReactionsRowButtonTooltip_reactedWith">
+                        return <div className="mx_Tooltip_sub">
                             {sub}
                         </div>;
                     },

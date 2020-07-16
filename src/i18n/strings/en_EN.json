@@ -1455,6 +1455,8 @@
     "Failed to copy": "Failed to copy",
     "Add an Integration": "Add an Integration",
     "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?": "You are about to be taken to a third-party site so you can authenticate your account for use with %(integrationsUrl)s. Do you wish to continue?",
+    "Edited at %(date)s": "Edited at %(date)s",
+    "Click to view edits": "Click to view edits",
     "Edited at %(date)s. Click to view edits.": "Edited at %(date)s. Click to view edits.",
     "edited": "edited",
     "Can't load this message": "Can't load this message",
