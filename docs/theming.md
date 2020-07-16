@@ -1,5 +1,5 @@
-Theming Riot
-============
+Theming Element
+===============
 
 Themes are a very basic way of providing simple alternative look & feels to the
 riot-web app via CSS & custom imagery.
@@ -8,7 +8,7 @@ They are *NOT* co be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Riot itself is a react-sdk skin.
 As of Jan 2017, skins are not fully supported; riot is the only available skin.
 
-To define a theme for Riot:
+To define a theme for Element:
 
  1. Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
  2. Fork `src/skins/vector/css/themes/dark.scss` to be `teal.scss`
@@ -95,4 +95,48 @@ eg. in config.json:
 
 These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
 
-All properties in `fonts` are optional, and will default to the standard Riot fonts.
+All properties in `fonts` are optional, and will default to the standard Element fonts.
+
+As a starting point, here are the default Light and Dark themes for Element (as of writing):
+```json
+{
+    "name": "Element Light",
+    "is_dark": false,
+    "colors": {
+        "accent-color": "#0DBD8B",
+        "primary-color": "#238CF5",
+        "warning-color": "#ff4b55",
+        "sidebar-color": "#C4E8E8E8",
+        "roomlist-background-color": "#E5F5F5F5",
+        "roomlist-text-color": "#212121",
+        "roomlist-text-secondary-color": "#61708b",
+        "roomlist-highlights-color": "#FFFFFF",
+        "roomlist-separator-color": "#2e2f32",
+        "timeline-background-color": "#ffffff",
+        "timeline-text-color": "#2e2f32",
+        "timeline-text-secondary-color": "#61708b",
+        "timeline-highlights-color": "#fff8e3"
+    }
+}
+```
+```json
+{
+    "name": "Element Dark",
+    "is_dark": true,
+    "colors": {
+        "accent-color": "#0DBD8B",
+        "primary-color": "#238CF5",
+        "warning-color": "#ff4b55",
+        "sidebar-color": "#D126272B",
+        "roomlist-background-color": "#E521262C",
+        "roomlist-text-color": "#ffffff",
+        "roomlist-text-secondary-color": "#A9B2BC",
+        "roomlist-highlights-color": "#338D97A5",
+        "roomlist-separator-color": "#ffffff",
+        "timeline-background-color": "#ffffff",
+        "timeline-text-color": "#ffffff",
+        "timeline-text-secondary-color": "#8E99A4",
+        "timeline-highlights-color": "#25271F"
+    }
+}
+```
