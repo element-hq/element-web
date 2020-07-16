@@ -16,6 +16,8 @@ limitations under the License.
 
 /* TODO: Consider unifying with general input styles in _light.scss */
 
+@import "../../_font-sizes.scss";
+
 .mx_Field {
     display: flex;
     flex: 1;
@@ -191,5 +193,5 @@ limitations under the License.
 }
 
 .mx_Field .mx_CountryDropdown {
-    width: 78px;
+    width: $font-78px;
 }
