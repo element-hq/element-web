@@ -2378,5 +2378,7 @@
     "%(brand)s Web": "Web %(brand)s",
     "%(brand)s Desktop": "%(brand)s Desktop",
     "%(brand)s iOS": "%(brand)s iOS",
-    "%(brand)s X for Android": "%(brand)s X para Android"
+    "%(brand)s X for Android": "%(brand)s X para Android",
+    "This room is public": "Esta é unha sala pública",
+    "Away": "Fóra"
 }
