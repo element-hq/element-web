@@ -49,7 +49,6 @@ function tooltipText(variant: Icon) {
 
 interface IProps {
     room: Room;
-    tag: TagID;
 }
 
 interface IState {
@@ -137,10 +136,11 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
     private calculateIcon(): Icon {
         let icon = Icon.None;
 
-        if (this.props.tag === DefaultTagID.DM && this.props.room.getJoinedMemberCount() === 2) {
+        // We look at the DMRoomMap and not the tag here so that we don't exclude DMs in Favourites
+        const otherUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
+        if (otherUserId && this.props.room.getJoinedMemberCount() === 2) {
             // Track presence, if available
             if (isPresenceEnabled()) {
-                const otherUserId = DMRoomMap.shared().getUserIdForRoomId(this.props.room.roomId);
                 if (otherUserId) {
                     this.dmUser = MatrixClientPeg.get().getUser(otherUserId);
                     icon = this.getPresenceIcon();
