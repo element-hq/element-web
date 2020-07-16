@@ -1266,7 +1266,7 @@
     "Show hidden events in timeline": "Zobrazovať skryté udalosti v histórii obsahu miestností",
     "Low bandwidth mode": "Režim šetrenia údajov",
     "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Ak váš domovský server neposkytuje pomocný server pri uskutočňovaní hovorov, povoliť použitie záložného servera turn.matrix.org (týmto počas hovoru zdieľate svoju adresu IP)",
-    "When rooms are upgraded": "Keď sú miestnosti aktualizované",
+    "When rooms are upgraded": "Keď sú miestnosti upgradované",
     "Accept <policyLink /> to continue:": "Ak chcete pokračovať, musíte prijať <policyLink />:",
     "ID": "ID",
     "Public Name": "Verejný názov",
@@ -1655,5 +1655,17 @@
     "%(senderName)s uninvited %(targetName)s": "%(senderName)s odpozval/a používateľa %(targetName)s",
     "You invited %(targetName)s": "Pozvali ste používateľa %(targetName)s",
     "%(senderName)s invited %(targetName)s": "%(senderName)s pozval/a používateľa %(targetName)s",
-    "You changed the room topic": "Zmenili ste tému miestnosti"
+    "You changed the room topic": "Zmenili ste tému miestnosti",
+    "%(senderName)s changed the room topic": "%(senderName)s zmenil/a tému miestnosti",
+    "New spinner design": "Nový točivý štýl",
+    "Use the improved room list (will refresh to apply changes)": "Použiť vylepšený list miestností (obnový stránku, aby sa aplikovali zmeny)",
+    "Use custom size": "Použiť vlastnú veľkosť",
+    "Use a more compact ‘Modern’ layout": "Použiť kompaktnejšie 'moderné' rozloženie",
+    "Use a system font": "Použiť systémové písmo",
+    "System font name": "Meno systémového písma",
+    "Enable experimental, compact IRC style layout": "Povoliť experimentálne, kompaktné rozloženie v štýle IRC",
+    "Unknown caller": "Neznámy volajúci",
+    "Incoming voice call": "Prichádzajúci hovor",
+    "Incoming video call": "Prichádzajúci video hovor",
+    "Incoming call": "Prichádzajúci hovor"
 }
