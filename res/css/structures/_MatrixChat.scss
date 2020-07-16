@@ -85,11 +85,11 @@ limitations under the License.
 
     &::before {
         position: absolute;
-        left: 5px;
+        left: 2px;
         top: 50%;
         transform: translate(0, -50%);
 
-        height: 30%;
+        height: 64px; // to match width of the ones on roomlist
         width: 4px;
         border-radius: 4px;
 
