@@ -2152,5 +2152,8 @@
     "Your recovery key is a safety net - you can use it to restore access to your encrypted messages if you forget your recovery passphrase.": "Sinu taastevõti toimib turvavõrguna - juhul, kui sa unustad taastamiseks mõeldud paroolifraasi, siis sa saad seda kasutada taastamaks ligipääsu krüptitud sõnumitele.",
     "Keep a copy of it somewhere secure, like a password manager or even a safe.": "Hoia seda turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis.",
     "Your keys are being backed up (the first backup could take a few minutes).": "Sinu krüptovõtmeid varundatakse (esimese varukoopia tegemine võib võtta paar minutit).",
-    "Autocomplete": "Automaatne sõnalõpetus"
+    "Autocomplete": "Automaatne sõnalõpetus",
+    "Favourited": "Märgitud lemmikuks",
+    "Leave Room": "Lahku jututoast",
+    "Forget Room": "Unusta jututuba ära"
 }
