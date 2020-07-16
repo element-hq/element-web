@@ -42,6 +42,8 @@ limitations under the License.
         // These are the 3 background types
 
         &.mx_NotificationBadge_dot {
+            background-color: $primary-fg-color; // increased visibility
+
             width: 6px;
             height: 6px;
             border-radius: 6px;

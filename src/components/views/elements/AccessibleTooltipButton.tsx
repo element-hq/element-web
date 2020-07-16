@@ -24,6 +24,7 @@ import Tooltip from './Tooltip';
 
 interface ITooltipProps extends IProps {
     title: string;
+    tooltip?: React.ReactNode;
     tooltipClassName?: string;
 }
 
@@ -52,12 +53,12 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
     };
 
     render() {
-        const {title, children, tooltipClassName, ...props} = this.props;
+        const {title, tooltip, children, tooltipClassName, ...props} = this.props;
 
         const tip = this.state.hover ? <Tooltip
             className="mx_AccessibleTooltipButton_container"
             tooltipClassName={classNames("mx_AccessibleTooltipButton_tooltip", tooltipClassName)}
-            label={title}
+            label={tooltip || title}
         /> : <div />;
         return (
             <AccessibleButton {...props} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} aria-label={title}>

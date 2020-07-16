@@ -75,7 +75,6 @@ limitations under the License.
 .mx_RoomHeader_buttons {
     display: flex;
     background-color: $primary-bg-color;
-    padding-right: 5px;
 }
 
 .mx_RoomHeader_info {
@@ -209,19 +208,31 @@ limitations under the License.
 
 .mx_RoomHeader_button {
     position: relative;
-    margin-left: 10px;
+    margin-left: 1px;
+    margin-right: 1px;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
 
     &::before {
         content: '';
         position: absolute;
-        height: 20px;
-        width: 20px;
+        top: 4px; // center with parent of 32px
+        left: 4px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
         background-color: $roomheader-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;
+    }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
     }
 }
 
