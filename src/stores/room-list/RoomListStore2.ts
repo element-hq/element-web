@@ -33,7 +33,6 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 interface IState {
     tagsEnabled?: boolean;
