@@ -28,8 +28,8 @@ import { Action } from "../../dispatcher/actions";
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
     isMinimized: boolean;
-    onVerticalArrow(ev: React.KeyboardEvent);
-    onEnter(ev: React.KeyboardEvent);
+    onVerticalArrow(ev: React.KeyboardEvent): void;
+    onEnter(ev: React.KeyboardEvent): boolean;
 }
 
 interface IState {
@@ -107,7 +107,13 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
             this.props.onVerticalArrow(ev);
         } else if (ev.key === Key.ENTER) {
-            this.props.onEnter(ev);
+            const shouldClear = this.props.onEnter(ev);
+            if (shouldClear) {
+                // wrap in set immediate to delay it so that we don't clear the filter & then change room
+                setImmediate(() => {
+                    this.clearInput();
+                });
+            }
         }
     };
 
