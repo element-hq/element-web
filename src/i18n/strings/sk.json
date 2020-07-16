@@ -1667,5 +1667,6 @@
     "Unknown caller": "Neznámy volajúci",
     "Incoming voice call": "Prichádzajúci hovor",
     "Incoming video call": "Prichádzajúci video hovor",
-    "Incoming call": "Prichádzajúci hovor"
+    "Incoming call": "Prichádzajúci hovor",
+    "To set up a filter, drag a community avatar over to the filter panel on the far left hand side of the screen. You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "Vytvorte si filter, potiahnite avatara komunity do panelu filtrov na ľavý okraj obrazovky. Môžete kliknúť na avatara v paneli filtorv, aby ste videli len miestnosti a ľudí patriacich do danej komunity."
 }
