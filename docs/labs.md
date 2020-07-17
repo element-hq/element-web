@@ -2,7 +2,7 @@
 
 If Labs is enabled in the [Element config](config.md), you can enable some of these features by going
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
-[#riot-web:matrix.org](https://matrix.to/#/#riot-web:matrix.org) for more information.
+[#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
 **Be warned! Labs features are not finalised, they may be fragile, they may change, they may be
 dropped. Ask in the room if you are unclear about any details here.**
@@ -109,5 +109,5 @@ In the event the new room list needs to be disabled, add this to your config.jso
 }
 ```
 
-**Note**: In a future release the new room list will not be optional.
-
+Adds an option to change the message layout to an IRC style ` timestamp | avatar
+| name | message `
