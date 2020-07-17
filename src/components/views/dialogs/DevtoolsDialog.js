@@ -416,7 +416,7 @@ class RoomStateExplorer extends React.PureComponent {
                 {
                     Array.from(this.roomStateEvents.entries()).map(([eventType, allStateKeys]) => {
                         let onClickFn;
-                        if (allStateKeys.size() === 1 && allStateKeys.has("")) {
+                        if (allStateKeys.size === 1 && allStateKeys.has("")) {
                             onClickFn = this.onViewSourceClick(allStateKeys.get(""));
                         } else {
                             onClickFn = this.browseEventType(eventType);
