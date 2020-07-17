@@ -78,7 +78,7 @@ export class IntegrationManagers {
         }
     }
 
-    async _setupHomeserverManagers(discoveryResponse) {
+    _setupHomeserverManagers = async (discoveryResponse) => {
         console.log("Updating homeserver-configured integration managers...");
         if (discoveryResponse && discoveryResponse['m.integrations']) {
             let managers = discoveryResponse['m.integrations']['managers'];
@@ -104,7 +104,7 @@ export class IntegrationManagers {
         } else {
             console.log("Homeserver has no integration managers");
         }
-    }
+    };
 
     _setupAccountManagers() {
         if (!this._client || !this._client.getUserId()) return; // not logged in
