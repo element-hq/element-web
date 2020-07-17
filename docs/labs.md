@@ -94,20 +94,3 @@ adds an ability for end users to add themes themselves by using a URL to the JSO
 theme definition.
 
 For some sample themes, check out [aaronraimist/riot-web-themes](https://github.com/aaronraimist/riot-web-themes).
-
-## New room list
-
-A complete rewrite of the room list is underway to increase performance, stability,
-and general usability.
-
-In the event the new room list needs to be disabled, add this to your config.json:
-```json
-{
-    "settingDefaults": {
-        "feature_new_room_list": false
-    }
-}
-```
-
-**Note**: In a future release the new room list will not be optional.
-
