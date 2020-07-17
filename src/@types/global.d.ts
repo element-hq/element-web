@@ -23,6 +23,7 @@ import RebrandListener from "../RebrandListener";
 import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 declare global {
     interface Window {
@@ -39,11 +40,12 @@ declare global {
         mx_RoomListStore2: RoomListStore2;
         mx_RoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
+        mxIntegrationManagers: typeof IntegrationManagers;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
     interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object
+        fromEntries?(xs: [string|number|symbol, any][]): object;
     }
 
     interface Document {

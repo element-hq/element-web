@@ -14,71 +14,77 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import type {MatrixClient} from "matrix-js-sdk/src/client";
+import type {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import type {Room} from "matrix-js-sdk/src/models/room";
+
 import SdkConfig from '../SdkConfig';
-import * as sdk from "../index";
 import Modal from '../Modal';
-import {IntegrationManagerInstance, KIND_ACCOUNT, KIND_CONFIG, KIND_HOMESERVER} from "./IntegrationManagerInstance";
-import type {MatrixClient, MatrixEvent, Room} from "matrix-js-sdk";
+import {IntegrationManagerInstance, Kind} from "./IntegrationManagerInstance";
+import IntegrationsImpossibleDialog from "../components/views/dialogs/IntegrationsImpossibleDialog";
+import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
+import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
+import url from 'url';
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
-    KIND_ACCOUNT,
-    KIND_HOMESERVER,
-    KIND_CONFIG,
+    Kind.Account,
+    Kind.Homeserver,
+    Kind.Config,
 ];
 
 export class IntegrationManagers {
-    static _instance;
+    private static instance;
 
-    static sharedInstance(): IntegrationManagers {
-        if (!IntegrationManagers._instance) {
-            IntegrationManagers._instance = new IntegrationManagers();
+    private managers: IntegrationManagerInstance[] = [];
+    private client: MatrixClient;
+    private primaryManager: IntegrationManagerInstance;
+
+    public static sharedInstance(): IntegrationManagers {
+        if (!IntegrationManagers.instance) {
+            IntegrationManagers.instance = new IntegrationManagers();
         }
-        return IntegrationManagers._instance;
+        return IntegrationManagers.instance;
     }
 
-    _managers: IntegrationManagerInstance[] = [];
-    _client: MatrixClient;
-    _primaryManager: IntegrationManagerInstance;
-
     constructor() {
-        this._compileManagers();
+        this.compileManagers();
     }
 
     startWatching(): void {
         this.stopWatching();
-        this._client = MatrixClientPeg.get();
-        this._client.on("accountData", this._onAccountData);
-        this._client.on("WellKnown.client", this._setupHomeserverManagers);
-        this._compileManagers();
+        this.client = MatrixClientPeg.get();
+        this.client.on("accountData", this.onAccountData);
+        this.client.on("WellKnown.client", this.setupHomeserverManagers);
+        this.compileManagers();
     }
 
     stopWatching(): void {
-        if (!this._client) return;
-        this._client.removeListener("accountData", this._onAccountData);
-        this._client.removeListener("WellKnown.client", this._setupHomeserverManagers);
+        if (!this.client) return;
+        this.client.removeListener("accountData", this.onAccountData);
+        this.client.removeListener("WellKnown.client", this.setupHomeserverManagers);
     }
 
-    _compileManagers() {
-        this._managers = [];
-        this._setupConfiguredManager();
-        this._setupAccountManagers();
+    private compileManagers() {
+        this.managers = [];
+        this.setupConfiguredManager();
+        this.setupAccountManagers();
     }
 
-    _setupConfiguredManager() {
-        const apiUrl = SdkConfig.get()['integrations_rest_url'];
-        const uiUrl = SdkConfig.get()['integrations_ui_url'];
+    private setupConfiguredManager() {
+        const apiUrl: string = SdkConfig.get()['integrations_rest_url'];
+        const uiUrl: string = SdkConfig.get()['integrations_ui_url'];
 
         if (apiUrl && uiUrl) {
-            this._managers.push(new IntegrationManagerInstance(KIND_CONFIG, apiUrl, uiUrl));
-            this._primaryManager = null; // reset primary
+            this.managers.push(new IntegrationManagerInstance(Kind.Config, apiUrl, uiUrl));
+            this.primaryManager = null; // reset primary
         }
     }
 
-    async _setupHomeserverManagers(discoveryResponse) {
+    private setupHomeserverManagers = async (discoveryResponse) => {
         console.log("Updating homeserver-configured integration managers...");
         if (discoveryResponse && discoveryResponse['m.integrations']) {
             let managers = discoveryResponse['m.integrations']['managers'];
@@ -88,26 +94,26 @@ export class IntegrationManagers {
 
             // Clear out any known managers for the homeserver
             // TODO: Log out of the scalar clients
-            this._managers = this._managers.filter(m => m.kind !== KIND_HOMESERVER);
+            this.managers = this.managers.filter(m => m.kind !== Kind.Homeserver);
 
             // Now add all the managers the homeserver wants us to have
             for (const hsManager of managers) {
                 if (!hsManager["api_url"]) continue;
-                this._managers.push(new IntegrationManagerInstance(
-                    KIND_HOMESERVER,
+                this.managers.push(new IntegrationManagerInstance(
+                    Kind.Homeserver,
                     hsManager["api_url"],
                     hsManager["ui_url"], // optional
                 ));
             }
 
-            this._primaryManager = null; // reset primary
+            this.primaryManager = null; // reset primary
         } else {
             console.log("Homeserver has no integration managers");
         }
-    }
+    };
 
-    _setupAccountManagers() {
-        if (!this._client || !this._client.getUserId()) return; // not logged in
+    private setupAccountManagers() {
+        if (!this.client || !this.client.getUserId()) return; // not logged in
         const widgets = WidgetUtils.getIntegrationManagerWidgets();
         widgets.forEach(w => {
             const data = w.content['data'];
@@ -117,30 +123,29 @@ export class IntegrationManagers {
             const apiUrl = data['api_url'];
             if (!apiUrl || !uiUrl) return;
 
-            const manager = new IntegrationManagerInstance(KIND_ACCOUNT, apiUrl, uiUrl);
-            manager.id = w['id'] || w['state_key'] || '';
-            this._managers.push(manager);
+            const manager = new IntegrationManagerInstance(Kind.Account, apiUrl, uiUrl, w['id'] || w['state_key'] || '');
+            this.managers.push(manager);
         });
-        this._primaryManager = null; // reset primary
+        this.primaryManager = null; // reset primary
     }
 
-    _onAccountData = (ev: MatrixEvent): void => {
+    private onAccountData = (ev: MatrixEvent): void => {
         if (ev.getType() === 'm.widgets') {
-            this._compileManagers();
+            this.compileManagers();
         }
     };
 
     hasManager(): boolean {
-        return this._managers.length > 0;
+        return this.managers.length > 0;
     }
 
     getOrderedManagers(): IntegrationManagerInstance[] {
         const ordered = [];
         for (const kind of KIND_PREFERENCE) {
-            const managers = this._managers.filter(m => m.kind === kind);
+            const managers = this.managers.filter(m => m.kind === kind);
             if (!managers || !managers.length) continue;
 
-            if (kind === KIND_ACCOUNT) {
+            if (kind === Kind.Account) {
                 // Order by state_keys (IDs)
                 managers.sort((a, b) => a.id.localeCompare(b.id));
             }
@@ -152,17 +157,16 @@ export class IntegrationManagers {
 
     getPrimaryManager(): IntegrationManagerInstance {
         if (this.hasManager()) {
-            if (this._primaryManager) return this._primaryManager;
+            if (this.primaryManager) return this.primaryManager;
 
-            this._primaryManager = this.getOrderedManagers()[0];
-            return this._primaryManager;
+            this.primaryManager = this.getOrderedManagers()[0];
+            return this.primaryManager;
         } else {
             return null;
         }
     }
 
     openNoManagerDialog(): void {
-        const IntegrationsImpossibleDialog = sdk.getComponent("dialogs.IntegrationsImpossibleDialog");
         Modal.createTrackedDialog('Integrations impossible', '', IntegrationsImpossibleDialog);
     }
 
@@ -171,11 +175,10 @@ export class IntegrationManagers {
             return this.showDisabledDialog();
         }
 
-        if (this._managers.length === 0) {
+        if (this.managers.length === 0) {
             return this.openNoManagerDialog();
         }
 
-        const TabbedIntegrationManagerDialog = sdk.getComponent("views.dialogs.TabbedIntegrationManagerDialog");
         Modal.createTrackedDialog(
             'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
             {room, screen, integrationId}, 'mx_TabbedIntegrationManagerDialog',
@@ -183,7 +186,6 @@ export class IntegrationManagers {
     }
 
     showDisabledDialog(): void {
-        const IntegrationsDisabledDialog = sdk.getComponent("dialogs.IntegrationsDisabledDialog");
         Modal.createTrackedDialog('Integrations disabled', '', IntegrationsDisabledDialog);
     }
 
@@ -202,15 +204,14 @@ export class IntegrationManagers {
      * @returns {Promise<IntegrationManagerInstance>} Resolves to an integration manager instance,
      * or null if none was found.
      */
-    async tryDiscoverManager(domainName: string): IntegrationManagerInstance {
+    async tryDiscoverManager(domainName: string): Promise<IntegrationManagerInstance> {
         console.log("Looking up integration manager via .well-known");
         if (domainName.startsWith("http:") || domainName.startsWith("https:")) {
             // trim off the scheme and just use the domain
-            const url = url.parse(domainName);
-            domainName = url.host;
+            domainName = url.parse(domainName).host;
         }
 
-        let wkConfig;
+        let wkConfig: object;
         try {
             const result = await fetch(`https://${domainName}/.well-known/matrix/integrations`);
             wkConfig = await result.json();
@@ -232,7 +233,7 @@ export class IntegrationManagers {
         }
 
         // All discovered managers are per-user managers
-        const manager = new IntegrationManagerInstance(KIND_ACCOUNT, widget["data"]["api_url"], widget["url"]);
+        const manager = new IntegrationManagerInstance(Kind.Account, widget["data"]["api_url"], widget["url"]);
         console.log("Got an integration manager (untested)");
 
         // We don't test the manager because the caller may need to do extra
@@ -244,4 +245,4 @@ export class IntegrationManagers {
 }
 
 // For debugging
-global.mxIntegrationManagers = IntegrationManagers;
+window.mxIntegrationManagers = IntegrationManagers;

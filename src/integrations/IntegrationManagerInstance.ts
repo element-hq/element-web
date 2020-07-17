@@ -14,32 +14,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import type {Room} from "matrix-js-sdk/src/models/room";
+
 import ScalarAuthClient from "../ScalarAuthClient";
-import * as sdk from "../index";
 import {dialogTermsInteractionCallback, TermsNotSignedError} from "../Terms";
-import type {Room} from "matrix-js-sdk";
 import Modal from '../Modal';
 import url from 'url';
 import SettingsStore from "../settings/SettingsStore";
+import IntegrationManager from "../components/views/settings/IntegrationManager";
 import {IntegrationManagers} from "./IntegrationManagers";
 
-export const KIND_ACCOUNT = "account";
-export const KIND_CONFIG = "config";
-export const KIND_HOMESERVER = "homeserver";
+export enum Kind {
+    Account = "account",
+    Config = "config",
+    Homeserver = "homeserver",
+}
 
 export class IntegrationManagerInstance {
-    apiUrl: string;
-    uiUrl: string;
-    kind: string;
-    id: string; // only applicable in some cases
+    public readonly apiUrl: string;
+    public readonly uiUrl: string;
+    public readonly kind: string;
+    public readonly id: string; // only applicable in some cases
 
-    constructor(kind: string, apiUrl: string, uiUrl: string) {
+    // Per the spec: UI URL is optional.
+    constructor(kind: string, apiUrl: string, uiUrl: string = apiUrl, id?: string) {
         this.kind = kind;
         this.apiUrl = apiUrl;
         this.uiUrl = uiUrl;
-
-        // Per the spec: UI URL is optional.
-        if (!this.uiUrl) this.uiUrl = this.apiUrl;
+        this.id = id;
     }
 
     get name(): string {
@@ -51,19 +53,18 @@ export class IntegrationManagerInstance {
         const parsed = url.parse(this.apiUrl);
         parsed.pathname = '';
         parsed.path = '';
-        return parsed.format();
+        return url.format(parsed);
     }
 
     getScalarClient(): ScalarAuthClient {
         return new ScalarAuthClient(this.apiUrl, this.uiUrl);
     }
 
-    async open(room: Room = null, screen: string = null, integrationId: string = null): void {
+    async open(room: Room = null, screen: string = null, integrationId: string = null): Promise<void> {
         if (!SettingsStore.getValue("integrationProvisioning")) {
             return IntegrationManagers.sharedInstance().showDisabledDialog();
         }
 
-        const IntegrationManager = sdk.getComponent("views.settings.IntegrationManager");
         const dialog = Modal.createTrackedDialog(
             'Integration Manager', '', IntegrationManager,
             {loading: true}, 'mx_IntegrationManager',
