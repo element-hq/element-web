@@ -1,7 +1,7 @@
 # Review Guidelines
 
 The following summarises review guidelines that we follow for pull requests in
-Element and other supporting repos. These are just guidelines (not strict
+Element Web and other supporting repos. These are just guidelines (not strict
 rules) and may be updated over time.
 
 ## Code Review
