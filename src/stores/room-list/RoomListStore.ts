@@ -44,7 +44,7 @@ interface IState {
  */
 export const LISTS_UPDATE_EVENT = "lists_update";
 
-export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
+export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.
@@ -52,7 +52,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
     public static TEST_MODE = false;
 
     private initialListsGenerated = false;
-    private enabled = true;
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
@@ -66,7 +65,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
     constructor() {
         super(defaultDispatcher);
 
-        this.checkEnabled();
+        this.checkLoggingEnabled();
         for (const settingName of this.watchedSettings) SettingsStore.monitorSetting(settingName, null);
         RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
@@ -106,9 +105,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
             super.matrixClient = forcedClient;
         }
 
-        // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
-        this.checkEnabled();
-        if (!this.enabled) return;
+        this.checkLoggingEnabled();
 
         // Update any settings here, as some may have happened before we were logically ready.
         // Update any settings here, as some may have happened before we were logically ready.
@@ -121,7 +118,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
         this.updateFn.trigger();
     }
 
-    private checkEnabled() {
+    private checkLoggingEnabled() {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             console.warn("Advanced room list logging is enabled");
         }
@@ -141,7 +138,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
      * be used if the calling code will manually trigger the update.
      */
     private async handleRVSUpdate({trigger = true}) {
-        if (!this.enabled) return; // TODO: Remove with https://github.com/vector-im/riot-web/issues/14367
         if (!this.matrixClient) return; // We assume there won't be RVS updates without a client
 
         const activeRoomId = RoomViewStore.getRoomId();
@@ -186,9 +182,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
     }
 
     protected async onDispatchAsync(payload: ActionPayload) {
-        // TODO: Remove this once the RoomListStore becomes default
-        if (!this.enabled) return;
-
         // Everything here requires a MatrixClient or some sort of logical readiness.
         const logicallyReady = this.matrixClient && this.initialListsGenerated;
         if (!logicallyReady) return;
@@ -507,12 +500,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
                 await this.setAndPersistListOrder(tag, listOrder);
             }
         }
-    }
-
-    protected async updateState(newState: IState) {
-        if (!this.enabled) return;
-
-        await super.updateState(newState);
     }
 
     private onAlgorithmListUpdated = () => {
