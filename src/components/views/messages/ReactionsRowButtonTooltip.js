@@ -73,11 +73,7 @@ export default class ReactionsRowButtonTooltip extends React.PureComponent {
 
         let tooltip;
         if (tooltipLabel) {
-            tooltip = <Tooltip
-                tooltipClassName="mx_Tooltip_timeline"
-                visible={visible}
-                label={tooltipLabel}
-            />;
+            tooltip = <Tooltip visible={visible} label={tooltipLabel} />;
         }
 
         return tooltip;

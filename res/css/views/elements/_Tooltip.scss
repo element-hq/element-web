@@ -51,20 +51,26 @@ limitations under the License.
 .mx_Tooltip {
     display: none;
     position: fixed;
-    border: 1px solid $menu-border-color;
     border-radius: 8px;
     box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
-    background-color: $menu-bg-color;
     z-index: 6000; // Higher than context menu so tooltips can be used everywhere
     padding: 10px;
     pointer-events: none;
     line-height: $font-14px;
     font-size: $font-12px;
     font-weight: 500;
-    color: $primary-fg-color;
     max-width: 200px;
     word-break: break-word;
     margin-right: 50px;
+
+    background-color: $inverted-bg-color;
+    color: $accent-fg-color;
+    border: 0;
+    text-align: center;
+
+    .mx_Tooltip_chevron {
+        display: none;
+    }
 
     &.mx_Tooltip_visible {
         animation: mx_fadein 0.2s forwards;
@@ -72,19 +78,6 @@ limitations under the License.
 
     &.mx_Tooltip_invisible {
         animation: mx_fadeout 0.1s forwards;
-    }
-}
-
-.mx_Tooltip_timeline {
-    &.mx_Tooltip {
-        background-color: $inverted-bg-color;
-        color: $accent-fg-color;
-        border: 0;
-        text-align: center;
-
-        .mx_Tooltip_chevron {
-            display: none;
-        }
     }
 }
 

@@ -55,14 +55,4 @@ limitations under the License.
 .mx_RoomBreadcrumbs2_Tooltip {
     margin-left: -42px;
     margin-top: -42px;
-
-    &.mx_Tooltip {
-        background-color: $inverted-bg-color;
-        color: $accent-fg-color;
-        border: 0;
-
-        .mx_Tooltip_chevron {
-            display: none;
-        }
-    }
 }
