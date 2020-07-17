@@ -26,7 +26,6 @@ import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import { linkifyElement } from '../../../HtmlUtils';
-import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";

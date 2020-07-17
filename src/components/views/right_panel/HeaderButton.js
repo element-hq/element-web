@@ -22,7 +22,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Analytics from '../../../Analytics';
-import AccessibleButton from '../elements/AccessibleButton';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 export default class HeaderButton extends React.Component {

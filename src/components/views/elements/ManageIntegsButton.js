@@ -17,7 +17,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
