@@ -44,7 +44,7 @@ interface IState {
  */
 export const LISTS_UPDATE_EVENT = "lists_update";
 
-export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
+export class RoomListStoreClass extends AsyncStoreWithClient<ActionPayload> {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.
@@ -175,7 +175,7 @@ export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
     protected async onAction(payload: ActionPayload) {
         // When we're running tests we can't reliably use setImmediate out of timing concerns.
         // As such, we use a more synchronous model.
-        if (RoomListStore2.TEST_MODE) {
+        if (RoomListStoreClass.TEST_MODE) {
             await this.onDispatchAsync(payload);
             return;
         }
@@ -608,15 +608,15 @@ export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
 }
 
 export default class RoomListStore {
-    private static internalInstance: RoomListStore2;
+    private static internalInstance: RoomListStoreClass;
 
-    public static get instance(): RoomListStore2 {
+    public static get instance(): RoomListStoreClass {
         if (!RoomListStore.internalInstance) {
-            RoomListStore.internalInstance = new RoomListStore2();
+            RoomListStore.internalInstance = new RoomListStoreClass();
         }
 
         return RoomListStore.internalInstance;
     }
 }
 
-window.mx_RoomListStore2 = RoomListStore.instance;
+window.mx_RoomListStore = RoomListStore.instance;
