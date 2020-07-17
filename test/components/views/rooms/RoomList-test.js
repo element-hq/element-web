@@ -14,10 +14,7 @@ import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
-import RoomListStore, {
-    LISTS_UPDATE_EVENT,
-    RoomListStoreClass
-} from "../../../../src/stores/room-list/RoomListStore";
+import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {

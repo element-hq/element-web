@@ -61,7 +61,7 @@ class CustomRoomTagStore extends EventEmitter {
                 trailing: true,
             },
         );
-        RoomListStore.instance.on(LISTS_UPDATE_EVENT,this._onListsUpdated);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this._onListsUpdated);
         dis.register(payload => this._onDispatch(payload));
     }
 
@@ -128,7 +128,7 @@ class CustomRoomTagStore extends EventEmitter {
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
                 this._state = {tags: {}};
-                RoomListStore.instance.off(LISTS_UPDATE_EVENT,this._onListsUpdated);
+                RoomListStore.instance.off(LISTS_UPDATE_EVENT, this._onListsUpdated);
             }
             break;
         }
