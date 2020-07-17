@@ -19,7 +19,7 @@ limitations under the License.
 
 import React from 'react';
 
-import CallView from "./CallView2";
+import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
 import dis from '../../../dispatcher/dispatcher';

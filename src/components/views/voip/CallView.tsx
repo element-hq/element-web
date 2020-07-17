@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
 import React, {createRef} from 'react';
 import Room from 'matrix-js-sdk/src/models/room';
 import dis from '../../../dispatcher/dispatcher';
@@ -156,7 +154,7 @@ export default class CallView extends React.Component<IProps, IState> {
             const client = MatrixClientPeg.get();
             const callRoom = client.getRoom(this.state.call.roomId);
 
-            view = <AccessibleButton className="mx_CallView2_voice" onClick={this.props.onClick}>
+            view = <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
                 <PulsedAvatar>
                     <RoomAvatar
                         room={callRoom}
@@ -181,7 +179,7 @@ export default class CallView extends React.Component<IProps, IState> {
         let hangup: React.ReactNode;
         if (this.props.showHangup) {
             hangup = <div
-                className="mx_CallView2_hangup"
+                className="mx_CallView_hangup"
                 onClick={() => {
                     dis.dispatch({
                         action: 'hangup',

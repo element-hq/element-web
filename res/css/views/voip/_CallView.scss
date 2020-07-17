@@ -15,9 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
-.mx_CallView2_voice {
+.mx_CallView_voice {
     background-color: $accent-color;
     color: $accent-fg-color;
     cursor: pointer;
@@ -60,7 +58,7 @@ limitations under the License.
     }
 }
 
-.mx_CallView2_hangup {
+.mx_CallView_hangup {
     position: absolute;
 
     right: 8px;
