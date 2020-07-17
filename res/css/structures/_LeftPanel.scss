@@ -17,7 +17,7 @@ limitations under the License.
 $tagPanelWidth: 56px; // only applies in this file, used for calculations
 
 .mx_LeftPanel {
-    background-color: $roomlist2-bg-color;
+    background-color: $roomlist-bg-color;
     min-width: 260px;
     max-width: 50%;
 
@@ -46,7 +46,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
     // panel, such as the menu options, breadcrumbs, filtering, etc
     .mx_LeftPanel_roomListContainer {
         width: calc(100% - $tagPanelWidth);
-        background-color: $roomlist2-bg-color;
+        background-color: $roomlist-bg-color;
 
         // Create another flexbox (this time a column) for the room list components
         display: flex;
@@ -114,7 +114,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
                 width: 28px;
                 height: 28px;
                 border-radius: 20px;
-                background-color: $roomlist2-button-bg-color;
+                background-color: $roomlist-button-bg-color;
                 position: relative;
                 margin-left: 8px;
 

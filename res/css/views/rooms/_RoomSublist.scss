@@ -45,7 +45,7 @@ limitations under the License.
         // to work correctly.
         padding-bottom: 8px;
         height: 24px;
-        color: $roomlist2-header-color;
+        color: $roomlist-header-color;
 
         .mx_RoomSublist_stickable {
             flex: 1;
@@ -310,7 +310,7 @@ limitations under the License.
                 width: 32px !important; // !important to override hover styles
                 height: 32px !important; // !important to override hover styles
                 margin-left: 0 !important; // !important to override hover styles
-                background-color: $roomlist2-button-bg-color;
+                background-color: $roomlist-button-bg-color;
                 margin-top: 8px;
 
                 &::before {
@@ -350,7 +350,7 @@ limitations under the License.
 
                 // This is the same color as the left panel background because it needs
                 // to occlude the sublist title
-                background-color: $roomlist2-bg-color;
+                background-color: $roomlist-bg-color;
 
                 &::before {
                     top: 0;
