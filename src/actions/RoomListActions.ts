@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import { asyncAction } from './actionCreators';
-import { TAG_DM } from '../stores/RoomListStore';
 import Modal from '../Modal';
 import * as Rooms from '../Rooms';
 import { _t } from '../languageHandler';
@@ -26,6 +25,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
 import RoomListStore from "../stores/room-list/RoomListStore2";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
+import { DefaultTagID } from "../stores/room-list/models";
 
 export default class RoomListActions {
     /**
@@ -82,11 +82,11 @@ export default class RoomListActions {
             const roomId = room.roomId;
 
             // Evil hack to get DMs behaving
-            if ((oldTag === undefined && newTag === TAG_DM) ||
-                (oldTag === TAG_DM && newTag === undefined)
+            if ((oldTag === undefined && newTag === DefaultTagID.DM) ||
+                (oldTag === DefaultTagID.DM && newTag === undefined)
             ) {
                 return Rooms.guessAndSetDMRoom(
-                    room, newTag === TAG_DM,
+                    room, newTag === DefaultTagID.DM,
                 ).catch((err) => {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to set direct chat tag " + err);
@@ -103,7 +103,7 @@ export default class RoomListActions {
             // but we avoid ever doing a request with TAG_DM.
             //
             // if we moved lists, remove the old tag
-            if (oldTag && oldTag !== TAG_DM &&
+            if (oldTag && oldTag !== DefaultTagID.DM &&
                 hasChangedSubLists
             ) {
                 const promiseToDelete = matrixClient.deleteRoomTag(
@@ -121,7 +121,7 @@ export default class RoomListActions {
             }
 
             // if we moved lists or the ordering changed, add the new tag
-            if (newTag && newTag !== TAG_DM &&
+            if (newTag && newTag !== DefaultTagID.DM &&
                 (hasChangedSubLists || metaData)
             ) {
                 // metaData is the body of the PUT to set the tag, so it must
