@@ -85,7 +85,7 @@
     "Try using turn.matrix.org": "جرب استخدام turn.matrix.org",
     "OK": "حسنا",
     "Unable to capture screen": "غير قادر على التقاط الشاشة",
-    "Call Failed": "فشل الاتصال",
+    "Call Failed": "فل الاتصال",
     "You are already in a call.": "أنت بالفعل في مكالمة.",
     "VoIP is unsupported": "تقنية VoIP غير مدعومة",
     "You cannot place VoIP calls in this browser.": "لايمكنك اجراء مكالمات VoIP عبر هذا المتصفح.",
@@ -327,5 +327,6 @@
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "على الرغم من كون هذه الصفحة تحوي معلومات تمكن تحديد الهوية، مثل معرف الغرفة والمستخدم والمجموعة، فهذه البيانات يتم حذفها قبل أن ترسل للخادم",
     "The remote side failed to pick up": "الطرف الآخر لم يتمكن من الرد",
     "Existing Call": "مكالمة موجودة",
-    "You cannot place a call with yourself.": "لا يمكنك البدء باتصال بك ذاتك"
+    "You cannot place a call with yourself.": "لا يمكنك البدء باتصال بك ذاتك",
+    "Call in Progress": "المكالمة قيد التحضير"
 }
