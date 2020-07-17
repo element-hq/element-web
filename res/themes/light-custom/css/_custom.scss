@@ -25,7 +25,6 @@ $button-link-fg-color: var(--accent-color);
 $button-primary-bg-color: var(--accent-color);
 $input-valid-border-color: var(--accent-color);
 $reaction-row-button-selected-border-color: var(--accent-color);
-$roomsublist-chevron-color: var(--accent-color);
 $tab-label-active-bg-color: var(--accent-color);
 $togglesw-on-color: var(--accent-color);
 $username-variant3-color: var(--accent-color);
@@ -40,14 +39,12 @@ $menu-bg-color: var(--timeline-background-color);
 $avatar-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
 $primary-bg-color: var(--timeline-background-color);
-$roomtile-focused-bg-color: var(--timeline-background-color);
 $togglesw-ball-color: var(--timeline-background-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .5
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .59
 $roomheader-bg-color: var(--timeline-background-color);
 //
 // --roomlist-highlights-color
-$roomtile-selected-bg-color: var(--roomlist-highlights-color);
 $roomtile2-selected-bg-color: var(--roomlist-highlights-color);
 //
 // --sidebar-color
@@ -65,7 +62,6 @@ $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-backgroun
 $dark-panel-bg-color: var(--roomlist-background-color);
 $input-lighter-bg-color: var(--roomlist-background-color);
 $plinth-bg-color: var(--roomlist-background-color);
-$roomsublist-background: var(--roomlist-background-color);
 $secondary-accent-color: var(--roomlist-background-color);
 $selected-color: var(--roomlist-background-color);
 $widget-menu-bar-bg-color: var(--roomlist-background-color);
@@ -86,12 +82,7 @@ $tab-label-fg-color: var(--timeline-text-color);
 // was #4e5054
 $authpage-lang-color: var(--timeline-text-color);
 $roomheader-color: var(--timeline-text-color);
-//
-// --roomlist-text-color
-$roomtile-notified-color: var(--roomlist-text-color);
-$roomtile-selected-color: var(--roomlist-text-color);
 // --roomlist-text-secondary-color
-$roomsublist-label-fg-color: var(--roomlist-text-secondary-color);
 $roomtile2-preview-color: var(--roomlist-text-secondary-color);
 $roomlist-header-color: var(--roomlist-text-secondary-color);
 $roomtile2-default-badge-bg-color: var(--roomlist-text-secondary-color);
