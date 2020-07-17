@@ -2268,5 +2268,17 @@
     "Verify by emoji": "Verifitseeri emoji'de abil",
     "Edited at %(date)s": "Muutmise kuupäev %(date)s",
     "Click to view edits": "Muudatuste nägemiseks klõpsi",
-    "<a>In reply to</a> <pill>": "<a>Vastuseks kasutajale</a> <pill>"
+    "<a>In reply to</a> <pill>": "<a>Vastuseks kasutajale</a> <pill>",
+    "There are advanced notifications which are not shown here.": "On olemad detailseid teavitusi, mida siin ei kuvata.",
+    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Sa võib-olla oled seadistanud nad %(brand)s'ist erinevas kliendis. Sa küll ei saa neid %(brand)s'is muuta, kuid nad kehtivad siiski.",
+    "You are currently using <server></server> to discover and be discoverable by existing contacts you know. You can change your identity server below.": "Sa hetkel kasutad <server></server> serverit, et olla leitav ja ise leida sinule teadaolevaid inimesi. Alljärgnevalt saad sa muuta oma isikutuvastusserverit.",
+    "If you don't want to use <server /> to discover and be discoverable by existing contacts you know, enter another identity server below.": "Kui sa ei soovi kasutada <server /> serverit, et olla leitav ja ise leida sinule teadaolevaid inimesi, siis sisesta alljärgnevalt mõni teine isikutuvastusserver.",
+    "Identity Server": "Isikutuvastusserver",
+    "Do not use an identity server": "Ära kasuta isikutuvastusserverit",
+    "Enter a new identity server": "Sisesta uue isikutuvastusserveri nimi",
+    "Change": "Muuda",
+    "Use an Integration Manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide jaoks kasuta lõiminguhaldurit <b>(%(serverName)s)</b>.",
+    "Use an Integration Manager to manage bots, widgets, and sticker packs.": "Robotite, vidinate ja kleepsupakkide seadistamiseks kasuta lõiminguhaldurit.",
+    "Manage integrations": "Halda lõiminguid",
+    "Integration Managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "Lõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi."
 }
