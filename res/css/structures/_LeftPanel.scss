@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 $tagPanelWidth: 56px; // only applies in this file, used for calculations
 
-.mx_LeftPanel2 {
+.mx_LeftPanel {
     background-color: $roomlist2-bg-color;
     min-width: 260px;
     max-width: 50%;
@@ -26,7 +24,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
     // Create a row-based flexbox for the TagPanel and the room list
     display: flex;
 
-    .mx_LeftPanel2_tagPanelContainer {
+    .mx_LeftPanel_tagPanelContainer {
         flex-grow: 0;
         flex-shrink: 0;
         flex-basis: $tagPanelWidth;
@@ -38,15 +36,15 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         // TagPanel handles its own CSS
     }
 
-    &:not(.mx_LeftPanel2_hasTagPanel) {
-        .mx_LeftPanel2_roomListContainer {
+    &:not(.mx_LeftPanel_hasTagPanel) {
+        .mx_LeftPanel_roomListContainer {
             width: 100%;
         }
     }
 
     // Note: The 'room list' in this context is actually everything that isn't the tag
     // panel, such as the menu options, breadcrumbs, filtering, etc
-    .mx_LeftPanel2_roomListContainer {
+    .mx_LeftPanel_roomListContainer {
         width: calc(100% - $tagPanelWidth);
         background-color: $roomlist2-bg-color;
 
@@ -54,7 +52,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         display: flex;
         flex-direction: column;
 
-        .mx_LeftPanel2_userHeader {
+        .mx_LeftPanel_userHeader {
             /* 12px top, 12px sides, 20px bottom (using 13px bottom to account
              * for internal whitespace in the breadcrumbs)
              */
@@ -66,7 +64,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             flex-direction: column;
         }
 
-        .mx_LeftPanel2_breadcrumbsContainer {
+        .mx_LeftPanel_breadcrumbsContainer {
             overflow-y: hidden;
             overflow-x: scroll;
             margin: 12px 12px 0 12px;
@@ -89,7 +87,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             }
         }
 
-        .mx_LeftPanel2_filterContainer {
+        .mx_LeftPanel_filterContainer {
             margin-left: 12px;
             margin-right: 12px;
 
@@ -99,7 +97,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             display: flex;
             align-items: center;
 
-            .mx_RoomSearch_expanded + .mx_LeftPanel2_exploreButton {
+            .mx_RoomSearch_expanded + .mx_LeftPanel_exploreButton {
                 // Cheaty way to return the occupied space to the filter input
                 flex-basis: 0;
                 margin: 0;
@@ -112,7 +110,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
                 }
             }
 
-            .mx_LeftPanel2_exploreButton {
+            .mx_LeftPanel_exploreButton {
                 width: 28px;
                 height: 28px;
                 border-radius: 20px;
@@ -136,7 +134,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             }
         }
 
-        .mx_LeftPanel2_roomListWrapper {
+        .mx_LeftPanel_roomListWrapper {
             // Create a flexbox to ensure the containing items cause appropriate overflow.
             display: flex;
 
@@ -145,16 +143,16 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             min-height: 0;
             margin-top: 10px; // so we're not up against the search/filter
 
-            &.mx_LeftPanel2_roomListWrapper_stickyBottom {
+            &.mx_LeftPanel_roomListWrapper_stickyBottom {
                 padding-bottom: 32px;
             }
 
-            &.mx_LeftPanel2_roomListWrapper_stickyTop {
+            &.mx_LeftPanel_roomListWrapper_stickyTop {
                 padding-top: 32px;
             }
         }
 
-        .mx_LeftPanel2_actualRoomListContainer {
+        .mx_LeftPanel_actualRoomListContainer {
             flex-grow: 1; // fill the available space
             overflow-y: auto;
             width: 100%;
@@ -167,26 +165,26 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
     }
 
     // These styles override the defaults for the minimized (66px) layout
-    &.mx_LeftPanel2_minimized {
+    &.mx_LeftPanel_minimized {
         min-width: unset;
 
         // We have to forcefully set the width to override the resizer's style attribute.
-        &.mx_LeftPanel2_hasTagPanel {
+        &.mx_LeftPanel_hasTagPanel {
             width: calc(68px + $tagPanelWidth) !important;
         }
-        &:not(.mx_LeftPanel2_hasTagPanel) {
+        &:not(.mx_LeftPanel_hasTagPanel) {
             width: 68px !important;
         }
 
-        .mx_LeftPanel2_roomListContainer {
+        .mx_LeftPanel_roomListContainer {
             width: 68px;
 
-            .mx_LeftPanel2_filterContainer {
+            .mx_LeftPanel_filterContainer {
                 // Organize the flexbox into a centered column layout
                 flex-direction: column;
                 justify-content: center;
 
-                .mx_LeftPanel2_exploreButton {
+                .mx_LeftPanel_exploreButton {
                     margin-left: 0;
                     margin-top: 8px;
                     background-color: transparent;

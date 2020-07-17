@@ -36,8 +36,6 @@ import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 interface IProps {
     isMinimized: boolean;
     resizeNotifier: ResizeNotifier;
@@ -58,7 +56,7 @@ const cssClasses = [
     "mx_RoomSublist2_showNButton",
 ];
 
-export default class LeftPanel2 extends React.Component<IProps, IState> {
+export default class LeftPanel extends React.Component<IProps, IState> {
     private listContainerRef: React.RefObject<HTMLDivElement> = createRef();
     private tagPanelWatcherRef: string;
     private focusedElement = null;
@@ -222,16 +220,16 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
         // add appropriate sticky classes to wrapper so it has
         // the necessary top/bottom padding to put the sticky header in
-        const listWrapper = list.parentElement; // .mx_LeftPanel2_roomListWrapper
+        const listWrapper = list.parentElement; // .mx_LeftPanel_roomListWrapper
         if (lastTopHeader) {
-            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyTop");
+            listWrapper.classList.add("mx_LeftPanel_roomListWrapper_stickyTop");
         } else {
-            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyTop");
+            listWrapper.classList.remove("mx_LeftPanel_roomListWrapper_stickyTop");
         }
         if (firstBottomHeader) {
-            listWrapper.classList.add("mx_LeftPanel2_roomListWrapper_stickyBottom");
+            listWrapper.classList.add("mx_LeftPanel_roomListWrapper_stickyBottom");
         } else {
-            listWrapper.classList.remove("mx_LeftPanel2_roomListWrapper_stickyBottom");
+            listWrapper.classList.remove("mx_LeftPanel_roomListWrapper_stickyBottom");
         }
     }
 
@@ -315,7 +313,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     private renderHeader(): React.ReactNode {
         return (
-            <div className="mx_LeftPanel2_userHeader">
+            <div className="mx_LeftPanel_userHeader">
                 <UserMenu isMinimized={this.props.isMinimized} />
             </div>
         );
@@ -325,7 +323,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         if (this.state.showBreadcrumbs && !this.props.isMinimized) {
             return (
                 <IndicatorScrollbar
-                    className="mx_LeftPanel2_breadcrumbsContainer mx_AutoHideScrollbar"
+                    className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
                 >
                     <RoomBreadcrumbs2 />
@@ -337,7 +335,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
     private renderSearchExplore(): React.ReactNode {
         return (
             <div
-                className="mx_LeftPanel2_filterContainer"
+                className="mx_LeftPanel_filterContainer"
                 onFocus={this.onFocus}
                 onBlur={this.onBlur}
                 onKeyDown={this.onKeyDown}
@@ -349,7 +347,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onEnter={this.onEnter}
                 />
                 <AccessibleTooltipButton
-                    className="mx_LeftPanel2_exploreButton"
+                    className="mx_LeftPanel_exploreButton"
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
                 />
@@ -359,7 +357,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const tagPanel = !this.state.showTagPanel ? null : (
-            <div className="mx_LeftPanel2_tagPanelContainer">
+            <div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel/>
             </div>
         );
@@ -376,24 +374,24 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
         />;
 
         const containerClasses = classNames({
-            "mx_LeftPanel2": true,
-            "mx_LeftPanel2_hasTagPanel": !!tagPanel,
-            "mx_LeftPanel2_minimized": this.props.isMinimized,
+            "mx_LeftPanel": true,
+            "mx_LeftPanel_hasTagPanel": !!tagPanel,
+            "mx_LeftPanel_minimized": this.props.isMinimized,
         });
 
         const roomListClasses = classNames(
-            "mx_LeftPanel2_actualRoomListContainer",
+            "mx_LeftPanel_actualRoomListContainer",
             "mx_AutoHideScrollbar",
         );
 
         return (
             <div className={containerClasses}>
                 {tagPanel}
-                <aside className="mx_LeftPanel2_roomListContainer">
+                <aside className="mx_LeftPanel_roomListContainer">
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
-                    <div className="mx_LeftPanel2_roomListWrapper">
+                    <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
                             onScroll={this.onScroll}

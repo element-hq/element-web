@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 async function openRoomDirectory(session) {
-    const roomDirectoryButton = await session.query('.mx_LeftPanel2_exploreButton');
+    const roomDirectoryButton = await session.query('.mx_LeftPanel_exploreButton');
     await roomDirectoryButton.click();
 }
 

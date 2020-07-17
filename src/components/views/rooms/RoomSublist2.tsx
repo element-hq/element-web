@@ -326,7 +326,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         const possibleSticky = this.headerButton.current.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
         const list = sublist.parentElement.parentElement;
-        // the scrollTop is capped at the height of the header in LeftPanel2, the top header is always sticky
+        // the scrollTop is capped at the height of the header in LeftPanel, the top header is always sticky
         const isAtTop = list.scrollTop <= HEADER_HEIGHT;
         const isAtBottom = list.scrollTop >= list.scrollHeight - list.offsetHeight;
         const isStickyTop = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_stickyTop');

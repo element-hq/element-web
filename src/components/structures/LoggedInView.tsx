@@ -50,7 +50,7 @@ import {
     hideToast as hideServerLimitToast
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
-import LeftPanel2 from "./LeftPanel2";
+import LeftPanel from "./LeftPanel";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
@@ -661,7 +661,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
 
         const leftPanel = (
-            <LeftPanel2
+            <LeftPanel
                 isMinimized={this.props.collapseLhs || false}
                 resizeNotifier={this.props.resizeNotifier}
             />
