@@ -20,10 +20,7 @@ limitations under the License.
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
-import { ViewTooltipPayload } from '../../../dispatcher/payloads/ViewTooltipPayload';
-import { Action } from '../../../dispatcher/actions';
 
 const MIN_TOOLTIP_HEIGHT = 25;
 
@@ -68,12 +65,6 @@ export default class Tooltip extends React.Component<IProps> {
 
     // Remove the wrapper element, as the tooltip has finished using it
     public componentWillUnmount() {
-        dis.dispatch<ViewTooltipPayload>({
-            action: Action.ViewTooltip,
-            tooltip: null,
-            parent: null,
-        });
-
         ReactDOM.unmountComponentAtNode(this.tooltipContainer);
         document.body.removeChild(this.tooltipContainer);
         window.removeEventListener('scroll', this.renderTooltip, true);
@@ -99,7 +90,6 @@ export default class Tooltip extends React.Component<IProps> {
         // positioned, also taking into account any window zoom
         // NOTE: The additional 6 pixels for the left position, is to take account of the
         // tooltips chevron
-        const parent = ReactDOM.findDOMNode(this).parentNode as Element;
         const style = this.updatePosition({});
         // Hide the entire container when not visible. This prevents flashing of the tooltip
         // if it is not meant to be visible on first mount.
@@ -119,13 +109,6 @@ export default class Tooltip extends React.Component<IProps> {
 
         // Render the tooltip manually, as we wish it not to be rendered within the parent
         this.tooltip = ReactDOM.render<Element>(tooltip, this.tooltipContainer);
-
-        // Tell the roomlist about us so it can manipulate us if it wishes
-        dis.dispatch<ViewTooltipPayload>({
-            action: Action.ViewTooltip,
-            tooltip: this.tooltip,
-            parent: parent,
-        });
     };
 
     public render() {
