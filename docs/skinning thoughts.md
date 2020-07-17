@@ -11,7 +11,7 @@ element-web: the Element skin
     - light
     - dark
 
-i.e. the only things which should go into Element are bits which apply vector-specific skinning
+i.e. the only things which should go into element-web are bits which apply vector-specific skinning
 specifically "Stuff that any other brand would not want to use. (e.g. Element logos, links, T&Cs)"
  - Questions:
    - Electron app?  (should probably be a separate repo in its own right?  but might as well go here for now)
