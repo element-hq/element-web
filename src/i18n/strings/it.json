@@ -2383,5 +2383,10 @@
     "Confirm Security Phrase": "Conferma frase di sicurezza",
     "Save your Security Key": "Salva la tua chiave di sicurezza",
     "This room is public": "Questa stanza è pubblica",
-    "Away": "Assente"
+    "Away": "Assente",
+    "Enable advanced debugging for the room list": "Attiva il debug avanzato per l'elenco di stanze",
+    "Show rooms with unread messages first": "Mostra prima le stanze con messaggi non letti",
+    "Show previews of messages": "Mostra anteprime dei messaggi",
+    "Edited at %(date)s": "Modificato il %(date)s",
+    "Click to view edits": "Clicca per vedere le modifiche"
 }
