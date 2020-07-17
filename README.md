@@ -35,7 +35,7 @@ The `develop` branch is continuously deployed by Jenkins at https://develop.elem
 for those who like living dangerously.
 
 To host your own copy of Element, the quickest bet is to use a pre-built
-released version of Riot:
+released version of Element:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
