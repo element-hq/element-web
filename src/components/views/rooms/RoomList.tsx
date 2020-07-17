@@ -29,7 +29,7 @@ import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import RoomSublist2 from "./RoomSublist2";
+import RoomSublist from "./RoomSublist";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -275,7 +275,7 @@ export default class RoomList extends React.Component<IProps, IState> {
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
             components.push(
-                <RoomSublist2
+                <RoomSublist
                     key={`sublist-${orderedTagId}`}
                     tagId={orderedTagId}
                     forRooms={true}

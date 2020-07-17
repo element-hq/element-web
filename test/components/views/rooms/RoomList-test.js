@@ -131,7 +131,7 @@ describe('RoomList', () => {
     });
 
     function expectRoomInSubList(room, subListTest) {
-        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist2');
+        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist');
         const RoomTile = sdk.getComponent('views.rooms.RoomTile');
 
         const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSubList);

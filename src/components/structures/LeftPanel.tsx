@@ -21,7 +21,7 @@ import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
-import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
+import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
@@ -50,9 +50,9 @@ interface IState {
 const cssClasses = [
     "mx_RoomSearch_input",
     "mx_RoomSearch_icon", // minimized <RoomSearch />
-    "mx_RoomSublist2_headerText",
+    "mx_RoomSublist_headerText",
     "mx_RoomTile",
-    "mx_RoomSublist2_showNButton",
+    "mx_RoomSublist_showNButton",
 ];
 
 export default class LeftPanel extends React.Component<IProps, IState> {
@@ -119,7 +119,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     private doStickyHeaders(list: HTMLDivElement) {
         const topEdge = list.scrollTop;
         const bottomEdge = list.offsetHeight + list.scrollTop;
-        const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist2");
+        const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist");
 
         const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
@@ -135,7 +135,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         let lastTopHeader;
         let firstBottomHeader;
         for (const sublist of sublists) {
-            const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist2_stickable");
+            const header = sublist.querySelector<HTMLDivElement>(".mx_RoomSublist_stickable");
             header.style.removeProperty("display"); // always clear display:none first
 
             // When an element is <=40% off screen, make it take over
@@ -171,8 +171,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             }
 
             if (style.stickyTop) {
-                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
-                    header.classList.add("mx_RoomSublist2_headerContainer_stickyTop");
+                if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyTop")) {
+                    header.classList.add("mx_RoomSublist_headerContainer_stickyTop");
                 }
 
                 const newTop = `${list.parentElement.offsetTop}px`;
@@ -180,8 +180,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.style.top = newTop;
                 }
             } else {
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyTop")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyTop");
+                if (header.classList.contains("mx_RoomSublist_headerContainer_stickyTop")) {
+                    header.classList.remove("mx_RoomSublist_headerContainer_stickyTop");
                 }
                 if (header.style.top) {
                     header.style.removeProperty('top');
@@ -189,18 +189,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             }
 
             if (style.stickyBottom) {
-                if (!header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
-                    header.classList.add("mx_RoomSublist2_headerContainer_stickyBottom");
+                if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
+                    header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
             } else {
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_stickyBottom")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_stickyBottom");
+                if (header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
+                    header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
                 }
             }
 
             if (style.stickyTop || style.stickyBottom) {
-                if (!header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
-                    header.classList.add("mx_RoomSublist2_headerContainer_sticky");
+                if (!header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
+                    header.classList.add("mx_RoomSublist_headerContainer_sticky");
                 }
 
                 const newWidth = `${headerStickyWidth}px`;
@@ -208,8 +208,8 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     header.style.width = newWidth;
                 }
             } else if (!style.stickyTop && !style.stickyBottom) {
-                if (header.classList.contains("mx_RoomSublist2_headerContainer_sticky")) {
-                    header.classList.remove("mx_RoomSublist2_headerContainer_sticky");
+                if (header.classList.contains("mx_RoomSublist_headerContainer_sticky")) {
+                    header.classList.remove("mx_RoomSublist_headerContainer_sticky");
                 }
                 if (header.style.width) {
                     header.style.removeProperty('width');
