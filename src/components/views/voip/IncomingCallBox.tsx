@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
 import React from 'react';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -35,7 +33,7 @@ interface IState {
     incomingCall: any;
 }
 
-export default class IncomingCallBox2 extends React.Component<IProps, IState> {
+export default class IncomingCallBox extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 
     constructor(props: IProps) {
@@ -106,8 +104,8 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
             }
         }
 
-        return <div className="mx_IncomingCallBox2">
-            <div className="mx_IncomingCallBox2_CallerInfo">
+        return <div className="mx_IncomingCallBox">
+            <div className="mx_IncomingCallBox_CallerInfo">
                 <PulsedAvatar>
                     <RoomAvatar
                         room={room}
@@ -120,16 +118,16 @@ export default class IncomingCallBox2 extends React.Component<IProps, IState> {
                     <p>{incomingCallText}</p>
                 </div>
             </div>
-            <div className="mx_IncomingCallBox2_buttons">
+            <div className="mx_IncomingCallBox_buttons">
                 <FormButton
-                    className={"mx_IncomingCallBox2_decline"}
+                    className={"mx_IncomingCallBox_decline"}
                     onClick={this.onRejectClick}
                     kind="danger"
                     label={_t("Decline")}
                 />
-                <div className="mx_IncomingCallBox2_spacer" />
+                <div className="mx_IncomingCallBox_spacer" />
                 <FormButton
-                    className={"mx_IncomingCallBox2_accept"}
+                    className={"mx_IncomingCallBox_accept"}
                     onClick={this.onAnswerClick}
                     kind="primary"
                     label={_t("Accept")}
