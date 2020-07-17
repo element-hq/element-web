@@ -36,7 +36,7 @@ import {inviteMultipleToRoom} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";

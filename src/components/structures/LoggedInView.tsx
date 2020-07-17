@@ -53,7 +53,7 @@ import { Action } from "../../dispatcher/actions";
 import LeftPanel2 from "./LeftPanel2";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
-import RoomListStore from "../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../stores/room-list/RoomListStore";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.

@@ -17,7 +17,7 @@ import {DefaultTagID} from "../../../../src/stores/room-list/models";
 import RoomListStore, {
     LISTS_UPDATE_EVENT,
     RoomListStoreClass
-} from "../../../../src/stores/room-list/RoomListStore2";
+} from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {

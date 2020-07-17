@@ -18,7 +18,7 @@ import * as RoomNotifs from '../RoomNotifs';
 import EventEmitter from 'events';
 import { throttle } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
-import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore2";
+import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
 
 // TODO: All of this needs updating for new custom tags: https://github.com/vector-im/riot-web/issues/14091
 const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;

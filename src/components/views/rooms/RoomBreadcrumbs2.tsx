@@ -23,7 +23,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { CSSTransition } from "react-transition-group";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";

@@ -20,7 +20,7 @@ import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
 import RebrandListener from "../RebrandListener";
-import { RoomListStoreClass } from "../stores/room-list/RoomListStore2";
+import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";

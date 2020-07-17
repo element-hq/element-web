@@ -23,7 +23,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";

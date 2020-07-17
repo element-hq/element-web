@@ -32,7 +32,7 @@ import {
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";

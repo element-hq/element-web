@@ -48,7 +48,7 @@ import {
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
 import { Volume } from "../../../RoomNotifsTypes";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
 import RoomListActions from "../../../actions/RoomListActions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";

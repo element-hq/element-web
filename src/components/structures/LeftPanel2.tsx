@@ -31,7 +31,7 @@ import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import SettingsStore from "../../settings/SettingsStore";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
 import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";

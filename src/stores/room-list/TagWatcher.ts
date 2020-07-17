@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomListStoreClass } from "./RoomListStore2";
+import { RoomListStoreClass } from "./RoomListStore";
 import TagOrderStore from "../TagOrderStore";
 import { CommunityFilterCondition } from "./filters/CommunityFilterCondition";
 import { arrayDiff, arrayHasDiff } from "../../utils/arrays";

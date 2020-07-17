@@ -23,7 +23,7 @@ import * as sdk from '../index';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
-import RoomListStore from "../stores/room-list/RoomListStore2";
+import RoomListStore from "../stores/room-list/RoomListStore";
 import { SortAlgorithm } from "../stores/room-list/algorithms/models";
 import { DefaultTagID } from "../stores/room-list/models";
 
