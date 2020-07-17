@@ -25,7 +25,7 @@ import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
-import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
+import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -325,7 +325,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
                 >
-                    <RoomBreadcrumbs2 />
+                    <RoomBreadcrumbs />
                 </IndicatorScrollbar>
             );
         }

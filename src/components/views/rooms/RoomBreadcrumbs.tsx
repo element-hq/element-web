@@ -28,8 +28,6 @@ import { DefaultTagID } from "../../../stores/room-list/models";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 interface IProps {
 }
 
@@ -44,7 +42,7 @@ interface IState {
     skipFirst: boolean;
 }
 
-export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState> {
+export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
     private isMounted = true;
 
     constructor(props: IProps) {
@@ -88,12 +86,12 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
             const roomTag = roomTags.includes(DefaultTagID.DM) ? DefaultTagID.DM : roomTags[0];
             return (
                 <RovingAccessibleTooltipButton
-                    className="mx_RoomBreadcrumbs2_crumb"
+                    className="mx_RoomBreadcrumbs_crumb"
                     key={r.roomId}
                     onClick={() => this.viewRoom(r, i)}
                     aria-label={_t("Room %(name)s", {name: r.name})}
                     title={r.name}
-                    tooltipClassName="mx_RoomBreadcrumbs2_Tooltip"
+                    tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
                 >
                     <DecoratedRoomAvatar
                         room={r}
@@ -111,17 +109,17 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
             return (
                 <CSSTransition
                     appear={true} in={this.state.doAnimation} timeout={640}
-                    classNames='mx_RoomBreadcrumbs2'
+                    classNames='mx_RoomBreadcrumbs'
                 >
-                    <Toolbar className='mx_RoomBreadcrumbs2'>
+                    <Toolbar className='mx_RoomBreadcrumbs'>
                         {tiles.slice(this.state.skipFirst ? 1 : 0)}
                     </Toolbar>
                 </CSSTransition>
             );
         } else {
             return (
-                <div className='mx_RoomBreadcrumbs2'>
-                    <div className="mx_RoomBreadcrumbs2_placeholder">
+                <div className='mx_RoomBreadcrumbs'>
+                    <div className="mx_RoomBreadcrumbs_placeholder">
                         {_t("No recently visited rooms")}
                     </div>
                 </div>

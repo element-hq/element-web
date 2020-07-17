@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
-.mx_RoomBreadcrumbs2 {
+.mx_RoomBreadcrumbs {
     width: 100%;
 
     // Create a flexbox for the crumbs
@@ -24,7 +22,7 @@ limitations under the License.
     flex-direction: row;
     align-items: flex-start;
 
-    .mx_RoomBreadcrumbs2_crumb {
+    .mx_RoomBreadcrumbs_crumb {
         margin-right: 8px;
         width: 32px;
     }
@@ -33,10 +31,10 @@ limitations under the License.
     // could care about, but this is all we worried about for now. The animation works by
     // first triggering the enter state with the newest breadcrumb off screen (-40px) then
     // sliding it into view.
-    &.mx_RoomBreadcrumbs2-enter {
+    &.mx_RoomBreadcrumbs-enter {
         margin-left: -40px; // 32px for the avatar, 8px for the margin
     }
-    &.mx_RoomBreadcrumbs2-enter-active {
+    &.mx_RoomBreadcrumbs-enter-active {
         margin-left: 0;
 
         // Timing function is as-requested by design.
@@ -44,7 +42,7 @@ limitations under the License.
         transition: margin-left 640ms cubic-bezier(0.66, 0.02, 0.36, 1);
     }
 
-    .mx_RoomBreadcrumbs2_placeholder {
+    .mx_RoomBreadcrumbs_placeholder {
         font-weight: 600;
         font-size: $font-14px;
         line-height: 32px; // specifically to match the height this is not scaled
@@ -52,7 +50,7 @@ limitations under the License.
     }
 }
 
-.mx_RoomBreadcrumbs2_Tooltip {
+.mx_RoomBreadcrumbs_Tooltip {
     margin-left: -42px;
     margin-top: -42px;
 }
