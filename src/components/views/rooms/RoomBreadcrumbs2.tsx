@@ -93,7 +93,7 @@ export default class RoomBreadcrumbs2 extends React.PureComponent<IProps, IState
                     onClick={() => this.viewRoom(r, i)}
                     aria-label={_t("Room %(name)s", {name: r.name})}
                     title={r.name}
-                    tooltipClassName={"mx_RoomBreadcrumbs2_Tooltip"}
+                    tooltipClassName="mx_RoomBreadcrumbs2_Tooltip"
                 >
                     <DecoratedRoomAvatar
                         room={r}

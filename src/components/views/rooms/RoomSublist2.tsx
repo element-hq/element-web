@@ -28,7 +28,7 @@ import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
     ChevronFace,
     ContextMenu,
-    ContextMenuButton,
+    ContextMenuTooltipButton,
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
@@ -499,10 +499,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         return (
             <React.Fragment>
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className="mx_RoomSublist2_menuButton"
                     onClick={this.onOpenMenuClick}
-                    label={_t("List options")}
+                    title={_t("List options")}
                     isExpanded={!!this.state.contextMenuPosition}
                 />
                 {contextMenu}
@@ -561,6 +561,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         </div>
                     );
 
+                    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
+                    if (this.props.isMinimized) {
+                        Button = AccessibleTooltipButton;
+                    }
+
                     // Note: the addRoomButton conditionally gets moved around
                     // the DOM depending on whether or not the list is minimized.
                     // If we're minimized, we want it below the header so it
@@ -569,7 +574,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     return (
                         <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus} aria-label={this.props.label}>
                             <div className="mx_RoomSublist2_stickable">
-                                <AccessibleButton
+                                <Button
                                     onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
@@ -579,10 +584,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                                     aria-level={1}
                                     onClick={this.onHeaderClick}
                                     onContextMenu={this.onContextMenu}
+                                    title={this.props.isMinimized ? this.props.label : undefined}
                                 >
                                     <span className={collapseClasses} />
                                     <span>{this.props.label}</span>
-                                </AccessibleButton>
+                                </Button>
                                 {this.renderMenu()}
                                 {this.props.isMinimized ? null : badgeContainer}
                                 {this.props.isMinimized ? null : addRoomButton}

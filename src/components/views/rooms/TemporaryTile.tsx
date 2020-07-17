@@ -16,7 +16,11 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
+import {
+    RovingAccessibleButton,
+    RovingAccessibleTooltipButton,
+    RovingTabIndexWrapper
+} from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
@@ -86,30 +90,29 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
+        let Button = RovingAccessibleButton;
+        if (this.props.isMinimized) {
+            Button = RovingAccessibleTooltipButton;
+        }
+
         return (
             <React.Fragment>
-                <RovingTabIndexWrapper>
-                    {({onFocus, isActive, ref}) =>
-                        <AccessibleButton
-                            onFocus={onFocus}
-                            tabIndex={isActive ? 0 : -1}
-                            inputRef={ref}
-                            className={classes}
-                            onMouseEnter={this.onTileMouseEnter}
-                            onMouseLeave={this.onTileMouseLeave}
-                            onClick={this.props.onClick}
-                            role="treeitem"
-                        >
-                            <div className="mx_RoomTile2_avatarContainer">
-                                {this.props.avatar}
-                            </div>
-                            {nameContainer}
-                            <div className="mx_RoomTile2_badgeContainer">
-                                {badge}
-                            </div>
-                        </AccessibleButton>
-                    }
-                </RovingTabIndexWrapper>
+                <Button
+                    className={classes}
+                    onMouseEnter={this.onTileMouseEnter}
+                    onMouseLeave={this.onTileMouseLeave}
+                    onClick={this.props.onClick}
+                    role="treeitem"
+                    title={this.props.isMinimized ? name : undefined}
+                >
+                    <div className="mx_RoomTile2_avatarContainer">
+                        {this.props.avatar}
+                    </div>
+                    {nameContainer}
+                    <div className="mx_RoomTile2_badgeContainer">
+                        {badge}
+                    </div>
+                </Button>
             </React.Fragment>
         );
     }

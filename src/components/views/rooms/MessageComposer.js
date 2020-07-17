@@ -27,7 +27,8 @@ import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
-import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
+import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -41,7 +42,6 @@ ComposerAvatar.propTypes = {
 };
 
 function CallButton(props) {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onVoiceCallClick = (ev) => {
         dis.dispatch({
             action: 'place_call',
@@ -50,10 +50,11 @@ function CallButton(props) {
         });
     };
 
-    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-            onClick={onVoiceCallClick}
-            title={_t('Voice call')}
-        />);
+    return (<AccessibleTooltipButton
+        className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+        onClick={onVoiceCallClick}
+        title={_t('Voice call')}
+    />);
 }
 
 CallButton.propTypes = {
@@ -61,7 +62,6 @@ CallButton.propTypes = {
 };
 
 function VideoCallButton(props) {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onCallClick = (ev) => {
         dis.dispatch({
             action: 'place_call',
@@ -70,7 +70,8 @@ function VideoCallButton(props) {
         });
     };
 
-    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_videocall"
+    return <AccessibleTooltipButton
+        className="mx_MessageComposer_button mx_MessageComposer_videocall"
         onClick={onCallClick}
         title={_t('Video call')}
     />;
@@ -117,14 +118,15 @@ const EmojiButton = ({addEmoji}) => {
     }
 
     return <React.Fragment>
-        <ContextMenuButton className="mx_MessageComposer_button mx_MessageComposer_emoji"
-                           onClick={openMenu}
-                           isExpanded={menuDisplayed}
-                           label={_t('Emoji picker')}
-                           inputRef={button}
+        <ContextMenuTooltipButton
+            className="mx_MessageComposer_button mx_MessageComposer_emoji"
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            title={_t('Emoji picker')}
+            inputRef={button}
         >
 
-        </ContextMenuButton>
+        </ContextMenuTooltipButton>
 
         { contextMenu }
     </React.Fragment>;
@@ -185,9 +187,9 @@ class UploadButton extends React.Component {
 
     render() {
         const uploadInputStyle = {display: 'none'};
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
-            <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_upload"
+            <AccessibleTooltipButton
+                className="mx_MessageComposer_button mx_MessageComposer_upload"
                 onClick={this.onUploadClick}
                 title={_t('Upload file')}
             >
@@ -198,7 +200,7 @@ class UploadButton extends React.Component {
                     multiple
                     onChange={this.onUploadFileInputChange}
                 />
-            </AccessibleButton>
+            </AccessibleTooltipButton>
         );
     }
 }

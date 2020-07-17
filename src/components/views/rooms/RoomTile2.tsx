@@ -29,7 +29,7 @@ import { _t } from "../../../languageHandler";
 import {
     ChevronFace,
     ContextMenu,
-    ContextMenuButton,
+    ContextMenuTooltipButton,
     MenuItemRadio,
     MenuItemCheckbox,
     MenuItem,
@@ -54,6 +54,7 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
@@ -373,10 +374,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         return (
             <React.Fragment>
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className={classes}
                     onClick={this.onNotificationsMenuOpenClick}
-                    label={_t("Notification options")}
+                    title={_t("Notification options")}
                     isExpanded={!!this.state.notificationsMenuPosition}
                     tabIndex={isActive ? 0 : -1}
                 />
@@ -441,10 +442,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
         return (
             <React.Fragment>
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className="mx_RoomTile2_menuButton"
                     onClick={this.onGeneralMenuOpenClick}
-                    label={_t("Room options")}
+                    title={_t("Room options")}
                     isExpanded={!!this.state.generalMenuPosition}
                 />
                 {contextMenu}
@@ -537,11 +538,16 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             ariaDescribedBy = messagePreviewId(this.props.room.roomId);
         }
 
+        let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
+        if (this.props.isMinimized) {
+            Button = AccessibleTooltipButton;
+        }
+
         return (
             <React.Fragment>
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
                     {({onFocus, isActive, ref}) =>
-                        <AccessibleButton
+                        <Button
                             onFocus={onFocus}
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
@@ -554,13 +560,14 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                             aria-label={ariaLabel}
                             aria-selected={this.state.selected}
                             aria-describedby={ariaDescribedBy}
+                            title={this.props.isMinimized ? name : undefined}
                         >
                             {roomAvatar}
                             {nameContainer}
                             {badge}
                             {this.renderGeneralMenu()}
                             {this.renderNotificationsMenu(isActive)}
-                        </AccessibleButton>
+                        </Button>
                     }
                 </RovingTabIndexWrapper>
             </React.Fragment>

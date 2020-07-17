@@ -230,9 +230,6 @@ export default createReactClass({
 
     onAction: function(payload) {
         switch (payload.action) {
-            case 'view_tooltip':
-                this.tooltip = payload.tooltip;
-                break;
             case 'call_state':
                 var call = CallHandler.getCall(payload.room_id);
                 if (call && call.call_state === 'ringing') {
@@ -586,18 +583,6 @@ export default createReactClass({
             return panel;
         } else {
             return panel.children[2]; // XXX: Fragile!
-        }
-    },
-
-    _whenScrolling: function(e) {
-        this._hideTooltip(e);
-        this._repositionIncomingCallBox(e, false);
-    },
-
-    _hideTooltip: function(e) {
-        // Hide tooltip when scrolling, as we'll no longer be over the one we were on
-        if (this.tooltip && this.tooltip.style.display !== "none") {
-            this.tooltip.style.display = "none";
         }
     },
 

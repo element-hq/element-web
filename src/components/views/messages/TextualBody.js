@@ -391,7 +391,6 @@ export default createReactClass({
                 onClick={this._openHistoryDialog}
                 title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
                 tooltip={tooltip}
-                tooltipClassName="mx_Tooltip_timeline"
             >
                 <span>{`(${_t("edited")})`}</span>
             </AccessibleTooltipButton>

@@ -18,17 +18,15 @@ limitations under the License.
 
 import React from "react";
 
-import AccessibleButton from "../../components/views/elements/AccessibleButton";
+import AccessibleTooltipButton from "../../components/views/elements/AccessibleTooltipButton";
 
-interface IProps extends React.ComponentProps<typeof AccessibleButton> {
-    label?: string;
+interface IProps extends React.ComponentProps<typeof AccessibleTooltipButton>  {
     // whether or not the context menu is currently open
     isExpanded: boolean;
 }
 
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
-export const ContextMenuButton: React.FC<IProps> = ({
-    label,
+export const ContextMenuTooltipButton: React.FC<IProps> = ({
     isExpanded,
     children,
     onClick,
@@ -36,16 +34,14 @@ export const ContextMenuButton: React.FC<IProps> = ({
     ...props
 }) => {
     return (
-        <AccessibleButton
+        <AccessibleTooltipButton
             {...props}
             onClick={onClick}
             onContextMenu={onContextMenu || onClick}
-            title={label}
-            aria-label={label}
             aria-haspopup={true}
             aria-expanded={isExpanded}
         >
             { children }
-        </AccessibleButton>
+        </AccessibleTooltipButton>
     );
 };

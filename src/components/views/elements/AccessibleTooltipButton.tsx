@@ -19,10 +19,9 @@ import React from 'react';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
-import {IProps} from "./AccessibleButton";
 import Tooltip from './Tooltip';
 
-interface ITooltipProps extends IProps {
+interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
     tooltipClassName?: string;
