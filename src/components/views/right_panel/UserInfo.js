@@ -1287,11 +1287,11 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     );
 
     // only display the devices list if our client supports E2E
-    const _enableDevices = cli.isCryptoEnabled();
+    const cryptoEnabled = cli.isCryptoEnabled();
 
     let text;
     if (!isRoomEncrypted) {
-        if (!_enableDevices) {
+        if (!cryptoEnabled) {
             text = _t("This client does not support end-to-end encryption.");
         } else if (room) {
             text = _t("Messages in this room are not end-to-end encrypted.");
@@ -1305,8 +1305,8 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     let verifyButton;
     const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
 
-    const userTrust = cli.checkUserTrust(member.userId);
-    const userVerified = userTrust.isCrossSigningVerified();
+    const userTrust = cryptoEnabled && cli.checkUserTrust(member.userId);
+    const userVerified = cryptoEnabled && userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
     const canVerify = homeserverSupportsCrossSigning && !userVerified && !isMe;
 
@@ -1345,10 +1345,10 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
             { verifyButton }
-            <DevicesSection
+            { cryptoEnabled && <DevicesSection
                 loading={showDeviceListSpinner}
                 devices={devices}
-                userId={member.userId} />
+                userId={member.userId} /> }
         </div>
     );
 
