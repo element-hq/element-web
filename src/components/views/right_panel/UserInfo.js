@@ -1308,7 +1308,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cryptoEnabled && cli.checkUserTrust(member.userId);
     const userVerified = cryptoEnabled && userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = homeserverSupportsCrossSigning && !userVerified && !isMe;
+    const canVerify = cryptoEnabled && homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));
