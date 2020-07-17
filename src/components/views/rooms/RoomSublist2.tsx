@@ -561,7 +561,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         </div>
                     );
 
-                    let Button = AccessibleButton;
+                    let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
                     if (this.props.isMinimized) {
                         Button = AccessibleTooltipButton;
                     }
