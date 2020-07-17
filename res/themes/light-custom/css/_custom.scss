@@ -45,7 +45,7 @@ $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs 
 $roomheader-bg-color: var(--timeline-background-color);
 //
 // --roomlist-highlights-color
-$roomtile2-selected-bg-color: var(--roomlist-highlights-color);
+$roomtile-selected-bg-color: var(--roomlist-highlights-color);
 //
 // --sidebar-color
 $interactive-tooltip-bg-color: var(--sidebar-color);
@@ -83,16 +83,16 @@ $tab-label-fg-color: var(--timeline-text-color);
 $authpage-lang-color: var(--timeline-text-color);
 $roomheader-color: var(--timeline-text-color);
 // --roomlist-text-secondary-color
-$roomtile2-preview-color: var(--roomlist-text-secondary-color);
+$roomtile-preview-color: var(--roomlist-text-secondary-color);
 $roomlist-header-color: var(--roomlist-text-secondary-color);
-$roomtile2-default-badge-bg-color: var(--roomlist-text-secondary-color);
+$roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 
 //
 // --roomlist-separator-color
 $input-darker-bg-color: var(--roomlist-separator-color);
 $panel-divider-color: var(--roomlist-separator-color);// originally #dee1f3, but close enough
 $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, but close enough
-$roomsublist2-divider-color: var(--roomlist-separator-color);
+$roomsublist-divider-color: var(--roomlist-separator-color);
 //
 // --timeline-text-secondary-color
 $authpage-secondary-color: var(--timeline-text-secondary-color);

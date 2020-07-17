@@ -245,7 +245,7 @@ limitations under the License.
         cursor: pointer;
         font-size: $font-13px;
         line-height: $font-18px;
-        color: $roomtile2-preview-color;
+        color: $roomtile-preview-color;
 
         // Update the render() function for RoomSublist if these change
         // Update the ListLayout class for minVisibleTiles if these change.
@@ -265,7 +265,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $roomtile2-preview-color;
+            background: $roomtile-preview-color;
         }
 
         .mx_RoomSublist_showMoreButtonChevron {
@@ -375,7 +375,7 @@ limitations under the License.
         margin-top: 16px;
         margin-bottom: 16px;
         margin-right: 16px; // additional 16px
-        border: 1px solid $roomsublist2-divider-color;
+        border: 1px solid $roomsublist-divider-color;
         opacity: 0.1;
     }
 

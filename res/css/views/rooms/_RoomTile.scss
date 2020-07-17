@@ -26,7 +26,7 @@ limitations under the License.
     &:hover,
     &:focus-within,
     &.mx_RoomTile_hasMenuOpen {
-        background-color: $roomtile2-selected-bg-color;
+        background-color: $roomtile-selected-bg-color;
         border-radius: 8px;
     }
 
@@ -67,7 +67,7 @@ limitations under the License.
         .mx_RoomTile_messagePreview {
             font-size: $font-13px;
             line-height: $font-18px;
-            color: $roomtile2-preview-color;
+            color: $roomtile-preview-color;
         }
 
         .mx_RoomTile_nameWithPreview {
