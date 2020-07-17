@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 
-import React, { Component } from 'react';
+import React, {Component, CSSProperties} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
@@ -70,7 +70,7 @@ export default class Tooltip extends React.Component<IProps> {
         window.removeEventListener('scroll', this.renderTooltip, true);
     }
 
-    private updatePosition(style: {[key: string]: any}) {
+    private updatePosition(style: CSSProperties) {
         const parentBox = this.parent.getBoundingClientRect();
         let offset = 0;
         if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
@@ -80,8 +80,14 @@ export default class Tooltip extends React.Component<IProps> {
             // we need so that we're still centered.
             offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
         }
+
         style.top = (parentBox.top - 2) + window.pageYOffset + offset;
-        style.left = 6 + parentBox.right + window.pageXOffset;
+        if (parentBox.right > window.innerWidth / 2) {
+            style.right = window.innerWidth - parentBox.right - window.pageXOffset - 8;
+        } else {
+            style.left = parentBox.right + window.pageXOffset + 6;
+        }
+
         return style;
     }
 
