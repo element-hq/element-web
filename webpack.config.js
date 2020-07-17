@@ -296,12 +296,6 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
-            new webpack.DefinePlugin({
-                'process.env': {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-                },
-            }),
-
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: 'bundles/[hash]/[name].css',
