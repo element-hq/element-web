@@ -34,6 +34,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore2";
 import {Key} from "../../Keyboard";
 import IndicatorScrollbar from "../structures/IndicatorScrollbar";
+import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 
 // TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
@@ -347,7 +348,7 @@ export default class LeftPanel2 extends React.Component<IProps, IState> {
                     onVerticalArrow={this.onKeyDown}
                     onEnter={this.onEnter}
                 />
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className="mx_LeftPanel2_exploreButton"
                     onClick={this.onExplore}
                     title={_t("Explore rooms")}
