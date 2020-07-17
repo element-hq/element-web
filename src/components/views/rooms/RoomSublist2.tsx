@@ -28,7 +28,7 @@ import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
     ChevronFace,
     ContextMenu,
-    ContextMenuButton,
+    ContextMenuTooltipButton,
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
@@ -499,10 +499,10 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
         return (
             <React.Fragment>
-                <ContextMenuButton
+                <ContextMenuTooltipButton
                     className="mx_RoomSublist2_menuButton"
                     onClick={this.onOpenMenuClick}
-                    label={_t("List options")}
+                    title={_t("List options")}
                     isExpanded={!!this.state.contextMenuPosition}
                 />
                 {contextMenu}
