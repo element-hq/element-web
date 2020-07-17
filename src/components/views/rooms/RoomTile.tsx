@@ -56,8 +56,6 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 interface IProps {
     room: Room;
     showMessagePreview: boolean;

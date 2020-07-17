@@ -48,8 +48,6 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
 export const HEADER_HEIGHT = 32; // As defined by CSS
