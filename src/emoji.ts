@@ -71,8 +71,8 @@ EMOJIBASE.forEach((emoji: IEmojiWithFilterString) => {
         DATA_BY_CATEGORY[categoryId].push(emoji);
     }
     // This is used as the string to match the query against when filtering emojis
-    emoji.filterString = `${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
-        `${emoji.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`.toLowerCase();
+    emoji.filterString = (`${emoji.annotation}\n${emoji.shortcodes.join('\n')}}\n${emoji.emoticon || ''}\n` +
+        `${emoji.unicode.split(ZERO_WIDTH_JOINER).join("\n")}`).toLowerCase();
 
     // Add mapping from unicode to Emoji object
     // The 'unicode' field that we use in emojibase has either
