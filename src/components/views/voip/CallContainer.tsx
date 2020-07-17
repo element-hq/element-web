@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import IncomingCallBox2 from './IncomingCallBox2';
-import CallPreview from './CallPreview2';
+import CallPreview from './CallPreview';
 import * as VectorConferenceHandler from '../../../VectorConferenceHandler';
 
 interface IProps {

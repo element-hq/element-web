@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
 import React from 'react';
 
 import CallView from "./CallView";
