@@ -23,7 +23,7 @@ import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
-import RoomTile2 from "./RoomTile2";
+import RoomTile from "./RoomTile";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
     ChevronFace,
@@ -252,7 +252,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private focusRoomTile = (index: number) => {
         if (!this.sublistRef.current) return;
-        const elements = this.sublistRef.current.querySelectorAll<HTMLDivElement>(".mx_RoomTile2");
+        const elements = this.sublistRef.current.querySelectorAll<HTMLDivElement>(".mx_RoomTile");
         const element = elements && elements[index];
         if (element) {
             element.focus();
@@ -370,7 +370,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     this.toggleCollapsed();
                 } else if (this.sublistRef.current) {
                     // otherwise focus the first room
-                    const element = this.sublistRef.current.querySelector(".mx_RoomTile2") as HTMLDivElement;
+                    const element = this.sublistRef.current.querySelector(".mx_RoomTile") as HTMLDivElement;
                     if (element) {
                         element.focus();
                     }
@@ -405,7 +405,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
                 tiles.push(
-                    <RoomTile2
+                    <RoomTile
                         room={room}
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.layout.showPreviews}

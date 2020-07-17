@@ -51,7 +51,7 @@ const cssClasses = [
     "mx_RoomSearch_input",
     "mx_RoomSearch_icon", // minimized <RoomSearch />
     "mx_RoomSublist2_headerText",
-    "mx_RoomTile2",
+    "mx_RoomTile",
     "mx_RoomSublist2_showNButton",
 ];
 
@@ -264,7 +264,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     };
 
     private onEnter = () => {
-        const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile2");
+        const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile");
         if (firstRoom) {
             firstRoom.click();
             return true; // to get the field to clear

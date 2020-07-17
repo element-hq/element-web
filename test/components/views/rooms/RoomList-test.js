@@ -132,7 +132,7 @@ describe('RoomList', () => {
 
     function expectRoomInSubList(room, subListTest) {
         const RoomSubList = sdk.getComponent('views.rooms.RoomSublist2');
-        const RoomTile = sdk.getComponent('views.rooms.RoomTile2');
+        const RoomTile = sdk.getComponent('views.rooms.RoomTile');
 
         const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSubList);
         const containingSubList = subLists.find(subListTest);

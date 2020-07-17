@@ -77,7 +77,7 @@ interface IState {
     generalMenuPosition: PartialDOMRect;
 }
 
-const messagePreviewId = (roomId: string) => `mx_RoomTile2_messagePreview_${roomId}`;
+const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
 
 const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -96,12 +96,12 @@ interface INotifOptionProps {
 
 const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassName, label}) => {
     const classes = classNames({
-        mx_RoomTile2_contextMenu_activeRow: active,
+        mx_RoomTile_contextMenu_activeRow: active,
     });
 
     let activeIcon;
     if (active) {
-        activeIcon = <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconCheck" />;
+        activeIcon = <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconCheck" />;
     }
 
     return (
@@ -113,7 +113,7 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
     );
 };
 
-export default class RoomTile2 extends React.Component<IProps, IState> {
+export default class RoomTile extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
 
@@ -328,30 +328,30 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         if (this.state.notificationsMenuPosition) {
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.notificationsMenuPosition)} onFinished={this.onCloseNotificationsMenu}>
-                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <NotifOption
                                 label={_t("Use default")}
                                 active={state === ALL_MESSAGES}
-                                iconClassName="mx_RoomTile2_iconBell"
+                                iconClassName="mx_RoomTile_iconBell"
                                 onClick={this.onClickAllNotifs}
                             />
                             <NotifOption
                                 label={_t("All messages")}
                                 active={state === ALL_MESSAGES_LOUD}
-                                iconClassName="mx_RoomTile2_iconBellDot"
+                                iconClassName="mx_RoomTile_iconBellDot"
                                 onClick={this.onClickAlertMe}
                             />
                             <NotifOption
                                 label={_t("Mentions & Keywords")}
                                 active={state === MENTIONS_ONLY}
-                                iconClassName="mx_RoomTile2_iconBellMentions"
+                                iconClassName="mx_RoomTile_iconBellMentions"
                                 onClick={this.onClickMentions}
                             />
                             <NotifOption
                                 label={_t("None")}
                                 active={state === MUTE}
-                                iconClassName="mx_RoomTile2_iconBellCrossed"
+                                iconClassName="mx_RoomTile_iconBellCrossed"
                                 onClick={this.onClickMute}
                             />
                         </div>
@@ -360,16 +360,16 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             );
         }
 
-        const classes = classNames("mx_RoomTile2_notificationsButton", {
+        const classes = classNames("mx_RoomTile_notificationsButton", {
             // Show bell icon for the default case too.
-            mx_RoomTile2_iconBell: state === ALL_MESSAGES,
-            mx_RoomTile2_iconBellDot: state === ALL_MESSAGES_LOUD,
-            mx_RoomTile2_iconBellMentions: state === MENTIONS_ONLY,
-            mx_RoomTile2_iconBellCrossed: state === MUTE,
+            mx_RoomTile_iconBell: state === ALL_MESSAGES,
+            mx_RoomTile_iconBellDot: state === ALL_MESSAGES_LOUD,
+            mx_RoomTile_iconBellMentions: state === MENTIONS_ONLY,
+            mx_RoomTile_iconBellCrossed: state === MUTE,
 
             // Only show the icon by default if the room is overridden to muted.
             // TODO: [FTUE Notifications] Probably need to detect global mute state
-            mx_RoomTile2_notificationsButton_show: state === MUTE,
+            mx_RoomTile_notificationsButton_show: state === MUTE,
         });
 
         return (
@@ -392,18 +392,18 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
 
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
-        const favouriteIconClassName = isFavorite ? "mx_RoomTile2_iconFavorite" : "mx_RoomTile2_iconStar";
-        const favouriteLabelClassName = isFavorite ? "mx_RoomTile2_contextMenu_activeRow" : "";
+        const favouriteIconClassName = isFavorite ? "mx_RoomTile_iconFavorite" : "mx_RoomTile_iconStar";
+        const favouriteLabelClassName = isFavorite ? "mx_RoomTile_contextMenu_activeRow" : "";
         const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
 
         let contextMenu = null;
         if (this.state.generalMenuPosition && this.props.tag === DefaultTagID.Archived) {
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
-                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
-                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile_contextMenu">
+                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile_contextMenu_redRow">
                             <MenuItem onClick={this.onForgetRoomClick} label={_t("Leave Room")}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconSignOut" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Forget Room")}</span>
                             </MenuItem>
                         </div>
@@ -413,7 +413,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         } else if (this.state.generalMenuPosition) {
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
-                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile2_contextMenu">
+                    <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <MenuItemCheckbox
                                 className={favouriteLabelClassName}
@@ -425,13 +425,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
                                 <span className="mx_IconizedContextMenu_label">{favouriteLabel}</span>
                             </MenuItemCheckbox>
                             <MenuItem onClick={this.onOpenRoomSettings} label={_t("Settings")}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSettings" />
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconSettings" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Settings")}</span>
                             </MenuItem>
                         </div>
-                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile2_contextMenu_redRow">
+                        <div className="mx_IconizedContextMenu_optionList mx_RoomTile_contextMenu_redRow">
                             <MenuItem onClick={this.onLeaveRoomClick} label={_t("Leave Room")}>
-                                <span className="mx_IconizedContextMenu_icon mx_RoomTile2_iconSignOut" />
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconSignOut" />
                                 <span className="mx_IconizedContextMenu_label">{_t("Leave Room")}</span>
                             </MenuItem>
                         </div>
@@ -443,7 +443,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         return (
             <React.Fragment>
                 <ContextMenuTooltipButton
-                    className="mx_RoomTile2_menuButton"
+                    className="mx_RoomTile_menuButton"
                     onClick={this.onGeneralMenuOpenClick}
                     title={_t("Room options")}
                     isExpanded={!!this.state.generalMenuPosition}
@@ -455,10 +455,10 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement {
         const classes = classNames({
-            'mx_RoomTile2': true,
-            'mx_RoomTile2_selected': this.state.selected,
-            'mx_RoomTile2_hasMenuOpen': !!(this.state.generalMenuPosition || this.state.notificationsMenuPosition),
-            'mx_RoomTile2_minimized': this.props.isMinimized,
+            'mx_RoomTile': true,
+            'mx_RoomTile_selected': this.state.selected,
+            'mx_RoomTile_hasMenuOpen': !!(this.state.generalMenuPosition || this.state.notificationsMenuPosition),
+            'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
         const roomAvatar = <DecoratedRoomAvatar
@@ -472,7 +472,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         if (!this.props.isMinimized) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
             badge = (
-                <div className="mx_RoomTile2_badgeContainer" aria-hidden="true">
+                <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
                     <NotificationBadge
                         notification={this.state.notificationState}
                         forceCount={false}
@@ -494,7 +494,7 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
             // Only show the preview if there is one to show.
             if (text) {
                 messagePreview = (
-                    <div className="mx_RoomTile2_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
+                    <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
                         {text}
                     </div>
                 );
@@ -502,13 +502,13 @@ export default class RoomTile2 extends React.Component<IProps, IState> {
         }
 
         const nameClasses = classNames({
-            "mx_RoomTile2_name": true,
-            "mx_RoomTile2_nameWithPreview": !!messagePreview,
-            "mx_RoomTile2_nameHasUnreadEvents": this.state.notificationState.isUnread,
+            "mx_RoomTile_name": true,
+            "mx_RoomTile_nameWithPreview": !!messagePreview,
+            "mx_RoomTile_nameHasUnreadEvents": this.state.notificationState.isUnread,
         });
 
         let nameContainer = (
-            <div className="mx_RoomTile2_nameContainer">
+            <div className="mx_RoomTile_nameContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
                     {name}
                 </div>
