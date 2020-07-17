@@ -2380,5 +2380,10 @@
     "%(brand)s iOS": "%(brand)s iOS",
     "%(brand)s X for Android": "%(brand)s X para Android",
     "This room is public": "Esta é unha sala pública",
-    "Away": "Fóra"
+    "Away": "Fóra",
+    "Enable advanced debugging for the room list": "Activar depuración avanzada para a lista da sala",
+    "Show rooms with unread messages first": "Mostrar primeiro as salas con mensaxes sen ler",
+    "Show previews of messages": "Mostrar vista previa das mensaxes",
+    "Edited at %(date)s": "Editado o %(date)s",
+    "Click to view edits": "Preme para ver as edicións"
 }
