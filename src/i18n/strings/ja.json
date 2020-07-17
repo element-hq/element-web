@@ -754,8 +754,8 @@
     "Failed to load %(groupId)s": "%(groupId)s をロードできませんでした",
     "Failed to reject invitation": "招待を拒否できませんでした",
     "This room is not public. You will not be able to rejoin without an invite.": "この部屋は公開されていません。 あなたは招待なしで再び参加することはできません。",
-    "Are you sure you want to leave the room '%(roomName)s'?": "本当にその部屋 '%(roomName)s' を離れますか?",
-    "Failed to leave room": "部屋を離れることができなかった",
+    "Are you sure you want to leave the room '%(roomName)s'?": "本当にこの部屋「%(roomName)s」から退出してよろしいですか？",
+    "Failed to leave room": "部屋からの退出に失敗しました",
     "Can't leave Server Notices room": "サーバー通知部屋を離れることはできません",
     "This room is used for important messages from the Homeserver, so you cannot leave it.": "この部屋はホームサーバーからの重要なメッセージに使用されるため、そこを離れることはできません。",
     "Signed Out": "サインアウト",
@@ -1354,5 +1354,11 @@
     "Security & privacy": "セキュリティとプライバシー",
     "All settings": "全ての設定",
     "Feedback": "フィードバック",
-    "User menu": "ユーザーメニュー"
+    "User menu": "ユーザーメニュー",
+    "Connecting to integration manager...": "インテグレーションマネージャに接続中...",
+    "Cannot connect to integration manager": "インテグレーションマネージャに接続できません",
+    "Leave Room": "部屋を退出",
+    "Failed to connect to integration manager": "インテグレーションマネージャへの接続に失敗しました",
+    "Start verification again from their profile.": "プロフィールから再度検証を開始してください。",
+    "Integration Manager": "インテグレーションマネージャ"
 }
