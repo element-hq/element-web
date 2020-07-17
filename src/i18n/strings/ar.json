@@ -232,7 +232,7 @@
     "Opens the Developer Tools dialog": "يفتح نافذة ادوات المطور",
     "Adds a custom widget by URL to the room": "يضيف Widget خاص عبر URL الى الغرفة",
     "Please supply a widget URL or embed code": "رجاء قم بتحديد Widget URL او قم بتضمين كود",
-    "Please supply a https:// or http:// widget URL": "Please supply a https:// or http:// widget URL",
+    "Please supply a https:// or http:// widget URL": "يرجى ادخال a https:// او http:// widget URL",
     "You cannot modify widgets in this room.": "لا يمكنك تعديل الحاجيات في هذه الغرفة.",
     "Verifies a user, session, and pubkey tuple": "يتحقق من العناصر: المستخدم والجلسة والمفتاح العام",
     "Unknown (user, session) pair:": "زوج (المستخدم، الجلسة)غير معروف:",
@@ -324,9 +324,9 @@
     "Every page you use in the app": "كل صفحة تستخدمها في التطبيق",
     "e.g. <CurrentPageURL>": "مثلا <رابط الصفحة الحالية>",
     "Your device resolution": "دقة شاشة جهازك",
-    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "على الرغم من كون هذه الصفحة تحوي معلومات تمكن تحديد الهوية، مثل معرف الغرفة والمستخدم والمجموعة، فهذه البيانات يتم حذفها قبل أن ترسل للخادم",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "على الرغم من كون هذه الصفحة تحوي معلومات تمكن تحديد الهوية، مثل معرف الغرفة والمستخدم والمجموعة، فهذه البيانات يتم حذفها قبل أن ترسل للسيرفر.",
     "The remote side failed to pick up": "الطرف الآخر لم يتمكن من الرد",
     "Existing Call": "مكالمة موجودة",
-    "You cannot place a call with yourself.": "لا يمكنك البدء باتصال بك ذاتك",
+    "You cannot place a call with yourself.": "لا يمكنك الاتصال بنفسك.",
     "Call in Progress": "المكالمة قيد التحضير"
 }
