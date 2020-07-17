@@ -140,14 +140,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_new_room_list": {
-        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
-        // XXX: We shouldn't have non-features appear like features.
-        displayName: _td("Use the improved room list (will refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),

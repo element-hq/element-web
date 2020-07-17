@@ -607,7 +607,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     render() {
-        const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
         const GroupView = sdk.getComponent('structures.GroupView');
@@ -661,21 +660,12 @@ class LoggedInView extends React.Component<IProps, IState> {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
-        let leftPanel = (
-            <LeftPanel
+        const leftPanel = (
+            <LeftPanel2
+                isMinimized={this.props.collapseLhs || false}
                 resizeNotifier={this.props.resizeNotifier}
-                collapsed={this.props.collapseLhs || false}
-                disabled={this.props.leftDisabled}
             />
         );
-        if (SettingsStore.getValue("feature_new_room_list")) {
-            leftPanel = (
-                <LeftPanel2
-                    isMinimized={this.props.collapseLhs || false}
-                    resizeNotifier={this.props.resizeNotifier}
-                />
-            );
-        }
 
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>

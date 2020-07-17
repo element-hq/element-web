@@ -28,7 +28,7 @@ import { ITagMap } from "./algorithms/models";
  */
 export class RoomListStoreTempProxy {
     public static isUsingNewStore(): boolean {
-        return SettingsStore.getValue("feature_new_room_list");
+        return true;
     }
 
     public static addListener(handler: () => void): RoomListStoreTempToken {

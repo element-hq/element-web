@@ -92,17 +92,10 @@ class RoomListStore extends Store {
     constructor() {
         super(dis);
 
-        this._checkDisabled();
+        this.disabled = true;
         this._init();
         this._getManualComparator = this._getManualComparator.bind(this);
         this._recentsComparator = this._recentsComparator.bind(this);
-    }
-
-    _checkDisabled() {
-        this.disabled = SettingsStore.getValue("feature_new_room_list");
-        if (this.disabled) {
-            console.warn("👋 legacy room list store has been disabled");
-        }
     }
 
     /**
@@ -196,7 +189,6 @@ class RoomListStore extends Store {
                     break;
                 }
 
-                this._checkDisabled();
                 if (this.disabled) return;
 
                 // Always ensure that we set any state needed for settings here. It is possible that

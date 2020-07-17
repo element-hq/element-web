@@ -52,7 +52,7 @@ export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
     public static TEST_MODE = false;
 
     private initialListsGenerated = false;
-    private enabled = false;
+    private enabled = true;
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
@@ -121,12 +121,7 @@ export class RoomListStore2 extends AsyncStoreWithClient<ActionPayload> {
         this.updateFn.trigger();
     }
 
-    // TODO: Remove enabled flag with the old RoomListStore: https://github.com/vector-im/riot-web/issues/14367
     private checkEnabled() {
-        this.enabled = SettingsStore.getValue("feature_new_room_list");
-        if (this.enabled) {
-            console.log("⚡ new room list store engaged");
-        }
         if (SettingsStore.getValue("advancedRoomListLogging")) {
             console.warn("Advanced room list logging is enabled");
         }

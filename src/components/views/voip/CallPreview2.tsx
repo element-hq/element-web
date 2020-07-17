@@ -37,7 +37,6 @@ interface IProps {
 interface IState {
     roomId: string;
     activeCall: any;
-    newRoomListActive: boolean;
 }
 
 export default class CallPreview extends React.Component<IProps, IState> {
@@ -51,12 +50,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.state = {
             roomId: RoomViewStore.getRoomId(),
             activeCall: CallHandler.getAnyActiveCall(),
-            newRoomListActive: SettingsStore.getValue("feature_new_room_list"),
         };
-
-        this.settingsWatcherRef = SettingsStore.watchSetting("feature_new_room_list", null, (name, roomId, level, valAtLevel, newVal) => this.setState({
-            newRoomListActive: newVal,
-        }));
     }
 
     public componentDidMount() {
@@ -102,28 +96,24 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     public render() {
-        if (this.state.newRoomListActive) {
-            const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
-            const showCall = (
-                this.state.activeCall &&
-                this.state.activeCall.call_state === 'connected' &&
-                !callForRoom
+        const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
+        const showCall = (
+            this.state.activeCall &&
+            this.state.activeCall.call_state === 'connected' &&
+            !callForRoom
+        );
+
+        if (showCall) {
+            return (
+                <CallView
+                    className="mx_CallPreview" onClick={this.onCallViewClick}
+                    ConferenceHandler={this.props.ConferenceHandler}
+                    showHangup={true}
+                />
             );
-
-            if (showCall) {
-                return (
-                    <CallView
-                        className="mx_CallPreview" onClick={this.onCallViewClick}
-                        ConferenceHandler={this.props.ConferenceHandler}
-                        showHangup={true}
-                    />
-                );
-            }
-
-            return <PersistentApp />;
         }
 
-        return null;
+        return <PersistentApp />;
     }
 }
 
