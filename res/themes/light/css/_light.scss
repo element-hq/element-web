@@ -193,7 +193,6 @@ $presence-offline: #E3E8F0;
 
 // ********************
 
-$roomtile-name-color: #61708b;
 $roomtile-badge-fg-color: $accent-fg-color;
 $roomtile-selected-color: #212121;
 $roomtile-notified-color: #212121;
@@ -212,7 +211,7 @@ $username-variant8-color: #74d12c;
 $roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
 
 $roomsublist-background: $secondary-accent-color;
-$roomsublist-label-fg-color: $roomtile-name-color;
+$roomsublist-label-fg-color: $muted-fg-color;
 $roomsublist-label-bg-color: $tertiary-accent-color;
 $roomsublist-chevron-color: $accent-color;
 
@@ -291,7 +290,7 @@ $progressbar-color: #000;
 
 $room-warning-bg-color: $yellow-background;
 
-$memberstatus-placeholder-color: $roomtile-name-color;
+$memberstatus-placeholder-color: $muted-fg-color;
 
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(245, 245, 245, 0.90);
