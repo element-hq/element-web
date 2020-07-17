@@ -42,8 +42,6 @@ import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDelta
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
-
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
     onFocus: (ev: React.FocusEvent) => void;
@@ -132,7 +130,7 @@ const TAG_AESTHETICS: {
     },
 };
 
-export default class RoomList2 extends React.Component<IProps, IState> {
+export default class RoomList extends React.Component<IProps, IState> {
     private searchFilter: NameFilterCondition = new NameFilterCondition();
     private dispatcherRef;
 
@@ -306,7 +304,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        className="mx_RoomList2"
+                        className="mx_RoomList"
                         role="tree"
                         aria-label={_t("Rooms")}
                     >{sublists}</div>

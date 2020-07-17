@@ -20,12 +20,11 @@ import TagPanel from "./TagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
-import RoomList2 from "../views/rooms/RoomList2";
+import RoomList from "../views/rooms/RoomList";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist2";
 import { Action } from "../../dispatcher/actions";
 import UserMenu from "./UserMenu";
 import RoomSearch from "./RoomSearch";
-import AccessibleButton from "../views/elements/AccessibleButton";
 import RoomBreadcrumbs2 from "../views/rooms/RoomBreadcrumbs2";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -362,7 +361,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             </div>
         );
 
-        const roomList = <RoomList2
+        const roomList = <RoomList
             onKeyDown={this.onKeyDown}
             resizeNotifier={null}
             collapsed={false}

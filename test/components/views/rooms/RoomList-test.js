@@ -65,7 +65,7 @@ describe('RoomList', () => {
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
 
-        const RoomList = sdk.getComponent('views.rooms.RoomList2');
+        const RoomList = sdk.getComponent('views.rooms.RoomList');
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
             <DragDropContext>

@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename to mx_RoomList during replacement of old component
-
-.mx_RoomList2 {
+.mx_RoomList {
     width: calc(100% - 16px); // 16px of artificial right-side margin (8px is overflowed from the sublists)
 
     // Create a column-based flexbox for the sublists. That's pretty much all we have to
