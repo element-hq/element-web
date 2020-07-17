@@ -1,25 +1,20 @@
-/*
- * Nunito.
- * Includes extended Latin and Vietnamese character sets
- * Current URLs are taken from
- * https://github.com/alexeiva/NunitoFont/releases/tag/v3.500
- * ...in order to include cyrillic.
- *
- * Previously, they were
- * https://fonts.googleapis.com/css?family=Nunito:400,400i,600,600i,700,700i&subset=latin-ext,vietnamese
- *
- * We explicitly do not include Nunito's italic variants, as they are not italic enough
- * and it's better to rely on the browser's built-in obliquing behaviour.
- */
-
 /* the 'src' links are relative to the bundle.css, which is in a subdirectory.
  */
+
+/* Inter unexpectedly contains various codepoints which collide with emoji, even
+   when variation-16 is applied to request the emoji variant.  From eyeballing
+   the emoji picker, these are: 20e3, 23cf, 24c2, 25a0-25c1, 2665, 2764, 2b06, 2b1c.
+   Therefore we define a unicode-range to load which excludes the glyphs
+   (to avoid having to maintain a fork of Inter). */
+
+$inter-unicode-range: U+0000-20e2,U+20e4-23ce,U+23d0-24c1,U+24c3-259f,U+25c2-2664,U+2666-2763,U+2765-2b05,U+2b07-2b1b,U+2b1d-10FFFF;
 
 @font-face {
   font-family: 'Inter';
   font-style:  normal;
   font-weight: 400;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-Regular.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-Regular.woff?v=3.13") format("woff");
 }
@@ -28,6 +23,7 @@
   font-style:  italic;
   font-weight: 400;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-Italic.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-Italic.woff?v=3.13") format("woff");
 }
@@ -37,6 +33,7 @@
   font-style:  normal;
   font-weight: 500;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-Medium.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-Medium.woff?v=3.13") format("woff");
 }
@@ -45,6 +42,7 @@
   font-style:  italic;
   font-weight: 500;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-MediumItalic.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-MediumItalic.woff?v=3.13") format("woff");
 }
@@ -54,6 +52,7 @@
   font-style:  normal;
   font-weight: 600;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-SemiBold.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-SemiBold.woff?v=3.13") format("woff");
 }
@@ -62,6 +61,7 @@
   font-style:  italic;
   font-weight: 600;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-SemiBoldItalic.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-SemiBoldItalic.woff?v=3.13") format("woff");
 }
@@ -71,6 +71,7 @@
   font-style:  normal;
   font-weight: 700;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-Bold.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-Bold.woff?v=3.13") format("woff");
 }
@@ -79,6 +80,7 @@
   font-style:  italic;
   font-weight: 700;
   font-display: swap;
+  unicode-range: $inter-unicode-range;
   src: url("$(res)/fonts/Inter/Inter-BoldItalic.woff2?v=3.13") format("woff2"),
        url("$(res)/fonts/Inter/Inter-BoldItalic.woff?v=3.13") format("woff");
 }
@@ -118,17 +120,3 @@
     src: local('Inconsolata Bold'), local('Inconsolata-Bold'), url('$(res)/fonts/Inconsolata/QldXNThLqRwH-OJ1UHjlKGHiw71p5_zaDpwm.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
-/* a COLR/CPAL version of Twemoji used for consistent cross-browser emoji
- * taken from https://github.com/mozilla/twemoji-colr
- * using the fix from https://github.com/mozilla/twemoji-colr/issues/50 to
- * work on macOS
- */
-/*
-// except we now load it dynamically via FontManager to handle browsers
-// which can't render COLR/CPAL still
-@font-face {
-    font-family: "Twemoji Mozilla";
-    src: url('$(res)/fonts/Twemoji_Mozilla/TwemojiMozilla.woff2') format('woff2');
-}
-*/
