@@ -18,7 +18,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { RoomListStoreTempProxy } from "./RoomListStoreTempProxy";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
 import { NameEventPreview } from "./previews/NameEventPreview";
 import { TagID } from "./models";
@@ -191,9 +190,6 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
     protected async onAction(payload: ActionPayload) {
         if (!this.matrixClient) return;
-
-        // TODO: Remove when new room list is made the default: https://github.com/vector-im/riot-web/issues/14367
-        if (!RoomListStoreTempProxy.isUsingNewStore()) return;
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher

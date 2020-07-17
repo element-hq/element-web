@@ -24,7 +24,8 @@ import * as sdk from '../index';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { AsyncActionPayload } from "../dispatcher/payloads";
-import { RoomListStoreTempProxy } from "../stores/room-list/RoomListStoreTempProxy";
+import RoomListStore from "../stores/room-list/RoomListStore2";
+import { SortAlgorithm } from "../stores/room-list/algorithms/models";
 
 export default class RoomListActions {
     /**
@@ -51,9 +52,9 @@ export default class RoomListActions {
         let metaData = null;
 
         // Is the tag ordered manually?
-        if (newTag && !newTag.match(/^(m\.lowpriority|im\.vector\.fake\.(invite|recent|direct|archived))$/)) {
-            const lists = RoomListStoreTempProxy.getRoomLists();
-            const newList = [...lists[newTag]];
+        const store = RoomListStore.instance;
+        if (newTag && store.getTagSorting(newTag) === SortAlgorithm.Manual) {
+            const newList = [...store.orderedLists[newTag]];
 
             newList.sort((a, b) => a.tags[newTag].order - b.tags[newTag].order);
 
