@@ -319,5 +319,13 @@
     "%(senderName)s changed the pinned messages for the room.": "عدل %(senderName)s الرسائل المثبتة للغرفة.",
     "%(widgetName)s widget modified by %(senderName)s": "الودجت %(widgetName)s تعدلت بواسطة %(senderName)s",
     "%(widgetName)s widget added by %(senderName)s": "الودجت %(widgetName)s اضيفت بواسطة %(senderName)s",
-    "%(widgetName)s widget removed by %(senderName)s": "الودجت %(widgetName)s حذفت بواسطة %(senderName)s"
+    "%(widgetName)s widget removed by %(senderName)s": "الودجت %(widgetName)s حذفت بواسطة %(senderName)s",
+    "Whether or not you're logged in (we don't record your username)": "سواءً كنت مسجلا دخولك أم لا (لا نحتفظ باسم المستخدم)",
+    "Every page you use in the app": "كل صفحة تستخدمها في التطبيق",
+    "e.g. <CurrentPageURL>": "مثلا <رابط الصفحة الحالية>",
+    "Your device resolution": "دقة شاشة جهازك",
+    "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "على الرغم من كون هذه الصفحة تحوي معلومات تمكن تحديد الهوية، مثل معرف الغرفة والمستخدم والمجموعة، فهذه البيانات يتم حذفها قبل أن ترسل للخادم",
+    "The remote side failed to pick up": "الطرف الآخر لم يتمكن من الرد",
+    "Existing Call": "مكالمة موجودة",
+    "You cannot place a call with yourself.": "لا يمكنك البدء باتصال بك ذاتك"
 }
