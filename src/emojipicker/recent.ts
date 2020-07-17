@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
-import {sortBy} from "lodash";
+import {orderBy} from "lodash";
 
 interface ILegacyFormat {
     [emoji: string]: [number, number]; // [count, date]
@@ -68,6 +68,6 @@ export function get(limit = 24) {
     }
 
     // perform a stable sort on `count` to keep the recent (date) order as a secondary sort factor
-    const sorted = sortBy(recents, "1");
+    const sorted = orderBy(recents, "1", "desc");
     return sorted.slice(0, limit).map(([emoji]) => emoji);
 }
