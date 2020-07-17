@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
+import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -45,9 +46,8 @@ export default class ManageIntegsButton extends React.Component {
     render() {
         let integrationsButton = <div />;
         if (IntegrationManagers.sharedInstance().hasManager()) {
-            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             integrationsButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className='mx_RoomHeader_button mx_RoomHeader_manageIntegsButton'
                     title={_t("Manage Integrations")}
                     onClick={this.onManageIntegrations}
