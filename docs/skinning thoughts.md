@@ -5,7 +5,7 @@ matrix-react-sdk
   - base CSS
   - all the components needed to build a workable app (including the top layer)
 
-Element: the Element skin
+element-web: the Element skin
   - Element-specific classes (e.g. login header/footer)
   - Element-specific themes
     - light
