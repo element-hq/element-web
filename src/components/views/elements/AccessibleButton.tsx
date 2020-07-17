@@ -118,7 +118,7 @@ export default function AccessibleButton({
 AccessibleButton.defaultProps = {
     element: 'div',
     role: 'button',
-    tabIndex: "0",
+    tabIndex: 0,
 };
 
 AccessibleButton.displayName = "AccessibleButton";
