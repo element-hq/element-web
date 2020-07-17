@@ -1,6 +1,6 @@
 # Feature flags
 
-When developing new features for Riot, we use feature flags to give us more
+When developing new features for Element, we use feature flags to give us more
 flexibility and control over when and where those features are enabled.
 
 For example, flags make the following things possible:
@@ -88,7 +88,7 @@ and
 configs.
 
 **Warning:** While this does mean the feature is enabled by default for
-https://riot.im and official Riot Desktop builds, it will not be enabled by
+https://app.element.io and official Element Desktop builds, it will not be enabled by
 default for self-hosted installs, custom desktop builds, etc. To cover those
 cases as well, the best options at the moment are converting to a regular
 setting defaulted on or to remove the flag. Simply enabling the existing flag by
