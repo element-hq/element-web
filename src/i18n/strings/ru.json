@@ -1993,5 +1993,21 @@
     "Signature upload success": "Отпечаток успешно отправлен",
     "Signature upload failed": "Сбой отправки отпечатка",
     "Room name or address": "Имя или адрес комнаты",
-    "Unrecognised room address:": "Не удалось найти адрес комнаты:"
+    "Unrecognised room address:": "Не удалось найти адрес комнаты:",
+    "Use your account to sign in to the latest version": "Используйте свой аккаунт для входа в последнюю версию",
+    "We’re excited to announce Riot is now Element": "Мы рады объявить, что Riot теперь Element",
+    "Riot is now Element!": "Riot теперь Element!",
+    "Learn More": "Узнать больше",
+    "Joins room with given address": "Присоединиться к комнате с указанным адресом",
+    "Opens chat with the given user": "Открыть чат с данным пользователем",
+    "Sends a message to the given user": "Отправить сообщение данному пользователю",
+    "You signed in to a new session without verifying it:": "Вы вошли в новый сеанс, не подтвердив его:",
+    "Verify your other session using one of the options below.": "Проверьте другой сеанс, используя один из вариантов ниже.",
+    "Help us improve %(brand)s": "Помогите нам улучшить %(brand)s",
+    "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.": "Отправьте <UsageDataLink>анонимные данные об использовании</UsageDataLink>, которые помогут нам улучшить %(brand)s. Для этого будеть использоваться <PolicyLink>cookie</PolicyLink>.",
+    "I want to help": "Я хочу помочь",
+    "Review where you’re logged in": "Проверьте, где вы вошли",
+    "Verify all your sessions to ensure your account & messages are safe": "Проверьте все свои сеансы, чтобы убедиться, что ваша учетная запись и сообщения в безопасности",
+    "Your homeserver has exceeded its user limit.": "Ваш домашний сервер превысил свой лимит пользователей.",
+    "Your homeserver has exceeded one of its resource limits.": "Ваш домашний сервер превысил один из своих лимитов ресурсов."
 }
