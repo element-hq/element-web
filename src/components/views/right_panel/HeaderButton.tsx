@@ -29,7 +29,7 @@ interface IProps {
     // click handler
     onClick: () => void;
     // The badge to display above the icon
-    badge: React.ReactNode;
+    badge?: React.ReactNode;
     // The parameters to track the click event
     analytics: string[];
 

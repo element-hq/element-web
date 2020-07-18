@@ -29,8 +29,10 @@ export interface SetRightPanelPhasePayload extends ActionPayload {
 export interface SetRightPanelPhaseRefireParams {
     // XXX: Fix after the types are defiend in matrix-js-sdk
     // No appropriate types exist yet for the fields
-    members: any;
-    verificationRequest: typeof VerificationRequest;
-    groudId: string;
-    groupRoomId: string;
+    members?: any;
+    verificationRequest?: typeof VerificationRequest;
+    groudId?: string;
+    groupRoomId?: string;
+    // XXX: 'view_3pid_invite' action's payload
+    event?: any;
 }
