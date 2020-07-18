@@ -2385,5 +2385,6 @@
     "Show rooms with unread messages first": "Mostrar primeiro as salas con mensaxes sen ler",
     "Show previews of messages": "Mostrar vista previa das mensaxes",
     "Edited at %(date)s": "Editado o %(date)s",
-    "Click to view edits": "Preme para ver as edicións"
+    "Click to view edits": "Preme para ver as edicións",
+    "Are you sure you want to cancel entering passphrase?": "¿Estás seguro de que non queres escribir a frase de paso?"
 }
