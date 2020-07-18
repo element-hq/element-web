@@ -25,6 +25,7 @@ import HeaderButtons, {HeaderKind} from './HeaderButtons';
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
+import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
 
 const GROUP_PHASES = [
     RightPanelPhases.GroupMemberInfo,
@@ -35,8 +36,10 @@ const ROOM_PHASES = [
     RightPanelPhases.GroupRoomInfo,
 ];
 
+interface IProps {}
+
 export default class GroupHeaderButtons extends HeaderButtons {
-    constructor(props) {
+    constructor(props: IProps) {
         super(props, HeaderKind.Group);
         this._onMembersClicked = this._onMembersClicked.bind(this);
         this._onRoomsClicked = this._onRoomsClicked.bind(this);
@@ -46,8 +49,8 @@ export default class GroupHeaderButtons extends HeaderButtons {
         super.onAction(payload);
 
         if (payload.action === Action.ViewUser) {
-            if (payload.member) {
-                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
+            if ((payload as ViewUserPayload).member) {
+                this.setPhase(RightPanelPhases.RoomMemberInfo, {members: payload.member});
             } else {
                 this.setPhase(RightPanelPhases.GroupMemberList);
             }
@@ -63,7 +66,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         } else if (payload.action === "view_group_member_list") {
             this.setPhase(RightPanelPhases.GroupMemberList);
         } else if (payload.action === "view_group_user") {
-            this.setPhase(RightPanelPhases.GroupMemberInfo, {member: payload.member});
+            this.setPhase(RightPanelPhases.GroupMemberInfo, {members: payload.member});
         }
     }
 

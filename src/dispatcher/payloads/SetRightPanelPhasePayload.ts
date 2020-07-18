@@ -31,7 +31,7 @@ export interface SetRightPanelPhaseRefireParams {
     // No appropriate types exist yet for the fields
     members?: any;
     verificationRequest?: typeof VerificationRequest;
-    groudId?: string;
+    groupId?: string;
     groupRoomId?: string;
     // XXX: 'view_3pid_invite' action's payload
     event?: any;
