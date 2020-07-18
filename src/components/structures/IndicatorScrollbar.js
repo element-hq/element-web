@@ -192,7 +192,7 @@ export default class IndicatorScrollbar extends React.Component {
             ref={this._collectScrollerComponent}
             wrappedRef={this._collectScroller}
             onWheel={this.onMouseWheel}
-            {... this.props}
+            {...this.props}
         >
             { leftOverflowIndicator }
             { this.props.children }
