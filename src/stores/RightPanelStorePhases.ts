@@ -29,7 +29,7 @@ export enum RightPanelPhases {
     GroupRoomList = 'GroupRoomList',
     GroupRoomInfo = 'GroupRoomInfo',
     GroupMemberInfo = 'GroupMemberInfo',
-};
+}
 
 // These are the phases that are safe to persist (the ones that don't require additional
 // arguments).

@@ -37,7 +37,7 @@ interface IProps {
     name: string;
     // Button title
     title: string;
-};
+}
 
 export default class HeaderButton extends React.Component<IProps> {
     constructor(props: IProps) {
