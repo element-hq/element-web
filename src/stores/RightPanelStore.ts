@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import dis from '../dispatcher/dispatcher';
-import {Action} from '../dispatcher/actions';
 import {pendingVerificationRequestForUser} from '../verification';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
 import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
+import {ActionPayload} from "../dispatcher/payloads";
+import {Action} from '../dispatcher/actions';
 
 interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
@@ -60,7 +61,7 @@ const MEMBER_INFO_PHASES = [
  * A class for tracking the state of the right panel between layouts and
  * sessions.
  */
-export default class RightPanelStore extends Store {
+export default class RightPanelStore extends Store<ActionPayload> {
     private static instance: RightPanelStore;
     private state: RightPanelStoreState;
 

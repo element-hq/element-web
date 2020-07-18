@@ -23,6 +23,7 @@ import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from '../../../dispatcher/actions';
+import {SetRightPanelPhasePayload} from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 
 export enum HeaderKind {
   Room = "room",
@@ -65,7 +66,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
     }
 
     setPhase(phase: RightPanelPhases, extras) {
-        dis.dispatch({
+        dis.dispatch<SetRightPanelPhasePayload>({
             action: Action.SetRightPanelPhase,
             phase: phase,
             refireParams: extras,
