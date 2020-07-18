@@ -25,8 +25,8 @@ import Modal from "../../../Modal";
 import {PHASE_REQUESTED, PHASE_UNSENT} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import * as sdk from "../../../index";
 import {_t} from "../../../languageHandler";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
