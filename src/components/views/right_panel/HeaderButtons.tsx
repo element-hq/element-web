@@ -21,42 +21,52 @@ limitations under the License.
 import React from 'react';
 import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import {Action} from '../../../dispatcher/actions';
 
-export const HEADER_KIND_ROOM = "room";
-export const HEADER_KIND_GROUP = "group";
+export enum HeaderKind {
+  Room = "room",
+  Group = "group",
+}
 
-const HEADER_KINDS = [HEADER_KIND_GROUP, HEADER_KIND_ROOM];
+interface IState {
+    headerKind: HeaderKind;
+    phase: RightPanelPhases;
+}
 
-export default class HeaderButtons extends React.Component {
-    constructor(props, kind) {
+interface IProps {}
+
+export default class HeaderButtons extends React.Component<IProps, IState> {
+    private storeToken: ReturnType<RightPanelStore["addListener"]>;
+    private dispatcherRef: string;
+
+    constructor(props: IProps, kind: HeaderKind) {
         super(props);
-
-        if (!HEADER_KINDS.includes(kind)) throw new Error(`Invalid header kind: ${kind}`);
 
         const rps = RightPanelStore.getSharedInstance();
         this.state = {
             headerKind: kind,
-            phase: kind === HEADER_KIND_ROOM ? rps.visibleRoomPanelPhase : rps.visibleGroupPanelPhase,
+            phase: kind === HeaderKind.Room ? rps.visibleRoomPanelPhase : rps.visibleGroupPanelPhase,
         };
     }
 
     componentDidMount() {
-        this._storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
-        this._dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
+        this.storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
+        this.dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
     componentWillUnmount() {
-        if (this._storeToken) this._storeToken.remove();
-        if (this._dispatcherRef) dis.unregister(this._dispatcherRef);
+        if (this.storeToken) this.storeToken.remove();
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
     onAction(payload) {
         // Ignore - intended to be overridden by subclasses
     }
 
-    setPhase(phase, extras) {
+    setPhase(phase: RightPanelPhases, extras) {
         dis.dispatch({
-            action: 'set_right_panel_phase',
+            action: Action.SetRightPanelPhase,
             phase: phase,
             refireParams: extras,
         });
@@ -72,11 +82,21 @@ export default class HeaderButtons extends React.Component {
 
     onRightPanelUpdate() {
         const rps = RightPanelStore.getSharedInstance();
-        if (this.state.headerKind === HEADER_KIND_ROOM) {
+        if (this.state.headerKind === HeaderKind.Room) {
             this.setState({phase: rps.visibleRoomPanelPhase});
-        } else if (this.state.headerKind === HEADER_KIND_GROUP) {
+        } else if (this.state.headerKind === HeaderKind.Group) {
             this.setState({phase: rps.visibleGroupPanelPhase});
         }
+    }
+
+    // XXX: Make renderButtons a prop
+    renderButtons(): JSX.Element[] {
+        // Ignore - intended to be overridden by subclasses
+        // Return empty fragment to satisfy the type
+        return [
+          <React.Fragment>
+          </React.Fragment>
+        ];
     }
 
     render() {
