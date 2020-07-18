@@ -18,7 +18,7 @@ import React from "react";
 
 import * as sdk from "../../../index";
 import {_t} from "../../../languageHandler";
-import {RoomMember} from "matrix-js-sdk/src/models/room-member"
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 
 export const PendingActionSpinner = ({text}) => {
     const Spinner = sdk.getComponent('elements.Spinner');
