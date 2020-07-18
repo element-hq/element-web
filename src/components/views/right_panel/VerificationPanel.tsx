@@ -110,17 +110,17 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         if (this.props.layout === 'dialog') {
             // HACK: This is a terrible idea.
-            let qrBlock: JSX.Element;
-            let sasBlock: JSX.Element;
+            let qrBlockDialog: JSX.Element;
+            let sasBlockDialog: JSX.Element;
             if (showQR) {
-                qrBlock =
+                qrBlockDialog =
                     <div className='mx_VerificationPanel_QRPhase_startOption'>
                         <p>{_t("Scan this unique code")}</p>
                         <VerificationQRCode qrCodeData={request.qrCodeData} />
                     </div>;
             }
             if (showSAS) {
-                sasBlock =
+                sasBlockDialog =
                     <div className='mx_VerificationPanel_QRPhase_startOption'>
                         <p>{_t("Compare unique emoji")}</p>
                         <span className='mx_VerificationPanel_QRPhase_helpText'>{_t("Compare a unique set of emoji if you don't have a camera on either device")}</span>
@@ -129,15 +129,15 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                         </AccessibleButton>
                     </div>;
             }
-            const or = qrBlock && sasBlock ?
+            const or = qrBlockDialog && sasBlockDialog ?
                 <div className='mx_VerificationPanel_QRPhase_betweenText'>{_t("or")}</div> : null;
             return (
                 <div>
                     {_t("Verify this session by completing one of the following:")}
                     <div className='mx_VerificationPanel_QRPhase_startOptions'>
-                        {qrBlock}
+                        {qrBlockDialog}
                         {or}
-                        {sasBlock}
+                        {sasBlockDialog}
                         {noCommonMethodError}
                     </div>
                 </div>
@@ -425,7 +425,6 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const {request} = this.props;
         request.on("change", this.onRequestChange);
         if (request.verifier) {
-            const {request} = this.props;
             const {sasEvent, reciprocateQREvent} = request.verifier;
             this.setState({sasEvent, reciprocateQREvent});
         }
