@@ -169,7 +169,7 @@ export default createReactClass({
             dis.dispatch({
                 action: Action.SetRightPanelPhase,
                 phase: RightPanelPhases.GroupMemberList,
-                groupId: this.props.groupId,
+                refireParams: { groupId: this.props.groupId },
             });
         });
     },
