@@ -59,10 +59,10 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     useEffect(() => {
         async function awaitPromise() {
             setRequesting(true);
-            const request = await verificationRequestPromise;
+            const requestFromPromise = await verificationRequestPromise;
             setRequesting(false);
-            setRequest(request);
-            setPhase(request.phase);
+            setRequest(requestFromPromise);
+            setPhase(requestFromPromise.phase);
         }
         if (verificationRequestPromise) {
             awaitPromise();
@@ -115,9 +115,9 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         setRequesting(true);
         const cli = MatrixClientPeg.get();
         const roomId = await ensureDMExists(cli, member.userId);
-        const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
-        setRequest(verificationRequest);
-        setPhase(verificationRequest.phase);
+        const verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+        setRequest(verificationRequest_);
+        setPhase(verificationRequest_.phase);
     }, [member.userId]);
 
     const requested =
