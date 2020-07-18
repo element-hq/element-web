@@ -328,5 +328,6 @@
     "The remote side failed to pick up": "الطرف الآخر لم يتمكن من الرد",
     "Existing Call": "مكالمة موجودة",
     "You cannot place a call with yourself.": "لا يمكنك الاتصال بنفسك.",
-    "Call in Progress": "المكالمة قيد التحضير"
+    "Call in Progress": "المكالمة قيد التحضير",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "يرجى تثبيت <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience."
 }
