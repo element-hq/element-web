@@ -109,5 +109,4 @@ In the event the new room list needs to be disabled, add this to your config.jso
 }
 ```
 
-Adds an option to change the message layout to an IRC style ` timestamp | avatar
-| name | message `
+Note: In a future release the new room list will not be optional.
