@@ -27,7 +27,7 @@
     "Unsupported browser": "متصفح غير متوافق",
     "Your browser can't run %(brand)s": "متصفحك لايمكنه تشغيل %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s يستخدم مزايا المتصفح المتقدمة والتي لا يدعمها متصفحك الحالي.",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "رجاء قم بتثبيت <chromeLink>كروم</chromeLink>أو <firefoxLink>فايرفوكس</firefoxLink> أو <safariLink>سفاري</safariLink> للحصول على افضل نتيجة.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "يرجى تثبيت <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "يمكنك الاستمرار في استخدام متصفحك الحالي، ولكن بعض او كل المزايا ربما لا تعمل ويكون شكل التطبيق وشعورك تجاهه غير صحيح.",
     "I understand the risks and wish to continue": "ادرك المخاطر وارغب في الاستمرار",
     "Go to element.io": "اذهب الى Element.io",
