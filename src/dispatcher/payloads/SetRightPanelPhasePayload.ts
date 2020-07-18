@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
@@ -29,7 +30,7 @@ export interface SetRightPanelPhasePayload extends ActionPayload {
 export interface SetRightPanelPhaseRefireParams {
     // XXX: Fix after the types are defiend in matrix-js-sdk
     // No appropriate types exist yet for the fields
-    members?: any;
+    members?: RoomMember;
     verificationRequest?: typeof VerificationRequest;
     groupId?: string;
     groupRoomId?: string;
