@@ -81,6 +81,18 @@ limitations under the License.
     }
 }
 
+// These tooltips use an older style with a chevron
+.mx_Field_tooltip {
+    background-color: $menu-bg-color;
+    color: $primary-fg-color;
+    border: 1px solid $menu-border-color;
+    text-align: unset;
+
+    .mx_Tooltip_chevron {
+        display: unset;
+    }
+}
+
 .mx_Tooltip_title {
     font-weight: 600;
 }
