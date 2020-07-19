@@ -2382,5 +2382,7 @@
     "This room is public": "Ĉi tiu ĉambro estas publika",
     "Away": "For",
     "Edited at %(date)s": "Redaktita je %(date)s",
-    "Click to view edits": "Klaku por vidi redaktojn"
+    "Click to view edits": "Klaku por vidi redaktojn",
+    "Are you sure you want to cancel entering passphrase?": "Ĉu vi certe volas nuligi enigon de pasfrazo?",
+    "Enable advanced debugging for the room list": "Ŝalti altnivelan erarserĉadon por la ĉambrobreto"
 }
