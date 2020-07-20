@@ -54,7 +54,11 @@ export class TagWatcher {
                     continue;
                 }
 
-                newFilters.set(tag, new CommunityFilterCondition(group));
+                let filter = this.filters.get(tag);
+                if (!filter) {
+                    filter = new CommunityFilterCondition(group);
+                }
+                newFilters.set(tag, filter);
             }
 
             // Update the room list store's filters
@@ -73,10 +77,6 @@ export class TagWatcher {
                 if (!filter) continue;
 
                 this.store.removeFilter(filter);
-            }
-
-            // Destroy any and all old filter conditions to prevent resource leaks
-            for (const filter of this.filters.values()) {
                 filter.destroy();
             }
 
