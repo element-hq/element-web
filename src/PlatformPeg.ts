@@ -45,7 +45,7 @@ export class PlatformPeg {
     }
 }
 
-if (!window.mx_PlatformPeg) {
-    window.mx_PlatformPeg = new PlatformPeg();
+if (!window.mxPlatformPeg) {
+    window.mxPlatformPeg = new PlatformPeg();
 }
-export default window.mx_PlatformPeg;
+export default window.mxPlatformPeg;

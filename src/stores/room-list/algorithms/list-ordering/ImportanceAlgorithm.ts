@@ -218,7 +218,12 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private moveRoomIndexes(nRooms: number, fromCategory: NotificationColor, toCategory: NotificationColor, indices: ICategoryIndex) {
+    private moveRoomIndexes(
+        nRooms: number,
+        fromCategory: NotificationColor,
+        toCategory: NotificationColor,
+        indices: ICategoryIndex,
+    ) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.

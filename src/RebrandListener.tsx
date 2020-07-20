@@ -67,8 +67,8 @@ export default class RebrandListener {
     private nagAgainAt?: number = null;
 
     static sharedInstance() {
-        if (!window.mx_RebrandListener) window.mx_RebrandListener = new RebrandListener();
-        return window.mx_RebrandListener;
+        if (!window.mxRebrandListener) window.mxRebrandListener = new RebrandListener();
+        return window.mxRebrandListener;
     }
 
     constructor() {

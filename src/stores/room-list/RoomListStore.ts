@@ -606,4 +606,4 @@ export default class RoomListStore {
     }
 }
 
-window.mx_RoomListStore = RoomListStore.instance;
+window.mxRoomListStore = RoomListStore.instance;

@@ -419,7 +419,9 @@ export class Algorithm extends EventEmitter {
         if (!updatedTag || updatedTag === sticky.tag) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
-                console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
+                console.log(
+                    `Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`,
+                );
             }
             this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
         }
@@ -823,6 +825,7 @@ export class Algorithm extends EventEmitter {
             // Flag that we've done something
             this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list
             this.recalculateStickyRoom(tag); // update sticky room to make sure it appears if needed
+            changed = true;
         }
 
         if (SettingsStore.getValue("advancedRoomListLogging")) {

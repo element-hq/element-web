@@ -123,7 +123,12 @@ export class IntegrationManagers {
             const apiUrl = data['api_url'];
             if (!apiUrl || !uiUrl) return;
 
-            const manager = new IntegrationManagerInstance(Kind.Account, apiUrl, uiUrl, w['id'] || w['state_key'] || '');
+            const manager = new IntegrationManagerInstance(
+                Kind.Account,
+                apiUrl,
+                uiUrl,
+                w['id'] || w['state_key'] || '',
+            );
             this.managers.push(manager);
         });
         this.primaryManager = null; // reset primary
@@ -245,4 +250,4 @@ export class IntegrationManagers {
 }
 
 // For debugging
-window.mx_IntegrationManagers = IntegrationManagers;
+window.mxIntegrationManagers = IntegrationManagers;

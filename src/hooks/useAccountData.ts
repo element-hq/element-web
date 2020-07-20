@@ -30,7 +30,7 @@ export const useAccountData = <T extends {}>(cli: MatrixClient, eventType: strin
     const handler = useCallback((event) => {
         if (event.getType() !== eventType) return;
         setValue(event.getContent());
-    }, [cli, eventType]);
+    }, [eventType]);
     useEventEmitter(cli, "accountData", handler);
 
     return value || {} as T;
@@ -43,7 +43,7 @@ export const useRoomAccountData = <T extends {}>(room: Room, eventType: string) 
     const handler = useCallback((event) => {
         if (event.getType() !== eventType) return;
         setValue(event.getContent());
-    }, [room, eventType]);
+    }, [eventType]);
     useEventEmitter(room, "Room.accountData", handler);
 
     return value || {} as T;

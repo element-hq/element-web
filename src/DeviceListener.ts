@@ -48,8 +48,8 @@ export default class DeviceListener {
     private displayingToastsForDeviceIds = new Set<string>();
 
     static sharedInstance() {
-        if (!window.mx_DeviceListener) window.mx_DeviceListener = new DeviceListener();
-        return window.mx_DeviceListener;
+        if (!window.mxDeviceListener) window.mxDeviceListener = new DeviceListener();
+        return window.mxDeviceListener;
     }
 
     start() {
