@@ -45,7 +45,6 @@ enum Preset {
 }
 
 interface Invite3PID {
-
     id_server: string;
     id_access_token?: string; // this gets injected by the js-sdk
     medium: string;
