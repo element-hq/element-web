@@ -1,0 +1,273 @@
+// unified palette
+// try to use these colors when possible
+$bg-color: #181b21;
+$base-color: #15171b;
+$base-text-color: #edf3ff;
+$header-panel-bg-color: #22262e;
+$header-panel-border-color: #000000;
+$header-panel-text-primary-color: #a1b2d1;
+$header-panel-text-secondary-color: #c8c8cd;
+$text-primary-color: #edf3ff;
+$text-secondary-color: #a1b2d1;
+$search-bg-color: #181b21;
+$search-placeholder-color: #61708b;
+$room-highlight-color: #343a46;
+
+// typical text (dark-on-white in light skin)
+$primary-fg-color: $text-primary-color;
+$primary-bg-color: $bg-color;
+$muted-fg-color: $header-panel-text-primary-color;
+
+// used for dialog box text
+$light-fg-color: $header-panel-text-secondary-color;
+
+// used for focusing form controls
+$focus-bg-color: $room-highlight-color;
+
+$mention-user-pill-bg-color: $warning-color;
+$other-user-pill-bg-color: $room-highlight-color;
+$rte-room-pill-color: $room-highlight-color;
+$rte-group-pill-color: $room-highlight-color;
+
+// informational plinth
+$info-plinth-bg-color: $header-panel-bg-color;
+$info-plinth-fg-color: #888;
+
+$preview-bar-bg-color: $header-panel-bg-color;
+
+$tagpanel-bg-color: $base-color;
+$inverted-bg-color: $tagpanel-bg-color;
+
+// used by AddressSelector
+$selected-color: $room-highlight-color;
+
+// selected for hoverover & selected event tiles
+$event-selected-color: $header-panel-bg-color;
+
+// used for the hairline dividers in RoomView
+$primary-hairline-color: $header-panel-border-color;
+
+// used for the border of input text fields
+$input-border-color: #e7e7e7;
+$input-darker-bg-color: $search-bg-color;
+$input-darker-fg-color: $search-placeholder-color;
+$input-lighter-bg-color: #f2f5f8;
+$input-lighter-fg-color: $input-darker-fg-color;
+$input-focused-border-color: #238cf5;
+$input-valid-border-color: $accent-color;
+$input-invalid-border-color: $warning-color;
+
+$field-focused-label-bg-color: $bg-color;
+
+// scrollbars
+$scrollbar-thumb-color: rgba(255, 255, 255, 0.2);
+$scrollbar-track-color: transparent;
+
+// context menus
+$menu-border-color: $header-panel-border-color;
+$menu-bg-color: $header-panel-bg-color;
+$menu-box-shadow-color: $bg-color;
+$menu-selected-color: $room-highlight-color;
+
+$avatar-initial-color: #ffffff;
+$avatar-bg-color: $bg-color;
+
+$h3-color: $primary-fg-color;
+
+$dialog-title-fg-color: $base-text-color;
+$dialog-backdrop-color: #000;
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+$dialog-close-fg-color: #9fa9ba;
+
+$dialog-background-bg-color: $header-panel-bg-color;
+$lightbox-background-bg-color: #000;
+
+$settings-grey-fg-color: #a2a2a2;
+$settings-profile-placeholder-bg-color: #e7e7e7;
+$settings-profile-overlay-bg-color: #000;
+$settings-profile-overlay-placeholder-bg-color: transparent;
+$settings-profile-overlay-fg-color: #fff;
+$settings-profile-overlay-placeholder-fg-color: #454545;
+$settings-subsection-fg-color: $text-secondary-color;
+
+$topleftmenu-color: $text-primary-color;
+$roomheader-color: $text-primary-color;
+$roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
+$roomheader-addroom-fg-color: $text-primary-color;
+$tagpanel-button-color: $header-panel-text-primary-color;
+$roomheader-button-color: $header-panel-text-primary-color;
+$groupheader-button-color: $header-panel-text-primary-color;
+$rightpanel-button-color: $header-panel-text-primary-color;
+$composer-button-color: $header-panel-text-primary-color;
+$roomtopic-color: $text-secondary-color;
+$eventtile-meta-color: $roomtopic-color;
+
+$header-divider-color: $header-panel-text-primary-color;
+$composer-e2e-icon-color: $header-panel-text-primary-color;
+
+// ********************
+
+$theme-button-bg-color: #e3e8f0;
+
+$roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-bg-color: $header-panel-bg-color;
+
+$roomsublist-divider-color: $primary-fg-color;
+
+$roomtile-preview-color: #9e9e9e;
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: #1A1D23;
+
+// ********************
+
+$panel-divider-color: $header-panel-border-color;
+
+$widget-menu-bar-bg-color: $header-panel-bg-color;
+
+// event tile lifecycle
+$event-sending-color: $text-secondary-color;
+
+// event redaction
+$event-redacted-fg-color: #606060;
+$event-redacted-border-color: #000000;
+
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: #25271F;
+
+// event timestamp
+$event-timestamp-color: $text-secondary-color;
+
+// Tabbed views
+$tab-label-fg-color: $text-primary-color;
+$tab-label-active-fg-color: $text-primary-color;
+$tab-label-bg-color: transparent;
+$tab-label-active-bg-color: $accent-color;
+$tab-label-icon-bg-color: $text-primary-color;
+$tab-label-active-icon-bg-color: $text-primary-color;
+
+// Buttons
+$button-primary-fg-color: #ffffff;
+$button-primary-bg-color: $accent-color;
+$button-secondary-bg-color: transparent;
+$button-danger-fg-color: #ffffff;
+$button-danger-bg-color: $notice-primary-color;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+$button-link-fg-color: $accent-color;
+$button-link-bg-color: transparent;
+
+// Toggle switch
+$togglesw-off-color: $room-highlight-color;
+
+$visual-bell-bg-color: #800;
+
+$room-warning-bg-color: $header-panel-bg-color;
+
+$dark-panel-bg-color: $header-panel-bg-color;
+$panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
+
+$message-action-bar-bg-color: $header-panel-bg-color;
+$message-action-bar-fg-color: $header-panel-text-primary-color;
+$message-action-bar-border-color: #616b7f;
+$message-action-bar-hover-border-color: $header-panel-text-primary-color;
+
+$reaction-row-button-bg-color: $header-panel-bg-color;
+$reaction-row-button-border-color: #616b7f;
+$reaction-row-button-hover-border-color: $header-panel-text-primary-color;
+$reaction-row-button-selected-bg-color: #1f6954;
+$reaction-row-button-selected-border-color: $accent-color;
+
+$kbd-border-color: #000000;
+
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
+$interactive-tooltip-bg-color: $base-color;
+$interactive-tooltip-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #272c35;
+
+$user-tile-hover-bg-color: $header-panel-bg-color;
+
+// Appearance tab colors
+$appearance-tab-border-color: $room-highlight-color;
+
+$composer-shadow-color: tranparent;
+
+// ***** Mixins! *****
+
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 4px;
+    font-family: $font-family;
+    font-size: $font-14px;
+    color: $button-fg-color;
+    background-color: $button-bg-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+}
+
+@define-mixin mx_DialogButton_danger {
+    background-color: $accent-color;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $button-secondary-bg-color;
+}
+
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
+
+// Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
+// better match the theme.  Typically applied to dark grey 'off' buttons or
+// light grey 'on' buttons.
+.mx_filterFlipColor {
+    filter: invert(1);
+}
+
+// markdown overrides:
+.mx_EventTile_content .markdown-body pre:hover {
+    border-color: #808080 !important; // inverted due to rules below
+}
+.mx_EventTile_content .markdown-body {
+    pre, code {
+        filter: invert(1);
+    }
+
+    pre code {
+        filter: none;
+    }
+
+    table {
+        tr {
+            background-color: #000000;
+        }
+
+        tr:nth-child(2n) {
+            background-color: #080808;
+        }
+    }
+}
+
+// diff highlight colors
+// intentionally swapped to avoid inversion
+.hljs-addition {
+    background: #fdd;
+}
+
+.hljs-deletion {
+    background: #dfd;
+}

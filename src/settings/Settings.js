@@ -103,12 +103,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_font_scaling": {
-        isFeature: true,
-        displayName: _td("Font scaling"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -146,24 +140,17 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_new_room_list": {
-        isFeature: true,
-        displayName: _td("Use the improved room list (will refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new ReloadOnChangeController(),
-    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_irc_ui": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Enable IRC layout option in the appearance tab'),
+    "advancedRoomListLogging": {
+        // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
+        displayName: _td("Enable advanced debugging for the room list"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
-        isFeature: true,
     },
     "mjolnirRooms": {
         supportedLevels: ['account'],
@@ -202,7 +189,7 @@ export const SETTINGS = {
         default: false,
     },
     "useCompactLayout": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td('Use a more compact ‘Modern’ layout'),
         default: false,
     },
@@ -362,6 +349,12 @@ export const SETTINGS = {
         default: "en",
     },
     "breadcrumb_rooms": {
+        // not really a setting
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "recent_emoji": {
+        // not really a setting
         supportedLevels: ['account'],
         default: [],
     },
@@ -478,11 +471,13 @@ export const SETTINGS = {
             deny: [],
         },
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: false,
     },
+    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show rooms with unread notifications first"),
@@ -572,7 +567,7 @@ export const SETTINGS = {
     },
     "useIRCLayout": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Use IRC layout"),
+        displayName: _td("Enable experimental, compact IRC style layout"),
         default: false,
     },
 };

@@ -53,7 +53,7 @@ limitations under the License.
     }
 
     .mx_UserInfo_separator {
-        border-bottom: 1px solid lightgray;
+        border-bottom: 1px solid rgba($primary-fg-color, .1);
     }
 
     .mx_UserInfo_memberDetailsContainer {
@@ -121,7 +121,7 @@ limitations under the License.
     h3 {
         text-transform: uppercase;
         color: $notice-secondary-color;
-        font-weight: bold;
+        font-weight: 600;
         font-size: $font-12px;
         margin: 4px 0;
     }

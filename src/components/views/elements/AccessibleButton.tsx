@@ -64,7 +64,6 @@ export default function AccessibleButton({
     className,
     ...restProps
 }: IProps) {
-
     const newProps: IAccessibleButtonProps = restProps;
     if (!disabled) {
         newProps.onClick = onClick;
@@ -119,7 +118,7 @@ export default function AccessibleButton({
 AccessibleButton.defaultProps = {
     element: 'div',
     role: 'button',
-    tabIndex: "0",
+    tabIndex: 0,
 };
 
 AccessibleButton.displayName = "AccessibleButton";

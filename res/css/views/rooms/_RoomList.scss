@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2017 Vector Creations Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,56 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_RoomList.mx_RoomList2 {
-    overflow-y: auto;
-}
-
 .mx_RoomList {
-    /* take up remaining space below TopLeftMenu */
-    flex: 1;
-    min-height: 0;
-    overflow-y: hidden;
-}
+    width: calc(100% - 16px); // 16px of artificial right-side margin (8px is overflowed from the sublists)
 
-.mx_RoomList .mx_ResizeHandle {
-    // needed so the z-index takes effect
-    position: relative;
-}
-
-/* hide resize handles next to collapsed / empty sublists */
-.mx_RoomList .mx_RoomSubList:not(.mx_RoomSubList_nonEmpty) + .mx_ResizeHandle {
-    display: none;
-}
-
-.mx_RoomList_expandButton {
-    margin-left: 8px;
-    cursor: pointer;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-
-.mx_RoomList_emptySubListTip_container {
-    padding-left: 18px;
-    padding-right: 18px;
-    padding-top: 8px;
-    padding-bottom: 7px;
-}
-
-.mx_RoomList_emptySubListTip {
-    font-size: $font-13px;
-    padding: 5px;
-    border: 1px dashed $accent-color;
-    color: $primary-fg-color;
-    background-color: $droptarget-bg-color;
-    border-radius: 4px;
-    line-height: $font-16px;
-}
-
-.mx_RoomList_emptySubListTip .mx_RoleButton {
-    vertical-align: -2px;
-}
-
-.mx_RoomList_headerButtons {
-    position: absolute;
-    right: 60px;
+    // Create a column-based flexbox for the sublists. That's pretty much all we have to
+    // worry about in this stylesheet.
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap; // let the column overflow
 }

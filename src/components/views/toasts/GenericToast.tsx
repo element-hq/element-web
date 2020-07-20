@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {ReactChild} from "react";
+import React, {ReactNode} from "react";
 
 import FormButton from "../elements/FormButton";
 import {XOR} from "../../../@types/common";
 
-interface IProps {
-    description: ReactChild;
+export interface IProps {
+    description: ReactNode;
     acceptLabel: string;
 
     onAccept();

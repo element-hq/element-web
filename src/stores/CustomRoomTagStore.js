@@ -18,10 +18,11 @@ import * as RoomNotifs from '../RoomNotifs';
 import EventEmitter from 'events';
 import { throttle } from "lodash";
 import SettingsStore from "../settings/SettingsStore";
-import {RoomListStoreTempProxy} from "./room-list/RoomListStoreTempProxy";
+import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
 
+// TODO: All of this needs updating for new custom tags: https://github.com/vector-im/riot-web/issues/14091
 const STANDARD_TAGS_REGEX =
-  /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+    /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
 
 function commonPrefix(a, b) {
     const len = Math.min(a.length, b.length);
@@ -61,9 +62,7 @@ class CustomRoomTagStore extends EventEmitter {
                 trailing: true,
             },
         );
-        this._roomListStoreToken = RoomListStoreTempProxy.addListener(() => {
-            this._setState({tags: this._getUpdatedTags()});
-        });
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this._onListsUpdated);
         dis.register(payload => this._onDispatch(payload));
     }
 
@@ -86,7 +85,7 @@ class CustomRoomTagStore extends EventEmitter {
     }
 
     getSortedTags() {
-        const roomLists = RoomListStoreTempProxy.getRoomLists();
+        const roomLists = RoomListStore.instance.orderedLists;
 
         const tagNames = Object.keys(this._state.tags).sort();
         const prefixes = tagNames.map((name, i) => {
@@ -110,6 +109,9 @@ class CustomRoomTagStore extends EventEmitter {
         });
     }
 
+    _onListsUpdated = () => {
+        this._setState({tags: this._getUpdatedTags()});
+    };
 
     _onDispatch(payload) {
         switch (payload.action) {
@@ -127,10 +129,7 @@ class CustomRoomTagStore extends EventEmitter {
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
                 this._state = {tags: {}};
-                if (this._roomListStoreToken) {
-                    this._roomListStoreToken.remove();
-                    this._roomListStoreToken = null;
-                }
+                RoomListStore.instance.off(LISTS_UPDATE_EVENT, this._onListsUpdated);
             }
             break;
         }
@@ -141,7 +140,7 @@ class CustomRoomTagStore extends EventEmitter {
             return;
         }
 
-        const newTagNames = Object.keys(RoomListStoreTempProxy.getRoomLists())
+        const newTagNames = Object.keys(RoomListStore.instance.orderedLists)
             .filter((tagName) => {
                 return !tagName.match(STANDARD_TAGS_REGEX);
             }).sort();

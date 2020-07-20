@@ -33,7 +33,7 @@ limitations under the License.
 .mx_TagPanel .mx_TagPanel_clearButton_container {
     /* Constant height within flex mx_TagPanel */
     height: 70px;
-    width: 60px;
+    width: 56px;
 
     flex: none;
 
@@ -51,7 +51,7 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagPanel_divider {
     height: 0px;
-    width: 42px;
+    width: 34px;
     border-bottom: 1px solid $panel-divider-color;
     display: none;
 }
@@ -66,15 +66,13 @@ limitations under the License.
     flex-direction: column;
     align-items: center;
 
-    height: 100%;
+    padding-top: 6px;
 }
 .mx_TagPanel .mx_TagPanel_tagTileContainer > div {
-    height: 40px;
-    padding: 10px 0 9px 0;
+    margin: 6px 0;
 }
 
 .mx_TagPanel .mx_TagTile {
-    margin: 9px 0;
     // opacity: 0.5;
     position: relative;
 }
@@ -86,8 +84,8 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile_plus {
     margin-bottom: 12px;
-    height: 40px;
-    width: 40px;
+    height: 32px;
+    width: 32px;
     border-radius: 20px;
     background-color: $roomheader-addroom-bg-color;
     position: relative;
@@ -159,7 +157,7 @@ limitations under the License.
     font-weight: 600;
     font-size: $font-14px;
     padding: 0 5px;
-    background-color: $roomtile-name-color;
+    background-color: $muted-fg-color;
 }
 
 .mx_TagTile_badgeHighlight {

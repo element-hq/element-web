@@ -15,26 +15,34 @@ limitations under the License.
 */
 
 .mx_RoomHeader {
-    flex: 0 0 52px;
+    flex: 0 0 50px;
     border-bottom: 1px solid $primary-hairline-color;
+    background-color: $roomheader-bg-color;
 
-    .mx_E2EIcon {
-        margin: 0;
-        position: absolute;
-        bottom: -2px;
-        right: -6px;
-        height: 15px;
-        width: 15px;
+    .mx_RoomHeader_e2eIcon {
+        height: 12px;
+        width: 12px;
+
+        .mx_E2EIcon {
+            margin: 0;
+            position: absolute;
+            height: 12px;
+            width: 12px;
+        }
     }
 }
 
 .mx_RoomHeader_wrapper {
     margin: auto;
-    height: 52px;
+    height: 50px;
     display: flex;
     align-items: center;
     min-width: 0;
-    padding: 0 10px 0 19px;
+    padding: 0 10px 0 18px;
+
+    .mx_InviteOnlyIcon_large {
+        margin: 0;
+    }
 }
 
 .mx_RoomHeader_spinner {
@@ -67,7 +75,6 @@ limitations under the License.
 .mx_RoomHeader_buttons {
     display: flex;
     background-color: $primary-bg-color;
-    padding-right: 5px;
 }
 
 .mx_RoomHeader_info {
@@ -173,7 +180,7 @@ limitations under the License.
 
 .mx_RoomHeader_avatar {
     flex: 0;
-    margin: 0 7px;
+    margin: 0 6px 0 7px;
     position: relative;
 }
 
@@ -201,41 +208,53 @@ limitations under the License.
 
 .mx_RoomHeader_button {
     position: relative;
-    margin-left: 10px;
+    margin-left: 1px;
+    margin-right: 1px;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
 
     &::before {
         content: '';
         position: absolute;
-        height: 20px;
-        width: 20px;
+        top: 4px; // center with parent of 32px
+        left: 4px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
         background-color: $roomheader-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;
     }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
+    }
 }
 
 .mx_RoomHeader_settingsButton::before {
-    mask-image: url('$(res)/img/feather-customised/settings.svg');
+    mask-image: url('$(res)/img/element-icons/settings.svg');
 }
 
 .mx_RoomHeader_forgetButton::before {
-    mask-image: url('$(res)/img/leave.svg');
+    mask-image: url('$(res)/img/element-icons/leave.svg');
     width: 26px;
 }
 
 .mx_RoomHeader_searchButton::before {
-    mask-image: url('$(res)/img/feather-customised/search.svg');
+    mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
 }
 
 .mx_RoomHeader_shareButton::before {
-    mask-image: url('$(res)/img/feather-customised/share.svg');
+    mask-image: url('$(res)/img/element-icons/room/share.svg');
 }
 
 .mx_RoomHeader_manageIntegsButton::before {
-    mask-image: url('$(res)/img/feather-customised/grid.svg');
+    mask-image: url('$(res)/img/element-icons/room/integrations.svg');
 }
 
 .mx_RoomHeader_showPanel {
@@ -251,7 +270,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_pinnedButton::before {
-    mask-image: url('$(res)/img/icons-pin.svg');
+    mask-image: url('$(res)/img/element-icons/room/pin.svg');
 }
 
 .mx_RoomHeader_pinsIndicator {

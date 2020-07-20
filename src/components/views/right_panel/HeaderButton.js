@@ -22,7 +22,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Analytics from '../../../Analytics';
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 export default class HeaderButton extends React.Component {
     constructor() {
@@ -42,13 +42,13 @@ export default class HeaderButton extends React.Component {
             [`mx_RightPanel_${this.props.name}`]: true,
         });
 
-        return <AccessibleButton
+        return <AccessibleTooltipButton
             aria-selected={this.props.isHighlighted}
             role="tab"
             title={this.props.title}
             className={classes}
-            onClick={this.onClick}>
-        </AccessibleButton>;
+            onClick={this.onClick}
+        />;
     }
 }
 

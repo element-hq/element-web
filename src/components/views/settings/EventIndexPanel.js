@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
+import SdkConfig from "../../../SdkConfig";
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
@@ -121,6 +122,7 @@ export default class EventIndexPanel extends React.Component {
     render() {
         let eventIndexingSettings = null;
         const InlineSpinner = sdk.getComponent('elements.InlineSpinner');
+        const brand = SdkConfig.get().brand;
 
         if (EventIndexPeg.get() !== null) {
             eventIndexingSettings = (
@@ -165,11 +167,13 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
-                        _t( "Riot is missing some components required for securely " +
+                        _t( "%(brand)s is missing some components required for securely " +
                             "caching encrypted messages locally. If you'd like to " +
-                            "experiment with this feature, build a custom Riot Desktop " +
+                            "experiment with this feature, build a custom %(brand)s Desktop " +
                             "with <nativeLink>search components added</nativeLink>.",
-                            {},
+                            {
+                                brand,
+                            },
                             {
                                 'nativeLink': (sub) => <a href={nativeLink} target="_blank"
                                     rel="noreferrer noopener">{sub}</a>,
@@ -182,12 +186,14 @@ export default class EventIndexPanel extends React.Component {
             eventIndexingSettings = (
                 <div className='mx_SettingsTab_subsectionText'>
                     {
-                        _t( "Riot can't securely cache encrypted messages locally " +
-                            "while running in a web browser. Use <riotLink>Riot Desktop</riotLink> " +
+                        _t( "%(brand)s can't securely cache encrypted messages locally " +
+                            "while running in a web browser. Use <desktopLink>%(brand)s Desktop</desktopLink> " +
                             "for encrypted messages to appear in search results.",
-                            {},
                             {
-                                'riotLink': (sub) => <a href="https://riot.im/download/desktop"
+                                brand,
+                            },
+                            {
+                                'desktopLink': (sub) => <a href="https://riot.im/download/desktop"
                                     target="_blank" rel="noreferrer noopener">{sub}</a>,
                             },
                         )

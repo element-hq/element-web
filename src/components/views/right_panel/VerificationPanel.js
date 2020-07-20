@@ -24,6 +24,7 @@ import {SCAN_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode"
 
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import {_t} from "../../../languageHandler";
+import SdkConfig from "../../../SdkConfig";
 import E2EIcon from "../rooms/E2EIcon";
 import {
     PHASE_UNSENT,
@@ -63,9 +64,15 @@ export default class VerificationPanel extends React.PureComponent {
         const showSAS = request.otherPartySupportsMethod(verificationMethods.SAS);
         const showQR = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const brand = SdkConfig.get().brand;
 
         const noCommonMethodError = !showSAS && !showQR ?
-            <p>{_t("The session you are trying to verify doesn't support scanning a QR code or emoji verification, which is what Riot supports. Try with a different client.")}</p> :
+            <p>{_t(
+                "The session you are trying to verify doesn't support scanning a " +
+                "QR code or emoji verification, which is what %(brand)s supports. Try " +
+                "with a different client.",
+                { brand },
+            )}</p> :
             null;
 
         if (this.props.layout === 'dialog') {

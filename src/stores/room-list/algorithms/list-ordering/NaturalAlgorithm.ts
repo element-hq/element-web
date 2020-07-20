@@ -27,7 +27,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 export class NaturalAlgorithm extends OrderingAlgorithm {
     public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
         super(tagId, initialSortingAlgorithm);
-        console.log(`[RoomListDebug] Constructed a NaturalAlgorithm for ${tagId}`);
     }
 
     public async setRooms(rooms: Room[]): Promise<any> {
@@ -35,27 +34,33 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
     }
 
     public async handleRoomUpdate(room, cause): Promise<boolean> {
-        const isSplice = cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved;
-        const isInPlace = cause === RoomUpdateCause.Timeline || cause === RoomUpdateCause.ReadReceipt;
-        if (!isSplice && !isInPlace) {
-            throw new Error(`Unsupported update cause: ${cause}`);
+        try {
+            await this.updateLock.acquireAsync();
+
+            const isSplice = cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved;
+            const isInPlace = cause === RoomUpdateCause.Timeline || cause === RoomUpdateCause.ReadReceipt;
+            if (!isSplice && !isInPlace) {
+                throw new Error(`Unsupported update cause: ${cause}`);
+            }
+
+            if (cause === RoomUpdateCause.NewRoom) {
+                this.cachedOrderedRooms.push(room);
+            } else if (cause === RoomUpdateCause.RoomRemoved) {
+                const idx = this.getRoomIndex(room);
+                if (idx >= 0) {
+                    this.cachedOrderedRooms.splice(idx, 1);
+                } else {
+                    console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                }
+            }
+
+            // TODO: Optimize this to avoid useless operations: https://github.com/vector-im/riot-web/issues/14457
+            // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
+            this.cachedOrderedRooms = await sortRoomsWithAlgorithm(this.cachedOrderedRooms, this.tagId, this.sortingAlgorithm);
+
+            return true;
+        } finally {
+            await this.updateLock.release();
         }
-
-        if (cause === RoomUpdateCause.NewRoom) {
-            this.cachedOrderedRooms.push(room);
-        } else if (cause === RoomUpdateCause.RoomRemoved) {
-            const idx = this.cachedOrderedRooms.indexOf(room);
-            if (idx >= 0) this.cachedOrderedRooms.splice(idx, 1);
-        }
-
-        // TODO: Optimize this to avoid useless operations
-        // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
-        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(
-            this.cachedOrderedRooms,
-            this.tagId,
-            this.sortingAlgorithm,
-        );
-
-        return true;
     }
 }

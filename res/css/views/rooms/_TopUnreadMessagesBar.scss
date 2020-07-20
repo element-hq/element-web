@@ -42,7 +42,7 @@ limitations under the License.
     border-radius: 19px;
     box-sizing: border-box;
     background: $primary-bg-color;
-    border: 1.3px solid $roomtile-name-color;
+    border: 1.3px solid $muted-fg-color;
     cursor: pointer;
 }
 
@@ -54,7 +54,7 @@ limitations under the License.
     mask-image: url('$(res)/img/icon-jump-to-first-unread.svg');
     mask-repeat: no-repeat;
     mask-position: 9px 13px;
-    background: $roomtile-name-color;
+    background: $muted-fg-color;
 }
 
 .mx_TopUnreadMessagesBar_markAsRead {
@@ -62,7 +62,7 @@ limitations under the License.
     width: 18px;
     height: 18px;
     background: $primary-bg-color;
-    border: 1.3px solid $roomtile-name-color;
+    border: 1.3px solid $muted-fg-color;
     border-radius: 10px;
     margin: 5px auto;
 }
@@ -76,5 +76,5 @@ limitations under the License.
     mask-repeat: no-repeat;
     mask-size: 10px;
     mask-position: 4px 4px;
-    background: $roomtile-name-color;
+    background: $muted-fg-color;
 }

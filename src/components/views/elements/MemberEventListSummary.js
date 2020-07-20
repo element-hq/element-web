@@ -1,6 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import * as sdk from "../../../index";
 import {MatrixEvent} from "matrix-js-sdk";
+import {isValid3pidInvite} from "../../../RoomInvite";
 
 export default createReactClass({
     displayName: 'MemberEventListSummary',
@@ -284,6 +285,9 @@ export default createReactClass({
     _getTransition: function(e) {
         if (e.mxEvent.getType() === 'm.room.third_party_invite') {
             // Handle 3pid invites the same as invites so they get bundled together
+            if (!isValid3pidInvite(e.mxEvent)) {
+                return 'invite_withdrawal';
+            }
             return 'invited';
         }
 

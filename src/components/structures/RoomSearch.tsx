@@ -25,17 +25,11 @@ import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
-
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
     isMinimized: boolean;
+    onVerticalArrow(ev: React.KeyboardEvent): void;
+    onEnter(ev: React.KeyboardEvent): boolean;
 }
 
 interface IState {
@@ -78,6 +72,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
 
     private openSearch = () => {
         defaultDispatcher.dispatch({action: "show_left_panel"});
+        defaultDispatcher.dispatch({action: "focus_room_filter"});
     };
 
     private onChange = () => {
@@ -101,7 +96,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         ev.target.select();
     };
 
-    private onBlur = () => {
+    private onBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
         this.setState({focused: false});
     };
 
@@ -109,6 +104,16 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (ev.key === Key.ESCAPE) {
             this.clearInput();
             defaultDispatcher.fire(Action.FocusComposer);
+        } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
+            this.props.onVerticalArrow(ev);
+        } else if (ev.key === Key.ENTER) {
+            const shouldClear = this.props.onEnter(ev);
+            if (shouldClear) {
+                // wrap in set immediate to delay it so that we don't clear the filter & then change room
+                setImmediate(() => {
+                    this.clearInput();
+                });
+            }
         }
     };
 
@@ -144,7 +149,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         let clearButton = (
             <AccessibleButton
                 tabIndex={-1}
-                className='mx_RoomSearch_clearButton'
+                title={_t("Clear filter")}
+                className="mx_RoomSearch_clearButton"
                 onClick={this.clearInput}
             />
         );
@@ -152,8 +158,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (this.props.isMinimized) {
             icon = (
                 <AccessibleButton
-                    tabIndex={-1}
-                    className='mx_RoomSearch_icon'
+                    title={_t("Search rooms")}
+                    className="mx_RoomSearch_icon"
                     onClick={this.openSearch}
                 />
             );

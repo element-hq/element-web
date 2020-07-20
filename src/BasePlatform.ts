@@ -53,6 +53,10 @@ export default abstract class BasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
+    abstract async getConfig(): Promise<{}>;
+
+    abstract getDefaultDeviceDisplayName(): string;
+
     protected onAction = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'on_client_not_viable':

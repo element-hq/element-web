@@ -26,8 +26,6 @@ import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
-        'RoomList.orderAlphabetically',
-        'RoomList.orderByImportance',
         'breadcrumbs',
     ];
 

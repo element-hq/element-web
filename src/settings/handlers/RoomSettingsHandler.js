@@ -43,11 +43,14 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         const roomId = event.getRoomId();
         const room = this.client.getRoom(roomId);
 
-        // Note: the tests often fire setting updates that don't have rooms in the store, so
-        // we fail softly here. We shouldn't assume that the state being fired is current
-        // state, but we also don't need to explode just because we didn't find a room.
-        if (!room) console.warn(`Unknown room caused setting update: ${roomId}`);
-        if (room && state !== room.currentState) return; // ignore state updates which are not current
+        // Note: in tests and during the encryption setup on initial load we might not have
+        // rooms in the store, so we just quietly ignore the problem. If we log it then we'll
+        // just end up spamming the logs a few thousand times. It is perfectly fine for us
+        // to ignore the problem as the app will not have loaded enough to care yet.
+        if (!room) return;
+
+        // ignore state updates which are not current
+        if (room && state !== room.currentState) return;
 
         if (event.getType() === "org.matrix.room.preview_urls") {
             let val = event.getContent()['disable'];

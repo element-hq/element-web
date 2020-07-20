@@ -18,10 +18,6 @@ import { TagID } from "./models";
 
 const TILE_HEIGHT_PX = 44;
 
-// the .65 comes from the CSS where the show more button is
-// mathematically 65% of a tile when floating.
-const RESIZER_BOX_FACTOR = 0.65;
-
 interface ISerializedListLayout {
     numTiles: number;
     showPreviews: boolean;
@@ -81,28 +77,12 @@ export class ListLayout {
     }
 
     public get minVisibleTiles(): number {
-        return 1 + RESIZER_BOX_FACTOR;
+        return 1;
     }
 
     public get defaultVisibleTiles(): number {
-        // TODO: Remove dogfood flag
-        const val = Number(localStorage.getItem("mx_dogfood_rl_defTiles") || 4);
-        return val + RESIZER_BOX_FACTOR;
-    }
-
-    public calculateTilesToPixelsMin(maxTiles: number, n: number, possiblePadding: number): number {
-        // Only apply the padding if we're about to use maxTiles as we need to
-        // plan for the padding. If we're using n, the padding is already accounted
-        // for by the resizing stuff.
-        let padding = 0;
-        if (maxTiles < n) {
-            padding = possiblePadding;
-        }
-        return this.tilesToPixels(Math.min(maxTiles, n)) + padding;
-    }
-
-    public tilesWithResizerBoxFactor(n: number): number {
-        return n + RESIZER_BOX_FACTOR;
+        // This number is what "feels right", and mostly subject to design's opinion.
+        return 5;
     }
 
     public tilesWithPadding(n: number, paddingPx: number): number {
@@ -119,6 +99,10 @@ export class ListLayout {
 
     public pixelsToTiles(px: number): number {
         return px / this.tileHeight;
+    }
+
+    public reset() {
+        localStorage.removeItem(this.key);
     }
 
     private save() {

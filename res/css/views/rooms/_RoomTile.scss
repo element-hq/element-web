@@ -1,6 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,214 +14,226 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Note: the room tile expects to be in a flexbox column container
 .mx_RoomTile {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-    height: 34px;
-    margin: 0;
-    padding: 0 8px 0 10px;
-    position: relative;
-
-    .mx_RoomTile_menuButton {
-        display: none;
-        flex: 0 0 16px;
-        height: 16px;
-        background-image: url('$(res)/img/icon_context.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-    .mx_UserOnlineDot {
-        display: block;
-        margin-right: 5px;
-    }
-}
-
-.mx_RoomTile:focus {
-    filter: none !important;
-    background-color: $roomtile-focused-bg-color;
-}
-
-.mx_RoomTile_tooltip {
-    display: inline-block;
-    position: relative;
-    top: -54px;
-    left: -12px;
-}
-
-.mx_RoomTile_nameContainer {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    vertical-align: middle;
-    min-width: 0;
-}
-
-.mx_RoomTile_labelContainer {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-}
-
-.mx_RoomTile_subtext {
-    display: inline-block;
-    font-size: $font-11px;
-    padding: 0 0 0 7px;
-    margin: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: clip;
-    position: relative;
-    bottom: 4px;
-}
-
-.mx_RoomTile_avatar_container {
-    position: relative;
-    display: flex;
-}
-
-.mx_RoomTile_avatar {
-    flex: 0;
+    margin-bottom: 4px;
     padding: 4px;
-    width: 24px;
-    vertical-align: middle;
-}
 
-.mx_RoomTile_hasSubtext .mx_RoomTile_avatar {
-    padding-top: 0;
-    vertical-align: super;
-}
+    // The tile is also a flexbox row itself
+    display: flex;
 
-.mx_RoomTile_dm {
-    display: block;
-    position: absolute;
-    bottom: 0;
-    right: -5px;
-    z-index: 2;
-}
+    &.mx_RoomTile_selected,
+    &:hover,
+    &:focus-within,
+    &.mx_RoomTile_hasMenuOpen {
+        background-color: $roomtile-selected-bg-color;
+        border-radius: 8px;
+    }
 
-// Note we match .mx_E2EIcon to make sure this matches more tightly than just
-// .mx_E2EIcon on its own
-.mx_RoomTile_e2eIcon.mx_E2EIcon {
-    height: 14px;
-    width: 14px;
-    display: block;
-    position: absolute;
-    bottom: -2px;
-    right: -5px;
-    z-index: 1;
-    margin: 0;
-}
+    .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
+        margin-right: 8px;
+    }
 
-.mx_RoomTile_name {
-    font-size: $font-14px;
-    padding: 0 4px;
-    color: $roomtile-name-color;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-}
+    .mx_RoomTile_nameContainer {
+        flex-grow: 1;
+        min-width: 0; // allow flex to shrink it
+        margin-right: 8px; // spacing to buttons/badges
 
-.mx_RoomTile_badge {
-    flex: 0 1 content;
-    border-radius: 0.8em;
-    padding: 0 0.4em;
-    color: $roomtile-badge-fg-color;
-    font-weight: 600;
-    font-size: $font-12px;
-}
-
-.collapsed {
-    .mx_RoomTile {
-        margin: 0 6px;
-        padding: 0 2px;
-        position: relative;
+        // Create a new column layout flexbox for the name parts
+        display: flex;
+        flex-direction: column;
         justify-content: center;
+
+        .mx_RoomTile_name,
+        .mx_RoomTile_messagePreview {
+            margin: 0 2px;
+            width: 100%;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .mx_RoomTile_name {
+            font-size: $font-14px;
+            line-height: $font-18px;
+        }
+
+        .mx_RoomTile_name.mx_RoomTile_nameHasUnreadEvents {
+            font-weight: 600;
+        }
+
+        .mx_RoomTile_messagePreview {
+            font-size: $font-13px;
+            line-height: $font-18px;
+            color: $roomtile-preview-color;
+        }
+
+        .mx_RoomTile_nameWithPreview {
+            margin-top: -4px; // shift the name up a bit more
+        }
     }
 
-    .mx_RoomTile_name {
+    .mx_RoomTile_notificationsButton {
+        margin-left: 4px; // spacing between buttons
+    }
+
+    .mx_RoomTile_badgeContainer {
+        height: 16px;
+        // don't set width so that it takes no space when there is no badge to show
+        margin: auto 0; // vertically align
+
+        // Create a flexbox to make aligning dot badges easier
+        display: flex;
+        align-items: center;
+
+        .mx_NotificationBadge {
+            margin-right: 2px; // centering
+        }
+
+        .mx_NotificationBadge_dot {
+            // make the smaller dot occupy the same width for centering
+            margin-left: 5px;
+            margin-right: 7px;
+        }
+    }
+
+    // The context menu buttons are hidden by default
+    .mx_RoomTile_menuButton,
+    .mx_RoomTile_notificationsButton {
+        width: 20px;
+        min-width: 20px; // yay flex
+        height: 20px;
+        margin-top: auto;
+        margin-bottom: auto;
+        position: relative;
         display: none;
+
+        &::before {
+            top: 2px;
+            left: 2px;
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
     }
 
-    .mx_RoomTile_badge {
-        position: absolute;
-        right: 6px;
-        top: 0px;
-        border-radius: 16px;
-        z-index: 3;
-        border: 0.18em solid $secondary-accent-color;
-    }
-
-    .mx_RoomTile_menuButton {
-        display: none; // no design for this for now
-    }
-    .mx_UserOnlineDot {
-        display: none; // no design for this for now
-    }
-}
-
-// toggle menuButton and badge on menu displayed
-.mx_RoomTile_menuDisplayed,
-// or on keyboard focus of room tile
-.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:focus-within,
-// or on pointer hover
-.mx_LeftPanel_container:not(.collapsed) .mx_RoomTile:hover {
-    .mx_RoomTile_menuButton {
+    // If the room has an overriden notification setting then we always show the notifications menu button
+    .mx_RoomTile_notificationsButton.mx_RoomTile_notificationsButton_show {
         display: block;
     }
-    .mx_UserOnlineDot {
-        display: none;
+
+    .mx_RoomTile_menuButton::before {
+        mask-image: url('$(res)/img/element-icons/context-menu.svg');
+    }
+
+    &:not(.mx_RoomTile_minimized) {
+        &:hover,
+        &:focus-within,
+        &.mx_RoomTile_hasMenuOpen {
+            // Hide the badge container on hover because it'll be a menu button
+            .mx_RoomTile_badgeContainer {
+                width: 0;
+                height: 0;
+                display: none;
+            }
+
+            .mx_RoomTile_notificationsButton,
+            .mx_RoomTile_menuButton {
+                display: block;
+            }
+        }
+    }
+
+    &.mx_RoomTile_minimized {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
+            margin-right: 0;
+        }
     }
 }
 
-.mx_RoomTile_unreadNotify .mx_RoomTile_badge,
-.mx_RoomTile_badge.mx_RoomTile_badgeUnread {
-    background-color: $roomtile-name-color;
+// We use these both in context menus and the room tiles
+.mx_RoomTile_iconBell::before {
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
+}
+.mx_RoomTile_iconBellDot::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
+}
+.mx_RoomTile_iconBellCrossed::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+}
+.mx_RoomTile_iconBellMentions::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
+}
+.mx_RoomTile_iconCheck::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
 }
 
-.mx_RoomTile_highlight .mx_RoomTile_badge,
-.mx_RoomTile_badge.mx_RoomTile_badgeRed {
-    color: $accent-fg-color;
-    background-color: $warning-color;
-}
+.mx_RoomTile_contextMenu {
+    .mx_RoomTile_contextMenu_redRow {
+        .mx_AccessibleButton {
+            color: $warning-color !important; // !important to override styles from context menu
+        }
 
-.mx_RoomTile_unread, .mx_RoomTile_highlight {
-    .mx_RoomTile_name {
-        font-weight: 600;
-        color: $roomtile-selected-color;
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $warning-color;
+        }
     }
-}
 
-.mx_RoomTile_selected {
-    border-radius: 4px;
-    background-color: $roomtile-selected-bg-color;
-}
+    .mx_RoomTile_contextMenu_activeRow {
+        &.mx_AccessibleButton, .mx_AccessibleButton {
+            color: $accent-color !important; // !important to override styles from context menu
+        }
 
-.mx_DNDRoomTile {
-    transform: none;
-    transition: transform 0.2s;
-}
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $accent-color;
+        }
+    }
 
-.mx_DNDRoomTile_dragging {
-    transform: scale(1.05, 1.05);
-}
+    .mx_IconizedContextMenu_icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
 
-.mx_RoomTile_arrow {
-    position: absolute;
-    right: 0px;
-}
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
+    }
 
-.mx_RoomTile.mx_RoomTile_transparent {
-    background-color: transparent;
-}
+    .mx_RoomTile_iconStar::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+    }
 
-.mx_RoomTile.mx_RoomTile_transparent:focus {
-    background-color: $roomtile-transparent-focused-color;
-}
+    .mx_RoomTile_iconFavorite::before {
+        mask-image: url('$(res)/img/feather-customised/favourites.svg');
+    }
 
-.mx_GroupInviteTile .mx_RoomTile_name {
-    flex: 1;
+    .mx_RoomTile_iconArrowDown::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/low-priority.svg');
+    }
+
+    .mx_RoomTile_iconSettings::before {
+        mask-image: url('$(res)/img/element-icons/settings.svg');
+    }
+
+    .mx_RoomTile_iconSignOut::before {
+        mask-image: url('$(res)/img/element-icons/leave.svg');
+    }
 }

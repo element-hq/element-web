@@ -23,8 +23,8 @@ import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as ServerType from '../../views/auth/ServerTypeSelector';
 import ServerConfig from "./ServerConfig";
 
-const MODULAR_URL = 'https://modular.im/services/matrix-hosting-riot' +
-    '?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+const MODULAR_URL = 'https://element.io/matrix-services' +
+    '?utm_source=element-web&utm_medium=web&utm_campaign=element-web-authentication';
 
 // TODO: TravisR - Can this extend ServerConfig for most things?
 
@@ -95,10 +95,10 @@ export default class ModularServerConfig extends ServerConfig {
 
         return (
             <div className="mx_ServerConfig">
-                <h3>{_t("Your Modular server")}</h3>
+                <h3>{_t("Your server")}</h3>
                 {_t(
-                    "Enter the location of your Modular homeserver. It may use your own " +
-                    "domain name or be a subdomain of <a>modular.im</a>.",
+                    "Enter the location of your Element Matrix Services homeserver. It may use your own " +
+                    "domain name or be a subdomain of <a>element.io</a>.",
                     {}, {
                         a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                             {sub}

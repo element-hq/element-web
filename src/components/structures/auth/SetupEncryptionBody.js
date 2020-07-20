@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import {
@@ -131,6 +132,8 @@ export default class SetupEncryptionBody extends React.Component {
                 </AccessibleButton>;
             }
 
+            const brand = SdkConfig.get().brand;
+
             return (
                 <div>
                     <p>{_t(
@@ -138,17 +141,18 @@ export default class SetupEncryptionBody extends React.Component {
                         "granting it access to encrypted messages.",
                     )}</p>
                     <p>{_t(
-                        "This requires the latest Riot on your other devices:",
+                        "This requires the latest %(brand)s on your other devices:",
+                        { brand },
                     )}</p>
 
                     <div className="mx_CompleteSecurity_clients">
                         <div className="mx_CompleteSecurity_clients_desktop">
-                            <div>Riot Web</div>
-                            <div>Riot Desktop</div>
+                            <div>{_t("%(brand)s Web", { brand })}</div>
+                            <div>{_t("%(brand)s Desktop", { brand })}</div>
                         </div>
                         <div className="mx_CompleteSecurity_clients_mobile">
-                            <div>Riot iOS</div>
-                            <div>Riot X for Android</div>
+                            <div>{_t("%(brand)s iOS", { brand })}</div>
+                            <div>{_t("%(brand)s X for Android", { brand })}</div>
                         </div>
                         <p>{_t("or another cross-signing capable Matrix client")}</p>
                     </div>
