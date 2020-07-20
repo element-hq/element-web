@@ -24,7 +24,6 @@ import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
-import TintableSvg from '../elements/TintableSvg';
 import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 

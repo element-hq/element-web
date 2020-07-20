@@ -21,7 +21,6 @@ import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupAddRoomDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
-import TintableSvg from '../elements/TintableSvg';
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 
 const INITIAL_LOAD_NUM_ROOMS = 30;
