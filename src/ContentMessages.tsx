@@ -621,9 +621,9 @@ export default class ContentMessages {
     }
 
     static sharedInstance() {
-        if (window.mxContentMessages === undefined) {
-            window.mxContentMessages = new ContentMessages();
+        if (window.mx_ContentMessages === undefined) {
+            window.mx_ContentMessages = new ContentMessages();
         }
-        return window.mxContentMessages;
+        return window.mx_ContentMessages;
     }
 }

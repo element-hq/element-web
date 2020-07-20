@@ -39,8 +39,8 @@ declare global {
         mx_RebrandListener: RebrandListener;
         mx_RoomListStore: RoomListStoreClass;
         mx_RoomListLayoutStore: RoomListLayoutStore;
-        mxPlatformPeg: PlatformPeg;
-        mxIntegrationManagers: typeof IntegrationManagers;
+        mx_PlatformPeg: PlatformPeg;
+        mx_IntegrationManagers: typeof IntegrationManagers;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933

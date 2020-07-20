@@ -245,4 +245,4 @@ export class IntegrationManagers {
 }
 
 // For debugging
-window.mxIntegrationManagers = IntegrationManagers;
+window.mx_IntegrationManagers = IntegrationManagers;
