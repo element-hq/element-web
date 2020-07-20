@@ -14,25 +14,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EditorModel from "./model";
+import {IDiff} from "./diff";
+import {SerializedPart} from "./parts";
+import {Caret} from "./caret";
+
+interface IHistory {
+    parts: SerializedPart[];
+    caret: Caret;
+}
+
 export const MAX_STEP_LENGTH = 10;
 
 export default class HistoryManager {
-    constructor() {
-        this.clear();
-    }
+    private stack: IHistory[] = [];
+    private newlyTypedCharCount = 0;
+    private currentIndex = -1;
+    private changedSinceLastPush = false;
+    private lastCaret: Caret = null;
+    private nonWordBoundarySinceLastPush = false;
+    private addedSinceLastPush = false;
+    private removedSinceLastPush = false;
 
     clear() {
-        this._stack = [];
-        this._newlyTypedCharCount = 0;
-        this._currentIndex = -1;
-        this._changedSinceLastPush = false;
-        this._lastCaret = null;
-        this._nonWordBoundarySinceLastPush = false;
-        this._addedSinceLastPush = false;
-        this._removedSinceLastPush = false;
+        this.stack = [];
+        this.newlyTypedCharCount = 0;
+        this.currentIndex = -1;
+        this.changedSinceLastPush = false;
+        this.lastCaret = null;
+        this.nonWordBoundarySinceLastPush = false;
+        this.addedSinceLastPush = false;
+        this.removedSinceLastPush = false;
     }
 
-    _shouldPush(inputType, diff) {
+    private shouldPush(inputType, diff) {
         // right now we can only push a step after
         // the input has been applied to the model,
         // so we can't push the state before something happened.
@@ -43,24 +58,24 @@ export default class HistoryManager {
                                inputType === "deleteContentBackward";
         if (diff && isNonBulkInput) {
             if (diff.added) {
-                this._addedSinceLastPush = true;
+                this.addedSinceLastPush = true;
             }
             if (diff.removed) {
-                this._removedSinceLastPush = true;
+                this.removedSinceLastPush = true;
             }
             // as long as you've only been adding or removing since the last push
-            if (this._addedSinceLastPush !== this._removedSinceLastPush) {
+            if (this.addedSinceLastPush !== this.removedSinceLastPush) {
                 // add steps by word boundary, up to MAX_STEP_LENGTH characters
                 const str = diff.added ? diff.added : diff.removed;
                 const isWordBoundary = str === " " || str === "\t" || str === "\n";
-                if (this._nonWordBoundarySinceLastPush && isWordBoundary) {
+                if (this.nonWordBoundarySinceLastPush && isWordBoundary) {
                     return true;
                 }
                 if (!isWordBoundary) {
-                    this._nonWordBoundarySinceLastPush = true;
+                    this.nonWordBoundarySinceLastPush = true;
                 }
-                this._newlyTypedCharCount += str.length;
-                return this._newlyTypedCharCount > MAX_STEP_LENGTH;
+                this.newlyTypedCharCount += str.length;
+                return this.newlyTypedCharCount > MAX_STEP_LENGTH;
             } else {
                 // if starting to remove while adding before, or the opposite, push
                 return true;
@@ -71,24 +86,24 @@ export default class HistoryManager {
         }
     }
 
-    _pushState(model, caret) {
+    private pushState(model: EditorModel, caret: Caret) {
         // remove all steps after current step
-        while (this._currentIndex < (this._stack.length - 1)) {
-            this._stack.pop();
+        while (this.currentIndex < (this.stack.length - 1)) {
+            this.stack.pop();
         }
         const parts = model.serializeParts();
-        this._stack.push({parts, caret});
-        this._currentIndex = this._stack.length - 1;
-        this._lastCaret = null;
-        this._changedSinceLastPush = false;
-        this._newlyTypedCharCount = 0;
-        this._nonWordBoundarySinceLastPush = false;
-        this._addedSinceLastPush = false;
-        this._removedSinceLastPush = false;
+        this.stack.push({parts, caret});
+        this.currentIndex = this.stack.length - 1;
+        this.lastCaret = null;
+        this.changedSinceLastPush = false;
+        this.newlyTypedCharCount = 0;
+        this.nonWordBoundarySinceLastPush = false;
+        this.addedSinceLastPush = false;
+        this.removedSinceLastPush = false;
     }
 
     // needs to persist parts and caret position
-    tryPush(model, caret, inputType, diff) {
+    tryPush(model: EditorModel, caret: Caret, inputType: string, diff: IDiff) {
         // ignore state restoration echos.
         // these respect the inputType values of the input event,
         // but are actually passed in from MessageEditor calling model.reset()
@@ -96,45 +111,45 @@ export default class HistoryManager {
         if (inputType === "historyUndo" || inputType === "historyRedo") {
             return false;
         }
-        const shouldPush = this._shouldPush(inputType, diff);
+        const shouldPush = this.shouldPush(inputType, diff);
         if (shouldPush) {
-            this._pushState(model, caret);
+            this.pushState(model, caret);
         } else {
-            this._lastCaret = caret;
-            this._changedSinceLastPush = true;
+            this.lastCaret = caret;
+            this.changedSinceLastPush = true;
         }
         return shouldPush;
     }
 
-    ensureLastChangesPushed(model) {
-        if (this._changedSinceLastPush) {
-            this._pushState(model, this._lastCaret);
+    ensureLastChangesPushed(model: EditorModel) {
+        if (this.changedSinceLastPush) {
+            this.pushState(model, this.lastCaret);
         }
     }
 
     canUndo() {
-        return this._currentIndex >= 1 || this._changedSinceLastPush;
+        return this.currentIndex >= 1 || this.changedSinceLastPush;
     }
 
     canRedo() {
-        return this._currentIndex < (this._stack.length - 1);
+        return this.currentIndex < (this.stack.length - 1);
     }
 
     // returns state that should be applied to model
-    undo(model) {
+    undo(model: EditorModel) {
         if (this.canUndo()) {
             this.ensureLastChangesPushed(model);
-            this._currentIndex -= 1;
-            return this._stack[this._currentIndex];
+            this.currentIndex -= 1;
+            return this.stack[this.currentIndex];
         }
     }
 
     // returns state that should be applied to model
     redo() {
         if (this.canRedo()) {
-            this._changedSinceLastPush = false;
-            this._currentIndex += 1;
-            return this._stack[this._currentIndex];
+            this.changedSinceLastPush = false;
+            this.currentIndex += 1;
+            return this.stack[this.currentIndex];
         }
     }
 }
