@@ -18,7 +18,7 @@ limitations under the License.
 import {diffAtCaret, diffDeletion, IDiff} from "./diff";
 import DocumentPosition, {IPosition} from "./position";
 import Range from "./range";
-import {BasePart, ISerializedPart, PartCreator} from "./parts";
+import {SerializedPart, Part, PartCreator} from "./parts";
 import AutocompleteWrapperModel, {ICallback} from "./autocomplete";
 import DocumentOffset from "./offset";
 import {Caret} from "./caret";
@@ -49,7 +49,7 @@ type UpdateCallback = (caret: Caret, inputType?: string, diff?: IDiff) => void;
 type ManualTransformCallback = () => Caret;
 
 export default class EditorModel {
-    private _parts: BasePart[];
+    private _parts: Part[];
     private readonly _partCreator: PartCreator;
     private activePartIdx: number = null;
     private _autoComplete: AutocompleteWrapperModel = null;
@@ -57,7 +57,7 @@ export default class EditorModel {
     private autoCompletePartCount = 0;
     private transformCallback: TransformCallback = null;
 
-    constructor(parts: BasePart[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
+    constructor(parts: Part[], partCreator: PartCreator, private updateCallback: UpdateCallback = null) {
         this._parts = parts;
         this._partCreator = partCreator;
         this.transformCallback = null;
@@ -94,7 +94,7 @@ export default class EditorModel {
         return new EditorModel(this._parts, this._partCreator, this.updateCallback);
     }
 
-    private insertPart(index: number, part: BasePart) {
+    private insertPart(index: number, part: Part) {
         this._parts.splice(index, 0, part);
         if (this.activePartIdx >= index) {
             ++this.activePartIdx;
@@ -118,7 +118,7 @@ export default class EditorModel {
         }
     }
 
-    private replacePart(index: number, part: BasePart) {
+    private replacePart(index: number, part: Part) {
         this._parts.splice(index, 1, part);
     }
 
@@ -158,7 +158,7 @@ export default class EditorModel {
         }
     }
 
-    reset(serializedParts: ISerializedPart[], caret: Caret, inputType: string) {
+    reset(serializedParts: SerializedPart[], caret: Caret, inputType: string) {
         this._parts = serializedParts.map(p => this._partCreator.deserializePart(p));
         if (!caret) {
             caret = this.getPositionAtEnd();
@@ -180,7 +180,7 @@ export default class EditorModel {
      * @param {DocumentPosition} position the position to start inserting at
      * @return {Number} the amount of characters added
      */
-    insert(parts: BasePart[], position: IPosition) {
+    insert(parts: Part[], position: IPosition) {
         const insertIndex = this.splitAt(position);
         let newTextLength = 0;
         for (let i = 0; i < parts.length; ++i) {
@@ -420,7 +420,7 @@ export default class EditorModel {
         return new Range(this, positionA, positionB);
     }
 
-    replaceRange(startPosition: DocumentPosition, endPosition: DocumentPosition, parts: BasePart[]) {
+    replaceRange(startPosition: DocumentPosition, endPosition: DocumentPosition, parts: Part[]) {
         // convert end position to offset, so it is independent of how the document is split into parts
         // which we'll change when splitting up at the start position
         const endOffset = endPosition.asOffset(this);

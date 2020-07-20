@@ -19,15 +19,66 @@ import {MatrixClient} from "matrix-js-sdk/src/client";
 import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 import {Room} from "matrix-js-sdk/src/models/room";
 
-import AutocompleteWrapperModel, {GetAutocompleterComponent, UpdateCallback, UpdateQuery} from "./autocomplete";
+import AutocompleteWrapperModel, {
+    GetAutocompleterComponent,
+    UpdateCallback,
+    UpdateQuery
+} from "./autocomplete";
 import * as Avatar from "../Avatar";
 
-export interface ISerializedPart {
-    type: string;
+interface ISerializedPart {
+    type: Type.Plain | Type.Newline | Type.Command | Type.PillCandidate;
     text: string;
 }
 
-export abstract class BasePart {
+interface ISerializedPillPart {
+    type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
+    text: string;
+    resourceId: string;
+}
+
+export type SerializedPart = ISerializedPart | ISerializedPillPart;
+
+enum Type {
+    Plain = "plain",
+    Newline = "newline",
+    Command = "command",
+    UserPill = "user-pill",
+    RoomPill = "room-pill",
+    AtRoomPill = "at-room-pill",
+    PillCandidate = "pill-candidate",
+}
+
+interface IBasePart {
+    text: string;
+    type: Type.Plain | Type.Newline;
+    canEdit: boolean;
+
+    createAutoComplete(updateCallback: UpdateCallback): void;
+
+    serialize(): SerializedPart;
+    remove(offset: number, len: number): string;
+    split(offset: number): IBasePart;
+    validateAndInsert(offset: number, str: string, inputType: string): boolean;
+    appendUntilRejected(str: string, inputType: string): string;
+    updateDOMNode(node: Node);
+    canUpdateDOMNode(node: Node);
+    toDOMNode(): Node;
+}
+
+interface IPillCandidatePart extends Omit<IBasePart, "type" | "createAutoComplete"> {
+    type: Type.PillCandidate | Type.Command;
+    createAutoComplete(updateCallback: UpdateCallback): AutocompleteWrapperModel;
+}
+
+interface IPillPart extends Omit<IBasePart, "type" | "resourceId"> {
+    type: Type.AtRoomPill | Type.RoomPill | Type.UserPill;
+    resourceId: string;
+}
+
+export type Part = IBasePart | IPillCandidatePart | IPillPart;
+
+abstract class BasePart {
     protected _text: string;
 
     constructor(text = "") {
@@ -42,7 +93,7 @@ export abstract class BasePart {
         return true;
     }
 
-    merge(part: BasePart) {
+    merge(part: Part) {
         return false;
     }
 
@@ -94,7 +145,7 @@ export abstract class BasePart {
         return true;
     }
 
-    createAutoComplete(updateCallback): AutocompleteWrapperModel | void {}
+    createAutoComplete(updateCallback: UpdateCallback): void {}
 
     trim(len: number) {
         const remaining = this._text.substr(len);
@@ -106,7 +157,7 @@ export abstract class BasePart {
         return this._text;
     }
 
-    abstract get type(): string;
+    abstract get type(): Type;
 
     get canEdit() {
         return true;
@@ -116,8 +167,11 @@ export abstract class BasePart {
         return `${this.type}(${this.text})`;
     }
 
-    serialize(): ISerializedPart {
-        return {type: this.type, text: this.text};
+    serialize(): SerializedPart {
+        return {
+            type: this.type as ISerializedPart["type"],
+            text: this.text,
+        };
     }
 
     abstract updateDOMNode(node: Node);
@@ -125,8 +179,7 @@ export abstract class BasePart {
     abstract toDOMNode(): Node;
 }
 
-// exported for unit tests, should otherwise only be used through PartCreator
-export class PlainPart extends BasePart {
+abstract class PlainBasePart extends BasePart {
     acceptsInsertion(chr: string, offset: number, inputType: string) {
         if (chr === "\n") {
             return false;
@@ -150,10 +203,6 @@ export class PlainPart extends BasePart {
         return false;
     }
 
-    get type() {
-        return "plain";
-    }
-
     updateDOMNode(node: Node) {
         if (node.textContent !== this.text) {
             node.textContent = this.text;
@@ -165,7 +214,14 @@ export class PlainPart extends BasePart {
     }
 }
 
-export abstract class PillPart extends BasePart {
+// exported for unit tests, should otherwise only be used through PartCreator
+export class PlainPart extends PlainBasePart implements IBasePart {
+    get type(): IBasePart["type"] {
+        return Type.Plain;
+    }
+}
+
+abstract class PillPart extends BasePart implements IPillPart {
     constructor(public resourceId: string, label) {
         super(label);
     }
@@ -223,12 +279,14 @@ export abstract class PillPart extends BasePart {
         return false;
     }
 
+    abstract get type(): IPillPart["type"];
+
     abstract get className(): string;
 
     abstract setAvatar(node: HTMLElement): void;
 }
 
-class NewlinePart extends BasePart {
+class NewlinePart extends BasePart implements IBasePart {
     acceptsInsertion(chr: string, offset: number) {
         return offset === 0 && chr === "\n";
     }
@@ -251,8 +309,8 @@ class NewlinePart extends BasePart {
         return node.tagName === "BR";
     }
 
-    get type() {
-        return "newline";
+    get type(): IBasePart["type"] {
+        return Type.Newline;
     }
 
     // this makes the cursor skip this part when it is inserted
@@ -283,8 +341,8 @@ class RoomPillPart extends PillPart {
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
-    get type() {
-        return "room-pill";
+    get type(): IPillPart["type"] {
+        return Type.RoomPill;
     }
 
     get className() {
@@ -293,8 +351,8 @@ class RoomPillPart extends PillPart {
 }
 
 class AtRoomPillPart extends RoomPillPart {
-    get type() {
-        return "at-room-pill";
+    get type(): IPillPart["type"] {
+        return Type.AtRoomPill;
     }
 }
 
@@ -321,28 +379,29 @@ class UserPillPart extends PillPart {
         this._setAvatarVars(node, avatarUrl, initialLetter);
     }
 
-    get type() {
-        return "user-pill";
+    get type(): IPillPart["type"] {
+        return Type.UserPill;
     }
 
     get className() {
         return "mx_UserPill mx_Pill";
     }
 
-    serialize() {
+    serialize(): ISerializedPillPart {
         return {
-            ...super.serialize(),
+            type: this.type,
+            text: this.text,
             resourceId: this.resourceId,
         };
     }
 }
 
-class PillCandidatePart extends PlainPart {
+class PillCandidatePart extends PlainBasePart implements IPillCandidatePart {
     constructor(text: string, private autoCompleteCreator: IAutocompleteCreator) {
         super(text);
     }
 
-    createAutoComplete(updateCallback): AutocompleteWrapperModel {
+    createAutoComplete(updateCallback: UpdateCallback): AutocompleteWrapperModel {
         return this.autoCompleteCreator.create(updateCallback);
     }
 
@@ -362,8 +421,8 @@ class PillCandidatePart extends PlainPart {
         return true;
     }
 
-    get type() {
-        return "pill-candidate";
+    get type(): IPillCandidatePart["type"] {
+        return Type.PillCandidate;
     }
 }
 
@@ -399,7 +458,7 @@ export class PartCreator {
         this.autoCompleteCreator.create = autoCompleteCreator(this);
     }
 
-    createPartForInput(input: string, partIndex: number, inputType?: string): BasePart {
+    createPartForInput(input: string, partIndex: number, inputType?: string): Part {
         switch (input[0]) {
             case "#":
             case "@":
@@ -416,20 +475,20 @@ export class PartCreator {
         return this.plain(text);
     }
 
-    deserializePart(part: ISerializedPart) {
+    deserializePart(part: SerializedPart): Part {
         switch (part.type) {
-            case "plain":
+            case Type.Plain:
                 return this.plain(part.text);
-            case "newline":
+            case Type.Newline:
                 return this.newline();
-            case "at-room-pill":
+            case Type.AtRoomPill:
                 return this.atRoomPill(part.text);
-            case "pill-candidate":
+            case Type.PillCandidate:
                 return this.pillCandidate(part.text);
-            case "room-pill":
+            case Type.RoomPill:
                 return this.roomPill(part.text);
-            case "user-pill":
-                return this.userPill(part.text, (part as PillPart).resourceId);
+            case Type.UserPill:
+                return this.userPill(part.text, part.resourceId);
         }
     }
 
@@ -491,7 +550,7 @@ export class CommandPartCreator extends PartCreator {
         return new CommandPart(text, this.autoCompleteCreator);
     }
 
-    deserializePart(part: BasePart) {
+    deserializePart(part: Part): Part {
         if (part.type === "command") {
             return this.command(part.text);
         } else {
@@ -501,7 +560,7 @@ export class CommandPartCreator extends PartCreator {
 }
 
 class CommandPart extends PillCandidatePart {
-    get type() {
-        return "command";
+    get type(): IPillCandidatePart["type"] {
+        return Type.Command;
     }
 }

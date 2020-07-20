@@ -17,13 +17,13 @@ limitations under the License.
 
 import {KeyboardEvent} from "react";
 
-import {BasePart, CommandPartCreator, PartCreator} from "./parts";
+import {Part, CommandPartCreator, PartCreator} from "./parts";
 import DocumentPosition from "./position";
 import {ICompletion} from "../autocomplete/Autocompleter";
 import Autocomplete from "../components/views/rooms/Autocomplete";
 
 export interface ICallback {
-    replaceParts?: BasePart[];
+    replaceParts?: Part[];
     close?: boolean;
 }
 
@@ -32,7 +32,7 @@ export type GetAutocompleterComponent = () => Autocomplete;
 export type UpdateQuery = (test: string) => Promise<void>;
 
 export default class AutocompleteWrapperModel {
-    private queryPart: BasePart;
+    private queryPart: Part;
     private partIndex: number;
 
     constructor(
@@ -89,7 +89,7 @@ export default class AutocompleteWrapperModel {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
-    onPartUpdate(part: BasePart, pos: DocumentPosition) {
+    onPartUpdate(part: Part, pos: DocumentPosition) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this.queryPart = part;

@@ -15,16 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {BasePart} from "./parts";
+import {Part} from "./parts";
 import EditorModel from "./model";
-import {instanceOf} from "prop-types";
 
-export function needsCaretNodeBefore(part: BasePart, prevPart: BasePart) {
+export function needsCaretNodeBefore(part: Part, prevPart: Part) {
     const isFirst = !prevPart || prevPart.type === "newline";
     return !part.canEdit && (isFirst || !prevPart.canEdit);
 }
 
-export function needsCaretNodeAfter(part: BasePart, isLastOfLine: boolean) {
+export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean) {
     return !part.canEdit && isLastOfLine;
 }
 
@@ -83,7 +82,7 @@ function removeChildren(parent: HTMLElement) {
     }
 }
 
-function reconcileLine(lineContainer: ChildNode, parts: BasePart[]) {
+function reconcileLine(lineContainer: ChildNode, parts: Part[]) {
     let currentNode;
     let prevPart;
     const lastPart = parts[parts.length - 1];

@@ -16,12 +16,11 @@ limitations under the License.
 
 import EditorModel from "./model";
 import {IDiff} from "./diff";
-import {ISerializedPart} from "./parts";
-import Range from "./range";
+import {SerializedPart} from "./parts";
 import {Caret} from "./caret";
 
 interface IHistory {
-    parts: ISerializedPart[];
+    parts: SerializedPart[];
     caret: Caret;
 }
 

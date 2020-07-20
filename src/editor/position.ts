@@ -16,15 +16,15 @@ limitations under the License.
 
 import DocumentOffset from "./offset";
 import EditorModel from "./model";
-import {BasePart} from "./parts";
+import {Part} from "./parts";
 
 export interface IPosition {
     index: number;
     offset: number;
 }
 
-type Callback = (part: BasePart, startIdx: number, endIdx: number) => void;
-type Predicate = (index: number, offset: number, part: BasePart) => boolean;
+type Callback = (part: Part, startIdx: number, endIdx: number) => void;
+type Predicate = (index: number, offset: number, part: Part) => boolean;
 
 export default class DocumentPosition implements IPosition {
     constructor(public readonly index: number, public readonly offset: number) {

@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import Range from "./range";
-import {BasePart} from "./parts";
+import {Part} from "./parts";
 
 /**
  * Some common queries and transformations on the editor model
  */
 
-export function replaceRangeAndExpandSelection(range: Range, newParts: BasePart[]) {
+export function replaceRangeAndExpandSelection(range: Range, newParts: Part[]) {
     const {model} = range;
     model.transform(() => {
         const oldLen = range.length;
@@ -32,7 +32,7 @@ export function replaceRangeAndExpandSelection(range: Range, newParts: BasePart[
     });
 }
 
-export function replaceRangeAndMoveCaret(range: Range, newParts: BasePart[]) {
+export function replaceRangeAndMoveCaret(range: Range, newParts: Part[]) {
     const {model} = range;
     model.transform(() => {
         const oldLen = range.length;

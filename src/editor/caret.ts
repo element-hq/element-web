@@ -19,7 +19,7 @@ import {needsCaretNodeBefore, needsCaretNodeAfter} from "./render";
 import Range from "./range";
 import EditorModel from "./model";
 import DocumentPosition, {IPosition} from "./position";
-import {BasePart} from "./parts";
+import {Part} from "./parts";
 
 export type Caret = Range | DocumentPosition;
 
@@ -104,7 +104,7 @@ export function getLineAndNodePosition(model: EditorModel, caretPosition: IPosit
     return {lineIndex, nodeIndex, offset};
 }
 
-function findNodeInLineForPart(parts: BasePart[], partIndex: number) {
+function findNodeInLineForPart(parts: Part[], partIndex: number) {
     let lineIndex = 0;
     let nodeIndex = -1;
 
@@ -140,7 +140,7 @@ function findNodeInLineForPart(parts: BasePart[], partIndex: number) {
     return {lineIndex, nodeIndex};
 }
 
-function moveOutOfUneditablePart(parts: BasePart[], partIndex: number, nodeIndex: number, offset: number) {
+function moveOutOfUneditablePart(parts: Part[], partIndex: number, nodeIndex: number, offset: number) {
     // move caret before or after uneditable part
     const part = parts[partIndex];
     if (part && !part.canEdit) {
