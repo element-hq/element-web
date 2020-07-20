@@ -37,7 +37,7 @@ export default class TextWithTooltip extends React.Component {
         this.setState({hover: true});
     };
 
-    onMouseOut = () => {
+    onMouseLeave = () => {
         this.setState({hover: false});
     };
 
@@ -45,7 +45,7 @@ export default class TextWithTooltip extends React.Component {
         const Tooltip = sdk.getComponent("elements.Tooltip");
 
         return (
-            <span onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} className={this.props.class}>
+            <span onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className={this.props.class}>
                 {this.props.children}
                 <Tooltip
                     label={this.props.tooltip}

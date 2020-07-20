@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,11 +18,13 @@ limitations under the License.
 import React from 'react';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 
 export default createReactClass({
     displayName: 'CustomServerDialog',
 
     render: function() {
+        const brand = SdkConfig.get().brand;
         return (
             <div className="mx_ErrorDialog">
                 <div className="mx_Dialog_title">
@@ -32,8 +34,9 @@ export default createReactClass({
                     <p>{_t(
                         "You can use the custom server options to sign into other " +
                         "Matrix servers by specifying a different homeserver URL. This " +
-                        "allows you to use this app with an existing Matrix account on a " +
+                        "allows you to use %(brand)s with an existing Matrix account on a " +
                         "different homeserver.",
+                        { brand },
                     )}</p>
                 </div>
                 <div className="mx_Dialog_buttons">

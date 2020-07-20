@@ -46,11 +46,6 @@ export enum Action {
     ViewRoomDirectory = "view_room_directory",
 
     /**
-     * Sets the current tooltip. Should be use with ViewTooltipPayload.
-     */
-    ViewTooltip = "view_tooltip",
-
-    /**
      * Forces the theme to reload. No additional payload information required.
      */
     RecheckTheme = "recheck_theme",

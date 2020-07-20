@@ -58,18 +58,6 @@ export default createReactClass({
             imgUrls.push(require("../../../../res/img/icon-email-user.svg"));
         }
 
-        // Removing networks for now as they're not really supported
-        /*
-        var network;
-        if (this.props.networkUrl !== "") {
-            network = (
-                <div className="mx_AddressTile_network">
-                    <BaseAvatar width={25} height={25} name={this.props.networkName} title="Riot" url={this.props.networkUrl} />
-                </div>
-            );
-        }
-        */
-
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 

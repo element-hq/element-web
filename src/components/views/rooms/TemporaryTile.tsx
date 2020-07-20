@@ -16,7 +16,11 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
+import {
+    RovingAccessibleButton,
+    RovingAccessibleTooltipButton,
+    RovingTabIndexWrapper
+} from "../../../accessibility/RovingTabIndex";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
@@ -34,6 +38,7 @@ interface IState {
     hover: boolean;
 }
 
+// TODO: Remove with community invites in the room list: https://github.com/vector-im/riot-web/issues/14456
 export default class TemporaryTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -54,10 +59,10 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         // XXX: We copy classes because it's easier
         const classes = classNames({
-            'mx_RoomTile2': true,
+            'mx_RoomTile': true,
             'mx_TemporaryTile': true,
-            'mx_RoomTile2_selected': this.props.isSelected,
-            'mx_RoomTile2_minimized': this.props.isMinimized,
+            'mx_RoomTile_selected': this.props.isSelected,
+            'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
         const badge = (
@@ -72,12 +77,12 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         const nameClasses = classNames({
-            "mx_RoomTile2_name": true,
-            "mx_RoomTile2_nameHasUnreadEvents": this.props.notificationState.isUnread,
+            "mx_RoomTile_name": true,
+            "mx_RoomTile_nameHasUnreadEvents": this.props.notificationState.isUnread,
         });
 
         let nameContainer = (
-            <div className="mx_RoomTile2_nameContainer">
+            <div className="mx_RoomTile_nameContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
                     {name}
                 </div>
@@ -85,30 +90,29 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         );
         if (this.props.isMinimized) nameContainer = null;
 
+        let Button = RovingAccessibleButton;
+        if (this.props.isMinimized) {
+            Button = RovingAccessibleTooltipButton;
+        }
+
         return (
             <React.Fragment>
-                <RovingTabIndexWrapper>
-                    {({onFocus, isActive, ref}) =>
-                        <AccessibleButton
-                            onFocus={onFocus}
-                            tabIndex={isActive ? 0 : -1}
-                            inputRef={ref}
-                            className={classes}
-                            onMouseEnter={this.onTileMouseEnter}
-                            onMouseLeave={this.onTileMouseLeave}
-                            onClick={this.props.onClick}
-                            role="treeitem"
-                        >
-                            <div className="mx_RoomTile2_avatarContainer">
-                                {this.props.avatar}
-                            </div>
-                            {nameContainer}
-                            <div className="mx_RoomTile2_badgeContainer">
-                                {badge}
-                            </div>
-                        </AccessibleButton>
-                    }
-                </RovingTabIndexWrapper>
+                <Button
+                    className={classes}
+                    onMouseEnter={this.onTileMouseEnter}
+                    onMouseLeave={this.onTileMouseLeave}
+                    onClick={this.props.onClick}
+                    role="treeitem"
+                    title={this.props.isMinimized ? name : undefined}
+                >
+                    <div className="mx_RoomTile_avatarContainer">
+                        {this.props.avatar}
+                    </div>
+                    {nameContainer}
+                    <div className="mx_RoomTile_badgeContainer">
+                        {badge}
+                    </div>
+                </Button>
             </React.Fragment>
         );
     }

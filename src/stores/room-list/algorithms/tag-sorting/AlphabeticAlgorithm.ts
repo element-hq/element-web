@@ -17,8 +17,6 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { TagID } from "../../models";
 import { IAlgorithm } from "./IAlgorithm";
-import { MatrixClientPeg } from "../../../../MatrixClientPeg";
-import * as Unread from "../../../../Unread";
 
 /**
  * Sorts rooms according to the browser's determination of alphabetic.

@@ -2,7 +2,6 @@
 Copyright 2019 New Vector Ltd
 Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -18,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
+import SdkConfig from "../../../../../SdkConfig";
 import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
@@ -89,7 +89,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
         // show the right values for things.
 
-        const themeChoice: string = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
+        const themeChoice: string = SettingsStore.getValue("theme");
         const systemThemeExplicit: boolean = SettingsStore.getValueAt(
             SettingLevel.DEVICE, "use_system_theme", null, false, true);
         const themeExplicit: string = SettingsStore.getValueAt(
@@ -309,7 +309,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             <div className="mx_AppearanceUserSettingsTab_fontSlider">
                 <div className="mx_AppearanceUserSettingsTab_fontSlider_smallText">Aa</div>
                 <Slider
-                    values={[13, 15, 16, 18, 20]}
+                    values={[13, 14, 15, 16, 18]}
                     value={parseInt(this.state.fontSize, 10)}
                     onSelectionChange={this.onFontSizeChanged}
                     displayFunc={_ => ""}
@@ -385,6 +385,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     };
 
     private renderAdvancedSection() {
+        const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"
             onClick={() => this.setState({showAdvanced: !this.state.showAdvanced})}
@@ -395,6 +396,10 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         let advanced: React.ReactNode;
 
         if (this.state.showAdvanced) {
+            const tooltipContent = _t(
+                "Set the name of a font installed on your system & %(brand)s will attempt to use it.",
+                { brand },
+            );
             advanced = <>
                 <SettingsFlag
                     name="useCompactLayout"
@@ -424,7 +429,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
 
                         SettingsStore.setValue("systemFont", null, SettingLevel.DEVICE, value.target.value);
                     }}
-                    tooltipContent="Set the name of a font installed on your system & Riot will attempt to use it."
+                    tooltipContent={tooltipContent}
                     forceTooltipVisible={true}
                     disabled={!this.state.useSystemFont}
                     value={this.state.systemFont}
@@ -438,14 +443,16 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     }
 
     render() {
+        const brand = SdkConfig.get().brand;
+
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Customise your appearance")}</div>
                 <div className="mx_SettingsTab_SubHeading">
-                    {_t("Appearance Settings only affect this Riot session.")}
+                    {_t("Appearance Settings only affect this %(brand)s session.", { brand })}
                 </div>
                 {this.renderThemeSection()}
-                {SettingsStore.isFeatureEnabled("feature_font_scaling") ? this.renderFontSection() : null}
+                {this.renderFontSection()}
                 {this.renderAdvancedSection()}
             </div>
         );

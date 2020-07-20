@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 .mx_TagTileContextMenu_item {
-    padding-top: 8px;
+    padding: 8px;
     padding-right: 20px;
-    padding-bottom: 8px;
     cursor: pointer;
     white-space: nowrap;
     display: flex;
@@ -25,15 +24,22 @@ limitations under the License.
     line-height: $font-16px;
 }
 
-.mx_TagTileContextMenu_item object {
-    pointer-events: none;
+.mx_TagTileContextMenu_item::before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    margin-right: 8px;
 }
 
+.mx_TagTileContextMenu_viewCommunity::before {
+    mask-image: url('$(res)/img/element-icons/view-community.svg');
+}
 
-.mx_TagTileContextMenu_item_icon {
-    padding-right: 8px;
-    padding-left: 4px;
-    display: inline-block;
+.mx_TagTileContextMenu_hideCommunity::before {
+    mask-image: url('$(res)/img/element-icons/hide.svg');
 }
 
 .mx_TagTileContextMenu_separator {

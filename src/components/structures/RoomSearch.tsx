@@ -25,20 +25,11 @@ import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 
-// TODO: Remove banner on launch: https://github.com/vector-im/riot-web/issues/14231
-
-/*******************************************************************
- *   CAUTION                                                       *
- *******************************************************************
- * This is a work in progress implementation and isn't complete or *
- * even useful as a component. Please avoid using it until this    *
- * warning disappears.                                             *
- *******************************************************************/
-
 interface IProps {
     onQueryUpdate: (newQuery: string) => void;
     isMinimized: boolean;
-    onVerticalArrow(ev: React.KeyboardEvent);
+    onVerticalArrow(ev: React.KeyboardEvent): void;
+    onEnter(ev: React.KeyboardEvent): boolean;
 }
 
 interface IState {
@@ -115,6 +106,14 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             defaultDispatcher.fire(Action.FocusComposer);
         } else if (ev.key === Key.ARROW_UP || ev.key === Key.ARROW_DOWN) {
             this.props.onVerticalArrow(ev);
+        } else if (ev.key === Key.ENTER) {
+            const shouldClear = this.props.onEnter(ev);
+            if (shouldClear) {
+                // wrap in set immediate to delay it so that we don't clear the filter & then change room
+                setImmediate(() => {
+                    this.clearInput();
+                });
+            }
         }
     };
 

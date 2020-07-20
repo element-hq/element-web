@@ -1,5 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,9 +19,12 @@ import React from 'react';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 
 export default (props) => {
+    const brand = SdkConfig.get().brand;
+
     const _onLogoutClicked = () => {
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
         Modal.createTrackedDialog('Logout e2e db too new', '', QuestionDialog, {
@@ -28,7 +32,8 @@ export default (props) => {
             description: _t(
                 "To avoid losing your chat history, you must export your room keys " +
                 "before logging out. You will need to go back to the newer version of " +
-                "Riot to do this",
+                "%(brand)s to do this",
+                { brand },
             ),
             button: _t("Sign out"),
             focus: false,
@@ -42,9 +47,12 @@ export default (props) => {
     };
 
     const description =
-        _t("You've previously used a newer version of Riot with this session. " +
+        _t(
+            "You've previously used a newer version of %(brand)s with this session. " +
             "To use this version again with end to end encryption, you will " +
-            "need to sign out and back in again.");
+            "need to sign out and back in again.",
+            { brand },
+        );
 
     const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
     const DialogButtons = sdk.getComponent('views.elements.DialogButtons');

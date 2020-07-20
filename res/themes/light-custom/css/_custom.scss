@@ -25,7 +25,6 @@ $button-link-fg-color: var(--accent-color);
 $button-primary-bg-color: var(--accent-color);
 $input-valid-border-color: var(--accent-color);
 $reaction-row-button-selected-border-color: var(--accent-color);
-$roomsublist-chevron-color: var(--accent-color);
 $tab-label-active-bg-color: var(--accent-color);
 $togglesw-on-color: var(--accent-color);
 $username-variant3-color: var(--accent-color);
@@ -40,10 +39,10 @@ $menu-bg-color: var(--timeline-background-color);
 $avatar-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
 $primary-bg-color: var(--timeline-background-color);
-$roomtile-focused-bg-color: var(--timeline-background-color);
 $togglesw-ball-color: var(--timeline-background-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .5
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .59
+$roomheader-bg-color: var(--timeline-background-color);
 //
 // --roomlist-highlights-color
 $roomtile-selected-bg-color: var(--roomlist-highlights-color);
@@ -53,6 +52,7 @@ $interactive-tooltip-bg-color: var(--sidebar-color);
 $tagpanel-bg-color: var(--sidebar-color);
 $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
+$roomlist-button-bg-color: var(--sidebar-color-15pct);
 //
 // --roomlist-background-color
 $header-panel-bg-color: var(--roomlist-background-color);
@@ -62,11 +62,10 @@ $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-backgroun
 $dark-panel-bg-color: var(--roomlist-background-color);
 $input-lighter-bg-color: var(--roomlist-background-color);
 $plinth-bg-color: var(--roomlist-background-color);
-$roomsublist-background: var(--roomlist-background-color);
 $secondary-accent-color: var(--roomlist-background-color);
 $selected-color: var(--roomlist-background-color);
 $widget-menu-bar-bg-color: var(--roomlist-background-color);
-$roomtile-badge-fg-color: var(--roomlist-background-color);
+$roomlist-bg-color: var(--roomlist-background-color);
 //
 // --timeline-text-color
 $message-action-bar-fg-color: var(--timeline-text-color);
@@ -83,19 +82,17 @@ $tab-label-fg-color: var(--timeline-text-color);
 // was #4e5054
 $authpage-lang-color: var(--timeline-text-color);
 $roomheader-color: var(--timeline-text-color);
-//
-// --roomlist-text-color
-$roomtile-notified-color: var(--roomlist-text-color);
-$roomtile-selected-color: var(--roomlist-text-color);
-//
 // --roomlist-text-secondary-color
-$roomsublist-label-fg-color: var(--roomlist-text-secondary-color);
-$roomtile-name-color: var(--roomlist-text-secondary-color);
+$roomtile-preview-color: var(--roomlist-text-secondary-color);
+$roomlist-header-color: var(--roomlist-text-secondary-color);
+$roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
+
 //
 // --roomlist-separator-color
 $input-darker-bg-color: var(--roomlist-separator-color);
 $panel-divider-color: var(--roomlist-separator-color);// originally #dee1f3, but close enough
 $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, but close enough
+$roomsublist-divider-color: var(--roomlist-separator-color);
 //
 // --timeline-text-secondary-color
 $authpage-secondary-color: var(--timeline-text-secondary-color);
@@ -126,7 +123,8 @@ $notice-primary-color: var(--warning-color);
 $pinned-unread-color: var(--warning-color);
 $warning-color: var(--warning-color);
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5
-
+//
+// --username colors
 $username-variant1-color: var(--username-colors_1, $username-variant1-color);
 $username-variant2-color: var(--username-colors_2, $username-variant2-color);
 $username-variant3-color: var(--username-colors_3, $username-variant3-color);
@@ -135,6 +133,10 @@ $username-variant5-color: var(--username-colors_5, $username-variant5-color);
 $username-variant6-color: var(--username-colors_6, $username-variant6-color);
 $username-variant7-color: var(--username-colors_7, $username-variant7-color);
 $username-variant8-color: var(--username-colors_8, $username-variant8-color);
-
+//
+// --timeline-highlights-color
 $event-selected-color: var(--timeline-highlights-color);
 $event-highlight-bg-color: var(--timeline-highlights-color);
+//
+// redirect some variables away from their hardcoded values in the light theme
+$settings-grey-fg-color: $primary-fg-color;

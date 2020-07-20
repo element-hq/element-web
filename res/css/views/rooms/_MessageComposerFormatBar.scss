@@ -75,23 +75,23 @@ limitations under the License.
     }
 
     .mx_MessageComposerFormatBar_buttonIconBold::after {
-        mask-image: url('$(res)/img/format/bold.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/bold.svg');
     }
 
     .mx_MessageComposerFormatBar_buttonIconItalic::after {
-        mask-image: url('$(res)/img/format/italics.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/italic.svg');
     }
 
     .mx_MessageComposerFormatBar_buttonIconStrikethrough::after {
-        mask-image: url('$(res)/img/format/strikethrough.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/strikethrough.svg');
     }
 
     .mx_MessageComposerFormatBar_buttonIconQuote::after {
-        mask-image: url('$(res)/img/format/quote.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/quote.svg');
     }
 
     .mx_MessageComposerFormatBar_buttonIconCode::after {
-        mask-image: url('$(res)/img/format/code.svg');
+        mask-image: url('$(res)/img/element-icons/room/format-bar/code.svg');
     }
 }
 

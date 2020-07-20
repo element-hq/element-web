@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 
 import { _t } from "../languageHandler";
+import SdkConfig from "../SdkConfig";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import QuestionDialog from "../components/views/dialogs/QuestionDialog";
@@ -76,11 +77,12 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
         acceptLabel = _t("Restart");
     }
 
+    const brand = SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Upgrade your Riot"),
+        title: _t("Upgrade your %(brand)s", { brand }),
         props: {
-            description: _t("A new version of Riot is available!"),
+            description: _t("A new version of %(brand)s is available!", { brand }),
             acceptLabel,
             onAccept,
             rejectLabel: _t("Later"),

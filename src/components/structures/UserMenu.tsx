@@ -170,6 +170,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.stopPropagation();
 
         // TODO: Archived room view: https://github.com/vector-im/riot-web/issues/14038
+        // Note: You'll need to uncomment the button too.
         console.log("TODO: Show archived rooms");
     };
 
@@ -256,7 +257,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                             title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
                         >
                             <img
-                                src={require("../../../res/img/feather-customised/sun.svg")}
+                                src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
                                 alt={_t("Switch theme")}
                                 width={16}
                             />
@@ -305,6 +306,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
+        const {body} = document;
+        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
+        body.style.setProperty("--avatar-url", `url('${avatarUrl}')`);
 
         let name = <span className="mx_UserMenu_userName">{OwnProfileStore.instance.displayName}</span>;
         let buttons = (

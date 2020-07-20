@@ -2,6 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2017 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +17,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from './MatrixClientPeg';
+import { MatrixClientPeg } from './MatrixClientPeg';
+import SdkConfig from './SdkConfig';
 import PlatformPeg from './PlatformPeg';
 import * as TextForEvent from './TextForEvent';
 import Analytics from './Analytics';
@@ -226,10 +228,11 @@ const Notifier = {
                 if (result !== 'granted') {
                     // The permission request was dismissed or denied
                     // TODO: Support alternative branding in messaging
+                    const brand = SdkConfig.get().brand;
                     const description = result === 'denied'
-                        ? _t('Riot does not have permission to send you notifications - ' +
-                            'please check your browser settings')
-                        : _t('Riot was not given permission to send notifications - please try again');
+                        ? _t('%(brand)s does not have permission to send you notifications - ' +
+                            'please check your browser settings', { brand })
+                        : _t('%(brand)s was not given permission to send notifications - please try again', { brand });
                     const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
                     Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
                         title: _t('Unable to enable Notifications'),

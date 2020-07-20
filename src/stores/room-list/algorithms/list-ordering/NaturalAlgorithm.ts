@@ -55,7 +55,7 @@ export class NaturalAlgorithm extends OrderingAlgorithm {
                 }
             }
 
-            // TODO: Optimize this to avoid useless operations: https://github.com/vector-im/riot-web/issues/14035
+            // TODO: Optimize this to avoid useless operations: https://github.com/vector-im/riot-web/issues/14457
             // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
             this.cachedOrderedRooms = await sortRoomsWithAlgorithm(this.cachedOrderedRooms, this.tagId, this.sortingAlgorithm);
 

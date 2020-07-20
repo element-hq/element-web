@@ -1,14 +1,14 @@
 // unified palette
 // try to use these colors when possible
-$bg-color: #181b21;
-$base-color: #15171b;
-$base-text-color: #edf3ff;
-$header-panel-bg-color: #22262e;
+$bg-color: #15191E;
+$base-color: $bg-color;
+$base-text-color: #ffffff;
+$header-panel-bg-color: #20252B;
 $header-panel-border-color: #000000;
-$header-panel-text-primary-color: #a1b2d1;
+$header-panel-text-primary-color: #B9BEC6;
 $header-panel-text-secondary-color: #c8c8cd;
-$text-primary-color: #edf3ff;
-$text-secondary-color: #a1b2d1;
+$text-primary-color: #ffffff;
+$text-secondary-color: #B9BEC6;
 $search-bg-color: #181b21;
 $search-placeholder-color: #61708b;
 $room-highlight-color: #343a46;
@@ -35,7 +35,8 @@ $info-plinth-fg-color: #888;
 
 $preview-bar-bg-color: $header-panel-bg-color;
 
-$tagpanel-bg-color: $base-color;
+$tagpanel-bg-color: rgba(38, 39, 43, 0.82);
+$inverted-bg-color: $base-color;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -44,10 +45,10 @@ $selected-color: $room-highlight-color;
 $event-selected-color: $header-panel-bg-color;
 
 // used for the hairline dividers in RoomView
-$primary-hairline-color: $header-panel-border-color;
+$primary-hairline-color: transparent;
 
 // used for the border of input text fields
-$input-border-color: #e7e7e7;
+$input-border-color: rgba(231, 231, 231, 0.2);
 $input-darker-bg-color: $search-bg-color;
 $input-darker-fg-color: $search-placeholder-color;
 $input-lighter-bg-color: #f2f5f8;
@@ -91,7 +92,8 @@ $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
 $roomheader-color: $text-primary-color;
-$roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
+$roomheader-bg-color: $bg-color;
+$roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
 $roomheader-button-color: $header-panel-text-primary-color;
@@ -102,34 +104,26 @@ $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 
 $header-divider-color: $header-panel-text-primary-color;
+$composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // ********************
-
-// V2 Room List
-// TODO: Remove the 2 from all of these when the new list takes over
 
 $theme-button-bg-color: #e3e8f0;
 
-$roomlist2-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
-$roomlist2-bg-color: $header-panel-bg-color;
+$roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-bg-color: rgba(33, 38, 44, 0.90);
+$roomlist-header-color: #8E99A4;
+$roomsublist-divider-color: $primary-fg-color;
 
-$roomsublist2-divider-color: $primary-fg-color;
-
-$roomtile2-preview-color: #9e9e9e;
-$roomtile2-default-badge-bg-color: #61708b;
-$roomtile2-selected-bg-color: #1A1D23;
+$roomtile-preview-color: #A9B2BC;
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: rgba(141, 151, 165, 0.2);
 
 // ********************
 
-$roomtile-name-color: $header-panel-text-primary-color;
-$roomtile-selected-color: $text-primary-color;
-$roomtile-notified-color: $text-primary-color;
-$roomtile-selected-bg-color: $room-highlight-color;
-$roomtile-focused-bg-color: $room-highlight-color;
+$notice-secondary-color: $roomlist-header-color;
 
-$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
-
-$panel-divider-color: $header-panel-border-color;
+$panel-divider-color: transparent;
 
 $widget-menu-bar-bg-color: $header-panel-bg-color;
 
@@ -200,6 +194,12 @@ $user-tile-hover-bg-color: $header-panel-bg-color;
 
 // Appearance tab colors
 $appearance-tab-border-color: $room-highlight-color;
+
+// blur amounts for left left panel (only for element theme, used in _mods.scss)
+$roomlist-background-blur-amount: 60px;
+$tagpanel-background-blur-amount: 30px;
+
+$composer-shadow-color: rgba(0, 0, 0, 0.28);
 
 // ***** Mixins! *****
 

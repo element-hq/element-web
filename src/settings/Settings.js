@@ -103,12 +103,6 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_font_scaling": {
-        isFeature: true,
-        displayName: _td("Font scaling"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_pinning": {
         isFeature: true,
         displayName: _td("Message Pinning"),
@@ -146,17 +140,16 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_new_room_list": {
-        isFeature: true,
-        displayName: _td("Use the improved room list (will refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "advancedRoomListLogging": {
+        // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
+        displayName: _td("Enable advanced debugging for the room list"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
     "mjolnirRooms": {
@@ -356,6 +349,12 @@ export const SETTINGS = {
         default: "en",
     },
     "breadcrumb_rooms": {
+        // not really a setting
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "recent_emoji": {
+        // not really a setting
         supportedLevels: ['account'],
         default: [],
     },
