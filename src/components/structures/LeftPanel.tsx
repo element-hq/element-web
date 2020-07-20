@@ -324,6 +324,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <IndicatorScrollbar
                     className="mx_LeftPanel_breadcrumbsContainer mx_AutoHideScrollbar"
                     verticalScrollsHorizontally={true}
+                    // Firefox sometimes makes this element focusable due to
+                    // overflow:scroll;, so force it out of tab order.
+                    tabIndex={-1}
                 >
                     <RoomBreadcrumbs />
                 </IndicatorScrollbar>
