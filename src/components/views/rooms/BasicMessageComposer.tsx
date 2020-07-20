@@ -16,11 +16,13 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {createRef, ClipboardEvent} from 'react';
+import {Room} from 'matrix-js-sdk/src/models/room';
+import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
-import {setSelection} from '../../../editor/caret';
+import {Caret, setSelection} from '../../../editor/caret';
 import {
     formatRangeAsQuote,
     formatRangeAsCode,
@@ -29,17 +31,21 @@ import {
 } from '../../../editor/operations';
 import {getCaretOffsetAndText, getRangeForSelection} from '../../../editor/dom';
 import Autocomplete, {generateCompletionDomId} from '../rooms/Autocomplete';
-import {autoCompleteCreator} from '../../../editor/parts';
+import {getAutoCompleteCreator} from '../../../editor/parts';
 import {parsePlainTextMessage} from '../../../editor/deserialize';
 import {renderModel} from '../../../editor/render';
-import {Room} from 'matrix-js-sdk';
 import TypingStore from "../../../stores/TypingStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import * as sdk from '../../../index';
 import {Key} from "../../../Keyboard";
 import {EMOTICON_TO_EMOJI} from "../../../emoji";
 import {CommandCategories, CommandMap, parseCommandString} from "../../../SlashCommands";
+import Range from "../../../editor/range";
+import MessageComposerFormatBar from "./MessageComposerFormatBar";
+import DocumentOffset from "../../../editor/offset";
+import {IDiff} from "../../../editor/diff";
+import AutocompleteWrapperModel from "../../../editor/autocomplete";
+import DocumentPosition from "../../../editor/position";
+import {ICompletion} from "../../../autocomplete/Autocompleter";
 
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s$');
 
@@ -49,7 +55,7 @@ function ctrlShortcutLabel(key) {
     return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
 }
 
-function cloneSelection(selection) {
+function cloneSelection(selection: Selection): Partial<Selection> {
     return {
         anchorNode: selection.anchorNode,
         anchorOffset: selection.anchorOffset,
@@ -61,7 +67,7 @@ function cloneSelection(selection) {
     };
 }
 
-function selectionEquals(a: Selection, b: Selection): boolean {
+function selectionEquals(a: Partial<Selection>, b: Selection): boolean {
     return a.anchorNode === b.anchorNode &&
         a.anchorOffset === b.anchorOffset &&
         a.focusNode === b.focusNode &&
@@ -71,45 +77,75 @@ function selectionEquals(a: Selection, b: Selection): boolean {
         a.type === b.type;
 }
 
-export default class BasicMessageEditor extends React.Component {
-    static propTypes = {
-        onChange: PropTypes.func,
-        onPaste: PropTypes.func, // returns true if handled and should skip internal onPaste handler
-        model: PropTypes.instanceOf(EditorModel).isRequired,
-        room: PropTypes.instanceOf(Room).isRequired,
-        placeholder: PropTypes.string,
-        label: PropTypes.string,    // the aria label
-        initialCaret: PropTypes.object, // See DocumentPosition in editor/model.js
-    };
+enum Formatting {
+    Bold = "bold",
+    Italics = "italics",
+    Strikethrough = "strikethrough",
+    Code = "code",
+    Quote = "quote",
+}
+
+interface IProps {
+    model: EditorModel;
+    room: Room;
+    placeholder?: string;
+    label?: string;
+    initialCaret?: DocumentOffset;
+
+    onChange();
+    onPaste(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
+}
+
+interface IState {
+    showPillAvatar: boolean;
+    query?: string;
+    showVisualBell?: boolean;
+    autoComplete?: AutocompleteWrapperModel;
+    completionIndex?: number;
+}
+
+export default class BasicMessageEditor extends React.Component<IProps, IState> {
+    private editorRef = createRef<HTMLDivElement>();
+    private autocompleteRef = createRef<Autocomplete>();
+    private formatBarRef = createRef<typeof MessageComposerFormatBar>();
+
+    private modifiedFlag = false;
+    private isIMEComposing = false;
+    private hasTextSelected = false;
+
+    private _isCaretAtEnd: boolean;
+    private lastCaret: DocumentOffset;
+    private lastSelection: ReturnType<typeof cloneSelection>;
+
+    private readonly emoticonSettingHandle: string;
+    private readonly shouldShowPillAvatarSettingHandle: string;
+    private readonly historyManager = new HistoryManager();
 
     constructor(props) {
         super(props);
         this.state = {
-            autoComplete: null,
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
         };
-        this._editorRef = null;
-        this._autocompleteRef = null;
-        this._formatBarRef = null;
-        this._modifiedFlag = false;
-        this._isIMEComposing = false;
-        this._hasTextSelected = false;
-        this._emoticonSettingHandle = null;
-        this._shouldShowPillAvatarSettingHandle = null;
+
+        this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
+            this.configureEmoticonAutoReplace);
+        this.configureEmoticonAutoReplace();
+        this.shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting("Pill.shouldShowPillAvatar", null,
+            this.configureShouldShowPillAvatar);
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps: IProps) {
         if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {
-                this._showPlaceholder();
+                this.showPlaceholder();
             } else {
-                this._hidePlaceholder();
+                this.hidePlaceholder();
             }
         }
     }
 
-    _replaceEmoticon = (caretPosition, inputType, diff) => {
+    private replaceEmoticon = (caretPosition: DocumentPosition) => {
         const {model} = this.props;
         const range = model.startRange(caretPosition);
         // expand range max 8 characters backwards from caretPosition,
@@ -139,30 +175,30 @@ export default class BasicMessageEditor extends React.Component {
                 return range.replace([partCreator.plain(data.unicode + " ")]);
             }
         }
-    }
+    };
 
-    _updateEditorState = (selection, inputType, diff) => {
-        renderModel(this._editorRef, this.props.model);
+    private updateEditorState = (selection: Caret, inputType?: string, diff?: IDiff) => {
+        renderModel(this.editorRef.current, this.props.model);
         if (selection) { // set the caret/selection
             try {
-                setSelection(this._editorRef, this.props.model, selection);
+                setSelection(this.editorRef.current, this.props.model, selection);
             } catch (err) {
                 console.error(err);
             }
             // if caret selection is a range, take the end position
-            const position = selection.end || selection;
-            this._setLastCaretFromPosition(position);
+            const position = selection instanceof Range ? selection.end : selection;
+            this.setLastCaretFromPosition(position);
         }
         const {isEmpty} = this.props.model;
         if (this.props.placeholder) {
             if (isEmpty) {
-                this._showPlaceholder();
+                this.showPlaceholder();
             } else {
-                this._hidePlaceholder();
+                this.hidePlaceholder();
             }
         }
         if (isEmpty) {
-            this._formatBarRef.hide();
+            this.formatBarRef.current.hide();
         }
         this.setState({autoComplete: this.props.model.autoComplete});
         this.historyManager.tryPush(this.props.model, selection, inputType, diff);
@@ -180,26 +216,26 @@ export default class BasicMessageEditor extends React.Component {
         if (this.props.onChange) {
             this.props.onChange();
         }
+    };
+
+    private showPlaceholder() {
+        this.editorRef.current.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
+        this.editorRef.current.classList.add("mx_BasicMessageComposer_inputEmpty");
     }
 
-    _showPlaceholder() {
-        this._editorRef.style.setProperty("--placeholder", `'${this.props.placeholder}'`);
-        this._editorRef.classList.add("mx_BasicMessageComposer_inputEmpty");
+    private hidePlaceholder() {
+        this.editorRef.current.classList.remove("mx_BasicMessageComposer_inputEmpty");
+        this.editorRef.current.style.removeProperty("--placeholder");
     }
 
-    _hidePlaceholder() {
-        this._editorRef.classList.remove("mx_BasicMessageComposer_inputEmpty");
-        this._editorRef.style.removeProperty("--placeholder");
-    }
-
-    _onCompositionStart = (event) => {
-        this._isIMEComposing = true;
+    private onCompositionStart = () => {
+        this.isIMEComposing = true;
         // even if the model is empty, the composition text shouldn't be mixed with the placeholder
-        this._hidePlaceholder();
-    }
+        this.hidePlaceholder();
+    };
 
-    _onCompositionEnd = (event) => {
-        this._isIMEComposing = false;
+    private onCompositionEnd = () => {
+        this.isIMEComposing = false;
         // some browsers (Chrome) don't fire an input event after ending a composition,
         // so trigger a model update after the composition is done by calling the input handler.
 
@@ -213,48 +249,48 @@ export default class BasicMessageEditor extends React.Component {
         const isSafari = ua.includes('safari/') && !ua.includes('chrome/');
 
         if (isSafari) {
-            this._onInput({inputType: "insertCompositionText"});
+            this.onInput({inputType: "insertCompositionText"});
         } else {
             Promise.resolve().then(() => {
-                this._onInput({inputType: "insertCompositionText"});
+                this.onInput({inputType: "insertCompositionText"});
             });
         }
-    }
+    };
 
-    isComposing(event) {
+    isComposing(event: React.KeyboardEvent) {
         // checking the event.isComposing flag just in case any browser out there
         // emits events related to the composition after compositionend
         // has been fired
-        return !!(this._isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
+        return !!(this.isIMEComposing || (event.nativeEvent && event.nativeEvent.isComposing));
     }
 
-    _onCutCopy = (event, type) => {
+    private onCutCopy = (event: ClipboardEvent, type: string) => {
         const selection = document.getSelection();
         const text = selection.toString();
         if (text) {
             const {model} = this.props;
-            const range = getRangeForSelection(this._editorRef, model, selection);
+            const range = getRangeForSelection(this.editorRef.current, model, selection);
             const selectedParts = range.parts.map(p => p.serialize());
             event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
             event.clipboardData.setData("text/plain", text); // so plain copy/paste works
             if (type === "cut") {
                 // Remove the text, updating the model as appropriate
-                this._modifiedFlag = true;
+                this.modifiedFlag = true;
                 replaceRangeAndMoveCaret(range, []);
             }
             event.preventDefault();
         }
-    }
+    };
 
-    _onCopy = (event) => {
-        this._onCutCopy(event, "copy");
-    }
+    private onCopy = (event: ClipboardEvent) => {
+        this.onCutCopy(event, "copy");
+    };
 
-    _onCut = (event) => {
-        this._onCutCopy(event, "cut");
-    }
+    private onCut = (event: ClipboardEvent) => {
+        this.onCutCopy(event, "cut");
+    };
 
-    _onPaste = (event) => {
+    private onPaste = (event: ClipboardEvent<HTMLDivElement>) => {
         event.preventDefault(); // we always handle the paste ourselves
         if (this.props.onPaste && this.props.onPaste(event, this.props.model)) {
             // to prevent double handling, allow props.onPaste to skip internal onPaste
@@ -273,28 +309,28 @@ export default class BasicMessageEditor extends React.Component {
             const text = event.clipboardData.getData("text/plain");
             parts = parsePlainTextMessage(text, partCreator);
         }
-        this._modifiedFlag = true;
-        const range = getRangeForSelection(this._editorRef, model, document.getSelection());
+        this.modifiedFlag = true;
+        const range = getRangeForSelection(this.editorRef.current, model, document.getSelection());
         replaceRangeAndMoveCaret(range, parts);
-    }
+    };
 
-    _onInput = (event) => {
+    private onInput = (event: Partial<InputEvent>) => {
         // ignore any input while doing IME compositions
-        if (this._isIMEComposing) {
+        if (this.isIMEComposing) {
             return;
         }
-        this._modifiedFlag = true;
+        this.modifiedFlag = true;
         const sel = document.getSelection();
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
+        const {caret, text} = getCaretOffsetAndText(this.editorRef.current, sel);
         this.props.model.update(text, event.inputType, caret);
-    }
+    };
 
-    _insertText(textToInsert, inputType = "insertText") {
+    private insertText(textToInsert: string, inputType = "insertText") {
         const sel = document.getSelection();
-        const {caret, text} = getCaretOffsetAndText(this._editorRef, sel);
+        const {caret, text} = getCaretOffsetAndText(this.editorRef.current, sel);
         const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
         caret.offset += textToInsert.length;
-        this._modifiedFlag = true;
+        this.modifiedFlag = true;
         this.props.model.update(newText, inputType, caret);
     }
 
@@ -303,28 +339,28 @@ export default class BasicMessageEditor extends React.Component {
     // we don't need to. But if the user is navigating the caret without input
     // we need to recalculate it, to be able to know where to insert content after
     // losing focus
-    _setLastCaretFromPosition(position) {
+    private setLastCaretFromPosition(position: DocumentPosition) {
         const {model} = this.props;
         this._isCaretAtEnd = position.isAtEnd(model);
-        this._lastCaret = position.asOffset(model);
-        this._lastSelection = cloneSelection(document.getSelection());
+        this.lastCaret = position.asOffset(model);
+        this.lastSelection = cloneSelection(document.getSelection());
     }
 
-    _refreshLastCaretIfNeeded() {
+    private refreshLastCaretIfNeeded() {
         // XXX: needed when going up and down in editing messages ... not sure why yet
         // because the editors should stop doing this when when blurred ...
         // maybe it's on focus and the _editorRef isn't available yet or something.
-        if (!this._editorRef) {
+        if (!this.editorRef.current) {
             return;
         }
         const selection = document.getSelection();
-        if (!this._lastSelection || !selectionEquals(this._lastSelection, selection)) {
-            this._lastSelection = cloneSelection(selection);
-            const {caret, text} = getCaretOffsetAndText(this._editorRef, selection);
-            this._lastCaret = caret;
+        if (!this.lastSelection || !selectionEquals(this.lastSelection, selection)) {
+            this.lastSelection = cloneSelection(selection);
+            const {caret, text} = getCaretOffsetAndText(this.editorRef.current, selection);
+            this.lastCaret = caret;
             this._isCaretAtEnd = caret.offset === text.length;
         }
-        return this._lastCaret;
+        return this.lastCaret;
     }
 
     clearUndoHistory() {
@@ -332,11 +368,11 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     getCaret() {
-        return this._lastCaret;
+        return this.lastCaret;
     }
 
     isSelectionCollapsed() {
-        return !this._lastSelection || this._lastSelection.isCollapsed;
+        return !this.lastSelection || this.lastSelection.isCollapsed;
     }
 
     isCaretAtStart() {
@@ -347,51 +383,51 @@ export default class BasicMessageEditor extends React.Component {
         return this._isCaretAtEnd;
     }
 
-    _onBlur = () => {
-        document.removeEventListener("selectionchange", this._onSelectionChange);
-    }
+    private onBlur = () => {
+        document.removeEventListener("selectionchange", this.onSelectionChange);
+    };
 
-    _onFocus = () => {
-        document.addEventListener("selectionchange", this._onSelectionChange);
+    private onFocus = () => {
+        document.addEventListener("selectionchange", this.onSelectionChange);
         // force to recalculate
-        this._lastSelection = null;
-        this._refreshLastCaretIfNeeded();
-    }
+        this.lastSelection = null;
+        this.refreshLastCaretIfNeeded();
+    };
 
-    _onSelectionChange = () => {
+    private onSelectionChange = () => {
         const {isEmpty} = this.props.model;
 
-        this._refreshLastCaretIfNeeded();
+        this.refreshLastCaretIfNeeded();
         const selection = document.getSelection();
-        if (this._hasTextSelected && selection.isCollapsed) {
-            this._hasTextSelected = false;
-            if (this._formatBarRef) {
-                this._formatBarRef.hide();
+        if (this.hasTextSelected && selection.isCollapsed) {
+            this.hasTextSelected = false;
+            if (this.formatBarRef.current) {
+                this.formatBarRef.current.hide();
             }
         } else if (!selection.isCollapsed && !isEmpty) {
-            this._hasTextSelected = true;
-            if (this._formatBarRef) {
+            this.hasTextSelected = true;
+            if (this.formatBarRef.current) {
                 const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
-                this._formatBarRef.showAt(selectionRect);
+                this.formatBarRef.current.showAt(selectionRect);
             }
         }
-    }
+    };
 
-    _onKeyDown = (event) => {
+    private onKeyDown = (event: React.KeyboardEvent) => {
         const model = this.props.model;
         const modKey = IS_MAC ? event.metaKey : event.ctrlKey;
         let handled = false;
         // format bold
         if (modKey && event.key === Key.B) {
-            this._onFormatAction("bold");
+            this.onFormatAction(Formatting.Bold);
             handled = true;
         // format italics
         } else if (modKey && event.key === Key.I) {
-            this._onFormatAction("italics");
+            this.onFormatAction(Formatting.Italics);
             handled = true;
         // format quote
         } else if (modKey && event.key === Key.GREATER_THAN) {
-            this._onFormatAction("quote");
+            this.onFormatAction(Formatting.Quote);
             handled = true;
         // redo
         } else if ((!IS_MAC && modKey && event.key === Key.Y) ||
@@ -414,18 +450,18 @@ export default class BasicMessageEditor extends React.Component {
             handled = true;
         // insert newline on Shift+Enter
         } else if (event.key === Key.ENTER && (event.shiftKey || (IS_MAC && event.altKey))) {
-            this._insertText("\n");
+            this.insertText("\n");
             handled = true;
         // move selection to start of composer
         } else if (modKey && event.key === Key.HOME && !event.shiftKey) {
-            setSelection(this._editorRef, model, {
+            setSelection(this.editorRef.current, model, {
                 index: 0,
                 offset: 0,
             });
             handled = true;
         // move selection to end of composer
         } else if (modKey && event.key === Key.END && !event.shiftKey) {
-            setSelection(this._editorRef, model, {
+            setSelection(this.editorRef.current, model, {
                 index: model.parts.length - 1,
                 offset: model.parts[model.parts.length - 1].text.length,
             });
@@ -465,19 +501,19 @@ export default class BasicMessageEditor extends React.Component {
                         return; // don't preventDefault on anything else
                 }
             } else if (event.key === Key.TAB) {
-                this._tabCompleteName();
+                this.tabCompleteName(event);
                 handled = true;
             } else if (event.key === Key.BACKSPACE || event.key === Key.DELETE) {
-                this._formatBarRef.hide();
+                this.formatBarRef.current.hide();
             }
         }
         if (handled) {
             event.preventDefault();
             event.stopPropagation();
         }
-    }
+    };
 
-    async _tabCompleteName() {
+    private async tabCompleteName(event: React.KeyboardEvent) {
         try {
             await new Promise(resolve => this.setState({showVisualBell: false}, resolve));
             const {model} = this.props;
@@ -500,7 +536,7 @@ export default class BasicMessageEditor extends React.Component {
 
             // Don't try to do things with the autocomplete if there is none shown
             if (model.autoComplete) {
-                await model.autoComplete.onTab();
+                await model.autoComplete.onTab(event);
                 if (!model.autoComplete.hasSelection()) {
                     this.setState({showVisualBell: true});
                     model.autoComplete.close();
@@ -512,64 +548,58 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     isModified() {
-        return this._modifiedFlag;
+        return this.modifiedFlag;
     }
 
-    _onAutoCompleteConfirm = (completion) => {
+    private onAutoCompleteConfirm = (completion: ICompletion) => {
         this.props.model.autoComplete.onComponentConfirm(completion);
-    }
-
-    _onAutoCompleteSelectionChange = (completion, completionIndex) => {
-        this.props.model.autoComplete.onComponentSelectionChange(completion);
-        this.setState({completionIndex});
-    }
-
-    _configureEmoticonAutoReplace = () => {
-        const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
-        this.props.model.setTransformCallback(shouldReplace ? this._replaceEmoticon : null);
     };
 
-    _configureShouldShowPillAvatar = () => {
+    private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
+        this.props.model.autoComplete.onComponentSelectionChange(completion);
+        this.setState({completionIndex});
+    };
+
+    private configureEmoticonAutoReplace = () => {
+        const shouldReplace = SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji');
+        this.props.model.setTransformCallback(shouldReplace ? this.replaceEmoticon : null);
+    };
+
+    private configureShouldShowPillAvatar = () => {
         const showPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
         this.setState({ showPillAvatar });
     };
 
     componentWillUnmount() {
-        document.removeEventListener("selectionchange", this._onSelectionChange);
-        this._editorRef.removeEventListener("input", this._onInput, true);
-        this._editorRef.removeEventListener("compositionstart", this._onCompositionStart, true);
-        this._editorRef.removeEventListener("compositionend", this._onCompositionEnd, true);
-        SettingsStore.unwatchSetting(this._emoticonSettingHandle);
-        SettingsStore.unwatchSetting(this._shouldShowPillAvatarSettingHandle);
+        document.removeEventListener("selectionchange", this.onSelectionChange);
+        this.editorRef.current.removeEventListener("input", this.onInput, true);
+        this.editorRef.current.removeEventListener("compositionstart", this.onCompositionStart, true);
+        this.editorRef.current.removeEventListener("compositionend", this.onCompositionEnd, true);
+        SettingsStore.unwatchSetting(this.emoticonSettingHandle);
+        SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
     }
 
     componentDidMount() {
         const model = this.props.model;
-        model.setUpdateCallback(this._updateEditorState);
-        this._emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
-            this._configureEmoticonAutoReplace);
-        this._configureEmoticonAutoReplace();
-        this._shouldShowPillAvatarSettingHandle = SettingsStore.watchSetting("Pill.shouldShowPillAvatar", null,
-            this._configureShouldShowPillAvatar);
+        model.setUpdateCallback(this.updateEditorState);
         const partCreator = model.partCreator;
         // TODO: does this allow us to get rid of EditorStateTransfer?
         // not really, but we could not serialize the parts, and just change the autoCompleter
-        partCreator.setAutoCompleteCreator(autoCompleteCreator(
-            () => this._autocompleteRef,
+        partCreator.setAutoCompleteCreator(getAutoCompleteCreator(
+            () => this.autocompleteRef.current,
             query => new Promise(resolve => this.setState({query}, resolve)),
         ));
-        this.historyManager = new HistoryManager(partCreator);
         // initial render of model
-        this._updateEditorState(this._getInitialCaretPosition());
+        this.updateEditorState(this.getInitialCaretPosition());
         // attach input listener by hand so React doesn't proxy the events,
         // as the proxied event doesn't support inputType, which we need.
-        this._editorRef.addEventListener("input", this._onInput, true);
-        this._editorRef.addEventListener("compositionstart", this._onCompositionStart, true);
-        this._editorRef.addEventListener("compositionend", this._onCompositionEnd, true);
-        this._editorRef.focus();
+        this.editorRef.current.addEventListener("input", this.onInput, true);
+        this.editorRef.current.addEventListener("compositionstart", this.onCompositionStart, true);
+        this.editorRef.current.addEventListener("compositionend", this.onCompositionEnd, true);
+        this.editorRef.current.focus();
     }
 
-    _getInitialCaretPosition() {
+    private getInitialCaretPosition() {
         let caretPosition;
         if (this.props.initialCaret) {
             // if restoring state from a previous editor,
@@ -583,34 +613,34 @@ export default class BasicMessageEditor extends React.Component {
         return caretPosition;
     }
 
-    _onFormatAction = (action) => {
+    private onFormatAction = (action: Formatting) => {
         const range = getRangeForSelection(
-            this._editorRef,
+            this.editorRef.current,
             this.props.model,
             document.getSelection());
         if (range.length === 0) {
             return;
         }
         this.historyManager.ensureLastChangesPushed(this.props.model);
-        this._modifiedFlag = true;
+        this.modifiedFlag = true;
         switch (action) {
-            case "bold":
+            case Formatting.Bold:
                 toggleInlineFormat(range, "**");
                 break;
-            case "italics":
+            case Formatting.Italics:
                 toggleInlineFormat(range, "_");
                 break;
-            case "strikethrough":
+            case Formatting.Strikethrough:
                 toggleInlineFormat(range, "<del>", "</del>");
                 break;
-            case "code":
+            case Formatting.Code:
                 formatRangeAsCode(range);
                 break;
-            case "quote":
+            case Formatting.Quote:
                 formatRangeAsQuote(range);
                 break;
         }
-    }
+    };
 
     render() {
         let autoComplete;
@@ -619,10 +649,10 @@ export default class BasicMessageEditor extends React.Component {
             const queryLen = query.length;
             autoComplete = (<div className="mx_BasicMessageComposer_AutoCompleteWrapper">
                 <Autocomplete
-                    ref={ref => this._autocompleteRef = ref}
+                    ref={this.autocompleteRef}
                     query={query}
-                    onConfirm={this._onAutoCompleteConfirm}
-                    onSelectionChange={this._onAutoCompleteSelectionChange}
+                    onConfirm={this.onAutoCompleteConfirm}
+                    onSelectionChange={this.onAutoCompleteSelectionChange}
                     selection={{beginning: true, end: queryLen, start: queryLen}}
                     room={this.props.room}
                 />
@@ -635,7 +665,6 @@ export default class BasicMessageEditor extends React.Component {
             "mx_BasicMessageComposer_input_shouldShowPillAvatar": this.state.showPillAvatar,
         });
 
-        const MessageComposerFormatBar = sdk.getComponent('rooms.MessageComposerFormatBar');
         const shortcuts = {
             bold: ctrlShortcutLabel("B"),
             italics: ctrlShortcutLabel("I"),
@@ -646,18 +675,18 @@ export default class BasicMessageEditor extends React.Component {
 
         return (<div className={wrapperClasses}>
             { autoComplete }
-            <MessageComposerFormatBar ref={ref => this._formatBarRef = ref} onAction={this._onFormatAction} shortcuts={shortcuts} />
+            <MessageComposerFormatBar ref={this.formatBarRef} onAction={this.onFormatAction} shortcuts={shortcuts} />
             <div
                 className={classes}
                 contentEditable="true"
-                tabIndex="0"
-                onBlur={this._onBlur}
-                onFocus={this._onFocus}
-                onCopy={this._onCopy}
-                onCut={this._onCut}
-                onPaste={this._onPaste}
-                onKeyDown={this._onKeyDown}
-                ref={ref => this._editorRef = ref}
+                tabIndex={0}
+                onBlur={this.onBlur}
+                onFocus={this.onFocus}
+                onCopy={this.onCopy}
+                onCut={this.onCut}
+                onPaste={this.onPaste}
+                onKeyDown={this.onKeyDown}
+                ref={this.editorRef}
                 aria-label={this.props.label}
                 role="textbox"
                 aria-multiline="true"
@@ -671,6 +700,6 @@ export default class BasicMessageEditor extends React.Component {
     }
 
     focus() {
-        this._editorRef.focus();
+        this.editorRef.current.focus();
     }
 }

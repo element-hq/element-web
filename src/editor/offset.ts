@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EditorModel from "./model";
+
 export default class DocumentOffset {
-    constructor(offset, atNodeEnd) {
-        this.offset = offset;
-        this.atNodeEnd = atNodeEnd;
+    constructor(public offset: number, public readonly atNodeEnd: boolean) {
     }
 
-    asPosition(model) {
+    asPosition(model: EditorModel) {
         return model.positionForOffset(this.offset, this.atNodeEnd);
     }
 
-    add(delta, atNodeEnd = false) {
+    add(delta: number, atNodeEnd = false) {
         return new DocumentOffset(this.offset + delta, atNodeEnd);
     }
 }
