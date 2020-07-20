@@ -29,6 +29,7 @@ import FlairStore from '../../../stores/FlairStore';
 import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AccessibleButton from "./AccessibleButton";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
@@ -114,7 +115,7 @@ export default createReactClass({
         this.setState({ hover: true });
     },
 
-    onMouseOut: function() {
+    onMouseLeave: function() {
         this.setState({ hover: false });
     },
 
@@ -151,11 +152,14 @@ export default createReactClass({
             badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
         }
 
-        // FIXME: this ought to use AccessibleButton for a11y but that causes onMouseOut/onMouseOver to fire too much
         const contextButton = this.state.hover || this.props.menuDisplayed ?
-            <div className="mx_TagTile_context_button" onClick={this.openMenu} ref={this.props.contextMenuButtonRef}>
+            <AccessibleButton
+                className="mx_TagTile_context_button"
+                onClick={this.openMenu}
+                ref={this.props.contextMenuButtonRef}
+            >
                 {"\u00B7\u00B7\u00B7"}
-            </div> : <div ref={this.props.contextMenuButtonRef} />;
+            </AccessibleButton> : <div ref={this.props.contextMenuButtonRef} />;
 
         const AccessibleTooltipButton = sdk.getComponent("elements.AccessibleTooltipButton");
 
@@ -168,7 +172,7 @@ export default createReactClass({
             <div
                 className="mx_TagTile_avatar"
                 onMouseOver={this.onMouseOver}
-                onMouseOut={this.onMouseOut}
+                onMouseLeave={this.onMouseLeave}
             >
                 <BaseAvatar
                     name={name}

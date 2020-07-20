@@ -66,7 +66,7 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordere
     }
 
     const onMouseOver = () => setHover(true);
-    const onMouseOut = () => setHover(false);
+    const onMouseLeave = () => setHover(false);
 
     let tip;
     if (hover && !hideTooltip) {
@@ -78,7 +78,7 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordere
             <AccessibleButton
                 onClick={onClick}
                 onMouseOver={onMouseOver}
-                onMouseOut={onMouseOut}
+                onMouseLeave={onMouseLeave}
                 className={classes}
                 style={style}
             >
@@ -87,7 +87,7 @@ const E2EIcon = ({isUser, status, className, size, onClick, hideTooltip, bordere
         );
     }
 
-    return <div onMouseOver={onMouseOver} onMouseOut={onMouseOut} className={classes} style={style}>
+    return <div onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} className={classes} style={style}>
         { tip }
     </div>;
 };
