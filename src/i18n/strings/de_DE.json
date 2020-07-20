@@ -2326,5 +2326,12 @@
     "Message deleted on %(date)s": "Nachricht am %(date)s gelöscht",
     "Wrong file type": "Falscher Dateityp",
     "Wrong Recovery Key": "Falscher Wiederherstellungsschlüssel",
-    "Invalid Recovery Key": "Ungültiger Wiederherstellungsschlüssel"
+    "Invalid Recovery Key": "Ungültiger Wiederherstellungsschlüssel",
+    "Riot is now Element!": "Riot ist jetzt Element!",
+    "Learn More": "Mehr erfahren",
+    "Unknown caller": "Unbekannter Anrufer",
+    "Incoming voice call": "Eingehender Sprachanruf",
+    "Incoming video call": "Eingehender Videoanruf",
+    "Incoming call": "Eingehender Anruf",
+    "There are advanced notifications which are not shown here.": "Es sind erweiterte Benachrichtigungen vorhanden, die hier nicht angezeigt werden."
 }
