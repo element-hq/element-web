@@ -104,7 +104,8 @@ export default class CallPreview extends React.Component<IProps, IState> {
         if (showCall) {
             return (
                 <CallView
-                    className="mx_CallPreview" onClick={this.onCallViewClick}
+                    className="mx_CallPreview"
+                    onClick={this.onCallViewClick}
                     ConferenceHandler={this.props.ConferenceHandler}
                     showHangup={true}
                 />
