@@ -14,7 +14,7 @@ import GroupStore from '../../../../src/stores/GroupStore.js';
 
 import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import {DefaultTagID} from "../../../../src/stores/room-list/models";
-import RoomListStore, {LISTS_UPDATE_EVENT, RoomListStore2} from "../../../../src/stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT, RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";
 
 function generateRoomId() {
@@ -49,7 +49,7 @@ describe('RoomList', () => {
     let myOtherMember;
 
     beforeEach(async function(done) {
-        RoomListStore2.TEST_MODE = true;
+        RoomListStoreClass.TEST_MODE = true;
 
         TestUtils.stubClient();
         client = MatrixClientPeg.get();
@@ -62,7 +62,7 @@ describe('RoomList', () => {
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
 
-        const RoomList = sdk.getComponent('views.rooms.RoomList2');
+        const RoomList = sdk.getComponent('views.rooms.RoomList');
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
             <DragDropContext>
@@ -128,8 +128,8 @@ describe('RoomList', () => {
     });
 
     function expectRoomInSubList(room, subListTest) {
-        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist2');
-        const RoomTile = sdk.getComponent('views.rooms.RoomTile2');
+        const RoomSubList = sdk.getComponent('views.rooms.RoomSublist');
+        const RoomTile = sdk.getComponent('views.rooms.RoomTile');
 
         const subLists = ReactTestUtils.scryRenderedComponentsWithType(root, RoomSubList);
         const containingSubList = subLists.find(subListTest);

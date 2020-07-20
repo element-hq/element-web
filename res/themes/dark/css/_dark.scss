@@ -108,32 +108,20 @@ $composer-e2e-icon-color: $header-panel-text-primary-color;
 
 // ********************
 
-// V2 Room List
-// TODO: Remove the 2 from all of these when the new list takes over
-
 $theme-button-bg-color: #e3e8f0;
 
+$roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-bg-color: rgba(33, 38, 44, 0.90);
+$roomlist-header-color: #8E99A4;
+$roomsublist-divider-color: $primary-fg-color;
 
-$roomlist2-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
-$roomlist2-bg-color: rgba(33, 38, 44, 0.90);
-$roomlist2-header-color: #8E99A4;
-$roomsublist2-divider-color: $primary-fg-color;
-
-$roomtile2-preview-color: #A9B2BC;
-$roomtile2-default-badge-bg-color: #61708b;
-$roomtile2-selected-bg-color: rgba(141, 151, 165, 0.2);
+$roomtile-preview-color: #A9B2BC;
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: rgba(141, 151, 165, 0.2);
 
 // ********************
 
-$notice-secondary-color: $roomlist2-header-color;
-
-$roomtile-name-color: $header-panel-text-primary-color;
-$roomtile-selected-color: $text-primary-color;
-$roomtile-notified-color: $text-primary-color;
-$roomtile-selected-bg-color: $room-highlight-color;
-$roomtile-focused-bg-color: $room-highlight-color;
-
-$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
+$notice-secondary-color: $roomlist-header-color;
 
 $panel-divider-color: transparent;
 

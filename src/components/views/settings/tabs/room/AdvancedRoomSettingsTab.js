@@ -22,7 +22,7 @@ import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import RoomListStore from "../../../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../../../stores/room-list/RoomListStore";
 import RoomListActions from "../../../../../actions/RoomListActions";
 import { DefaultTagID } from '../../../../../stores/room-list/models';
 import LabelledToggleSwitch from '../../../elements/LabelledToggleSwitch';

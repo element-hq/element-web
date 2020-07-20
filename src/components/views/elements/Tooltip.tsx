@@ -26,7 +26,7 @@ const MIN_TOOLTIP_HEIGHT = 25;
 
 interface IProps {
         // Class applied to the element used to position the tooltip
-        className: string;
+        className?: string;
         // Class applied to the tooltip itself
         tooltipClassName?: string;
         // Whether the tooltip is visible or hidden.
@@ -35,6 +35,7 @@ interface IProps {
         visible?: boolean;
         // the react element to put into the tooltip
         label: React.ReactNode;
+        forceOnRight?: boolean;
 }
 
 export default class Tooltip extends React.Component<IProps> {
@@ -82,7 +83,7 @@ export default class Tooltip extends React.Component<IProps> {
         }
 
         style.top = (parentBox.top - 2) + window.pageYOffset + offset;
-        if (parentBox.right > window.innerWidth / 2) {
+        if (!this.props.forceOnRight && parentBox.right > window.innerWidth / 2) {
             style.right = window.innerWidth - parentBox.right - window.pageXOffset - 8;
         } else {
             style.left = parentBox.right + window.pageXOffset + 6;
@@ -120,7 +121,7 @@ export default class Tooltip extends React.Component<IProps> {
     public render() {
         // Render a placeholder
         return (
-            <div className={this.props.className} >
+            <div className={this.props.className}>
             </div>
         );
     }

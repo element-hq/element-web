@@ -66,7 +66,7 @@ limitations under the License.
 }
 
 /* not the left panel, and not the resize handle, so the roomview/groupview/... */
-.mx_MatrixChat > :not(.mx_LeftPanel_container):not(.mx_LeftPanel2):not(.mx_ResizeHandle) {
+.mx_MatrixChat > :not(.mx_LeftPanel):not(.mx_ResizeHandle) {
     background-color: $primary-bg-color;
 
     flex: 1 1 0;

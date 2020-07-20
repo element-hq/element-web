@@ -35,11 +35,6 @@ limitations under the License.
         border-color: $reaction-row-button-selected-border-color;
     }
 
-    // ignore mouse events for all children, treat it as one entire hoverable entity
-    * {
-        pointer-events: none;
-    }
-
     .mx_ReactionsRowButton_content {
         max-width: 100px;
         overflow: hidden;

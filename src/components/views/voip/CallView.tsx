@@ -1,6 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,73 +14,84 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React, {createRef} from 'react';
-import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
+import Room from 'matrix-js-sdk/src/models/room';
 import dis from '../../../dispatcher/dispatcher';
 import CallHandler from '../../../CallHandler';
-import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
+import AccessibleButton from '../elements/AccessibleButton';
+import VideoView from "./VideoView";
+import RoomAvatar from "../avatars/RoomAvatar";
+import PulsedAvatar from '../avatars/PulsedAvatar';
 
-export default createReactClass({
-    displayName: 'CallView',
-
-    propTypes: {
+interface IProps {
         // js-sdk room object. If set, we will only show calls for the given
         // room; if not, we will show any active call.
-        room: PropTypes.object,
+        room?: Room;
 
         // A Conference Handler implementation
         // Must have a function signature:
         //  getConferenceCallForRoom(roomId: string): MatrixCall
-        ConferenceHandler: PropTypes.object,
+        ConferenceHandler?: any;
 
         // maxHeight style attribute for the video panel
-        maxVideoHeight: PropTypes.number,
+        maxVideoHeight?: number;
 
         // a callback which is called when the user clicks on the video div
-        onClick: PropTypes.func,
+        onClick?: React.MouseEventHandler;
 
         // a callback which is called when the content in the callview changes
         // in a way that is likely to cause a resize.
-        onResize: PropTypes.func,
+        onResize?: any;
 
-        // render ongoing audio call details - useful when in LeftPanel
-        showVoice: PropTypes.bool,
-    },
+        // classname applied to view,
+        className?: string;
 
-    getInitialState: function() {
-        return {
+        // Whether to show the hang up icon:W
+        showHangup?: boolean;
+}
+
+interface IState {
+    call: any;
+}
+
+export default class CallView extends React.Component<IProps, IState> {
+    private videoref: React.RefObject<any>;
+    private dispatcherRef: string;
+    public call: any;
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
             // the call this view is displaying (if any)
             call: null,
         };
-    },
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._video = createRef();
-    },
+        this.videoref = createRef();
+    }
 
-    componentDidMount: function() {
+    public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.showCall();
-    },
+    }
 
-    componentWillUnmount: function() {
+    public componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    },
+    }
 
-    onAction: function(payload) {
+    private onAction = (payload) => {
         // don't filter out payloads for room IDs other than props.room because
         // we may be interested in the conf 1:1 room
         if (payload.action !== 'call_state') {
             return;
         }
         this.showCall();
-    },
+    };
 
-    showCall: function() {
+    private showCall() {
         let call;
 
         if (this.props.room) {
@@ -131,37 +142,57 @@ export default createReactClass({
         if (this.props.onResize) {
             this.props.onResize();
         }
-    },
+    }
 
-    getVideoView: function() {
-        return this._video.current;
-    },
+    private getVideoView() {
+        return this.videoref.current;
+    }
 
-    render: function() {
-        const VideoView = sdk.getComponent('voip.VideoView');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+    public render() {
+        let view: React.ReactNode;
+        if (this.state.call && this.state.call.type === "voice") {
+            const client = MatrixClientPeg.get();
+            const callRoom = client.getRoom(this.state.call.roomId);
 
-        let voice;
-        if (this.state.call && this.state.call.type === "voice" && this.props.showVoice) {
-            const callRoom = MatrixClientPeg.get().getRoom(this.state.call.roomId);
-            voice = (
-                <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
-                { _t("Active call (%(roomName)s)", {roomName: callRoom.name}) }
-                </AccessibleButton>
-            );
+            view = <AccessibleButton className="mx_CallView_voice" onClick={this.props.onClick}>
+                <PulsedAvatar>
+                    <RoomAvatar
+                        room={callRoom}
+                        height={35}
+                        width={35}
+                    />
+                </PulsedAvatar>
+                <div>
+                    <h1>{callRoom.name}</h1>
+                    <p>{ _t("Active call") }</p>
+                </div>
+            </AccessibleButton>;
+        } else {
+            view = <VideoView
+                ref={this.videoref}
+                onClick={this.props.onClick}
+                onResize={this.props.onResize}
+                maxHeight={this.props.maxVideoHeight}
+            />;
         }
 
-        return (
-            <div>
-                <VideoView
-                    ref={this._video}
-                    onClick={this.props.onClick}
-                    onResize={this.props.onResize}
-                    maxHeight={this.props.maxVideoHeight}
-                />
-                { voice }
-            </div>
-        );
-    },
-});
+        let hangup: React.ReactNode;
+        if (this.props.showHangup) {
+            hangup = <div
+                className="mx_CallView_hangup"
+                onClick={() => {
+                    dis.dispatch({
+                        action: 'hangup',
+                        room_id: this.state.call.roomId,
+                    });
+                }}
+            />;
+        }
+
+        return <div className={this.props.className}>
+            {view}
+            {hangup}
+        </div>;
+    }
+}
 

@@ -40,7 +40,6 @@ import * as KeyboardShortcuts from "../../accessibility/KeyboardShortcuts";
 import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
-import { RoomListStoreTempProxy } from "../../stores/room-list/RoomListStoreTempProxy";
 import { DefaultTagID } from "../../stores/room-list/models";
 import {
     showToast as showSetPasswordToast,
@@ -51,9 +50,10 @@ import {
     hideToast as hideServerLimitToast
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
-import LeftPanel2 from "./LeftPanel2";
+import LeftPanel from "./LeftPanel";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
+import RoomListStore from "../../stores/room-list/RoomListStore";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -308,8 +308,8 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     onRoomStateEvents = (ev, state) => {
-        const roomLists = RoomListStoreTempProxy.getRoomLists();
-        if (roomLists[DefaultTagID.ServerNotice] && roomLists[DefaultTagID.ServerNotice].some(r => r.roomId === ev.getRoomId())) {
+        const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
+        if (serverNoticeList && serverNoticeList.some(r => r.roomId === ev.getRoomId())) {
             this._updateServerNoticeEvents();
         }
     };
@@ -328,11 +328,11 @@ class LoggedInView extends React.Component<IProps, IState> {
     }
 
     _updateServerNoticeEvents = async () => {
-        const roomLists = RoomListStoreTempProxy.getRoomLists();
-        if (!roomLists[DefaultTagID.ServerNotice]) return [];
+        const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
+        if (!serverNoticeList) return [];
 
         const events = [];
-        for (const room of roomLists[DefaultTagID.ServerNotice]) {
+        for (const room of serverNoticeList) {
             const pinStateEvent = room.currentState.getStateEvents("m.room.pinned_events", "");
 
             if (!pinStateEvent || !pinStateEvent.getContent().pinned) continue;
@@ -607,7 +607,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     };
 
     render() {
-        const LeftPanel = sdk.getComponent('structures.LeftPanel');
         const RoomView = sdk.getComponent('structures.RoomView');
         const UserView = sdk.getComponent('structures.UserView');
         const GroupView = sdk.getComponent('structures.GroupView');
@@ -661,21 +660,12 @@ class LoggedInView extends React.Component<IProps, IState> {
             bodyClasses += ' mx_MatrixChat_useCompactLayout';
         }
 
-        let leftPanel = (
+        const leftPanel = (
             <LeftPanel
+                isMinimized={this.props.collapseLhs || false}
                 resizeNotifier={this.props.resizeNotifier}
-                collapsed={this.props.collapseLhs || false}
-                disabled={this.props.leftDisabled}
             />
         );
-        if (SettingsStore.getValue("feature_new_room_list")) {
-            leftPanel = (
-                <LeftPanel2
-                    isMinimized={this.props.collapseLhs || false}
-                    resizeNotifier={this.props.resizeNotifier}
-                />
-            );
-        }
 
         return (
             <MatrixClientContext.Provider value={this._matrixClient}>
