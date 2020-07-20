@@ -1641,7 +1641,7 @@
     "Not trusted": "Ez konfiantzazkoa",
     "Direct message": "Mezu zuzena",
     "<strong>%(role)s</strong> in %(roomName)s": "<strong>%(role)s</strong> %(roomName)s gelan",
-    "Messages in this room are end-to-end encrypted.": "Gela honetako mezuak ez daude muturretik muturrera zifratuta.",
+    "Messages in this room are end-to-end encrypted.": "Gela honetako mezuak muturretik muturrera zifratuta daude.",
     "Security": "Segurtasuna",
     "Verify": "Egiaztatu",
     "You have ignored this user, so their message is hidden. <a>Show anyways.</a>": "Erabiltzaile hau ezikusi duzu, beraz bere mezua ezkutatuta dago. <a>Erakutsi hala ere.</a>",
