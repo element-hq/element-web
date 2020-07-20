@@ -29,7 +29,7 @@ import {getAddressType} from "./UserAddress";
 
 const E2EE_WK_KEY = "im.vector.riot.e2ee";
 
-// we define a number of interfaces which in effect take their names from the js-sdk
+// we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
 
 // TODO move these interfaces over to js-sdk once it has been typescripted enough to accept them
