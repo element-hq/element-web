@@ -23,13 +23,13 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { _t, _td } from "../../../languageHandler";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { ResizeNotifier } from "../../../utils/ResizeNotifier";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore2";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import RoomSublist2 from "./RoomSublist2";
+import RoomSublist from "./RoomSublist";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -41,8 +41,6 @@ import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
-
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -132,7 +130,7 @@ const TAG_AESTHETICS: {
     },
 };
 
-export default class RoomList2 extends React.Component<IProps, IState> {
+export default class RoomList extends React.Component<IProps, IState> {
     private searchFilter: NameFilterCondition = new NameFilterCondition();
     private dispatcherRef;
 
@@ -212,7 +210,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14035
+            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
             console.log("new lists", newLists);
         }
 
@@ -277,7 +275,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
             components.push(
-                <RoomSublist2
+                <RoomSublist
                     key={`sublist-${orderedTagId}`}
                     tagId={orderedTagId}
                     forRooms={true}
@@ -306,7 +304,7 @@ export default class RoomList2 extends React.Component<IProps, IState> {
                         onFocus={this.props.onFocus}
                         onBlur={this.props.onBlur}
                         onKeyDown={onKeyDownHandler}
-                        className="mx_RoomList2"
+                        className="mx_RoomList"
                         role="tree"
                         aria-label={_t("Rooms")}
                     >{sublists}</div>

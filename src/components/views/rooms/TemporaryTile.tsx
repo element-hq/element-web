@@ -59,10 +59,10 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         // XXX: We copy classes because it's easier
         const classes = classNames({
-            'mx_RoomTile2': true,
+            'mx_RoomTile': true,
             'mx_TemporaryTile': true,
-            'mx_RoomTile2_selected': this.props.isSelected,
-            'mx_RoomTile2_minimized': this.props.isMinimized,
+            'mx_RoomTile_selected': this.props.isSelected,
+            'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
         const badge = (
@@ -77,12 +77,12 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         const nameClasses = classNames({
-            "mx_RoomTile2_name": true,
-            "mx_RoomTile2_nameHasUnreadEvents": this.props.notificationState.isUnread,
+            "mx_RoomTile_name": true,
+            "mx_RoomTile_nameHasUnreadEvents": this.props.notificationState.isUnread,
         });
 
         let nameContainer = (
-            <div className="mx_RoomTile2_nameContainer">
+            <div className="mx_RoomTile_nameContainer">
                 <div title={name} className={nameClasses} tabIndex={-1} dir="auto">
                     {name}
                 </div>
@@ -105,11 +105,11 @@ export default class TemporaryTile extends React.Component<IProps, IState> {
                     role="treeitem"
                     title={this.props.isMinimized ? name : undefined}
                 >
-                    <div className="mx_RoomTile2_avatarContainer">
+                    <div className="mx_RoomTile_avatarContainer">
                         {this.props.avatar}
                     </div>
                     {nameContainer}
-                    <div className="mx_RoomTile2_badgeContainer">
+                    <div className="mx_RoomTile_badgeContainer">
                         {badge}
                     </div>
                 </Button>

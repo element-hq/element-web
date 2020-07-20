@@ -28,6 +28,7 @@ import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import CallView from "../voip/CallView";
 
 
 export default createReactClass({
@@ -142,7 +143,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const CallView = sdk.getComponent("voip.CallView");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         let fileDropTarget = null;

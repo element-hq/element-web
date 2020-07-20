@@ -23,7 +23,7 @@ import classNames from 'classnames';
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
-import RoomTile2 from "./RoomTile2";
+import RoomTile from "./RoomTile";
 import { ListLayout } from "../../../stores/room-list/ListLayout";
 import {
     ChevronFace,
@@ -32,7 +32,7 @@ import {
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
-import RoomListStore from "../../../stores/room-list/RoomListStore2";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
@@ -47,8 +47,6 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
-
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14367
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -94,7 +92,7 @@ interface IState {
     height: number;
 }
 
-export default class RoomSublist2 extends React.Component<IProps, IState> {
+export default class RoomSublist extends React.Component<IProps, IState> {
     private headerButton = createRef<HTMLDivElement>();
     private sublistRef = createRef<HTMLDivElement>();
     private dispatcherRef: string;
@@ -144,7 +142,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     }
 
     private get numTiles(): number {
-        return RoomSublist2.calcNumTiles(this.props);
+        return RoomSublist.calcNumTiles(this.props);
     }
 
     private static calcNumTiles(props) {
@@ -167,7 +165,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         }
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
-        if (RoomSublist2.calcNumTiles(prevProps) !== this.numTiles) {
+        if (RoomSublist.calcNumTiles(prevProps) !== this.numTiles) {
             this.setState({height: this.calculateInitialHeight()});
         }
     }
@@ -252,7 +250,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
 
     private focusRoomTile = (index: number) => {
         if (!this.sublistRef.current) return;
-        const elements = this.sublistRef.current.querySelectorAll<HTMLDivElement>(".mx_RoomTile2");
+        const elements = this.sublistRef.current.querySelectorAll<HTMLDivElement>(".mx_RoomTile");
         const element = elements && elements[index];
         if (element) {
             element.focus();
@@ -326,11 +324,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         const possibleSticky = this.headerButton.current.parentElement;
         const sublist = possibleSticky.parentElement.parentElement;
         const list = sublist.parentElement.parentElement;
-        // the scrollTop is capped at the height of the header in LeftPanel2, the top header is always sticky
+        // the scrollTop is capped at the height of the header in LeftPanel, the top header is always sticky
         const isAtTop = list.scrollTop <= HEADER_HEIGHT;
         const isAtBottom = list.scrollTop >= list.scrollHeight - list.offsetHeight;
-        const isStickyTop = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_stickyTop');
-        const isStickyBottom = possibleSticky.classList.contains('mx_RoomSublist2_headerContainer_stickyBottom');
+        const isStickyTop = possibleSticky.classList.contains('mx_RoomSublist_headerContainer_stickyTop');
+        const isStickyBottom = possibleSticky.classList.contains('mx_RoomSublist_headerContainer_stickyBottom');
 
         if ((isStickyBottom && !isAtBottom) || (isStickyTop && !isAtTop)) {
             // is sticky - jump to list
@@ -370,7 +368,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     this.toggleCollapsed();
                 } else if (this.sublistRef.current) {
                     // otherwise focus the first room
-                    const element = this.sublistRef.current.querySelector(".mx_RoomTile2") as HTMLDivElement;
+                    const element = this.sublistRef.current.querySelector(".mx_RoomTile") as HTMLDivElement;
                     if (element) {
                         element.focus();
                     }
@@ -405,7 +403,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
                 tiles.push(
-                    <RoomTile2
+                    <RoomTile
                         room={room}
                         key={`room-${room.roomId}`}
                         showMessagePreview={this.layout.showPreviews}
@@ -444,7 +442,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     <React.Fragment>
                         <hr />
                         <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Appearance")}</div>
+                            <div className='mx_RoomSublist_contextMenu_title'>{_t("Appearance")}</div>
                             <StyledMenuItemCheckbox
                                 onClose={this.onCloseMenu}
                                 onChange={this.onUnreadFirstChanged}
@@ -471,9 +469,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
                     onFinished={this.onCloseMenu}
                 >
-                    <div className="mx_RoomSublist2_contextMenu">
+                    <div className="mx_RoomSublist_contextMenu">
                         <div>
-                            <div className='mx_RoomSublist2_contextMenu_title'>{_t("Sort by")}</div>
+                            <div className='mx_RoomSublist_contextMenu_title'>{_t("Sort by")}</div>
                             <StyledMenuItemRadio
                                 onClose={this.onCloseMenu}
                                 onChange={() => this.onTagSortChanged(SortAlgorithm.Recent)}
@@ -500,7 +498,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
         return (
             <React.Fragment>
                 <ContextMenuTooltipButton
-                    className="mx_RoomSublist2_menuButton"
+                    className="mx_RoomSublist_menuButton"
                     onClick={this.onOpenMenuClick}
                     title={_t("List options")}
                     isExpanded={!!this.state.contextMenuPosition}
@@ -537,26 +535,26 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                             <AccessibleTooltipButton
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoom}
-                                className="mx_RoomSublist2_auxButton"
+                                className="mx_RoomSublist_auxButton"
                                 aria-label={this.props.addRoomLabel || _t("Add room")}
                                 title={this.props.addRoomLabel}
-                                tooltipClassName={"mx_RoomSublist2_addRoomTooltip"}
+                                tooltipClassName={"mx_RoomSublist_addRoomTooltip"}
                             />
                         );
                     }
 
                     const collapseClasses = classNames({
-                        'mx_RoomSublist2_collapseBtn': true,
-                        'mx_RoomSublist2_collapseBtn_collapsed': !this.state.isExpanded,
+                        'mx_RoomSublist_collapseBtn': true,
+                        'mx_RoomSublist_collapseBtn_collapsed': !this.state.isExpanded,
                     });
 
                     const classes = classNames({
-                        'mx_RoomSublist2_headerContainer': true,
-                        'mx_RoomSublist2_headerContainer_withAux': !!addRoomButton,
+                        'mx_RoomSublist_headerContainer': true,
+                        'mx_RoomSublist_headerContainer_withAux': !!addRoomButton,
                     });
 
                     const badgeContainer = (
-                        <div className="mx_RoomSublist2_badgeContainer">
+                        <div className="mx_RoomSublist_badgeContainer">
                             {badge}
                         </div>
                     );
@@ -573,12 +571,12 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                     // The same applies to the notification badge.
                     return (
                         <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus} aria-label={this.props.label}>
-                            <div className="mx_RoomSublist2_stickable">
+                            <div className="mx_RoomSublist_stickable">
                                 <Button
                                     onFocus={onFocus}
                                     inputRef={ref}
                                     tabIndex={tabIndex}
-                                    className="mx_RoomSublist2_headerText"
+                                    className="mx_RoomSublist_headerText"
                                     role="treeitem"
                                     aria-expanded={this.state.isExpanded}
                                     aria-level={1}
@@ -611,9 +609,9 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
     public render(): React.ReactElement {
         const visibleTiles = this.renderVisibleTiles();
         const classes = classNames({
-            'mx_RoomSublist2': true,
-            'mx_RoomSublist2_hasMenuOpen': !!this.state.contextMenuPosition,
-            'mx_RoomSublist2_minimized': this.props.isMinimized,
+            'mx_RoomSublist': true,
+            'mx_RoomSublist_hasMenuOpen': !!this.state.contextMenuPosition,
+            'mx_RoomSublist_minimized': this.props.isMinimized,
         });
 
         let content = null;
@@ -626,7 +624,7 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             const minTilesPx = layout.tilesToPixelsWithPadding(minTiles, minHeightPadding);
             let maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
-                'mx_RoomSublist2_showNButton': true,
+                'mx_RoomSublist_showNButton': true,
             });
 
             // If we're hiding rooms, show a 'show more' button to the user. This button
@@ -640,14 +638,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                 const amountFullyShown = Math.floor(nonPaddedHeight / this.layout.tileHeight);
                 const numMissing = this.numTiles - amountFullyShown;
                 let showMoreText = (
-                    <span className='mx_RoomSublist2_showNButtonText'>
+                    <span className='mx_RoomSublist_showNButtonText'>
                         {_t("Show %(count)s more", {count: numMissing})}
                     </span>
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
                     <RovingAccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses}>
-                        <span className='mx_RoomSublist2_showMoreButtonChevron mx_RoomSublist2_showNButtonChevron'>
+                        <span className='mx_RoomSublist_showMoreButtonChevron mx_RoomSublist_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showMoreText}
@@ -656,14 +654,14 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             } else if (this.numTiles > this.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
                 let showLessText = (
-                    <span className='mx_RoomSublist2_showNButtonText'>
+                    <span className='mx_RoomSublist_showNButtonText'>
                         {_t("Show less")}
                     </span>
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
                     <RovingAccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses}>
-                        <span className='mx_RoomSublist2_showLessButtonChevron mx_RoomSublist2_showNButtonChevron'>
+                        <span className='mx_RoomSublist_showLessButtonChevron mx_RoomSublist_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
                         {showLessText}
@@ -698,8 +696,8 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
             // only mathematically 7 possible).
 
             const handleWrapperClasses = classNames({
-                'mx_RoomSublist2_resizerHandles': true,
-                'mx_RoomSublist2_resizerHandles_showNButton': !!showNButton,
+                'mx_RoomSublist_resizerHandles': true,
+                'mx_RoomSublist_resizerHandles_showNButton': !!showNButton,
             });
 
             content = (
@@ -712,11 +710,11 @@ export default class RoomSublist2 extends React.Component<IProps, IState> {
                         onResizeStop={this.onResizeStop}
                         onResize={this.onResize}
                         handleWrapperClass={handleWrapperClasses}
-                        handleClasses={{bottom: "mx_RoomSublist2_resizerHandle"}}
-                        className="mx_RoomSublist2_resizeBox"
+                        handleClasses={{bottom: "mx_RoomSublist_resizerHandle"}}
+                        className="mx_RoomSublist_resizeBox"
                         enable={handles}
                     >
-                        <div className="mx_RoomSublist2_tiles" onScroll={this.onScrollPrevent}>
+                        <div className="mx_RoomSublist_tiles" onScroll={this.onScrollPrevent}>
                             {visibleTiles}
                         </div>
                         {showNButton}

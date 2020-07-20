@@ -15,11 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// TODO: Rename on launch: https://github.com/vector-im/riot-web/issues/14231
-
 import React from 'react';
 
-import CallView from "./CallView2";
+import CallView from "./CallView";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import CallHandler from '../../../CallHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -37,7 +35,6 @@ interface IProps {
 interface IState {
     roomId: string;
     activeCall: any;
-    newRoomListActive: boolean;
 }
 
 export default class CallPreview extends React.Component<IProps, IState> {
@@ -51,12 +48,7 @@ export default class CallPreview extends React.Component<IProps, IState> {
         this.state = {
             roomId: RoomViewStore.getRoomId(),
             activeCall: CallHandler.getAnyActiveCall(),
-            newRoomListActive: SettingsStore.getValue("feature_new_room_list"),
         };
-
-        this.settingsWatcherRef = SettingsStore.watchSetting("feature_new_room_list", null, (name, roomId, level, valAtLevel, newVal) => this.setState({
-            newRoomListActive: newVal,
-        }));
     }
 
     public componentDidMount() {
@@ -102,28 +94,24 @@ export default class CallPreview extends React.Component<IProps, IState> {
     };
 
     public render() {
-        if (this.state.newRoomListActive) {
-            const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
-            const showCall = (
-                this.state.activeCall &&
-                this.state.activeCall.call_state === 'connected' &&
-                !callForRoom
+        const callForRoom = CallHandler.getCallForRoom(this.state.roomId);
+        const showCall = (
+            this.state.activeCall &&
+            this.state.activeCall.call_state === 'connected' &&
+            !callForRoom
+        );
+
+        if (showCall) {
+            return (
+                <CallView
+                    className="mx_CallPreview" onClick={this.onCallViewClick}
+                    ConferenceHandler={this.props.ConferenceHandler}
+                    showHangup={true}
+                />
             );
-
-            if (showCall) {
-                return (
-                    <CallView
-                        className="mx_CallPreview" onClick={this.onCallViewClick}
-                        ConferenceHandler={this.props.ConferenceHandler}
-                        showHangup={true}
-                    />
-                );
-            }
-
-            return <PersistentApp />;
         }
 
-        return null;
+        return <PersistentApp />;
     }
 }
 
