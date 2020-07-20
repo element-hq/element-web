@@ -15,7 +15,8 @@ limitations under the License.
 */
 
 import EditorModel from "./model";
-import DocumentPosition from "./position";
+import DocumentPosition, {Predicate} from "./position";
+import {Part} from "./parts";
 
 export default class Range {
     private _start: DocumentPosition;
@@ -27,14 +28,14 @@ export default class Range {
         this._end = bIsLarger ? positionB : positionA;
     }
 
-    moveStart(delta) {
+    moveStart(delta: number) {
         this._start = this._start.forwardsWhile(this.model, () => {
             delta -= 1;
             return delta >= 0;
         });
     }
 
-    expandBackwardsWhile(predicate) {
+    expandBackwardsWhile(predicate: Predicate) {
         this._start = this._start.backwardsWhile(this.model, predicate);
     }
 
@@ -53,7 +54,7 @@ export default class Range {
      * @param {Part[]} parts the parts to replace the range with
      * @return {Number} the net amount of characters added, can be negative.
      */
-    replace(parts) {
+    replace(parts: Part[]) {
         const newLength = parts.reduce((sum, part) => sum + part.text.length, 0);
         let oldLength = 0;
         this._start.iteratePartsBetween(this._end, this.model, (part, startIdx, endIdx) => {

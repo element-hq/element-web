@@ -24,7 +24,7 @@ export interface IPosition {
 }
 
 type Callback = (part: Part, startIdx: number, endIdx: number) => void;
-type Predicate = (index: number, offset: number, part: Part) => boolean;
+export type Predicate = (index: number, offset: number, part: Part) => boolean;
 
 export default class DocumentPosition implements IPosition {
     constructor(public readonly index: number, public readonly offset: number) {
