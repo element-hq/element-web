@@ -134,7 +134,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             this.configureShouldShowPillAvatar);
     }
 
-    componentDidUpdate(prevProps: IProps) {
+    public componentDidUpdate(prevProps: IProps) {
         if (this.props.placeholder !== prevProps.placeholder && this.props.placeholder) {
             const {isEmpty} = this.props.model;
             if (isEmpty) {

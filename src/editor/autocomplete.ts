@@ -43,7 +43,7 @@ export default class AutocompleteWrapperModel {
     ) {
     }
 
-    onEscape(e: KeyboardEvent) {
+    public onEscape(e: KeyboardEvent) {
         this.getAutocompleterComponent().onEscape(e);
         this.updateCallback({
             replaceParts: [this.partCreator.plain(this.queryPart.text)],
@@ -51,24 +51,24 @@ export default class AutocompleteWrapperModel {
         });
     }
 
-    close() {
+    public close() {
         this.updateCallback({close: true});
     }
 
-    hasSelection() {
+    public hasSelection() {
         return this.getAutocompleterComponent().hasSelection();
     }
 
-    hasCompletions() {
+    public hasCompletions() {
         const ac = this.getAutocompleterComponent();
         return ac && ac.countCompletions() > 0;
     }
 
-    onEnter() {
+    public onEnter() {
         this.updateCallback({close: true});
     }
 
-    async onTab(e: KeyboardEvent) {
+    public async onTab(e: KeyboardEvent) {
         const acComponent = this.getAutocompleterComponent();
 
         if (acComponent.countCompletions() === 0) {
@@ -81,15 +81,15 @@ export default class AutocompleteWrapperModel {
         }
     }
 
-    onUpArrow(e: KeyboardEvent) {
+    public onUpArrow(e: KeyboardEvent) {
         this.getAutocompleterComponent().moveSelection(-1);
     }
 
-    onDownArrow(e: KeyboardEvent) {
+    public onDownArrow(e: KeyboardEvent) {
         this.getAutocompleterComponent().moveSelection(+1);
     }
 
-    onPartUpdate(part: Part, pos: DocumentPosition) {
+    public onPartUpdate(part: Part, pos: DocumentPosition) {
         // cache the typed value and caret here
         // so we can restore it in onComponentSelectionChange when the value is undefined (meaning it should be the typed text)
         this.queryPart = part;
@@ -97,7 +97,7 @@ export default class AutocompleteWrapperModel {
         return this.updateQuery(part.text);
     }
 
-    onComponentSelectionChange(completion: ICompletion) {
+    public onComponentSelectionChange(completion: ICompletion) {
         if (!completion) {
             this.updateCallback({
                 replaceParts: [this.queryPart],
@@ -109,7 +109,7 @@ export default class AutocompleteWrapperModel {
         }
     }
 
-    onComponentConfirm(completion: ICompletion) {
+    public onComponentConfirm(completion: ICompletion) {
         this.updateCallback({
             replaceParts: this.partForCompletion(completion),
             close: true,
