@@ -135,13 +135,10 @@ export default createReactClass({
         if (GroupStore.isUserPrivileged(this.props.groupId)) {
             inviteButton = (
                 <AccessibleButton
-                    className="mx_RightPanel_invite"
+                    className="mx_MemberList_invite mx_MemberList_addRoomToCommunity"
                     onClick={this.onAddRoomToGroupButtonClick}
                 >
-                    <div className="mx_RightPanel_icon" >
-                        <TintableSvg src={require("../../../../res/img/icons-room-add.svg")} width="18" height="14" />
-                    </div>
-                    <div className="mx_RightPanel_message">{ _t('Add rooms to this community') }</div>
+                    <span>{ _t('Add rooms to this community') }</span>
                 </AccessibleButton>
             );
         }

@@ -211,15 +211,13 @@ export default createReactClass({
         let inviteButton;
         if (GroupStore.isUserPrivileged(this.props.groupId)) {
             inviteButton = (
-            <AccessibleButton
-                className="mx_RightPanel_invite"
-                onClick={this.onInviteToGroupButtonClick}
-            >
-                <div className="mx_RightPanel_icon" >
-                    <TintableSvg src={require("../../../../res/img/icon-invite-people.svg")} width="18" height="14" />
-                </div>
-                <div className="mx_RightPanel_message">{ _t('Invite to this community') }</div>
-            </AccessibleButton>);
+                <AccessibleButton
+                    className="mx_MemberList_invite mx_MemberList_inviteCommunity"
+                    onClick={this.onInviteToGroupButtonClick}
+                >
+                    <span>{ _t('Invite to this community') }</span>
+                </AccessibleButton>
+            );
         }
 
         return (
