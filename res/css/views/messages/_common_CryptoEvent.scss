@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_cryptoEvent {
-
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content;
 
@@ -25,9 +24,15 @@ limitations under the License.
         width: 16px;
         height: 16px;
         content: "";
-        background-image: url("$(res)/img/e2e/normal.svg");
-        background-repeat: no-repeat;
-        background-size: 100%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+        mask-image: url('$(res)/img/e2e/normal.svg');
+        background-color: $composer-e2e-icon-color;
         margin-top: 4px;
     }
 
