@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomListStore2 } from "./RoomListStore2";
+import { RoomListStoreClass } from "./RoomListStore";
 import TagOrderStore from "../TagOrderStore";
 import { CommunityFilterCondition } from "./filters/CommunityFilterCondition";
 import { arrayDiff, arrayHasDiff } from "../../utils/arrays";
@@ -26,7 +26,7 @@ export class TagWatcher {
     // TODO: Support custom tags, somehow: https://github.com/vector-im/riot-web/issues/14091
     private filters = new Map<string, CommunityFilterCondition>();
 
-    constructor(private store: RoomListStore2) {
+    constructor(private store: RoomListStoreClass) {
         TagOrderStore.addListener(this.onTagsUpdated);
     }
 

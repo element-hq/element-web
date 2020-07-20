@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,8 +19,76 @@ limitations under the License.
     background-color: $accent-color;
     color: $accent-fg-color;
     cursor: pointer;
-    text-align: center;
     padding: 6px;
     font-weight: bold;
-    font-size: $font-13px;
+
+    border-radius: 8px;
+    min-width: 200px;
+
+    display: flex;
+    align-items: center;
+
+    img {
+        margin: 4px;
+        margin-right: 10px;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        // Hacky vertical align
+        padding-top: 3px;
+    }
+
+    > div > p,
+    > div > h1 {
+        padding: 0;
+        margin: 0;
+        font-size: $font-13px;
+        line-height: $font-15px;
+    }
+
+    > div > p {
+        font-weight: bold;
+    }
+
+    > * {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+}
+
+.mx_CallView_hangup {
+    position: absolute;
+
+    right: 8px;
+    bottom: 10px;
+
+    height: 35px;
+    width: 35px;
+
+    border-radius: 35px;
+
+    background-color: $notice-primary-color;
+
+    z-index: 101;
+
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+
+        height: 20px;
+        width: 20px;
+
+        top: 6.5px;
+        left: 7.5px;
+
+        mask: url('$(res)/img/hangup.svg');
+        mask-size: contain;
+        background-size: contain;
+
+        background-color: $primary-fg-color;
+    }
 }

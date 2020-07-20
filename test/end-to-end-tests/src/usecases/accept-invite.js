@@ -20,7 +20,7 @@ const {findSublist} = require("./create-room");
 module.exports = async function acceptInvite(session, name) {
     session.log.step(`accepts "${name}" invite`);
     const inviteSublist = await findSublist(session, "invites");
-    const invitesHandles = await inviteSublist.$$(".mx_RoomTile2_name");
+    const invitesHandles = await inviteSublist.$$(".mx_RoomTile_name");
     const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
         const text = await session.innerText(inviteHandle);
         return {inviteHandle, text};

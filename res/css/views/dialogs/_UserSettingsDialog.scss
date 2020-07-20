@@ -18,41 +18,41 @@ limitations under the License.
 // ==========================================================
 
 .mx_UserSettingsDialog_settingsIcon::before {
-    mask-image: url('$(res)/img/feather-customised/settings.svg');
+    mask-image: url('$(res)/img/element-icons/settings.svg');
 }
 
 .mx_UserSettingsDialog_appearanceIcon::before {
-    mask-image: url('$(res)/img/feather-customised/brush.svg');
+    mask-image: url('$(res)/img/element-icons/settings/appearance.svg');
 }
 
 .mx_UserSettingsDialog_voiceIcon::before {
-    mask-image: url('$(res)/img/feather-customised/phone.svg');
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
 }
 
 .mx_UserSettingsDialog_bellIcon::before {
-    mask-image: url('$(res)/img/feather-customised/notifications.svg');
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
 }
 
 .mx_UserSettingsDialog_preferencesIcon::before {
-    mask-image: url('$(res)/img/feather-customised/sliders.svg');
+    mask-image: url('$(res)/img/element-icons/settings/preference.svg');
 }
 
 .mx_UserSettingsDialog_securityIcon::before {
-    mask-image: url('$(res)/img/feather-customised/lock.svg');
+    mask-image: url('$(res)/img/element-icons/security.svg');
 }
 
 .mx_UserSettingsDialog_helpIcon::before {
-    mask-image: url('$(res)/img/feather-customised/help-circle.svg');
+    mask-image: url('$(res)/img/element-icons/settings/help.svg');
 }
 
 .mx_UserSettingsDialog_labsIcon::before {
-    mask-image: url('$(res)/img/feather-customised/flag.svg');
+    mask-image: url('$(res)/img/element-icons/settings/lab-flags.svg');
 }
 
 .mx_UserSettingsDialog_mjolnirIcon::before {
-    mask-image: url('$(res)/img/feather-customised/face.svg');
+    mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
 }
 
 .mx_UserSettingsDialog_flairIcon::before {
-    mask-image: url('$(res)/img/feather-customised/flair.svg');
+    mask-image: url('$(res)/img/element-icons/settings/flair.svg');
 }

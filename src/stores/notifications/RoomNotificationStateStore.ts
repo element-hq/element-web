@@ -21,7 +21,6 @@ import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
-import { TagSpecificNotificationState } from "./TagSpecificNotificationState";
 
 const INSPECIFIC_TAG = "INSPECIFIC_TAG";
 type INSPECIFIC_TAG = "INSPECIFIC_TAG";
@@ -72,11 +71,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
 
         const forRoomMap = this.roomMap.get(room);
         if (!forRoomMap.has(targetTag)) {
-            if (inTagId) {
-                forRoomMap.set(inTagId, new TagSpecificNotificationState(room, inTagId));
-            } else {
-                forRoomMap.set(INSPECIFIC_TAG, new RoomNotificationState(room));
-            }
+            forRoomMap.set(inTagId ? inTagId : INSPECIFIC_TAG, new RoomNotificationState(room));
         }
 
         return forRoomMap.get(targetTag);

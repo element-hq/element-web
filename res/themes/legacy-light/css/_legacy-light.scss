@@ -1,0 +1,372 @@
+// XXX: check this?
+/* Nunito lacks combining diacritics, so these will fall through
+   to the next font.  Helevetica's diacritics however do not combine
+   nicely (on OSX, at least) and result in a huge horizontal mess.
+   Arial empirically gets it right, hence prioritising Arial here. */
+/* We fall through to Twemoji for emoji rather than falling through
+   to native Emoji fonts (if any) to ensure cross-browser consistency */
+/* Noto Color Emoji contains digits, in fixed-width, therefore causing
+   digits in flowed text to stand out.
+   TODO: Consider putting all emoji fonts to the end rather than the front. */
+$font-family: Nunito, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Arial, Helvetica, Sans-Serif, 'Noto Color Emoji';
+
+$monospace-font-family: Inconsolata, Twemoji, 'Apple Color Emoji', 'Segoe UI Emoji', Courier, monospace, 'Noto Color Emoji';
+
+// unified palette
+// try to use these colors when possible
+$accent-color: #03b381;
+$accent-bg-color: rgba(3, 179, 129, 0.16);
+$notice-primary-color: #ff4b55;
+$notice-primary-bg-color: rgba(255, 75, 85, 0.16);
+$notice-secondary-color: #61708b;
+$header-panel-bg-color: #f3f8fd;
+
+// typical text (dark-on-white in light skin)
+$primary-fg-color: #2e2f32;
+$primary-bg-color: #ffffff;
+$muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
+
+// used for dialog box text
+$light-fg-color: #747474;
+
+// used for focusing form controls
+$focus-bg-color: #dddddd;
+
+// button UI (white-on-green in light skin)
+$accent-fg-color: #ffffff;
+$accent-color-50pct: rgba(3, 179, 129, 0.5);    //#03b381 in rgb
+$accent-color-darker: #92caad;
+$accent-color-alt: #238cf5;
+
+$selection-fg-color: $primary-bg-color;
+
+$focus-brightness: 105%;
+
+// warning colours
+$warning-color: $notice-primary-color; // red
+$orange-warning-color: #ff8d13; // used for true warnings
+// background colour for warnings
+$warning-bg-color: #df2a8b;
+$info-bg-color: #2a9edf;
+$mention-user-pill-bg-color: $warning-color;
+$other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
+
+// pinned events indicator
+$pinned-unread-color: $notice-primary-color;
+$pinned-color: $notice-secondary-color;
+
+// informational plinth
+$info-plinth-bg-color: #f7f7f7;
+$info-plinth-fg-color: #888;
+
+$preview-bar-bg-color: #f7f7f7;
+
+// left-panel style muted accent color
+$secondary-accent-color: #f2f5f8;
+$tertiary-accent-color: #d3efe1;
+
+$tagpanel-bg-color: #27303a;
+$inverted-bg-color: $tagpanel-bg-color;
+
+// used by RoomDirectory permissions
+$plinth-bg-color: $secondary-accent-color;
+
+// used by RoomDropTarget
+$droptarget-bg-color: rgba(255, 255, 255, 0.5);
+
+// used by AddressSelector
+$selected-color: $secondary-accent-color;
+
+// selected for hoverover & selected event tiles
+$event-selected-color: $header-panel-bg-color;
+
+// used for the hairline dividers in RoomView
+$primary-hairline-color: #e5e5e5;
+
+// used for the border of input text fields
+$input-border-color: #e7e7e7;
+$input-darker-bg-color: #e3e8f0;
+$input-darker-fg-color: #9fa9ba;
+$input-lighter-bg-color: #f2f5f8;
+$input-lighter-fg-color: $input-darker-fg-color;
+$input-focused-border-color: #238cf5;
+$input-valid-border-color: $accent-color;
+$input-invalid-border-color: $warning-color;
+
+$field-focused-label-bg-color: #ffffff;
+
+$button-bg-color: $accent-color;
+$button-fg-color: white;
+
+// apart from login forms, which have stronger border
+$strong-input-border-color: #c7c7c7;
+
+// used for UserSettings EditableText
+$input-underline-color: rgba(151, 151, 151, 0.5);
+$input-fg-color: rgba(74, 74, 74, 0.9);
+// scrollbars
+$scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+$scrollbar-track-color: transparent;
+// context menus
+$menu-border-color: #e7e7e7;
+$menu-bg-color: #fff;
+$menu-box-shadow-color: rgba(118, 131, 156, 0.6);
+$menu-selected-color: #f5f8fa;
+
+$avatar-initial-color: #ffffff;
+$avatar-bg-color: #ffffff;
+
+$h3-color: #3d3b39;
+
+$dialog-title-fg-color: #45474a;
+$dialog-backdrop-color: rgba(46, 48, 51, 0.38);
+$dialog-shadow-color: rgba(0, 0, 0, 0.48);
+$dialog-close-fg-color: #c1c1c1;
+
+$dialog-background-bg-color: #e9e9e9;
+$lightbox-background-bg-color: #000;
+
+$imagebody-giflabel: rgba(0, 0, 0, 0.7);
+$imagebody-giflabel-border: rgba(0, 0, 0, 0.2);
+$imagebody-giflabel-color: rgba(255, 255, 255, 1);
+
+$greyed-fg-color: #888;
+
+$neutral-badge-color: #dbdbdb;
+
+$preview-widget-bar-color: #ddd;
+$preview-widget-fg-color: $greyed-fg-color;
+
+$blockquote-bar-color: #ddd;
+$blockquote-fg-color: #777;
+
+$settings-grey-fg-color: #a2a2a2;
+$settings-profile-placeholder-bg-color: #e7e7e7;
+$settings-profile-overlay-bg-color: #000;
+$settings-profile-overlay-placeholder-bg-color: transparent;
+$settings-profile-overlay-fg-color: #fff;
+$settings-profile-overlay-placeholder-fg-color: #2e2f32;
+$settings-subsection-fg-color: #61708b;
+
+$voip-decline-color: #f48080;
+$voip-accept-color: #80f480;
+
+$rte-bg-color: #e9e9e9;
+$rte-code-bg-color: rgba(0, 0, 0, 0.04);
+$rte-room-pill-color: #aaa;
+$rte-group-pill-color: #aaa;
+
+$topleftmenu-color: #212121;
+$roomheader-color: #45474a;
+$roomheader-bg-color: $primary-bg-color;
+$roomheader-addroom-bg-color: #91a1c0;
+$roomheader-addroom-fg-color: $accent-fg-color;
+$tagpanel-button-color: #91a1c0;
+$roomheader-button-color: #91a1c0;
+$groupheader-button-color: #91a1c0;
+$rightpanel-button-color: #91a1c0;
+$composer-button-color: #91a1c0;
+$roomtopic-color: #9e9e9e;
+$eventtile-meta-color: $roomtopic-color;
+
+$composer-e2e-icon-color: #91a1c0;
+$header-divider-color: #91a1c0;
+
+// ********************
+
+$theme-button-bg-color: #e3e8f0;
+
+$roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-bg-color: $header-panel-bg-color;
+$roomlist-header-color: $primary-fg-color;
+$roomsublist-divider-color: $primary-fg-color;
+
+$roomtile-preview-color: #9e9e9e;
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: #fff;
+
+$presence-online: $accent-color;
+$presence-away: #d9b072;
+$presence-offline: #e3e8f0;
+
+// ********************
+
+$username-variant1-color: #368bd6;
+$username-variant2-color: #ac3ba8;
+$username-variant3-color: #03b381;
+$username-variant4-color: #e64f7a;
+$username-variant5-color: #ff812d;
+$username-variant6-color: #2dc2c5;
+$username-variant7-color: #5c56f5;
+$username-variant8-color: #74d12c;
+
+$panel-divider-color: #dee1f3;
+
+// ********************
+
+$widget-menu-bar-bg-color: $secondary-accent-color;
+
+// ********************
+
+// both $event-highlight-bg-color and $room-warning-bg-color share this value,
+// so to not make their order dependent on who depends on who, have a shared value
+// defined before both
+$yellow-background: #fff8e3;
+
+// event tile lifecycle
+$event-encrypting-color: #abddbc;
+$event-sending-color: #ddd;
+$event-notsent-color: #f44;
+
+$event-highlight-fg-color: $warning-color;
+$event-highlight-bg-color: $yellow-background;
+
+// event redaction
+$event-redacted-fg-color: #e2e2e2;
+$event-redacted-border-color: #cccccc;
+
+// event timestamp
+$event-timestamp-color: #acacac;
+
+$copy-button-url: "$(res)/img/icon_copy_message.svg";
+
+// e2e
+$e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color
+$e2e-unknown-color: #e8bf37;
+$e2e-unverified-color: #e8bf37;
+$e2e-warning-color: #ba6363;
+
+/*** ImageView ***/
+$lightbox-bg-color: #454545;
+$lightbox-fg-color: #ffffff;
+$lightbox-border-color: #ffffff;
+
+// Tabbed views
+$tab-label-fg-color: #45474a;
+$tab-label-active-fg-color: #ffffff;
+$tab-label-bg-color: transparent;
+$tab-label-active-bg-color: $accent-color;
+$tab-label-icon-bg-color: #454545;
+$tab-label-active-icon-bg-color: $tab-label-active-fg-color;
+
+// Buttons
+$button-primary-fg-color: #ffffff;
+$button-primary-bg-color: $accent-color;
+$button-secondary-bg-color: $accent-fg-color;
+$button-danger-fg-color: #ffffff;
+$button-danger-bg-color: $notice-primary-color;
+$button-danger-disabled-fg-color: #ffffff;
+$button-danger-disabled-bg-color: #f5b6bb; // TODO: Verify color
+$button-link-fg-color: $accent-color;
+$button-link-bg-color: transparent;
+
+$visual-bell-bg-color: #faa;
+
+// Toggle switch
+$togglesw-off-color: #c1c9d6;
+$togglesw-on-color: $accent-color;
+$togglesw-ball-color: #fff;
+
+// Slider
+$slider-selection-color: $accent-color;
+$slider-background-color: #c1c9d6;
+
+$progressbar-color: #000;
+
+$room-warning-bg-color: $yellow-background;
+
+$memberstatus-placeholder-color: $muted-fg-color;
+
+$authpage-bg-color: #2e3649;
+$authpage-modal-bg-color: rgba(255, 255, 255, 0.59);
+$authpage-body-bg-color: #ffffff;
+$authpage-focus-bg-color: #dddddd;
+$authpage-lang-color: #4e5054;
+$authpage-primary-color: #232f32;
+$authpage-secondary-color: #61708b;
+
+$dark-panel-bg-color: $secondary-accent-color;
+$panel-gradient: rgba(242, 245, 248, 0), rgba(242, 245, 248, 1);
+
+$message-action-bar-bg-color: $primary-bg-color;
+$message-action-bar-fg-color: $primary-fg-color;
+$message-action-bar-border-color: #e9edf1;
+$message-action-bar-hover-border-color: $focus-bg-color;
+
+$reaction-row-button-bg-color: $header-panel-bg-color;
+$reaction-row-button-border-color: #e9edf1;
+$reaction-row-button-hover-border-color: $focus-bg-color;
+$reaction-row-button-selected-bg-color: #e9fff9;
+$reaction-row-button-selected-border-color: $accent-color;
+
+$kbd-border-color: $reaction-row-button-border-color;
+
+$tooltip-timeline-bg-color: $tagpanel-bg-color;
+$tooltip-timeline-fg-color: #ffffff;
+
+$interactive-tooltip-bg-color: #27303a;
+$interactive-tooltip-fg-color: #ffffff;
+
+$breadcrumb-placeholder-bg-color: #e8eef5;
+
+$user-tile-hover-bg-color: $header-panel-bg-color;
+
+// FontSlider colors
+$appearance-tab-border-color: $input-darker-bg-color;
+
+$composer-shadow-color: tranparent;
+
+// ***** Mixins! *****
+
+@define-mixin mx_DialogButton {
+    /* align images in buttons (eg spinners) */
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 4px;
+    font-family: $font-family;
+    font-size: $font-14px;
+    color: $button-fg-color;
+    background-color: $button-bg-color;
+    width: auto;
+    padding: 7px;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+    display: inline-block;
+    outline: none;
+}
+
+@define-mixin mx_DialogButton_hover {
+}
+
+@define-mixin mx_DialogButton_danger {
+    background-color: $accent-color;
+}
+
+@define-mixin mx_DialogButton_small {
+    @mixin mx_DialogButton;
+    font-size: $font-15px;
+    padding: 0px 1.5em 0px 1.5em;
+}
+
+@define-mixin mx_DialogButton_secondary {
+    // flip colours for the secondary ones
+    font-weight: 600;
+    border: 1px solid $accent-color ! important;
+    color: $accent-color;
+    background-color: $button-secondary-bg-color;
+}
+
+@define-mixin mx_Dialog_link {
+    color: $accent-color;
+    text-decoration: none;
+}
+
+// diff highlight colors
+.hljs-addition {
+    background: #dfd;
+}
+
+.hljs-deletion {
+    background: #fdd;
+}

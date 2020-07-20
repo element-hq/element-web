@@ -41,8 +41,8 @@ limitations under the License.
     // with text-align in parent
     display: inline-block;
     padding: 0 4px;
-    color: $roomtile-badge-fg-color;
-    background-color: $roomtile-name-color;
+    color: $accent-fg-color;
+    background-color: $muted-fg-color;
 }
 
 .mx_JumpToBottomButton_highlight .mx_JumpToBottomButton_badge {
@@ -56,7 +56,7 @@ limitations under the License.
     border-radius: 19px;
     box-sizing: border-box;
     background: $primary-bg-color;
-    border: 1.3px solid $roomtile-name-color;
+    border: 1.3px solid $muted-fg-color;
     cursor: pointer;
 }
 
@@ -70,5 +70,5 @@ limitations under the License.
     mask: url('$(res)/img/icon-jump-to-bottom.svg');
     mask-repeat: no-repeat;
     mask-position: 9px 14px;
-    background: $roomtile-name-color;
+    background: $muted-fg-color;
 }

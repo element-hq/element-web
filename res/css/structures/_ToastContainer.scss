@@ -48,14 +48,17 @@ limitations under the License.
         padding: 8px;
 
         &.mx_Toast_hasIcon {
-            &::after {
+            &::before, &::after {
                 content: "";
                 width: 22px;
                 height: 22px;
                 grid-column: 1;
                 grid-row: 1;
                 mask-size: 100%;
+                mask-position: center;
                 mask-repeat: no-repeat;
+                background-size: 100%;
+                background-repeat: no-repeat;
             }
 
             &.mx_Toast_icon_verification::after {
@@ -63,8 +66,22 @@ limitations under the License.
                 background-color: $primary-fg-color;
             }
 
-            &.mx_Toast_icon_verification_warning::after {
-                background-image: url("$(res)/img/e2e/warning.svg");
+            &.mx_Toast_icon_verification_warning {
+                // white infill for the hollow svg mask
+                &::before {
+                    background-color: #ffffff;
+                    mask-image: url('$(res)/img/e2e/normal.svg');
+                    mask-size: 90%;
+                }
+
+                &::after {
+                    mask-image: url("$(res)/img/e2e/warning.svg");
+                    background-color: $notice-primary-color;
+                }
+            }
+
+            &.mx_Toast_icon_element_logo::after {
+                background-image: url("$(res)/img/element-logo.svg");
             }
 
             .mx_Toast_title, .mx_Toast_body {

@@ -1927,25 +1927,29 @@ export default createReactClass({
         }
 
         if (inCall) {
-            let zoomButton; let voiceMuteButton; let videoMuteButton;
+            let zoomButton; let videoMuteButton;
 
             if (call.type === "video") {
                 zoomButton = (
                     <div className="mx_RoomView_voipButton" onClick={this.onFullscreenClick} title={_t("Fill screen")}>
-                        <TintableSvg src={require("../../../res/img/fullscreen.svg")} width="29" height="22" style={{ marginTop: 1, marginRight: 4 }} />
+                        <TintableSvg src={require("../../../res/img/element-icons/call/fullscreen.svg")} width="29" height="22" style={{ marginTop: 1, marginRight: 4 }} />
                     </div>
                 );
 
                 videoMuteButton =
                     <div className="mx_RoomView_voipButton" onClick={this.onMuteVideoClick}>
-                        <TintableSvg src={call.isLocalVideoMuted() ? require("../../../res/img/video-unmute.svg") : require("../../../res/img/video-mute.svg")}
+                        <TintableSvg src={call.isLocalVideoMuted() ?
+                            require("../../../res/img/element-icons/call/video-muted.svg") :
+                            require("../../../res/img/element-icons/call/video-call.svg")}
                              alt={call.isLocalVideoMuted() ? _t("Click to unmute video") : _t("Click to mute video")}
-                             width="31" height="27" />
+                             width="" height="27" />
                     </div>;
             }
-            voiceMuteButton =
+            const voiceMuteButton =
                 <div className="mx_RoomView_voipButton" onClick={this.onMuteAudioClick}>
-                    <TintableSvg src={call.isMicrophoneMuted() ? require("../../../res/img/voice-unmute.svg") : require("../../../res/img/voice-mute.svg")}
+                    <TintableSvg src={call.isMicrophoneMuted() ?
+                        require("../../../res/img/element-icons/call/voice-muted.svg") :
+                        require("../../../res/img/element-icons/call/voice-unmuted.svg")}
                          alt={call.isMicrophoneMuted() ? _t("Click to unmute audio") : _t("Click to mute audio")}
                          width="21" height="26" />
                 </div>;
@@ -1957,7 +1961,6 @@ export default createReactClass({
                     { videoMuteButton }
                     { zoomButton }
                     { statusBar }
-                    <TintableSvg className="mx_RoomView_voipChevron" src={require("../../../res/img/voip-chevron.svg")} width="22" height="17" />
                 </div>;
         }
 

@@ -675,12 +675,16 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'hide_left_panel':
                 this.setState({
                     collapseLhs: true,
+                }, () => {
+                    this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
             case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
+                }, () => {
+                    this.state.resizeNotifier.notifyLeftHandleResized();
                 });
                 break;
             case 'panel_disable': {
@@ -1460,16 +1464,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("crypto.warning", (type) => {
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
+                    const brand = SdkConfig.get().brand;
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
-                            "Data from an older version of Riot has been detected. " +
+                            "Data from an older version of %(brand)s has been detected. " +
                             "This will have caused end-to-end cryptography to malfunction " +
                             "in the older version. End-to-end encrypted messages exchanged " +
                             "recently whilst using the older version may not be decryptable " +
                             "in this version. This may also cause messages exchanged with this " +
                             "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
+                            { brand },
                         ),
                     });
                     break;
@@ -1834,7 +1840,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else {
             subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
-        document.title = `${SdkConfig.get().brand || 'Riot'} ${subtitle}`;
+        document.title = `${SdkConfig.get().brand} ${subtitle}`;
     }
 
     updateStatusIndicator(state: string, prevState: string) {

@@ -15,6 +15,10 @@ limitations under the License.
 */
 
 .mx_UserMenu {
+
+    // to make the ... button sort of aligned with the explore button below
+    padding-right: 6px;
+
     .mx_UserMenu_headerButtons {
         width: 16px;
         height: 16px;
@@ -32,7 +36,7 @@ limitations under the License.
             mask-size: contain;
             mask-repeat: no-repeat;
             background: $primary-fg-color;
-            mask-image: url('$(res)/img/feather-customised/more-horizontal.svg');
+            mask-image: url('$(res)/img/element-icons/context-menu.svg');
         }
     }
 
@@ -48,6 +52,7 @@ limitations under the License.
 
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size
+                object-fit: cover;
             }
         }
 
@@ -167,30 +172,30 @@ limitations under the License.
     }
 
     .mx_UserMenu_iconHome::before {
-        mask-image: url('$(res)/img/feather-customised/home.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
     }
 
     .mx_UserMenu_iconBell::before {
-        mask-image: url('$(res)/img/feather-customised/notifications.svg');
+        mask-image: url('$(res)/img/element-icons/notifications.svg');
     }
 
     .mx_UserMenu_iconLock::before {
-        mask-image: url('$(res)/img/feather-customised/lock.svg');
+        mask-image: url('$(res)/img/element-icons/security.svg');
     }
 
     .mx_UserMenu_iconSettings::before {
-        mask-image: url('$(res)/img/feather-customised/settings.svg');
+        mask-image: url('$(res)/img/element-icons/settings.svg');
     }
 
     .mx_UserMenu_iconArchive::before {
-        mask-image: url('$(res)/img/feather-customised/archive.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/archived.svg');
     }
 
     .mx_UserMenu_iconMessage::before {
-        mask-image: url('$(res)/img/feather-customised/message-circle.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/feedback.svg');
     }
 
     .mx_UserMenu_iconSignOut::before {
-        mask-image: url('$(res)/img/feather-customised/sign-out.svg');
+        mask-image: url('$(res)/img/element-icons/leave.svg');
     }
 }

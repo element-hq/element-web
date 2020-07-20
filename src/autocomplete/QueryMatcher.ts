@@ -18,16 +18,15 @@ limitations under the License.
 
 import _at from 'lodash/at';
 import _uniq from 'lodash/uniq';
-
-function stripDiacritics(str: string): string {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
+import {removeHiddenChars} from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
     keys: Array<string | keyof T>;
     funcs?: Array<(T) => string>;
     shouldMatchWordsOnly?: boolean;
     shouldMatchPrefix?: boolean;
+    // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
+    fuzzy?: boolean;
 }
 
 /**
@@ -46,14 +45,10 @@ interface IOptions<T extends {}> {
  */
 export default class QueryMatcher<T extends Object> {
     private _options: IOptions<T>;
-    private _keys: IOptions<T>["keys"];
-    private _funcs: Required<IOptions<T>["funcs"]>;
     private _items: Map<string, {object: T, keyWeight: number}[]>;
 
     constructor(objects: T[], options: IOptions<T> = { keys: [] }) {
         this._options = options;
-        this._keys = options.keys;
-        this._funcs = options.funcs || [];
 
         this.setObjects(objects);
 
@@ -78,15 +73,17 @@ export default class QueryMatcher<T extends Object> {
             // type for their values. We assume that those values who's keys have
             // been specified will be string. Also, we cannot infer all the
             // types of the keys of the objects at compile.
-            const keyValues = _at<string>(<any>object, this._keys);
+            const keyValues = _at<string>(<any>object, this._options.keys);
 
-            for (const f of this._funcs) {
-                keyValues.push(f(object));
+            if (this._options.funcs) {
+                for (const f of this._options.funcs) {
+                    keyValues.push(f(object));
+                }
             }
 
             for (const [index, keyValue] of Object.entries(keyValues)) {
                 if (!keyValue) continue; // skip falsy keyValues
-                const key = stripDiacritics(keyValue).toLowerCase();
+                const key = this.processQuery(keyValue);
                 if (!this._items.has(key)) {
                     this._items.set(key, []);
                 }
@@ -99,7 +96,7 @@ export default class QueryMatcher<T extends Object> {
     }
 
     match(query: string): T[] {
-        query = stripDiacritics(query).toLowerCase();
+        query = this.processQuery(query);
         if (this._options.shouldMatchWordsOnly) {
             query = query.replace(/[^\w]/g, '');
         }
@@ -141,5 +138,12 @@ export default class QueryMatcher<T extends Object> {
 
         // Now map the keys to the result objects. Also remove any duplicates.
         return _uniq(matches.map((match) => match.object));
+    }
+
+    private processQuery(query: string): string {
+        if (this._options.fuzzy !== false) {
+            return removeHiddenChars(query).toLowerCase();
+        }
+        return query.toLowerCase();
     }
 }

@@ -19,9 +19,11 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
-import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
+import RebrandListener from "../RebrandListener";
+import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
 
 declare global {
     interface Window {
@@ -34,14 +36,16 @@ declare global {
         mx_ContentMessages: ContentMessages;
         mx_ToastStore: ToastStore;
         mx_DeviceListener: DeviceListener;
-        mx_RoomListStore2: RoomListStore2;
+        mx_RebrandListener: RebrandListener;
+        mx_RoomListStore: RoomListStoreClass;
         mx_RoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
+        mxIntegrationManagers: typeof IntegrationManagers;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
     interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object
+        fromEntries?(xs: [string|number|symbol, any][]): object;
     }
 
     interface Document {

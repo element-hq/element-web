@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
+import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
 
 const MessageCase = Object.freeze({
@@ -282,6 +283,7 @@ export default createReactClass({
     },
 
     render: function() {
+        const brand = SdkConfig.get().brand;
         const Spinner = sdk.getComponent('elements.Spinner');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
@@ -398,7 +400,8 @@ export default createReactClass({
                 );
                 subTitle = _t(
                     "Link this email with your account in Settings to receive invites " +
-                    "directly in Riot.",
+                    "directly in %(brand)s.",
+                    { brand },
                 );
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;
@@ -413,7 +416,8 @@ export default createReactClass({
                     },
                 );
                 subTitle = _t(
-                    "Use an identity server in Settings to receive invites directly in Riot.",
+                    "Use an identity server in Settings to receive invites directly in %(brand)s.",
+                    { brand },
                 );
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;
@@ -428,7 +432,8 @@ export default createReactClass({
                     },
                 );
                 subTitle = _t(
-                    "Share this email in Settings to receive invites directly in Riot.",
+                    "Share this email in Settings to receive invites directly in %(brand)s.",
+                    { brand },
                 );
                 primaryActionLabel = _t("Join the discussion");
                 primaryActionHandler = this.props.onJoinClick;

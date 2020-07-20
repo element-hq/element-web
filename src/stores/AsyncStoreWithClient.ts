@@ -18,7 +18,6 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import { AsyncStore } from "./AsyncStore";
 import { ActionPayload } from "../dispatcher/payloads";
 
-
 export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {
     protected matrixClient: MatrixClient;
 

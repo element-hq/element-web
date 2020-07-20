@@ -18,6 +18,7 @@ import React from 'react';
 import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
+import SdkConfig from '../../../../SdkConfig';
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
@@ -134,8 +135,10 @@ export default class ManageEventIndexDialog extends React.Component {
     };
 
     render() {
-        let crawlerState;
+        const brand = SdkConfig.get().brand;
+        const Field = sdk.getComponent('views.elements.Field');
 
+        let crawlerState;
         if (this.state.currentRoom === null) {
             crawlerState = _t("Not currently indexing messages for any room.");
         } else {
@@ -144,17 +147,15 @@ export default class ManageEventIndexDialog extends React.Component {
             );
         }
 
-        const Field = sdk.getComponent('views.elements.Field');
-
         const doneRooms = Math.max(0, (this.state.roomCount - this.state.crawlingRoomsCount));
 
         const eventIndexingSettings = (
             <div>
-                {
-                    _t( "Riot is securely caching encrypted messages locally for them " +
-                        "to appear in search results:",
-                    )
-                }
+                {_t(
+                    "%(brand)s is securely caching encrypted messages locally for them " +
+                    "to appear in search results:",
+                    { brand },
+                )}
                 <div className='mx_SettingsTab_subsectionText'>
                     {crawlerState}<br />
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />

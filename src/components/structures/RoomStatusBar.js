@@ -173,7 +173,7 @@ export default createReactClass({
         if (this.props.hasActiveCall) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
-                <TintableSvg src={require("../../../res/img/sound-indicator.svg")} width="23" height="20" />
+                <TintableSvg src={require("../../../res/img/element-icons/room/in-call.svg")} width="23" height="20" />
             );
         }
 

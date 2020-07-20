@@ -23,6 +23,7 @@ import {objectClone, objectKeyChanges} from "../../utils/objects";
 const BREADCRUMBS_LEGACY_EVENT_TYPE = "im.vector.riot.breadcrumb_rooms";
 const BREADCRUMBS_EVENT_TYPE = "im.vector.setting.breadcrumbs";
 const BREADCRUMBS_EVENT_TYPES = [BREADCRUMBS_LEGACY_EVENT_TYPE, BREADCRUMBS_EVENT_TYPE];
+const RECENT_EMOJI_EVENT_TYPE = "io.element.recent_emoji";
 
 const INTEG_PROVISIONING_EVENT_TYPE = "im.vector.setting.integration_provisioning";
 
@@ -69,6 +70,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         } else if (event.getType() === INTEG_PROVISIONING_EVENT_TYPE) {
             const val = event.getContent()['enabled'];
             this._watchers.notifyUpdate("integrationProvisioning", null, SettingLevel.ACCOUNT, val);
+        } else if (event.getType() === RECENT_EMOJI_EVENT_TYPE) {
+            const val = event.getContent()['enabled'];
+            this._watchers.notifyUpdate("recent_emoji", null, SettingLevel.ACCOUNT, val);
         }
     }
 
@@ -93,6 +97,12 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             }
 
             return content && content['recent_rooms'] ? content['recent_rooms'] : [];
+        }
+
+        // Special case recent emoji
+        if (settingName === "recent_emoji") {
+            const content = this._getSettings(RECENT_EMOJI_EVENT_TYPE);
+            return content ? content["recent_emoji"] : null;
         }
 
         // Special case integration manager provisioning
@@ -133,6 +143,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
             content['recent_rooms'] = newValue;
             return MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
+        }
+
+        // Special case recent emoji
+        if (settingName === "recent_emoji") {
+            const content = this._getSettings(RECENT_EMOJI_EVENT_TYPE) || {};
+            content["recent_emoji"] = newValue;
+            return MatrixClientPeg.get().setAccountData(RECENT_EMOJI_EVENT_TYPE, content);
         }
 
         // Special case integration manager provisioning

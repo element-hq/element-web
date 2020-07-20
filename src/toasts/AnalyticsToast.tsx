@@ -17,6 +17,7 @@ limitations under the License.
 import React from "react";
 
 import { _t } from "../languageHandler";
+import SdkConfig from "../SdkConfig";
 import dis from "../dispatcher/dispatcher";
 import Analytics from "../Analytics";
 import AccessibleButton from "../components/views/elements/AccessibleButton";
@@ -42,14 +43,17 @@ const onUsageDataClicked = () => {
 const TOAST_KEY = "analytics";
 
 export const showToast = (policyUrl?: string) => {
+    const brand = SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
-        title: _t("Help us improve Riot"),
+        title: _t("Help us improve %(brand)s", { brand }),
         props: {
             description: _t(
-                "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve Riot. " +
+                "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. " +
                 "This will use a <PolicyLink>cookie</PolicyLink>.",
-                {},
+                {
+                    brand,
+                },
                 {
                     "UsageDataLink": (sub) => (
                         <AccessibleButton kind="link" onClick={onUsageDataClicked}>{ sub }</AccessibleButton>
