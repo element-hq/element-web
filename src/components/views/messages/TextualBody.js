@@ -107,7 +107,7 @@ export default createReactClass({
                         } else {
                             // Only syntax highlight if there's a class starting with language-
                             const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-');
+                                return cl.startsWith('language-') && !cl.startsWith('language-_');
                             });
 
                             if (classes.length != 0) {

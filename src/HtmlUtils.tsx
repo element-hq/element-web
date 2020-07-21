@@ -184,7 +184,7 @@ const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to mat
         if (typeof attribs.class !== 'undefined') {
             // Filter out all classes other than ones starting with language- for syntax highlighting.
             const classes = attribs.class.split(/\s/).filter(function(cl) {
-                return cl.startsWith('language-');
+                return cl.startsWith('language-') && !cl.startsWith('language-_');
             });
             attribs.class = classes.join(' ');
         }
