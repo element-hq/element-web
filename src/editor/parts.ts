@@ -22,7 +22,7 @@ import {Room} from "matrix-js-sdk/src/models/room";
 import AutocompleteWrapperModel, {
     GetAutocompleterComponent,
     UpdateCallback,
-    UpdateQuery
+    UpdateQuery,
 } from "./autocomplete";
 import * as Avatar from "../Avatar";
 

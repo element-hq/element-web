@@ -704,6 +704,7 @@ export default class AppTile extends React.Component {
 
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
+        // eslint-disable-next-line no-self-assign
         this._appFrame.current.src = this._appFrame.current.src;
     }
 

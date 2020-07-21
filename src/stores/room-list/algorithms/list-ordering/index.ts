@@ -36,7 +36,11 @@ const ALGORITHM_FACTORIES: { [algorithm in ListAlgorithm]: AlgorithmFactory } = 
  * @param {SortAlgorithm} initSort The initial sorting algorithm for the ordering algorithm.
  * @returns {Algorithm} The algorithm instance.
  */
-export function getListAlgorithmInstance(algorithm: ListAlgorithm, tagId: TagID, initSort: SortAlgorithm): OrderingAlgorithm {
+export function getListAlgorithmInstance(
+    algorithm: ListAlgorithm,
+    tagId: TagID,
+    initSort: SortAlgorithm,
+): OrderingAlgorithm {
     if (!ALGORITHM_FACTORIES[algorithm]) {
         throw new Error(`${algorithm} is not a known algorithm`);
     }

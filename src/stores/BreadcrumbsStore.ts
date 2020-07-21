@@ -171,5 +171,4 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             }
         }
     }
-
 }

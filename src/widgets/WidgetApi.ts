@@ -113,7 +113,7 @@ export class WidgetApi extends EventEmitter {
                     // Finalization needs to be async, so postpone with a promise
                     let finalizePromise = Promise.resolve();
                     const wait = (promise) => {
-                        finalizePromise = finalizePromise.then(value => promise);
+                        finalizePromise = finalizePromise.then(() => promise);
                     };
                     this.emit('terminate', wait);
                     Promise.resolve(finalizePromise).then(() => {

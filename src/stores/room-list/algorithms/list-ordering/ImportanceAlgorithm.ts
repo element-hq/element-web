@@ -218,7 +218,12 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private moveRoomIndexes(nRooms: number, fromCategory: NotificationColor, toCategory: NotificationColor, indices: ICategoryIndex) {
+    private moveRoomIndexes(
+        nRooms: number,
+        fromCategory: NotificationColor,
+        toCategory: NotificationColor,
+        indices: ICategoryIndex,
+    ) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
@@ -257,7 +262,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
             if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
-                console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
+                console.warn(
+                    `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +
+                    `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
                 // TODO: Regenerate index when this happens: https://github.com/vector-im/riot-web/issues/14234
             }

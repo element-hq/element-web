@@ -22,12 +22,12 @@ import { _t } from '../languageHandler';
  * e.g: 999, 9.9K, 99K, 0.9M, 9.9M, 99M, 0.9B, 9.9B
  */
 export function formatCount(count: number): string {
-   if (count < 1000) return count.toString();
-   if (count < 10000) return (count / 1000).toFixed(1) + "K";
-   if (count < 100000) return (count / 1000).toFixed(0) + "K";
-   if (count < 10000000) return (count / 1000000).toFixed(1) + "M";
-   if (count < 100000000) return (count / 1000000).toFixed(0) + "M";
-   return (count / 1000000000).toFixed(1) + "B"; // 10B is enough for anyone, right? :S
+    if (count < 1000) return count.toString();
+    if (count < 10000) return (count / 1000).toFixed(1) + "K";
+    if (count < 100000) return (count / 1000).toFixed(0) + "K";
+    if (count < 10000000) return (count / 1000000).toFixed(1) + "M";
+    if (count < 100000000) return (count / 1000000).toFixed(0) + "M";
+    return (count / 1000000000).toFixed(1) + "B"; // 10B is enough for anyone, right? :S
 }
 
 /**

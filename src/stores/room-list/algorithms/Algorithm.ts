@@ -27,7 +27,7 @@ import {
     ITagMap,
     ITagSortingMap,
     ListAlgorithm,
-    SortAlgorithm
+    SortAlgorithm,
 } from "./models";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "../filters/IFilterCondition";
 import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } from "../../../utils/membership";
@@ -419,7 +419,9 @@ export class Algorithm extends EventEmitter {
         if (!updatedTag || updatedTag === sticky.tag) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
                 // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
-                console.log(`Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`);
+                console.log(
+                    `Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`,
+                );
             }
             this._cachedStickyRooms[sticky.tag].splice(sticky.position, 0, sticky.room);
         }
@@ -563,9 +565,6 @@ export class Algorithm extends EventEmitter {
     }
 
     public getTagsForRoom(room: Room): TagID[] {
-        // XXX: This duplicates a lot of logic from setKnownRooms above, but has a slightly
-        // different use case and therefore different performance curve
-
         const tags: TagID[] = [];
 
         const membership = getEffectiveMembership(room.getMyMembership());

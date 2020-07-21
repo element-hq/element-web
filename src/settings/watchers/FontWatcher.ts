@@ -19,7 +19,6 @@ import SettingsStore, {SettingLevel} from '../SettingsStore';
 import IWatcher from "./Watcher";
 import { toPx } from '../../utils/units';
 import { Action } from '../../dispatcher/actions';
-import { UpdateSystemFontPayload } from '../../dispatcher/payloads/UpdateSystemFontPayload';
 
 export class FontWatcher implements IWatcher {
     public static readonly MIN_SIZE = 8;

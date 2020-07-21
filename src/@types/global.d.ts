@@ -24,6 +24,7 @@ import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
+import {ModalManager} from "../Modal";
 import {ActiveRoomObserver} from "../ActiveRoomObserver";
 
 declare global {
@@ -34,16 +35,16 @@ declare global {
             init: () => Promise<void>;
         };
 
-        mx_ContentMessages: ContentMessages;
-        mx_ToastStore: ToastStore;
-        mx_DeviceListener: DeviceListener;
-        mx_RebrandListener: RebrandListener;
-        mx_RoomListStore: RoomListStoreClass;
-        mx_RoomListLayoutStore: RoomListLayoutStore;
+        mxContentMessages: ContentMessages;
+        mxToastStore: ToastStore;
+        mxDeviceListener: DeviceListener;
+        mxRebrandListener: RebrandListener;
+        mxRoomListStore: RoomListStoreClass;
+        mxRoomListLayoutStore: RoomListLayoutStore;
         mx_ActiveRoomObserver: ActiveRoomObserver;
-
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
+        singletonModalManager: ModalManager;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
