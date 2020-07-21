@@ -1,7 +1,7 @@
 # Review Guidelines
 
 The following summarises review guidelines that we follow for pull requests in
-Riot Web and other supporting repos. These are just guidelines (not strict
+Element Web and other supporting repos. These are just guidelines (not strict
 rules) and may be updated over time.
 
 ## Code Review
@@ -58,7 +58,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 
 ## Design and Product Review
 
-We want to ensure that all changes to Riot fit with our design and product
+We want to ensure that all changes to Element fit with our design and product
 vision. We often request review from those teams so they can provide their
 perspective.
 
@@ -72,11 +72,11 @@ functionality is:
 
 As it can be difficult to review design work from looking at just the changed
 files in a PR, authors should be prepared for Design and / or Product teams to
-request a link to an ad-hoc build of Riot (hosted anywhere) that can be used for
+request a link to an ad-hoc build of Element (hosted anywhere) that can be used for
 the review. In the future, we [hope to automate
 this](https://github.com/vector-im/riot-web/issues/12624) for every PR.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
-with our vision for Riot. Please chat with the team in
-[#riot-dev:matrix.org](https://matrix.to/#/#riot-dev:matrix.org) before you
+with our vision for Element. Please chat with the team in
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
 start so we can ensure it's something we'd be willing to merge.

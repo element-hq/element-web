@@ -1,41 +1,41 @@
-Riot
-====
+Element
+=======
 
-Riot (formerly known as Vector) is a Matrix web client built using the [Matrix
+Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
 React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
 Supported Environments
 ======================
 
-Riot has several tiers of support for different environments:
+Element has several tiers of support for different environments:
 
 * Supported
   * Definition: Issues **actively triaged**, regressions **block** the release
   * Last 2 major versions of Chrome, Firefox, and Safari on desktop OSes
-  * Latest release of official Riot Desktop app on desktop OSes
+  * Latest release of official Element Desktop app on desktop OSes
   * Desktop OSes means macOS, Windows, and Linux versions for desktop devices
     that are actively supported by the OS vendor and receive security updates
 * Experimental
   * Definition: Issues **accepted**, regressions **do not block** the release
-  * Riot as an installed PWA via current stable version of Chrome, Firefox, and Safari
+  * Element as an installed PWA via current stable version of Chrome, Firefox, and Safari
   * Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 * Not supported
   * Definition: Issues only affecting unsupported environments are **closed**
   * Everything else
 
-For accessing Riot on an Android or iOS device, we currently recommend the
+For accessing Element on an Android or iOS device, we currently recommend the
 native apps [riot-android](https://github.com/vector-im/riot-android)
 and [riot-ios](https://github.com/vector-im/riot-ios).
 
 Getting Started
 ===============
 
-The easiest way to test Riot is to just use the hosted copy at https://riot.im/app.
-The `develop` branch is continuously deployed by Jenkins at https://riot.im/develop
+The easiest way to test Element is to just use the hosted copy at https://app.element.io.
+The `develop` branch is continuously deployed by Jenkins at https://develop.element.io
 for those who like living dangerously.
 
-To host your own copy of Riot, the quickest bet is to use a pre-built
-released version of Riot:
+To host your own copy of Element, the quickest bet is to use a pre-built
+released version of Element:
 
 1. Download the latest version from https://github.com/vector-im/riot-web/releases
 1. Untar the tarball on your web server
@@ -43,29 +43,29 @@ released version of Riot:
 1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
-1. Enter the URL into your browser and log into Riot!
+1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
 at https://packages.riot.im/riot-release-key.asc.
 
-Note that for the security of your chats will need to serve Riot
+Note that for the security of your chats will need to serve Element
 over HTTPS. Major browsers also do not allow you to use VoIP/video
 chats over HTTP, as WebRTC is only usable over HTTPS.
 There are some exceptions like when using localhost, which is
 considered a [secure context](https://developer.mozilla.org/docs/Web/Security/Secure_Contexts)
 and thus allowed.
 
-To install Riot as a desktop application, see [Running as a desktop
+To install Element as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
 
 Important Security Note
 =======================
 
-We do not recommend running Riot from the same domain name as your Matrix
+We do not recommend running Element from the same domain name as your Matrix
 homeserver.  The reason is the risk of XSS (cross-site-scripting)
-vulnerabilities that could occur if someone caused Riot to load and render
+vulnerabilities that could occur if someone caused Element to load and render
 malicious user generated content from a Matrix API which then had trusted
-access to Riot (or other apps) due to sharing the same domain.
+access to Element (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
@@ -74,7 +74,7 @@ https://github.com/vector-im/riot-web/issues/1977 for more details.
 Building From Source
 ====================
 
-Riot is a modular webapp built with modern ES6 and uses a Node.js build system.
+Element is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
@@ -88,7 +88,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
    *  If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
       environment](#setting-up-a-dev-environment) below). Alternatively, you
-      can use https://riot.im/develop - the continuous integration release of
+      can use https://develop.element.io - the continuous integration release of
       the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](docs/config.md) for details.
@@ -97,14 +97,14 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
    web server.
 
 Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
-which will build all the necessary files into the `webapp` directory. The version of Riot
+which will build all the necessary files into the `webapp` directory. The version of Element
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your webserver to actually serve up the app, which is entirely static content.
 
 Running as a Desktop app
 ========================
 
-Riot can also be run as a desktop app, wrapped in Electron. You can download a
+Element can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from https://riot.im/download/desktop/ or, if you prefer,
 build it yourself.
 
@@ -117,7 +117,7 @@ Other options for running as a desktop app:
 
 ```bash
 yarn global add nativefier
-nativefier https://riot.im/app/
+nativefier https://app.element.io/
 ```
 
 The [configuration docs](docs/config.md#desktop-app-configuration) show how to
@@ -162,19 +162,19 @@ docker build -t vectorim/riot-web:develop \
 config.json
 ===========
 
-Riot supports a variety of settings to configure default servers, behaviour, themes, etc.
+Element supports a variety of settings to configure default servers, behaviour, themes, etc.
 See the [configuration docs](docs/config.md) for more details.
 
 Labs Features
 =============
 
-Some features of Riot may be enabled by flags in the `Labs` section of the settings.
+Some features of Element may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
 
 Caching requirements
 ====================
 
-Riot requires the following URLs not to be cached, when/if you are serving Riot from your own webserver:
+Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
 ```
 /config.*.json
 /i18n
@@ -188,7 +188,7 @@ Development
 
 Before attempting to develop on Riot you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
-also defines the design, architecture and style for Riot too.
+also defines the design, architecture and style for Element too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Riot. Please chat with the team in
@@ -199,7 +199,7 @@ You should also familiarise yourself with the ["Here be Dragons" guide
 ](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
 to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
 
-The idea of Riot is to be a relatively lightweight "skin" of customisations on
+The idea of Element is to be a relatively lightweight "skin" of customisations on
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
@@ -207,15 +207,15 @@ apps using React.
 After creating a new component you must run `yarn reskindex` to regenerate
 the `component-index.js` for the app (used in future for skinning).
 
-Please note that Riot is intended to run correctly without access to the public
+Please note that Element is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
-into Riot itself.
+into Element itself.
 
 Setting up a dev environment
 ============================
 
-Much of the functionality in Riot is actually in the `matrix-react-sdk` and
+Much of the functionality in Element is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
 easy to track the `develop` branches in git and to make local changes without
 having to manually rebuild each time.
@@ -243,7 +243,7 @@ yarn install
 popd
 ```
 
-Finally, build and start Riot itself:
+Finally, build and start Element itself:
 
 ```bash
 git clone https://github.com/vector-im/riot-web.git
@@ -299,12 +299,12 @@ ___
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
 
-If you add or remove any components from the Riot skin, you will need to rebuild
+If you add or remove any components from the Element skin, you will need to rebuild
 the skin's index by running, `yarn reskindex`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
-You'll need to do this in each new terminal you open before building Riot.
+You'll need to do this in each new terminal you open before building Element.
 
 Running the tests
 -----------------
