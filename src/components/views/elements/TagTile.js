@@ -156,7 +156,7 @@ export default createReactClass({
             <AccessibleButton
                 className="mx_TagTile_context_button"
                 onClick={this.openMenu}
-                ref={this.props.contextMenuButtonRef}
+                inputRef={this.props.contextMenuButtonRef}
             >
                 {"\u00B7\u00B7\u00B7"}
             </AccessibleButton> : <div ref={this.props.contextMenuButtonRef} />;
