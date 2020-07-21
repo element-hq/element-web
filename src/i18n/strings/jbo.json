@@ -467,5 +467,9 @@
     "<userName/> wants to chat": ".i la'o zoi. <userName/> .zoi kaidji le ka tavla do",
     "<userName/> invited you": ".i la'o zoi. <userName/> .zoi friti le ka ziljmina kei do",
     "Username": "judri cmene",
-    "Enter username": ".i ko cuxna fo le ka judri cmene"
+    "Enter username": ".i ko cuxna fo le ka judri cmene",
+    "We’re excited to announce Riot is now Element": ".i fizbu lo nu zo .elyment. basti zo .raiyt. le ka cmene",
+    "Riot is now Element!": ".i zo .elyment. basti zo .raiyt. le ka cmene",
+    "Learn More": "nu facki",
+    "We’re excited to announce Riot is now Element!": ".i lo nu gubni xusra le du'u zo .elyment. basti zo .raiyt. le ka cmene cu fizbu"
 }
