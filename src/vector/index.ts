@@ -175,8 +175,12 @@ async function start() {
             if (error.err && error.err instanceof SyntaxError) {
                 // This uses the default brand since the app config is unavailable.
                 return showError(_t("Your Element is misconfigured"), [
-                    _t("Your Element configuration contains invalid JSON. Please correct the problem and reload the page."),
-                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON")}),
+                    _t("Your Element configuration contains invalid JSON. " +
+                        "Please correct the problem and reload the page."),
+                    _t(
+                        "The message from the parser is: %(message)s",
+                        { message: error.err.message || _t("Invalid JSON") },
+                    ),
                 ]);
             }
             return showError(_t("Unable to load config file: please refresh the page to try again."));
@@ -210,6 +214,7 @@ start().catch(err => {
     // with some basic styling to make the iframe full page
     delete document.body.style.height;
     const iframe = document.createElement("iframe");
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";
