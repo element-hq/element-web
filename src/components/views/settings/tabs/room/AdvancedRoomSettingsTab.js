@@ -22,10 +22,6 @@ import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
-import RoomListStore from "../../../../../stores/room-list/RoomListStore";
-import RoomListActions from "../../../../../actions/RoomListActions";
-import { DefaultTagID } from '../../../../../stores/room-list/models';
-import LabelledToggleSwitch from '../../../elements/LabelledToggleSwitch';
 
 export default class AdvancedRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -36,13 +32,9 @@ export default class AdvancedRoomSettingsTab extends React.Component {
     constructor(props) {
         super(props);
 
-        const room = MatrixClientPeg.get().getRoom(props.roomId);
-        const roomTags = RoomListStore.instance.getTagsForRoom(room);
-
         this.state = {
             // This is eventually set to the value of room.getRecommendedVersion()
             upgradeRecommendation: null,
-            isLowPriorityRoom: roomTags.includes(DefaultTagID.LowPriority),
         };
     }
 
@@ -93,25 +85,6 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         });
         this.props.closeSettingsFn();
     };
-
-    _onToggleLowPriorityTag = (e) => {
-        this.setState({
-            isLowPriorityRoom: !this.state.isLowPriorityRoom,
-        });
-
-        const removeTag = this.state.isLowPriorityRoom ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
-        const addTag = this.state.isLowPriorityRoom ? null : DefaultTagID.LowPriority;
-        const client = MatrixClientPeg.get();
-
-        dis.dispatch(RoomListActions.tagRoom(
-            client,
-            client.getRoom(this.props.roomId),
-            removeTag,
-            addTag,
-            undefined,
-            0,
-        ));
-    }
 
     render() {
         const client = MatrixClientPeg.get();
@@ -182,17 +155,6 @@ export default class AdvancedRoomSettingsTab extends React.Component {
                     <AccessibleButton onClick={this._openDevtools} kind='primary'>
                         {_t("Open Devtools")}
                     </AccessibleButton>
-                </div>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{_t('Make this room low priority')}</span>
-                    <LabelledToggleSwitch
-                        value={this.state.isLowPriorityRoom}
-                        onChange={this._onToggleLowPriorityTag}
-                        label={_t(
-                            "Low priority rooms show up at the bottom of your room list" +
-                            " in a dedicated section at the bottom of your room list",
-                        )}
-                    />
                 </div>
             </div>
         );
