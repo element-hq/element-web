@@ -29,7 +29,7 @@ type Listener = (isActive: boolean) => void;
  */
 export class ActiveRoomObserver {
     private listeners: {[key: string]: Listener[]} = {};
-    private _activeRoomId = RoomViewStore.getRoomId(); // TODO
+    private _activeRoomId = RoomViewStore.getRoomId();
     private readonly roomStoreToken: string;
 
     constructor() {
