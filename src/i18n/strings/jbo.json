@@ -179,7 +179,7 @@
     "Enable inline URL previews by default": "lo zmiselcu'a pe lo du'u xu kau zmiku purzga lo se urli",
     "Enable URL previews for this room (only affects you)": "lo du'u xu kau do zmiku purzga lo se urli ne'i le kumfa pe'a",
     "Enable URL previews by default for participants in this room": "lo zmiselcu'a pe lo du'u xu kau lo cmima be le kumfa pe'a cu zmiku purzga lo se urli",
-    "Room Colour": "lo se skari be le kumfa pe'a",
+    "Room Colour": "se skari le ve zilbe'i",
     "Enable widget screenshots on supported widgets": "lo du'u xu kau kakne lo nu co'a pixra lo uidje kei lo nu kakne tu'a .ubu",
     "Collecting app version information": ".i ca'o facki le du'u favytcinymupli",
     "Collecting logs": ".i ca'o facki le du'u citri",
@@ -451,5 +451,8 @@
     "You invited %(targetName)s": ".i do friti le ka ziljmina kei la'o zoi. %(targetName)s .zoi",
     "%(senderName)s invited %(targetName)s": ".i la'o zoi. %(senderName)s .zoi friti le ka ziljmina kei la'o zoi. %(targetName)s .zoi",
     "You changed the room topic": ".i gau do da basti de le ka skicu be le ve zilbe'i be'o lerpoi",
-    "%(senderName)s changed the room topic": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka skicu be le ve zilbe'i be'o lerpoi"
+    "%(senderName)s changed the room topic": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka skicu be le ve zilbe'i be'o lerpoi",
+    "Use a system font": "nu da pe le vanbi cu ci'artai",
+    "System font name": "cmene le ci'artai pe le vanbi",
+    "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u"
 }
