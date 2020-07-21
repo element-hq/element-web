@@ -257,11 +257,10 @@ export async function downloadBugReport(opts) {
 
 // Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
 function uint8ToString(buf: Buffer) {
-    let i, length, out = '';
-    for (i = 0, length = buf.length; i < length; i += 1) {
+    let out = '';
+    for (let i = 0; i < buf.length; i += 1) {
         out += String.fromCharCode(buf[i]);
     }
-
     return out;
 }
 
