@@ -123,6 +123,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             const category = this.getRoomCategory(room);
             this.alterCategoryPositionBy(category, 1, this.indices);
             this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            await this.sortCategory(category);
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
             if (roomIdx === -1) {
