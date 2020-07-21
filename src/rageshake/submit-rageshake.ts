@@ -234,7 +234,7 @@ export async function downloadBugReport(opts) {
             await new Promise((resolve => {
                 const reader = new FileReader();
                 reader.addEventListener('loadend', ev => {
-                    tape.append(`log-${i++}.log`, pako.ungzip(ev.target.result));
+                    tape.append(`log-${i++}.log`, pako.ungzip(ev.target.result as string));
                     resolve();
                 });
                 reader.readAsArrayBuffer(value as Blob);
