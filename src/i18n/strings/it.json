@@ -2388,5 +2388,6 @@
     "Show rooms with unread messages first": "Mostra prima le stanze con messaggi non letti",
     "Show previews of messages": "Mostra anteprime dei messaggi",
     "Edited at %(date)s": "Modificato il %(date)s",
-    "Click to view edits": "Clicca per vedere le modifiche"
+    "Click to view edits": "Clicca per vedere le modifiche",
+    "Are you sure you want to cancel entering passphrase?": "Sei sicuro di volere annullare l'inserimento della frase?"
 }
