@@ -25,7 +25,6 @@ import Tar from "tar-js";
 
 import * as rageshake from './rageshake';
 
-
 // polyfill textencoder if necessary
 import * as TextEncodingUtf8 from 'text-encoding-utf-8';
 import SettingsStore from "../settings/SettingsStore";
@@ -41,7 +40,7 @@ interface IOpts {
     progressCallback?: (string) => void;
 }
 
-async function collectBugReport(opts) {
+async function collectBugReport(opts: IOpts) {
     opts = opts || {};
     const progressCallback = opts.progressCallback || (() => {});
 
@@ -230,18 +229,18 @@ export async function downloadBugReport(opts) {
     let metadata = "";
     const tape = new Tar();
     let i = 0;
-    for (const e of body.entries()) {
-        if (e[0] === 'compressed-log') {
+    for (const [key, value] of body.entries()) {
+        if (key === 'compressed-log') {
             await new Promise((resolve => {
                 const reader = new FileReader();
                 reader.addEventListener('loadend', ev => {
                     tape.append(`log-${i++}.log`, pako.ungzip(ev.target.result));
                     resolve();
                 });
-                reader.readAsArrayBuffer(e[1]);
+                reader.readAsArrayBuffer(value as Blob);
             }));
         } else {
-            metadata += `${e[0]} = ${e[1]}\n`;
+            metadata += `${key} = ${value}\n`;
         }
     }
     tape.append('issue.txt', metadata);
@@ -257,7 +256,7 @@ export async function downloadBugReport(opts) {
 }
 
 // Source: https://github.com/beatgammit/tar-js/blob/master/examples/main.js
-function uint8ToString(buf) {
+function uint8ToString(buf: Buffer) {
     let i, length, out = '';
     for (i = 0, length = buf.length; i < length; i += 1) {
         out += String.fromCharCode(buf[i]);
