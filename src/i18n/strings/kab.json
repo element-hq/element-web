@@ -25,5 +25,11 @@
     "Go to element.io": "Ṛuḥ ɣer element.io",
     "Failed to start": "Asenker ur yeddi ara",
     "Welcome to Element": "Ansuf ɣer Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Adiwenni &amp; attekki araslemmas d uwgelhan s lmendad n [matrix]"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Adiwenni &amp; attekki araslemmas d uwgelhan s lmendad n [matrix]",
+    "Your Element is misconfigured": "Aferdis-inek·inem ur yettuswel ara akken iwata",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Deg twila n uferdis-inek·inem yella JSON d arameɣtu. Ttxil-k·m seɣti ugur syen ales asali n usebter.",
+    "Download Completed": "Asider yemmed",
+    "Open": "Ldi",
+    "Your browser can't run %(brand)s": "Iminig-inek·inem ur isselkan ara %(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s isseqdac timahilin n yiminig leqqayen ur yessefrak ara yiminig-ik·im amiran."
 }
