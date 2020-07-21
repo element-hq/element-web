@@ -2209,5 +2209,18 @@
     "System font name": "Järjestelmän fontin nimi",
     "Message layout": "Viestiasettelu",
     "Compact": "Tiivis",
-    "Modern": "Moderni"
+    "Modern": "Moderni",
+    "We’re excited to announce Riot is now Element": "Meillä on ilo ilmoittaa, että Riot on nyt Element",
+    "Riot is now Element!": "Riot on nyt Element!",
+    "Learn More": "Lue lisää",
+    "Use default": "Käytä oletusta",
+    "Mentions & Keywords": "Maininnat ja avainsanat",
+    "Notification options": "Ilmoitusasetukset",
+    "Room options": "Huoneen asetukset",
+    "This room is public": "Tämä huone on julkinen",
+    "You’re already signed in and good to go here, but you can also grab the latest versions of the app on all platforms at <a>element.io/get-started</a>.": "Olet jo kirjautuneena eikä sinun tarvitse tehdä mitään, mutta voit myös hakea sovelluksen uusimman version kaikille alustoille osoitteesta <a>element.io/get-started</a>.",
+    "We’re excited to announce Riot is now Element!": "Meillä on ilo ilmoittaa, että Riot on nyt Element!",
+    "Learn more at <a>element.io/previously-riot</a>": "Lue lisää osoitteessa <a>element.io/previously-riot</a>",
+    "Security & privacy": "Tietoturva ja -suoja",
+    "User menu": "Käyttäjän valikko"
 }
