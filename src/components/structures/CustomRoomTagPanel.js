@@ -72,17 +72,17 @@ class CustomRoomTagTile extends React.Component {
         const tag = this.props.tag;
         const avatarHeight = 40;
         const className = classNames({
-            CustomRoomTagPanel_tileSelected: tag.selected,
+            "CustomRoomTagPanel_tileSelected": tag.selected,
         });
         const name = tag.name;
-        const badge = tag.badge;
+        const badgeNotifState = tag.badgeNotifState;
         let badgeElement;
-        if (badge) {
+        if (badgeNotifState) {
             const badgeClasses = classNames({
                 "mx_TagTile_badge": true,
-                "mx_TagTile_badgeHighlight": badge.highlight,
+                "mx_TagTile_badgeHighlight": badgeNotifState.hasMentions,
             });
-            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badgeNotifState.count)}</div>);
         }
 
         return (

@@ -25,3 +25,13 @@ export function getEnumValues<T>(e: any): T[] {
         .filter(k => ['string', 'number'].includes(typeof(e[k])))
         .map(k => e[k]);
 }
+
+/**
+ * Determines if a given value is a valid value for the provided enum.
+ * @param e The enum to check against.
+ * @param val The value to search for.
+ * @returns True if the enum contains the value.
+ */
+export function isEnumValue<T>(e: T, val: string | number): boolean {
+    return getEnumValues(e).includes(val);
+}

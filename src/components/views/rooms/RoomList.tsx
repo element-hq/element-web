@@ -26,7 +26,7 @@ import { ResizeNotifier } from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
-import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { DefaultTagID, isCustomTag, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import RoomSublist from "./RoomSublist";
@@ -41,6 +41,7 @@ import { Action } from "../../../dispatcher/actions";
 import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
+import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -77,6 +78,7 @@ const ALWAYS_VISIBLE_TAGS: TagID[] = [
 
 interface ITagAesthetics {
     sectionLabel: string;
+    sectionLabelRaw?: string;
     addRoomLabel?: string;
     onAddRoom?: (dispatcher: Dispatcher<ActionPayload>) => void;
     isInvite: boolean;
@@ -130,9 +132,22 @@ const TAG_AESTHETICS: {
     },
 };
 
+function customTagAesthetics(tagId: TagID): ITagAesthetics {
+    if (tagId.startsWith("u.")) {
+        tagId = tagId.substring(2);
+    }
+    return {
+        sectionLabel: _td("Custom Tag"),
+        sectionLabelRaw: tagId,
+        isInvite: false,
+        defaultHidden: false,
+    };
+}
+
 export default class RoomList extends React.Component<IProps, IState> {
     private searchFilter: NameFilterCondition = new NameFilterCondition();
     private dispatcherRef;
+    private customTagStoreRef;
 
     constructor(props: IProps) {
         super(props);
@@ -161,12 +176,14 @@ export default class RoomList extends React.Component<IProps, IState> {
 
     public componentDidMount(): void {
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
+        this.customTagStoreRef = CustomRoomTagStore.addListener(this.updateLists);
         this.updateLists(); // trigger the first update
     }
 
     public componentWillUnmount() {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
+        if (this.customTagStoreRef) this.customTagStoreRef.remove();
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -257,12 +274,18 @@ export default class RoomList extends React.Component<IProps, IState> {
     private renderSublists(): React.ReactElement[] {
         const components: React.ReactElement[] = [];
 
-        for (const orderedTagId of TAG_ORDER) {
-            if (CUSTOM_TAGS_BEFORE_TAG === orderedTagId) {
-                // Populate custom tags if needed
-                // TODO: Custom tags: https://github.com/vector-im/riot-web/issues/14091
+        const tagOrder = TAG_ORDER.reduce((p, c) => {
+            if (c === CUSTOM_TAGS_BEFORE_TAG) {
+                const customTags = Object.keys(this.state.sublists)
+                    .filter(t => isCustomTag(t))
+                    .filter(t => CustomRoomTagStore.getTags()[t]); // isSelected
+                p.push(...customTags);
             }
+            p.push(c);
+            return p;
+        }, [] as TagID[]);
 
+        for (const orderedTagId of tagOrder) {
             const orderedRooms = this.state.sublists[orderedTagId] || [];
             const extraTiles = orderedTagId === DefaultTagID.Invite ? this.renderCommunityInvites() : null;
             const totalTiles = orderedRooms.length + (extraTiles ? extraTiles.length : 0);
@@ -270,7 +293,9 @@ export default class RoomList extends React.Component<IProps, IState> {
                 continue; // skip tag - not needed
             }
 
-            const aesthetics: ITagAesthetics = TAG_AESTHETICS[orderedTagId];
+            const aesthetics: ITagAesthetics = isCustomTag(orderedTagId)
+                ? customTagAesthetics(orderedTagId)
+                : TAG_AESTHETICS[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
             const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
@@ -281,7 +306,7 @@ export default class RoomList extends React.Component<IProps, IState> {
                     forRooms={true}
                     rooms={orderedRooms}
                     startAsHidden={aesthetics.defaultHidden}
-                    label={_t(aesthetics.sectionLabel)}
+                    label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
                     onAddRoom={onAddRoomFn}
                     addRoomLabel={aesthetics.addRoomLabel}
                     isMinimized={this.props.isMinimized}

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,15 +14,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import dis from '../dispatcher/dispatcher';
-import * as RoomNotifs from '../RoomNotifs';
 import EventEmitter from 'events';
-import { throttle } from "lodash";
+import {throttle} from "lodash";
 import SettingsStore from "../settings/SettingsStore";
 import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
-
-// TODO: All of this needs updating for new custom tags: https://github.com/vector-im/riot-web/issues/14091
-const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+import {RoomNotificationStateStore} from "./notifications/RoomNotificationStateStore";
+import {isCustomTag} from "./room-list/models";
 
 function commonPrefix(a, b) {
     const len = Math.min(a.length, b.length);
@@ -84,8 +84,6 @@ class CustomRoomTagStore extends EventEmitter {
     }
 
     getSortedTags() {
-        const roomLists = RoomListStore.instance.orderedLists;
-
         const tagNames = Object.keys(this._state.tags).sort();
         const prefixes = tagNames.map((name, i) => {
             const isFirst = i === 0;
@@ -97,14 +95,14 @@ class CustomRoomTagStore extends EventEmitter {
             return longestPrefix;
         });
         return tagNames.map((name, i) => {
-            const notifs = RoomNotifs.aggregateNotificationCount(roomLists[name]);
-            let badge;
-            if (notifs.count !== 0) {
-                badge = notifs;
+            const notifs = RoomNotificationStateStore.instance.getListState(name);
+            let badgeNotifState;
+            if (notifs.hasUnreadCount) {
+                badgeNotifState = notifs;
             }
             const avatarLetter = name.substr(prefixes[i].length, 1);
             const selected = this._state.tags[name];
-            return {name, avatarLetter, badge, selected};
+            return {name, avatarLetter, badgeNotifState, selected};
         });
     }
 
@@ -139,16 +137,12 @@ class CustomRoomTagStore extends EventEmitter {
             return;
         }
 
-        const newTagNames = Object.keys(RoomListStore.instance.orderedLists)
-            .filter((tagName) => {
-                return !tagName.match(STANDARD_TAGS_REGEX);
-            }).sort();
+        const newTagNames = Object.keys(RoomListStore.instance.orderedLists).filter(t => isCustomTag(t)).sort();
         const prevTags = this._state && this._state.tags;
-        const newTags = newTagNames.reduce((newTags, tagName) => {
-            newTags[tagName] = (prevTags && prevTags[tagName]) || false;
-            return newTags;
+        return newTagNames.reduce((c, tagName) => {
+            c[tagName] = (prevTags && prevTags[tagName]) || false;
+            return c;
         }, {});
-        return newTags;
     }
 }
 
