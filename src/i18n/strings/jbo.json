@@ -454,5 +454,6 @@
     "%(senderName)s changed the room topic": ".i gau la'o zoi. %(senderName)s .zoi da basti de le ka skicu be le ve zilbe'i be'o lerpoi",
     "Use a system font": "nu da pe le vanbi cu ci'artai",
     "System font name": "cmene le ci'artai pe le vanbi",
-    "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u"
+    "Never send encrypted messages to unverified sessions from this session": "nu na pa mifra be pa notci cu zilbe'i pa se samtcise'u poi na se lanli ku'o le se samtcise'u",
+    "Sign In": "nu co'a jaspu"
 }
