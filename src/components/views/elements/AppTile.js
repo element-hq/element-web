@@ -2,6 +2,7 @@
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,25 +29,46 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
-import MessageSpinner from './MessageSpinner';
+import Spinner from './Spinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
+import {WidgetType} from "../../../widgets/WidgetType";
+import {Capability} from "../../../widgets/WidgetApi";
+import {sleep} from "../../../utils/promise";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
+
+/**
+ * Does template substitution on a URL (or any string). Variables will be
+ * passed through encodeURIComponent.
+ * @param {string} uriTemplate The path with template variables e.g. '/foo/$bar'.
+ * @param {Object} variables The key/value pairs to replace the template
+ * variables with. E.g. { '$bar': 'baz' }.
+ * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
+ */
+function uriFromTemplate(uriTemplate, variables) {
+    let out = uriTemplate;
+    for (const [key, val] of Object.entries(variables)) {
+        out = out.replace(
+            '$' + key, encodeURIComponent(val),
+        );
+    }
+    return out;
+}
 
 export default class AppTile extends React.Component {
     constructor(props) {
         super(props);
 
         // The key used for PersistedElement
-        this._persistKey = 'widget_' + this.props.id;
+        this._persistKey = 'widget_' + this.props.app.id;
 
         this.state = this._getNewState(props);
 
@@ -78,7 +100,7 @@ export default class AppTile extends React.Component {
         // This is a function to make the impact of calling SettingsStore slightly less
         const hasPermissionToLoad = () => {
             const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", newProps.room.roomId);
-            return !!currentlyAllowedWidgets[newProps.eventId];
+            return !!currentlyAllowedWidgets[newProps.app.eventId];
         };
 
         const PersistedElement = sdk.getComponent("elements.PersistedElement");
@@ -86,7 +108,7 @@ export default class AppTile extends React.Component {
             initialising: true, // True while we are mangling the widget URL
             // True while the iframe content is loading
             loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
-            widgetUrl: this._addWurlParams(newProps.url),
+            widgetUrl: this._addWurlParams(newProps.app.url),
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: newProps.userId === newProps.creatorUserId || hasPermissionToLoad(),
@@ -103,7 +125,7 @@ export default class AppTile extends React.Component {
      * @return {Boolean}            True if capability supported
      */
     _hasCapability(capability) {
-        return ActiveWidgetStore.widgetHasCapability(this.props.id, capability);
+        return ActiveWidgetStore.widgetHasCapability(this.props.app.id, capability);
     }
 
     /**
@@ -117,70 +139,68 @@ export default class AppTile extends React.Component {
      * If url can not be parsed, it is returned unmodified.
      */
     _addWurlParams(urlString) {
-        const u = url.parse(urlString);
-        if (!u) {
-            console.error("_addWurlParams", "Invalid URL", urlString);
-            return url;
+        try {
+            const parsed = new URL(urlString);
+
+            // TODO: Replace these with proper widget params
+            // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
+            parsed.searchParams.set('widgetId', this.props.app.id);
+            parsed.searchParams.set('parentUrl', window.location.href.split('#', 2)[0]);
+
+            // Replace the encoded dollar signs back to dollar signs. They have no special meaning
+            // in HTTP, but URL parsers encode them anyways.
+            return parsed.toString().replace(/%24/g, '$');
+        } catch (e) {
+            console.error("Failed to add widget URL params:", e);
+            return urlString;
         }
-
-        const params = qs.parse(u.query);
-        // Append widget ID to query parameters
-        params.widgetId = this.props.id;
-        // Append current / parent URL, minus the hash because that will change when
-        // we view a different room (ie. may change for persistent widgets)
-        params.parentUrl = window.location.href.split('#', 2)[0];
-        u.search = undefined;
-        u.query = params;
-
-        return u.format();
     }
 
     isMixedContent() {
         const parentContentProtocol = window.location.protocol;
-        const u = url.parse(this.props.url);
+        const u = url.parse(this.props.app.url);
         const childContentProtocol = u.protocol;
         if (parentContentProtocol === 'https:' && childContentProtocol !== 'https:') {
             console.warn("Refusing to load mixed-content app:",
-            parentContentProtocol, childContentProtocol, window.location, this.props.url);
+            parentContentProtocol, childContentProtocol, window.location, this.props.app.url);
             return true;
         }
         return false;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // Only fetch IM token on mount if we're showing and have permission to load
         if (this.props.show && this.state.hasPermissionToLoad) {
             this.setScalarToken();
         }
-    }
 
-    componentDidMount() {
         // Widget action listeners
         this.dispatcherRef = dis.register(this._onAction);
     }
 
     componentWillUnmount() {
         // Widget action listeners
-        dis.unregister(this.dispatcherRef);
+        if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         // if it's not remaining on screen, get rid of the PersistedElement container
-        if (!ActiveWidgetStore.getWidgetPersistence(this.props.id)) {
-            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
+        if (!ActiveWidgetStore.getWidgetPersistence(this.props.app.id)) {
+            ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }
     }
 
+    // TODO: Generify the name of this function. It's not just scalar tokens.
     /**
      * Adds a scalar token to the widget URL, if required
      * Component initialisation is only complete when this function has resolved
      */
     setScalarToken() {
-        if (!WidgetUtils.isScalarUrl(this.props.url)) {
-            console.warn('Non-scalar widget, not setting scalar token!', url);
+        if (!WidgetUtils.isScalarUrl(this.props.app.url)) {
+            console.warn('Widget does not match integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
-                widgetUrl: this._addWurlParams(this.props.url),
+                widgetUrl: this._addWurlParams(this.props.app.url),
                 initialising: false,
             });
             return;
@@ -191,7 +211,7 @@ export default class AppTile extends React.Component {
             console.warn("No integration manager - not setting scalar token", url);
             this.setState({
                 error: null,
-                widgetUrl: this._addWurlParams(this.props.url),
+                widgetUrl: this._addWurlParams(this.props.app.url),
                 initialising: false,
             });
             return;
@@ -201,10 +221,10 @@ export default class AppTile extends React.Component {
 
         const defaultManager = managers.getPrimaryManager();
         if (!WidgetUtils.isScalarUrl(defaultManager.apiUrl)) {
-            console.warn('Non-scalar manager, not setting scalar token!', url);
+            console.warn('Unknown integration manager, refusing to set auth token', url);
             this.setState({
                 error: null,
-                widgetUrl: this._addWurlParams(this.props.url),
+                widgetUrl: this._addWurlParams(this.props.app.url),
                 initialising: false,
             });
             return;
@@ -217,7 +237,7 @@ export default class AppTile extends React.Component {
         this._scalarClient.getScalarToken().then((token) => {
             // Append scalar_token as a query param if not already present
             this._scalarClient.scalarToken = token;
-            const u = url.parse(this._addWurlParams(this.props.url));
+            const u = url.parse(this._addWurlParams(this.props.app.url));
             const params = qs.parse(u.query);
             if (!params.scalar_token) {
                 params.scalar_token = encodeURIComponent(token);
@@ -245,14 +265,17 @@ export default class AppTile extends React.Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.url !== this.props.url) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+        if (nextProps.app.url !== this.props.app.url) {
             this._getNewState(nextProps);
             // Fetch IM token for new URL if we're showing and have permission to load
             if (this.props.show && this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.show && !this.props.show) {
+        }
+
+        if (nextProps.show && !this.props.show) {
             // We assume that persisted widgets are loaded and don't need a spinner.
             if (this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey)) {
                 this.setState({
@@ -263,7 +286,9 @@ export default class AppTile extends React.Component {
             if (this.state.hasPermissionToLoad) {
                 this.setScalarToken();
             }
-        } else if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
+        }
+
+        if (nextProps.widgetPageTitle !== this.props.widgetPageTitle) {
             this.setState({
                 widgetPageTitle: nextProps.widgetPageTitle,
             });
@@ -280,7 +305,7 @@ export default class AppTile extends React.Component {
     }
 
     _onEditClick() {
-        console.log("Edit widget ID ", this.props.id);
+        console.log("Edit widget ID ", this.props.app.id);
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
@@ -289,21 +314,21 @@ export default class AppTile extends React.Component {
                 IntegrationManagers.sharedInstance().openAll(
                     this.props.room,
                     'type_' + this.props.type,
-                    this.props.id,
+                    this.props.app.id,
                 );
             } else {
                 IntegrationManagers.sharedInstance().getPrimaryManager().open(
                     this.props.room,
                     'type_' + this.props.type,
-                    this.props.id,
+                    this.props.app.id,
                 );
             }
         }
     }
 
     _onSnapshotClick() {
-        console.warn("Requesting widget snapshot");
-        ActiveWidgetStore.getWidgetMessaging(this.props.id).getScreenshot()
+        console.log("Requesting widget snapshot");
+        ActiveWidgetStore.getWidgetMessaging(this.props.app.id).getScreenshot()
             .catch((err) => {
                 console.error("Failed to get screenshot", err);
             })
@@ -313,6 +338,42 @@ export default class AppTile extends React.Component {
                     file: screenshot,
                 }, true);
             });
+    }
+
+    /**
+     * Ends all widget interaction, such as cancelling calls and disabling webcams.
+     * @private
+     * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
+     */
+    _endWidgetActions() {
+        let terminationPromise;
+
+        if (this._hasCapability(Capability.ReceiveTerminate)) {
+            // Wait for widget to terminate within a timeout
+            const timeout = 2000;
+            const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
+            terminationPromise = Promise.race([messaging.terminate(), sleep(timeout)]);
+        } else {
+            terminationPromise = Promise.resolve();
+        }
+
+        return terminationPromise.finally(() => {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+            if (this._appFrame.current) {
+                // In practice we could just do `+= ''` to trick the browser
+                // into thinking the URL changed, however I can foresee this
+                // being optimized out by a browser. Instead, we'll just point
+                // the iframe at a page that is reasonably safe to use in the
+                // event the iframe doesn't wink away.
+                // This is relative to where the Riot instance is located.
+                this._appFrame.current.src = 'about:blank';
+            }
+
+            // Delete the widget from the persisted store for good measure.
+            PersistedElement.destroyElement(this._persistKey);
+        });
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -336,23 +397,12 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    // HACK: This is a really dirty way to ensure that Jitsi cleans up
-                    // its hold on the webcam. Without this, the widget holds a media
-                    // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-                    if (this._appFrame.current) {
-                        // In practice we could just do `+= ''` to trick the browser
-                        // into thinking the URL changed, however I can foresee this
-                        // being optimized out by a browser. Instead, we'll just point
-                        // the iframe at a page that is reasonably safe to use in the
-                        // event the iframe doesn't wink away.
-                        // This is relative to where the Riot instance is located.
-                        this._appFrame.current.src = 'about:blank';
-                    }
-
-                    WidgetUtils.setRoomWidget(
-                        this.props.room.roomId,
-                        this.props.id,
-                    ).catch((e) => {
+                    this._endWidgetActions().then(() => {
+                        return WidgetUtils.setRoomWidget(
+                            this.props.room.roomId,
+                            this.props.app.id,
+                        );
+                    }).catch((e) => {
                         console.error('Failed to delete widget', e);
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -369,7 +419,7 @@ export default class AppTile extends React.Component {
     }
 
     _onRevokeClicked() {
-        console.info("Revoke widget permissions - %s", this.props.id);
+        console.info("Revoke widget permissions - %s", this.props.app.id);
         this._revokeWidgetPermission();
     }
 
@@ -380,10 +430,10 @@ export default class AppTile extends React.Component {
         // Destroy the old widget messaging before starting it back up again. Some widgets
         // have startup routines that run when they are loaded, so we just need to reinitialize
         // the messaging for them.
-        ActiveWidgetStore.delWidgetMessaging(this.props.id);
+        ActiveWidgetStore.delWidgetMessaging(this.props.app.id);
         this._setupWidgetMessaging();
 
-        ActiveWidgetStore.setRoomId(this.props.id, this.props.room.roomId);
+        ActiveWidgetStore.setRoomId(this.props.app.id, this.props.room.roomId);
         this.setState({loading: false});
     }
 
@@ -391,10 +441,15 @@ export default class AppTile extends React.Component {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
         const widgetMessaging = new WidgetMessaging(
-            this.props.id, this.props.url, this.props.userWidget, this._appFrame.current.contentWindow);
-        ActiveWidgetStore.setWidgetMessaging(this.props.id, widgetMessaging);
+            this.props.app.id,
+            this.props.app.url,
+            this._getRenderedUrl(),
+            this.props.userWidget,
+            this._appFrame.current.contentWindow,
+        );
+        ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
-            console.log(`Widget ${this.props.id} requested capabilities: ` + requestedCapabilities);
+            console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);
             requestedCapabilities = requestedCapabilities || [];
 
             // Allow whitelisted capabilities
@@ -406,7 +461,7 @@ export default class AppTile extends React.Component {
                 }, this.props.whitelistCapabilities);
 
                 if (requestedWhitelistCapabilies.length > 0 ) {
-                    console.warn(`Widget ${this.props.id} allowing requested, whitelisted properties: ` +
+                    console.log(`Widget ${this.props.app.id} allowing requested, whitelisted properties: ` +
                         requestedWhitelistCapabilies,
                     );
                 }
@@ -414,7 +469,7 @@ export default class AppTile extends React.Component {
 
             // TODO -- Add UI to warn about and optionally allow requested capabilities
 
-            ActiveWidgetStore.setWidgetCapabilities(this.props.id, requestedWhitelistCapabilies);
+            ActiveWidgetStore.setWidgetCapabilities(this.props.app.id, requestedWhitelistCapabilies);
 
             if (this.props.onCapabilityRequest) {
                 this.props.onCapabilityRequest(requestedCapabilities);
@@ -422,16 +477,16 @@ export default class AppTile extends React.Component {
 
             // We only tell Jitsi widgets that we're ready because they're realistically the only ones
             // using this custom extension to the widget API.
-            if (this.props.type === 'jitsi') {
+            if (WidgetType.JITSI.matches(this.props.app.type)) {
                 widgetMessaging.flagReadyToContinue();
             }
         }).catch((err) => {
-            console.log(`Failed to get capabilities for widget type ${this.props.type}`, this.props.id, err);
+            console.log(`Failed to get capabilities for widget type ${this.props.app.type}`, this.props.app.id, err);
         });
     }
 
     _onAction(payload) {
-        if (payload.widgetId === this.props.id) {
+        if (payload.widgetId === this.props.app.id) {
             switch (payload.action) {
                 case 'm.sticker':
                 if (this._hasCapability('m.sticker')) {
@@ -460,9 +515,9 @@ export default class AppTile extends React.Component {
 
     _grantWidgetPermission() {
         const roomId = this.props.room.roomId;
-        console.info("Granting permission for widget to load: " + this.props.eventId);
+        console.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
-        current[this.props.eventId] = true;
+        current[this.props.app.eventId] = true;
         SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
             this.setState({hasPermissionToLoad: true});
 
@@ -476,14 +531,14 @@ export default class AppTile extends React.Component {
 
     _revokeWidgetPermission() {
         const roomId = this.props.room.roomId;
-        console.info("Revoking permission for widget to load: " + this.props.eventId);
+        console.info("Revoking permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
-        current[this.props.eventId] = false;
+        current[this.props.app.eventId] = false;
         SettingsStore.setValue("allowedWidgets", roomId, SettingLevel.ROOM_ACCOUNT, current).then(() => {
             this.setState({hasPermissionToLoad: false});
 
             // Force the widget to be non-persistent (able to be deleted/forgotten)
-            ActiveWidgetStore.destroyPersistentWidget(this.props.id);
+            ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
             const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }).catch(err => {
@@ -494,8 +549,8 @@ export default class AppTile extends React.Component {
 
     formatAppTileName() {
         let appTileName = "No name";
-        if (this.props.name && this.props.name.trim()) {
-            appTileName = this.props.name.trim();
+        if (this.props.app.name && this.props.app.name.trim()) {
+            appTileName = this.props.app.name.trim();
         }
         return appTileName;
     }
@@ -512,6 +567,10 @@ export default class AppTile extends React.Component {
         if (this.props.userWidget) {
             this._onMinimiseClick();
         } else {
+            if (this.props.show) {
+                // if we were being shown, end the widget as we're about to be minimized.
+                this._endWidgetActions();
+            }
             dis.dispatch({
                 action: 'appsDrawer',
                 show: !this.props.show,
@@ -519,23 +578,88 @@ export default class AppTile extends React.Component {
         }
     }
 
-    _getSafeUrl() {
-        const parsedWidgetUrl = url.parse(this.state.widgetUrl, true);
+    /**
+     * Replace the widget template variables in a url with their values
+     *
+     * @param {string} u The URL with template variables
+     * @param {string} widgetType The widget's type
+     *
+     * @returns {string} url with temlate variables replaced
+     */
+    _templatedUrl(u, widgetType: string) {
+        const targetData = {};
+        if (WidgetType.JITSI.matches(widgetType)) {
+            targetData['domain'] = 'jitsi.riot.im'; // v1 jitsi widgets have this hardcoded
+        }
+        const myUserId = MatrixClientPeg.get().credentials.userId;
+        const myUser = MatrixClientPeg.get().getUser(myUserId);
+        const vars = Object.assign(targetData, this.props.app.data, {
+            'matrix_user_id': myUserId,
+            'matrix_room_id': this.props.room.roomId,
+            'matrix_display_name': myUser ? myUser.displayName : myUserId,
+            'matrix_avatar_url': myUser ? MatrixClientPeg.get().mxcUrlToHttp(myUser.avatarUrl) : '',
+
+            // TODO: Namespace themes through some standard
+            'theme': SettingsStore.getValue("theme"),
+        });
+
+        if (vars.conferenceId === undefined) {
+            // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
+            const parsedUrl = new URL(this.props.app.url);
+            vars.conferenceId = parsedUrl.searchParams.get("confId");
+        }
+
+        return uriFromTemplate(u, vars);
+    }
+
+    /**
+     * Get the URL used in the iframe
+     * In cases where we supply our own UI for a widget, this is an internal
+     * URL different to the one used if the widget is popped out to a separate
+     * tab / browser
+     *
+     * @returns {string} url
+     */
+    _getRenderedUrl() {
+        let url;
+
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
+            console.log("Replacing Jitsi widget URL with local wrapper");
+            url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
+            url = this._addWurlParams(url);
+        } else {
+            url = this._getSafeUrl(this.state.widgetUrl);
+        }
+        return this._templatedUrl(url, this.props.app.type);
+    }
+
+    _getPopoutUrl() {
+        if (WidgetType.JITSI.matches(this.props.app.type)) {
+            return this._templatedUrl(
+                WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                this.props.app.type,
+            );
+        } else {
+            // use app.url, not state.widgetUrl, because we want the one without
+            // the wURL params for the popped-out version.
+            return this._templatedUrl(this._getSafeUrl(this.props.app.url), this.props.app.type);
+        }
+    }
+
+    _getSafeUrl(u) {
+        const parsedWidgetUrl = url.parse(u, true);
         if (ENABLE_REACT_PERF) {
             parsedWidgetUrl.search = null;
             parsedWidgetUrl.query.react_perf = true;
         }
         let safeWidgetUrl = '';
-        if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol) || (
-            // Check if the widget URL is a Jitsi widget in Electron
-            parsedWidgetUrl.protocol === 'vector:'
-            && parsedWidgetUrl.host === 'vector'
-            && parsedWidgetUrl.pathname === '/webapp/jitsi.html'
-            && this.props.type === 'jitsi'
-        )) {
+        if (ALLOWED_APP_URL_SCHEMES.includes(parsedWidgetUrl.protocol)) {
             safeWidgetUrl = url.format(parsedWidgetUrl);
         }
-        return safeWidgetUrl;
+
+        // Replace all the dollar signs back to dollar signs as they don't affect HTTP at all.
+        // We also need the dollar signs in-tact for variable substitution.
+        return safeWidgetUrl.replace(/%24/g, '$');
     }
 
     _getTileTitle() {
@@ -561,14 +685,26 @@ export default class AppTile extends React.Component {
     }
 
     _onPopoutWidgetClick() {
+        // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
+        // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
+            this._endWidgetActions().then(() => {
+                if (this._appFrame.current) {
+                    // Reload iframe
+                    this._appFrame.current.src = this._getRenderedUrl();
+                    this.setState({});
+                }
+            });
+        }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
-        // window.open(this._getSafeUrl(), '_blank', 'noopener=yes');
+        // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
-            { target: '_blank', href: this._getSafeUrl(), rel: 'noreferrer noopener'}).click();
+            { target: '_blank', href: this._getPopoutUrl(), rel: 'noreferrer noopener'}).click();
     }
 
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
+        // eslint-disable-next-line no-self-assign
         this._appFrame.current.src = this._appFrame.current.src;
     }
 
@@ -605,7 +741,7 @@ export default class AppTile extends React.Component {
         if (this.props.show) {
             const loadingElement = (
                 <div className="mx_AppLoading_spinner_fadeIn">
-                    <MessageSpinner msg='Loading...' />
+                    <Spinner message={_t("Loading...")} />
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {
@@ -641,7 +777,7 @@ export default class AppTile extends React.Component {
                             <iframe
                                 allow={iframeFeatures}
                                 ref={this._appFrame}
-                                src={this._getSafeUrl()}
+                                src={this._getRenderedUrl()}
                                 allowFullScreen={true}
                                 sandbox={sandboxFlags}
                                 onLoad={this._onLoaded} />
@@ -706,7 +842,7 @@ export default class AppTile extends React.Component {
         }
 
         return <React.Fragment>
-            <div className={appTileClass} id={this.props.id}>
+            <div className={appTileClass} id={this.props.app.id}>
                 { this.props.showMenubar &&
                 <div ref={this._menu_bar} className={menuBarClasses} onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>
@@ -753,12 +889,8 @@ export default class AppTile extends React.Component {
 AppTile.displayName = 'AppTile';
 
 AppTile.propTypes = {
-    id: PropTypes.string.isRequired,
-    eventId: PropTypes.string, // required for room widgets
-    url: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    app: PropTypes.object.isRequired,
     room: PropTypes.object.isRequired,
-    type: PropTypes.string.isRequired,
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth: PropTypes.bool,
@@ -805,7 +937,6 @@ AppTile.propTypes = {
 };
 
 AppTile.defaultProps = {
-    url: "",
     waitForIframeLoad: true,
     showMenubar: true,
     showTitle: true,

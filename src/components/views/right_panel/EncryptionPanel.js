@@ -112,6 +112,9 @@ const EncryptionPanel = (props) => {
     const requested =
         (!request && isRequesting) ||
         (request && (phase === PHASE_REQUESTED || phase === PHASE_UNSENT || phase === undefined));
+    const isSelfVerification = request ?
+        request.isSelfVerification :
+        member.userId === MatrixClientPeg.get().getUserId();
     if (!request || requested) {
         const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
         return (<React.Fragment>
@@ -120,8 +123,10 @@ const EncryptionPanel = (props) => {
                 isRoomEncrypted={isRoomEncrypted}
                 onStartVerification={onStartVerification}
                 member={member}
+                isSelfVerification={isSelfVerification}
                 waitingForOtherParty={requested && initiatedByMe}
-                waitingForNetwork={requested && !initiatedByMe} />
+                waitingForNetwork={requested && !initiatedByMe}
+                inDialog={layout === "dialog"} />
         </React.Fragment>);
     } else {
         return (<React.Fragment>
@@ -133,7 +138,9 @@ const EncryptionPanel = (props) => {
                 member={member}
                 request={request}
                 key={request.channel.transactionId}
-                phase={phase} />
+                inDialog={layout === "dialog"}
+                phase={phase}
+            />
         </React.Fragment>);
     }
 };
@@ -142,6 +149,7 @@ EncryptionPanel.propTypes = {
     onClose: PropTypes.func.isRequired,
     verificationRequest: PropTypes.object,
     layout: PropTypes.string,
+    inDialog: PropTypes.bool,
 };
 
 export default EncryptionPanel;

@@ -170,6 +170,7 @@ export default createReactClass({
         return MatrixClientPeg.get().mxcUrlToHttp(content.url);
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._iframe = createRef();
         this._dummyLink = createRef();

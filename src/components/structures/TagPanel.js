@@ -22,7 +22,7 @@ import TagOrderStore from '../../stores/TagOrderStore';
 import GroupActions from '../../actions/GroupActions';
 
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
@@ -44,7 +44,7 @@ const TagPanel = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.unmounted = false;
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);

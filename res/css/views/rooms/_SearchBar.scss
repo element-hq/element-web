@@ -22,7 +22,7 @@ limitations under the License.
 
     .mx_SearchBar_input {
         // border: 1px solid $input-border-color;
-        // font-size: 15px;
+        // font-size: $font-15px;
         flex: 1 1 0;
         margin-left: 22px;
     }
@@ -45,7 +45,7 @@ limitations under the License.
         border: 0;
         margin: 0 0 0 22px;
         padding: 5px;
-        font-size: 15px;
+        font-size: $font-15px;
         cursor: pointer;
         color: $primary-fg-color;
         border-bottom: 2px solid $accent-color;

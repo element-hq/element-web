@@ -22,7 +22,7 @@ import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -50,6 +50,7 @@ export default createReactClass({
         onResize: PropTypes.func,
     },
 
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._local = createRef();
         this._remote = createRef();

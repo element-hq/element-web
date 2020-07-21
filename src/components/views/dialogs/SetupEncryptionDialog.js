@@ -14,16 +14,52 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from 'react';
+import PropTypes from 'prop-types';
 import SetupEncryptionBody from '../../structures/auth/SetupEncryptionBody';
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
+import { SetupEncryptionStore, PHASE_DONE } from '../../../stores/SetupEncryptionStore';
 
-export default function SetupEncryptionDialog({onFinished}) {
-    return <BaseDialog
-        headerImage={require("../../../../res/img/e2e/warning.svg")}
-        onFinished={onFinished}
-        title={_t("Verify this session")}
-    >
-        <SetupEncryptionBody onFinished={onFinished} />
-    </BaseDialog>;
+function iconFromPhase(phase) {
+    if (phase === PHASE_DONE) {
+        return require("../../../../res/img/e2e/verified.svg");
+    } else {
+        return require("../../../../res/img/e2e/warning.svg");
+    }
+}
+
+export default class SetupEncryptionDialog extends React.Component {
+    static propTypes = {
+        onFinished: PropTypes.func.isRequired,
+    };
+
+    constructor() {
+        super();
+
+        this.store = SetupEncryptionStore.sharedInstance();
+        this.state = {icon: iconFromPhase(this.store.phase)};
+    }
+
+    componentDidMount() {
+        this.store.on("update", this._onStoreUpdate);
+    }
+
+    componentWillUnmount() {
+        this.store.removeListener("update", this._onStoreUpdate);
+    }
+
+    _onStoreUpdate = () => {
+        this.setState({icon: iconFromPhase(this.store.phase)});
+    };
+
+    render() {
+        return <BaseDialog
+            headerImage={this.state.icon}
+            onFinished={this.props.onFinished}
+            title={_t("Verify this session")}
+        >
+            <SetupEncryptionBody onFinished={this.props.onFinished} />
+        </BaseDialog>;
+    }
 }

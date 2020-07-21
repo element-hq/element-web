@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { GroupMemberType } from '../../../groups';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 

@@ -19,7 +19,7 @@ limitations under the License.
 }
 
 .mx_TextualEvent.mx_EventListSummary_summary {
-    font-size: 14px;
+    font-size: $font-14px;
     display: inline-flex;
 }
 
@@ -27,7 +27,7 @@ limitations under the License.
     display: inline-block;
     margin-right: 8px;
     padding-top: 8px;
-    line-height: 12px;
+    line-height: $font-12px;
 }
 
 .mx_EventListSummary_avatars .mx_BaseAvatar {
@@ -46,19 +46,19 @@ limitations under the License.
 .mx_EventListSummary_line {
     border-bottom: 1px solid $primary-hairline-color;
     margin-left: 63px;
-    line-height: 30px;
+    line-height: $font-30px;
 }
 
 .mx_MatrixChat_useCompactLayout {
     .mx_EventListSummary {
-        font-size: 13px;
+        font-size: $font-13px;
         .mx_EventTile_line {
-            line-height: 20px;
+            line-height: $font-20px;
         }
     }
 
     .mx_EventListSummary_line {
-        line-height: 22px;
+        line-height: $font-22px;
     }
 
     .mx_EventListSummary_toggle {
@@ -66,6 +66,6 @@ limitations under the License.
     }
 
     .mx_TextualEvent.mx_EventListSummary_summary {
-        font-size: 13px;
+        font-size: $font-13px;
     }
 }

@@ -35,7 +35,7 @@ export default class StatusMessageContextMenu extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { user } = this.props;
         if (!user) {
             return;

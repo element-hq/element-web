@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,18 +17,21 @@ limitations under the License.
 
 const assert = require('assert');
 const {openMemberInfo} = require("./memberlist");
-const {assertDialog, acceptDialog} = require("./dialog");
-
-async function assertVerified(session) {
-    const dialogSubTitle = await session.innerText(await session.query(".mx_Dialog h2"));
-    assert(dialogSubTitle, "Verified!");
-}
 
 async function startVerification(session, name) {
+    session.log.step("opens their opponent's profile and starts verification");
     await openMemberInfo(session, name);
     // click verify in member info
-    const firstVerifyButton = await session.query(".mx_MemberDeviceInfo_verify");
+    const firstVerifyButton = await session.query(".mx_UserInfo_verifyButton");
     await firstVerifyButton.click();
+
+    // wait for the animation to finish
+    await session.delay(1000);
+
+    // click 'start verification'
+    const startVerifyButton = await session.query('.mx_UserInfo_container .mx_AccessibleButton_kind_primary');
+    await startVerifyButton.click();
+    session.log.done();
 }
 
 async function getSasCodes(session) {
@@ -38,33 +41,73 @@ async function getSasCodes(session) {
     return sasLabels;
 }
 
-module.exports.startSasVerifcation = async function(session, name) {
-    await startVerification(session, name);
-    // expect "Verify device" dialog and click "Begin Verification"
-    await assertDialog(session, "Verify device");
-    // click "Begin Verification"
-    await acceptDialog(session);
+async function doSasVerification(session) {
+    session.log.step("hunts for the emoji to yell at their opponent");
     const sasCodes = await getSasCodes(session);
-    // click "Verify"
-    await acceptDialog(session);
-    await assertVerified(session);
-    // click "Got it" when verification is done
-    await acceptDialog(session);
+    session.log.done(sasCodes);
+
+    // Assume they match
+    session.log.step("assumes the emoji match");
+    const matchButton = await session.query(".mx_VerificationShowSas .mx_AccessibleButton_kind_primary");
+    await matchButton.click();
+    session.log.done();
+
+    // Wait for a big green shield (universal sign that it worked)
+    session.log.step("waits for a green shield");
+    await session.query(".mx_VerificationPanel_verified_section .mx_E2EIcon_verified");
+    session.log.done();
+
+    // Click 'Got It'
+    session.log.step("confirms the green shield");
+    const doneButton = await session.query(".mx_VerificationPanel_verified_section .mx_AccessibleButton_kind_primary");
+    await doneButton.click();
+    session.log.done();
+
+    // Wait a bit for the animation
+    session.log.step("confirms their opponent has a green shield");
+    await session.delay(1000);
+
+    // Verify that we now have a green shield in their name (proving it still works)
+    await session.query('.mx_UserInfo_profile .mx_E2EIcon_verified');
+    session.log.done();
+
+    return sasCodes;
+}
+
+module.exports.startSasVerifcation = async function(session, name) {
+    session.log.startGroup("starts verification");
+    await startVerification(session, name);
+
+    // expect to be waiting (the presence of a spinner is a good thing)
+    await session.query('.mx_UserInfo_container .mx_EncryptionInfo_spinner');
+
+    const sasCodes = await doSasVerification(session);
+    session.log.endGroup();
     return sasCodes;
 };
 
 module.exports.acceptSasVerification = async function(session, name) {
-    await assertDialog(session, "Incoming Verification Request");
-    const opponentLabelElement = await session.query(".mx_IncomingSasDialog_opponentProfile h2");
-    const opponentLabel = await session.innerText(opponentLabelElement);
-    assert(opponentLabel, name);
-    // click "Continue" button
-    await acceptDialog(session);
-    const sasCodes = await getSasCodes(session);
-    // click "Verify"
-    await acceptDialog(session);
-    await assertVerified(session);
-    // click "Got it" when verification is done
-    await acceptDialog(session);
+    session.log.startGroup("accepts verification");
+    const requestToast = await session.query('.mx_Toast_icon_verification');
+
+    // verify the toast is for verification
+    const toastHeader = await requestToast.$("h2");
+    const toastHeaderText = await session.innerText(toastHeader);
+    assert.equal(toastHeaderText, 'Verification Request');
+    const toastDescription = await requestToast.$(".mx_Toast_description");
+    const toastDescText = await session.innerText(toastDescription);
+    assert.equal(toastDescText.startsWith(name), true,
+        `verification opponent mismatch: expected to start with '${name}', got '${toastDescText}'`);
+
+    // accept the verification
+    const acceptButton = await requestToast.$(".mx_AccessibleButton_kind_primary");
+    await acceptButton.click();
+
+    // find the emoji button
+    const startEmojiButton = await session.query(".mx_VerificationPanel_verifyByEmojiButton");
+    await startEmojiButton.click();
+
+    const sasCodes = await doSasVerification(session);
+    session.log.endGroup();
     return sasCodes;
 };

@@ -43,4 +43,34 @@ describe('editor/serialize', function() {
         const html = htmlSerializeIfNeeded(model, {});
         expect(html).toBe("<em>hello</em> world");
     });
+    it('displaynames ending in a backslash work', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.userPill("Displayname\\", "@user:server")]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname\\</a>");
+    });
+    it('displaynames containing an opening square bracket work', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.userPill("Displayname[[", "@user:server")]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname[[</a>");
+    });
+    it('displaynames containing a closing square bracket work', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.userPill("Displayname]", "@user:server")]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe("<a href=\"https://matrix.to/#/@user:server\">Displayname]</a>");
+    });
+    it('escaped markdown should not retain backslashes', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.plain('\\*hello\\* world')]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe('*hello* world');
+    });
+    it('escaped markdown should convert HTML entities', function() {
+        const pc = createPartCreator();
+        const model = new EditorModel([pc.plain('\\*hello\\* world < hey world!')]);
+        const html = htmlSerializeIfNeeded(model, {});
+        expect(html).toBe('*hello* world &lt; hey world!');
+    });
 });

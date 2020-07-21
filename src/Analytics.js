@@ -66,7 +66,10 @@ const customVariables = {
     },
     'App Version': {
         id: 2,
-        expl: _td('The version of Riot'),
+        expl: _td('The version of %(brand)s'),
+        getTextVariables: () => ({
+            brand: SdkConfig.get().brand,
+        }),
         example: '15.0.0',
     },
     'User Type': {
@@ -96,7 +99,10 @@ const customVariables = {
     },
     'Touch Input': {
         id: 8,
-        expl: _td("Whether you're using Riot on a device where touch is the primary input mechanism"),
+        expl: _td("Whether you're using %(brand)s on a device where touch is the primary input mechanism"),
+        getTextVariables: () => ({
+            brand: SdkConfig.get().brand,
+        }),
         example: 'false',
     },
     'Breadcrumbs': {
@@ -106,7 +112,10 @@ const customVariables = {
     },
     'Installed PWA': {
         id: 10,
-        expl: _td("Whether you're using Riot as an installed Progressive Web App"),
+        expl: _td("Whether you're using %(brand)s as an installed Progressive Web App"),
+        getTextVariables: () => ({
+            brand: SdkConfig.get().brand,
+        }),
         example: 'false',
     },
 };
@@ -123,8 +132,8 @@ const LAST_VISIT_TS_KEY = "mx_Riot_Analytics_lvts";
 
 function getUid() {
     try {
-        let data = localStorage.getItem(UID_KEY);
-        if (!data) {
+        let data = localStorage && localStorage.getItem(UID_KEY);
+        if (!data && localStorage) {
             localStorage.setItem(UID_KEY, data = [...Array(16)].map(() => Math.random().toString(16)[2]).join(''));
         }
         return data;
@@ -145,14 +154,16 @@ class Analytics {
         this.firstPage = true;
         this._heartbeatIntervalID = null;
 
-        this.creationTs = localStorage.getItem(CREATION_TS_KEY);
-        if (!this.creationTs) {
+        this.creationTs = localStorage && localStorage.getItem(CREATION_TS_KEY);
+        if (!this.creationTs && localStorage) {
             localStorage.setItem(CREATION_TS_KEY, this.creationTs = new Date().getTime());
         }
 
-        this.lastVisitTs = localStorage.getItem(LAST_VISIT_TS_KEY);
-        this.visitCount = localStorage.getItem(VISIT_COUNT_KEY) || 0;
-        localStorage.setItem(VISIT_COUNT_KEY, parseInt(this.visitCount, 10) + 1);
+        this.lastVisitTs = localStorage && localStorage.getItem(LAST_VISIT_TS_KEY);
+        this.visitCount = localStorage && localStorage.getItem(VISIT_COUNT_KEY) || 0;
+        if (localStorage) {
+            localStorage.setItem(VISIT_COUNT_KEY, parseInt(this.visitCount, 10) + 1);
+        }
     }
 
     get disabled() {
@@ -193,8 +204,11 @@ class Analytics {
 
         this._setVisitVariable('Chosen Language', getCurrentLanguage());
 
-        if (window.location.hostname === 'riot.im') {
+        const hostname = window.location.hostname;
+        if (hostname === 'riot.im') {
             this._setVisitVariable('Instance', window.location.pathname);
+        } else if (hostname.endsWith('.element.io')) {
+            this._setVisitVariable('Instance', hostname.replace('.element.io', ''));
         }
 
         let installedPWA = "unknown";
@@ -354,12 +368,17 @@ class Analytics {
         Modal.createTrackedDialog('Analytics Details', '', ErrorDialog, {
             title: _t('Analytics'),
             description: <div className="mx_AnalyticsModal">
-                <div>
-                    { _t('The information being sent to us to help make Riot better includes:') }
-                </div>
+                <div>{_t('The information being sent to us to help make %(brand)s better includes:', {
+                    brand: SdkConfig.get().brand,
+                })}</div>
                 <table>
                     { rows.map((row) => <tr key={row[0]}>
-                        <td>{ _t(customVariables[row[0]].expl) }</td>
+                        <td>{_t(
+                            customVariables[row[0]].expl,
+                            customVariables[row[0]].getTextVariables ?
+                                customVariables[row[0]].getTextVariables() :
+                                null,
+                        )}</td>
                         { row[1] !== undefined && <td><code>{ row[1] }</code></td> }
                     </tr>) }
                     { otherVariables.map((item, index) =>

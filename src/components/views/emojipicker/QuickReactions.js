@@ -27,8 +27,7 @@ const QUICK_REACTIONS = ["👍", "👎", "😄", "🎉", "😕", "❤️", "🚀
     if (!data) {
         throw new Error(`Emoji ${emoji} doesn't exist in emojibase`);
     }
-    // Prefer our unicode value for quick reactions as we sometimes use variation selectors.
-    return Object.assign({}, data, { unicode: emoji });
+    return data;
 });
 
 class QuickReactions extends React.Component {
@@ -72,7 +71,7 @@ class QuickReactions extends React.Component {
                         </React.Fragment>
                     }
                 </h2>
-                <ul className="mx_EmojiPicker_list">
+                <ul className="mx_EmojiPicker_list" aria-label={_t("Quick Reactions")}>
                     {QUICK_REACTIONS.map(emoji => <Emoji
                         key={emoji.hexcode} emoji={emoji} onClick={this.props.onClick}
                         onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}

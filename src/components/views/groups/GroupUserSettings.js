@@ -34,7 +34,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this.context.getJoinedGroups().then((result) => {
             this.setState({groups: result.groups || [], error: null});
         }, (err) => {

@@ -603,6 +603,7 @@ const stateHandlers = {
     'm.room.guest_access': textForGuestAccessEvent,
     'm.room.related_groups': textForRelatedGroupsEvent,
 
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
     'im.vector.modular.widgets': textForWidgetEvent,
 };
 

@@ -31,7 +31,7 @@ export default createReactClass({
         recommendation: PropTypes.object.isRequired,
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
 

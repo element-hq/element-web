@@ -30,16 +30,29 @@ export default class VerificationRequestDialog extends React.Component {
     constructor(...args) {
         super(...args);
         this.onFinished = this.onFinished.bind(this);
+        this.state = {};
+        if (this.props.verificationRequest) {
+            this.state.verificationRequest = this.props.verificationRequest;
+        } else if (this.props.verificationRequestPromise) {
+            this.props.verificationRequestPromise.then(r => {
+                this.setState({verificationRequest: r});
+            });
+        }
     }
 
     render() {
         const BaseDialog = sdk.getComponent("views.dialogs.BaseDialog");
         const EncryptionPanel = sdk.getComponent("views.right_panel.EncryptionPanel");
+        const request = this.state.verificationRequest;
+        const otherUserId = request && request.otherUserId;
         const member = this.props.member ||
-            MatrixClientPeg.get().getUser(this.props.verificationRequest.otherUserId);
+            otherUserId && MatrixClientPeg.get().getUser(otherUserId);
+        const title = request && request.isSelfVerification ?
+            _t("Verify other session") : _t("Verification Request");
+
         return <BaseDialog className="mx_InfoDialog" onFinished={this.onFinished}
                 contentId="mx_Dialog_content"
-                title={_t("Verification Request")}
+                title={title}
                 hasCancel={true}
             >
             <EncryptionPanel

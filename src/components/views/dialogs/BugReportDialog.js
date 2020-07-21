@@ -164,12 +164,20 @@ export default class BugReportDialog extends React.Component {
             );
         }
 
+        let warning;
+        if (window.Modernizr && Object.values(window.Modernizr).some(support => support === false)) {
+            warning = <p><b>
+                { _t("Reminder: Your browser is unsupported, so your experience may be unpredictable.") }
+            </b></p>;
+        }
+
         return (
             <BaseDialog className="mx_BugReportDialog" onFinished={this._onCancel}
                     title={_t('Submit debug logs')}
                 contentId='mx_Dialog_content'
             >
                 <div className="mx_Dialog_content" id='mx_Dialog_content'>
+                    { warning }
                     <p>
                         { _t(
                             "Debug logs contain application usage data including your " +

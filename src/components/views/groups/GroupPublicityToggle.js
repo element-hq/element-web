@@ -36,7 +36,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._initGroupStore(this.props.groupId);
     },
 

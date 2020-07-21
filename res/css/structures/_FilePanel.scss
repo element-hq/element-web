@@ -49,7 +49,7 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile .mx_MFileBody_download {
     display: flex;
-    font-size: 14px;
+    font-size: $font-14px;
     color: $event-timestamp-color;
 }
 
@@ -60,7 +60,7 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
     flex: 1 0 0;
-    font-size: 11px;
+    font-size: $font-11px;
     text-align: right;
     white-space: nowrap;
 }
@@ -80,7 +80,7 @@ limitations under the License.
     flex: 1 1 auto;
     line-height: initial;
     padding: 0px;
-    font-size: 11px;
+    font-size: $font-11px;
     opacity: 1.0;
     color: $event-timestamp-color;
 }
@@ -90,7 +90,7 @@ limitations under the License.
     text-align: right;
     visibility: visible;
     position: initial;
-    font-size: 11px;
+    font-size: $font-11px;
     opacity: 1.0;
     color: $event-timestamp-color;
 }

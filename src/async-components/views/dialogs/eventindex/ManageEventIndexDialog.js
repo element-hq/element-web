@@ -18,6 +18,7 @@ import React from 'react';
 import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
+import SdkConfig from '../../../../SdkConfig';
 import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
@@ -30,7 +31,7 @@ import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 export default class ManageEventIndexDialog extends React.Component {
     static propTypes = {
         onFinished: PropTypes.func.isRequired,
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -82,7 +83,7 @@ export default class ManageEventIndexDialog extends React.Component {
         }
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         let eventIndexSize = 0;
         let crawlingRoomsCount = 0;
         let roomCount = 0;
@@ -126,39 +127,35 @@ export default class ManageEventIndexDialog extends React.Component {
             import("./DisableEventIndexDialog"),
             null, null, /* priority = */ false, /* static = */ true,
         );
-    }
-
-    _onDone = () => {
-        this.props.onFinished(true);
-    }
+    };
 
     _onCrawlerSleepTimeChange = (e) => {
         this.setState({crawlerSleepTime: e.target.value});
         SettingsStore.setValue("crawlerSleepTime", null, SettingLevel.DEVICE, e.target.value);
-    }
+    };
 
     render() {
-        let crawlerState;
+        const brand = SdkConfig.get().brand;
+        const Field = sdk.getComponent('views.elements.Field');
 
+        let crawlerState;
         if (this.state.currentRoom === null) {
             crawlerState = _t("Not currently indexing messages for any room.");
         } else {
             crawlerState = (
-                    _t("Currently indexing: %(currentRoom)s.", { currentRoom: this.state.currentRoom })
+                    _t("Currently indexing: %(currentRoom)s", { currentRoom: this.state.currentRoom })
             );
         }
-
-        const Field = sdk.getComponent('views.elements.Field');
 
         const doneRooms = Math.max(0, (this.state.roomCount - this.state.crawlingRoomsCount));
 
         const eventIndexingSettings = (
             <div>
-                {
-                    _t( "Riot is securely caching encrypted messages locally for them " +
-                        "to appear in search results:",
-                    )
-                }
+                {_t(
+                    "%(brand)s is securely caching encrypted messages locally for them " +
+                    "to appear in search results:",
+                    { brand },
+                )}
                 <div className='mx_SettingsTab_subsectionText'>
                     {crawlerState}<br />
                     {_t("Space used:")} {formatBytes(this.state.eventIndexSize, 0)}<br />

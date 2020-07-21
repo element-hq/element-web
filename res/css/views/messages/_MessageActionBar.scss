@@ -21,7 +21,7 @@ limitations under the License.
     cursor: pointer;
     display: flex;
     height: 24px;
-    line-height: 24px;
+    line-height: $font-24px;
     border-radius: 4px;
     background: $message-action-bar-bg-color;
     top: -18px;
@@ -91,17 +91,17 @@ limitations under the License.
 }
 
 .mx_MessageActionBar_reactButton::after {
-    mask-image: url('$(res)/img/react.svg');
+    mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
 }
 
 .mx_MessageActionBar_replyButton::after {
-    mask-image: url('$(res)/img/reply.svg');
+    mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
 }
 
 .mx_MessageActionBar_editButton::after {
-    mask-image: url('$(res)/img/edit.svg');
+    mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
 }
 
 .mx_MessageActionBar_optionsButton::after {
-    mask-image: url('$(res)/img/icon_context.svg');
+    mask-image: url('$(res)/img/element-icons/context-menu.svg');
 }

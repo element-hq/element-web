@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ProgressBar {
-    height: 5px;
-    border: 1px solid $progressbar-color;
-}
+progress.mx_ProgressBar {
+    height: 4px;
+    width: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    appearance: none;
+    border: 0;
 
-.mx_ProgressBar_fill {
-    height: 100%;
-    background-color: $progressbar-color;
+    @mixin ProgressBarBorderRadius "10px";
+    @mixin ProgressBarColour $accent-color;
+    ::-webkit-progress-value {
+        transition: width 1s;
+    }
+    ::-moz-progress-bar {
+        transition: padding-bottom 1s;
+        padding-bottom: var(--value);
+        transform-origin: 0 0;
+        transform: rotate(-90deg) translateX(-15px);
+        padding-left: 15px;
+
+        height: 0;
+    }
 }

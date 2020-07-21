@@ -25,7 +25,7 @@ import * as HtmlUtils from '../../../HtmlUtils';
 import {formatDate} from '../../../DateUtils';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -34,6 +34,8 @@ import {pillifyLinks, unmountPills} from '../../../utils/pillify';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import {isPermalinkHost} from "../../../utils/permalinks/Permalinks";
 import {toRightOf} from "../../structures/ContextMenu";
+import {copyPlaintext} from "../../../utils/strings";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 export default createReactClass({
     displayName: 'TextualBody',
@@ -69,23 +71,7 @@ export default createReactClass({
         };
     },
 
-    copyToClipboard: function(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.select();
-
-        let successful = false;
-        try {
-            successful = document.execCommand('copy');
-        } catch (err) {
-            console.log('Unable to copy');
-        }
-
-        document.body.removeChild(textArea);
-        return successful;
-    },
-
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
     UNSAFE_componentWillMount: function() {
         this._content = createRef();
     },
@@ -121,7 +107,7 @@ export default createReactClass({
                         } else {
                             // Only syntax highlight if there's a class starting with language-
                             const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-');
+                                return cl.startsWith('language-') && !cl.startsWith('language-_');
                             });
 
                             if (classes.length != 0) {
@@ -161,7 +147,6 @@ export default createReactClass({
                 nextProps.showUrlPreview !== this.props.showUrlPreview ||
                 nextProps.editState !== this.props.editState ||
                 nextState.links !== this.state.links ||
-                nextState.editedMarkerHovered !== this.state.editedMarkerHovered ||
                 nextState.widgetHidden !== this.state.widgetHidden);
     },
 
@@ -276,17 +261,17 @@ export default createReactClass({
         Array.from(ReactDOM.findDOMNode(this).querySelectorAll('.mx_EventTile_body pre')).forEach((p) => {
             const button = document.createElement("span");
             button.className = "mx_EventTile_copyButton";
-            button.onclick = (e) => {
-                const copyCode = button.parentNode.getElementsByTagName("code")[0];
-                const successful = this.copyToClipboard(copyCode.textContent);
+            button.onclick = async () => {
+                const copyCode = button.parentNode.getElementsByTagName("pre")[0];
+                const successful = await copyPlaintext(copyCode.textContent);
 
-                const buttonRect = e.target.getBoundingClientRect();
+                const buttonRect = button.getBoundingClientRect();
                 const GenericTextContextMenu = sdk.getComponent('context_menus.GenericTextContextMenu');
                 const {close} = ContextMenu.createMenu(GenericTextContextMenu, {
                     ...toRightOf(buttonRect, 2),
                     message: successful ? _t('Copied!') : _t('Failed to copy'),
                 });
-                e.target.onmouseleave = close;
+                button.onmouseleave = close;
             };
 
             // Wrap a div around <pre> so that the copy button can be correctly positioned
@@ -382,42 +367,33 @@ export default createReactClass({
         });
     },
 
-    _onMouseEnterEditedMarker: function() {
-        this.setState({editedMarkerHovered: true});
-    },
-
-    _onMouseLeaveEditedMarker: function() {
-        this.setState({editedMarkerHovered: false});
-    },
-
     _openHistoryDialog: async function() {
         const MessageEditHistoryDialog = sdk.getComponent("views.dialogs.MessageEditHistoryDialog");
         Modal.createDialog(MessageEditHistoryDialog, {mxEvent: this.props.mxEvent});
     },
 
     _renderEditedMarker: function() {
-        let editedTooltip;
-        if (this.state.editedMarkerHovered) {
-            const Tooltip = sdk.getComponent('elements.Tooltip');
-            const date = this.props.mxEvent.replacingEventDate();
-            const dateString = date && formatDate(date);
-            editedTooltip = <Tooltip
-                tooltipClassName="mx_Tooltip_timeline"
-                label={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
-            />;
-        }
+        const date = this.props.mxEvent.replacingEventDate();
+        const dateString = date && formatDate(date);
 
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
+        const tooltip = <div>
+            <div className="mx_Tooltip_title">
+                {_t("Edited at %(date)s", {date: dateString})}
+            </div>
+            <div className="mx_Tooltip_sub">
+                {_t("Click to view edits")}
+            </div>
+        </div>;
+
         return (
-            <AccessibleButton
-                key="editedMarker"
+            <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
-                onMouseEnter={this._onMouseEnterEditedMarker}
-                onMouseLeave={this._onMouseLeaveEditedMarker}
+                title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
+                tooltip={tooltip}
             >
-                { editedTooltip }<span>{`(${_t("edited")})`}</span>
-            </AccessibleButton>
+                <span>{`(${_t("edited")})`}</span>
+            </AccessibleTooltipButton>
         );
     },
 

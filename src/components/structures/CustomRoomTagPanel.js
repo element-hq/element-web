@@ -18,7 +18,7 @@ import React from 'react';
 import CustomRoomTagStore from '../../stores/CustomRoomTagStore';
 import AutoHideScrollbar from './AutoHideScrollbar';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import classNames from 'classnames';
 import * as FormattingUtils from '../../utils/FormattingUtils';
 
@@ -30,7 +30,7 @@ class CustomRoomTagPanel extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._tagStoreToken = CustomRoomTagStore.addListener(() => {
             this.setState({tags: CustomRoomTagStore.getSortedTags()});
         });
@@ -72,17 +72,17 @@ class CustomRoomTagTile extends React.Component {
         const tag = this.props.tag;
         const avatarHeight = 40;
         const className = classNames({
-            CustomRoomTagPanel_tileSelected: tag.selected,
+            "CustomRoomTagPanel_tileSelected": tag.selected,
         });
         const name = tag.name;
-        const badge = tag.badge;
+        const badgeNotifState = tag.badgeNotifState;
         let badgeElement;
-        if (badge) {
+        if (badgeNotifState) {
             const badgeClasses = classNames({
                 "mx_TagTile_badge": true,
-                "mx_TagTile_badgeHighlight": badge.highlight,
+                "mx_TagTile_badgeHighlight": badgeNotifState.hasMentions,
             });
-            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badge.count)}</div>);
+            badgeElement = (<div className={badgeClasses}>{FormattingUtils.formatCount(badgeNotifState.count)}</div>);
         }
 
         return (

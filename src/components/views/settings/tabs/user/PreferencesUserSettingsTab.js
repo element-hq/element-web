@@ -26,8 +26,6 @@ import PlatformPeg from "../../../../../PlatformPeg";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
-        'RoomList.orderAlphabetically',
-        'RoomList.orderByImportance',
         'breadcrumbs',
     ];
 
@@ -81,7 +79,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         };
     }
 
-    async componentWillMount(): void {
+    async componentDidMount(): void {
         const platform = PlatformPeg.get();
 
         const autoLaunchSupported = await platform.supportsAutoLaunch();

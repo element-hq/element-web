@@ -46,7 +46,8 @@ export default createReactClass({
         };
     },
 
-    componentWillReceiveProps: function(props) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(props) {
         // Make sure the selected item isn't outside the list bounds
         const selected = this.state.selected;
         const maxSelected = this._maxSelected(props.addressList);

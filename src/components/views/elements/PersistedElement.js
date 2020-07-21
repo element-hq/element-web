@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 
 import ResizeObserver from 'resize-observer-polyfill';
 
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -113,10 +113,12 @@ export default class PersistedElement extends React.Component {
 
     componentDidMount() {
         this.updateChild();
+        this.renderApp();
     }
 
     componentDidUpdate() {
         this.updateChild();
+        this.renderApp();
     }
 
     componentWillUnmount() {
@@ -141,6 +143,14 @@ export default class PersistedElement extends React.Component {
         this.updateChildVisibility(this.child, true);
     }
 
+    renderApp() {
+        const content = <div ref={this.collectChild} style={this.props.style}>
+            {this.props.children}
+        </div>;
+
+        ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
+    }
+
     updateChildVisibility(child, visible) {
         if (!child) return;
         child.style.display = visible ? 'block' : 'none';
@@ -160,12 +170,6 @@ export default class PersistedElement extends React.Component {
     }
 
     render() {
-        const content = <div ref={this.collectChild} style={this.props.style}>
-            {this.props.children}
-        </div>;
-
-        ReactDOM.render(content, getOrCreateContainer('mx_persistedElement_'+this.props.persistKey));
-
         return <div ref={this.collectChildContainer}></div>;
     }
 }

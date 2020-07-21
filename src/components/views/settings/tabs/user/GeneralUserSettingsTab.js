@@ -19,7 +19,6 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
-import Field from "../../../elements/Field";
 import * as languageHandler from "../../../../../languageHandler";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -27,17 +26,17 @@ import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import DeactivateAccountDialog from "../../../dialogs/DeactivateAccountDialog";
 import PropTypes from "prop-types";
-import {enumerateThemes, ThemeWatcher} from "../../../../../theme";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import Modal from "../../../../../Modal";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
 import {Service, startTermsFlow} from "../../../../../Terms";
 import {SERVICE_TYPES} from "matrix-js-sdk";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
+import Spinner from "../../../elements/Spinner";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -60,15 +59,14 @@ export default class GeneralUserSettingsTab extends React.Component {
             },
             emails: [],
             msisdns: [],
-            ...this._calculateThemeState(),
-            customThemeUrl: "",
-            customThemeMessage: {isError: false, text: ""},
+            loading3pids: true, // whether or not the emails and msisdns have been loaded
         };
 
         this.dispatcherRef = dis.register(this._onAction);
     }
 
-    async componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    async UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const cli = MatrixClientPeg.get();
 
         const serverSupportsSeparateAddAndBind = await cli.doesServerSupportSeparateAddAndBind();
@@ -88,39 +86,6 @@ export default class GeneralUserSettingsTab extends React.Component {
 
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-    }
-
-    _calculateThemeState() {
-        // We have to mirror the logic from ThemeWatcher.getEffectiveTheme so we
-        // show the right values for things.
-
-        const themeChoice = SettingsStore.getValueAt(SettingLevel.ACCOUNT, "theme");
-        const systemThemeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "use_system_theme", null, false, true);
-        const themeExplicit = SettingsStore.getValueAt(
-            SettingLevel.DEVICE, "theme", null, false, true);
-
-        // If the user has enabled system theme matching, use that.
-        if (systemThemeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: true,
-            };
-        }
-
-        // If the user has set a theme explicitly, use that (no system theme matching)
-        if (themeExplicit) {
-            return {
-                theme: themeChoice,
-                useSystemTheme: false,
-            };
-        }
-
-        // Otherwise assume the defaults for the settings
-        return {
-            theme: themeChoice,
-            useSystemTheme: SettingsStore.getValueAt(SettingLevel.DEVICE, "use_system_theme"),
-        };
     }
 
     _onAction = (payload) => {
@@ -157,8 +122,11 @@ export default class GeneralUserSettingsTab extends React.Component {
             );
             console.warn(e);
         }
-        this.setState({ emails: threepids.filter((a) => a.medium === 'email') });
-        this.setState({ msisdns: threepids.filter((a) => a.medium === 'msisdn') });
+        this.setState({
+            emails: threepids.filter((a) => a.medium === 'email'),
+            msisdns: threepids.filter((a) => a.medium === 'msisdn'),
+            loading3pids: false,
+        });
     }
 
     async _checkTerms() {
@@ -213,33 +181,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         PlatformPeg.get().reload();
     };
 
-    _onThemeChange = (e) => {
-        const newTheme = e.target.value;
-        if (this.state.theme === newTheme) return;
-
-        // doing getValue in the .catch will still return the value we failed to set,
-        // so remember what the value was before we tried to set it so we can revert
-        const oldTheme = SettingsStore.getValue('theme');
-        SettingsStore.setValue("theme", null, SettingLevel.ACCOUNT, newTheme).catch(() => {
-            dis.dispatch({action: 'recheck_theme'});
-            this.setState({theme: oldTheme});
-        });
-        this.setState({theme: newTheme});
-        // The settings watcher doesn't fire until the echo comes back from the
-        // server, so to make the theme change immediately we need to manually
-        // do the dispatch now
-        // XXX: The local echoed value appears to be unreliable, in particular
-        // when settings custom themes(!) so adding forceTheme to override
-        // the value from settings.
-        dis.dispatch({action: 'recheck_theme', forceTheme: newTheme});
-    };
-
-    _onUseSystemThemeChanged = (checked) => {
-        this.setState({useSystemTheme: checked});
-        SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, checked);
-        dis.dispatch({action: 'recheck_theme'});
-    };
-
     _onPasswordChangeError = (err) => {
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         let errMsg = err.error || "";
@@ -276,41 +217,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         });
     };
 
-    _onAddCustomTheme = async () => {
-        let currentThemes = SettingsStore.getValue("custom_themes");
-        if (!currentThemes) currentThemes = [];
-        currentThemes = currentThemes.map(c => c); // cheap clone
-
-        if (this._themeTimer) {
-            clearTimeout(this._themeTimer);
-        }
-
-        try {
-            const r = await fetch(this.state.customThemeUrl);
-            const themeInfo = await r.json();
-            if (!themeInfo || typeof(themeInfo['name']) !== 'string' || typeof(themeInfo['colors']) !== 'object') {
-                this.setState({customThemeMessage: {text: _t("Invalid theme schema."), isError: true}});
-                return;
-            }
-            currentThemes.push(themeInfo);
-        } catch (e) {
-            console.error(e);
-            this.setState({customThemeMessage: {text: _t("Error downloading theme information."), isError: true}});
-            return; // Don't continue on error
-        }
-
-        await SettingsStore.setValue("custom_themes", null, SettingLevel.ACCOUNT, currentThemes);
-        this.setState({customThemeUrl: "", customThemeMessage: {text: _t("Theme added!"), isError: false}});
-
-        this._themeTimer = setTimeout(() => {
-            this.setState({customThemeMessage: {text: "", isError: false}});
-        }, 3000);
-    };
-
-    _onCustomThemeChange = (e) => {
-        this.setState({customThemeUrl: e.target.value});
-    };
-
     _renderProfileSection() {
         return (
             <div className="mx_SettingsTab_section">
@@ -324,7 +230,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         const ChangePassword = sdk.getComponent("views.settings.ChangePassword");
         const EmailAddresses = sdk.getComponent("views.settings.account.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.account.PhoneNumbers");
-        const Spinner = sdk.getComponent("views.elements.Spinner");
 
         let passwordChangeForm = (
             <ChangePassword
@@ -343,18 +248,24 @@ export default class GeneralUserSettingsTab extends React.Component {
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
         if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
-            threepidSection = <div>
-                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-                <EmailAddresses
+            const emails = this.state.loading3pids
+                ? <Spinner />
+                : <EmailAddresses
                     emails={this.state.emails}
                     onEmailsChange={this._onEmailsChange}
-                />
-
-                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-                <PhoneNumbers
+                />;
+            const msisdns = this.state.loading3pids
+                ? <Spinner />
+                : <PhoneNumbers
                     msisdns={this.state.msisdns}
                     onMsisdnsChange={this._onMsisdnsChange}
-                />
+                />;
+            threepidSection = <div>
+                <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
+                {emails}
+
+                <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
+                {msisdns}
             </div>;
         } else if (this.state.serverSupportsSeparateAddAndBind === null) {
             threepidSection = <Spinner />;
@@ -390,77 +301,6 @@ export default class GeneralUserSettingsTab extends React.Component {
         );
     }
 
-    _renderThemeSection() {
-        const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        const LabelledToggleSwitch = sdk.getComponent("views.elements.LabelledToggleSwitch");
-
-        const themeWatcher = new ThemeWatcher();
-        let systemThemeSection;
-        if (themeWatcher.isSystemThemeSupported()) {
-            systemThemeSection = <div>
-                <LabelledToggleSwitch
-                    value={this.state.useSystemTheme}
-                    label={SettingsStore.getDisplayName("use_system_theme")}
-                    onChange={this._onUseSystemThemeChanged}
-                />
-            </div>;
-        }
-
-        let customThemeForm;
-        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
-            let messageElement = null;
-            if (this.state.customThemeMessage.text) {
-                if (this.state.customThemeMessage.isError) {
-                    messageElement = <div className='text-error'>{this.state.customThemeMessage.text}</div>;
-                } else {
-                    messageElement = <div className='text-success'>{this.state.customThemeMessage.text}</div>;
-                }
-            }
-            customThemeForm = (
-                <div className='mx_SettingsTab_section'>
-                    <form onSubmit={this._onAddCustomTheme}>
-                        <Field
-                            label={_t("Custom theme URL")}
-                            type='text'
-                            autoComplete="off"
-                            onChange={this._onCustomThemeChange}
-                            value={this.state.customThemeUrl}
-                        />
-                        <AccessibleButton
-                            onClick={this._onAddCustomTheme}
-                            type="submit" kind="primary_sm"
-                            disabled={!this.state.customThemeUrl.trim()}
-                        >{_t("Add theme")}</AccessibleButton>
-                        {messageElement}
-                    </form>
-                </div>
-            );
-        }
-
-        const themes = Object.entries(enumerateThemes())
-            .map(p => ({id: p[0], name: p[1]})); // convert pairs to objects for code readability
-        const builtInThemes = themes.filter(p => !p.id.startsWith("custom-"));
-        const customThemes = themes.filter(p => !builtInThemes.includes(p))
-            .sort((a, b) => a.name.localeCompare(b.name));
-        const orderedThemes = [...builtInThemes, ...customThemes];
-        return (
-            <div className="mx_SettingsTab_section mx_GeneralUserSettingsTab_themeSection">
-                <span className="mx_SettingsTab_subheading">{_t("Theme")}</span>
-                {systemThemeSection}
-                <Field label={_t("Theme")} element="select"
-                       value={this.state.theme} onChange={this._onThemeChange}
-                       disabled={this.state.useSystemTheme}
-                >
-                    {orderedThemes.map(theme => {
-                        return <option key={theme.id} value={theme.id}>{theme.name}</option>;
-                    })}
-                </Field>
-                {customThemeForm}
-                <SettingsFlag name="useCompactLayout" level={SettingLevel.ACCOUNT} />
-            </div>
-        );
-    }
-
     _renderDiscoverySection() {
         const SetIdServer = sdk.getComponent("views.settings.SetIdServer");
 
@@ -490,12 +330,15 @@ export default class GeneralUserSettingsTab extends React.Component {
         const EmailAddresses = sdk.getComponent("views.settings.discovery.EmailAddresses");
         const PhoneNumbers = sdk.getComponent("views.settings.discovery.PhoneNumbers");
 
+        const emails = this.state.loading3pids ? <Spinner /> : <EmailAddresses emails={this.state.emails} />;
+        const msisdns = this.state.loading3pids ? <Spinner /> : <PhoneNumbers msisdns={this.state.msisdns} />;
+
         const threepidSection = this.state.haveIdServer ? <div className='mx_GeneralUserSettingsTab_discovery'>
             <span className="mx_SettingsTab_subheading">{_t("Email addresses")}</span>
-            <EmailAddresses emails={this.state.emails} />
+            {emails}
 
             <span className="mx_SettingsTab_subheading">{_t("Phone numbers")}</span>
-            <PhoneNumbers msisdns={this.state.msisdns} />
+            {msisdns}
         </div> : null;
 
         return (
@@ -546,7 +389,6 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderProfileSection()}
                 {this._renderAccountSection()}
                 {this._renderLanguageSection()}
-                {this._renderThemeSection()}
                 <div className="mx_SettingsTab_heading">{discoWarning} {_t("Discovery")}</div>
                 {this._renderDiscoverySection()}
                 {this._renderIntegrationManagerSection() /* Has its own title */}

@@ -6,11 +6,12 @@ function mkClient(selfTrust) {
         getUserId: () => "@self:localhost",
         checkUserTrust: (userId) => ({
             isCrossSigningVerified: () => userId[1] == "T",
+            wasCrossSigningVerified: () => userId[1] == "T" || userId[1] == "W",
         }),
         checkDeviceTrust: (userId, deviceId) => ({
             isVerified: () => userId === "@self:localhost" ? selfTrust : userId[2] == "T",
         }),
-        getStoredDevicesForUser: async (userId) => ["DEVICE"],
+        getStoredDevicesForUser: (userId) => ["DEVICE"],
     };
 }
 
@@ -150,7 +151,7 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h", "@TT: h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@TF:h", "@TT:h"].map((userId) => ({userId})),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);
@@ -162,7 +163,19 @@ describe("shieldStatusForMembership other-trust behaviour", function() {
         const client = mkClient(true);
         const room = {
             roomId: dm ? "DM" : "other",
-            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h", "@FT: h"].map((userId) => ({userId})),
+            getEncryptionTargetMembers: () => ["@self:localhost", "@FF:h", "@FT:h"].map((userId) => ({userId})),
+        };
+        const status = await shieldStatusForRoom(client, room);
+        expect(status).toEqual(result);
+    });
+
+    it.each(
+        [["warning", true], ["warning", false]],
+    )("2 was verified: returns '%s', DM = %s", async (result, dm) => {
+        const client = mkClient(true);
+        const room = {
+            roomId: dm ? "DM" : "other",
+            getEncryptionTargetMembers: () => ["@self:localhost", "@WF:h", "@FT:h"].map((userId) => ({userId})),
         };
         const status = await shieldStatusForRoom(client, room);
         expect(status).toEqual(result);

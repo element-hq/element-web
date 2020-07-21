@@ -134,7 +134,7 @@ describe.skip('RoomSettings', () => {
         });
     });
 
-    // XXX: Can't test this because we `getRoomDirectoryVisibility` in `componentWillMount`
+    // XXX: Can't test this because we `getRoomDirectoryVisibility` in `componentDidMount`
     xit('should set room directory publicity when set to true', (done) => {
         const isRoomPublished = true;
         roomSettings.setState({
@@ -177,6 +177,7 @@ describe.skip('RoomSettings', () => {
                         'm.room.history_visibility': 50,
                         'm.room.power_levels': 50,
                         'm.room.topic': 50,
+                        // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
                         'im.vector.modular.widgets': 50,
                     },
                 },

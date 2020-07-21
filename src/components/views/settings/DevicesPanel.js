@@ -23,6 +23,7 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import {SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
 
 export default class DevicesPanel extends React.Component {
     constructor(props) {
@@ -123,11 +124,34 @@ export default class DevicesPanel extends React.Component {
             // pop up an interactive auth dialog
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
 
+            const numDevices = this.state.selectedDevices.length;
+            const dialogAesthetics = {
+                [SSOAuthEntry.PHASE_PREAUTH]: {
+                    title: _t("Use Single Sign On to continue"),
+                    body: _t("Confirm deleting these sessions by using Single Sign On to prove your identity.", {
+                        count: numDevices,
+                    }),
+                    continueText: _t("Single Sign On"),
+                    continueKind: "primary",
+                },
+                [SSOAuthEntry.PHASE_POSTAUTH]: {
+                    title: _t("Confirm deleting these sessions"),
+                    body: _t("Click the button below to confirm deleting these sessions.", {
+                        count: numDevices,
+                    }),
+                    continueText: _t("Delete sessions", {count: numDevices}),
+                    continueKind: "danger",
+                },
+            };
             Modal.createTrackedDialog('Delete Device Dialog', '', InteractiveAuthDialog, {
                 title: _t("Authentication"),
                 matrixClient: MatrixClientPeg.get(),
                 authData: error.data,
                 makeRequest: this._makeDeleteRequest.bind(this),
+                aestheticsForStagePhases: {
+                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
+                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
+                },
             });
         }).catch((e) => {
             console.error("Error deleting sessions", e);

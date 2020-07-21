@@ -16,7 +16,7 @@ limitations under the License.
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
 import {
     htmlSerializeIfNeeded,
@@ -44,6 +44,7 @@ import {Key} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RateLimitedFunc from '../../../ratelimitedfunc';
+import {Action} from "../../../dispatcher/actions";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -312,6 +313,7 @@ export default class SendMessageComposer extends React.Component {
                     event: null,
                 });
             }
+            dis.dispatch({action: "message_sent"});
         }
 
         this.sendHistoryManager.save(this.model);
@@ -322,16 +324,12 @@ export default class SendMessageComposer extends React.Component {
         this._clearStoredEditorState();
     }
 
-    componentDidMount() {
-        this._editorRef.getEditableRootNode().addEventListener("paste", this._onPaste, true);
-    }
-
     componentWillUnmount() {
         dis.unregister(this.dispatcherRef);
-        this._editorRef.getEditableRootNode().removeEventListener("paste", this._onPaste, true);
     }
 
-    componentWillMount() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         const partCreator = new CommandPartCreator(this.props.room, this.context);
         const parts = this._restoreStoredEditorState(partCreator) || [];
         this.model = new EditorModel(parts, partCreator);
@@ -367,7 +365,7 @@ export default class SendMessageComposer extends React.Component {
     onAction = (payload) => {
         switch (payload.action) {
             case 'reply_to_event':
-            case 'focus_composer':
+            case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
             case 'insert_mention':
@@ -375,6 +373,9 @@ export default class SendMessageComposer extends React.Component {
                 break;
             case 'quote':
                 this._insertQuotedMessage(payload.event);
+                break;
+            case 'insert_emoji':
+                this._insertEmoji(payload.emoji);
                 break;
         }
     };
@@ -413,9 +414,22 @@ export default class SendMessageComposer extends React.Component {
         this._editorRef && this._editorRef.focus();
     }
 
+    _insertEmoji = (emoji) => {
+        const {model} = this;
+        const {partCreator} = model;
+        const caret = this._editorRef.getCaret();
+        const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
+        model.transform(() => {
+            const addedLen = model.insert([partCreator.plain(emoji)], position);
+            return model.positionForOffset(caret.offset + addedLen, true);
+        });
+    };
+
     _onPaste = (event) => {
         const {clipboardData} = event;
-        if (clipboardData.files.length) {
+        // Prioritize text on the clipboard over files as Office on macOS puts a bitmap
+        // in the clipboard as well as the content being copied.
+        if (clipboardData.files.length && !clipboardData.types.some(t => t === "text/plain")) {
             // This actually not so much for 'files' as such (at time of writing
             // neither chrome nor firefox let you paste a plain file copied
             // from Finder) but more images copied from a different website
@@ -423,6 +437,7 @@ export default class SendMessageComposer extends React.Component {
             ContentMessages.sharedInstance().sendContentListToRoom(
                 Array.from(clipboardData.files), this.props.room.roomId, this.context,
             );
+            return true; // to skip internal onPaste handler
         }
     }
 
@@ -439,6 +454,7 @@ export default class SendMessageComposer extends React.Component {
                     label={this.props.placeholder}
                     placeholder={this.props.placeholder}
                     onChange={this._saveStoredEditorState}
+                    onPaste={this._onPaste}
                 />
             </div>
         );

@@ -38,7 +38,7 @@ export default createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         this._unmounted = false;
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/riot-web/issues/3148

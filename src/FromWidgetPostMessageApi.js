@@ -17,15 +17,15 @@ limitations under the License.
 */
 
 import URL from 'url';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import WidgetMessagingEndpoint from './WidgetMessagingEndpoint';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
-import {Capability, KnownWidgetActions} from "./widgets/WidgetApi";
-import SdkConfig from "./SdkConfig";
+import {Capability} from "./widgets/WidgetApi";
+import {objectClone} from "./utils/objects";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -101,7 +101,7 @@ export default class FromWidgetPostMessageApi {
             console.warn('Add FromWidgetPostMessageApi - Endpoint already registered');
             return;
         } else {
-            console.warn(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
+            console.log(`Adding fromWidget messaging endpoint for ${widgetId}`, endpoint);
             this.widgetMessagingEndpoints.push(endpoint);
         }
     }
@@ -166,7 +166,7 @@ export default class FromWidgetPostMessageApi {
         const action = event.data.action;
         const widgetId = event.data.widgetId;
         if (action === 'content_loaded') {
-            console.warn('Widget reported content loaded for', widgetId);
+            console.log('Widget reported content loaded for', widgetId);
             dis.dispatch({
                 action: 'widget_content_loaded',
                 widgetId: widgetId,
@@ -220,13 +220,6 @@ export default class FromWidgetPostMessageApi {
             }
         } else if (action === 'get_openid') {
             // Handled by caller
-        } else if (action === KnownWidgetActions.GetRiotWebConfig) {
-            if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.GetRiotWebConfig)) {
-                this.sendResponse(event, {
-                    api: INBOUND_API_NAME,
-                    config: SdkConfig.get(),
-                });
-            }
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});
@@ -255,7 +248,7 @@ export default class FromWidgetPostMessageApi {
      * @param  {Object} res   Response data
      */
     sendResponse(event, res) {
-        const data = JSON.parse(JSON.stringify(event.data));
+        const data = objectClone(event.data);
         data.response = res;
         event.source.postMessage(data, event.origin);
     }
@@ -268,7 +261,7 @@ export default class FromWidgetPostMessageApi {
      */
     sendError(event, msg, nestedError) {
         console.error('Action:' + event.data.action + ' failed with message: ' + msg);
-        const data = JSON.parse(JSON.stringify(event.data));
+        const data = objectClone(event.data);
         data.response = {
             error: {
                 message: msg,

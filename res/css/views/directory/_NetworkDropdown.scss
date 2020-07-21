@@ -35,6 +35,8 @@ limitations under the License.
     border-radius: 4px;
     border: 1px solid $dialog-close-fg-color;
     background-color: $primary-bg-color;
+    max-height: calc(100vh - 20px); // allow 10px padding on both top and bottom
+    overflow-y: auto;
 }
 
 .mx_NetworkDropdown_menu_network {
@@ -47,19 +49,20 @@ limitations under the License.
 
     .mx_NetworkDropdown_server_title {
         padding: 0 10px;
-        font-size: 15px;
+        font-size: $font-15px;
         font-weight: 600;
-        line-height: 20px;
+        line-height: $font-20px;
         margin-bottom: 4px;
+        position: relative;
 
         // remove server button
         .mx_AccessibleButton {
             position: absolute;
             display: inline;
-            right: 12px;
+            right: 10px;
             height: 16px;
             width: 16px;
-            margin-top: 4px;
+            margin-top: 2px;
 
             &::after {
                 content: "";
@@ -77,16 +80,16 @@ limitations under the License.
 
     .mx_NetworkDropdown_server_subtitle {
         padding: 0 10px;
-        font-size: 10px;
-        line-height: 14px;
+        font-size: $font-10px;
+        line-height: $font-14px;
         margin-top: -4px;
         margin-bottom: 4px;
         color: $muted-fg-color;
     }
 
     .mx_NetworkDropdown_server_network {
-        font-size: 12px;
-        line-height: 16px;
+        font-size: $font-12px;
+        line-height: $font-16px;
         padding: 4px 10px;
         cursor: pointer;
         position: relative;
@@ -154,7 +157,7 @@ limitations under the License.
 
     .mx_NetworkDropdown_handle_server {
         color: $muted-fg-color;
-        font-size: 12px;
+        font-size: $font-12px;
     }
 }
 

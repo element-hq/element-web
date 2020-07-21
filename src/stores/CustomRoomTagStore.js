@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,14 +14,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher';
-import * as RoomNotifs from '../RoomNotifs';
-import RoomListStore from './RoomListStore';
-import EventEmitter from 'events';
-import { throttle } from "lodash";
-import SettingsStore from "../settings/SettingsStore";
 
-const STANDARD_TAGS_REGEX = /^(m\.(favourite|lowpriority|server_notice)|im\.vector\.fake\.(invite|recent|direct|archived))$/;
+import dis from '../dispatcher/dispatcher';
+import EventEmitter from 'events';
+import {throttle} from "lodash";
+import SettingsStore from "../settings/SettingsStore";
+import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
+import {RoomNotificationStateStore} from "./notifications/RoomNotificationStateStore";
+import {isCustomTag} from "./room-list/models";
 
 function commonPrefix(a, b) {
     const len = Math.min(a.length, b.length);
@@ -60,9 +61,7 @@ class CustomRoomTagStore extends EventEmitter {
                 trailing: true,
             },
         );
-        this._roomListStoreToken = RoomListStore.addListener(() => {
-            this._setState({tags: this._getUpdatedTags()});
-        });
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this._onListsUpdated);
         dis.register(payload => this._onDispatch(payload));
     }
 
@@ -85,8 +84,6 @@ class CustomRoomTagStore extends EventEmitter {
     }
 
     getSortedTags() {
-        const roomLists = RoomListStore.getRoomLists();
-
         const tagNames = Object.keys(this._state.tags).sort();
         const prefixes = tagNames.map((name, i) => {
             const isFirst = i === 0;
@@ -98,17 +95,20 @@ class CustomRoomTagStore extends EventEmitter {
             return longestPrefix;
         });
         return tagNames.map((name, i) => {
-            const notifs = RoomNotifs.aggregateNotificationCount(roomLists[name]);
-            let badge;
-            if (notifs.count !== 0) {
-                badge = notifs;
+            const notifs = RoomNotificationStateStore.instance.getListState(name);
+            let badgeNotifState;
+            if (notifs.hasUnreadCount) {
+                badgeNotifState = notifs;
             }
             const avatarLetter = name.substr(prefixes[i].length, 1);
             const selected = this._state.tags[name];
-            return {name, avatarLetter, badge, selected};
+            return {name, avatarLetter, badgeNotifState, selected};
         });
     }
 
+    _onListsUpdated = () => {
+        this._setState({tags: this._getUpdatedTags()});
+    };
 
     _onDispatch(payload) {
         switch (payload.action) {
@@ -126,10 +126,7 @@ class CustomRoomTagStore extends EventEmitter {
             case 'on_logged_out': {
                 // we assume to always have a tags object in the state
                 this._state = {tags: {}};
-                if (this._roomListStoreToken) {
-                    this._roomListStoreToken.remove();
-                    this._roomListStoreToken = null;
-                }
+                RoomListStore.instance.off(LISTS_UPDATE_EVENT, this._onListsUpdated);
             }
             break;
         }
@@ -140,16 +137,12 @@ class CustomRoomTagStore extends EventEmitter {
             return;
         }
 
-        const newTagNames = Object.keys(RoomListStore.getRoomLists())
-            .filter((tagName) => {
-                return !tagName.match(STANDARD_TAGS_REGEX);
-            }).sort();
+        const newTagNames = Object.keys(RoomListStore.instance.orderedLists).filter(t => isCustomTag(t)).sort();
         const prevTags = this._state && this._state.tags;
-        const newTags = newTagNames.reduce((newTags, tagName) => {
-            newTags[tagName] = (prevTags && prevTags[tagName]) || false;
-            return newTags;
+        return newTagNames.reduce((c, tagName) => {
+            c[tagName] = (prevTags && prevTags[tagName]) || false;
+            return c;
         }, {});
-        return newTags;
     }
 }
 

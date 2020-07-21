@@ -20,13 +20,15 @@ import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import Stickerpicker from './Stickerpicker';
 import { makeRoomPermalink } from '../../../utils/permalinks/Permalinks';
 import ContentMessages from '../../../ContentMessages';
 import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
+import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -40,7 +42,6 @@ ComposerAvatar.propTypes = {
 };
 
 function CallButton(props) {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onVoiceCallClick = (ev) => {
         dis.dispatch({
             action: 'place_call',
@@ -49,10 +50,11 @@ function CallButton(props) {
         });
     };
 
-    return (<AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_voicecall"
-            onClick={onVoiceCallClick}
-            title={_t('Voice call')}
-        />);
+    return (<AccessibleTooltipButton
+        className="mx_MessageComposer_button mx_MessageComposer_voicecall"
+        onClick={onVoiceCallClick}
+        title={_t('Voice call')}
+    />);
 }
 
 CallButton.propTypes = {
@@ -60,7 +62,6 @@ CallButton.propTypes = {
 };
 
 function VideoCallButton(props) {
-    const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onCallClick = (ev) => {
         dis.dispatch({
             action: 'place_call',
@@ -69,7 +70,8 @@ function VideoCallButton(props) {
         });
     };
 
-    return <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_videocall"
+    return <AccessibleTooltipButton
+        className="mx_MessageComposer_button mx_MessageComposer_videocall"
         onClick={onCallClick}
         title={_t('Video call')}
     />;
@@ -103,6 +105,33 @@ HangupButton.propTypes = {
     roomId: PropTypes.string.isRequired,
 };
 
+const EmojiButton = ({addEmoji}) => {
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+
+    let contextMenu;
+    if (menuDisplayed) {
+        const buttonRect = button.current.getBoundingClientRect();
+        const EmojiPicker = sdk.getComponent('emojipicker.EmojiPicker');
+        contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu} catchTab={false}>
+            <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
+        </ContextMenu>;
+    }
+
+    return <React.Fragment>
+        <ContextMenuTooltipButton
+            className="mx_MessageComposer_button mx_MessageComposer_emoji"
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            title={_t('Emoji picker')}
+            inputRef={button}
+        >
+
+        </ContextMenuTooltipButton>
+
+        { contextMenu }
+    </React.Fragment>;
+};
+
 class UploadButton extends React.Component {
     static propTypes = {
         roomId: PropTypes.string.isRequired,
@@ -114,7 +143,18 @@ class UploadButton extends React.Component {
         this.onUploadFileInputChange = this.onUploadFileInputChange.bind(this);
 
         this._uploadInput = createRef();
+        this._dispatcherRef = dis.register(this.onAction);
     }
+
+    componentWillUnmount() {
+        dis.unregister(this._dispatcherRef);
+    }
+
+    onAction = payload => {
+        if (payload.action === "upload_file") {
+            this.onUploadClick();
+        }
+    };
 
     onUploadClick(ev) {
         if (MatrixClientPeg.get().isGuest()) {
@@ -128,7 +168,7 @@ class UploadButton extends React.Component {
         if (ev.target.files.length === 0) return;
 
         // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sesnible iteration).
+        // (Note it is a FileList: we can't use slice or sensible iteration).
         const tfiles = [];
         for (let i = 0; i < ev.target.files.length; ++i) {
             tfiles.push(ev.target.files[i]);
@@ -147,9 +187,9 @@ class UploadButton extends React.Component {
 
     render() {
         const uploadInputStyle = {display: 'none'};
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         return (
-            <AccessibleButton className="mx_MessageComposer_button mx_MessageComposer_upload"
+            <AccessibleTooltipButton
+                className="mx_MessageComposer_button mx_MessageComposer_upload"
                 onClick={this.onUploadClick}
                 title={_t('Upload file')}
             >
@@ -160,7 +200,7 @@ class UploadButton extends React.Component {
                     multiple
                     onChange={this.onUploadFileInputChange}
                 />
-            </AccessibleButton>
+            </AccessibleTooltipButton>
         );
     }
 }
@@ -270,35 +310,26 @@ export default class MessageComposer extends React.Component {
     }
 
     renderPlaceholderText() {
-        if (SettingsStore.isFeatureEnabled("feature_cross_signing")) {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply…');
-                }
+        if (this.state.isQuoting) {
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted reply…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message…');
-                }
+                return _t('Send a reply…');
             }
         } else {
-            if (this.state.isQuoting) {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted reply…');
-                } else {
-                    return _t('Send a reply (unencrypted)…');
-                }
+            if (this.props.e2eStatus) {
+                return _t('Send an encrypted message…');
             } else {
-                if (this.props.e2eStatus) {
-                    return _t('Send an encrypted message…');
-                } else {
-                    return _t('Send a message (unencrypted)…');
-                }
+                return _t('Send a message…');
             }
         }
+    }
+
+    addEmoji(emoji) {
+        dis.dispatch({
+            action: "insert_emoji",
+            emoji,
+        });
     }
 
     render() {
@@ -324,8 +355,9 @@ export default class MessageComposer extends React.Component {
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
                     permalinkCreator={this.props.permalinkCreator} />,
-                <Stickerpicker key='stickerpicker_controls_button' room={this.props.room} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
+                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
+                <Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />,
             );
 
             if (this.state.showCallButtons) {
@@ -370,7 +402,7 @@ export default class MessageComposer extends React.Component {
         }
 
         return (
-            <div className="mx_MessageComposer">
+            <div className="mx_MessageComposer mx_GroupLayout">
                 <div className="mx_MessageComposer_wrapper">
                     <div className="mx_MessageComposer_row">
                         { controls }

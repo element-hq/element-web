@@ -81,7 +81,34 @@ describe('QueryMatcher', function() {
         expect(reverseResults[1].name).toBe('Victoria');
     });
 
-    it('Returns results with search string in same place in insertion order', function() {
+    it('Returns results with search string in same place according to key index', function() {
+        const objects = [
+            { name: "a", first: "hit", second: "miss", third: "miss" },
+            { name: "b", first: "miss", second: "hit", third: "miss" },
+            { name: "c", first: "miss", second: "miss", third: "hit" },
+        ];
+        const qm = new QueryMatcher(objects, {keys: ["second", "first", "third"]});
+        const results = qm.match('hit');
+
+        expect(results.length).toBe(3);
+        expect(results[0].name).toBe('b');
+        expect(results[1].name).toBe('a');
+        expect(results[2].name).toBe('c');
+
+
+        qm.setObjects(objects.slice().reverse());
+
+        const reverseResults = qm.match('hit');
+
+        // should still be in the same order: key index
+        // takes precedence over input order
+        expect(reverseResults.length).toBe(3);
+        expect(reverseResults[0].name).toBe('b');
+        expect(reverseResults[1].name).toBe('a');
+        expect(reverseResults[2].name).toBe('c');
+    });
+
+    it('Returns results with search string in same place and key in same place in insertion order', function() {
         const qm = new QueryMatcher(OBJECTS, {keys: ["name"]});
         const results = qm.match('Mel');
 
@@ -132,9 +159,9 @@ describe('QueryMatcher', function() {
 
         const results = qm.match('Emma');
         expect(results.length).toBe(3);
-        expect(results[0].name).toBe('Mel B');
-        expect(results[1].name).toBe('Mel C');
-        expect(results[2].name).toBe('Emma');
+        expect(results[0].name).toBe('Emma');
+        expect(results[1].name).toBe('Mel B');
+        expect(results[2].name).toBe('Mel C');
     });
 
     it('Matches words only by default', function() {

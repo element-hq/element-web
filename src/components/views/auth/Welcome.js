@@ -18,6 +18,10 @@ import React from 'react';
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
+import {_td} from "../../../languageHandler";
+
+// translatable strings for Welcome pages
+_td("Sign in with SSO");
 
 export default class Welcome extends React.PureComponent {
     render() {
@@ -36,8 +40,13 @@ export default class Welcome extends React.PureComponent {
         return (
             <AuthPage>
                 <div className="mx_Welcome">
-                    <EmbeddedPage className="mx_WelcomePage"
+                    <EmbeddedPage
+                        className="mx_WelcomePage"
                         url={pageUrl}
+                        replaceMap={{
+                            "$riot:ssoUrl": "#/start_sso",
+                            "$riot:casUrl": "#/start_cas",
+                        }}
                     />
                     <LanguageSelector />
                 </div>

@@ -55,7 +55,8 @@ export default createReactClass({
         askReason: false,
     }),
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Move this to constructor
+    UNSAFE_componentWillMount: function() {
         this._reasonField = null;
     },
 

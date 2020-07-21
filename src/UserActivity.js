@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import Timer from './utils/Timer';
 
 // important these are larger than the timeouts of timers

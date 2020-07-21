@@ -19,7 +19,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 
@@ -81,7 +81,8 @@ export default class Flair extends React.Component {
         this._unmounted = true;
     }
 
-    componentWillReceiveProps(newProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps(newProps) {  // eslint-disable-line camelcase
         this._generateAvatars(newProps.groups);
     }
 

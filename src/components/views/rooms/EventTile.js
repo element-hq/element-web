@@ -25,7 +25,7 @@ import classNames from "classnames";
 import { _t, _td } from '../../../languageHandler';
 import * as TextForEvent from "../../../TextForEvent";
 import * as sdk from "../../../index";
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventStatus} from 'matrix-js-sdk';
 import {formatTime} from "../../../DateUtils";
@@ -34,6 +34,7 @@ import {ALL_RULE_TYPES} from "../../../mjolnir/BanList";
 import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
+import {toRem} from "../../../utils/units";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -59,6 +60,7 @@ const stateEventTileTypes = {
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
     'm.room.server_acl': 'messages.TextualEvent',
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
@@ -102,7 +104,7 @@ export function getHandlerTile(ev) {
     // fall back to showing hidden events, if we're viewing hidden events
     // XXX: This is extremely a hack. Possibly these components should have an interface for
     // declining to render?
-    if (type === "m.key.verification.cancel" && SettingsStore.getValue("showHiddenEventsInTimeline")) {
+    if (type === "m.key.verification.cancel" || type === "m.key.verification.done") {
         const MKeyVerificationConclusion = sdk.getComponent("messages.MKeyVerificationConclusion");
         if (!MKeyVerificationConclusion.prototype._shouldRender.call(null, ev, ev.request)) {
             return;
@@ -204,6 +206,9 @@ export default createReactClass({
 
         // whether to show reactions for this event
         showReactions: PropTypes.bool,
+
+        // whether to use the irc layout
+        useIRCLayout: PropTypes.bool,
     },
 
     getDefaultProps: function() {
@@ -233,7 +238,8 @@ export default createReactClass({
         contextType: MatrixClientContext,
     },
 
-    componentWillMount: function() {
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount: function() {
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
         this._verifyEvent(this.props.mxEvent);
@@ -253,7 +259,8 @@ export default createReactClass({
         }
     },
 
-    componentWillReceiveProps: function(nextProps) {
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    UNSAFE_componentWillReceiveProps: function(nextProps) {
         // re-check the sender verification as outgoing events progress through
         // the send process.
         if (nextProps.eventSendStatus !== this.props.eventSendStatus) {
@@ -306,44 +313,52 @@ export default createReactClass({
             return;
         }
 
-        // If we directly trust the device, short-circuit here
-        const verified = await this.context.isEventSenderVerified(mxEvent);
-        if (verified) {
-            this.setState({
-                verified: E2E_STATE.VERIFIED,
-            }, () => {
-                // Decryption may have caused a change in size
-                this.props.onHeightChanged();
-            });
-            return;
-        }
+        const encryptionInfo = this.context.getEventEncryptionInfo(mxEvent);
+        const senderId = mxEvent.getSender();
+        const userTrust = this.context.checkUserTrust(senderId);
 
-        // If cross-signing is off, the old behaviour is to scream at the user
-        // as if they've done something wrong, which they haven't
-        if (!SettingsStore.isFeatureEnabled("feature_cross_signing")) {
+        if (encryptionInfo.mismatchedSender) {
+            // something definitely wrong is going on here
             this.setState({
                 verified: E2E_STATE.WARNING,
-            }, this.props.onHeightChanged);
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
+        if (!userTrust.isCrossSigningVerified()) {
+            // user is not verified, so default to everything is normal
             this.setState({
                 verified: E2E_STATE.NORMAL,
-            }, this.props.onHeightChanged);
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
+        const eventSenderTrust = encryptionInfo.sender && this.context.checkDeviceTrust(
+            senderId, encryptionInfo.sender.deviceId,
+        );
         if (!eventSenderTrust) {
             this.setState({
                 verified: E2E_STATE.UNKNOWN,
-            }, this.props.onHeightChanged); // Decryption may have cause a change in size
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!eventSenderTrust.isVerified()) {
+            this.setState({
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!encryptionInfo.authenticated) {
+            this.setState({
+                verified: E2E_STATE.UNAUTHENTICATED,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         this.setState({
-            verified: eventSenderTrust.isVerified() ? E2E_STATE.VERIFIED : E2E_STATE.WARNING,
+            verified: E2E_STATE.VERIFIED,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
@@ -396,7 +411,7 @@ export default createReactClass({
     },
 
     shouldHighlight: function() {
-        const actions = this.context.getPushActionsForEvent(this.props.mxEvent);
+        const actions = this.context.getPushActionsForEvent(this.props.mxEvent.replacingEvent() || this.props.mxEvent);
         if (!actions || !actions.tweaks) { return false; }
 
         // don't show self-highlights from another of our clients
@@ -470,7 +485,7 @@ export default createReactClass({
             if (remainder > 0) {
                 remText = <span className="mx_EventTile_readAvatarRemainder"
                     onClick={this.toggleAllReadAvatars}
-                    style={{ right: -(left - receiptOffset) }}>{ remainder }+
+                    style={{ right: "calc(" + toRem(-left) + " + " + receiptOffset + "px)" }}>{ remainder }+
                 </span>;
             }
         }
@@ -528,6 +543,8 @@ export default createReactClass({
                 return; // no icon if we've not even cross-signed the user
             } else if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
+            } else if (this.state.verified === E2E_STATE.UNAUTHENTICATED) {
+                return (<E2ePadlockUnauthenticated />);
             } else if (this.state.verified === E2E_STATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
             } else {
@@ -666,7 +683,6 @@ export default createReactClass({
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2E_STATE.UNKNOWN,
             mx_EventTile_bad: isEncryptionFailure,
             mx_EventTile_emote: msgtype === 'm.emote',
-            mx_EventTile_redacted: isRedacted,
         });
 
         let permalink = "#";
@@ -692,6 +708,9 @@ export default createReactClass({
             // joins/parts/etc
             avatarSize = 14;
             needsSenderProfile = false;
+        } else if (this.props.useIRCLayout) {
+            avatarSize = 14;
+            needsSenderProfile = true;
         } else if (this.props.continuation && this.props.tileShape !== "file_grid") {
             // no avatar or sender profile for continuation messages
             avatarSize = 0;
@@ -783,6 +802,19 @@ export default createReactClass({
             />;
         }
 
+        const linkedTimestamp = <a
+                href={permalink}
+                onClick={this.onPermalinkClicked}
+                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+            >
+                { timestamp }
+            </a>;
+
+        const groupTimestamp = !this.props.useIRCLayout ? linkedTimestamp : null;
+        const ircTimestamp = this.props.useIRCLayout ? linkedTimestamp : null;
+        const groupPadlock = !this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+        const ircPadlock = this.props.useIRCLayout && !isBubbleMessage && this._renderE2EPadlock();
+
         switch (this.props.tileShape) {
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
@@ -850,13 +882,13 @@ export default createReactClass({
                 }
                 return (
                     <div className={classes}>
+                        { ircTimestamp }
                         { avatar }
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_reply">
-                            <a href={permalink} onClick={this.onPermalinkClicked}>
-                                { timestamp }
-                            </a>
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupTimestamp }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -874,23 +906,21 @@ export default createReactClass({
                     this.props.onHeightChanged,
                     this.props.permalinkCreator,
                     this._replyThread,
+                    this.props.useIRCLayout,
                 );
+
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
                     <div className={classes} tabIndex={-1}>
+                        { ircTimestamp }
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
                         </div>
                         { sender }
+                        { ircPadlock }
                         <div className="mx_EventTile_line">
-                            <a
-                                href={permalink}
-                                onClick={this.onPermalinkClicked}
-                                aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
-                            >
-                                { timestamp }
-                            </a>
-                            { !isBubbleMessage && this._renderE2EPadlock() }
+                            { groupTimestamp }
+                            { groupPadlock }
                             { thread }
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -962,6 +992,12 @@ function E2ePadlockUnencrypted(props) {
 function E2ePadlockUnknown(props) {
     return (
         <E2ePadlock title={_t("Encrypted by a deleted session")} icon="unknown" {...props} />
+    );
+}
+
+function E2ePadlockUnauthenticated(props) {
+    return (
+        <E2ePadlock title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")} icon="unauthenticated" {...props} />
     );
 }
 

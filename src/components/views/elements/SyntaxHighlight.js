@@ -31,7 +31,6 @@ export default class SyntaxHighlight extends React.Component {
     }
 
     // componentDidUpdate used here for reusability
-    // componentWillReceiveProps fires too early to call highlightBlock on.
     componentDidUpdate() {
         if (this._el) highlightBlock(this._el);
     }

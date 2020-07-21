@@ -59,13 +59,13 @@ import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
-import dis from './dispatcher';
-import SdkConfig from './SdkConfig';
-import { showUnknownDeviceDialogForCalls } from './cryptodevices';
+import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
 import SettingsStore, { SettingLevel } from './settings/SettingsStore';
 import {generateHumanReadableId} from "./utils/NamingUtils";
+import {Jitsi} from "./widgets/Jitsi";
+import {WidgetType} from "./widgets/WidgetType";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -118,62 +118,22 @@ function pause(audioId) {
     }
 }
 
-function _reAttemptCall(call) {
-    if (call.direction === 'outbound') {
-        dis.dispatch({
-            action: 'place_call',
-            room_id: call.roomId,
-            type: call.type,
-        });
-    } else {
-        call.answer();
-    }
-}
-
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error:", err);
-        if (err.code === 'unknown_devices') {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
-                title: _t('Call Failed'),
-                description: _t(
-                    "There are unknown sessions in this room: "+
-                    "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call.",
-                ),
-                button: _t('Review Sessions'),
-                onFinished: function(confirmed) {
-                    if (confirmed) {
-                        const room = MatrixClientPeg.get().getRoom(call.roomId);
-                        showUnknownDeviceDialogForCalls(
-                            MatrixClientPeg.get(),
-                            room,
-                            () => {
-                                _reAttemptCall(call);
-                            },
-                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
-                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
-                        );
-                    }
-                },
-            });
-        } else {
-            if (
-                MatrixClientPeg.get().getTurnServers().length === 0 &&
-                SettingsStore.getValue("fallbackICEServerAllowed") === null
-            ) {
-                _showICEFallbackPrompt();
-                return;
-            }
-
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
-                title: _t('Call Failed'),
-                description: err.message,
-            });
+        if (
+            MatrixClientPeg.get().getTurnServers().length === 0 &&
+            SettingsStore.getValue("fallbackICEServerAllowed") === null
+        ) {
+            _showICEFallbackPrompt();
+            return;
         }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+            title: _t('Call Failed'),
+            description: err.message,
+        });
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
@@ -401,9 +361,9 @@ async function _startCallApp(roomId, type) {
     });
 
     const room = MatrixClientPeg.get().getRoom(roomId);
-    const currentRoomWidgets = WidgetUtils.getRoomWidgets(room);
+    const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
 
-    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentRoomWidgets, 'jitsi')) {
+    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
         Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
@@ -413,9 +373,6 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    const currentJitsiWidgets = currentRoomWidgets.filter((ev) => {
-        return ev.getContent().type === 'jitsi';
-    });
     if (currentJitsiWidgets.length > 0) {
         console.warn(
             "Refusing to start conference call widget in " + roomId +
@@ -430,8 +387,8 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    const confId = `JitsiConference_${generateHumanReadableId()}`;
-    const jitsiDomain = SdkConfig.get()['jitsi']['preferredDomain'];
+    const confId = `JitsiConference${generateHumanReadableId()}`;
+    const jitsiDomain = Jitsi.getInstance().preferredDomain;
 
     let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
@@ -454,7 +411,7 @@ async function _startCallApp(roomId, type) {
         Date.now()
     );
 
-    WidgetUtils.setRoomWidget(roomId, widgetId, 'jitsi', widgetUrl, 'Jitsi', widgetData).then(() => {
+    WidgetUtils.setRoomWidget(roomId, widgetId, WidgetType.JITSI, widgetUrl, 'Jitsi', widgetData).then(() => {
         console.log('Jitsi widget added');
     }).catch((e) => {
         if (e.errcode === 'M_FORBIDDEN') {

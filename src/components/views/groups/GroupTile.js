@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
@@ -55,7 +55,7 @@ const GroupTile = createReactClass({
         };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
             this.setState({profile});
         }).catch((err) => {

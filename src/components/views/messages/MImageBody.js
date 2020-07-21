@@ -26,6 +26,7 @@ import { decryptFile } from '../../../utils/DecryptFile';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import InlineSpinner from '../elements/InlineSpinner';
 
 export default class MImageBody extends React.Component {
     static propTypes = {
@@ -65,11 +66,6 @@ export default class MImageBody extends React.Component {
         };
 
         this._image = createRef();
-    }
-
-    componentWillMount() {
-        this.unmounted = false;
-        this.context.on('sync', this.onClientSync);
     }
 
     // FIXME: factor this out and aplpy it to MVideoBody and MAudioBody too!
@@ -258,6 +254,9 @@ export default class MImageBody extends React.Component {
     }
 
     componentDidMount() {
+        this.unmounted = false;
+        this.context.on('sync', this.onClientSync);
+
         const content = this.props.mxEvent.getContent();
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             let thumbnailPromise = Promise.resolve(null);
@@ -367,12 +366,7 @@ export default class MImageBody extends React.Component {
 
         // e2e image hasn't been decrypted yet
         if (content.file !== undefined && this.state.decryptedUrl === null) {
-            placeholder = <img
-                src={require("../../../../res/img/spinner.gif")}
-                alt={content.body}
-                width="32"
-                height="32"
-            />;
+            placeholder = <InlineSpinner w={32} h={32} />;
         } else if (!this.state.imgLoaded) {
             // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
             placeholder = this.getPlaceholder();
