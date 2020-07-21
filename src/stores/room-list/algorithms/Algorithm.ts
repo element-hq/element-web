@@ -382,7 +382,7 @@ export class Algorithm extends EventEmitter {
 
         if (!this._stickyRoom) {
             // If there's no sticky room, just do nothing useful.
-            if (this._cachedStickyRooms) {
+            if (!!this._cachedStickyRooms) {
                 // Clear the cache if we won't be needing it
                 this._cachedStickyRooms = null;
                 this.emit(LIST_UPDATED_EVENT);

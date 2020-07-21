@@ -14,18 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// The following interfaces take their names and member names from the js-sdk
+/* eslint-disable camelcase */
+
 export interface MatrixEvent {
     type: string;
     sender: string;
     content: {};
-    eventId: string;
-    originServerTs: number;
+    event_id: string;
+    origin_server_ts: number;
     unsigned?: {};
     roomId: string;
 }
 
 export interface MatrixProfile {
-    avatarUrl: string;
+    avatar_url: string;
     displayname: string;
 }
 
@@ -37,9 +40,9 @@ export interface CrawlerCheckpoint {
 }
 
 export interface ResultContext {
-    eventsBefore: [MatrixEvent];
-    eventsAfter: [MatrixEvent];
-    profileInfo: Map<string, MatrixProfile>;
+    events_before: [MatrixEvent];
+    events_after: [MatrixEvent];
+    profile_info: Map<string, MatrixProfile>;
 }
 
 export interface ResultsElement {
@@ -55,11 +58,11 @@ export interface SearchResult {
 }
 
 export interface SearchArgs {
-    searchTerm: string;
-    beforeLimit: number;
-    afterLimit: number;
-    orderByRecency: boolean;
-    roomId?: string;
+    search_term: string;
+    before_limit: number;
+    after_limit: number;
+    order_by_recency: boolean;
+    room_id?: string;
 }
 
 export interface EventAndProfile {
@@ -76,8 +79,8 @@ export interface LoadArgs {
 
 export interface IndexStats {
     size: number;
-    eventCount: number;
-    roomCount: number;
+    event_count: number;
+    room_count: number;
 }
 
 /**
