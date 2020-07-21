@@ -233,10 +233,9 @@ export default class RoomTile extends React.Component<IProps, IState> {
 
         if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
             const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
-            const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
-            const isFavourite = roomTags.includes(tagId);
-            const removeTag = isFavourite ? tagId : inverseTag;
-            const addTag = isFavourite ? null : tagId;
+            const isApplied = RoomListStore.instance.getTagsForRoom(this.props.room).includes(tagId);
+            const removeTag = isApplied ? tagId : inverseTag;
+            const addTag = isApplied ? null : tagId;
             dis.dispatch(RoomListActions.tagRoom(
                 MatrixClientPeg.get(),
                 this.props.room,
