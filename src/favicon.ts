@@ -52,7 +52,7 @@ export default class Favicon {
     private context: CanvasRenderingContext2D;
     private icons: HTMLLinkElement[];
 
-    private isReady: boolean = false;
+    private isReady = false;
     // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
     private readyCb = () => {};
 

@@ -29,7 +29,7 @@ function renderConfigError(message) {
 async function initPage() {
     document.getElementById('back_to_element_button').onclick = onBackToElementClick;
 
-    let config = await getVectorConfig('..');
+    const config = await getVectorConfig('..');
 
     // We manually parse the config similar to how validateServerConfig works because
     // calling that function pulls in roughly 4mb of JS we don't use.
