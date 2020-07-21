@@ -64,7 +64,7 @@ function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     let language = "";
     if (n.firstChild && n.firstChild.nodeName === "CODE") {
         for (const className of (<HTMLElement>n.firstChild).classList) {
-            if (className.startsWith("language-")) {
+            if (className.startsWith("language-") && !className.startsWith("language-_")) {
                 language = className.substr("language-".length);
                 break;
             }
