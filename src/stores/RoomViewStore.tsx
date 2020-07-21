@@ -99,6 +99,9 @@ class RoomViewStore extends Store<ActionPayload> {
             case 'view_room':
                 this.viewRoom(payload);
                 break;
+            case 'view_create_group':
+            case 'view_welcome_page':
+            case 'view_home_page':
             case 'view_my_groups':
             case 'view_group':
                 this.setState({
