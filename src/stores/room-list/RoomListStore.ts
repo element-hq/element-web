@@ -17,7 +17,7 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
-import { DefaultTagID, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
+import { DefaultTagID, isCustomTag, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
 import TagOrderStore from "../TagOrderStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
@@ -33,6 +33,7 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import { isEnumValue } from "../../utils/enums";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -527,25 +528,28 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     public async regenerateAllLists({trigger = true}) {
         console.warn("Regenerating all room lists");
 
+        const rooms = this.matrixClient.getVisibleRooms();
+        const customTags = new Set<TagID>();
+        if (this.state.tagsEnabled) {
+            for (const room of rooms) {
+                if (!room.tags) continue;
+                const tags = Object.keys(room.tags).filter(t => isCustomTag(t));
+                tags.forEach(t => customTags.add(t));
+            }
+        }
+
         const sorts: ITagSortingMap = {};
         const orders: IListOrderingMap = {};
-        for (const tagId of OrderedDefaultTagIDs) {
+        const allTags = [...OrderedDefaultTagIDs, ...Array.from(customTags)];
+        for (const tagId of allTags) {
             sorts[tagId] = this.calculateTagSorting(tagId);
             orders[tagId] = this.calculateListOrder(tagId);
 
             RoomListLayoutStore.instance.ensureLayoutExists(tagId);
         }
 
-        if (this.state.tagsEnabled) {
-            // TODO: Fix custom tags: https://github.com/vector-im/riot-web/issues/14091
-            const roomTags = TagOrderStore.getOrderedTags() || [];
-
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
-            console.log("rtags", roomTags);
-        }
-
         await this.algorithm.populateTags(sorts, orders);
-        await this.algorithm.setKnownRooms(this.matrixClient.getVisibleRooms());
+        await this.algorithm.setKnownRooms(rooms);
 
         this.initialListsGenerated = true;
 

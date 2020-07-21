@@ -17,6 +17,7 @@ limitations under the License.
 import * as React from "react";
 import { createRef } from "react";
 import TagPanel from "./TagPanel";
+import CustomRoomTagPanel from "./CustomRoomTagPanel";
 import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
@@ -361,6 +362,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const tagPanel = !this.state.showTagPanel ? null : (
             <div className="mx_LeftPanel_tagPanelContainer">
                 <TagPanel/>
+                {SettingsStore.isFeatureEnabled("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
             </div>
         );
 

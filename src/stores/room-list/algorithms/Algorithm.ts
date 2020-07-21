@@ -565,9 +565,6 @@ export class Algorithm extends EventEmitter {
     }
 
     public getTagsForRoom(room: Room): TagID[] {
-        // XXX: This duplicates a lot of logic from setKnownRooms above, but has a slightly
-        // different use case and therefore different performance curve
-
         const tags: TagID[] = [];
 
         const membership = getEffectiveMembership(room.getMyMembership());
