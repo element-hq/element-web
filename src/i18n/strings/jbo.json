@@ -544,5 +544,8 @@
     "Your Communities": "girzu vau je se pagbu do",
     "Error whilst fetching joined communities": ".i da nabmi fi lo nu kibycpa ro girzu poi se pagbu do",
     "Communities": "girzu",
-    "Create a new community": "nu cupra pa girzu"
+    "Create a new community": "nu cupra pa girzu",
+    "React": "nu cinmo spuda",
+    "Reply": "nu spuda",
+    "<a>In reply to</a> <pill>": ".i nu <a>spuda</a> tu'a la'o zoi. <pill> .zoi"
 }
