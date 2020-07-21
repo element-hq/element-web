@@ -18,12 +18,18 @@
     "Missing indexeddb worker script!": "Отсутствует скрипт воркера для indexeddb!",
     "Unable to load config file: please refresh the page to try again.": "Не удалось загрузить файл конфигурации. Попробуйте обновить страницу.",
     "Previous/next recently visited room or community": "Предыдущая/следующая недавно посещённая комната или сообщество",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s десктоп (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Неподдерживаемый браузер",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Вы можете продолжать пользоваться этим браузером но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
     "I understand the risks and wish to continue": "Я понимаю риск и хочу продолжить",
     "Go to element.io": "К element.io",
-    "Failed to start": "Старт не удался"
+    "Failed to start": "Старт не удался",
+    "Your Element is misconfigured": "Ваш Element неверно настроен",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Конфигурация Element содержит неверный JSON. Исправьте проблему и обновите страницу.",
+    "Download Completed": "Загрузка завершена",
+    "Open": "Открыть",
+    "Your browser can't run %(brand)s": "Ваш браузер не может запустить %(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером."
 }
