@@ -15,13 +15,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import dis from '../dispatcher/dispatcher';
+
+import React from "react";
 import {Store} from 'flux/utils';
+
+import dis from '../dispatcher/dispatcher';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 import * as sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
 import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
+import {ActionPayload} from "../dispatcher/payloads";
 
 const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
@@ -33,6 +37,7 @@ const INITIAL_STATE = {
 
     // The event to scroll to when the room is first viewed
     initialEventId: null,
+    initialEventPixelOffset: null,
     // Whether to highlight the initial event
     isInitialEventHighlighted: false,
 
@@ -46,6 +51,10 @@ const INITIAL_STATE = {
     forwardingEvent: null,
 
     quotingEvent: null,
+
+    replyingToEvent: null,
+
+    shouldPeek: false,
 };
 
 /**
@@ -53,21 +62,20 @@ const INITIAL_STATE = {
 *  with a subset of the js-sdk.
  *  ```
  */
-class RoomViewStore extends Store {
+class RoomViewStore extends Store<ActionPayload> {
+    private state = INITIAL_STATE; // initialize state
+
     constructor() {
         super(dis);
-
-        // Initialise state
-        this._state = INITIAL_STATE;
     }
 
-    _setState(newState) {
+    setState(newState: Partial<typeof INITIAL_STATE>) {
         // If values haven't changed, there's nothing to do.
         // This only tries a shallow comparison, so unchanged objects will slip
         // through, but that's probably okay for now.
         let stateChanged = false;
         for (const key of Object.keys(newState)) {
-            if (this._state[key] !== newState[key]) {
+            if (this.state[key] !== newState[key]) {
                 stateChanged = true;
                 break;
             }
@@ -76,7 +84,7 @@ class RoomViewStore extends Store {
             return;
         }
 
-        this._state = Object.assign(this._state, newState);
+        this.state = Object.assign(this.state, newState);
         this.__emitChange();
     }
 
@@ -89,59 +97,59 @@ class RoomViewStore extends Store {
             //      - event_offset: 100
             //      - highlighted:  true
             case 'view_room':
-                this._viewRoom(payload);
+                this.viewRoom(payload);
                 break;
             case 'view_my_groups':
             case 'view_group':
-                this._setState({
+                this.setState({
                     roomId: null,
                     roomAlias: null,
                 });
                 break;
             case 'view_room_error':
-                this._viewRoomError(payload);
+                this.viewRoomError(payload);
                 break;
             case 'will_join':
-                this._setState({
+                this.setState({
                     joining: true,
                 });
                 break;
             case 'cancel_join':
-                this._setState({
+                this.setState({
                     joining: false,
                 });
                 break;
             // join_room:
             //      - opts: options for joinRoom
             case 'join_room':
-                this._joinRoom(payload);
+                this.joinRoom(payload);
                 break;
             case 'join_room_error':
-                this._joinRoomError(payload);
+                this.joinRoomError(payload);
                 break;
             case 'join_room_ready':
-                this._setState({ shouldPeek: false });
+                this.setState({ shouldPeek: false });
                 break;
             case 'on_client_not_viable':
             case 'on_logged_out':
                 this.reset();
                 break;
             case 'forward_event':
-                this._setState({
+                this.setState({
                     forwardingEvent: payload.event,
                 });
                 break;
             case 'reply_to_event':
                 // If currently viewed room does not match the room in which we wish to reply then change rooms
                 // this can happen when performing a search across all rooms
-                if (payload.event && payload.event.getRoomId() !== this._state.roomId) {
+                if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
                     dis.dispatch({
                         action: 'view_room',
                         room_id: payload.event.getRoomId(),
                         replyingToEvent: payload.event,
                     });
                 } else {
-                    this._setState({
+                    this.setState({
                         replyingToEvent: payload.event,
                     });
                 }
@@ -149,14 +157,14 @@ class RoomViewStore extends Store {
             case 'open_room_settings': {
                 const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
-                    roomId: payload.room_id || this._state.roomId,
+                    roomId: payload.room_id || this.state.roomId,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
             }
         }
     }
 
-    async _viewRoom(payload) {
+    private async viewRoom(payload) {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
@@ -181,18 +189,18 @@ class RoomViewStore extends Store {
                 newState.replyingToEvent = payload.replyingToEvent;
             }
 
-            if (this._state.forwardingEvent) {
+            if (this.state.forwardingEvent) {
                 dis.dispatch({
                     action: 'send_event',
                     room_id: newState.roomId,
-                    event: this._state.forwardingEvent,
+                    event: this.state.forwardingEvent,
                 });
             }
 
-            this._setState(newState);
+            this.setState(newState);
 
             if (payload.auto_join) {
-                this._joinRoom(payload);
+                this.joinRoom(payload);
             }
         } else if (payload.room_alias) {
             // Try the room alias to room ID navigation cache first to avoid
@@ -201,7 +209,7 @@ class RoomViewStore extends Store {
             if (!roomId) {
                 // Room alias cache miss, so let's ask the homeserver. Resolve the alias
                 // and then do a second dispatch with the room ID acquired.
-                this._setState({
+                this.setState({
                     roomId: null,
                     initialEventId: null,
                     initialEventPixelOffset: null,
@@ -238,8 +246,8 @@ class RoomViewStore extends Store {
         }
     }
 
-    _viewRoomError(payload) {
-        this._setState({
+    private viewRoomError(payload) {
+        this.setState({
             roomId: payload.room_id,
             roomAlias: payload.room_alias,
             roomLoading: false,
@@ -247,12 +255,12 @@ class RoomViewStore extends Store {
         });
     }
 
-    _joinRoom(payload) {
-        this._setState({
+    private joinRoom(payload) {
+        this.setState({
             joining: true,
         });
         MatrixClientPeg.get().joinRoom(
-            this._state.roomAlias || this._state.roomId, payload.opts,
+            this.state.roomAlias || this.state.roomId, payload.opts,
         ).then(() => {
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
@@ -282,45 +290,45 @@ class RoomViewStore extends Store {
         });
     }
 
-    _joinRoomError(payload) {
-        this._setState({
+    private joinRoomError(payload) {
+        this.setState({
             joining: false,
             joinError: payload.err,
         });
     }
 
-    reset() {
-        this._state = Object.assign({}, INITIAL_STATE);
+    public reset() {
+        this.state = Object.assign({}, INITIAL_STATE);
     }
 
     // The room ID of the room currently being viewed
-    getRoomId() {
-        return this._state.roomId;
+    public getRoomId() {
+        return this.state.roomId;
     }
 
     // The event to scroll to when the room is first viewed
-    getInitialEventId() {
-        return this._state.initialEventId;
+    public getInitialEventId() {
+        return this.state.initialEventId;
     }
 
     // Whether to highlight the initial event
-    isInitialEventHighlighted() {
-        return this._state.isInitialEventHighlighted;
+    public isInitialEventHighlighted() {
+        return this.state.isInitialEventHighlighted;
     }
 
     // The room alias of the room (or null if not originally specified in view_room)
-    getRoomAlias() {
-        return this._state.roomAlias;
+    public getRoomAlias() {
+        return this.state.roomAlias;
     }
 
     // Whether the current room is loading (true whilst resolving an alias)
-    isRoomLoading() {
-        return this._state.roomLoading;
+    public isRoomLoading() {
+        return this.state.roomLoading;
     }
 
     // Any error that has occurred during loading
-    getRoomLoadError() {
-        return this._state.roomLoadError;
+    public getRoomLoadError() {
+        return this.state.roomLoadError;
     }
 
     // True if we're expecting the user to be joined to the room currently being
@@ -346,27 +354,27 @@ class RoomViewStore extends Store {
     //         // show join prompt
     //     }
     // }
-    isJoining() {
-        return this._state.joining;
+    public isJoining() {
+        return this.state.joining;
     }
 
     // Any error that has occurred during joining
-    getJoinError() {
-        return this._state.joinError;
+    public getJoinError() {
+        return this.state.joinError;
     }
 
     // The mxEvent if one is about to be forwarded
-    getForwardingEvent() {
-        return this._state.forwardingEvent;
+    public getForwardingEvent() {
+        return this.state.forwardingEvent;
     }
 
     // The mxEvent if one is currently being replied to/quoted
-    getQuotingEvent() {
-        return this._state.replyingToEvent;
+    public getQuotingEvent() {
+        return this.state.replyingToEvent;
     }
 
-    shouldPeek() {
-        return this._state.shouldPeek;
+    public shouldPeek() {
+        return this.state.shouldPeek;
     }
 }
 

@@ -24,6 +24,7 @@ import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
+import {ActiveRoomObserver} from "../ActiveRoomObserver";
 
 declare global {
     interface Window {
@@ -39,6 +40,8 @@ declare global {
         mx_RebrandListener: RebrandListener;
         mx_RoomListStore: RoomListStoreClass;
         mx_RoomListLayoutStore: RoomListLayoutStore;
+        mx_ActiveRoomObserver: ActiveRoomObserver;
+
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
     }

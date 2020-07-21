@@ -16,6 +16,8 @@ limitations under the License.
 
 import RoomViewStore from './stores/RoomViewStore';
 
+type Listener = (isActive: boolean) => void;
+
 /**
  * Consumes changes from the RoomViewStore and notifies specific things
  * about when the active room changes. Unlike listening for RoomViewStore
@@ -25,57 +27,57 @@ import RoomViewStore from './stores/RoomViewStore';
  * TODO: If we introduce an observer for something else, factor out
  * the adding / removing of listeners & emitting into a common class.
  */
-class ActiveRoomObserver {
-    constructor() {
-        this._listeners = {}; // key=roomId, value=function(isActive:boolean)
+export class ActiveRoomObserver {
+    private listeners: {[key: string]: Listener[]} = {};
+    private _activeRoomId = RoomViewStore.getRoomId(); // TODO
+    private readonly roomStoreToken: string;
 
-        this._activeRoomId = RoomViewStore.getRoomId();
-        // TODO: We could self-destruct when the last listener goes away, or at least
-        // stop listening.
-        this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate.bind(this));
+    constructor() {
+        // TODO: We could self-destruct when the last listener goes away, or at least stop listening.
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
     }
 
-    get activeRoomId(): string {
+    public get activeRoomId(): string {
         return this._activeRoomId;
     }
 
-    addListener(roomId, listener) {
-        if (!this._listeners[roomId]) this._listeners[roomId] = [];
-        this._listeners[roomId].push(listener);
+    public addListener(roomId, listener) {
+        if (!this.listeners[roomId]) this.listeners[roomId] = [];
+        this.listeners[roomId].push(listener);
     }
 
-    removeListener(roomId, listener) {
-        if (this._listeners[roomId]) {
-            const i = this._listeners[roomId].indexOf(listener);
+    public removeListener(roomId, listener) {
+        if (this.listeners[roomId]) {
+            const i = this.listeners[roomId].indexOf(listener);
             if (i > -1) {
-                this._listeners[roomId].splice(i, 1);
+                this.listeners[roomId].splice(i, 1);
             }
         } else {
             console.warn("Unregistering unrecognised listener (roomId=" + roomId + ")");
         }
     }
 
-    _emit(roomId, isActive: boolean) {
-        if (!this._listeners[roomId]) return;
+    private emit(roomId, isActive: boolean) {
+        if (!this.listeners[roomId]) return;
 
-        for (const l of this._listeners[roomId]) {
+        for (const l of this.listeners[roomId]) {
             l.call(null, isActive);
         }
     }
 
-    _onRoomViewStoreUpdate() {
+    private onRoomViewStoreUpdate = () => {
         // emit for the old room ID
-        if (this._activeRoomId) this._emit(this._activeRoomId, false);
+        if (this._activeRoomId) this.emit(this._activeRoomId, false);
 
         // update our cache
         this._activeRoomId = RoomViewStore.getRoomId();
 
         // and emit for the new one
-        if (this._activeRoomId) this._emit(this._activeRoomId, true);
-    }
+        if (this._activeRoomId) this.emit(this._activeRoomId, true);
+    };
 }
 
-if (global.mx_ActiveRoomObserver === undefined) {
-    global.mx_ActiveRoomObserver = new ActiveRoomObserver();
+if (window.mx_ActiveRoomObserver === undefined) {
+    window.mx_ActiveRoomObserver = new ActiveRoomObserver();
 }
-export default global.mx_ActiveRoomObserver;
+export default window.mx_ActiveRoomObserver;
