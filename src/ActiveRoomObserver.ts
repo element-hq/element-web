@@ -77,7 +77,7 @@ export class ActiveRoomObserver {
     };
 }
 
-if (window.mx_ActiveRoomObserver === undefined) {
-    window.mx_ActiveRoomObserver = new ActiveRoomObserver();
+if (window.mxActiveRoomObserver === undefined) {
+    window.mxActiveRoomObserver = new ActiveRoomObserver();
 }
-export default window.mx_ActiveRoomObserver;
+export default window.mxActiveRoomObserver;

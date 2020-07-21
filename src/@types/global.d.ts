@@ -41,7 +41,7 @@ declare global {
         mxRebrandListener: RebrandListener;
         mxRoomListStore: RoomListStoreClass;
         mxRoomListLayoutStore: RoomListLayoutStore;
-        mx_ActiveRoomObserver: ActiveRoomObserver;
+        mxActiveRoomObserver: ActiveRoomObserver;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
