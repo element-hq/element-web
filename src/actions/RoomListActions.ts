@@ -108,7 +108,7 @@ export default class RoomListActions {
             ) {
                 const promiseToDelete = matrixClient.deleteRoomTag(
                     roomId, oldTag,
-                ).catch(function (err) {
+                ).catch(function(err) {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to remove tag " + oldTag + " from room: " + err);
                     Modal.createTrackedDialog('Failed to remove tag from room', '', ErrorDialog, {
@@ -128,7 +128,7 @@ export default class RoomListActions {
                 // at least be an empty object.
                 metaData = metaData || {};
 
-                const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function (err) {
+                const promiseToAdd = matrixClient.setRoomTag(roomId, newTag, metaData).catch(function(err) {
                     const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     console.error("Failed to add tag " + newTag + " to room: " + err);
                     Modal.createTrackedDialog('Failed to add tag to room', '', ErrorDialog, {

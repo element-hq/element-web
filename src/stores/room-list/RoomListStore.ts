@@ -18,7 +18,6 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import SettingsStore from "../../settings/SettingsStore";
 import { DefaultTagID, isCustomTag, OrderedDefaultTagIDs, RoomUpdateCause, TagID } from "./models";
-import TagOrderStore from "../TagOrderStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IListOrderingMap, ITagMap, ITagSortingMap, ListAlgorithm, SortAlgorithm } from "./algorithms/models";
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -33,7 +32,6 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
-import { isEnumValue } from "../../utils/enums";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -610,4 +608,4 @@ export default class RoomListStore {
     }
 }
 
-window.mx_RoomListStore = RoomListStore.instance;
+window.mxRoomListStore = RoomListStore.instance;

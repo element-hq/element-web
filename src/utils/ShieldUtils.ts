@@ -27,7 +27,7 @@ export async function shieldStatusForRoom(client: Client, room: Room): Promise<s
     members.filter((userId) => userId !== client.getUserId())
         .forEach((userId) => {
             (client.checkUserTrust(userId).isCrossSigningVerified() ?
-            verified : unverified).push(userId);
+                verified : unverified).push(userId);
         });
 
     /* Alarm if any unverified users were verified before. */

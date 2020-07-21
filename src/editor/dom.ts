@@ -17,7 +17,6 @@ limitations under the License.
 
 import {CARET_NODE_CHAR, isCaretNode} from "./render";
 import DocumentOffset from "./offset";
-import EditorModel from "./model";
 
 type Predicate = (node: Node) => boolean;
 type Callback = (node: Node) => void;

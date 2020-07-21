@@ -17,16 +17,16 @@ limitations under the License.
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {
     hideToast as hideBulkUnverifiedSessionsToast,
-    showToast as showBulkUnverifiedSessionsToast
+    showToast as showBulkUnverifiedSessionsToast,
 } from "./toasts/BulkUnverifiedSessionsToast";
 import {
     hideToast as hideSetupEncryptionToast,
     Kind as SetupKind,
-    showToast as showSetupEncryptionToast
+    showToast as showSetupEncryptionToast,
 } from "./toasts/SetupEncryptionToast";
 import {
     hideToast as hideUnverifiedSessionsToast,
-    showToast as showUnverifiedSessionsToast
+    showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
 import {privateShouldBeEncrypted} from "./createRoom";
 
@@ -48,8 +48,8 @@ export default class DeviceListener {
     private displayingToastsForDeviceIds = new Set<string>();
 
     static sharedInstance() {
-        if (!window.mx_DeviceListener) window.mx_DeviceListener = new DeviceListener();
-        return window.mx_DeviceListener;
+        if (!window.mxDeviceListener) window.mxDeviceListener = new DeviceListener();
+        return window.mxDeviceListener;
     }
 
     start() {

@@ -30,7 +30,7 @@ import {Caret} from "./caret";
  * @param {object?} diff an object with `removed` and `added` strings
  */
 
- /**
+/**
  * @callback TransformCallback
  * @param {DocumentPosition?} caretPosition the position where the caret should be position
  * @param {string?} inputType the inputType of the DOM input event
