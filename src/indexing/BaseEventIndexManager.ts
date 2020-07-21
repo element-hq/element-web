@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// The following interfaces take their names and member names from the js-sdk
+// The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */
 
 export interface MatrixEvent {
