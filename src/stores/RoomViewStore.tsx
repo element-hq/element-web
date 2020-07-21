@@ -99,6 +99,7 @@ class RoomViewStore extends Store<ActionPayload> {
             case 'view_room':
                 this.viewRoom(payload);
                 break;
+            // for these events blank out the roomId as we are no longer in the RoomView
             case 'view_create_group':
             case 'view_welcome_page':
             case 'view_home_page':
