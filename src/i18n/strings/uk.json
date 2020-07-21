@@ -478,7 +478,7 @@
     "Sends the given message coloured as a rainbow": "Надсилає вказане повідомлення розфарбоване веселкою",
     "Your %(brand)s is misconfigured": "Ваш %(brand)s налаштовано неправильно",
     "Join the discussion": "Приєднатися до обговорення",
-    "Upload": "Відвантажити",
+    "Upload": "Обрати",
     "Upload file": "Відвантажити файл",
     "Send an encrypted message…": "Надіслати зашифроване повідомлення…",
     "The conversation continues here.": "Розмова триває тут.",
@@ -625,5 +625,17 @@
     "Learn More": "Дізнатися більше",
     "Command error": "Помилка команди",
     "Sends a message as html, without interpreting it as markdown": "Надсилає повідомлення як HTML, не інтерпритуючи Markdown",
-    "Failed to set topic": "Не вдалося встановити тему"
+    "Failed to set topic": "Не вдалося встановити тему",
+    "Once enabled, encryption cannot be disabled.": "Після увімкнення шифрування не можна буде вимкнути.",
+    "Please enter verification code sent via text.": "Будь ласка, введіть звірювальний код, відправлений у текстовому повідомленні.",
+    "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Текстове повідомлення було відправлено на номер +%(msisdn)s. Будь ласка, введіть звірювальний код, який воно містить.",
+    "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням. Тільки ви та одержувачі мають ключі для прочитання цих повідомлень.",
+    "Messages in this room are end-to-end encrypted.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням.",
+    "Messages in this room are not end-to-end encrypted.": "Повідомлення у цій кімнаті не захищені наскрізним шифруванням.",
+    "Encryption enabled": "Шифрувення увімкнено",
+    "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням. Дізнайтеся більше та звіртеся з цим користувачем через його профіль.",
+    "You sent a verification request": "Ви відправили звірювальний запит",
+    "Direct Messages": "Особисті повідомлення",
+    "Room Settings - %(roomName)s": "Налаштування кімнати - %(roomName)s",
+    "A verification email will be sent to your inbox to confirm setting your new password.": "Ми відправимо перевіряльний електронний лист до вас для підтвердження зміни пароля."
 }
