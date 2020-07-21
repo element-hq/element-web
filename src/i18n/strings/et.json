@@ -2310,5 +2310,16 @@
     "Recovery Method Removed": "Taastemeetod on eemaldatud",
     "This session has detected that your recovery passphrase and key for Secure Messages have been removed.": "Oleme tuvastanud, et selles sessioonis ei leidu taastamiseks mõeldud paroolifraas ega krüptitud sõnumite taastevõtit.",
     "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Kui sa tegid seda juhuslikult, siis sa võid selles sessioonis uuesti seadistada sõnumite krüptimise, mille tulemusel krüptime uuesti kõik sõnumid ja loome uue taastamise meetodi.",
-    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma salasõna ning määra seadistustes uus taastemeetod."
+    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise taastamise meetodeid eemaldanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma salasõna ning määra seadistustes uus taastemeetod.",
+    "Are you sure you want to cancel entering passphrase?": "Kas oled kindel et sa soovid katkestada paroolifraasi sisestamise?",
+    "Use an identity server to invite by email. Click continue to use the default identity server (%(defaultIdentityServerName)s) or manage in Settings.": "E-posti teel kutse saatmiseks kasuta isikutuvastusserverit. Võid kasutada vaikimisi serverit (%(defaultIdentityServerName)s) või määrata muu serveri seadistustes.",
+    "Use an identity server to invite by email. Manage in Settings.": "Kasutajatele e-posti teel kutse saatmiseks pruugi isikutuvastusserverit. Täpsemalt saad seda hallata seadistustes.",
+    "Joins room with given address": "Liitu antud aadressiga jututoaga",
+    "Leave room": "Lahku jututoast",
+    "Unrecognised room address:": "Tundmatu jututoa aadress:",
+    "Kicks user with given id": "Müksa selle tunnusega kasutaja jututoast välja",
+    "Stops ignoring a user, showing their messages going forward": "Lõpeta kasutaja eiramine ja näita edaspidi tema sõnumeid",
+    "Unignored user": "Kasutaja, kelle eiramine on lõppenud",
+    "You are no longer ignoring %(userId)s": "Sa edaspidi ei eira kasutajat %(userId)s",
+    "Deops user with given id": "Eemalda antud tunnusega kasutajalt haldusõigused selles jututoas"
 }
