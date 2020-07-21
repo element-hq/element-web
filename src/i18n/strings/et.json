@@ -1310,7 +1310,7 @@
     "%(oneUser)schanged their avatar %(count)s times|other": "Kasutaja %(oneUser)s muutis oma tunnuspilti %(count)s korda",
     "%(oneUser)schanged their avatar %(count)s times|one": "Kasutaja %(oneUser)s muutis oma tunnuspilti",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Palu oma koduserveri haldajat (<code>%(homeserverDomain)s</code>), et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.",
-    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternatiivina võid sa kasutada avalikku serverit <code>turn.matrix.org</code>, kuid see ei pruugi olla piisavalt töökindel ning sa jagaad ka oma IP-aadressi selle serveriga. Täpsemalt saad seda määrata seadistustes.",
+    "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternatiivina võid sa kasutada avalikku serverit <code>turn.matrix.org</code>, kuid see ei pruugi olla piisavalt töökindel ning sa jagad ka oma IP-aadressi selle serveriga. Täpsemalt saad seda määrata seadistustes.",
     "Try using turn.matrix.org": "Proovi kasutada turn.matrix.org serverit",
     "OK": "Sobib",
     "Unable to capture screen": "Ekraanipildi hõive ei õnnestunud",
