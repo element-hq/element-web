@@ -164,7 +164,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private async viewRoom(payload) {
+    private async viewRoom(payload: ActionPayload) {
         if (payload.room_id) {
             const newState = {
                 roomId: payload.room_id,
@@ -246,7 +246,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private viewRoomError(payload) {
+    private viewRoomError(payload: ActionPayload) {
         this.setState({
             roomId: payload.room_id,
             roomAlias: payload.room_alias,
@@ -255,7 +255,7 @@ class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private joinRoom(payload) {
+    private joinRoom(payload: ActionPayload) {
         this.setState({
             joining: true,
         });
@@ -290,7 +290,7 @@ class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private joinRoomError(payload) {
+    private joinRoomError(payload: ActionPayload) {
         this.setState({
             joining: false,
             joinError: payload.err,
