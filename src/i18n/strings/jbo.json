@@ -577,5 +577,8 @@
     "Ask %(displayName)s to scan your code:": ".i ko cpedu le ka gau ce'u kacma samymo'i le sinxa kei la'o zoi. %(displayName)s .zoi",
     "Almost there! Is %(displayName)s showing the same shield?": ".uo ru'e .i xu la'o zoi. %(displayName)s .zoi jarco ta'i tu'a pa sinxa poi mapti",
     "You've successfully verified %(displayName)s!": ".i do mo'u co'a lacri la'o zoi. %(displayName)s .zoi",
-    "%(displayName)s cancelled verification.": ".i la'o zoi. %(displayName)s .zoi co'u co'a lacri"
+    "%(displayName)s cancelled verification.": ".i la'o zoi. %(displayName)s .zoi co'u co'a lacri",
+    "Decrypt %(text)s": "nu facki le du'u mifra la'o zoi. %(text)s .zoi",
+    "Download %(text)s": "nu kibycpa la'o zoi. %(text)s .zoi",
+    "Download this file": "nu kibycpa le vreji"
 }
