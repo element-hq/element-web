@@ -648,7 +648,9 @@ export default createReactClass({
 
         if (scrollState.stuckAtBottom) {
             const sn = this._getScrollNode();
-            sn.scrollTop = sn.scrollHeight;
+            if (sn.scrollTop !== sn.scrollHeight) {
+                sn.scrollTop = sn.scrollHeight;
+            }
         } else if (scrollState.trackedScrollToken) {
             const itemlist = this._itemlist.current;
             const trackedNode = this._getTrackedNode();
@@ -657,7 +659,10 @@ export default createReactClass({
                 const bottomDiff = newBottomOffset - scrollState.bottomOffset;
                 this._bottomGrowth += bottomDiff;
                 scrollState.bottomOffset = newBottomOffset;
-                itemlist.style.height = `${this._getListHeight()}px`;
+                const newHeight = `${this._getListHeight()}px`;
+                if (itemlist.style.height !== newHeight) {
+                    itemlist.style.height = newHeight;
+                }
                 debuglog("balancing height because messages below viewport grew by", bottomDiff);
             }
         }
