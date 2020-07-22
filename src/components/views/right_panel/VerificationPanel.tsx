@@ -68,22 +68,6 @@ interface IState {
 }
 
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
-    /* static propTypes = { */
-    /*     layout: PropTypes.string, */
-    /*     request: PropTypes.object.isRequired, */
-    /*     member: PropTypes.object.isRequired, */
-    /*     phase: PropTypes.oneOf([ */
-    /*         PHASE_UNSENT, */
-    /*         PHASE_REQUESTED, */
-    /*         PHASE_READY, */
-    /*         PHASE_STARTED, */
-    /*         PHASE_CANCELLED, */
-    /*         PHASE_DONE, */
-    /*     ]).isRequired, */
-    /*     onClose: PropTypes.func.isRequired, */
-    /*     isRoomEncrypted: PropTypes.bool, */
-    /* }; */
-
     private hasVerifier: boolean;
 
     constructor(props: IProps) {
