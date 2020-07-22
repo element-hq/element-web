@@ -15,11 +15,5 @@ limitations under the License.
 */
 
 .mx_RoomList {
-    width: calc(100% - 16px); // 16px of artificial right-side margin (8px is overflowed from the sublists)
-
-    // Create a column-based flexbox for the sublists. That's pretty much all we have to
-    // worry about in this stylesheet.
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap; // let the column overflow
+    padding-right: 7px; // width of the scrollbar, to line things up
 }
