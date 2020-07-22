@@ -879,7 +879,7 @@
     "Set up": "Võta kasutusele",
     "Upgrade": "Uuenda",
     "Verify": "Verifitseeri",
-    "Verify the new login accessing your account: %(name)s": "Verifitseeri uus kasutajasessioon, kes pruugib sinu kontot: %(name)s",
+    "Verify the new login accessing your account: %(name)s": "Verifitseeri uus kasutajasessioon, mis pruugib sinu kontot: %(name)s",
     "From %(deviceName)s (%(deviceId)s)": "Seadmest %(deviceName)s (%(deviceId)s)",
     "Decline (%(counter)s)": "Lükka tagasi (%(counter)s)",
     "Accept <policyLink /> to continue:": "Jätkamiseks nõustu <policyLink />'ga:",
