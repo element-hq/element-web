@@ -15,15 +15,8 @@ limitations under the License.
 */
 
 .mx_RoomSublist {
-    // The sublist is a column of rows, essentially
-    display: flex;
-    flex-direction: column;
-
     margin-left: 8px;
     margin-bottom: 4px;
-    width: 100%;
-
-    flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
 
     .mx_RoomSublist_headerContainer {
         // Create a flexbox to make alignment easy

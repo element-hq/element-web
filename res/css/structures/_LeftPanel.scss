@@ -135,12 +135,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         }
 
         .mx_LeftPanel_roomListWrapper {
-            // Create a flexbox to ensure the containing items cause appropriate overflow.
-            display: flex;
-
-            flex-grow: 1;
             overflow: hidden;
-            min-height: 0;
             margin-top: 10px; // so we're not up against the search/filter
 
             &.mx_LeftPanel_roomListWrapper_stickyBottom {
@@ -153,14 +148,8 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         }
 
         .mx_LeftPanel_actualRoomListContainer {
-            flex-grow: 1; // fill the available space
-            overflow-y: auto;
-            width: 100%;
-            max-width: 100%;
             position: relative; // for sticky headers
-
-            // Create a flexbox to trick the layout engine
-            display: flex;
+            height: 100%; // ensure scrolling still works
         }
     }
 

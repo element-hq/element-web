@@ -26,6 +26,7 @@ import { CallAnswerEventPreview } from "./previews/CallAnswerEventPreview";
 import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 const PREVIEWS = {
     'm.room.message': {
@@ -62,11 +63,14 @@ type TAG_ANY = "im.vector.any";
 const TAG_ANY: TAG_ANY = "im.vector.any";
 
 interface IState {
-    [roomId: string]: Map<TagID | TAG_ANY, string | null>; // null indicates the preview is empty / irrelevant
+    // Empty because we don't actually use the state
 }
 
 export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new MessagePreviewStore();
+
+    // null indicates the preview is empty / irrelevant
+    private previews = new Map<string, Map<TagID|TAG_ANY, string|null>>();
 
     private constructor() {
         super(defaultDispatcher, {});
@@ -85,10 +89,9 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     public getPreviewForRoom(room: Room, inTagId: TagID): string {
         if (!room) return null; // invalid room, just return nothing
 
-        const val = this.state[room.roomId];
-        if (!val) this.generatePreview(room, inTagId);
+        if (!this.previews.has(room.roomId)) this.generatePreview(room, inTagId);
 
-        const previews = this.state[room.roomId];
+        const previews = this.previews.get(room.roomId);
         if (!previews) return null;
 
         if (!previews.has(inTagId)) {
@@ -101,11 +104,10 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
         const events = room.timeline;
         if (!events) return; // should only happen in tests
 
-        let map = this.state[room.roomId];
+        let map = this.previews.get(room.roomId);
         if (!map) {
             map = new Map<TagID | TAG_ANY, string | null>();
-
-            // We set the state later with the map, so no need to send an update now
+            this.previews.set(room.roomId, map);
         }
 
         // Set the tags so we know what to generate
@@ -141,16 +143,16 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
             }
 
             if (changed) {
-                // Update state for good measure - causes emit for update
-                // noinspection JSIgnoredPromiseFromCall - the AsyncStore handles concurrent calls
-                this.updateState({[room.roomId]: map});
+                // We've muted the underlying Map, so just emit that we've changed.
+                this.previews.set(room.roomId, map);
+                this.emit(UPDATE_EVENT, this);
             }
             return; // we're done
         }
 
         // At this point, we didn't generate a preview so clear it
-        // noinspection JSIgnoredPromiseFromCall - the AsyncStore handles concurrent calls
-        this.updateState({[room.roomId]: null});
+        this.previews.set(room.roomId, new Map<TagID|TAG_ANY, string|null>());
+        this.emit(UPDATE_EVENT, this);
     }
 
     protected async onAction(payload: ActionPayload) {
@@ -158,7 +160,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
-            if (!Object.keys(this.state).includes(event.getRoomId())) return; // not important
+            if (!this.previews.has(event.getRoomId())) return; // not important
             this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }
     }
