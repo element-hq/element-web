@@ -19,41 +19,18 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { MessageEventPreview } from "./previews/MessageEventPreview";
-import { NameEventPreview } from "./previews/NameEventPreview";
 import { TagID } from "./models";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-import { TopicEventPreview } from "./previews/TopicEventPreview";
-import { MembershipEventPreview } from "./previews/MembershipEventPreview";
-import { HistoryVisibilityEventPreview } from "./previews/HistoryVisibilityEventPreview";
 import { CallInviteEventPreview } from "./previews/CallInviteEventPreview";
 import { CallAnswerEventPreview } from "./previews/CallAnswerEventPreview";
 import { CallHangupEvent } from "./previews/CallHangupEvent";
-import { EncryptionEventPreview } from "./previews/EncryptionEventPreview";
-import { ThirdPartyInviteEventPreview } from "./previews/ThirdPartyInviteEventPreview";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
-import { CreationEventPreview } from "./previews/CreationEventPreview";
 
 const PREVIEWS = {
     'm.room.message': {
         isState: false,
         previewer: new MessageEventPreview(),
-    },
-    'm.room.name': {
-        isState: true,
-        previewer: new NameEventPreview(),
-    },
-    'm.room.topic': {
-        isState: true,
-        previewer: new TopicEventPreview(),
-    },
-    'm.room.member': {
-        isState: true,
-        previewer: new MembershipEventPreview(),
-    },
-    'm.room.history_visibility': {
-        isState: true,
-        previewer: new HistoryVisibilityEventPreview(),
     },
     'm.call.invite': {
         isState: false,
@@ -67,14 +44,6 @@ const PREVIEWS = {
         isState: false,
         previewer: new CallHangupEvent(),
     },
-    'm.room.encryption': {
-        isState: true,
-        previewer: new EncryptionEventPreview(),
-    },
-    'm.room.third_party_invite': {
-        isState: true,
-        previewer: new ThirdPartyInviteEventPreview(),
-    },
     'm.sticker': {
         isState: false,
         previewer: new StickerEventPreview(),
@@ -82,10 +51,6 @@ const PREVIEWS = {
     'm.reaction': {
         isState: false,
         previewer: new ReactionEventPreview(),
-    },
-    'm.room.create': {
-        isState: true,
-        previewer: new CreationEventPreview(),
     },
 };
 
