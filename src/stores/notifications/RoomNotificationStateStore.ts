@@ -21,6 +21,8 @@ import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
+import { NotificationState } from "./NotificationState";
+import { SummarizedNotificationState } from "./SummarizedNotificationState";
 
 interface IState {}
 
@@ -31,6 +33,23 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
 
     private constructor() {
         super(defaultDispatcher, {});
+    }
+
+    /**
+     * Gets a snapshot of notification state for all visible rooms. The number of states recorded
+     * on the SummarizedNotificationState is equivalent to rooms.
+     */
+    public get globalState(): SummarizedNotificationState {
+        // If we're not ready yet, just return an empty state
+        if (!this.matrixClient) return new SummarizedNotificationState();
+
+        // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
+        // This will include highlights from the previous version of the room internally
+        const globalState = new SummarizedNotificationState();
+        for (const room of this.matrixClient.getVisibleRooms()) {
+            globalState.add(this.getRoomState(room));
+        }
+        return globalState;
     }
 
     /**
