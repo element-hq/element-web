@@ -21,7 +21,6 @@ import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
-import { NotificationState } from "./NotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 
 interface IState {}
