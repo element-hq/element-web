@@ -24,7 +24,7 @@ import { NotificationState } from "./NotificationState";
  * Useful for community notification counts, global notification counts, etc.
  */
 export class SummarizedNotificationState extends NotificationState {
-    private _totalStatesWithUnread = 0;
+    private totalStatesWithUnread = 0;
 
     constructor() {
         super();
@@ -34,7 +34,7 @@ export class SummarizedNotificationState extends NotificationState {
     }
 
     public get numUnreadStates(): number {
-        return this._totalStatesWithUnread;
+        return this.totalStatesWithUnread;
     }
 
     /**
@@ -56,7 +56,7 @@ export class SummarizedNotificationState extends NotificationState {
             this._color = other.color;
         }
         if (other.hasUnreadCount) {
-            this._totalStatesWithUnread++;
+            this.totalStatesWithUnread++;
         }
     }
 }
