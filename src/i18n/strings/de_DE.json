@@ -2333,5 +2333,15 @@
     "Incoming voice call": "Eingehender Sprachanruf",
     "Incoming video call": "Eingehender Videoanruf",
     "Incoming call": "Eingehender Anruf",
-    "There are advanced notifications which are not shown here.": "Es sind erweiterte Benachrichtigungen vorhanden, die hier nicht angezeigt werden."
+    "There are advanced notifications which are not shown here.": "Es sind erweiterte Benachrichtigungen vorhanden, die hier nicht angezeigt werden.",
+    "Are you sure you want to cancel entering passphrase?": "Bist du sicher dass du die Eingabe der Passphrase abbrechen möchtest?",
+    "Use your account to sign in to the latest version": "Verwende dein Konto um dich bei der neusten Version anzumelden",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
+    "Enable advanced debugging for the room list": "Erweiterte Fehlersuche für die Raumliste aktivieren",
+    "Enable experimental, compact IRC style layout": "Kompaktes, experimentelles Layout im IRC-Stil aktivieren",
+    "User menu": "Benutzermenü",
+    "%(brand)s Web": "%(brand)s Web",
+    "%(brand)s Desktop": "%(brand)s Desktop",
+    "%(brand)s iOS": "%(brand)s iOS",
+    "%(brand)s X for Android": "%(brand)s X für Android"
 }
