@@ -168,6 +168,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
+        // If we're not remotely ready, don't even bother scheduling the dispatch handling.
+        // This is repeated in the handler just in case things change between a decision here and
+        // when the timer fires.
+        const logicallyReady = this.matrixClient && this.initialListsGenerated;
+        if (!logicallyReady) return;
+
         // When we're running tests we can't reliably use setImmediate out of timing concerns.
         // As such, we use a more synchronous model.
         if (RoomListStoreClass.TEST_MODE) {
