@@ -198,7 +198,7 @@
     "Unable to capture screen": "画面をキャプチャできません",
     "Existing Call": "既存の通話",
     "You are already in a call.": "すでに通話中です。",
-    "VoIP is unsupported": "VoIPはサポートされていません",
+    "VoIP is unsupported": "VoIP対応していません",
     "You cannot place VoIP calls in this browser.": "このブラウザにはVoIP通話はできません。",
     "You cannot place a call with yourself.": "自分自身に電話をかけることはできません。",
     "Call in Progress": "発信中",
