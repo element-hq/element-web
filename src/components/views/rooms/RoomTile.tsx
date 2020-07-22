@@ -120,7 +120,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room, this.props.tag),
+            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,

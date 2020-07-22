@@ -90,7 +90,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     private getRoomCategory(room: Room): NotificationColor {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
-        const state = RoomNotificationStateStore.instance.getRoomState(room, this.tagId);
+        const state = RoomNotificationStateStore.instance.getRoomState(room);
         return state.color;
     }
 
