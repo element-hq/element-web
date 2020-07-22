@@ -144,13 +144,14 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
             if (changed) {
                 // We've muted the underlying Map, so just emit that we've changed.
+                this.previews.set(room.roomId, map);
                 this.emit(UPDATE_EVENT, this);
             }
             return; // we're done
         }
 
         // At this point, we didn't generate a preview so clear it
-        this.previews.delete(room.roomId);
+        this.previews.set(room.roomId, new Map<TagID|TAG_ANY, string|null>());
         this.emit(UPDATE_EVENT, this);
     }
 
@@ -159,7 +160,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
         if (payload.action === 'MatrixActions.Room.timeline' || payload.action === 'MatrixActions.Event.decrypted') {
             const event = payload.event; // TODO: Type out the dispatcher
-            if (!Object.keys(this.state).includes(event.getRoomId())) return; // not important
+            if (!this.previews.has(event.getRoomId())) return; // not important
             this.generatePreview(this.matrixClient.getRoom(event.getRoomId()), TAG_ANY);
         }
     }
