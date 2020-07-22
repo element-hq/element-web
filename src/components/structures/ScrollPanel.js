@@ -699,12 +699,16 @@ export default createReactClass({
         const height = Math.max(minHeight, contentHeight);
         this._pages = Math.ceil(height / PAGE_SIZE);
         this._bottomGrowth = 0;
-        const newHeight = this._getListHeight();
+        const newHeight = `${this._getListHeight()}px`;
 
         const scrollState = this.scrollState;
         if (scrollState.stuckAtBottom) {
-            itemlist.style.height = `${newHeight}px`;
-            sn.scrollTop = sn.scrollHeight;
+            if (itemlist.style.height !== newHeight) {
+                itemlist.style.height = newHeight;
+            }
+            if (sn.scrollTop !== sn.scrollHeight){
+                sn.scrollTop = sn.scrollHeight;
+            }
             debuglog("updateHeight to", newHeight);
         } else if (scrollState.trackedScrollToken) {
             const trackedNode = this._getTrackedNode();
@@ -714,7 +718,9 @@ export default createReactClass({
             // the currently filled piece of the timeline
             if (trackedNode) {
                 const oldTop = trackedNode.offsetTop;
-                itemlist.style.height = `${newHeight}px`;
+                if (itemlist.style.height !== newHeight) {
+                    itemlist.style.height = newHeight;
+                }
                 const newTop = trackedNode.offsetTop;
                 const topDiff = newTop - oldTop;
                 // important to scroll by a relative amount as
