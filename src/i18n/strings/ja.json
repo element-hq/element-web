@@ -906,7 +906,7 @@
     "Call failed due to misconfigured server": "サーバの誤設定により呼び出し失敗",
     "Try using turn.matrix.org": "turn.matrix.orgで試してみる",
     "Replying With Files": "ファイルを添付して返信",
-    "The file '%(fileName)s' failed to upload.": "ファイル '%(fileName)s' のアップロードに失敗しました。",
+    "The file '%(fileName)s' failed to upload.": "ファイル '%(fileName)s' のアップロードに失敗しました.",
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "ファイル '%(fileName)s' はこのホームサーバのアップロードのサイズ上限を超えています",
     "The server does not support the room version specified.": "このサーバは指定された部屋バージョンに対応していません。",
     "Name or Matrix ID": "名前またはMatrix ID",
