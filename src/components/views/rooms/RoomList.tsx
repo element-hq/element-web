@@ -210,7 +210,7 @@ export default class RoomList extends React.Component<IProps, IState> {
             if (unread) {
                 // filter to only notification rooms (and our current active room so we can index properly)
                 listRooms = listRooms.filter(r => {
-                    const state = RoomNotificationStateStore.instance.getRoomState(r, t);
+                    const state = RoomNotificationStateStore.instance.getRoomState(r);
                     return state.room.roomId === roomId || state.isUnread;
                 });
             }
