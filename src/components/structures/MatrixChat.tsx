@@ -58,7 +58,6 @@ import { messageForSyncError } from '../../utils/ErrorUtils';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../utils/AutoDiscoveryUtils";
 import DMRoomMap from '../../utils/DMRoomMap';
-import { countRoomsWithNotif } from '../../RoomNotifs';
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { FontWatcher } from '../../settings/watchers/FontWatcher';
 import { storeRoomAliasInCache } from '../../RoomAliasCache';
@@ -75,6 +74,7 @@ import {
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
+import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1844,21 +1844,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     updateStatusIndicator(state: string, prevState: string) {
-        // only count visible rooms to not torment the user with notification counts in rooms they can't see
-        // it will include highlights from the previous version of the room internally
-        const notifCount = countRoomsWithNotif(MatrixClientPeg.get().getVisibleRooms()).count;
+        const notificationState = RoomNotificationStateStore.instance.globalState;
+        const numUnreadRooms = notificationState.numUnreadStates; // we know that states === rooms here
 
         if (PlatformPeg.get()) {
             PlatformPeg.get().setErrorStatus(state === 'ERROR');
-            PlatformPeg.get().setNotificationCount(notifCount);
+            PlatformPeg.get().setNotificationCount(numUnreadRooms);
         }
 
         this.subTitleStatus = '';
         if (state === "ERROR") {
             this.subTitleStatus += `[${_t("Offline")}] `;
         }
-        if (notifCount > 0) {
-            this.subTitleStatus += `[${notifCount}]`;
+        if (numUnreadRooms > 0) {
+            this.subTitleStatus += `[${numUnreadRooms}]`;
         }
 
         this.setPageSubtitle();
