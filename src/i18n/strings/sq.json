@@ -2385,5 +2385,7 @@
     "%(brand)s Web": "%(brand)s Web",
     "%(brand)s Desktop": "%(brand)s Desktop",
     "%(brand)s iOS": "%(brand)s iOS",
-    "%(brand)s X for Android": "%(brand)s X për Android"
+    "%(brand)s X for Android": "%(brand)s X për Android",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
+    "Custom Tag": "Etiketë Vetjake"
 }
