@@ -550,7 +550,9 @@ const RedactMessagesButton = ({member}) => {
         let eventsToRedact = [];
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
+                    event.getType() !== "m.room.create"
+                ) {
                     return events.concat(event);
                 } else {
                     return events;
