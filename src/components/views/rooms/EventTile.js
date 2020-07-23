@@ -333,7 +333,7 @@ export default createReactClass({
             return;
         }
 
-        const eventSenderTrust = this.context.checkDeviceTrust(
+        const eventSenderTrust = encryptionInfo.sender && this.context.checkDeviceTrust(
             senderId, encryptionInfo.sender.deviceId,
         );
         if (!eventSenderTrust) {

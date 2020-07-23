@@ -140,18 +140,16 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_new_room_list": {
-        // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14367
-        // XXX: We shouldn't have non-features appear like features.
-        displayName: _td("Use the improved room list (will refresh to apply changes)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: true,
-        controller: new ReloadOnChangeController(),
-    },
     "feature_custom_themes": {
         isFeature: true,
         displayName: _td("Support adding custom themes"),
         supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "advancedRoomListLogging": {
+        // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
+        displayName: _td("Enable advanced debugging for the room list"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
     },
     "mjolnirRooms": {
@@ -167,6 +165,10 @@ export const SETTINGS = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
+    },
+    "RoomList.backgroundImage": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: null,
     },
     "baseFontSize": {
         displayName: _td("Font size"),
@@ -351,6 +353,12 @@ export const SETTINGS = {
         default: "en",
     },
     "breadcrumb_rooms": {
+        // not really a setting
+        supportedLevels: ['account'],
+        default: [],
+    },
+    "recent_emoji": {
+        // not really a setting
         supportedLevels: ['account'],
         default: [],
     },

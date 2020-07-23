@@ -70,4 +70,4 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
     }
 }
 
-window.mx_RoomListLayoutStore = RoomListLayoutStore.instance;
+window.mxRoomListLayoutStore = RoomListLayoutStore.instance;

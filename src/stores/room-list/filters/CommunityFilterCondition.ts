@@ -21,6 +21,7 @@ import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
 import { arrayHasDiff } from "../../../utils/arrays";
 import { IDestroyable } from "../../../utils/IDestroyable";
+import DMRoomMap from "../../../utils/DMRoomMap";
 
 /**
  * A filter condition for the room list which reveals rooms which
@@ -28,6 +29,7 @@ import { IDestroyable } from "../../../utils/IDestroyable";
  */
 export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
     private roomIds: string[] = [];
+    private userIds: string[] = [];
 
     constructor(private community: Group) {
         super();
@@ -43,15 +45,19 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
     }
 
     public isVisible(room: Room): boolean {
-        return this.roomIds.includes(room.roomId);
+        return this.roomIds.includes(room.roomId) ||
+            this.userIds.includes(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
     }
 
     private onStoreUpdate = async (): Promise<any> => {
-        // We don't actually know if the room list changed for the community, so just
-        // check it again.
+        // We don't actually know if the room list changed for the community, so just check it again.
         const beforeRoomIds = this.roomIds;
         this.roomIds = (await GroupStore.getGroupRooms(this.community.groupId)).map(r => r.roomId);
-        if (arrayHasDiff(beforeRoomIds, this.roomIds)) {
+
+        const beforeUserIds = this.userIds;
+        this.userIds = (await GroupStore.getGroupMembers(this.community.groupId)).map(u => u.userId);
+
+        if (arrayHasDiff(beforeRoomIds, this.roomIds) || arrayHasDiff(beforeUserIds, this.userIds)) {
             this.emit(FILTER_CHANGED);
         }
     };

@@ -43,6 +43,7 @@ import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -400,14 +401,16 @@ export const Commands = [
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
-                    let finished = Promise.resolve();
+                    let prom = Promise.resolve();
                     if (
                         getAddressType(address) === 'email' &&
                         !MatrixClientPeg.get().getIdentityServerUrl()
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            ({ finished } = Modal.createTrackedDialog('Slash Commands', 'Identity server',
+                            const { finished } = Modal.createTrackedDialog<[boolean]>(
+                                'Slash Commands',
+                                'Identity server',
                                 QuestionDialog, {
                                     title: _t("Use an identity server"),
                                     description: <p>{_t(
@@ -420,9 +423,9 @@ export const Commands = [
                                     )}</p>,
                                     button: _t("Continue"),
                                 },
-                            ));
+                            );
 
-                            finished = finished.then(([useDefault]: any) => {
+                            prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
                                     useDefaultIdentityServer();
                                     return;
@@ -434,7 +437,7 @@ export const Commands = [
                         }
                     }
                     const inviter = new MultiInviter(roomId);
-                    return success(finished.then(() => {
+                    return success(prom.then(() => {
                         return inviter.invite([address]);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
@@ -730,9 +733,11 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-
+                        const member = room.getMember(args);
+                        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+                            return reject(_t("Could not find user in room"));
+                        }
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
@@ -1046,7 +1051,7 @@ export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
-    if (input[0] !== '/') return null; // not a command
+    if (input[0] !== '/') return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
     let cmd;

@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
-import { Room } from "matrix-js-sdk";
+import { Room, MatrixEvent } from "matrix-js-sdk";
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
@@ -327,6 +327,8 @@ class RoomStateExplorer extends React.PureComponent {
 
     static contextType = MatrixClientContext;
 
+    roomStateEvents: Map<string, Map<string, MatrixEvent>>;
+
     constructor(props) {
         super(props);
 
@@ -412,30 +414,26 @@ class RoomStateExplorer extends React.PureComponent {
         if (this.state.eventType === null) {
             list = <FilteredList query={this.state.queryEventType} onChange={this.onQueryEventType}>
                 {
-                    Object.keys(this.roomStateEvents).map((evType) => {
-                        const stateGroup = this.roomStateEvents[evType];
-                        const stateKeys = Object.keys(stateGroup);
-
+                    Array.from(this.roomStateEvents.entries()).map(([eventType, allStateKeys]) => {
                         let onClickFn;
-                        if (stateKeys.length === 1 && stateKeys[0] === '') {
-                            onClickFn = this.onViewSourceClick(stateGroup[stateKeys[0]]);
+                        if (allStateKeys.size === 1 && allStateKeys.has("")) {
+                            onClickFn = this.onViewSourceClick(allStateKeys.get(""));
                         } else {
-                            onClickFn = this.browseEventType(evType);
+                            onClickFn = this.browseEventType(eventType);
                         }
 
-                        return <button className={classes} key={evType} onClick={onClickFn}>
-                            { evType }
+                        return <button className={classes} key={eventType} onClick={onClickFn}>
+                            {eventType}
                         </button>;
                     })
                 }
             </FilteredList>;
         } else {
-            const stateGroup = this.roomStateEvents[this.state.eventType];
+            const stateGroup = this.roomStateEvents.get(this.state.eventType);
 
             list = <FilteredList query={this.state.queryStateKey} onChange={this.onQueryStateKey}>
                 {
-                    Object.keys(stateGroup).map((stateKey) => {
-                        const ev = stateGroup[stateKey];
+                    Array.from(stateGroup.entries()).map(([stateKey, ev]) => {
                         return <button className={classes} key={stateKey} onClick={this.onViewSourceClick(ev)}>
                             { stateKey }
                         </button>;

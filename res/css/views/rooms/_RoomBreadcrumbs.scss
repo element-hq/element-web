@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,98 +15,42 @@ limitations under the License.
 */
 
 .mx_RoomBreadcrumbs {
-    position: relative;
-    height: 42px;
-    padding: 8px;
-    padding-bottom: 0;
+    width: 100%;
+
+    // Create a flexbox for the crumbs
     display: flex;
     flex-direction: row;
-
-    // repeating circles as empty placeholders
-    background:
-        radial-gradient(
-            circle at center,
-            $breadcrumb-placeholder-bg-color,
-            $breadcrumb-placeholder-bg-color 15px,
-            transparent 16px
-        );
-    background-size: 36px;
-    background-position: 6px -1px;
-    background-repeat: repeat-x;
-
-
-    // Autohide the scrollbar
-    overflow-x: hidden;
-    &:hover {
-        overflow-x: visible;
-    }
-
-    .mx_AutoHideScrollbar {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-    }
+    align-items: flex-start;
 
     .mx_RoomBreadcrumbs_crumb {
-        margin-left: 4px;
-        height: 32px;
-        display: inline-block;
-        transition: transform 0.3s, width 0.3s;
-        position: relative;
-
-        .mx_RoomTile_badge {
-            position: absolute;
-            top: -3px;
-            right: -4px;
-        }
-
-        .mx_RoomBreadcrumbs_dmIndicator {
-            position: absolute;
-            bottom: 0;
-            right: -4px;
-        }
-    }
-
-    .mx_RoomBreadcrumbs_animate {
-        margin-left: 0;
+        margin-right: 8px;
         width: 32px;
-        transform: scale(1);
     }
 
-    .mx_RoomBreadcrumbs_preAnimate {
-        width: 0;
-        transform: scale(0);
+    // These classes come from the CSSTransition component. There's many more classes we
+    // could care about, but this is all we worried about for now. The animation works by
+    // first triggering the enter state with the newest breadcrumb off screen (-40px) then
+    // sliding it into view.
+    &.mx_RoomBreadcrumbs-enter {
+        margin-left: -40px; // 32px for the avatar, 8px for the margin
+    }
+    &.mx_RoomBreadcrumbs-enter-active {
+        margin-left: 0;
+
+        // Timing function is as-requested by design.
+        // NOTE: The transition time MUST match the value passed to CSSTransition!
+        transition: margin-left 640ms cubic-bezier(0.66, 0.02, 0.36, 1);
     }
 
-    .mx_RoomBreadcrumbs_left {
-        opacity: 0.5;
+    .mx_RoomBreadcrumbs_placeholder {
+        font-weight: 600;
+        font-size: $font-14px;
+        line-height: 32px; // specifically to match the height this is not scaled
+        height: 32px;
     }
+}
 
-    // Note: we have to manually control the gradient and stuff, but the IndicatorScrollbar
-    // will deal with left/right positioning for us. Normally we'd use position:sticky on
-    // a few key elements, however that doesn't work in horizontal scrolling scenarios.
-
-    .mx_IndicatorScrollbar_leftOverflowIndicator,
-    .mx_IndicatorScrollbar_rightOverflowIndicator {
-        display: none;
-    }
-
-    .mx_IndicatorScrollbar_leftOverflowIndicator {
-        background: linear-gradient(to left, $panel-gradient);
-    }
-
-    .mx_IndicatorScrollbar_rightOverflowIndicator {
-        background: linear-gradient(to right, $panel-gradient);
-    }
-
-    &.mx_IndicatorScrollbar_leftOverflow .mx_IndicatorScrollbar_leftOverflowIndicator,
-    &.mx_IndicatorScrollbar_rightOverflow .mx_IndicatorScrollbar_rightOverflowIndicator {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 15px;
-        display: block;
-        pointer-events: none;
-        z-index: 100;
-    }
+.mx_RoomBreadcrumbs_Tooltip {
+    margin-left: -42px;
+    margin-top: -42px;
 }

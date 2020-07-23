@@ -27,6 +27,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import {ContextMenu} from "../../structures/ContextMenu";
 import {WidgetType} from "../../../widgets/WidgetType";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -409,14 +410,14 @@ export default class Stickerpicker extends React.Component {
         } else {
             // Show show-stickers button
             stickersButton =
-                <AccessibleButton
+                <AccessibleTooltipButton
                     id='stickersButton'
                     key="controls_show_stickers"
                     className="mx_MessageComposer_button mx_MessageComposer_stickers"
                     onClick={this._onShowStickersClick}
                     title={_t("Show Stickers")}
                 >
-                </AccessibleButton>;
+                </AccessibleTooltipButton>;
         }
         return <React.Fragment>
             { stickersButton }

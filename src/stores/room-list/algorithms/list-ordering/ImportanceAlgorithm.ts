@@ -90,7 +90,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     private getRoomCategory(room: Room): NotificationColor {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
-        const state = RoomNotificationStateStore.instance.getRoomState(room, this.tagId);
+        const state = RoomNotificationStateStore.instance.getRoomState(room);
         return state.color;
     }
 
@@ -123,6 +123,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             const category = this.getRoomCategory(room);
             this.alterCategoryPositionBy(category, 1, this.indices);
             this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            await this.sortCategory(category);
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
             if (roomIdx === -1) {
@@ -218,7 +219,12 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private moveRoomIndexes(nRooms: number, fromCategory: NotificationColor, toCategory: NotificationColor, indices: ICategoryIndex) {
+    private moveRoomIndexes(
+        nRooms: number,
+        fromCategory: NotificationColor,
+        toCategory: NotificationColor,
+        indices: ICategoryIndex,
+    ) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
@@ -257,7 +263,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
 
             if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
-                console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
+                console.warn(
+                    `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +
+                    `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
                 // TODO: Regenerate index when this happens: https://github.com/vector-im/riot-web/issues/14234
             }

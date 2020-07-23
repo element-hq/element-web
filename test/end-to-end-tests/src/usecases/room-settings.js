@@ -45,7 +45,7 @@ async function findTabs(session) {
     /// XXX delay is needed here, possibly because the header is being rerendered
     /// click doesn't do anything otherwise
     await session.delay(1000);
-    const settingsButton = await session.query(".mx_RoomHeader .mx_AccessibleButton[title=Settings]");
+    const settingsButton = await session.query(".mx_RoomHeader .mx_AccessibleButton[aria-label=Settings]");
     await settingsButton.click();
 
     //find tabs

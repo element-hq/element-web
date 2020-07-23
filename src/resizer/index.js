@@ -17,5 +17,4 @@ limitations under the License.
 
 export FixedDistributor from "./distributors/fixed";
 export CollapseDistributor from "./distributors/collapse";
-export RoomSubListDistributor from "./distributors/roomsublist";
 export Resizer from "./resizer";

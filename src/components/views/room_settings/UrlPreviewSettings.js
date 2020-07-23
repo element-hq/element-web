@@ -58,7 +58,7 @@ export default createReactClass({
                         'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
-            } else if (accountEnabled) {
+            } else {
                 previewsForAccount = (
                     _t("You have <a>disabled</a> URL previews by default.", {}, {
                         'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,

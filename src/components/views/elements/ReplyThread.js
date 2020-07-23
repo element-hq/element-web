@@ -27,6 +27,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import sanitizeHtml from "sanitize-html";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -92,7 +93,21 @@ export default class ReplyThread extends React.Component {
 
     // Part of Replies fallback support
     static stripHTMLReply(html) {
-        return html.replace(/^<mx-reply>[\s\S]+?<\/mx-reply>/, '');
+        // Sanitize the original HTML for inclusion in <mx-reply>.  We allow
+        // any HTML, since the original sender could use special tags that we
+        // don't recognize, but want to pass along to any recipients who do
+        // recognize them -- recipients should be sanitizing before displaying
+        // anyways.  However, we sanitize to 1) remove any mx-reply, so that we
+        // don't generate a nested mx-reply, and 2) make sure that the HTML is
+        // properly formatted (e.g. tags are closed where necessary)
+        return sanitizeHtml(
+            html,
+            {
+                allowedTags: false, // false means allow everything
+                allowedAttributes: false,
+                exclusiveFilter: (frame) => frame.tag === "mx-reply",
+            },
+        );
     }
 
     // Part of Replies fallback support
@@ -102,15 +117,19 @@ export default class ReplyThread extends React.Component {
         let {body, formatted_body: html} = ev.getContent();
         if (this.getParentEventId(ev)) {
             if (body) body = this.stripPlainReply(body);
-            if (html) html = this.stripHTMLReply(html);
         }
 
         if (!body) body = ""; // Always ensure we have a body, for reasons.
 
-        // Escape the body to use as HTML below.
-        // We also run a nl2br over the result to fix the fallback representation. We do this
-        // after converting the text to safe HTML to avoid user-provided BR's from being converted.
-        if (!html) html = escapeHtml(body).replace(/\n/g, '<br/>');
+        if (html) {
+            // sanitize the HTML before we put it in an <mx-reply>
+            html = this.stripHTMLReply(html);
+        } else {
+            // Escape the body to use as HTML below.
+            // We also run a nl2br over the result to fix the fallback representation. We do this
+            // after converting the text to safe HTML to avoid user-provided BR's from being converted.
+            html = escapeHtml(body).replace(/\n/g, '<br/>');
+        }
 
         // dev note: do not rely on `body` being safe for HTML usage below.
 

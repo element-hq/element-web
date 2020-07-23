@@ -107,7 +107,7 @@ export default createReactClass({
                         } else {
                             // Only syntax highlight if there's a class starting with language-
                             const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-');
+                                return cl.startsWith('language-') && !cl.startsWith('language-_');
                             });
 
                             if (classes.length != 0) {
@@ -376,12 +376,21 @@ export default createReactClass({
         const date = this.props.mxEvent.replacingEventDate();
         const dateString = date && formatDate(date);
 
+        const tooltip = <div>
+            <div className="mx_Tooltip_title">
+                {_t("Edited at %(date)s", {date: dateString})}
+            </div>
+            <div className="mx_Tooltip_sub">
+                {_t("Click to view edits")}
+            </div>
+        </div>;
+
         return (
             <AccessibleTooltipButton
                 className="mx_EventTile_edited"
                 onClick={this._openHistoryDialog}
                 title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
-                tooltipClassName="mx_Tooltip_timeline"
+                tooltip={tooltip}
             >
                 <span>{`(${_t("edited")})`}</span>
             </AccessibleTooltipButton>

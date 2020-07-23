@@ -22,7 +22,6 @@ import { AsyncActionPayload } from "../dispatcher/payloads";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 export default class TagOrderActions {
-
     /**
      * Creates an action thunk that will do an asynchronous request to
      * move a tag in TagOrderStore to destinationIx.

@@ -36,12 +36,12 @@ limitations under the License.
         }
     }
 
-    .mx_IncomingCallBox2 {
+    .mx_IncomingCallBox {
         min-width: 250px;
         background-color: $primary-bg-color;
         padding: 8px;
 
-        .mx_IncomingCallBox2_CallerInfo {
+        .mx_IncomingCallBox_CallerInfo {
             display: flex;
             direction: row;
 
@@ -68,12 +68,12 @@ limitations under the License.
             }
         }
 
-        .mx_IncomingCallBox2_buttons {
+        .mx_IncomingCallBox_buttons {
             padding: 8px;
             display: flex;
             flex-direction: row;
 
-            > .mx_IncomingCallBox2_spacer {
+            > .mx_IncomingCallBox_spacer {
                 width: 8px;
             }
 
