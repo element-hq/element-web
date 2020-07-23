@@ -1846,7 +1846,7 @@
     "Reactions": "Reacties",
     "<reactors/><reactedWith> reacted with %(content)s</reactedWith>": "<reactors/><reactedWith> heeft gereageerd met %(content)s</reactedWith>",
     "Frequently Used": "Vaak gebruikt",
-    "Smileys & People": "Smileys en personen",
+    "Smileys & People": "Emoticons en personen",
     "Animals & Nature": "Dieren en natuur",
     "Food & Drink": "Eten en drinken",
     "Activities": "Activiteiten",
@@ -2024,5 +2024,7 @@
     "Dark": "Donker",
     "Set password": "Stel wachtwoord in",
     "To return to your account in future you need to set a password": "Zonder wachtwoord kunt u later niet tot uw account terugkeren",
-    "Restart": "Herstarten"
+    "Restart": "Herstarten",
+    "People": "Tweegesprekken",
+    "Set a room address to easily share your room with other people.": "Geef het gesprek een adres om het gemakkelijk met anderen te kunnen delen."
 }

@@ -120,5 +120,6 @@
     "With your current browser, the look and feel of the application may be completely incorrect, and some or all features may not function. If you want to try it anyway you can continue, but you are on your own in terms of any issues you may encounter!": "با مرورگر کنونی شما، ظاهر و حس استفاده از برنامه ممکن است کاملا اشتباه باشد و برخی یا همه‌ی ویژگی‌ها ممکن است کار نکنند. می‌توانید به استفاده ادامه دهید اما مسئولیت هر مشکلی که به آن بربخورید بر عهده‌ی خودتان است!",
     "Checking for an update...": "درحال بررسی به‌روزرسانی‌ها...",
     "This email address is already in use": "این آدرس ایمیل در حال حاضر در حال استفاده است",
-    "This phone number is already in use": "این شماره تلفن در حال استفاده است"
+    "This phone number is already in use": "این شماره تلفن در حال استفاده است",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "لطفا برای تجربه بهتر <chromeLink>کروم</chromeLink>، <firefoxLink>فایرفاکس</firefoxLink>، یا <safariLink>سافاری</safariLink> را نصب کنید."
 }
