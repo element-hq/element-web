@@ -162,10 +162,10 @@ export function renderModel(editor: HTMLDivElement, model: EditorModel) {
     lines.forEach((parts, i) => {
         // find first (and remove anything else) div without className
         // (as browsers insert these in contenteditable) line container
-        let lineContainer = editor.children[i];
-        while (lineContainer && (lineContainer.tagName !== "DIV" || !!lineContainer.className)) {
+        let lineContainer = editor.childNodes[i];
+        while (lineContainer && ((<Element>lineContainer).tagName !== "DIV" || !!(<Element>lineContainer).className)) {
             editor.removeChild(lineContainer);
-            lineContainer = editor.children[i];
+            lineContainer = editor.childNodes[i];
         }
         if (!lineContainer) {
             lineContainer = document.createElement("div");
