@@ -2161,5 +2161,8 @@
     "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Zadejte jméno písma, které máte naistalované v systému, a %(brand)s se jej pokusí použít.",
     "Customise your appearance": "Přizpůsobte si vzhled aplikace",
     "Appearance Settings only affect this %(brand)s session.": "Nastavení vzhledu působí jen v této relaci programu %(brand)s.",
-    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Sem přídejte servery a uživatele, které chcete ignorovat. Hvězdička pro %(brand)s zastupuje libovolný počet kterýchkoliv znaků. Např. <code>@bot:*</code> bude ignorovat všechny uživatele se jménem „bot“ na kterémkoliv serveru."
+    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Sem přídejte servery a uživatele, které chcete ignorovat. Hvězdička pro %(brand)s zastupuje libovolný počet kterýchkoliv znaků. Např. <code>@bot:*</code> bude ignorovat všechny uživatele se jménem „bot“ na kterémkoliv serveru.",
+    "Signature upload success": "Podpis úspěšně nahrán",
+    "Signature upload failed": "Podpis se nepodařilo nahrát",
+    "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Je-li jiná verze programu %(brand)s stále otevřená na jiné kartě, tak ji prosím zavřete, neboť užívání programu %(brand)s stejným hostitelem se zpožděným nahráváním současně povoleným i zakázaným bude působit problémy."
 }
