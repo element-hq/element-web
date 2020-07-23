@@ -186,7 +186,7 @@ abstract class PlainBasePart extends BasePart {
         }
         // when not pasting or dropping text, reject characters that should start a pill candidate
         if (inputType !== "insertFromPaste" && inputType !== "insertFromDrop") {
-            return chr !== "@" && chr !== "#" && chr !== ":";
+            return chr !== "@" && chr !== "#" && chr !== ":" && chr !== "+";
         }
         return true;
     }
@@ -463,6 +463,7 @@ export class PartCreator {
             case "#":
             case "@":
             case ":":
+            case "+":
                 return this.pillCandidate("");
             case "\n":
                 return new NewlinePart();
