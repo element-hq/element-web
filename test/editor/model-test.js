@@ -282,7 +282,7 @@ describe('editor/model', function() {
             expect(model.parts[0].text).toBe("try #define");
         });
 
-        it('insert room pill without splitting at the semi-colon', () => {
+        it('insert room pill without splitting at the colon', () => {
             const renderer = createRenderer();
             const pc = createPartCreator([{resourceId: "#room:server"}]);
             const model = new EditorModel([], pc, renderer);
