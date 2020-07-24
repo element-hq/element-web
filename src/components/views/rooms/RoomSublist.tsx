@@ -202,6 +202,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             return true;
         }
 
+        // Before we go analyzing the rooms, we can see if we're collapsed. If we're collapsed, we don't need
+        // to render anything. We do this after the height check though to ensure that the height gets appropriately
+        // calculated for when/if we become uncollapsed.
+        if (!nextState.isExpanded) {
+            return false;
+        }
+
         // Quickly double check we're not about to break something due to the number of rooms changing.
         if (this.state.rooms.length !== nextState.rooms.length) {
             return true;
