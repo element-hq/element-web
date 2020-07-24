@@ -632,7 +632,7 @@
     "Messages in this room are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням. Тільки ви та одержувачі мають ключі для прочитання цих повідомлень.",
     "Messages in this room are end-to-end encrypted.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням.",
     "Messages in this room are not end-to-end encrypted.": "Повідомлення у цій кімнаті не захищені наскрізним шифруванням.",
-    "Encryption enabled": "Шифрувення увімкнено",
+    "Encryption enabled": "Шифрування увімкнено",
     "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Повідомлення у цій кімнаті захищені наскрізним шифруванням. Дізнайтеся більше та звіртеся з цим користувачем через його профіль.",
     "You sent a verification request": "Ви відправили звірювальний запит",
     "Direct Messages": "Особисті повідомлення",
