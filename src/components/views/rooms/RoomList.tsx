@@ -239,7 +239,22 @@ export default class RoomList extends React.Component<IProps, IState> {
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists);
 
-        if (arrayHasDiff(previousListIds, newListIds)) {
+        let doUpdate = arrayHasDiff(previousListIds, newListIds);
+        if (!doUpdate) {
+            // so we didn't have the visible sublists change, but did the contents of those
+            // sublists change significantly enough to break the sticky headers? Probably, so
+            // let's check the length of each.
+            for (const tagId of newListIds) {
+                const oldRooms = this.state.sublists[tagId];
+                const newRooms = newLists[tagId];
+                if (oldRooms.length !== newRooms.length) {
+                    doUpdate = true;
+                    break;
+                }
+            }
+        }
+
+        if (doUpdate) {
             this.setState({sublists: newLists}, () => {
                 this.props.onResize();
             });
