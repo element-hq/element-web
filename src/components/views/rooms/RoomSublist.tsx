@@ -47,7 +47,7 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
-import { arrayHasDiff, arrayHasOrderChange } from "../../../utils/arrays";
+import { arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
@@ -202,6 +202,11 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             return true;
         }
 
+        // Quickly double check we're not about to break something due to the number of rooms changing.
+        if (this.state.rooms.length !== nextState.rooms.length) {
+            return true;
+        }
+
         // Finally, determine if the room update (as presumably that's all that's left) is within
         // our visible range. If it is, then do a render. If the update is outside our visible range
         // then we can skip the update.
@@ -212,11 +217,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const prevSlicedRooms = this.state.rooms.slice(0, this.numVisibleTiles);
         const nextSlicedRooms = nextState.rooms.slice(0, this.numVisibleTiles);
         if (arrayHasOrderChange(prevSlicedRooms, nextSlicedRooms)) {
-            return true;
-        }
-
-        // Quickly double check we're not about to break something due to the number of rooms changing.
-        if (arrayHasDiff(this.state.rooms, nextState.rooms)) {
             return true;
         }
 
