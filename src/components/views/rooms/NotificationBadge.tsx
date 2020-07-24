@@ -72,9 +72,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public componentWillUnmount() {
         SettingsStore.unwatchSetting(this.countWatcherRef);
-        if (this.props.notification) {
-            this.props.notification.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
-        }
+        this.props.notification.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>) {
