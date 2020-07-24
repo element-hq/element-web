@@ -159,13 +159,11 @@ export default class RoomTile extends React.Component<IProps, IState> {
         // Whenever a prop change happens (or our parent updates) we can get told to update too. Try
         // to minimize that by seeing if anything actually changed.
         if (objectHasValueChange(this.props, nextProps)) {
-            console.log(`DIFF_PROPS@${this.props.room.roomId}`, JSON.stringify(objectDiff(this.props, nextProps)));
             return true;
         }
 
         // Do the same for state
         if (objectHasValueChange(this.state, nextState)) {
-            console.log(`DIFF_STATE@${this.props.room.roomId}`, JSON.stringify(objectDiff(this.state, nextState)));
             return true;
         }
 
