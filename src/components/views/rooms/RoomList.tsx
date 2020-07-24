@@ -42,6 +42,8 @@ import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDelta
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
+import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
+import { objectShallowClone } from "../../../utils/objects";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -80,7 +82,7 @@ interface ITagAesthetics {
     sectionLabel: string;
     sectionLabelRaw?: string;
     addRoomLabel?: string;
-    onAddRoom?: (dispatcher: Dispatcher<ActionPayload>) => void;
+    onAddRoom?: (dispatcher?: Dispatcher<ActionPayload>) => void;
     isInvite: boolean;
     defaultHidden: boolean;
 }
@@ -104,14 +106,18 @@ const TAG_AESTHETICS: {
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Start chat"),
-        onAddRoom: (dispatcher: Dispatcher<ActionPayload>) => dispatcher.dispatch({action: 'view_create_chat'}),
+        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
+            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_chat'});
+        },
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
         isInvite: false,
         defaultHidden: false,
         addRoomLabel: _td("Create room"),
-        onAddRoom: (dispatcher: Dispatcher<ActionPayload>) => dispatcher.dispatch({action: 'view_create_room'}),
+        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
+            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_room'})
+        },
     },
     [DefaultTagID.LowPriority]: {
         sectionLabel: _td("Low priority"),
@@ -231,9 +237,33 @@ export default class RoomList extends React.Component<IProps, IState> {
             console.log("new lists", newLists);
         }
 
-        this.setState({sublists: newLists}, () => {
-            this.props.onResize();
-        });
+        const previousListIds = Object.keys(this.state.sublists);
+        const newListIds = Object.keys(newLists);
+
+        let doUpdate = arrayHasDiff(previousListIds, newListIds);
+        if (!doUpdate) {
+            // so we didn't have the visible sublists change, but did the contents of those
+            // sublists change significantly enough to break the sticky headers? Probably, so
+            // let's check the length of each.
+            for (const tagId of newListIds) {
+                const oldRooms = this.state.sublists[tagId];
+                const newRooms = newLists[tagId];
+                if (oldRooms.length !== newRooms.length) {
+                    doUpdate = true;
+                    break;
+                }
+            }
+        }
+
+        if (doUpdate) {
+            // We have to break our reference to the room list store if we want to be able to
+            // diff the object for changes, so do that.
+            const sublists = objectShallowClone(newLists, (k, v) => arrayFastClone(v));
+
+            this.setState({sublists}, () => {
+                this.props.onResize();
+            });
+        }
     };
 
     private renderCommunityInvites(): React.ReactElement[] {
@@ -298,16 +328,14 @@ export default class RoomList extends React.Component<IProps, IState> {
                 : TAG_AESTHETICS[orderedTagId];
             if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
-            const onAddRoomFn = aesthetics.onAddRoom ? () => aesthetics.onAddRoom(dis) : null;
             components.push(
                 <RoomSublist
                     key={`sublist-${orderedTagId}`}
                     tagId={orderedTagId}
                     forRooms={true}
-                    rooms={orderedRooms}
                     startAsHidden={aesthetics.defaultHidden}
                     label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
-                    onAddRoom={onAddRoomFn}
+                    onAddRoom={aesthetics.onAddRoom}
                     addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}

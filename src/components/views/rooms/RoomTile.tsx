@@ -35,7 +35,7 @@ import {
     MenuItem,
 } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {
     getRoomNotifsState,
@@ -128,6 +128,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
     }
 
     private get showContextMenu(): boolean {
@@ -150,6 +151,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
         defaultDispatcher.unregister(this.dispatcherRef);
+        MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -157,6 +159,12 @@ export default class RoomTile extends React.Component<IProps, IState> {
             setImmediate(() => {
                 this.scrollIntoView();
             });
+        }
+    };
+
+    private onRoomPreviewChanged = (room: Room) => {
+        if (this.props.room && room.roomId === this.props.room.roomId) {
+            this.forceUpdate(); // we don't have any state to set, so just complain that we need an update
         }
     };
 
