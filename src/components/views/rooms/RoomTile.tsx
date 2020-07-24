@@ -61,18 +61,16 @@ interface IProps {
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-
-    // TODO: Incoming call boxes: https://github.com/vector-im/riot-web/issues/14177
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
-    hover: boolean;
     notificationState: NotificationState;
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
+    messagePreview?: string;
 }
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
@@ -111,7 +109,7 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
     );
 };
 
-export default class RoomTile extends React.Component<IProps, IState> {
+export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
 
@@ -119,11 +117,13 @@ export default class RoomTile extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            hover: false,
             notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
+
+            // generatePreview() will return nothing if the user has previews disabled
+            messagePreview: this.generatePreview(),
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
@@ -164,9 +164,18 @@ export default class RoomTile extends React.Component<IProps, IState> {
 
     private onRoomPreviewChanged = (room: Room) => {
         if (this.props.room && room.roomId === this.props.room.roomId) {
-            this.forceUpdate(); // we don't have any state to set, so just complain that we need an update
+            // generatePreview() will return nothing if the user has previews disabled
+            this.setState({messagePreview: this.generatePreview()});
         }
     };
+
+    private generatePreview(): string | null {
+        if (!this.showMessagePreview) {
+            return null;
+        }
+
+        return MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+    }
 
     private scrollIntoView = () => {
         if (!this.roomTileRef.current) return;
@@ -174,14 +183,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
             block: "nearest",
             behavior: "auto",
         });
-    };
-
-    private onTileMouseEnter = () => {
-        this.setState({hover: true});
-    };
-
-    private onTileMouseLeave = () => {
-        this.setState({hover: false});
     };
 
     private onTileClick = (ev: React.KeyboardEvent) => {
@@ -503,18 +504,12 @@ export default class RoomTile extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         let messagePreview = null;
-        if (this.showMessagePreview) {
-            // The preview store heavily caches this info, so should be safe to hammer.
-            const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
-
-            // Only show the preview if there is one to show.
-            if (text) {
-                messagePreview = (
-                    <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
-                        {text}
-                    </div>
-                );
-            }
+        if (this.showMessagePreview && this.state.messagePreview) {
+            messagePreview = (
+                <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
+                    {this.state.messagePreview}
+                </div>
+            );
         }
 
         const nameClasses = classNames({
@@ -568,8 +563,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
                             className={classes}
-                            onMouseEnter={this.onTileMouseEnter}
-                            onMouseLeave={this.onTileMouseLeave}
                             onClick={this.onTileClick}
                             onContextMenu={this.onContextMenu}
                             role="treeitem"
