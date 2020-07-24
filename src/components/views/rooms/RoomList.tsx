@@ -42,7 +42,8 @@ import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDelta
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
-import { arrayHasDiff } from "../../../utils/arrays";
+import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
+import { objectShallowClone } from "../../../utils/objects";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -255,7 +256,11 @@ export default class RoomList extends React.Component<IProps, IState> {
         }
 
         if (doUpdate) {
-            this.setState({sublists: newLists}, () => {
+            // We have to break our reference to the room list store if we want to be able to
+            // diff the object for changes, so do that.
+            const sublists = objectShallowClone(newLists, (k, v) => arrayFastClone(v));
+
+            this.setState({sublists: sublists}, () => {
                 this.props.onResize();
             });
         }

@@ -37,6 +37,28 @@ export function objectExcluding(a: any, props: string[]): any {
 }
 
 /**
+ * Clones an object to a caller-controlled depth. When a propertyCloner is supplied, the
+ * object's properties will be passed through it with the return value used as the new
+ * object's type. This is intended to be used to deep clone a reference, but without
+ * having to deep clone the entire object. This function is safe to call recursively within
+ * the propertyCloner.
+ * @param a The object to clone. Must be defined.
+ * @param propertyCloner The function to clone the properties of the object with, optionally.
+ * First argument is the property key with the second being the current value.
+ * @returns A cloned object.
+ */
+export function objectShallowClone(a: any, propertyCloner?: (k: string, v: any) => any): any {
+    const newObj = {};
+    for (const [k, v] of Object.entries(a)) {
+        newObj[k] = v;
+        if (propertyCloner) {
+            newObj[k] = propertyCloner(k, v);
+        }
+    }
+    return newObj;
+}
+
+/**
  * Determines if the two objects, which are assumed to be of the same
  * key shape, have a difference in their values. If a difference is
  * determined, true is returned.

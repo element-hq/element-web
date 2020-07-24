@@ -15,6 +15,15 @@ limitations under the License.
 */
 
 /**
+ * Clones an array as fast as possible, retaining references of the array's values.
+ * @param a The array to clone. Must be defined.
+ * @returns A copy of the array.
+ */
+export function arrayFastClone(a: any[]): any[] {
+    return a.slice(0, a.length);
+}
+
+/**
  * Determines if the two arrays are different either in length, contents,
  * or order of those contents.
  * @param a The first array. Must be defined.
