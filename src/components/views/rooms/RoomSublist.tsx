@@ -48,6 +48,7 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayHasDiff, arrayHasOrderChange } from "../../../utils/arrays";
+import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -172,6 +173,55 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         if (RoomSublist.calcNumTiles(prevState.rooms, prevProps.extraBadTilesThatShouldntExist) !== this.numTiles) {
             this.setState({height: this.calculateInitialHeight()});
         }
+    }
+
+    public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
+        if (objectHasValueChange(this.props, nextProps)) {
+            // Something we don't care to optimize has updated, so update.
+            return true;
+        }
+
+        // Do the same check used on props for state, without the rooms we're going to no-op
+        const prevStateNoRooms = objectExcluding(this.state, ['rooms']);
+        const nextStateNoRooms = objectExcluding(nextState, ['rooms']);
+        if (objectHasValueChange(prevStateNoRooms, nextStateNoRooms)) {
+            return true;
+        }
+
+        // If we're supposed to handle extra tiles, take the performance hit and re-render all the
+        // time so we don't have to consider them as part of the visible room optimization.
+        const prevExtraTiles = this.props.extraBadTilesThatShouldntExist || [];
+        const nextExtraTiles = nextProps.extraBadTilesThatShouldntExist || [];
+        if (prevExtraTiles.length > 0 || nextExtraTiles.length > 0) {
+            return true;
+        }
+
+        // If we're about to update the height of the list, we don't really care about which rooms
+        // are visible or not for no-op purposes, so ensure that the height calculation runs through.
+        if (RoomSublist.calcNumTiles(nextState.rooms, nextProps.extraBadTilesThatShouldntExist) !== this.numTiles) {
+            return true;
+        }
+
+        // Finally, determine if the room update (as presumably that's all that's left) is within
+        // our visible range. If it is, then do a render. If the update is outside our visible range
+        // then we can skip the update.
+        //
+        // We also optimize for order changing here: if the update did happen in our visible range
+        // but doesn't result in the list re-sorting itself then there's no reason for us to update
+        // on our own.
+        const prevSlicedRooms = this.state.rooms.slice(0, this.numVisibleTiles);
+        const nextSlicedRooms = nextState.rooms.slice(0, this.numVisibleTiles);
+        if (arrayHasOrderChange(prevSlicedRooms, nextSlicedRooms)) {
+            return true;
+        }
+
+        // Quickly double check we're not about to break something due to the number of rooms changing.
+        if (arrayHasDiff(this.state.rooms, nextState.rooms)) {
+            return true;
+        }
+
+        // Finally, nothing happened so no-op the update
+        return false;
     }
 
     public componentWillUnmount() {

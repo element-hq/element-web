@@ -14,7 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
+import { arrayDiff, arrayHasDiff, arrayMerge, arrayUnion } from "./arrays";
+
+/**
+ * Gets a new object which represents the provided object, excluding some properties.
+ * @param a The object to strip properties of. Must be defined.
+ * @param props The property names to remove.
+ * @returns The new object without the provided properties.
+ */
+export function objectExcluding(a: any, props: string[]): any {
+    // We use a Map to avoid hammering the `delete` keyword, which is slow and painful.
+    const tempMap = new Map<string, any>(Object.entries(a));
+    for (const prop of props) {
+        tempMap.delete(prop);
+    }
+
+    // Convert the map to an object again
+    return Array.from(tempMap.entries()).reduce((c, [k, v]) => {
+        c[k] = v;
+        return c;
+    }, {});
+}
+
+/**
+ * Determines if the two objects, which are assumed to be of the same
+ * key shape, have a difference in their values. If a difference is
+ * determined, true is returned.
+ * @param a The first object. Must be defined.
+ * @param b The second object. Must be defined.
+ * @returns True if there's a perceptual difference in the object's values.
+ */
+export function objectHasValueChange(a: any, b: any): boolean {
+    const aValues = Object.values(a);
+    const bValues = Object.values(b);
+    return arrayHasDiff(aValues, bValues);
+}
 
 /**
  * Determines the keys added, changed, and removed between two objects.
