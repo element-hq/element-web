@@ -2387,5 +2387,6 @@
     "Edited at %(date)s": "Editado o %(date)s",
     "Click to view edits": "Preme para ver as edicións",
     "Are you sure you want to cancel entering passphrase?": "¿Estás seguro de que non queres escribir a frase de paso?",
-    "Custom Tag": "Etiqueta personal"
+    "Custom Tag": "Etiqueta personal",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
 }
