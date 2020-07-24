@@ -2390,5 +2390,6 @@
     "%(brand)s Desktop": "%(brand)s 桌面版",
     "%(brand)s iOS": "%(brand)s iOS",
     "%(brand)s X for Android": "Android 的 %(brand)s X",
-    "Custom Tag": "自訂標籤"
+    "Custom Tag": "自訂標籤",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
 }
