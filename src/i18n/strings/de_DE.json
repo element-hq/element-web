@@ -31,5 +31,6 @@
     "Download Completed": "Download fertiggestellt",
     "Open": "Offen",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s verwendet erweiterte Browserfunktionen, die von Ihrem aktuellen Browser nicht unterstützt werden.",
-    "Your browser can't run %(brand)s": "Dein Browser kann %(brand)s nicht ausführen"
+    "Your browser can't run %(brand)s": "Dein Browser kann %(brand)s nicht ausführen",
+    "Powered by Matrix": "Powered by Matrix"
 }
