@@ -266,12 +266,11 @@ export default class RoomList extends React.Component<IProps, IState> {
         }
     };
 
-    private renderCommunityInvites(): React.ReactElement[] {
+    private renderCommunityInvites(): TemporaryTile[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/riot-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
-           if (g.myMembership !== 'invite') return false;
-           return !this.searchFilter || this.searchFilter.matches(g.name || "");
+           return g.myMembership === 'invite';
         }).map(g => {
             const avatar = (
                 <GroupAvatar

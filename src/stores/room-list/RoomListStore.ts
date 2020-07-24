@@ -32,6 +32,7 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import { NameFilterCondition } from "./filters/NameFilterCondition";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -586,6 +587,20 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             }
         }
         this.updateFn.trigger();
+    }
+
+    /**
+     * Gets the first (and ideally only) name filter condition. If one isn't present,
+     * this returns null.
+     * @returns The first name filter condition, or null if none.
+     */
+    public getFirstNameFilterCondition(): NameFilterCondition | null {
+        for (const filter of this.filterConditions) {
+            if (filter instanceof NameFilterCondition) {
+                return filter;
+            }
+        }
+        return null;
     }
 
     /**
