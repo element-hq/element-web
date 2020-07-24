@@ -210,7 +210,7 @@ export default class RoomList extends React.Component<IProps, IState> {
             if (unread) {
                 // filter to only notification rooms (and our current active room so we can index properly)
                 listRooms = listRooms.filter(r => {
-                    const state = RoomNotificationStateStore.instance.getRoomState(r, t);
+                    const state = RoomNotificationStateStore.instance.getRoomState(r);
                     return state.room.roomId === roomId || state.isUnread;
                 });
             }
@@ -308,7 +308,7 @@ export default class RoomList extends React.Component<IProps, IState> {
                     startAsHidden={aesthetics.defaultHidden}
                     label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
                     onAddRoom={onAddRoomFn}
-                    addRoomLabel={aesthetics.addRoomLabel}
+                    addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}

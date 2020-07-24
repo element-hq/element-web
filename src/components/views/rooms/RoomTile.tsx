@@ -120,7 +120,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
 
         this.state = {
             hover: false,
-            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room, this.props.tag),
+            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
@@ -231,11 +231,11 @@ export default class RoomTile extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        if (tagId === DefaultTagID.Favourite) {
-            const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
-            const isFavourite = roomTags.includes(DefaultTagID.Favourite);
-            const removeTag = isFavourite ? DefaultTagID.Favourite : DefaultTagID.LowPriority;
-            const addTag = isFavourite ? null : DefaultTagID.Favourite;
+        if (tagId === DefaultTagID.Favourite || tagId === DefaultTagID.LowPriority) {
+            const inverseTag = tagId === DefaultTagID.Favourite ? DefaultTagID.LowPriority : DefaultTagID.Favourite;
+            const isApplied = RoomListStore.instance.getTagsForRoom(this.props.room).includes(tagId);
+            const removeTag = isApplied ? tagId : inverseTag;
+            const addTag = isApplied ? null : tagId;
             dis.dispatch(RoomListActions.tagRoom(
                 MatrixClientPeg.get(),
                 this.props.room,
@@ -387,13 +387,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
     private renderGeneralMenu(): React.ReactElement {
         if (!this.showContextMenu) return null; // no menu to show
 
-        const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
-
-        const isFavorite = roomTags.includes(DefaultTagID.Favourite);
-        const favouriteIconClassName = isFavorite ? "mx_RoomTile_iconFavorite" : "mx_RoomTile_iconStar";
-        const favouriteLabelClassName = isFavorite ? "mx_RoomTile_contextMenu_activeRow" : "";
-        const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
-
         let contextMenu = null;
         if (this.state.generalMenuPosition && this.props.tag === DefaultTagID.Archived) {
             contextMenu = (
@@ -409,18 +402,35 @@ export default class RoomTile extends React.Component<IProps, IState> {
                 </ContextMenu>
             );
         } else if (this.state.generalMenuPosition) {
+            const roomTags = RoomListStore.instance.getTagsForRoom(this.props.room);
+
+            const isFavorite = roomTags.includes(DefaultTagID.Favourite);
+            const favouriteLabel = isFavorite ? _t("Favourited") : _t("Favourite");
+
+            const isLowPriority = roomTags.includes(DefaultTagID.LowPriority);
+            const lowPriorityLabel = _t("Low Priority");
+
             contextMenu = (
                 <ContextMenu {...contextMenuBelow(this.state.generalMenuPosition)} onFinished={this.onCloseGeneralMenu}>
                     <div className="mx_IconizedContextMenu mx_IconizedContextMenu_compact mx_RoomTile_contextMenu">
                         <div className="mx_IconizedContextMenu_optionList">
                             <MenuItemCheckbox
-                                className={favouriteLabelClassName}
+                                className={isFavorite ? "mx_RoomTile_contextMenu_activeRow" : ""}
                                 onClick={(e) => this.onTagRoom(e, DefaultTagID.Favourite)}
                                 active={isFavorite}
                                 label={favouriteLabel}
                             >
-                                <span className={classNames("mx_IconizedContextMenu_icon", favouriteIconClassName)} />
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconStar" />
                                 <span className="mx_IconizedContextMenu_label">{favouriteLabel}</span>
+                            </MenuItemCheckbox>
+                            <MenuItemCheckbox
+                                className={isLowPriority ? "mx_RoomTile_contextMenu_activeRow" : ""}
+                                onClick={(e) => this.onTagRoom(e, DefaultTagID.LowPriority)}
+                                active={isLowPriority}
+                                label={lowPriorityLabel}
+                            >
+                                <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconArrowDown" />
+                                <span className="mx_IconizedContextMenu_label">{lowPriorityLabel}</span>
                             </MenuItemCheckbox>
                             <MenuItem onClick={this.onOpenRoomSettings} label={_t("Settings")}>
                                 <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconSettings" />

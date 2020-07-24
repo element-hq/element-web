@@ -21,19 +21,34 @@ import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
-
-const INSPECIFIC_TAG = "INSPECIFIC_TAG";
-type INSPECIFIC_TAG = "INSPECIFIC_TAG";
+import { SummarizedNotificationState } from "./SummarizedNotificationState";
 
 interface IState {}
 
 export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new RoomNotificationStateStore();
 
-    private roomMap = new Map<Room, Map<TagID | INSPECIFIC_TAG, RoomNotificationState>>();
+    private roomMap = new Map<Room, RoomNotificationState>();
 
     private constructor() {
         super(defaultDispatcher, {});
+    }
+
+    /**
+     * Gets a snapshot of notification state for all visible rooms. The number of states recorded
+     * on the SummarizedNotificationState is equivalent to rooms.
+     */
+    public get globalState(): SummarizedNotificationState {
+        // If we're not ready yet, just return an empty state
+        if (!this.matrixClient) return new SummarizedNotificationState();
+
+        // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
+        // This will include highlights from the previous version of the room internally
+        const globalState = new SummarizedNotificationState();
+        for (const room of this.matrixClient.getVisibleRooms()) {
+            globalState.add(this.getRoomState(room));
+        }
+        return globalState;
     }
 
     /**
@@ -49,7 +64,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         // TODO: Update if/when invites move out of the room list.
         const useTileCount = tagId === DefaultTagID.Invite;
         const getRoomFn: FetchRoomFn = (room: Room) => {
-            return this.getRoomState(room, tagId);
+            return this.getRoomState(room);
         };
         return new ListNotificationState(useTileCount, tagId, getRoomFn);
     }
@@ -59,22 +74,13 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      * attempt to destroy the returned state as it may be shared with other
      * consumers.
      * @param room The room to get the notification state for.
-     * @param inTagId Optional tag ID to scope the notification state to.
      * @returns The room's notification state.
      */
-    public getRoomState(room: Room, inTagId?: TagID): RoomNotificationState {
+    public getRoomState(room: Room): RoomNotificationState {
         if (!this.roomMap.has(room)) {
-            this.roomMap.set(room, new Map<TagID | INSPECIFIC_TAG, RoomNotificationState>());
+            this.roomMap.set(room, new RoomNotificationState(room));
         }
-
-        const targetTag = inTagId ? inTagId : INSPECIFIC_TAG;
-
-        const forRoomMap = this.roomMap.get(room);
-        if (!forRoomMap.has(targetTag)) {
-            forRoomMap.set(inTagId ? inTagId : INSPECIFIC_TAG, new RoomNotificationState(room));
-        }
-
-        return forRoomMap.get(targetTag);
+        return this.roomMap.get(room);
     }
 
     public static get instance(): RoomNotificationStateStore {
@@ -82,10 +88,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady(): Promise<any> {
-        for (const roomMap of this.roomMap.values()) {
-            for (const roomState of roomMap.values()) {
-                roomState.destroy();
-            }
+        for (const roomState of this.roomMap.values()) {
+            roomState.destroy();
         }
     }
 

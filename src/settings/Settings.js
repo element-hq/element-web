@@ -166,6 +166,10 @@ export const SETTINGS = {
         displayName: _td("Show info about bridges in room settings"),
         default: false,
     },
+    "RoomList.backgroundImage": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        default: null,
+    },
     "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

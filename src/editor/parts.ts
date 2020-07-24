@@ -186,7 +186,7 @@ abstract class PlainBasePart extends BasePart {
         }
         // when not pasting or dropping text, reject characters that should start a pill candidate
         if (inputType !== "insertFromPaste" && inputType !== "insertFromDrop") {
-            if (chr !== "@" && chr !== "#" && chr !== ":") {
+            if (chr !== "@" && chr !== "#" && chr !== ":" && chr !== "+") {
                 return true;
             }
             // only split if the previous character is a space
@@ -467,6 +467,7 @@ export class PartCreator {
             case "#":
             case "@":
             case ":":
+            case "+":
                 return this.pillCandidate("");
             case "\n":
                 return new NewlinePart();
