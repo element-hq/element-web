@@ -55,14 +55,13 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { objectDiff, objectHasValueChange } from "../../../utils/objects";
 
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-
-    // TODO: Incoming call boxes: https://github.com/vector-im/riot-web/issues/14177
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
@@ -152,6 +151,24 @@ export default class RoomTile extends React.Component<IProps, IState> {
         }
         defaultDispatcher.unregister(this.dispatcherRef);
         MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+    }
+
+    public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
+        // Whenever a prop change happens (or our parent updates) we can get told to update too. Try
+        // to minimize that by seeing if anything actually changed.
+        if (objectHasValueChange(this.props, nextProps)) {
+            console.log(`DIFF_PROPS@${this.props.room.roomId}`, objectDiff(this.props, nextProps));
+            return true;
+        }
+
+        // Do the same for state
+        if (objectHasValueChange(this.state, nextState)) {
+            console.log(`DIFF_STATE@${this.props.room.roomId}`, objectDiff(this.state, nextState));
+            return true;
+        }
+
+        // Finally, nothing changed so say so.
+        return false;
     }
 
     private onAction = (payload: ActionPayload) => {
