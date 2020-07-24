@@ -32,7 +32,7 @@ import {
     StyledMenuItemCheckbox,
     StyledMenuItemRadio,
 } from "../../structures/ContextMenu";
-import RoomListStore from "../../../stores/room-list/RoomListStore";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { ListAlgorithm, SortAlgorithm } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
@@ -47,6 +47,7 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
+import { arrayHasDiff, arrayHasOrderChange } from "../../../utils/arrays";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -59,7 +60,6 @@ polyfillTouchEvent();
 
 interface IProps {
     forRooms: boolean;
-    rooms?: Room[];
     startAsHidden: boolean;
     label: string;
     onAddRoom?: () => void;
@@ -90,6 +90,7 @@ interface IState {
     isResizing: boolean;
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
     height: number;
+    rooms: Room[];
 }
 
 export default class RoomSublist extends React.Component<IProps, IState> {
@@ -104,16 +105,19 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
-        const height = this.calculateInitialHeight();
         this.state = {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
             isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed,
-            height,
+            height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
+            rooms: RoomListStore.instance.orderedLists[this.props.tagId] || [],
         };
-        this.state.notificationState.setRooms(this.props.rooms);
+        // Why Object.assign() and not this.state.height? Because TypeScript says no.
+        this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
+        this.state.notificationState.setRooms(this.state.rooms);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     private calculateInitialHeight() {
@@ -142,11 +146,11 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     private get numTiles(): number {
-        return RoomSublist.calcNumTiles(this.props);
+        return RoomSublist.calcNumTiles(this.state.rooms, this.props.extraBadTilesThatShouldntExist);
     }
 
-    private static calcNumTiles(props) {
-        return (props.rooms || []).length + (props.extraBadTilesThatShouldntExist || []).length;
+    private static calcNumTiles(rooms: Room[], extraTiles: any[]) {
+        return (rooms || []).length + (extraTiles || []).length;
     }
 
     private get numVisibleTiles(): number {
@@ -154,8 +158,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return Math.min(nVisible, this.numTiles);
     }
 
-    public componentDidUpdate(prevProps: Readonly<IProps>) {
-        this.state.notificationState.setRooms(this.props.rooms);
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
+        this.state.notificationState.setRooms(this.state.rooms);
         if (prevProps.isFiltered !== this.props.isFiltered) {
             if (this.props.isFiltered) {
                 this.setState({isExpanded: true});
@@ -165,7 +169,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
-        if (RoomSublist.calcNumTiles(prevProps) !== this.numTiles) {
+        if (RoomSublist.calcNumTiles(prevState.rooms, prevProps.extraBadTilesThatShouldntExist) !== this.numTiles) {
             this.setState({height: this.calculateInitialHeight()});
         }
     }
@@ -173,14 +177,23 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     public componentWillUnmount() {
         this.state.notificationState.destroy();
         defaultDispatcher.unregister(this.dispatcherRef);
+        RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
+    private onListsUpdated = () => {
+        const currentRooms = this.state.rooms;
+        const newRooms = RoomListStore.instance.orderedLists[this.props.tagId] || [];
+        if (arrayHasOrderChange(currentRooms, newRooms)) {
+            this.setState({rooms: newRooms});
+        }
+    };
+
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === "view_room" && payload.show_room_tile && this.props.rooms) {
+        if (payload.action === "view_room" && payload.show_room_tile && this.state.rooms) {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
             setImmediate(() => {
-                const roomIndex = this.props.rooms.findIndex((r) => r.roomId === payload.room_id);
+                const roomIndex = this.state.rooms.findIndex((r) => r.roomId === payload.room_id);
 
                 if (!this.state.isExpanded && roomIndex > -1) {
                     this.toggleCollapsed();
@@ -302,10 +315,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         let room;
         if (this.props.tagId === DefaultTagID.Invite) {
             // switch to first room as that'll be the top of the list for the user
-            room = this.props.rooms && this.props.rooms[0];
+            room = this.state.rooms && this.state.rooms[0];
         } else {
             // find the first room with a count of the same colour as the badge count
-            room = this.props.rooms.find((r: Room) => {
+            room = this.state.rooms.find((r: Room) => {
                 const notifState = this.state.notificationState.getForRoom(r);
                 return notifState.count > 0 && notifState.color === this.state.notificationState.color;
             });
@@ -399,8 +412,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         const tiles: React.ReactElement[] = [];
 
-        if (this.props.rooms) {
-            const visibleRooms = this.props.rooms.slice(0, this.numVisibleTiles);
+        if (this.state.rooms) {
+            const visibleRooms = this.state.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
                 tiles.push(
                     <RoomTile

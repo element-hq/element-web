@@ -15,10 +15,28 @@ limitations under the License.
 */
 
 /**
+ * Determines if the two arrays are different either in length, contents,
+ * or order of those contents.
+ * @param a The first array. Must be defined.
+ * @param b The second array. Must be defined.
+ * @returns True if they are different, false otherwise.
+ */
+export function arrayHasOrderChange(a: any[], b: any[]): boolean {
+    if (a.length === b.length) {
+        for (let i = 0; i < a.length; i++) {
+            if (a[i] !== b[i]) return true;
+        }
+        return false;
+    } else {
+        return true; // like arrayHasDiff, a difference in length is a natural change
+    }
+}
+
+/**
  * Determines if two arrays are different through a shallow comparison.
  * @param a The first array. Must be defined.
  * @param b The second array. Must be defined.
- * @returns True if they are the same, false otherwise.
+ * @returns True if they are different, false otherwise.
  */
 export function arrayHasDiff(a: any[], b: any[]): boolean {
     if (a.length === b.length) {

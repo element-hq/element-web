@@ -42,6 +42,7 @@ import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDelta
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
+import { arrayHasDiff } from "../../../utils/arrays";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -231,9 +232,14 @@ export default class RoomList extends React.Component<IProps, IState> {
             console.log("new lists", newLists);
         }
 
-        this.setState({sublists: newLists}, () => {
-            this.props.onResize();
-        });
+        const previousListIds = Object.keys(this.state.sublists);
+        const newListIds = Object.keys(newLists);
+
+        if (arrayHasDiff(previousListIds, newListIds)) {
+            this.setState({sublists: newLists}, () => {
+                this.props.onResize();
+            });
+        }
     };
 
     private renderCommunityInvites(): React.ReactElement[] {
@@ -304,7 +310,6 @@ export default class RoomList extends React.Component<IProps, IState> {
                     key={`sublist-${orderedTagId}`}
                     tagId={orderedTagId}
                     forRooms={true}
-                    rooms={orderedRooms}
                     startAsHidden={aesthetics.defaultHidden}
                     label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
                     onAddRoom={onAddRoomFn}
