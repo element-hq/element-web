@@ -55,7 +55,6 @@ import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { objectDiff, objectHasValueChange } from "../../../utils/objects";
 
 interface IProps {
     room: Room;
@@ -110,7 +109,7 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
     );
 };
 
-export default class RoomTile extends React.Component<IProps, IState> {
+export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
 
@@ -153,22 +152,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
         }
         defaultDispatcher.unregister(this.dispatcherRef);
         MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
-    }
-
-    public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
-        // Whenever a prop change happens (or our parent updates) we can get told to update too. Try
-        // to minimize that by seeing if anything actually changed.
-        if (objectHasValueChange(this.props, nextProps)) {
-            return true;
-        }
-
-        // Do the same for state
-        if (objectHasValueChange(this.state, nextState)) {
-            return true;
-        }
-
-        // Finally, nothing changed so say so.
-        return false;
     }
 
     private onAction = (payload: ActionPayload) => {
