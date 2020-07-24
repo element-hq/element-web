@@ -67,7 +67,6 @@ interface IProps {
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
-    hover: boolean;
     notificationState: NotificationState;
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
@@ -119,7 +118,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            hover: false,
             notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
@@ -204,14 +202,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
             block: "nearest",
             behavior: "auto",
         });
-    };
-
-    private onTileMouseEnter = () => {
-        this.setState({hover: true});
-    };
-
-    private onTileMouseLeave = () => {
-        this.setState({hover: false});
     };
 
     private onTileClick = (ev: React.KeyboardEvent) => {
@@ -592,8 +582,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
                             className={classes}
-                            onMouseEnter={this.onTileMouseEnter}
-                            onMouseLeave={this.onTileMouseLeave}
                             onClick={this.onTileClick}
                             onContextMenu={this.onContextMenu}
                             role="treeitem"
