@@ -260,7 +260,7 @@ export default class RoomList extends React.Component<IProps, IState> {
             // diff the object for changes, so do that.
             const sublists = objectShallowClone(newLists, (k, v) => arrayFastClone(v));
 
-            this.setState({sublists: sublists}, () => {
+            this.setState({sublists}, () => {
                 this.props.onResize();
             });
         }
