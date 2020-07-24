@@ -25,7 +25,7 @@
     "Failed to start": "Falha ao iniciar",
     "Missing indexeddb worker script!": "Script \"indexeddb\" não encontrado!",
     "Open": "Abrir",
-    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente",
+    "Previous/next recently visited room or community": "Anterior / próximo sala ou comunidade visitada",
     "%(brand)s Desktop (%(platformName)s)": "Desktop: %(brand) - (%(platformName))",
     "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login",
     "Your Element is misconfigured": "Seu Element está mal configurado",
