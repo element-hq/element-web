@@ -27,5 +27,10 @@
     "Go to element.io": "到 element.io",
     "Failed to start": "啟動失敗",
     "Download Completed": "下載完成",
-    "Open": "開啟"
+    "Open": "開啟",
+    "Your Element is misconfigured": "Element 配置錯誤",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element 的配置中包含無效JSON，請更正錯誤並重新加載網頁。",
+    "Your browser can't run %(brand)s": "當前瀏覽器無法運行%(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "當前瀏覽器不支持%(brand)s使用的高級特性。",
+    "Powered by Matrix": "威力本源 Matrix"
 }

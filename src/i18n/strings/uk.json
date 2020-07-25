@@ -6,8 +6,8 @@
     "Welcome to Element": "Ласкаво просимо до Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентралізована, зашифрована балачка та засіб для співробітництва, що працює на [matrix]",
     "Sign In": "Увійти",
-    "Create Account": "Створити обліківку",
-    "Explore rooms": "Дослідити кімнати",
+    "Create Account": "Створити обліковий запис",
+    "Explore rooms": "Шукати кімнати",
     "Unexpected error preparing the app. See console for details.": "Неочікувана помилка при підготовці програми. Дивіться деталі у виводі консолі.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Невірна конфігурація: можна вказати лише default_server_config, default_server_name або default_hs_url.",
     "Invalid configuration: no default server specified.": "Невірна конфігурація: не вказано сервер за замовчуванням.",
@@ -18,5 +18,6 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Ви можете продовжити, користуючись вашим поточним переглядачем, але деякі функції можуть не працювати і застосунок може виглядати неправильно.",
     "I understand the risks and wish to continue": "Я усвідомлюю ризик і бажаю продовжити",
     "Go to element.io": "Перейти на element.io",
-    "Failed to start": "Запуск не вдався"
+    "Failed to start": "Запуск не вдався",
+    "Download Completed": "Завантаження завершено"
 }
