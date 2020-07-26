@@ -321,7 +321,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
-                    isFiltered={!!RoomListStore.instance.getFirstNameFilterCondition()}
                 />
             );
         }

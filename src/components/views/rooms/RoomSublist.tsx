@@ -69,7 +69,6 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
-    isFiltered: boolean;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
@@ -102,17 +101,19 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private layout: ListLayout;
     private heightAtStart: number;
+    private isBeingFiltered: boolean;
 
     constructor(props: IProps) {
         super(props);
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
+        this.isBeingFiltered = !!RoomListStore.instance.getFirstNameFilterCondition();
         this.state = {
             notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
-            isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed,
+            isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
             rooms: RoomListStore.instance.orderedLists[this.props.tagId] || [],
         };
@@ -173,13 +174,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
         this.state.notificationState.setRooms(this.state.rooms);
-        if (prevProps.isFiltered !== this.props.isFiltered) {
-            if (this.props.isFiltered) {
-                this.setState({isExpanded: true});
-            } else {
-                this.setState({isExpanded: !this.layout.isCollapsed});
-            }
-        }
         const prevExtraTiles = prevState.filteredExtraTiles || prevProps.extraBadTilesThatShouldntExist;
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
@@ -267,6 +261,16 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const newRooms = RoomListStore.instance.orderedLists[this.props.tagId] || [];
         if (arrayHasOrderChange(currentRooms, newRooms)) {
             stateUpdates.rooms = newRooms;
+        }
+
+        const isStillBeingFiltered = !!RoomListStore.instance.getFirstNameFilterCondition();
+        if (isStillBeingFiltered !== this.isBeingFiltered) {
+            this.isBeingFiltered = isStillBeingFiltered;
+            if (isStillBeingFiltered) {
+                stateUpdates.isExpanded = true;
+            } else {
+                stateUpdates.isExpanded = !this.layout.isCollapsed;
+            }
         }
 
         if (Object.keys(stateUpdates).length > 0) {
