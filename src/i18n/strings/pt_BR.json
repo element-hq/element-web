@@ -1157,7 +1157,7 @@
     "Replying With Files": "Responder com arquivos",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Momentaneamente, não é possível responder com um arquivo. Você quer fazer o envio deste arquivo sem responder a mensagem?",
     "The file '%(fileName)s' failed to upload.": "O envio do arquivo '%(fileName)s' falhou.",
-    "The server does not support the room version specified.": "Este servidor não suporta a versão de sala especificada.",
+    "The server does not support the room version specified.": "O servidor não suporta a versão da sala especificada.",
     "Cancel entering passphrase?": "Cancelar a introdução da frase de senha?",
     "Are you sure you want to cancel entering passphrase?": "Tem certeza que quer cancelar a introdução da frase de senha?",
     "Go Back": "Voltar",
