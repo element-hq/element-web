@@ -1155,7 +1155,7 @@
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativamente, você pode tentar usar o servidor público em <code>turn.matrix.org</code>. No entanto, ele não é tão confiável e compartilhará o seu IP com esse servidor. Você também pode configurar isso nas Configurações.",
     "Try using turn.matrix.org": "Tente utilizar turn.matrix.org",
     "Replying With Files": "Responder com arquivos",
-    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Neste momento não é possível responder com um arquivo. Você quer fazer upload deste arquivo sem responder à mensagem?",
+    "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "Neste momento não é possível responder com um arquivo. Você gostaria de fazer o upload deste arquivo sem encaminha-lo?",
     "The file '%(fileName)s' failed to upload.": "O arquivo '%(fileName)s' não pôde ser enviado.",
     "The server does not support the room version specified.": "Este servidor não suporta a versão de sala especificada.",
     "Cancel entering passphrase?": "Cancelar a introdução da frase de senha?",
