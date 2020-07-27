@@ -53,7 +53,7 @@ import RoomListActions from "../../../actions/RoomListActions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import {NOTIFICATION_STATE_UPDATE, NotificationState} from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 interface IProps {
@@ -69,7 +69,6 @@ type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
     hover: boolean;
-    notificationState: NotificationState;
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
@@ -114,13 +113,13 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
 export default class RoomTile extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
+    private notificationState: NotificationState;
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
             hover: false,
-            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
@@ -129,7 +128,13 @@ export default class RoomTile extends React.Component<IProps, IState> {
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
+        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
     }
+
+    private onNotificationUpdate = () => {
+        this.forceUpdate(); // notification state changed - update
+    };
 
     private get showContextMenu(): boolean {
         return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
@@ -152,6 +157,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
         }
         defaultDispatcher.unregister(this.dispatcherRef);
         MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -490,7 +496,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
             badge = (
                 <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
                     <NotificationBadge
-                        notification={this.state.notificationState}
+                        notification={this.notificationState}
                         forceCount={false}
                         roomId={this.props.room.roomId}
                     />
@@ -520,7 +526,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
         const nameClasses = classNames({
             "mx_RoomTile_name": true,
             "mx_RoomTile_nameWithPreview": !!messagePreview,
-            "mx_RoomTile_nameHasUnreadEvents": this.state.notificationState.isUnread,
+            "mx_RoomTile_nameHasUnreadEvents": this.notificationState.isUnread,
         });
 
         let nameContainer = (
@@ -537,15 +543,15 @@ export default class RoomTile extends React.Component<IProps, IState> {
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
         if (this.props.tag === DefaultTagID.Invite) {
             // append nothing
-        } else if (this.state.notificationState.hasMentions) {
+        } else if (this.notificationState.hasMentions) {
             ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
-                count: this.state.notificationState.count,
+                count: this.notificationState.count,
             });
-        } else if (this.state.notificationState.hasUnreadCount) {
+        } else if (this.notificationState.hasUnreadCount) {
             ariaLabel += " " + _t("%(count)s unread messages.", {
-                count: this.state.notificationState.count,
+                count: this.notificationState.count,
             });
-        } else if (this.state.notificationState.isUnread) {
+        } else if (this.notificationState.isUnread) {
             ariaLabel += " " + _t("Unread messages.");
         }
 
