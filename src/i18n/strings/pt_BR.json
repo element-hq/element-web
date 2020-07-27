@@ -1150,7 +1150,7 @@
     "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Se você está usando ou não a funcionalidade 'breadcrumbs' (fotos acima da lista de salas)",
     "Whether you're using %(brand)s as an installed Progressive Web App": "Se estiver usando %(brand)s como uma Progressive Web App (PWA)",
     "Your user agent": "Seu agente de usuária(o)",
-    "Call failed due to misconfigured server": "Chamada falhou devido a falha de configuração no servidor",
+    "Call failed due to misconfigured server": "A chamada caiu por conta de má configuração no servidor",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Por favor, peça aos administradores do seu servidor (<code>%(homeserverDomain)s</code>) para configurar um servidor TURN para que as chamadas funcionem de forma estável.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativamente, pode tentar usar o servidor público em <code>turn.matrix.org</code>, mas não será tão fiável e partilhará o seu IP com esse servidor. Também pode gerir isso nas definições.",
     "Try using turn.matrix.org": "Tentar utilizar turn.matrix.org",
