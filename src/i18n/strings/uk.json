@@ -948,5 +948,16 @@
     "Flower": "Квітка",
     "Unicorn": "Одноріг",
     "Butterfly": "Метелик",
-    "Cake": "Пиріг"
+    "Cake": "Пиріг",
+    "Tree": "Деревце",
+    "Cactus": "Кактус",
+    "Mushroom": "Гриб",
+    "Globe": "Глобус",
+    "This bridge was provisioned by <user />.": "Цей місток був підготовленим <user />.",
+    "This bridge is managed by <user />.": "Цей міст керується <user />.",
+    "Workspace: %(networkName)s": "Робочий простір: %(networkName)s",
+    "Channel: %(channelName)s": "Канал: %(channelName)s",
+    "Show less": "Показати менше",
+    "Show more": "Показати більше",
+    "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Якщо ви не експортуєте ключі для цієї комнати і не імпортуєте їх у майбутньому, зміна пароля приведе до скидання всіх ключів сквозного шифрування і зробить неможилвимим читання історії чату. У майбутньому це буде вдосконалено."
 }
