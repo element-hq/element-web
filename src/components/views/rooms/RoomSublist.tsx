@@ -49,7 +49,7 @@ import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -101,7 +101,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private layout: ListLayout;
     private heightAtStart: number;
     private isBeingFiltered: boolean;
-    private notificationState: NotificationState;
+    private notificationState: ListNotificationState;
 
     constructor(props: IProps) {
         super(props);
