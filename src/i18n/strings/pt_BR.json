@@ -13,7 +13,7 @@
     "Unexpected error preparing the app. See console for details.": "Erro inesperado preparando o aplicativo. Veja o console para mais detalhes.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuração inválida: somente se pode especificar um valor entre default_server_config, default_server_name, ou default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuração inválida: servidor padrão não especificado.",
-    "Unable to load config file: please refresh the page to try again.": "Não foi possível carregar o arquivo de configuração: por favor atualize a página e tente novamente.",
+    "Unable to load config file: please refresh the page to try again.": "Não foi possível carregar o arquivo de configuração: por favor, atualize a página para tentar novamente.",
     "Download Completed": "Download Concluído",
     "Open user settings": "Abrir configurações do usuário",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
@@ -23,9 +23,14 @@
     "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
     "Go to element.io": "Vá para element.io",
     "Failed to start": "Falha ao iniciar",
-    "Missing indexeddb worker script!": "Script de trabalho indexeddb não encontrado!",
+    "Missing indexeddb worker script!": "O script indexeddb não foi encontrado!",
     "Open": "Abrir",
-    "Previous/next recently visited room or community": "Próxima/Anterior sala ou comunidade visitada recentemente",
-    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login"
+    "Previous/next recently visited room or community": "Anterior/Próxima sala ou comunidade visitada recentemente",
+    "%(brand)s Desktop (%(platformName)s)": "Desktop de %(brand) (%(platformName))",
+    "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login",
+    "Your Element is misconfigured": "Seu Element está desconfigurado",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Sua configuração do Element contém JSON inválido. Por favor, corrija o problema e recarregue a página.",
+    "Your browser can't run %(brand)s": "Seu navegador não consegue rodar o %(brand)",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funcionalidades avançadas de navegador que não são suportadas pelo seu navegador atual.",
+    "Powered by Matrix": "Powered by Matrix"
 }
