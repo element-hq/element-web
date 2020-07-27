@@ -311,7 +311,7 @@
     "Changes your display nickname": "Змінює ваш нік",
     "Invites user with given id to current room": "Запрошує користувача з вказаним ідентифікатором до кімнати",
     "Leave room": "Покинути кімнату",
-    "Kicks user with given id": "Вилучити з кімнати користувача з вказаним ідентифікатором",
+    "Kicks user with given id": "Викидає з кімнати користувача з вказаним ідентифікатором",
     "Ignores a user, hiding their messages from you": "Ігнорує користувача, приховуючи повідомлення від них",
     "Ignored user": "Користувача ігноровано",
     "You are now ignoring %(userId)s": "Ви ігноруєте %(userId)s",
