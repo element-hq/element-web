@@ -23,7 +23,7 @@
     "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
     "Go to element.io": "Vá para element.io",
     "Failed to start": "Falha ao iniciar",
-    "Missing indexeddb worker script!": "Script indexeddb ausente!",
+    "Missing indexeddb worker script!": "O script indexeddb não foi encontrado!",
     "Open": "Abrir",
     "Previous/next recently visited room or community": "Anterior/Próxima sala ou comunidade visitada recentemente",
     "%(brand)s Desktop (%(platformName)s)": "Desktop de %(brand) (%(platformName))",
