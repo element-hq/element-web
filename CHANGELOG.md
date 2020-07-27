@@ -11,6 +11,7 @@ BREAKING CHANGES
 All Changes
 ---
 
+ * Upgrade to JS SDK 3.0.0
  * Update from Weblate
    [\#5053](https://github.com/matrix-org/matrix-react-sdk/pull/5053)
  * RoomList listen to notificationState updates for bolding
