@@ -73,6 +73,23 @@ export function objectHasValueChange(a: any, b: any): boolean {
 }
 
 /**
+ * Determines if any keys were added, removed, or changed between two objects.
+ * For changes, simple triple equal comparisons are done, not in-depth
+ * tree checking.
+ * @param a The first object. Must be defined.
+ * @param b The second object. Must be defined.
+ * @returns True if there's a difference between the objects, false otherwise
+ */
+export function objectHasDiff(a: any, b: any): boolean {
+    const aKeys = Object.keys(a);
+    const bKeys = Object.keys(b);
+    if (arrayHasDiff(aKeys, bKeys)) return true;
+
+    const possibleChanges = arrayUnion(aKeys, bKeys);
+    return possibleChanges.some(k => a[k] !== b[k]);
+}
+
+/**
  * Determines the keys added, changed, and removed between two objects.
  * For changes, simple triple equal comparisons are done, not in-depth
  * tree checking.
