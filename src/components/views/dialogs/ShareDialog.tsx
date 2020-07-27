@@ -211,7 +211,6 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
                         { matrixToUrl }
                     </a>
                     <a href={matrixToUrl} className="mx_ShareDialog_matrixto_copy" onClick={this.onCopyClick}>
-                        { _t('COPY') }
                         <div>&nbsp;</div>
                     </a>
                 </div>
