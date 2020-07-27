@@ -1147,7 +1147,7 @@
     "Confirm adding phone number": "Confirmar adição de número de telefone",
     "Add Phone Number": "Adicionar número de telefone",
     "Whether you're using %(brand)s on a device where touch is the primary input mechanism": "Se estiver usando %(brand)s em um aparelho onde touch é o mecanismo primário de entrada de dados",
-    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Se você está usando a funcionalidade 'breadcrumbs' (imagens acima da lista de salas)",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Se você está utilizando a opção de 'breadcrumbs' (ícones sobre a lista de de salas)",
     "Whether you're using %(brand)s as an installed Progressive Web App": "Se estiver usando %(brand)s como uma Progressive Web App (PWA)",
     "Your user agent": "Seu agente de usuária(o)",
     "Call failed due to misconfigured server": "A chamada caiu por conta de má configuração do servidor",
