@@ -38,7 +38,6 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
-import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -50,6 +49,7 @@ import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -86,7 +86,6 @@ interface ResizeDelta {
 type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
 
 interface IState {
-    notificationState: ListNotificationState;
     contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
@@ -102,6 +101,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private layout: ListLayout;
     private heightAtStart: number;
     private isBeingFiltered: boolean;
+    private notificationState: NotificationState;
 
     constructor(props: IProps) {
         super(props);
@@ -109,8 +109,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
         this.isBeingFiltered = !!RoomListStore.instance.getFirstNameFilterCondition();
+        this.notificationState = RoomNotificationStateStore.instance.getListState(this.props.tagId);
         this.state = {
-            notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
             isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
@@ -119,7 +119,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
-        this.state.notificationState.setRooms(this.state.rooms);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
@@ -173,7 +172,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        this.state.notificationState.setRooms(this.state.rooms);
         const prevExtraTiles = prevState.filteredExtraTiles || prevProps.extraBadTilesThatShouldntExist;
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
@@ -239,7 +237,6 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        this.state.notificationState.destroy();
         defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
@@ -409,8 +406,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         } else {
             // find the first room with a count of the same colour as the badge count
             room = this.state.rooms.find((r: Room) => {
-                const notifState = this.state.notificationState.getForRoom(r);
-                return notifState.count > 0 && notifState.color === this.state.notificationState.color;
+                const notifState = this.notificationState.getForRoom(r);
+                return notifState.count > 0 && notifState.color === this.notificationState.color;
             });
         }
 
@@ -626,7 +623,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     const badge = (
                         <NotificationBadge
                             forceCount={true}
-                            notification={this.state.notificationState}
+                            notification={this.notificationState}
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
                             aria-label={ariaLabel}
