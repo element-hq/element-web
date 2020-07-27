@@ -53,7 +53,7 @@ import RoomListActions from "../../../actions/RoomListActions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {ActionPayload} from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import {NOTIFICATION_STATE_UPDATE, NotificationState} from "../../../stores/notifications/NotificationState";
+import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 interface IProps {
