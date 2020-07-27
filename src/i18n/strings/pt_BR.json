@@ -1763,5 +1763,6 @@
     "Enter username": "Digite o nome de usuário",
     "Email (optional)": "E-mail (opcional)",
     "Phone (optional)": "Número de celular (opcional)",
-    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Defina um e-mail para recuperação da conta. Opcionalmente, use e-mail ou número de celular para ser encontrado por seus contatos."
+    "Set an email for account recovery. Use email or phone to optionally be discoverable by existing contacts.": "Defina um e-mail para recuperação da conta. Opcionalmente, use e-mail ou número de celular para ser encontrado por seus contatos.",
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Você não pode entrar na sua conta. Entre em contato com o administrador do servidor para obter mais informações."
 }
