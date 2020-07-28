@@ -1364,5 +1364,6 @@
     "Do not use an identity server": "ID サーバーを使用しない",
     "Composer": "入力欄",
     "Sort by": "並び替え",
-    "List options": "一覧の設定"
+    "List options": "一覧の設定",
+    "Use Single Sign On to continue": "シングルサインオンを使用して続行"
 }
