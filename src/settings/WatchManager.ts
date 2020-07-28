@@ -52,7 +52,7 @@ export class WatchManager {
         }
     }
 
-    public notifyUpdate(settingName: string, inRoomId: string, atLevel: SettingLevel, newValueAtLevel: any) {
+    public notifyUpdate(settingName: string, inRoomId: string | null, atLevel: SettingLevel, newValueAtLevel: any) {
         // Dev note: We could avoid raising changes for ultimately inconsequential changes, but
         // we also don't have a reliable way to get the old value of a setting. Instead, we'll just
         // let it fall through regardless and let the receiver dedupe if they want to.
