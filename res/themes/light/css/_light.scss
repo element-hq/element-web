@@ -19,8 +19,8 @@ $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $primary-fg-color: #2e2f32;
-$roomlist2-header-color: $primary-fg-color;
-$notice-secondary-color: $roomlist2-header-color;
+$roomlist-header-color: $primary-fg-color;
+$notice-secondary-color: $roomlist-header-color;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -174,31 +174,21 @@ $header-divider-color: #91A1C0;
 
 // ********************
 
-// V2 Room List
-// TODO: Remove the 2 from all of these when the new list takes over
-
 $theme-button-bg-color: #e3e8f0;
 
-$roomlist2-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
-$roomlist2-bg-color: rgba(245, 245, 245, 0.90);
-$roomsublist2-divider-color: $primary-fg-color;
+$roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-bg-color: rgba(245, 245, 245, 0.90);
+$roomsublist-divider-color: $primary-fg-color;
 
-$roomtile2-preview-color: #737D8C;
-$roomtile2-default-badge-bg-color: #61708b;
-$roomtile2-selected-bg-color: #FFF;
+$roomtile-preview-color: #737D8C;
+$roomtile-default-badge-bg-color: #61708b;
+$roomtile-selected-bg-color: #FFF;
 
 $presence-online: $accent-color;
-$presence-away: orange; // TODO: Get color
+$presence-away: #d9b072;
 $presence-offline: #E3E8F0;
 
 // ********************
-
-$roomtile-name-color: #61708b;
-$roomtile-badge-fg-color: $accent-fg-color;
-$roomtile-selected-color: #212121;
-$roomtile-notified-color: #212121;
-$roomtile-selected-bg-color: #fff;
-$roomtile-focused-bg-color: #fff;
 
 $username-variant1-color: #368bd6;
 $username-variant2-color: #ac3ba8;
@@ -208,13 +198,6 @@ $username-variant5-color: #ff812d;
 $username-variant6-color: #2dc2c5;
 $username-variant7-color: #5c56f5;
 $username-variant8-color: #74d12c;
-
-$roomtile-transparent-focused-color: rgba(0, 0, 0, 0.1);
-
-$roomsublist-background: $secondary-accent-color;
-$roomsublist-label-fg-color: $roomtile-name-color;
-$roomsublist-label-bg-color: $tertiary-accent-color;
-$roomsublist-chevron-color: $accent-color;
 
 $panel-divider-color: transparent;
 
@@ -291,7 +274,7 @@ $progressbar-color: #000;
 
 $room-warning-bg-color: $yellow-background;
 
-$memberstatus-placeholder-color: $roomtile-name-color;
+$memberstatus-placeholder-color: $muted-fg-color;
 
 $authpage-bg-color: #2e3649;
 $authpage-modal-bg-color: rgba(245, 245, 245, 0.90);

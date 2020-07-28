@@ -19,10 +19,9 @@ import React from 'react';
 import classNames from 'classnames';
 
 import AccessibleButton from "./AccessibleButton";
-import {IProps} from "./AccessibleButton";
 import Tooltip from './Tooltip';
 
-interface ITooltipProps extends IProps {
+interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
     tooltipClassName?: string;
@@ -46,7 +45,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
         });
     };
 
-    onMouseOut = () => {
+    onMouseLeave = () => {
         this.setState({
             hover: false,
         });
@@ -61,7 +60,12 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
             label={tooltip || title}
         /> : <div />;
         return (
-            <AccessibleButton {...props} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} aria-label={title}>
+            <AccessibleButton
+                {...props}
+                onMouseOver={this.onMouseOver}
+                onMouseLeave={this.onMouseLeave}
+                aria-label={title}
+            >
                 { children }
                 { tip }
             </AccessibleButton>

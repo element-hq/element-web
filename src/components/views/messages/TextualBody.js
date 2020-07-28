@@ -107,7 +107,7 @@ export default createReactClass({
                         } else {
                             // Only syntax highlight if there's a class starting with language-
                             const classes = blocks[i].className.split(/\s+/).filter(function(cl) {
-                                return cl.startsWith('language-');
+                                return cl.startsWith('language-') && !cl.startsWith('language-_');
                             });
 
                             if (classes.length != 0) {
@@ -391,7 +391,6 @@ export default createReactClass({
                 onClick={this._openHistoryDialog}
                 title={_t("Edited at %(date)s. Click to view edits.", {date: dateString})}
                 tooltip={tooltip}
-                tooltipClassName="mx_Tooltip_timeline"
             >
                 <span>{`(${_t("edited")})`}</span>
             </AccessibleTooltipButton>

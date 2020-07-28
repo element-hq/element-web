@@ -461,6 +461,7 @@ export function createMenu(ElementClass, props) {
 
 // re-export the semantic helper components for simplicity
 export {ContextMenuButton} from "../../accessibility/context_menu/ContextMenuButton";
+export {ContextMenuTooltipButton} from "../../accessibility/context_menu/ContextMenuTooltipButton";
 export {MenuGroup} from "../../accessibility/context_menu/MenuGroup";
 export {MenuItem} from "../../accessibility/context_menu/MenuItem";
 export {MenuItemCheckbox} from "../../accessibility/context_menu/MenuItemCheckbox";

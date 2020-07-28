@@ -27,7 +27,7 @@ limitations under the License.
     //     ^- The count is an element floating within that.
 
     &.mx_NotificationBadge_visible {
-        background-color: $roomtile2-default-badge-bg-color;
+        background-color: $roomtile-default-badge-bg-color;
 
         // Create a flexbox to order the count a bit easier
         display: flex;

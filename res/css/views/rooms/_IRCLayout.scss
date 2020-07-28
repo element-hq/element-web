@@ -181,7 +181,8 @@ $irc-line-height: $font-18px;
         > span {
             display: flex;
 
-            > .mx_SenderProfile_name {
+            > .mx_SenderProfile_name,
+            > .mx_SenderProfile_aux {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 min-width: var(--name-width);

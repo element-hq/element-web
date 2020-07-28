@@ -401,14 +401,16 @@ export const Commands = [
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
-                    let finished = Promise.resolve();
+                    let prom = Promise.resolve();
                     if (
                         getAddressType(address) === 'email' &&
                         !MatrixClientPeg.get().getIdentityServerUrl()
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            ({ finished } = Modal.createTrackedDialog('Slash Commands', 'Identity server',
+                            const { finished } = Modal.createTrackedDialog<[boolean]>(
+                                'Slash Commands',
+                                'Identity server',
                                 QuestionDialog, {
                                     title: _t("Use an identity server"),
                                     description: <p>{_t(
@@ -421,9 +423,9 @@ export const Commands = [
                                     )}</p>,
                                     button: _t("Continue"),
                                 },
-                            ));
+                            );
 
-                            finished = finished.then(([useDefault]: any) => {
+                            prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
                                     useDefaultIdentityServer();
                                     return;
@@ -435,7 +437,7 @@ export const Commands = [
                         }
                     }
                     const inviter = new MultiInviter(roomId);
-                    return success(finished.then(() => {
+                    return success(prom.then(() => {
                         return inviter.invite([address]);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
@@ -1049,7 +1051,7 @@ export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
-    if (input[0] !== '/') return null; // not a command
+    if (input[0] !== '/') return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
     let cmd;

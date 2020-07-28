@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 async function openRoomDirectory(session) {
-    const roomDirectoryButton = await session.query('.mx_LeftPanel2_exploreButton');
+    const roomDirectoryButton = await session.query('.mx_LeftPanel_exploreButton');
     await roomDirectoryButton.click();
 }
 
 async function findSublist(session, name) {
-    const sublists = await session.queryAll('.mx_RoomSublist2');
+    const sublists = await session.queryAll('.mx_RoomSublist');
     for (const sublist of sublists) {
-        const header = await sublist.$('.mx_RoomSublist2_headerText');
+        const header = await sublist.$('.mx_RoomSublist_headerText');
         const headerText = await session.innerText(header);
         if (headerText.toLowerCase().includes(name.toLowerCase())) {
             return sublist;
@@ -36,7 +36,7 @@ async function createRoom(session, roomName, encrypted=false) {
     session.log.step(`creates room "${roomName}"`);
 
     const roomsSublist = await findSublist(session, "rooms");
-    const addRoomButton = await roomsSublist.$(".mx_RoomSublist2_auxButton");
+    const addRoomButton = await roomsSublist.$(".mx_RoomSublist_auxButton");
     await addRoomButton.click();
 
     const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');
@@ -58,7 +58,7 @@ async function createDm(session, invitees) {
     session.log.step(`creates DM with ${JSON.stringify(invitees)}`);
 
     const dmsSublist = await findSublist(session, "people");
-    const startChatButton = await dmsSublist.$(".mx_RoomSublist2_auxButton");
+    const startChatButton = await dmsSublist.$(".mx_RoomSublist_auxButton");
     await startChatButton.click();
 
     const inviteesEditor = await session.query('.mx_InviteDialog_editor textarea');

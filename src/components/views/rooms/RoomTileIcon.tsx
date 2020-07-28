@@ -162,7 +162,6 @@ export default class RoomTileIcon extends React.Component<IProps, IState> {
 
         return <TextWithTooltip
             tooltip={tooltipText(this.state.icon)}
-            tooltipClass="mx_Tooltip_timeline"
             class={`mx_RoomTileIcon mx_RoomTileIcon_${this.state.icon.toLowerCase()}`}
         />;
     }

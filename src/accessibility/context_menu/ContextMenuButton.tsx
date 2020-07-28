@@ -18,9 +18,9 @@ limitations under the License.
 
 import React from "react";
 
-import AccessibleButton, {IProps as IAccessibleButtonProps} from "../../components/views/elements/AccessibleButton";
+import AccessibleButton from "../../components/views/elements/AccessibleButton";
 
-interface IProps extends IAccessibleButtonProps {
+interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     label?: string;
     // whether or not the context menu is currently open
     isExpanded: boolean;

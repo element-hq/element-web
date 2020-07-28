@@ -70,15 +70,11 @@ limitations under the License.
     }
 }
 
-
-
 .mx_MemberList_wrapper {
     padding: 10px;
 }
 
-
-.mx_MemberList_invite,
-.mx_RightPanel_invite {
+.mx_MemberList_invite {
     flex: 0 0 auto;
     position: relative;
     background-color: $button-bg-color;
@@ -88,11 +84,6 @@ limitations under the License.
     justify-content: center;
     color: $button-fg-color;
     font-weight: 600;
-
-    .mx_RightPanel_icon {
-        padding-right: 5px;
-        padding-top: 2px;
-    }
 }
 
 .mx_MemberList_invite.mx_AccessibleButton_disabled {
@@ -106,4 +97,12 @@ limitations under the License.
     background-position: center left;
     background-size: 20px;
     padding: 8px 0 8px 25px;
+}
+
+.mx_MemberList_inviteCommunity span {
+    background-image: url('$(res)/img/icon-invite-people.svg');
+}
+
+.mx_MemberList_addRoomToCommunity span {
+    background-image: url('$(res)/img/icons-room-add.svg');
 }

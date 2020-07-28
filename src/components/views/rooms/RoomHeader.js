@@ -26,7 +26,6 @@ import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import { linkifyElement } from '../../../HtmlUtils';
-import AccessibleButton from '../elements/AccessibleButton';
 import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -34,6 +33,7 @@ import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {DefaultTagID} from "../../../stores/room-list/models";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 export default createReactClass({
     displayName: 'RoomHeader',
@@ -220,11 +220,10 @@ export default createReactClass({
 
         if (this.props.onSettingsClick) {
             settingsButton =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_settingsButton"
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_settingsButton"
                     onClick={this.props.onSettingsClick}
-                    title={_t("Settings")}
-                >
-                </AccessibleButton>;
+                    title={_t("Settings")} />;
         }
 
         if (this.props.onPinnedClick && SettingsStore.isFeatureEnabled('feature_pinning')) {
@@ -236,55 +235,45 @@ export default createReactClass({
             }
 
             pinnedEventsButton =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_pinnedButton"
-                                  onClick={this.props.onPinnedClick} title={_t("Pinned Messages")}>
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_pinnedButton"
+                    onClick={this.props.onPinnedClick}
+                    title={_t("Pinned Messages")}
+                >
                     { pinsIndicator }
-                </AccessibleButton>;
+                </AccessibleTooltipButton>;
         }
-
-//        var leave_button;
-//        if (this.props.onLeaveClick) {
-//            leave_button =
-//                <div className="mx_RoomHeader_button" onClick={this.props.onLeaveClick} title="Leave room">
-//                    <TintableSvg src={require("../../../../res/img/leave.svg")} width="26" height="20"/>
-//                </div>;
-//        }
 
         let forgetButton;
         if (this.props.onForgetClick) {
             forgetButton =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
                     onClick={this.props.onForgetClick}
-                    title={_t("Forget room")}
-                >
-                </AccessibleButton>;
+                    title={_t("Forget room")} />;
         }
 
         let searchButton;
         if (this.props.onSearchClick && this.props.inRoom) {
             searchButton =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_searchButton"
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_searchButton"
                     onClick={this.props.onSearchClick}
-                    title={_t("Search")}
-                >
-                </AccessibleButton>;
+                    title={_t("Search")} />;
         }
 
         let shareRoomButton;
         if (this.props.inRoom) {
             shareRoomButton =
-                <AccessibleButton className="mx_RoomHeader_button mx_RoomHeader_shareButton"
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_shareButton"
                     onClick={this.onShareRoomClick}
-                    title={_t('Share room')}
-                >
-                </AccessibleButton>;
+                    title={_t('Share room')} />;
         }
 
         let manageIntegsButton;
         if (this.props.room && this.props.room.roomId && this.props.inRoom) {
-            manageIntegsButton = <ManageIntegsButton
-                room={this.props.room}
-            />;
+            manageIntegsButton = <ManageIntegsButton room={this.props.room} />;
         }
 
         const rightRow =

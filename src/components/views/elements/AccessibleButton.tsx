@@ -27,7 +27,7 @@ export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Elemen
  * onClick:  (required) Event handler for button activation. Should be
  *           implemented exactly like a normal onClick handler.
  */
-export interface IProps extends React.InputHTMLAttributes<Element> {
+interface IProps extends React.InputHTMLAttributes<Element> {
     inputRef?: React.Ref<Element>;
     element?: string;
     // The kind of button, similar to how Bootstrap works.
@@ -118,7 +118,7 @@ export default function AccessibleButton({
 AccessibleButton.defaultProps = {
     element: 'div',
     role: 'button',
-    tabIndex: "0",
+    tabIndex: 0,
 };
 
 AccessibleButton.displayName = "AccessibleButton";
