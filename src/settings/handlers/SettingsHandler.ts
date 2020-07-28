@@ -19,7 +19,7 @@ limitations under the License.
  * Represents the base class for all level handlers. This class performs no logic
  * and should be overridden.
  */
-export default class SettingsHandler {
+export default abstract class SettingsHandler {
     /**
      * Gets the value for a particular setting at this level for a particular room.
      * If no room is applicable, the roomId may be null. The roomId may not be

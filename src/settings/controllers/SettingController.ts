@@ -25,7 +25,7 @@ import { SettingLevel } from "../SettingLevel";
  * This is not intended to replace the functionality of a SettingsHandler, it is only
  * intended to handle environmental factors for specific settings.
  */
-export default class SettingController {
+export default abstract class SettingController {
     /**
      * Gets the overridden value for the setting, if any. This must return null if the
      * value is not to be overridden, otherwise it must return the new value.
