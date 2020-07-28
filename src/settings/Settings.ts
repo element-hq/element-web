@@ -32,6 +32,7 @@ import FontSizeController from './controllers/FontSizeController';
 import SystemFontController from './controllers/SystemFontController';
 import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
+import SettingController from "./controllers/SettingController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -91,7 +92,7 @@ interface ISetting {
     default: any;
 
     // Optional settings controller. See SettingsController for more information.
-    controller?: any; // TODO: [TS] Type
+    controller?: SettingController;
 
     // Optional flag to make supportedLevels be respected as the order to handle
     // settings. The first element is treated as "most preferred". The "default"
