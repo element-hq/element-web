@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
+import { SettingLevel } from "../SettingLevel";
 
 /**
  * Represents a controller for individual settings to alter the reading behaviour
@@ -34,7 +37,7 @@ export default class SettingController {
      * calculated at. May be null.
      * @return {*} The value that should be used, or null if no override is applicable.
      */
-    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
+    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: any): any {
         return null; // no override
     }
 
@@ -44,7 +47,7 @@ export default class SettingController {
      * @param {String} roomId The room ID, may be null.
      * @param {*} newValue The new value for the setting, may be null.
      */
-    onChange(level, roomId, newValue) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any) {
         // do nothing by default
     }
 }
