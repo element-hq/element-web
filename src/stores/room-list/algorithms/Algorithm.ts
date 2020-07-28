@@ -465,6 +465,10 @@ export class Algorithm extends EventEmitter {
         return this.filteredRooms;
     }
 
+    public getUnfilteredRooms(): ITagMap {
+        return this._cachedStickyRooms || this.cachedRooms;
+    }
+
     /**
      * This returns the same as getOrderedRooms(), but without the sticky room
      * map as it causes issues for sticky room handling (see sticky room handling

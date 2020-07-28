@@ -38,7 +38,6 @@ import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import NotificationBadge from "./NotificationBadge";
-import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -49,6 +48,8 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
+import TemporaryTile from "./TemporaryTile";
+import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -68,11 +69,10 @@ interface IProps {
     isMinimized: boolean;
     tagId: TagID;
     onResize: () => void;
-    isFiltered: boolean;
 
     // TODO: Don't use this. It's for community invites, and community invites shouldn't be here.
     // You should feel bad if you use this.
-    extraBadTilesThatShouldntExist?: React.ReactElement[];
+    extraBadTilesThatShouldntExist?: TemporaryTile[];
 
     // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
 }
@@ -86,12 +86,12 @@ interface ResizeDelta {
 type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
 
 interface IState {
-    notificationState: ListNotificationState;
     contextMenuPosition: PartialDOMRect;
     isResizing: boolean;
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
     height: number;
     rooms: Room[];
+    filteredExtraTiles?: TemporaryTile[];
 }
 
 export default class RoomSublist extends React.Component<IProps, IState> {
@@ -100,23 +100,25 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private layout: ListLayout;
     private heightAtStart: number;
+    private isBeingFiltered: boolean;
+    private notificationState: ListNotificationState;
 
     constructor(props: IProps) {
         super(props);
 
         this.layout = RoomListLayoutStore.instance.getLayoutFor(this.props.tagId);
         this.heightAtStart = 0;
+        this.isBeingFiltered = !!RoomListStore.instance.getFirstNameFilterCondition();
+        this.notificationState = RoomNotificationStateStore.instance.getListState(this.props.tagId);
         this.state = {
-            notificationState: RoomNotificationStateStore.instance.getListState(this.props.tagId),
             contextMenuPosition: null,
             isResizing: false,
-            isExpanded: this.props.isFiltered ? this.props.isFiltered : !this.layout.isCollapsed,
+            isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
             rooms: RoomListStore.instance.orderedLists[this.props.tagId] || [],
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
-        this.state.notificationState.setRooms(this.state.rooms);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
@@ -146,8 +148,18 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         return padding;
     }
 
+    private get extraTiles(): TemporaryTile[] | null {
+        if (this.state.filteredExtraTiles) {
+            return this.state.filteredExtraTiles;
+        }
+        if (this.props.extraBadTilesThatShouldntExist) {
+            return this.props.extraBadTilesThatShouldntExist;
+        }
+        return null;
+    }
+
     private get numTiles(): number {
-        return RoomSublist.calcNumTiles(this.state.rooms, this.props.extraBadTilesThatShouldntExist);
+        return RoomSublist.calcNumTiles(this.state.rooms, this.extraTiles);
     }
 
     private static calcNumTiles(rooms: Room[], extraTiles: any[]) {
@@ -160,17 +172,10 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
-        this.state.notificationState.setRooms(this.state.rooms);
-        if (prevProps.isFiltered !== this.props.isFiltered) {
-            if (this.props.isFiltered) {
-                this.setState({isExpanded: true});
-            } else {
-                this.setState({isExpanded: !this.layout.isCollapsed});
-            }
-        }
+        const prevExtraTiles = prevState.filteredExtraTiles || prevProps.extraBadTilesThatShouldntExist;
         // as the rooms can come in one by one we need to reevaluate
         // the amount of available rooms to cap the amount of requested visible rooms by the layout
-        if (RoomSublist.calcNumTiles(prevState.rooms, prevProps.extraBadTilesThatShouldntExist) !== this.numTiles) {
+        if (RoomSublist.calcNumTiles(prevState.rooms, prevExtraTiles) !== this.numTiles) {
             this.setState({height: this.calculateInitialHeight()});
         }
     }
@@ -191,14 +196,14 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         // If we're supposed to handle extra tiles, take the performance hit and re-render all the
         // time so we don't have to consider them as part of the visible room optimization.
         const prevExtraTiles = this.props.extraBadTilesThatShouldntExist || [];
-        const nextExtraTiles = nextProps.extraBadTilesThatShouldntExist || [];
+        const nextExtraTiles = (nextState.filteredExtraTiles || nextProps.extraBadTilesThatShouldntExist) || [];
         if (prevExtraTiles.length > 0 || nextExtraTiles.length > 0) {
             return true;
         }
 
         // If we're about to update the height of the list, we don't really care about which rooms
         // are visible or not for no-op purposes, so ensure that the height calculation runs through.
-        if (RoomSublist.calcNumTiles(nextState.rooms, nextProps.extraBadTilesThatShouldntExist) !== this.numTiles) {
+        if (RoomSublist.calcNumTiles(nextState.rooms, nextExtraTiles) !== this.numTiles) {
             return true;
         }
 
@@ -232,16 +237,41 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
-        this.state.notificationState.destroy();
         defaultDispatcher.unregister(this.dispatcherRef);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.onListsUpdated);
     }
 
     private onListsUpdated = () => {
+        const stateUpdates: IState & any = {}; // &any is to avoid a cast on the initializer
+
+        if (this.props.extraBadTilesThatShouldntExist) {
+            const nameCondition = RoomListStore.instance.getFirstNameFilterCondition();
+            if (nameCondition) {
+                stateUpdates.filteredExtraTiles = this.props.extraBadTilesThatShouldntExist
+                    .filter(t => nameCondition.matches(t.props.displayName || ""));
+            } else if (this.state.filteredExtraTiles) {
+                stateUpdates.filteredExtraTiles = null;
+            }
+        }
+
         const currentRooms = this.state.rooms;
         const newRooms = RoomListStore.instance.orderedLists[this.props.tagId] || [];
         if (arrayHasOrderChange(currentRooms, newRooms)) {
-            this.setState({rooms: newRooms});
+            stateUpdates.rooms = newRooms;
+        }
+
+        const isStillBeingFiltered = !!RoomListStore.instance.getFirstNameFilterCondition();
+        if (isStillBeingFiltered !== this.isBeingFiltered) {
+            this.isBeingFiltered = isStillBeingFiltered;
+            if (isStillBeingFiltered) {
+                stateUpdates.isExpanded = true;
+            } else {
+                stateUpdates.isExpanded = !this.layout.isCollapsed;
+            }
+        }
+
+        if (Object.keys(stateUpdates).length > 0) {
+            this.setState(stateUpdates);
         }
     };
 
@@ -376,8 +406,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         } else {
             // find the first room with a count of the same colour as the badge count
             room = this.state.rooms.find((r: Room) => {
-                const notifState = this.state.notificationState.getForRoom(r);
-                return notifState.count > 0 && notifState.color === this.state.notificationState.color;
+                const notifState = this.notificationState.getForRoom(r);
+                return notifState.count > 0 && notifState.color === this.notificationState.color;
             });
         }
 
@@ -484,8 +514,9 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             }
         }
 
-        if (this.props.extraBadTilesThatShouldntExist) {
-            tiles.push(...this.props.extraBadTilesThatShouldntExist);
+        if (this.extraTiles) {
+            // HACK: We break typing here, but this 'extra tiles' property shouldn't exist.
+            (tiles as any[]).push(...this.extraTiles);
         }
 
         // We only have to do this because of the extra tiles. We do it conditionally
@@ -592,7 +623,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     const badge = (
                         <NotificationBadge
                             forceCount={true}
-                            notification={this.state.notificationState}
+                            notification={this.notificationState}
                             onClick={this.onBadgeClick}
                             tabIndex={tabIndex}
                             aria-label={ariaLabel}

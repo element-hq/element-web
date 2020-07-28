@@ -31,7 +31,6 @@ import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import RoomSublist from "./RoomSublist";
 import { ActionPayload } from "../../../dispatcher/payloads";
-import { NameFilterCondition } from "../../../stores/room-list/filters/NameFilterCondition";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
 import TemporaryTile from "./TemporaryTile";
@@ -52,7 +51,6 @@ interface IProps {
     onResize: () => void;
     resizeNotifier: ResizeNotifier;
     collapsed: boolean;
-    searchFilter: string;
     isMinimized: boolean;
 }
 
@@ -150,8 +148,7 @@ function customTagAesthetics(tagId: TagID): ITagAesthetics {
     };
 }
 
-export default class RoomList extends React.Component<IProps, IState> {
-    private searchFilter: NameFilterCondition = new NameFilterCondition();
+export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private customTagStoreRef;
 
@@ -163,21 +160,6 @@ export default class RoomList extends React.Component<IProps, IState> {
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-    }
-
-    public componentDidUpdate(prevProps: Readonly<IProps>): void {
-        if (prevProps.searchFilter !== this.props.searchFilter) {
-            const hadSearch = !!this.searchFilter.search.trim();
-            const haveSearch = !!this.props.searchFilter.trim();
-            this.searchFilter.search = this.props.searchFilter;
-            if (!hadSearch && haveSearch) {
-                // started a new filter - add the condition
-                RoomListStore.instance.addFilter(this.searchFilter);
-            } else if (hadSearch && !haveSearch) {
-                // cleared a filter - remove the condition
-                RoomListStore.instance.removeFilter(this.searchFilter);
-            } // else the filter hasn't changed enough for us to care here
-        }
     }
 
     public componentDidMount(): void {
@@ -266,12 +248,11 @@ export default class RoomList extends React.Component<IProps, IState> {
         }
     };
 
-    private renderCommunityInvites(): React.ReactElement[] {
+    private renderCommunityInvites(): TemporaryTile[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/riot-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
-           if (g.myMembership !== 'invite') return false;
-           return !this.searchFilter || this.searchFilter.matches(g.name || "");
+           return g.myMembership === 'invite';
         }).map(g => {
             const avatar = (
                 <GroupAvatar
@@ -340,7 +321,6 @@ export default class RoomList extends React.Component<IProps, IState> {
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
-                    isFiltered={!!this.searchFilter.search}
                 />
             );
         }

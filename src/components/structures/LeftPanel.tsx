@@ -44,7 +44,6 @@ interface IProps {
 }
 
 interface IState {
-    searchFilter: string;
     showBreadcrumbs: boolean;
     showTagPanel: boolean;
 }
@@ -69,7 +68,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            searchFilter: "",
             showBreadcrumbs: BreadcrumbsStore.instance.visible,
             showTagPanel: SettingsStore.getValue('TagPanel.enableTagPanel'),
         };
@@ -96,10 +94,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onBackgroundImageUpdate);
         this.props.resizeNotifier.off("middlePanelResizedNoisy", this.onResize);
     }
-
-    private onSearch = (term: string): void => {
-        this.setState({searchFilter: term});
-    };
 
     private onExplore = () => {
         dis.fire(Action.ViewRoomDirectory);
@@ -366,7 +360,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 onKeyDown={this.onKeyDown}
             >
                 <RoomSearch
-                    onQueryUpdate={this.onSearch}
                     isMinimized={this.props.isMinimized}
                     onVerticalArrow={this.onKeyDown}
                     onEnter={this.onEnter}
@@ -392,7 +385,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
             onKeyDown={this.onKeyDown}
             resizeNotifier={null}
             collapsed={false}
-            searchFilter={this.state.searchFilter}
             onFocus={this.onFocus}
             onBlur={this.onBlur}
             isMinimized={this.props.isMinimized}

@@ -53,6 +53,9 @@ export function arrayHasDiff(a: any[], b: any[]): boolean {
         // an element from the other.
         if (b.some(i => !a.includes(i))) return true;
         if (a.some(i => !b.includes(i))) return true;
+
+        // if all the keys are common, say so
+        return false;
     } else {
         return true; // different lengths means they are naturally diverged
     }
