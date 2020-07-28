@@ -1360,5 +1360,10 @@
     "Leave Room": "部屋を退出",
     "Failed to connect to integration manager": "インテグレーションマネージャへの接続に失敗しました",
     "Start verification again from their profile.": "プロフィールから再度検証を開始してください。",
-    "Integration Manager": "インテグレーションマネージャ"
+    "Integration Manager": "インテグレーションマネージャ",
+    "Do not use an identity server": "ID サーバーを使用しない",
+    "Composer": "入力欄",
+    "Sort by": "並び替え",
+    "List options": "一覧の設定",
+    "Use Single Sign On to continue": "シングルサインオンを使用して続行"
 }
