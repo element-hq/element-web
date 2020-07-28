@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 // Dev note: This whole class exists in the event someone logs out and back in - we want
 // to make sure the right MatrixClient is listening for changes.
@@ -23,30 +24,30 @@ import SettingsHandler from "./SettingsHandler";
  * Represents the base class for settings handlers which need access to a MatrixClient.
  * This class performs no logic and should be overridden.
  */
-export default class MatrixClientBackedSettingsHandler extends SettingsHandler {
-    static _matrixClient;
-    static _instances = [];
+export default abstract class MatrixClientBackedSettingsHandler extends SettingsHandler {
+    private static _matrixClient: MatrixClient;
+    private static instances: MatrixClientBackedSettingsHandler[] = [];
 
-    static set matrixClient(client) {
+    public static set matrixClient(client: MatrixClient) {
         const oldClient = MatrixClientBackedSettingsHandler._matrixClient;
         MatrixClientBackedSettingsHandler._matrixClient = client;
 
-        for (const instance of MatrixClientBackedSettingsHandler._instances) {
+        for (const instance of MatrixClientBackedSettingsHandler.instances) {
             instance.initMatrixClient(oldClient, client);
         }
     }
 
-    constructor() {
+    protected constructor() {
         super();
 
-        MatrixClientBackedSettingsHandler._instances.push(this);
+        MatrixClientBackedSettingsHandler.instances.push(this);
     }
 
-    get client() {
-        return MatrixClientBackedSettingsHandler._matrixClient;
+    public get client(): MatrixClient {
+        return MatrixClientBackedSettingsHandler.matrixClient;
     }
 
-    initMatrixClient() {
+    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
         console.warn("initMatrixClient not overridden");
     }
 }
