@@ -4,7 +4,7 @@ Configuration
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-For a good example, see https;//develop.element.io/config.json.
+For a good example, see https://develop.element.io/config.json.
 
 1. `default_server_config` sets the default homeserver and identity server URL for
    Element to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
