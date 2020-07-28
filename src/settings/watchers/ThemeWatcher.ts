@@ -24,9 +24,6 @@ import { ActionPayload } from '../../dispatcher/payloads';
 import { SettingLevel } from "../SettingLevel";
 
 export default class ThemeWatcher {
-    // XXX: I think this is unused.
-    static _instance = null;
-
     private themeWatchRef: string;
     private systemThemeWatchRef: string;
     private dispatcherRef: string;
