@@ -25,6 +25,7 @@ interface IProps extends React.ComponentProps<typeof AccessibleTooltipButton>  {
     isExpanded: boolean;
 }
 
+// TODO: replace this the header buttons and the right panel buttons with a single representation
 // Semantic component for representing the AccessibleButton which launches a <ContextMenu />
 export const ContextMenuTooltipButton: React.FC<IProps> = ({
     isExpanded,

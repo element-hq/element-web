@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, {createRef} from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
@@ -29,7 +30,6 @@ import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
@@ -117,9 +117,17 @@ const EmojiButton = ({addEmoji}) => {
         </ContextMenu>;
     }
 
+    const className = classNames(
+        "mx_MessageComposer_button",
+        "mx_MessageComposer_emoji",
+        {
+            "mx_RightPanel_headerButton_highlight": menuDisplayed,
+        },
+    );
+
     return <React.Fragment>
         <ContextMenuTooltipButton
-            className="mx_MessageComposer_button mx_MessageComposer_emoji"
+            className={className}
             onClick={openMenu}
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}

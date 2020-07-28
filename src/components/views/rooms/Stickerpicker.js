@@ -385,8 +385,9 @@ export default class Stickerpicker extends React.Component {
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers"
+                    className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers mx_RightPanel_headerButton_highlight "
                     onClick={this._onHideStickersClick}
+                    active={this.state.showStickers}
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;

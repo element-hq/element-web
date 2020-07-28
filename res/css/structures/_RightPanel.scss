@@ -65,7 +65,7 @@ limitations under the License.
         left: 4px; // center with parent of 32px
         height: 24px;
         width: 24px;
-        background-color: $rightpanel-button-color;
+        background-color: $icon-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;
     }
@@ -100,7 +100,7 @@ limitations under the License.
     background: rgba($accent-color, 0.25);
     // make the icon the accent color too
     &::before {
-        background-color: $accent-color;
+        background-color: $accent-color !important;
     }
 }
 

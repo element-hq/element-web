@@ -24,6 +24,8 @@ import classNames from 'classnames';
 import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
+// TODO: replace this, the composer buttons and the right panel buttons with a unified
+// representation
 export default class HeaderButton extends React.Component {
     constructor() {
         super();
