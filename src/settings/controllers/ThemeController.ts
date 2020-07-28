@@ -1,6 +1,6 @@
 /*
-Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@ limitations under the License.
 
 import SettingController from "./SettingController";
 import {DEFAULT_THEME, enumerateThemes} from "../../theme";
+import { SettingLevel } from "../SettingLevel";
 
 export default class ThemeController extends SettingController {
-    static isLogin = false;
+    public static isLogin = false;
 
-    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
+    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: any): any {
         if (!calculatedValue) return null; // Don't override null themes
 
         if (ThemeController.isLogin) return 'light';
