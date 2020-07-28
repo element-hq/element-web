@@ -62,10 +62,11 @@ import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
-import SettingsStore, { SettingLevel } from './settings/SettingsStore';
+import SettingsStore  from './settings/SettingsStore';
 import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
+import {SettingLevel} from "./settings/SettingLevel";
 
 global.mxCalls = {
     //room_id: MatrixCall

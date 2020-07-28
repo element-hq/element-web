@@ -21,7 +21,7 @@ import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
-import { SettingLevel } from '../../../../../settings/SettingsStore';
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export default class NotificationsSettingsTab extends React.Component {
     static propTypes = {

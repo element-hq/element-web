@@ -26,7 +26,7 @@ import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
 import {ButtonEvent} from "../views/elements/AccessibleButton";
@@ -37,6 +37,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 interface IProps {
     isMinimized: boolean;

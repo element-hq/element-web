@@ -20,7 +20,7 @@ import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
+import SettingsStore from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
     NotificationUtils,
@@ -31,6 +31,7 @@ import {
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.

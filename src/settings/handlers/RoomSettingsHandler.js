@@ -17,8 +17,8 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {SettingLevel} from "../SettingsStore";
 import {objectClone, objectKeyChanges} from "../../utils/objects";
+import {SettingLevel} from "../SettingLevel";
 
 /**
  * Gets and sets settings at the "room" level.

@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import { enumerateThemes } from "../../../../../theme";
 import ThemeWatcher from "../../../../../settings/watchers/ThemeWatcher";
 import Slider from "../../../elements/Slider";
@@ -35,6 +35,7 @@ import Field from '../../../elements/Field';
 import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import classNames from 'classnames';
+import { SettingLevel } from "../../../../../settings/SettingLevel";
 
 interface IProps {
 }

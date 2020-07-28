@@ -27,10 +27,11 @@ import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import SettingsStore from "./settings/SettingsStore";
 import {
     hideToast as hideNotificationsToast,
 } from "./toasts/DesktopNotificationsToast";
+import {SettingLevel} from "./settings/SettingLevel";
 
 /*
  * Dispatches:

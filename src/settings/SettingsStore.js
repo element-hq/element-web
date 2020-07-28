@@ -28,12 +28,6 @@ import dis from '../dispatcher/dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import {WatchManager} from "./WatchManager";
-import {SettingLevel as SL2} from "./SettingLevel";
-
-/**
- * @deprecated Use SettingLevel directly
- */
-export const SettingLevel = SL2;
 
 const defaultWatchManager = new WatchManager();
 

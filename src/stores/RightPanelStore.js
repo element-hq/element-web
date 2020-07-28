@@ -17,8 +17,9 @@ limitations under the License.
 import dis from '../dispatcher/dispatcher';
 import {pendingVerificationRequestForUser} from '../verification';
 import {Store} from 'flux/utils';
-import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
+import SettingsStore from "../settings/SettingsStore";
 import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
+import {SettingLevel} from "../settings/SettingLevel";
 
 const INITIAL_STATE = {
     // Whether or not to show the right panel at all. We split out rooms and groups

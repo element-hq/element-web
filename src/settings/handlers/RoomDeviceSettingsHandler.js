@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
-import {SettingLevel} from "../SettingsStore";
+import {SettingLevel} from "../SettingLevel";
 
 /**
  * Gets and sets settings at the "room-device" level for the current device in a particular

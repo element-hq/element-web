@@ -21,7 +21,8 @@ import * as sdk from "../../../index";
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 export default class RoomRecoveryReminder extends React.PureComponent {
     static propTypes = {
