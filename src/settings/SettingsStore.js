@@ -28,21 +28,12 @@ import dis from '../dispatcher/dispatcher';
 import {SETTINGS} from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
 import {WatchManager} from "./WatchManager";
+import {SettingLevel as SL2} from "./SettingLevel";
 
 /**
- * Represents the various setting levels supported by the SettingsStore.
+ * @deprecated Use SettingLevel directly
  */
-export const SettingLevel = {
-    // Note: This enum is not used in this class or in the Settings file
-    // This should always be used elsewhere in the project.
-    DEVICE: "device",
-    ROOM_DEVICE: "room-device",
-    ROOM_ACCOUNT: "room-account",
-    ACCOUNT: "account",
-    ROOM: "room",
-    CONFIG: "config",
-    DEFAULT: "default",
-};
+export const SettingLevel = SL2;
 
 const defaultWatchManager = new WatchManager();
 
