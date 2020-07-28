@@ -1721,8 +1721,8 @@
     "To be secure, do this in person or use a trusted way to communicate.": "Por plia sekureco, faru tion persone, aŭ uzu alian fidatan komunikilon.",
     "Verify yourself & others to keep your chats safe": "Kontrolu vin mem kaj aliajn por sekurigi viajn babilojn",
     "Channel: %(channelName)s": "Kanalo: %(channelName)s",
-    "Show less": "Montri pli",
-    "Show more": "Montri malpli",
+    "Show less": "Montri malpli",
+    "Show more": "Montri pli",
     "Help": "Helpo",
     "Session verified": "Salutaĵo kontroliĝis",
     "Copy": "Kopii",
@@ -2376,7 +2376,7 @@
     "Set a Security Phrase": "Agordi Sekurecan frazon",
     "Confirm Security Phrase": "Konfirmi Sekurecan frazon",
     "Save your Security Key": "Konservi vian Sekurecan ŝlosilon",
-    "New spinner design": "",
+    "New spinner design": "Nova fasono de la turniĝilo",
     "Show rooms with unread messages first": "Montri ĉambrojn kun nelegitaj mesaĝoj kiel unuajn",
     "Show previews of messages": "Montri antaŭrigardojn al mesaĝoj",
     "This room is public": "Ĉi tiu ĉambro estas publika",
@@ -2386,5 +2386,6 @@
     "Are you sure you want to cancel entering passphrase?": "Ĉu vi certe volas nuligi enigon de pasfrazo?",
     "Enable advanced debugging for the room list": "Ŝalti altnivelan erarserĉadon por la ĉambrobreto",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
-    "Custom Tag": "Propra etikedo"
+    "Custom Tag": "Propra etikedo",
+    "Feedback": "Prikomenti"
 }
