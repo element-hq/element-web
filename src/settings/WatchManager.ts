@@ -18,7 +18,7 @@ import { SettingLevel } from "./SettingLevel";
 
 export type CallbackFn = (changedInRoomId: string, atLevel: SettingLevel, newValAtLevel: any) => void;
 
-const IRRELEVANT_ROOM: symbol = Symbol("any room");
+const IRRELEVANT_ROOM = Symbol("any room");
 
 interface RoomWatcherMap {
     // @ts-ignore - TS wants string-only keys but we know better - https://github.com/Microsoft/TypeScript/issues/1863
