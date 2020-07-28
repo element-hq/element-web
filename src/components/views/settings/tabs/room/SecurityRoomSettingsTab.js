@@ -23,7 +23,7 @@ import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import {SettingLevel} from "../../../../../settings/SettingsStore";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
-import StyledRadioButton from '../../../elements/StyledRadioButton';
+import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -258,30 +258,33 @@ export default class SecurityRoomSettingsTab extends React.Component {
             <div>
                 {guestWarning}
                 {aliasWarning}
-                <StyledRadioButton
-                    name="roomVis" value="invite_only"
-                    disabled={!canChangeAccess}
-                    onChange={this._onRoomAccessRadioToggle}
-                    checked={joinRule !== "public"}
-                >
-                    {_t('Only people who have been invited')}
-                </StyledRadioButton>
-                <StyledRadioButton
-                    name="roomVis" value="public_no_guests"
-                    disabled={!canChangeAccess}
-                    onChange={this._onRoomAccessRadioToggle}
-                    checked={joinRule === "public" && guestAccess !== "can_join"}
-                >
-                    {_t('Anyone who knows the room\'s link, apart from guests')}
-                </StyledRadioButton>
-                <StyledRadioButton
-                    name="roomVis" value="public_with_guests"
-                    disabled={!canChangeAccess}
-                    onChange={this._onRoomAccessRadioToggle}
-                    checked={joinRule === "public" && guestAccess === "can_join"}
-                >
-                    {_t("Anyone who knows the room's link, including guests")}
-                </StyledRadioButton>
+                <StyledRadioGroup
+                    name="roomVis"
+                    value={joinRule}
+                    definitions={[
+                        {
+                            value: "invite_only",
+                            disabled: !canChangeAccess,
+                            onChange: this._onRoomAccessRadioToggle,
+                            label: _t('Only people who have been invited'),
+                            checked: joinRule !== "public",
+                        },
+                        {
+                            value: "public_no_guests",
+                            disabled: !canChangeAccess,
+                            onChange: this._onRoomAccessRadioToggle,
+                            label: _t('Anyone who knows the room\'s link, apart from guests'),
+                            checked: joinRule === "public" && guestAccess !== "can_join",
+                        },
+                        {
+                            value: "public_with_guests",
+                            disabled: !canChangeAccess,
+                            onChange: this._onRoomAccessRadioToggle,
+                            label: _t("Anyone who knows the room's link, including guests"),
+                            checked: joinRule === "public" && guestAccess === "can_join",
+                        },
+                    ]}
+                />
             </div>
         );
     }
@@ -298,38 +301,36 @@ export default class SecurityRoomSettingsTab extends React.Component {
                     {_t('Changes to who can read history will only apply to future messages in this room. ' +
                         'The visibility of existing history will be unchanged.')}
                 </div>
-                <StyledRadioButton
-                    name="historyVis" value="world_readable"
-                    disabled={!canChangeHistory}
-                    checked={history === "world_readable"}
-                    onChange={this._onHistoryRadioToggle}
-                >
-                    {_t("Anyone")}
-                </StyledRadioButton>
-                <StyledRadioButton
-                    name="historyVis" value="shared"
-                    disabled={!canChangeHistory}
-                    checked={history === "shared"}
-                    onChange={this._onHistoryRadioToggle}
-                >
-                    {_t('Members only (since the point in time of selecting this option)')}
-                </StyledRadioButton>
-                <StyledRadioButton
-                    name="historyVis" value="invited"
-                    disabled={!canChangeHistory}
-                    checked={history === "invited"}
-                    onChange={this._onHistoryRadioToggle}
-                >
-                    {_t('Members only (since they were invited)')}
-                </StyledRadioButton>
-                <StyledRadioButton
-                    name="historyVis" value="joined"
-                    disabled={!canChangeHistory}
-                    checked={history === "joined"}
-                    onChange={this._onHistoryRadioToggle}
-                >
-                    {_t('Members only (since they joined)')}
-                </StyledRadioButton>
+                <StyledRadioGroup
+                    name="historyVis"
+                    value={history}
+                    definitions={[
+                        {
+                            value: "world_readable",
+                            disabled: !canChangeHistory,
+                            onChange: this._onHistoryRadioToggle,
+                            label: _t("Anyone"),
+                        },
+                        {
+                            value: "shared",
+                            disabled: !canChangeHistory,
+                            onChange: this._onHistoryRadioToggle,
+                            label: _t('Members only (since the point in time of selecting this option)'),
+                        },
+                        {
+                            value: "invited",
+                            disabled: !canChangeHistory,
+                            onChange: this._onHistoryRadioToggle,
+                            label: _t('Members only (since they were invited)'),
+                        },
+                        {
+                            value: "joined",
+                            disabled: !canChangeHistory,
+                            onChange: this._onHistoryRadioToggle,
+                            label: _t('Members only (since they joined)'),
+                        },
+                    ]}
+                />
             </div>
         );
     }

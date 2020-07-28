@@ -121,10 +121,12 @@ const EmojiButton = ({addEmoji}) => {
         "mx_MessageComposer_button",
         "mx_MessageComposer_emoji",
         {
-            "mx_RightPanel_headerButton_highlight": menuDisplayed,
+            "mx_MessageComposer_button_highlight": menuDisplayed,
         },
     );
 
+    // TODO: replace ContextMenuTooltipButton with a unified representation of
+    // the header buttons and the right panel buttons
     return <React.Fragment>
         <ContextMenuTooltipButton
             className={className}

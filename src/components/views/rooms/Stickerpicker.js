@@ -384,7 +384,7 @@ export default class Stickerpicker extends React.Component {
             "mx_MessageComposer_button",
             "mx_MessageComposer_stickers",
             "mx_Stickers_hideStickers",
-            "mx_RightPanel_headerButton_highlight",
+            "mx_MessageComposer_button_highlight",
         );
         if (this.state.showStickers) {
             // Show hide-stickers button

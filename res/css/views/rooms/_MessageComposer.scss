@@ -179,6 +179,14 @@ limitations under the License.
     color: $accent-color;
 }
 
+.mx_MessageComposer_button_highlight {
+    background: rgba($accent-color, 0.25);
+    // make the icon the accent color too
+    &::before {
+        background-color: $accent-color !important;
+    }
+}
+
 .mx_MessageComposer_button {
     position: relative;
     margin-right: 6px;
