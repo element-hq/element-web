@@ -36,9 +36,9 @@ const MEMBER_PHASES = [
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, HeaderKind.Room);
-        this._onMembersClicked = this._onMembersClicked.bind(this);
-        this._onFilesClicked = this._onFilesClicked.bind(this);
-        this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
+        this.onMembersClicked = this.onMembersClicked.bind(this);
+        this.onFilesClicked = this.onFilesClicked.bind(this);
+        this.onNotificationsClicked = this.onNotificationsClicked.bind(this);
     }
 
     onAction(payload: ActionPayload) {
@@ -58,7 +58,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    _onMembersClicked() {
+    private onMembersClicked() {
         if (this.state.phase === RightPanelPhases.RoomMemberInfo) {
             // send the active phase to trigger a toggle
             // XXX: we should pass refireParams here but then it won't collapse as we desire it to
@@ -69,12 +69,12 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    _onFilesClicked() {
+    private onFilesClicked() {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.FilePanel);
     }
 
-    _onNotificationsClicked() {
+    private onNotificationsClicked() {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.NotificationPanel);
     }
@@ -84,19 +84,19 @@ export default class RoomHeaderButtons extends HeaderButtons {
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(MEMBER_PHASES)}
-                onClick={this._onMembersClicked}
+                onClick={this.onMembersClicked}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
             <HeaderButton key="filesButton" name="filesButton"
                 title={_t('Files')}
                 isHighlighted={this.isPhase(RightPanelPhases.FilePanel)}
-                onClick={this._onFilesClicked}
+                onClick={this.onFilesClicked}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
             <HeaderButton key="notifsButton" name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
-                onClick={this._onNotificationsClicked}
+                onClick={this.onNotificationsClicked}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
             />,
         ];
