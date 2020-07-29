@@ -20,6 +20,7 @@ import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload"
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
@@ -105,7 +106,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                dis.dispatch({
+                dis.dispatch<SetRightPanelPhasePayload>({
                     action: Action.SetRightPanelPhase,
                     phase: RightPanelPhases.EncryptionPanel,
                     refireParams: {
