@@ -291,7 +291,7 @@ export default class SettingsStore {
             throw new Error("Setting " + settingName + " is not a feature");
         }
 
-        return SettingsStore.setValue(settingName, null, "device", value);
+        return SettingsStore.setValue(settingName, null, SettingLevel.DEVICE, value);
     }
 
     /**
