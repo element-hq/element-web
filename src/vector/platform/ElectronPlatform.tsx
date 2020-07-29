@@ -47,7 +47,7 @@ import {ActionPayload} from "matrix-react-sdk/src/dispatcher/payloads";
 import {showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
 import {CheckUpdatesPayload} from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
-import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
+import GenericExpiringToast from "matrix-react-sdk/src/toasts/GenericExpiringToast";
 
 const ipcRenderer = window.ipcRenderer;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
