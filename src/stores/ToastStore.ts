@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import React, {JSXElementConstructor} from "react";
+import React from "react";
+import { ComponentClass } from "../@types/common";
 
-export interface IToast<C extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> {
+export interface IToast<C extends ComponentClass> {
     key: string;
     // higher priority number will be shown on top of lower priority
     priority: number;
@@ -55,7 +56,7 @@ export default class ToastStore extends EventEmitter {
      *
      * @param {object} newToast The new toast
      */
-    addOrReplaceToast<C extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>>(newToast: IToast<C>) {
+    addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>) {
         const oldIndex = this.toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;

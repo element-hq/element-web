@@ -54,6 +54,7 @@ import LeftPanel from "./LeftPanel";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
+import NonUrgentToastContainer from "./NonUrgentToastContainer";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -687,6 +688,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     </DragDropContext>
                 </div>
                 <CallContainer />
+                <NonUrgentToastContainer />
             </MatrixClientContext.Provider>
         );
     }
