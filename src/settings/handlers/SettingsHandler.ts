@@ -44,7 +44,7 @@ export default abstract class SettingsHandler {
      * @param {*} newValue The new value for the setting, may be null.
      * @returns {Promise} Resolves when the setting has been saved.
      */
-    public setValue(settingName: string, roomId: string, newValue): Promise<void> {
+    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         console.error("Invalid operation: setValue was not overridden");
         return Promise.reject(new Error("Invalid operation: setValue was not overridden"));
     }
