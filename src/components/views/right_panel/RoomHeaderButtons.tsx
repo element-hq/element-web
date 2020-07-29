@@ -45,7 +45,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         super.onAction(payload);
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
-                this.setPhase(RightPanelPhases.RoomMemberInfo, {members: payload.member});
+                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
             } else {
                 this.setPhase(RightPanelPhases.RoomMemberList);
             }
