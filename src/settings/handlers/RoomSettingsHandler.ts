@@ -34,13 +34,13 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
 
     protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
         if (oldClient) {
-            oldClient.removeListener("RoomState.events", this._onEvent);
+            oldClient.removeListener("RoomState.events", this.onEvent);
         }
 
-        newClient.on("RoomState.events", this._onEvent);
+        newClient.on("RoomState.events", this.onEvent);
     }
 
-    private _onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent) => {
+    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent) => {
         const roomId = event.getRoomId();
         const room = this.client.getRoom(roomId);
 
