@@ -441,6 +441,7 @@
     "%(senderName)s: %(message)s": "%(senderName)s: %(message)s",
     "%(senderName)s: %(reaction)s": "%(senderName)s: %(reaction)s",
     "%(senderName)s: %(stickerName)s": "%(senderName)s: %(stickerName)s",
+    "Change notification settings": "Change notification settings",
     "New spinner design": "New spinner design",
     "Message Pinning": "Message Pinning",
     "Custom user status messages": "Custom user status messages",
