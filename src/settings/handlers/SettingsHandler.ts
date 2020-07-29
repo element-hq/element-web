@@ -46,7 +46,7 @@ export default abstract class SettingsHandler {
      */
     public setValue(settingName: string, roomId: string, newValue): Promise<void> {
         console.error("Invalid operation: setValue was not overridden");
-        return Promise.reject();
+        return Promise.reject(new Error("Invalid operation: setValue was not overridden"));
     }
 
     /**
