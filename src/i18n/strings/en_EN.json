@@ -423,6 +423,8 @@
     "Upgrade your %(brand)s": "Upgrade your %(brand)s",
     "A new version of %(brand)s is available!": "A new version of %(brand)s is available!",
     "Guest": "Guest",
+    "The person who invited you already left the room.": "The person who invited you already left the room.",
+    "The person who invited you already left the room, or their server is offline.": "The person who invited you already left the room, or their server is offline.",
     "There was an error joining the room": "There was an error joining the room",
     "Sorry, your homeserver is too old to participate in this room.": "Sorry, your homeserver is too old to participate in this room.",
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
