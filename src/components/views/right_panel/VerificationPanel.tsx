@@ -57,7 +57,7 @@ interface IProps {
     onClose: () => void;
     isRoomEncrypted: boolean;
     inDialog: boolean;
-    key: any;
+    key: number;
 }
 
 interface IState {
