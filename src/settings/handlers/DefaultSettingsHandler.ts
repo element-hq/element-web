@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2019 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,29 +27,27 @@ export default class DefaultSettingsHandler extends SettingsHandler {
      * @param {object} defaults The default setting values, keyed by setting name.
      * @param {object} invertedDefaults The default inverted setting values, keyed by setting name.
      */
-    constructor(defaults, invertedDefaults) {
+    constructor(private defaults: any, private invertedDefaults: any) { // TODO: [TS] Appropriate types
         super();
-        this._defaults = defaults;
-        this._invertedDefaults = invertedDefaults;
     }
 
-    getValue(settingName, roomId) {
-        let value = this._defaults[settingName];
+    public getValue(settingName: string, roomId: string): any {
+        let value = this.defaults[settingName];
         if (value === undefined) {
-            value = this._invertedDefaults[settingName];
+            value = this.invertedDefaults[settingName];
         }
         return value;
     }
 
-    setValue(settingName, roomId, newValue) {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         throw new Error("Cannot set values on the default level handler");
     }
 
-    canSetValue(settingName, roomId) {
+    public canSetValue(settingName: string, roomId: string) {
         return false;
     }
 
-    isSupported() {
+    public isSupported(): boolean {
         return true;
     }
 }
