@@ -71,7 +71,7 @@ const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = [
     SettingLevel.CONFIG,
 ];
 
-interface ISetting {
+export interface ISetting {
     // Must be set to true for features. Default is 'false'.
     isFeature?: boolean;
 
