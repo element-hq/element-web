@@ -18,7 +18,7 @@
     "Open user settings": "Abrir configurações do usuário",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navegador não suportado",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instale o <chromeLink> Chrome </chromeLink>, o <firefoxLink> Firefox </firefoxLink> ou o <safariLink> Safari </safariLink> para obter uma melhor experiência.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instale o <chromeLink>Chrome</chromeLink>, o <firefoxLink>Firefox</firefoxLink> ou o <safariLink>Safari</safariLink> para obter a melhor experiência de uso.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Você pode continuar usando o navegador atual, mas alguns dos recursos podem não funcionar e a aparência do aplicativo pode estar incorreta.",
     "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
     "Go to element.io": "Vá para element.io",
