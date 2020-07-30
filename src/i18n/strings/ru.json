@@ -1547,8 +1547,8 @@
     "%(creator)s created and configured the room.": "%(creator)s создал и настроил комнату.",
     "Preview": "Заглянуть",
     "View": "Просмотр",
-    "Find a room…": "Найди комнату…",
-    "Find a room… (e.g. %(exampleRoom)s)": "Найди комнату... (напр. %(exampleRoom)s)",
+    "Find a room…": "Поиск комнат…",
+    "Find a room… (e.g. %(exampleRoom)s)": "Поиск комнат... (напр. %(exampleRoom)s)",
     "Explore rooms": "Список комнат",
     "No identity server is configured: add one in server settings to reset your password.": "Идентификационный сервер не настроен: добавьте его в настройки сервера, чтобы сбросить пароль.",
     "Command Autocomplete": "Автозаполнение команды",
@@ -1609,8 +1609,8 @@
     "Verifies a user, session, and pubkey tuple": "Проверяет пользователя, сессию и публичные ключи",
     "Unknown (user, session) pair:": "Неизвестная (пользователь:сессия) пара:",
     "Session already verified!": "Сессия уже подтверждена!",
-    "Never send encrypted messages to unverified sessions from this session": "Никогда не отправляйте зашифрованные сообщения в непроверенные сессий из этой сессии",
-    "Never send encrypted messages to unverified sessions in this room from this session": "Никогда не отправляйте зашифрованные сообщения в непроверенные сессии в эту комнату из этой сессии",
+    "Never send encrypted messages to unverified sessions from this session": "Никогда не отправлять зашифрованные сообщения непроверенным сессиям в этой сессии",
+    "Never send encrypted messages to unverified sessions in this room from this session": "Никогда не отправлять зашифрованные сообщения непроверенным сессиям в этой комнате и в этой сессии",
     "Your keys are <b>not being backed up from this session</b>.": "Ваши ключи <b>не резервируются с этой сессии</b>.",
     "Server or user ID to ignore": "Сервер или ID пользователя для игнорирования",
     "Subscribed lists": "Подписанные списки",
@@ -2172,5 +2172,8 @@
     "This address is already in use": "Этот адрес уже используется",
     "Are you sure you want to remove <b>%(serverName)s</b>": "Вы уверены, что хотите удалить <b>%(serverName)s</b>",
     "Enter the name of a new server you want to explore.": "Введите имя нового сервера для просмотра.",
-    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Напоминание: ваш браузер не поддерживается, возможны непредвиденные проблемы."
+    "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Напоминание: ваш браузер не поддерживается, возможны непредвиденные проблемы.",
+    "Notification settings": "Настройки уведомлений",
+    "Switch to light mode": "Переключить в светлый режим",
+    "Switch to dark mode": "Переключить в тёмный режим"
 }

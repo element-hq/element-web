@@ -456,5 +456,6 @@
     "Notify the whole room": "Tilkynna öllum á spjallrásinni",
     "Room Notification": "Tilkynning á spjallrás",
     "Passphrases must match": "Lykilfrasar verða að stemma",
-    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður"
+    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður",
+    "Create Account": "Stofna Reikning"
 }
