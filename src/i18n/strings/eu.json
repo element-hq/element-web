@@ -1897,7 +1897,7 @@
     "If your other sessions do not have the key for this message you will not be able to decrypt them.": "Zure beste saioek ez badute mezu honen gakoa ezin izango duzu deszifratu.",
     "<requestLink>Re-request encryption keys</requestLink> from your other sessions.": "<requestLink>Eskatu berriro zifratze gakoak</requestLink> zure beste saioei.",
     "Waiting for %(displayName)s to accept…": "%(displayName)s(e)k onartu bitartean zain…",
-    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Zuon mezuak babestuta daude eta soilik zuk eta hartzaileak dituzue hauek irekitzeko giltza.",
+    "Your messages are secured and only you and the recipient have the unique keys to unlock them.": "Zuen mezuak babestuta daude eta soilik zuk eta hartzaileak dituzue hauek dekodetzeko gakoak.",
     "One of the following may be compromised:": "Hauetakoren bat konprometituta egon daiteke:",
     "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Egiztatu gailu hau fidagarri gisa markatzeko. Gailu hau fidagarritzat jotzeak lasaitasuna ematen du muturretik-muturrera zifratutako mezuak erabiltzean.",
     "Verifying this device will mark it as trusted, and users who have verified with you will trust this device.": "Gailu hau egiaztatzean fidagarri gisa markatuko da, eta egiaztatu zaituzten erabiltzaileek fidagarri gisa ikusiko dute.",
