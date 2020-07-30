@@ -426,6 +426,8 @@
     "There was an error joining the room": "There was an error joining the room",
     "Sorry, your homeserver is too old to participate in this room.": "Sorry, your homeserver is too old to participate in this room.",
     "Please contact your homeserver administrator.": "Please contact your homeserver administrator.",
+    "The person who invited you already left the room.": "The person who invited you already left the room.",
+    "The person who invited you already left the room, or their server is offline.": "The person who invited you already left the room, or their server is offline.",
     "Failed to join room": "Failed to join room",
     "You joined the call": "You joined the call",
     "%(senderName)s joined the call": "%(senderName)s joined the call",

@@ -26,7 +26,7 @@ import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
 import { showGroupInviteDialog, showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import GroupStore from '../../stores/GroupStore';
-import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
+import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPanelStorePhases";
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {Action} from "../../dispatcher/actions";
@@ -75,8 +75,8 @@ export default class RightPanel extends React.Component {
         const userForPanel = this._getUserForPanel();
         if (this.props.groupId) {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.groupPanelPhase)) {
-                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.GroupMemberList});
-                return RIGHT_PANEL_PHASES.GroupMemberList;
+                dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.GroupMemberList});
+                return RightPanelPhases.GroupMemberList;
             }
             return rps.groupPanelPhase;
         } else if (userForPanel) {
@@ -98,11 +98,11 @@ export default class RightPanel extends React.Component {
             ) {
                 return rps.roomPanelPhase;
             }
-            return RIGHT_PANEL_PHASES.RoomMemberInfo;
+            return RightPanelPhases.RoomMemberInfo;
         } else {
             if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
-                dis.dispatch({action: "set_right_panel_phase", phase: RIGHT_PANEL_PHASES.RoomMemberList});
-                return RIGHT_PANEL_PHASES.RoomMemberList;
+                dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.RoomMemberList});
+                return RightPanelPhases.RoomMemberList;
             }
             return rps.roomPanelPhase;
         }
@@ -149,7 +149,7 @@ export default class RightPanel extends React.Component {
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             this.setState({
-                phase: RIGHT_PANEL_PHASES.GroupMemberList,
+                phase: RightPanelPhases.GroupMemberList,
             });
         });
     }
@@ -165,9 +165,9 @@ export default class RightPanel extends React.Component {
             return;
         }
         // redraw the badge on the membership list
-        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase === RightPanelPhases.RoomMemberList && member.roomId === this.props.roomId) {
             this._delayedUpdate();
-        } else if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo && member.roomId === this.props.roomId &&
+        } else if (this.state.phase === RightPanelPhases.RoomMemberInfo && member.roomId === this.props.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
@@ -175,7 +175,7 @@ export default class RightPanel extends React.Component {
     }
 
     onAction(payload) {
-        if (payload.action === "after_right_panel_phase_change") {
+        if (payload.action === Action.AfterRightPanelPhaseChange) {
             this.setState({
                 phase: payload.phase,
                 groupRoomId: payload.groupRoomId,
@@ -206,7 +206,7 @@ export default class RightPanel extends React.Component {
             // or the member list if we were in the member panel... phew.
             dis.dispatch({
                 action: Action.ViewUser,
-                member: this.state.phase === RIGHT_PANEL_PHASES.EncryptionPanel ? this.state.member : null,
+                member: this.state.phase === RightPanelPhases.EncryptionPanel ? this.state.member : null,
             });
         }
     };
@@ -225,21 +225,21 @@ export default class RightPanel extends React.Component {
         let panel = <div />;
 
         switch (this.state.phase) {
-            case RIGHT_PANEL_PHASES.RoomMemberList:
+            case RightPanelPhases.RoomMemberList:
                 if (this.props.roomId) {
                     panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
                 }
                 break;
-            case RIGHT_PANEL_PHASES.GroupMemberList:
+            case RightPanelPhases.GroupMemberList:
                 if (this.props.groupId) {
                     panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
                 }
                 break;
-            case RIGHT_PANEL_PHASES.GroupRoomList:
+            case RightPanelPhases.GroupRoomList:
                 panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
                 break;
-            case RIGHT_PANEL_PHASES.RoomMemberInfo:
-            case RIGHT_PANEL_PHASES.EncryptionPanel:
+            case RightPanelPhases.RoomMemberInfo:
+            case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
                     roomId={this.props.roomId}
@@ -250,26 +250,26 @@ export default class RightPanel extends React.Component {
                     verificationRequestPromise={this.state.verificationRequestPromise}
                 />;
                 break;
-            case RIGHT_PANEL_PHASES.Room3pidMemberInfo:
+            case RightPanelPhases.Room3pidMemberInfo:
                 panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
                 break;
-            case RIGHT_PANEL_PHASES.GroupMemberInfo:
+            case RightPanelPhases.GroupMemberInfo:
                 panel = <UserInfo
                     user={this.state.member}
                     groupId={this.props.groupId}
                     key={this.state.member.userId}
                     onClose={this.onCloseUserInfo} />;
                 break;
-            case RIGHT_PANEL_PHASES.GroupRoomInfo:
+            case RightPanelPhases.GroupRoomInfo:
                 panel = <GroupRoomInfo
                     groupRoomId={this.state.groupRoomId}
                     groupId={this.props.groupId}
                     key={this.state.groupRoomId} />;
                 break;
-            case RIGHT_PANEL_PHASES.NotificationPanel:
+            case RightPanelPhases.NotificationPanel:
                 panel = <NotificationPanel />;
                 break;
-            case RIGHT_PANEL_PHASES.FilePanel:
+            case RightPanelPhases.FilePanel:
                 panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
                 break;
         }
