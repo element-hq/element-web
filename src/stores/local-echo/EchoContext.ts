@@ -28,7 +28,6 @@ export enum ContextTransactionState {
 export abstract class EchoContext extends Whenable<ContextTransactionState> implements IDestroyable {
     private _transactions: EchoTransaction[] = [];
     private _state = ContextTransactionState.NotStarted;
-    public readonly startTime: Date = new Date();
 
     public get transactions(): EchoTransaction[] {
         return arrayFastClone(this._transactions);
@@ -36,6 +35,19 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
 
     public get state(): ContextTransactionState {
         return this._state;
+    }
+
+    public get firstFailedTime(): Date {
+        const failedTxn = this.transactions.find(t => t.didPreviouslyFail || t.status === TransactionStatus.DoneError);
+        if (failedTxn) return failedTxn.startTime;
+        return null;
+    }
+
+    public disownTransaction(txn: EchoTransaction) {
+        const idx = this._transactions.indexOf(txn);
+        if (idx >= 0) this._transactions.splice(idx, 1);
+        txn.destroy();
+        this.checkTransactions();
     }
 
     public beginTransaction(auditName: string, runFn: RunFn): EchoTransaction {

@@ -22,7 +22,7 @@ import { RoomEchoContext } from "./RoomEchoContext";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { ContextTransactionState } from "./EchoContext";
+import { ContextTransactionState, EchoContext } from "./EchoContext";
 import NonUrgentToastStore, { ToastReference } from "../NonUrgentToastStore";
 import NonUrgentEchoFailureToast from "../../components/views/toasts/NonUrgentEchoFailureToast";
 
@@ -48,6 +48,10 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
             EchoStore._instance = new EchoStore();
         }
         return EchoStore._instance;
+    }
+
+    public get contexts(): EchoContext[] {
+        return Array.from(this.caches.values()).map(e => e.context);
     }
 
     public getOrCreateEchoForRoom(room: Room): RoomCachedEcho {

@@ -16,13 +16,23 @@ limitations under the License.
 
 import React from "react";
 import { _t } from "../../../languageHandler";
+import AccessibleButton from "../elements/AccessibleButton";
+import Modal from "../../../Modal";
+import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
 
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
-    render() {
+    private openDialog = () => {
+        Modal.createTrackedDialog('Local Echo Server Error', '', ServerOfflineDialog, {});
+    };
+
+    public render() {
         return (
             <div className="mx_NonUrgentEchoFailureToast">
-                {_t("Your server isn't responding to some <a>requests</a>", {}, {
-                    'a': (sub) => <a>{sub}</a>
+                <span className="mx_NonUrgentEchoFailureToast_icon" />
+                {_t("Your server isn't responding to some <a>requests</a>.", {}, {
+                    'a': (sub) => (
+                        <AccessibleButton kind="link" onClick={this.openDialog}>{sub}</AccessibleButton>
+                    ),
                 })}
             </div>
         )

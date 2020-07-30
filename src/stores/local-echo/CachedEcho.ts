@@ -59,13 +59,18 @@ export abstract class CachedEcho<C extends EchoContext, K, V> extends EventEmitt
 
     private decacheKey(key: K) {
         if (this.cache.has(key)) {
-            this.cache.get(key).txn.cancel(); // should be safe to call
+            this.context.disownTransaction(this.cache.get(key).txn);
             this.cache.delete(key);
             this.emit(PROPERTY_UPDATED, key);
         }
     }
 
     protected markEchoReceived(key: K) {
+        if (this.cache.has(key)) {
+            const txn = this.cache.get(key).txn;
+            this.context.disownTransaction(txn);
+            txn.cancel();
+        }
         this.decacheKey(key);
     }
 
@@ -79,7 +84,6 @@ export abstract class CachedEcho<C extends EchoContext, K, V> extends EventEmitt
         this.cacheVal(key, targetVal, txn); // set the cache now as it won't be updated by the .when() ladder below.
 
         txn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, txn))
-            .when(TransactionStatus.DoneError, () => this.decacheKey(key))
             .when(TransactionStatus.DoneError, () => revertFn());
 
         txn.run();

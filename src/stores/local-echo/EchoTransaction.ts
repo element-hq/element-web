@@ -28,6 +28,8 @@ export class EchoTransaction extends Whenable<TransactionStatus> {
     private _status = TransactionStatus.Pending;
     private didFail = false;
 
+    public readonly startTime = new Date();
+
     public constructor(
         public readonly auditName,
         public runFn: RunFn,
