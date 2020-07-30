@@ -4,5 +4,11 @@
     "Unknown device": "Óþekkt tæki",
     "Dismiss": "Hafna",
     "You need to be using HTTPS to place a screen-sharing call.": "Þú verður að nota HTTPS til að hringja samtal með deilingu á skjá.",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]",
+    "Open": "Opna",
+    "Unsupported browser": "Óstuddur vafri",
+    "Your browser can't run %(brand)s": "Vafri þinn geta ekki keyrt upp %(brand)s",
+    "Sign In": "Skrá inn",
+    "Create Account": "Stofna Reikning",
+    "Explore rooms": "Kanna herbergi"
 }
