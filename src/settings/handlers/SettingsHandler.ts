@@ -28,10 +28,7 @@ export default abstract class SettingsHandler {
      * @param {String} roomId The room ID to read from, may be null.
      * @returns {*} The setting value, or null if not found.
      */
-    public getValue(settingName: string, roomId: string): any {
-        console.error("Invalid operation: getValue was not overridden");
-        return null;
-    }
+    public abstract getValue(settingName: string, roomId: string): any;
 
     /**
      * Sets the value for a particular setting at this level for a particular room.
@@ -44,10 +41,7 @@ export default abstract class SettingsHandler {
      * @param {*} newValue The new value for the setting, may be null.
      * @returns {Promise} Resolves when the setting has been saved.
      */
-    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
-        console.error("Invalid operation: setValue was not overridden");
-        return Promise.reject(new Error("Invalid operation: setValue was not overridden"));
-    }
+    public abstract setValue(settingName: string, roomId: string, newValue: any): Promise<void>;
 
     /**
      * Determines if the current user is able to set the value of the given setting
@@ -56,15 +50,11 @@ export default abstract class SettingsHandler {
      * @param {String} roomId The room ID to check in, may be null
      * @returns {boolean} True if the setting can be set by the user, false otherwise.
      */
-    public canSetValue(settingName: string, roomId: string): boolean {
-        return false;
-    }
+    public abstract canSetValue(settingName: string, roomId: string): boolean;
 
     /**
      * Determines if this level is supported on this device.
      * @returns {boolean} True if this level is supported on the current device.
      */
-    public isSupported(): boolean {
-        return false;
-    }
+    public abstract isSupported(): boolean;
 }
