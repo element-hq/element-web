@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomCachedEcho } from "./RoomCachedEcho";
+import { RoomEchoChamber } from "./RoomEchoChamber";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EchoStore } from "./EchoStore";
 
@@ -25,7 +25,7 @@ export class EchoChamber {
     private constructor() {
     }
 
-    public static forRoom(room: Room): RoomCachedEcho {
-        return EchoStore.instance.getOrCreateEchoForRoom(room);
+    public static forRoom(room: Room): RoomEchoChamber {
+        return EchoStore.instance.getOrCreateChamberForRoom(room);
     }
 }

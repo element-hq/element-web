@@ -25,7 +25,7 @@ export async function implicitlyReverted() {
 
 export const PROPERTY_UPDATED = "property_updated";
 
-export abstract class CachedEcho<C extends EchoContext, K, V> extends EventEmitter {
+export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends EventEmitter {
     private cache = new Map<K, {txn: EchoTransaction, val: V}>();
     protected matrixClient: MatrixClient;
 

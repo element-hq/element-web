@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { CachedEcho } from "./CachedEcho";
+import { GenericEchoChamber } from "./GenericEchoChamber";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomCachedEcho } from "./RoomCachedEcho";
+import { RoomEchoChamber } from "./RoomEchoChamber";
 import { RoomEchoContext } from "./RoomEchoContext";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -36,7 +36,7 @@ const roomContextKey = (room: Room): ContextKey => `room-${room.roomId}`;
 export class EchoStore extends AsyncStoreWithClient<IState> {
     private static _instance: EchoStore;
 
-    private caches = new Map<ContextKey, CachedEcho<any, any, any>>();
+    private caches = new Map<ContextKey, GenericEchoChamber<any, any, any>>();
 
     constructor() {
         super(defaultDispatcher);
@@ -53,15 +53,15 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
         return Array.from(this.caches.values()).map(e => e.context);
     }
 
-    public getOrCreateEchoForRoom(room: Room): RoomCachedEcho {
+    public getOrCreateChamberForRoom(room: Room): RoomEchoChamber {
         if (this.caches.has(roomContextKey(room))) {
-            return this.caches.get(roomContextKey(room)) as RoomCachedEcho;
+            return this.caches.get(roomContextKey(room)) as RoomEchoChamber;
         }
 
         const context = new RoomEchoContext(room);
         context.whenAnything(() => this.checkContexts());
 
-        const echo = new RoomCachedEcho(context);
+        const echo = new RoomEchoChamber(context);
         echo.setClient(this.matrixClient);
         this.caches.set(roomContextKey(room), echo);
 

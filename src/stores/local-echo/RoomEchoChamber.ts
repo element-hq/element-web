@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { CachedEcho, implicitlyReverted, PROPERTY_UPDATED } from "./CachedEcho";
+import { GenericEchoChamber, implicitlyReverted, PROPERTY_UPDATED } from "./GenericEchoChamber";
 import { getRoomNotifsState, setRoomNotifsState } from "../../RoomNotifs";
 import { RoomEchoContext } from "./RoomEchoContext";
 import { _t } from "../../languageHandler";
@@ -27,7 +27,7 @@ export enum CachedRoomKey {
     NotificationVolume,
 }
 
-export class RoomCachedEcho extends CachedEcho<RoomEchoContext, CachedRoomKey, CachedRoomValues> {
+export class RoomEchoChamber extends GenericEchoChamber<RoomEchoContext, CachedRoomKey, CachedRoomValues> {
     private properties = new Map<CachedRoomKey, CachedRoomValues>();
 
     public constructor(context: RoomEchoContext) {

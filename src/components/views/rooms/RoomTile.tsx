@@ -49,8 +49,8 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
-import { CachedRoomKey, RoomCachedEcho } from "../../../stores/local-echo/RoomCachedEcho";
-import { PROPERTY_UPDATED } from "../../../stores/local-echo/CachedEcho";
+import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
+import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
 
 interface IProps {
     room: Room;
@@ -108,7 +108,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
-    private roomProps: RoomCachedEcho;
+    private roomProps: RoomEchoChamber;
 
     constructor(props: IProps) {
         super(props);
