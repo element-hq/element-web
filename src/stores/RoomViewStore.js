@@ -265,7 +265,14 @@ class RoomViewStore extends Store {
             });
             let msg = err.message ? err.message : JSON.stringify(err);
             console.log("Failed to join room:", msg);
-            if (err.httpStatus === 404) {
+            if (err.name === "ConnectionError") {
+                msg = _t("There was an error joining the room");
+            } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
+                msg = <div>
+                    {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
+                    {_t("Please contact your homeserver administrator.")}
+                </div>;
+            } else if (err.httpStatus === 404) {
                 const invitingUserId = this._getInvitingUserId(this._state.roomId);
                 // only provide a better error message for invites
                 if (invitingUserId) {
@@ -276,13 +283,6 @@ class RoomViewStore extends Store {
                         msg = _t("The person who invited you already left the room, or their server is offline.");
                     }
                 }
-            } else if (err.name === "ConnectionError") {
-                msg = _t("There was an error joining the room");
-            } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
-                msg = <div>
-                    {_t("Sorry, your homeserver is too old to participate in this room.")}<br />
-                    {_t("Please contact your homeserver administrator.")}
-                </div>;
             }
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
