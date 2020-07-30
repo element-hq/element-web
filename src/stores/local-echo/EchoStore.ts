@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
 import { CachedEcho } from "./CachedEcho";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomCachedEcho } from "./RoomCachedEcho";
