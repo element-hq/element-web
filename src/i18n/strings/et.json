@@ -2383,5 +2383,7 @@
     "Did you know: you can use communities to filter your %(brand)s experience!": "Kas sa teadsid, et sa võid %(brand)s'i parema kasutuskogemuse nimel pruukida kogukondi!",
     "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another session.": "Kui sa pole seadistanud krüptitud sõnumite taastamise meetodeid, siis väljalogimisel või muu sessiooni kasutamisel sa kaotad võimaluse oma krüptitud sõnumeid lugeda.",
     "Set up Secure Message Recovery": "Võta kasutusele turvaline sõnumivõtmete varundus",
-    "Secure your backup with a recovery passphrase": "Krüpti oma varukoopia taastamiseks mõeldud paroolifraasiga"
+    "Secure your backup with a recovery passphrase": "Krüpti oma varukoopia taastamiseks mõeldud paroolifraasiga",
+    "The person who invited you already left the room.": "See, kes sind jututoa liikmeks kutsus, on juba jututoast lahkunud.",
+    "The person who invited you already left the room, or their server is offline.": "See, kes sind jututoa liikmeks kutsus, kas juba on jututoast lahkunud või tema koduserver on võrgust väljas."
 }
