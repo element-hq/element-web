@@ -19,7 +19,8 @@ import React from "react";
 import * as sdk from "../../../index";
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload"
 import {userLabelForEventRoom} from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
@@ -27,6 +28,7 @@ import Modal from "../../../Modal";
 import GenericToast from "./GenericToast";
 import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import {DeviceInfo} from "matrix-js-sdk/src/crypto/deviceinfo";
+import {Action} from "../../../dispatcher/actions";
 
 interface IProps {
     toastKey: string;
@@ -104,9 +106,9 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                dis.dispatch({
-                    action: "set_right_panel_phase",
-                    phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+                dis.dispatch<SetRightPanelPhasePayload>({
+                    action: Action.SetRightPanelPhase,
+                    phase: RightPanelPhases.EncryptionPanel,
                     refireParams: {
                         verificationRequest: request,
                         member: cli.getUser(request.otherUserId),
