@@ -46,7 +46,7 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
-import { arrayHasOrderChange } from "../../../utils/arrays";
+import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
@@ -115,7 +115,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             isResizing: false,
             isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
-            rooms: RoomListStore.instance.orderedLists[this.props.tagId] || [],
+            rooms: arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []),
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
@@ -255,7 +255,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
 
         const currentRooms = this.state.rooms;
-        const newRooms = RoomListStore.instance.orderedLists[this.props.tagId] || [];
+        const newRooms = arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []);
         if (arrayHasOrderChange(currentRooms, newRooms)) {
             stateUpdates.rooms = newRooms;
         }
