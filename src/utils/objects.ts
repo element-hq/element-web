@@ -59,20 +59,6 @@ export function objectShallowClone(a: any, propertyCloner?: (k: string, v: any) 
 }
 
 /**
- * Determines if the two objects, which are assumed to be of the same
- * key shape, have a difference in their values. If a difference is
- * determined, true is returned.
- * @param a The first object. Must be defined.
- * @param b The second object. Must be defined.
- * @returns True if there's a perceptual difference in the object's values.
- */
-export function objectHasValueChange(a: any, b: any): boolean {
-    const aValues = Object.values(a);
-    const bValues = Object.values(b);
-    return arrayHasDiff(aValues, bValues);
-}
-
-/**
  * Determines if any keys were added, removed, or changed between two objects.
  * For changes, simple triple equal comparisons are done, not in-depth
  * tree checking.

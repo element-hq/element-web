@@ -47,7 +47,7 @@ import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
 import { arrayHasOrderChange } from "../../../utils/arrays";
-import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
+import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
@@ -181,7 +181,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
-        if (objectHasValueChange(this.props, nextProps)) {
+        if (objectHasDiff(this.props, nextProps)) {
             // Something we don't care to optimize has updated, so update.
             return true;
         }
@@ -189,7 +189,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         // Do the same check used on props for state, without the rooms we're going to no-op
         const prevStateNoRooms = objectExcluding(this.state, ['rooms']);
         const nextStateNoRooms = objectExcluding(nextState, ['rooms']);
-        if (objectHasValueChange(prevStateNoRooms, nextStateNoRooms)) {
+        if (objectHasDiff(prevStateNoRooms, nextStateNoRooms)) {
             return true;
         }
 
