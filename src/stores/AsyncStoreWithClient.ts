@@ -35,11 +35,6 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         await this.onAction(payload);
 
         if (payload.action === 'MatrixActions.sync') {
-            // Filter out anything that isn't the first PREPARED sync.
-            if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
-                return;
-            }
-
             this.matrixClient = payload.matrixClient;
             await this.onReady();
         } else if (payload.action === 'on_client_not_viable' || payload.action === 'on_logged_out') {
