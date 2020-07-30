@@ -85,6 +85,8 @@ interface IHandlerMap {
     [level: SettingLevel]: SettingsHandler;
 }
 
+export type LabsFeatureState = "labs" | "disable" | "enable" | string;
+
 /**
  * Controls and manages application settings by providing varying levels at which the
  * setting value may be specified. The levels are then used to determine what the setting
@@ -610,7 +612,7 @@ export default class SettingsStore {
         return handlers;
     }
 
-    private static getFeatureState(settingName: string): "labs" | "disable" | "enable" | string {
+    private static getFeatureState(settingName: string): LabsFeatureState {
         const featuresConfig = SdkConfig.get()['features'];
         const enableLabs = SdkConfig.get()['enableLabs']; // we'll honour the old flag
 
