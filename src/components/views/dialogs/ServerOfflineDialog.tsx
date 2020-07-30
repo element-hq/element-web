@@ -26,6 +26,7 @@ import { TransactionStatus } from "../../../stores/local-echo/EchoTransaction";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps {
     onFinished: (bool) => void;
@@ -92,6 +93,7 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
             timeline = [<div key={1}>{_t("You're all caught up.")}</div>];
         }
 
+        const serverName = MatrixClientPeg.getHomeserverName();
         return <BaseDialog title={_t("Server isn't responding")}
             className='mx_ServerOfflineDialog'
             contentId='mx_Dialog_content'
@@ -100,11 +102,11 @@ export default class ServerOfflineDialog extends React.PureComponent<IProps> {
         >
             <div className="mx_ServerOfflineDialog_content">
                 <p>{_t(
-                    "Your server isn't responding to some of your requests for some reason. " +
-                    "Below are some possible reasons why this happened.",
+                    "Your server isn't responding to some of your requests. " +
+                    "Below are some of the most likely reasons.",
                 )}</p>
                 <ul>
-                    <li>{_t("The server took too long to respond.")}</li>
+                    <li>{_t("The server (%(serverName)s) took too long to respond.", {serverName})}</li>
                     <li>{_t("Your firewall or anti-virus is blocking the request.")}</li>
                     <li>{_t("A browser extension is preventing the request.")}</li>
                     <li>{_t("The server is offline.")}</li>
