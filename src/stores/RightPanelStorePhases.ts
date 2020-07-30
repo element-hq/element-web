@@ -15,28 +15,28 @@ limitations under the License.
 */
 
 // These are in their own file because of circular imports being a problem.
-export const RIGHT_PANEL_PHASES = Object.freeze({
+export enum RightPanelPhases {
     // Room stuff
-    RoomMemberList: 'RoomMemberList',
-    FilePanel: 'FilePanel',
-    NotificationPanel: 'NotificationPanel',
-    RoomMemberInfo: 'RoomMemberInfo',
-    EncryptionPanel: 'EncryptionPanel',
+    RoomMemberList = 'RoomMemberList',
+    FilePanel = 'FilePanel',
+    NotificationPanel = 'NotificationPanel',
+    RoomMemberInfo = 'RoomMemberInfo',
+    EncryptionPanel = 'EncryptionPanel',
 
-    Room3pidMemberInfo: 'Room3pidMemberInfo',
+    Room3pidMemberInfo = 'Room3pidMemberInfo',
     // Group stuff
-    GroupMemberList: 'GroupMemberList',
-    GroupRoomList: 'GroupRoomList',
-    GroupRoomInfo: 'GroupRoomInfo',
-    GroupMemberInfo: 'GroupMemberInfo',
-});
+    GroupMemberList = 'GroupMemberList',
+    GroupRoomList = 'GroupRoomList',
+    GroupRoomInfo = 'GroupRoomInfo',
+    GroupMemberInfo = 'GroupMemberInfo',
+}
 
 // These are the phases that are safe to persist (the ones that don't require additional
 // arguments).
 export const RIGHT_PANEL_PHASES_NO_ARGS = [
-    RIGHT_PANEL_PHASES.NotificationPanel,
-    RIGHT_PANEL_PHASES.FilePanel,
-    RIGHT_PANEL_PHASES.RoomMemberList,
-    RIGHT_PANEL_PHASES.GroupMemberList,
-    RIGHT_PANEL_PHASES.GroupRoomList,
+    RightPanelPhases.NotificationPanel,
+    RightPanelPhases.FilePanel,
+    RightPanelPhases.RoomMemberList,
+    RightPanelPhases.GroupMemberList,
+    RightPanelPhases.GroupRoomList,
 ];

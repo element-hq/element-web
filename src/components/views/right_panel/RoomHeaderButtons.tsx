@@ -21,82 +21,82 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
-import HeaderButtons, {HEADER_KIND_ROOM} from './HeaderButtons';
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import HeaderButtons, {HeaderKind} from './HeaderButtons';
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
 
 const MEMBER_PHASES = [
-    RIGHT_PANEL_PHASES.RoomMemberList,
-    RIGHT_PANEL_PHASES.RoomMemberInfo,
-    RIGHT_PANEL_PHASES.EncryptionPanel,
-    RIGHT_PANEL_PHASES.Room3pidMemberInfo,
+    RightPanelPhases.RoomMemberList,
+    RightPanelPhases.RoomMemberInfo,
+    RightPanelPhases.EncryptionPanel,
+    RightPanelPhases.Room3pidMemberInfo,
 ];
 
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
-        super(props, HEADER_KIND_ROOM);
-        this._onMembersClicked = this._onMembersClicked.bind(this);
-        this._onFilesClicked = this._onFilesClicked.bind(this);
-        this._onNotificationsClicked = this._onNotificationsClicked.bind(this);
+        super(props, HeaderKind.Room);
+        this.onMembersClicked = this.onMembersClicked.bind(this);
+        this.onFilesClicked = this.onFilesClicked.bind(this);
+        this.onNotificationsClicked = this.onNotificationsClicked.bind(this);
     }
 
-    onAction(payload: ActionPayload) {
+    protected onAction(payload: ActionPayload) {
         super.onAction(payload);
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
-                this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, {member: payload.member});
+                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
             } else {
-                this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+                this.setPhase(RightPanelPhases.RoomMemberList);
             }
         } else if (payload.action === "view_3pid_invite") {
             if (payload.event) {
-                this.setPhase(RIGHT_PANEL_PHASES.Room3pidMemberInfo, {event: payload.event});
+                this.setPhase(RightPanelPhases.Room3pidMemberInfo, {event: payload.event});
             } else {
-                this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+                this.setPhase(RightPanelPhases.RoomMemberList);
             }
         }
     }
 
-    _onMembersClicked() {
-        if (this.state.phase === RIGHT_PANEL_PHASES.RoomMemberInfo) {
+    private onMembersClicked() {
+        if (this.state.phase === RightPanelPhases.RoomMemberInfo) {
             // send the active phase to trigger a toggle
             // XXX: we should pass refireParams here but then it won't collapse as we desire it to
-            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo);
+            this.setPhase(RightPanelPhases.RoomMemberInfo);
         } else {
             // This toggles for us, if needed
-            this.setPhase(RIGHT_PANEL_PHASES.RoomMemberList);
+            this.setPhase(RightPanelPhases.RoomMemberList);
         }
     }
 
-    _onFilesClicked() {
+    private onFilesClicked() {
         // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.FilePanel);
+        this.setPhase(RightPanelPhases.FilePanel);
     }
 
-    _onNotificationsClicked() {
+    private onNotificationsClicked() {
         // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.NotificationPanel);
+        this.setPhase(RightPanelPhases.NotificationPanel);
     }
 
-    renderButtons() {
+    public renderButtons() {
         return [
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(MEMBER_PHASES)}
-                onClick={this._onMembersClicked}
+                onClick={this.onMembersClicked}
                 analytics={['Right Panel', 'Member List Button', 'click']}
             />,
             <HeaderButton key="filesButton" name="filesButton"
                 title={_t('Files')}
-                isHighlighted={this.isPhase(RIGHT_PANEL_PHASES.FilePanel)}
-                onClick={this._onFilesClicked}
+                isHighlighted={this.isPhase(RightPanelPhases.FilePanel)}
+                onClick={this.onFilesClicked}
                 analytics={['Right Panel', 'File List Button', 'click']}
             />,
             <HeaderButton key="notifsButton" name="notifsButton"
                 title={_t('Notifications')}
-                isHighlighted={this.isPhase(RIGHT_PANEL_PHASES.NotificationPanel)}
-                onClick={this._onNotificationsClicked}
+                isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
+                onClick={this.onNotificationsClicked}
                 analytics={['Right Panel', 'Notification List Button', 'click']}
             />,
         ];

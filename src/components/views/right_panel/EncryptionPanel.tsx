@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React, {useCallback, useEffect, useState} from "react";
-import PropTypes from "prop-types";
 
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";
@@ -26,11 +25,23 @@ import Modal from "../../../Modal";
 import {PHASE_REQUESTED, PHASE_UNSENT} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import * as sdk from "../../../index";
 import {_t} from "../../../languageHandler";
+import {VerificationRequest} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
 
-const EncryptionPanel = (props) => {
+interface IProps {
+    member: RoomMember;
+    onClose: () => void;
+    verificationRequest: VerificationRequest;
+    verificationRequestPromise: Promise<VerificationRequest>;
+    layout: string;
+    inDialog: boolean;
+    isRoomEncrypted: boolean;
+}
+
+const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     const {verificationRequest, verificationRequestPromise, member, onClose, layout, isRoomEncrypted} = props;
     const [request, setRequest] = useState(verificationRequest);
     // state to show a spinner immediately after clicking "start verification",
@@ -48,10 +59,10 @@ const EncryptionPanel = (props) => {
     useEffect(() => {
         async function awaitPromise() {
             setRequesting(true);
-            const request = await verificationRequestPromise;
+            const requestFromPromise = await verificationRequestPromise;
             setRequesting(false);
-            setRequest(request);
-            setPhase(request.phase);
+            setRequest(requestFromPromise);
+            setPhase(requestFromPromise.phase);
         }
         if (verificationRequestPromise) {
             awaitPromise();
@@ -90,7 +101,7 @@ const EncryptionPanel = (props) => {
         }
     }, [request]);
 
-    let cancelButton;
+    let cancelButton: JSX.Element;
     if (layout !== "dialog" && request && request.pending) {
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
         cancelButton = (<AccessibleButton
@@ -104,9 +115,9 @@ const EncryptionPanel = (props) => {
         setRequesting(true);
         const cli = MatrixClientPeg.get();
         const roomId = await ensureDMExists(cli, member.userId);
-        const verificationRequest = await cli.requestVerificationDM(member.userId, roomId);
-        setRequest(verificationRequest);
-        setPhase(verificationRequest.phase);
+        const verificationRequest_ = await cli.requestVerificationDM(member.userId, roomId);
+        setRequest(verificationRequest_);
+        setPhase(verificationRequest_.phase);
     }, [member.userId]);
 
     const requested =
@@ -143,13 +154,6 @@ const EncryptionPanel = (props) => {
             />
         </React.Fragment>);
     }
-};
-EncryptionPanel.propTypes = {
-    member: PropTypes.object.isRequired,
-    onClose: PropTypes.func.isRequired,
-    verificationRequest: PropTypes.object,
-    layout: PropTypes.string,
-    inDialog: PropTypes.bool,
 };
 
 export default EncryptionPanel;

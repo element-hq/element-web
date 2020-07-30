@@ -21,65 +21,68 @@ limitations under the License.
 import React from 'react';
 import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
-import HeaderButtons, {HEADER_KIND_GROUP} from './HeaderButtons';
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import HeaderButtons, {HeaderKind} from './HeaderButtons';
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
+import {ViewUserPayload} from "../../../dispatcher/payloads/ViewUserPayload";
 
 const GROUP_PHASES = [
-    RIGHT_PANEL_PHASES.GroupMemberInfo,
-    RIGHT_PANEL_PHASES.GroupMemberList,
+    RightPanelPhases.GroupMemberInfo,
+    RightPanelPhases.GroupMemberList,
 ];
 const ROOM_PHASES = [
-    RIGHT_PANEL_PHASES.GroupRoomList,
-    RIGHT_PANEL_PHASES.GroupRoomInfo,
+    RightPanelPhases.GroupRoomList,
+    RightPanelPhases.GroupRoomInfo,
 ];
 
+interface IProps {}
+
 export default class GroupHeaderButtons extends HeaderButtons {
-    constructor(props) {
-        super(props, HEADER_KIND_GROUP);
-        this._onMembersClicked = this._onMembersClicked.bind(this);
-        this._onRoomsClicked = this._onRoomsClicked.bind(this);
+    constructor(props: IProps) {
+        super(props, HeaderKind.Group);
+        this.onMembersClicked = this.onMembersClicked.bind(this);
+        this.onRoomsClicked = this.onRoomsClicked.bind(this);
     }
 
-    onAction(payload: ActionPayload) {
+    protected onAction(payload: ActionPayload) {
         super.onAction(payload);
 
         if (payload.action === Action.ViewUser) {
-            if (payload.member) {
-                this.setPhase(RIGHT_PANEL_PHASES.RoomMemberInfo, {member: payload.member});
+            if ((payload as ViewUserPayload).member) {
+                this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
             } else {
-                this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+                this.setPhase(RightPanelPhases.GroupMemberList);
             }
         } else if (payload.action === "view_group") {
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+            this.setPhase(RightPanelPhases.GroupMemberList);
         } else if (payload.action === "view_group_room") {
             this.setPhase(
-                RIGHT_PANEL_PHASES.GroupRoomInfo,
+                RightPanelPhases.GroupRoomInfo,
                 {groupRoomId: payload.groupRoomId, groupId: payload.groupId},
             );
         } else if (payload.action === "view_group_room_list") {
-            this.setPhase(RIGHT_PANEL_PHASES.GroupRoomList);
+            this.setPhase(RightPanelPhases.GroupRoomList);
         } else if (payload.action === "view_group_member_list") {
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+            this.setPhase(RightPanelPhases.GroupMemberList);
         } else if (payload.action === "view_group_user") {
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo, {member: payload.member});
+            this.setPhase(RightPanelPhases.GroupMemberInfo, {member: payload.member});
         }
     }
 
-    _onMembersClicked() {
-        if (this.state.phase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
+    private onMembersClicked() {
+        if (this.state.phase === RightPanelPhases.GroupMemberInfo) {
             // send the active phase to trigger a toggle
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberInfo);
+            this.setPhase(RightPanelPhases.GroupMemberInfo);
         } else {
             // This toggles for us, if needed
-            this.setPhase(RIGHT_PANEL_PHASES.GroupMemberList);
+            this.setPhase(RightPanelPhases.GroupMemberList);
         }
     }
 
-    _onRoomsClicked() {
+    private onRoomsClicked() {
         // This toggles for us, if needed
-        this.setPhase(RIGHT_PANEL_PHASES.GroupRoomList);
+        this.setPhase(RightPanelPhases.GroupRoomList);
     }
 
     renderButtons() {
@@ -87,13 +90,13 @@ export default class GroupHeaderButtons extends HeaderButtons {
             <HeaderButton key="groupMembersButton" name="groupMembersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(GROUP_PHASES)}
-                onClick={this._onMembersClicked}
+                onClick={this.onMembersClicked}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
             <HeaderButton key="roomsButton" name="roomsButton"
                 title={_t('Rooms')}
                 isHighlighted={this.isPhase(ROOM_PHASES)}
-                onClick={this._onRoomsClicked}
+                onClick={this.onRoomsClicked}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
             />,
         ];

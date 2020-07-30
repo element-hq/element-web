@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import PropTypes from "prop-types";
 
 import * as sdk from "../../../index";
 import {_t} from "../../../languageHandler";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
 
 export const PendingActionSpinner = ({text}) => {
     const Spinner = sdk.getComponent('elements.Spinner');
@@ -28,7 +28,17 @@ export const PendingActionSpinner = ({text}) => {
     </div>;
 };
 
-const EncryptionInfo = ({
+interface IProps {
+    waitingForOtherParty: boolean;
+    waitingForNetwork: boolean;
+    member: RoomMember;
+    onStartVerification: () => Promise<void>;
+    isRoomEncrypted: boolean;
+    inDialog: boolean;
+    isSelfVerification: boolean;
+}
+
+const EncryptionInfo: React.FC<IProps> = ({
     waitingForOtherParty,
     waitingForNetwork,
     member,
@@ -36,10 +46,10 @@ const EncryptionInfo = ({
     isRoomEncrypted,
     inDialog,
     isSelfVerification,
-}) => {
-    let content;
+}: IProps) => {
+    let content: JSX.Element;
     if (waitingForOtherParty || waitingForNetwork) {
-        let text;
+        let text: string;
         if (waitingForOtherParty) {
             if (isSelfVerification) {
                 text = _t("Waiting for you to accept on your other session…");
@@ -61,7 +71,7 @@ const EncryptionInfo = ({
         );
     }
 
-    let description;
+    let description: JSX.Element;
     if (isRoomEncrypted) {
         description = (
             <div>
@@ -96,11 +106,6 @@ const EncryptionInfo = ({
             </div>
         </div>
     </React.Fragment>;
-};
-EncryptionInfo.propTypes = {
-    member: PropTypes.object.isRequired,
-    onStartVerification: PropTypes.func.isRequired,
-    request: PropTypes.object,
 };
 
 export default EncryptionInfo;

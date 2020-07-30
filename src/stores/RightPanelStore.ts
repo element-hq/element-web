@@ -18,161 +18,177 @@ import dis from '../dispatcher/dispatcher';
 import {pendingVerificationRequestForUser} from '../verification';
 import {Store} from 'flux/utils';
 import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
-import {RIGHT_PANEL_PHASES, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
+import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "./RightPanelStorePhases";
+import {ActionPayload} from "../dispatcher/payloads";
+import {Action} from '../dispatcher/actions';
 
-const INITIAL_STATE = {
+interface RightPanelStoreState {
     // Whether or not to show the right panel at all. We split out rooms and groups
     // because they're different flows for the user to follow.
-    showRoomPanel: SettingsStore.getValue("showRightPanelInRoom"),
-    showGroupPanel: SettingsStore.getValue("showRightPanelInGroup"),
+    showRoomPanel: boolean;
+    showGroupPanel: boolean;
 
     // The last phase (screen) the right panel was showing
-    lastRoomPhase: SettingsStore.getValue("lastRightPanelPhaseForRoom"),
-    lastGroupPhase: SettingsStore.getValue("lastRightPanelPhaseForGroup"),
+    lastRoomPhase: RightPanelPhases;
+    lastGroupPhase: RightPanelPhases;
 
     // Extra information about the last phase
+    lastRoomPhaseParams: {[key: string]: any};
+}
+
+const INITIAL_STATE: RightPanelStoreState = {
+    showRoomPanel: SettingsStore.getValue("showRightPanelInRoom"),
+    showGroupPanel: SettingsStore.getValue("showRightPanelInGroup"),
+    lastRoomPhase: SettingsStore.getValue("lastRightPanelPhaseForRoom"),
+    lastGroupPhase: SettingsStore.getValue("lastRightPanelPhaseForGroup"),
     lastRoomPhaseParams: {},
 };
 
-const GROUP_PHASES = Object.keys(RIGHT_PANEL_PHASES).filter(k => k.startsWith("Group"));
+const GROUP_PHASES = [
+    RightPanelPhases.GroupMemberList,
+    RightPanelPhases.GroupRoomList,
+    RightPanelPhases.GroupRoomInfo,
+    RightPanelPhases.GroupMemberInfo,
+];
 
 const MEMBER_INFO_PHASES = [
-    RIGHT_PANEL_PHASES.RoomMemberInfo,
-    RIGHT_PANEL_PHASES.Room3pidMemberInfo,
-    RIGHT_PANEL_PHASES.EncryptionPanel,
+    RightPanelPhases.RoomMemberInfo,
+    RightPanelPhases.Room3pidMemberInfo,
+    RightPanelPhases.EncryptionPanel,
 ];
 
 /**
  * A class for tracking the state of the right panel between layouts and
  * sessions.
  */
-export default class RightPanelStore extends Store {
-    static _instance;
+export default class RightPanelStore extends Store<ActionPayload> {
+    private static instance: RightPanelStore;
+    private state: RightPanelStoreState;
 
     constructor() {
         super(dis);
 
         // Initialise state
-        this._state = INITIAL_STATE;
+        this.state = INITIAL_STATE;
     }
 
     get isOpenForRoom(): boolean {
-        return this._state.showRoomPanel;
+        return this.state.showRoomPanel;
     }
 
     get isOpenForGroup(): boolean {
-        return this._state.showGroupPanel;
+        return this.state.showGroupPanel;
     }
 
-    get roomPanelPhase(): string {
-        return this._state.lastRoomPhase;
+    get roomPanelPhase(): RightPanelPhases {
+        return this.state.lastRoomPhase;
     }
 
-    get groupPanelPhase(): string {
-        return this._state.lastGroupPhase;
+    get groupPanelPhase(): RightPanelPhases {
+        return this.state.lastGroupPhase;
     }
 
-    get visibleRoomPanelPhase(): string {
+    get visibleRoomPanelPhase(): RightPanelPhases {
         return this.isOpenForRoom ? this.roomPanelPhase : null;
     }
 
-    get visibleGroupPanelPhase(): string {
+    get visibleGroupPanelPhase(): RightPanelPhases {
         return this.isOpenForGroup ? this.groupPanelPhase : null;
     }
 
     get roomPanelPhaseParams(): any {
-        return this._state.lastRoomPhaseParams || {};
+        return this.state.lastRoomPhaseParams || {};
     }
 
-    _setState(newState) {
-        this._state = Object.assign(this._state, newState);
+    private setState(newState: Partial<RightPanelStoreState>) {
+        this.state = Object.assign(this.state, newState);
 
         SettingsStore.setValue(
             "showRightPanelInRoom",
             null,
             SettingLevel.DEVICE,
-            this._state.showRoomPanel,
+            this.state.showRoomPanel,
         );
         SettingsStore.setValue(
             "showRightPanelInGroup",
             null,
             SettingLevel.DEVICE,
-            this._state.showGroupPanel,
+            this.state.showGroupPanel,
         );
 
-        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this._state.lastRoomPhase)) {
+        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this.state.lastRoomPhase)) {
             SettingsStore.setValue(
                 "lastRightPanelPhaseForRoom",
                 null,
                 SettingLevel.DEVICE,
-                this._state.lastRoomPhase,
+                this.state.lastRoomPhase,
             );
         }
-        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this._state.lastGroupPhase)) {
+        if (RIGHT_PANEL_PHASES_NO_ARGS.includes(this.state.lastGroupPhase)) {
             SettingsStore.setValue(
                 "lastRightPanelPhaseForGroup",
                 null,
                 SettingLevel.DEVICE,
-                this._state.lastGroupPhase,
+                this.state.lastGroupPhase,
             );
         }
 
         this.__emitChange();
     }
 
-    __onDispatch(payload) {
+    __onDispatch(payload: ActionPayload) {
         switch (payload.action) {
             case 'view_room':
             case 'view_group':
                 // Reset to the member list if we're viewing member info
-                if (MEMBER_INFO_PHASES.includes(this._state.lastRoomPhase)) {
-                    this._setState({lastRoomPhase: RIGHT_PANEL_PHASES.RoomMemberList, lastRoomPhaseParams: {}});
+                if (MEMBER_INFO_PHASES.includes(this.state.lastRoomPhase)) {
+                    this.setState({lastRoomPhase: RightPanelPhases.RoomMemberList, lastRoomPhaseParams: {}});
                 }
 
                 // Do the same for groups
-                if (this._state.lastGroupPhase === RIGHT_PANEL_PHASES.GroupMemberInfo) {
-                    this._setState({lastGroupPhase: RIGHT_PANEL_PHASES.GroupMemberList});
+                if (this.state.lastGroupPhase === RightPanelPhases.GroupMemberInfo) {
+                    this.setState({lastGroupPhase: RightPanelPhases.GroupMemberList});
                 }
                 break;
 
-            case 'set_right_panel_phase': {
+            case Action.SetRightPanelPhase: {
                 let targetPhase = payload.phase;
                 let refireParams = payload.refireParams;
                 // redirect to EncryptionPanel if there is an ongoing verification request
-                if (targetPhase === RIGHT_PANEL_PHASES.RoomMemberInfo && payload.refireParams) {
+                if (targetPhase === RightPanelPhases.RoomMemberInfo && payload.refireParams) {
                     const {member} = payload.refireParams;
                     const pendingRequest = pendingVerificationRequestForUser(member);
                     if (pendingRequest) {
-                        targetPhase = RIGHT_PANEL_PHASES.EncryptionPanel;
+                        targetPhase = RightPanelPhases.EncryptionPanel;
                         refireParams = {
                             verificationRequest: pendingRequest,
                             member,
                         };
                     }
                 }
-                if (!RIGHT_PANEL_PHASES[targetPhase]) {
+                if (!RightPanelPhases[targetPhase]) {
                     console.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
                     return;
                 }
 
                 if (GROUP_PHASES.includes(targetPhase)) {
-                    if (targetPhase === this._state.lastGroupPhase) {
-                        this._setState({
-                            showGroupPanel: !this._state.showGroupPanel,
+                    if (targetPhase === this.state.lastGroupPhase) {
+                        this.setState({
+                            showGroupPanel: !this.state.showGroupPanel,
                         });
                     } else {
-                        this._setState({
+                        this.setState({
                             lastGroupPhase: targetPhase,
                             showGroupPanel: true,
                         });
                     }
                 } else {
-                    if (targetPhase === this._state.lastRoomPhase && !refireParams) {
-                        this._setState({
-                            showRoomPanel: !this._state.showRoomPanel,
+                    if (targetPhase === this.state.lastRoomPhase && !refireParams) {
+                        this.setState({
+                            showRoomPanel: !this.state.showRoomPanel,
                         });
                     } else {
-                        this._setState({
+                        this.setState({
                             lastRoomPhase: targetPhase,
                             showRoomPanel: true,
                             lastRoomPhaseParams: refireParams || {},
@@ -182,27 +198,27 @@ export default class RightPanelStore extends Store {
 
                 // Let things like the member info panel actually open to the right member.
                 dis.dispatch({
-                    action: 'after_right_panel_phase_change',
+                    action: Action.AfterRightPanelPhaseChange,
                     phase: targetPhase,
                     ...(refireParams || {}),
                 });
                 break;
             }
 
-            case 'toggle_right_panel':
+            case Action.ToggleRightPanel:
                 if (payload.type === "room") {
-                    this._setState({ showRoomPanel: !this._state.showRoomPanel });
+                    this.setState({ showRoomPanel: !this.state.showRoomPanel });
                 } else { // group
-                    this._setState({ showGroupPanel: !this._state.showGroupPanel });
+                    this.setState({ showGroupPanel: !this.state.showGroupPanel });
                 }
                 break;
         }
     }
 
     static getSharedInstance(): RightPanelStore {
-        if (!RightPanelStore._instance) {
-            RightPanelStore._instance = new RightPanelStore();
+        if (!RightPanelStore.instance) {
+            RightPanelStore.instance = new RightPanelStore();
         }
-        return RightPanelStore._instance;
+        return RightPanelStore.instance;
     }
 }

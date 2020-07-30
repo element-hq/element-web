@@ -28,7 +28,7 @@ import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
-import {RIGHT_PANEL_PHASES} from "../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../stores/RightPanelStorePhases";
 import FontSizeController from './controllers/FontSizeController';
 import SystemFontController from './controllers/SystemFontController';
 import UseSystemFontController from './controllers/UseSystemFontController';
@@ -534,11 +534,11 @@ export const SETTINGS = {
     },
     "lastRightPanelPhaseForRoom": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RIGHT_PANEL_PHASES.RoomMemberInfo,
+        default: RightPanelPhases.RoomMemberInfo,
     },
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RIGHT_PANEL_PHASES.GroupMemberList,
+        default: RightPanelPhases.GroupMemberList,
     },
     "enableEventIndexing": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

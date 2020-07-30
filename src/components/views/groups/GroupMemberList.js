@@ -24,8 +24,9 @@ import GroupStore from '../../../stores/GroupStore';
 import PropTypes from 'prop-types';
 import { showGroupInviteDialog } from '../../../GroupAddressPicker';
 import AccessibleButton from '../elements/AccessibleButton';
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import {Action} from "../../../dispatcher/actions";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -164,9 +165,9 @@ export default createReactClass({
     onInviteToGroupButtonClick() {
         showGroupInviteDialog(this.props.groupId).then(() => {
             dis.dispatch({
-                action: 'set_right_panel_phase',
-                phase: RIGHT_PANEL_PHASES.GroupMemberList,
-                groupId: this.props.groupId,
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.GroupMemberList,
+                refireParams: { groupId: this.props.groupId },
             });
         });
     },
