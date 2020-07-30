@@ -22,12 +22,19 @@ import { RoomEchoContext } from "./RoomEchoContext";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
+import { ContextTransactionState } from "./EchoContext";
+import NonUrgentToastStore, { ToastReference } from "../NonUrgentToastStore";
+import NonUrgentEchoFailureToast from "../../components/views/toasts/NonUrgentEchoFailureToast";
+
+interface IState {
+    toastRef: ToastReference;
+}
 
 type ContextKey = string;
 
 const roomContextKey = (room: Room): ContextKey => `room-${room.roomId}`;
 
-export class EchoStore extends AsyncStoreWithClient<any> {
+export class EchoStore extends AsyncStoreWithClient<IState> {
     private static _instance: EchoStore;
 
     private caches = new Map<ContextKey, CachedEcho<any, any, any>>();
@@ -47,13 +54,35 @@ export class EchoStore extends AsyncStoreWithClient<any> {
         if (this.caches.has(roomContextKey(room))) {
             return this.caches.get(roomContextKey(room)) as RoomCachedEcho;
         }
-        const echo = new RoomCachedEcho(new RoomEchoContext(room));
+
+        const context = new RoomEchoContext(room);
+        context.whenAnything(() => this.checkContexts());
+
+        const echo = new RoomCachedEcho(context);
         echo.setClient(this.matrixClient);
         this.caches.set(roomContextKey(room), echo);
+
         return echo;
     }
 
+    private async checkContexts() {
+        let hasOrHadError = false;
+        for (const echo of this.caches.values()) {
+            hasOrHadError = echo.context.state === ContextTransactionState.PendingErrors;
+            if (hasOrHadError) break;
+        }
+
+        if (hasOrHadError && !this.state.toastRef) {
+            const ref = NonUrgentToastStore.instance.addToast(NonUrgentEchoFailureToast);
+            await this.updateState({toastRef: ref});
+        } else if (!hasOrHadError && this.state.toastRef) {
+            NonUrgentToastStore.instance.removeToast(this.state.toastRef);
+            await this.updateState({toastRef: null});
+        }
+    }
+
     protected async onReady(): Promise<any> {
+        if (!this.caches) return; // can only happen during initialization
         for (const echo of this.caches.values()) {
             echo.setClient(this.matrixClient);
         }

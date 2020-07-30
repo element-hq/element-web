@@ -27,10 +27,15 @@ export enum ContextTransactionState {
 
 export abstract class EchoContext extends Whenable<ContextTransactionState> implements IDestroyable {
     private _transactions: EchoTransaction[] = [];
+    private _state = ContextTransactionState.NotStarted;
     public readonly startTime: Date = new Date();
 
     public get transactions(): EchoTransaction[] {
         return arrayFastClone(this._transactions);
+    }
+
+    public get state(): ContextTransactionState {
+        return this._state;
     }
 
     public beginTransaction(auditName: string, runFn: RunFn): EchoTransaction {
@@ -48,7 +53,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
     private checkTransactions = () => {
         let status = ContextTransactionState.AllSuccessful;
         for (const txn of this.transactions) {
-            if (txn.status === TransactionStatus.DoneError) {
+            if (txn.status === TransactionStatus.DoneError || txn.didPreviouslyFail) {
                 status = ContextTransactionState.PendingErrors;
                 break;
             } else if (txn.status === TransactionStatus.Pending) {
@@ -56,6 +61,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
                 // no break as we might hit something which broke
             }
         }
+        this._state = status;
         this.notifyCondition(status);
     };
 
@@ -63,6 +69,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
         for (const txn of this.transactions) {
             txn.destroy();
         }
+        this._transactions = [];
         super.destroy();
     }
 }

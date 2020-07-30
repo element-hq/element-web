@@ -60,6 +60,7 @@ export class RoomCachedEcho extends CachedEcho<RoomEchoContext, CachedRoomKey, C
 
     private updateNotificationVolume() {
         this.properties.set(CachedRoomKey.NotificationVolume, getRoomNotifsState(this.context.room.roomId));
+        this.markEchoReceived(CachedRoomKey.NotificationVolume);
         this.emit(PROPERTY_UPDATED, CachedRoomKey.NotificationVolume);
     }
 
@@ -71,7 +72,7 @@ export class RoomCachedEcho extends CachedEcho<RoomEchoContext, CachedRoomKey, C
 
     public set notificationVolume(v: Volume) {
         this.setValue(_t("Change notification settings"), CachedRoomKey.NotificationVolume, v, async () => {
-            setRoomNotifsState(this.context.room.roomId, v);
+            return setRoomNotifsState(this.context.room.roomId, v);
         }, implicitlyReverted);
     }
 }

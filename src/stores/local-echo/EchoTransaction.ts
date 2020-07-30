@@ -53,6 +53,11 @@ export class EchoTransaction extends Whenable<TransactionStatus> {
             .catch(() => this.setStatus(TransactionStatus.DoneError));
     }
 
+    public cancel() {
+        // Success basically means "done"
+        this.setStatus(TransactionStatus.DoneSuccess);
+    }
+
     private setStatus(status: TransactionStatus) {
         this._status = status;
         if (status === TransactionStatus.DoneError) {

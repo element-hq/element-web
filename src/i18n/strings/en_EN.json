@@ -612,6 +612,7 @@
     "Headphones": "Headphones",
     "Folder": "Folder",
     "Pin": "Pin",
+    "Your server isn't responding to some <a>requests</a>": "Your server isn't responding to some <a>requests</a>",
     "From %(deviceName)s (%(deviceId)s)": "From %(deviceName)s (%(deviceId)s)",
     "Decline (%(counter)s)": "Decline (%(counter)s)",
     "Accept <policyLink /> to continue:": "Accept <policyLink /> to continue:",

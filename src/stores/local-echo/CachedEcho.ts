@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EchoContext } from "./EchoContext";
-import { RunFn, TransactionStatus } from "./EchoTransaction";
+import { EchoTransaction, RunFn, TransactionStatus } from "./EchoTransaction";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { EventEmitter } from "events";
 
@@ -26,10 +26,10 @@ export async function implicitlyReverted() {
 export const PROPERTY_UPDATED = "property_updated";
 
 export abstract class CachedEcho<C extends EchoContext, K, V> extends EventEmitter {
-    private cache = new Map<K, V>();
+    private cache = new Map<K, {txn: EchoTransaction, val: V}>();
     protected matrixClient: MatrixClient;
 
-    protected constructor(protected context: C, private lookupFn: (key: K) => V) {
+    protected constructor(public readonly context: C, private lookupFn: (key: K) => V) {
         super();
     }
 
@@ -49,24 +49,39 @@ export abstract class CachedEcho<C extends EchoContext, K, V> extends EventEmitt
      * @returns The value for the key.
      */
     public getValue(key: K): V {
-        return this.cache.has(key) ? this.cache.get(key) : this.lookupFn(key);
+        return this.cache.has(key) ? this.cache.get(key).val : this.lookupFn(key);
     }
 
-    private cacheVal(key: K, val: V) {
-        this.cache.set(key, val);
+    private cacheVal(key: K, val: V, txn: EchoTransaction) {
+        this.cache.set(key, {txn, val});
         this.emit(PROPERTY_UPDATED, key);
     }
 
     private decacheKey(key: K) {
-        this.cache.delete(key);
-        this.emit(PROPERTY_UPDATED, key);
+        if (this.cache.has(key)) {
+            this.cache.get(key).txn.cancel(); // should be safe to call
+            this.cache.delete(key);
+            this.emit(PROPERTY_UPDATED, key);
+        }
+    }
+
+    protected markEchoReceived(key: K) {
+        this.decacheKey(key);
     }
 
     public setValue(auditName: string, key: K, targetVal: V, runFn: RunFn, revertFn: RunFn) {
-        this.cacheVal(key, targetVal); // set the cache now as it won't be updated by the .when() ladder below.
-        this.context.beginTransaction(auditName, runFn)
-            .when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal))
-            .whenAnyOf([TransactionStatus.DoneError, TransactionStatus.DoneSuccess], () => this.decacheKey(key))
+        // Cancel any pending transactions for the same key
+        if (this.cache.has(key)) {
+            this.cache.get(key).txn.cancel();
+        }
+
+        const txn = this.context.beginTransaction(auditName, runFn);
+        this.cacheVal(key, targetVal, txn); // set the cache now as it won't be updated by the .when() ladder below.
+
+        txn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, txn))
+            .when(TransactionStatus.DoneError, () => this.decacheKey(key))
             .when(TransactionStatus.DoneError, () => revertFn());
+
+        txn.run();
     }
 }
