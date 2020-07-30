@@ -25,7 +25,7 @@ export default class SystemFontController extends SettingController {
         super();
     }
 
-    onChange(level, roomId, newValue) {
+    public onChange(level, roomId, newValue) {
         // Dispatch font size change so that everything open responds to the change.
         dis.dispatch<UpdateSystemFontPayload>({
             action: Action.UpdateSystemFont,
