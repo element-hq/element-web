@@ -62,7 +62,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
-    public onAction(payload) {
+    protected onAction(payload) {
         // Ignore - intended to be overridden by subclasses
     }
 

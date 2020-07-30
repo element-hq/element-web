@@ -41,7 +41,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         this.onNotificationsClicked = this.onNotificationsClicked.bind(this);
     }
 
-    public onAction(payload: ActionPayload) {
+    protected onAction(payload: ActionPayload) {
         super.onAction(payload);
         if (payload.action === Action.ViewUser) {
             if (payload.member) {

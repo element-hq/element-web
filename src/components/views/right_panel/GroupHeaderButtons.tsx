@@ -45,7 +45,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         this.onRoomsClicked = this.onRoomsClicked.bind(this);
     }
 
-    public onAction(payload: ActionPayload) {
+    protected onAction(payload: ActionPayload) {
         super.onAction(payload);
 
         if (payload.action === Action.ViewUser) {
