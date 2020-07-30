@@ -80,7 +80,7 @@ export type CallbackFn = (
     newVal: any,
 ) => void;
 
-interface HandlerMap {
+interface IHandlerMap {
     // @ts-ignore - TS wants this to be a string key but we know better
     [level: SettingLevel]: SettingsHandler;
 }
@@ -595,7 +595,7 @@ export default class SettingsStore {
         return handlers[level];
     }
 
-    private static getHandlers(settingName: string): HandlerMap {
+    private static getHandlers(settingName: string): IHandlerMap {
         if (!SETTINGS[settingName]) return {};
 
         const handlers = {};
