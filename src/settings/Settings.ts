@@ -411,7 +411,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "blacklistUnverifiedDevices": {
         // We specifically want to have room-device > device so that users may set a device default
         // with a per-room override.
-        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.ROOM_ACCOUNT],
+        supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.DEVICE],
         supportedLevelsAreOrdered: true,
         displayName: {
             "default": _td('Never send encrypted messages to unverified sessions from this session'),
