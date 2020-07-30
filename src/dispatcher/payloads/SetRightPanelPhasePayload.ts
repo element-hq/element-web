@@ -24,7 +24,7 @@ export interface SetRightPanelPhasePayload extends ActionPayload {
     action: Action.SetRightPanelPhase;
 
     phase: RightPanelPhases;
-    refireParams?: SetRightPanelPhaseRefireParams;
+    refireParams: SetRightPanelPhaseRefireParams;
 }
 
 export interface SetRightPanelPhaseRefireParams {
