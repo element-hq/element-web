@@ -93,7 +93,7 @@ async function initPage() {
 
     if (hsUrl !== 'https://matrix.org/') {
         document.getElementById('configure_element_button').href =
-            "https://app.element.io/config/config?hs_url=" + encodeURIComponent(hsUrl) +
+            "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl) +
             "&is_url=" + encodeURIComponent(isUrl);
         document.getElementById('step1_heading').innerHTML= '1: Install the app';
         document.getElementById('step2_container').style.display = 'block';
