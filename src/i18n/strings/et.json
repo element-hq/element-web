@@ -2368,5 +2368,22 @@
     "You've previously used a newer version of %(brand)s with this session. To use this version again with end to end encryption, you will need to sign out and back in again.": "Sa oled selle sessiooni jaoks varem kasutanud %(brand)s'i uuemat versiooni. Selle versiooni kasutamiseks läbiva krüptimisega, pead sa esmalt logima välja ja siis uuesti logima tagasi sisse.",
     "Without setting up Secure Message Recovery, you'll lose your secure message history when you log out.": "Kui sa pole seadistanud krüptitud sõnumite taastamise meetodeid, siis väljalogimisel sa kaotad võimaluse neid krüptitud sõnumeid lugeda.",
     "If you don't want to set this up now, you can later in Settings.": "Kui sa ei soovi seda teha kohe, siis vastava võimaluse leiad hiljem rakenduse seadistustest.",
-    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise uusi taastamise meetodeid lisanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod."
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Kui sa ei ole ise uusi taastamise meetodeid lisanud, siis võib olla tegemist ründega sinu konto vastu. Palun vaheta koheselt oma kasutajakonto salasõna ning määra seadistustes uus taastemeetod.",
+    "%(senderDisplayName)s enabled flair for %(groups)s in this room.": "%(senderDisplayName)s võttis selles jututoas kasutusele %(groups)s kogukonna rinnamärgi.",
+    "%(senderDisplayName)s disabled flair for %(groups)s in this room.": "%(senderDisplayName)s eemaldas selles jututoas kasutuselt %(groups)s kogukonna rinnamärgi.",
+    "%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for %(oldGroups)s in this room.": "%(senderDisplayName)s võttis selles jututoas kasutusele %(newGroups)s kogukonna rinnamärgi ning eemaldas rinnamärgi %(oldGroups)s kogukonnalt.",
+    "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Enne väljalogimist seo see sessioon krüptovõtmete varundusega. Kui sa seda ei tee, siis võid kaotada võtmed, mida kasutatakse vaid siin sessioonis.",
+    "Flair": "Kogukonna rinnasilt",
+    "Error updating flair": "Viga kogukonna rinnasildi uuendamisel",
+    "There was an error updating the flair for this room. The server may not allow it or a temporary error occurred.": "Kogukonna rinnasildi uuendamisel tekkis viga. See kas on serveri poolt keelatud või tekkis mingi ajutine viga.",
+    "Showing flair for these communities:": "Näidatakse nende kogukondade rinnasilte:",
+    "This room is not showing flair for any communities": "Sellele jututoale ei ole jagatud ühtegi kogukonna rinnasilti",
+    "Display your community flair in rooms configured to show it.": "Näita oma kogukonna rinnasilti nendes jututubades, kus selle kuvamine on seadistatud.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Kohandatud serveriseadistusi saad kasutada selleks, et logida sisse sinu valitud koduserverisse. See võimaldab sinul kasutada %(brand)s'i mõnes teises koduserveri hallatava kasutajakontoga.",
+    "Did you know: you can use communities to filter your %(brand)s experience!": "Kas sa teadsid, et sa võid %(brand)s'i parema kasutuskogemuse nimel pruukida kogukondi!",
+    "Without setting up Secure Message Recovery, you won't be able to restore your encrypted message history if you log out or use another session.": "Kui sa pole seadistanud krüptitud sõnumite taastamise meetodeid, siis väljalogimisel või muu sessiooni kasutamisel sa kaotad võimaluse oma krüptitud sõnumeid lugeda.",
+    "Set up Secure Message Recovery": "Võta kasutusele turvaline sõnumivõtmete varundus",
+    "Secure your backup with a recovery passphrase": "Krüpti oma varukoopia taastamiseks mõeldud paroolifraasiga",
+    "The person who invited you already left the room.": "See, kes sind jututoa liikmeks kutsus, on juba jututoast lahkunud.",
+    "The person who invited you already left the room, or their server is offline.": "See, kes sind jututoa liikmeks kutsus, kas juba on jututoast lahkunud või tema koduserver on võrgust väljas."
 }

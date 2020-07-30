@@ -2388,5 +2388,7 @@
     "Click to view edits": "Preme para ver as edicións",
     "Are you sure you want to cancel entering passphrase?": "¿Estás seguro de que non queres escribir a frase de paso?",
     "Custom Tag": "Etiqueta personal",
-    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
+    "The person who invited you already left the room.": "A persoa que te convidou xa deixou a sala.",
+    "The person who invited you already left the room, or their server is offline.": "A persoa que te convidou xa deixou a sala, ou o seu servidor non está a funcionar."
 }
