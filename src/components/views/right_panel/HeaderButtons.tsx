@@ -24,6 +24,7 @@ import RightPanelStore from "../../../stores/RightPanelStore";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from '../../../dispatcher/actions';
 import {SetRightPanelPhasePayload, SetRightPanelPhaseRefireParams} from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
+import {EventSubscription} from "fbemitter";
 
 export enum HeaderKind {
   Room = "room",
@@ -38,7 +39,7 @@ interface IState {
 interface IProps {}
 
 export default class HeaderButtons extends React.Component<IProps, IState> {
-    private storeToken: ReturnType<RightPanelStore["addListener"]>;
+    private storeToken: EventSubscription;
     private dispatcherRef: string;
 
     constructor(props: IProps, kind: HeaderKind) {
