@@ -61,7 +61,7 @@ export class NotificationsEnabledController extends SettingController {
         return calculatedValue;
     }
 
-    public onChange(level: SettingLevel, roomId: string, newValue) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any) {
         if (getNotifier().supportsDesktopNotifications()) {
             getNotifier().setEnabled(newValue);
         }

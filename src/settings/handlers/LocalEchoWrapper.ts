@@ -60,7 +60,7 @@ export default class LocalEchoWrapper extends SettingsHandler {
         });
     }
 
-    public canSetValue(settingName, roomId): boolean {
+    public canSetValue(settingName: string, roomId: string): boolean {
         return this.handler.canSetValue(settingName, roomId);
     }
 
