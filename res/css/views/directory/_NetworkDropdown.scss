@@ -145,9 +145,10 @@ limitations under the License.
     &::after {
         content: "";
         position: absolute;
-        width: 18px;
-        height: 18px;
-        right: -22px; // - (18 + 4)
+        width: 24px;
+        height: 24px;
+        right: -26.5px; // - (24 + 2.5)
+        top: -3px;
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
