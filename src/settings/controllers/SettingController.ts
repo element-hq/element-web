@@ -33,11 +33,16 @@ export default abstract class SettingController {
      * @param {String} roomId The room ID, may be null.
      * @param {*} calculatedValue The value that the handlers think the setting should be,
      * may be null.
-     * @param {string} calculatedAtLevel The level for which the calculated value was
+     * @param {SettingLevel} calculatedAtLevel The level for which the calculated value was
      * calculated at. May be null.
      * @return {*} The value that should be used, or null if no override is applicable.
      */
-    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: any): any {
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel,
+    ): any {
         return null; // no override
     }
 

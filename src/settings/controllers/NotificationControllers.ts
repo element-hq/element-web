@@ -46,7 +46,12 @@ function getNotifier(): any { // TODO: [TS] Formal type that doesn't cause a cyc
 }
 
 export class NotificationsEnabledController extends SettingController {
-    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: any): any {
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel,
+    ): any {
         if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {

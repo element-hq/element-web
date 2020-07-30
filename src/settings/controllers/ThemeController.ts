@@ -22,7 +22,12 @@ import { SettingLevel } from "../SettingLevel";
 export default class ThemeController extends SettingController {
     public static isLogin = false;
 
-    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: any): any {
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel,
+    ): any {
         if (!calculatedValue) return null; // Don't override null themes
 
         if (ThemeController.isLogin) return 'light';

@@ -402,7 +402,7 @@ export default class SettingsStore {
         level: SettingLevel,
         roomId: string,
         calculatedValue: any,
-        calculatedAtLevel: any,
+        calculatedAtLevel: SettingLevel,
     ): any {
         let resultingValue = calculatedValue;
 
