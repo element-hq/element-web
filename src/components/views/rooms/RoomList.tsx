@@ -42,7 +42,7 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
-import { objectShallowClone } from "../../../utils/objects";
+import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -220,7 +220,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         }
 
         const previousListIds = Object.keys(this.state.sublists);
-        const newListIds = Object.keys(newLists);
+        const newListIds = Object.keys(newLists).filter(t => {
+            if (!isCustomTag(t)) return true; // always include non-custom tags
+
+            // if the tag is custom though, only include it if it is enabled
+            return CustomRoomTagStore.getTags()[t];
+        });
 
         let doUpdate = arrayHasDiff(previousListIds, newListIds);
         if (!doUpdate) {
@@ -240,7 +245,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (doUpdate) {
             // We have to break our reference to the room list store if we want to be able to
             // diff the object for changes, so do that.
-            const sublists = objectShallowClone(newLists, (k, v) => arrayFastClone(v));
+            const newSublists = objectWithOnly(newLists, newListIds);
+            const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
             this.setState({sublists}, () => {
                 this.props.onResize();
@@ -288,8 +294,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const tagOrder = TAG_ORDER.reduce((p, c) => {
             if (c === CUSTOM_TAGS_BEFORE_TAG) {
                 const customTags = Object.keys(this.state.sublists)
-                    .filter(t => isCustomTag(t))
-                    .filter(t => CustomRoomTagStore.getTags()[t]); // isSelected
+                    .filter(t => isCustomTag(t));
                 p.push(...customTags);
             }
             p.push(c);

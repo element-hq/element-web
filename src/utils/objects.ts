@@ -37,6 +37,23 @@ export function objectExcluding(a: any, props: string[]): any {
 }
 
 /**
+ * Gets a new object which represents the provided object, with only some properties
+ * included.
+ * @param a The object to clone properties of. Must be defined.
+ * @param props The property names to keep.
+ * @returns The new object with only the provided properties.
+ */
+export function objectWithOnly(a: any, props: string[]): any {
+    const existingProps = Object.keys(a);
+    const diff = arrayDiff(existingProps, props);
+    if (diff.removed.length === 0) {
+        return objectShallowClone(a);
+    } else {
+        return objectExcluding(a, diff.removed);
+    }
+}
+
+/**
  * Clones an object to a caller-controlled depth. When a propertyCloner is supplied, the
  * object's properties will be passed through it with the return value used as the new
  * object's type. This is intended to be used to deep clone a reference, but without
