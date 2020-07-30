@@ -41,11 +41,11 @@ interface IProps {}
 export default class GroupHeaderButtons extends HeaderButtons {
     constructor(props: IProps) {
         super(props, HeaderKind.Group);
-        this._onMembersClicked = this._onMembersClicked.bind(this);
-        this._onRoomsClicked = this._onRoomsClicked.bind(this);
+        this.onMembersClicked = this.onMembersClicked.bind(this);
+        this.onRoomsClicked = this.onRoomsClicked.bind(this);
     }
 
-    onAction(payload: ActionPayload) {
+    public onAction(payload: ActionPayload) {
         super.onAction(payload);
 
         if (payload.action === Action.ViewUser) {
@@ -70,7 +70,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         }
     }
 
-    _onMembersClicked() {
+    private onMembersClicked() {
         if (this.state.phase === RightPanelPhases.GroupMemberInfo) {
             // send the active phase to trigger a toggle
             this.setPhase(RightPanelPhases.GroupMemberInfo);
@@ -80,7 +80,7 @@ export default class GroupHeaderButtons extends HeaderButtons {
         }
     }
 
-    _onRoomsClicked() {
+    private onRoomsClicked() {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.GroupRoomList);
     }
@@ -90,13 +90,13 @@ export default class GroupHeaderButtons extends HeaderButtons {
             <HeaderButton key="groupMembersButton" name="groupMembersButton"
                 title={_t('Members')}
                 isHighlighted={this.isPhase(GROUP_PHASES)}
-                onClick={this._onMembersClicked}
+                onClick={this.onMembersClicked}
                 analytics={['Right Panel', 'Group Member List Button', 'click']}
             />,
             <HeaderButton key="roomsButton" name="roomsButton"
                 title={_t('Rooms')}
                 isHighlighted={this.isPhase(ROOM_PHASES)}
-                onClick={this._onRoomsClicked}
+                onClick={this.onRoomsClicked}
                 analytics={['Right Panel', 'Group Room List Button', 'click']}
             />,
         ];

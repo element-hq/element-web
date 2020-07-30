@@ -76,7 +76,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.hasVerifier = false;
     }
 
-    renderQRPhase() {
+    private renderQRPhase() {
         const {member, request} = this.props;
         const showSAS: boolean = request.otherPartySupportsMethod(verificationMethods.SAS);
         const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
@@ -191,7 +191,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         return MatrixClientPeg.get().getStoredDevice(MatrixClientPeg.get().getUserId(), deviceId);
     }
 
-    renderQRReciprocatePhase() {
+    private renderQRReciprocatePhase() {
         const {member, request} = this.props;
         let Button;
         // a bit of a hack, but the FormButton should only be used in the right panel
@@ -235,7 +235,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         </div>;
     }
 
-    renderVerifiedPhase() {
+    private renderVerifiedPhase() {
         const {member, request} = this.props;
 
         let text: string;
@@ -281,7 +281,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    renderCancelledPhase() {
+    private renderCancelledPhase() {
         const {member, request} = this.props;
 
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -321,7 +321,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         );
     }
 
-    render() {
+    public render() {
         const {member, phase, request} = this.props;
 
         const displayName = member.displayName || member.name || member.userId;
@@ -405,7 +405,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         }
     };
 
-    componentDidMount() {
+    public componentDidMount() {
         const {request} = this.props;
         request.on("change", this.onRequestChange);
         if (request.verifier) {
@@ -415,7 +415,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         this.onRequestChange();
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         const {request} = this.props;
         if (request.verifier) {
             request.verifier.off('show_sas', this.updateVerifierState);

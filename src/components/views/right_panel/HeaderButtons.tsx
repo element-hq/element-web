@@ -52,21 +52,21 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         this.storeToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelUpdate.bind(this));
         this.dispatcherRef = dis.register(this.onAction.bind(this)); // used by subclasses
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
         if (this.storeToken) this.storeToken.remove();
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
     }
 
-    onAction(payload) {
+    public onAction(payload) {
         // Ignore - intended to be overridden by subclasses
     }
 
-    setPhase(phase: RightPanelPhases, extras?: Partial<SetRightPanelPhaseRefireParams>) {
+    public setPhase(phase: RightPanelPhases, extras?: Partial<SetRightPanelPhaseRefireParams>) {
         dis.dispatch<SetRightPanelPhasePayload>({
             action: Action.SetRightPanelPhase,
             phase: phase,
@@ -74,7 +74,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
         });
     }
 
-    isPhase(phases: string | string[]) {
+    public isPhase(phases: string | string[]) {
         if (Array.isArray(phases)) {
             return phases.includes(this.state.phase);
         } else {
@@ -82,7 +82,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
         }
     }
 
-    onRightPanelUpdate() {
+    private onRightPanelUpdate() {
         const rps = RightPanelStore.getSharedInstance();
         if (this.state.headerKind === HeaderKind.Room) {
             this.setState({phase: rps.visibleRoomPanelPhase});
@@ -92,7 +92,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
     }
 
     // XXX: Make renderButtons a prop
-    renderButtons(): JSX.Element[] {
+    public renderButtons(): JSX.Element[] {
         // Ignore - intended to be overridden by subclasses
         // Return empty fragment to satisfy the type
         return [
@@ -101,7 +101,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
         ];
     }
 
-    render() {
+    public render() {
         // inline style as this will be swapped around in future commits
         return <div className="mx_HeaderButtons" role="tablist">
             {this.renderButtons()}

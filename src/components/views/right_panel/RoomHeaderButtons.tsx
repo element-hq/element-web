@@ -41,7 +41,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         this.onNotificationsClicked = this.onNotificationsClicked.bind(this);
     }
 
-    onAction(payload: ActionPayload) {
+    public onAction(payload: ActionPayload) {
         super.onAction(payload);
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
@@ -79,7 +79,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         this.setPhase(RightPanelPhases.NotificationPanel);
     }
 
-    renderButtons() {
+    public renderButtons() {
         return [
             <HeaderButton key="membersButton" name="membersButton"
                 title={_t('Members')}

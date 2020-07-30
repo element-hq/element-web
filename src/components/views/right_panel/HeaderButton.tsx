@@ -45,12 +45,12 @@ export default class HeaderButton extends React.Component<IProps> {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(_ev: React.KeyboardEvent) {
+    private onClick() {
         Analytics.trackEvent(...this.props.analytics);
         this.props.onClick();
     }
 
-    render() {
+    public render() {
         const classes = classNames({
             mx_RightPanel_headerButton: true,
             mx_RightPanel_headerButton_highlight: this.props.isHighlighted,
