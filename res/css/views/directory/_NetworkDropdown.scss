@@ -147,7 +147,7 @@ limitations under the License.
         position: absolute;
         width: 24px;
         height: 24px;
-        right: -26.5px; // - (24 + 2.5)
+        right: -26.5px; // - (width: 24 + spacing to align with X above: 2.5)
         top: -3px;
         mask-repeat: no-repeat;
         mask-position: center;
