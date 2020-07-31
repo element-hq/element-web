@@ -1365,5 +1365,10 @@
     "Composer": "入力欄",
     "Sort by": "並び替え",
     "List options": "一覧の設定",
-    "Use Single Sign On to continue": "シングルサインオンを使用して続行"
+    "Use Single Sign On to continue": "シングルサインオンを使用して続行",
+    "Accept <policyLink /> to continue:": "<policyLink /> に同意して続行：",
+    "Always show the window menu bar": "常にウィンドウメニューバーを表示する",
+    "Create room": "部屋を作成",
+    "Show %(count)s more|other": "さらに %(count)s 件を表示",
+    "Show %(count)s more|one": "さらに %(count)s 件を表示"
 }
