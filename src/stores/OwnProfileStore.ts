@@ -111,8 +111,6 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         await this.updateState({displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url});
     };
 
-    // TSLint wants this to be a member, but we don't want that.
-    // tslint:disable-next-line
     private onStateEvents = throttle(async (ev: MatrixEvent) => {
         const myUserId = MatrixClientPeg.get().getUserId();
         if (ev.getType() === 'm.room.member' && ev.getSender() === myUserId && ev.getStateKey() === myUserId) {
