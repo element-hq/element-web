@@ -141,7 +141,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     }
 
     // add labs options
-    const enabledLabs = SettingsStore.getLabsFeatures().filter(SettingsStore.isFeatureEnabled);
+    const enabledLabs = SettingsStore.getLabsFeatures().filter(f => SettingsStore.isFeatureEnabled(f));
     if (enabledLabs.length) {
         body.append('enabled_labs', enabledLabs.join(', '));
     }

@@ -28,7 +28,7 @@ limitations under the License.
     content: "";
     position: absolute;
     top: -8px;
-    left: 11px;
+    left: 10.5px;
     width: 4px;
     height: 4px;
     border-radius: 16px;
@@ -49,11 +49,12 @@ limitations under the License.
 .mx_TopUnreadMessagesBar_scrollUp::before {
     content: "";
     position: absolute;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     mask-image: url('$(res)/img/icon-jump-to-first-unread.svg');
     mask-repeat: no-repeat;
-    mask-position: 9px 13px;
+    mask-position: center;
+    mask-size: 50%;
     background: $muted-fg-color;
 }
 

@@ -715,7 +715,9 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    this.cachedRooms[rmTag] = algorithm.orderedRooms;
+                    this._cachedRooms[rmTag] = algorithm.orderedRooms;
+                    this.recalculateFilteredRoomsForTag(rmTag); // update filter to re-sort the list
+                    this.recalculateStickyRoom(rmTag); // update sticky room to make sure it moves if needed
                 }
                 for (const addTag of diff.added) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
@@ -725,7 +727,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[addTag];
                     if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
-                    this.cachedRooms[addTag] = algorithm.orderedRooms;
+                    this._cachedRooms[addTag] = algorithm.orderedRooms;
                 }
 
                 // Update the tag map so we don't regen it in a moment
@@ -821,7 +823,7 @@ export class Algorithm extends EventEmitter {
             if (!algorithm) throw new Error(`No algorithm for ${tag}`);
 
             await algorithm.handleRoomUpdate(room, cause);
-            this.cachedRooms[tag] = algorithm.orderedRooms;
+            this._cachedRooms[tag] = algorithm.orderedRooms;
 
             // Flag that we've done something
             this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list

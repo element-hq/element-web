@@ -48,7 +48,7 @@ import RightPanel from './RightPanel';
 import RoomViewStore from '../../stores/RoomViewStore';
 import RoomScrollStateStore from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore from "../../settings/SettingsStore";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/RightPanelStore";
 import {haveTileForEvent} from "../views/rooms/EventTile";
@@ -56,6 +56,7 @@ import RoomContext from "../../contexts/RoomContext";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
+import {SettingLevel} from "../../settings/SettingLevel";
 
 const DEBUG = false;
 let debuglog = function() {};

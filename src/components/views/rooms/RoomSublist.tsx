@@ -46,8 +46,8 @@ import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import RoomListLayoutStore from "../../../stores/room-list/RoomListLayoutStore";
-import { arrayHasOrderChange } from "../../../utils/arrays";
-import { objectExcluding, objectHasValueChange } from "../../../utils/objects";
+import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
+import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 
@@ -115,7 +115,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             isResizing: false,
             isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
-            rooms: RoomListStore.instance.orderedLists[this.props.tagId] || [],
+            rooms: arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []),
         };
         // Why Object.assign() and not this.state.height? Because TypeScript says no.
         this.state = Object.assign(this.state, {height: this.calculateInitialHeight()});
@@ -181,7 +181,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
-        if (objectHasValueChange(this.props, nextProps)) {
+        if (objectHasDiff(this.props, nextProps)) {
             // Something we don't care to optimize has updated, so update.
             return true;
         }
@@ -189,7 +189,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         // Do the same check used on props for state, without the rooms we're going to no-op
         const prevStateNoRooms = objectExcluding(this.state, ['rooms']);
         const nextStateNoRooms = objectExcluding(nextState, ['rooms']);
-        if (objectHasValueChange(prevStateNoRooms, nextStateNoRooms)) {
+        if (objectHasDiff(prevStateNoRooms, nextStateNoRooms)) {
             return true;
         }
 
@@ -255,7 +255,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
 
         const currentRooms = this.state.rooms;
-        const newRooms = RoomListStore.instance.orderedLists[this.props.tagId] || [];
+        const newRooms = arrayFastClone(RoomListStore.instance.orderedLists[this.props.tagId] || []);
         if (arrayHasOrderChange(currentRooms, newRooms)) {
             stateUpdates.rooms = newRooms;
         }

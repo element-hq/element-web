@@ -20,11 +20,12 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from '../../../languageHandler';
 import ToggleSwitch from "./ToggleSwitch";
 import StyledCheckbox from "./StyledCheckbox";
+import { SettingLevel } from "../../../settings/SettingLevel";
 
 interface IProps {
     // The setting must be a boolean
     name: string;
-    level: string;
+    level: SettingLevel;
     roomId?: string; // for per-room settings
     label?: string; // untranslated
     isExplicit?: boolean;
@@ -52,8 +53,8 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         };
     }
 
-    private onChange = (checked: boolean): void => {
-        this.save(checked);
+    private onChange = async (checked: boolean) => {
+        await this.save(checked);
         this.setState({ value: checked });
         if (this.props.onChange) this.props.onChange(checked);
     };
@@ -62,8 +63,8 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         this.onChange(e.target.checked);
     };
 
-    private save = (val?: boolean): void => {
-        return SettingsStore.setValue(
+    private save = async (val?: boolean) => {
+        await SettingsStore.setValue(
             this.props.name,
             this.props.roomId,
             this.props.level,

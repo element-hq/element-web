@@ -136,6 +136,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         } else {
             throw new Error(`Unhandled splice: ${cause}`);
         }
+
+        // changes have been made if we made it here, so say so
+        return true;
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {

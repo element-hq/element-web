@@ -2387,5 +2387,7 @@
     "%(brand)s iOS": "%(brand)s iOS",
     "%(brand)s X for Android": "%(brand)s X për Android",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
-    "Custom Tag": "Etiketë Vetjake"
+    "Custom Tag": "Etiketë Vetjake",
+    "The person who invited you already left the room.": "Personi që ju ftoi ka dalë nga dhoma tashmë.",
+    "The person who invited you already left the room, or their server is offline.": "Personi që ju ftoi, ka dalë nga dhoma tashmë, ose shërbyesi i tij është jashtë funksionimi."
 }

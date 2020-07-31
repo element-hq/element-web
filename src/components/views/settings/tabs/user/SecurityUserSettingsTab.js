@@ -19,7 +19,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -29,6 +28,7 @@ import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
 import {privateShouldBeEncrypted} from "../../../../../createRoom";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
