@@ -256,7 +256,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             deviceId: creds.deviceId,
             pickleKey: creds.pickleKey,
             timelineSupport: true,
-            forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer', false),
+            forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
             fallbackICEServerAllowed: !!SettingsStore.getValue('fallbackICEServerAllowed'),
             verificationMethods: [
                 verificationMethods.SAS,

@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +17,14 @@ limitations under the License.
 
 import SettingController from "./SettingController";
 import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { SettingLevel } from "../SettingLevel";
 
 // XXX: This feels wrong.
 import {PushProcessor} from "matrix-js-sdk/src/pushprocessor";
 
 // .m.rule.master being enabled means all events match that push rule
 // default action on this rule is dont_notify, but it could be something else
-function isPushNotifyDisabled() {
+function isPushNotifyDisabled(): boolean {
     // Return the value of the master push rule as a default
     const processor = new PushProcessor(MatrixClientPeg.get());
     const masterRule = processor.getPushRuleById(".m.rule.master");
@@ -36,14 +38,20 @@ function isPushNotifyDisabled() {
     return masterRule.enabled && !masterRule.actions.includes("notify");
 }
 
-function getNotifier() {
+function getNotifier(): any { // TODO: [TS] Formal type that doesn't cause a cyclical reference.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     let Notifier = require('../../Notifier'); // avoids cyclical references
     if (Notifier.default) Notifier = Notifier.default; // correct for webpack require() weirdness
     return Notifier;
 }
 
 export class NotificationsEnabledController extends SettingController {
-    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel,
+    ): any {
         if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null || calculatedAtLevel === "default") {
@@ -53,7 +61,7 @@ export class NotificationsEnabledController extends SettingController {
         return calculatedValue;
     }
 
-    onChange(level, roomId, newValue) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any) {
         if (getNotifier().supportsDesktopNotifications()) {
             getNotifier().setEnabled(newValue);
         }
@@ -61,7 +69,7 @@ export class NotificationsEnabledController extends SettingController {
 }
 
 export class NotificationBodyEnabledController extends SettingController {
-    getValueOverride(level, roomId, calculatedValue) {
+    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any): any {
         if (!getNotifier().isPossible()) return false;
 
         if (calculatedValue === null) {
@@ -73,7 +81,7 @@ export class NotificationBodyEnabledController extends SettingController {
 }
 
 export class AudioNotificationsEnabledController extends SettingController {
-    getValueOverride(level, roomId, calculatedValue) {
+    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any): any {
         if (!getNotifier().isPossible()) return false;
 
         // Note: Audio notifications are *not* enabled by default.

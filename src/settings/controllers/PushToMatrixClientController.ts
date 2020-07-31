@@ -15,23 +15,20 @@ limitations under the License.
 */
 
 import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { SettingLevel } from "../SettingLevel";
+import SettingController from "./SettingController";
 
 /**
  * When the value changes, call a setter function on the matrix client with the new value
  */
-export default class PushToMatrixClientController {
-    constructor(setter, inverse) {
-        this._setter = setter;
-        this._inverse = inverse;
+export default class PushToMatrixClientController extends SettingController {
+    constructor(private setter: Function, private inverse: boolean) {
+        super();
     }
 
-    getValueOverride(level, roomId, calculatedValue, calculatedAtLevel) {
-        return null; // no override
-    }
-
-    onChange(level, roomId, newValue) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any) {
         // XXX does this work? This surely isn't necessarily the effective value,
         // but it's what NotificationsEnabledController does...
-        this._setter.call(MatrixClientPeg.get(), this._inverse ? !newValue : newValue);
+        this.setter.call(MatrixClientPeg.get(), this.inverse ? !newValue : newValue);
     }
 }

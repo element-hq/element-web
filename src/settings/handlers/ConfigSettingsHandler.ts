@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
  * roomId parameter.
  */
 export default class ConfigSettingsHandler extends SettingsHandler {
-    getValue(settingName, roomId) {
+    public getValue(settingName: string, roomId: string): any {
         const config = SdkConfig.get() || {};
 
         // Special case themes
@@ -37,15 +37,15 @@ export default class ConfigSettingsHandler extends SettingsHandler {
         return settingsConfig[settingName];
     }
 
-    setValue(settingName, roomId, newValue) {
+    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         throw new Error("Cannot change settings at the config level");
     }
 
-    canSetValue(settingName, roomId) {
+    public canSetValue(settingName: string, roomId: string): boolean {
         return false;
     }
 
-    isSupported() {
+    public isSupported(): boolean {
         return true; // SdkConfig is always there
     }
 }

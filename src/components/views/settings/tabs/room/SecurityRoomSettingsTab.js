@@ -20,9 +20,9 @@ import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
