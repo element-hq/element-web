@@ -84,7 +84,7 @@ export abstract class GenericEchoChamber<C extends EchoContext, K, V> extends Ev
         this.cacheVal(key, targetVal, txn); // set the cache now as it won't be updated by the .when() ladder below.
 
         txn.when(TransactionStatus.Pending, () => this.cacheVal(key, targetVal, txn))
-            .when(TransactionStatus.DoneError, () => revertFn());
+            .when(TransactionStatus.Error, () => revertFn());
 
         txn.run();
     }
