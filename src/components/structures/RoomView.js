@@ -1912,6 +1912,7 @@ export default createReactClass({
                     disabled={this.props.disabled}
                     showApps={this.state.showApps}
                     e2eStatus={this.state.e2eStatus}
+                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this._getPermalinkCreatorForRoom(this.state.room)}
                 />;
         }

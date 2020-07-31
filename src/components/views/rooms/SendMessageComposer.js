@@ -365,6 +365,13 @@ export default class SendMessageComposer extends React.Component {
     onAction = (payload) => {
         switch (payload.action) {
             case 'reply_to_event':
+                // add a timeout for the reply preview to be rendered, so
+                // that the ScrollPanel listening to the resizeNotifier can
+                // correctly measure it's new height and scroll down to keep
+                // at the bottom if it already is
+                setTimeout(() => {
+                    this.props.resizeNotifier.notifyTimelineHeightChanged();
+                }, 100);
             case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;

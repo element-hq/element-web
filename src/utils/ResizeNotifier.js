@@ -53,6 +53,10 @@ export default class ResizeNotifier extends EventEmitter {
         this._updateMiddlePanel();
     }
 
+    notifyTimelineHeightChanged() {
+        this._updateMiddlePanel();
+    }
+
     // can be called in quick succession
     notifyWindowResized() {
         // no need to throttle this one,

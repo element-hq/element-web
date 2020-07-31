@@ -354,6 +354,7 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
+                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
