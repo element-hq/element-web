@@ -444,9 +444,7 @@ export default class SendMessageComposer extends React.Component {
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
-                <div className="mx_SendMessageComposer_overlayWrapper">
-                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
-                </div>
+                <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                 <BasicMessageComposer
                     ref={this._setEditorRef}
                     model={this.model}
