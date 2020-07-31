@@ -1,10 +1,10 @@
 {
     "Dismiss": "Descartar",
     "powered by Matrix": "oferecido por Matrix",
-    "Unknown device": "Dispositivo desconhecido",
+    "Unknown device": "Aparelho desconhecido",
     "You need to be using HTTPS to place a screen-sharing call.": "Você precisa estar usando HTTPS para poder iniciar uma chamada com compartilhamento de tela.",
     "Welcome to Element": "Seja bem-vinda(o) a Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat descentralizado, criptografado e colaborativo oferecido por [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat descentralizado, criptografado e colaborativo construído com [matrix]",
     "Sign In": "Entrar",
     "Create Account": "Criar Conta",
     "Explore rooms": "Explore as salas",
@@ -18,7 +18,7 @@
     "Open user settings": "Abrir configurações do usuário",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navegador não suportado",
-    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Instale o <chromeLink> Chrome </chromeLink>, o <firefoxLink> Firefox </firefoxLink> ou o <safariLink> Safari </safariLink> para obter uma melhor experiência.",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instale o <chromeLink>Chrome</chromeLink>, o <firefoxLink>Firefox</firefoxLink> ou o <safariLink>Safari</safariLink> para obter a melhor experiência de uso.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Você pode continuar usando o navegador atual, mas alguns dos recursos podem não funcionar e a aparência do aplicativo pode estar incorreta.",
     "I understand the risks and wish to continue": "Entendo os riscos e desejo continuar",
     "Go to element.io": "Vá para element.io",
@@ -26,11 +26,11 @@
     "Missing indexeddb worker script!": "O script indexeddb não foi encontrado!",
     "Open": "Abrir",
     "Previous/next recently visited room or community": "Anterior/Próxima sala ou comunidade visitada recentemente",
-    "%(brand)s Desktop (%(platformName)s)": "Desktop de %(brand) (%(platformName))",
+    "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Go to your browser to complete Sign In": "Vá para o seu navegador para concluir o login",
     "Your Element is misconfigured": "Seu Element está desconfigurado",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Sua configuração do Element contém JSON inválido. Por favor, corrija o problema e recarregue a página.",
-    "Your browser can't run %(brand)s": "Seu navegador não consegue rodar o %(brand)",
+    "Your browser can't run %(brand)s": "Seu navegador não consegue rodar %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funcionalidades avançadas de navegador que não são suportadas pelo seu navegador atual.",
-    "Powered by Matrix": "Powered by Matrix"
+    "Powered by Matrix": "Construído com tecnologia Matrix"
 }
