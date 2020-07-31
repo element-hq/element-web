@@ -109,3 +109,7 @@ limitations under the License.
 .mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
     background-color: $primary-bg-color;
 }
+
+.mx_FilePanel_empty::before {
+    mask-image: url('$(res)/img/element-icons/room/files.svg');
+}
