@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { JSXElementConstructor } from "react";
+.mx_NonUrgentToastContainer {
+    position: absolute;
+    bottom: 30px;
+    left: 28px;
+    z-index: 101; // same level as other toasts
 
-// Based on https://stackoverflow.com/a/53229857/3532235
-export type Without<T, U> = {[P in Exclude<keyof T, keyof U>] ? : never};
-export type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
-export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+    .mx_NonUrgentToastContainer_toast {
+        padding: 10px 12px;
+        border-radius: 8px;
+        width: 320px;
+        font-size: $font-13px;
+        margin-top: 8px;
 
-export type ComponentClass = keyof JSX.IntrinsicElements | JSXElementConstructor<any>;
+        // We don't use variables on the colours because we want it to be the same
+        // in all themes.
+        background-color: #17191c;
+        color: #fff;
+    }
+}

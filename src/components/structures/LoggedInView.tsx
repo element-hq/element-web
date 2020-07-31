@@ -54,6 +54,7 @@ import LeftPanel from "./LeftPanel";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
+import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 
 // We need to fetch each pinned message individually (if we don't already have it)
@@ -688,6 +689,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     </DragDropContext>
                 </div>
                 <CallContainer />
+                <NonUrgentToastContainer />
             </MatrixClientContext.Provider>
         );
     }
