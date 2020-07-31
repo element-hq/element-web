@@ -2388,5 +2388,21 @@
     "You’re already signed in and good to go here, but you can also grab the latest versions of the app on all platforms at <a>element.io/get-started</a>.": "Már be vagy jelentkezve és ez rendben van, de minden platformon az alkalmazás legfrissebb verziójának beszerzéséhez látogass el ide: <a>element.io/get-started</a>.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Használhatod a más szerver opciót, hogy egy másik matrix szerverre jelentkezz be amihez megadod a szerver url címét. Ezzel használhatod %(brand)s klienst egy már létező Matrix fiókkal egy másik matrix szerveren.",
     "Enter the location of your Element Matrix Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Add meg az Element Matrix Services matrix szerveredet. Használhatod a saját domain-edet vagy az <a>element.io</a> al-domain-jét.",
-    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
+    "The person who invited you already left the room.": "Aki meghívott a szobába már távozott.",
+    "The person who invited you already left the room, or their server is offline.": "Aki meghívott a szobába már távozott, vagy a szervere elérhetetlen.",
+    "Change notification settings": "Értesítési beállítások megváltoztatása",
+    "Your server isn't responding to some <a>requests</a>.": "A szervered nem válaszol néhány <a>kérésre</a>.",
+    "You're all caught up.": "Mindent elolvastál.",
+    "Server isn't responding": "A szerver nem válaszol",
+    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "A szervered néhány kérésre nem válaszol. Alább felsorolunk pár lehetséges okot.",
+    "The server (%(serverName)s) took too long to respond.": "A szervernek (%(serverName)s) túl hosszú időbe telt válaszolni.",
+    "Your firewall or anti-virus is blocking the request.": "A tűzfalad vagy víruskeresőd blokkolja a kérést.",
+    "A browser extension is preventing the request.": "Egy böngésző kiterjesztés megakadályozza a kérést.",
+    "The server is offline.": "A szerver nem működik.",
+    "The server has denied your request.": "A szerver elutasította a kérést.",
+    "Your area is experiencing difficulties connecting to the internet.": "Probléma az Internet elérésben.",
+    "A connection error occurred while trying to contact the server.": "Kapcsolati hiba lépett fel miközben a szervert próbáltad elérni.",
+    "The server is not configured to indicate what the problem is (CORS).": "A szerver nincs beállítva, hogy megmutassa mi okozhatta a hibát (CORS).",
+    "Recent changes that have not yet been received": "Legutóbbi változások amik még nem érkeztek meg"
 }
