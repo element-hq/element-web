@@ -41,7 +41,7 @@ export abstract class Whenable<T> implements IDestroyable {
     }
 
     /**
-     * Sets up a fall to `fn` *when* any of the `conditions` are met.
+     * Sets up a call to `fn` *when* any of the `conditions` are met.
      * @param conditions The conditions to match.
      * @param fn The function to call.
      * @returns This.
@@ -64,7 +64,7 @@ export abstract class Whenable<T> implements IDestroyable {
     }
 
     /**
-     * Notifies all the whenables of a given condition.
+     * Notifies all the listeners of a given condition.
      * @param condition The new condition that has been met.
      */
     protected notifyCondition(condition: T) {

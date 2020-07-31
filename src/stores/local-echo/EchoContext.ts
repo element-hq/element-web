@@ -38,7 +38,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
     }
 
     public get firstFailedTime(): Date {
-        const failedTxn = this.transactions.find(t => t.didPreviouslyFail || t.status === TransactionStatus.DoneError);
+        const failedTxn = this.transactions.find(t => t.didPreviouslyFail || t.status === TransactionStatus.Error);
         if (failedTxn) return failedTxn.startTime;
         return null;
     }
@@ -57,7 +57,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
 
         // We have no intent to call the transaction again if it succeeds (in fact, it'll
         // be really angry at us if we do), so call that the end of the road for the events.
-        txn.when(TransactionStatus.DoneSuccess, () => txn.destroy());
+        txn.when(TransactionStatus.Success, () => txn.destroy());
 
         return txn;
     }
@@ -65,7 +65,7 @@ export abstract class EchoContext extends Whenable<ContextTransactionState> impl
     private checkTransactions = () => {
         let status = ContextTransactionState.AllSuccessful;
         for (const txn of this.transactions) {
-            if (txn.status === TransactionStatus.DoneError || txn.didPreviouslyFail) {
+            if (txn.status === TransactionStatus.Error || txn.didPreviouslyFail) {
                 status = ContextTransactionState.PendingErrors;
                 break;
             } else if (txn.status === TransactionStatus.Pending) {

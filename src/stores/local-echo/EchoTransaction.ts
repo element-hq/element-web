@@ -20,8 +20,8 @@ export type RunFn = () => Promise<void>;
 
 export enum TransactionStatus {
     Pending,
-    DoneSuccess,
-    DoneError,
+    Success,
+    Error,
 }
 
 export class EchoTransaction extends Whenable<TransactionStatus> {
@@ -46,25 +46,25 @@ export class EchoTransaction extends Whenable<TransactionStatus> {
     }
 
     public run() {
-        if (this.status === TransactionStatus.DoneSuccess) {
+        if (this.status === TransactionStatus.Success) {
             throw new Error("Cannot re-run a successful echo transaction");
         }
         this.setStatus(TransactionStatus.Pending);
         this.runFn()
-            .then(() => this.setStatus(TransactionStatus.DoneSuccess))
-            .catch(() => this.setStatus(TransactionStatus.DoneError));
+            .then(() => this.setStatus(TransactionStatus.Success))
+            .catch(() => this.setStatus(TransactionStatus.Error));
     }
 
     public cancel() {
         // Success basically means "done"
-        this.setStatus(TransactionStatus.DoneSuccess);
+        this.setStatus(TransactionStatus.Success);
     }
 
     private setStatus(status: TransactionStatus) {
         this._status = status;
-        if (status === TransactionStatus.DoneError) {
+        if (status === TransactionStatus.Error) {
             this.didFail = true;
-        } else if (status === TransactionStatus.DoneSuccess) {
+        } else if (status === TransactionStatus.Success) {
             this.didFail = false;
         }
         this.notifyCondition(status);
