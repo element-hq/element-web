@@ -31,5 +31,6 @@
     "Your Element is misconfigured": "Az Element hibásan van beállítva",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Kérlek javítsd és töltsd újra az oldalt.",
     "Your browser can't run %(brand)s": "A böngésződ nem tudja futtatni ezt: %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s haladó böngésző funkciókat használ amiket a jelenlegi böngésződ nem támogat."
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s haladó böngésző funkciókat használ amiket a jelenlegi böngésződ nem támogat.",
+    "Powered by Matrix": "A gépházban: Matrix"
 }
