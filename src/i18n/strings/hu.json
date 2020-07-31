@@ -2387,5 +2387,6 @@
     "Click to view edits": "A szerkesztések megtekintéséhez kattints",
     "You’re already signed in and good to go here, but you can also grab the latest versions of the app on all platforms at <a>element.io/get-started</a>.": "Már be vagy jelentkezve és ez rendben van, de minden platformon az alkalmazás legfrissebb verziójának beszerzéséhez látogass el ide: <a>element.io/get-started</a>.",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Használhatod a más szerver opciót, hogy egy másik matrix szerverre jelentkezz be amihez megadod a szerver url címét. Ezzel használhatod %(brand)s klienst egy már létező Matrix fiókkal egy másik matrix szerveren.",
-    "Enter the location of your Element Matrix Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Add meg az Element Matrix Services matrix szerveredet. Használhatod a saját domain-edet vagy az <a>element.io</a> al-domain-jét."
+    "Enter the location of your Element Matrix Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Add meg az Element Matrix Services matrix szerveredet. Használhatod a saját domain-edet vagy az <a>element.io</a> al-domain-jét.",
+    "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s"
 }
