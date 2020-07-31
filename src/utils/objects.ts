@@ -37,6 +37,23 @@ export function objectExcluding(a: any, props: string[]): any {
 }
 
 /**
+ * Gets a new object which represents the provided object, with only some properties
+ * included.
+ * @param a The object to clone properties of. Must be defined.
+ * @param props The property names to keep.
+ * @returns The new object with only the provided properties.
+ */
+export function objectWithOnly(a: any, props: string[]): any {
+    const existingProps = Object.keys(a);
+    const diff = arrayDiff(existingProps, props);
+    if (diff.removed.length === 0) {
+        return objectShallowClone(a);
+    } else {
+        return objectExcluding(a, diff.removed);
+    }
+}
+
+/**
  * Clones an object to a caller-controlled depth. When a propertyCloner is supplied, the
  * object's properties will be passed through it with the return value used as the new
  * object's type. This is intended to be used to deep clone a reference, but without
@@ -56,20 +73,6 @@ export function objectShallowClone(a: any, propertyCloner?: (k: string, v: any) 
         }
     }
     return newObj;
-}
-
-/**
- * Determines if the two objects, which are assumed to be of the same
- * key shape, have a difference in their values. If a difference is
- * determined, true is returned.
- * @param a The first object. Must be defined.
- * @param b The second object. Must be defined.
- * @returns True if there's a perceptual difference in the object's values.
- */
-export function objectHasValueChange(a: any, b: any): boolean {
-    const aValues = Object.values(a);
-    const bValues = Object.values(b);
-    return arrayHasDiff(aValues, bValues);
 }
 
 /**

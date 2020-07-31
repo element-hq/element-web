@@ -31,6 +31,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.on("Room.receipt", this.handleReadReceipt);
         this.room.on("Room.timeline", this.handleRoomEventUpdate);
         this.room.on("Room.redaction", this.handleRoomEventUpdate);
+        this.room.on("Room.myMembership", this.handleMembershipUpdate);
         MatrixClientPeg.get().on("Event.decrypted", this.handleRoomEventUpdate);
         MatrixClientPeg.get().on("accountData", this.handleAccountDataUpdate);
         this.updateNotificationState();
@@ -45,6 +46,7 @@ export class RoomNotificationState extends NotificationState implements IDestroy
         this.room.removeListener("Room.receipt", this.handleReadReceipt);
         this.room.removeListener("Room.timeline", this.handleRoomEventUpdate);
         this.room.removeListener("Room.redaction", this.handleRoomEventUpdate);
+        this.room.removeListener("Room.myMembership", this.handleMembershipUpdate);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Event.decrypted", this.handleRoomEventUpdate);
             MatrixClientPeg.get().removeListener("accountData", this.handleAccountDataUpdate);
@@ -54,6 +56,10 @@ export class RoomNotificationState extends NotificationState implements IDestroy
     private handleReadReceipt = (event: MatrixEvent, room: Room) => {
         if (!readReceiptChangeIsFor(event, MatrixClientPeg.get())) return; // not our own - ignore
         if (room.roomId !== this.room.roomId) return; // not for us - ignore
+        this.updateNotificationState();
+    };
+
+    private handleMembershipUpdate = () => {
         this.updateNotificationState();
     };
 
