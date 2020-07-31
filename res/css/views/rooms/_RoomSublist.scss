@@ -260,7 +260,8 @@ limitations under the License.
             left: -1px; // adjust for image position
         }
 
-        .mx_RoomSublist_showMoreButtonChevron {
+        .mx_RoomSublist_showMoreButtonChevron,
+        .mx_RoomSublist_showLessButtonChevron {
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 
