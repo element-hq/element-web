@@ -154,7 +154,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $primary-fg-color;
+                    background-color: $roomlist-header-color;
                     mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 }
 
@@ -256,7 +256,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $roomtile-preview-color;
+            background: $roomlist-header-color;
             left: -1px; // adjust for image position
         }
 
