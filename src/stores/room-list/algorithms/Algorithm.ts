@@ -212,7 +212,18 @@ export class Algorithm extends EventEmitter {
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
         // means we'll be off by 1 when the user is switching rooms. This leads to visual jumping
         // when the user is moving south in the list (not north, because of math).
-        let position = this.getOrderedRoomsWithoutSticky()[tag].indexOf(val);
+        const tagList = this.getOrderedRoomsWithoutSticky()[tag] || []; // can be null if filtering
+        let position = tagList.indexOf(val);
+
+        // We do want to see if a tag change happened though - if this did happen then we'll want
+        // to force the position to zero (top) to ensure we can properly handle it.
+        const wasSticky = this._lastStickyRoom.room ? this._lastStickyRoom.room.roomId === val.roomId : false;
+        if (this._lastStickyRoom.tag && tag !== this._lastStickyRoom.tag && wasSticky && position < 0) {
+            console.warn(`Sticky room ${val.roomId} changed tags during sticky room handling`);
+            position = 0;
+        }
+
+        // Sanity check the position to make sure the room is qualified for being sticky
         if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
 
         // 🐉 Here be dragons.
