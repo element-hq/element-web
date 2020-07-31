@@ -29,7 +29,6 @@ import {
 } from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
-import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
@@ -365,13 +364,6 @@ export default class SendMessageComposer extends React.Component {
     onAction = (payload) => {
         switch (payload.action) {
             case 'reply_to_event':
-                // add a timeout for the reply preview to be rendered, so
-                // that the ScrollPanel listening to the resizeNotifier can
-                // correctly measure it's new height and scroll down to keep
-                // at the bottom if it already is
-                setTimeout(() => {
-                    this.props.resizeNotifier.notifyTimelineHeightChanged();
-                }, 100);
             case Action.FocusComposer:
                 this._editorRef && this._editorRef.focus();
                 break;
@@ -451,7 +443,6 @@ export default class SendMessageComposer extends React.Component {
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
-                <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                 <BasicMessageComposer
                     ref={this._setEditorRef}
                     model={this.model}
