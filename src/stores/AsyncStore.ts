@@ -42,25 +42,27 @@ export const UPDATE_EVENT = "update";
  * help prevent lock conflicts.
  */
 export abstract class AsyncStore<T extends Object> extends EventEmitter {
-    private storeState: T = <T>{};
+    private storeState: Readonly<T>;
     private lock = new AwaitLock();
     private readonly dispatcherRef: string;
 
     /**
      * Creates a new AsyncStore using the given dispatcher.
      * @param {Dispatcher<ActionPayload>} dispatcher The dispatcher to rely upon.
+     * @param {T} initialState The initial state for the store.
      */
-    protected constructor(private dispatcher: Dispatcher<ActionPayload>) {
+    protected constructor(private dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
         super();
 
         this.dispatcherRef = dispatcher.register(this.onDispatch.bind(this));
+        this.storeState = initialState;
     }
 
     /**
      * The current state of the store. Cannot be mutated.
      */
     protected get state(): T {
-        return Object.freeze(this.storeState);
+        return this.storeState;
     }
 
     /**
@@ -77,7 +79,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
     protected async updateState(newState: T | Object) {
         await this.lock.acquireAsync();
         try {
-            this.storeState = Object.assign(<T>{}, this.storeState, newState);
+            this.storeState = Object.freeze(Object.assign(<T>{}, this.storeState, newState));
             this.emit(UPDATE_EVENT, this);
         } finally {
             await this.lock.release();
@@ -92,7 +94,7 @@ export abstract class AsyncStore<T extends Object> extends EventEmitter {
     protected async reset(newState: T | Object = null, quiet = false) {
         await this.lock.acquireAsync();
         try {
-            this.storeState = <T>(newState || {});
+            this.storeState = Object.freeze(<T>(newState || {}));
             if (!quiet) this.emit(UPDATE_EVENT, this);
         } finally {
             await this.lock.release();

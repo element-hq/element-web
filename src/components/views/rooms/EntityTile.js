@@ -170,7 +170,7 @@ const EntityTile = createReactClass({
         let e2eIcon;
         const { e2eStatus } = this.props;
         if (e2eStatus) {
-            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} />;
+            e2eIcon = <E2EIcon status={e2eStatus} isUser={true} bordered={true} />;
         }
 
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');

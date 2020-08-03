@@ -35,8 +35,11 @@ import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../
 import {inviteMultipleToRoom} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
-import {RoomListStoreTempProxy} from "../../../stores/room-list/RoomListStoreTempProxy";
 import {DefaultTagID} from "../../../stores/room-list/models";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
+
+// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
+/* eslint-disable camelcase */
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -346,8 +349,7 @@ export default class InviteDialog extends React.PureComponent {
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
         // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const taggedRooms = RoomListStoreTempProxy.getRoomLists();
-        const dmTaggedRooms = taggedRooms[DefaultTagID.DM];
+        const dmTaggedRooms = RoomListStore.instance.orderedLists[DefaultTagID.DM];
         const myUserId = MatrixClientPeg.get().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter(u => u.userId !== myUserId);

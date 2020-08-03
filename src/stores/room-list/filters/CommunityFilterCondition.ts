@@ -15,19 +15,21 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
 import GroupStore from "../../GroupStore";
 import { arrayHasDiff } from "../../../utils/arrays";
-import { IDisposable } from "../../../utils/IDisposable";
+import { IDestroyable } from "../../../utils/IDestroyable";
+import DMRoomMap from "../../../utils/DMRoomMap";
 
 /**
  * A filter condition for the room list which reveals rooms which
  * are a member of a given community.
  */
-export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDisposable {
+export class CommunityFilterCondition extends EventEmitter implements IFilterCondition, IDestroyable {
     private roomIds: string[] = [];
+    private userIds: string[] = [];
 
     constructor(private community: Group) {
         super();
@@ -37,22 +39,30 @@ export class CommunityFilterCondition extends EventEmitter implements IFilterCon
         this.onStoreUpdate(); // trigger a false update to seed the store
     }
 
+    public get relativePriority(): FilterPriority {
+        // Lowest priority so we can coarsely find rooms.
+        return FilterPriority.Lowest;
+    }
+
     public isVisible(room: Room): boolean {
-        return this.roomIds.includes(room.roomId);
+        return this.roomIds.includes(room.roomId) ||
+            this.userIds.includes(DMRoomMap.shared().getUserIdForRoomId(room.roomId));
     }
 
     private onStoreUpdate = async (): Promise<any> => {
-        // We don't actually know if the room list changed for the community, so just
-        // check it again.
+        // We don't actually know if the room list changed for the community, so just check it again.
         const beforeRoomIds = this.roomIds;
         this.roomIds = (await GroupStore.getGroupRooms(this.community.groupId)).map(r => r.roomId);
-        if (arrayHasDiff(beforeRoomIds, this.roomIds)) {
-            console.log("Updating filter for group: ", this.community.groupId);
+
+        const beforeUserIds = this.userIds;
+        this.userIds = (await GroupStore.getGroupMembers(this.community.groupId)).map(u => u.userId);
+
+        if (arrayHasDiff(beforeRoomIds, this.roomIds) || arrayHasDiff(beforeUserIds, this.userIds)) {
             this.emit(FILTER_CHANGED);
         }
     };
 
-    public dispose(): void {
+    public destroy(): void {
         GroupStore.off("update", this.onStoreUpdate);
     }
 }

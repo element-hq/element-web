@@ -17,9 +17,10 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as sdk from "../../../../../index";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -66,7 +67,7 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name={"keepSecretStoragePassphraseForSession"} level={SettingLevel.DEVICE} />
+                    <SettingsFlag name={"advancedRoomListLogging"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );

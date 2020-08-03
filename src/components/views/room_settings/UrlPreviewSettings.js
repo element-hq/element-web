@@ -22,10 +22,11 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {Action} from "../../../dispatcher/actions";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 
 export default createReactClass({
@@ -58,7 +59,7 @@ export default createReactClass({
                         'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,
                     })
                 );
-            } else if (accountEnabled) {
+            } else {
                 previewsForAccount = (
                     _t("You have <a>disabled</a> URL previews by default.", {}, {
                         'a': (sub)=><a onClick={this._onClickUserSettings} href=''>{ sub }</a>,

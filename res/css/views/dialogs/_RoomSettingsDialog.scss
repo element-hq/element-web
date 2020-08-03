@@ -18,19 +18,19 @@ limitations under the License.
 // ==========================================================
 
 .mx_RoomSettingsDialog_settingsIcon::before {
-    mask-image: url('$(res)/img/feather-customised/settings.svg');
+    mask-image: url('$(res)/img/element-icons/settings.svg');
 }
 
 .mx_RoomSettingsDialog_securityIcon::before {
-    mask-image: url('$(res)/img/feather-customised/lock.svg');
+    mask-image: url('$(res)/img/element-icons/security.svg');
 }
 
 .mx_RoomSettingsDialog_rolesIcon::before {
-    mask-image: url('$(res)/img/feather-customised/users-sm.svg');
+    mask-image: url('$(res)/img/element-icons/room/settings/roles.svg');
 }
 
 .mx_RoomSettingsDialog_notificationsIcon::before {
-    mask-image: url('$(res)/img/feather-customised/notifications.svg');
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
 }
 
 .mx_RoomSettingsDialog_bridgesIcon::before {
@@ -39,7 +39,7 @@ limitations under the License.
 }
 
 .mx_RoomSettingsDialog_warningIcon::before {
-    mask-image: url('$(res)/img/feather-customised/warning-triangle.svg');
+    mask-image: url('$(res)/img/element-icons/room/settings/advanced.svg');
 }
 
 .mx_RoomSettingsDialog .mx_Dialog_title {

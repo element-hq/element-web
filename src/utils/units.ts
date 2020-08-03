@@ -19,7 +19,7 @@ limitations under the License.
 
 // converts a pixel value to rem.
 export function toRem(pixelValue: number): string {
-    return pixelValue / 15 + "rem";
+    return pixelValue / 10 + "rem";
 }
 
 export function toPx(pixelValue: number): string {

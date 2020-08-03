@@ -24,7 +24,9 @@ limitations under the License.
     align-items: flex-start;
 
     input[type=checkbox] {
-        display: none;
+        appearance: none;
+        margin: 0;
+        padding: 0;
 
         & + label {
             display: flex;
@@ -48,6 +50,8 @@ limitations under the License.
             border-radius: $border-radius;
 
             img {
+                display: none;
+
                 height: 100%;
                 width: 100%;
                 filter: invert(100%);
@@ -57,10 +61,24 @@ limitations under the License.
         &:checked + label > .mx_Checkbox_background {
             background: $accent-color;
             border-color: $accent-color;
+
+            img {
+                display: block;
+            }
         }
 
         & + label > *:not(.mx_Checkbox_background) {
             margin-left: 10px;
+        }
+
+        &:disabled + label {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:checked:disabled + label > .mx_Checkbox_background {
+            background-color: $accent-color;
+            border-color: $accent-color;
         }
     }
 }

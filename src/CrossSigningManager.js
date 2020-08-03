@@ -20,7 +20,6 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
-import SettingsStore from './settings/SettingsStore';
 import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
@@ -32,10 +31,7 @@ let secretStorageKeys = {};
 let secretStorageBeingAccessed = false;
 
 function isCachingAllowed() {
-    return (
-        secretStorageBeingAccessed ||
-        SettingsStore.getValue("keepSecretStoragePassphraseForSession")
-    );
+    return secretStorageBeingAccessed;
 }
 
 export class AccessCancelledError extends Error {
@@ -44,25 +40,16 @@ export class AccessCancelledError extends Error {
     }
 }
 
-async function confirmToDismiss(name) {
-    let description;
-    if (name === "m.cross_signing.user_signing") {
-        description = _t("If you cancel now, you won't complete verifying the other user.");
-    } else if (name === "m.cross_signing.self_signing") {
-        description = _t("If you cancel now, you won't complete verifying your other session.");
-    } else {
-        description = _t("If you cancel now, you won't complete your operation.");
-    }
-
+async function confirmToDismiss() {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
-        description,
-        danger: true,
-        cancelButton: _t("Enter passphrase"),
-        button: _t("Cancel"),
+        description: _t("Are you sure you want to cancel entering passphrase?"),
+        danger: false,
+        button: _t("Go Back"),
+        cancelButton: _t("Cancel"),
     }).finished;
-    return sure;
+    return !sure;
 }
 
 async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
@@ -106,7 +93,7 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         /* options= */ {
             onBeforeClose: async (reason) => {
                 if (reason === "backgroundClick") {
-                    return confirmToDismiss(ssssItemName);
+                    return confirmToDismiss();
                 }
                 return true;
             },

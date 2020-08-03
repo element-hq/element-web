@@ -413,7 +413,7 @@ export default class SetIdServer extends React.Component {
                     tooltipContent={this._getTooltip()}
                     tooltipClassName="mx_SetIdServer_tooltip"
                     disabled={this.state.busy}
-                    flagInvalid={!!this.state.error}
+                    forceValidity={this.state.error ? false : null}
                 />
                 <AccessibleButton type="submit" kind="primary_sm"
                     onClick={this._checkIdServer}

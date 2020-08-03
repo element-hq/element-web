@@ -141,9 +141,13 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     }
 
     // add labs options
-    const enabledLabs = SettingsStore.getLabsFeatures().filter(SettingsStore.isFeatureEnabled);
+    const enabledLabs = SettingsStore.getLabsFeatures().filter(f => SettingsStore.isFeatureEnabled(f));
     if (enabledLabs.length) {
         body.append('enabled_labs', enabledLabs.join(', '));
+    }
+    // if low bandwidth mode is enabled, say so over rageshake, it causes many issues
+    if (SettingsStore.getValue("lowBandwidth")) {
+        body.append("lowBandwidth", "enabled");
     }
 
     // add storage persistence/quota information

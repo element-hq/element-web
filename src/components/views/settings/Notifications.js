@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import SettingsStore, {SettingLevel} from '../../../settings/SettingsStore';
+import SettingsStore from '../../../settings/SettingsStore';
 import Modal from '../../../Modal';
 import {
     NotificationUtils,
@@ -30,6 +31,7 @@ import {
 import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import AccessibleButton from "../elements/AccessibleButton";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 // TODO: this "view" component still has far too much application logic in it,
 // which should be factored out to other files.
@@ -154,7 +156,7 @@ export default createReactClass({
         let emailPusherPromise;
         if (checked) {
             const data = {};
-            data['brand'] = SdkConfig.get().brand || 'Riot';
+            data['brand'] = SdkConfig.get().brand;
             emailPusherPromise = MatrixClientPeg.get().setPusher({
                 kind: 'email',
                 app_id: 'm.email',
@@ -841,11 +843,16 @@ export default createReactClass({
 
         let advancedSettings;
         if (externalRules.length) {
+            const brand = SdkConfig.get().brand;
             advancedSettings = (
                 <div>
                     <h3>{ _t('Advanced notification settings') }</h3>
-                    { _t('There are advanced notifications which are not shown here') }.<br />
-                    { _t('You might have configured them in a client other than Riot. You cannot tune them in Riot but they still apply') }.
+                    { _t('There are advanced notifications which are not shown here.') }<br />
+                    {_t(
+                        'You might have configured them in a client other than %(brand)s. ' +
+                        'You cannot tune them in %(brand)s but they still apply.',
+                        { brand },
+                    )}
                     <ul>
                         { externalRules }
                     </ul>

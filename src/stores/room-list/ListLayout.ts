@@ -16,14 +16,18 @@ limitations under the License.
 
 import { TagID } from "./models";
 
-const TILE_HEIGHT_PX = 34;
+const TILE_HEIGHT_PX = 44;
 
 interface ISerializedListLayout {
     numTiles: number;
+    showPreviews: boolean;
+    collapsed: boolean;
 }
 
 export class ListLayout {
     private _n = 0;
+    private _previews = false;
+    private _collapsed = false;
 
     constructor(public readonly tagId: TagID) {
         const serialized = localStorage.getItem(this.key);
@@ -31,7 +35,27 @@ export class ListLayout {
             // We don't use the setters as they cause writes.
             const parsed = <ISerializedListLayout>JSON.parse(serialized);
             this._n = parsed.numTiles;
+            this._previews = parsed.showPreviews;
+            this._collapsed = parsed.collapsed;
         }
+    }
+
+    public get isCollapsed(): boolean {
+        return this._collapsed;
+    }
+
+    public set isCollapsed(v: boolean) {
+        this._collapsed = v;
+        this.save();
+    }
+
+    public get showPreviews(): boolean {
+        return this._previews;
+    }
+
+    public set showPreviews(v: boolean) {
+        this._previews = v;
+        this.save();
     }
 
     public get tileHeight(): number {
@@ -43,16 +67,30 @@ export class ListLayout {
     }
 
     public get visibleTiles(): number {
+        if (this._n === 0) return this.defaultVisibleTiles;
         return Math.max(this._n, this.minVisibleTiles);
     }
 
     public set visibleTiles(v: number) {
         this._n = v;
-        localStorage.setItem(this.key, JSON.stringify(this.serialize()));
+        this.save();
     }
 
     public get minVisibleTiles(): number {
-        return 3;
+        return 1;
+    }
+
+    public get defaultVisibleTiles(): number {
+        // This number is what "feels right", and mostly subject to design's opinion.
+        return 5;
+    }
+
+    public tilesWithPadding(n: number, paddingPx: number): number {
+        return this.pixelsToTiles(this.tilesToPixelsWithPadding(n, paddingPx));
+    }
+
+    public tilesToPixelsWithPadding(n: number, paddingPx: number): number {
+        return this.tilesToPixels(n) + paddingPx;
     }
 
     public tilesToPixels(n: number): number {
@@ -63,9 +101,19 @@ export class ListLayout {
         return px / this.tileHeight;
     }
 
+    public reset() {
+        localStorage.removeItem(this.key);
+    }
+
+    private save() {
+        localStorage.setItem(this.key, JSON.stringify(this.serialize()));
+    }
+
     private serialize(): ISerializedListLayout {
         return {
             numTiles: this.visibleTiles,
+            showPreviews: this.showPreviews,
+            collapsed: this.isCollapsed,
         };
     }
 }

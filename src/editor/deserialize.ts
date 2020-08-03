@@ -64,7 +64,7 @@ function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     let language = "";
     if (n.firstChild && n.firstChild.nodeName === "CODE") {
         for (const className of (<HTMLElement>n.firstChild).classList) {
-            if (className.startsWith("language-")) {
+            if (className.startsWith("language-") && !className.startsWith("language-_")) {
                 language = className.substr("language-".length);
                 break;
             }
@@ -257,7 +257,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
     return parts;
 }
 
-export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage: boolean) {
+export function parsePlainTextMessage(body: string, partCreator: PartCreator, isQuotedMessage?: boolean) {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
         if (isQuotedMessage) {

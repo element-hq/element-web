@@ -313,35 +313,52 @@ export default createReactClass({
             return;
         }
 
-        // If we directly trust the device, short-circuit here
-        const verified = await this.context.isEventSenderVerified(mxEvent);
-        if (verified) {
+        const encryptionInfo = this.context.getEventEncryptionInfo(mxEvent);
+        const senderId = mxEvent.getSender();
+        const userTrust = this.context.checkUserTrust(senderId);
+
+        if (encryptionInfo.mismatchedSender) {
+            // something definitely wrong is going on here
             this.setState({
-                verified: E2E_STATE.VERIFIED,
-            }, () => {
-                // Decryption may have caused a change in size
-                this.props.onHeightChanged();
-            });
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        if (!this.context.checkUserTrust(mxEvent.getSender()).isCrossSigningVerified()) {
+        if (!userTrust.isCrossSigningVerified()) {
+            // user is not verified, so default to everything is normal
             this.setState({
                 verified: E2E_STATE.NORMAL,
-            }, this.props.onHeightChanged);
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
-        const eventSenderTrust = await this.context.checkEventSenderTrust(mxEvent);
+        const eventSenderTrust = encryptionInfo.sender && this.context.checkDeviceTrust(
+            senderId, encryptionInfo.sender.deviceId,
+        );
         if (!eventSenderTrust) {
             this.setState({
                 verified: E2E_STATE.UNKNOWN,
-            }, this.props.onHeightChanged); // Decryption may have cause a change in size
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!eventSenderTrust.isVerified()) {
+            this.setState({
+                verified: E2E_STATE.WARNING,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
+            return;
+        }
+
+        if (!encryptionInfo.authenticated) {
+            this.setState({
+                verified: E2E_STATE.UNAUTHENTICATED,
+            }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
 
         this.setState({
-            verified: eventSenderTrust.isVerified() ? E2E_STATE.VERIFIED : E2E_STATE.WARNING,
+            verified: E2E_STATE.VERIFIED,
         }, this.props.onHeightChanged); // Decryption may have caused a change in size
     },
 
@@ -526,6 +543,8 @@ export default createReactClass({
                 return; // no icon if we've not even cross-signed the user
             } else if (this.state.verified === E2E_STATE.VERIFIED) {
                 return; // no icon for verified
+            } else if (this.state.verified === E2E_STATE.UNAUTHENTICATED) {
+                return (<E2ePadlockUnauthenticated />);
             } else if (this.state.verified === E2E_STATE.UNKNOWN) {
                 return (<E2ePadlockUnknown />);
             } else {
@@ -666,6 +685,9 @@ export default createReactClass({
             mx_EventTile_emote: msgtype === 'm.emote',
         });
 
+        // If the tile is in the Sending state, don't speak the message.
+        const ariaLive = (this.props.eventSendStatus !== null) ? 'off' : undefined;
+
         let permalink = "#";
         if (this.props.permalinkCreator) {
             permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
@@ -800,7 +822,7 @@ export default createReactClass({
             case 'notif': {
                 const room = this.context.getRoom(this.props.mxEvent.getRoomId());
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_roomName">
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
@@ -826,7 +848,7 @@ export default createReactClass({
             }
             case 'file_grid': {
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_line">
                             <EventTileType ref={this._tile}
                                            mxEvent={this.props.mxEvent}
@@ -862,7 +884,7 @@ export default createReactClass({
                     );
                 }
                 return (
-                    <div className={classes}>
+                    <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         { ircTimestamp }
                         { avatar }
                         { sender }
@@ -892,7 +914,7 @@ export default createReactClass({
 
                 // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
                 return (
-                    <div className={classes} tabIndex={-1}>
+                    <div className={classes} tabIndex={-1} aria-live={ariaLive} aria-atomic="true">
                         { ircTimestamp }
                         <div className="mx_EventTile_msgOption">
                             { readAvatars }
@@ -973,6 +995,12 @@ function E2ePadlockUnencrypted(props) {
 function E2ePadlockUnknown(props) {
     return (
         <E2ePadlock title={_t("Encrypted by a deleted session")} icon="unknown" {...props} />
+    );
+}
+
+function E2ePadlockUnauthenticated(props) {
+    return (
+        <E2ePadlock title={_t("The authenticity of this encrypted message can't be guaranteed on this device.")} icon="unauthenticated" {...props} />
     );
 }
 

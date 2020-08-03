@@ -427,7 +427,9 @@ export default class SendMessageComposer extends React.Component {
 
     _onPaste = (event) => {
         const {clipboardData} = event;
-        if (clipboardData.files.length) {
+        // Prioritize text on the clipboard over files as Office on macOS puts a bitmap
+        // in the clipboard as well as the content being copied.
+        if (clipboardData.files.length && !clipboardData.types.some(t => t === "text/plain")) {
             // This actually not so much for 'files' as such (at time of writing
             // neither chrome nor firefox let you paste a plain file copied
             // from Finder) but more images copied from a different website

@@ -18,11 +18,12 @@ import React from 'react';
 import * as sdk from '../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import {Action} from "../../../dispatcher/actions";
 
 const RoomDirectoryButton = function(props) {
     const ActionButton = sdk.getComponent('elements.ActionButton');
     return (
-        <ActionButton action="view_room_directory"
+        <ActionButton action={Action.ViewRoomDirectory}
             mouseOverAction={props.callout ? "callout_room_directory" : null}
             label={_t("Room directory")}
             iconPath={require("../../../../res/img/icons-directory.svg")}

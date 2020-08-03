@@ -20,7 +20,6 @@ import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import LanguageDropdown from "../../../elements/LanguageDropdown";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -37,6 +36,7 @@ import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {

@@ -346,9 +346,9 @@ export default class MessagePanel extends React.Component {
         }
     }
 
-    _isUnmounting() {
+    _isUnmounting = () => {
         return !this._isMounted;
-    }
+    };
 
     // TODO: Implement granular (per-room) hide options
     _shouldShowEvent(mxEv) {
@@ -388,8 +388,11 @@ export default class MessagePanel extends React.Component {
             }
 
             return (
-                <li key={"readMarker_"+eventId} ref={this._readMarkerNode}
-                      className="mx_RoomView_myReadMarker_container">
+                <li key={"readMarker_"+eventId}
+                    ref={this._readMarkerNode}
+                    className="mx_RoomView_myReadMarker_container"
+                    data-scroll-tokens={eventId}
+                >
                     { hr }
                 </li>
             );
@@ -568,12 +571,10 @@ export default class MessagePanel extends React.Component {
 
         const readReceipts = this._readReceiptsByEvent[eventId];
 
-        // Dev note: `this._isUnmounting.bind(this)` is important - it ensures that
-        // the function is run in the context of this class and not EventTile, therefore
-        // ensuring the right `this._mounted` variable is used by read receipts (which
-        // don't update their position if we, the MessagePanel, is unmounting).
+        // use txnId as key if available so that we don't remount during sending
         ret.push(
-            <li key={eventId}
+            <li
+                key={mxEv.getTxnId() || eventId}
                 ref={this._collectEventNode.bind(this, eventId)}
                 data-scroll-tokens={scrollToken}
             >
@@ -587,7 +588,7 @@ export default class MessagePanel extends React.Component {
                         readReceipts={readReceipts}
                         readReceiptMap={this._readReceiptMap}
                         showUrlPreview={this.props.showUrlPreview}
-                        checkUnmounting={this._isUnmounting.bind(this)}
+                        checkUnmounting={this._isUnmounting}
                         eventSendStatus={mxEv.getAssociatedStatus()}
                         tileShape={this.props.tileShape}
                         isTwelveHour={this.props.isTwelveHour}

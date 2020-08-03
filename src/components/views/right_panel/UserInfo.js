@@ -40,7 +40,7 @@ import E2EIcon from "../rooms/E2EIcon";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
@@ -550,7 +550,9 @@ const RedactMessagesButton = ({member}) => {
         let eventsToRedact = [];
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
+                    event.getType() !== "m.room.create"
+                ) {
                     return events.concat(event);
                 } else {
                     return events;
@@ -748,19 +750,26 @@ const RoomAdminToolsContainer = ({room, children, member, startUpdating, stopUpd
         powerLevels.state_default
     );
 
+    // if these do not exist in the event then they should default to 50 as per the spec
+    const {
+        ban: banPowerLevel = 50,
+        kick: kickPowerLevel = 50,
+        redact: redactPowerLevel = 50,
+    } = powerLevels;
+
     const me = room.getMember(cli.getUserId());
     const isMe = me.userId === member.userId;
     const canAffectUser = member.powerLevel < me.powerLevel || isMe;
 
-    if (canAffectUser && me.powerLevel >= powerLevels.kick) {
+    if (canAffectUser && me.powerLevel >= kickPowerLevel) {
         kickButton = <RoomKickButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
-    if (me.powerLevel >= powerLevels.redact) {
+    if (me.powerLevel >= redactPowerLevel) {
         redactButton = (
             <RedactMessagesButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />
         );
     }
-    if (canAffectUser && me.powerLevel >= powerLevels.ban) {
+    if (canAffectUser && me.powerLevel >= banPowerLevel) {
         banButton = <BanToggleButton member={member} startUpdating={startUpdating} stopUpdating={stopUpdating} />;
     }
     if (canAffectUser && me.powerLevel >= editPowerLevel) {
@@ -1280,11 +1289,11 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     );
 
     // only display the devices list if our client supports E2E
-    const _enableDevices = cli.isCryptoEnabled();
+    const cryptoEnabled = cli.isCryptoEnabled();
 
     let text;
     if (!isRoomEncrypted) {
-        if (!_enableDevices) {
+        if (!cryptoEnabled) {
             text = _t("This client does not support end-to-end encryption.");
         } else if (room) {
             text = _t("Messages in this room are not end-to-end encrypted.");
@@ -1298,10 +1307,10 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     let verifyButton;
     const homeserverSupportsCrossSigning = useHomeserverSupportsCrossSigning(cli);
 
-    const userTrust = cli.checkUserTrust(member.userId);
-    const userVerified = userTrust.isCrossSigningVerified();
+    const userTrust = cryptoEnabled && cli.checkUserTrust(member.userId);
+    const userVerified = cryptoEnabled && userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = homeserverSupportsCrossSigning && !userVerified && !isMe;
+    const canVerify = cryptoEnabled && homeserverSupportsCrossSigning && !userVerified && !isMe;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));
@@ -1338,10 +1347,10 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
             <h3>{ _t("Security") }</h3>
             <p>{ text }</p>
             { verifyButton }
-            <DevicesSection
+            { cryptoEnabled && <DevicesSection
                 loading={showDeviceListSpinner}
                 devices={devices}
-                userId={member.userId} />
+                userId={member.userId} /> }
         </div>
     );
 
@@ -1473,7 +1482,7 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
     </React.Fragment>;
 };
 
-const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.RoomMemberInfo, ...props}) => {
+const UserInfo = ({user, groupId, roomId, onClose, phase=RightPanelPhases.RoomMemberInfo, ...props}) => {
     const cli = useContext(MatrixClientContext);
 
     // Load room if we are given a room id and memoize it
@@ -1493,8 +1502,8 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.Room
 
     let content;
     switch (phase) {
-        case RIGHT_PANEL_PHASES.RoomMemberInfo:
-        case RIGHT_PANEL_PHASES.GroupMemberInfo:
+        case RightPanelPhases.RoomMemberInfo:
+        case RightPanelPhases.GroupMemberInfo:
             content = (
                 <BasicUserInfo
                     room={room}
@@ -1504,7 +1513,7 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.Room
                     isRoomEncrypted={isRoomEncrypted} />
             );
             break;
-        case RIGHT_PANEL_PHASES.EncryptionPanel:
+        case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
             content = (
                 <EncryptionPanel {...props} member={member} onClose={onClose} isRoomEncrypted={isRoomEncrypted} />

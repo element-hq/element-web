@@ -22,7 +22,8 @@ import { _t } from '../../../languageHandler';
 import {getNameForEventRoom, userLabelForEventRoom}
     from '../../../utils/KeyVerificationStateObserver';
 import dis from "../../../dispatcher/dispatcher";
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
+import {Action} from "../../../dispatcher/actions";
 
 export default class MKeyVerificationRequest extends React.Component {
     constructor(props) {
@@ -48,8 +49,8 @@ export default class MKeyVerificationRequest extends React.Component {
         const {verificationRequest} = this.props.mxEvent;
         const member = MatrixClientPeg.get().getUser(verificationRequest.otherUserId);
         dis.dispatch({
-            action: "set_right_panel_phase",
-            phase: RIGHT_PANEL_PHASES.EncryptionPanel,
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.EncryptionPanel,
             refireParams: {verificationRequest, member},
         });
     };

@@ -29,12 +29,12 @@ limitations under the License.
     align-items: center;
     display: flex;
     padding-bottom: 10px;
+    padding-left: 19px;
 }
 
 .mx_GroupView_header_view {
     border-bottom: 1px solid $primary-hairline-color;
     padding-bottom: 0px;
-    padding-left: 19px;
     padding-right: 8px;
 }
 
@@ -63,11 +63,11 @@ limitations under the License.
 }
 
 .mx_GroupHeader_editButton::before {
-    mask-image: url('$(res)/img/feather-customised/settings.svg');
+    mask-image: url('$(res)/img/element-icons/settings.svg');
 }
 
 .mx_GroupHeader_shareButton::before {
-    mask-image: url('$(res)/img/icons-share.svg');
+    mask-image: url('$(res)/img/element-icons/room/share.svg');
 }
 
 .mx_GroupView_hostingSignup img {
@@ -182,6 +182,7 @@ limitations under the License.
 
 .mx_GroupView_body {
     flex-grow: 1;
+    margin: 0 24px;
 }
 
 .mx_GroupView_rooms {
@@ -250,6 +251,7 @@ limitations under the License.
 .mx_GroupView_membershipSubSection {
     justify-content: space-between;
     display: flex;
+    padding-bottom: 8px;
 }
 
 .mx_GroupView_membershipSubSection .mx_Spinner {

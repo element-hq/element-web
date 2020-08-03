@@ -25,6 +25,7 @@ import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
 import {Capability} from "./widgets/WidgetApi";
+import {objectClone} from "./utils/objects";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -247,7 +248,7 @@ export default class FromWidgetPostMessageApi {
      * @param  {Object} res   Response data
      */
     sendResponse(event, res) {
-        const data = JSON.parse(JSON.stringify(event.data));
+        const data = objectClone(event.data);
         data.response = res;
         event.source.postMessage(data, event.origin);
     }
@@ -260,7 +261,7 @@ export default class FromWidgetPostMessageApi {
      */
     sendError(event, msg, nestedError) {
         console.error('Action:' + event.data.action + ' failed with message: ' + msg);
-        const data = JSON.parse(JSON.stringify(event.data));
+        const data = objectClone(event.data);
         data.response = {
             error: {
                 message: msg,

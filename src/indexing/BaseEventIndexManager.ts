@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// The following interfaces take their names and member names from seshat and the spec
+/* eslint-disable camelcase */
+
 export interface MatrixEvent {
     type: string;
     sender: string;
@@ -21,7 +24,7 @@ export interface MatrixEvent {
     event_id: string;
     origin_server_ts: number;
     unsigned?: {};
-    room_id: string;
+    roomId: string;
 }
 
 export interface MatrixProfile {
@@ -135,12 +138,48 @@ export default abstract class BaseEventIndexManager {
     }
 
     /**
+     * Check if the room with the given id is already indexed.
+     *
+     * @param {string} roomId The ID of the room which we want to check if it
+     * has been already indexed.
+     *
+     * @return {Promise<boolean>} Returns true if the index contains events for
+     * the given room, false otherwise.
+     */
+    isRoomIndexed(roomId: string): Promise<boolean> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
      * Get statistical information of the index.
      *
      * @return {Promise<IndexStats>} A promise that will resolve to the index
      * statistics.
      */
     async getStats(): Promise<IndexStats> {
+        throw new Error("Unimplemented");
+    }
+
+
+    /**
+     * Get the user version of the database.
+     * @return {Promise<number>} A promise that will resolve to the user stored
+     * version number.
+     */
+    async getUserVersion(): Promise<number> {
+        throw new Error("Unimplemented");
+    }
+
+    /**
+     * Set the user stored version to the given version number.
+     *
+     * @param {number} version The new version that should be stored in the
+     * database.
+     *
+     * @return {Promise<void>} A promise that will resolve once the new version
+     * is stored.
+     */
+    async setUserVersion(version: number): Promise<void> {
         throw new Error("Unimplemented");
     }
 

@@ -40,8 +40,12 @@ import ToastStore from "./stores/ToastStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
+import RebrandListener from "./RebrandListener";
 import {Jitsi} from "./widgets/Jitsi";
-import {HOMESERVER_URL_KEY, ID_SERVER_URL_KEY} from "./BasePlatform";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+
+const HOMESERVER_URL_KEY = "mx_hs_url";
+const ID_SERVER_URL_KEY = "mx_is_url";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -164,8 +168,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    const homeserver = localStorage.getItem(HOMESERVER_URL_KEY);
-    const identityServer = localStorage.getItem(ID_SERVER_URL_KEY);
+    const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
     if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);
@@ -302,6 +306,11 @@ async function _restoreFromLocalStorage(opts) {
         }
 
         const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+        if (pickleKey) {
+            console.log("Got pickle key");
+        } else {
+            console.log("No pickle key available");
+        }
 
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
@@ -359,6 +368,12 @@ export async function setLoggedIn(credentials) {
     const pickleKey = credentials.userId && credentials.deviceId
           ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
           : null;
+
+    if (pickleKey) {
+        console.log("Created pickle key");
+    } else {
+        console.log("Pickle key not created");
+    }
 
     return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
@@ -497,6 +512,14 @@ function _persistCredentialsToLocalStorage(credentials) {
     localStorage.setItem("mx_access_token", credentials.accessToken);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
 
+    if (credentials.pickleKey) {
+        localStorage.setItem("mx_has_pickle_key", true);
+    } else {
+        if (localStorage.getItem("mx_has_pickle_key")) {
+            console.error("Expected a pickle key, but none provided.  Encryption may not work.");
+        }
+    }
+
     // if we didn't get a deviceId from the login, leave mx_device_id unset,
     // rather than setting it to "undefined".
     //
@@ -624,6 +647,8 @@ async function startMatrixClient(startSyncing=true) {
     // Now that we have a MatrixClientPeg, update the Jitsi info
     await Jitsi.getInstance().start();
 
+    RebrandListener.sharedInstance().start();
+
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.
     dis.dispatch({action: 'client_started'});
@@ -685,6 +710,7 @@ export function stopMatrixClient(unsetClient=true) {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
+    RebrandListener.sharedInstance().stop();
     if (DMRoomMap.shared()) DMRoomMap.shared().stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();

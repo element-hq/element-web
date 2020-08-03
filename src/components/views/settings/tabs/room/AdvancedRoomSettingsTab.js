@@ -29,8 +29,8 @@ export default class AdvancedRoomSettingsTab extends React.Component {
         closeSettingsFn: PropTypes.func.isRequired,
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             // This is eventually set to the value of room.getRecommendedVersion()

@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import React, {JSXElementConstructor} from "react";
+import React from "react";
+import { ComponentClass } from "../@types/common";
 
-export interface IToast<C extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>> {
+export interface IToast<C extends ComponentClass> {
     key: string;
     // higher priority number will be shown on top of lower priority
     priority: number;
     title: string;
     icon?: string;
     component: C;
-    props?: React.ComponentProps<C>;
+    props?: Omit<React.ComponentProps<C>, "toastKey">; // toastKey is injected by ToastContainer
 }
 
 /**
@@ -37,8 +38,8 @@ export default class ToastStore extends EventEmitter {
     private countSeen = 0;
 
     static sharedInstance() {
-        if (!window.mx_ToastStore) window.mx_ToastStore = new ToastStore();
-        return window.mx_ToastStore;
+        if (!window.mxToastStore) window.mxToastStore = new ToastStore();
+        return window.mxToastStore;
     }
 
     reset() {
@@ -55,7 +56,7 @@ export default class ToastStore extends EventEmitter {
      *
      * @param {object} newToast The new toast
      */
-    addOrReplaceToast<C extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>>(newToast: IToast<C>) {
+    addOrReplaceToast<C extends ComponentClass>(newToast: IToast<C>) {
         const oldIndex = this.toasts.findIndex(t => t.key === newToast.key);
         if (oldIndex === -1) {
             let newIndex = this.toasts.length;

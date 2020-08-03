@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomListStore2 } from "./RoomListStore2";
+import { RoomListStoreClass } from "./RoomListStore";
 import TagOrderStore from "../TagOrderStore";
 import { CommunityFilterCondition } from "./filters/CommunityFilterCondition";
 import { arrayDiff, arrayHasDiff } from "../../utils/arrays";
 
 /**
- * Watches for changes in tags/groups to manage filters on the provided RoomListStore
+ * Watches for changes in groups to manage filters on the provided RoomListStore
  */
 export class TagWatcher {
-    // TODO: Support custom tags, somehow (deferred to later work - need support elsewhere)
     private filters = new Map<string, CommunityFilterCondition>();
 
-    constructor(private store: RoomListStore2) {
+    constructor(private store: RoomListStoreClass) {
         TagOrderStore.addListener(this.onTagsUpdated);
     }
 
@@ -43,8 +42,6 @@ export class TagWatcher {
             }
 
             const newFilters = new Map<string, CommunityFilterCondition>();
-
-            // TODO: Support custom tags properly
             const filterableTags = newTags.filter(t => t.startsWith("+"));
 
             for (const tag of filterableTags) {
@@ -54,13 +51,16 @@ export class TagWatcher {
                     continue;
                 }
 
-                newFilters.set(tag, new CommunityFilterCondition(group));
+                let filter = this.filters.get(tag);
+                if (!filter) {
+                    filter = new CommunityFilterCondition(group);
+                }
+                newFilters.set(tag, filter);
             }
 
             // Update the room list store's filters
             const diff = arrayDiff(lastTags, newTags);
             for (const tag of diff.added) {
-                // TODO: Remove this check when custom tags are supported (as we shouldn't be losing filters)
                 const filter = newFilters.get(tag);
                 if (!filter) continue;
 
@@ -72,6 +72,7 @@ export class TagWatcher {
                 if (!filter) continue;
 
                 this.store.removeFilter(filter);
+                filter.destroy();
             }
 
             this.filters = newFilters;

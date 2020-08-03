@@ -19,7 +19,13 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
-import { RoomListStore2 } from "../stores/room-list/RoomListStore2";
+import RebrandListener from "../RebrandListener";
+import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
+import { PlatformPeg } from "../PlatformPeg";
+import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
+import {IntegrationManagers} from "../integrations/IntegrationManagers";
+import {ModalManager} from "../Modal";
+import SettingsStore from "../settings/SettingsStore";
 
 declare global {
     interface Window {
@@ -29,20 +35,30 @@ declare global {
             init: () => Promise<void>;
         };
 
-        mx_ContentMessages: ContentMessages;
-        mx_ToastStore: ToastStore;
-        mx_DeviceListener: DeviceListener;
-        mx_RoomListStore2: RoomListStore2;
+        mxContentMessages: ContentMessages;
+        mxToastStore: ToastStore;
+        mxDeviceListener: DeviceListener;
+        mxRebrandListener: RebrandListener;
+        mxRoomListStore: RoomListStoreClass;
+        mxRoomListLayoutStore: RoomListLayoutStore;
+        mxPlatformPeg: PlatformPeg;
+        mxIntegrationManagers: typeof IntegrationManagers;
+        singletonModalManager: ModalManager;
+        mxSettingsStore: SettingsStore;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
     interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object
+        fromEntries?(xs: [string|number|symbol, any][]): object;
     }
 
     interface Document {
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasStorageAccess
         hasStorageAccess?: () => Promise<boolean>;
+    }
+
+    interface Navigator {
+        userLanguage?: string;
     }
 
     interface StorageEstimate {

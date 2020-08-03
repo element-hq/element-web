@@ -48,7 +48,6 @@ const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, remo
     if (uploadAvatar) {
         // insert an empty div to be the host for a css mask containing the upload.svg
         uploadAvatarBtn = <AccessibleButton onClick={uploadAvatar} kind="primary">
-            <div>&nbsp;</div>
             {_t("Upload")}
         </AccessibleButton>;
     }

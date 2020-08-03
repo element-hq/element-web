@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -36,13 +37,13 @@ export default class HelpUserSettingsTab extends React.Component {
         super();
 
         this.state = {
-            vectorVersion: null,
+            appVersion: null,
             canUpdate: false,
         };
     }
 
     componentDidMount(): void {
-        PlatformPeg.get().getAppVersion().then((ver) => this.setState({vectorVersion: ver})).catch((e) => {
+        PlatformPeg.get().getAppVersion().then((ver) => this.setState({appVersion: ver})).catch((e) => {
             console.error("Error getting vector version: ", e);
         });
         PlatformPeg.get().canSelfUpdate().then((v) => this.setState({canUpdate: v})).catch((e) => {
@@ -119,7 +120,7 @@ export default class HelpUserSettingsTab extends React.Component {
                 <span className='mx_SettingsTab_subheading'>{_t("Credits")}</span>
                 <ul>
                     <li>
-                        The <a href="themes/riot/img/backgrounds/valley.jpg" rel="noreferrer noopener" target="_blank">
+                        The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
                         default cover photo</a> is ©&nbsp;
                         <a href="https://www.flickr.com/golan" rel="noreferrer noopener" target="_blank">Jesús Roncero</a>{' '}
                         used under the terms of&nbsp;
@@ -148,30 +149,52 @@ export default class HelpUserSettingsTab extends React.Component {
     }
 
     render() {
-        let faqText = _t('For help with using Riot, click <a>here</a>.', {}, {
-            'a': (sub) =>
-                <a href="https://about.riot.im/need-help/" rel="noreferrer noopener" target="_blank">{sub}</a>,
-        });
+        const brand = SdkConfig.get().brand;
+
+        let faqText = _t(
+            'For help with using %(brand)s, click <a>here</a>.',
+            {
+                brand,
+            },
+            {
+                'a': (sub) => <a
+                    href="https://element.io/help"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                >
+                    {sub}
+                </a>,
+            },
+        );
         if (SdkConfig.get().welcomeUserId && getCurrentLanguage().startsWith('en')) {
             faqText = (
                 <div>
-                    {
-                        _t('For help with using Riot, click <a>here</a> or start a chat with our ' +
-                            'bot using the button below.', {}, {
-                            'a': (sub) => <a href="https://about.riot.im/need-help/" rel='noreferrer noopener'
-                                             target='_blank'>{sub}</a>,
-                        })
-                    }
+                    {_t(
+                        'For help with using %(brand)s, click <a>here</a> or start a chat with our ' +
+                        'bot using the button below.',
+                        {
+                            brand,
+                        },
+                        {
+                            'a': (sub) => <a
+                                href="https://element.io/help"
+                                rel='noreferrer noopener'
+                                target='_blank'
+                            >
+                                {sub}
+                            </a>,
+                        },
+                    )}
                     <div>
                         <AccessibleButton onClick={this._onStartBotChat} kind='primary'>
-                            {_t("Chat with Riot Bot")}
+                            {_t("Chat with %(brand)s Bot", { brand })}
                         </AccessibleButton>
                     </div>
                 </div>
             );
         }
 
-        const vectorVersion = this.state.vectorVersion || 'unknown';
+        const appVersion = this.state.appVersion || 'unknown';
 
         let olmVersion = MatrixClientPeg.get().olmVersion;
         olmVersion = olmVersion ? `${olmVersion[0]}.${olmVersion[1]}.${olmVersion[2]}` : '<not-enabled>';
@@ -228,7 +251,7 @@ export default class HelpUserSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
                     <span className='mx_SettingsTab_subheading'>{_t("Versions")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("riot-web version:")} {vectorVersion}<br />
+                        {_t("%(brand)s version:", { brand })} {appVersion}<br />
                         {_t("olm version:")} {olmVersion}<br />
                         {updateButton}
                     </div>

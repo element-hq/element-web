@@ -24,8 +24,14 @@ module.exports = async function toastScenarios(alice, bob) {
     await rejectToast(alice, "Notifications");
     alice.log.done();
 
+    alice.log.step(`accepts rebrand toast`);
+    await acceptToast(alice, "Riot is now Element!");
+    let doneButton = await alice.query('.mx_Dialog_primary');
+    await doneButton.click(); // also accept the resulting dialog
+    alice.log.done();
+
     alice.log.step(`accepts analytics toast`);
-    await acceptToast(alice, "Help us improve Riot");
+    await acceptToast(alice, "Help us improve Element");
     alice.log.done();
 
     alice.log.step(`checks no remaining toasts`);
@@ -38,8 +44,14 @@ module.exports = async function toastScenarios(alice, bob) {
     await rejectToast(bob, "Notifications");
     bob.log.done();
 
+    bob.log.step(`accepts rebrand toast`);
+    await acceptToast(bob, "Riot is now Element!");
+    doneButton = await bob.query('.mx_Dialog_primary');
+    await doneButton.click(); // also accept the resulting dialog
+    bob.log.done();
+
     bob.log.step(`reject analytics toast`);
-    await rejectToast(bob, "Help us improve Riot");
+    await rejectToast(bob, "Help us improve Element");
     bob.log.done();
 
     bob.log.step(`checks no remaining toasts`);

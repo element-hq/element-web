@@ -20,9 +20,10 @@ import PropTypes from 'prop-types';
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from '../../../../languageHandler';
 
-import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
+import SettingsStore from "../../../../settings/SettingsStore";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
 import {Action} from "../../../../dispatcher/actions";
+import {SettingLevel} from "../../../../settings/SettingLevel";
 
 /*
  * Allows the user to disable the Event Index.

@@ -14,43 +14,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm } from "./Algorithm";
-import { ITagMap } from "../models";
+import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
+import { OrderingAlgorithm } from "./OrderingAlgorithm";
+import { RoomUpdateCause, TagID } from "../../models";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 /**
  * Uses the natural tag sorting algorithm order to determine tag ordering. No
  * additional behavioural changes are present.
  */
-export class NaturalAlgorithm extends Algorithm {
-
-    constructor() {
-        super();
-        console.log("Constructed a NaturalAlgorithm");
+export class NaturalAlgorithm extends OrderingAlgorithm {
+    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
+        super(tagId, initialSortingAlgorithm);
     }
 
-    protected async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
-        for (const tagId of Object.keys(updatedTagMap)) {
-            const unorderedRooms = updatedTagMap[tagId];
-
-            const sortBy = this.sortAlgorithms[tagId];
-            if (!sortBy) throw new Error(`${tagId} does not have a sorting algorithm`);
-
-            updatedTagMap[tagId] = await sortRoomsWithAlgorithm(unorderedRooms, tagId, sortBy);
-        }
+    public async setRooms(rooms: Room[]): Promise<any> {
+        this.cachedOrderedRooms = await sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
     }
 
     public async handleRoomUpdate(room, cause): Promise<boolean> {
-        const tags = this.roomIdsToTags[room.roomId];
-        if (!tags) {
-            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
-            return false;
-        }
-        for (const tag of tags) {
-            // TODO: Optimize this loop to avoid useless operations
+        try {
+            await this.updateLock.acquireAsync();
+
+            const isSplice = cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved;
+            const isInPlace = cause === RoomUpdateCause.Timeline || cause === RoomUpdateCause.ReadReceipt;
+            if (!isSplice && !isInPlace) {
+                throw new Error(`Unsupported update cause: ${cause}`);
+            }
+
+            if (cause === RoomUpdateCause.NewRoom) {
+                this.cachedOrderedRooms.push(room);
+            } else if (cause === RoomUpdateCause.RoomRemoved) {
+                const idx = this.getRoomIndex(room);
+                if (idx >= 0) {
+                    this.cachedOrderedRooms.splice(idx, 1);
+                } else {
+                    console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                }
+            }
+
+            // TODO: Optimize this to avoid useless operations: https://github.com/vector-im/riot-web/issues/14457
             // For example, we can skip updates to alphabetic (sometimes) and manually ordered tags
-            this.cachedRooms[tag] = await sortRoomsWithAlgorithm(this.cachedRooms[tag], tag, this.sortAlgorithms[tag]);
+            this.cachedOrderedRooms = await sortRoomsWithAlgorithm(
+                this.cachedOrderedRooms,
+                this.tagId,
+                this.sortingAlgorithm,
+            );
+
+            return true;
+        } finally {
+            await this.updateLock.release();
         }
-        return true; // assume we changed something
     }
 }

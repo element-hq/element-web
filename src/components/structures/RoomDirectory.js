@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import Modal from "../../Modal";
 import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import PropTypes from 'prop-types';
 import { _t } from '../../languageHandler';
+import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
@@ -74,7 +75,7 @@ export default createReactClass({
             this.protocols = response;
             this.setState({protocolsLoading: false});
         }, (err) => {
-            console.warn(`error loading thirdparty protocols: ${err}`);
+            console.warn(`error loading third party protocols: ${err}`);
             this.setState({protocolsLoading: false});
             if (MatrixClientPeg.get().isGuest()) {
                 // Guests currently aren't allowed to use this API, so
@@ -83,10 +84,12 @@ export default createReactClass({
                 return;
             }
             track('Failed to get protocol list from homeserver');
+            const brand = SdkConfig.get().brand;
             this.setState({
                 error: _t(
-                    'Riot failed to get the protocol list from the homeserver. ' +
+                    '%(brand)s failed to get the protocol list from the homeserver. ' +
                     'The homeserver may be too old to support third party networks.',
+                    { brand },
                 ),
             });
         });
@@ -173,12 +176,13 @@ export default createReactClass({
 
             console.error("Failed to get publicRooms: %s", JSON.stringify(err));
             track('Failed to get public room list');
+            const brand = SdkConfig.get().brand;
             this.setState({
                 loading: false,
-                error:
-                    `${_t('Riot failed to get the public room list.')} ` +
-                    `${(err && err.message) ? err.message : _t('The homeserver may be unavailable or overloaded.')}`
-                ,
+                error: (
+                    _t('%(brand)s failed to get the public room list.', { brand }) +
+                    (err && err.message) ? err.message : _t('The homeserver may be unavailable or overloaded.')
+                ),
             });
         });
     },
@@ -314,9 +318,10 @@ export default createReactClass({
             const fields = protocolName ? this._getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance) : null;
             if (!fields) {
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+                const brand = SdkConfig.get().brand;
                 Modal.createTrackedDialog('Unable to join network', '', ErrorDialog, {
                     title: _t('Unable to join network'),
-                    description: _t('Riot does not know how to join a room on this network'),
+                    description: _t('%(brand)s does not know how to join a room on this network', { brand }),
                 });
                 return;
             }

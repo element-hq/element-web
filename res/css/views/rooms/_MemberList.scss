@@ -26,6 +26,10 @@ limitations under the License.
         flex: 1 0 auto;
     }
 
+    .mx_SearchBox {
+        margin-bottom: 5px;
+    }
+
     h2 {
         text-transform: uppercase;
         color: $h3-color;
@@ -59,32 +63,27 @@ limitations under the License.
 .mx_GroupMemberList_query,
 .mx_GroupRoomList_query {
     flex: 1 1 0;
+
+    // stricter rule to override the one in _common.scss
+    &[type="text"] {
+        font-size: $font-12px;
+    }
 }
-
-
 
 .mx_MemberList_wrapper {
     padding: 10px;
 }
 
-
-.mx_MemberList_invite,
-.mx_RightPanel_invite {
+.mx_MemberList_invite {
     flex: 0 0 auto;
     position: relative;
     background-color: $button-bg-color;
     border-radius: 4px;
-    padding: 8px;
-    margin: 9px;
+    margin: 5px 9px 9px;
     display: flex;
     justify-content: center;
     color: $button-fg-color;
     font-weight: 600;
-
-    .mx_RightPanel_icon {
-        padding-right: 5px;
-        padding-top: 2px;
-    }
 }
 
 .mx_MemberList_invite.mx_AccessibleButton_disabled {
@@ -93,8 +92,17 @@ limitations under the License.
 }
 
 .mx_MemberList_invite span {
-    background-image: url('$(res)/img/feather-customised/user-add.svg');
+    background-image: url('$(res)/img/element-icons/room/invite.svg');
     background-repeat: no-repeat;
     background-position: center left;
-    padding-left: 25px;
+    background-size: 20px;
+    padding: 8px 0 8px 25px;
+}
+
+.mx_MemberList_inviteCommunity span {
+    background-image: url('$(res)/img/icon-invite-people.svg');
+}
+
+.mx_MemberList_addRoomToCommunity span {
+    background-image: url('$(res)/img/icons-room-add.svg');
 }

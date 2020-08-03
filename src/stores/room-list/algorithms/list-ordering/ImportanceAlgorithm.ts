@@ -15,51 +15,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Algorithm } from "./Algorithm";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { DefaultTagID, RoomUpdateCause, TagID } from "../../models";
-import { ITagMap, SortAlgorithm } from "../models";
+import { RoomUpdateCause, TagID } from "../../models";
+import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
-import * as Unread from '../../../../Unread';
-
-/**
- * The determined category of a room.
- */
-export enum Category {
-    /**
-     * The room has unread mentions within.
-     */
-    Red = "RED",
-    /**
-     * The room has unread notifications within. Note that these are not unread
-     * mentions - they are simply messages which the user has asked to cause a
-     * badge count update or push notification.
-     */
-    Grey = "GREY",
-    /**
-     * The room has unread messages within (grey without the badge).
-     */
-    Bold = "BOLD",
-    /**
-     * The room has no relevant unread messages within.
-     */
-    Idle = "IDLE",
-}
+import { OrderingAlgorithm } from "./OrderingAlgorithm";
+import { NotificationColor } from "../../../notifications/NotificationColor";
+import { RoomNotificationStateStore } from "../../../notifications/RoomNotificationStateStore";
 
 interface ICategorizedRoomMap {
     // @ts-ignore - TS wants this to be a string, but we know better
-    [category: Category]: Room[];
+    [category: NotificationColor]: Room[];
 }
 
 interface ICategoryIndex {
     // @ts-ignore - TS wants this to be a string, but we know better
-    [category: Category]: number; // integer
+    [category: NotificationColor]: number; // integer
 }
 
 // Caution: changing this means you'll need to update a bunch of assumptions and
 // comments! Check the usage of Category carefully to figure out what needs changing
 // if you're going to change this array's order.
-const CATEGORY_ORDER = [Category.Red, Category.Grey, Category.Bold, Category.Idle];
+const CATEGORY_ORDER = [
+    NotificationColor.Red,
+    NotificationColor.Grey,
+    NotificationColor.Bold,
+    NotificationColor.None, // idle
+];
 
 /**
  * An implementation of the "importance" algorithm for room list sorting. Where
@@ -77,54 +59,25 @@ const CATEGORY_ORDER = [Category.Red, Category.Grey, Category.Bold, Category.Idl
  * within the same category. For more information, see the comments contained
  * within the class.
  */
-export class ImportanceAlgorithm extends Algorithm {
+export class ImportanceAlgorithm extends OrderingAlgorithm {
+    // This tracks the category for the tag it represents by tracking the index of
+    // each category within the list, where zero is the top of the list. This then
+    // tracks when rooms change categories and splices the orderedRooms array as
+    // needed, preventing many ordering operations.
 
-    // HOW THIS WORKS
-    // --------------
-    //
-    // This block of comments assumes you've read the README one level higher.
-    // You should do that if you haven't already.
-    //
-    // Tags are fed into the algorithmic functions from the Algorithm superclass,
-    // which cause subsequent updates to the room list itself. Categories within
-    // those tags are tracked as index numbers within the array (zero = top), with
-    // each sticky room being tracked separately. Internally, the category index
-    // can be found from `this.indices[tag][category]` and the sticky room information
-    // from `this.stickyRoom`.
-    //
-    // The room list store is always provided with the `this.cachedRooms` results, which are
-    // updated as needed and not recalculated often. For example, when a room needs to
-    // move within a tag, the array in `this.cachedRooms` will be spliced instead of iterated.
-    // The `indices` help track the positions of each category to make splicing easier.
+    private indices: ICategoryIndex = {};
 
-    private indices: {
-        // @ts-ignore - TS wants this to be a string but we know better than it
-        [tag: TagID]: ICategoryIndex;
-    } = {};
-
-    // TODO: Use this (see docs above)
-    private stickyRoom: {
-        roomId: string;
-        tag: TagID;
-        fromTop: number;
-    } = {
-        roomId: null,
-        tag: null,
-        fromTop: 0,
-    };
-
-    constructor() {
-        super();
-        console.log("Constructed an ImportanceAlgorithm");
+    public constructor(tagId: TagID, initialSortingAlgorithm: SortAlgorithm) {
+        super(tagId, initialSortingAlgorithm);
     }
 
     // noinspection JSMethodCanBeStatic
     private categorizeRooms(rooms: Room[]): ICategorizedRoomMap {
         const map: ICategorizedRoomMap = {
-            [Category.Red]: [],
-            [Category.Grey]: [],
-            [Category.Bold]: [],
-            [Category.Idle]: [],
+            [NotificationColor.Red]: [],
+            [NotificationColor.Grey]: [],
+            [NotificationColor.Bold]: [],
+            [NotificationColor.None]: [],
         };
         for (const room of rooms) {
             const category = this.getRoomCategory(room);
@@ -134,98 +87,90 @@ export class ImportanceAlgorithm extends Algorithm {
     }
 
     // noinspection JSMethodCanBeStatic
-    private getRoomCategory(room: Room): Category {
-        // Function implementation borrowed from old RoomListStore
-
-        const mentions = room.getUnreadNotificationCount('highlight') > 0;
-        if (mentions) {
-            return Category.Red;
-        }
-
-        let unread = room.getUnreadNotificationCount() > 0;
-        if (unread) {
-            return Category.Grey;
-        }
-
-        unread = Unread.doesRoomHaveUnreadMessages(room);
-        if (unread) {
-            return Category.Bold;
-        }
-
-        return Category.Idle;
+    private getRoomCategory(room: Room): NotificationColor {
+        // It's fine for us to call this a lot because it's cached, and we shouldn't be
+        // wasting anything by doing so as the store holds single references
+        const state = RoomNotificationStateStore.instance.getRoomState(room);
+        return state.color;
     }
 
-    protected async generateFreshTags(updatedTagMap: ITagMap): Promise<any> {
-        for (const tagId of Object.keys(updatedTagMap)) {
-            const unorderedRooms = updatedTagMap[tagId];
-
-            const sortBy = this.sortAlgorithms[tagId];
-            if (!sortBy) throw new Error(`${tagId} does not have a sorting algorithm`);
-
-            if (sortBy === SortAlgorithm.Manual) {
-                // Manual tags essentially ignore the importance algorithm, so don't do anything
-                // special about them.
-                updatedTagMap[tagId] = await sortRoomsWithAlgorithm(unorderedRooms, tagId, sortBy);
-            } else {
-                // Every other sorting type affects the categories, not the whole tag.
-                const categorized = this.categorizeRooms(unorderedRooms);
-                for (const category of Object.keys(categorized)) {
-                    const roomsToOrder = categorized[category];
-                    categorized[category] = await sortRoomsWithAlgorithm(roomsToOrder, tagId, sortBy);
-                }
-
-                const newlyOrganized: Room[] = [];
-                const newIndices: ICategoryIndex = {};
-
-                for (const category of CATEGORY_ORDER) {
-                    newIndices[category] = newlyOrganized.length;
-                    newlyOrganized.push(...categorized[category]);
-                }
-
-                this.indices[tagId] = newIndices;
-                updatedTagMap[tagId] = newlyOrganized;
+    public async setRooms(rooms: Room[]): Promise<any> {
+        if (this.sortingAlgorithm === SortAlgorithm.Manual) {
+            this.cachedOrderedRooms = await sortRoomsWithAlgorithm(rooms, this.tagId, this.sortingAlgorithm);
+        } else {
+            // Every other sorting type affects the categories, not the whole tag.
+            const categorized = this.categorizeRooms(rooms);
+            for (const category of Object.keys(categorized)) {
+                const roomsToOrder = categorized[category];
+                categorized[category] = await sortRoomsWithAlgorithm(roomsToOrder, this.tagId, this.sortingAlgorithm);
             }
+
+            const newlyOrganized: Room[] = [];
+            const newIndices: ICategoryIndex = {};
+
+            for (const category of CATEGORY_ORDER) {
+                newIndices[category] = newlyOrganized.length;
+                newlyOrganized.push(...categorized[category]);
+            }
+
+            this.indices = newIndices;
+            this.cachedOrderedRooms = newlyOrganized;
         }
+    }
+
+    private async handleSplice(room: Room, cause: RoomUpdateCause): Promise<boolean> {
+        if (cause === RoomUpdateCause.NewRoom) {
+            const category = this.getRoomCategory(room);
+            this.alterCategoryPositionBy(category, 1, this.indices);
+            this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            await this.sortCategory(category);
+        } else if (cause === RoomUpdateCause.RoomRemoved) {
+            const roomIdx = this.getRoomIndex(room);
+            if (roomIdx === -1) {
+                console.warn(`Tried to remove unknown room from ${this.tagId}: ${room.roomId}`);
+                return false; // no change
+            }
+            const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
+            this.alterCategoryPositionBy(oldCategory, -1, this.indices);
+            this.cachedOrderedRooms.splice(roomIdx, 1); // remove the room
+        } else {
+            throw new Error(`Unhandled splice: ${cause}`);
+        }
+
+        // changes have been made if we made it here, so say so
+        return true;
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
-        if (cause === RoomUpdateCause.NewRoom) {
-            // TODO: Be smarter and insert rather than regen the planet.
-            await this.setKnownRooms([room, ...this.rooms]);
-            return;
-        }
+        try {
+            await this.updateLock.acquireAsync();
 
-        let tags = this.roomIdsToTags[room.roomId];
-        if (!tags) {
-            console.warn(`No tags known for "${room.name}" (${room.roomId})`);
-            return false;
-        }
-        const category = this.getRoomCategory(room);
-        let changed = false;
-        for (const tag of tags) {
-            if (this.sortAlgorithms[tag] === SortAlgorithm.Manual) {
-                continue; // Nothing to do here.
+            if (cause === RoomUpdateCause.NewRoom || cause === RoomUpdateCause.RoomRemoved) {
+                return this.handleSplice(room, cause);
             }
 
-            const taggedRooms = this.cachedRooms[tag];
-            const indices = this.indices[tag];
-            let roomIdx = taggedRooms.indexOf(room);
-            if (roomIdx === -1) {
-                console.warn(`Degrading performance to find missing room in "${tag}": ${room.roomId}`);
-                roomIdx = taggedRooms.findIndex(r => r.roomId === room.roomId);
+            if (cause !== RoomUpdateCause.Timeline && cause !== RoomUpdateCause.ReadReceipt) {
+                throw new Error(`Unsupported update cause: ${cause}`);
             }
+
+            const category = this.getRoomCategory(room);
+            if (this.sortingAlgorithm === SortAlgorithm.Manual) {
+                return; // Nothing to do here.
+            }
+
+            const roomIdx = this.getRoomIndex(room);
             if (roomIdx === -1) {
-                throw new Error(`Room ${room.roomId} has no index in ${tag}`);
+                throw new Error(`Room ${room.roomId} has no index in ${this.tagId}`);
             }
 
             // Try to avoid doing array operations if we don't have to: only move rooms within
             // the categories if we're jumping categories
-            const oldCategory = this.getCategoryFromIndices(roomIdx, indices);
+            const oldCategory = this.getCategoryFromIndices(roomIdx, this.indices);
             if (oldCategory !== category) {
                 // Move the room and update the indices
-                this.moveRoomIndexes(1, oldCategory, category, indices);
-                taggedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
-                taggedRooms.splice(indices[category], 0, room); // splice in the new room (pre-adjusted)
+                this.moveRoomIndexes(1, oldCategory, category, this.indices);
+                this.cachedOrderedRooms.splice(roomIdx, 1); // splice out the old index (fixed position)
+                this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
                 // Note: if moveRoomIndexes() is called after the splice then the insert operation
                 // will happen in the wrong place. Because we would have already adjusted the index
                 // for the category, we don't need to determine how the room is moving in the list.
@@ -235,28 +180,33 @@ export class ImportanceAlgorithm extends Algorithm {
                 // room from the array.
             }
 
-            // The room received an update, so take out the slice and sort it. This should be relatively
-            // quick because the room is inserted at the top of the category, and most popular sorting
-            // algorithms will deal with trying to keep the active room at the top/start of the category.
-            // For the few algorithms that will have to move the thing quite far (alphabetic with a Z room
-            // for example), the list should already be sorted well enough that it can rip through the
-            // array and slot the changed room in quickly.
-            const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
-                ? Number.MAX_SAFE_INTEGER
-                : indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
-            const startIdx = indices[category];
-            const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
-            const unsortedSlice = taggedRooms.splice(startIdx, numSort);
-            const sorted = await sortRoomsWithAlgorithm(unsortedSlice, tag, this.sortAlgorithms[tag]);
-            taggedRooms.splice(startIdx, 0, ...sorted);
+            // Sort the category now that we've dumped the room in
+            await this.sortCategory(category);
 
-            // Finally, flag that we've done something
-            changed = true;
+            return true; // change made
+        } finally {
+            await this.updateLock.release();
         }
-        return changed;
     }
 
-    private getCategoryFromIndices(index: number, indices: ICategoryIndex): Category {
+    private async sortCategory(category: NotificationColor) {
+        // This should be relatively quick because the room is usually inserted at the top of the
+        // category, and most popular sorting algorithms will deal with trying to keep the active
+        // room at the top/start of the category. For the few algorithms that will have to move the
+        // thing quite far (alphabetic with a Z room for example), the list should already be sorted
+        // well enough that it can rip through the array and slot the changed room in quickly.
+        const nextCategoryStartIdx = category === CATEGORY_ORDER[CATEGORY_ORDER.length - 1]
+            ? Number.MAX_SAFE_INTEGER
+            : this.indices[CATEGORY_ORDER[CATEGORY_ORDER.indexOf(category) + 1]];
+        const startIdx = this.indices[category];
+        const numSort = nextCategoryStartIdx - startIdx; // splice() returns up to the max, so MAX_SAFE_INT is fine
+        const unsortedSlice = this.cachedOrderedRooms.splice(startIdx, numSort);
+        const sorted = await sortRoomsWithAlgorithm(unsortedSlice, this.tagId, this.sortingAlgorithm);
+        this.cachedOrderedRooms.splice(startIdx, 0, ...sorted);
+    }
+
+    // noinspection JSMethodCanBeStatic
+    private getCategoryFromIndices(index: number, indices: ICategoryIndex): NotificationColor {
         for (let i = 0; i < CATEGORY_ORDER.length; i++) {
             const category = CATEGORY_ORDER[i];
             const isLast = i === (CATEGORY_ORDER.length - 1);
@@ -271,21 +221,42 @@ export class ImportanceAlgorithm extends Algorithm {
         throw new Error("Programming error: somehow you've ended up with an index that isn't in a category");
     }
 
-    private moveRoomIndexes(nRooms: number, fromCategory: Category, toCategory: Category, indices: ICategoryIndex) {
+    // noinspection JSMethodCanBeStatic
+    private moveRoomIndexes(
+        nRooms: number,
+        fromCategory: NotificationColor,
+        toCategory: NotificationColor,
+        indices: ICategoryIndex,
+    ) {
         // We have to update the index of the category *after* the from/toCategory variables
         // in order to update the indices correctly. Because the room is moving from/to those
         // categories, the next category's index will change - not the category we're modifying.
         // We also need to update subsequent categories as they'll all shift by nRooms, so we
         // loop over the order to achieve that.
 
-        for (let i = CATEGORY_ORDER.indexOf(fromCategory) + 1; i < CATEGORY_ORDER.length; i++) {
-            const nextCategory = CATEGORY_ORDER[i];
-            indices[nextCategory] -= nRooms;
-        }
+        this.alterCategoryPositionBy(fromCategory, -nRooms, indices);
+        this.alterCategoryPositionBy(toCategory, +nRooms, indices);
+    }
 
-        for (let i = CATEGORY_ORDER.indexOf(toCategory) + 1; i < CATEGORY_ORDER.length; i++) {
-            const nextCategory = CATEGORY_ORDER[i];
-            indices[nextCategory] += nRooms;
+    private alterCategoryPositionBy(category: NotificationColor, n: number, indices: ICategoryIndex) {
+        // Note: when we alter a category's index, we actually have to modify the ones following
+        // the target and not the target itself.
+
+        // XXX: If this ever actually gets more than one room passed to it, it'll need more index
+        // handling. For instance, if 45 rooms are removed from the middle of a 50 room list, the
+        // index for the categories will be way off.
+
+        const nextOrderIndex = CATEGORY_ORDER.indexOf(category) + 1;
+        if (n > 0) {
+            for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
+                const nextCategory = CATEGORY_ORDER[i];
+                indices[nextCategory] += Math.abs(n);
+            }
+        } else if (n < 0) {
+            for (let i = nextOrderIndex; i < CATEGORY_ORDER.length; i++) {
+                const nextCategory = CATEGORY_ORDER[i];
+                indices[nextCategory] -= Math.abs(n);
+            }
         }
 
         // Do a quick check to see if we've completely broken the index
@@ -295,9 +266,11 @@ export class ImportanceAlgorithm extends Algorithm {
 
             if (indices[lastCat] > indices[thisCat]) {
                 // "should never happen" disclaimer goes here
-                console.warn(`!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
+                console.warn(
+                    `!! Room list index corruption: ${lastCat} (i:${indices[lastCat]}) is greater ` +
+                    `than ${thisCat} (i:${indices[thisCat]}) - category indices are likely desynced from reality`);
 
-                // TODO: Regenerate index when this happens
+                // TODO: Regenerate index when this happens: https://github.com/vector-im/riot-web/issues/14234
             }
         }
     }

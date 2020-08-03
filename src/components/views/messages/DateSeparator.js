@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import {formatFullDateNoTime} from '../../../DateUtils';
 
 function getdaysArray() {
-	return [
+    return [
         _t('Sunday'),
         _t('Monday'),
         _t('Tuesday'),

@@ -1,0 +1,201 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserMenu {
+
+    // to make the ... button sort of aligned with the explore button below
+    padding-right: 6px;
+
+    .mx_UserMenu_headerButtons {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        display: block;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+            mask-image: url('$(res)/img/element-icons/context-menu.svg');
+        }
+    }
+
+    .mx_UserMenu_row {
+        // Create a row-based flexbox to ensure items stay aligned correctly.
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_userAvatarContainer {
+            position: relative; // to make default avatars work
+            margin-right: 8px;
+            height: 32px; // to remove the unknown 4px gap the browser puts below it
+
+            .mx_UserMenu_userAvatar {
+                border-radius: 32px; // should match avatar size
+                object-fit: cover;
+            }
+        }
+
+        .mx_UserMenu_userName {
+            font-weight: 600;
+            font-size: $font-15px;
+            line-height: $font-20px;
+            flex: 1;
+
+            // Ellipsize any text overflow
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .mx_UserMenu_headerButtons {
+            // No special styles: the rest of the layout happens to make it work.
+        }
+    }
+
+    &.mx_UserMenu_minimized {
+        .mx_UserMenu_userHeader {
+            .mx_UserMenu_row {
+                justify-content: center;
+            }
+
+            .mx_UserMenu_userAvatarContainer {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
+.mx_UserMenu_contextMenu {
+    width: 247px;
+
+    .mx_UserMenu_contextMenu_redRow {
+        .mx_AccessibleButton {
+            padding-top: 16px;
+            padding-bottom: 16px;
+            color: $warning-color !important; // !important to override styles from context menu
+        }
+
+        .mx_IconizedContextMenu_icon::before {
+            background-color: $warning-color;
+        }
+    }
+
+    .mx_UserMenu_contextMenu_header {
+        padding: 20px;
+
+        // Create a flexbox to organize the header a bit easier
+        display: flex;
+        align-items: center;
+
+        .mx_UserMenu_contextMenu_name {
+            // Create another flexbox of columns to handle large user IDs
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
+
+            * {
+                // Automatically grow all subelements to fit the container
+                flex: 1;
+                width: 100%;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .mx_UserMenu_contextMenu_displayName {
+                font-weight: bold;
+                font-size: $font-15px;
+                line-height: $font-20px;
+            }
+
+            .mx_UserMenu_contextMenu_userId {
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+        }
+
+        .mx_UserMenu_contextMenu_themeButton {
+            min-width: 32px;
+            max-width: 32px;
+            width: 32px;
+            height: 32px;
+            margin-left: 8px;
+            border-radius: 32px;
+            background-color: $theme-button-bg-color;
+            cursor: pointer;
+
+            // to make alignment easier, create flexbox for the image
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .mx_IconizedContextMenu_icon {
+        width: 16px;
+        height: 16px;
+        display: block;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            display: block;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-fg-color;
+        }
+    }
+
+    .mx_UserMenu_iconHome::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
+    }
+
+    .mx_UserMenu_iconBell::before {
+        mask-image: url('$(res)/img/element-icons/notifications.svg');
+    }
+
+    .mx_UserMenu_iconLock::before {
+        mask-image: url('$(res)/img/element-icons/security.svg');
+    }
+
+    .mx_UserMenu_iconSettings::before {
+        mask-image: url('$(res)/img/element-icons/settings.svg');
+    }
+
+    .mx_UserMenu_iconArchive::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/archived.svg');
+    }
+
+    .mx_UserMenu_iconMessage::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/feedback.svg');
+    }
+
+    .mx_UserMenu_iconSignOut::before {
+        mask-image: url('$(res)/img/element-icons/leave.svg');
+    }
+}

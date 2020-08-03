@@ -17,10 +17,11 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import * as sdk from "../../../index";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import WidgetUtils from "../../../utils/WidgetUtils";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 export default class WidgetOpenIDPermissionsDialog extends React.Component {
     static propTypes = {

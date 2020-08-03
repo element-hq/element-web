@@ -21,3 +21,9 @@ limitations under the License.
     padding: 25px 40px;
     box-sizing: border-box;
 }
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthHeader {
+        display: none;
+    }
+}

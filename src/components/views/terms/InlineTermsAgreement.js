@@ -18,6 +18,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import {_t, pickBestLanguage} from "../../../languageHandler";
 import * as sdk from "../../..";
+import {objectClone} from "../../../utils/objects";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 export default class InlineTermsAgreement extends React.Component {
     static propTypes = {
@@ -56,7 +58,7 @@ export default class InlineTermsAgreement extends React.Component {
     }
 
     _togglePolicy = (index) => {
-        const policies = JSON.parse(JSON.stringify(this.state.policies)); // deep & cheap clone
+        const policies = objectClone(this.state.policies);
         policies[index].checked = !policies[index].checked;
         this.setState({policies});
     };
@@ -89,8 +91,9 @@ export default class InlineTermsAgreement extends React.Component {
                 <div key={i} className='mx_InlineTermsAgreement_cbContainer'>
                     <div>{introText}</div>
                     <div className='mx_InlineTermsAgreement_checkbox'>
-                        <input type='checkbox' onChange={() => this._togglePolicy(i)} checked={policy.checked} />
-                        {_t("Accept")}
+                        <StyledCheckbox onChange={() => this._togglePolicy(i)} checked={policy.checked}>
+                            {_t("Accept")}
+                        </StyledCheckbox>
                     </div>
                 </div>,
             );
