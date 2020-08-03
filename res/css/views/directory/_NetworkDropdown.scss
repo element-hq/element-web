@@ -145,13 +145,14 @@ limitations under the License.
     &::after {
         content: "";
         position: absolute;
-        width: 24px;
-        height: 24px;
-        right: -28px; // - (24 + 4)
+        width: 26px;
+        height: 26px;
+        right: -27.5px; // - (width: 26 + spacing to align with X above: 1.5)
+        top: -3px;
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
-        mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+        mask-image: url('$(res)/img/feather-customised/chevron-down-thin.svg');
         background-color: $primary-fg-color;
     }
 
