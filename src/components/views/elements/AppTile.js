@@ -314,13 +314,13 @@ export default class AppTile extends React.Component {
             if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
                 IntegrationManagers.sharedInstance().openAll(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             } else {
                 IntegrationManagers.sharedInstance().getPrimaryManager().open(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             }
