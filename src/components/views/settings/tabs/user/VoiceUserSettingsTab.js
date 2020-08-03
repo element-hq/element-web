@@ -21,10 +21,10 @@ import SdkConfig from "../../../../../SdkConfig";
 import CallMediaHandler from "../../../../../CallMediaHandler";
 import Field from "../../../elements/Field";
 import AccessibleButton from "../../../elements/AccessibleButton";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../../index";
 import Modal from "../../../../../Modal";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export default class VoiceUserSettingsTab extends React.Component {
     constructor() {

@@ -22,10 +22,11 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
 import { _t, _td } from '../../../languageHandler';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import dis from "../../../dispatcher/dispatcher";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import {Action} from "../../../dispatcher/actions";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 
 export default createReactClass({

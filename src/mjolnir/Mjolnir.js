@@ -16,9 +16,10 @@ limitations under the License.
 
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {ALL_RULE_TYPES, BanList} from "./BanList";
-import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
+import SettingsStore from "../settings/SettingsStore";
 import {_t} from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
+import {SettingLevel} from "../settings/SettingLevel";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
 

@@ -114,6 +114,11 @@ export default class RebrandListener {
         }
     };
 
+    onOneTimeToastDismiss = async () => {
+        localStorage.setItem('mx_rename_dialog_dismissed', 'true');
+        this.recheck();
+    };
+
     onNagTimerFired = () => {
         this._reshowTimer = null;
         this.nagAgainAt = null;
@@ -143,10 +148,14 @@ export default class RebrandListener {
 
         if (nagToast || oneTimeToast) {
             let description;
+            let rejectLabel = null;
+            let onReject = null;
             if (nagToast) {
                 description = _t("Use your account to sign in to the latest version");
             } else {
                 description = _t("We’re excited to announce Riot is now Element");
+                rejectLabel = _t("Dismiss");
+                onReject = this.onOneTimeToastDismiss;
             }
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -157,6 +166,8 @@ export default class RebrandListener {
                     description,
                     acceptLabel: _t("Learn More"),
                     onAccept: nagToast ? this.onNagToastLearnMore : this.onOneTimeToastLearnMore,
+                    rejectLabel,
+                    onReject,
                 },
                 component: GenericToast,
                 priority: 20,

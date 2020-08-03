@@ -20,10 +20,11 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import {formatBytes, formatCountLong} from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 export default class EventIndexPanel extends React.Component {
     constructor() {

@@ -134,7 +134,7 @@ const BaseAvatar = (props: IProps) => {
                 aria-hidden="true" />
         );
 
-        if (onClick !== null) {
+        if (onClick) {
             return (
                 <AccessibleButton
                     {...otherProps}
@@ -162,7 +162,7 @@ const BaseAvatar = (props: IProps) => {
         }
     }
 
-    if (onClick !== null) {
+    if (onClick) {
         return (
             <AccessibleButton
                 className={classNames("mx_BaseAvatar mx_BaseAvatar_image", className)}

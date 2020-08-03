@@ -47,11 +47,10 @@ export default class TextWithTooltip extends React.Component {
         return (
             <span onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave} className={this.props.class}>
                 {this.props.children}
-                <Tooltip
+                {this.state.hover && <Tooltip
                     label={this.props.tooltip}
-                    visible={this.state.hover}
                     tooltipClassName={this.props.tooltipClass}
-                    className={"mx_TextWithTooltip_tooltip"} />
+                    className={"mx_TextWithTooltip_tooltip"} /> }
             </span>
         );
     }

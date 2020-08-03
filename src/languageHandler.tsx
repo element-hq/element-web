@@ -21,11 +21,12 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import React from 'react';
 
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
+import { SettingLevel } from "./settings/SettingLevel";
 
 const i18nFolder = 'i18n/';
 

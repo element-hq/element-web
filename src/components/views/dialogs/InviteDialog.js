@@ -38,6 +38,9 @@ import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 
+// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
+/* eslint-disable camelcase */
+
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
 

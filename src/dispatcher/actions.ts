@@ -79,4 +79,19 @@ export enum Action {
      * Changes room based on room list order and payload parameters. Should be used with ViewRoomDeltaPayload.
      */
     ViewRoomDelta = "view_room_delta",
+
+    /**
+     * Sets the phase for the right panel. Should be used with SetRightPanelPhasePayload.
+     */
+    SetRightPanelPhase = "set_right_panel_phase",
+
+    /**
+     * Toggles the right panel. Should be used with ToggleRightPanelPayload.
+     */
+    ToggleRightPanel = "toggle_right_panel",
+
+    /**
+     * Trigged after the phase of the right panel is set. Should be used with AfterRightPanelPhaseChangePayload.
+     */
+    AfterRightPanelPhaseChange = "after_right_panel_phase_change",
 }

@@ -16,10 +16,11 @@ limitations under the License.
 
 import SdkConfig from "../../../SdkConfig";
 import {getCurrentLanguage} from "../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import PlatformPeg from "../../../PlatformPeg";
 import * as sdk from '../../../index';
 import React from 'react';
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 function onChange(newLang) {
     if (getCurrentLanguage() !== newLang) {

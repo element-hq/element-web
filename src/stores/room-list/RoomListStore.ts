@@ -32,6 +32,8 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import RoomListLayoutStore from "./RoomListLayoutStore";
 import { MarkedExecution } from "../../utils/MarkedExecution";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
+import { NameFilterCondition } from "./filters/NameFilterCondition";
+import { RoomNotificationStateStore } from "../notifications/RoomNotificationStateStore";
 
 interface IState {
     tagsEnabled?: boolean;
@@ -54,7 +56,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private tagWatcher = new TagWatcher(this);
-    private updateFn = new MarkedExecution(() => this.emit(LISTS_UPDATE_EVENT));
+    private updateFn = new MarkedExecution(() => {
+        for (const tagId of Object.keys(this.unfilteredLists)) {
+            RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.unfilteredLists[tagId]);
+        }
+        this.emit(LISTS_UPDATE_EVENT);
+    });
 
     private readonly watchedSettings = [
         'feature_custom_tags',
@@ -69,6 +76,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         RoomViewStore.addListener(() => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
+    }
+
+    public get unfilteredLists(): ITagMap {
+        if (!this.algorithm) return {}; // No tags yet.
+        return this.algorithm.getUnfilteredRooms();
     }
 
     public get orderedLists(): ITagMap {
@@ -168,6 +180,12 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     protected async onAction(payload: ActionPayload) {
+        // If we're not remotely ready, don't even bother scheduling the dispatch handling.
+        // This is repeated in the handler just in case things change between a decision here and
+        // when the timer fires.
+        const logicallyReady = this.matrixClient && this.initialListsGenerated;
+        if (!logicallyReady) return;
+
         // When we're running tests we can't reliably use setImmediate out of timing concerns.
         // As such, we use a more synchronous model.
         if (RoomListStoreClass.TEST_MODE) {
@@ -580,6 +598,20 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
             }
         }
         this.updateFn.trigger();
+    }
+
+    /**
+     * Gets the first (and ideally only) name filter condition. If one isn't present,
+     * this returns null.
+     * @returns The first name filter condition, or null if none.
+     */
+    public getFirstNameFilterCondition(): NameFilterCondition | null {
+        for (const filter of this.filterConditions) {
+            if (filter instanceof NameFilterCondition) {
+                return filter;
+            }
+        }
+        return null;
     }
 
     /**
