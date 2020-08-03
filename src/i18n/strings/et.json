@@ -607,7 +607,7 @@
     "We've sent you an email to verify your address. Please follow the instructions there and then click the button below.": "Sinu aadressi kontrollimiseks saatsime sulle e-kirja. Palun järgi kirjas näidatud juhendit ja siis klõpsi alljärgnevat nuppu.",
     "Email Address": "E-posti aadress",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "Saatsime tekstisõnumi numbrile +%(msisdn)s. Palun sisesta seal kuvatud kontrollkood.",
-    "Phone Number": "Telefoni number",
+    "Phone Number": "Telefoninumber",
     "Cannot add any more widgets": "Rohkem vidinaid ei õnnestu lisada",
     "The maximum permitted number of widgets have already been added to this room.": "Suurim lubatud vidinate arv on siia jututuppa juba lisatud.",
     "Join as <voiceText>voice</voiceText> or <videoText>video</videoText>.": "Liitu kas <voiceText>häälkõnega</voiceText> või <videoText>videokõnega</videoText>.",
@@ -2397,5 +2397,8 @@
     "The server has denied your request.": "Server blokeerib sinu päringuid.",
     "Your area is experiencing difficulties connecting to the internet.": "Sinu piirkonnas on tõrkeid internetiühenduses.",
     "A connection error occurred while trying to contact the server.": "Serveriga ühenduse algatamisel tekkis viga.",
-    "The server is not configured to indicate what the problem is (CORS).": "Server on seadistatud varjama tegelikke veapõhjuseid (CORS)."
+    "The server is not configured to indicate what the problem is (CORS).": "Server on seadistatud varjama tegelikke veapõhjuseid (CORS).",
+    "No files visible in this room": "Selles jututoas pole nähtavaid faile",
+    "Attach files from chat or just drag and drop them anywhere in a room.": "Faile saad manueks lisada kas vastava nupu alt vestlusest või sikutades neid jututoa aknasse.",
+    "You have no visible notifications in this room.": "Jututoas pole nähtavaid teavitusi."
 }
