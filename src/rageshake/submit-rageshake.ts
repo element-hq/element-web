@@ -40,8 +40,7 @@ interface IOpts {
     progressCallback?: (string) => void;
 }
 
-async function collectBugReport(opts: IOpts) {
-    opts = opts || {};
+async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     const progressCallback = opts.progressCallback || (() => {});
 
     progressCallback(_t("Collecting app version information"));
@@ -166,12 +165,14 @@ async function collectBugReport(opts: IOpts) {
         const logs = await rageshake.getLogsForReport();
         for (const entry of logs) {
             // encode as UTF-8
-            const buf = new TextEncoder().encode(entry.lines);
+            let buf = new TextEncoder().encode(entry.lines);
 
             // compress
-            const compressed = pako.gzip(buf);
+            if (gzipLogs) {
+                buf = pako.gzip(buf);
+            }
 
-            body.append('compressed-log', new Blob([compressed]), entry.id);
+            body.append('compressed-log', new Blob([buf]), entry.id);
         }
     }
 
@@ -193,12 +194,11 @@ async function collectBugReport(opts: IOpts) {
  *
  * @return {Promise} Resolved when the bug report is sent.
  */
-export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts) {
+export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts = {}) {
     if (!bugReportEndpoint) {
         throw new Error("No bug report endpoint has been set.");
     }
 
-    opts = opts || {};
     const progressCallback = opts.progressCallback || (() => {});
     const body = await collectBugReport(opts);
 
@@ -220,10 +220,9 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
  *
  * @return {Promise} Resolved when the bug report is downloaded (or started).
  */
-export async function downloadBugReport(opts) {
-    opts = opts || {};
+export async function downloadBugReport(opts: IOpts = {}) {
     const progressCallback = opts.progressCallback || (() => {});
-    const body = await collectBugReport(opts);
+    const body = await collectBugReport(opts, false);
 
     progressCallback(_t("Downloading report"));
     let metadata = "";
@@ -234,7 +233,7 @@ export async function downloadBugReport(opts) {
             await new Promise((resolve => {
                 const reader = new FileReader();
                 reader.addEventListener('loadend', ev => {
-                    tape.append(`log-${i++}.log`, pako.ungzip(ev.target.result as string));
+                    tape.append(`log-${i++}.log`, new TextDecoder().decode(ev.target.result as ArrayBuffer));
                     resolve();
                 });
                 reader.readAsArrayBuffer(value as Blob);
