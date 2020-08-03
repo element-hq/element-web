@@ -2404,5 +2404,9 @@
     "Your area is experiencing difficulties connecting to the internet.": "Hai problemas de conexión a internet na túa localidade.",
     "A connection error occurred while trying to contact the server.": "Aconteceu un fallo de conexión ó intentar contactar co servidor.",
     "The server is not configured to indicate what the problem is (CORS).": "O servidor non está configurado para sinalar cal é o problema (CORS).",
-    "Recent changes that have not yet been received": "Cambios recentes que aínda non foron recibidos"
+    "Recent changes that have not yet been received": "Cambios recentes que aínda non foron recibidos",
+    "No files visible in this room": "Non hai ficheiros visibles na sala",
+    "Attach files from chat or just drag and drop them anywhere in a room.": "Anexa filecheiros desde a conversa ou arrastra e sóltaos onde queiras nunha sala.",
+    "You’re all caught up": "Xa estás ó día",
+    "You have no visible notifications in this room.": "Non tes notificacións visibles nesta sala."
 }
