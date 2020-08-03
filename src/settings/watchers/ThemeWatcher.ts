@@ -78,7 +78,7 @@ export default class ThemeWatcher {
     };
 
     // XXX: forceTheme param added here as local echo appears to be unreliable
-    // https://github.com/vector-im/riot-web/issues/11443
+    // https://github.com/vector-im/element-web/issues/11443
     public recheck(forceTheme?: string) {
         const oldTheme = this.currentTheme;
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;

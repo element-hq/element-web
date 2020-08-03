@@ -480,7 +480,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // click the button are aware they're making a change to their account.
         // Once we're confident enough in this (and it's supported enough) we can do
         // it automatically.
-        // https://github.com/vector-im/riot-web/issues/11696
+        // https://github.com/vector-im/element-web/issues/11696
         const Field = sdk.getComponent('views.elements.Field');
 
         let authPrompt;
@@ -575,7 +575,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             changeText = _t("Use a different passphrase?");
         } else if (!this.state.passPhrase.startsWith(this.state.passPhraseConfirm)) {
             // only tell them they're wrong if they've actually gone wrong.
-            // Security concious readers will note that if you left riot-web unattended
+            // Security concious readers will note that if you left element-web unattended
             // on this screen, this would make it easy for a malicious person to guess
             // your passphrase one letter at a time, but they could get this faster by
             // just opening the browser's developer tools and reading it.

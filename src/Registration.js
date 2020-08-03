@@ -52,7 +52,7 @@ export async function startAnyRegistrationFlow(options) {
     // caution though.
 
     // XXX: ILAG is disabled for now,
-    // see https://github.com/vector-im/riot-web/issues/8222
+    // see https://github.com/vector-im/element-web/issues/8222
 
     // const flows = await _getRegistrationFlows();
     // const hasIlagFlow = flows.some((flow) => {

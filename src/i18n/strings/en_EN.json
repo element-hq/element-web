@@ -2171,7 +2171,7 @@
     "%(brand)s Web": "%(brand)s Web",
     "%(brand)s Desktop": "%(brand)s Desktop",
     "%(brand)s iOS": "%(brand)s iOS",
-    "%(brand)s X for Android": "%(brand)s X for Android",
+    "%(brand)s Android": "%(brand)s Android",
     "or another cross-signing capable Matrix client": "or another cross-signing capable Matrix client",
     "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.",
     "Your new session is now verified. Other users will see it as trusted.": "Your new session is now verified. Other users will see it as trusted.",

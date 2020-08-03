@@ -65,7 +65,7 @@ export interface FromWidgetRequest extends WidgetRequest {
 }
 
 /**
- * Handles Riot <--> Widget interactions for embedded/standalone widgets.
+ * Handles Element <--> Widget interactions for embedded/standalone widgets.
  *
  * Emitted events:
  * - terminate(wait): client requested the widget to terminate.

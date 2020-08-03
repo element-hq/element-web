@@ -319,7 +319,7 @@ export class ModalManager {
 
     private reRender() {
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
-            // If there is no modal to render, make all of Riot available
+            // If there is no modal to render, make all of Element available
             // to screen reader users again
             dis.dispatch({
                 action: 'aria_unhide_main_app',

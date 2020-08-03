@@ -169,7 +169,7 @@ limitations under the License.
     // that the sublists below them do not jump. However, that leaves a gap
     // when scrolled to the top above the first sublist (whose header can only
     // ever stick to top), so we force height to 0 for only that first header.
-    // See also https://github.com/vector-im/riot-web/issues/14429.
+    // See also https://github.com/vector-im/element-web/issues/14429.
     &:first-child .mx_RoomSublist_headerContainer {
         height: 0;
         padding-bottom: 4px;

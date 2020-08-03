@@ -202,7 +202,7 @@ export async function setTheme(theme) {
     return new Promise((resolve) => {
         const switchTheme = function() {
             // we re-enable our theme here just in case we raced with another
-            // theme set request as per https://github.com/vector-im/riot-web/issues/5601.
+            // theme set request as per https://github.com/vector-im/element-web/issues/5601.
             // We could alternatively lock or similar to stop the race, but
             // this is probably good enough for now.
             styleElements[stylesheetName].disabled = false;

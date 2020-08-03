@@ -119,8 +119,8 @@ export default createReactClass({
                         'In future this will be improved.',
                     ) }
                     {' '}
-                    <a href="https://github.com/vector-im/riot-web/issues/2671" target="_blank" rel="noreferrer noopener">
-                        https://github.com/vector-im/riot-web/issues/2671
+                    <a href="https://github.com/vector-im/element-web/issues/2671" target="_blank" rel="noreferrer noopener">
+                        https://github.com/vector-im/element-web/issues/2671
                     </a>
                 </div>,
             button: _t("Continue"),

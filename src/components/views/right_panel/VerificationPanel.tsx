@@ -208,7 +208,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             });
         let body: JSX.Element;
         if (this.state.reciprocateQREvent) {
-            // riot web doesn't support scanning yet, so assume here we're the client being scanned.
+            // Element Web doesn't support scanning yet, so assume here we're the client being scanned.
             //
             // we're passing both a label and a child string to Button as
             // FormButton and AccessibleButton expect this differently

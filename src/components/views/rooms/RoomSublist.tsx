@@ -74,7 +74,7 @@ interface IProps {
     // You should feel bad if you use this.
     extraBadTilesThatShouldntExist?: TemporaryTile[];
 
-    // TODO: Account for https://github.com/vector-im/riot-web/issues/14179
+    // TODO: Account for https://github.com/vector-im/element-web/issues/14179
 }
 
 // TODO: Use re-resizer's NumberSize when it is exposed as the type
@@ -703,7 +703,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     private onScrollPrevent(e: React.UIEvent<HTMLDivElement>) {
         // the RoomTile calls scrollIntoView and the browser may scroll a div we do not wish to be scrollable
-        // this fixes https://github.com/vector-im/riot-web/issues/14413
+        // this fixes https://github.com/vector-im/element-web/issues/14413
         (e.target as HTMLDivElement).scrollTop = 0;
     }
 
