@@ -1583,7 +1583,7 @@
     "Reminder: Your browser is unsupported, so your experience may be unpredictable.": "Reminder: Your browser is unsupported, so your experience may be unpredictable.",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.",
-    "Click here to download your logs.": "Click here to download your logs.",
+    "Download logs": "Download logs",
     "GitHub issue": "GitHub issue",
     "Notes": "Notes",
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.",

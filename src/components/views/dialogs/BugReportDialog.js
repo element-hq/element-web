@@ -202,7 +202,7 @@ export default class BugReportDialog extends React.Component {
                     </b></p>
 
                     <AccessibleButton onClick={this._onDownload} kind="link">
-                        { _t("Click here to download your logs.") }
+                        { _t("Download logs") }
                     </AccessibleButton>
 
                     <Field
