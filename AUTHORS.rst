@@ -18,4 +18,4 @@ include:
   Improved multiple file uploading
 
 * Thom Cleary (https://github.com/thomcatdotrocks)
-  Small correction for tarball deployment
+  Small update for tarball deployment
