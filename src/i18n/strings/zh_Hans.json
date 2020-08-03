@@ -1655,5 +1655,6 @@
     "Remove %(phone)s?": "删除 %(phone)s 吗？",
     "A text message has been sent to +%(msisdn)s. Please enter the verification code it contains.": "一封短信已发送至 +%(msisdn)s。请输入其中包含的验证码。",
     "This user has not verified all of their sessions.": "此用户没有验证其全部会话。",
-    "You have not verified this user.": "您没有验证此用户。"
+    "You have not verified this user.": "您没有验证此用户。",
+    "You have verified this user. This user has verified all of their sessions.": "您验证了此用户。此用户已验证了其全部会话。"
 }
