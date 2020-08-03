@@ -17,12 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
+import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import dis from '../../../dispatcher/dispatcher';
+import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
@@ -30,31 +31,26 @@ import {
     ChevronFace,
     ContextMenu,
     ContextMenuTooltipButton,
-    MenuItemRadio,
-    MenuItemCheckbox,
     MenuItem,
+    MenuItemCheckbox,
+    MenuItemRadio,
 } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import {
-    getRoomNotifsState,
-    setRoomNotifsState,
-    ALL_MESSAGES,
-    ALL_MESSAGES_LOUD,
-    MENTIONS_ONLY,
-    MUTE,
-} from "../../../RoomNotifs";
+import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE, } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
 import { Volume } from "../../../RoomNotifsTypes";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import RoomListActions from "../../../actions/RoomListActions";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {ActionPayload} from "../../../dispatcher/payloads";
+import { ActionPayload } from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
+import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
+import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
 
 interface IProps {
     room: Room;
@@ -112,6 +108,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
+    private roomProps: RoomEchoChamber;
 
     constructor(props: IProps) {
         super(props);
@@ -130,10 +127,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps = EchoChamber.forRoom(this.props.room);
+        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
     }
 
     private onNotificationUpdate = () => {
         this.forceUpdate(); // notification state changed - update
+    };
+
+    private onRoomPropertyUpdate = (property: CachedRoomKey) => {
+        if (property === CachedRoomKey.NotificationVolume) this.onNotificationUpdate();
+        // else ignore - not important for this tile
     };
 
     private get showContextMenu(): boolean {
@@ -307,17 +311,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.stopPropagation();
         if (MatrixClientPeg.get().isGuest()) return;
 
-        // get key before we go async and React discards the nativeEvent
-        const key = (ev as React.KeyboardEvent).key;
-        try {
-            // TODO add local echo - https://github.com/vector-im/riot-web/issues/14280
-            await setRoomNotifsState(this.props.room.roomId, newState);
-        } catch (error) {
-            // TODO: some form of error notification to the user to inform them that their state change failed.
-            // See https://github.com/vector-im/riot-web/issues/14281
-            console.error(error);
-        }
+        this.roomProps.notificationVolume = newState;
 
+        const key = (ev as React.KeyboardEvent).key;
         if (key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
             this.setState({notificationsMenuPosition: null}); // hide the menu
@@ -335,7 +331,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             return null;
         }
 
-        const state = getRoomNotifsState(this.props.room.roomId);
+        const state = this.roomProps.notificationVolume;
 
         let contextMenu = null;
         if (this.state.notificationsMenuPosition) {

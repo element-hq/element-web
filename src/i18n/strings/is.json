@@ -298,7 +298,7 @@
     "Low Priority": "Lítill forgangur",
     "Direct Chat": "Beint spjall",
     "View Community": "Skoða samfélag",
-    "I understand the risks and wish to continue": "Ég skil áhættuna og vil halda áfram",
+    "I understand the risks and wish to continue": "Ég skil áhættuna og óska að halda áfram",
     "Name": "Nafn",
     "Failed to upload image": "Gat ekki sent inn mynd",
     "Add rooms to this community": "Bæta spjallrásum í þetta samfélag",
@@ -456,5 +456,7 @@
     "Notify the whole room": "Tilkynna öllum á spjallrásinni",
     "Room Notification": "Tilkynning á spjallrás",
     "Passphrases must match": "Lykilfrasar verða að stemma",
-    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður"
+    "Passphrase must not be empty": "Lykilfrasi má ekki vera auður",
+    "Create Account": "Stofna Reikning",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "vinsamlegast setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> fyrir besta reynsluna."
 }

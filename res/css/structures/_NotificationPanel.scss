@@ -99,3 +99,7 @@ limitations under the License.
 .mx_NotificationPanel .mx_EventTile_content {
     margin-right: 0px;
 }
+
+.mx_NotificationPanel_empty::before {
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
+}

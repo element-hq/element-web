@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2019 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ limitations under the License.
  * Represents the base class for all level handlers. This class performs no logic
  * and should be overridden.
  */
-export default class SettingsHandler {
+export default abstract class SettingsHandler {
     /**
      * Gets the value for a particular setting at this level for a particular room.
      * If no room is applicable, the roomId may be null. The roomId may not be
@@ -28,10 +28,7 @@ export default class SettingsHandler {
      * @param {String} roomId The room ID to read from, may be null.
      * @returns {*} The setting value, or null if not found.
      */
-    getValue(settingName, roomId) {
-        console.error("Invalid operation: getValue was not overridden");
-        return null;
-    }
+    public abstract getValue(settingName: string, roomId: string): any;
 
     /**
      * Sets the value for a particular setting at this level for a particular room.
@@ -44,10 +41,7 @@ export default class SettingsHandler {
      * @param {*} newValue The new value for the setting, may be null.
      * @returns {Promise} Resolves when the setting has been saved.
      */
-    setValue(settingName, roomId, newValue) {
-        console.error("Invalid operation: setValue was not overridden");
-        return Promise.reject();
-    }
+    public abstract setValue(settingName: string, roomId: string, newValue: any): Promise<void>;
 
     /**
      * Determines if the current user is able to set the value of the given setting
@@ -56,15 +50,11 @@ export default class SettingsHandler {
      * @param {String} roomId The room ID to check in, may be null
      * @returns {boolean} True if the setting can be set by the user, false otherwise.
      */
-    canSetValue(settingName, roomId) {
-        return false;
-    }
+    public abstract canSetValue(settingName: string, roomId: string): boolean;
 
     /**
      * Determines if this level is supported on this device.
      * @returns {boolean} True if this level is supported on the current device.
      */
-    isSupported() {
-        return false;
-    }
+    public abstract isSupported(): boolean;
 }

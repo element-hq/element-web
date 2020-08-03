@@ -20,7 +20,8 @@ import createReactClass from 'create-react-class';
 
 import Tinter from '../../../Tinter';
 import dis from '../../../dispatcher/dispatcher';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 const ROOM_COLORS = [
     // magic room default values courtesy of Ribot

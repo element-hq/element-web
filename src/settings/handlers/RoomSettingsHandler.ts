@@ -1,6 +1,6 @@
 /*
 Copyright 2017 Travis Ralston
-Copyright 2019 New Vector Ltd.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,31 +15,32 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import {MatrixClientPeg} from '../../MatrixClientPeg';
+import { MatrixClientPeg } from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
-import {SettingLevel} from "../SettingsStore";
-import {objectClone, objectKeyChanges} from "../../utils/objects";
+import { objectClone, objectKeyChanges } from "../../utils/objects";
+import { SettingLevel } from "../SettingLevel";
+import { WatchManager } from "../WatchManager";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 /**
  * Gets and sets settings at the "room" level.
  */
 export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(watchManager) {
+    constructor(private watchers: WatchManager) {
         super();
-
-        this._watchers = watchManager;
-        this._onEvent = this._onEvent.bind(this);
     }
 
-    initMatrixClient(oldClient, newClient) {
+    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
         if (oldClient) {
-            oldClient.removeListener("RoomState.events", this._onEvent);
+            oldClient.removeListener("RoomState.events", this.onEvent);
         }
 
-        newClient.on("RoomState.events", this._onEvent);
+        newClient.on("RoomState.events", this.onEvent);
     }
 
-    _onEvent(event, state, prevEvent) {
+    private onEvent = (event: MatrixEvent, state: RoomState, prevEvent: MatrixEvent) => {
         const roomId = event.getRoomId();
         const room = this.client.getRoom(roomId);
 
@@ -60,45 +61,45 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
                 val = !val;
             }
 
-            this._watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
+            this.watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM, val);
         } else if (event.getType() === "im.vector.web.settings") {
             // Figure out what changed and fire those updates
             const prevContent = prevEvent ? prevEvent.getContent() : {};
             const changedSettings = objectKeyChanges(prevContent, event.getContent());
             for (const settingName of changedSettings) {
-                this._watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
+                this.watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM, event.getContent()[settingName]);
             }
         }
-    }
+    };
 
-    getValue(settingName, roomId) {
+    public getValue(settingName: string, roomId: string): any {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
+            const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
 
             // Check to make sure that we actually got a boolean
-            if (typeof(content['disable']) !== "boolean") return null;
+            if (typeof (content['disable']) !== "boolean") return null;
             return !content['disable'];
         }
 
-        const settings = this._getSettings(roomId) || {};
+        const settings = this.getSettings(roomId) || {};
         return settings[settingName];
     }
 
-    setValue(settingName, roomId, newValue) {
+    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
         // Special case URL previews
         if (settingName === "urlPreviewsEnabled") {
-            const content = this._getSettings(roomId, "org.matrix.room.preview_urls") || {};
+            const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
             content['disable'] = !newValue;
             return MatrixClientPeg.get().sendStateEvent(roomId, "org.matrix.room.preview_urls", content);
         }
 
-        const content = this._getSettings(roomId) || {};
+        const content = this.getSettings(roomId) || {};
         content[settingName] = newValue;
         return MatrixClientPeg.get().sendStateEvent(roomId, "im.vector.web.settings", content, "");
     }
 
-    canSetValue(settingName, roomId) {
+    public canSetValue(settingName: string, roomId: string): boolean {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
 
@@ -109,12 +110,12 @@ export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandl
         return room.currentState.maySendStateEvent(eventType, cli.getUserId());
     }
 
-    isSupported() {
+    public isSupported(): boolean {
         const cli = MatrixClientPeg.get();
         return cli !== undefined && cli !== null;
     }
 
-    _getSettings(roomId, eventType = "im.vector.web.settings") {
+    private getSettings(roomId: string, eventType = "im.vector.web.settings"): any {
         const room = MatrixClientPeg.get().getRoom(roomId);
         if (!room) return null;
 

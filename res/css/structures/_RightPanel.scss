@@ -144,3 +144,28 @@ limitations under the License.
     order: 2;
     margin: auto;
 }
+
+.mx_RightPanel_empty {
+    margin-right: -42px;
+
+    h2 {
+        font-weight: 700;
+        margin: 16px 0;
+    }
+
+    h2, p {
+        font-size: $font-14px;
+    }
+
+    &::before {
+        content: '';
+        display: block;
+        margin: 11px auto 29px auto;
+        height: 42px;
+        width: 42px;
+        background-color: $rightpanel-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+    }
+}

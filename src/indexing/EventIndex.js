@@ -18,8 +18,9 @@ import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {EventTimeline, RoomMember} from 'matrix-js-sdk';
 import {sleep} from "../utils/promise";
-import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
+import SettingsStore from "../settings/SettingsStore";
 import {EventEmitter} from "events";
+import {SettingLevel} from "../settings/SettingLevel";
 
 /*
  * Event indexing class that wraps the platform specific event indexing.

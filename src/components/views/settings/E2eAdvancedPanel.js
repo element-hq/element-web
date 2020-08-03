@@ -18,7 +18,7 @@ import React from 'react';
 
 import * as sdk from '../../../index';
 import {_t} from "../../../languageHandler";
-import {SettingLevel} from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 const SETTING_MANUALLY_VERIFY_ALL_SESSIONS = "e2ee.manuallyVerifyAllSessions";
 

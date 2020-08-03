@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import dis from '../../dispatcher/dispatcher';
-import SettingsStore, {SettingLevel} from '../SettingsStore';
+import SettingsStore from '../SettingsStore';
 import IWatcher from "./Watcher";
 import { toPx } from '../../utils/units';
 import { Action } from '../../dispatcher/actions';
+import { SettingLevel } from "../SettingLevel";
 
 export class FontWatcher implements IWatcher {
     public static readonly MIN_SIZE = 8;
