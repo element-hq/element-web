@@ -2400,5 +2400,6 @@
     "The server is not configured to indicate what the problem is (CORS).": "Server on seadistatud varjama tegelikke veapõhjuseid (CORS).",
     "No files visible in this room": "Selles jututoas pole nähtavaid faile",
     "Attach files from chat or just drag and drop them anywhere in a room.": "Faile saad manueks lisada kas vastava nupu alt vestlusest või sikutades neid jututoa aknasse.",
-    "You have no visible notifications in this room.": "Jututoas pole nähtavaid teavitusi."
+    "You have no visible notifications in this room.": "Jututoas pole nähtavaid teavitusi.",
+    "You're all caught up.": "Ei tea... kõik vist on nüüd tehtud."
 }
