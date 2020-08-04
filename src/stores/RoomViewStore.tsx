@@ -285,7 +285,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     {_t("Please contact your homeserver administrator.")}
                 </div>;
             } else if (err.httpStatus === 404) {
-                const invitingUserId = this.getInvitingUserId(this._state.roomId);
+                const invitingUserId = this.getInvitingUserId(this.state.roomId);
                 // only provide a better error message for invites
                 if (invitingUserId) {
                     // if the inviting user is on the same HS, there can only be one cause: they left.
