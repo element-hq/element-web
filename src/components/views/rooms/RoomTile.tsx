@@ -47,7 +47,7 @@ import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber"
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
     IconizedContextMenuOption,
-    IconizedContextMenuOptionList
+    IconizedContextMenuOptionList, IconizedContextMenuRadio
 } from "../context_menus/IconizedContextMenu";
 
 interface IProps {
@@ -74,32 +74,6 @@ const contextMenuBelow = (elementRect: PartialDOMRect) => {
     const top = elementRect.bottom + window.pageYOffset + 17;
     const chevronFace = ChevronFace.None;
     return {left, top, chevronFace};
-};
-
-interface INotifOptionProps {
-    active: boolean;
-    iconClassName: string;
-    label: string;
-    onClick(ev: ButtonEvent);
-}
-
-const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassName, label}) => {
-    const classes = classNames({
-        mx_RoomTile_contextMenu_activeRow: active,
-    });
-
-    let activeIcon;
-    if (active) {
-        activeIcon = <span className="mx_IconizedContextMenu_icon mx_RoomTile_iconCheck" />;
-    }
-
-    return (
-        <MenuItemRadio className={classes} onClick={onClick} active={active} label={label}>
-            <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
-            <span className="mx_IconizedContextMenu_label">{ label }</span>
-            { activeIcon }
-        </MenuItemRadio>
-    );
 };
 
 export default class RoomTile extends React.PureComponent<IProps, IState> {
@@ -340,25 +314,25 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 compact
             >
                 <IconizedContextMenuOptionList first>
-                    <NotifOption
+                    <IconizedContextMenuRadio
                         label={_t("Use default")}
                         active={state === ALL_MESSAGES}
                         iconClassName="mx_RoomTile_iconBell"
                         onClick={this.onClickAllNotifs}
                     />
-                    <NotifOption
+                    <IconizedContextMenuRadio
                         label={_t("All messages")}
                         active={state === ALL_MESSAGES_LOUD}
                         iconClassName="mx_RoomTile_iconBellDot"
                         onClick={this.onClickAlertMe}
                     />
-                    <NotifOption
+                    <IconizedContextMenuRadio
                         label={_t("Mentions & Keywords")}
                         active={state === MENTIONS_ONLY}
                         iconClassName="mx_RoomTile_iconBellMentions"
                         onClick={this.onClickMentions}
                     />
-                    <NotifOption
+                    <IconizedContextMenuRadio
                         label={_t("None")}
                         active={state === MUTE}
                         iconClassName="mx_RoomTile_iconBellCrossed"
