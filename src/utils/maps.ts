@@ -18,11 +18,10 @@ import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
 
 /**
  * Determines the keys added, changed, and removed between two Maps.
- * For changes, simple triple equal comparisons are done, not in-depth
- * tree checking.
- * @param a The first object. Must be defined.
- * @param b The second object. Must be defined.
- * @returns The difference between the keys of each object.
+ * For changes, simple triple equal comparisons are done, not in-depth tree checking.
+ * @param a The first Map. Must be defined.
+ * @param b The second Map. Must be defined.
+ * @returns The difference between the keys of each Map.
  */
 export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added: K[], removed: K[] } {
     const aKeys = [...a.keys()];
@@ -35,13 +34,11 @@ export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added
 }
 
 /**
- * Gets all the key changes (added, removed, or value difference) between
- * two Maps. Triple equals is used to compare values, not in-depth tree
- * checking.
- * @param a The first object. Must be defined.
- * @param b The second object. Must be defined.
- * @returns The keys which have been added, removed, or changed between the
- * two objects.
+ * Gets all the key changes (added, removed, or value difference) between two Maps.
+ * Triple equals is used to compare values, not in-depth tree checking.
+ * @param a The first Map. Must be defined.
+ * @param b The second Map. Must be defined.
+ * @returns The keys which have been added, removed, or changed between the two Maps.
  */
 export function mapKeyChanges<K, V>(a: Map<K, V>, b: Map<K, V>): K[] {
     const diff = mapDiff(a, b);
