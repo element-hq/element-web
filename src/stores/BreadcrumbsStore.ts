@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsStore, { SettingLevel } from "../settings/SettingsStore";
+import SettingsStore from "../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { SettingLevel } from "../settings/SettingLevel";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -55,7 +56,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private get meetsRoomRequirement(): boolean {
-        return this.matrixClient.getVisibleRooms().length >= 20;
+        return this.matrixClient && this.matrixClient.getVisibleRooms().length >= 20;
     }
 
     protected async onAction(payload: ActionPayload) {

@@ -90,7 +90,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
     private getRoomCategory(room: Room): NotificationColor {
         // It's fine for us to call this a lot because it's cached, and we shouldn't be
         // wasting anything by doing so as the store holds single references
-        const state = RoomNotificationStateStore.instance.getRoomState(room, this.tagId);
+        const state = RoomNotificationStateStore.instance.getRoomState(room);
         return state.color;
     }
 
@@ -123,6 +123,7 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
             const category = this.getRoomCategory(room);
             this.alterCategoryPositionBy(category, 1, this.indices);
             this.cachedOrderedRooms.splice(this.indices[category], 0, room); // splice in the new room (pre-adjusted)
+            await this.sortCategory(category);
         } else if (cause === RoomUpdateCause.RoomRemoved) {
             const roomIdx = this.getRoomIndex(room);
             if (roomIdx === -1) {
@@ -135,6 +136,9 @@ export class ImportanceAlgorithm extends OrderingAlgorithm {
         } else {
             throw new Error(`Unhandled splice: ${cause}`);
         }
+
+        // changes have been made if we made it here, so say so
+        return true;
     }
 
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {

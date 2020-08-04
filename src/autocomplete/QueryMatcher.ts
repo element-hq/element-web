@@ -142,7 +142,8 @@ export default class QueryMatcher<T extends Object> {
 
     private processQuery(query: string): string {
         if (this._options.fuzzy !== false) {
-            return removeHiddenChars(query).toLowerCase();
+            // lower case both the input and the output for consistency
+            return removeHiddenChars(query.toLowerCase()).toLowerCase();
         }
         return query.toLowerCase();
     }

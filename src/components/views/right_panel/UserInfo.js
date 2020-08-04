@@ -40,7 +40,7 @@ import E2EIcon from "../rooms/E2EIcon";
 import {useEventEmitter} from "../../../hooks/useEventEmitter";
 import {textualPowerLevel} from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import {RIGHT_PANEL_PHASES} from "../../../stores/RightPanelStorePhases";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
@@ -550,7 +550,9 @@ const RedactMessagesButton = ({member}) => {
         let eventsToRedact = [];
         while (timeline) {
             eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction()) {
+                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
+                    event.getType() !== "m.room.create"
+                ) {
                     return events.concat(event);
                 } else {
                     return events;
@@ -1480,7 +1482,7 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
     </React.Fragment>;
 };
 
-const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.RoomMemberInfo, ...props}) => {
+const UserInfo = ({user, groupId, roomId, onClose, phase=RightPanelPhases.RoomMemberInfo, ...props}) => {
     const cli = useContext(MatrixClientContext);
 
     // Load room if we are given a room id and memoize it
@@ -1500,8 +1502,8 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.Room
 
     let content;
     switch (phase) {
-        case RIGHT_PANEL_PHASES.RoomMemberInfo:
-        case RIGHT_PANEL_PHASES.GroupMemberInfo:
+        case RightPanelPhases.RoomMemberInfo:
+        case RightPanelPhases.GroupMemberInfo:
             content = (
                 <BasicUserInfo
                     room={room}
@@ -1511,7 +1513,7 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RIGHT_PANEL_PHASES.Room
                     isRoomEncrypted={isRoomEncrypted} />
             );
             break;
-        case RIGHT_PANEL_PHASES.EncryptionPanel:
+        case RightPanelPhases.EncryptionPanel:
             classes.push("mx_UserInfo_smallAvatar");
             content = (
                 <EncryptionPanel {...props} member={member} onClose={onClose} isRoomEncrypted={isRoomEncrypted} />

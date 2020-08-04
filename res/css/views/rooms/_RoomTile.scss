@@ -221,10 +221,6 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
     }
 
-    .mx_RoomTile_iconFavorite::before {
-        mask-image: url('$(res)/img/feather-customised/favourites.svg');
-    }
-
     .mx_RoomTile_iconArrowDown::before {
         mask-image: url('$(res)/img/element-icons/roomlist/low-priority.svg');
     }

@@ -212,7 +212,18 @@ export class Algorithm extends EventEmitter {
         // We specifically do NOT use the ordered rooms set as it contains the sticky room, which
         // means we'll be off by 1 when the user is switching rooms. This leads to visual jumping
         // when the user is moving south in the list (not north, because of math).
-        let position = this.getOrderedRoomsWithoutSticky()[tag].indexOf(val);
+        const tagList = this.getOrderedRoomsWithoutSticky()[tag] || []; // can be null if filtering
+        let position = tagList.indexOf(val);
+
+        // We do want to see if a tag change happened though - if this did happen then we'll want
+        // to force the position to zero (top) to ensure we can properly handle it.
+        const wasSticky = this._lastStickyRoom.room ? this._lastStickyRoom.room.roomId === val.roomId : false;
+        if (this._lastStickyRoom.tag && tag !== this._lastStickyRoom.tag && wasSticky && position < 0) {
+            console.warn(`Sticky room ${val.roomId} changed tags during sticky room handling`);
+            position = 0;
+        }
+
+        // Sanity check the position to make sure the room is qualified for being sticky
         if (position < 0) throw new Error(`${val.roomId} does not appear to be known and cannot be sticky`);
 
         // 🐉 Here be dragons.
@@ -465,6 +476,10 @@ export class Algorithm extends EventEmitter {
         return this.filteredRooms;
     }
 
+    public getUnfilteredRooms(): ITagMap {
+        return this._cachedStickyRooms || this.cachedRooms;
+    }
+
     /**
      * This returns the same as getOrderedRooms(), but without the sticky room
      * map as it causes issues for sticky room handling (see sticky room handling
@@ -711,7 +726,9 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
                     if (!algorithm) throw new Error(`No algorithm for ${rmTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.RoomRemoved);
-                    this.cachedRooms[rmTag] = algorithm.orderedRooms;
+                    this._cachedRooms[rmTag] = algorithm.orderedRooms;
+                    this.recalculateFilteredRoomsForTag(rmTag); // update filter to re-sort the list
+                    this.recalculateStickyRoom(rmTag); // update sticky room to make sure it moves if needed
                 }
                 for (const addTag of diff.added) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
@@ -721,7 +738,7 @@ export class Algorithm extends EventEmitter {
                     const algorithm: OrderingAlgorithm = this.algorithms[addTag];
                     if (!algorithm) throw new Error(`No algorithm for ${addTag}`);
                     await algorithm.handleRoomUpdate(room, RoomUpdateCause.NewRoom);
-                    this.cachedRooms[addTag] = algorithm.orderedRooms;
+                    this._cachedRooms[addTag] = algorithm.orderedRooms;
                 }
 
                 // Update the tag map so we don't regen it in a moment
@@ -817,7 +834,7 @@ export class Algorithm extends EventEmitter {
             if (!algorithm) throw new Error(`No algorithm for ${tag}`);
 
             await algorithm.handleRoomUpdate(room, cause);
-            this.cachedRooms[tag] = algorithm.orderedRooms;
+            this._cachedRooms[tag] = algorithm.orderedRooms;
 
             // Flag that we've done something
             this.recalculateFilteredRoomsForTag(tag); // update filter to re-sort the list

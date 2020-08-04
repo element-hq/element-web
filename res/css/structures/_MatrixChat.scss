@@ -78,3 +78,24 @@ limitations under the License.
     */
     height: 100%;
 }
+
+.mx_MatrixChat > .mx_LeftPanel2:hover + .mx_ResizeHandle_horizontal,
+.mx_MatrixChat > .mx_ResizeHandle_horizontal:hover {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        left: 6px;
+        top: 50%;
+        transform: translate(0, -50%);
+
+        height: 64px; // to match width of the ones on roomlist
+        width: 4px;
+        border-radius: 4px;
+
+        content: ' ';
+
+        background-color: $primary-fg-color;
+        opacity: 0.8;
+    }
+}

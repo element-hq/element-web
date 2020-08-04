@@ -34,7 +34,8 @@ import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 const LIMIT = 20;
 
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
-const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
+// anchored to only match from the start of parts otherwise it'll show emoji suggestions whilst typing matrix IDs
+const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|(?:^|\\s):[+-\\w]*:?)$', 'g');
 
 interface IEmojiShort {
     emoji: IEmoji;

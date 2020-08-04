@@ -281,5 +281,38 @@ describe('editor/model', function() {
             expect(model.parts[0].type).toBe("plain");
             expect(model.parts[0].text).toBe("try #define");
         });
+
+        it('insert room pill without splitting at the colon', () => {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{resourceId: "#room:server"}]);
+            const model = new EditorModel([], pc, renderer);
+
+            model.update("#roo", "insertText", {offset: 4, atNodeEnd: true});
+
+            expect(renderer.count).toBe(1);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("pill-candidate");
+            expect(model.parts[0].text).toBe("#roo");
+
+            model.update("#room:s", "insertText", {offset: 7, atNodeEnd: true});
+
+            expect(renderer.count).toBe(2);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("pill-candidate");
+            expect(model.parts[0].text).toBe("#room:s");
+        });
+
+        it('allow typing e-mail addresses without splitting at the @', () => {
+            const renderer = createRenderer();
+            const pc = createPartCreator([{resourceId: "@alice", label: "Alice"}]);
+            const model = new EditorModel([], pc, renderer);
+
+            model.update("foo@a", "insertText", {offset: 5, atNodeEnd: true});
+
+            expect(renderer.count).toBe(1);
+            expect(model.parts.length).toBe(1);
+            expect(model.parts[0].type).toBe("plain");
+            expect(model.parts[0].text).toBe("foo@a");
+        });
     });
 });
