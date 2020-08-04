@@ -2375,5 +2375,6 @@
     "The server is offline.": "Der Server ist offline.",
     "The server has denied your request.": "Der Server hat deine Anfrage abgewiesen.",
     "Your area is experiencing difficulties connecting to the internet.": "Deine Region hat Schwierigkeiten, eine Verbindung zum Internet herzustellen.",
-    "A connection error occurred while trying to contact the server.": "Beim Versuch, den Server zu kontaktieren, ist ein Verbindungsfehler aufgetreten."
+    "A connection error occurred while trying to contact the server.": "Beim Versuch, den Server zu kontaktieren, ist ein Verbindungsfehler aufgetreten.",
+    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Du hast sie ggf. in einem anderen Client als %(brand)s konfiguriert. Du kannst sie nicht in %(brand)s verändern, aber sie werden trotzdem angewendet. "
 }
