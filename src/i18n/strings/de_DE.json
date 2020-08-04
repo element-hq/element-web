@@ -2361,5 +2361,19 @@
     "%(brand)s encountered an error during upload of:": "%(brand)s hat einen Fehler festgestellt beim hochladen von:",
     "Use your account to sign in to the latest version of the app at <a />": "Verwende dein Konto um dich an der neusten Version der App anzumelden<a />",
     "We’re excited to announce Riot is now Element!": "Wir freuen uns bekanntzugeben: Riot ist jetzt Element!",
-    "Learn more at <a>element.io/previously-riot</a>": "Erfahre mehr unter <a>element.io/previously-riot</a>"
+    "Learn more at <a>element.io/previously-riot</a>": "Erfahre mehr unter <a>element.io/previously-riot</a>",
+    "The person who invited you already left the room.": "Die Person, die dich eingeladen hat, hat den Raum bereits verlassen.",
+    "The person who invited you already left the room, or their server is offline.": "Die Person, die dich eingeladen hat, hat den Raum bereits verlassen oder ihr Server ist offline.",
+    "Change notification settings": "Benachrichtigungseinstellungen ändern",
+    "Your server isn't responding to some <a>requests</a>.": "Dein Server antwortet nicht auf einige <a>Anfragen</a>.",
+    "Go to Element": "Zu Element gehen",
+    "Server isn't responding": "Server antwortet nicht",
+    "Your server isn't responding to some of your requests. Below are some of the most likely reasons.": "Server reagiert nicht auf einige deiner Anfragen. Im Folgenden sind einige der wahrscheinlichsten Gründe aufgeführt.",
+    "The server (%(serverName)s) took too long to respond.": "Der Server (%(serverName)s) brauchte zu lange zum antworten.",
+    "Your firewall or anti-virus is blocking the request.": "Deine Firewall oder Anti-Virus-Programm blockiert die Anfrage.",
+    "A browser extension is preventing the request.": "Eine Browser-Erweiterung verhindert die Anfrage.",
+    "The server is offline.": "Der Server ist offline.",
+    "The server has denied your request.": "Der Server hat deine Anfrage abgewiesen.",
+    "Your area is experiencing difficulties connecting to the internet.": "Deine Region hat Schwierigkeiten, eine Verbindung zum Internet herzustellen.",
+    "A connection error occurred while trying to contact the server.": "Beim Versuch, den Server zu kontaktieren, ist ein Verbindungsfehler aufgetreten."
 }
