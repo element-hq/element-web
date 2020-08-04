@@ -1,15 +1,3 @@
-const path = require('path');
-
-// get the path of the js-sdk so we can extend the config
-// eslint supports loading extended configs by module,
-// but only if they come from a module that starts with eslint-config-
-// So we load the filename directly (and it could be in node_modules/
-// or or ../node_modules/ etc)
-//
-// We add a `..` to the end because the js-sdk lives out of lib/, but the eslint
-// config is at the project root.
-const matrixJsSdkPath = path.join(path.dirname(require.resolve('matrix-js-sdk')), '..');
-
 module.exports = {
     extends: ["matrix-org", "matrix-org/react-legacy"],
     parser: "babel-eslint",
@@ -31,7 +19,7 @@ module.exports = {
     },
 
     overrides: [{
-        files: ["src/**/*.{ts, tsx}"],
+        "files": ["src/**/*.{ts, tsx}"],
         "extends": ["matrix-org/ts"],
         "rules": {
             // We disable this while we're transitioning
@@ -41,6 +29,6 @@ module.exports = {
 
             "quotes": "off",
             "no-extra-boolean-cast": "off",
-        }
+        },
     }],
 };

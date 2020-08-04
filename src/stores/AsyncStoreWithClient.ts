@@ -17,11 +17,24 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { AsyncStore } from "./AsyncStore";
 import { ActionPayload } from "../dispatcher/payloads";
+import { Dispatcher } from "flux";
+import { MatrixClientPeg } from "../MatrixClientPeg";
 
 export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<T> {
     protected matrixClient: MatrixClient;
 
     protected abstract async onAction(payload: ActionPayload);
+
+    protected constructor(dispatcher: Dispatcher<ActionPayload>, initialState: T = <T>{}) {
+        super(dispatcher, initialState);
+
+        if (MatrixClientPeg.get()) {
+            this.matrixClient = MatrixClientPeg.get();
+
+            // noinspection JSIgnoredPromiseFromCall
+            this.onReady();
+        }
+    }
 
     protected async onReady() {
         // Default implementation is to do nothing.
@@ -35,13 +48,21 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         await this.onAction(payload);
 
         if (payload.action === 'MatrixActions.sync') {
-            // Filter out anything that isn't the first PREPARED sync.
+            // Only set the client on the transition into the PREPARED state.
+            // Everything after this is unnecessary (we only need to know once we have a client)
+            // and we intentionally don't set the client before this point to avoid stores
+            // updating for every event emitted during the cached sync.
             if (!(payload.prevState === 'PREPARED' && payload.state !== 'PREPARED')) {
                 return;
             }
 
-            this.matrixClient = payload.matrixClient;
-            await this.onReady();
+            if (this.matrixClient !== payload.matrixClient) {
+                if (this.matrixClient) {
+                    await this.onNotReady();
+                }
+                this.matrixClient = payload.matrixClient;
+                await this.onReady();
+            }
         } else if (payload.action === 'on_client_not_viable' || payload.action === 'on_logged_out') {
             if (this.matrixClient) {
                 await this.onNotReady();

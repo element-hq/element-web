@@ -53,11 +53,12 @@ limitations under the License.
 .mx_RebrandDialog_chevron::after {
     content: '';
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     mask-position: center;
     mask-size: contain;
     mask-repeat: no-repeat;
     background-color: $muted-fg-color;
-    mask-image: url('$(res)/img/feather-customised/chevron-right.svg');
+    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+    transform: rotate(-90deg);
 }

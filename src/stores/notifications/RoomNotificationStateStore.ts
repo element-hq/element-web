@@ -29,6 +29,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new RoomNotificationStateStore();
 
     private roomMap = new Map<Room, RoomNotificationState>();
+    private listMap = new Map<TagID, ListNotificationState>();
 
     private constructor() {
         super(defaultDispatcher, {});
@@ -52,21 +53,23 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     }
 
     /**
-     * Creates a new list notification state. The consumer is expected to set the rooms
-     * on the notification state, and destroy the state when it no longer needs it.
-     * @param tagId The tag to create the notification state for.
+     * Gets an instance of the list state class for the given tag.
+     * @param tagId The tag to get the notification state for.
      * @returns The notification state for the tag.
      */
     public getListState(tagId: TagID): ListNotificationState {
-        // Note: we don't cache these notification states as the consumer is expected to call
-        // .setRooms() on the returned object, which could confuse other consumers.
+        if (this.listMap.has(tagId)) {
+            return this.listMap.get(tagId);
+        }
 
         // TODO: Update if/when invites move out of the room list.
         const useTileCount = tagId === DefaultTagID.Invite;
         const getRoomFn: FetchRoomFn = (room: Room) => {
             return this.getRoomState(room);
         };
-        return new ListNotificationState(useTileCount, tagId, getRoomFn);
+        const state = new ListNotificationState(useTileCount, tagId, getRoomFn);
+        this.listMap.set(tagId, state);
+        return state;
     }
 
     /**

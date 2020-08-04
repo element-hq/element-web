@@ -1,0 +1,72 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ServerOfflineDialog {
+    .mx_ServerOfflineDialog_content {
+        padding-right: 85px;
+        color: $primary-fg-color;
+
+        hr {
+            border-color: $primary-fg-color;
+            opacity: 0.1;
+            border-bottom: none;
+        }
+
+        ul {
+            padding: 16px;
+
+            li:nth-child(n + 2) {
+                margin-top: 16px;
+            }
+        }
+
+        .mx_ServerOfflineDialog_content_context {
+            .mx_ServerOfflineDialog_content_context_timestamp {
+                display: inline-block;
+                width: 115px;
+                color: $muted-fg-color;
+                line-height: 24px; // same as avatar
+                vertical-align: top;
+            }
+
+            .mx_ServerOfflineDialog_content_context_timeline {
+                display: inline-block;
+                width: calc(100% - 155px); // 115px timestamp width + 40px right margin
+
+                .mx_ServerOfflineDialog_content_context_timeline_header {
+                    span {
+                        margin-left: 8px;
+                        vertical-align: middle;
+                    }
+                }
+
+                .mx_ServerOfflineDialog_content_context_txn {
+                    position: relative;
+                    margin-top: 8px;
+
+                    .mx_ServerOfflineDialog_content_context_txn_desc {
+                        width: calc(100% - 100px); // 100px is an arbitrary margin for the button
+                    }
+
+                    .mx_AccessibleButton {
+                        float: right;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}

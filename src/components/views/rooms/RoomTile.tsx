@@ -17,12 +17,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {createRef} from "react";
+import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import dis from '../../../dispatcher/dispatcher';
+import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
@@ -30,49 +31,41 @@ import {
     ChevronFace,
     ContextMenu,
     ContextMenuTooltipButton,
-    MenuItemRadio,
-    MenuItemCheckbox,
     MenuItem,
+    MenuItemCheckbox,
+    MenuItemRadio,
 } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
+import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import {
-    getRoomNotifsState,
-    setRoomNotifsState,
-    ALL_MESSAGES,
-    ALL_MESSAGES_LOUD,
-    MENTIONS_ONLY,
-    MUTE,
-} from "../../../RoomNotifs";
+import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE, } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
 import { Volume } from "../../../RoomNotifsTypes";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import RoomListActions from "../../../actions/RoomListActions";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {ActionPayload} from "../../../dispatcher/payloads";
+import { ActionPayload } from "../../../dispatcher/payloads";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
+import { CachedRoomKey, RoomEchoChamber } from "../../../stores/local-echo/RoomEchoChamber";
+import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber";
 
 interface IProps {
     room: Room;
     showMessagePreview: boolean;
     isMinimized: boolean;
     tag: TagID;
-
-    // TODO: Incoming call boxes: https://github.com/vector-im/riot-web/issues/14177
 }
 
 type PartialDOMRect = Pick<DOMRect, "left" | "bottom">;
 
 interface IState {
-    hover: boolean;
-    notificationState: NotificationState;
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
+    messagePreview?: string;
 }
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
@@ -111,24 +104,41 @@ const NotifOption: React.FC<INotifOptionProps> = ({active, onClick, iconClassNam
     );
 };
 
-export default class RoomTile extends React.Component<IProps, IState> {
+export default class RoomTile extends React.PureComponent<IProps, IState> {
     private dispatcherRef: string;
     private roomTileRef = createRef<HTMLDivElement>();
+    private notificationState: NotificationState;
+    private roomProps: RoomEchoChamber;
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
-            hover: false,
-            notificationState: RoomNotificationStateStore.instance.getRoomState(this.props.room),
             selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
+
+            // generatePreview() will return nothing if the user has previews disabled
+            messagePreview: this.generatePreview(),
         };
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
+        MessagePreviewStore.instance.on(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
+        this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.roomProps = EchoChamber.forRoom(this.props.room);
+        this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
     }
+
+    private onNotificationUpdate = () => {
+        this.forceUpdate(); // notification state changed - update
+    };
+
+    private onRoomPropertyUpdate = (property: CachedRoomKey) => {
+        if (property === CachedRoomKey.NotificationVolume) this.onNotificationUpdate();
+        // else ignore - not important for this tile
+    };
 
     private get showContextMenu(): boolean {
         return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
@@ -150,6 +160,8 @@ export default class RoomTile extends React.Component<IProps, IState> {
             ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         }
         defaultDispatcher.unregister(this.dispatcherRef);
+        MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
+        this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -160,20 +172,27 @@ export default class RoomTile extends React.Component<IProps, IState> {
         }
     };
 
+    private onRoomPreviewChanged = (room: Room) => {
+        if (this.props.room && room.roomId === this.props.room.roomId) {
+            // generatePreview() will return nothing if the user has previews disabled
+            this.setState({messagePreview: this.generatePreview()});
+        }
+    };
+
+    private generatePreview(): string | null {
+        if (!this.showMessagePreview) {
+            return null;
+        }
+
+        return MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
+    }
+
     private scrollIntoView = () => {
         if (!this.roomTileRef.current) return;
         this.roomTileRef.current.scrollIntoView({
             block: "nearest",
             behavior: "auto",
         });
-    };
-
-    private onTileMouseEnter = () => {
-        this.setState({hover: true});
-    };
-
-    private onTileMouseLeave = () => {
-        this.setState({hover: false});
     };
 
     private onTileClick = (ev: React.KeyboardEvent) => {
@@ -292,17 +311,9 @@ export default class RoomTile extends React.Component<IProps, IState> {
         ev.stopPropagation();
         if (MatrixClientPeg.get().isGuest()) return;
 
-        // get key before we go async and React discards the nativeEvent
-        const key = (ev as React.KeyboardEvent).key;
-        try {
-            // TODO add local echo - https://github.com/vector-im/riot-web/issues/14280
-            await setRoomNotifsState(this.props.room.roomId, newState);
-        } catch (error) {
-            // TODO: some form of error notification to the user to inform them that their state change failed.
-            // See https://github.com/vector-im/riot-web/issues/14281
-            console.error(error);
-        }
+        this.roomProps.notificationVolume = newState;
 
+        const key = (ev as React.KeyboardEvent).key;
         if (key === Key.ENTER) {
             // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
             this.setState({notificationsMenuPosition: null}); // hide the menu
@@ -320,7 +331,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
             return null;
         }
 
-        const state = getRoomNotifsState(this.props.room.roomId);
+        const state = this.roomProps.notificationVolume;
 
         let contextMenu = null;
         if (this.state.notificationsMenuPosition) {
@@ -482,7 +493,7 @@ export default class RoomTile extends React.Component<IProps, IState> {
             badge = (
                 <div className="mx_RoomTile_badgeContainer" aria-hidden="true">
                     <NotificationBadge
-                        notification={this.state.notificationState}
+                        notification={this.notificationState}
                         forceCount={false}
                         roomId={this.props.room.roomId}
                     />
@@ -495,24 +506,18 @@ export default class RoomTile extends React.Component<IProps, IState> {
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         let messagePreview = null;
-        if (this.showMessagePreview) {
-            // The preview store heavily caches this info, so should be safe to hammer.
-            const text = MessagePreviewStore.instance.getPreviewForRoom(this.props.room, this.props.tag);
-
-            // Only show the preview if there is one to show.
-            if (text) {
-                messagePreview = (
-                    <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
-                        {text}
-                    </div>
-                );
-            }
+        if (this.showMessagePreview && this.state.messagePreview) {
+            messagePreview = (
+                <div className="mx_RoomTile_messagePreview" id={messagePreviewId(this.props.room.roomId)}>
+                    {this.state.messagePreview}
+                </div>
+            );
         }
 
         const nameClasses = classNames({
             "mx_RoomTile_name": true,
             "mx_RoomTile_nameWithPreview": !!messagePreview,
-            "mx_RoomTile_nameHasUnreadEvents": this.state.notificationState.isUnread,
+            "mx_RoomTile_nameHasUnreadEvents": this.notificationState.isUnread,
         });
 
         let nameContainer = (
@@ -529,15 +534,15 @@ export default class RoomTile extends React.Component<IProps, IState> {
         // The following labels are written in such a fashion to increase screen reader efficiency (speed).
         if (this.props.tag === DefaultTagID.Invite) {
             // append nothing
-        } else if (this.state.notificationState.hasMentions) {
+        } else if (this.notificationState.hasMentions) {
             ariaLabel += " " + _t("%(count)s unread messages including mentions.", {
-                count: this.state.notificationState.count,
+                count: this.notificationState.count,
             });
-        } else if (this.state.notificationState.hasUnreadCount) {
+        } else if (this.notificationState.hasUnreadCount) {
             ariaLabel += " " + _t("%(count)s unread messages.", {
-                count: this.state.notificationState.count,
+                count: this.notificationState.count,
             });
-        } else if (this.state.notificationState.isUnread) {
+        } else if (this.notificationState.isUnread) {
             ariaLabel += " " + _t("Unread messages.");
         }
 
@@ -560,8 +565,6 @@ export default class RoomTile extends React.Component<IProps, IState> {
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
                             className={classes}
-                            onMouseEnter={this.onTileMouseEnter}
-                            onMouseLeave={this.onTileMouseLeave}
                             onClick={this.onTileClick}
                             onContextMenu={this.onContextMenu}
                             role="treeitem"

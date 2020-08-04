@@ -15,7 +15,8 @@
 */
 
 import * as Matrix from 'matrix-js-sdk';
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import SettingsStore from "./settings/SettingsStore";
+import {SettingLevel} from "./settings/SettingLevel";
 
 export default {
     hasAnyLabeledDevices: async function() {

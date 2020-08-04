@@ -210,6 +210,11 @@ const FilePanel = createReactClass({
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const Loader = sdk.getComponent("elements.Spinner");
 
+        const emptyState = (<div className="mx_RightPanel_empty mx_FilePanel_empty">
+            <h2>{_t('No files visible in this room')}</h2>
+            <p>{_t('Attach files from chat or just drag and drop them anywhere in a room.')}</p>
+        </div>);
+
         if (this.state.timelineSet) {
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
@@ -223,7 +228,7 @@ const FilePanel = createReactClass({
                         onPaginationRequest={this.onPaginationRequest}
                         tileShape="file_grid"
                         resizeNotifier={this.props.resizeNotifier}
-                        empty={_t('There are no visible files in this room')}
+                        empty={emptyState}
                     />
                 </div>
             );

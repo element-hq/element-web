@@ -19,8 +19,8 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-import {SettingLevel} from "../../../settings/SettingsStore";
 import SettingsStore from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 export default createReactClass({
     propTypes: {
