@@ -15,11 +15,14 @@ limitations under the License.
 */
 
 import {useRef, useEffect} from "react";
+import type {EventEmitter} from "events";
+
+type Handler = (...args: any[]) => void;
 
 // Hook to wrap event emitter on and removeListener in hook lifecycle
-export const useEventEmitter = (emitter, eventName, handler) => {
+export const useEventEmitter = (emitter: EventEmitter, eventName: string | symbol, handler: Handler) => {
     // Create a ref that stores handler
-    const savedHandler = useRef();
+    const savedHandler = useRef(handler);
 
     // Update ref.current value if handler changes.
     useEffect(() => {

@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState, useEffect } from 'react';
+import {useState} from "react";
 
-export const useAsyncMemo = (fn, deps, initialValue) => {
+// Hook to simplify toggling of a boolean state value
+// Returns value, method to toggle boolean value and method to set the boolean value
+export const useStateToggle = (initialValue: boolean) => {
     const [value, setValue] = useState(initialValue);
-    useEffect(() => {
-        fn().then(setValue);
-    }, deps); // eslint-disable-line react-hooks/exhaustive-deps
-    return value;
+    const toggleValue = () => {
+        setValue(!value);
+    };
+    return [value, toggleValue, setValue];
 };
