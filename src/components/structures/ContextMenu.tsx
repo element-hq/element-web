@@ -58,7 +58,7 @@ export enum ChevronFace {
     None = "none",
 }
 
-interface IProps extends IPosition {
+export interface IProps extends IPosition {
     menuWidth?: number;
     menuHeight?: number;
 
