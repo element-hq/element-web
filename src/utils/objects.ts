@@ -16,15 +16,17 @@ limitations under the License.
 
 import { arrayDiff, arrayHasDiff, arrayMerge, arrayUnion } from "./arrays";
 
+type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof O, P[number]>]: O[k]};
+
 /**
  * Gets a new object which represents the provided object, excluding some properties.
  * @param a The object to strip properties of. Must be defined.
  * @param props The property names to remove.
  * @returns The new object without the provided properties.
  */
-export function objectExcluding(a: any, props: string[]): any {
+export function objectExcluding<O extends {}, P extends (keyof O)[]>(a: O, props: P): ObjectExcluding<O, P> {
     // We use a Map to avoid hammering the `delete` keyword, which is slow and painful.
-    const tempMap = new Map<string, any>(Object.entries(a));
+    const tempMap = new Map<keyof O, any>(Object.entries(a) as [keyof O, any][]);
     for (const prop of props) {
         tempMap.delete(prop);
     }
@@ -33,7 +35,7 @@ export function objectExcluding(a: any, props: string[]): any {
     return Array.from(tempMap.entries()).reduce((c, [k, v]) => {
         c[k] = v;
         return c;
-    }, {});
+    }, {} as O);
 }
 
 /**
@@ -43,13 +45,13 @@ export function objectExcluding(a: any, props: string[]): any {
  * @param props The property names to keep.
  * @returns The new object with only the provided properties.
  */
-export function objectWithOnly(a: any, props: string[]): any {
-    const existingProps = Object.keys(a);
+export function objectWithOnly<O extends {}, P extends (keyof O)[]>(a: O, props: P): {[k in P[number]]: O[k]} {
+    const existingProps = Object.keys(a) as (keyof O)[];
     const diff = arrayDiff(existingProps, props);
     if (diff.removed.length === 0) {
         return objectShallowClone(a);
     } else {
-        return objectExcluding(a, diff.removed);
+        return objectExcluding(a, diff.removed) as {[k in P[number]]: O[k]};
     }
 }
 
@@ -64,9 +66,9 @@ export function objectWithOnly(a: any, props: string[]): any {
  * First argument is the property key with the second being the current value.
  * @returns A cloned object.
  */
-export function objectShallowClone(a: any, propertyCloner?: (k: string, v: any) => any): any {
-    const newObj = {};
-    for (const [k, v] of Object.entries(a)) {
+export function objectShallowClone<O extends {}>(a: O, propertyCloner?: (k: keyof O, v: O[keyof O]) => any): O {
+    const newObj = {} as O;
+    for (const [k, v] of Object.entries(a) as [keyof O, O[keyof O]][]) {
         newObj[k] = v;
         if (propertyCloner) {
             newObj[k] = propertyCloner(k, v);
@@ -83,7 +85,7 @@ export function objectShallowClone(a: any, propertyCloner?: (k: string, v: any) 
  * @param b The second object. Must be defined.
  * @returns True if there's a difference between the objects, false otherwise
  */
-export function objectHasDiff(a: any, b: any): boolean {
+export function objectHasDiff<O extends {}>(a: O, b: O): boolean {
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
     if (arrayHasDiff(aKeys, bKeys)) return true;
@@ -91,6 +93,8 @@ export function objectHasDiff(a: any, b: any): boolean {
     const possibleChanges = arrayUnion(aKeys, bKeys);
     return possibleChanges.some(k => a[k] !== b[k]);
 }
+
+type Diff<K> = { changed: K[], added: K[], removed: K[] };
 
 /**
  * Determines the keys added, changed, and removed between two objects.
@@ -100,9 +104,9 @@ export function objectHasDiff(a: any, b: any): boolean {
  * @param b The second object. Must be defined.
  * @returns The difference between the keys of each object.
  */
-export function objectDiff(a: any, b: any): { changed: string[], added: string[], removed: string[] } {
-    const aKeys = Object.keys(a);
-    const bKeys = Object.keys(b);
+export function objectDiff<O extends {}>(a: O, b: O): Diff<keyof O> {
+    const aKeys = Object.keys(a) as (keyof O)[];
+    const bKeys = Object.keys(b) as (keyof O)[];
     const keyDiff = arrayDiff(aKeys, bKeys);
     const possibleChanges = arrayUnion(aKeys, bKeys);
     const changes = possibleChanges.filter(k => a[k] !== b[k]);
@@ -119,7 +123,7 @@ export function objectDiff(a: any, b: any): { changed: string[], added: string[]
  * @returns The keys which have been added, removed, or changed between the
  * two objects.
  */
-export function objectKeyChanges(a: any, b: any): string[] {
+export function objectKeyChanges<O extends {}>(a: O, b: O): (keyof O)[] {
     const diff = objectDiff(a, b);
     return arrayMerge(diff.removed, diff.added, diff.changed);
 }
@@ -131,6 +135,6 @@ export function objectKeyChanges(a: any, b: any): string[] {
  * @param obj The object to clone.
  * @returns The cloned object
  */
-export function objectClone(obj: any): any {
+export function objectClone<O extends {}>(obj: O): O {
     return JSON.parse(JSON.stringify(obj));
 }

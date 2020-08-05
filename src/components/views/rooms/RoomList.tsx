@@ -245,6 +245,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (doUpdate) {
             // We have to break our reference to the room list store if we want to be able to
             // diff the object for changes, so do that.
+            // @ts-ignore - ITagMap is ts-ignored so this will have to be too
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
