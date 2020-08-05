@@ -34,7 +34,7 @@ interface IProps<T extends string> {
     definitions: IDefinition<T>[];
     value?: T; // if not provided no options will be selected
     outlined?: boolean;
-    onChange(newValue: T);
+    onChange(newValue: T): void;
 }
 
 function StyledRadioGroup<T extends string>({name, definitions, value, className, outlined, onChange}: IProps<T>) {
