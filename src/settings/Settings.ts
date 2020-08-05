@@ -19,7 +19,6 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { _td } from '../languageHandler';
 import {
-    AudioNotificationsEnabledController,
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
@@ -460,7 +459,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "audioNotificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
-        controller: new AudioNotificationsEnabledController(),
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
