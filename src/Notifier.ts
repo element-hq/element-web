@@ -17,6 +17,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { MatrixClientPeg } from './MatrixClientPeg';
 import SdkConfig from './SdkConfig';
 import PlatformPeg from './PlatformPeg';
@@ -28,9 +31,7 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
-import {
-    hideToast as hideNotificationsToast,
-} from "./toasts/DesktopNotificationsToast";
+import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import {SettingLevel} from "./settings/SettingLevel";
 
 /*
@@ -55,7 +56,7 @@ const typehandlers = {
     },
 };
 
-const Notifier = {
+export const Notifier = {
     notifsByRoom: {},
 
     // A list of event IDs that we've received but need to wait until
@@ -63,14 +64,14 @@ const Notifier = {
     // or not
     pendingEncryptedEventIds: [],
 
-    notificationMessageForEvent: function(ev) {
+    notificationMessageForEvent: function(ev: MatrixEvent) {
         if (typehandlers.hasOwnProperty(ev.getContent().msgtype)) {
             return typehandlers[ev.getContent().msgtype](ev);
         }
         return TextForEvent.textForEvent(ev);
     },
 
-    _displayPopupNotification: function(ev, room) {
+    _displayPopupNotification: function(ev: MatrixEvent, room: Room) {
         const plaf = PlatformPeg.get();
         if (!plaf) {
             return;
@@ -125,7 +126,7 @@ const Notifier = {
         }
     },
 
-    getSoundForRoom: function(roomId) {
+    getSoundForRoom: function(roomId: string) {
         // We do no caching here because the SDK caches setting
         // and the browser will cache the sound.
         const content = SettingsStore.getValue("notificationSound", roomId);
@@ -153,12 +154,13 @@ const Notifier = {
         };
     },
 
-    _playAudioNotification: async function(ev, room) {
+    _playAudioNotification: async function(ev: MatrixEvent, room: Room) {
         const sound = this.getSoundForRoom(room.roomId);
         console.log(`Got sound ${sound && sound.name || "default"} for ${room.roomId}`);
 
         try {
-            const selector = document.querySelector(sound ? `audio[src='${sound.url}']` : "#messageAudio");
+            const selector =
+                document.querySelector<HTMLAudioElement>(sound ? `audio[src='${sound.url}']` : "#messageAudio");
             let audioElement = selector;
             if (!selector) {
                 if (!sound) {
@@ -207,7 +209,7 @@ const Notifier = {
         return plaf && plaf.supportsNotifications();
     },
 
-    setEnabled: function(enable, callback) {
+    setEnabled: function(enable: boolean, callback: () => void) {
         const plaf = PlatformPeg.get();
         if (!plaf) return;
 
@@ -280,7 +282,7 @@ const Notifier = {
         return this.isEnabled() && SettingsStore.getValue("audioNotificationsEnabled");
     },
 
-    setToolbarHidden: function(hidden, persistent = true) {
+    setToolbarHidden: function(hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
 
         Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
@@ -289,7 +291,7 @@ const Notifier = {
 
         // update the info to localStorage for persistent settings
         if (persistent && global.localStorage) {
-            global.localStorage.setItem("notifications_hidden", hidden);
+            global.localStorage.setItem("notifications_hidden", String(hidden));
         }
     },
 
@@ -312,7 +314,7 @@ const Notifier = {
         return this.toolbarHidden;
     },
 
-    onSyncStateChange: function(state) {
+    onSyncStateChange: function(state: string) {
         if (state === "SYNCING") {
             this.isSyncing = true;
         } else if (state === "STOPPED" || state === "ERROR") {
@@ -320,7 +322,7 @@ const Notifier = {
         }
     },
 
-    onEvent: function(ev) {
+    onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
         if (ev.sender && ev.sender.userId === MatrixClientPeg.get().credentials.userId) return;
 
@@ -338,7 +340,7 @@ const Notifier = {
         this._evaluateEvent(ev);
     },
 
-    onEventDecrypted: function(ev) {
+    onEventDecrypted: function(ev: MatrixEvent) {
         // 'decrypted' means the decryption process has finished: it may have failed,
         // in which case it might decrypt soon if the keys arrive
         if (ev.isDecryptionFailure()) return;
@@ -350,7 +352,7 @@ const Notifier = {
         this._evaluateEvent(ev);
     },
 
-    onRoomReceipt: function(ev, room) {
+    onRoomReceipt: function(ev: MatrixEvent, room: Room) {
         if (room.getUnreadNotificationCount() === 0) {
             // ideally we would clear each notification when it was read,
             // but we have no way, given a read receipt, to know whether
@@ -383,8 +385,8 @@ const Notifier = {
     },
 };
 
-if (!global.mxNotifier) {
-    global.mxNotifier = Notifier;
+if (!window.mxNotifier) {
+    window.mxNotifier = Notifier;
 }
 
-export default global.mxNotifier;
+export default window.mxNotifier;

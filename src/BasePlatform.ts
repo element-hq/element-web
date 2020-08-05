@@ -155,6 +155,8 @@ export default abstract class BasePlatform {
 
     loudNotification(ev: Event, room: Object) {
     }
+    clearNotification(notif: Notification) {
+    }
 
     /**
      * Returns a promise that resolves to a string representing the current version of the application.
