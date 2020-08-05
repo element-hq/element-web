@@ -738,14 +738,20 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 const nonPaddedHeight = this.state.height - RESIZE_HANDLE_HEIGHT - SHOW_N_BUTTON_HEIGHT;
                 const amountFullyShown = Math.floor(nonPaddedHeight / this.layout.tileHeight);
                 const numMissing = this.numTiles - amountFullyShown;
+                const label = _t("Show %(count)s more", {count: numMissing});
                 let showMoreText = (
                     <span className='mx_RoomSublist_showNButtonText'>
-                        {_t("Show %(count)s more", {count: numMissing})}
+                        {label}
                     </span>
                 );
                 if (this.props.isMinimized) showMoreText = null;
                 showNButton = (
-                    <RovingAccessibleButton onClick={this.onShowAllClick} className={showMoreBtnClasses}>
+                    <RovingAccessibleButton
+                        role="treeitem"
+                        onClick={this.onShowAllClick}
+                        className={showMoreBtnClasses}
+                        aria-label={label}
+                    >
                         <span className='mx_RoomSublist_showMoreButtonChevron mx_RoomSublist_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
@@ -754,14 +760,20 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 );
             } else if (this.numTiles > this.layout.defaultVisibleTiles) {
                 // we have all tiles visible - add a button to show less
+                const label = _t("Show less");
                 let showLessText = (
                     <span className='mx_RoomSublist_showNButtonText'>
-                        {_t("Show less")}
+                        {label}
                     </span>
                 );
                 if (this.props.isMinimized) showLessText = null;
                 showNButton = (
-                    <RovingAccessibleButton onClick={this.onShowLessClick} className={showMoreBtnClasses}>
+                    <RovingAccessibleButton
+                        role="treeitem"
+                        onClick={this.onShowLessClick}
+                        className={showMoreBtnClasses}
+                        aria-label={label}
+                    >
                         <span className='mx_RoomSublist_showLessButtonChevron mx_RoomSublist_showNButtonChevron'>
                             {/* set by CSS masking */}
                         </span>
