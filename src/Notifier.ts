@@ -209,7 +209,7 @@ export const Notifier = {
         return plaf && plaf.supportsNotifications();
     },
 
-    setEnabled: function(enable: boolean, callback: () => void) {
+    setEnabled: function(enable: boolean, callback?: () => void) {
         const plaf = PlatformPeg.get();
         if (!plaf) return;
 
