@@ -24,7 +24,7 @@ type ObjectExcluding<O extends {}, P extends (keyof O)[]> = {[k in Exclude<keyof
  * @param props The property names to remove.
  * @returns The new object without the provided properties.
  */
-export function objectExcluding<O extends {}, P extends (keyof O)[]>(a: O, props: P): ObjectExcluding<O, P> {
+export function objectExcluding<O extends {}, P extends Array<keyof O>>(a: O, props: P): ObjectExcluding<O, P> {
     // We use a Map to avoid hammering the `delete` keyword, which is slow and painful.
     const tempMap = new Map<keyof O, any>(Object.entries(a) as [keyof O, any][]);
     for (const prop of props) {
@@ -45,7 +45,7 @@ export function objectExcluding<O extends {}, P extends (keyof O)[]>(a: O, props
  * @param props The property names to keep.
  * @returns The new object with only the provided properties.
  */
-export function objectWithOnly<O extends {}, P extends (keyof O)[]>(a: O, props: P): {[k in P[number]]: O[k]} {
+export function objectWithOnly<O extends {}, P extends Array<keyof O>>(a: O, props: P): {[k in P[number]]: O[k]} {
     const existingProps = Object.keys(a) as (keyof O)[];
     const diff = arrayDiff(existingProps, props);
     if (diff.removed.length === 0) {

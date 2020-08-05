@@ -141,7 +141,7 @@ export class WidgetApi extends EventEmitter {
     private replyToRequest(payload: ToWidgetRequest, reply: any) {
         if (!window.parent) return;
 
-        const request = objectClone(payload);
+        const request: ToWidgetRequest & {response?: any} = objectClone(payload);
         request.response = reply;
 
         window.parent.postMessage(request, this.origin);
