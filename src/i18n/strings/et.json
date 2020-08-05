@@ -1918,7 +1918,7 @@
     "You don't have permission to delete the address.": "Sinul pole õigusi selle aadressi kustutamiseks.",
     "There was an error removing that address. It may no longer exist or a temporary error occurred.": "Selle aadressi kustutamisel tekkis viga. See kas juba on kustutatud või tekkis ajutine tõrge.",
     "Error removing address": "Viga aadresi kustutamisel",
-    "This room has no local addresses": "Sellel jututoal puudub kohalik aadress",
+    "This room has no local addresses": "Sellel jututoal puuduvad kohalikud aadressid",
     "Local address": "Kohalik aadress",
     "Published Addresses": "Avaldatud aadressid",
     "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "Avaldatud aadresse saab mis iganes serveri kasutaja pruukida sinu jututoaga liitumiseks. Aadressi avaldamiseks peab ta alustuseks olema määratud kohaliku aadressina.",
@@ -2401,5 +2401,7 @@
     "No files visible in this room": "Selles jututoas pole nähtavaid faile",
     "Attach files from chat or just drag and drop them anywhere in a room.": "Faile saad manueks lisada kas vastava nupu alt vestlusest või sikutades neid jututoa aknasse.",
     "You have no visible notifications in this room.": "Jututoas pole nähtavaid teavitusi.",
-    "You're all caught up.": "Ei tea... kõik vist on nüüd tehtud."
+    "You're all caught up.": "Ei tea... kõik vist on nüüd tehtud.",
+    "You’re all caught up": "Ei tea... kõik vist on nüüd tehtud",
+    "%(brand)s Android": "%(brand)s Android"
 }
