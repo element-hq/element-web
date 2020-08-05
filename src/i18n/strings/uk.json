@@ -28,7 +28,7 @@
     "Open user settings": "Відкрити користувацькі налаштування",
     "Previous/next recently visited room or community": "Попередня/наступна нещодавно відвідана кімната чи спільнота",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "Go to your browser to complete Sign In": "Відкрийте переглядач щоб завершити входження",
+    "Go to your browser to complete Sign In": "Перейдіть у ваш переглядач щоб завершити входження",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Powered by Matrix": "Працює на Matrix",
     "Your browser can't run %(brand)s": "Ваш переглядач неспроможний запустити %(brand)s",
