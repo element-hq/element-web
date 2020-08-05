@@ -145,7 +145,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === "PREPARED" && state === "SYNCING") {
-            // If our indexer is empty we're most likely running Riot the
+            // If our indexer is empty we're most likely running Element the
             // first time with indexing support or running it with an
             // initial sync. Add checkpoints to crawl our encrypted rooms.
             const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();

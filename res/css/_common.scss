@@ -38,7 +38,7 @@ body {
     margin: 0px;
 
     // needed to match the designs correctly on macOS
-    // see https://github.com/vector-im/riot-web/issues/11425
+    // see https://github.com/vector-im/element-web/issues/11425
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -436,7 +436,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
 // These classes were brought in from the old UserSettings and are included here to avoid
 // breaking the app.
-// Ref: https://github.com/vector-im/riot-web/issues/8420
+// Ref: https://github.com/vector-im/element-web/issues/8420
 .mx_GeneralButton {
     @mixin mx_DialogButton;
     display: inline;

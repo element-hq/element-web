@@ -55,7 +55,7 @@ timestamp contained within the event (generated server-side by the sender's serv
 
 This is the easiest of the algorithms to understand because it does essentially nothing. It imposes no
 behavioural changes over the tag sorting algorithm and is by far the simplest way to order a room list.
-Historically, it's been the only option in Riot and extremely common in most chat applications due to
+Historically, it's been the only option in Element and extremely common in most chat applications due to
 its relative deterministic behaviour.
 
 ### List ordering algorithm: Importance

@@ -1,6 +1,6 @@
 # The CIDER (Contenteditable-Input-Diff-Error-Reconcile) editor
 
-The CIDER editor is a custom editor written for Riot.
+The CIDER editor is a custom editor written for Element.
 Most of the code can be found in the `/editor/` directory of the `matrix-react-sdk` project.
 It is used to power the composer main composer (both to send and edit messages), and might be used for other usecases where autocomplete is desired (invite box, ...).
 

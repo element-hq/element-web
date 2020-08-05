@@ -596,7 +596,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const maxRadius = 5; // People shouldn't be straying too far, hopefully
 
         // Note: we track how far the user moved their mouse to help
-        // combat against https://github.com/vector-im/riot-web/issues/7158
+        // combat against https://github.com/vector-im/element-web/issues/7158
 
         if (distance < maxRadius) {
             // This is probably a real click, and not a drag

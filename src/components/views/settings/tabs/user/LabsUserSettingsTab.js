@@ -55,7 +55,7 @@ export default class LabsUserSettingsTab extends React.Component {
                         _t('Customise your experience with experimental labs features. ' +
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
-                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                return <a href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
                                     rel='noreferrer noopener' target='_blank'>{sub}</a>;
                             },
                         })

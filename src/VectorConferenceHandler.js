@@ -19,13 +19,13 @@ import {createNewMatrixCall as jsCreateNewMatrixCall, Room} from "matrix-js-sdk"
 import CallHandler from './CallHandler';
 import {MatrixClientPeg} from "./MatrixClientPeg";
 
-// FIXME: this is Riot (Vector) specific code, but will be removed shortly when
-// we switch over to jitsi entirely for video conferencing.
+// FIXME: this is Element specific code, but will be removed shortly when we
+// switch over to Jitsi entirely for video conferencing.
 
-// FIXME: This currently forces Vector to try to hit the matrix.org AS for conferencing.
-// This is bad because it prevents people running their own ASes from being used.
-// This isn't permanent and will be customisable in the future: see the proposal
-// at docs/conferencing.md for more info.
+// FIXME: This currently forces Element to try to hit the matrix.org AS for
+// conferencing. This is bad because it prevents people running their own ASes
+// from being used. This isn't permanent and will be customisable in the future:
+// see the proposal at docs/conferencing.md for more info.
 const USER_PREFIX = "fs_";
 const DOMAIN = "matrix.org";
 

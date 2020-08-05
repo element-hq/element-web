@@ -160,7 +160,7 @@ export default class EventIndexPanel extends React.Component {
             );
         } else if (EventIndexPeg.platformHasSupport() && !EventIndexPeg.supportIsInstalled()) {
             const nativeLink = (
-                "https://github.com/vector-im/riot-web/blob/develop/" +
+                "https://github.com/vector-im/element-web/blob/develop/" +
                 "docs/native-node-modules.md#" +
                 "adding-seshat-for-search-in-e2e-encrypted-rooms"
             );
@@ -194,7 +194,7 @@ export default class EventIndexPanel extends React.Component {
                                 brand,
                             },
                             {
-                                'desktopLink': (sub) => <a href="https://riot.im/download/desktop"
+                                'desktopLink': (sub) => <a href="https://element.io/get-started"
                                     target="_blank" rel="noreferrer noopener">{sub}</a>,
                             },
                         )

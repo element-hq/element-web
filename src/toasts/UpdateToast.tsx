@@ -29,7 +29,7 @@ const TOAST_KEY = "update";
 
 /*
  * Check a version string is compatible with the Changelog
- * dialog ([riot-version]-react-[react-sdk-version]-js-[js-sdk-version])
+ * dialog ([element-version]-react-[react-sdk-version]-js-[js-sdk-version])
  */
 function checkVersion(ver) {
     const parts = ver.split('-');

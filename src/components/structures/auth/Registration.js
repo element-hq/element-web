@@ -262,7 +262,7 @@ export default createReactClass({
                 // the user off to the login page to figure their account out.
                 try {
                     const loginLogic = new Login(hsUrl, isUrl, null, {
-                        defaultDeviceDisplayName: "riot login check", // We shouldn't ever be used
+                        defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
                     });
                     const flows = await loginLogic.getFlows();
                     const hasSsoFlow = flows.find(f => f.type === 'm.login.sso' || f.type === 'm.login.cas');

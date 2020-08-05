@@ -345,7 +345,7 @@ function textForCallHangupEvent(event) {
         } else if (eventContent.reason === "invite_timeout") {
             reason = _t('(no answer)');
         } else if (eventContent.reason === "user hangup") {
-            // workaround for https://github.com/vector-im/riot-web/issues/5178
+            // workaround for https://github.com/vector-im/element-web/issues/5178
             // it seems Android randomly sets a reason of "user hangup" which is
             // interpreted as an error code :(
             // https://github.com/vector-im/riot-android/issues/2623
@@ -603,7 +603,7 @@ const stateHandlers = {
     'm.room.guest_access': textForGuestAccessEvent,
     'm.room.related_groups': textForRelatedGroupsEvent,
 
-    // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': textForWidgetEvent,
 };
 

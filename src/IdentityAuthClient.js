@@ -177,7 +177,7 @@ export default class IdentityAuthClient {
         // appropriately. We already clear storage on sign out, but we'll need
         // additional clearing when changing ISes in settings as part of future
         // privacy work.
-        // See also https://github.com/vector-im/riot-web/issues/10455.
+        // See also https://github.com/vector-im/element-web/issues/10455.
     }
 
     async registerForToken(check=true) {

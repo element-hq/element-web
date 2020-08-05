@@ -1186,7 +1186,7 @@ const TimelinePanel = createReactClass({
             if (!timeline) {
                 // Somehow, it seems to be possible for live events to not have
                 // a timeline, even though that should not happen. :(
-                // https://github.com/vector-im/riot-web/issues/12120
+                // https://github.com/vector-im/element-web/issues/12120
                 console.warn(
                     `Event ${events[i].getId()} in room ${room.roomId} is live, ` +
                     `but it does not have a timeline`,
