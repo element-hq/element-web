@@ -1145,5 +1145,6 @@
     "Esc": "Esc",
     "Enter": "Enter",
     "Space": "Пропуск",
-    "End": "End"
+    "End": "End",
+    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Видалення даних з цього сеансу є безповоротним. Зашифровані повідомлення будуть втрачені якщо їхні ключі не було продубльовано."
 }
