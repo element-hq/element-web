@@ -759,5 +759,19 @@
     "Glasses": "Tisekkadin",
     "Umbrella": "Tasiwant",
     "Gift": "Asefk",
-    "Light bulb": "Taftilt"
+    "Light bulb": "Taftilt",
+    "Power level must be positive integer.": "Ilaq ad yili uswir n tezmert d ummid ufrir.",
+    "Sends a message as plain text, without interpreting it as markdown": "Yuzen izen d aḍris aččuran war ma isegza-t s tukksa n tecreḍt",
+    "You do not have the required permissions to use this command.": "Ur tesεiḍ ara tisirag akken ad tesqedceḍ taladna-a.",
+    "Double check that your server supports the room version chosen and try again.": "Senqed akken ilaq ma yella aqeddac-inek·inem issefrak lqem n texxamtyettwafernen syen εreḍ tikkelt-nniḍen.",
+    "Changes your display nickname": "Ibeddel isem-inek·inem yettwaskanen",
+    "Changes your display nickname in the current room only": "Ibeddel isem-inek·inem i d-yettwaskanen degtexxamt kan tamirant",
+    "Kicks user with given id": "Suffeɣ aseqdac s usulay i d-yettunefken",
+    "Unignored user": "Aseqdac ur yettuzeglen ara",
+    "You are no longer ignoring %(userId)s": "Dayen ur tettazgaleḍ ara akk %(userId)s",
+    "Opens the Developer Tools dialog": "Yeldi adiwenni n yifecka n uneflay",
+    "Adds a custom widget by URL to the room": "Yerna awiǧit udmawan s URL ɣer texxamt",
+    "Please supply a widget URL or embed code": "Ttxil-k·m mudd URL n uwiǧit neɣ tangalt tusliɣt",
+    "Verifies a user, session, and pubkey tuple": "Yessenqad tagrumma-a: aseqdac, tiɣimit d tsarut tazayezt",
+    "WARNING: Session already verified, but keys do NOT MATCH!": "ΓUR-K·M: Tettwasenqed tɣimit yakan maca tisura ur mṣadant ara!"
 }
