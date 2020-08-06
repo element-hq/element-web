@@ -92,7 +92,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
 
     const body = new FormData();
     body.append('text', opts.userText || "User did not supply any additional text.");
-    body.append('app', 'riot-web');
+    body.append('app', 'element-web');
     body.append('version', version);
     body.append('user_agent', userAgent);
     body.append('installed_pwa', installedPWA);
