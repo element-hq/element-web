@@ -122,6 +122,8 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
             body.append("ssss_key_in_account", String(!!(await secretStorage.hasKey())));
 
             const pkCache = client.getCrossSigningCacheCallbacks();
+            body.append("master_pk_cached",
+                String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
             body.append("self_signing_pk_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
             body.append("user_signing_pk_cached",
