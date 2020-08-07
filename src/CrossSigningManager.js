@@ -129,7 +129,11 @@ const onSecretRequested = async function({
         console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
         return;
     }
-    if (name.startsWith("m.cross_signing")) {
+    if (
+        name === "m.cross_signing.master" ||
+        name === "m.cross_signing.self_signing" ||
+        name === "m.cross_signing.user_signing"
+    ) {
         const callbacks = client.getCrossSigningCacheCallbacks();
         if (!callbacks.getCrossSigningKeyCache) return;
         const keyId = name.replace("m.cross_signing.", "");
