@@ -28,7 +28,7 @@
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
-        "policyUrl": "https://matrix.org/legal/riot-im-cookie-policy"
+        "policyUrl": "https://element.io/cookie-policy"
     },
     "roomDirectory": {
         "servers": [
@@ -41,11 +41,11 @@
     },
     "terms_and_conditions_links": [
         {
-            "url": "https://riot.im/privacy",
+            "url": "https://element.io/privacy",
             "text": "Privacy Policy"
         },
         {
-            "url": "https://matrix.org/legal/riot-im-cookie-policy",
+            "url": "https://element.io/cookie-policy",
             "text": "Cookie Policy"
         }
     ]
