@@ -2409,5 +2409,6 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Anexa filecheiros desde a conversa ou arrastra e sóltaos onde queiras nunha sala.",
     "You’re all caught up": "Xa estás ó día",
     "You have no visible notifications in this room.": "Non tes notificacións visibles nesta sala.",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Master private key:": "Chave mestra principal:"
 }
