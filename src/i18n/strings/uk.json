@@ -494,7 +494,7 @@
     "Your homeserver doesn't seem to support this feature.": "Схоже, що ваш домашній сервер не підтримує цю властивість.",
     "Sign out and remove encryption keys?": "Вийти та видалити ключі шифрування?",
     "Clear Storage and Sign Out": "Очистити сховище та вийти",
-    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очищення сховища вашого оглядача може усунути проблему, але воно виведе вас з системи і зробить непрочитною історію ваших зашифрованих листувань.",
+    "Clearing your browser's storage may fix the problem, but will sign you out and cause any encrypted chat history to become unreadable.": "Очищення сховища вашого переглядача може усунути проблему, але воно виведе вас з системи та зробить непрочитною історію ваших зашифрованих листувань.",
     "Verification Pending": "Очікується перевірка",
     "Upload files (%(current)s of %(total)s)": "Відвантажити файли (%(current)s з %(total)s)",
     "Upload files": "Відвантажити файли",
@@ -1146,5 +1146,12 @@
     "Enter": "Enter",
     "Space": "Пропуск",
     "End": "End",
-    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Видалення даних з цього сеансу є безповоротним. Зашифровані повідомлення будуть втрачені якщо їхні ключі не було продубльовано."
+    "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Видалення даних з цього сеансу є безповоротним. Зашифровані повідомлення будуть втрачені якщо їхні ключі не було продубльовано.",
+    "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Звірте цього користувача щоб позначити його довіреним. Довіряння користувачам додає спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
+    "Verify this device to mark it as trusted. Trusting this device gives you and other users extra peace of mind when using end-to-end encrypted messages.": "Звірте цей пристрій щоб позначити його довіреним. Довіряння цьому пристрою додає вам та іншим користувачам спокою якщо ви користуєтесь наскрізно зашифрованими повідомленнями.",
+    "I don't want my encrypted messages": "Мені не потрібні мої зашифровані повідомлення",
+    "You'll lose access to your encrypted messages": "Ви втратите доступ до ваших зашифрованих повідомлень",
+    "Use this session to verify your new one, granting it access to encrypted messages:": "Використати цей сеанс для звірення вашого нового сеансу, надаючи йому доступ до зашифрованих повідомлень:",
+    "Reporting this message will send its unique 'event ID' to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.": "Скарження на це повідомлення надішле його унікальний 'ідентифікатор події (event ID)' адміністраторові вашого домашнього сервера. Якщо повідомлення у цій кімнаті зашифровані, то адміністратор не зможе бачити ані тексту повідомлень, ані жодних файлів чи зображень.",
+    "Some session data, including encrypted message keys, is missing. Sign out and sign in to fix this, restoring keys from backup.": "Бракує деяких даних сеансу, включно з ключами зашифрованих повідомлень. Вийдіть та зайдіть знову щоб виправити цю проблему, відновлюючи ключі з дубля."
 }
