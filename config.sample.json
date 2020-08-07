@@ -22,7 +22,7 @@
         "https://scalar-staging.vector.im/api",
         "https://scalar-staging.riot.im/scalar/api"
     ],
-    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "defaultCountryCode": "GB",
     "showLabsSettings": false,
     "features": {
