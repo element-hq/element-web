@@ -27,6 +27,7 @@ import {IntegrationManagers} from "../integrations/IntegrationManagers";
 import {ModalManager} from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
 import {ActiveRoomObserver} from "../ActiveRoomObserver";
+import {Notifier} from "../Notifier";
 
 declare global {
     interface Window {
@@ -47,6 +48,7 @@ declare global {
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
+        mxNotifier: typeof Notifier;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
@@ -78,5 +80,9 @@ declare global {
 
     interface PromiseConstructor {
         allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
+    }
+
+    interface HTMLAudioElement {
+        type?: string;
     }
 }

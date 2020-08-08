@@ -79,12 +79,3 @@ export class NotificationBodyEnabledController extends SettingController {
         return calculatedValue;
     }
 }
-
-export class AudioNotificationsEnabledController extends SettingController {
-    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any): any {
-        if (!getNotifier().isPossible()) return false;
-
-        // Note: Audio notifications are *not* enabled by default.
-        return calculatedValue;
-    }
-}
