@@ -512,7 +512,7 @@
     "%(senderName)s placed a voice call. (not supported by this browser)": "%(senderName)s alustas häälkõnet. (sellel brauseril puudub niisuguste kõnede tugi)",
     "%(senderName)s placed a video call.": "%(senderName)s alustas videokõnet.",
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s alustas videokõnet. (sellel brauseril puudub niisuguste kõnede tugi)",
-    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s määras et jututuppa pääseb vaid kutsega.",
+    "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s määras, et jututuppa pääseb vaid kutsega.",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s muutis liitumisreeglid järgnevaks - %(rule)s",
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s on lubanud külalistel jututoaga liituda.",
     "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s on määranud et külalised ei saa jututoaga liituda.",
