@@ -1561,7 +1561,7 @@
     "Enter the location of your Element Matrix Services homeserver. It may use your own domain name or be a subdomain of <a>element.io</a>.": "Entre com a localização do seu Servidor Matrix. Pode ser seu próprio domínio ou ser um subdomínio de <a>element.io</a>.",
     "Create your Matrix account on %(serverName)s": "Criar sua conta Matrix em %(serverName)s",
     "Create your Matrix account on <underlinedServerName />": "Crie sua conta Matrix em <underlinedServerName />",
-    "Welcome to %(appName)s": "Desejamos boas vindas ao %(appName)s",
+    "Welcome to %(appName)s": "Bem-vinda/o ao %(appName)s",
     "Liberate your communication": "Liberte sua comunicação",
     "Send a Direct Message": "Enviar uma mensagem",
     "Explore Public Rooms": "Explore as salas públicas",
