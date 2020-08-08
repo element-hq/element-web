@@ -2412,5 +2412,6 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "從聊天中附加檔案，或將其拖放到聊天室的任何地方。",
     "You’re all caught up": "您都設定好了",
     "You have no visible notifications in this room.": "您在此聊天室沒有可見的通知。",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Master private key:": "主控私鑰："
 }
