@@ -37,7 +37,7 @@ export default class BridgeSettingsTab extends React.Component {
         if (!content || !content.channel || !content.protocol) {
             return null;
         }
-        return <BridgeTile room={room} ev={event}></BridgeTile>;
+        return <BridgeTile key={event.getId()} room={room} ev={event}></BridgeTile>;
     }
 
     static getBridgeStateEvents(roomId) {
@@ -45,7 +45,7 @@ export default class BridgeSettingsTab extends React.Component {
         const roomState = (client.getRoom(roomId)).currentState;
 
         const bridgeEvents = [].concat(...BRIDGE_EVENT_TYPES.map((typeName) =>
-            Object.values(roomState.events[typeName] || {}),
+            Array.from(roomState.events.get(typeName).values()),
         ));
 
         return bridgeEvents;
