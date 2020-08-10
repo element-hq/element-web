@@ -11,7 +11,7 @@
         "https://scalar-staging.riot.im/scalar/api"
     ],
     "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
-    "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
+    "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "features": {
         "feature_new_spinner": "labs",
         "feature_pinning": "labs",
