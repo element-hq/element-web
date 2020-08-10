@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import {Room} from "matrix-js-sdk/src/models/room";
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+
 import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import BridgeTile from "../../BridgeTile";
@@ -27,28 +29,26 @@ const BRIDGE_EVENT_TYPES = [
 
 const BRIDGES_LINK = "https://matrix.org/bridges/";
 
-export default class BridgeSettingsTab extends React.Component {
-    static propTypes = {
-        roomId: PropTypes.string.isRequired,
-    };
+interface IProps {
+    roomId: string;
+}
 
-    _renderBridgeCard(event, room) {
+export default class BridgeSettingsTab extends React.Component<IProps> {
+    private renderBridgeCard(event: MatrixEvent, room: Room) {
         const content = event.getContent();
         if (!content || !content.channel || !content.protocol) {
             return null;
         }
-        return <BridgeTile room={room} ev={event}></BridgeTile>;
+        return <BridgeTile key={event.getId()} room={room} ev={event} />;
     }
 
-    static getBridgeStateEvents(roomId) {
+    static getBridgeStateEvents(roomId: string) {
         const client = MatrixClientPeg.get();
-        const roomState = (client.getRoom(roomId)).currentState;
+        const roomState = client.getRoom(roomId).currentState;
 
-        const bridgeEvents = [].concat(...BRIDGE_EVENT_TYPES.map((typeName) =>
-            Object.values(roomState.events[typeName] || {}),
+        return [].concat(...BRIDGE_EVENT_TYPES.map((typeName) =>
+            Array.from(roomState.events.get(typeName).values()),
         ));
-
-        return bridgeEvents;
     }
 
     render() {
@@ -58,8 +58,7 @@ export default class BridgeSettingsTab extends React.Component {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
 
-        let content = null;
-
+        let content: JSX.Element;
         if (bridgeEvents.length > 0) {
             content = <div>
                 <p>{_t(
@@ -72,7 +71,7 @@ export default class BridgeSettingsTab extends React.Component {
                     },
                 )}</p>
                 <ul className="mx_RoomSettingsDialog_BridgeList">
-                    { bridgeEvents.map((event) => this._renderBridgeCard(event, room)) }
+                    { bridgeEvents.map((event) => this.renderBridgeCard(event, room)) }
                 </ul>
             </div>;
         } else {
