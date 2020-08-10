@@ -50,7 +50,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
      */
-    maySendNotifications(): boolean {
+    async maySendNotifications(): Promise<boolean> {
         return window.Notification.permission === 'granted';
     }
 

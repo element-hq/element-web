@@ -335,8 +335,8 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    maySendNotifications(): boolean {
-        return true;
+    async maySendNotifications(): Promise<boolean> {
+        return this._ipcCall('getMaySendNotifications');
     }
 
     displayNotification(title: string, msg: string, avatarUrl: string, room: Room): Notification {
