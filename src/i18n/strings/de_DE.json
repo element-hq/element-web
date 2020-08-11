@@ -1353,7 +1353,7 @@
     "%(senderName)s placed a video call. (not supported by this browser)": "%(senderName)s hat einen Videoanruf getätigt. (Nicht von diesem Browser unterstützt)",
     "Verify this session": "Sitzung verifizieren",
     "Set up encryption": "Verschlüsselung einrichten",
-    "%(senderName)s updated an invalid ban rule": "%(senderName)s hat eine ungültige Bannregel aktualisiert",
+    "%(senderName)s updated an invalid ban rule": "%(senderName)s aktualisierte eine ungültige Ausschluss-Regel",
     "The message you are trying to send is too large.": "Die Nachricht, die du versuchst zu senden, ist zu lang.",
     "a few seconds ago": "vor ein paar Sekunden",
     "about a minute ago": "vor etwa einer Minute",
