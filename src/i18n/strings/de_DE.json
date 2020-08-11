@@ -633,7 +633,7 @@
     "Community IDs cannot be empty.": "Community-IDs können nicht leer sein.",
     "Learn more about how we use analytics.": "Lerne mehr darüber, wie wir die Analysedaten nutzen.",
     "Where this page includes identifiable information, such as a room, user or group ID, that data is removed before being sent to the server.": "Wenn diese Seite identifizierbare Informationen wie Raum-, Nutzer- oder Gruppen-ID enthält, werden diese Daten entfernt bevor sie an den Server gesendet werden.",
-    "Which officially provided instance you are using, if any": "Welche offiziell angebotene Instanz du nutzt, wenn es der Fall ist",
+    "Which officially provided instance you are using, if any": "Welche offiziell angebotene Instanz du nutzt, wenn überhaupt eine",
     "<a>In reply to</a> <pill>": "<a>Als Antwort auf</a> <pill>",
     "This room is not public. You will not be able to rejoin without an invite.": "Dies ist kein öffentlicher Raum. Du wirst diesen nicht ohne Einladung wieder beitreten können.",
     "%(oldDisplayName)s changed their display name to %(displayName)s.": "%(oldDisplayName)s änderte den Anzeigenamen auf %(displayName)s.",
