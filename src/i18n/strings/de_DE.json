@@ -2333,7 +2333,7 @@
     "Incoming voice call": "Eingehender Sprachanruf",
     "Incoming video call": "Eingehender Videoanruf",
     "Incoming call": "Eingehender Anruf",
-    "There are advanced notifications which are not shown here.": "Es sind erweiterte Benachrichtigungen vorhanden, die hier nicht angezeigt werden.",
+    "There are advanced notifications which are not shown here.": "Erweiterte Benachrichtigungen, werden hier nicht angezeigt.",
     "Are you sure you want to cancel entering passphrase?": "Bist du sicher dass du die Eingabe der Passphrase abbrechen möchtest?",
     "Use your account to sign in to the latest version": "Verwende dein Konto um dich bei der neusten Version anzumelden",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
@@ -2376,5 +2376,15 @@
     "The server has denied your request.": "Der Server hat deine Anfrage abgewiesen.",
     "Your area is experiencing difficulties connecting to the internet.": "Deine Region hat Schwierigkeiten, eine Verbindung zum Internet herzustellen.",
     "A connection error occurred while trying to contact the server.": "Beim Versuch, den Server zu kontaktieren, ist ein Verbindungsfehler aufgetreten.",
-    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Du hast sie ggf. in einem anderen Client als %(brand)s konfiguriert. Du kannst sie nicht in %(brand)s verändern, aber sie werden trotzdem angewendet. "
+    "You might have configured them in a client other than %(brand)s. You cannot tune them in %(brand)s but they still apply.": "Du hast sie ggf. in einem anderen Client als %(brand)s konfiguriert. Du kannst sie nicht in %(brand)s verändern, aber sie werden trotzdem angewendet. ",
+    "Master private key:": "Privater Hauptschlüssel:",
+    "Set the name of a font installed on your system & %(brand)s will attempt to use it.": "Setze den Schriftnamen auf eine in deinem System installierte Schriftart & %(brand)s werden versuchen sie zu verwenden.",
+    "Custom Tag": "Benutzerdefinierter Tag",
+    "You’re already signed in and good to go here, but you can also grab the latest versions of the app on all platforms at <a>element.io/get-started</a>.": "Du bist bereits eingeloggt und kannst loslegen. Allerdings kannst du auch die neuesten Versionen der App für alle Plattformen unter <a>element.io/get-started</a> herunterladen.",
+    "You're all caught up.": "Alles gesichtet.",
+    "The server is not configured to indicate what the problem is (CORS).": "Der Server ist nicht so konfiguriert, dass das Problem angezeigt wird (CORS).",
+    "Recent changes that have not yet been received": "Letzte Änderungen, die noch nicht eingegangen sind",
+    "Set a Security Phrase": "Sicherheitsphrase setzen",
+    "Confirm Security Phrase": "Sicherheitsphrase bestätigen",
+    "Save your Security Key": "Sicherungsschlüssel sichern"
 }
