@@ -2334,7 +2334,7 @@
     "Incoming video call": "Eingehender Videoanruf",
     "Incoming call": "Eingehender Anruf",
     "There are advanced notifications which are not shown here.": "Erweiterte Benachrichtigungen, werden hier nicht angezeigt.",
-    "Are you sure you want to cancel entering passphrase?": "Bist du sicher dass du die Eingabe der Passphrase abbrechen möchtest?",
+    "Are you sure you want to cancel entering passphrase?": "Bist du sicher, dass du die Eingabe der Passphrase abbrechen möchtest? ",
     "Use your account to sign in to the latest version": "Verwende dein Konto um dich bei der neusten Version anzumelden",
     "* %(senderName)s %(emote)s": "* %(senderName)s %(emote)s",
     "Enable advanced debugging for the room list": "Erweiterte Fehlersuche für die Raumliste aktivieren",
