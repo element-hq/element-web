@@ -2386,5 +2386,10 @@
     "Recent changes that have not yet been received": "Letzte Änderungen, die noch nicht eingegangen sind",
     "Set a Security Phrase": "Sicherheitsphrase setzen",
     "Confirm Security Phrase": "Sicherheitsphrase bestätigen",
-    "Save your Security Key": "Sicherungsschlüssel sichern"
+    "Save your Security Key": "Sicherungsschlüssel sichern",
+    "Security Phrase": "Sicherheitsphrase",
+    "Enter your Security Phrase or <button>Use your Security Key</button> to continue.": "Gib deine Sicherheitsphrase ein oder <button>benutze deinen Sicherheitsschlüssel</button> um fortzufahren.",
+    "Security Key": "Sicherheitsschlüssel",
+    "Use your Security Key to continue.": "Benutze deinen Sicherheitsschlüssel um fortzufahren. ",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "Du kannst in den benutzerdefinierten Server-Optionen eine andere Heimserver URL amgeben, um dich bei anderen Matrix Servern anzumelden. Dadurch kannst du %(brand)s mit einem existierenden Matrix Account auf einem anderen Heimserver nutzen. "
 }
