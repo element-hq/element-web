@@ -27,6 +27,7 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
+import BlurhashPlaceholder from "../elements/BlurhashPlaceholder";
 
 export default class MImageBody extends React.Component {
     static propTypes = {
@@ -53,6 +54,8 @@ export default class MImageBody extends React.Component {
         this.onClick = this.onClick.bind(this);
         this._isGif = this._isGif.bind(this);
 
+        const imageInfo = this.props.mxEvent.getContent().info;
+
         this.state = {
             decryptedUrl: null,
             decryptedThumbnailUrl: null,
@@ -63,6 +66,7 @@ export default class MImageBody extends React.Component {
             loadedImageDimensions: null,
             hover: false,
             showImage: SettingsStore.getValue("showImages"),
+            blurhash: imageInfo ? imageInfo['xyz.amorgan.blurhash'] : null, // TODO: Use `blurhash` when MSC2448 lands.
         };
 
         this._image = createRef();
@@ -329,7 +333,8 @@ export default class MImageBody extends React.Component {
             infoWidth = content.info.w;
             infoHeight = content.info.h;
         } else {
-            // Whilst the image loads, display nothing.
+            // Whilst the image loads, display nothing. We also don't display a blurhash image
+            // because we don't really know what size of image we'll end up with.
             //
             // Once loaded, use the loaded image dimensions stored in `loadedImageDimensions`.
             //
@@ -368,8 +373,7 @@ export default class MImageBody extends React.Component {
         if (content.file !== undefined && this.state.decryptedUrl === null) {
             placeholder = <InlineSpinner w={32} h={32} />;
         } else if (!this.state.imgLoaded) {
-            // Deliberately, getSpinner is left unimplemented here, MStickerBody overides
-            placeholder = this.getPlaceholder();
+            placeholder = this.getPlaceholder(maxWidth, maxHeight);
         }
 
         let showPlaceholder = Boolean(placeholder);
@@ -391,7 +395,7 @@ export default class MImageBody extends React.Component {
 
         if (!this.state.showImage) {
             img = <HiddenImagePlaceholder style={{ maxWidth: maxWidth + "px" }} />;
-            showPlaceholder = false; // because we're hiding the image, so don't show the sticker icon.
+            showPlaceholder = false; // because we're hiding the image, so don't show the placeholder.
         }
 
         if (this._isGif() && !SettingsStore.getValue("autoplayGifsAndVideos") && !this.state.hover) {
@@ -433,9 +437,9 @@ export default class MImageBody extends React.Component {
     }
 
     // Overidden by MStickerBody
-    getPlaceholder() {
-        // MImageBody doesn't show a placeholder whilst the image loads, (but it could do)
-        return null;
+    getPlaceholder(width, height) {
+        if (!this.state.blurhash) return null;
+        return <BlurhashPlaceholder blurhash={this.state.blurhash} width={width} height={height} />;
     }
 
     // Overidden by MStickerBody

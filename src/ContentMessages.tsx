@@ -334,6 +334,7 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
             if (file.type) {
                 encryptInfo.mimetype = file.type;
             }
+            // TODO: Blurhash for encrypted media?
             return {"file": encryptInfo};
         });
         (prom as IAbortablePromise<any>).abort = () => {
@@ -344,11 +345,15 @@ function uploadFile(matrixClient: MatrixClient, roomId: string, file: File | Blo
     } else {
         const basePromise = matrixClient.uploadContent(file, {
             progressHandler: progressHandler,
+            onlyContentUri: false,
         });
-        const promise1 = basePromise.then(function(url) {
+        const promise1 = basePromise.then(function(body) {
             if (canceled) throw new UploadCanceledError();
             // If the attachment isn't encrypted then include the URL directly.
-            return {"url": url};
+            return {
+                "url": body.content_uri,
+                "blurhash": body["xyz.amorgan.blurhash"], // TODO: Use `body.blurhash` when MSC2448 lands
+            };
         });
         promise1.abort = () => {
             canceled = true;
@@ -550,6 +555,7 @@ export default class ContentMessages {
             return upload.promise.then(function(result) {
                 content.file = result.file;
                 content.url = result.url;
+                content.info['xyz.amorgan.blurhash'] = result.blurhash; // TODO: Use `blurhash` when MSC2448 lands
             });
         }).then(() => {
             // Await previous message being sent into the room
