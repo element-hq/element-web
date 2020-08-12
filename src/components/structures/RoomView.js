@@ -251,7 +251,7 @@ export default createReactClass({
             this.context.stopPeeking();
         }
 
-        // Temporary logging to diagnose https://github.com/vector-im/riot-web/issues/4307
+        // Temporary logging to diagnose https://github.com/vector-im/element-web/issues/4307
         console.log(
             'RVS update:',
             newState.roomId,
@@ -1078,7 +1078,7 @@ export default createReactClass({
             // Do this by indicating our intention to join
 
             // XXX: ILAG is disabled for now,
-            // see https://github.com/vector-im/riot-web/issues/8222
+            // see https://github.com/vector-im/element-web/issues/8222
             dis.dispatch({action: 'require_registration'});
             // dis.dispatch({
             //     action: 'will_join',

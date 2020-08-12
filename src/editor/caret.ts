@@ -59,7 +59,7 @@ export function setCaretPosition(editor: HTMLDivElement, model: EditorModel, car
             // If the selection matches, it's important to leave it alone.
             // Recreating the selection state in at least Chrome can cause
             // strange side effects, like touch bar flickering on every key.
-            // See https://github.com/vector-im/riot-web/issues/9299
+            // See https://github.com/vector-im/element-web/issues/9299
             return;
         }
     }

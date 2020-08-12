@@ -60,7 +60,7 @@ const stateEventTileTypes = {
     'm.room.power_levels': 'messages.TextualEvent',
     'm.room.pinned_events': 'messages.TextualEvent',
     'm.room.server_acl': 'messages.TextualEvent',
-    // TODO: Enable support for m.widget event type (https://github.com/vector-im/riot-web/issues/13111)
+    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': 'messages.TextualEvent',
     'm.room.tombstone': 'messages.TextualEvent',
     'm.room.join_rules': 'messages.TextualEvent',
@@ -519,7 +519,7 @@ export default createReactClass({
 
     onPermalinkClicked: function(e) {
         // This allows the permalink to be opened in a new tab/window or copied as
-        // matrix.to, but also for it to enable routing within Riot when clicked.
+        // matrix.to, but also for it to enable routing within Element when clicked.
         e.preventDefault();
         dis.dispatch({
             action: 'view_room',
@@ -595,11 +595,11 @@ export default createReactClass({
         }
         const eventId = this.props.mxEvent.getId();
         if (!eventId) {
-            // XXX: Temporary diagnostic logging for https://github.com/vector-im/riot-web/issues/11120
+            // XXX: Temporary diagnostic logging for https://github.com/vector-im/element-web/issues/11120
             console.error("EventTile attempted to get relations for an event without an ID");
             // Use event's special `toJSON` method to log key data.
             console.log(JSON.stringify(this.props.mxEvent, null, 4));
-            console.trace("Stacktrace for https://github.com/vector-im/riot-web/issues/11120");
+            console.trace("Stacktrace for https://github.com/vector-im/element-web/issues/11120");
         }
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
     },

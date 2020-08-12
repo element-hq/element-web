@@ -36,6 +36,11 @@ const NotificationPanel = createReactClass({
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const Loader = sdk.getComponent("elements.Spinner");
 
+        const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
+            <h2>{_t('You’re all caught up')}</h2>
+            <p>{_t('You have no visible notifications in this room.')}</p>
+        </div>);
+
         const timelineSet = MatrixClientPeg.get().getNotifTimelineSet();
         if (timelineSet) {
             return (
@@ -46,7 +51,7 @@ const NotificationPanel = createReactClass({
                         timelineSet={timelineSet}
                         showUrlPreview={false}
                         tileShape="notif"
-                        empty={_t('You have no visible notifications')}
+                        empty={emptyState}
                     />
                 </div>
             );

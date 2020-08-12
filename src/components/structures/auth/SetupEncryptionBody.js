@@ -152,7 +152,7 @@ export default class SetupEncryptionBody extends React.Component {
                         </div>
                         <div className="mx_CompleteSecurity_clients_mobile">
                             <div>{_t("%(brand)s iOS", { brand })}</div>
-                            <div>{_t("%(brand)s X for Android", { brand })}</div>
+                            <div>{_t("%(brand)s Android", { brand })}</div>
                         </div>
                         <p>{_t("or another cross-signing capable Matrix client")}</p>
                     </div>

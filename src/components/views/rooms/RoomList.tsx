@@ -128,7 +128,7 @@ const TAG_AESTHETICS: {
         defaultHidden: false,
     },
 
-    // TODO: Replace with archived view: https://github.com/vector-im/riot-web/issues/14038
+    // TODO: Replace with archived view: https://github.com/vector-im/element-web/issues/14038
     [DefaultTagID.Archived]: {
         sectionLabel: _td("Historical"),
         isInvite: false,
@@ -215,7 +215,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private updateLists = () => {
         const newLists = RoomListStore.instance.orderedLists;
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log("new lists", newLists);
         }
 
@@ -245,6 +245,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         if (doUpdate) {
             // We have to break our reference to the room list store if we want to be able to
             // diff the object for changes, so do that.
+            // @ts-ignore - ITagMap is ts-ignored so this will have to be too
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
@@ -256,7 +257,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderCommunityInvites(): TemporaryTile[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
-        // See https://github.com/vector-im/riot-web/issues/14456
+        // See https://github.com/vector-im/element-web/issues/14456
         return MatrixClientPeg.get().getGroups().filter(g => {
            return g.myMembership === 'invite';
         }).map(g => {

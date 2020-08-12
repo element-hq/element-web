@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
+import classNames from 'classnames';
 import {_t, _td} from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -380,14 +381,21 @@ export default class Stickerpicker extends React.Component {
     render() {
         let stickerPicker;
         let stickersButton;
+        const className = classNames(
+            "mx_MessageComposer_button",
+            "mx_MessageComposer_stickers",
+            "mx_Stickers_hideStickers",
+            "mx_MessageComposer_button_highlight",
+        );
         if (this.state.showStickers) {
             // Show hide-stickers button
             stickersButton =
                 <AccessibleButton
                     id='stickersButton'
                     key="controls_hide_stickers"
-                    className="mx_MessageComposer_button mx_MessageComposer_stickers mx_Stickers_hideStickers"
+                    className={className}
                     onClick={this._onHideStickersClick}
+                    active={this.state.showStickers}
                     title={_t("Hide Stickers")}
                 >
                 </AccessibleButton>;

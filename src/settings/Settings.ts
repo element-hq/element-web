@@ -19,7 +19,6 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { _td } from '../languageHandler';
 import {
-    AudioNotificationsEnabledController,
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
@@ -160,7 +159,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
     },
     "advancedRoomListLogging": {
-        // TODO: Remove flag before launch: https://github.com/vector-im/riot-web/issues/14231
+        // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: false,
@@ -460,7 +459,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "audioNotificationsEnabled": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: true,
-        controller: new AudioNotificationsEnabledController(),
     },
     "enableWidgetScreenshots": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -488,13 +486,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             deny: [],
         },
     },
-    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
+    // TODO: Remove setting: https://github.com/vector-im/element-web/issues/14373
     "RoomList.orderAlphabetically": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Order rooms by name"),
         default: false,
     },
-    // TODO: Remove setting: https://github.com/vector-im/riot-web/issues/14373
+    // TODO: Remove setting: https://github.com/vector-im/element-web/issues/14373
     "RoomList.orderByImportance": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show rooms with unread notifications first"),

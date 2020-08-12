@@ -314,13 +314,13 @@ export default class AppTile extends React.Component {
             if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
                 IntegrationManagers.sharedInstance().openAll(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             } else {
                 IntegrationManagers.sharedInstance().getPrimaryManager().open(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             }
@@ -361,14 +361,14 @@ export default class AppTile extends React.Component {
         return terminationPromise.finally(() => {
             // HACK: This is a really dirty way to ensure that Jitsi cleans up
             // its hold on the webcam. Without this, the widget holds a media
-            // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
+            // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
             if (this._appFrame.current) {
                 // In practice we could just do `+= ''` to trick the browser
                 // into thinking the URL changed, however I can foresee this
                 // being optimized out by a browser. Instead, we'll just point
                 // the iframe at a page that is reasonably safe to use in the
                 // event the iframe doesn't wink away.
-                // This is relative to where the Riot instance is located.
+                // This is relative to where the Element instance is located.
                 this._appFrame.current.src = 'about:blank';
             }
 
@@ -727,7 +727,7 @@ export default class AppTile extends React.Component {
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
         // because that would allow the iframe to programmatically remove the sandbox attribute, but
-        // this would only be for content hosted on the same origin as the riot client: anything
+        // this would only be for content hosted on the same origin as the element client: anything
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
@@ -924,7 +924,7 @@ AppTile.propTypes = {
     // Optionally show the reload widget icon
     // This is not currently intended for use with production widgets. However
     // it can be useful when developing persistent widgets in order to avoid
-    // having to reload all of riot to get new widget content.
+    // having to reload all of Element to get new widget content.
     showReload: PropTypes.bool,
     // Widget capabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX

@@ -139,7 +139,7 @@ export function pillifyLinks(nodes, mxEvent, pills) {
  * It's critical to call this after pillifyLinks, otherwise
  * Pills will leak, leaking entire DOM trees via the event
  * emitter on BaseAvatar as per
- * https://github.com/vector-im/riot-web/issues/12417
+ * https://github.com/vector-im/element-web/issues/12417
  *
  * @param {Node[]} pills - array of pill containers whose React
  *   components should be unmounted.

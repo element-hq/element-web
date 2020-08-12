@@ -72,7 +72,7 @@ export default class ErrorBoundary extends React.PureComponent {
     render() {
         if (this.state.error) {
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-            const newIssueUrl = "https://github.com/vector-im/riot-web/issues/new";
+            const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
             return <div className="mx_ErrorBoundary">
                 <div className="mx_ErrorBoundary_body">
                     <h1>{_t("Something went wrong!")}</h1>

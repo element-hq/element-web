@@ -72,7 +72,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
 
     const body = new FormData();
     body.append('text', opts.userText || "User did not supply any additional text.");
-    body.append('app', 'riot-web');
+    body.append('app', 'element-web');
     body.append('version', version);
     body.append('user_agent', userAgent);
     body.append('installed_pwa', installedPWA);
@@ -102,6 +102,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("ssss_key_in_account", String(!!(await secretStorage.hasKey())));
 
             const pkCache = client.getCrossSigningCacheCallbacks();
+            body.append("master_pk_cached",
+                String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
             body.append("self_signing_pk_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
             body.append("user_signing_pk_cached",

@@ -51,11 +51,11 @@ limitations under the License.
     position: absolute;
     width: 36px;
     height: 36px;
-    mask-image: url('$(res)/img/icon-jump-to-first-unread.svg');
+    mask-image: url('$(res)/img/feather-customised/chevron-down-thin.svg');
     mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: 50%;
+    mask-size: contain;
     background: $muted-fg-color;
+    transform: rotate(180deg);
 }
 
 .mx_TopUnreadMessagesBar_markAsRead {

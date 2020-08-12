@@ -51,7 +51,8 @@ limitations under the License.
     display: inherit;
 }
 .mx_ShareDialog_matrixto_copy > div {
-    background-image: url($copy-button-url);
+    mask-image: url($copy-button-url);
+    background-color: $message-action-bar-fg-color;
     margin-left: 5px;
     width: 20px;
     height: 20px;

@@ -19,8 +19,8 @@ $accent-bg-color: rgba(3, 179, 129, 0.16);
 $notice-primary-color: #ff4b55;
 $notice-primary-bg-color: rgba(255, 75, 85, 0.16);
 $primary-fg-color: #2e2f32;
-$roomlist-header-color: $primary-fg-color;
-$notice-secondary-color: $roomlist-header-color;
+$secondary-fg-color: #737D8C;
+$tertiary-fg-color: #8D99A5;
 $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
@@ -52,10 +52,6 @@ $info-bg-color: #2A9EDF;
 $mention-user-pill-bg-color: $warning-color;
 $other-user-pill-bg-color: rgba(0, 0, 0, 0.1);
 
-// pinned events indicator
-$pinned-unread-color: $notice-primary-color;
-$pinned-color: $notice-secondary-color;
-
 // informational plinth
 $info-plinth-bg-color: #f7f7f7;
 $info-plinth-fg-color: #888;
@@ -78,7 +74,7 @@ $droptarget-bg-color: rgba(255,255,255,0.5);
 $selected-color: $secondary-accent-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $header-panel-bg-color;
+$event-selected-color: #f6f7f8;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -162,10 +158,9 @@ $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.2);
 $roomheader-addroom-fg-color: #5c6470;
 $tagpanel-button-color: #91A1C0;
-$roomheader-button-color: #91A1C0;
 $groupheader-button-color: #91A1C0;
 $rightpanel-button-color: #91A1C0;
-$composer-button-color: #91A1C0;
+$icon-button-color: #C1C6CD;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
@@ -178,9 +173,10 @@ $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(245, 245, 245, 0.90);
+$roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
 
-$roomtile-preview-color: #737D8C;
+$roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: #FFF;
 
@@ -199,7 +195,13 @@ $username-variant6-color: #2dc2c5;
 $username-variant7-color: #5c56f5;
 $username-variant8-color: #74d12c;
 
+$notice-secondary-color: $roomlist-header-color;
+
 $panel-divider-color: transparent;
+
+// pinned events indicator
+$pinned-unread-color: $notice-primary-color;
+$pinned-color: $notice-secondary-color;
 
 // ********************
 
@@ -227,7 +229,7 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$copy-button-url: "$(res)/img/icon_copy_message.svg";
+$copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color

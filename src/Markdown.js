@@ -99,7 +99,7 @@ export default class Markdown {
             // puts softbreaks in for multiple lines in a blockquote,
             // so if these are just newline characters then the
             // block quote ends up all on one line
-            // (https://github.com/vector-im/riot-web/issues/3154)
+            // (https://github.com/vector-im/element-web/issues/3154)
             softbreak: '<br />',
         });
 
@@ -166,7 +166,7 @@ export default class Markdown {
      * Render the markdown message to plain text. That is, essentially
      * just remove any backslashes escaping what would otherwise be
      * markdown syntax
-     * (to fix https://github.com/vector-im/riot-web/issues/2870).
+     * (to fix https://github.com/vector-im/element-web/issues/2870).
      *
      * N.B. this does **NOT** render arbitrary MD to plain text - only MD
      * which has no formatting.  Otherwise it emits HTML(!).

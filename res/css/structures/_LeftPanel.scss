@@ -137,6 +137,7 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
         .mx_LeftPanel_roomListWrapper {
             overflow: hidden;
             margin-top: 10px; // so we're not up against the search/filter
+            flex: 1 0 0; // needed in Safari to properly set flex-basis
 
             &.mx_LeftPanel_roomListWrapper_stickyBottom {
                 padding-bottom: 32px;

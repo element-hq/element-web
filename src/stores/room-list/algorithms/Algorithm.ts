@@ -334,7 +334,7 @@ export class Algorithm extends EventEmitter {
             newMap[tagId] = allowedRoomsInThisTag;
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(`[DEBUG] ${newMap[tagId].length}/${rooms.length} rooms filtered into ${tagId}`);
             }
         }
@@ -349,7 +349,7 @@ export class Algorithm extends EventEmitter {
         if (!this.hasFilters) return; // don't bother doing work if there's nothing to do
 
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log(`Recalculating filtered rooms for ${tagId}`);
         }
         delete this.filteredRooms[tagId];
@@ -361,7 +361,7 @@ export class Algorithm extends EventEmitter {
         }
 
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log(`[DEBUG] ${filteredRooms.length}/${rooms.length} rooms filtered into ${tagId}`);
         }
     }
@@ -403,7 +403,7 @@ export class Algorithm extends EventEmitter {
 
         if (!this._cachedStickyRooms || !updatedTag) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(`Generating clone of cached rooms for sticky room handling`);
             }
             const stickiedTagMap: ITagMap = {};
@@ -417,7 +417,7 @@ export class Algorithm extends EventEmitter {
             // Update the tag indicated by the caller, if possible. This is mostly to ensure
             // our cache is up to date.
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(`Replacing cached sticky rooms for ${updatedTag}`);
             }
             this._cachedStickyRooms[updatedTag] = this.cachedRooms[updatedTag].map(r => r); // shallow clone
@@ -429,7 +429,7 @@ export class Algorithm extends EventEmitter {
         const sticky = this._stickyRoom;
         if (!updatedTag || updatedTag === sticky.tag) {
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(
                     `Inserting sticky room ${sticky.room.roomId} at position ${sticky.position} in ${sticky.tag}`,
                 );
@@ -660,7 +660,7 @@ export class Algorithm extends EventEmitter {
      */
     public async handleRoomUpdate(room: Room, cause: RoomUpdateCause): Promise<boolean> {
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log(`Handle room update for ${room.roomId} called with cause ${cause}`);
         }
         if (!this.algorithms) throw new Error("Not ready: no algorithms to determine tags from");
@@ -720,7 +720,7 @@ export class Algorithm extends EventEmitter {
             if (diff.removed.length > 0 || diff.added.length > 0) {
                 for (const rmTag of diff.removed) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
-                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                         console.log(`Removing ${room.roomId} from ${rmTag}`);
                     }
                     const algorithm: OrderingAlgorithm = this.algorithms[rmTag];
@@ -732,7 +732,7 @@ export class Algorithm extends EventEmitter {
                 }
                 for (const addTag of diff.added) {
                     if (SettingsStore.getValue("advancedRoomListLogging")) {
-                        // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                        // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                         console.log(`Adding ${room.roomId} to ${addTag}`);
                     }
                     const algorithm: OrderingAlgorithm = this.algorithms[addTag];
@@ -745,14 +745,14 @@ export class Algorithm extends EventEmitter {
                 this.roomIdsToTags[room.roomId] = newTags;
 
                 if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                     console.log(`Changing update cause for ${room.roomId} to Timeline to sort rooms`);
                 }
                 cause = RoomUpdateCause.Timeline;
                 didTagChange = true;
             } else {
                 if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                     console.log(`Received no-op update for ${room.roomId} - changing to Timeline update`);
                 }
                 cause = RoomUpdateCause.Timeline;
@@ -781,7 +781,7 @@ export class Algorithm extends EventEmitter {
         if (cause !== RoomUpdateCause.NewRoom && cause !== RoomUpdateCause.RoomRemoved) {
             if (this.stickyRoom === room) {
                 if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                     console.warn(`[RoomListDebug] Received ${cause} update for sticky room ${room.roomId} - ignoring`);
                 }
                 return false;
@@ -791,14 +791,14 @@ export class Algorithm extends EventEmitter {
         if (!this.roomIdsToTags[room.roomId]) {
             if (CAUSES_REQUIRING_ROOM.includes(cause)) {
                 if (SettingsStore.getValue("advancedRoomListLogging")) {
-                    // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                    // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                     console.warn(`Skipping tag update for ${room.roomId} because we don't know about the room`);
                 }
                 return false;
             }
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(`[RoomListDebug] Updating tags for room ${room.roomId} (${room.name})`);
             }
 
@@ -812,13 +812,13 @@ export class Algorithm extends EventEmitter {
             this.roomIdsToTags[room.roomId] = roomTags;
 
             if (SettingsStore.getValue("advancedRoomListLogging")) {
-                // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+                // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
                 console.log(`[RoomListDebug] Updated tags for ${room.roomId}:`, roomTags);
             }
         }
 
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log(`[RoomListDebug] Reached algorithmic handling for ${room.roomId} and cause ${cause}`);
         }
 
@@ -843,7 +843,7 @@ export class Algorithm extends EventEmitter {
         }
 
         if (SettingsStore.getValue("advancedRoomListLogging")) {
-            // TODO: Remove debug: https://github.com/vector-im/riot-web/issues/14602
+            // TODO: Remove debug: https://github.com/vector-im/element-web/issues/14602
             console.log(`[RoomListDebug] Finished handling ${room.roomId} with cause ${cause} (changed=${changed})`);
         }
         return changed;
