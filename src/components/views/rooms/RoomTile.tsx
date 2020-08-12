@@ -120,6 +120,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         return !this.props.isMinimized && this.props.showMessagePreview;
     }
 
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
+        if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
+            this.setState({messagePreview: this.generatePreview()});
+        }
+    }
+
     public componentDidMount() {
         // when we're first rendered (or our sublist is expanded) make sure we are visible if we're active
         if (this.state.selected) {
