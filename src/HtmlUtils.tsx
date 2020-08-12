@@ -421,7 +421,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         }
 
         let formattedBody = typeof content.formatted_body === 'string' ? content.formatted_body : null;
-        const plainBody = typeof content.body === 'string' ? content.body : null;
+        const plainBody = typeof content.body === 'string' ? content.body : "";
 
         if (opts.stripReplyFallback && formattedBody) formattedBody = ReplyThread.stripHTMLReply(formattedBody);
         strippedBody = opts.stripReplyFallback ? ReplyThread.stripPlainReply(plainBody) : plainBody;
