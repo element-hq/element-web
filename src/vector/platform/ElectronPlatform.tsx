@@ -374,10 +374,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         ipcRenderer.send('loudNotification');
     }
 
-    clearNotification(notif: Notification) {
-        notif.close();
-    }
-
     async getAppVersion(): Promise<string> {
         return this._ipcCall('getAppVersion');
     }
