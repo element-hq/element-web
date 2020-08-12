@@ -40,7 +40,6 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
-        mxRebrandListener: RebrandListener;
         mxRoomListStore: RoomListStoreClass;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxActiveRoomObserver: ActiveRoomObserver;
