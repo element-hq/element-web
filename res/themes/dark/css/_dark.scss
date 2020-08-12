@@ -46,7 +46,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $header-panel-bg-color;
+$event-selected-color: #21262c;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -100,10 +100,9 @@ $roomheader-bg-color: $bg-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
-$roomheader-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
-$composer-button-color: $header-panel-text-primary-color;
+$icon-button-color: #8E99A4;
 $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 

@@ -605,3 +605,15 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         border-radius: $radius;
     }
 }
+
+@define-mixin unreal-focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+
+    /* WebKit gets its native focus styles. */
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
+    }
+}

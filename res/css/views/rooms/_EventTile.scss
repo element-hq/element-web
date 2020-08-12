@@ -536,11 +536,12 @@ $left-gutter: 64px;
     display: inline-block;
     visibility: hidden;
     cursor: pointer;
-    top: 8px;
+    top: 6px;
     right: 6px;
     width: 19px;
     height: 19px;
-    background-image: url($copy-button-url);
+    mask-image: url($copy-button-url);
+    background-color: $message-action-bar-fg-color;
 }
 
 .mx_EventTile_body .mx_EventTile_pre_container:focus-within .mx_EventTile_copyButton,
