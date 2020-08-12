@@ -2308,5 +2308,8 @@
     "Page Down": "Page Down",
     "Esc": "Esc",
     "Enter": "Enter",
-    "Space": "Space"
+    "Space": "Space",
+    "How fast should messages be downloaded.": "消息下载速度。",
+    "IRC display name width": "IRC 显示名称宽度",
+    "When rooms are upgraded": "聊天室升级时间"
 }
