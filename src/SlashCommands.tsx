@@ -733,7 +733,7 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-                        const member = room.getMember(args);
+                        const member = room.getMember(userId);
                         if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
                             return reject(_t("Could not find user in room"));
                         }
