@@ -1,3 +1,69 @@
+Changes in [3.2.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.2.0-rc.1) (2020-08-13)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.1.0...v3.2.0-rc.1)
+
+ * Upgrade to JS SDK 8.1.0-rc.1
+ * Update from Weblate
+   [\#5105](https://github.com/matrix-org/matrix-react-sdk/pull/5105)
+ * padding the timeline so that its scrollbar has its own space from the
+   resizer
+   [\#5103](https://github.com/matrix-org/matrix-react-sdk/pull/5103)
+ * Try to close notification on all platforms which support it, not just
+   electron
+   [\#5102](https://github.com/matrix-org/matrix-react-sdk/pull/5102)
+ * Fix exception when stripping replies from an event with a non-string body
+   [\#5101](https://github.com/matrix-org/matrix-react-sdk/pull/5101)
+ * Quick win session 24/07/2020
+   [\#5056](https://github.com/matrix-org/matrix-react-sdk/pull/5056)
+ * Remove rebranding toast
+   [\#5100](https://github.com/matrix-org/matrix-react-sdk/pull/5100)
+ * Generate previews for rooms when the option changes
+   [\#5098](https://github.com/matrix-org/matrix-react-sdk/pull/5098)
+ * Fix Bridge Settings tab
+   [\#5095](https://github.com/matrix-org/matrix-react-sdk/pull/5095)
+ * get screen type from app prop
+   [\#5081](https://github.com/matrix-org/matrix-react-sdk/pull/5081)
+ * Update rageshake app name
+   [\#5093](https://github.com/matrix-org/matrix-react-sdk/pull/5093)
+ * Factor out Iconized Context menu for reusability
+   [\#5085](https://github.com/matrix-org/matrix-react-sdk/pull/5085)
+ * Decouple Audible notifications from Desktop notifications
+   [\#5088](https://github.com/matrix-org/matrix-react-sdk/pull/5088)
+ * Make the room sublist show more/less buttons treeitems
+   [\#5087](https://github.com/matrix-org/matrix-react-sdk/pull/5087)
+ * Share and debug master cross-signing key
+   [\#5092](https://github.com/matrix-org/matrix-react-sdk/pull/5092)
+ * Create Map comparison utilities and convert Hooks to Typescript
+   [\#5086](https://github.com/matrix-org/matrix-react-sdk/pull/5086)
+ * Fix room list scrolling in Safari
+   [\#5090](https://github.com/matrix-org/matrix-react-sdk/pull/5090)
+ * Replace Riot with Element in docs and comments
+   [\#5083](https://github.com/matrix-org/matrix-react-sdk/pull/5083)
+ * When the room view isn't active don't highlight it in room list
+   [\#5027](https://github.com/matrix-org/matrix-react-sdk/pull/5027)
+ * remove emoji icons in autocomplete/reply by designer request
+   [\#5073](https://github.com/matrix-org/matrix-react-sdk/pull/5073)
+ * Add title and icon to empty state of file and notification panel
+   [\#5079](https://github.com/matrix-org/matrix-react-sdk/pull/5079)
+ * Mass redact ignore room creation events
+   [\#5045](https://github.com/matrix-org/matrix-react-sdk/pull/5045)
+ * Replace all chevrons with a single icon
+   [\#5067](https://github.com/matrix-org/matrix-react-sdk/pull/5067)
+ * Replace i18n generation script with something matching our project
+   [\#5077](https://github.com/matrix-org/matrix-react-sdk/pull/5077)
+ * Handle tag changes in sticky room updates
+   [\#5078](https://github.com/matrix-org/matrix-react-sdk/pull/5078)
+ * Remove leftover bits of TSLint
+   [\#5075](https://github.com/matrix-org/matrix-react-sdk/pull/5075)
+ * Clean up documentation of Whenable + fix other code concerns
+   [\#5076](https://github.com/matrix-org/matrix-react-sdk/pull/5076)
+ * Center the jump down/up icon, looks misaligned
+   [\#5074](https://github.com/matrix-org/matrix-react-sdk/pull/5074)
+ * [WIP] Support a new settings structure
+   [\#5058](https://github.com/matrix-org/matrix-react-sdk/pull/5058)
+ * Convert SettingsStore to TypeScript
+   [\#5062](https://github.com/matrix-org/matrix-react-sdk/pull/5062)
+
 Changes in [3.1.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.1.0) (2020-08-05)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.1.0-rc.1...v3.1.0)
