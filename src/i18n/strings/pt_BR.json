@@ -2278,5 +2278,7 @@
     "Enter a security phrase only you know, as it’s used to safeguard your data. To be secure, you shouldn’t re-use your account password.": "Digite uma frase de segurança que só você conheça, usada para proteger segredos em seu servidor.",
     "Use a different passphrase?": "Usar uma frase secreta diferente?",
     "Enter your recovery passphrase a second time to confirm it.": "Digite sua senha de recuperação uma segunda vez para confirmá-la.",
-    "Confirm your recovery passphrase": "Confirme a sua frase de recuperação"
+    "Confirm your recovery passphrase": "Confirme a sua frase de recuperação",
+    "Page Up": "Page Up",
+    "Page Down": "Page Down"
 }
