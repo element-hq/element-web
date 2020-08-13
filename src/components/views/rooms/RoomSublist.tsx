@@ -50,6 +50,7 @@ import { arrayFastClone, arrayHasOrderChange } from "../../../utils/arrays";
 import { objectExcluding, objectHasDiff } from "../../../utils/objects";
 import TemporaryTile from "./TemporaryTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
+import IconizedContextMenu from "../context_menus/IconizedContextMenu";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -65,6 +66,7 @@ interface IProps {
     startAsHidden: boolean;
     label: string;
     onAddRoom?: () => void;
+    addRoomContextMenu?: (onFinished: () => void) => React.ReactNode;
     addRoomLabel: string;
     isMinimized: boolean;
     tagId: TagID;
@@ -87,6 +89,7 @@ type PartialDOMRect = Pick<DOMRect, "left" | "top" | "height">;
 
 interface IState {
     contextMenuPosition: PartialDOMRect;
+    addRoomContextMenuPosition: PartialDOMRect;
     isResizing: boolean;
     isExpanded: boolean; // used for the for expand of the sublist when the room list is being filtered
     height: number;
@@ -112,6 +115,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         this.notificationState = RoomNotificationStateStore.instance.getListState(this.props.tagId);
         this.state = {
             contextMenuPosition: null,
+            addRoomContextMenuPosition: null,
             isResizing: false,
             isExpanded: this.isBeingFiltered ? this.isBeingFiltered : !this.layout.isCollapsed,
             height: 0, // to be fixed in a moment, we need `rooms` to calculate this.
@@ -376,8 +380,19 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
     };
 
+    private onAddRoomContextMenu = (ev: React.MouseEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const target = ev.target as HTMLButtonElement;
+        this.setState({addRoomContextMenuPosition: target.getBoundingClientRect()});
+    };
+
     private onCloseMenu = () => {
         this.setState({contextMenuPosition: null});
+    };
+
+    private onCloseAddRoomMenu = () => {
+        this.setState({addRoomContextMenuPosition: null});
     };
 
     private onUnreadFirstChanged = async () => {
@@ -594,6 +609,18 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     </div>
                 </ContextMenu>
             );
+        } else if (this.state.addRoomContextMenuPosition) {
+            contextMenu = (
+                <IconizedContextMenu
+                    chevronFace={ChevronFace.None}
+                    left={this.state.addRoomContextMenuPosition.left - 7} // center align with the handle
+                    top={this.state.addRoomContextMenuPosition.top + this.state.addRoomContextMenuPosition.height}
+                    onFinished={this.onCloseAddRoomMenu}
+                    compact
+                >
+                    {this.props.addRoomContextMenu(this.onCloseAddRoomMenu)}
+                </IconizedContextMenu>
+            );
         }
 
         return (
@@ -637,9 +664,21 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                                 tabIndex={tabIndex}
                                 onClick={this.onAddRoom}
                                 className="mx_RoomSublist_auxButton"
+                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
                                 aria-label={this.props.addRoomLabel || _t("Add room")}
                                 title={this.props.addRoomLabel}
-                                tooltipClassName={"mx_RoomSublist_addRoomTooltip"}
+                            />
+                        );
+                    } else if (this.props.addRoomContextMenu) {
+                        addRoomButton = (
+                            <ContextMenuTooltipButton
+                                tabIndex={tabIndex}
+                                onClick={this.onAddRoomContextMenu}
+                                className="mx_RoomSublist_auxButton"
+                                tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                                aria-label={this.props.addRoomLabel || _t("Add room")}
+                                title={this.props.addRoomLabel}
+                                isExpanded={!!this.state.addRoomContextMenuPosition}
                             />
                         );
                     }
