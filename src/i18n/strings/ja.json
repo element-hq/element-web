@@ -1370,5 +1370,8 @@
     "Always show the window menu bar": "常にウィンドウメニューバーを表示する",
     "Create room": "部屋を作成",
     "Show %(count)s more|other": "さらに %(count)s 件を表示",
-    "Show %(count)s more|one": "さらに %(count)s 件を表示"
+    "Show %(count)s more|one": "さらに %(count)s 件を表示",
+    "%(num)s minutes ago": "%(num)s 分前",
+    "%(num)s hours ago": "%(num)s 時間前",
+    "%(num)s days ago": "%(num)s 日前"
 }
