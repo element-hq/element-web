@@ -36,6 +36,8 @@ export default class BugReportDialog extends React.Component {
             issueUrl: "",
             text: "",
             progress: null,
+            downloadBusy: false,
+            downloadProgress: null,
         };
         this._unmounted = false;
         this._onSubmit = this._onSubmit.bind(this);
@@ -44,6 +46,7 @@ export default class BugReportDialog extends React.Component {
         this._onIssueUrlChange = this._onIssueUrlChange.bind(this);
         this._onSendLogsChange = this._onSendLogsChange.bind(this);
         this._sendProgressCallback = this._sendProgressCallback.bind(this);
+        this._downloadProgressCallback = this._downloadProgressCallback.bind(this);
     }
 
     componentWillUnmount() {
@@ -97,26 +100,25 @@ export default class BugReportDialog extends React.Component {
     }
 
     _onDownload = async (ev) => {
-        this.setState({ busy: true, progress: null, err: null });
-        this._sendProgressCallback(_t("Preparing to download logs"));
+        this.setState({ downloadBusy: true });
+        this._downloadProgressCallback(_t("Preparing to download logs"));
 
         try {
             await downloadBugReport({
                 sendLogs: true,
-                progressCallback: this._sendProgressCallback,
+                progressCallback: this._downloadProgressCallback,
                 label: this.props.label,
             });
 
             this.setState({
-                busy: false,
-                progress: null,
+                downloadBusy: false,
+                downloadProgress: null,
             });
         } catch (err) {
             if (!this._unmounted) {
                 this.setState({
-                    busy: false,
-                    progress: null,
-                    err: _t("Failed to send logs: ") + `${err.message}`,
+                    downloadBusy: false,
+                    downloadProgress: _t("Failed to send logs: ") + `${err.message}`,
                 });
             }
         }
@@ -139,6 +141,13 @@ export default class BugReportDialog extends React.Component {
             return;
         }
         this.setState({progress: progress});
+    }
+
+    _downloadProgressCallback(downloadProgress) {
+        if (this._unmounted) {
+            return;
+        }
+        this.setState({ downloadProgress });
     }
 
     render() {
@@ -201,9 +210,12 @@ export default class BugReportDialog extends React.Component {
                         ) }
                     </b></p>
 
-                    <AccessibleButton onClick={this._onDownload} kind="link">
-                        { _t("Download logs") }
-                    </AccessibleButton>
+                    <div className="mx_BugReportDialog_download">
+                        <AccessibleButton onClick={this._onDownload} kind="link" disabled={this.state.downloadBusy}>
+                            { _t("Download logs") }
+                        </AccessibleButton>
+                        {this.state.downloadProgress && <span>{this.state.downloadProgress} ...</span>}
+                    </div>
 
                     <Field
                         type="text"
