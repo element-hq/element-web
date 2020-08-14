@@ -158,6 +158,18 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_roomlist_preview_reactions_dms": {
+        isFeature: true,
+        displayName: _td("Show message previews for reactions in DMs"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
+    "feature_roomlist_preview_reactions_all": {
+        isFeature: true,
+        displayName: _td("Show message previews for reactions in all rooms"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "advancedRoomListLogging": {
         // TODO: Remove flag before launch: https://github.com/vector-im/element-web/issues/14231
         displayName: _td("Enable advanced debugging for the room list"),
