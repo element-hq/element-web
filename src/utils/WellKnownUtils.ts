@@ -33,3 +33,8 @@ export function getE2EEWellKnown(): IE2EEWellKnown {
     }
     return null;
 }
+
+export function isSecureBackupRequired(): boolean {
+    const wellKnown = getE2EEWellKnown();
+    return wellKnown && wellKnown["secure_backup_required"] === true;
+}

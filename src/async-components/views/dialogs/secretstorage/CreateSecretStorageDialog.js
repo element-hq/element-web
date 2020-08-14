@@ -30,6 +30,7 @@ import StyledRadioButton from '../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
+import { isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -85,8 +86,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
-
             passPhraseKeySelected: CREATE_STORAGE_OPTION_KEY,
+            canSkip: !isSecureBackupRequired(),
         };
 
         this._passphraseField = createRef();
@@ -470,7 +471,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._onChooseKeyPassphraseFormSubmit}
                 onCancel={this._onCancelClick}
-                hasCancel={true}
+                hasCancel={this.state.canSkip}
             />
         </form>;
     }
@@ -687,7 +688,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_Dialog_buttons">
                 <DialogButtons primaryButton={_t('Retry')}
                     onPrimaryButtonClick={this._onLoadRetryClick}
-                    hasCancel={true}
+                    hasCancel={this.state.canSkip}
                     onCancel={this._onCancel}
                 />
             </div>
@@ -742,7 +743,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div className="mx_Dialog_buttons">
                     <DialogButtons primaryButton={_t('Retry')}
                         onPrimaryButtonClick={this._bootstrapSecretStorage}
-                        hasCancel={true}
+                        hasCancel={this.state.canSkip}
                         onCancel={this._onCancel}
                     />
                 </div>
