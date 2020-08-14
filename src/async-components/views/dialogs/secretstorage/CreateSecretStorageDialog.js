@@ -714,7 +714,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _titleForPhase(phase) {
         switch (phase) {
             case PHASE_CHOOSE_KEY_PASSPHRASE:
-                return _t('Set up Secure backup');
+                return _t('Set up Secure Backup');
             case PHASE_MIGRATE:
                 return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
