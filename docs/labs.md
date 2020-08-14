@@ -94,3 +94,8 @@ adds an ability for end users to add themes themselves by using a URL to the JSO
 theme definition.
 
 For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
+
+# Message preview tweaks
+
+To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
+To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
