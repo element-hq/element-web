@@ -114,15 +114,19 @@ export default class MessageActionBar extends React.PureComponent {
     static contextType = RoomContext;
 
     componentDidMount() {
-        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        if (this.props.mxEvent.isBeingDecrypted()) {
+            this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
+        }
         this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
-        this.props.mxEvent.on("Event.localEventIdReplaced", this.onEcho);
+        if (this.props.mxEvent.getId()[0] !== "!") {
+            this.props.mxEvent.once("Event.localEventIdReplaced", this.onEcho);
+        }
     }
 
     componentWillUnmount() {
-        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
-        this.props.mxEvent.removeListener("Event.beforeRedaction", this.onBeforeRedaction);
-        this.props.mxEvent.removeListener("Event.localEventIdReplaced", this.onEcho);
+        this.props.mxEvent.off("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.off("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.off("Event.localEventIdReplaced", this.onEcho);
     }
 
     onDecrypted = () => {
