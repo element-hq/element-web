@@ -9,8 +9,14 @@ Set the following on your homeserver's
 `/.well-known/matrix/client` config:
 ```json
 {
-  "im.vector.riot.e2ee": {
+  "im.vector.e2ee": {
     "default": false
   }
 }
 ```
+
+# Compatibility
+
+The settings above were first proposed under a `im.vector.riot.e2ee` key, which
+is now deprecated. Element will check for either key, preferring
+`im.vector.e2ee` if both exist.
