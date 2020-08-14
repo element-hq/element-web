@@ -43,9 +43,6 @@ limitations under the License.
         border-radius: 8px;
     }
 
-    .mx_DecoratedRoomAvatar_icon_globe {
-        background-color: #fff;
-    }
     .mx_DecoratedRoomAvatar_icon_globe::before {
         mask-position: center;
         mask-size: contain;
