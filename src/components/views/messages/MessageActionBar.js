@@ -116,11 +116,13 @@ export default class MessageActionBar extends React.PureComponent {
     componentDidMount() {
         this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
         this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.on("Event.localEventIdReplaced", this.onEcho);
     }
 
     componentWillUnmount() {
         this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
         this.props.mxEvent.removeListener("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.removeListener("Event.localEventIdReplaced", this.onEcho);
     }
 
     onDecrypted = () => {
@@ -131,6 +133,11 @@ export default class MessageActionBar extends React.PureComponent {
 
     onBeforeRedaction = () => {
         // When an event is redacted, we can't edit it so update the available actions.
+        this.forceUpdate();
+    };
+
+    onEcho = () => {
+        // When an event is sent and echoed the possible actions change.
         this.forceUpdate();
     };
 
