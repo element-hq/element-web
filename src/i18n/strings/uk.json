@@ -1225,5 +1225,6 @@
     "If you've joined lots of rooms, this might take a while": "Якщо ви приєднались до багатьох кімнат, це може зайняти деякий час",
     "Create account": "Створити обліковий запис",
     "Failed to fetch avatar URL": "Не вдалось вибрати URL личини",
-    "Clear room list filter field": "Очистити поле цідила списку кімнат"
+    "Clear room list filter field": "Очистити поле цідила списку кімнат",
+    "Cancel autocomplete": "Скасувати самодоповнення"
 }
