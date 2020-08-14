@@ -115,7 +115,7 @@ export default class MessageActionBar extends React.PureComponent {
     static contextType = RoomContext;
 
     componentDidMount() {
-        if (this.props.mxEvent.status && this.props.mxEvent !== EventStatus.SENT) {
+        if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
             this.props.mxEvent.on("Event.status", this.onSent);
         }
         if (this.props.mxEvent.isBeingDecrypted()) {
