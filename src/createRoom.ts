@@ -27,7 +27,8 @@ import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
 
-const E2EE_WK_KEY = "im.vector.riot.e2ee";
+const E2EE_WK_KEY = "im.vector.e2ee";
+const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -298,6 +299,10 @@ export function privateShouldBeEncrypted() {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
     if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
         const defaultDisabled = clientWellKnown[E2EE_WK_KEY]["default"] === false;
+        return !defaultDisabled;
+    }
+    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY_DEPRECATED]) {
+        const defaultDisabled = clientWellKnown[E2EE_WK_KEY_DEPRECATED]["default"] === false;
         return !defaultDisabled;
     }
 
