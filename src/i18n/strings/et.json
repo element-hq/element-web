@@ -1025,7 +1025,7 @@
     "Permissions": "Õigused",
     "Select the roles required to change various parts of the room": "Vali rollid, mis on vajalikud jututoa eri osade muutmiseks",
     "Enable encryption?": "Kas võtame krüptimise kasutusele?",
-    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Kui kord juba kasutusele võetud, siis krüptimist enam hiljem ära lõpetada ei saa. Krüptitud sõnumeid ei saa lugeda ei vaheapealses veebiliikluses ega serveris ja vaid jututoa liikmed saavad neid lugeda. Krüptimise kasutusele võtmine takistada nii robotite kui sõnumisildade tööd. <a>Lisateave krüptimise kohta.</a>",
+    "Once enabled, encryption for a room cannot be disabled. Messages sent in an encrypted room cannot be seen by the server, only by the participants of the room. Enabling encryption may prevent many bots and bridges from working correctly. <a>Learn more about encryption.</a>": "Kui kord juba kasutusele võetud, siis krüptimist enam hiljem ära lõpetada ei saa. Krüptitud sõnumeid ei saa lugeda ei vaheapealses veebiliikluses ega serveris ja vaid jututoa liikmed saavad neid lugeda. Krüptimise kasutusele võtmine võib takistada nii robotite kui sõnumisildade tööd. <a>Lisateave krüptimise kohta.</a>",
     "Guests cannot join this room even if explicitly invited.": "Külalised ei saa selle jututoaga liituda ka siis, kui neid on otseselt kutsutud.",
     "Click here to fix": "Parandamiseks klõpsi siia",
     "Server error": "Serveri viga",
@@ -2403,5 +2403,9 @@
     "You have no visible notifications in this room.": "Jututoas pole nähtavaid teavitusi.",
     "You're all caught up.": "Ei tea... kõik vist on nüüd tehtud.",
     "You’re all caught up": "Ei tea... kõik vist on nüüd tehtud",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Show message previews for reactions in DMs": "Näita eelvaates otsesõnumitele regeerimisi",
+    "Show message previews for reactions in all rooms": "Näita kõikides jututubades eelvaadetes sõnumitele regeerimisi",
+    "Master private key:": "Üldine privaatvõti:",
+    "Recent changes that have not yet been received": "Hiljutised muudatused, mis pole veel alla laetud või saabunud"
 }

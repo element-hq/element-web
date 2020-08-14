@@ -1373,5 +1373,7 @@
     "Show %(count)s more|one": "さらに %(count)s 件を表示",
     "%(num)s minutes ago": "%(num)s 分前",
     "%(num)s hours ago": "%(num)s 時間前",
-    "%(num)s days ago": "%(num)s 日前"
+    "%(num)s days ago": "%(num)s 日前",
+    "Favourited": "お気に入り登録中",
+    "Room options": "部屋の設定"
 }
