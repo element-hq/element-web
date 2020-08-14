@@ -18,6 +18,7 @@ limitations under the License.
 
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
+import { EventStatus } from 'matrix-js-sdk';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -114,19 +115,19 @@ export default class MessageActionBar extends React.PureComponent {
     static contextType = RoomContext;
 
     componentDidMount() {
+        if (this.props.mxEvent.status && this.props.mxEvent !== EventStatus.SENT) {
+            this.props.mxEvent.on("Event.status", this.onSent);
+        }
         if (this.props.mxEvent.isBeingDecrypted()) {
             this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
         }
         this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
-        if (this.props.mxEvent.getId()[0] !== "!") {
-            this.props.mxEvent.once("Event.localEventIdReplaced", this.onEcho);
-        }
     }
 
     componentWillUnmount() {
+        this.props.mxEvent.off("Event.status", this.onSent);
         this.props.mxEvent.off("Event.decrypted", this.onDecrypted);
         this.props.mxEvent.off("Event.beforeRedaction", this.onBeforeRedaction);
-        this.props.mxEvent.off("Event.localEventIdReplaced", this.onEcho);
     }
 
     onDecrypted = () => {
@@ -140,7 +141,7 @@ export default class MessageActionBar extends React.PureComponent {
         this.forceUpdate();
     };
 
-    onEcho = () => {
+    onSent = () => {
         // When an event is sent and echoed the possible actions change.
         this.forceUpdate();
     };
