@@ -2404,5 +2404,13 @@
     "Your area is experiencing difficulties connecting to the internet.": "Probléma az Internet elérésben.",
     "A connection error occurred while trying to contact the server.": "Kapcsolati hiba lépett fel miközben a szervert próbáltad elérni.",
     "The server is not configured to indicate what the problem is (CORS).": "A szerver nincs beállítva, hogy megmutassa mi okozhatta a hibát (CORS).",
-    "Recent changes that have not yet been received": "Legutóbbi változások amik még nem érkeztek meg"
+    "Recent changes that have not yet been received": "Legutóbbi változások amik még nem érkeztek meg",
+    "Show message previews for reactions in DMs": "Üzenet előnézet mutatása a reakcióhoz a közvetlen beszélgetéseknél",
+    "Show message previews for reactions in all rooms": "Üzenet előnézet mutatása a reakciókhoz minden szobában",
+    "Master private key:": "Privát elsődleges kulcs:",
+    "No files visible in this room": "Ebben a szobában nincsenek fájlok",
+    "Attach files from chat or just drag and drop them anywhere in a room.": "Csatolj fájlt a csevegésből vagy húzd és ejtsd bárhova a szobában.",
+    "You’re all caught up": "Mindent elolvastál",
+    "You have no visible notifications in this room.": "Nincsenek látható értesítéseid ebben a szobában.",
+    "%(brand)s Android": "%(brand)s Android"
 }
