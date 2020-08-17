@@ -12,8 +12,7 @@
     ],
     "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
-    "features": {
-    },
+    "showLabsSettings": false,
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
