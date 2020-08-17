@@ -136,6 +136,14 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             }
         }
 
+        .mx_LeftPanel_roomListFilterCount {
+            font-size: $font-13px;
+            font-weight: 500;
+            margin-left: 12px;
+            margin-top: 16px;
+            margin-bottom: -4px; // to counteract the normal roomListWrapper margin-top
+        }
+
         .mx_LeftPanel_roomListWrapper {
             overflow: hidden;
             margin-top: 10px; // so we're not up against the search/filter
