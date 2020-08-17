@@ -2412,5 +2412,6 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Csatolj fájlt a csevegésből vagy húzd és ejtsd bárhova a szobában.",
     "You’re all caught up": "Mindent elolvastál",
     "You have no visible notifications in this room.": "Nincsenek látható értesítéseid ebben a szobában.",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Explore public rooms": "Nyilvános szobák felderítése"
 }
