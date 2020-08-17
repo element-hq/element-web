@@ -9,10 +9,7 @@
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "bug_report_endpoint_url": "https://riot.im/bugreports/submit",
-    "features": {
-        "feature_groups": "labs",
-        "feature_pinning": "labs"
-    },
+    "showLabsSettings": true,
     "default_federate": true,
     "welcomePageUrl": "home.html",
     "default_theme": "light",

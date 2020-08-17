@@ -35,7 +35,8 @@ export class LabsSettingToggle extends React.Component {
     render() {
         const label = SettingsStore.getDisplayName(this.props.featureId);
         const value = SettingsStore.getValue(this.props.featureId);
-        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} />;
+        const canChange = SettingsStore.canSetValue(this.props.featureId, null, SettingLevel.DEVICE);
+        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} disabled={!canChange} />;
     }
 }
 

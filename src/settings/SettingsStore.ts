@@ -23,7 +23,6 @@ import AccountSettingsHandler from "./handlers/AccountSettingsHandler";
 import RoomSettingsHandler from "./handlers/RoomSettingsHandler";
 import ConfigSettingsHandler from "./handlers/ConfigSettingsHandler";
 import { _t } from '../languageHandler';
-import SdkConfig from "../SdkConfig";
 import dis from '../dispatcher/dispatcher';
 import { ISetting, SETTINGS } from "./Settings";
 import LocalEchoWrapper from "./handlers/LocalEchoWrapper";
@@ -433,6 +432,12 @@ export default class SettingsStore {
         // Verify that the setting is actually a setting
         if (!SETTINGS[settingName]) {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        // When features are specified in the config.json, we force them as enabled or disabled.
+        if (SettingsStore.isFeature(settingName)) {
+            const configVal = SettingsStore.getValueAt(SettingLevel.CONFIG, settingName, roomId, true, true);
+            if (configVal === true || configVal === false) return false;
         }
 
         const handler = SettingsStore.getHandler(settingName, level);
