@@ -2407,5 +2407,6 @@
     "Show message previews for reactions in DMs": "Näita eelvaates otsesõnumitele regeerimisi",
     "Show message previews for reactions in all rooms": "Näita kõikides jututubades eelvaadetes sõnumitele regeerimisi",
     "Master private key:": "Üldine privaatvõti:",
-    "Recent changes that have not yet been received": "Hiljutised muudatused, mis pole veel alla laetud või saabunud"
+    "Recent changes that have not yet been received": "Hiljutised muudatused, mis pole veel alla laetud või saabunud",
+    "Explore public rooms": "Sirvi avalikke jututubasid"
 }
