@@ -16,15 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { _t, _td } from '../../../languageHandler';
+import { _t, _tSasV1 } from '../../../languageHandler';
 import {PendingActionSpinner} from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import DialogButtons from "../elements/DialogButtons";
 import { fixupColorFonts } from '../../../utils/FontManager';
-
-function capFirst(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-}
 
 export default class VerificationShowSas extends React.Component {
     static propTypes = {
@@ -73,7 +69,7 @@ export default class VerificationShowSas extends React.Component {
                         { emoji[0] }
                     </div>
                     <div className="mx_VerificationShowSas_emojiSas_label">
-                        {_t(capFirst(emoji[1]))}
+                        {_tSasV1(emoji[0])}
                     </div>
                 </div>,
             );
@@ -166,69 +162,3 @@ export default class VerificationShowSas extends React.Component {
         </div>;
     }
 }
-
-// List of Emoji strings from the js-sdk, for i18n
-_td("Dog");
-_td("Cat");
-_td("Lion");
-_td("Horse");
-_td("Unicorn");
-_td("Pig");
-_td("Elephant");
-_td("Rabbit");
-_td("Panda");
-_td("Rooster");
-_td("Penguin");
-_td("Turtle");
-_td("Fish");
-_td("Octopus");
-_td("Butterfly");
-_td("Flower");
-_td("Tree");
-_td("Cactus");
-_td("Mushroom");
-_td("Globe");
-_td("Moon");
-_td("Cloud");
-_td("Fire");
-_td("Banana");
-_td("Apple");
-_td("Strawberry");
-_td("Corn");
-_td("Pizza");
-_td("Cake");
-_td("Heart");
-_td("Smiley");
-_td("Robot");
-_td("Hat");
-_td("Glasses");
-_td("Spanner");
-_td("Santa");
-_td("Thumbs up");
-_td("Umbrella");
-_td("Hourglass");
-_td("Clock");
-_td("Gift");
-_td("Light bulb");
-_td("Book");
-_td("Pencil");
-_td("Paperclip");
-_td("Scissors");
-_td("Lock");
-_td("Key");
-_td("Hammer");
-_td("Telephone");
-_td("Flag");
-_td("Train");
-_td("Bicycle");
-_td("Aeroplane");
-_td("Rocket");
-_td("Trophy");
-_td("Ball");
-_td("Guitar");
-_td("Trumpet");
-_td("Bell");
-_td("Anchor");
-_td("Headphones");
-_td("Folder");
-_td("Pin");
