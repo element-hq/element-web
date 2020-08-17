@@ -25,6 +25,7 @@ limitations under the License.
     height: 100%;
     left: 0;
     top: 0;
+    border-radius: 4px;
 }
 
 .mx_MImageBody_thumbnail_container {
@@ -34,8 +35,6 @@ limitations under the License.
 
     // Make sure the _thumbnail is positioned relative to the _container
     position: relative;
-
-    border-radius: 4px;
 }
 
 .mx_MImageBody_thumbnail_spinner {
