@@ -116,7 +116,7 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
         ));
-        if (SdkConfig.get()['showLabsSettings'] || SettingsStore.getLabsFeatures().length > 0) {
+        if (SdkConfig.get()['showLabsSettings']) {
             tabs.push(new Tab(
                 USER_LABS_TAB,
                 _td("Labs"),
