@@ -125,6 +125,14 @@ export default class SettingsStore {
     private static watcherCount = 1;
 
     /**
+     * Gets all the feature-style setting names.
+     * @returns {string[]} The names of the feature settings.
+     */
+    public static getFeatureSettingNames(): string[] {
+        return Object.keys(SETTINGS).filter(n => SettingsStore.isFeature(n));
+    }
+
+    /**
      * Watches for changes in a particular setting. This is done without any local echo
      * wrapping and fires whenever a change is detected in a setting's value, at any level.
      * Watching is intended to be used in scenarios where the app needs to react to changes

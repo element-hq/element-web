@@ -28,7 +28,7 @@ export class LabsSettingToggle extends React.Component {
     };
 
     _onChange = async (checked) => {
-        await SettingsStore.setFeatureEnabled(this.props.featureId, checked);
+        await SettingsStore.setValue(this.props.featureId, null, SettingLevel.DEVICE, checked);
         this.forceUpdate();
     };
 
@@ -46,7 +46,7 @@ export default class LabsUserSettingsTab extends React.Component {
 
     render() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        const flags = SettingsStore.getLabsFeatures().map(f => <LabsSettingToggle featureId={f} key={f} />);
+        const flags = SettingsStore.getFeatureSettingNames().map(f => <LabsSettingToggle featureId={f} key={f} />);
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
