@@ -136,7 +136,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private async readAndCacheSettingsFromStore() {
-        const tagsEnabled = SettingsStore.isFeatureEnabled("feature_custom_tags");
+        const tagsEnabled = SettingsStore.getValue("feature_custom_tags");
         await this.updateState({
             tagsEnabled,
         });

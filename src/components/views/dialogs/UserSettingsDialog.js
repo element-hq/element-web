@@ -54,7 +54,7 @@ export default class UserSettingsDialog extends React.Component {
         super();
 
         this.state = {
-            mjolnirEnabled: SettingsStore.isFeatureEnabled("feature_mjolnir"),
+            mjolnirEnabled: SettingsStore.getValue("feature_mjolnir"),
         };
     }
 

@@ -104,7 +104,7 @@ export default createReactClass({
     },
 
     _rateLimitedUpdate: new RateLimitedFunc(function() {
-        if (SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (SettingsStore.getValue("feature_state_counters")) {
             this.setState({counters: this._computeCounters()});
         }
     }, 500),
@@ -112,7 +112,7 @@ export default createReactClass({
     _computeCounters: function() {
         let counters = [];
 
-        if (this.props.room && SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
             const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
             stateEvs.sort((a, b) => {
                 return a.getStateKey() < b.getStateKey();
@@ -206,7 +206,7 @@ export default createReactClass({
         />;
 
         let stateViews = null;
-        if (this.state.counters && SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (this.state.counters && SettingsStore.getValue("feature_state_counters")) {
             let counters = [];
 
             this.state.counters.forEach((counter, idx) => {

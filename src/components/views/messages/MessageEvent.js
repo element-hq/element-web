@@ -95,7 +95,7 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+        if (SettingsStore.getValue("feature_mjolnir")) {
             const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
             const allowRender = localStorage.getItem(key) === "true";
 

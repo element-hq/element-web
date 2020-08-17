@@ -1428,7 +1428,7 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
         presenceLastActiveAgo = member.user.lastActiveAgo;
         presenceCurrentlyActive = member.user.currentlyActive;
 
-        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (SettingsStore.getValue("feature_custom_status")) {
             statusMessage = member.user._unstable_statusMessage;
         }
     }

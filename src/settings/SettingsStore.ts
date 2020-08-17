@@ -241,19 +241,6 @@ export default class SettingsStore {
     }
 
     /**
-     * Returns a list of all available labs feature names
-     * @returns {string[]} The list of available feature names
-     */
-    public static getLabsFeatures(): string[] {
-        const possibleFeatures = Object.keys(SETTINGS).filter((s) => SettingsStore.isFeature(s));
-
-        const enableLabs = SdkConfig.get()["enableLabs"];
-        if (enableLabs) return possibleFeatures;
-
-        return possibleFeatures.filter((s) => SettingsStore.getFeatureState(s) === "labs");
-    }
-
-    /**
      * Determines if a setting is also a feature.
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is a feature.
@@ -261,39 +248,6 @@ export default class SettingsStore {
     public static isFeature(settingName: string) {
         if (!SETTINGS[settingName]) return false;
         return SETTINGS[settingName].isFeature;
-    }
-
-    /**
-     * Determines if a given feature is enabled. The feature given must be a known
-     * feature.
-     * @param {string} settingName The name of the setting that is a feature.
-     * @param {String} roomId The optional room ID to validate in, may be null.
-     * @return {boolean} True if the feature is enabled, false otherwise
-     */
-    public static isFeatureEnabled(settingName: string, roomId: string = null) {
-        if (!SettingsStore.isFeature(settingName)) {
-            throw new Error("Setting " + settingName + " is not a feature");
-        }
-
-        return SettingsStore.getValue(settingName, roomId);
-    }
-
-    /**
-     * Sets a feature as enabled or disabled on the current device.
-     * @param {string} settingName The name of the setting.
-     * @param {boolean} value True to enable the feature, false otherwise.
-     * @returns {Promise} Resolves when the setting has been set.
-     */
-    public static setFeatureEnabled(settingName: string, value: any): Promise<void> {
-        // Verify that the setting is actually a setting
-        if (!SETTINGS[settingName]) {
-            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
-        }
-        if (!SettingsStore.isFeature(settingName)) {
-            throw new Error("Setting " + settingName + " is not a feature");
-        }
-
-        return SettingsStore.setValue(settingName, null, SettingLevel.DEVICE, value);
     }
 
     /**
@@ -345,13 +299,6 @@ export default class SettingsStore {
 
         const minIndex = levelOrder.indexOf(level);
         if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
-
-        if (SettingsStore.isFeature(settingName)) {
-            const configValue = SettingsStore.getFeatureState(settingName);
-            if (configValue === "enable") return true;
-            if (configValue === "disable") return false;
-            // else let it fall through the default process
-        }
 
         const handlers = SettingsStore.getHandlers(settingName);
 
@@ -610,24 +557,6 @@ export default class SettingsStore {
         if (!handlers['default']) handlers['default'] = LEVEL_HANDLERS['default'];
 
         return handlers;
-    }
-
-    private static getFeatureState(settingName: string): LabsFeatureState {
-        const featuresConfig = SdkConfig.get()['features'];
-        const enableLabs = SdkConfig.get()['enableLabs']; // we'll honour the old flag
-
-        let featureState = enableLabs ? "labs" : "disable";
-        if (featuresConfig && featuresConfig[settingName] !== undefined) {
-            featureState = featuresConfig[settingName];
-        }
-
-        const allowedStates = ['enable', 'disable', 'labs'];
-        if (!allowedStates.includes(featureState)) {
-            console.warn("Feature state '" + featureState + "' is invalid for " + settingName);
-            featureState = "disable"; // to prevent accidental features.
-        }
-
-        return featureState;
     }
 }
 

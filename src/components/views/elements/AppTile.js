@@ -311,7 +311,7 @@ export default class AppTile extends React.Component {
             this.props.onEditClick();
         } else {
             // TODO: Open the right manager for the widget
-            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            if (SettingsStore.getValue("feature_many_integration_managers")) {
                 IntegrationManagers.sharedInstance().openAll(
                     this.props.room,
                     'type_' + this.props.app.type,

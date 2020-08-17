@@ -34,7 +34,7 @@ export default class ManageIntegsButton extends React.Component {
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
         } else {
-            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            if (SettingsStore.getValue("feature_many_integration_managers")) {
                 managers.openAll(this.props.room);
             } else {
                 managers.getPrimaryManager().open(this.props.room);

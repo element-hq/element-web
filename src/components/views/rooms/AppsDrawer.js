@@ -130,7 +130,7 @@ export default createReactClass({
     },
 
     _launchManageIntegrations: function() {
-        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll();
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');

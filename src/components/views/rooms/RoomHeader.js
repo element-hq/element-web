@@ -226,7 +226,7 @@ export default createReactClass({
                     title={_t("Settings")} />;
         }
 
-        if (this.props.onPinnedClick && SettingsStore.isFeatureEnabled('feature_pinning')) {
+        if (this.props.onPinnedClick && SettingsStore.getValue('feature_pinning')) {
             let pinsIndicator = null;
             if (this._hasUnreadPins()) {
                 pinsIndicator = (<div className="mx_RoomHeader_pinsIndicator mx_RoomHeader_pinsIndicatorUnread" />);
