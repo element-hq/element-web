@@ -23,7 +23,9 @@
         "feature_dm_verification": "labs",
         "feature_bridge_state": "labs",
         "feature_presence_in_room_list": "labs",
-        "feature_custom_themes": "labs"
+        "feature_custom_themes": "labs",
+        "feature_roomlist_preview_reactions_dms": "labs",
+        "feature_roomlist_preview_reactions_all": "labs"
     },
     "piwik": {
         "url": "https://piwik.riot.im/",
