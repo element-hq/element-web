@@ -19,6 +19,8 @@ limitations under the License.
     flex: 1;
     border-radius: 8px;
     background-color: $roomlist-button-bg-color;
+    // keep border thickness consistent to prevent movement
+    border: 1px solid transparent;
     height: 28px;
     padding: 2px;
 
@@ -50,7 +52,18 @@ limitations under the License.
         }
     }
 
-    &.mx_RoomSearch_expanded {
+    &.mx_RoomSearch_hasQuery {
+        border-color: $secondary-fg-color;
+    }
+
+    &.mx_RoomSearch_focused {
+        box-shadow: 0 0 4px 4px rgba(0, 132, 255, 0.5);
+        border-color: transparent;
+    }
+
+    &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
+        background-color: $roomlist-filter-active-bg-color;
+
         .mx_RoomSearch_clearButton {
             width: 16px;
             height: 16px;
