@@ -53,7 +53,7 @@ const LEVEL_HANDLERS = {
     [SettingLevel.ROOM_ACCOUNT]: new RoomAccountSettingsHandler(defaultWatchManager),
     [SettingLevel.ACCOUNT]: new AccountSettingsHandler(defaultWatchManager),
     [SettingLevel.ROOM]: new RoomSettingsHandler(defaultWatchManager),
-    [SettingLevel.CONFIG]: new ConfigSettingsHandler(),
+    [SettingLevel.CONFIG]: new ConfigSettingsHandler(featureNames),
     [SettingLevel.DEFAULT]: new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
 
