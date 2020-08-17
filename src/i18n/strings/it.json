@@ -2415,5 +2415,6 @@
     "You have no visible notifications in this room.": "Non hai alcuna notifica visibile in questa stanza.",
     "%(brand)s Android": "%(brand)s Android",
     "Show message previews for reactions in DMs": "Mostra anteprime messaggi per le reazioni nei messaggi diretti",
-    "Show message previews for reactions in all rooms": "Mostra anteprime messaggi per le reazioni in tutte le stanze"
+    "Show message previews for reactions in all rooms": "Mostra anteprime messaggi per le reazioni in tutte le stanze",
+    "Explore public rooms": "Esplora stanze pubbliche"
 }
