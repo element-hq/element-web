@@ -1003,9 +1003,10 @@ export default createReactClass({
                     this.state.inviterProfile.avatarUrl, 36, 36,
                 ) : null;
 
-            let inviterName = group.inviter.userId;
+            const inviter = group.inviter || {};
+            let inviterName = inviter.userId;
             if (this.state.inviterProfile) {
-                inviterName = this.state.inviterProfile.displayName || group.inviter.userId;
+                inviterName = this.state.inviterProfile.displayName || inviter.userId;
             }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
@@ -1016,7 +1017,7 @@ export default createReactClass({
                             height={36}
                         />
                         { _t("%(inviter)s has invited you to join this community", {
-                            inviter: inviterName,
+                            inviter: inviterName || _t("Someone"),
                         }) }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">
