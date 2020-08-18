@@ -49,11 +49,6 @@ declare global {
         mxNotifier: typeof Notifier;
     }
 
-    // workaround for https://github.com/microsoft/TypeScript/issues/30933
-    interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object;
-    }
-
     interface Document {
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/hasStorageAccess
         hasStorageAccess?: () => Promise<boolean>;

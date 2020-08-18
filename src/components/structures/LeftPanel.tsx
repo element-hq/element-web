@@ -37,6 +37,7 @@ import IndicatorScrollbar from "../structures/IndicatorScrollbar";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import RoomListNumResults from "../views/rooms/RoomListNumResults";
 
 interface IProps {
     isMinimized: boolean;
@@ -409,6 +410,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     {this.renderHeader()}
                     {this.renderSearchExplore()}
                     {this.renderBreadcrumbs()}
+                    <RoomListNumResults />
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}

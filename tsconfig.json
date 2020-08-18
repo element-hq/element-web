@@ -17,6 +17,11 @@
       "react",
       "flux",
       "react-transition-group"
+    ],
+    "lib": [
+      "es2019",
+      "dom",
+      "dom.iterable"
     ]
   },
   "include": [
