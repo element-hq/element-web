@@ -2415,5 +2415,6 @@
     "%(brand)s Android": "%(brand)s Android",
     "Master private key:": "主控私鑰：",
     "Show message previews for reactions in DMs": "在直接訊息中顯示反應的訊息預覽",
-    "Show message previews for reactions in all rooms": "在所有聊天室中顯示反應的訊息預覽"
+    "Show message previews for reactions in all rooms": "在所有聊天室中顯示反應的訊息預覽",
+    "Explore public rooms": "探索公開聊天室"
 }
