@@ -27,7 +27,6 @@ import PlatformPeg from "./PlatformPeg";
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
 import { SettingLevel } from "./settings/SettingLevel";
-import { SASEmojiV1 } from "matrix-js-sdk/src/crypto/verification/SASEmojiV1";
 
 const i18nFolder = 'i18n/';
 
@@ -39,14 +38,6 @@ const ANNOTATE_STRINGS = false;
 counterpart.setSeparator('|');
 // Fall back to English
 counterpart.setFallbackLocale('en');
-
-for (const emoji of SASEmojiV1.getAllEmoji()) {
-    const translations = SASEmojiV1.getTranslationsFor(emoji);
-    for (const lang of Object.keys(translations)) {
-        const tempObject = {[SASEmojiV1.getNameFor(emoji)]: translations[lang]};
-        counterpart.registerTranslations(lang, tempObject);
-    }
-}
 
 interface ITranslatableError extends Error {
     translatedMessage: string;
@@ -151,11 +142,6 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): string | 
     } else {
         return substituted;
     }
-}
-
-export function _tSasV1(emoji: string): string {
-    const name = SASEmojiV1.getNameFor(emoji);
-    return _t(name);
 }
 
 /*

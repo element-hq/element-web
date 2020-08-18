@@ -105,6 +105,7 @@
     "%(targetName)s accepted an invitation.": "%(targetName)s telah menerima undangan.",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s menerima undangan untuk %(displayName)s.",
     "Access Token:": "Token Akses:",
+    "Active call (%(roomName)s)": "Panggilan aktif (%(roomName)s)",
     "Admin": "Admin",
     "Admin Tools": "Peralatan Admin",
     "No Webcams detected": "Tidak ada Webcam terdeteksi",

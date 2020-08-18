@@ -261,6 +261,7 @@
     "%(roomName)s does not exist.": "ไม่มีห้อง %(roomName)s อยู่จริง",
     "Enter passphrase": "กรอกรหัสผ่าน",
     "Seen by %(userName)s at %(dateTime)s": "%(userName)s เห็นแล้วเมื่อเวลา %(dateTime)s",
+    "unknown caller": "ไม่ทราบผู้โทร",
     "Upload new:": "อัปโหลดใหม่:",
     "%(userName)s (power %(powerLevelNumber)s)": "%(userName)s (ระดับอำนาจ %(powerLevelNumber)s)",
     "Users": "ผู้ใช้",
