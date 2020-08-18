@@ -138,9 +138,9 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
 
         .mx_LeftPanel_roomListFilterCount {
             font-size: $font-13px;
-            font-weight: 500;
+            font-weight: $font-semi-bold;
             margin-left: 12px;
-            margin-top: 16px;
+            margin-top: 14px;
             margin-bottom: -4px; // to counteract the normal roomListWrapper margin-top
         }
 
