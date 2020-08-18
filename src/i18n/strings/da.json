@@ -1,6 +1,5 @@
 {
     "Filter room members": "Filter medlemmer",
-    "You have no visible notifications": "Du har ingen synlige meddelelser",
     "Invites": "Invitationer",
     "Favourites": "Favoritter",
     "Rooms": "Rum",
@@ -483,9 +482,6 @@
     "Confirm adding phone number": "Bekræft tilføjelse af telefonnummer",
     "Click the button below to confirm adding this phone number.": "Klik på knappen herunder for at bekræfte tilføjelsen af dette telefonnummer.",
     "Whether you're using %(brand)s as an installed Progressive Web App": "Om du anvender %(brand)s som en installeret Progressiv Web App",
-    "If you cancel now, you won't complete verifying the other user.": "Hvis du annullerer du, vil du ikke have færdiggjort verifikationen af den anden bruger.",
-    "If you cancel now, you won't complete verifying your other session.": "Hvis du annullerer nu, vil du ikke have færdiggjort verifikationen af din anden session.",
-    "If you cancel now, you won't complete your operation.": "Hvis du annullerer nu, vil du ikke færdiggøre din operation.",
     "Cancel entering passphrase?": "Annuller indtastning af kodeord?",
     "Enter passphrase": "Indtast kodeord",
     "Setting up keys": "Sætter nøgler op",
