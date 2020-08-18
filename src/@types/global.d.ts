@@ -19,12 +19,14 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
-import RebrandListener from "../RebrandListener";
 import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import {IntegrationManagers} from "../integrations/IntegrationManagers";
 import {ModalManager} from "../Modal";
+import SettingsStore from "../settings/SettingsStore";
+import {ActiveRoomObserver} from "../ActiveRoomObserver";
+import {Notifier} from "../Notifier";
 
 declare global {
     interface Window {
@@ -37,12 +39,14 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
-        mxRebrandListener: RebrandListener;
         mxRoomListStore: RoomListStoreClass;
         mxRoomListLayoutStore: RoomListLayoutStore;
+        mxActiveRoomObserver: ActiveRoomObserver;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;
+        mxSettingsStore: SettingsStore;
+        mxNotifier: typeof Notifier;
     }
 
     // workaround for https://github.com/microsoft/TypeScript/issues/30933
@@ -74,5 +78,9 @@ declare global {
 
     interface PromiseConstructor {
         allSettled<T>(promises: Promise<T>[]): Promise<Array<ISettledFulfilled<T> | ISettledRejected>>;
+    }
+
+    interface HTMLAudioElement {
+        type?: string;
     }
 }

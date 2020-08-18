@@ -120,7 +120,7 @@ limitations under the License.
         }
 
         .mx_RoomSublist_auxButton::before {
-            mask-image: url('$(res)/img/feather-customised/plus.svg');
+            mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
         }
 
         .mx_RoomSublist_menuButton::before {
@@ -142,26 +142,24 @@ limitations under the License.
             .mx_RoomSublist_collapseBtn {
                 display: inline-block;
                 position: relative;
-                width: 12px;
-                height: 12px;
-                margin-right: 8px;
+                width: 14px;
+                height: 14px;
+                margin-right: 6px;
 
                 &::before {
                     content: '';
-                    width: 12px;
-                    height: 12px;
+                    width: 18px;
+                    height: 18px;
                     position: absolute;
-                    top: 1px;
-                    left: 1px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $primary-fg-color;
+                    background-color: $roomlist-header-color;
                     mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
                 }
 
                 &.mx_RoomSublist_collapseBtn_collapsed::before {
-                    mask-image: url('$(res)/img/feather-customised/chevron-right.svg');
+                    transform: rotate(-90deg);
                 }
             }
         }
@@ -171,7 +169,7 @@ limitations under the License.
     // that the sublists below them do not jump. However, that leaves a gap
     // when scrolled to the top above the first sublist (whose header can only
     // ever stick to top), so we force height to 0 for only that first header.
-    // See also https://github.com/vector-im/riot-web/issues/14429.
+    // See also https://github.com/vector-im/element-web/issues/14429.
     &:first-child .mx_RoomSublist_headerContainer {
         height: 0;
         padding-bottom: 4px;
@@ -251,22 +249,24 @@ limitations under the License.
 
         .mx_RoomSublist_showNButtonChevron {
             position: relative;
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             margin-left: 12px;
-            margin-right: 18px;
+            margin-right: 16px;
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $roomtile-preview-color;
+            background: $roomlist-header-color;
+            left: -1px; // adjust for image position
         }
 
-        .mx_RoomSublist_showMoreButtonChevron {
+        .mx_RoomSublist_showMoreButtonChevron,
+        .mx_RoomSublist_showLessButtonChevron {
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         }
 
         .mx_RoomSublist_showLessButtonChevron {
-            mask-image: url('$(res)/img/feather-customised/chevron-up.svg');
+            transform: rotate(180deg);
         }
     }
 

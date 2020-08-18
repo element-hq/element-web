@@ -19,11 +19,12 @@ import * as sdk from '../../../../index';
 import PropTypes from 'prop-types';
 import { _t } from '../../../../languageHandler';
 import SdkConfig from '../../../../SdkConfig';
-import SettingsStore, {SettingLevel} from "../../../../settings/SettingsStore";
+import SettingsStore from "../../../../settings/SettingsStore";
 
 import Modal from '../../../../Modal';
 import {formatBytes, formatCountLong} from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";
+import {SettingLevel} from "../../../../settings/SettingLevel";
 
 /*
  * Allows the user to introspect the event index state and disable it.

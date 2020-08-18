@@ -89,15 +89,10 @@ limitations under the License.
 .mx_UserMenu_contextMenu {
     width: 247px;
 
-    .mx_UserMenu_contextMenu_redRow {
+    &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
         .mx_AccessibleButton {
             padding-top: 16px;
             padding-bottom: 16px;
-            color: $warning-color !important; // !important to override styles from context menu
-        }
-
-        .mx_IconizedContextMenu_icon::before {
-            background-color: $warning-color;
         }
     }
 

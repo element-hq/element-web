@@ -38,7 +38,7 @@ body {
     margin: 0px;
 
     // needed to match the designs correctly on macOS
-    // see https://github.com/vector-im/riot-web/issues/11425
+    // see https://github.com/vector-im/element-web/issues/11425
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -436,7 +436,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
 // These classes were brought in from the old UserSettings and are included here to avoid
 // breaking the app.
-// Ref: https://github.com/vector-im/riot-web/issues/8420
+// Ref: https://github.com/vector-im/element-web/issues/8420
 .mx_GeneralButton {
     @mixin mx_DialogButton;
     display: inline;
@@ -585,93 +585,6 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     max-width: 120px;
 }
 
-// A context menu that largely fits the | [icon]    [label] | format.
-.mx_IconizedContextMenu {
-    min-width: 146px;
-
-    .mx_IconizedContextMenu_optionList {
-        & > * {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        // the notFirst class is for cases where the optionList might be under a header of sorts.
-        &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
-            // This is a bit of a hack when we could just use a simple border-top property,
-            // however we have a (kinda) good reason for doing it this way: we need opacity.
-            // To get the right color, we need an opacity modifier which means we have to work
-            // around the problem. PostCSS doesn't support the opacity() function, and if we
-            // use something like postcss-functions we quickly run into an issue where the
-            // function we would define gets passed a CSS variable for custom themes, which
-            // can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379
-            //
-            // Therefore, we just hack in a line and border the thing ourselves
-            &::before {
-                border-top: 1px solid $primary-fg-color;
-                opacity: 0.1;
-                content: '';
-
-                // Counteract the padding problems (width: 100% ignores the 40px padding,
-                // unless we position it absolutely then it does the right thing).
-                width: 100%;
-                position: absolute;
-                left: 0;
-            }
-        }
-
-        // round the top corners of the top button for the hover effect to be bounded
-        &:first-child .mx_AccessibleButton:first-child {
-            border-radius: 8px 8px 0 0; // radius matches .mx_ContextualMenu
-        }
-
-        // round the bottom corners of the bottom button for the hover effect to be bounded
-        &:last-child .mx_AccessibleButton:last-child {
-            border-radius: 0 0 8px 8px; // radius matches .mx_ContextualMenu
-        }
-
-        .mx_AccessibleButton {
-            // pad the inside of the button so that the hover background is padded too
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-decoration: none;
-            color: $primary-fg-color;
-            font-size: $font-15px;
-            line-height: $font-24px;
-
-            // Create a flexbox to more easily define the list items
-            display: flex;
-            align-items: center;
-
-            &:hover {
-                background-color: $menu-selected-color;
-            }
-
-            img, .mx_IconizedContextMenu_icon { // icons
-                width: 16px;
-                min-width: 16px;
-                max-width: 16px;
-            }
-
-            span.mx_IconizedContextMenu_label { // labels
-                padding-left: 14px;
-                width: 100%;
-                flex: 1;
-
-                // Ellipsize any text overflow
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-        }
-    }
-
-    &.mx_IconizedContextMenu_compact {
-        .mx_IconizedContextMenu_optionList > * {
-            padding: 8px 16px 8px 11px;
-        }
-    }
-}
-
 @define-mixin ProgressBarColour $colour {
     color: $colour;
     &::-moz-progress-bar {
@@ -690,5 +603,17 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     &::-webkit-progress-bar,
     &::-webkit-progress-value {
         border-radius: $radius;
+    }
+}
+
+@define-mixin unreal-focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+
+    /* WebKit gets its native focus styles. */
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
     }
 }

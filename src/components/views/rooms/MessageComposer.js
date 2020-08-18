@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, {createRef} from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import CallHandler from '../../../CallHandler';
@@ -118,9 +119,19 @@ const EmojiButton = ({addEmoji}) => {
         </ContextMenu>;
     }
 
+    const className = classNames(
+        "mx_MessageComposer_button",
+        "mx_MessageComposer_emoji",
+        {
+            "mx_MessageComposer_button_highlight": menuDisplayed,
+        },
+    );
+
+    // TODO: replace ContextMenuTooltipButton with a unified representation of
+    // the header buttons and the right panel buttons
     return <React.Fragment>
         <ContextMenuTooltipButton
-            className="mx_MessageComposer_button mx_MessageComposer_emoji"
+            className={className}
             onClick={openMenu}
             isExpanded={menuDisplayed}
             title={_t('Emoji picker')}

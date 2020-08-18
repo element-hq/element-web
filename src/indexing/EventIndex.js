@@ -18,8 +18,9 @@ import PlatformPeg from "../PlatformPeg";
 import {MatrixClientPeg} from "../MatrixClientPeg";
 import {EventTimeline, RoomMember} from 'matrix-js-sdk';
 import {sleep} from "../utils/promise";
-import SettingsStore, {SettingLevel} from "../settings/SettingsStore";
+import SettingsStore from "../settings/SettingsStore";
 import {EventEmitter} from "events";
+import {SettingLevel} from "../settings/SettingLevel";
 
 /*
  * Event indexing class that wraps the platform specific event indexing.
@@ -144,7 +145,7 @@ export default class EventIndex extends EventEmitter {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         if (prevState === "PREPARED" && state === "SYNCING") {
-            // If our indexer is empty we're most likely running Riot the
+            // If our indexer is empty we're most likely running Element the
             // first time with indexing support or running it with an
             // initial sync. Add checkpoints to crawl our encrypted rooms.
             const eventIndexWasEmpty = await indexManager.isEventIndexEmpty();

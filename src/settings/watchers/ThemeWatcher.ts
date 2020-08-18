@@ -15,17 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsStore, { SettingLevel } from '../SettingsStore';
+import SettingsStore from '../SettingsStore';
 import dis from '../../dispatcher/dispatcher';
 import { Action } from '../../dispatcher/actions';
 import ThemeController from "../controllers/ThemeController";
 import { setTheme } from "../../theme";
 import { ActionPayload } from '../../dispatcher/payloads';
+import { SettingLevel } from "../SettingLevel";
 
 export default class ThemeWatcher {
-    // XXX: I think this is unused.
-    static _instance = null;
-
     private themeWatchRef: string;
     private systemThemeWatchRef: string;
     private dispatcherRef: string;
@@ -80,7 +78,7 @@ export default class ThemeWatcher {
     };
 
     // XXX: forceTheme param added here as local echo appears to be unreliable
-    // https://github.com/vector-im/riot-web/issues/11443
+    // https://github.com/vector-im/element-web/issues/11443
     public recheck(forceTheme?: string) {
         const oldTheme = this.currentTheme;
         this.currentTheme = forceTheme === undefined ? this.getEffectiveTheme() : forceTheme;

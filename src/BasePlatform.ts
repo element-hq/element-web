@@ -156,6 +156,14 @@ export default abstract class BasePlatform {
     loudNotification(ev: Event, room: Object) {
     }
 
+    clearNotification(notif: Notification) {
+        // Some browsers don't support this, e.g Safari on iOS
+        // https://developer.mozilla.org/en-US/docs/Web/API/Notification/close
+        if (notif.close) {
+            notif.close();
+        }
+    }
+
     /**
      * Returns a promise that resolves to a string representing the current version of the application.
      */

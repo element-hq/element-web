@@ -65,7 +65,7 @@ export interface FromWidgetRequest extends WidgetRequest {
 }
 
 /**
- * Handles Riot <--> Widget interactions for embedded/standalone widgets.
+ * Handles Element <--> Widget interactions for embedded/standalone widgets.
  *
  * Emitted events:
  * - terminate(wait): client requested the widget to terminate.
@@ -141,7 +141,7 @@ export class WidgetApi extends EventEmitter {
     private replyToRequest(payload: ToWidgetRequest, reply: any) {
         if (!window.parent) return;
 
-        const request = objectClone(payload);
+        const request: ToWidgetRequest & {response?: any} = objectClone(payload);
         request.response = reply;
 
         window.parent.postMessage(request, this.origin);

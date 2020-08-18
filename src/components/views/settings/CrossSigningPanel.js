@@ -32,6 +32,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             error: null,
             crossSigningPublicKeysOnDevice: false,
             crossSigningPrivateKeysInStorage: false,
+            masterPrivateKeyCached: false,
             selfSigningPrivateKeyCached: false,
             userSigningPrivateKeyCached: false,
             sessionBackupKeyCached: false,
@@ -78,6 +79,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         const secretStorage = cli._crypto._secretStorage;
         const crossSigningPublicKeysOnDevice = crossSigning.getId();
         const crossSigningPrivateKeysInStorage = await crossSigning.isStoredInSecretStorage(secretStorage);
+        const masterPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("master"));
         const selfSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"));
         const userSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"));
         const sessionBackupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
@@ -91,6 +93,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         this.setState({
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
+            masterPrivateKeyCached,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
             sessionBackupKeyCached,
@@ -140,6 +143,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             error,
             crossSigningPublicKeysOnDevice,
             crossSigningPrivateKeysInStorage,
+            masterPrivateKeyCached,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
             sessionBackupKeyCached,
@@ -234,6 +238,10 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("Cross-signing private keys:")}</td>
                             <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Master private key:")}</td>
+                            <td>{masterPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Self signing private key:")}</td>

@@ -18,7 +18,7 @@ limitations under the License.
 
 /**
  * Regenerates the translations en_EN file by walking the source tree and
- * parsing each file with flow-parser. Emits a JSON file with the
+ * parsing each file with the appropriate parser. Emits a JSON file with the
  * translatable strings mapped to themselves in the order they appeared
  * in the files and grouped by the file they appeared in.
  *
@@ -29,8 +29,8 @@ const path = require('path');
 
 const walk = require('walk');
 
-const flowParser = require('flow-parser');
-const estreeWalker = require('estree-walker');
+const parser = require("@babel/parser");
+const traverse = require("@babel/traverse");
 
 const TRANSLATIONS_FUNCS = ['_t', '_td'];
 
@@ -44,17 +44,9 @@ const OUTPUT_FILE = 'src/i18n/strings/en_EN.json';
 // to a project that's actively maintained.
 const SEARCH_PATHS = ['src', 'res'];
 
-const FLOW_PARSER_OPTS = {
-  esproposal_class_instance_fields: true,
-  esproposal_class_static_fields: true,
-  esproposal_decorators: true,
-  esproposal_export_star_as: true,
-  types: true,
-};
-
 function getObjectValue(obj, key) {
     for (const prop of obj.properties) {
-        if (prop.key.type == 'Identifier' && prop.key.name == key) {
+        if (prop.key.type === 'Identifier' && prop.key.name === key) {
             return prop.value;
         }
     }
@@ -62,11 +54,11 @@ function getObjectValue(obj, key) {
 }
 
 function getTKey(arg) {
-    if (arg.type == 'Literal') {
+    if (arg.type === 'Literal' || arg.type === "StringLiteral") {
         return arg.value;
-    } else if (arg.type == 'BinaryExpression' && arg.operator == '+') {
+    } else if (arg.type === 'BinaryExpression' && arg.operator === '+') {
         return getTKey(arg.left) + getTKey(arg.right);
-    } else if (arg.type == 'TemplateLiteral') {
+    } else if (arg.type === 'TemplateLiteral') {
         return arg.quasis.map((q) => {
             return q.value.raw;
         }).join('');
@@ -110,81 +102,112 @@ function getFormatStrings(str) {
 }
 
 function getTranslationsJs(file) {
-    const tree = flowParser.parse(fs.readFileSync(file, { encoding: 'utf8' }), FLOW_PARSER_OPTS);
+    const contents = fs.readFileSync(file, { encoding: 'utf8' });
 
     const trs = new Set();
 
-    estreeWalker.walk(tree, {
-        enter: function(node, parent) {
-            if (
-                node.type == 'CallExpression' &&
-                TRANSLATIONS_FUNCS.includes(node.callee.name)
-            ) {
-                const tKey = getTKey(node.arguments[0]);
-                // This happens whenever we call _t with non-literals (ie. whenever we've
-                // had to use a _td to compensate) so is expected.
-                if (tKey === null) return;
+    try {
+        const plugins = [
+            // https://babeljs.io/docs/en/babel-parser#plugins
+            "classProperties",
+            "objectRestSpread",
+            "throwExpressions",
+            "exportDefaultFrom",
+            "decorators-legacy",
+        ];
 
-                // check the format string against the args
-                // We only check _t: _td has no args
-                if (node.callee.name === '_t') {
-                    try {
-                        const placeholders = getFormatStrings(tKey);
-                        for (const placeholder of placeholders) {
-                            if (node.arguments.length < 2) {
-                                throw new Error(`Placeholder found ('${placeholder}') but no substitutions given`);
-                            }
-                            const value = getObjectValue(node.arguments[1], placeholder);
-                            if (value === null) {
-                                throw new Error(`No value found for placeholder '${placeholder}'`);
-                            }
-                        }
+        if (file.endsWith(".js") || file.endsWith(".jsx")) {
+            // all JS is assumed to be flow or react
+            plugins.push("flow", "jsx");
+        } else if (file.endsWith(".ts")) {
+            // TS can't use JSX unless it's a TSX file (otherwise angle casts fail)
+            plugins.push("typescript");
+        } else if (file.endsWith(".tsx")) {
+            // When the file is a TSX file though, enable JSX parsing
+            plugins.push("typescript", "jsx");
+        }
 
-                        // Validate tag replacements
-                        if (node.arguments.length > 2) {
-                            const tagMap = node.arguments[2];
-                            for (const prop of tagMap.properties || []) {
-                                if (prop.key.type === 'Literal') {
-                                    const tag = prop.key.value;
-                                    // RegExp same as in src/languageHandler.js
-                                    const regexp = new RegExp(`(<${tag}>(.*?)<\\/${tag}>|<${tag}>|<${tag}\\s*\\/>)`);
-                                    if (!tKey.match(regexp)) {
-                                        throw new Error(`No match for ${regexp} in ${tKey}`);
+        const babelParsed = parser.parse(contents, {
+            allowImportExportEverywhere: true,
+            errorRecovery: true,
+            sourceFilename: file,
+            tokens: true,
+            plugins,
+        });
+        traverse.default(babelParsed, {
+            enter: (p) => {
+                const node = p.node;
+                if (p.isCallExpression() && node.callee && TRANSLATIONS_FUNCS.includes(node.callee.name)) {
+                    const tKey = getTKey(node.arguments[0]);
+
+                    // This happens whenever we call _t with non-literals (ie. whenever we've
+                    // had to use a _td to compensate) so is expected.
+                    if (tKey === null) return;
+
+                    // check the format string against the args
+                    // We only check _t: _td has no args
+                    if (node.callee.name === '_t') {
+                        try {
+                            const placeholders = getFormatStrings(tKey);
+                            for (const placeholder of placeholders) {
+                                if (node.arguments.length < 2) {
+                                    throw new Error(`Placeholder found ('${placeholder}') but no substitutions given`);
+                                }
+                                const value = getObjectValue(node.arguments[1], placeholder);
+                                if (value === null) {
+                                    throw new Error(`No value found for placeholder '${placeholder}'`);
+                                }
+                            }
+
+                            // Validate tag replacements
+                            if (node.arguments.length > 2) {
+                                const tagMap = node.arguments[2];
+                                for (const prop of tagMap.properties || []) {
+                                    if (prop.key.type === 'Literal') {
+                                        const tag = prop.key.value;
+                                        // RegExp same as in src/languageHandler.js
+                                        const regexp = new RegExp(`(<${tag}>(.*?)<\\/${tag}>|<${tag}>|<${tag}\\s*\\/>)`);
+                                        if (!tKey.match(regexp)) {
+                                            throw new Error(`No match for ${regexp} in ${tKey}`);
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                    } catch (e) {
-                        console.log();
-                        console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
-                        console.error(e);
-                        process.exit(1);
-                    }
-                }
-
-                let isPlural = false;
-                if (node.arguments.length > 1 && node.arguments[1].type == 'ObjectExpression') {
-                    const countVal = getObjectValue(node.arguments[1], 'count');
-                    if (countVal) {
-                        isPlural = true;
-                    }
-                }
-
-                if (isPlural) {
-                    trs.add(tKey + "|other");
-                    const plurals = enPlurals[tKey];
-                    if (plurals) {
-                        for (const pluralType of Object.keys(plurals)) {
-                            trs.add(tKey + "|" + pluralType);
+                        } catch (e) {
+                            console.log();
+                            console.error(`ERROR: ${file}:${node.loc.start.line} ${tKey}`);
+                            console.error(e);
+                            process.exit(1);
                         }
                     }
-                } else {
-                    trs.add(tKey);
+
+                    let isPlural = false;
+                    if (node.arguments.length > 1 && node.arguments[1].type === 'ObjectExpression') {
+                        const countVal = getObjectValue(node.arguments[1], 'count');
+                        if (countVal) {
+                            isPlural = true;
+                        }
+                    }
+
+                    if (isPlural) {
+                        trs.add(tKey + "|other");
+                        const plurals = enPlurals[tKey];
+                        if (plurals) {
+                            for (const pluralType of Object.keys(plurals)) {
+                                trs.add(tKey + "|" + pluralType);
+                            }
+                        }
+                    } else {
+                        trs.add(tKey);
+                    }
                 }
-            }
-        }
-    });
+            },
+        });
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
+    }
 
     return trs;
 }
@@ -194,7 +217,7 @@ function getTranslationsOther(file) {
 
     const trs = new Set();
 
-    // Taken from riot-web src/components/structures/HomePage.js
+    // Taken from element-web src/components/structures/HomePage.js
     const translationsRegex = /_t\(['"]([\s\S]*?)['"]\)/mg;
     let matches;
     while (matches = translationsRegex.exec(contents)) {

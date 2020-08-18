@@ -67,8 +67,8 @@ limitations under the License.
     bottom: 0;
     left: 0;
     right: 0;
-    mask: url('$(res)/img/icon-jump-to-bottom.svg');
+    mask-image: url('$(res)/img/feather-customised/chevron-down-thin.svg');
     mask-repeat: no-repeat;
-    mask-position: 9px 14px;
+    mask-size: contain;
     background: $muted-fg-color;
 }

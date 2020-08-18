@@ -137,7 +137,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     getName(): string {
-        return '👥 ' + _t('Users');
+        return _t('Users');
     }
 
     _makeUsers() {

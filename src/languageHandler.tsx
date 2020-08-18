@@ -21,11 +21,12 @@ import request from 'browser-request';
 import counterpart from 'counterpart';
 import React from 'react';
 
-import SettingsStore, {SettingLevel} from "./settings/SettingsStore";
+import SettingsStore from "./settings/SettingsStore";
 import PlatformPeg from "./PlatformPeg";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
+import { SettingLevel } from "./settings/SettingLevel";
 
 const i18nFolder = 'i18n/';
 
@@ -63,7 +64,7 @@ export function _td(s: string): string {
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
 // Takes the same arguments as counterpart.translate()
 function safeCounterpartTranslate(text: string, options?: object) {
-    // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
+    // Horrible hack to avoid https://github.com/vector-im/element-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
     // values and instead will throw an error. This is a problem since everywhere else
     // in JS land passing undefined/null will simply stringify instead, and when converting
@@ -294,7 +295,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
 // Allow overriding the text displayed when no translation exists
 // Currently only used in unit tests to avoid having to load
-// the translations in riot-web
+// the translations in element-web
 export function setMissingEntryGenerator(f: (value: string) => void) {
     counterpart.setMissingEntryGenerator(f);
 }

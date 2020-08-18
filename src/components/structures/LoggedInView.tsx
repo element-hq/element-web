@@ -54,6 +54,7 @@ import LeftPanel from "./LeftPanel";
 import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
+import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 
 // We need to fetch each pinned message individually (if we don't already have it)
@@ -595,7 +596,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const maxRadius = 5; // People shouldn't be straying too far, hopefully
 
         // Note: we track how far the user moved their mouse to help
-        // combat against https://github.com/vector-im/riot-web/issues/7158
+        // combat against https://github.com/vector-im/element-web/issues/7158
 
         if (distance < maxRadius) {
             // This is probably a real click, and not a drag
@@ -688,6 +689,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                     </DragDropContext>
                 </div>
                 <CallContainer />
+                <NonUrgentToastContainer />
             </MatrixClientContext.Provider>
         );
     }

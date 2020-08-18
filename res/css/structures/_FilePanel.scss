@@ -41,13 +41,19 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile {
     word-break: break-word;
+    margin-top: 32px;
 }
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody {
     margin-right: 0px;
 }
 
+.mx_FilePanel .mx_EventTile .mx_MFileBody {
+    line-height: 2.4rem;
+}
+
 .mx_FilePanel .mx_EventTile .mx_MFileBody_download {
+    padding-top: 8px;
     display: flex;
     font-size: $font-14px;
     color: $event-timestamp-color;
@@ -60,7 +66,7 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile .mx_MImageBody_size {
     flex: 1 0 0;
-    font-size: $font-11px;
+    font-size: $font-14px;
     text-align: right;
     white-space: nowrap;
 }
@@ -80,7 +86,7 @@ limitations under the License.
     flex: 1 1 auto;
     line-height: initial;
     padding: 0px;
-    font-size: $font-11px;
+    font-size: $font-14px;
     opacity: 1.0;
     color: $event-timestamp-color;
 }
@@ -90,7 +96,7 @@ limitations under the License.
     text-align: right;
     visibility: visible;
     position: initial;
-    font-size: $font-11px;
+    font-size: $font-14px;
     opacity: 1.0;
     color: $event-timestamp-color;
 }
@@ -108,4 +114,8 @@ limitations under the License.
 
 .mx_FilePanel .mx_EventTile:hover .mx_EventTile_line {
     background-color: $primary-bg-color;
+}
+
+.mx_FilePanel_empty::before {
+    mask-image: url('$(res)/img/element-icons/room/files.svg');
 }

@@ -20,9 +20,10 @@ import {_t} from "../../../../../languageHandler";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as sdk from "../../../../..";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
-import {SettingLevel} from "../../../../../settings/SettingsStore";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
+import StyledRadioGroup from '../../../elements/StyledRadioGroup';
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -99,7 +100,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
                 {
                     'a': (sub) => {
                         return <a rel='noreferrer noopener' target='_blank'
-                                  href='https://about.riot.im/help#end-to-end-encryption'>{sub}</a>;
+                                  href='https://element.io/help#encryption'>{sub}</a>;
                     },
                 },
             ),
@@ -144,7 +145,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         });
     };
 
-    _onRoomAccessRadioToggle = (ev) => {
+    _onRoomAccessRadioToggle = (roomAccess) => {
         //                         join_rule
         //                      INVITE  |  PUBLIC
         //        ----------------------+----------------
@@ -161,7 +162,7 @@ export default class SecurityRoomSettingsTab extends React.Component {
         let joinRule = "invite";
         let guestAccess = "can_join";
 
-        switch (ev.target.value) {
+        switch (roomAccess) {
             case "invite_only":
                 // no change - use defaults above
                 break;
@@ -190,11 +191,11 @@ export default class SecurityRoomSettingsTab extends React.Component {
         });
     };
 
-    _onHistoryRadioToggle = (ev) => {
+    _onHistoryRadioToggle = (history) => {
         const beforeHistory = this.state.history;
-        this.setState({history: ev.target.value});
+        this.setState({history: history});
         MatrixClientPeg.get().sendStateEvent(this.props.roomId, "m.room.history_visibility", {
-            history_visibility: ev.target.value,
+            history_visibility: history,
         }, "").catch((e) => {
             console.error(e);
             this.setState({history: beforeHistory});
@@ -257,27 +258,31 @@ export default class SecurityRoomSettingsTab extends React.Component {
             <div>
                 {guestWarning}
                 {aliasWarning}
-                <label>
-                    <input type="radio" name="roomVis" value="invite_only"
-                           disabled={!canChangeAccess}
-                           onChange={this._onRoomAccessRadioToggle}
-                           checked={joinRule !== "public"} />
-                    {_t('Only people who have been invited')}
-                </label>
-                <label>
-                    <input type="radio" name="roomVis" value="public_no_guests"
-                           disabled={!canChangeAccess}
-                           onChange={this._onRoomAccessRadioToggle}
-                           checked={joinRule === "public" && guestAccess !== "can_join"} />
-                    {_t('Anyone who knows the room\'s link, apart from guests')}
-                </label>
-                <label>
-                    <input type="radio" name="roomVis" value="public_with_guests"
-                           disabled={!canChangeAccess}
-                           onChange={this._onRoomAccessRadioToggle}
-                           checked={joinRule === "public" && guestAccess === "can_join"} />
-                    {_t("Anyone who knows the room's link, including guests")}
-                </label>
+                <StyledRadioGroup
+                    name="roomVis"
+                    value={joinRule}
+                    onChange={this._onRoomAccessRadioToggle}
+                    definitions={[
+                        {
+                            value: "invite_only",
+                            disabled: !canChangeAccess,
+                            label: _t('Only people who have been invited'),
+                            checked: joinRule !== "public",
+                        },
+                        {
+                            value: "public_no_guests",
+                            disabled: !canChangeAccess,
+                            label: _t('Anyone who knows the room\'s link, apart from guests'),
+                            checked: joinRule === "public" && guestAccess !== "can_join",
+                        },
+                        {
+                            value: "public_with_guests",
+                            disabled: !canChangeAccess,
+                            label: _t("Anyone who knows the room's link, including guests"),
+                            checked: joinRule === "public" && guestAccess === "can_join",
+                        },
+                    ]}
+                />
             </div>
         );
     }
@@ -294,34 +299,33 @@ export default class SecurityRoomSettingsTab extends React.Component {
                     {_t('Changes to who can read history will only apply to future messages in this room. ' +
                         'The visibility of existing history will be unchanged.')}
                 </div>
-                <label>
-                    <input type="radio" name="historyVis" value="world_readable"
-                           disabled={!canChangeHistory}
-                           checked={history === "world_readable"}
-                           onChange={this._onHistoryRadioToggle} />
-                    {_t("Anyone")}
-                </label>
-                <label>
-                    <input type="radio" name="historyVis" value="shared"
-                           disabled={!canChangeHistory}
-                           checked={history === "shared"}
-                           onChange={this._onHistoryRadioToggle} />
-                    {_t('Members only (since the point in time of selecting this option)')}
-                </label>
-                <label>
-                    <input type="radio" name="historyVis" value="invited"
-                           disabled={!canChangeHistory}
-                           checked={history === "invited"}
-                           onChange={this._onHistoryRadioToggle} />
-                    {_t('Members only (since they were invited)')}
-                </label>
-                <label >
-                    <input type="radio" name="historyVis" value="joined"
-                           disabled={!canChangeHistory}
-                           checked={history === "joined"}
-                           onChange={this._onHistoryRadioToggle} />
-                    {_t('Members only (since they joined)')}
-                </label>
+                <StyledRadioGroup
+                    name="historyVis"
+                    value={history}
+                    onChange={this._onHistoryRadioToggle}
+                    definitions={[
+                        {
+                            value: "world_readable",
+                            disabled: !canChangeHistory,
+                            label: _t("Anyone"),
+                        },
+                        {
+                            value: "shared",
+                            disabled: !canChangeHistory,
+                            label: _t('Members only (since the point in time of selecting this option)'),
+                        },
+                        {
+                            value: "invited",
+                            disabled: !canChangeHistory,
+                            label: _t('Members only (since they were invited)'),
+                        },
+                        {
+                            value: "joined",
+                            disabled: !canChangeHistory,
+                            label: _t('Members only (since they joined)'),
+                        },
+                    ]}
+                />
             </div>
         );
     }

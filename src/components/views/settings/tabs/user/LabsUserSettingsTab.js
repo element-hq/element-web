@@ -17,9 +17,10 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as sdk from "../../../../../index";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -54,7 +55,7 @@ export default class LabsUserSettingsTab extends React.Component {
                         _t('Customise your experience with experimental labs features. ' +
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
-                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                return <a href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
                                     rel='noreferrer noopener' target='_blank'>{sub}</a>;
                             },
                         })

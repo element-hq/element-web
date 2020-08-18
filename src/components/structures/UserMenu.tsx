@@ -20,13 +20,13 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
-import { ChevronFace, ContextMenu, ContextMenuButton, MenuItem } from "./ContextMenu";
+import { ContextMenuButton } from "./ContextMenu";
 import {USER_NOTIFICATIONS_TAB, USER_SECURITY_TAB} from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RedesignFeedbackDialog from "../views/dialogs/RedesignFeedbackDialog";
 import Modal from "../../Modal";
 import LogoutDialog from "../views/dialogs/LogoutDialog";
-import SettingsStore, {SettingLevel} from "../../settings/SettingsStore";
+import SettingsStore from "../../settings/SettingsStore";
 import {getCustomTheme} from "../../theme";
 import {getHostingLink} from "../../utils/HostingLink";
 import {ButtonEvent} from "../views/elements/AccessibleButton";
@@ -37,6 +37,11 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import classNames from "classnames";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
+import { SettingLevel } from "../../settings/SettingLevel";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList
+} from "../views/context_menus/IconizedContextMenu";
 
 interface IProps {
     isMinimized: boolean;
@@ -48,19 +53,6 @@ interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
 }
-
-interface IMenuButtonProps {
-    iconClassName: string;
-    label: string;
-    onClick(ev: ButtonEvent);
-}
-
-const MenuButton: React.FC<IMenuButtonProps> = ({iconClassName, label, onClick}) => {
-    return <MenuItem label={label} onClick={onClick}>
-        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
-        <span className="mx_IconizedContextMenu_label">{label}</span>
-    </MenuItem>;
-};
 
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
@@ -169,7 +161,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        // TODO: Archived room view: https://github.com/vector-im/riot-web/issues/14038
+        // TODO: Archived room view: https://github.com/vector-im/element-web/issues/14038
         // Note: You'll need to uncomment the button too.
         console.log("TODO: Show archived rooms");
     };
@@ -225,7 +217,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let homeButton = null;
         if (this.hasHomePage) {
             homeButton = (
-                <MenuButton
+                <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconHome"
                     label={_t("Home")}
                     onClick={this.onHomeClick}
@@ -233,75 +225,71 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        return (
-            <ContextMenu
-                chevronFace={ChevronFace.None}
-                // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
-                left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
-                top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
-                onFinished={this.onCloseMenu}
-            >
-                <div className="mx_IconizedContextMenu mx_UserMenu_contextMenu">
-                    <div className="mx_UserMenu_contextMenu_header">
-                        <div className="mx_UserMenu_contextMenu_name">
-                            <span className="mx_UserMenu_contextMenu_displayName">
-                                {OwnProfileStore.instance.displayName}
-                            </span>
-                            <span className="mx_UserMenu_contextMenu_userId">
-                                {MatrixClientPeg.get().getUserId()}
-                            </span>
-                        </div>
-                        <AccessibleTooltipButton
-                            className="mx_UserMenu_contextMenu_themeButton"
-                            onClick={this.onSwitchThemeClick}
-                            title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
-                        >
-                            <img
-                                src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
-                                alt={_t("Switch theme")}
-                                width={16}
-                            />
-                        </AccessibleTooltipButton>
-                    </div>
-                    {hostingLink}
-                    <div className="mx_IconizedContextMenu_optionList mx_IconizedContextMenu_optionList_notFirst">
-                        {homeButton}
-                        <MenuButton
-                            iconClassName="mx_UserMenu_iconBell"
-                            label={_t("Notification settings")}
-                            onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
-                        />
-                        <MenuButton
-                            iconClassName="mx_UserMenu_iconLock"
-                            label={_t("Security & privacy")}
-                            onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
-                        />
-                        <MenuButton
-                            iconClassName="mx_UserMenu_iconSettings"
-                            label={_t("All settings")}
-                            onClick={(e) => this.onSettingsOpen(e, null)}
-                        />
-                        {/* <MenuButton
-                            iconClassName="mx_UserMenu_iconArchive"
-                            label={_t("Archived rooms")}
-                            onClick={this.onShowArchived}
-                        /> */}
-                        <MenuButton
-                            iconClassName="mx_UserMenu_iconMessage"
-                            label={_t("Feedback")}
-                            onClick={this.onProvideFeedback}
-                        />
-                    </div>
-                    <div className="mx_IconizedContextMenu_optionList mx_UserMenu_contextMenu_redRow">
-                        <MenuButton
-                            iconClassName="mx_UserMenu_iconSignOut"
-                            label={_t("Sign out")}
-                            onClick={this.onSignOutClick}
-                        />
-                    </div>
+        return <IconizedContextMenu
+            // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
+            left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
+            top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
+            onFinished={this.onCloseMenu}
+            className="mx_UserMenu_contextMenu"
+        >
+            <div className="mx_UserMenu_contextMenu_header">
+                <div className="mx_UserMenu_contextMenu_name">
+                        <span className="mx_UserMenu_contextMenu_displayName">
+                            {OwnProfileStore.instance.displayName}
+                        </span>
+                    <span className="mx_UserMenu_contextMenu_userId">
+                            {MatrixClientPeg.get().getUserId()}
+                        </span>
                 </div>
-            </ContextMenu>
-        );
+                <AccessibleTooltipButton
+                    className="mx_UserMenu_contextMenu_themeButton"
+                    onClick={this.onSwitchThemeClick}
+                    title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
+                >
+                    <img
+                        src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
+                        alt={_t("Switch theme")}
+                        width={16}
+                    />
+                </AccessibleTooltipButton>
+            </div>
+            {hostingLink}
+            <IconizedContextMenuOptionList>
+                {homeButton}
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconBell"
+                    label={_t("Notification settings")}
+                    onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                />
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconLock"
+                    label={_t("Security & privacy")}
+                    onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                />
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconSettings"
+                    label={_t("All settings")}
+                    onClick={(e) => this.onSettingsOpen(e, null)}
+                />
+                {/* <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconArchive"
+                    label={_t("Archived rooms")}
+                    onClick={this.onShowArchived}
+                /> */}
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconMessage"
+                    label={_t("Feedback")}
+                    onClick={this.onProvideFeedback}
+                />
+            </IconizedContextMenuOptionList>
+            <IconizedContextMenuOptionList red>
+                <IconizedContextMenuOption
+                    iconClassName="mx_UserMenu_iconSignOut"
+                    label={_t("Sign out")}
+                    onClick={this.onSignOutClick}
+                />
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>;
     };
 
     public render() {

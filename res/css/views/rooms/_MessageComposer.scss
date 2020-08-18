@@ -21,6 +21,7 @@ limitations under the License.
     border-top: 1px solid $primary-hairline-color;
     position: relative;
     padding-left: 82px;
+    padding-right: 6px;
 }
 
 .mx_MessageComposer_replaced_wrapper {
@@ -178,23 +179,42 @@ limitations under the License.
     color: $accent-color;
 }
 
+.mx_MessageComposer_button_highlight {
+    background: rgba($accent-color, 0.25);
+    // make the icon the accent color too
+    &::before {
+        background-color: $accent-color !important;
+    }
+}
+
 .mx_MessageComposer_button {
     position: relative;
-    margin-right: 12px;
+    margin-right: 6px;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 26px;
+    width: 26px;
+    border-radius: 100%;
 
     &::before {
         content: '';
         position: absolute;
 
+        top: 3px;
+        left: 3px;
         height: 20px;
         width: 20px;
-        background-color: $composer-button-color;
+        background-color: $icon-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
+    }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
     }
 
     &.mx_MessageComposer_hangup::before {
@@ -288,7 +308,7 @@ limitations under the License.
     mask-size: contain;
     mask-position: center;
     mask-repeat: no-repeat;
-    background-color: $composer-button-color;
+    background-color: $icon-button-color;
 
     &.mx_MessageComposer_markdownDisabled {
         opacity: 0.2;

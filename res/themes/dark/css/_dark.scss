@@ -18,6 +18,10 @@ $primary-fg-color: $text-primary-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
+// additional text colors
+$secondary-fg-color: #A9B2BC;
+$tertiary-fg-color: #8E99A4;
+
 // used for dialog box text
 $light-fg-color: $header-panel-text-secondary-color;
 
@@ -42,7 +46,7 @@ $inverted-bg-color: $base-color;
 $selected-color: $room-highlight-color;
 
 // selected for hoverover & selected event tiles
-$event-selected-color: $header-panel-bg-color;
+$event-selected-color: #21262c;
 
 // used for the hairline dividers in RoomView
 $primary-hairline-color: transparent;
@@ -96,10 +100,9 @@ $roomheader-bg-color: $bg-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
-$roomheader-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
-$composer-button-color: $header-panel-text-primary-color;
+$icon-button-color: #8E99A4;
 $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 
@@ -112,10 +115,10 @@ $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: rgba(141, 151, 165, 0.2); // Buttons include the filter box, explore button, and sublist buttons
 $roomlist-bg-color: rgba(33, 38, 44, 0.90);
-$roomlist-header-color: #8E99A4;
+$roomlist-header-color: $tertiary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
 
-$roomtile-preview-color: #A9B2BC;
+$roomtile-preview-color: $secondary-fg-color;
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: rgba(141, 151, 165, 0.2);
 

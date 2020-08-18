@@ -479,7 +479,7 @@ export const Commands = [
                     const parsedUrl = new URL(params[0]);
                     const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
 
-                    // if we're using a Riot permalink handler, this will catch it before we get much further.
+                    // if we're using a Element permalink handler, this will catch it before we get much further.
                     // see below where we make assumptions about parsing the URL.
                     if (isPermalinkHost(hostname)) {
                         isPermalink = true;
@@ -733,7 +733,7 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-                        const member = room.getMember(args);
+                        const member = room.getMember(userId);
                         if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
                             return reject(_t("Could not find user in room"));
                         }

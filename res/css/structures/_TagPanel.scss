@@ -108,13 +108,12 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected::before {
     content: '';
-    height: calc(100% + 16px);
+    height: 100%;
     background-color: $accent-color;
-    width: 5px;
+    width: 4px;
     position: absolute;
-    left: -15px;
+    left: -12px;
     border-radius: 0 3px 3px 0;
-    top: -8px; // (16px from height / 2)
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {

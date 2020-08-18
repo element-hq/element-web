@@ -45,7 +45,7 @@ export default class Resend {
             });
         }, function(err) {
             // XXX: temporary logging to try to diagnose
-            // https://github.com/vector-im/riot-web/issues/3148
+            // https://github.com/vector-im/element-web/issues/3148
             console.log('Resend got send failure: ' + err.name + '(' + err + ')');
 
             dis.dispatch({

@@ -51,7 +51,7 @@ import { getHomePageUrl } from '../../utils/pages';
 
 import createRoom from "../../createRoom";
 import {_t, _td, getCurrentLanguage} from '../../languageHandler';
-import SettingsStore, { SettingLevel } from "../../settings/SettingsStore";
+import SettingsStore from "../../settings/SettingsStore";
 import ThemeController from "../../settings/controllers/ThemeController";
 import { startAnyRegistrationFlow } from "../../Registration.js";
 import { messageForSyncError } from '../../utils/ErrorUtils';
@@ -75,6 +75,7 @@ import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificat
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -414,7 +415,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
         this.pageChanging = true;
-        performance.mark('riot_MatrixChat_page_change_start');
+        performance.mark('element_MatrixChat_page_change_start');
     }
 
     stopPageChangeTimer() {
@@ -426,15 +427,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
         this.pageChanging = false;
-        performance.mark('riot_MatrixChat_page_change_stop');
+        performance.mark('element_MatrixChat_page_change_stop');
         performance.measure(
-            'riot_MatrixChat_page_change_delta',
-            'riot_MatrixChat_page_change_start',
-            'riot_MatrixChat_page_change_stop',
+            'element_MatrixChat_page_change_delta',
+            'element_MatrixChat_page_change_start',
+            'element_MatrixChat_page_change_stop',
         );
-        performance.clearMarks('riot_MatrixChat_page_change_start');
-        performance.clearMarks('riot_MatrixChat_page_change_stop');
-        const measurement = performance.getEntriesByName('riot_MatrixChat_page_change_delta').pop();
+        performance.clearMarks('element_MatrixChat_page_change_start');
+        performance.clearMarks('element_MatrixChat_page_change_stop');
+        const measurement = performance.getEntriesByName('element_MatrixChat_page_change_delta').pop();
 
         // In practice, sometimes the entries list is empty, so we get no measurement
         if (!measurement) return null;
@@ -1322,7 +1323,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // state (each of which can be 10s of MBs) for each DISJOINT timeline. This is
         // particularly noticeable when there are lots of 'limited' /sync responses
         // such as when laptops unsleep.
-        // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
+        // https://github.com/vector-im/element-web/issues/3307#issuecomment-282895568
         cli.setCanResetTimelineCallback((roomId) => {
             console.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
             if (roomId !== this.state.currentRoomId) {
@@ -1660,7 +1661,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // of the app, we coerce the eventId to be undefined where applicable.
             if (!eventId) eventId = undefined;
 
-            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
+            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
             // FIXME: sort_out caseConsistency
             const thirdPartyInvite = {
@@ -1934,7 +1935,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         let fragmentAfterLogin = "";
         const initialScreenAfterLogin = this.props.initialScreenAfterLogin;
         if (initialScreenAfterLogin &&
-            // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
+            // XXX: workaround for https://github.com/vector-im/element-web/issues/11643 causing a login-loop
             !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
         ) {
             fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
