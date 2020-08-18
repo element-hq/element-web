@@ -204,7 +204,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     const progressCallback = opts.progressCallback || (() => {});
     const body = await collectBugReport(opts);
 
-    progressCallback(_t("Uploading report"));
+    progressCallback(_t("Uploading logs"));
     await _submitReport(bugReportEndpoint, body, progressCallback);
 }
 
@@ -226,7 +226,7 @@ export async function downloadBugReport(opts: IOpts = {}) {
     const progressCallback = opts.progressCallback || (() => {});
     const body = await collectBugReport(opts, false);
 
-    progressCallback(_t("Downloading report"));
+    progressCallback(_t("Downloading logs"));
     let metadata = "";
     const tape = new Tar();
     let i = 0;
