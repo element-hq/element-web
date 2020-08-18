@@ -2413,5 +2413,8 @@
     "You’re all caught up": "您都設定好了",
     "You have no visible notifications in this room.": "您在此聊天室沒有可見的通知。",
     "%(brand)s Android": "%(brand)s Android",
-    "Master private key:": "主控私鑰："
+    "Master private key:": "主控私鑰：",
+    "Show message previews for reactions in DMs": "在直接訊息中顯示反應的訊息預覽",
+    "Show message previews for reactions in all rooms": "在所有聊天室中顯示反應的訊息預覽",
+    "Explore public rooms": "探索公開聊天室"
 }
