@@ -503,6 +503,7 @@
     "Manually verify all remote sessions": "Manually verify all remote sessions",
     "IRC display name width": "IRC display name width",
     "Enable experimental, compact IRC style layout": "Enable experimental, compact IRC style layout",
+    "Don't show chat effects": "Don't show chat effects",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading report": "Uploading report",

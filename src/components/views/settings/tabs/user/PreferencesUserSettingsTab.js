@@ -49,6 +49,7 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
+        'dontShowChatEffects',
     ];
 
     static ADVANCED_SETTINGS = [

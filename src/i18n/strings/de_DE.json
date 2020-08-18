@@ -2361,5 +2361,6 @@
     "%(brand)s encountered an error during upload of:": "%(brand)s hat einen Fehler festgestellt beim hochladen von:",
     "Use your account to sign in to the latest version of the app at <a />": "Verwende dein Konto um dich an der neusten Version der App anzumelden<a />",
     "We’re excited to announce Riot is now Element!": "Wir freuen uns bekanntzugeben: Riot ist jetzt Element!",
-    "Learn more at <a>element.io/previously-riot</a>": "Erfahre mehr unter <a>element.io/previously-riot</a>"
+    "Learn more at <a>element.io/previously-riot</a>": "Erfahre mehr unter <a>element.io/previously-riot</a>",
+    "Don't show chat effects": "Chat Effekte nicht zeigen"
 }
