@@ -2342,7 +2342,7 @@
     "Custom Tag": "Kohandatud silt",
     "%(brand)s does not know how to join a room on this network": "%(brand)s ei tea kuidas selles võrgus jututoaga liituda",
     "%(brand)s Web": "%(brand)s Web",
-    "%(brand)s Desktop": "%(brand)s Töölaud",
+    "%(brand)s Desktop": "%(brand)s Desktop",
     "%(brand)s iOS": "%(brand)s iOS",
     "%(brand)s X for Android": "%(brand)s X Androidi jaoks",
     "Starting backup...": "Alusta varundamist...",
@@ -2413,5 +2413,12 @@
     "You've previously used %(brand)s on %(host)s with lazy loading of members enabled. In this version lazy loading is disabled. As the local cache is not compatible between these two settings, %(brand)s needs to resync your account.": "Olete varem kasutanud %(brand)s %(host)s ja lubanud liikmete laisa laadimise. Selles versioonis on laisk laadimine keelatud. Kuna kohalik vahemälu nende kahe sätte vahel ei ühildu, peab %(brand)s teie konto uuesti sünkroonima.",
     "If the other version of %(brand)s is still open in another tab, please close it as using %(brand)s on the same host with both lazy loading enabled and disabled simultaneously will cause issues.": "Kui %(brand)s teine versioon on mõnel teisel vahekaardil endiselt avatud, sulgege see, kuna %(brand)s kasutamine samal hostil, kui laisk laadimine on lubatud ja keelatud ühekorraga põhjustab probleeme.",
     "Data from an older version of %(brand)s has been detected. This will have caused end-to-end cryptography to malfunction in the older version. End-to-end encrypted messages exchanged recently whilst using the older version may not be decryptable in this version. This may also cause messages exchanged with this version to fail. If you experience problems, log out and back in again. To retain message history, export and re-import your keys.": "%(brand)s vanema versiooni andmed on tuvastatud. See on põhjustanud krüptograafia tõrke vanemas versioonis. Krüptitud teated, mida on vanema versiooni kasutamise ajal hiljuti vahetatud, ei pruugi selles versioonis olla dekrüptitavad. See võib põhjustada ka selle versiooniga vahetatud sõnumite tõrke. Kui teil on probleeme, logige välja ja uuesti sisse. Sõnumite ajaloo säilitamiseks eksportige ja uuesti importige oma võtmed.",
-    "Navigation": "Navigeerimine"
+    "Navigation": "Navigeerimine",
+    "Uploading logs": "Laen üles logisid",
+    "Downloading logs": "Laen alla logisid",
+    "Can't see what you’re looking for?": "Kas sa ei leia seda, mida otsisid?",
+    "Explore all public rooms": "Sirvi kõiki avalikke jututubasid",
+    "%(count)s results|other": "%(count)s tulemust",
+    "Preparing to download logs": "Valmistun logikirjete allalaadimiseks",
+    "Download logs": "Lae logikirjed alla"
 }
