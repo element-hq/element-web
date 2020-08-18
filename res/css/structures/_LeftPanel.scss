@@ -111,9 +111,9 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             }
 
             .mx_LeftPanel_exploreButton {
-                width: 28px;
-                height: 28px;
-                border-radius: 20px;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
                 background-color: $roomlist-button-bg-color;
                 position: relative;
                 margin-left: 8px;
@@ -121,15 +121,15 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
                 &::before {
                     content: '';
                     position: absolute;
-                    top: 6px;
-                    left: 6px;
+                    top: 8px;
+                    left: 8px;
                     width: 16px;
                     height: 16px;
-                    mask-image: url('$(res)/img/feather-customised/compass.svg');
+                    mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $primary-fg-color;
+                    background: $secondary-fg-color;
                 }
             }
         }
