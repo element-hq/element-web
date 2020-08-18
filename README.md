@@ -39,7 +39,7 @@ released version of Element:
 
 1. Download the latest version from https://github.com/vector-im/element-web/releases
 1. Untar the tarball on your web server
-1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
+1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
@@ -129,7 +129,7 @@ Running from Docker
 The Docker image can be used to serve element-web as a web server. The easiest way to use
 it is to use the prebuilt image:
 ```bash
-docker run -p 80:80 vectorim/element-web
+docker run -p 80:80 vectorim/riot-web
 ```
 
 To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
@@ -192,7 +192,7 @@ also defines the design, architecture and style for Element too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Element. Please chat with the team in
-[#riot-dev:matrix.org](https://matrix.to/#/#riot-dev:matrix.org) before you
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
 start so we can ensure it's something we'd be willing to merge.
 
 You should also familiarise yourself with the ["Here be Dragons" guide
