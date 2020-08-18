@@ -97,16 +97,18 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
             display: flex;
             align-items: center;
 
-            .mx_RoomSearch_expanded + .mx_LeftPanel_exploreButton {
-                // Cheaty way to return the occupied space to the filter input
-                flex-basis: 0;
-                margin: 0;
-                width: 0;
+            .mx_RoomSearch_focused, .mx_RoomSearch_hasQuery {
+                & + .mx_LeftPanel_exploreButton {
+                    // Cheaty way to return the occupied space to the filter input
+                    flex-basis: 0;
+                    margin: 0;
+                    width: 0;
 
-                // Don't forget to hide the masked ::before icon,
-                // using display:none or visibility:hidden would break accessibility
-                &::before {
-                    content: none;
+                    // Don't forget to hide the masked ::before icon,
+                    // using display:none or visibility:hidden would break accessibility
+                    &::before {
+                        content: none;
+                    }
                 }
             }
 
@@ -132,6 +134,14 @@ $tagPanelWidth: 56px; // only applies in this file, used for calculations
                     background: $secondary-fg-color;
                 }
             }
+        }
+
+        .mx_LeftPanel_roomListFilterCount {
+            font-size: $font-13px;
+            font-weight: $font-semi-bold;
+            margin-left: 12px;
+            margin-top: 14px;
+            margin-bottom: -4px; // to counteract the normal roomListWrapper margin-top
         }
 
         .mx_LeftPanel_roomListWrapper {

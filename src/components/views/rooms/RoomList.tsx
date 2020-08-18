@@ -44,6 +44,7 @@ import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -278,6 +279,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onExplore = () => {
+        dis.fire(Action.ViewRoomDirectory);
+    };
+
     private renderCommunityInvites(): TemporaryTile[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
@@ -359,6 +364,16 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
+        let explorePrompt: JSX.Element;
+        if (RoomListStore.instance.getFirstNameFilterCondition()) {
+            explorePrompt = <div className="mx_RoomList_explorePrompt">
+                <div>{_t("Can't see what you’re looking for?")}</div>
+                <AccessibleButton kind="link" onClick={this.onExplore}>
+                    {_t("Explore all public rooms")}
+                </AccessibleButton>
+            </div>;
+        }
+
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
@@ -370,7 +385,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         className="mx_RoomList"
                         role="tree"
                         aria-label={_t("Rooms")}
-                    >{sublists}</div>
+                    >
+                        {sublists}
+                        {explorePrompt}
+                    </div>
                 )}
             </RovingTabIndexProvider>
         );
