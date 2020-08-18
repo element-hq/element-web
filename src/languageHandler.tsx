@@ -153,7 +153,7 @@ export function _t(text: string, variables?: IVariables, tags?: Tags): string | 
     }
 }
 
-export function _tSasV1(emoji: string): string | React.ReactNode {
+export function _tSasV1(emoji: string): string {
     const name = SASEmojiV1.getNameFor(emoji);
     return _t(name);
 }
