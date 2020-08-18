@@ -235,10 +235,6 @@ export default class MessageComposer extends React.Component {
         }
     };
 
-    componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
-    }
-
     componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
@@ -269,6 +265,7 @@ export default class MessageComposer extends React.Component {
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+        dis.unregister(this.dispatcherRef);
     }
 
     _onRoomStateEvents(ev, state) {
