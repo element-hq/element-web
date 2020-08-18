@@ -2412,5 +2412,6 @@
     "%(brand)s Android": "%(brand)s Android",
     "Master private key:": "Chave mestra principal:",
     "Show message previews for reactions in DMs": "Mostrar vista previa das mensaxes para reaccións en MDs",
-    "Show message previews for reactions in all rooms": "Mostrar vista previa das mensaxes para reaccións en todas as salas"
+    "Show message previews for reactions in all rooms": "Mostrar vista previa das mensaxes para reaccións en todas as salas",
+    "Explore public rooms": "Explorar salas públicas"
 }
