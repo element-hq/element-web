@@ -25,6 +25,7 @@ interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
     tooltipClassName?: string;
+    forceHide?: boolean;
 }
 
 interface IState {
@@ -39,7 +40,16 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
         };
     }
 
+    componentDidUpdate(prevProps: Readonly<ITooltipProps>) {
+        if (!prevProps.forceHide && this.props.forceHide && this.state.hover) {
+            this.setState({
+                hover: false,
+            });
+        }
+    }
+
     onMouseOver = () => {
+        if (this.props.forceHide) return;
         this.setState({
             hover: true,
         });
