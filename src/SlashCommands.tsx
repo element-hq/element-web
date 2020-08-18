@@ -44,6 +44,7 @@ import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
+import {func} from "prop-types";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1025,6 +1026,18 @@ export const Commands = [
             return reject(this.getUsage());
         },
         category: CommandCategories.actions,
+    }),
+    new Command({
+        command: "confetti",
+        description: _td("Throws confetti animation in the chat room"),
+        args: '/confetti + <message>',
+        runFn: function(roomId, args, command) {
+            return success((async () => {
+              const cli = MatrixClientPeg.get();
+              await cli.sendHtmlMessage(roomId, args);
+            })());
+        },
+        category: CommandCategories.messages,
     }),
 
     // Command definitions for autocompletion ONLY:

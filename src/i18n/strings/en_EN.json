@@ -213,6 +213,7 @@
     "Thank you!": "Thank you!",
     "Opens chat with the given user": "Opens chat with the given user",
     "Sends a message to the given user": "Sends a message to the given user",
+    "Throws confetti animation in the chat room": "Throws confetti animation in the chat room",
     "Displays action": "Displays action",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",

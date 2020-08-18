@@ -57,6 +57,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
+import Confetti from "../views/elements/Confetti";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -67,7 +68,7 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
 }
-
+let confetti;
 export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
@@ -624,12 +625,14 @@ export default createReactClass({
             ev.preventDefault();
         }
     },
-
     onAction: function(payload) {
         switch (payload.action) {
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
+                confetti = new Confetti('100', '100');
+                console.log('confetti sent');
+                confetti.animateConfetti('test', 'message');
                 break;
             case 'post_sticker_message':
               this.injectSticker(
