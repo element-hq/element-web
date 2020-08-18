@@ -650,7 +650,7 @@
     "Where you’re logged in": "Kus sa oled võrku loginud",
     "Manage the names of and sign out of your sessions below or <a>verify them in your User Profile</a>.": "Halda alljärgnevas oma sessioonide nimesid, logi neist välja või <a>verifitseeri neid oma kasutajaprofiilis</a>.",
     "A session's public name is visible to people you communicate with": "Sessiooni avalik nimi on nähtav neile, kellega sa suhtled",
-    "%(brand)s collects anonymous analytics to allow us to improve the application.": "Võimaldamaks meil rakendust parandada kogub %(brand)s anonüümset analüütikat.",
+    "%(brand)s collects anonymous analytics to allow us to improve the application.": "Võimaldamaks meil rakendust parandada kogub %(brand)s anonüümset teavet rakenduse kasutuse kohta.",
     "Privacy is important to us, so we don't collect any personal or identifiable data for our analytics.": "Privaatsus on meile oluline ning seega me ei kogu ei isiklikke ega isikustatavaid andmeid.",
     "Learn more about how we use analytics.": "Loe lisaks kuidas me kasutama analüütikat.",
     "No media permissions": "Meediaõigused puuduvad",
