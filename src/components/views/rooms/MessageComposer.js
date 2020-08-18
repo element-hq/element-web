@@ -30,6 +30,8 @@ import E2EIcon from './E2EIcon';
 import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import ReplyPreview from "./ReplyPreview";
+
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
     return <div className="mx_MessageComposer_avatar">
@@ -223,7 +225,7 @@ export default class MessageComposer extends React.Component {
         this._onRoomViewStoreUpdate = this._onRoomViewStoreUpdate.bind(this);
         this._onTombstoneClick = this._onTombstoneClick.bind(this);
         this.renderPlaceholderText = this.renderPlaceholderText.bind(this);
-
+        this._dispatcherRef = null;
         this.state = {
             isQuoting: Boolean(RoomViewStore.getQuotingEvent()),
             tombstone: this._getRoomTombstone(),
@@ -232,7 +234,20 @@ export default class MessageComposer extends React.Component {
         };
     }
 
+    onAction = (payload) => {
+        if (payload.action === 'reply_to_event') {
+            // add a timeout for the reply preview to be rendered, so
+            // that the ScrollPanel listening to the resizeNotifier can
+            // correctly measure it's new height and scroll down to keep
+            // at the bottom if it already is
+            setTimeout(() => {
+                this.props.resizeNotifier.notifyTimelineHeightChanged();
+            }, 100);
+        }
+    };
+
     componentDidMount() {
+        this.dispatcherRef = dis.register(this.onAction);
         MatrixClientPeg.get().on("RoomState.events", this._onRoomStateEvents);
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._waitForOwnMember();
@@ -261,6 +276,7 @@ export default class MessageComposer extends React.Component {
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
+        dis.unregister(this.dispatcherRef);
     }
 
     _onRoomStateEvents(ev, state) {
@@ -364,6 +380,7 @@ export default class MessageComposer extends React.Component {
                     key="controls_input"
                     room={this.props.room}
                     placeholder={this.renderPlaceholderText()}
+                    resizeNotifier={this.props.resizeNotifier}
                     permalinkCreator={this.props.permalinkCreator} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
@@ -414,6 +431,7 @@ export default class MessageComposer extends React.Component {
         return (
             <div className="mx_MessageComposer mx_GroupLayout">
                 <div className="mx_MessageComposer_wrapper">
+                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
                     </div>

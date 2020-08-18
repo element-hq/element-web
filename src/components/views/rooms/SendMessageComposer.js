@@ -29,7 +29,6 @@ import {
 } from '../../../editor/serialize';
 import {CommandPartCreator} from '../../../editor/parts';
 import BasicMessageComposer from "./BasicMessageComposer";
-import ReplyPreview from "./ReplyPreview";
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ReplyThread from "../elements/ReplyThread";
 import {parseEvent} from '../../../editor/deserialize';
@@ -444,9 +443,6 @@ export default class SendMessageComposer extends React.Component {
     render() {
         return (
             <div className="mx_SendMessageComposer" onClick={this.focusComposer} onKeyDown={this._onKeyDown}>
-                <div className="mx_SendMessageComposer_overlayWrapper">
-                    <ReplyPreview permalinkCreator={this.props.permalinkCreator} />
-                </div>
                 <BasicMessageComposer
                     ref={this._setEditorRef}
                     model={this.model}

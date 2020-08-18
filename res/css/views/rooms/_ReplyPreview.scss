@@ -15,10 +15,6 @@ limitations under the License.
 */
 
 .mx_ReplyPreview {
-    position: absolute;
-    bottom: 0;
-    z-index: 1000;
-    width: 100%;
     border: 1px solid $primary-hairline-color;
     background: $primary-bg-color;
     border-bottom: none;
