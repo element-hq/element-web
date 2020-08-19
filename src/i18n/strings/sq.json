@@ -2409,5 +2409,13 @@
     "Master private key:": "Kyç privat i përgjithshëm:",
     "%(brand)s Android": "%(brand)s Android",
     "Show message previews for reactions in DMs": "Shfaq paraparje mesazhi për reagime në MD",
-    "Show message previews for reactions in all rooms": "Shfaq paraparje mesazhi për reagime në krejt dhomat"
+    "Show message previews for reactions in all rooms": "Shfaq paraparje mesazhi për reagime në krejt dhomat",
+    "Uploading logs": "Po ngarkohen regjistra",
+    "Downloading logs": "Po shkarkohen regjistra",
+    "Explore public rooms": "Eksploroni dhoma publike",
+    "Can't see what you’re looking for?": "S’shihni ç’po kërkoni?",
+    "Explore all public rooms": "Eksploroni krejt dhomat publike",
+    "%(count)s results|other": "%(count)s përfundime",
+    "Preparing to download logs": "Po bëhet gati për shkarkim regjistrash",
+    "Download logs": "Shkarko regjistra"
 }
