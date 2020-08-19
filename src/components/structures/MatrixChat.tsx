@@ -2085,3 +2085,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         </ErrorBoundary>;
     }
 }
+
+export function isLoggedIn(): boolean {
+    // JRS: Maybe we should move the step that writes this to the window out of
+    // `element-web` and into this file?
+    const app = window.matrixChat;
+    return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
+}
