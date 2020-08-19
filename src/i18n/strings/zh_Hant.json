@@ -2416,5 +2416,12 @@
     "Master private key:": "主控私鑰：",
     "Show message previews for reactions in DMs": "在直接訊息中顯示反應的訊息預覽",
     "Show message previews for reactions in all rooms": "在所有聊天室中顯示反應的訊息預覽",
-    "Explore public rooms": "探索公開聊天室"
+    "Explore public rooms": "探索公開聊天室",
+    "Uploading logs": "正在上傳紀錄檔",
+    "Downloading logs": "正在下載紀錄檔",
+    "Can't see what you’re looking for?": "看不到您要找的東西嗎？",
+    "Explore all public rooms": "探索所有公開聊天室",
+    "%(count)s results|other": "%(count)s 個結果",
+    "Preparing to download logs": "正在準備下載紀錄檔",
+    "Download logs": "下載紀錄檔"
 }
