@@ -1633,7 +1633,7 @@
     "Sends a message as html, without interpreting it as markdown": "Verschickt eine Nachricht im html-Format, ohne sie in Markdown zu formatieren",
     "Show rooms with unread notifications first": "Räume mit nicht gelesenen Benachrichtungen zuerst zeigen",
     "Show shortcuts to recently viewed rooms above the room list": "Kurzbefehlezu den kürzlich gesichteteten Räumen über der Raumliste anzeigen",
-    "Use Single Sign On to continue": " Verwende Single-Sign-On um fortzufahren",
+    "Use Single Sign On to continue": "Verwende Single-Sign-On um fortzufahren",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Bestätige die hinzugefügte E-Mail-Adresse mit Single-Sign-On, um deine Identität nachzuweisen.",
     "Single Sign On": "Single Sign-On",
     "Confirm adding email": "Bestätige hinzugefügte E-Mail-Addresse",
@@ -2410,5 +2410,13 @@
     "You can also set up Secure Backup & manage your keys in Settings.": "Du kannst auch in den Einstellungen eine Sicherung erstellen & deine Schlüssel verwalten.",
     "Set up Secure backup": "Sicheres Backup einrichten",
     "Show message previews for reactions in DMs": "Anzeigen einer Nachrichtenvorschau für Reaktionen in DMs",
-    "Show message previews for reactions in all rooms": "Zeigen Sie eine Nachrichtenvorschau für Reaktionen in allen Räumen an"
+    "Show message previews for reactions in all rooms": "Zeigen Sie eine Nachrichtenvorschau für Reaktionen in allen Räumen an",
+    "Uploading logs": "Protokolle werden hochgeladen",
+    "Downloading logs": "Protokolle werden heruntergeladen",
+    "Explore public rooms": "Erkunde öffentliche Räume",
+    "Can't see what you’re looking for?": "Kannst du nicht finden wonach du suchst?",
+    "Explore all public rooms": "Erkunde alle öffentlichen Räume",
+    "%(count)s results|other": "%(count)s Ergebnisse",
+    "Preparing to download logs": "Bereite das Herunterladen der Protokolle vor",
+    "Download logs": "Protokolle herunterladen"
 }
