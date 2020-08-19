@@ -24,8 +24,23 @@ import {isNullOrUndefined} from "matrix-js-sdk/src/utils";
  * roomId parameter.
  */
 export default class ConfigSettingsHandler extends SettingsHandler {
+    public constructor(private featureNames: string[]) {
+        super();
+    }
+
     public getValue(settingName: string, roomId: string): any {
         const config = SdkConfig.get() || {};
+
+        if (this.featureNames.includes(settingName)) {
+            const labsConfig = config["features"] || {};
+            const val = labsConfig[settingName];
+            if (isNullOrUndefined(val)) return null; // no definition at this level
+            if (val === true || val === false) return val; // new style: mapped as a boolean
+            if (val === "enable") return true; // backwards compat
+            if (val === "disable") return false; // backwards compat
+            if (val === "labs") return null; // backwards compat, no override
+            return null; // fallback in the case of invalid input
+        }
 
         // Special case themes
         if (settingName === "theme") {

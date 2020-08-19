@@ -53,7 +53,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
         if (this.props.member.userId !== MatrixClientPeg.get().getUserId()) {
             throw new Error("Cannot use MemberStatusMessageAvatar on anyone but the logged in user");
         }
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (!SettingsStore.getValue("feature_custom_status")) {
             return;
         }
         const { user } = this.props.member;
@@ -105,7 +105,7 @@ export default class MemberStatusMessageAvatar extends React.Component {
             resizeMethod={this.props.resizeMethod}
         />;
 
-        if (!SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (!SettingsStore.getValue("feature_custom_status")) {
             return avatar;
         }
 
