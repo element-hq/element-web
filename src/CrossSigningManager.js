@@ -35,6 +35,17 @@ function isCachingAllowed() {
     return secretStorageBeingAccessed;
 }
 
+/**
+ * This can be used by other components to check if secret storage access is in
+ * progress, so that we can e.g. avoid intermittently showing toasts during
+ * secret storage setup.
+ *
+ * @returns {bool}
+ */
+export function isSecretStorageBeingAccessed() {
+    return secretStorageBeingAccessed;
+}
+
 export class AccessCancelledError extends Error {
     constructor() {
         super("Secret storage access canceled");
