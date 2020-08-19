@@ -2233,7 +2233,7 @@
     "Alt": "Alt",
     "Alt Gr": "Alt Gr",
     "Shift": "Maiús",
-    "Super": "Super",
+    "Super": "Súper",
     "Ctrl": "Ctrl",
     "Toggle Bold": "Activa Resaltar",
     "Toggle Italics": "Activa Cursiva",
@@ -2410,5 +2410,15 @@
     "You’re all caught up": "Xa estás ó día",
     "You have no visible notifications in this room.": "Non tes notificacións visibles nesta sala.",
     "%(brand)s Android": "%(brand)s Android",
-    "Master private key:": "Chave mestra principal:"
+    "Master private key:": "Chave mestra principal:",
+    "Show message previews for reactions in DMs": "Mostrar vista previa das mensaxes para reaccións en MDs",
+    "Show message previews for reactions in all rooms": "Mostrar vista previa das mensaxes para reaccións en todas as salas",
+    "Explore public rooms": "Explorar salas públicas",
+    "Uploading logs": "Subindo o rexistro",
+    "Downloading logs": "Descargando o rexistro",
+    "Can't see what you’re looking for?": "¿Non atopas o que buscas?",
+    "Explore all public rooms": "Explora todas as salas públicas",
+    "%(count)s results|other": "%(count)s resultados",
+    "Preparing to download logs": "Preparándose para descargar rexistro",
+    "Download logs": "Descargar rexistro"
 }

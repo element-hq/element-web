@@ -2413,5 +2413,15 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Allega file dalla chat o trascinali in qualsiasi punto in una stanza.",
     "You’re all caught up": "Non hai nulla di nuovo da vedere",
     "You have no visible notifications in this room.": "Non hai alcuna notifica visibile in questa stanza.",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Show message previews for reactions in DMs": "Mostra anteprime messaggi per le reazioni nei messaggi diretti",
+    "Show message previews for reactions in all rooms": "Mostra anteprime messaggi per le reazioni in tutte le stanze",
+    "Explore public rooms": "Esplora stanze pubbliche",
+    "Uploading logs": "Invio dei log",
+    "Downloading logs": "Scaricamento dei log",
+    "Can't see what you’re looking for?": "Non vedi quello che cerchi?",
+    "Explore all public rooms": "Esplora tutte le stanze pubbliche",
+    "%(count)s results|other": "%(count)s risultati",
+    "Preparing to download logs": "Preparazione al download dei log",
+    "Download logs": "Scarica i log"
 }
