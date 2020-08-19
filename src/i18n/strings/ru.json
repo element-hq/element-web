@@ -2408,5 +2408,12 @@
     "Master private key:": "Приватный мастер-ключ:",
     "Show message previews for reactions in DMs": "Показывать превью сообщений для реакций в ЛС",
     "Show message previews for reactions in all rooms": "Показывать предварительный просмотр сообщений для реакций во всех комнатах",
-    "Explore public rooms": "Просмотреть публичные комнаты"
+    "Explore public rooms": "Просмотреть публичные комнаты",
+    "Uploading logs": "Загрузка журналов",
+    "Downloading logs": "Скачивание журналов",
+    "Can't see what you’re looking for?": "Не видите то, что ищете?",
+    "Explore all public rooms": "Просмотреть все публичные комнаты",
+    "%(count)s results|other": "%(count)s результатов",
+    "Preparing to download logs": "Подготовка к загрузке журналов",
+    "Download logs": "Скачать журналы"
 }
