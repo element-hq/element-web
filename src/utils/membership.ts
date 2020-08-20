@@ -78,7 +78,7 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
     }
 }
 
-export async function leaveRoomBehaviour(roomId: string): Promise<boolean> {
+export async function leaveRoomBehaviour(roomId: string) {
     let leavingAllVersions = true;
     const history = await MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
     if (history && history.length > 0) {
@@ -120,7 +120,7 @@ export async function leaveRoomBehaviour(roomId: string): Promise<boolean> {
                             "so you cannot leave it.",
                         ),
                     });
-                    return false;
+                    return;
                 }
                 message = results[roomId].message;
             }
@@ -130,11 +130,10 @@ export async function leaveRoomBehaviour(roomId: string): Promise<boolean> {
             title: _t("Error leaving room"),
             description: messages,
         });
-        return false;
+        return;
     }
 
     if (RoomViewStore.getRoomId() === roomId) {
         dis.dispatch({action: 'view_next_room'});
     }
-    return true;
 }
