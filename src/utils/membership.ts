@@ -108,11 +108,12 @@ export async function leaveRoomBehaviour(roomId: string) {
 
     const errors = Object.entries(results).filter(r => !!r[1]);
     if (errors.length > 0) {
-        let messages = [];
-        for (const err of errors) {
+        const messages = [];
+        for (const roomErr of errors) {
+            const err = roomErr[1]; // [0] is the roomId
             let message = _t("Unexpected server error trying to leave the room");
-            if (results[roomId].errcode && results[roomId].message) {
-                if (results[roomId].errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
+            if (err.errcode && err.message) {
+                if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
                     Modal.createTrackedDialog('Error Leaving Room', '', ErrorDialog, {
                         title: _t("Can't leave Server Notices room"),
                         description: _t(
