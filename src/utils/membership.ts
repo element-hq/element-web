@@ -91,7 +91,7 @@ export async function leaveRoomBehaviour(roomId: string) {
     }
 
     let results: { [roomId: string]: Error & { errcode: string, message: string } } = {};
-    if (!leavingAllVersions || true) {
+    if (!leavingAllVersions) {
         try {
             await MatrixClientPeg.get().leave(roomId);
         } catch (e) {
