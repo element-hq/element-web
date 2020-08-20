@@ -1334,7 +1334,7 @@
     "If you cancel now, you won't complete your operation.": "Kui sa katkestad nüüd, siis sul jääb pooleliolev tegevus lõpetamata.",
     "Cancel entering passphrase?": "Kas katkestame paroolifraasi sisestamise?",
     "Enter passphrase": "Sisesta paroolifraas",
-    "Setting up keys": "Võtamevõtmed kasutusele",
+    "Setting up keys": "Võtame krüptovõtmed kasutusele",
     "Room name or address": "Jututoa nimi või aadress",
     "Unable to enable Notifications": "Teavituste kasutusele võtmine ei õnnestunud",
     "This email address was not found": "Seda e-posti aadressi ei leidunud",
@@ -2420,5 +2420,7 @@
     "Explore all public rooms": "Sirvi kõiki avalikke jututubasid",
     "%(count)s results|other": "%(count)s tulemust",
     "Preparing to download logs": "Valmistun logikirjete allalaadimiseks",
-    "Download logs": "Lae logikirjed alla"
+    "Download logs": "Lae logikirjed alla",
+    "Unexpected server error trying to leave the room": "Jututoast lahkumisel tekkis serveris ootamatu viga",
+    "Error leaving room": "Viga jututoast lahkumisel"
 }
