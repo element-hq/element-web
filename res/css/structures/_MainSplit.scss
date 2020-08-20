@@ -21,8 +21,22 @@ limitations under the License.
     height: 100%;
 }
 
-// move hit area 5px to the right so it doesn't overlap with the timeline scrollbar
-.mx_MainSplit > .mx_ResizeHandle.mx_ResizeHandle_horizontal {
-    margin: 0 -10px 0 0;
-    padding: 0 10px 0 0;
+.mx_MainSplit > .mx_RightPanel_ResizeWrapper {
+    padding: 5px;
+    // margin left to not allow the handle to not encroach on the space for the scrollbar
+    margin-left: 8px;
+
+    &:hover .mx_RightPanel_ResizeHandle {
+        // Need to use important to override element style attributes
+        // set by re-resizable
+        top: 50% !important;
+        transform: translate(0, -50%);
+
+        height: 64px !important; // to match width of the ones on roomlist
+        width: 4px !important;
+        border-radius: 4px !important;
+
+        background-color: $primary-fg-color;
+        opacity: 0.8;
+    }
 }

@@ -34,7 +34,7 @@ export default createReactClass({
         });
     },
 
-    onMouseOut: function() {
+    onMouseLeave: function() {
         this.setState({
             hover: false,
         });
@@ -48,7 +48,7 @@ export default createReactClass({
             label={this.props.helpText}
         /> : <div />;
         return (
-            <div className="mx_TooltipButton" onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} >
+            <div className="mx_TooltipButton" onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
                 ?
                 { tip }
             </div>

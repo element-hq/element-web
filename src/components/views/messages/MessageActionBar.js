@@ -1,7 +1,7 @@
 /*
 Copyright 2019 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,18 +18,20 @@ limitations under the License.
 
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
+import { EventStatus } from 'matrix-js-sdk';
 
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
-import Modal from '../../../Modal';
-import {aboveLeftOf, ContextMenu, ContextMenuButton, useContextMenu} from '../../structures/ContextMenu';
+import dis from '../../../dispatcher/dispatcher';
+import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent } from '../../../utils/EventUtils';
 import RoomContext from "../../../contexts/RoomContext";
-import SettingsStore from '../../../settings/SettingsStore';
+import Toolbar from "../../../accessibility/Toolbar";
+import {RovingAccessibleTooltipButton, useRovingTabIndex} from "../../../accessibility/RovingTabIndex";
 
 const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const [onFocus, isActive, ref] = useRovingTabIndex(button);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -41,18 +43,6 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
         const tile = getTile && getTile();
         const replyThread = getReplyThread && getReplyThread();
 
-        const onCryptoClick = () => {
-            Modal.createTrackedDialogAsync('Encrypted Event Dialog', '',
-                import('../../../async-components/views/dialogs/EncryptedEventDialog'),
-                {event: mxEvent},
-            );
-        };
-
-        let e2eInfoCallback = null;
-        if (mxEvent.isEncrypted() && !SettingsStore.getValue("feature_cross_signing")) {
-            e2eInfoCallback = onCryptoClick;
-        }
-
         const buttonRect = button.current.getBoundingClientRect();
         contextMenu = <ContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <MessageContextMenu
@@ -60,19 +50,20 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
                 permalinkCreator={permalinkCreator}
                 eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
                 collapseReplyThread={replyThread && replyThread.canCollapse() ? replyThread.collapse : undefined}
-                e2eInfoCallback={e2eInfoCallback}
                 onFinished={closeMenu}
             />
         </ContextMenu>;
     }
 
     return <React.Fragment>
-        <ContextMenuButton
+        <ContextMenuTooltipButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
-            label={_t("Options")}
+            title={_t("Options")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
-            inputRef={button}
+            inputRef={ref}
+            onFocus={onFocus}
+            tabIndex={isActive ? 0 : -1}
         />
 
         { contextMenu }
@@ -81,6 +72,7 @@ const OptionsButton = ({mxEvent, getTile, getReplyThread, permalinkCreator, onFo
 
 const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const [onFocus, isActive, ref] = useRovingTabIndex(button);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -95,12 +87,14 @@ const ReactButton = ({mxEvent, reactions, onFocusChange}) => {
     }
 
     return <React.Fragment>
-        <ContextMenuButton
+        <ContextMenuTooltipButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
-            label={_t("React")}
+            title={_t("React")}
             onClick={openMenu}
             isExpanded={menuDisplayed}
-            inputRef={button}
+            inputRef={ref}
+            onFocus={onFocus}
+            tabIndex={isActive ? 0 : -1}
         />
 
         { contextMenu }
@@ -121,13 +115,19 @@ export default class MessageActionBar extends React.PureComponent {
     static contextType = RoomContext;
 
     componentDidMount() {
-        this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+        if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
+            this.props.mxEvent.on("Event.status", this.onSent);
+        }
+        if (this.props.mxEvent.isBeingDecrypted()) {
+            this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
+        }
         this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     componentWillUnmount() {
-        this.props.mxEvent.removeListener("Event.decrypted", this.onDecrypted);
-        this.props.mxEvent.removeListener("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.off("Event.status", this.onSent);
+        this.props.mxEvent.off("Event.decrypted", this.onDecrypted);
+        this.props.mxEvent.off("Event.beforeRedaction", this.onBeforeRedaction);
     }
 
     onDecrypted = () => {
@@ -138,6 +138,11 @@ export default class MessageActionBar extends React.PureComponent {
 
     onBeforeRedaction = () => {
         // When an event is redacted, we can't edit it so update the available actions.
+        this.forceUpdate();
+    };
+
+    onSent = () => {
+        // When an event is sent and echoed the possible actions change.
         this.forceUpdate();
     };
 
@@ -163,8 +168,6 @@ export default class MessageActionBar extends React.PureComponent {
     };
 
     render() {
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
-
         let reactButton;
         let replyButton;
         let editButton;
@@ -176,7 +179,7 @@ export default class MessageActionBar extends React.PureComponent {
                 );
             }
             if (this.context.canReply) {
-                replyButton = <AccessibleButton
+                replyButton = <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                     title={_t("Reply")}
                     onClick={this.onReplyClick}
@@ -184,7 +187,7 @@ export default class MessageActionBar extends React.PureComponent {
             }
         }
         if (canEditContent(this.props.mxEvent)) {
-            editButton = <AccessibleButton
+            editButton = <RovingAccessibleTooltipButton
                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_editButton"
                 title={_t("Edit")}
                 onClick={this.onEditClick}
@@ -192,7 +195,7 @@ export default class MessageActionBar extends React.PureComponent {
         }
 
         // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
-        return <div className="mx_MessageActionBar" role="toolbar" aria-label={_t("Message Actions")} aria-live="off">
+        return <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
             {reactButton}
             {replyButton}
             {editButton}
@@ -203,6 +206,6 @@ export default class MessageActionBar extends React.PureComponent {
                 permalinkCreator={this.props.permalinkCreator}
                 onFocusChange={this.onFocusChange}
             />
-        </div>;
+        </Toolbar>;
     }
 }

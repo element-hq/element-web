@@ -17,10 +17,10 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
+import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 export default class ManageIntegsButton extends React.Component {
     constructor(props) {
@@ -34,7 +34,7 @@ export default class ManageIntegsButton extends React.Component {
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
         } else {
-            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            if (SettingsStore.getValue("feature_many_integration_managers")) {
                 managers.openAll(this.props.room);
             } else {
                 managers.getPrimaryManager().open(this.props.room);
@@ -45,9 +45,8 @@ export default class ManageIntegsButton extends React.Component {
     render() {
         let integrationsButton = <div />;
         if (IntegrationManagers.sharedInstance().hasManager()) {
-            const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             integrationsButton = (
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className='mx_RoomHeader_button mx_RoomHeader_manageIntegsButton'
                     title={_t("Manage Integrations")}
                     onClick={this.onManageIntegrations}

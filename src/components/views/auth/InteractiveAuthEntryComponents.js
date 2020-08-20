@@ -109,7 +109,7 @@ export const PasswordAuthEntry = createReactClass({
         this.props.submitAuthDict({
             type: PasswordAuthEntry.LOGIN_TYPE,
             // TODO: Remove `user` once servers support proper UIA
-            // See https://github.com/vector-im/riot-web/issues/10312
+            // See https://github.com/vector-im/element-web/issues/10312
             user: this.props.matrixClient.credentials.userId,
             identifier: {
                 type: "m.id.user",
@@ -355,6 +355,7 @@ export const TermsAuthEntry = createReactClass({
             allChecked = allChecked && checked;
 
             checkboxes.push(
+                // XXX: replace with StyledCheckbox
                 <label key={"policy_checkbox_" + policy.id} className="mx_InteractiveAuthEntryComponents_termsPolicy">
                     <input type="checkbox" onChange={() => this._togglePolicy(policy.id)} checked={checked} />
                     <a href={policy.url} target="_blank" rel="noreferrer noopener">{ policy.name }</a>
@@ -412,14 +413,14 @@ export const EmailIdentityAuthEntry = createReactClass({
         this.props.onPhaseChange(DEFAULT_PHASE);
     },
 
-    getInitialState: function() {
-        return {
-            requestingToken: false,
-        };
-    },
-
     render: function() {
-        if (this.state.requestingToken) {
+        // This component is now only displayed once the token has been requested,
+        // so we know the email has been sent. It can also get loaded after the user
+        // has clicked the validation link if the server takes a while to propagate
+        // the validation internally. If we're in the session spawned from clicking
+        // the validation link, we won't know the email address, so if we don't have it,
+        // assume that the link has been clicked and the server will realise when we poll.
+        if (this.props.inputs.emailAddress === undefined) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
         } else {
@@ -537,7 +538,8 @@ export const MsisdnAuthEntry = createReactClass({
                 this.props.submitAuthDict({
                     type: MsisdnAuthEntry.LOGIN_TYPE,
                     // TODO: Remove `threepid_creds` once servers support proper UIA
-                    // See https://github.com/vector-im/riot-web/issues/10312
+                    // See https://github.com/vector-im/element-web/issues/10312
+                    // See https://github.com/matrix-org/matrix-doc/issues/2220
                     threepid_creds: creds,
                     threepidCreds: creds,
                 });

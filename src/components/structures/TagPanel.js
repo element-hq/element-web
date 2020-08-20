@@ -22,7 +22,7 @@ import TagOrderStore from '../../stores/TagOrderStore';
 import GroupActions from '../../actions/GroupActions';
 
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
 
 import { Droppable } from 'react-beautiful-dnd';
@@ -141,7 +141,7 @@ const TagPanel = createReactClass({
             <AutoHideScrollbar
                 className="mx_TagPanel_scroller"
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-                // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6253
+                // instead of onClick. Otherwise we experience https://github.com/vector-im/element-web/issues/6253
                 onMouseDown={this.onMouseDown}
             >
                 <Droppable

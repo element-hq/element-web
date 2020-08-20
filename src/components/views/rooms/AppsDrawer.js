@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import * as ScalarMessaging from '../../../ScalarMessaging';
 import { _t } from '../../../languageHandler';
@@ -138,7 +138,7 @@ export default createReactClass({
     },
 
     _launchManageIntegrations: function() {
-        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll();
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');

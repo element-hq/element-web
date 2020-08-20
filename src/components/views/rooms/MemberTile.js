@@ -20,9 +20,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import * as sdk from "../../../index";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import {Action} from "../../../dispatcher/actions";
 
 export default createReactClass({
     displayName: 'MemberTile',
@@ -49,28 +50,26 @@ export default createReactClass({
     componentDidMount() {
         const cli = MatrixClientPeg.get();
 
-        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (SettingsStore.getValue("feature_custom_status")) {
             const { user } = this.props.member;
             if (user) {
                 user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
             }
         }
 
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            const { roomId } = this.props.member;
-            if (roomId) {
-                const isRoomEncrypted = cli.isRoomEncrypted(roomId);
-                this.setState({
-                    isRoomEncrypted,
-                });
-                if (isRoomEncrypted) {
-                    cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
-                    cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
-                    this.updateE2EStatus();
-                } else {
-                    // Listen for room to become encrypted
-                    cli.on("RoomState.events", this.onRoomStateEvents);
-                }
+        const { roomId } = this.props.member;
+        if (roomId) {
+            const isRoomEncrypted = cli.isRoomEncrypted(roomId);
+            this.setState({
+                isRoomEncrypted,
+            });
+            if (isRoomEncrypted) {
+                cli.on("userTrustStatusChanged", this.onUserTrustStatusChanged);
+                cli.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
+                this.updateE2EStatus();
+            } else {
+                // Listen for room to become encrypted
+                cli.on("RoomState.events", this.onRoomStateEvents);
             }
         }
     },
@@ -185,7 +184,7 @@ export default createReactClass({
 
     onClick: function(e) {
         dis.dispatch({
-            action: 'view_user',
+            action: Action.ViewUser,
             member: this.props.member,
         });
     },
@@ -210,7 +209,7 @@ export default createReactClass({
         const presenceState = member.user ? member.user.presence : null;
 
         let statusMessage = null;
-        if (member.user && SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (member.user && SettingsStore.getValue("feature_custom_status")) {
             statusMessage = this.state.statusMessage;
         }
 

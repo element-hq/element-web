@@ -3,6 +3,6 @@
     "This phone number is already in use": "Ovaj broj telefona se već koristi",
     "Failed to verify email address: make sure you clicked the link in the email": "Nismo u mogućnosti verificirati Vašu email adresu. Provjerite dali ste kliknuli link u mailu",
     "The platform you're on": "Platforma na kojoj se nalazite",
-    "The version of Riot.im": "Verzija Riot.im",
+    "The version of %(brand)s": "Verzija %(brand)s",
     "Your language of choice": "Izabrani jezik"
 }

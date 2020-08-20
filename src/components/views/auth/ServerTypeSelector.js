@@ -22,7 +22,8 @@ import classnames from 'classnames';
 import {ValidatedServerConfig} from "../../../utils/AutoDiscoveryUtils";
 import {makeType} from "../../../utils/TypeUtils";
 
-const MODULAR_URL = 'https://modular.im/?utm_source=riot-web&utm_medium=web&utm_campaign=riot-web-authentication';
+const MODULAR_URL = 'https://element.io/matrix-services' +
+    '?utm_source=element-web&utm_medium=web&utm_campaign=element-web-authentication';
 
 export const FREE = 'Free';
 export const PREMIUM = 'Premium';
@@ -44,7 +45,7 @@ export const TYPES = {
     PREMIUM: {
         id: PREMIUM,
         label: () => _t('Premium'),
-        logo: () => <img src={require('../../../../res/img/modular-bw-logo.svg')} />,
+        logo: () => <img src={require('../../../../res/img/ems-logo.svg')} height={16} />,
         description: () => _t('Premium hosting for organisations <a>Learn more</a>', {}, {
             a: sub => <a href={MODULAR_URL} target="_blank" rel="noreferrer noopener">
                 {sub}

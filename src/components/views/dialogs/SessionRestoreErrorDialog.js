@@ -1,6 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,6 +57,7 @@ export default createReactClass({
     },
 
     render: function() {
+        const brand = SdkConfig.get().brand;
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
@@ -94,9 +96,10 @@ export default createReactClass({
                     <p>{ _t("We encountered an error trying to restore your previous session.") }</p>
 
                     <p>{ _t(
-                        "If you have previously used a more recent version of Riot, your session " +
+                        "If you have previously used a more recent version of %(brand)s, your session " +
                         "may be incompatible with this version. Close this window and return " +
                         "to the more recent version.",
+                        { brand },
                      ) }</p>
 
                     <p>{ _t(

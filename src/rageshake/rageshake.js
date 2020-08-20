@@ -41,7 +41,7 @@ limitations under the License.
 const FLUSH_RATE_MS = 30 * 1000;
 
 // the length of log data we keep in indexeddb (and include in the reports)
-const MAX_LOG_SIZE = 1024 * 1024 * 1; // 1 MB
+const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
 // A class which monkey-patches the global console and stores log lines.
 class ConsoleLogger {

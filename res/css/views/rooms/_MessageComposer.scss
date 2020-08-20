@@ -20,7 +20,8 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
-    padding-left: 84px;
+    padding-left: 82px;
+    padding-right: 6px;
 }
 
 .mx_MessageComposer_replaced_wrapper {
@@ -60,7 +61,7 @@ limitations under the License.
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
     position: absolute;
-    left: 27px;
+    left: 26px;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar .mx_BaseAvatar {
@@ -76,8 +77,8 @@ limitations under the License.
     left: 60px;
     margin-right: 0; // Counteract the E2EIcon class
     margin-left: 3px; // Counteract the E2EIcon class
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
 }
 
 .mx_MessageComposer_noperm_error {
@@ -178,44 +179,72 @@ limitations under the License.
     color: $accent-color;
 }
 
+.mx_MessageComposer_button_highlight {
+    background: rgba($accent-color, 0.25);
+    // make the icon the accent color too
+    &::before {
+        background-color: $accent-color !important;
+    }
+}
+
 .mx_MessageComposer_button {
     position: relative;
-    margin-right: 12px;
+    margin-right: 6px;
     cursor: pointer;
-    height: 20px;
-    width: 20px;
+    height: 26px;
+    width: 26px;
+    border-radius: 100%;
 
     &::before {
         content: '';
         position: absolute;
 
+        top: 3px;
+        left: 3px;
         height: 20px;
         width: 20px;
-        background-color: $composer-button-color;
+        background-color: $icon-button-color;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
     }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
+    }
+
+    &.mx_MessageComposer_hangup::before {
+        background-color: $warning-color;
+    }
 }
 
+
 .mx_MessageComposer_upload::before {
-    mask-image: url('$(res)/img/feather-customised/paperclip.svg');
+    mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }
 
 .mx_MessageComposer_hangup::before {
-    mask-image: url('$(res)/img/hangup.svg');
+    mask-image: url('$(res)/img/element-icons/call/hangup.svg');
 }
 
 .mx_MessageComposer_voicecall::before {
-    mask-image: url('$(res)/img/feather-customised/phone.svg');
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
 }
 
 .mx_MessageComposer_videocall::before {
-    mask-image: url('$(res)/img/feather-customised/video.svg');
+    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+}
+
+.mx_MessageComposer_emoji::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
 }
 
 .mx_MessageComposer_stickers::before {
-    mask-image: url('$(res)/img/feather-customised/face.svg');
+    mask-image: url('$(res)/img/element-icons/room/composer/sticker.svg');
 }
 
 .mx_MessageComposer_formatting {
@@ -279,7 +308,7 @@ limitations under the License.
     mask-size: contain;
     mask-position: center;
     mask-repeat: no-repeat;
-    background-color: $composer-button-color;
+    background-color: $icon-button-color;
 
     &.mx_MessageComposer_markdownDisabled {
         opacity: 0.2;

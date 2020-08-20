@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import * as sdk from '../../../index';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import FlairStore from '../../../stores/FlairStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
@@ -126,7 +126,7 @@ const GroupTile = createReactClass({
         }
 
         // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
-        // instead of onClick. Otherwise we experience https://github.com/vector-im/riot-web/issues/6156
+        // instead of onClick. Otherwise we experience https://github.com/vector-im/element-web/issues/6156
         return <AccessibleButton className="mx_GroupTile" onMouseDown={this.onMouseDown} onClick={nop}>
             { avatarElement }
             <div className="mx_GroupTile_profile">

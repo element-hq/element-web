@@ -125,13 +125,17 @@ export default createReactClass({
         </span>;
 
         const content = this.props.text ?
-            <span className="mx_SenderProfile_aux">
-                { _t(this.props.text, { senderName: () => nameElem }) }
+            <span>
+                <span className="mx_SenderProfile_aux">
+                    { _t(this.props.text, { senderName: () => nameElem }) }
+                </span>
             </span> : nameFlair;
 
         return (
             <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
-                { content }
+                <div className="mx_SenderProfile_hover">
+                    { content }
+                </div>
             </div>
         );
     },

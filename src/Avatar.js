@@ -19,6 +19,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import DMRoomMap from './utils/DMRoomMap';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 
+// Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(member, width, height, resizeMethod) {
     let url;
     if (member && member.getAvatarUrl) {
@@ -81,7 +82,7 @@ function urlForColor(color) {
 const colorToDataURLCache = new Map();
 
 export function defaultAvatarUrlForString(s) {
-    const defaultColors = ['#03b381', '#368bd6', '#ac3ba8'];
+    const defaultColors = ['#0DBD8B', '#368bd6', '#ac3ba8'];
     let total = 0;
     for (let i = 0; i < s.length; ++i) {
         total += s.charCodeAt(i);

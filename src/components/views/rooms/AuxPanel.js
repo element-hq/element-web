@@ -20,7 +20,7 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from '../../../index';
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import * as ObjectUtils from '../../../ObjectUtils';
 import AppsDrawer from './AppsDrawer';
 import { _t } from '../../../languageHandler';
@@ -28,6 +28,7 @@ import classNames from 'classnames';
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import CallView from "../voip/CallView";
 
 
 export default createReactClass({
@@ -103,7 +104,7 @@ export default createReactClass({
     },
 
     _rateLimitedUpdate: new RateLimitedFunc(function() {
-        if (SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (SettingsStore.getValue("feature_state_counters")) {
             this.setState({counters: this._computeCounters()});
         }
     }, 500),
@@ -111,7 +112,7 @@ export default createReactClass({
     _computeCounters: function() {
         let counters = [];
 
-        if (this.props.room && SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (this.props.room && SettingsStore.getValue("feature_state_counters")) {
             const stateEvs = this.props.room.currentState.getStateEvents('re.jki.counter');
             stateEvs.sort((a, b) => {
                 return a.getStateKey() < b.getStateKey();
@@ -142,7 +143,6 @@ export default createReactClass({
     },
 
     render: function() {
-        const CallView = sdk.getComponent("voip.CallView");
         const TintableSvg = sdk.getComponent("elements.TintableSvg");
 
         let fileDropTarget = null;
@@ -206,7 +206,7 @@ export default createReactClass({
         />;
 
         let stateViews = null;
-        if (this.state.counters && SettingsStore.isFeatureEnabled("feature_state_counters")) {
+        if (this.state.counters && SettingsStore.getValue("feature_state_counters")) {
             let counters = [];
 
             this.state.counters.forEach((counter, idx) => {

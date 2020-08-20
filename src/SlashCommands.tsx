@@ -21,7 +21,7 @@ limitations under the License.
 import * as React from 'react';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import {_t, _td} from './languageHandler';
 import Modal from './Modal';
@@ -40,6 +40,10 @@ import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml } from "parse5";
 import sendBugReport from "./rageshake/submit-rageshake";
 import SdkConfig from "./SdkConfig";
+import { ensureDMExists } from "./createRoom";
+import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
+import { Action } from "./dispatcher/actions";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -115,7 +119,7 @@ export class Command {
 
     run(roomId: string, args: string, cmd: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!this.runFn) return;
+        if (!this.runFn) return reject(_t("Command error"));
         return this.runFn.bind(this)(roomId, args, cmd);
     }
 
@@ -365,6 +369,7 @@ export const Commands = [
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
                 description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
+                hasCloseButton: true,
             });
             return success();
         },
@@ -396,14 +401,16 @@ export const Commands = [
                     // If we need an identity server but don't have one, things
                     // get a bit more complex here, but we try to show something
                     // meaningful.
-                    let finished = Promise.resolve();
+                    let prom = Promise.resolve();
                     if (
                         getAddressType(address) === 'email' &&
                         !MatrixClientPeg.get().getIdentityServerUrl()
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            ({ finished } = Modal.createTrackedDialog('Slash Commands', 'Identity server',
+                            const { finished } = Modal.createTrackedDialog<[boolean]>(
+                                'Slash Commands',
+                                'Identity server',
                                 QuestionDialog, {
                                     title: _t("Use an identity server"),
                                     description: <p>{_t(
@@ -416,9 +423,9 @@ export const Commands = [
                                     )}</p>,
                                     button: _t("Continue"),
                                 },
-                            ));
+                            );
 
-                            finished = finished.then(([useDefault]: any) => {
+                            prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
                                     useDefaultIdentityServer();
                                     return;
@@ -430,7 +437,7 @@ export const Commands = [
                         }
                     }
                     const inviter = new MultiInviter(roomId);
-                    return success(finished.then(() => {
+                    return success(prom.then(() => {
                         return inviter.invite([address]);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
@@ -446,8 +453,8 @@ export const Commands = [
     new Command({
         command: 'join',
         aliases: ['j', 'goto'],
-        args: '<room-alias>',
-        description: _td('Joins room with given alias'),
+        args: '<room-address>',
+        description: _td('Joins room with given address'),
         runFn: function(_, args) {
             if (args) {
                 // Note: we support 2 versions of this command. The first is
@@ -472,7 +479,7 @@ export const Commands = [
                     const parsedUrl = new URL(params[0]);
                     const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
 
-                    // if we're using a Riot permalink handler, this will catch it before we get much further.
+                    // if we're using a Element permalink handler, this will catch it before we get much further.
                     // see below where we make assumptions about parsing the URL.
                     if (isPermalinkHost(hostname)) {
                         isPermalink = true;
@@ -491,8 +498,7 @@ export const Commands = [
                     });
                     return success();
                 } else if (params[0][0] === '!') {
-                    const roomId = params[0];
-                    const viaServers = params.splice(0);
+                    const [roomId, ...viaServers] = params;
 
                     dis.dispatch({
                         action: 'view_room',
@@ -558,7 +564,7 @@ export const Commands = [
     }),
     new Command({
         command: 'part',
-        args: '[<room-alias>]',
+        args: '[<room-address>]',
         description: _td('Leave room'),
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
@@ -590,7 +596,7 @@ export const Commands = [
                         }
                         if (targetRoomId) break;
                     }
-                    if (!targetRoomId) return reject(_t('Unrecognised room alias:') + ' ' + roomAlias);
+                    if (!targetRoomId) return reject(_t('Unrecognised room address:') + ' ' + roomAlias);
                 }
             }
 
@@ -657,7 +663,7 @@ export const Commands = [
             if (args) {
                 const cli = MatrixClientPeg.get();
 
-                const matches = args.match(/^(\S+)$/);
+                const matches = args.match(/^(@[^:]+:\S+)$/);
                 if (matches) {
                     const userId = matches[1];
                     const ignoredUsers = cli.getIgnoredUsers();
@@ -687,7 +693,7 @@ export const Commands = [
             if (args) {
                 const cli = MatrixClientPeg.get();
 
-                const matches = args.match(/^(\S+)$/);
+                const matches = args.match(/(^@[^:]+:\S+$)/);
                 if (matches) {
                     const userId = matches[1];
                     const ignoredUsers = cli.getIgnoredUsers();
@@ -727,9 +733,11 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-
+                        const member = room.getMember(userId);
+                        if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
+                            return reject(_t("Could not find user in room"));
+                        }
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-                        if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
                     }
                 }
@@ -941,8 +949,10 @@ export const Commands = [
             }
 
             const member = MatrixClientPeg.get().getRoom(roomId).getMember(userId);
-            dis.dispatch({
-                action: 'view_user',
+            dis.dispatch<ViewUserPayload>({
+                action: Action.ViewUser,
+                // XXX: We should be using a real member object and not assuming what the
+                // receiver wants.
                 member: member || {userId},
             });
             return success();
@@ -970,6 +980,52 @@ export const Commands = [
         },
         category: CommandCategories.advanced,
     }),
+    new Command({
+        command: "query",
+        description: _td("Opens chat with the given user"),
+        args: "<user-id>",
+        runFn: function(roomId, userId) {
+            if (!userId || !userId.startsWith("@") || !userId.includes(":")) {
+                return reject(this.getUsage());
+            }
+
+            return success((async () => {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: await ensureDMExists(MatrixClientPeg.get(), userId),
+                });
+            })());
+        },
+        category: CommandCategories.actions,
+    }),
+    new Command({
+        command: "msg",
+        description: _td("Sends a message to the given user"),
+        args: "<user-id> <message>",
+        runFn: function(_, args) {
+            if (args) {
+                // matches the first whitespace delimited group and then the rest of the string
+                const matches = args.match(/^(\S+?)(?: +(.*))?$/s);
+                if (matches) {
+                    const [userId, msg] = matches.slice(1);
+                    if (msg && userId && userId.startsWith("@") && userId.includes(":")) {
+                        return success((async () => {
+                            const cli = MatrixClientPeg.get();
+                            const roomId = await ensureDMExists(cli, userId);
+                            dis.dispatch({
+                                action: 'view_room',
+                                room_id: roomId,
+                            });
+                            cli.sendTextMessage(roomId, msg);
+                        })());
+                    }
+                }
+            }
+
+            return reject(this.getUsage());
+        },
+        category: CommandCategories.actions,
+    }),
 
     // Command definitions for autocompletion ONLY:
     // /me is special because its not handled by SlashCommands.js and is instead done inside the Composer classes
@@ -995,7 +1051,7 @@ export function parseCommandString(input) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
-    if (input[0] !== '/') return null; // not a command
+    if (input[0] !== '/') return {}; // not a command
 
     const bits = input.match(/^(\S+?)(?: +((.|\n)*))?$/);
     let cmd;

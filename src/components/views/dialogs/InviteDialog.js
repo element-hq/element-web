@@ -27,15 +27,19 @@ import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import * as Email from "../../../email";
 import {getDefaultIdentityServerUrl, useDefaultIdentityServer} from "../../../utils/IdentityServerUtils";
 import {abbreviateUrl} from "../../../utils/UrlUtils";
-import dis from "../../../dispatcher";
+import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
-import createRoom, {canEncryptToAllUsers} from "../../../createRoom";
+import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
 import {inviteMultipleToRoom} from "../../../RoomInvite";
-import SettingsStore from '../../../settings/SettingsStore';
-import RoomListStore, {TAG_DM} from "../../../stores/RoomListStore";
 import {Key} from "../../../Keyboard";
+import {Action} from "../../../dispatcher/actions";
+import {DefaultTagID} from "../../../stores/room-list/models";
+import RoomListStore from "../../../stores/room-list/RoomListStore";
+
+// we have a number of types defined from the Matrix spec which can't reasonably be altered here.
+/* eslint-disable camelcase */
 
 export const KIND_DM = "dm";
 export const KIND_INVITE = "invite";
@@ -343,10 +347,9 @@ export default class InviteDialog extends React.PureComponent {
     _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
-        // Also pull in all the rooms tagged as TAG_DM so we don't miss anything. Sometimes the
+        // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the
         // room list doesn't tag the room for the DMRoomMap, but does for the room list.
-        const taggedRooms = RoomListStore.getRoomLists();
-        const dmTaggedRooms = taggedRooms[TAG_DM];
+        const dmTaggedRooms = RoomListStore.instance.orderedLists[DefaultTagID.DM] || [];
         const myUserId = MatrixClientPeg.get().getUserId();
         for (const dmRoom of dmTaggedRooms) {
             const otherMembers = dmRoom.getJoinedMembers().filter(u => u.userId !== myUserId);
@@ -574,7 +577,7 @@ export default class InviteDialog extends React.PureComponent {
 
         const createRoomOptions = {inlineErrors: true};
 
-        if (SettingsStore.getValue("feature_cross_signing")) {
+        if (privateShouldBeEncrypted()) {
             // Check whether all users have uploaded device keys before.
             // If so, enable encryption in the new room.
             const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
@@ -902,7 +905,7 @@ export default class InviteDialog extends React.PureComponent {
 
     _onManageSettingsClick = (e) => {
         e.preventDefault();
-        dis.dispatch({ action: 'view_user_settings' });
+        dis.fire(Action.ViewUserSettings);
         this.props.onFinished();
     };
 
@@ -1070,9 +1073,8 @@ export default class InviteDialog extends React.PureComponent {
         let buttonText;
         let goButtonFn;
 
+        const userId = MatrixClientPeg.get().getUserId();
         if (this.props.kind === KIND_DM) {
-            const userId = MatrixClientPeg.get().getUserId();
-
             title = _t("Direct Messages");
             helpText = _t(
                 "Start a conversation with someone using their name, username (like <userId/>) or email address.",
@@ -1086,9 +1088,11 @@ export default class InviteDialog extends React.PureComponent {
         } else { // KIND_INVITE
             title = _t("Invite to this room");
             helpText = _t(
-                "If you can't find someone, ask them for their username (e.g. @user:server.com) or " +
-                "<a>share this room</a>.", {},
+                "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
+                {},
                 {
+                    userId: () =>
+                        <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
                     a: (sub) =>
                         <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
                 },

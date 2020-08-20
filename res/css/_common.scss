@@ -19,7 +19,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 
 :root {
-    font-size: 15px;
+    font-size: 10px;
 }
 
 html {
@@ -38,7 +38,7 @@ body {
     margin: 0px;
 
     // needed to match the designs correctly on macOS
-    // see https://github.com/vector-im/riot-web/issues/11425
+    // see https://github.com/vector-im/element-web/issues/11425
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -160,9 +160,8 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid $dialog-close-fg-color;
-        // these things should probably not be defined
-        // globally
+        border: 1px solid rgba($primary-fg-color, .1);
+        // these things should probably not be defined globally
         margin: 9px;
         flex: 0 0 auto;
     }
@@ -175,7 +174,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
     .mx_textinput input::placeholder {
-        color: $roomsublist-label-fg-color;
+        color: rgba($input-darker-fg-color, .75);
     }
 }
 
@@ -227,7 +226,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 #mx_theme_tertiaryAccentColor {
-    color: $roomsublist-label-bg-color;
+    color: $tertiary-accent-color;
 }
 
 /* Expected z-indexes for dialogs:
@@ -264,7 +263,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     padding: 25px 30px 30px 30px;
     max-height: 80%;
     box-shadow: 2px 15px 30px 0 $dialog-shadow-color;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow-y: auto;
 }
 
@@ -319,7 +318,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_titleImage {
-    vertical-align: middle;
+    vertical-align: sub;
     width: 25px;
     height: 25px;
     margin-left: -2px;
@@ -334,6 +333,9 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
     text-align: center;
+}
+.mx_Dialog_header.mx_Dialog_headerWithCancel > .mx_Dialog_title {
+    margin-right: 20px; // leave space for the 'X' cancel button
 }
 
 .mx_Dialog_title.danger {
@@ -425,12 +427,16 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border-radius: 8px;
     padding: 0px;
     box-shadow: none;
+
+    /* Don't show scroll-bars on spinner dialogs */
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
 // These classes were brought in from the old UserSettings and are included here to avoid
 // breaking the app.
-// Ref: https://github.com/vector-im/riot-web/issues/8420
+// Ref: https://github.com/vector-im/element-web/issues/8420
 .mx_GeneralButton {
     @mixin mx_DialogButton;
     display: inline;
@@ -577,4 +583,37 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 @define-mixin mx_Settings_tooltip {
     // So it fits in the space provided by the page
     max-width: 120px;
+}
+
+@define-mixin ProgressBarColour $colour {
+    color: $colour;
+    &::-moz-progress-bar {
+        background-color: $colour;
+    }
+    &::-webkit-progress-value {
+        background-color: $colour;
+    }
+}
+
+@define-mixin ProgressBarBorderRadius $radius {
+    border-radius: $radius;
+    &::-moz-progress-bar {
+        border-radius: $radius;
+    }
+    &::-webkit-progress-bar,
+    &::-webkit-progress-value {
+        border-radius: $radius;
+    }
+}
+
+@define-mixin unreal-focus {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: Highlight;
+
+    /* WebKit gets its native focus styles. */
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        outline-color: -webkit-focus-ring-color;
+        outline-style: auto;
+    }
 }

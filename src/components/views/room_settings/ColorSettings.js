@@ -19,8 +19,9 @@ import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 
 import Tinter from '../../../Tinter';
-import dis from '../../../dispatcher';
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import dis from '../../../dispatcher/dispatcher';
+import SettingsStore from "../../../settings/SettingsStore";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 const ROOM_COLORS = [
     // magic room default values courtesy of Ribot
@@ -38,7 +39,7 @@ const ROOM_COLORS = [
 
 // Dev note: this component is not attached anywhere, but is left here as it
 // has a high possibility of being used in the nearish future.
-// Ref: https://github.com/vector-im/riot-web/issues/8421
+// Ref: https://github.com/vector-im/element-web/issues/8421
 
 export default createReactClass({
     displayName: 'ColorSettings',

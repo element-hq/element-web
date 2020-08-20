@@ -16,7 +16,6 @@ limitations under the License.
 
 .mx_ReactionsRowButton {
     display: inline-flex;
-    height: 20px;
     line-height: $font-21px;
     margin-right: 6px;
     padding: 0 6px;
@@ -33,11 +32,6 @@ limitations under the License.
     &.mx_ReactionsRowButton_selected {
         background-color: $reaction-row-button-selected-bg-color;
         border-color: $reaction-row-button-selected-border-color;
-    }
-
-    // ignore mouse events for all children, treat it as one entire hoverable entity
-    * {
-        pointer-events: none;
     }
 
     .mx_ReactionsRowButton_content {

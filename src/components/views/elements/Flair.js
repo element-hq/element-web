@@ -19,7 +19,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FlairStore from '../../../stores/FlairStore';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 

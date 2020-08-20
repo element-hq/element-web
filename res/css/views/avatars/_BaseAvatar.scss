@@ -22,7 +22,7 @@ limitations under the License.
     // different results during full reflow of the page vs. incremental reflow
     // of small portions. While that's surely a browser bug, we can avoid it by
     // using `inline-block` instead of the default `inline`.
-    // https://github.com/vector-im/riot-web/issues/5594
+    // https://github.com/vector-im/element-web/issues/5594
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1535053
     // https://bugzilla.mozilla.org/show_bug.cgi?id=255139
     display: inline-block;

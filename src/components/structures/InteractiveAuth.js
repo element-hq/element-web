@@ -203,7 +203,7 @@ export default createReactClass({
         // the UI layer, so we ignore this signal and show a spinner until
         // there's a new screen to show the user. This is implemented by setting
         // `busy: false` in `_authStateUpdated`.
-        // See also https://github.com/vector-im/riot-web/issues/12546
+        // See also https://github.com/vector-im/element-web/issues/12546
     },
 
     _setFocus: function() {

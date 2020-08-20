@@ -17,6 +17,7 @@ limitations under the License.
 import React, {useState, useCallback, useRef} from 'react';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 
 export default function KeySignatureUploadFailedDialog({
         failures,
@@ -65,9 +66,10 @@ export default function KeySignatureUploadFailedDialog({
     let body;
     if (!success && !cancelled && continuation && retry > 0) {
         const reason = causes.get(source) || defaultCause;
+        const brand = SdkConfig.get().brand;
 
         body = (<div>
-            <p>{_t("Riot encountered an error during upload of:")}</p>
+            <p>{_t("%(brand)s encountered an error during upload of:", { brand })}</p>
             <p>{reason}</p>
             {retrying && <Spinner />}
             <pre>{JSON.stringify(failures, null, 2)}</pre>

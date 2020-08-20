@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import {_t} from "../../../../../languageHandler";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import SdkConfig from "../../../../../SdkConfig";
 import {MatrixClientPeg} from "../../../../../MatrixClientPeg";
 import * as FormattingUtils from "../../../../../utils/FormattingUtils";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -25,7 +26,9 @@ import Analytics from "../../../../../Analytics";
 import Modal from "../../../../../Modal";
 import * as sdk from "../../../../..";
 import {sleep} from "../../../../../utils/promise";
-import dis from "../../../../../dispatcher";
+import dis from "../../../../../dispatcher/dispatcher";
+import {privateShouldBeEncrypted} from "../../../../../createRoom";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -112,7 +115,10 @@ export default class SecurityUserSettingsTab extends React.Component {
     };
 
     _onGoToUserProfileClick = () => {
-        window.location.href = "#/user/" + MatrixClientPeg.get().getUserId();
+        dis.dispatch({
+            action: 'view_user_info',
+            userId: MatrixClientPeg.get().getUserId(),
+        });
         this.props.closeSettingsFn();
     }
 
@@ -277,6 +283,7 @@ export default class SecurityUserSettingsTab extends React.Component {
     }
 
     render() {
+        const brand = SdkConfig.get().brand;
         const DevicesPanel = sdk.getComponent('views.settings.DevicesPanel');
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
         const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
@@ -303,9 +310,7 @@ export default class SecurityUserSettingsTab extends React.Component {
         // in having advanced details here once all flows are implemented, we
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
-        let crossSigning;
-        if (SettingsStore.getValue("feature_cross_signing")) {
-            crossSigning = (
+        const crossSigning = (
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
@@ -313,12 +318,20 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </div>
                 </div>
             );
-        }
 
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
 
+        let warning;
+        if (!privateShouldBeEncrypted()) {
+            warning = <div className="mx_SecurityUserSettingsTab_warning">
+                { _t("Your server admin has disabled end-to-end encryption by default " +
+                    "in private rooms & Direct Messages.") }
+            </div>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
+                {warning}
                 <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>
@@ -345,7 +358,10 @@ export default class SecurityUserSettingsTab extends React.Component {
                 <div className='mx_SettingsTab_section'>
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        {_t("Riot collects anonymous analytics to allow us to improve the application.")}
+                        {_t(
+                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                            { brand },
+                        )}
                         &nbsp;
                         {_t("Privacy is important to us, so we don't collect any personal or " +
                             "identifiable data for our analytics.")}

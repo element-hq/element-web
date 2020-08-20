@@ -125,10 +125,9 @@ export default class UserProvider extends AutocompleteProvider {
                     suffix: (selection.beginning && range.start === 0) ? ': ' : ' ',
                     href: makeUserPermalink(user.userId),
                     component: (
-                        <PillCompletion
-                            initialComponent={<MemberAvatar member={user} width={24} height={24} />}
-                            title={displayName}
-                            description={user.userId} />
+                        <PillCompletion title={displayName} description={user.userId}>
+                            <MemberAvatar member={user} width={24} height={24} />
+                        </PillCompletion>
                     ),
                     range,
                 };
@@ -138,7 +137,7 @@ export default class UserProvider extends AutocompleteProvider {
     }
 
     getName(): string {
-        return '👥 ' + _t('Users');
+        return _t('Users');
     }
 
     _makeUsers() {

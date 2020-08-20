@@ -144,6 +144,11 @@ export default createReactClass({
         /* resizeNotifier: ResizeNotifier to know when middle column has changed size
          */
         resizeNotifier: PropTypes.object,
+
+        /* fixedChildren: allows for children to be passed which are rendered outside
+         * of the wrapper
+         */
+        fixedChildren: PropTypes.node,
     },
 
     getDefaultProps: function() {
@@ -643,7 +648,9 @@ export default createReactClass({
 
         if (scrollState.stuckAtBottom) {
             const sn = this._getScrollNode();
-            sn.scrollTop = sn.scrollHeight;
+            if (sn.scrollTop !== sn.scrollHeight) {
+                sn.scrollTop = sn.scrollHeight;
+            }
         } else if (scrollState.trackedScrollToken) {
             const itemlist = this._itemlist.current;
             const trackedNode = this._getTrackedNode();
@@ -652,7 +659,10 @@ export default createReactClass({
                 const bottomDiff = newBottomOffset - scrollState.bottomOffset;
                 this._bottomGrowth += bottomDiff;
                 scrollState.bottomOffset = newBottomOffset;
-                itemlist.style.height = `${this._getListHeight()}px`;
+                const newHeight = `${this._getListHeight()}px`;
+                if (itemlist.style.height !== newHeight) {
+                    itemlist.style.height = newHeight;
+                }
                 debuglog("balancing height because messages below viewport grew by", bottomDiff);
             }
         }
@@ -689,12 +699,16 @@ export default createReactClass({
         const height = Math.max(minHeight, contentHeight);
         this._pages = Math.ceil(height / PAGE_SIZE);
         this._bottomGrowth = 0;
-        const newHeight = this._getListHeight();
+        const newHeight = `${this._getListHeight()}px`;
 
         const scrollState = this.scrollState;
         if (scrollState.stuckAtBottom) {
-            itemlist.style.height = `${newHeight}px`;
-            sn.scrollTop = sn.scrollHeight;
+            if (itemlist.style.height !== newHeight) {
+                itemlist.style.height = newHeight;
+            }
+            if (sn.scrollTop !== sn.scrollHeight){
+                sn.scrollTop = sn.scrollHeight;
+            }
             debuglog("updateHeight to", newHeight);
         } else if (scrollState.trackedScrollToken) {
             const trackedNode = this._getTrackedNode();
@@ -704,7 +718,9 @@ export default createReactClass({
             // the currently filled piece of the timeline
             if (trackedNode) {
                 const oldTop = trackedNode.offsetTop;
-                itemlist.style.height = `${newHeight}px`;
+                if (itemlist.style.height !== newHeight) {
+                    itemlist.style.height = newHeight;
+                }
                 const newTop = trackedNode.offsetTop;
                 const topDiff = newTop - oldTop;
                 // important to scroll by a relative amount as
@@ -881,6 +897,7 @@ export default createReactClass({
         return (<AutoHideScrollbar wrappedRef={this._collectScroll}
                 onScroll={this.onScroll}
                 className={`mx_ScrollPanel ${this.props.className}`} style={this.props.style}>
+                    { this.props.fixedChildren }
                     <div className="mx_RoomView_messageListWrapper">
                         <ol ref={this._itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
                             { this.props.children }

@@ -2,5 +2,10 @@
 @import "../../light/css/_paths.scss";
 @import "../../light/css/_fonts.scss";
 @import "../../light/css/_light.scss";
+// important this goes before _mods,
+// as $tagpanel-background-blur-amount and
+// $roomlist-background-blur-amount
+// are overridden in _dark.scss
 @import "_dark.scss";
+@import "../../light/css/_mods.scss";
 @import "../../../../res/css/_components.scss";

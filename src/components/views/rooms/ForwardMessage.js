@@ -19,7 +19,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import {Key} from '../../../Keyboard';
 
 

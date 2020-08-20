@@ -34,7 +34,8 @@ import EMOTICON_REGEX from 'emojibase-regex/emoticon';
 const LIMIT = 20;
 
 // Match for ascii-style ";-)" emoticons or ":wink:" shortcodes provided by emojibase
-const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|:[+-\\w]*:?)$', 'g');
+// anchored to only match from the start of parts otherwise it'll show emoji suggestions whilst typing matrix IDs
+const EMOJI_REGEX = new RegExp('(' + EMOTICON_REGEX.source + '|(?:^|\\s):[+-\\w]*:?)$', 'g');
 
 interface IEmojiShort {
     emoji: IEmoji;
@@ -69,7 +70,7 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     constructor() {
         super(EMOJI_REGEX);
-        this.matcher = new QueryMatcher(EMOJI_SHORTNAMES, {
+        this.matcher = new QueryMatcher<IEmojiShort>(EMOJI_SHORTNAMES, {
             keys: ['emoji.emoticon', 'shortname'],
             funcs: [
                 (o) => o.emoji.shortcodes.length > 1 ? o.emoji.shortcodes.slice(1).map(s => `:${s}:`).join(" ") : "", // aliases
@@ -121,9 +122,9 @@ export default class EmojiProvider extends AutocompleteProvider {
                 return {
                     completion: unicode,
                     component: (
-                        <PillCompletion title={shortname} aria-label={unicode} initialComponent={
-                            <span style={{maxWidth: '1em'}}>{ unicode }</span>
-                        } />
+                        <PillCompletion title={shortname} aria-label={unicode}>
+                            <span>{ unicode }</span>
+                        </PillCompletion>
                     ),
                     range,
                 };

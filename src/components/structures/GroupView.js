@@ -21,7 +21,7 @@ import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import * as sdk from '../../index';
-import dis from '../../dispatcher';
+import dis from '../../dispatcher/dispatcher';
 import { getHostingLink } from '../../utils/HostingLink';
 import { sanitizedHtmlNode } from '../../HtmlUtils';
 import { _t, _td } from '../../languageHandler';
@@ -92,7 +92,7 @@ const CategoryRoomList = createReactClass({
         Modal.createTrackedDialog('Add Rooms to Group Summary', '', AddressPickerDialog, {
             title: _t('Add rooms to the community summary'),
             description: _t("Which rooms would you like to add to this summary?"),
-            placeholder: _t("Room name or alias"),
+            placeholder: _t("Room name or address"),
             button: _t("Add to summary"),
             pickerType: 'room',
             validAddressTypes: ['mx-room-id'],
@@ -1003,9 +1003,10 @@ export default createReactClass({
                     this.state.inviterProfile.avatarUrl, 36, 36,
                 ) : null;
 
-            let inviterName = group.inviter.userId;
+            const inviter = group.inviter || {};
+            let inviterName = inviter.userId;
             if (this.state.inviterProfile) {
-                inviterName = this.state.inviterProfile.displayName || group.inviter.userId;
+                inviterName = this.state.inviterProfile.displayName || inviter.userId;
             }
             return <div className="mx_GroupView_membershipSection mx_GroupView_membershipSection_invited">
                 <div className="mx_GroupView_membershipSubSection">
@@ -1016,7 +1017,7 @@ export default createReactClass({
                             height={36}
                         />
                         { _t("%(inviter)s has invited you to join this community", {
-                            inviter: inviterName,
+                            inviter: inviterName || _t("Someone"),
                         }) }
                     </div>
                     <div className="mx_GroupView_membership_buttonContainer">

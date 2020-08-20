@@ -17,9 +17,10 @@ limitations under the License.
 import React from 'react';
 import {_t} from "../../../../../languageHandler";
 import PropTypes from "prop-types";
-import SettingsStore, {SettingLevel} from "../../../../../settings/SettingsStore";
+import SettingsStore from "../../../../../settings/SettingsStore";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import * as sdk from "../../../../../index";
+import {SettingLevel} from "../../../../../settings/SettingLevel";
 
 export class LabsSettingToggle extends React.Component {
     static propTypes = {
@@ -27,14 +28,15 @@ export class LabsSettingToggle extends React.Component {
     };
 
     _onChange = async (checked) => {
-        await SettingsStore.setFeatureEnabled(this.props.featureId, checked);
+        await SettingsStore.setValue(this.props.featureId, null, SettingLevel.DEVICE, checked);
         this.forceUpdate();
     };
 
     render() {
         const label = SettingsStore.getDisplayName(this.props.featureId);
-        const value = SettingsStore.isFeatureEnabled(this.props.featureId);
-        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} />;
+        const value = SettingsStore.getValue(this.props.featureId);
+        const canChange = SettingsStore.canSetValue(this.props.featureId, null, SettingLevel.DEVICE);
+        return <LabelledToggleSwitch value={value} label={label} onChange={this._onChange} disabled={!canChange} />;
     }
 }
 
@@ -45,7 +47,7 @@ export default class LabsUserSettingsTab extends React.Component {
 
     render() {
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
-        const flags = SettingsStore.getLabsFeatures().map(f => <LabsSettingToggle featureId={f} key={f} />);
+        const flags = SettingsStore.getFeatureSettingNames().map(f => <LabsSettingToggle featureId={f} key={f} />);
         return (
             <div className="mx_SettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("Labs")}</div>
@@ -54,7 +56,7 @@ export default class LabsUserSettingsTab extends React.Component {
                         _t('Customise your experience with experimental labs features. ' +
                             '<a>Learn more</a>.', {}, {
                             'a': (sub) => {
-                                return <a href="https://github.com/vector-im/riot-web/blob/develop/docs/labs.md"
+                                return <a href="https://github.com/vector-im/element-web/blob/develop/docs/labs.md"
                                     rel='noreferrer noopener' target='_blank'>{sub}</a>;
                             },
                         })
@@ -66,7 +68,7 @@ export default class LabsUserSettingsTab extends React.Component {
                     <SettingsFlag name={"showHiddenEventsInTimeline"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"lowBandwidth"} level={SettingLevel.DEVICE} />
                     <SettingsFlag name={"sendReadReceipts"} level={SettingLevel.ACCOUNT} />
-                    <SettingsFlag name={"keepSecretStoragePassphraseForSession"} level={SettingLevel.DEVICE} />
+                    <SettingsFlag name={"advancedRoomListLogging"} level={SettingLevel.DEVICE} />
                 </div>
             </div>
         );

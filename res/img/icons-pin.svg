@@ -1,7 +1,0 @@
-<svg width="16px" height="16px" viewbox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
- <g transform="scale(0.03125)">
-  <path id="svg_2" fill="none" stroke="#76cfa6" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" d="m315.802,402.338c12.73,-33.537 13.503,-69.629 3.623,-102.697l93.245,-103.107l7.831,7.831c10.411,10.409 27.283,10.409 37.691,0c10.41,-10.408 10.41,-27.281 0.001,-37.69l-112.869,-112.867c-10.407,-10.409 -27.279,-10.41 -37.689,-0.001c-10.408,10.41 -10.409,27.283 0.001,37.693l7.833,7.833l-103.107,93.243c-33.069,-9.878 -69.163,-9.107 -102.697,3.626c-4.7,1.785 -8.001,5.646 -9.059,10.604c-1.175,5.473 0.627,11.402 4.697,15.472l184.42,184.421c4.069,4.07 10,5.871 15.472,4.695c4.959,-1.055 8.82,-4.357 10.607,-9.056z"/>
-  <polyline id="svg_3" fill="none" stroke="#76cfa6" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" points="    180.951,297.927 46,466 215.319,332.295   "/>
-  <!--<line id="svg_4" fill="none" stroke="#76cfa6" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" y2="219.549" y1="138.166" x2="255.531" x1="336.915"/>-->
- </g>
-</svg>

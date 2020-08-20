@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
+import SdkConfig from '../../../SdkConfig';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as sdk from '../../../index';
 import {
@@ -27,6 +28,14 @@ import {
     PHASE_CONFIRM_SKIP,
     PHASE_FINISHED,
 } from '../../../stores/SetupEncryptionStore';
+
+function keyHasPassphrase(keyInfo) {
+    return (
+        keyInfo.passphrase &&
+        keyInfo.passphrase.salt &&
+        keyInfo.passphrase.iterations
+    );
+}
 
 export default class SetupEncryptionBody extends React.Component {
     static propTypes = {
@@ -108,6 +117,23 @@ export default class SetupEncryptionBody extends React.Component {
                 member={MatrixClientPeg.get().getUser(this.state.verificationRequest.otherUserId)}
             />;
         } else if (phase === PHASE_INTRO) {
+            const store = SetupEncryptionStore.sharedInstance();
+            let recoveryKeyPrompt;
+            if (store.keyInfo && keyHasPassphrase(store.keyInfo)) {
+                recoveryKeyPrompt = _t("Use Recovery Key or Passphrase");
+            } else if (store.keyInfo) {
+                recoveryKeyPrompt = _t("Use Recovery Key");
+            }
+
+            let useRecoveryKeyButton;
+            if (recoveryKeyPrompt) {
+                useRecoveryKeyButton = <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
+                    {recoveryKeyPrompt}
+                </AccessibleButton>;
+            }
+
+            const brand = SdkConfig.get().brand;
+
             return (
                 <div>
                     <p>{_t(
@@ -115,25 +141,24 @@ export default class SetupEncryptionBody extends React.Component {
                         "granting it access to encrypted messages.",
                     )}</p>
                     <p>{_t(
-                        "This requires the latest Riot on your other devices:",
+                        "This requires the latest %(brand)s on your other devices:",
+                        { brand },
                     )}</p>
 
                     <div className="mx_CompleteSecurity_clients">
                         <div className="mx_CompleteSecurity_clients_desktop">
-                            <div>Riot Web</div>
-                            <div>Riot Desktop</div>
+                            <div>{_t("%(brand)s Web", { brand })}</div>
+                            <div>{_t("%(brand)s Desktop", { brand })}</div>
                         </div>
                         <div className="mx_CompleteSecurity_clients_mobile">
-                            <div>Riot iOS</div>
-                            <div>Riot X for Android</div>
+                            <div>{_t("%(brand)s iOS", { brand })}</div>
+                            <div>{_t("%(brand)s Android", { brand })}</div>
                         </div>
                         <p>{_t("or another cross-signing capable Matrix client")}</p>
                     </div>
 
                     <div className="mx_CompleteSecurity_actionRow">
-                        <AccessibleButton kind="link" onClick={this._onUsePassphraseClick}>
-                            {_t("Use Recovery Passphrase or Key")}
-                        </AccessibleButton>
+                        {useRecoveryKeyButton}
                         <AccessibleButton kind="danger" onClick={this.onSkipClick}>
                             {_t("Skip")}
                         </AccessibleButton>

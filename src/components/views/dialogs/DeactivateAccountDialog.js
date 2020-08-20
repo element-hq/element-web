@@ -25,6 +25,7 @@ import * as Lifecycle from '../../../Lifecycle';
 import { _t } from '../../../languageHandler';
 import InteractiveAuth, {ERROR_USER_CANCELLED} from "../../structures/InteractiveAuth";
 import {DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry} from "../auth/InteractiveAuthEntryComponents";
+import StyledCheckbox from "../elements/StyledCheckbox";
 
 export default class DeactivateAccountDialog extends React.Component {
     constructor(props) {
@@ -34,6 +35,7 @@ export default class DeactivateAccountDialog extends React.Component {
             shouldErase: false,
             errStr: null,
             authData: null, // for UIA
+            authEnabled: true, // see usages for information
 
             // A few strings that are passed to InteractiveAuth for design or are displayed
             // next to the InteractiveAuth component.
@@ -42,21 +44,7 @@ export default class DeactivateAccountDialog extends React.Component {
             continueKind: null,
         };
 
-        MatrixClientPeg.get().deactivateAccount(null, false).then(r => {
-            // If we got here, oops. The server didn't require any auth.
-            // Our application lifecycle will catch the error and do the logout bits.
-            // We'll try to log something in an vain attempt to record what happened (storage
-            // is also obliterated on logout).
-            console.warn("User's account got deactivated without confirmation: Server had no auth");
-            this.setState({errStr: _t("Server did not require any authentication")});
-        }).catch(e => {
-            if (e && e.httpStatus === 401 && e.data) {
-                // Valid UIA response
-                this.setState({authData: e.data});
-            } else {
-                this.setState({errStr: _t("Server did not return valid authentication information.")});
-            }
-        });
+        this._initAuth(/* shouldErase= */false);
     }
 
     _onStagePhaseChange = (stage, phase) => {
@@ -124,11 +112,38 @@ export default class DeactivateAccountDialog extends React.Component {
     _onEraseFieldChange = (ev) => {
         this.setState({
             shouldErase: ev.target.checked,
+
+            // Disable the auth form because we're going to have to reinitialize the auth
+            // information. We do this because we can't modify the parameters in the UIA
+            // session, and the user will have selected something which changes the request.
+            // Therefore, we throw away the last auth session and try a new one.
+            authEnabled: false,
         });
+
+        // As mentioned above, set up for auth again to get updated UIA session info
+        this._initAuth(/* shouldErase= */ev.target.checked);
     };
 
     _onCancel() {
         this.props.onFinished(false);
+    }
+
+    _initAuth(shouldErase) {
+        MatrixClientPeg.get().deactivateAccount(null, shouldErase).then(r => {
+            // If we got here, oops. The server didn't require any auth.
+            // Our application lifecycle will catch the error and do the logout bits.
+            // We'll try to log something in an vain attempt to record what happened (storage
+            // is also obliterated on logout).
+            console.warn("User's account got deactivated without confirmation: Server had no auth");
+            this.setState({errStr: _t("Server did not require any authentication")});
+        }).catch(e => {
+            if (e && e.httpStatus === 401 && e.data) {
+                // Valid UIA response
+                this.setState({authData: e.data, authEnabled: true});
+            } else {
+                this.setState({errStr: _t("Server did not return valid authentication information.")});
+            }
+        });
     }
 
     render() {
@@ -142,7 +157,7 @@ export default class DeactivateAccountDialog extends React.Component {
         }
 
         let auth = <div>{_t("Loading...")}</div>;
-        if (this.state.authData) {
+        if (this.state.authData && this.state.authEnabled) {
             auth = (
                 <div>
                     {this.state.bodyText}
@@ -195,21 +210,18 @@ export default class DeactivateAccountDialog extends React.Component {
 
                     <div className="mx_DeactivateAccountDialog_input_section">
                         <p>
-                            <label htmlFor="mx_DeactivateAccountDialog_erase_account_input">
-                                <input
-                                    id="mx_DeactivateAccountDialog_erase_account_input"
-                                    type="checkbox"
-                                    checked={this.state.shouldErase}
-                                    onChange={this._onEraseFieldChange}
-                                />
-                                { _t(
+                            <StyledCheckbox
+                                checked={this.state.shouldErase}
+                                onChange={this._onEraseFieldChange}
+                            >
+                                {_t(
                                     "Please forget all messages I have sent when my account is deactivated " +
                                     "(<b>Warning:</b> this will cause future users to see an incomplete view " +
                                     "of conversations)",
                                     {},
                                     { b: (sub) => <b>{ sub }</b> },
-                                ) }
-                            </label>
+                                )}
+                            </StyledCheckbox>
                         </p>
 
                         {error}

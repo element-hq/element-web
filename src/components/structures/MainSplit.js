@@ -16,77 +16,24 @@ limitations under the License.
 */
 
 import React from 'react';
-import ResizeHandle from '../views/elements/ResizeHandle';
-import {Resizer, FixedDistributor} from '../../resizer';
+import { Resizable } from 're-resizable';
 
 export default class MainSplit extends React.Component {
-    constructor(props) {
-        super(props);
-        this._setResizeContainerRef = this._setResizeContainerRef.bind(this);
-        this._onResized = this._onResized.bind(this);
+    _onResized = (event, direction, refToElement, delta) => {
+        window.localStorage.setItem("mx_rhs_size", this._loadSidePanelSize().width + delta.width);
     }
 
-    _onResized(size) {
-        window.localStorage.setItem("mx_rhs_size", size);
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.notifyRightHandleResized();
-        }
-    }
+    _loadSidePanelSize() {
+        let rhsSize = parseInt(window.localStorage.getItem("mx_rhs_size"), 10);
 
-    _createResizer() {
-        const classNames = {
-            handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
-            reverse: "mx_ResizeHandle_reverse",
-        };
-        const resizer = new Resizer(
-            this.resizeContainer,
-            FixedDistributor,
-            {onResized: this._onResized},
-        );
-        resizer.setClassNames(classNames);
-        let rhsSize = window.localStorage.getItem("mx_rhs_size");
-        if (rhsSize !== null) {
-            rhsSize = parseInt(rhsSize, 10);
-        } else {
+        if (isNaN(rhsSize)) {
             rhsSize = 350;
         }
-        resizer.forHandleAt(0).resize(rhsSize);
 
-        resizer.attach();
-        this.resizer = resizer;
-    }
-
-    _setResizeContainerRef(div) {
-        this.resizeContainer = div;
-    }
-
-    componentDidMount() {
-        if (this.props.panel) {
-            this._createResizer();
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.resizer) {
-            this.resizer.detach();
-            this.resizer = null;
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        const wasPanelSet = this.props.panel && !prevProps.panel;
-        const wasPanelCleared = !this.props.panel && prevProps.panel;
-
-        if (this.resizeContainer && wasPanelSet) {
-            // The resizer can only be created when **both** expanded and the panel is
-            // set. Once both are true, the container ref will mount, which is required
-            // for the resizer to work.
-            this._createResizer();
-        } else if (this.resizer && wasPanelCleared) {
-            this.resizer.detach();
-            this.resizer = null;
-        }
+        return {
+            height: "100%",
+            width: rhsSize,
+        };
     }
 
     render() {
@@ -97,13 +44,29 @@ export default class MainSplit extends React.Component {
 
         let children;
         if (hasResizer) {
-            children = <React.Fragment>
-                <ResizeHandle reverse={true} />
+            children = <Resizable
+                defaultSize={this._loadSidePanelSize()}
+                minWidth={264}
+                maxWidth="50%"
+                enable={{
+                    top: false,
+                    right: false,
+                    bottom: false,
+                    left: true,
+                    topRight: false,
+                    bottomRight: false,
+                    bottomLeft: false,
+                    topLeft: false,
+                }}
+                onResizeStop={this._onResized}
+                className="mx_RightPanel_ResizeWrapper"
+                handleClasses={{left: "mx_RightPanel_ResizeHandle"}}
+            >
                 { panelView }
-            </React.Fragment>;
+            </Resizable>;
         }
 
-        return <div className="mx_MainSplit" ref={hasResizer ? this._setResizeContainerRef : undefined}>
+        return <div className="mx_MainSplit">
             { bodyView }
             { children }
         </div>;

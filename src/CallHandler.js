@@ -59,14 +59,14 @@ import Modal from './Modal';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
-import dis from './dispatcher';
-import { showUnknownDeviceDialogForCalls } from './cryptodevices';
+import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import WidgetEchoStore from './stores/WidgetEchoStore';
-import SettingsStore, { SettingLevel } from './settings/SettingsStore';
+import SettingsStore from './settings/SettingsStore';
 import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
+import {SettingLevel} from "./settings/SettingLevel";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -90,7 +90,7 @@ function play(audioId) {
                 // This is usually because the user hasn't interacted with the document,
                 // or chrome doesn't think so and is denying the request. Not sure what
                 // we can really do here...
-                // https://github.com/vector-im/riot-web/issues/7657
+                // https://github.com/vector-im/element-web/issues/7657
                 console.log("Unable to play audio clip", e);
             }
         };
@@ -119,62 +119,22 @@ function pause(audioId) {
     }
 }
 
-function _reAttemptCall(call) {
-    if (call.direction === 'outbound') {
-        dis.dispatch({
-            action: 'place_call',
-            room_id: call.roomId,
-            type: call.type,
-        });
-    } else {
-        call.answer();
-    }
-}
-
 function _setCallListeners(call) {
     call.on("error", function(err) {
         console.error("Call error:", err);
-        if (err.code === 'unknown_devices') {
-            const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
-
-            Modal.createTrackedDialog('Call Failed', '', QuestionDialog, {
-                title: _t('Call Failed'),
-                description: _t(
-                    "There are unknown sessions in this room: "+
-                    "if you proceed without verifying them, it will be "+
-                    "possible for someone to eavesdrop on your call.",
-                ),
-                button: _t('Review Sessions'),
-                onFinished: function(confirmed) {
-                    if (confirmed) {
-                        const room = MatrixClientPeg.get().getRoom(call.roomId);
-                        showUnknownDeviceDialogForCalls(
-                            MatrixClientPeg.get(),
-                            room,
-                            () => {
-                                _reAttemptCall(call);
-                            },
-                            call.direction === 'outbound' ? _t("Call Anyway") : _t("Answer Anyway"),
-                            call.direction === 'outbound' ? _t("Call") : _t("Answer"),
-                        );
-                    }
-                },
-            });
-        } else {
-            if (
-                MatrixClientPeg.get().getTurnServers().length === 0 &&
-                SettingsStore.getValue("fallbackICEServerAllowed") === null
-            ) {
-                _showICEFallbackPrompt();
-                return;
-            }
-
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-            Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
-                title: _t('Call Failed'),
-                description: err.message,
-            });
+        if (
+            MatrixClientPeg.get().getTurnServers().length === 0 &&
+            SettingsStore.getValue("fallbackICEServerAllowed") === null
+        ) {
+            _showICEFallbackPrompt();
+            return;
         }
+
+        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
+        Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
+            title: _t('Call Failed'),
+            description: err.message,
+        });
     });
     call.on("hangup", function() {
         _setCallState(undefined, call.roomId, "ended");
@@ -514,15 +474,15 @@ const callHandler = {
 
     /**
      * The conference handler is a module that deals with implementation-specific
-     * multi-party calling implementations. Riot passes in its own which creates
+     * multi-party calling implementations. Element passes in its own which creates
      * a one-to-one call with a freeswitch conference bridge. As of July 2018,
      * the de-facto way of conference calling is a Jitsi widget, so this is
      * deprecated. It reamins here for two reasons:
-     *  1. So Riot still supports joining existing freeswitch conference calls
+     *  1. So Element still supports joining existing freeswitch conference calls
      *     (but doesn't support creating them). After a transition period, we can
      *     remove support for joining them too.
      *  2. To hide the one-to-one rooms that old-style conferencing creates. This
-     *     is much harder to remove: probably either we make Riot leave & forget these
+     *     is much harder to remove: probably either we make Element leave & forget these
      *     rooms after we remove support for joining freeswitch conferences, or we
      *     accept that random rooms with cryptic users will suddently appear for
      *     anyone who's ever used conference calling, or we are stuck with this

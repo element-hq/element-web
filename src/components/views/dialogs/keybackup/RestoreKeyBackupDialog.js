@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
-import Modal from '../../../../Modal';
 import { _t } from '../../../../languageHandler';
 import { accessSecretStorage } from '../../../../CrossSigningManager';
 
@@ -89,14 +88,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
 
     _onResetRecoveryClick = () => {
         this.props.onFinished(false);
-        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
-            {
-                onFinished: () => {
-                    this._loadBackupStatus();
-                },
-            }, null, /* priority = */ false, /* static = */ true,
-        );
+        accessSecretStorage(() => {}, /* forceReset = */ true);
     }
 
     _onRecoveryKeyChange = (e) => {
@@ -193,7 +185,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             // `accessSecretStorage` may prompt for storage access as needed.
             const recoverInfo = await accessSecretStorage(async () => {
                 return MatrixClientPeg.get().restoreKeyBackupWithSecretStorage(
-                    this.state.backupInfo,
+                    this.state.backupInfo, undefined, undefined,
                     { progressCallback: this._progressCallback },
                 );
             });
@@ -235,8 +227,10 @@ export default class RestoreKeyBackupDialog extends React.PureComponent {
             loadError: null,
         });
         try {
-            const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
-            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
+            const cli = MatrixClientPeg.get();
+            const backupInfo = await cli.getKeyBackupVersion();
+            const has4S = await cli.hasSecretStorageKey();
+            const backupKeyStored = has4S && await cli.isKeyBackupKeyStored();
             this.setState({
                 backupInfo,
                 backupKeyStored,

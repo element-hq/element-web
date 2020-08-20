@@ -29,16 +29,19 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import AppPermission from './AppPermission';
 import AppWarning from './AppWarning';
-import MessageSpinner from './MessageSpinner';
+import Spinner from './Spinner';
 import WidgetUtils from '../../../utils/WidgetUtils';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import classNames from 'classnames';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
-import SettingsStore, {SettingLevel} from "../../../settings/SettingsStore";
+import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
+import {Capability} from "../../../widgets/WidgetApi";
+import {sleep} from "../../../utils/promise";
+import {SettingLevel} from "../../../settings/SettingLevel";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -308,16 +311,16 @@ export default class AppTile extends React.Component {
             this.props.onEditClick();
         } else {
             // TODO: Open the right manager for the widget
-            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            if (SettingsStore.getValue("feature_many_integration_managers")) {
                 IntegrationManagers.sharedInstance().openAll(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             } else {
                 IntegrationManagers.sharedInstance().getPrimaryManager().open(
                     this.props.room,
-                    'type_' + this.props.type,
+                    'type_' + this.props.app.type,
                     this.props.app.id,
                 );
             }
@@ -341,23 +344,37 @@ export default class AppTile extends React.Component {
     /**
      * Ends all widget interaction, such as cancelling calls and disabling webcams.
      * @private
+     * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
     _endWidgetActions() {
-        // HACK: This is a really dirty way to ensure that Jitsi cleans up
-        // its hold on the webcam. Without this, the widget holds a media
-        // stream open, even after death. See https://github.com/vector-im/riot-web/issues/7351
-        if (this._appFrame.current) {
-            // In practice we could just do `+= ''` to trick the browser
-            // into thinking the URL changed, however I can foresee this
-            // being optimized out by a browser. Instead, we'll just point
-            // the iframe at a page that is reasonably safe to use in the
-            // event the iframe doesn't wink away.
-            // This is relative to where the Riot instance is located.
-            this._appFrame.current.src = 'about:blank';
+        let terminationPromise;
+
+        if (this._hasCapability(Capability.ReceiveTerminate)) {
+            // Wait for widget to terminate within a timeout
+            const timeout = 2000;
+            const messaging = ActiveWidgetStore.getWidgetMessaging(this.props.app.id);
+            terminationPromise = Promise.race([messaging.terminate(), sleep(timeout)]);
+        } else {
+            terminationPromise = Promise.resolve();
         }
 
-        // Delete the widget from the persisted store for good measure.
-        PersistedElement.destroyElement(this._persistKey);
+        return terminationPromise.finally(() => {
+            // HACK: This is a really dirty way to ensure that Jitsi cleans up
+            // its hold on the webcam. Without this, the widget holds a media
+            // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
+            if (this._appFrame.current) {
+                // In practice we could just do `+= ''` to trick the browser
+                // into thinking the URL changed, however I can foresee this
+                // being optimized out by a browser. Instead, we'll just point
+                // the iframe at a page that is reasonably safe to use in the
+                // event the iframe doesn't wink away.
+                // This is relative to where the Element instance is located.
+                this._appFrame.current.src = 'about:blank';
+            }
+
+            // Delete the widget from the persisted store for good measure.
+            PersistedElement.destroyElement(this._persistKey);
+        });
     }
 
     /* If user has permission to modify widgets, delete the widget,
@@ -381,12 +398,12 @@ export default class AppTile extends React.Component {
                     }
                     this.setState({deleting: true});
 
-                    this._endWidgetActions();
-
-                    WidgetUtils.setRoomWidget(
-                        this.props.room.roomId,
-                        this.props.app.id,
-                    ).catch((e) => {
+                    this._endWidgetActions().then(() => {
+                        return WidgetUtils.setRoomWidget(
+                            this.props.room.roomId,
+                            this.props.app.id,
+                        );
+                    }).catch((e) => {
                         console.error('Failed to delete widget', e);
                         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
@@ -424,13 +441,13 @@ export default class AppTile extends React.Component {
     _setupWidgetMessaging() {
         // FIXME: There's probably no reason to do this here: it should probably be done entirely
         // in ActiveWidgetStore.
-
-        // We use the app's URL over the rendered URL so that anything the widget does which could
-        // lead to requesting a "security key" will pass accordingly. The only other thing this URL
-        // is used for is to determine the origin we're talking to, and therefore we don't need the
-        // fully templated URL.
         const widgetMessaging = new WidgetMessaging(
-            this.props.app.id, this.props.app.url, this.props.userWidget, this._appFrame.current.contentWindow);
+            this.props.app.id,
+            this.props.app.url,
+            this._getRenderedUrl(),
+            this.props.userWidget,
+            this._appFrame.current.contentWindow,
+        );
         ActiveWidgetStore.setWidgetMessaging(this.props.app.id, widgetMessaging);
         widgetMessaging.getCapabilities().then((requestedCapabilities) => {
             console.log(`Widget ${this.props.app.id} requested capabilities: ` + requestedCapabilities);
@@ -669,6 +686,17 @@ export default class AppTile extends React.Component {
     }
 
     _onPopoutWidgetClick() {
+        // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
+        // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
+            this._endWidgetActions().then(() => {
+                if (this._appFrame.current) {
+                    // Reload iframe
+                    this._appFrame.current.src = this._getRenderedUrl();
+                    this.setState({});
+                }
+            });
+        }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
         Object.assign(document.createElement('a'),
@@ -677,6 +705,7 @@ export default class AppTile extends React.Component {
 
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
+        // eslint-disable-next-line no-self-assign
         this._appFrame.current.src = this._appFrame.current.src;
     }
 
@@ -698,7 +727,7 @@ export default class AppTile extends React.Component {
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin
         // because that would allow the iframe to programmatically remove the sandbox attribute, but
-        // this would only be for content hosted on the same origin as the riot client: anything
+        // this would only be for content hosted on the same origin as the element client: anything
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox "+
@@ -713,7 +742,7 @@ export default class AppTile extends React.Component {
         if (this.props.show) {
             const loadingElement = (
                 <div className="mx_AppLoading_spinner_fadeIn">
-                    <MessageSpinner msg='Loading...' />
+                    <Spinner message={_t("Loading...")} />
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {
@@ -897,7 +926,7 @@ AppTile.propTypes = {
     // Optionally show the reload widget icon
     // This is not currently intended for use with production widgets. However
     // it can be useful when developing persistent widgets in order to avoid
-    // having to reload all of riot to get new widget content.
+    // having to reload all of Element to get new widget content.
     showReload: PropTypes.bool,
     // Widget capabilities to allow by default (without user confirmation)
     // NOTE -- Use with caution. This is intended to aid better integration / UX

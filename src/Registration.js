@@ -20,7 +20,7 @@ limitations under the License.
  * registration code.
  */
 
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import Modal from './Modal';
 import { _t } from './languageHandler';
@@ -52,7 +52,7 @@ export async function startAnyRegistrationFlow(options) {
     // caution though.
 
     // XXX: ILAG is disabled for now,
-    // see https://github.com/vector-im/riot-web/issues/8222
+    // see https://github.com/vector-im/element-web/issues/8222
 
     // const flows = await _getRegistrationFlows();
     // const hasIlagFlow = flows.some((flow) => {

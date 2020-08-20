@@ -26,7 +26,7 @@ import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
-import dis from './dispatcher';
+import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
 import * as sdk from './index';
@@ -41,6 +41,10 @@ import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
+import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+
+const HOMESERVER_URL_KEY = "mx_hs_url";
+const ID_SERVER_URL_KEY = "mx_is_url";
 
 /**
  * Called at startup, to attempt to build a logged-in Matrix session. It tries
@@ -163,14 +167,16 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         return Promise.resolve(false);
     }
 
-    if (!queryParams.homeserver) {
+    const homeserver = localStorage.getItem(SSO_HOMESERVER_URL_KEY);
+    const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
+    if (!homeserver) {
         console.warn("Cannot log in with token: can't determine HS URL to use");
         return Promise.resolve(false);
     }
 
     return sendLoginRequest(
-        queryParams.homeserver,
-        queryParams.identityServer,
+        homeserver,
+        identityServer,
         "m.login.token", {
             token: queryParams.loginToken,
             initial_device_display_name: defaultDeviceDisplayName,
@@ -256,8 +262,8 @@ function _registerAsGuest(hsUrl, isUrl, defaultDeviceDisplayName) {
  * @returns {Object} Information about the session - see implementation for variables.
  */
 export function getLocalStorageSessionVars() {
-    const hsUrl = localStorage.getItem("mx_hs_url");
-    const isUrl = localStorage.getItem("mx_is_url");
+    const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
+    const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
     const accessToken = localStorage.getItem("mx_access_token");
     const userId = localStorage.getItem("mx_user_id");
     const deviceId = localStorage.getItem("mx_device_id");
@@ -298,6 +304,13 @@ async function _restoreFromLocalStorage(opts) {
             return false;
         }
 
+        const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+        if (pickleKey) {
+            console.log("Got pickle key");
+        } else {
+            console.log("No pickle key available");
+        }
+
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
             userId: userId,
@@ -306,6 +319,7 @@ async function _restoreFromLocalStorage(opts) {
             homeserverUrl: hsUrl,
             identityServerUrl: isUrl,
             guest: isGuest,
+            pickleKey: pickleKey,
         }, false);
         return true;
     } else {
@@ -348,9 +362,19 @@ async function _handleLoadSessionFailure(e) {
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function setLoggedIn(credentials) {
+export async function setLoggedIn(credentials) {
     stopMatrixClient();
-    return _doSetLoggedIn(credentials, true);
+    const pickleKey = credentials.userId && credentials.deviceId
+          ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
+          : null;
+
+    if (pickleKey) {
+        console.log("Created pickle key");
+    } else {
+        console.log("Pickle key not created");
+    }
+
+    return _doSetLoggedIn(Object.assign({}, credentials, {pickleKey}), true);
 }
 
 /**
@@ -479,13 +503,21 @@ function _showStorageEvictedDialog() {
 class AbortLoginAndRebuildStorage extends Error { }
 
 function _persistCredentialsToLocalStorage(credentials) {
-    localStorage.setItem("mx_hs_url", credentials.homeserverUrl);
+    localStorage.setItem(HOMESERVER_URL_KEY, credentials.homeserverUrl);
     if (credentials.identityServerUrl) {
-        localStorage.setItem("mx_is_url", credentials.identityServerUrl);
+        localStorage.setItem(ID_SERVER_URL_KEY, credentials.identityServerUrl);
     }
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_access_token", credentials.accessToken);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
+
+    if (credentials.pickleKey) {
+        localStorage.setItem("mx_has_pickle_key", true);
+    } else {
+        if (localStorage.getItem("mx_has_pickle_key")) {
+            console.error("Expected a pickle key, but none provided.  Encryption may not work.");
+        }
+    }
 
     // if we didn't get a deviceId from the login, leave mx_device_id unset,
     // rather than setting it to "undefined".
@@ -516,7 +548,9 @@ export function logout() {
     }
 
     _isLoggingOut = true;
-    MatrixClientPeg.get().logout().then(onLoggedOut,
+    const client = MatrixClientPeg.get();
+    PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
+    client.logout().then(onLoggedOut,
         (err) => {
             // Just throwing an error here is going to be very unhelpful
             // if you're trying to log out because your server's down and
@@ -575,10 +609,12 @@ async function startMatrixClient(startSyncing=true) {
     // to work).
     dis.dispatch({action: 'will_start_client'}, true);
 
+    // reset things first just in case
+    TypingStore.sharedInstance().reset();
+    ToastStore.sharedInstance().reset();
+
     Notifier.start();
     UserActivity.sharedInstance().start();
-    TypingStore.sharedInstance().reset(); // just in case
-    ToastStore.sharedInstance().reset();
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.start();
@@ -608,7 +644,7 @@ async function startMatrixClient(startSyncing=true) {
     }
 
     // Now that we have a MatrixClientPeg, update the Jitsi info
-    await Jitsi.getInstance().update();
+    await Jitsi.getInstance().start();
 
     // dispatch that we finished starting up to wire up any other bits
     // of the matrix client that cannot be set prior to starting up.

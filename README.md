@@ -11,14 +11,14 @@ a 'skin'. A skin provides:
  * The containing application
  * Zero or more 'modules' containing non-UI functionality
 
-As of Aug 2018, the only skin that exists is `vector-im/riot-web`; it and
+As of Aug 2018, the only skin that exists is `vector-im/element-web`; it and
 `matrix-org/matrix-react-sdk` should effectively
 be considered as a single project (for instance, matrix-react-sdk bugs
-are currently filed against vector-im/riot-web rather than this project).
+are currently filed against vector-im/element-web rather than this project).
 
 Translation Status
 ==================
-[![Translation status](https://translate.riot.im/widgets/riot-web/-/multi-auto.svg)](https://translate.riot.im/engage/riot-web/?utm_source=widget)
+[![Translation status](https://translate.riot.im/widgets/element-web/-/multi-auto.svg)](https://translate.riot.im/engage/element-web/?utm_source=widget)
 
 Developer Guide
 ===============
@@ -41,10 +41,10 @@ https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
 
 Code should be committed as follows:
  * All new components: https://github.com/matrix-org/matrix-react-sdk/tree/master/src/components
- * Riot-specific components: https://github.com/vector-im/riot-web/tree/master/src/components
+ * Element-specific components: https://github.com/vector-im/element-web/tree/master/src/components
    * In practice, `matrix-react-sdk` is still evolving so fast that the maintenance
-     burden of customising and overriding these components for Riot can seriously
-     impede development.  So right now, there should be very few (if any) customisations for Riot.
+     burden of customising and overriding these components for Element can seriously
+     impede development.  So right now, there should be very few (if any) customisations for Element.
  * CSS: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css
  * Theme specific CSS & resources: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
 
@@ -71,7 +71,7 @@ practices that anyone working with the SDK needs to be be aware of and uphold:
 
   * The view's CSS file MUST have the same name (e.g. view/rooms/MessageTile.css).
     CSS for matrix-react-sdk currently resides in
-    https://github.com/vector-im/riot-web/tree/master/src/skins/vector/css/matrix-react-sdk.
+    https://github.com/vector-im/element-web/tree/master/src/skins/vector/css/matrix-react-sdk.
 
   * Per-view CSS is optional - it could choose to inherit all its styling from
     the context of the rest of the app, although this is unusual for any but
@@ -125,7 +125,7 @@ from it.
 Github Issues
 =============
 
-All issues should be filed under https://github.com/vector-im/riot-web/issues
+All issues should be filed under https://github.com/vector-im/element-web/issues
 for now.
 
 Development
@@ -133,8 +133,10 @@ Development
 
 Ensure you have the latest LTS version of Node.js installed.
 
-Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
-guide](https://yarnpkg.com/docs/install/) if you do not have it already.
+Using `yarn` instead of `npm` is recommended. Please see the Yarn 1 [install
+guide](https://classic.yarnpkg.com/docs/install) if you do not have it
+already. This project has not yet been migrated to Yarn 2, so please ensure
+`yarn --version` shows a version from the 1.x series.
 
 `matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
 latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
@@ -172,5 +174,5 @@ yarn test
 
 ## End-to-End tests
 
-Make sure you've got your Riot development server running (by doing `yarn start` in riot-web), and then in this project, run `yarn run e2etests`.
+Make sure you've got your Element development server running (by doing `yarn start` in element-web), and then in this project, run `yarn run e2etests`.
 See `test/end-to-end-tests/README.md` for more information.

@@ -53,7 +53,7 @@ export default class CommunityProvider extends AutocompleteProvider {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
 
         // Disable autocompletions when composing commands because of various issues
-        // (see https://github.com/vector-im/riot-web/issues/4762)
+        // (see https://github.com/vector-im/element-web/issues/4762)
         if (/^(\/join|\/leave)/.test(query)) {
             return [];
         }
@@ -90,11 +90,12 @@ export default class CommunityProvider extends AutocompleteProvider {
                 type: "community",
                 href: makeGroupPermalink(groupId),
                 component: (
-                    <PillCompletion initialComponent={
+                    <PillCompletion title={name} description={groupId}>
                         <BaseAvatar name={name || groupId}
-                                    width={24} height={24}
+                                    width={24}
+                                    height={24}
                                     url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
-                    } title={name} description={groupId} />
+                    </PillCompletion>
                 ),
                 range,
             }))

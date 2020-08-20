@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import dis from '../../../dispatcher';
+import dis from '../../../dispatcher/dispatcher';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -73,7 +73,7 @@ export default class ReplyPreview extends React.Component {
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_title">
-                    { '💬 ' + _t('Replying') }
+                    { _t('Replying') }
                 </div>
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
                     <img className="mx_filterFlipColor" src={require("../../../../res/img/cancel.svg")} width="18" height="18"

@@ -24,11 +24,6 @@ limitations under the License.
 
     background-color: $togglesw-off-color;
     opacity: 0.5;
-
-    display: flex;
-    flex-direction: row;
-    flex: 0 0 auto;
-    align-items: center;
 }
 
 .mx_ToggleSwitch_enabled {
@@ -38,16 +33,18 @@ limitations under the License.
 
 .mx_ToggleSwitch.mx_ToggleSwitch_on {
     background-color: $togglesw-on-color;
+
+    > .mx_ToggleSwitch_ball {
+        left: calc(100% - $font-20px);
+    }
 }
 
 .mx_ToggleSwitch_ball {
-    transition: left 0.15s ease-out 0.1s;
+    position: relative;
     width: $font-20px;
     height: $font-20px;
     border-radius: $font-20px;
     background-color: $togglesw-ball-color;
-}
-
-.mx_ToggleSwitch_on {
-    flex-direction: row-reverse;
+    transition: left 0.15s ease-out 0.1s;
+    left: 0;
 }

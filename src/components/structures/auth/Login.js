@@ -285,7 +285,7 @@ export default createReactClass({
                 // We'd like to rely on new props coming in via `onServerConfigChange`
                 // so that we know the servers have definitely updated before clearing
                 // the busy state. In the case of a full MXID that resolves to the same
-                // HS as Riot's default HS though, there may not be any server change.
+                // HS as Element's default HS though, there may not be any server change.
                 // To avoid this trap, we clear busy here. For cases where the server
                 // actually has changed, `_initLoginLogic` will be called and manages
                 // busy state for its own liveness check.
@@ -355,7 +355,8 @@ export default createReactClass({
             ev.preventDefault();
             ev.stopPropagation();
             const ssoKind = step === 'm.login.sso' ? 'sso' : 'cas';
-            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind);
+            PlatformPeg.get().startSingleSignOn(this._loginLogic.createTemporaryClient(), ssoKind,
+                this.props.fragmentAfterLogin);
         } else {
             // Don't intercept - just go through to the register page
             this.onRegisterClick(ev);
@@ -614,8 +615,8 @@ export default createReactClass({
         }
         // XXX: This link does *not* have a target="_blank" because single sign-on relies on
         // redirecting the user back to a URI once they're logged in. On the web, this means
-        // we use the same window and redirect back to riot. On electron, this actually
-        // opens the SSO page in the electron app itself due to
+        // we use the same window and redirect back to Element. On Electron, this actually
+        // opens the SSO page in the Electron app itself due to
         // https://github.com/electron/electron/issues/8841 and so happens to work.
         // If this bug gets fixed, it will break SSO since it will open the SSO page in the
         // user's browser, let them log into their SSO provider, then redirect their browser
@@ -628,7 +629,9 @@ export default createReactClass({
                 <SSOButton
                     className="mx_Login_sso_link mx_Login_submit"
                     matrixClient={this._loginLogic.createTemporaryClient()}
-                    loginType={loginType} />
+                    loginType={loginType}
+                    fragmentAfterLogin={this.props.fragmentAfterLogin}
+                />
             </div>
         );
     },

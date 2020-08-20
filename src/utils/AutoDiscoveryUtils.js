@@ -1,6 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -70,13 +70,17 @@ export default class AutoDiscoveryUtils {
         let title = _t("Cannot reach homeserver");
         let body = _t("Ensure you have a stable internet connection, or get in touch with the server admin");
         if (!AutoDiscoveryUtils.isLivelinessError(err)) {
-            title = _t("Your Riot is misconfigured");
+            const brand = SdkConfig.get().brand;
+            title = _t("Your %(brand)s is misconfigured", { brand });
             body = _t(
-                "Ask your Riot admin to check <a>your config</a> for incorrect or duplicate entries.",
-                {}, {
+                "Ask your %(brand)s admin to check <a>your config</a> for incorrect or duplicate entries.",
+                {
+                    brand,
+                },
+                {
                     a: (sub) => {
                         return <a
-                            href="https://github.com/vector-im/riot-web/blob/master/docs/config.md"
+                            href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
                             target="_blank"
                             rel="noreferrer noopener"
                         >{sub}</a>;
@@ -199,7 +203,7 @@ export default class AutoDiscoveryUtils {
         // Note: In the cases where we rely on the default IS from the config (namely
         // lack of identity server provided by the discovery method), we intentionally do not
         // validate it. This has already been validated and this helps some off-the-grid usage
-        // of Riot.
+        // of Element.
         let preferredIdentityUrl = defaultConfig && defaultConfig['isUrl'];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
             preferredIdentityUrl = isResult["base_url"];
