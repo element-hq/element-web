@@ -53,10 +53,8 @@
 @import "./views/avatars/_PulsedAvatar.scss";
 @import "./views/context_menus/_IconizedContextMenu.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
-@import "./views/context_menus/_RoomTileContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
-@import "./views/context_menus/_TopLeftMenu.scss";
 @import "./views/context_menus/_WidgetContextMenu.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
@@ -157,7 +155,6 @@
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
 @import "./views/room_settings/_AliasSettings.scss";
-@import "./views/room_settings/_ColorSettings.scss";
 @import "./views/rooms/_AppsDrawer.scss";
 @import "./views/rooms/_Autocomplete.scss";
 @import "./views/rooms/_AuxPanel.scss";
