@@ -2420,5 +2420,7 @@
     "Explore all public rooms": "Explora todas as salas públicas",
     "%(count)s results|other": "%(count)s resultados",
     "Preparing to download logs": "Preparándose para descargar rexistro",
-    "Download logs": "Descargar rexistro"
+    "Download logs": "Descargar rexistro",
+    "Unexpected server error trying to leave the room": "Fallo non agardado no servidor ó intentar saír da sala",
+    "Error leaving room": "Erro ó saír da sala"
 }
