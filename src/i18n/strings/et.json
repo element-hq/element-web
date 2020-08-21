@@ -170,7 +170,7 @@
     "Are you sure you want to remove <b>%(serverName)s</b>": "Kas sa oled kindel et soovid eemadlada <b>%(serverName)s</b>",
     "Remove server": "Eemalda server",
     "%(networkName)s rooms": "%(networkName)s jututoad",
-    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Kas sa oled kindel et soovid eemaldada (kustutada) seda sündmust? Pane tähele, et see muutus võib tagasi pöörduda, kui muudad hiljem jututoa nime või teemanime.",
+    "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Kas sa oled kindel et soovid eemaldada (kustutada) seda sündmust? Pane tähele, et see muutus võib tagasi pöörduda, kui muudad hiljem jututoa nime või teema nime.",
     "Sign out and remove encryption keys?": "Logi välja ja eemalda krüptimisvõtmed?",
     "Upload files (%(current)s of %(total)s)": "Lae failid üles (%(current)s / %(total)s)",
     "Upload files": "Lae failid üles",
