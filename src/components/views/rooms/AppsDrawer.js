@@ -240,11 +240,11 @@ const PersistentVResizer = ({id, minHeight, maxHeight, className, handleWrapperC
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
-            setResizing(true);
+            if (!resizing) setResizing(true);
         }}
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
-            setResizing(false);
+            if (resizing) setResizing(false);
         }}
         handleWrapperClass={handleWrapperClass}
         handleClasses={{bottom: handleClass}}
