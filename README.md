@@ -105,10 +105,10 @@ Running as a Desktop app
 ========================
 
 Element can also be run as a desktop app, wrapped in Electron. You can download a
-pre-built version from https://riot.im/download/desktop/ or, if you prefer,
+pre-built version from https://element.io/get-started or, if you prefer,
 build it yourself.
 
-To build it yourself, follow the instructions at https://github.com/vector-im/riot-desktop.
+To build it yourself, follow the instructions at https://github.com/vector-im/element-desktop.
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
