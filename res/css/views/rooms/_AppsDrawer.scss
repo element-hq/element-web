@@ -15,16 +15,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
- Size settings
-*/
-$AppsDrawerMinHeight: 50px;
-$AppsDrawerDefaultHeight: 300px;
 $MiniAppTileHeight: 114px;
 
 .mx_AppsDrawer {
-    margin: 5px;
-    display: block;
+    margin: 5px 5px 5px 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .mx_RoomSublist_resizerHandles {
+        flex: 0 0 4px;
+    }
+
+    .mx_RoomSublist_resizerHandle {
+        cursor: ns-resize;
+        border-radius: 3px;
+
+        // Override styles from library
+        width: unset !important;
+        height: 4px !important;
+
+        // This is positioned directly below frame
+        position: absolute;
+        bottom: -8px !important; // override from library
+
+        // Together, these make the bar 64px wide
+        // These are also overridden from the library
+        left: calc(50% - 32px) !important;
+        right: calc(50% - 32px) !important;
+    }
+
+    &:hover {
+        .mx_RoomSublist_resizerHandle {
+            opacity: 0.8;
+            background: $primary-fg-color;
+        }
+    }
 }
 
 .mx_AppsDrawer_hidden {
@@ -36,13 +63,13 @@ $MiniAppTileHeight: 114px;
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
-    min-height: $AppsDrawerMinHeight;
-    height: $AppsDrawerDefaultHeight;
+    height: 100%;
 }
 
 .mx_AppsDrawer_minimised .mx_AppsContainer {
-    min-height: inherit;
-    height: inherit;
+    // override the re-resizable inline styles
+    height: inherit !important;
+    min-height: inherit !important;
 }
 
 .mx_AddWidget_button {
@@ -70,15 +97,14 @@ $MiniAppTileHeight: 114px;
 .mx_AppTile {
     max-width: 960px;
     width: 50%;
-    margin-right: 5px;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
-}
 
-.mx_AppTile:last-child {
-    margin-right: 1px;
+    & + .mx_AppTile {
+        margin-left: 5px;
+    }
 }
 
 .mx_AppTileFullWidth {
@@ -105,7 +131,7 @@ $MiniAppTileHeight: 114px;
 .mx_AppTile.mx_AppTile_minimised,
 .mx_AppTileFullWidth.mx_AppTile_minimised,
 .mx_AppTile_mini.mx_AppTile_minimised {
-    min-height: inherit;
+    height: 14px;
 }
 
 .mx_AppTile .mx_AppTile_persistedWrapper,
@@ -117,7 +143,6 @@ $MiniAppTileHeight: 114px;
 .mx_AppTile_persistedWrapper div {
     width: 100%;
     height: 100%;
-    min-width: 300px;
 }
 
 .mx_AppTileMenuBar {
@@ -402,7 +427,7 @@ form.mx_Custom_Widget_Form div {
     margin-right: auto;
 }
 
-.mx_AppsDrawer_minimised .mx_ResizeHandle {
+.mx_AppsDrawer_minimised .mx_RoomSublist_resizerHandle {
     display: none;
 }
 

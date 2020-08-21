@@ -1547,9 +1547,9 @@ export default createReactClass({
 
         // header + footer + status + give us at least 120px of scrollback at all times.
         let auxPanelMaxHeight = window.innerHeight -
-                (83 + // height of RoomHeader
+                (54 + // height of RoomHeader
                  36 + // height of the status area
-                 72 + // minimum height of the message compmoser
+                 51 + // minimum height of the message compmoser
                  120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway

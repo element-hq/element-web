@@ -31,8 +31,8 @@ import AccessibleButton from '../elements/AccessibleButton';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import classNames from 'classnames';
-import ResizeHandle from '../elements/ResizeHandle';
-import {Resizer, FixedDistributor} from '../../../resizer';
+import {Resizable} from "re-resizable";
+import {useLocalStorageState} from "../../../hooks/useLocalStorage";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -63,7 +63,6 @@ export default createReactClass({
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
         this.dispatcherRef = dis.register(this.onAction);
-        this._createResizer();
     },
 
     componentWillUnmount: function() {
@@ -73,10 +72,6 @@ export default createReactClass({
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-        if (this.resizer) {
-            this.resizer.detach();
-            this.resizer = null;
-        }
     },
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -162,30 +157,6 @@ export default createReactClass({
         this._launchManageIntegrations();
     },
 
-    _createResizer: function() {
-        if (!this.resizeContainer) {
-            return;
-        }
-
-        const classNames = {
-            handle: "mx_ResizeHandle",
-            vertical: "mx_ResizeHandle_vertical",
-            resizing: "mx_AppsDrawer_resizing",
-        };
-        const resizer = new Resizer(
-            this.resizeContainer,
-            FixedDistributor,
-            {},
-        );
-        resizer.setClassNames(classNames);
-        resizer.attach();
-        this.resizer = resizer;
-    },
-
-    _setResizeContainerRef: function(div) {
-        this.resizeContainer = div;
-    },
-
     render: function() {
         const apps = this.state.apps.map((app, index, arr) => {
             const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
@@ -193,7 +164,7 @@ export default createReactClass({
             return (<AppTile
                 key={app.id}
                 app={app}
-                fullWidth={arr.length<2 ? true : false}
+                fullWidth={arr.length < 2}
                 room={this.props.room}
                 userId={this.props.userId}
                 show={this.props.showApps}
@@ -204,8 +175,8 @@ export default createReactClass({
             />);
         });
 
-        if (apps.length == 0) {
-            return <div></div>;
+        if (apps.length === 0) {
+            return <div />;
         }
 
         let addWidget;
@@ -221,13 +192,6 @@ export default createReactClass({
                 title={_t('Add a widget')}>
                 [+] { _t('Add a widget') }
             </AccessibleButton>;
-        }
-
-        const containerStyle = {
-            maxHeight: Math.max(this.props.maxHeight - 50, 300),
-        };
-        if (!this.props.showApps && this.resizer) {
-            this.resizer.forHandleAt(0).item.clearSize();
         }
 
         let spinner;
@@ -249,14 +213,39 @@ export default createReactClass({
         });
 
         return (
-            <div className={classes} ref={this._setResizeContainerRef}>
-                <div id='apps' className='mx_AppsContainer' style={containerStyle}>
+            <div className={classes}>
+                <PersistentVResizer
+                    id={"apps-drawer_" + this.props.room.roomId}
+                    minHeight={100}
+                    maxHeight={this.props.maxHeight - 50}
+                    handleWrapperClass="mx_RoomSublist_resizerHandles"
+                    handleClass="mx_RoomSublist_resizerHandle"
+                    className="mx_AppsContainer"
+                >
                     { apps }
                     { spinner }
-                </div>
-                <ResizeHandle vertical={true} />
+                </PersistentVResizer>
                 { this._canUserModify() && addWidget }
             </div>
         );
     },
 });
+
+const PersistentVResizer = ({id, minHeight, maxHeight, className, handleWrapperClass, handleClass, children}) => {
+    const [height, setHeight] = useLocalStorageState("pvr_" + id, 100);
+
+    return <Resizable
+        size={{height: Math.min(height, maxHeight)}}
+        minHeight={minHeight}
+        maxHeight={maxHeight}
+        onResizeStop={(e, dir, ref, d) => {
+            setHeight(height + d.height);
+        }}
+        handleWrapperClass={handleWrapperClass}
+        handleClasses={{bottom: handleClass}}
+        className={className}
+        enable={{bottom: true}}
+    >
+        { children }
+    </Resizable>;
+};
