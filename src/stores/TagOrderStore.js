@@ -115,7 +115,7 @@ class TagOrderStore extends Store {
                 break;
             }
             case 'select_tag': {
-                const allowMultiple = !SettingsStore.getValue("feature_communities_v2_prototypes")
+                const allowMultiple = !SettingsStore.getValue("feature_communities_v2_prototypes");
 
                 let newTags = [];
                 // Shift-click semantics
