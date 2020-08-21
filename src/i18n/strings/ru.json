@@ -1590,7 +1590,7 @@
     "Error subscribing to list": "Ошибка при подписке на список",
     "Error upgrading room": "Ошибка обновления комнаты",
     "Match system theme": "Тема системы",
-    "Show tray icon and minimize window to it on close": "Показать иконку в панели задач и свернуть окно при закрытии",
+    "Show tray icon and minimize window to it on close": "Показать иконку в трее и сворачивать окно при закрытии",
     "Show typing notifications": "Показывать уведомления о наборе",
     "Delete %(count)s sessions|other": "Удалить %(count)s сессий",
     "Enable desktop notifications for this session": "Включить уведомления для рабочего стола для этой сессии",
