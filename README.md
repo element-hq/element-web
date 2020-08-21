@@ -24,8 +24,8 @@ Element has several tiers of support for different environments:
   * Everything else
 
 For accessing Element on an Android or iOS device, we currently recommend the
-native apps [riot-android](https://github.com/vector-im/riot-android)
-and [riot-ios](https://github.com/vector-im/riot-ios).
+native apps [element-android](https://github.com/vector-im/element-android)
+and [element-ios](https://github.com/vector-im/element-ios).
 
 Getting Started
 ===============
@@ -37,7 +37,7 @@ for those who like living dangerously.
 To host your own copy of Element, the quickest bet is to use a pre-built
 released version of Element:
 
-1. Download the latest version from https://github.com/vector-im/riot-web/releases
+1. Download the latest version from https://github.com/vector-im/element-web/releases
 1. Untar the tarball on your web server
 1. Move (or symlink) the `riot-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
@@ -69,7 +69,7 @@ access to Element (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
-https://github.com/vector-im/riot-web/issues/1977 for more details.
+https://github.com/vector-im/element-web/issues/1977 for more details.
 
 Building From Source
 ====================
@@ -82,7 +82,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 
 1. Install or update `node.js` so that your `node` is at least v10.x.
 1. Install `yarn` if not present already.
-1. Clone the repo: `git clone https://github.com/vector-im/riot-web.git`.
+1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the riot-web directory: `cd riot-web`.
 1. Install the prerequisites: `yarn install`.
    *  If you're using the `develop` branch, then it is recommended to set up a
