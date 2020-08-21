@@ -24,11 +24,11 @@ $MiniAppTileHeight: 114px;
     flex-direction: column;
     overflow: hidden;
 
-    .mx_RoomSublist_resizerHandles {
+    .mx_AppsContainer_resizerHandles {
         flex: 0 0 4px;
     }
 
-    .mx_RoomSublist_resizerHandle {
+    .mx_AppsContainer_resizerHandle {
         cursor: ns-resize;
         border-radius: 3px;
 
@@ -47,7 +47,7 @@ $MiniAppTileHeight: 114px;
     }
 
     &:hover {
-        .mx_RoomSublist_resizerHandle {
+        .mx_AppsContainer_resizerHandle {
             opacity: 0.8;
             background: $primary-fg-color;
         }
@@ -427,7 +427,7 @@ form.mx_Custom_Widget_Form div {
     margin-right: auto;
 }
 
-.mx_AppsDrawer_minimised .mx_RoomSublist_resizerHandle {
+.mx_AppsDrawer_minimised .mx_AppsContainer_resizerHandle {
     display: none;
 }
 

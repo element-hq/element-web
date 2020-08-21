@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -218,8 +218,8 @@ export default createReactClass({
                     id={"apps-drawer_" + this.props.room.roomId}
                     minHeight={100}
                     maxHeight={this.props.maxHeight - 50}
-                    handleWrapperClass="mx_RoomSublist_resizerHandles"
-                    handleClass="mx_RoomSublist_resizerHandle"
+                    handleWrapperClass="mx_AppsContainer_resizerHandles"
+                    handleClass="mx_AppsContainer_resizerHandle"
                     className="mx_AppsContainer"
                 >
                     { apps }
@@ -233,17 +233,24 @@ export default createReactClass({
 
 const PersistentVResizer = ({id, minHeight, maxHeight, className, handleWrapperClass, handleClass, children}) => {
     const [height, setHeight] = useLocalStorageState("pvr_" + id, 100);
+    const [resizing, setResizing] = useState(false);
 
     return <Resizable
         size={{height: Math.min(height, maxHeight)}}
         minHeight={minHeight}
         maxHeight={maxHeight}
+        onResizeStart={() => {
+            setResizing(true);
+        }}
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
+            setResizing(false);
         }}
         handleWrapperClass={handleWrapperClass}
         handleClasses={{bottom: handleClass}}
-        className={className}
+        className={classNames(className, {
+            mx_AppsDrawer_resizing: resizing,
+        })}
         enable={{bottom: true}}
     >
         { children }
