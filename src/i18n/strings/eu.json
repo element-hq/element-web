@@ -1,10 +1,10 @@
 {
     "Dismiss": "Baztertu",
-    "powered by Matrix": "Matrix mamian",
+    "powered by Matrix": "Matrix-ekin egina",
     "Unknown device": "Gailu ezezaguna",
     "You need to be using HTTPS to place a screen-sharing call.": "HTTPS erabili behar duzu sekretuak partekatzeko dei bat ezartzeko.",
     "Welcome to Element": "Ongi etorri Element mezularitzara",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Deszentralizatutako eta zifratutako txat eta elkarlana [matrix] sareari esker",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Txat eta elkarlan deszentralizatua eta zifratua [matrix] sarean",
     "Sign In": "Hasi saioa",
     "Create Account": "Sortu kontua",
     "Explore rooms": "Arakatu gelak",
@@ -25,5 +25,12 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Zure oraingo nabigatzailea erabiltzen jarraitu dezakezu, baina ezaugarri batzuk agian ez dute funtzionatuko eta itxura desegokia izan daiteke.",
     "I understand the risks and wish to continue": "Arriskuak ulertzen ditut eta jarraitu nahi dut",
     "Go to element.io": "Joan element.io gunera",
-    "Failed to start": "Huts egin du abiatzean"
+    "Failed to start": "Huts egin du abiatzean",
+    "Your Element is misconfigured": "Zure Element ez dago ondo konfiguratuta",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Zure Element-en konfigurazioak JSON baliogabea dauka. Mesedez, konpondu arazoa eta birkargatu orria.",
+    "Download Completed": "Deskarga burututa",
+    "Open": "Ireki",
+    "Your browser can't run %(brand)s": "Zure nabigatzaileak ezin du %(brand)s exekutatu",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s-(e)k zure oraingo nabigatzaile honek euskarririk ematen ez dien ezaugarri aurreratuak erabiltzen ditu.",
+    "Powered by Matrix": "Matrixekin egina"
 }

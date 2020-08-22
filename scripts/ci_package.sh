@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Runs package.sh setting the version to git hashes of the riot-web,
+# Runs package.sh setting the version to git hashes of the element-web,
 # react-sdk & js-sdk checkouts, for the case where these dependencies
 # are git checkouts.
 

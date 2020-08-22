@@ -1,4 +1,4 @@
-# How to translate riot-web (Dev Guide)
+# How to translate Element (Dev Guide)
 
 ## Requirements
 
@@ -6,7 +6,7 @@
   - Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
 - Latest LTS version of Node.js installed
 - Be able to understand English
-- Be able to understand the language you want to translate riot-web into
+- Be able to understand the language you want to translate Element into
 
 ## Translating strings vs. marking strings for translation
 

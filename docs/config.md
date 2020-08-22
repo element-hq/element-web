@@ -4,13 +4,13 @@ Configuration
 You can configure the app by copying `config.sample.json` to
 `config.json` and customising it:
 
-For a good example, see https://riot.im/develop/config.json.
+For a good example, see https://develop.element.io/config.json.
 
 1. `default_server_config` sets the default homeserver and identity server URL for
-   Riot to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
+   Element to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
    with added support for a `server_name` under the `m.homeserver` section to display
    a custom homeserver name. Alternatively, the config can contain a `default_server_name`
-   instead which is where Riot will go to get that same object, although this option is
+   instead which is where Element will go to get that same object, although this option is
    deprecated - see the `.well-known` link above for more information on using this option.
    Note that the `default_server_name` is used to get a complete server configuration
    whereas the `server_name` in the `default_server_config` is for display purposes only.
@@ -18,16 +18,16 @@ For a good example, see https://riot.im/develop/config.json.
      `default_is_url`, however these are deprecated. They are maintained for backwards
      compatibility with older configurations. `default_is_url` is respected only
      if `default_hs_url` is used.
-   * Riot will fail to load if a mix of `default_server_config`, `default_server_name`, or
+   * Element will fail to load if a mix of `default_server_config`, `default_server_name`, or
      `default_hs_url` is specified. When multiple sources are specified, it is unclear
      which should take priority and therefore the application cannot continue.
-   * As of Riot 1.4.0, identity servers are optional. See [Identity servers](#identity-servers) below.
-1. `features`: Lookup of optional features that may be `enable`d, `disable`d, or
-   exposed to the user in the `labs` section of settings. The available
-   optional experimental features vary from release to release and are [documented](labs.md). The feature flag process is
-   [documented](feature-flags.md) as well.
-1. `showLabsSettings`: Shows the "labs" tab of user settings even when no `features` are enabled
-   or present. Useful for getting at settings which may be otherwise hidden.
+   * As of Element 1.4.0, identity servers are optional. See [Identity servers](#identity-servers) below.
+1. `features`: Lookup of optional features that may be force-enabled (`true`) or force-disabled (`false`).
+   When features are not listed here, their defaults will be used, and users can turn them on/off if `showLabsSettings`
+   allows them to. The available optional experimental features vary from release to release and are 
+   [documented](labs.md). The feature flag process is [documented](feature-flags.md) as well.
+1. `showLabsSettings`: Shows the "labs" tab of user settings. Useful to allow users to turn on experimental features
+   they might not otherwise have access to.
 1. `brand`: String to pass to your homeserver when configuring email notifications, to let the
    homeserver know what email template to use when talking to you.
 1. `branding`: Configures various branding and logo details, such as:
@@ -42,7 +42,7 @@ For a good example, see https://riot.im/develop/config.json.
     1. `adminMessageMD`: An extra message to show on the reporting dialog to
        mention homeserver-specific policies. Accepts Markdown.
 1. `integrations_ui_url`: URL to the web interface for the integrations server. The integrations
-   server is not Riot and normally not your homeserver either. The integration server settings
+   server is not Element and normally not your homeserver either. The integration server settings
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
@@ -65,10 +65,10 @@ For a good example, see https://riot.im/develop/config.json.
     1. `whitelistedISUrls`: a list of IS URLs to not redact from the analytics
     1. `siteId`: The Piwik Site ID to use when sending analytics to the Piwik server configured above
 1. `welcomeUserId`: the user ID of a bot to invite whenever users register that can give them a tour
-1. `embeddedPages`: Configures the pages displayed in portions of Riot that
+1. `embeddedPages`: Configures the pages displayed in portions of Element that
    embed static files, such as:
     1. `welcomeUrl`: Initial content shown on the outside of the app when not
-       logged in. Defaults to `welcome.html` supplied with Riot.
+       logged in. Defaults to `welcome.html` supplied with Element.
     1. `homeUrl`: Content shown on the inside of the app when a specific room is
        not selected. By default, no home page is configured. If one is set, a
        button to access it will be shown in the top left menu.
@@ -80,7 +80,7 @@ For a good example, see https://riot.im/develop/config.json.
    is special cased to the `default_theme` in the config file).
 1. `disable_custom_urls`: disallow the user to change the
    default homeserver when signing up or logging in.
-1. `permalinkPrefix`: Used to change the URL that Riot generates permalinks with.
+1. `permalinkPrefix`: Used to change the URL that Element generates permalinks with.
    By default, this is "https://matrix.to" to generate matrix.to (spec) permalinks.
    Set this to your Riot instance URL if you run an unfederated server (eg:
    "https://riot.example.org").
@@ -103,14 +103,14 @@ For a good example, see https://riot.im/develop/config.json.
     Defaults to true (room federation enabled).
 
 Note that `index.html` also has an og:image meta tag that is set to an image
-hosted on riot.im. This is the image used if links to your copy of Riot
-appear in some websites like Facebook, and indeed Riot itself. This has to be
+hosted on riot.im. This is the image used if links to your copy of Element
+appear in some websites like Facebook, and indeed Element itself. This has to be
 static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
 not possible for this to be an option in config.json. If you'd like to change
-it, you can build Riot, but run
+it, you can build Element, but run
 `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`.
 Alternatively, you can edit the `og:image` meta tag in `index.html` directly
-each time you download a new version of Riot.
+each time you download a new version of Element.
 
 Identity servers
 ================
@@ -119,10 +119,10 @@ The identity server is used for inviting other users to a room via third party
 identifiers like emails and phone numbers. It is not used to store your password
 or account information.
 
-As of Riot 1.4.0, all identity server functions are optional and you are
+As of Element 1.4.0, all identity server functions are optional and you are
 prompted to agree to terms before data is sent to the identity server.
 
-Riot will check multiple sources when looking for an identity server to use in
+Element will check multiple sources when looking for an identity server to use in
 the following order of preference:
 
 1. The identity server set in the user's account data
@@ -132,7 +132,7 @@ the following order of preference:
    login
 3. The identity server provided by the Riot config file
 
-If none of these sources have an identity server set, then Riot will prompt the
+If none of these sources have an identity server set, then Element will prompt the
 user to set an identity server first when attempting to use features that
 require one.
 

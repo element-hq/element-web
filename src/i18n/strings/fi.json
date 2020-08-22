@@ -27,5 +27,10 @@
     "Failed to start": "Käynnistys ei onnistunut",
     "Download Completed": "Lataus valmis",
     "Open": "Avaa",
-    "Go to element.io": "Mene osoitteeseen riot.im"
+    "Go to element.io": "Mene osoitteeseen riot.im",
+    "Your Element is misconfigured": "Elementisi asetukset ovat pielessä",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element-asetuksesi sisältävät epäkelpoa JSONia. Korjaa ongelma ja lataa sivu uudelleen.",
+    "Powered by Matrix": "Moottorina Matrix",
+    "Your browser can't run %(brand)s": "%(brand)s ei toimi selaimessasi",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue."
 }

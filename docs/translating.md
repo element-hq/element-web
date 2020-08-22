@@ -1,10 +1,10 @@
-# How to translate riot-web
+# How to translate Element
 
 ## Requirements
 
 - Web Browser
 - Be able to understand English
-- Be able to understand the language you want to translate riot-web into
+- Be able to understand the language you want to translate Element into
 
 ## Step 0: Join #riotweb-translations:matrix.org
 
@@ -17,7 +17,7 @@
 2. After registering check if you got an email to verify your account and click the link (if there is none head to step 1.4)
 3. Log into weblate
 4. Head to https://translate.riot.im/accounts/profile/ and select the languages you know and maybe another language you know too.
-6. Head to https://translate.riot.im/accounts/profile/#subscriptions and select Riot Web as Project
+6. Head to https://translate.riot.im/accounts/profile/#subscriptions and select Element Web as Project
 
 ## How to check if your language already is being translated
 
@@ -50,7 +50,7 @@ The yellow button has to be used if you are unsure about the translation but you
 
 ### What are "%(something)s"?
 
-These things are variables that are expanded when displayed by Riot. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
+These things are variables that are expanded when displayed by Element. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
 
 A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`.  You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
 

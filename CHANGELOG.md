@@ -1,3 +1,88 @@
+Changes in [1.7.4](https://github.com/vector-im/element-web/releases/tag/v1.7.4) (2020-08-17)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4-rc.1...v1.7.4)
+
+ * Upgrade to React SDK 3.2.0 and JS SDK 8.1.0
+
+Changes in [1.7.4-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.4-rc.1) (2020-08-13)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.3...v1.7.4-rc.1)
+
+ * Upgrade to React SDK 3.2.0-rc.1 and JS SDK 8.1.0-rc.1
+ * Update policy links to element.io
+   [\#14905](https://github.com/vector-im/element-web/pull/14905)
+ * Update from Weblate
+   [\#14949](https://github.com/vector-im/element-web/pull/14949)
+ * Try to close notification on all platforms which support it, not just
+   electron
+   [\#14939](https://github.com/vector-im/element-web/pull/14939)
+ * Update bug report submission URL
+   [\#14903](https://github.com/vector-im/element-web/pull/14903)
+ * Fix arm docker build
+   [\#14522](https://github.com/vector-im/element-web/pull/14522)
+
+Changes in [1.7.3](https://github.com/vector-im/element-web/releases/tag/v1.7.3) (2020-08-05)
+=============================================================================================
+
+## Security notice
+
+Element Web 1.7.3 (as well as the earlier release 1.7.2) fixes an issue where
+replying to a specially formatted message would make it seem like the replier
+said something they did not. Thanks to Sorunome for responsibly disclosing this
+via Matrix's Security Disclosure Policy.
+
+Element Web 1.7.3 (as well as the earlier release 1.7.2) fixes an issue where an
+unexpected language ID in a code block could cause Element to crash. Thanks to
+SakiiR for responsibly disclosing this via Matrix's Security Disclosure Policy.
+
+## All changes
+
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.3-rc.1...v1.7.3)
+
+ * Upgrade to React SDK 3.1.0 and JS SDK 8.0.1
+
+Changes in [1.7.3-rc.1](https://github.com/vector-im/riot-web/releases/tag/v1.7.3-rc.1) (2020-07-31)
+====================================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.2...v1.7.3-rc.1)
+
+ * Upgrade to React SDK 3.1.0-rc.1 and JS SDK 8.0.1-rc.1
+ * Make Lojban translation available
+   [\#14703](https://github.com/vector-im/riot-web/pull/14703)
+ * Update from Weblate
+   [\#14841](https://github.com/vector-im/riot-web/pull/14841)
+ * Remove redundant lint dependencies
+   [\#14810](https://github.com/vector-im/riot-web/pull/14810)
+ * Bump elliptic from 6.5.2 to 6.5.3
+   [\#14826](https://github.com/vector-im/riot-web/pull/14826)
+ * Update mobile config intercept URL
+   [\#14796](https://github.com/vector-im/riot-web/pull/14796)
+ * Fix typo in https://
+   [\#14791](https://github.com/vector-im/riot-web/pull/14791)
+
+Changes in [1.7.2](https://github.com/vector-im/riot-web/releases/tag/v1.7.2) (2020-07-27)
+==========================================================================================
+[Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.1...v1.7.2)
+
+ * Upgrade to React SDK 3.0.0 and JS SDK 8.0.0
+ * Update from Weblate
+   [\#14778](https://github.com/vector-im/riot-web/pull/14778)
+ * Capitalize letters
+   [\#14566](https://github.com/vector-im/riot-web/pull/14566)
+ * Configure eslint package and fix lint issues
+   [\#14673](https://github.com/vector-im/riot-web/pull/14673)
+ * Riot → Element
+   [\#14581](https://github.com/vector-im/riot-web/pull/14581)
+ * Remove labs info for the new room list
+   [\#14603](https://github.com/vector-im/riot-web/pull/14603)
+ * Convince Webpack to use development on CI
+   [\#14593](https://github.com/vector-im/riot-web/pull/14593)
+ * Move dev dep to the right place
+   [\#14572](https://github.com/vector-im/riot-web/pull/14572)
+ * Bump lodash from 4.17.15 to 4.17.19
+   [\#14552](https://github.com/vector-im/riot-web/pull/14552)
+ * Update all mobile links to match marketing site
+   [\#14541](https://github.com/vector-im/riot-web/pull/14541)
+
 Changes in [1.7.1](https://github.com/vector-im/riot-web/releases/tag/v1.7.1) (2020-07-16)
 ==========================================================================================
 [Full Changelog](https://github.com/vector-im/riot-web/compare/v1.7.0...v1.7.1)

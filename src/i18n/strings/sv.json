@@ -25,5 +25,12 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kan fortsätta använda din nuvarande webbläsare, men vissa eller alla funktioner kanske inte fungerar och uteseendet samt känslan av applikationen kan var felaktig.",
     "I understand the risks and wish to continue": "Jag förstår riskerna och vill fortsätta",
     "Go to element.io": "Gå till element.io",
-    "Failed to start": "Misslyckade att starta"
+    "Failed to start": "Misslyckade att starta",
+    "Your Element is misconfigured": "Din Element är felkonfigurerad",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Din Element konfiguration innehåller ogiltig JSON. Vänligen rätta till problemet och ladda om sidan igen.",
+    "Download Completed": "Nedladdning Slutförd",
+    "Open": "Öppna",
+    "Powered by Matrix": "Drivs av Matrix",
+    "Your browser can't run %(brand)s": "Din webbläsare kan inte köra %(brand)s",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s använder avancerade webbläsarfunktioner som inte stöds av din aktuella webbläsare."
 }

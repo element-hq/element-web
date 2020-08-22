@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.7.1",
+  "version": "1.7.4",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -51,9 +51,8 @@
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "install:electron": "electron-builder install-app-deps",
-    "lint": "yarn lint:types && yarn lint:ts && yarn lint:js && yarn lint:style",
+    "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
     "lint:js": "eslint src",
-    "lint:ts": "echo 'We don't actually have a typescript linter at this layer because tslint is being removed from our stack. Presumably your TS is fine.'",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint 'res/css/**/*.scss'",
     "test": "true"
@@ -114,11 +113,10 @@
     "concurrently": "^4.0.1",
     "cpx": "^1.3.2",
     "css-loader": "^3.3.2",
-    "eslint": "^5.8.0",
-    "eslint-config-google": "^0.7.1",
+    "eslint": "7.3.1",
+    "eslint-config-matrix-org": "^0.1.2",
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-flowtype": "^2.50.3",
-    "eslint-plugin-jest": "^23.0.4",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-react-hooks": "^2.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
