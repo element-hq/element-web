@@ -51,9 +51,9 @@ limitations under the License.
 
 .mx_TagPanel .mx_TagPanel_divider {
     height: 0px;
-    width: 34px;
-    border-bottom: 1px solid $panel-divider-color;
-    display: none;
+    width: 90%;
+    border: none;
+    border-bottom: 1px solid $tagpanel-divider-color;
 }
 
 .mx_TagPanel .mx_TagPanel_scroller {
@@ -114,6 +114,10 @@ limitations under the License.
     position: absolute;
     left: -12px;
     border-radius: 0 3px 3px 0;
+}
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_large.mx_TagTile_selected::before {
+    left: -10px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {

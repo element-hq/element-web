@@ -47,6 +47,7 @@ export default createReactClass({
         contextMenuButtonRef: PropTypes.object,
         openMenu: PropTypes.func,
         menuDisplayed: PropTypes.bool,
+        selected: PropTypes.bool,
     },
 
     statics: {
