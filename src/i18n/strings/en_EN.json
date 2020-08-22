@@ -2072,6 +2072,7 @@
     "Find a room…": "Find a room…",
     "Find a room… (e.g. %(exampleRoom)s)": "Find a room… (e.g. %(exampleRoom)s)",
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.",
+    "Explore rooms in %(communityName)s": "Explore rooms in %(communityName)s",
     "Clear filter": "Clear filter",
     "Search rooms": "Search rooms",
     "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.": "You can't send any messages until you review and agree to <consentLink>our terms and conditions</consentLink>.",
