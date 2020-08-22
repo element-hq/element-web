@@ -136,7 +136,7 @@ To supply your own custom `config.json`, map a volume to `/app/config.json`. For
 if your custom config was located at `/etc/element-web/config.json` then your Docker command
 would be:
 ```bash
-docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
+docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/riot-web
 ```
 
 To build the image yourself:
@@ -144,13 +144,13 @@ To build the image yourself:
 git clone https://github.com/vector-im/element-web.git element-web
 cd element-web
 git checkout master
-docker build -t vectorim/element-web .
+docker build .
 ```
 
 If you're building a custom branch, or want to use the develop branch, check out the appropriate
 element-web branch and then run:
 ```bash
-docker build -t vectorim/element-web:develop \
+docker build -t \
     --build-arg USE_CUSTOM_SDKS=true \
     --build-arg REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git" \
     --build-arg REACT_SDK_BRANCH="develop" \
