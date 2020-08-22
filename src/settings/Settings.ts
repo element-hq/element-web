@@ -109,6 +109,15 @@ export interface ISetting {
 }
 
 export const SETTINGS: {[setting: string]: ISetting} = {
+    "feature_communities_v2_prototypes": {
+        isFeature: true,
+        displayName: _td(
+            "Communities v2 prototypes. Requires compatible homeserver. " +
+            "Highly experimental - use with caution.",
+        ),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_new_spinner": {
         isFeature: true,
         displayName: _td("New spinner design"),
