@@ -1959,5 +1959,7 @@
     "Incorrect username and/or password.": "Isem n uqeddac d/neɣ awal uffir d arameɣtu.",
     "Registration Successful": "Asekles yemmed akken iwata",
     "Save your Security Key": "Sekles tasarut-ik·im n tɣellist",
-    "Unable to set up secret storage": "Asbadu n uklas uffir d awezɣi"
+    "Unable to set up secret storage": "Asbadu n uklas uffir d awezɣi",
+    "Paperclip": "Tamessakt n lkaɣeḍ",
+    "Are you sure? You will lose your encrypted messages if your keys are not backed up properly.": "Tettḥeqqeḍ? Ad tesruḥeḍ iznan-ik•im yettwawgelhen ma tisura-k•m ur klisent ara akken ilaq."
 }
