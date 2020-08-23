@@ -1337,7 +1337,7 @@
     "Use an identity server to invite by email. Manage in Settings.": "Nutze einen Identitätsserver, um über E-Mail Einladungen zu verschicken. Verwalte es in den Einstellungen.",
     "%(name)s (%(userId)s)": "%(name)s (%(userId)s)",
     "Try out new ways to ignore people (experimental)": "Versuche neue Möglichkeiten, um Menschen zu ignorieren (experimentell)",
-    "Send read receipts for messages (requires compatible homeserver to disable)": "Schicke Lesebestätigungen für Nachrichten (erfordert kompatiblen Heimserver zum Deaktivieren)",
+    "Send read receipts for messages (requires compatible homeserver to disable)": "Lesebestätigungen für Nachrichten senden (erfordert einen kompatiblen Heimserver zum deaktivieren)",
     "My Ban List": "Meine Bannliste",
     "This is your list of users/servers you have blocked - don't leave the room!": "Dies ist die Liste von Benutzer*innen/Servern, die du blockiert hast - verlasse den Raum nicht!",
     "Accept <policyLink /> to continue:": "Akzeptiere <policyLink />, um fortzufahren:",
