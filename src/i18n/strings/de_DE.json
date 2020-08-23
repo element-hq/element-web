@@ -1034,7 +1034,7 @@
     "%(senderDisplayName)s made the room invite only.": "%(senderDisplayName)s hat den Raum auf eingeladene User beschränkt.",
     "%(senderDisplayName)s changed the join rule to %(rule)s": "%(senderDisplayName)s änderte die Zutrittsregel auf '%(rule)s'",
     "%(senderDisplayName)s has allowed guests to join the room.": "%(senderDisplayName)s erlaubte Gäste diesem Raum beizutreten.",
-    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s hat verboten, dass Gäste diesem Raum beitreten.",
+    "%(senderDisplayName)s has prevented guests from joining the room.": "%(senderDisplayName)s hat Gästen verboten diesem Raum beizutreten.",
     "%(senderDisplayName)s changed guest access to %(rule)s": "%(senderDisplayName)s änderte den Gastzugriff auf '%(rule)s'",
     "Group & filter rooms by custom tags (refresh to apply changes)": "Gruppiere & filtere Räume nach eigenen Tags (neu laden um Änderungen zu übernehmen)",
     "Unable to find a supported verification method.": "Konnte kein unterstützte Verifikationsmethode finden.",
