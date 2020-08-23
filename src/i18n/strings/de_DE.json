@@ -1587,7 +1587,7 @@
     "Reject & Ignore user": "Ablehnen & Nutzer ignorieren",
     "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
     "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel für Räume von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
-    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Erlaube den Standard-Server zur Anrufunterstützung (turn.matrix.org) zu verwenden wenn dein Heimserver keinen eigenen anbietet (deine IP Adresse wird bei dem Anruf übermittelt)",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Auf den Server turn.matrix.org zurückgreifen, falls deine Heimserver keine Anruf-Assistenz anbietet (Deine IP-Adresse wird während eines Anrufs geteilt).",
     "Show more": "mehr",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Diese Sitzung <b>speichert deine Schlüssel nicht</b>, du kannst sie aber an die Schlüsselsicherung anschließen.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Verbinde diese Sitzung mit deiner Schlüsselsicherung bevor du dich abmeldest, um den Verlust von Schlüsseln zu vermeiden.",
