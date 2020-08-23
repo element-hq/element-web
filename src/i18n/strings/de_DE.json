@@ -572,7 +572,7 @@
     "was unbanned %(count)s times|one": "wurde entbannt",
     "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)shat den Namen geändert",
     "%(items)s and %(count)s others|other": "%(items)s und %(count)s andere",
-    "%(items)s and %(count)s others|one": "%(items)s und noch jemand",
+    "%(items)s and %(count)s others|one": "%(items)s und ein weiteres Raum-Mitglied",
     "An email has been sent to %(emailAddress)s. Once you've followed the link it contains, click below.": "Eine E-Mail wurde an %(emailAddress)s gesendet. Folge dem in der E-Mail enthaltenen Link und klicke dann unten.",
     "The visibility of '%(roomName)s' in %(groupId)s could not be updated.": "Die Sichtbarkeit von '%(roomName)s' in %(groupId)s konnte nicht aktualisiert werden.",
     "Visibility in Room List": "Sichtbarkeit in Raum-Liste",
