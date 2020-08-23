@@ -2,7 +2,7 @@ language: node_js
 os: linux
 dist: bionic
 node_js:
-  11
+  12
 before_script:
   - npm run clean && npm install
 env:
