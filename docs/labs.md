@@ -95,7 +95,14 @@ theme definition.
 
 For some sample themes, check out [aaronraimist/element-themes](https://github.com/aaronraimist/element-themes).
 
-# Message preview tweaks
+## Message preview tweaks
 
 To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
 To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
+
+## Communities v2 prototyping (`feature_communities_v2_prototypes`) [In Development]
+
+**This is a highly experimental implementation for parts of the communities v2 experience.** It does not
+represent what communities v2 will look/feel like and can/will change without notice. Due to the early
+stages this feature is in and the requirement for a compatible homeserver, we will not be accepting issues
+or feedback for this functionality at this time.
