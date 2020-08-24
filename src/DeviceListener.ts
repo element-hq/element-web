@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from './MatrixClientPeg';
+import dis from "./dispatcher/dispatcher";
 import {
     hideToast as hideBulkUnverifiedSessionsToast,
     showToast as showBulkUnverifiedSessionsToast,
@@ -28,11 +29,16 @@ import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
-import {privateShouldBeEncrypted} from "./createRoom";
+import { privateShouldBeEncrypted } from "./createRoom";
+import { isSecretStorageBeingAccessed, accessSecretStorage } from "./CrossSigningManager";
+import { isSecureBackupRequired } from './utils/WellKnownUtils';
+import { isLoggedIn } from './components/structures/MatrixChat';
+
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
 export default class DeviceListener {
+    private dispatcherRef: string;
     // device IDs for which the user has dismissed the verify toast ('Later')
     private dismissed = new Set<string>();
     // has the user dismissed any of the various nag toasts to setup encryption on this device?
@@ -60,6 +66,7 @@ export default class DeviceListener {
         MatrixClientPeg.get().on('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
         MatrixClientPeg.get().on('accountData', this._onAccountData);
         MatrixClientPeg.get().on('sync', this._onSync);
+        this.dispatcherRef = dis.register(this._onAction);
         this._recheck();
     }
 
@@ -72,6 +79,10 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
             MatrixClientPeg.get().removeListener('accountData', this._onAccountData);
             MatrixClientPeg.get().removeListener('sync', this._onSync);
+        }
+        if (this.dispatcherRef) {
+            dis.unregister(this.dispatcherRef);
+            this.dispatcherRef = null;
         }
         this.dismissed.clear();
         this.dismissedThisDeviceToast = false;
@@ -158,6 +169,11 @@ export default class DeviceListener {
         if (state === 'PREPARED' && prevState === null) this._recheck();
     };
 
+    _onAction = ({ action }) => {
+        if (action !== "on_logged_in") return;
+        this._recheck();
+    };
+
     // The server doesn't tell us when key backup is set up, so we poll
     // & cache the result
     async _getKeyBackupInfo() {
@@ -170,6 +186,9 @@ export default class DeviceListener {
     }
 
     private shouldShowSetupEncryptionToast() {
+        // If we're in the middle of a secret storage operation, we're likely
+        // modifying the state involved here, so don't add new toasts to setup.
+        if (isSecretStorageBeingAccessed()) return false;
         // In a default configuration, show the toasts. If the well-known config causes e2ee default to be false
         // then do not show the toasts until user is in at least one encrypted room.
         if (privateShouldBeEncrypted()) return true;
@@ -207,7 +226,15 @@ export default class DeviceListener {
                     showSetupEncryptionToast(SetupKind.UPGRADE_ENCRYPTION);
                 } else {
                     // No cross-signing or key backup on account (set up encryption)
-                    showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                    await cli.waitForClientWellKnown();
+                    if (isSecureBackupRequired() && isLoggedIn()) {
+                        // If we're meant to set up, and Secure Backup is required,
+                        // trigger the flow directly without a toast once logged in.
+                        hideSetupEncryptionToast();
+                        accessSecretStorage();
+                    } else {
+                        showSetupEncryptionToast(SetupKind.SET_UP_ENCRYPTION);
+                    }
                 }
             }
         }

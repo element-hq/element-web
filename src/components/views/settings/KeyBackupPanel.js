@@ -21,6 +21,7 @@ import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
+import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
 
 export default class KeyBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -315,14 +316,19 @@ export default class KeyBackupPanel extends React.PureComponent {
                 trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 
+            let deleteBackupButton;
+            if (!isSecureBackupRequired()) {
+                deleteBackupButton = <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                    {_t("Delete Backup")}
+                </AccessibleButton>;
+            }
+
             const buttonRow = (
                 <div className="mx_KeyBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         {restoreButtonCaption}
                     </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                        {_t("Delete Backup")}
-                    </AccessibleButton>
+                    {deleteBackupButton}
                 </div>
             );
 

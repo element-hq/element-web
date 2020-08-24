@@ -21,6 +21,7 @@ import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
+import { isSecureBackupRequired } from './utils/WellKnownUtils';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -31,6 +32,17 @@ let secretStorageKeys = {};
 let secretStorageBeingAccessed = false;
 
 function isCachingAllowed() {
+    return secretStorageBeingAccessed;
+}
+
+/**
+ * This can be used by other components to check if secret storage access is in
+ * progress, so that we can e.g. avoid intermittently showing toasts during
+ * secret storage setup.
+ *
+ * @returns {bool}
+ */
+export function isSecretStorageBeingAccessed() {
     return secretStorageBeingAccessed;
 }
 
@@ -208,7 +220,18 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 {
                     force: forceReset,
                 },
-                null, /* priority = */ false, /* static = */ true,
+                null,
+                /* priority = */ false,
+                /* static = */ true,
+                /* options = */ {
+                    onBeforeClose(reason) {
+                        // If Secure Backup is required, you cannot leave the modal.
+                        if (reason === "backgroundClick") {
+                            return !isSecureBackupRequired();
+                        }
+                        return true;
+                    },
+                },
             );
             const [confirmed] = await finished;
             if (!confirmed) {
