@@ -1,52 +1,48 @@
-import React from "react";
-import SettingsStore from "../../../../lib/settings/SettingsStore";
-import PropTypes from "prop-types";
+const confetti = {
+    //set max confetti count
+    maxCount: 150,
+    //syarn addet the particle animation speed
+    speed: 3,
+    //the confetti animation frame interval in milliseconds
+    frameInterval: 15,
+    //the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
+    alpha: 1.0,
+    //call to start confetti animation (with optional timeout in milliseconds)
+    start: null,
+    //call to stop adding confetti
+    stop: null,
+    //call to stop the confetti animation and remove all confetti immediately
+    remove: null,
+    isRunning: null,
+    //call and returns true or false depending on whether the animation is running
+    animate: null,
+};
 
-export default class Confetti extends React.Component {
-    displayName: 'confetti';
-    constructor(props) {
-        super(props);
-        this.animateConfetti = this.animateConfetti.bind(this);
-        this.confetti.start = this.startConfetti;
-        this.startConfetti = this.startConfetti.bind(this);
-        this.confetti.stop = this.stopConfetti;
-        this.confetti.remove = this.removeConfetti;
-        this.confetti.isRunning = this.isConfettiRunning;
-    }
-   static propTypes = {
-        width: PropTypes.string.isRequired,
-        height: PropTypes.string.isRequired,
-    }
-    confetti = {
-        //set max confetti count
-        maxCount: 150,
-        //set the particle animation speed
-        speed: 3,
-        //the confetti animation frame interval in milliseconds
-        frameInterval: 15,
-        //the alpha opacity of the confetti (between 0 and 1, where 1 is opaque and 0 is invisible)
-        alpha: 1.0,
-        start: null,
-    };
-    colors = ["rgba(30,144,255,", "rgba(107,142,35,", "rgba(255,215,0,",
-        "rgba(255,192,203,", "rgba(106,90,205,", "rgba(173,216,230,",
-        "rgba(238,130,238,", "rgba(152,251,152,", "rgba(70,130,180,",
-        "rgba(244,164,96,", "rgba(210,105,30,", "rgba(220,20,60,"];
-    streamingConfetti = false;
-    animationTimer = null;
-    lastFrameTime = Date.now();
-    particles = [];
-    waveAngle = 0;
-    context = null;
-    supportsAnimationFrame = window.requestAnimationFrame ||
+(function() {
+    confetti.start = startConfetti;
+    confetti.stop = stopConfetti;
+    confetti.remove = removeConfetti;
+    confetti.isRunning = isConfettiRunning;
+    confetti.animate = animateConfetti;
+    const supportsAnimationFrame = window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.oRequestAnimationFrame ||
         window.msRequestAnimationFrame;
+    const colors = ["rgba(30,144,255,", "rgba(107,142,35,", "rgba(255,215,0,",
+        "rgba(255,192,203,", "rgba(106,90,205,", "rgba(173,216,230,",
+        "rgba(238,130,238,", "rgba(152,251,152,", "rgba(70,130,180,",
+        "rgba(244,164,96,", "rgba(210,105,30,", "rgba(220,20,60,"];
+    let streamingConfetti = false;
+    let animationTimer = null;
+    let lastFrameTime = Date.now();
+    let particles = [];
+    let waveAngle = 0;
+    let context = null;
 
-    resetParticle(particle, width, height) {
-        particle.color = this.colors[(Math.random() * this.colors.length) | 0] + (this.confetti.alpha + ")");
-        particle.color2 = this.colors[(Math.random() * this.colors.length) | 0] + (this.confetti.alpha + ")");
+    function resetParticle(particle, width, height) {
+        particle.color = colors[(Math.random() * colors.length) | 0] + (confetti.alpha + ")");
+        particle.color2 = colors[(Math.random() * colors.length) | 0] + (confetti.alpha + ")");
         particle.x = Math.random() * width;
         particle.y = Math.random() * height - height;
         particle.diameter = Math.random() * 10 + 5;
@@ -56,154 +52,148 @@ export default class Confetti extends React.Component {
         return particle;
     }
 
-    startConfetti(timeout) {
-        const width = window.innerWidth;
+    function runAnimation() {
+        if (particles.length === 0) {
+            context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            animationTimer = null;
+        } else {
+            const now = Date.now();
+            const delta = now - lastFrameTime;
+            if (!supportsAnimationFrame || delta > confetti.frameInterval) {
+                context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+                updateParticles();
+                drawParticles(context);
+                lastFrameTime = now - (delta % confetti.frameInterval);
+            }
+            animationTimer = requestAnimationFrame(runAnimation);
+        }
+    }
+
+    function startConfetti(roomWidth, timeout) {
+        const width = roomWidth;
         const height = window.innerHeight;
-        window.requestAnimationFrame = () => {
+        window.requestAnimationFrame = (function () {
             return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function(callback) {
-                    return window.setTimeout(callback, this.confetti.frameInterval);
+                function (callback) {
+                    return window.setTimeout(callback, confetti.frameInterval);
                 };
-        };
+        })();
         let canvas = document.getElementById("confetti-canvas");
         if (canvas === null) {
             canvas = document.createElement("canvas");
             canvas.setAttribute("id", "confetti-canvas");
-            canvas.setAttribute("style", "display:block;z-index:999999;pointer-events:none;position:fixed;top:0");
+            canvas.setAttribute("style", "display:block;z-index:999999;pointer-events:none;position:fixed;top:0; right:0");
             document.body.prepend(canvas);
             canvas.width = width;
             canvas.height = height;
-            window.addEventListener("resize", function () {
-                canvas.width = window.innerWidth;
+            window.addEventListener("resize", function() {
+                canvas.width = roomWidth;
                 canvas.height = window.innerHeight;
             }, true);
-            this.context = canvas.getContext("2d");
-        } else if (this.context === null) {
-            this.context = canvas.getContext("2d");
+            context = canvas.getContext("2d");
+        } else if (context === null) {
+            context = canvas.getContext("2d");
         }
-        const count = this.confetti.maxCount;
-        while (this.particles.length < count) {
-            this.particles.push(this.resetParticle({}, width, height));
+        const count = confetti.maxCount;
+        while (particles.length < count) {
+            particles.push(resetParticle({}, width, height));
         }
-        this.streamingConfetti = true;
-        this.runAnimation();
+        streamingConfetti = true;
+        runAnimation();
         if (timeout) {
-            window.setTimeout(this.stopConfetti, timeout);
+            window.setTimeout(stopConfetti, timeout);
         }
     }
 
-    stopConfetti() {
-        this.streamingConfetti = false;
+    function stopConfetti() {
+        streamingConfetti = false;
     }
 
-    runAnimation() {
-        if (this.particles.length === 0) {
-            this.context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            this.animationTimer = null;
-        } else {
-            const now = Date.now();
-            const delta = now - this.lastFrameTime;
-            if (!this.supportsAnimationFrame || delta > this.confetti.frameInterval) {
-                this.context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-                this.updateParticles();
-                this.drawParticles(this.context);
-                this.lastFrameTime = now - (delta % this.confetti.frameInterval);
-            }
-            this.animationTimer = requestAnimationFrame(this.runAnimation);
-        }
-    }
-
-    removeConfetti() {
+    function removeConfetti() {
         stop();
-        this.particles = [];
+        particles = [];
     }
 
-    isConfettiRunning() {
-        return this.streamingConfetti;
+    function isConfettiRunning() {
+        return streamingConfetti;
     }
 
-    drawParticles(context) {
+    function drawParticles(context) {
         let particle;
-        let x;
-        let x2;
-        let y2;
-        for (let i = 0; i < this.particles.length; i++) {
-            particle = this.particles[i];
+        let x; let x2; let y2;
+        for (let i = 0; i < particles.length; i++) {
+            particle = particles[i];
             context.beginPath();
             context.lineWidth = particle.diameter;
             x2 = particle.x + particle.tilt;
             x = x2 + particle.diameter / 2;
             y2 = particle.y + particle.tilt + particle.diameter / 2;
-            context.strokeStyle = particle.color;
+            if (confetti.gradient) {
+                const gradient = context.createLinearGradient(x, particle.y, x2, y2);
+                gradient.addColorStop("0", particle.color);
+                gradient.addColorStop("1.0", particle.color2);
+                context.strokeStyle = gradient;
+            } else {
+                context.strokeStyle = particle.color;
+            }
             context.moveTo(x, particle.y);
             context.lineTo(x2, y2);
             context.stroke();
         }
     }
 
-    updateParticles() {
+    function updateParticles() {
         const width = window.innerWidth;
         const height = window.innerHeight;
         let particle;
-        this.waveAngle += 0.01;
-        for (let i = 0; i < this.particles.length; i++) {
-            particle = this.particles[i];
-            if (!this.streamingConfetti && particle.y < -15) {
+        waveAngle += 0.01;
+        for (let i = 0; i < particles.length; i++) {
+            particle = particles[i];
+            if (!streamingConfetti && particle.y < -15) {
                 particle.y = height + 100;
             } else {
                 particle.tiltAngle += particle.tiltAngleIncrement;
-                particle.x += Math.sin(this.waveAngle) - 0.5;
-                particle.y += (Math.cos(this.waveAngle) + particle.diameter + this.confetti.speed) * 0.5;
+                particle.x += Math.sin(waveAngle) - 0.5;
+                particle.y += (Math.cos(waveAngle) + particle.diameter + confetti.speed) * 0.5;
                 particle.tilt = Math.sin(particle.tiltAngle) * 15;
             }
             if (particle.x > width + 20 || particle.x < -20 || particle.y > height) {
-                if (this.streamingConfetti && this.particles.length <= this.confetti.maxCount) {
-                    this.resetParticle(particle, width, height);
+                if (streamingConfetti && particles.length <= confetti.maxCount) {
+                    resetParticle(particle, width, height);
                 } else {
-                    this.particles.splice(i, 1);
+                    particles.splice(i, 1);
                     i--;
                 }
             }
         }
     }
+})();
 
-    convertToHex(content) {
-        const contentBodyToHexArray = [];
-        let hex;
+export function convertToHex(content) {
+    const contentBodyToHexArray = [];
+    let hex;
+    if (content.body) {
         for (let i = 0; i < content.body.length; i++) {
             hex = content.body.codePointAt(i).toString(16);
             contentBodyToHexArray.push(hex);
         }
-        return contentBodyToHexArray;
     }
+    return contentBodyToHexArray;
+}
 
-    isChatEffectsDisabled() {
-        console.log('return value', SettingsStore.getValue('dontShowChatEffects'));
-        return SettingsStore.getValue('dontShowChatEffects');
-    }
+export function isConfettiEmoji(content) {
+    const hexArray = convertToHex(content);
+    return !!(hexArray.includes('1f389') || hexArray.includes('1f38a'));
+}
 
-    isConfettiEmoji(content) {
-        const hexArray = this.convertToHex(content);
-        return !!(hexArray.includes('1f389') || hexArray.includes('1f38a'));
-    }
-
-     animateConfetti(userId, message) {
-        // const shortendUserId = userId.slice(1).split(":").slice(0, 1);
-         console.log('in animate confetti method');
-        if (!this.isChatEffectsDisabled()) {
-            this.confetti.start(3000);
-        }
-        if (!message) {
-            return ('*' + userId + ' throws confetti ');
-        }
-    }
-
-    render() {
-        return (<canvas id="confetti-canvas" style="display:block;z-index:999999;pointer-events:none;position:fixed;top:0"
-        > </canvas>);
-    }
+export function animateConfetti(roomWidth) {
+        confetti.start(roomWidth, 3000);
+}
+export function forceStopConfetti() {
+    console.log('confetti should stop');
+    confetti.remove();
 }
