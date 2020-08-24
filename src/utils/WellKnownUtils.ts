@@ -23,14 +23,6 @@ export interface IE2EEWellKnown {
     default?: boolean;
 }
 
-export async function ensureClientWellKnown() {
-    const cli = MatrixClientPeg.get();
-    if (cli.haveAttemptedFetchingClientWellKnown()) return;
-    return new Promise(resolve => {
-        cli.once("WellKnown.attempted", resolve);
-    });
-}
-
 export function getE2EEWellKnown(): IE2EEWellKnown {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
     if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
