@@ -2088,7 +2088,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
 export function isLoggedIn(): boolean {
     // JRS: Maybe we should move the step that writes this to the window out of
-    // `element-web` and into this file?
+    // `element-web` and into this file? Better yet, we should probably create a
+    // store to hold this state.
+    // See also https://github.com/vector-im/element-web/issues/15034.
     const app = window.matrixChat;
     return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
 }
