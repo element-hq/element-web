@@ -64,6 +64,7 @@ $MiniAppTileHeight: 114px;
     align-items: stretch;
     justify-content: center;
     height: 100%;
+    margin-bottom: 8px;
 }
 
 .mx_AppsDrawer_minimised .mx_AppsContainer {
@@ -76,7 +77,7 @@ $MiniAppTileHeight: 114px;
     order: 2;
     cursor: pointer;
     padding: 0;
-    margin: 5px auto 5px 0;
+    margin: -3px auto 5px 0;
     color: $accent-color;
     font-size: $font-12px;
 }
