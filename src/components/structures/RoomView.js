@@ -57,7 +57,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
-import Confetti from "../views/elements/Confetti";
+import {animateConfetti, forceStopConfetti} from "../views/elements/Confetti";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -68,7 +68,6 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
 }
-let confetti;
 export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
@@ -511,6 +510,7 @@ export default createReactClass({
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
+            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -630,9 +630,9 @@ export default createReactClass({
             case 'message_send_failed':
             case 'message_sent':
                 this._checkIfAlone(this.state.room);
-                confetti = new Confetti('100', '100');
-                console.log('confetti sent');
-                confetti.animateConfetti('test', 'message');
+                break;
+            case 'confetti':
+                    animateConfetti(this._roomView.current.offsetWidth);
                 break;
             case 'post_sticker_message':
               this.injectSticker(
@@ -750,6 +750,18 @@ export default createReactClass({
                 });
             }
         }
+        if (!SettingsStore.getValue('dontShowChatEffects')) {
+            this.context.on('Event.decrypted', this.onEventDecrypted);
+        }
+    },
+     onEventDecrypted(ev) {
+         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+                     this.handleConfetti();
+     },
+    handleConfetti() {
+        if (this.context.isInitialSyncComplete()) {
+                dis.dispatch({action: 'confetti'});
+            }
     },
 
     onRoomName: function(room) {
@@ -786,6 +798,7 @@ export default createReactClass({
         this._calculateRecommendedVersion(room);
         this._updateE2EStatus(room);
         this._updatePermissions(room);
+        forceStopConfetti();
     },
 
     _calculateRecommendedVersion: async function(room) {
