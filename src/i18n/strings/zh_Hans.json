@@ -2369,5 +2369,7 @@
     "Toggle the top left menu": "切换左上方的菜单",
     "Toggle right panel": "切换右侧面板",
     "Toggle this dialog": "切换此对话框",
-    "End": "End"
+    "End": "End",
+    "The server is not configured to indicate what the problem is (CORS).": "服务器没有配置为提示错误是什么（CORS）。",
+    "Activate selected button": "激活选择的按钮"
 }
