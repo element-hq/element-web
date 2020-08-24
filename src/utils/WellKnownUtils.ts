@@ -16,7 +16,7 @@ limitations under the License.
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
-const E2EE_WK_KEY = "im.vector.e2ee";
+const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 
 export interface IE2EEWellKnown {
