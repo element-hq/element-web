@@ -115,9 +115,11 @@ class TagOrderStore extends Store {
                 break;
             }
             case 'select_tag': {
+                const allowMultiple = !SettingsStore.getValue("feature_communities_v2_prototypes");
+
                 let newTags = [];
                 // Shift-click semantics
-                if (payload.shiftKey) {
+                if (payload.shiftKey && allowMultiple) {
                     // Select range of tags
                     let start = this._state.orderedTags.indexOf(this._state.anchorTag);
                     let end = this._state.orderedTags.indexOf(payload.tag);
@@ -135,7 +137,7 @@ class TagOrderStore extends Store {
                         this._state.orderedTags.slice(start, end + 1).concat(newTags),
                     )];
                 } else {
-                    if (payload.ctrlOrCmdKey) {
+                    if (payload.ctrlOrCmdKey && allowMultiple) {
                         // Toggle individual tag
                         if (this._state.selectedTags.includes(payload.tag)) {
                             newTags = this._state.selectedTags.filter((t) => t !== payload.tag);
