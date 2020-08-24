@@ -87,7 +87,7 @@ const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
                            className="mx_ClearDecoration">
                             <img height="48" src="themes/element/img/download/google.svg" alt="Google Play Store" />
                         </a>
-                        <a href="https://f-droid.org/repository/browse/?fdid=im.vector.alpha" target="_blank"
+                        <a href="https://f-droid.org/repository/browse/?fdid=im.vector.app" target="_blank"
                            className="mx_ClearDecoration">
                             <img height="48" src="themes/element/img/download/fdroid.svg" alt="F-Droid" />
                         </a>

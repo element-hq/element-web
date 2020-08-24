@@ -12,19 +12,7 @@
     ],
     "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
-    "features": {
-        "feature_new_spinner": "labs",
-        "feature_pinning": "labs",
-        "feature_custom_status": "labs",
-        "feature_custom_tags": "labs",
-        "feature_state_counters": "labs",
-        "feature_many_integration_managers": "labs",
-        "feature_mjolnir": "labs",
-        "feature_dm_verification": "labs",
-        "feature_bridge_state": "labs",
-        "feature_presence_in_room_list": "labs",
-        "feature_custom_themes": "labs"
-    },
+    "showLabsSettings": true,
     "piwik": {
         "url": "https://piwik.riot.im/",
         "siteId": 1,
