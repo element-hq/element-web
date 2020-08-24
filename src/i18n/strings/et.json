@@ -2422,5 +2422,7 @@
     "Preparing to download logs": "Valmistun logikirjete allalaadimiseks",
     "Download logs": "Lae logikirjed alla",
     "Unexpected server error trying to leave the room": "Jututoast lahkumisel tekkis serveris ootamatu viga",
-    "Error leaving room": "Viga jututoast lahkumisel"
+    "Error leaving room": "Viga jututoast lahkumisel",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Kogukondade v2 prototüüp. Eeldab, et koduserver toetab sellist funktsionaalsust. Lahendus on esialgne ja katseline - kui kasutad, siis väga ettevaatlikult.",
+    "Explore rooms in %(communityName)s": "Uuri jututubasid %(communityName)s kogukonnas"
 }
