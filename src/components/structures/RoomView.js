@@ -68,6 +68,7 @@ if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
     debuglog = console.log.bind(console);
 }
+
 export default createReactClass({
     displayName: 'RoomView',
     propTypes: {
@@ -624,6 +625,7 @@ export default createReactClass({
             ev.stopPropagation();
             ev.preventDefault();
         }
+
     },
     onAction: function(payload) {
         switch (payload.action) {
@@ -632,7 +634,7 @@ export default createReactClass({
                 this._checkIfAlone(this.state.room);
                 break;
             case 'confetti':
-                    animateConfetti(this._roomView.current.offsetWidth);
+                animateConfetti(this._roomView.current.offsetWidth);
                 break;
             case 'post_sticker_message':
               this.injectSticker(
@@ -756,12 +758,12 @@ export default createReactClass({
     },
      onEventDecrypted(ev) {
          if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-                     this.handleConfetti();
+         this.handleConfetti();
      },
     handleConfetti() {
         if (this.context.isInitialSyncComplete()) {
-                dis.dispatch({action: 'confetti'});
-            }
+            dis.dispatch({action: 'confetti'});
+        }
     },
 
     onRoomName: function(room) {
