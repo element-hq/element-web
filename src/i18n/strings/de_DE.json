@@ -1587,7 +1587,7 @@
     "Reject & Ignore user": "Ablehnen & Nutzer ignorieren",
     "%(senderName)s changed a rule that was banning users matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
     "%(senderName)s changed a rule that was banning rooms matching %(oldGlob)s to matching %(newGlob)s for %(reason)s": "%(senderName)s ändert eine Ausschluss-Regel für Räume von %(oldGlob)s nach %(newGlob)s, wegen %(reason)s",
-    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Auf den Server turn.matrix.org zurückgreifen, falls deine Heimserver keine Anruf-Assistenz anbietet (deine IP-Adresse wird während eines Anrufs geteilt).",
+    "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "Auf den Server turn.matrix.org zurückgreifen, falls deine Heimserver keine Anruf-Assistenz anbietet (deine IP-Adresse wird während eines Anrufs geteilt)",
     "Show more": "Mehr zeigen",
     "This session is <b>not backing up your keys</b>, but you do have an existing backup you can restore from and add to going forward.": "Diese Sitzung <b>speichert deine Schlüssel nicht</b>, du kannst sie aber an die Schlüsselsicherung anschließen.",
     "Connect this session to key backup before signing out to avoid losing any keys that may only be on this session.": "Verbinde diese Sitzung mit deiner Schlüsselsicherung bevor du dich abmeldest, um den Verlust von Schlüsseln zu vermeiden.",
@@ -2418,5 +2418,7 @@
     "Explore all public rooms": "Erkunde alle öffentlichen Räume",
     "%(count)s results|other": "%(count)s Ergebnisse",
     "Preparing to download logs": "Bereite das Herunterladen der Protokolle vor",
-    "Download logs": "Protokolle herunterladen"
+    "Download logs": "Protokolle herunterladen",
+    "Unexpected server error trying to leave the room": "Unerwarteter Server-Fehler beim Versuch den Raum zu verlassen",
+    "Error leaving room": "Fehler beim Verlassen des Raums"
 }
