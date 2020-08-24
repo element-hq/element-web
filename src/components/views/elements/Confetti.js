@@ -34,7 +34,7 @@ const confetti = {
         "rgba(238,130,238,", "rgba(152,251,152,", "rgba(70,130,180,",
         "rgba(244,164,96,", "rgba(210,105,30,", "rgba(220,20,60,"];
     let streamingConfetti = false;
-    let animationTimer = null;
+   // let animationTimer = null;
     let lastFrameTime = Date.now();
     let particles = [];
     let waveAngle = 0;
@@ -55,7 +55,7 @@ const confetti = {
     function runAnimation() {
         if (particles.length === 0) {
             context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            animationTimer = null;
+            //animationTimer = null;
         } else {
             const now = Date.now();
             const delta = now - lastFrameTime;
@@ -65,7 +65,7 @@ const confetti = {
                 drawParticles(context);
                 lastFrameTime = now - (delta % confetti.frameInterval);
             }
-            animationTimer = requestAnimationFrame(runAnimation);
+           requestAnimationFrame(runAnimation);
         }
     }
 
