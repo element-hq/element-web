@@ -162,6 +162,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
         }
     }
 
+    body.append("mx_local_settings", localStorage.getItem('mx_local_settings'));
+
     if (opts.sendLogs) {
         progressCallback(_t("Collecting logs"));
         const logs = await rageshake.getLogsForReport();
