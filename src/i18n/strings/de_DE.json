@@ -2363,5 +2363,6 @@
     "We’re excited to announce Riot is now Element!": "Wir freuen uns bekanntzugeben: Riot ist jetzt Element!",
     "Learn more at <a>element.io/previously-riot</a>": "Erfahre mehr unter <a>element.io/previously-riot</a>",
     "Don't show chat effects": "Chat Effekte nicht zeigen",
-    "Throws confetti animation in the chat room": "Throws confetti animation in the chat room"
+    "Sends the given message with confetti": "Sendet die Nachricht mit Konfetti",
+    " sends confetti": " sendet Konfetti"
 }
