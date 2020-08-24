@@ -72,13 +72,13 @@ const confetti = {
     function startConfetti(roomWidth, timeout) {
         const width = roomWidth;
         const height = window.innerHeight;
-        window.requestAnimationFrame = (function () {
+        window.requestAnimationFrame = (function() {
             return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function (callback) {
+                function(callback) {
                     return window.setTimeout(callback, confetti.frameInterval);
                 };
         })();
@@ -86,7 +86,8 @@ const confetti = {
         if (canvas === null) {
             canvas = document.createElement("canvas");
             canvas.setAttribute("id", "confetti-canvas");
-            canvas.setAttribute("style", "display:block;z-index:999999;pointer-events:none;position:fixed;top:0; right:0");
+            canvas.setAttribute("style",
+                "display:block;z-index:999999;pointer-events:none;position:fixed;top:0; right:0");
             document.body.prepend(canvas);
             canvas.width = width;
             canvas.height = height;
