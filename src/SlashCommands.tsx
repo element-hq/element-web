@@ -45,6 +45,7 @@ import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 import {func} from "prop-types";
+import SettingsStore from "./settings/SettingsStore";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -1029,15 +1030,24 @@ export const Commands = [
     }),
     new Command({
         command: "confetti",
-        description: _td("Throws confetti animation in the chat room"),
-        args: '/confetti + <message>',
-        runFn: function(roomId, args, command) {
+        description: _td("Sends the given message with confetti"),
+        args: '<message>',
+        runFn: function(roomId, args) {
             return success((async () => {
-              const cli = MatrixClientPeg.get();
-              await cli.sendHtmlMessage(roomId, args);
+                const cli = MatrixClientPeg.get();
+                const userId = cli.getUserId();
+                const userName = userId.slice(1).split(":").slice(0, 1);
+                const isChatEffectsDisabled = SettingsStore.getValue('dontShowChatEffects');
+                if (!args || isChatEffectsDisabled) {
+                    args = '*' + userName + _td(' sends confetti');
+                }
+                if (!isChatEffectsDisabled) {
+                    dis.dispatch({action: 'confetti'});
+                }
+                cli.sendHtmlMessage(roomId, args);
             })());
         },
-        category: CommandCategories.messages,
+        category: CommandCategories.actions,
     }),
 
     // Command definitions for autocompletion ONLY:
