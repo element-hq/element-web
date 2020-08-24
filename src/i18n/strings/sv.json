@@ -608,7 +608,7 @@
     "Failed to add the following rooms to %(groupId)s:": "Det gick inte att lägga till följande rum till %(groupId)s:",
     "Missing roomId.": "Rums-ID saknas.",
     "This room is not recognised.": "Detta rum känns inte igen.",
-    "Usage": "Användning",
+    "Usage": "Användande",
     "Verified key": "Verifierad nyckel",
     "VoIP conference started.": "VoIP-gruppsamtal startat.",
     "VoIP conference finished.": "VoIP-gruppsamtal avslutat.",
