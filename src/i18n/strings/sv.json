@@ -1545,5 +1545,6 @@
     "Unrecognised room address:": "Okänd rumsadress:",
     "Command failed": "Kommandot misslyckades",
     "Could not find user in room": "Kunde inte hitta användaren i rummet",
-    "Please supply a widget URL or embed code": "Ange en widget-URL eller inbäddningskod"
+    "Please supply a widget URL or embed code": "Ange en widget-URL eller inbäddningskod",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "VARNING: NYCKEL VARIFIERING MYSSLYCKADES! Den signerade nyckeln för %(userId)s och session %(deviceId)s är \"%(fprint)s\" vilket inte matchar nyckel \"%(fingerprint)s\". Det kan betyda att kommunikationen är övervakad!"
 }
