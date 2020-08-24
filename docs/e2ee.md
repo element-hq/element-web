@@ -10,7 +10,7 @@ Set the following on your homeserver's
 
 ```json
 {
-  "im.vector.e2ee": {
+  "io.element.e2ee": {
     "default": false
   }
 }
@@ -29,8 +29,8 @@ following on your homeserver's `/.well-known/matrix/client` config:
 
 ```json
 {
-  "im.vector.e2ee": {
-    "secureBackupRequired": true
+  "io.element.e2ee": {
+    "secure_backup_required": true
   }
 }
 ```
@@ -39,4 +39,4 @@ following on your homeserver's `/.well-known/matrix/client` config:
 
 The settings above were first proposed under a `im.vector.riot.e2ee` key, which
 is now deprecated. Element will check for either key, preferring
-`im.vector.e2ee` if both exist.
+`io.element.e2ee` if both exist.
