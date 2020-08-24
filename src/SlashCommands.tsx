@@ -1039,7 +1039,7 @@ export const Commands = [
                 const userName = userId.slice(1).split(":").slice(0, 1);
                 const isChatEffectsDisabled = SettingsStore.getValue('dontShowChatEffects');
                 if (!args || isChatEffectsDisabled) {
-                    args = '*' + userName + _td(' sends confetti');
+                    args = _t("* %(userName)s sends confetti", {userName});
                 }
                 if (!isChatEffectsDisabled) {
                     dis.dispatch({action: 'confetti'});

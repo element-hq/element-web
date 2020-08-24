@@ -214,7 +214,7 @@
     "Opens chat with the given user": "Opens chat with the given user",
     "Sends a message to the given user": "Sends a message to the given user",
     "Sends the given message with confetti": "Sends the given message with confetti",
-    " sends confetti": " sends confetti",
+    "* %(userName)s sends confetti": "* %(userName)s sends confetti",
     "Displays action": "Displays action",
     "Reason": "Reason",
     "%(targetName)s accepted the invitation for %(displayName)s.": "%(targetName)s accepted the invitation for %(displayName)s.",
