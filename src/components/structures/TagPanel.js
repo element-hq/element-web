@@ -29,6 +29,8 @@ import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import SettingsStore from "../../settings/SettingsStore";
+import UserTagTile from "../views/elements/UserTagTile";
 
 const TagPanel = createReactClass({
     displayName: 'TagPanel',
@@ -102,6 +104,17 @@ const TagPanel = createReactClass({
         dis.dispatch({action: 'deselect_tags'});
     },
 
+    renderGlobalIcon() {
+        if (!SettingsStore.getValue("feature_communities_v2_prototypes")) return null;
+
+        return (
+            <div>
+                <UserTagTile />
+                <hr className="mx_TagPanel_divider" />
+            </div>
+        );
+    },
+
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -137,7 +150,6 @@ const TagPanel = createReactClass({
             <div className="mx_TagPanel_clearButton_container">
                 { clearButton }
             </div>
-            <div className="mx_TagPanel_divider" />
             <AutoHideScrollbar
                 className="mx_TagPanel_scroller"
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
@@ -153,6 +165,7 @@ const TagPanel = createReactClass({
                                 className="mx_TagPanel_tagTileContainer"
                                 ref={provided.innerRef}
                             >
+                                { this.renderGlobalIcon() }
                                 { tags }
                                 <div>
                                     <ActionButton
