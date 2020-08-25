@@ -1029,15 +1029,16 @@ export const Commands = [
         args: '<message>',
         runFn: function(roomId, args) {
             return success((async () => {
-                const cli = MatrixClientPeg.get();
-                const userId = cli.getUserId();
-                const userName = userId.slice(1).split(":").slice(0, 1);
                 const isChatEffectsDisabled = SettingsStore.getValue('dontShowChatEffects');
                 if ((!args) || (!args && isChatEffectsDisabled)) {
-                    args = _t("* %(userName)s sends confetti", {userName});
+                    args = _t("sends confetti");
+                    MatrixClientPeg.get().sendEmoteMessage(roomId, args);
+                } else {
+                    MatrixClientPeg.get().sendHtmlMessage(roomId, args);
                 }
-                cli.sendHtmlMessage(roomId, args,
-                    dis.dispatch({action: 'confetti'}));
+                if (!isChatEffectsDisabled) {
+                    dis.dispatch({action: 'confetti'});
+                }
             })());
         },
         category: CommandCategories.actions,

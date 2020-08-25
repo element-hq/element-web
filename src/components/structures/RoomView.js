@@ -511,7 +511,6 @@ export default createReactClass({
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
-            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -753,16 +752,16 @@ export default createReactClass({
             }
         }
         if (!SettingsStore.getValue('dontShowChatEffects')) {
-            this.context.on('Event.decrypted', this.onEventDecrypted);
+            this.context.on("Event.decrypted", (ev) => {
+                if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
+                this.handleConfetti(ev);
+            });
         }
     },
-     onEventDecrypted(ev) {
-         if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-         this.handleConfetti(ev);
-     },
     handleConfetti(ev) {
         if (this.context.isInitialSyncComplete()) {
-            if (isConfettiEmoji(ev.getContent())) {
+            const messageBody = _t('sends confetti');
+            if (isConfettiEmoji(ev.getContent()) || ev.getContent().body === messageBody) {
                 dis.dispatch({action: 'confetti'});
             }
         }
