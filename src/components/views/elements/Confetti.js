@@ -192,9 +192,8 @@ export function isConfettiEmoji(content) {
 }
 
 export function animateConfetti(roomWidth) {
-        confetti.start(roomWidth, 3000);
+    confetti.start(roomWidth, 3000);
 }
 export function forceStopConfetti() {
-    console.log('confetti should stop');
     confetti.remove();
 }
