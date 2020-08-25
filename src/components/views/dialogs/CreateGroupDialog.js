@@ -88,6 +88,13 @@ export default createReactClass({
                     action: 'view_room',
                     room_id: result.room_id,
                 });
+
+                // Ensure the tag gets selected now that we've created it
+                dis.dispatch({action: 'deselect_tags'}, true);
+                dis.dispatch({
+                    action: 'select_tag',
+                    tag: result.group_id,
+                });
             } else {
                 dis.dispatch({
                     action: 'view_group',
