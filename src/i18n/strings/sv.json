@@ -1587,5 +1587,6 @@
     "Done": "Klar",
     "a few seconds ago": "några sekunder sedan",
     "about a minute ago": "cirka en minut sedan",
-    "%(num)s minutes ago": "%(num)s minuter sedan"
+    "%(num)s minutes ago": "%(num)s minuter sedan",
+    "about an hour ago": "runt en timme sedan"
 }
