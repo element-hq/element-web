@@ -44,7 +44,6 @@ import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
-import {func} from "prop-types";
 import SettingsStore from "./settings/SettingsStore";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
@@ -1038,13 +1037,11 @@ export const Commands = [
                 const userId = cli.getUserId();
                 const userName = userId.slice(1).split(":").slice(0, 1);
                 const isChatEffectsDisabled = SettingsStore.getValue('dontShowChatEffects');
-                if (!args || isChatEffectsDisabled) {
+                if ((!args) || (!args && isChatEffectsDisabled)) {
                     args = _t("* %(userName)s sends confetti", {userName});
                 }
-                if (!isChatEffectsDisabled) {
-                    dis.dispatch({action: 'confetti'});
-                }
-                cli.sendHtmlMessage(roomId, args);
+                cli.sendHtmlMessage(roomId, args,
+                    dis.dispatch({action: 'confetti'}));
             })());
         },
         category: CommandCategories.actions,
