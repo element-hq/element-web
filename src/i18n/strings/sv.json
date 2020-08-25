@@ -1586,5 +1586,6 @@
     "Interactively verify by Emoji": "Verifiera interaktivt med emoji",
     "Done": "Klar",
     "a few seconds ago": "några sekunder sedan",
-    "about a minute ago": "cirka en minut sedan"
+    "about a minute ago": "cirka en minut sedan",
+    "%(num)s minutes ago": "minuter sedan"
 }
