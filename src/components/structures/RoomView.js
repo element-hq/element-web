@@ -57,7 +57,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { shieldStatusForRoom } from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
-import {animateConfetti, forceStopConfetti} from "../views/elements/Confetti";
+import {animateConfetti, forceStopConfetti, isConfettiEmoji} from "../views/elements/Confetti";
 
 const DEBUG = false;
 let debuglog = function() {};
@@ -758,11 +758,13 @@ export default createReactClass({
     },
      onEventDecrypted(ev) {
          if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-         this.handleConfetti();
+         this.handleConfetti(ev);
      },
-    handleConfetti() {
+    handleConfetti(ev) {
         if (this.context.isInitialSyncComplete()) {
-            dis.dispatch({action: 'confetti'});
+            if (isConfettiEmoji(ev.getContent())) {
+                dis.dispatch({action: 'confetti'});
+            }
         }
     },
 
