@@ -2422,5 +2422,8 @@
     "Preparing to download logs": "Preparándose para descargar rexistro",
     "Download logs": "Descargar rexistro",
     "Unexpected server error trying to leave the room": "Fallo non agardado no servidor ó intentar saír da sala",
-    "Error leaving room": "Erro ó saír da sala"
+    "Error leaving room": "Erro ó saír da sala",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Prototipos de Comunidades v2. Require un servidor compatible. Característica experimental - usa con tino.",
+    "Explore rooms in %(communityName)s": "Explorar salas en %(communityName)s",
+    "Set up Secure Backup": "Configurar Copia de apoio Segura"
 }
