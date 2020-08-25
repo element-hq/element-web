@@ -1588,5 +1588,6 @@
     "a few seconds ago": "några sekunder sedan",
     "about a minute ago": "cirka en minut sedan",
     "%(num)s minutes ago": "%(num)s minuter sedan",
-    "about an hour ago": "cirka en timme sedan"
+    "about an hour ago": "cirka en timme sedan",
+    "%(num)s hours ago": "timmar sedan"
 }
