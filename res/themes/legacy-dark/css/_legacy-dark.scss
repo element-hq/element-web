@@ -15,6 +15,8 @@ $room-highlight-color: #343a46;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: $text-primary-color;
+$secondary-fg-color: $primary-fg-color;
+$tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: $bg-color;
 $muted-fg-color: $header-panel-text-primary-color;
 
@@ -95,10 +97,9 @@ $roomheader-color: $text-primary-color;
 $roomheader-addroom-bg-color: #3c4556; // $search-placeholder-color at 0.5 opacity
 $roomheader-addroom-fg-color: $text-primary-color;
 $tagpanel-button-color: $header-panel-text-primary-color;
-$roomheader-button-color: $header-panel-text-primary-color;
 $groupheader-button-color: $header-panel-text-primary-color;
 $rightpanel-button-color: $header-panel-text-primary-color;
-$composer-button-color: $header-panel-text-primary-color;
+$icon-button-color: $header-panel-text-primary-color;
 $roomtopic-color: $text-secondary-color;
 $eventtile-meta-color: $roomtopic-color;
 
@@ -110,6 +111,7 @@ $composer-e2e-icon-color: $header-panel-text-primary-color;
 $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: #1A1D23; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 
 $roomsublist-divider-color: $primary-fg-color;

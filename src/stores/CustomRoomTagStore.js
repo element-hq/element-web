@@ -137,7 +137,7 @@ class CustomRoomTagStore extends EventEmitter {
     }
 
     _getUpdatedTags() {
-        if (!SettingsStore.isFeatureEnabled("feature_custom_tags")) {
+        if (!SettingsStore.getValue("feature_custom_tags")) {
             return {}; // none
         }
 

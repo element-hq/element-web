@@ -17,8 +17,10 @@ limitations under the License.
 // Note: this component expects to be contained within a flexbox
 .mx_RoomSearch {
     flex: 1;
-    border-radius: 20px;
+    border-radius: 8px;
     background-color: $roomlist-button-bg-color;
+    // keep border thickness consistent to prevent movement
+    border: 1px solid transparent;
     height: 28px;
     padding: 2px;
 
@@ -29,9 +31,9 @@ limitations under the License.
     .mx_RoomSearch_icon {
         width: 16px;
         height: 16px;
-        mask: url('$(res)/img/feather-customised/search-input.svg');
+        mask: url('$(res)/img/element-icons/roomlist/search.svg');
         mask-repeat: no-repeat;
-        background: $primary-fg-color;
+        background-color: $secondary-fg-color;
         margin-left: 7px;
     }
 
@@ -46,19 +48,30 @@ limitations under the License.
         line-height: $font-16px;
 
         &:not(.mx_RoomSearch_inputExpanded)::placeholder {
-            color: $primary-fg-color !important; // !important to override default app-wide styles
+            color: $tertiary-fg-color !important; // !important to override default app-wide styles
         }
     }
 
-    &.mx_RoomSearch_expanded {
+    &.mx_RoomSearch_hasQuery {
+        border-color: $secondary-fg-color;
+    }
+
+    &.mx_RoomSearch_focused {
+        box-shadow: 0 0 4px 4px rgba(0, 132, 255, 0.5);
+        border-color: transparent;
+    }
+
+    &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
+        background-color: $roomlist-filter-active-bg-color;
+
         .mx_RoomSearch_clearButton {
             width: 16px;
             height: 16px;
-            mask-image: url('$(res)/img/feather-customised/x.svg');
+            mask-image: url('$(res)/img/element-icons/roomlist/search-clear.svg');
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $primary-fg-color;
+            background-color: $secondary-fg-color;
             margin-right: 8px;
         }
     }

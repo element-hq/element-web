@@ -39,6 +39,9 @@ async function createRoom(session, roomName, encrypted=false) {
     const addRoomButton = await roomsSublist.$(".mx_RoomSublist_auxButton");
     await addRoomButton.click();
 
+    const createRoomButton = await session.query('.mx_AccessibleButton[aria-label="Create new room"]');
+    await createRoomButton.click();
+
     const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');
     await session.replaceInputText(roomNameInput, roomName);
 

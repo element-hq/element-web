@@ -126,7 +126,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     public render(): React.ReactNode {
         const classes = classNames({
             'mx_RoomSearch': true,
-            'mx_RoomSearch_expanded': this.state.query || this.state.focused,
+            'mx_RoomSearch_hasQuery': this.state.query,
+            'mx_RoomSearch_focused': this.state.focused,
             'mx_RoomSearch_minimized': this.props.isMinimized,
         });
 

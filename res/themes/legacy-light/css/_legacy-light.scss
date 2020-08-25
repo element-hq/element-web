@@ -23,6 +23,8 @@ $header-panel-bg-color: #f3f8fd;
 
 // typical text (dark-on-white in light skin)
 $primary-fg-color: #2e2f32;
+$secondary-fg-color: $primary-fg-color;
+$tertiary-fg-color: $primary-fg-color;
 $primary-bg-color: #ffffff;
 $muted-fg-color: #61708b; // Commonly used in headings and relevant alt text
 
@@ -162,10 +164,9 @@ $roomheader-bg-color: $primary-bg-color;
 $roomheader-addroom-bg-color: #91a1c0;
 $roomheader-addroom-fg-color: $accent-fg-color;
 $tagpanel-button-color: #91a1c0;
-$roomheader-button-color: #91a1c0;
 $groupheader-button-color: #91a1c0;
 $rightpanel-button-color: #91a1c0;
-$composer-button-color: #91a1c0;
+$icon-button-color: #91a1c0;
 $roomtopic-color: #9e9e9e;
 $eventtile-meta-color: $roomtopic-color;
 
@@ -177,6 +178,7 @@ $header-divider-color: #91a1c0;
 $theme-button-bg-color: #e3e8f0;
 
 $roomlist-button-bg-color: #fff; // Buttons include the filter box, explore button, and sublist buttons
+$roomlist-filter-active-bg-color: $roomlist-button-bg-color;
 $roomlist-bg-color: $header-panel-bg-color;
 $roomlist-header-color: $primary-fg-color;
 $roomsublist-divider-color: $primary-fg-color;
@@ -228,7 +230,8 @@ $event-redacted-border-color: #cccccc;
 // event timestamp
 $event-timestamp-color: #acacac;
 
-$copy-button-url: "$(res)/img/icon_copy_message.svg";
+$copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
+
 
 // e2e
 $e2e-verified-color: #76cfa5; // N.B. *NOT* the same as $accent-color

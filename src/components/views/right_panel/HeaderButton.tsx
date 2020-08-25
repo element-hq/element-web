@@ -39,6 +39,8 @@ interface IProps {
     title: string;
 }
 
+// TODO: replace this, the composer buttons and the right panel buttons with a unified
+// representation
 export default class HeaderButton extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);

@@ -93,7 +93,7 @@ interface IProps {
     initialCaret?: DocumentOffset;
 
     onChange();
-    onPaste(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
+    onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
 }
 
 interface IState {
@@ -554,10 +554,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     private onAutoCompleteConfirm = (completion: ICompletion) => {
+        this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentConfirm(completion);
     };
 
     private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
+        this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentSelectionChange(completion);
         this.setState({completionIndex});
     };

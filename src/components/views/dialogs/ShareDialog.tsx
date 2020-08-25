@@ -30,6 +30,7 @@ import * as ContextMenu from "../../structures/ContextMenu";
 import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext, selectText} from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
+import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 
 const socials = [
     {
@@ -210,10 +211,11 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
                     >
                         { matrixToUrl }
                     </a>
-                    <a href={matrixToUrl} className="mx_ShareDialog_matrixto_copy" onClick={this.onCopyClick}>
-                        { _t('COPY') }
-                        <div>&nbsp;</div>
-                    </a>
+                    <AccessibleTooltipButton
+                        title={_t("Copy")}
+                        onClick={this.onCopyClick}
+                        className="mx_ShareDialog_matrixto_copy"
+                    />
                 </div>
                 { checkbox }
                 <hr />

@@ -24,7 +24,7 @@ limitations under the License.
     line-height: $font-24px;
     border-radius: 4px;
     background: $message-action-bar-bg-color;
-    top: -18px;
+    top: -26px;
     right: 8px;
     user-select: none;
     // Ensure the action bar appears above over things, like the read marker.
@@ -41,7 +41,7 @@ limitations under the License.
         width: calc(10px + 48px + 100% + 8px);
         // safe area + action bar
         height: calc(20px + 100%);
-        top: -20px;
+        top: -12px;
         left: -58px;
         z-index: -1;
         cursor: initial;

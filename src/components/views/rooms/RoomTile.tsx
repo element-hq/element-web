@@ -113,11 +113,17 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     };
 
     private get showContextMenu(): boolean {
-        return !this.props.isMinimized && this.props.tag !== DefaultTagID.Invite;
+        return this.props.tag !== DefaultTagID.Invite;
     }
 
     private get showMessagePreview(): boolean {
         return !this.props.isMinimized && this.props.showMessagePreview;
+    }
+
+    public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>) {
+        if (prevProps.showMessagePreview !== this.props.showMessagePreview && this.showMessagePreview) {
+            this.setState({messagePreview: this.generatePreview()});
+        }
     }
 
     public componentDidMount() {
@@ -298,7 +304,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     private onClickMute = ev => this.saveNotifState(ev, MUTE);
 
     private renderNotificationsMenu(isActive: boolean): React.ReactElement {
-        if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived || !this.showContextMenu) {
+        if (MatrixClientPeg.get().isGuest() || this.props.tag === DefaultTagID.Archived ||
+            !this.showContextMenu || this.props.isMinimized
+        ) {
             // the menu makes no sense in these cases so do not show one
             return null;
         }
@@ -524,9 +532,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             ariaDescribedBy = messagePreviewId(this.props.room.roomId);
         }
 
+        const props: Partial<React.ComponentProps<typeof AccessibleTooltipButton>> = {};
         let Button: React.ComponentType<React.ComponentProps<typeof AccessibleButton>> = AccessibleButton;
         if (this.props.isMinimized) {
             Button = AccessibleTooltipButton;
+            props.title = name;
+            // force the tooltip to hide whilst we are showing the context menu
+            props.forceHide = !!this.state.generalMenuPosition;
         }
 
         return (
@@ -534,6 +546,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 <RovingTabIndexWrapper inputRef={this.roomTileRef}>
                     {({onFocus, isActive, ref}) =>
                         <Button
+                            {...props}
                             onFocus={onFocus}
                             tabIndex={isActive ? 0 : -1}
                             inputRef={ref}
@@ -544,7 +557,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                             aria-label={ariaLabel}
                             aria-selected={this.state.selected}
                             aria-describedby={ariaDescribedBy}
-                            title={this.props.isMinimized ? name : undefined}
                         >
                             {roomAvatar}
                             {nameContainer}

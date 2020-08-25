@@ -162,7 +162,7 @@ async function changeRoomSettings(session, settings) {
 
     if (settings.visibility) {
         session.log.step(`sets visibility to ${settings.visibility}`);
-        const radios = await session.queryAll(".mx_RoomSettingsDialog input[type=radio]");
+        const radios = await session.queryAll(".mx_RoomSettingsDialog label");
         assert.equal(radios.length, 7);
         const inviteOnly = radios[0];
         const publicNoGuests = radios[1];

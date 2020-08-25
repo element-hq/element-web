@@ -19,7 +19,6 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
-import RebrandListener from "../RebrandListener";
 import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
@@ -40,7 +39,6 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
-        mxRebrandListener: RebrandListener;
         mxRoomListStore: RoomListStoreClass;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxActiveRoomObserver: ActiveRoomObserver;
@@ -49,11 +47,6 @@ declare global {
         singletonModalManager: ModalManager;
         mxSettingsStore: SettingsStore;
         mxNotifier: typeof Notifier;
-    }
-
-    // workaround for https://github.com/microsoft/TypeScript/issues/30933
-    interface ObjectConstructor {
-        fromEntries?(xs: [string|number|symbol, any][]): object;
     }
 
     interface Document {

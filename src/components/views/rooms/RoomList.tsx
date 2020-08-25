@@ -43,6 +43,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
+import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
+import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -81,6 +83,7 @@ interface ITagAesthetics {
     sectionLabelRaw?: string;
     addRoomLabel?: string;
     onAddRoom?: (dispatcher?: Dispatcher<ActionPayload>) => void;
+    addRoomContextMenu?: (onFinished: () => void) => React.ReactNode;
     isInvite: boolean;
     defaultHidden: boolean;
 }
@@ -112,9 +115,30 @@ const TAG_AESTHETICS: {
         sectionLabel: _td("Rooms"),
         isInvite: false,
         defaultHidden: false,
-        addRoomLabel: _td("Create room"),
-        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
-            (dispatcher || defaultDispatcher).dispatch({action: 'view_create_room'})
+        addRoomLabel: _td("Add room"),
+        addRoomContextMenu: (onFinished: () => void) => {
+            return <IconizedContextMenuOptionList first>
+                <IconizedContextMenuOption
+                    label={_t("Create new room")}
+                    iconClassName="mx_RoomList_iconPlus"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onFinished();
+                        defaultDispatcher.dispatch({action: "view_create_room"});
+                    }}
+                />
+                <IconizedContextMenuOption
+                    label={_t("Explore public rooms")}
+                    iconClassName="mx_RoomList_iconExplore"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onFinished();
+                        defaultDispatcher.fire(Action.ViewRoomDirectory);
+                    }}
+                />
+            </IconizedContextMenuOptionList>;
         },
     },
     [DefaultTagID.LowPriority]: {
@@ -255,6 +279,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         }
     };
 
+    private onExplore = () => {
+        dis.fire(Action.ViewRoomDirectory);
+    };
+
     private renderCommunityInvites(): TemporaryTile[] {
         // TODO: Put community invites in a more sensible place (not in the room list)
         // See https://github.com/vector-im/element-web/issues/14456
@@ -324,6 +352,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
                     onAddRoom={aesthetics.onAddRoom}
                     addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
+                    addRoomContextMenu={aesthetics.addRoomContextMenu}
                     isMinimized={this.props.isMinimized}
                     onResize={this.props.onResize}
                     extraBadTilesThatShouldntExist={extraTiles}
@@ -335,6 +364,16 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
+        let explorePrompt: JSX.Element;
+        if (RoomListStore.instance.getFirstNameFilterCondition()) {
+            explorePrompt = <div className="mx_RoomList_explorePrompt">
+                <div>{_t("Can't see what you’re looking for?")}</div>
+                <AccessibleButton kind="link" onClick={this.onExplore}>
+                    {_t("Explore all public rooms")}
+                </AccessibleButton>
+            </div>;
+        }
+
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={this.props.onKeyDown}>
@@ -346,7 +385,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         className="mx_RoomList"
                         role="tree"
                         aria-label={_t("Rooms")}
-                    >{sublists}</div>
+                    >
+                        {sublists}
+                        {explorePrompt}
+                    </div>
                 )}
             </RovingTabIndexProvider>
         );

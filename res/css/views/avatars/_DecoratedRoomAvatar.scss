@@ -18,10 +18,49 @@ limitations under the License.
 .mx_DecoratedRoomAvatar, .mx_TemporaryTile {
     position: relative;
 
-    .mx_RoomTileIcon {
+    &.mx_DecoratedRoomAvatar_cutout .mx_BaseAvatar {
+        mask-image: url('$(res)/img/element-icons/roomlist/decorated-avatar-mask.svg');
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+    }
+
+    .mx_DecoratedRoomAvatar_icon {
         position: absolute;
-        bottom: 0;
-        right: 0;
+        bottom: -2px;
+        right: -2px;
+        margin: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .mx_DecoratedRoomAvatar_icon::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        border-radius: 8px;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_globe::before {
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        background: $secondary-fg-color;
+        mask-image: url('$(res)/img/globe.svg');
+    }
+
+    .mx_DecoratedRoomAvatar_icon_offline::before {
+        background-color: $presence-offline;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_online::before {
+        background-color: $presence-online;
+    }
+
+    .mx_DecoratedRoomAvatar_icon_away::before {
+        background-color: $presence-away;
     }
 
     .mx_NotificationBadge, .mx_RoomTile_badgeContainer {

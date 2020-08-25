@@ -172,6 +172,8 @@ export default createReactClass({
                     const hidden = global.localStorage.getItem("hide_preview_" + this.props.mxEvent.getId());
                     this.setState({ widgetHidden: hidden });
                 }
+            } else if (this.state.links.length) {
+                this.setState({ links: [] });
             }
         }
     },
