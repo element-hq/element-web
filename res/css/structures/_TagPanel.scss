@@ -76,10 +76,54 @@ limitations under the License.
     // opacity: 0.5;
     position: relative;
 }
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_prototype {
+    padding: 3px;
+}
+
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
     // opacity: 1;
+}
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected_prototype {
+    background-color: $primary-bg-color;
+    border-radius: 6px;
+}
+
+.mx_TagTile_selected_prototype {
+    .mx_TagTile_homeIcon::before {
+        background-color: $primary-fg-color; // dark-on-light
+    }
+}
+
+.mx_TagTile:not(.mx_TagTile_selected_prototype) .mx_TagTile_homeIcon {
+    background-color: $icon-button-color; // XXX: Variable abuse
+    border-radius: 48px;
+
+    &::before {
+        background-color: $primary-bg-color; // light-on-grey
+    }
+}
+
+.mx_TagTile_homeIcon {
+    width: 32px;
+    height: 32px;
+    position: relative;
+
+    &::before {
+        mask-image: url('$(res)/img/element-icons/home.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        width: 21px;
+        height: 21px;
+        content: '';
+        display: inline-block;
+        position: absolute;
+        top: calc(50% - 10.5px);
+        left: calc(50% - 10.5px);
+    }
 }
 
 .mx_TagPanel .mx_TagTile_plus {
@@ -114,10 +158,6 @@ limitations under the License.
     position: absolute;
     left: -12px;
     border-radius: 0 3px 3px 0;
-}
-
-.mx_TagPanel .mx_TagTile.mx_TagTile_large.mx_TagTile_selected::before {
-    left: -10px;
 }
 
 .mx_TagPanel .mx_TagTile.mx_AccessibleButton:focus {

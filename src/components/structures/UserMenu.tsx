@@ -42,9 +42,6 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList
 } from "../views/context_menus/IconizedContextMenu";
-import TagOrderStore from "../../stores/TagOrderStore";
-import * as fbEmitter from "fbemitter";
-import FlairStore from "../../stores/FlairStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -55,16 +52,11 @@ type PartialDOMRect = Pick<DOMRect, "width" | "left" | "top" | "height">;
 interface IState {
     contextMenuPosition: PartialDOMRect;
     isDarkTheme: boolean;
-    selectedCommunityProfile: {
-        displayName: string;
-        avatarMxc: string;
-    };
 }
 
 export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
-    private tagStoreRef: fbEmitter.EventSubscription;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
 
     constructor(props: IProps) {
@@ -73,7 +65,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.state = {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
-            selectedCommunityProfile: null,
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
@@ -86,7 +77,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
-        this.tagStoreRef = TagOrderStore.addListener(this.onTagStoreUpdate);
     }
 
     public componentWillUnmount() {
@@ -102,25 +92,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         }
         return theme === "dark";
     }
-
-    private onTagStoreUpdate = async () => {
-        if (!SettingsStore.getValue("feature_communities_v2_prototypes")) {
-            return;
-        }
-
-        const selectedId = TagOrderStore.getSelectedTags()[0];
-        if (!selectedId) {
-            this.setState({selectedCommunityProfile: null});
-            return;
-        }
-
-        // For some reason the group's profile info isn't on the js-sdk Group object but
-        // is in the flair store, so get it from there.
-        const profile = await FlairStore.getGroupProfileCached(MatrixClientPeg.get(), selectedId);
-        const displayName = profile.name || selectedId;
-        const avatarMxc = profile.avatarUrl;
-        this.setState({selectedCommunityProfile: {displayName, avatarMxc}});
-    };
 
     private onProfileUpdate = async () => {
         // the store triggered an update, so force a layout update. We don't
@@ -324,18 +295,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        let displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
-        let avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
-
-        if (this.state.selectedCommunityProfile) {
-            displayName = this.state.selectedCommunityProfile.displayName
-            const mxc = this.state.selectedCommunityProfile.avatarMxc;
-            if (mxc) {
-                avatarUrl = MatrixClientPeg.get().mxcUrlToHttp(mxc, avatarSize, avatarSize);
-            } else {
-                avatarUrl = null;
-            }
-        }
+        const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
+        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
         let name = <span className="mx_UserMenu_userName">{displayName}</span>;
         let buttons = (
