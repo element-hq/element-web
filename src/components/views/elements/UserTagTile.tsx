@@ -16,16 +16,14 @@ limitations under the License.
 
 import React from "react";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { OwnProfileStore } from "../../../stores/OwnProfileStore";
-import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import * as fbEmitter from "fbemitter";
 import TagOrderStore from "../../../stores/TagOrderStore";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
-import BaseAvatar from "../avatars/BaseAvatar";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import classNames from "classnames";
+import { _t } from "../../../languageHandler";
 
-interface IProps{}
+interface IProps {
+}
 
 interface IState {
     selected: boolean;
@@ -43,17 +41,12 @@ export default class UserTagTile extends React.PureComponent<IProps, IState> {
     }
 
     public componentDidMount() {
-        OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
         this.tagStoreRef = TagOrderStore.addListener(this.onTagStoreUpdate);
     }
 
     public componentWillUnmount() {
-        OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
+        this.tagStoreRef.remove();
     }
-
-    private onProfileUpdate = () => {
-        this.forceUpdate();
-    };
 
     private onTagStoreUpdate = () => {
         const selected = TagOrderStore.getSelectedTags().length === 0;
@@ -71,27 +64,19 @@ export default class UserTagTile extends React.PureComponent<IProps, IState> {
     public render() {
         // XXX: We reuse TagTile classes for ease of demonstration - we should probably generify
         // TagTile instead if we continue to use this component.
-        const avatarHeight = 36;
-        const name = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
         const className = classNames({
             mx_TagTile: true,
-            mx_TagTile_selected: this.state.selected,
-            mx_TagTile_large: true,
+            mx_TagTile_selected_prototype: this.state.selected,
+            mx_TagTile_home: true,
         });
         return (
             <AccessibleTooltipButton
                 className={className}
                 onClick={this.onTileClick}
-                title={name}
+                title={_t("Home")}
             >
                 <div className="mx_TagTile_avatar">
-                    <BaseAvatar
-                        name={name}
-                        idName={MatrixClientPeg.get().getUserId()}
-                        url={OwnProfileStore.instance.getHttpAvatarUrl(avatarHeight)}
-                        width={avatarHeight}
-                        height={avatarHeight}
-                    />
+                    <div className="mx_TagTile_homeIcon" />
                 </div>
             </AccessibleTooltipButton>
         );

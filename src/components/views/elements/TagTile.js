@@ -141,9 +141,11 @@ export default createReactClass({
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
 
+        const isPrototype = SettingsStore.getValue("feature_communities_v2_prototypes");
         const className = classNames({
             mx_TagTile: true,
-            mx_TagTile_selected: this.props.selected,
+            mx_TagTile_selected: this.props.selected && !isPrototype,
+            mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });
 
         const badge = TagOrderStore.getGroupBadge(this.props.tag);
