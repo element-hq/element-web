@@ -189,6 +189,7 @@ export default createReactClass({
         this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
         this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
         this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
+        this.context.on("Event.decrypted", this.onEventDecrypted);
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
@@ -511,6 +512,7 @@ export default createReactClass({
             this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
             this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
             this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
+            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -751,15 +753,16 @@ export default createReactClass({
                 });
             }
         }
-        if (!SettingsStore.getValue('dontShowChatEffects')) {
-            this.context.on("Event.decrypted", (ev) => {
-                if (ev.isBeingDecrypted() || ev.isDecryptionFailure()) return;
-                this.handleConfetti(ev);
-            });
-        }
+    },
+    onEventDecrypted(ev) {
+    if (!SettingsStore.getValue('dontShowChatEffects')) {
+        if (ev.isBeingDecrypted() || ev.isDecryptionFailure() ||
+            this.state.room.getUnreadNotificationCount() === 0) return;
+        this.handleConfetti(ev);
+    }
     },
     handleConfetti(ev) {
-        if (this.context.isInitialSyncComplete()) {
+        if (this.state.matrixClientIsReady) {
             const messageBody = _t('sends confetti');
             if (isConfettiEmoji(ev.getContent()) || ev.getContent().body === messageBody) {
                 dis.dispatch({action: 'confetti'});

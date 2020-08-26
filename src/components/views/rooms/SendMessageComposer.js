@@ -44,6 +44,8 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 import {Action} from "../../../dispatcher/actions";
+import {isConfettiEmoji} from "../elements/Confetti";
+import SettingsStore from "../../../settings/SettingsStore";
 
 function addReplyToMessageContent(content, repliedToEvent, permalinkCreator) {
     const replyContent = ReplyThread.makeReplyMixIn(repliedToEvent);
@@ -313,6 +315,11 @@ export default class SendMessageComposer extends React.Component {
                 });
             }
             dis.dispatch({action: "message_sent"});
+            if (!SettingsStore.getValue('dontShowChatEffects')) {
+                if (isConfettiEmoji(content)) {
+                dis.dispatch({action: 'confetti'});
+                }
+            }
         }
 
         this.sendHistoryManager.save(this.model);

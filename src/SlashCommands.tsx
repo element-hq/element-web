@@ -1034,7 +1034,7 @@ export const Commands = [
                     args = _t("sends confetti");
                     MatrixClientPeg.get().sendEmoteMessage(roomId, args);
                 } else {
-                    MatrixClientPeg.get().sendHtmlMessage(roomId, args);
+                    MatrixClientPeg.get().sendTextMessage(roomId, args);
                 }
                 if (!isChatEffectsDisabled) {
                     dis.dispatch({action: 'confetti'});
