@@ -77,6 +77,7 @@ import ErrorDialog from "../views/dialogs/ErrorDialog";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
+import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -620,7 +621,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.createRoom(payload.public);
                 break;
             case 'view_create_group': {
-                const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
+                let CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog")
+                if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+                    CreateGroupDialog = CreateCommunityPrototypeDialog;
+                }
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
                 break;
             }

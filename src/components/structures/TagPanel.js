@@ -146,6 +146,24 @@ const TagPanel = createReactClass({
             mx_TagPanel_items_selected: itemsSelected,
         });
 
+        let createButton = (
+            <ActionButton
+                tooltip
+                label={_t("Communities")}
+                action="toggle_my_groups"
+                className="mx_TagTile mx_TagTile_plus" />
+        );
+
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            createButton = (
+                <ActionButton
+                    tooltip
+                    label={_t("Create community")}
+                    action="view_create_group"
+                    className="mx_TagTile mx_TagTile_plus" />
+            );
+        }
+
         return <div className={classes}>
             <div className="mx_TagPanel_clearButton_container">
                 { clearButton }
@@ -168,11 +186,7 @@ const TagPanel = createReactClass({
                                 { this.renderGlobalIcon() }
                                 { tags }
                                 <div>
-                                    <ActionButton
-                                        tooltip
-                                        label={_t("Communities")}
-                                        action="toggle_my_groups"
-                                        className="mx_TagTile mx_TagTile_plus" />
+                                    {createButton}
                                 </div>
                                 { provided.placeholder }
                             </div>

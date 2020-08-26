@@ -61,7 +61,9 @@
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
+@import "./views/dialogs/_CommunityPrototypeInviteDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
+@import "./views/dialogs/_CreateCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
 @import "./views/dialogs/_CreateRoomDialog.scss";
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
@@ -106,6 +108,7 @@
 @import "./views/elements/_FormButton.scss";
 @import "./views/elements/_IconButton.scss";
 @import "./views/elements/_ImageView.scss";
+@import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
 @import "./views/elements/_PowerSelector.scss";
