@@ -66,6 +66,7 @@ export default class UserTagTile extends React.PureComponent<IProps, IState> {
         // TagTile instead if we continue to use this component.
         const className = classNames({
             mx_TagTile: true,
+            mx_TagTile_prototype: true,
             mx_TagTile_selected_prototype: this.state.selected,
             mx_TagTile_home: true,
         });

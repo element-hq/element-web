@@ -144,6 +144,7 @@ export default createReactClass({
         const isPrototype = SettingsStore.getValue("feature_communities_v2_prototypes");
         const className = classNames({
             mx_TagTile: true,
+            mx_TagTile_prototype: isPrototype,
             mx_TagTile_selected: this.props.selected && !isPrototype,
             mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });

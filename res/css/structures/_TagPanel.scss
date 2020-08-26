@@ -75,8 +75,12 @@ limitations under the License.
 .mx_TagPanel .mx_TagTile {
     // opacity: 0.5;
     position: relative;
+}
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_prototype {
     padding: 3px;
 }
+
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
