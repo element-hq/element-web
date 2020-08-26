@@ -31,6 +31,6 @@
     "Download Completed": "Descarga completada",
     "Open": "Abrir",
     "Your browser can't run %(brand)s": "Su navegador es incompatible con %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza funciones avanzadas no soportadas por su navegador.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
     "Powered by Matrix": "Powered by Matrix"
 }
