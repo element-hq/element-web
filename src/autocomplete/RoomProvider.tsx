@@ -27,7 +27,8 @@ import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
-import { uniqBy, sortBy } from 'lodash';
+import uniqBy from "lodash/uniqBy";
+import sortBy from "lodash/sortBy";
 
 const ROOM_REGEX = /\B#\S*/g;
 

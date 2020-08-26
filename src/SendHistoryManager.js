@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import _clamp from 'lodash/clamp';
+import _clamp from "lodash/clamp";
 
 export default class SendHistoryManager {
     history: Array<HistoryItem> = [];

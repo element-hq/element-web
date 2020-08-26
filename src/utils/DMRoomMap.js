@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
-import _uniq from 'lodash/uniq';
+import _uniq from "lodash/uniq";
 import {Room} from "matrix-js-sdk/src/matrix";
 
 /**

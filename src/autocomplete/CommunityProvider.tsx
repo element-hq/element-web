@@ -23,7 +23,7 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
-import _sortBy from 'lodash/sortBy';
+import _sortBy from "lodash/sortBy";
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";

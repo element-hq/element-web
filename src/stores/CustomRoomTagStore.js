@@ -17,7 +17,7 @@ limitations under the License.
 
 import dis from '../dispatcher/dispatcher';
 import EventEmitter from 'events';
-import {throttle} from "lodash";
+import throttle from "lodash/throttle";
 import SettingsStore from "../settings/SettingsStore";
 import RoomListStore, {LISTS_UPDATE_EVENT} from "./room-list/RoomListStore";
 import {RoomNotificationStateStore} from "./notifications/RoomNotificationStateStore";
