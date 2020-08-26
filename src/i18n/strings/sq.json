@@ -2407,5 +2407,20 @@
     "Attach files from chat or just drag and drop them anywhere in a room.": "Bashkëngjitni kartela prej fjalosjeje ose thjesht tërhiqini dhe lërini kudo qoftë brenda dhomës.",
     "You have no visible notifications in this room.": "S’ka njoftime të dukshme për ju në këtë dhomë.",
     "Master private key:": "Kyç privat i përgjithshëm:",
-    "%(brand)s Android": "%(brand)s Android"
+    "%(brand)s Android": "%(brand)s Android",
+    "Show message previews for reactions in DMs": "Shfaq paraparje mesazhi për reagime në MD",
+    "Show message previews for reactions in all rooms": "Shfaq paraparje mesazhi për reagime në krejt dhomat",
+    "Uploading logs": "Po ngarkohen regjistra",
+    "Downloading logs": "Po shkarkohen regjistra",
+    "Explore public rooms": "Eksploroni dhoma publike",
+    "Can't see what you’re looking for?": "S’shihni ç’po kërkoni?",
+    "Explore all public rooms": "Eksploroni krejt dhomat publike",
+    "%(count)s results|other": "%(count)s përfundime",
+    "Preparing to download logs": "Po bëhet gati për shkarkim regjistrash",
+    "Download logs": "Shkarko regjistra",
+    "Unexpected server error trying to leave the room": "Gabim i papritur shërbyesi në përpjekje për dalje nga dhoma",
+    "Error leaving room": "Gabim në dalje nga dhoma",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Prototipe bashkësie v2. Lyp shërbyes Home të përputhshëm. Tejet eksperimentale - përdoreni me kujdes.",
+    "Explore rooms in %(communityName)s": "Eksploroni dhoma në %(communityName)s",
+    "Set up Secure Backup": "Ujdisni Kopjeruajtje të Sigurt"
 }

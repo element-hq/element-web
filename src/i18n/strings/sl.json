@@ -9,5 +9,7 @@
     "Sign In": "Prijava",
     "powered by Matrix": "poganja Matrix",
     "Custom Server Options": "Možnosti strežnika po meri",
-    "Your language of choice": "Vaš jezik po izbiri"
+    "Your language of choice": "Vaš jezik po izbiri",
+    "Use Single Sign On to continue": "Uporabi Single Sign On za prijavo",
+    "Confirm adding this email address by using Single Sign On to prove your identity.": ""
 }
