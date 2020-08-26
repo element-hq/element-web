@@ -56,7 +56,7 @@ interface IState {
     busy: boolean;
 }
 
-export default class PrototypeCommunityInviteDialog extends React.PureComponent<IProps, IState> {
+export default class CommunityPrototypeInviteDialog extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
@@ -145,7 +145,7 @@ export default class PrototypeCommunityInviteDialog extends React.PureComponent<
     private renderPerson(person: IPerson, key: any) {
         const avatarSize = 36;
         return (
-            <div className="mx_PrototypeCommunityInviteDialog_person" key={key}>
+            <div className="mx_CommunityPrototypeInviteDialog_person" key={key}>
                 <BaseAvatar
                     url={getHttpUriForMxc(
                         MatrixClientPeg.get().getHomeserverUrl(), person.user.getMxcAvatarUrl(),
@@ -155,9 +155,9 @@ export default class PrototypeCommunityInviteDialog extends React.PureComponent<
                     width={avatarSize}
                     height={avatarSize}
                 />
-                <div className="mx_PrototypeCommunityInviteDialog_personIdentifiers">
-                    <span className="mx_PrototypeCommunityInviteDialog_personName">{person.user.name}</span>
-                    <span className="mx_PrototypeCommunityInviteDialog_personId">{person.userId}</span>
+                <div className="mx_CommunityPrototypeInviteDialog_personIdentifiers">
+                    <span className="mx_CommunityPrototypeInviteDialog_personName">{person.user.name}</span>
+                    <span className="mx_CommunityPrototypeInviteDialog_personId">{person.userId}</span>
                 </div>
                 <StyledCheckbox onChange={(e) => this.setPersonToggle(person, e.target.checked)} />
             </div>
@@ -206,14 +206,14 @@ export default class PrototypeCommunityInviteDialog extends React.PureComponent<
                     <AccessibleButton
                         onClick={this.onShowMorePeople}
                         kind="link" key="more"
-                        className="mx_PrototypeCommunityInviteDialog_morePeople"
+                        className="mx_CommunityPrototypeInviteDialog_morePeople"
                     >{_t("Show more")}</AccessibleButton>
                 );
             }
         }
         if (this.state.people.length > 0) {
             peopleIntro = (
-                <div className="mx_PrototypeCommunityInviteDialog_people">
+                <div className="mx_CommunityPrototypeInviteDialog_people">
                     <span>{_t("People you know on %(brand)s", {brand: SdkConfig.get().brand})}</span>
                     <AccessibleButton onClick={this.onShowPeopleClick}>
                         {this.state.showPeople ? _t("Hide") : _t("Show")}
@@ -230,7 +230,7 @@ export default class PrototypeCommunityInviteDialog extends React.PureComponent<
 
         return (
             <BaseDialog
-                className="mx_PrototypeCommunityInviteDialog"
+                className="mx_CommunityPrototypeInviteDialog"
                 onFinished={this.props.onFinished}
                 title={_t("Invite people to join %(communityName)s", {communityName: this.props.communityName})}
             >
@@ -242,7 +242,7 @@ export default class PrototypeCommunityInviteDialog extends React.PureComponent<
                         <AccessibleButton
                             kind="primary" onClick={this.onSubmit}
                             disabled={this.state.busy}
-                            className="mx_PrototypeCommunityInviteDialog_primaryButton"
+                            className="mx_CommunityPrototypeInviteDialog_primaryButton"
                         >{buttonText}</AccessibleButton>
                     </div>
                 </form>

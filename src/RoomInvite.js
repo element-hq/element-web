@@ -23,7 +23,7 @@ import Modal from './Modal';
 import * as sdk from './';
 import { _t } from './languageHandler';
 import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
-import PrototypeCommunityInviteDialog from "./components/views/dialogs/PrototypeCommunityInviteDialog";
+import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 
 /**
  * Invites multiple addresses to a room
@@ -59,7 +59,7 @@ export function showRoomInviteDialog(roomId) {
 
 export function showCommunityRoomInviteDialog(roomId, communityName) {
     Modal.createTrackedDialog(
-        'Invite Users to Community', '', PrototypeCommunityInviteDialog, {communityName, roomId},
+        'Invite Users to Community', '', CommunityPrototypeInviteDialog, {communityName, roomId},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
 }

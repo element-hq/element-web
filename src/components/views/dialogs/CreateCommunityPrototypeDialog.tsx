@@ -37,7 +37,7 @@ interface IState {
     avatarPreview: string;
 }
 
-export default class PrototypeCreateGroupDialog extends React.PureComponent<IProps, IState> {
+export default class CreateCommunityPrototypeDialog extends React.PureComponent<IProps, IState> {
     private avatarUploadRef: React.RefObject<HTMLInputElement> = React.createRef();
 
     constructor(props: IProps) {
@@ -138,7 +138,7 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
         let communityId = null;
         if (this.state.localpart) {
             communityId = (
-                <span className="mx_PrototypeCreateGroupDialog_communityId">
+                <span className="mx_CreateCommunityPrototypeDialog_communityId">
                     {_t("Community ID: +<localpart />:%(domain)s", {
                         domain: MatrixClientPeg.getHomeserverName(),
                     }, {
@@ -155,32 +155,32 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
         }
 
         let helpText = (
-            <span className="mx_PrototypeCreateGroupDialog_subtext">
+            <span className="mx_CreateCommunityPrototypeDialog_subtext">
                 {_t("You can change this later if needed.")}
             </span>
         );
         if (this.state.error) {
             helpText = (
-                <span className="mx_PrototypeCreateGroupDialog_subtext mx_PrototypeCreateGroupDialog_subtext_error">
+                <span className="mx_CreateCommunityPrototypeDialog_subtext mx_CreateCommunityPrototypeDialog_subtext_error">
                     {this.state.error}
                 </span>
             );
         }
 
-        let preview = <img src={this.state.avatarPreview} className="mx_PrototypeCreateGroupDialog_avatar" />;
+        let preview = <img src={this.state.avatarPreview} className="mx_CreateCommunityPrototypeDialog_avatar" />;
         if (!this.state.avatarPreview) {
-            preview = <div className="mx_PrototypeCreateGroupDialog_placeholderAvatar" />
+            preview = <div className="mx_CreateCommunityPrototypeDialog_placeholderAvatar" />
         }
 
         return (
             <BaseDialog
-                className="mx_PrototypeCreateGroupDialog"
+                className="mx_CreateCommunityPrototypeDialog"
                 onFinished={this.props.onFinished}
                 title={_t("What's the name of your community or team?")}
             >
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_Dialog_content">
-                        <div className="mx_PrototypeCreateGroupDialog_colName">
+                        <div className="mx_CreateCommunityPrototypeDialog_colName">
                             <Field
                                 value={this.state.name}
                                 onChange={this.onNameChange}
@@ -188,7 +188,7 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
                                 label={_t("Enter name")}
                             />
                             {helpText}
-                            <span className="mx_PrototypeCreateGroupDialog_subtext">
+                            <span className="mx_CreateCommunityPrototypeDialog_subtext">
                                 {/*nbsp is to reserve the height of this element when there's nothing*/}
                                 &nbsp;{communityId}
                             </span>
@@ -196,16 +196,16 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
                                 {_t("Create")}
                             </AccessibleButton>
                         </div>
-                        <div className="mx_PrototypeCreateGroupDialog_colAvatar">
+                        <div className="mx_CreateCommunityPrototypeDialog_colAvatar">
                             <input
                                 type="file" style={{display: "none"}}
                                 ref={this.avatarUploadRef} accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
-                            <AccessibleButton onClick={this.onChangeAvatar} className="mx_PrototypeCreateGroupDialog_avatarContainer">
+                            <AccessibleButton onClick={this.onChangeAvatar} className="mx_CreateCommunityPrototypeDialog_avatarContainer">
                                 {preview}
                             </AccessibleButton>
-                            <div className="mx_PrototypeCreateGroupDialog_tip">
+                            <div className="mx_CreateCommunityPrototypeDialog_tip">
                                 <b>{_t("Add image (optional)")}</b>
                                 <span>
                                     {_t("An image will help people identify your community.")}

@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_PrototypeCreateGroupDialog {
+.mx_CreateCommunityPrototypeDialog {
     .mx_Dialog_content {
         display: flex;
         flex-direction: row;
         margin-bottom: 12px;
 
-        .mx_PrototypeCreateGroupDialog_colName {
+        .mx_CreateCommunityPrototypeDialog_colName {
             flex-basis: 66.66%;
             padding-right: 100px;
 
@@ -29,7 +29,7 @@ limitations under the License.
                 line-height: $font-20px;
             }
 
-            .mx_PrototypeCreateGroupDialog_subtext {
+            .mx_CreateCommunityPrototypeDialog_subtext {
                 display: block;
                 color: $muted-fg-color;
                 margin-bottom: 16px;
@@ -38,12 +38,12 @@ limitations under the License.
                     margin-top: 16px;
                 }
 
-                &.mx_PrototypeCreateGroupDialog_subtext_error {
+                &.mx_CreateCommunityPrototypeDialog_subtext_error {
                     color: $warning-color;
                 }
             }
 
-            .mx_PrototypeCreateGroupDialog_communityId {
+            .mx_CreateCommunityPrototypeDialog_communityId {
                 position: relative;
 
                 .mx_InfoTooltip {
@@ -59,21 +59,21 @@ limitations under the License.
             }
         }
 
-        .mx_PrototypeCreateGroupDialog_colAvatar {
+        .mx_CreateCommunityPrototypeDialog_colAvatar {
             flex-basis: 33.33%;
 
-            .mx_PrototypeCreateGroupDialog_avatarContainer {
+            .mx_CreateCommunityPrototypeDialog_avatarContainer {
                 margin-top: 12px;
                 margin-bottom: 20px;
 
-                .mx_PrototypeCreateGroupDialog_avatar,
-                .mx_PrototypeCreateGroupDialog_placeholderAvatar {
+                .mx_CreateCommunityPrototypeDialog_avatar,
+                .mx_CreateCommunityPrototypeDialog_placeholderAvatar {
                     width: 96px;
                     height: 96px;
                     border-radius: 96px;
                 }
 
-                .mx_PrototypeCreateGroupDialog_placeholderAvatar {
+                .mx_CreateCommunityPrototypeDialog_placeholderAvatar {
                     background-color: #368bd6; // hardcoded for both themes
 
                     &::before {
@@ -91,7 +91,7 @@ limitations under the License.
                 }
             }
 
-            .mx_PrototypeCreateGroupDialog_tip {
+            .mx_CreateCommunityPrototypeDialog_tip {
                 & > b, & > span {
                     display: block;
                     color: $muted-fg-color;
