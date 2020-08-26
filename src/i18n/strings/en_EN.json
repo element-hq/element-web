@@ -1643,6 +1643,7 @@
     "Enable end-to-end encryption": "Enable end-to-end encryption",
     "Create a public room": "Create a public room",
     "Create a private room": "Create a private room",
+    "Create a room in %(communityName)s": "Create a room in %(communityName)s",
     "Name": "Name",
     "Topic (optional)": "Topic (optional)",
     "Make this room public": "Make this room public",
