@@ -206,7 +206,7 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
                                 {preview}
                             </AccessibleButton>
                             <div className="mx_PrototypeCreateGroupDialog_tip">
-                                <b>{_t("PRO TIP")}</b>
+                                <b>{_t("Add image (optional)")}</b>
                                 <span>
                                     {_t("An image will help people identify your community.")}
                                 </span>
