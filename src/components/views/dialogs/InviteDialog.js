@@ -327,7 +327,7 @@ export default class InviteDialog extends React.PureComponent {
         this.state = {
             targets: [], // array of Member objects (see interface above)
             filterText: "",
-            recents: this._buildRecents(alreadyInvited),
+            recents: InviteDialog.buildRecents(alreadyInvited),
             numRecentsShown: INITIAL_ROOMS_SHOWN,
             suggestions: this._buildSuggestions(alreadyInvited),
             numSuggestionsShown: INITIAL_ROOMS_SHOWN,
@@ -344,7 +344,7 @@ export default class InviteDialog extends React.PureComponent {
         this._editorRef = createRef();
     }
 
-    _buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
+    static buildRecents(excludedTargetIds: Set<string>): {userId: string, user: RoomMember, lastActive: number} {
         const rooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals(); // map of userId => js-sdk Room
 
         // Also pull in all the rooms tagged as DefaultTagID.DM so we don't miss anything. Sometimes the

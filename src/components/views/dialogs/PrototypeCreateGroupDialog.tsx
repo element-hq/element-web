@@ -23,6 +23,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
+import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
 
 interface IProps extends IDialogProps {
 }
@@ -67,7 +68,7 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
         // the background for the user to look at while they invite people.
         this.setState({busy: true});
         try {
-            let avatarUrl = null;
+            let avatarUrl = ''; // must be a string for synapse to accept it
             if (this.state.avatarFile) {
                 avatarUrl = await MatrixClientPeg.get().uploadContent(this.state.avatarFile);
             }
@@ -87,11 +88,15 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
                 tag: result.group_id,
             });
 
+            // Close our own dialog before moving much further
+            this.props.onFinished(true);
+
             if (result.room_id) {
                 dis.dispatch({
                     action: 'view_room',
                     room_id: result.room_id,
                 });
+                showCommunityRoomInviteDialog(result.room_id, this.state.name);
             } else {
                 dis.dispatch({
                     action: 'view_group',
@@ -99,8 +104,6 @@ export default class PrototypeCreateGroupDialog extends React.PureComponent<IPro
                     group_is_new: true,
                 });
             }
-
-            // TODO: Show invite dialog
         } catch (e) {
             console.error(e);
             this.setState({
