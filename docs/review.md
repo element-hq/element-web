@@ -14,6 +14,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Performance
 * Accessibility
 * Security
+* Quality via automated and manual testing
 * Comments and documentation where needed
 * Sharing knowledge of different areas among the team
 * Ensuring it's something we're comfortable maintaining for the long term
@@ -34,6 +35,7 @@ When reviewing code, here are some things we look for and also things we avoid:
 * Reviewers should be explicit about required versus optional changes
   * Reviews are conversations and the PR author should feel comfortable
     discussing and pushing back on changes before making them
+* Reviewers are encouraged to ask for tests where they believe it is reasonable
 * Core team should lead by example through their tone and language
 * Take the time to thank and point out good code changes
 * Using softer language like "please" and "what do you think?" goes a long way
