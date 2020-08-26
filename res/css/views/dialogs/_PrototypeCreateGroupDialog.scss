@@ -74,7 +74,7 @@ limitations under the License.
                 }
 
                 .mx_PrototypeCreateGroupDialog_placeholderAvatar {
-                    background-color: #368BD6; // hardcoded for both themes
+                    background-color: #368bd6; // hardcoded for both themes
 
                     &::before {
                         display: inline-block;
@@ -92,7 +92,7 @@ limitations under the License.
             }
 
             .mx_PrototypeCreateGroupDialog_tip {
-                &>b, &>span {
+                & > b, & > span {
                     display: block;
                     color: $muted-fg-color;
                 }
