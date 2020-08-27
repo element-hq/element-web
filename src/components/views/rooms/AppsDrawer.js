@@ -32,7 +32,7 @@ import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import classNames from 'classnames';
 import {Resizable} from "re-resizable";
-import {useLocalStorageState} from "../../../hooks/useLocalStorage";
+import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
