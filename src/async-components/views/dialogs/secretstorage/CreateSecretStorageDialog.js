@@ -56,12 +56,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     static propTypes = {
         hasCancel: PropTypes.bool,
         accountPassword: PropTypes.string,
-        force: PropTypes.bool,
+        forceReset: PropTypes.bool,
     };
 
     static defaultProps = {
         hasCancel: true,
-        force: false,
+        forceReset: false,
     };
 
     constructor(props) {
@@ -118,8 +118,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
             );
 
-            const { force } = this.props;
-            const phase = (backupInfo && !force) ? PHASE_MIGRATE : PHASE_CHOOSE_KEY_PASSPHRASE;
+            const { forceReset } = this.props;
+            const phase = (backupInfo && !forceReset) ? PHASE_MIGRATE : PHASE_CHOOSE_KEY_PASSPHRASE;
 
             this.setState({
                 phase,
@@ -277,11 +277,11 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         const cli = MatrixClientPeg.get();
 
-        const { force } = this.props;
+        const { forceReset } = this.props;
 
         try {
-            if (force) {
-                console.log("Forcing secret storage reset"); // log something so we can debug this later
+            if (forceReset) {
+                console.log("Forcing cross-signing and secret storage reset");
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     setupNewCrossSigning: true,

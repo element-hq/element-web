@@ -218,7 +218,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force: forceReset,
+                    forceReset,
                 },
                 null,
                 /* priority = */ false,
