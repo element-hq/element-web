@@ -164,7 +164,7 @@ const TagPanel = createReactClass({
             );
         }
 
-        return <div className={classes}>
+        return <div className={classes} onClick={this.onClearFilterClick}>
             <div className="mx_TagPanel_clearButton_container">
                 { clearButton }
             </div>
