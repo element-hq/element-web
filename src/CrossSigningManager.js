@@ -239,7 +239,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             }
         } else {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
-            await cli.bootstrapSecretStorage({
+            await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
                     const { finished } = Modal.createTrackedDialog(
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
@@ -254,7 +254,9 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                         throw new Error("Cross-signing key upload auth canceled");
                     }
                 },
-                getBackupPassphrase: promptForBackupPassphrase,
+            });
+            await cli.bootstrapSecretStorage({
+                getKeyBackupPassphrase: promptForBackupPassphrase,
             });
         }
 
