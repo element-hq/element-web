@@ -2440,5 +2440,7 @@
     "Enter name": "Sisesta nimi",
     "Add image (optional)": "Lisa pilt (kui soovid)",
     "An image will help people identify your community.": "Pilt aitab inimestel teie kogukonda ära tunda.",
-    "Create community": "Loo kogukond"
+    "Create community": "Loo kogukond",
+    "Explore community rooms": "Sirvi kogukonna jututubasid",
+    "Create a room in %(communityName)s": "Loo uus jututuba %(communityName)s kogukonda"
 }
