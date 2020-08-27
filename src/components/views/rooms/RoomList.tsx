@@ -45,6 +45,7 @@ import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
 import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
+import TagOrderStore from "../../../stores/TagOrderStore";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent) => void;
@@ -129,7 +130,9 @@ const TAG_AESTHETICS: {
                     }}
                 />
                 <IconizedContextMenuOption
-                    label={_t("Explore public rooms")}
+                    label={TagOrderStore.getSelectedPrototypeTag()
+                        ? _t("Explore community rooms")
+                        : _t("Explore public rooms")}
                     iconClassName="mx_RoomList_iconExplore"
                     onClick={(e) => {
                         e.preventDefault();

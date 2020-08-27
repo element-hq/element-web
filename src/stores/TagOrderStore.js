@@ -285,6 +285,13 @@ class TagOrderStore extends Store {
     getSelectedTags() {
         return this._state.selectedTags;
     }
+
+    getSelectedPrototypeTag() {
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            return this.getSelectedTags()[0];
+        }
+        return null; // no selection as far as this function is concerned
+    }
 }
 
 if (global.singletonTagOrderStore === undefined) {

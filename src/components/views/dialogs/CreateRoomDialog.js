@@ -25,6 +25,8 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import {privateShouldBeEncrypted} from "../../../createRoom";
+import TagOrderStore from "../../../stores/TagOrderStore";
+import GroupStore from "../../../stores/GroupStore";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -68,6 +70,10 @@ export default createReactClass({
 
         if (!this.state.isPublic) {
             opts.encryption = this.state.isEncrypted;
+        }
+
+        if (TagOrderStore.getSelectedPrototypeTag()) {
+            opts.associatedWithCommunity = TagOrderStore.getSelectedPrototypeTag();
         }
 
         return opts;
@@ -212,7 +218,12 @@ export default createReactClass({
             </React.Fragment>;
         }
 
-        const title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
+        let title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
+        if (TagOrderStore.getSelectedPrototypeTag()) {
+            const summary = GroupStore.getSummary(TagOrderStore.getSelectedPrototypeTag());
+            const name = summary?.profile?.name || TagOrderStore.getSelectedPrototypeTag();
+            title = _t("Create a room in %(communityName)s", {communityName: name});
+        }
         return (
             <BaseDialog className="mx_CreateRoomDialog" onFinished={this.props.onFinished}
                 title={title}
