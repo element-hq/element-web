@@ -30,25 +30,6 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_TagPanel .mx_TagPanel_clearButton_container {
-    /* Constant height within flex mx_TagPanel */
-    height: 70px;
-    width: 56px;
-
-    flex: none;
-
-    justify-content: center;
-    align-items: flex-start;
-
-    display: none;
-}
-
-.mx_TagPanel .mx_TagPanel_clearButton object {
-    /* Same as .mx_SearchBox padding-top */
-    margin-top: 24px;
-    pointer-events: none;
-}
-
 .mx_TagPanel .mx_TagPanel_divider {
     height: 0px;
     width: 90%;
