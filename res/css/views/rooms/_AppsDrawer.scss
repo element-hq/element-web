@@ -24,10 +24,6 @@ $MiniAppTileHeight: 114px;
     flex-direction: column;
     overflow: hidden;
 
-    .mx_AppsContainer_resizerHandles {
-        flex: 0 0 4px;
-    }
-
     .mx_AppsContainer_resizerHandle {
         cursor: ns-resize;
         border-radius: 3px;
@@ -410,22 +406,6 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppLoading iframe {
     display: none;
-}
-
-/* Hidden resize handle (Apptile bottom serves as indicator) */
-.mx_AppsDrawer .mx_ResizeHandle {
-    position: relative;
-    z-index: 1;
-}
-
-.mx_AppsDrawer .mx_ResizeHandle > div {
-    background: inherit;
-}
-
-.mx_AppsDrawer_fullWidth .mx_ResizeHandle {
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .mx_AppsDrawer_minimised .mx_AppsContainer_resizerHandle {

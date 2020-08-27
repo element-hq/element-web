@@ -218,7 +218,6 @@ export default createReactClass({
                     id={"apps-drawer_" + this.props.room.roomId}
                     minHeight={100}
                     maxHeight={this.props.maxHeight - 50}
-                    handleWrapperClass="mx_AppsContainer_resizerHandles"
                     handleClass="mx_AppsContainer_resizerHandle"
                     className="mx_AppsContainer"
                 >
