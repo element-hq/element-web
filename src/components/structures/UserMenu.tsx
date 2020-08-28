@@ -42,6 +42,9 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList
 } from "../views/context_menus/IconizedContextMenu";
+import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
+import * as fbEmitter from "fbemitter";
+import TagOrderStore from "../../stores/TagOrderStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -58,6 +61,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private themeWatcherRef: string;
     private buttonRef: React.RefObject<HTMLButtonElement> = createRef();
+    private tagStoreRef: fbEmitter.EventSubscription;
 
     constructor(props: IProps) {
         super(props);
@@ -77,13 +81,19 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.themeWatcherRef = SettingsStore.watchSetting("theme", null, this.onThemeChanged);
+        this.tagStoreRef = TagOrderStore.addListener(this.onTagStoreUpdate);
     }
 
     public componentWillUnmount() {
         if (this.themeWatcherRef) SettingsStore.unwatchSetting(this.themeWatcherRef);
         if (this.dispatcherRef) defaultDispatcher.unregister(this.dispatcherRef);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.onProfileUpdate);
+        this.tagStoreRef.remove();
     }
+
+    private onTagStoreUpdate = () => {
+        this.forceUpdate(); // we don't have anything useful in state to update
+    };
 
     private isUserOnDarkTheme(): boolean {
         const theme = SettingsStore.getValue("theme");
@@ -298,12 +308,34 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
+        const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
+
+        let isPrototype = false;
+        let menuName = _t("User menu");
         let name = <span className="mx_UserMenu_userName">{displayName}</span>;
         let buttons = (
             <span className="mx_UserMenu_headerButtons">
                 {/* masked image in CSS */}
             </span>
         );
+        if (prototypeCommunityName) {
+            name = (
+                <div className="mx_UserMenu_doubleName">
+                    <span className="mx_UserMenu_userName">{prototypeCommunityName}</span>
+                    <span className="mx_UserMenu_subUserName">{displayName}</span>
+                </div>
+            );
+            menuName = _t("Community and user menu");
+            isPrototype = true;
+        } else if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            name = (
+                <div className="mx_UserMenu_doubleName">
+                    <span className="mx_UserMenu_userName">{_t("Home")}</span>
+                    <span className="mx_UserMenu_subUserName">{displayName}</span>
+                </div>
+            );
+            isPrototype = true;
+        }
         if (this.props.isMinimized) {
             name = null;
             buttons = null;
@@ -312,6 +344,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const classes = classNames({
             'mx_UserMenu': true,
             'mx_UserMenu_minimized': this.props.isMinimized,
+            'mx_UserMenu_prototype': isPrototype,
         });
 
         return (
@@ -320,7 +353,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     className={classes}
                     onClick={this.onOpenMenuClick}
                     inputRef={this.buttonRef}
-                    label={_t("User menu")}
+                    label={menuName}
                     isExpanded={!!this.state.contextMenuPosition}
                     onContextMenu={this.onContextMenu}
                 >

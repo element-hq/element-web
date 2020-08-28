@@ -19,6 +19,30 @@ limitations under the License.
     // to make the menu button sort of aligned with the explore button below
     padding-right: 6px;
 
+    &.mx_UserMenu_prototype {
+        // The margin & padding combination between here and the ::after is to
+        // align the border line with the tag panel.
+        margin-bottom: 6px;
+
+        padding-right: 0; // make the right edge line up with the explore button
+
+        .mx_UserMenu_headerButtons {
+            // considering we've eliminated right padding on the menu itself, we need to
+            // push the chevron in slightly (roughly lining up with the center of the
+            // plus buttons)
+            margin-right: 2px;
+        }
+
+        // we cheat opacity on the theme colour with an after selector here
+        &::after {
+            content: '';
+            border-bottom: 1px solid $roomsublist-divider-color;
+            opacity: 0.2;
+            display: block;
+            padding-top: 8px;
+        }
+    }
+
     .mx_UserMenu_headerButtons {
         width: 16px;
         height: 16px;
@@ -53,6 +77,28 @@ limitations under the License.
             .mx_UserMenu_userAvatar {
                 border-radius: 32px; // should match avatar size
                 object-fit: cover;
+            }
+        }
+
+        .mx_UserMenu_doubleName {
+            flex: 1;
+            min-width: 0; // make flexbox aware that it can crush this to a tiny width
+
+            .mx_UserMenu_userName,
+            .mx_UserMenu_subUserName {
+                display: block;
+            }
+
+            .mx_UserMenu_subUserName {
+                color: $muted-fg-color;
+                font-size: $font-13px;
+                line-height: $font-18px;
+                flex: 1;
+
+                // Ellipsize any text overflow
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
         }
 
