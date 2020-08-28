@@ -135,6 +135,44 @@ limitations under the License.
 .mx_UserMenu_contextMenu {
     width: 247px;
 
+    // These override the styles already present on the user menu rather than try to
+    // define a new menu. They are specifically for the stacked menu when a community
+    // is being represented as a prototype.
+    &.mx_UserMenu_contextMenu_prototype {
+        padding-bottom: 16px;
+
+        .mx_UserMenu_contextMenu_header {
+            padding-bottom: 0;
+            padding-top: 16px;
+
+            &:nth-child(n + 2) {
+                padding-top: 8px;
+            }
+        }
+
+        hr {
+            width: 85%;
+            opacity: 0.2;
+            border: none;
+            border-bottom: 1px solid $roomsublist-divider-color;
+        }
+
+        &.mx_IconizedContextMenu {
+            > .mx_IconizedContextMenu_optionList {
+                margin-top: 4px;
+
+                &::before {
+                    border: none;
+                }
+
+                > .mx_AccessibleButton {
+                    padding-top: 2px;
+                    padding-bottom: 2px;
+                }
+            }
+        }
+    }
+
     &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
         .mx_AccessibleButton {
             padding-top: 16px;
@@ -238,5 +276,13 @@ limitations under the License.
 
     .mx_UserMenu_iconSignOut::before {
         mask-image: url('$(res)/img/element-icons/leave.svg');
+    }
+
+    .mx_UserMenu_iconMembers::before {
+        mask-image: url('$(res)/img/element-icons/room/members.svg');
+    }
+
+    .mx_UserMenu_iconInvite::before {
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
     }
 }

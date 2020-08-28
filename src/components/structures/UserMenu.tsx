@@ -199,8 +199,31 @@ export default class UserMenu extends React.Component<IProps, IState> {
         defaultDispatcher.dispatch({action: 'view_home_page'});
     };
 
+    private onCommunitySettingsClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        console.log("TODO@onCommunitySettingsClick");
+    };
+
+    private onCommunityMembersClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        console.log("TODO@onCommunityMembersClick");
+    };
+
+    private onCommunityInviteClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        console.log("TODO@onCommunityInviteClick");
+    };
+
     private renderContextMenu = (): React.ReactNode => {
         if (!this.state.contextMenuPosition) return null;
+
+        const prototypeCommunityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
 
         let hostingLink;
         const signupLink = getHostingLink("user-context-menu");
@@ -235,22 +258,135 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
+        let primaryHeader = (
+            <div className="mx_UserMenu_contextMenu_name">
+                <span className="mx_UserMenu_contextMenu_displayName">
+                    {OwnProfileStore.instance.displayName}
+                </span>
+                <span className="mx_UserMenu_contextMenu_userId">
+                    {MatrixClientPeg.get().getUserId()}
+                </span>
+            </div>
+        );
+        let primaryOptionList = (
+            <React.Fragment>
+                <IconizedContextMenuOptionList>
+                    {homeButton}
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconBell"
+                        label={_t("Notification settings")}
+                        onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconLock"
+                        label={_t("Security & privacy")}
+                        onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconSettings"
+                        label={_t("All settings")}
+                        onClick={(e) => this.onSettingsOpen(e, null)}
+                    />
+                    {/* <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconArchive"
+                        label={_t("Archived rooms")}
+                        onClick={this.onShowArchived}
+                    /> */}
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconMessage"
+                        label={_t("Feedback")}
+                        onClick={this.onProvideFeedback}
+                    />
+                </IconizedContextMenuOptionList>
+                <IconizedContextMenuOptionList red>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconSignOut"
+                        label={_t("Sign out")}
+                        onClick={this.onSignOutClick}
+                    />
+                </IconizedContextMenuOptionList>
+            </React.Fragment>
+        );
+        let secondarySection = null;
+
+        if (prototypeCommunityName) {
+            primaryHeader = (
+                <div className="mx_UserMenu_contextMenu_name">
+                    <span className="mx_UserMenu_contextMenu_displayName">
+                        {prototypeCommunityName}
+                    </span>
+                </div>
+            );
+            primaryOptionList = (
+                <IconizedContextMenuOptionList>
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconSettings"
+                        label={_t("Settings")}
+                        onClick={this.onCommunitySettingsClick}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconMembers"
+                        label={_t("Members")}
+                        onClick={this.onCommunityMembersClick}
+                    />
+                    <IconizedContextMenuOption
+                        iconClassName="mx_UserMenu_iconInvite"
+                        label={_t("Invite")}
+                        onClick={this.onCommunityInviteClick}
+                    />
+                </IconizedContextMenuOptionList>
+            );
+            secondarySection = (
+                <React.Fragment>
+                    <hr />
+                    <div className="mx_UserMenu_contextMenu_header">
+                        <div className="mx_UserMenu_contextMenu_name">
+                            <span className="mx_UserMenu_contextMenu_displayName">
+                                {OwnProfileStore.instance.displayName}
+                            </span>
+                            <span className="mx_UserMenu_contextMenu_userId">
+                                {MatrixClientPeg.get().getUserId()}
+                            </span>
+                        </div>
+                    </div>
+                    <IconizedContextMenuOptionList>
+                        <IconizedContextMenuOption
+                            iconClassName="mx_UserMenu_iconSettings"
+                            label={_t("Settings")}
+                            onClick={(e) => this.onSettingsOpen(e, null)}
+                        />
+                        <IconizedContextMenuOption
+                            iconClassName="mx_UserMenu_iconMessage"
+                            label={_t("Feedback")}
+                            onClick={this.onProvideFeedback}
+                        />
+                    </IconizedContextMenuOptionList>
+                    <IconizedContextMenuOptionList red>
+                        <IconizedContextMenuOption
+                            iconClassName="mx_UserMenu_iconSignOut"
+                            label={_t("Sign out")}
+                            onClick={this.onSignOutClick}
+                        />
+                    </IconizedContextMenuOptionList>
+                </React.Fragment>
+            )
+        }
+
+        const classes = classNames({
+            "mx_UserMenu_contextMenu": true,
+            "mx_UserMenu_contextMenu_prototype": !!prototypeCommunityName,
+        });
+
         return <IconizedContextMenu
-            // -20 to overlap the context menu by just over the width of the `...` icon and make it look connected
-            left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 20}
-            top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height}
+            // numerical adjustments to overlap the context menu by just over the width of the
+            // menu icon and make it look connected
+            left={this.state.contextMenuPosition.width + this.state.contextMenuPosition.left - 10}
+            top={this.state.contextMenuPosition.top + this.state.contextMenuPosition.height + 8}
             onFinished={this.onCloseMenu}
-            className="mx_UserMenu_contextMenu"
+            className={classes}
         >
             <div className="mx_UserMenu_contextMenu_header">
-                <div className="mx_UserMenu_contextMenu_name">
-                        <span className="mx_UserMenu_contextMenu_displayName">
-                            {OwnProfileStore.instance.displayName}
-                        </span>
-                    <span className="mx_UserMenu_contextMenu_userId">
-                            {MatrixClientPeg.get().getUserId()}
-                        </span>
-                </div>
+                {primaryHeader}
                 <AccessibleTooltipButton
                     className="mx_UserMenu_contextMenu_themeButton"
                     onClick={this.onSwitchThemeClick}
@@ -264,41 +400,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 </AccessibleTooltipButton>
             </div>
             {hostingLink}
-            <IconizedContextMenuOptionList>
-                {homeButton}
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconBell"
-                    label={_t("Notification settings")}
-                    onClick={(e) => this.onSettingsOpen(e, USER_NOTIFICATIONS_TAB)}
-                />
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconLock"
-                    label={_t("Security & privacy")}
-                    onClick={(e) => this.onSettingsOpen(e, USER_SECURITY_TAB)}
-                />
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconSettings"
-                    label={_t("All settings")}
-                    onClick={(e) => this.onSettingsOpen(e, null)}
-                />
-                {/* <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconArchive"
-                    label={_t("Archived rooms")}
-                    onClick={this.onShowArchived}
-                /> */}
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconMessage"
-                    label={_t("Feedback")}
-                    onClick={this.onProvideFeedback}
-                />
-            </IconizedContextMenuOptionList>
-            <IconizedContextMenuOptionList red>
-                <IconizedContextMenuOption
-                    iconClassName="mx_UserMenu_iconSignOut"
-                    label={_t("Sign out")}
-                    onClick={this.onSignOutClick}
-                />
-            </IconizedContextMenuOptionList>
+            {primaryOptionList}
+            {secondarySection}
         </IconizedContextMenu>;
     };
 
