@@ -171,7 +171,7 @@ export default class AppsDrawer extends React.Component {
                 userId={this.props.userId}
                 show={this.props.showApps}
                 creatorUserId={app.creatorUserId}
-                widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                 waitForIframeLoad={app.waitForIframeLoad}
                 whitelistCapabilities={capWhitelist}
             />);

@@ -76,7 +76,7 @@ export default class PersistentApp extends React.Component {
                     userId={MatrixClientPeg.get().credentials.userId}
                     show={true}
                     creatorUserId={app.creatorUserId}
-                    widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                    widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                     waitForIframeLoad={app.waitForIframeLoad}
                     whitelistCapabilities={capWhitelist}
                     showDelete={false}

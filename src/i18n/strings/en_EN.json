@@ -387,6 +387,7 @@
     "Common names and surnames are easy to guess": "Common names and surnames are easy to guess",
     "Straight rows of keys are easy to guess": "Straight rows of keys are easy to guess",
     "Short keyboard patterns are easy to guess": "Short keyboard patterns are easy to guess",
+    "Unknown App": "Unknown App",
     "Help us improve %(brand)s": "Help us improve %(brand)s",
     "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.": "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. This will use a <PolicyLink>cookie</PolicyLink>.",
     "I want to help": "I want to help",

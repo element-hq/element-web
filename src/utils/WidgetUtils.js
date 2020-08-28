@@ -32,6 +32,7 @@ import {Capability} from "../widgets/WidgetApi";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
+import {_t} from "../languageHandler";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -485,5 +486,15 @@ export default class WidgetUtils {
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
+    }
+
+    static getWidgetName(app) {
+        if (!app || !app.name) return "";
+        return app.name.trim() || _t("Unknown App");
+    }
+
+    static getWidgetDataTitle(app) {
+        if (!app || !app.data || !app.data.title) return "";
+        return app.data.title.trim();
     }
 }
