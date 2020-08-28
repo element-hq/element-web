@@ -1103,16 +1103,28 @@ export default class InviteDialog extends React.PureComponent {
                 const communityName = GroupStore.getSummary(communityId)?.profile?.name || communityId;
                 helpText = _t(
                     "Start a conversation with someone using their name, username (like <userId/>) or email address. " +
-                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.",
+                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click " +
+                    "<a>here</a>.",
                     {communityName}, {
                         userId: () => {
-                            return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
+                            return (
+                                <a
+                                    href={makeUserPermalink(userId)}
+                                    rel="noreferrer noopener"
+                                    target="_blank"
+                                >{userId}</a>
+                            );
                         },
                         a: (sub) => {
-                            return <AccessibleButton kind="link" onClick={this._onCommunityInviteClick}>{sub}</AccessibleButton>
+                            return (
+                                <AccessibleButton
+                                    kind="link"
+                                    onClick={this._onCommunityInviteClick}
+                                >{sub}</AccessibleButton>
+                            );
                         },
                     },
-                )
+                );
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
