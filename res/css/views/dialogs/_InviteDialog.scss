@@ -89,6 +89,13 @@ limitations under the License.
         font-weight: bold;
         text-transform: uppercase;
     }
+
+    .mx_InviteDialog_subname {
+        margin-bottom: 10px;
+        margin-top: -10px; // HACK: Positioning with margins is bad
+        font-size: $font-12px;
+        color: $muted-fg-color;
+    }
 }
 
 .mx_InviteDialog_roomTile {

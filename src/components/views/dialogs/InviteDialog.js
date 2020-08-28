@@ -37,6 +37,8 @@ import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
+import TagOrderStore from "../../../stores/TagOrderStore";
+import GroupStore from "../../../stores/GroupStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -915,6 +917,13 @@ export default class InviteDialog extends React.PureComponent {
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+        let sectionSubname = null;
+
+        if (kind === 'suggestions' && TagOrderStore.getSelectedPrototypeTag()) {
+            const summary = GroupStore.getSummary(TagOrderStore.getSelectedPrototypeTag());
+            const communityName = summary?.profile?.name || TagOrderStore.getSelectedPrototypeTag();
+            sectionSubname = _t("May include members not in %(communityName)s", {communityName});
+        }
 
         if (this.props.kind === KIND_INVITE) {
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
@@ -993,6 +1002,7 @@ export default class InviteDialog extends React.PureComponent {
         return (
             <div className='mx_InviteDialog_section'>
                 <h3>{sectionName}</h3>
+                {sectionSubname ? <p className="mx_InviteDialog_subname">{sectionSubname}</p> : null}
                 {tiles}
                 {showMore}
             </div>

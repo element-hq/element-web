@@ -1709,6 +1709,7 @@
     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s": "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",
     "Recent Conversations": "Recent Conversations",
     "Suggestions": "Suggestions",
+    "May include members not in %(communityName)s": "May include members not in %(communityName)s",
     "Recently Direct Messaged": "Recently Direct Messaged",
     "Direct Messages": "Direct Messages",
     "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Start a conversation with someone using their name, username (like <userId/>) or email address.",
