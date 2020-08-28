@@ -282,14 +282,14 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         try {
             if (forceReset) {
                 console.log("Forcing cross-signing and secret storage reset");
-                await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    setupNewCrossSigning: true,
-                });
                 await cli.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
+                });
+                await cli.bootstrapCrossSigning({
+                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
+                    setupNewCrossSigning: true,
                 });
             } else {
                 await cli.bootstrapCrossSigning({
