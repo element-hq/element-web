@@ -23,7 +23,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
-import _sortBy from 'lodash/sortBy';
+import {sortBy} from 'lodash';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
 import MatrixEvent from "matrix-js-sdk/src/models/event";
@@ -151,7 +151,7 @@ export default class UserProvider extends AutocompleteProvider {
         const currentUserId = MatrixClientPeg.get().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
 
-        this.users = _sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
+        this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 
         this.matcher.setObjects(this.users);
     }

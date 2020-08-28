@@ -18,7 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { FILTER_CHANGED, FilterPriority, IFilterCondition } from "./IFilterCondition";
 import { EventEmitter } from "events";
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
-import throttle from "lodash/throttle";
+import { throttle } from "lodash";
 
 /**
  * A filter condition for the room list which reveals rooms of a particular

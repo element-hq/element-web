@@ -23,7 +23,7 @@ limitations under the License.
  * @event module:utils~ResizeNotifier#"middlePanelResizedNoisy"
  */
 import { EventEmitter } from "events";
-import throttle from "lodash/throttle";
+import { throttle } from "lodash";
 
 export default class ResizeNotifier extends EventEmitter {
     constructor() {
