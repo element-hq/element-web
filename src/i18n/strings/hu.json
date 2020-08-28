@@ -2440,5 +2440,7 @@
     "An image will help people identify your community.": "A kép segít az embereknek a közösség azonosításában.",
     "Explore rooms in %(communityName)s": "Fedezd fel a szobákat itt: %(communityName)s",
     "Create community": "Közösség létrehozása",
-    "Set up Secure Backup": "Biztonsági mentés beállítása"
+    "Set up Secure Backup": "Biztonsági mentés beállítása",
+    "Explore community rooms": "Fedezd fel a közösségi szobákat",
+    "Create a room in %(communityName)s": "Készíts szobát itt: %(communityName)s"
 }
