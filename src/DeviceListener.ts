@@ -207,9 +207,13 @@ export default class DeviceListener {
         // (we add a listener on sync to do once check after the initial sync is done)
         if (!cli.isInitialSyncComplete()) return;
 
+        // JRS: This will change again in the next PR which moves secret storage
+        // later in the process.
         const crossSigningReady = await cli.isCrossSigningReady();
+        const secretStorageReady = await cli.isSecretStorageReady();
+        const allSystemsReady = crossSigningReady && secretStorageReady;
 
-        if (this.dismissedThisDeviceToast || crossSigningReady) {
+        if (this.dismissedThisDeviceToast || allSystemsReady) {
             hideSetupEncryptionToast();
         } else if (this.shouldShowSetupEncryptionToast()) {
             // make sure our keys are finished downloading
