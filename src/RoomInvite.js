@@ -76,8 +76,8 @@ export function showCommunityInviteDialog(communityId) {
     });
     if (!chat) chat = rooms[0];
     if (chat) {
-        const summary = GroupStore.getSummary(communityId);
-        showCommunityRoomInviteDialog(chat.roomId, summary?.profile?.name || communityId);
+        const name = CommunityPrototypeInviteDialog.instance.getCommunityName(communityId);
+        showCommunityRoomInviteDialog(chat.roomId, name);
     } else {
         throw new Error("Failed to locate appropriate room to start an invite in");
     }

@@ -22,6 +22,8 @@ import { EffectiveMembership, getEffectiveMembership } from "../utils/membership
 import SettingsStore from "../settings/SettingsStore";
 import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
+import FlairStore from "./FlairStore";
+import TagOrderStore from "./TagOrderStore";
 
 interface IState {
     // nothing of value - we use account data
@@ -41,6 +43,15 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
 
     public static get instance(): CommunityPrototypeStore {
         return CommunityPrototypeStore.internalInstance;
+    }
+
+    public getSelectedCommunityName(): string {
+        return CommunityPrototypeStore.instance.getCommunityName(TagOrderStore.getSelectedPrototypeTag());
+    }
+
+    public getCommunityName(communityId: string): string {
+        const profile = FlairStore.getGroupProfileCachedFast(this.matrixClient, communityId);
+        return profile?.name || communityId;
     }
 
     protected async onAction(payload: ActionPayload): Promise<any> {
