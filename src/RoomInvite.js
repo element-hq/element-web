@@ -24,6 +24,7 @@ import * as sdk from './';
 import { _t } from './languageHandler';
 import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
+import GroupStore from "./stores/GroupStore";
 
 /**
  * Invites multiple addresses to a room
@@ -62,6 +63,24 @@ export function showCommunityRoomInviteDialog(roomId, communityName) {
         'Invite Users to Community', '', CommunityPrototypeInviteDialog, {communityName, roomId},
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
+}
+
+export function showCommunityInviteDialog(communityId) {
+    const rooms = GroupStore.getGroupRooms(communityId)
+        .map(r => MatrixClientPeg.get().getRoom(r.roomId))
+        .filter(r => !!r);
+    let chat = rooms.find(r => {
+        const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
+        if (!idState || idState.getContent()['groupId'] !== communityId) return false;
+        return true;
+    });
+    if (!chat) chat = rooms[0];
+    if (chat) {
+        const summary = GroupStore.getSummary(communityId);
+        showCommunityRoomInviteDialog(chat.roomId, summary?.profile?.name || communityId);
+    } else {
+        throw new Error("Failed to locate appropriate room to start an invite in");
+    }
 }
 
 /**

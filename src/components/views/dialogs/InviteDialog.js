@@ -32,11 +32,13 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
-import {inviteMultipleToRoom} from "../../../RoomInvite";
+import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
+import TagOrderStore from "../../../stores/TagOrderStore";
+import GroupStore from "../../../stores/GroupStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -909,12 +911,24 @@ export default class InviteDialog extends React.PureComponent {
         this.props.onFinished();
     };
 
+    _onCommunityInviteClick = (e) => {
+        this.props.onFinished();
+        showCommunityInviteDialog(TagOrderStore.getSelectedPrototypeTag());
+    };
+
     _renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === 'recents' ? this._showMoreRecents.bind(this) : this._showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
+        let sectionSubname = null;
+
+        if (kind === 'suggestions' && TagOrderStore.getSelectedPrototypeTag()) {
+            const summary = GroupStore.getSummary(TagOrderStore.getSelectedPrototypeTag());
+            const communityName = summary?.profile?.name || TagOrderStore.getSelectedPrototypeTag();
+            sectionSubname = _t("May include members not in %(communityName)s", {communityName});
+        }
 
         if (this.props.kind === KIND_INVITE) {
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
@@ -993,6 +1007,7 @@ export default class InviteDialog extends React.PureComponent {
         return (
             <div className='mx_InviteDialog_section'>
                 <h3>{sectionName}</h3>
+                {sectionSubname ? <p className="mx_InviteDialog_subname">{sectionSubname}</p> : null}
                 {tiles}
                 {showMore}
             </div>
@@ -1083,6 +1098,34 @@ export default class InviteDialog extends React.PureComponent {
                     return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
                 }},
             );
+            if (TagOrderStore.getSelectedPrototypeTag()) {
+                const communityId = TagOrderStore.getSelectedPrototypeTag();
+                const communityName = GroupStore.getSummary(communityId)?.profile?.name || communityId;
+                helpText = _t(
+                    "Start a conversation with someone using their name, username (like <userId/>) or email address. " +
+                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click " +
+                    "<a>here</a>.",
+                    {communityName}, {
+                        userId: () => {
+                            return (
+                                <a
+                                    href={makeUserPermalink(userId)}
+                                    rel="noreferrer noopener"
+                                    target="_blank"
+                                >{userId}</a>
+                            );
+                        },
+                        a: (sub) => {
+                            return (
+                                <AccessibleButton
+                                    kind="link"
+                                    onClick={this._onCommunityInviteClick}
+                                >{sub}</AccessibleButton>
+                            );
+                        },
+                    },
+                );
+            }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
         } else { // KIND_INVITE
