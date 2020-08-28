@@ -25,7 +25,6 @@ import { _t } from './languageHandler';
 import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import GroupStore from "./stores/GroupStore";
-import dis from "./dispatcher/dispatcher";
 
 /**
  * Invites multiple addresses to a room
