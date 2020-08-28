@@ -32,7 +32,7 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import {humanizeTime} from "../../../utils/humanize";
 import createRoom, {canEncryptToAllUsers, privateShouldBeEncrypted} from "../../../createRoom";
-import {inviteMultipleToRoom} from "../../../RoomInvite";
+import {inviteMultipleToRoom, showCommunityInviteDialog} from "../../../RoomInvite";
 import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
@@ -911,6 +911,11 @@ export default class InviteDialog extends React.PureComponent {
         this.props.onFinished();
     };
 
+    _onCommunityInviteClick = (e) => {
+        this.props.onFinished();
+        showCommunityInviteDialog(TagOrderStore.getSelectedPrototypeTag());
+    };
+
     _renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
@@ -1093,6 +1098,22 @@ export default class InviteDialog extends React.PureComponent {
                     return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
                 }},
             );
+            if (TagOrderStore.getSelectedPrototypeTag()) {
+                const communityId = TagOrderStore.getSelectedPrototypeTag();
+                const communityName = GroupStore.getSummary(communityId)?.profile?.name || communityId;
+                helpText = _t(
+                    "Start a conversation with someone using their name, username (like <userId/>) or email address. " +
+                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.",
+                    {communityName}, {
+                        userId: () => {
+                            return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
+                        },
+                        a: (sub) => {
+                            return <AccessibleButton kind="link" onClick={this._onCommunityInviteClick}>{sub}</AccessibleButton>
+                        },
+                    },
+                )
+            }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
         } else { // KIND_INVITE

@@ -1713,6 +1713,7 @@
     "Recently Direct Messaged": "Recently Direct Messaged",
     "Direct Messages": "Direct Messages",
     "Start a conversation with someone using their name, username (like <userId/>) or email address.": "Start a conversation with someone using their name, username (like <userId/>) or email address.",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.",
     "Go": "Go",
     "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.": "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
     "a new master key signature": "a new master key signature",
