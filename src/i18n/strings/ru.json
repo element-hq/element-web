@@ -2428,7 +2428,7 @@
     "Show": "Показать",
     "Send %(count)s invites|other": "Отправить %(count)s приглашений",
     "Send %(count)s invites|one": "Отправить %(count)s приглашение",
-    "Invite people to join %(communityName)s": "Пригласите людей присоединиться к %(communityName)s",
+    "Invite people to join %(communityName)s": "Пригласите людей вступить в %(communityName)s",
     "There was an error creating your community. The name may be taken or the server is unable to process your request.": "При создании сообщества произошла ошибка. Имя может быть занято или сервер не может обработать ваш запрос.",
     "Community ID: +<localpart />:%(domain)s": "ID сообщества: +<localpart />:%(domain)s",
     "Use this when referencing your community to others. The community ID cannot be changed.": "Используйте это при обращении к другим людям. ID сообщества не может быть изменён.",
@@ -2440,5 +2440,10 @@
     "Create a room in %(communityName)s": "Создать комнату в %(communityName)s",
     "Create community": "Создать сообщество",
     "Cross-signing and secret storage are ready for use.": "Кросс-подпись и секретное хранилище готовы к использованию.",
-    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Кросс-подпись готова к использованию, но секретное хранилище в настоящее время не используется для резервного копирования ваших ключей."
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Кросс-подпись готова к использованию, но секретное хранилище в настоящее время не используется для резервного копирования ваших ключей.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Приватные комнаты можно найти и присоединиться только по приглашению. Публичные комнаты может найти и присоединиться к ним кто угодно.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Приватные комнаты можно найти и присоединиться только по приглашению. Публичные комнаты могут находить и присоединяться к ним любые участники этого сообщества.",
+    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Вы можете включить это, если комната будет использоваться только для совместной работы с внутренними командами на вашем домашнем сервере. Это не может быть изменено позже.",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Вы можете отключить это, если комната будет использоваться для совместной работы с внешними командами, у которых есть собственный домашний сервер. Это не может быть изменено позже.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Запретить кому-либо, не входящему в %(serverName)s, когда-либо присоединяться к этой комнате."
 }
