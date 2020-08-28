@@ -47,10 +47,10 @@ export default class RightPanel extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            ...RightPanelStore.getSharedInstance().roomPanelPhaseParams,
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
             member: this._getUserForPanel(),
-            verificationRequest: RightPanelStore.getSharedInstance().roomPanelPhaseParams.verificationRequest,
         };
         this.onAction = this.onAction.bind(this);
         this.onRoomStateMember = this.onRoomStateMember.bind(this);
@@ -102,10 +102,6 @@ export default class RightPanel extends React.Component {
             }
             return RightPanelPhases.RoomMemberInfo;
         } else {
-            if (!RIGHT_PANEL_PHASES_NO_ARGS.includes(rps.roomPanelPhase)) {
-                dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.RoomMemberList});
-                return RightPanelPhases.RoomMemberList;
-            }
             return rps.roomPanelPhase;
         }
     }
