@@ -363,7 +363,7 @@ export default class Stickerpicker extends React.Component {
      */
     _launchManageIntegrations() {
         // TODO: Open the right integration manager for the widget
-        if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll(
                 this.props.room,
                 `type_${WidgetType.STICKERPICKER.preferred}`,

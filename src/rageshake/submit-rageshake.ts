@@ -115,6 +115,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("cross_signing_supported_by_hs",
                 String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
             body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
+            body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
         }
     }
 
@@ -123,7 +124,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     }
 
     // add labs options
-    const enabledLabs = SettingsStore.getLabsFeatures().filter(f => SettingsStore.isFeatureEnabled(f));
+    const enabledLabs = SettingsStore.getFeatureSettingNames().filter(f => SettingsStore.getValue(f));
     if (enabledLabs.length) {
         body.append('enabled_labs', enabledLabs.join(', '));
     }
@@ -161,6 +162,8 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("modernizr_missing_features", missingFeatures.join(", "));
         }
     }
+
+    body.append("mx_local_settings", localStorage.getItem('mx_local_settings'));
 
     if (opts.sendLogs) {
         progressCallback(_t("Collecting logs"));

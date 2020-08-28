@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,26 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ColorSettings_roomColor {
-    display: inline-block;
-    position: relative;
-    width: 37px;
-    height: 37px;
-    border: 1px solid #979797;
-    margin-right: 13px;
-    cursor: pointer;
-}
-
-.mx_ColorSettings_roomColor_selected {
-    position: absolute;
-    left: 10px;
-    top: 4px;
-    cursor: default !important;
-}
-
-.mx_ColorSettings_roomColorPrimary {
-    height: 10px;
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
+export interface IDialogProps {
+    onFinished: (bool) => void;
 }

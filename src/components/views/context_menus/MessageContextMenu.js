@@ -81,7 +81,7 @@ export default createReactClass({
         let canPin = room.currentState.mayClientSendStateEvent('m.room.pinned_events', cli);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
-        if (!SettingsStore.isFeatureEnabled("feature_pinning")) canPin = false;
+        if (!SettingsStore.getValue("feature_pinning")) canPin = false;
 
         this.setState({canRedact, canPin});
     },

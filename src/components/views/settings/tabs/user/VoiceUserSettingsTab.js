@@ -157,6 +157,9 @@ export default class VoiceUserSettingsTab extends React.Component {
                 label: _t('Default Device'),
             };
             const getDefaultDevice = (devices) => {
+                // Note we're looking for a device with deviceId 'default' but adding a device
+                // with deviceId == the empty string: this is because Chrome gives us a device
+                // with deviceId 'default', so we're looking for this, not the one we are adding.
                 if (!devices.some((i) => i.deviceId === 'default')) {
                     devices.unshift(defaultOption);
                     return '';

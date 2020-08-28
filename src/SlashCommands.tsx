@@ -43,7 +43,7 @@ import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
-import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
+import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -601,11 +601,7 @@ export const Commands = [
             }
 
             if (!targetRoomId) targetRoomId = roomId;
-            return success(
-                cli.leaveRoomChain(targetRoomId).then(function() {
-                    dis.dispatch({action: 'view_next_room'});
-                }),
-            );
+            return success(leaveRoomBehaviour(targetRoomId));
         },
         category: CommandCategories.actions,
     }),

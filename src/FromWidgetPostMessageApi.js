@@ -197,7 +197,7 @@ export default class FromWidgetPostMessageApi {
             const integId = (data && data.integId) ? data.integId : null;
 
             // TODO: Open the right integration manager for the widget
-            if (SettingsStore.isFeatureEnabled("feature_many_integration_managers")) {
+            if (SettingsStore.getValue("feature_many_integration_managers")) {
                 IntegrationManagers.sharedInstance().openAll(
                     MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
                     `type_${integType}`,

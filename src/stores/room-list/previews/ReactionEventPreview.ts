@@ -24,8 +24,8 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 
 export class ReactionEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID): string {
-        const showDms = SettingsStore.isFeatureEnabled("feature_roomlist_preview_reactions_dms");
-        const showAll = SettingsStore.isFeatureEnabled("feature_roomlist_preview_reactions_all");
+        const showDms = SettingsStore.getValue("feature_roomlist_preview_reactions_dms");
+        const showAll = SettingsStore.getValue("feature_roomlist_preview_reactions_all");
 
         if (!showAll && (!showDms || DMRoomMap.shared().getUserIdForRoomId(event.getRoomId()))) return null;
 

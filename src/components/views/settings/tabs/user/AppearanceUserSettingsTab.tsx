@@ -237,7 +237,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         }
 
         let customThemeForm: JSX.Element;
-        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+        if (SettingsStore.getValue("feature_custom_themes")) {
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {

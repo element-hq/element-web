@@ -28,7 +28,7 @@ export default createReactClass({
         const imgClass = this.props.imgClassName || "";
 
         let imageSource;
-        if (SettingsStore.isFeatureEnabled('feature_new_spinner')) {
+        if (SettingsStore.getValue('feature_new_spinner')) {
             imageSource = require("../../../../res/img/spinner.svg");
         } else {
             imageSource = require("../../../../res/img/spinner.gif");

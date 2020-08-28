@@ -50,7 +50,7 @@ export default createReactClass({
     componentDidMount() {
         const cli = MatrixClientPeg.get();
 
-        if (SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (SettingsStore.getValue("feature_custom_status")) {
             const { user } = this.props.member;
             if (user) {
                 user.on("User._unstable_statusMessage", this._onStatusMessageCommitted);
@@ -209,7 +209,7 @@ export default createReactClass({
         const presenceState = member.user ? member.user.presence : null;
 
         let statusMessage = null;
-        if (member.user && SettingsStore.isFeatureEnabled("feature_custom_status")) {
+        if (member.user && SettingsStore.getValue("feature_custom_status")) {
             statusMessage = this.state.statusMessage;
         }
 

@@ -295,7 +295,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
     public render() {
         const avatarSize = 32; // should match border-radius of the avatar
 
-        let name = <span className="mx_UserMenu_userName">{OwnProfileStore.instance.displayName}</span>;
+        const displayName = OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId();
+        const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
+
+        let name = <span className="mx_UserMenu_userName">{displayName}</span>;
         let buttons = (
             <span className="mx_UserMenu_headerButtons">
                 {/* masked image in CSS */}
@@ -324,9 +327,9 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <div className="mx_UserMenu_row">
                         <span className="mx_UserMenu_userAvatarContainer">
                             <BaseAvatar
-                                idName={MatrixClientPeg.get().getUserId()}
-                                name={OwnProfileStore.instance.displayName || MatrixClientPeg.get().getUserId()}
-                                url={OwnProfileStore.instance.getHttpAvatarUrl(avatarSize)}
+                                idName={displayName}
+                                name={displayName}
+                                url={avatarUrl}
                                 width={avatarSize}
                                 height={avatarSize}
                                 resizeMethod="crop"

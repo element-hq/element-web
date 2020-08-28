@@ -53,17 +53,17 @@
 @import "./views/avatars/_PulsedAvatar.scss";
 @import "./views/context_menus/_IconizedContextMenu.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
-@import "./views/context_menus/_RoomTileContextMenu.scss";
 @import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
-@import "./views/context_menus/_TopLeftMenu.scss";
 @import "./views/context_menus/_WidgetContextMenu.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
+@import "./views/dialogs/_CommunityPrototypeInviteDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
+@import "./views/dialogs/_CreateCommunityPrototypeDialog.scss";
 @import "./views/dialogs/_CreateGroupDialog.scss";
 @import "./views/dialogs/_CreateRoomDialog.scss";
 @import "./views/dialogs/_DeactivateAccountDialog.scss";
@@ -108,6 +108,7 @@
 @import "./views/elements/_FormButton.scss";
 @import "./views/elements/_IconButton.scss";
 @import "./views/elements/_ImageView.scss";
+@import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
 @import "./views/elements/_PowerSelector.scss";
@@ -157,7 +158,6 @@
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
 @import "./views/room_settings/_AliasSettings.scss";
-@import "./views/room_settings/_ColorSettings.scss";
 @import "./views/rooms/_AppsDrawer.scss";
 @import "./views/rooms/_Autocomplete.scss";
 @import "./views/rooms/_AuxPanel.scss";

@@ -31,6 +31,7 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext, selectText} from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+import { IDialogProps } from "./IDialogProps";
 
 const socials = [
     {
@@ -60,8 +61,7 @@ const socials = [
     },
 ];
 
-interface IProps {
-    onFinished: () => void;
+interface IProps extends IDialogProps {
     target: Room | User | Group | RoomMember | MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
 }
