@@ -2442,5 +2442,7 @@
     "An image will help people identify your community.": "Pilt aitab inimestel teie kogukonda ära tunda.",
     "Create community": "Loo kogukond",
     "Explore community rooms": "Sirvi kogukonna jututubasid",
-    "Create a room in %(communityName)s": "Loo uus jututuba %(communityName)s kogukonda"
+    "Create a room in %(communityName)s": "Loo uus jututuba %(communityName)s kogukonda",
+    "Cross-signing and secret storage are ready for use.": "Risttunnustamine ja turvahoidla on kasutamiseks valmis.",
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Risttunnustamine on kasutamiseks valmis, kuid turvahoidla ei ole hetkel krüptovõtmete varundamiseks kasutusel."
 }
