@@ -2443,5 +2443,7 @@
     "Enter name": "輸入名稱",
     "Add image (optional)": "新增圖片（選擇性）",
     "An image will help people identify your community.": "圖片可以協助人們辨識您的社群。",
-    "Create community": "建立社群"
+    "Create community": "建立社群",
+    "Explore community rooms": "探索社群聊天室",
+    "Create a room in %(communityName)s": "在 %(communityName)s 中建立聊天室"
 }
