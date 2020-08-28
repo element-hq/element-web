@@ -226,15 +226,15 @@ export default createReactClass({
         }
 
         let federateLabel = _t(
-            "You might enable this if the room will be only be used for collaborating with internal " +
-            "teams on your homeserver. This setting cannot be changed later.",
+            "You might enable this if the room will only be used for collaborating with internal " +
+            "teams on your homeserver. This cannot be changed later.",
         );
         if (SdkConfig.get().default_federate === false) {
             // We only change the label if the default setting is different to avoid jarring text changes to the
             // user. They will have read the implications of turning this off/on, so no need to rephrase for them.
             federateLabel = _t(
                 "You might disable this if the room will be used for collaborating with external " +
-                "teams who have their own homeserver. This setting cannot be changed later.",
+                "teams who have their own homeserver. This cannot be changed later.",
             );
         }
 
