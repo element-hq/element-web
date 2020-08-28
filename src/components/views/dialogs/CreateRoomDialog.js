@@ -184,18 +184,25 @@ export default createReactClass({
         const LabelledToggleSwitch = sdk.getComponent('views.elements.LabelledToggleSwitch');
         const RoomAliasField = sdk.getComponent('views.elements.RoomAliasField');
 
-        let publicPrivateLabel;
         let aliasField;
         if (this.state.isPublic) {
-            publicPrivateLabel = (<p>{_t("Set a room address to easily share your room with other people.")}</p>);
             const domain = MatrixClientPeg.get().getDomain();
             aliasField = (
                 <div className="mx_CreateRoomDialog_aliasContainer">
                     <RoomAliasField ref={ref => this._aliasFieldRef = ref} onChange={this.onAliasChange} domain={domain} value={this.state.alias} />
                 </div>
             );
-        } else {
-            publicPrivateLabel = (<p>{_t("This room is private, and can only be joined by invitation.")}</p>);
+        }
+
+        let publicPrivateLabel = <p>{_t(
+            "Private rooms can be found and joined by invitation only. Public rooms can be " +
+            "found and joined by anyone.",
+        )}</p>;
+        if (TagOrderStore.getSelectedPrototypeTag()) {
+            publicPrivateLabel = <p>{_t(
+                "Private rooms can be found and joined by invitation only. Public rooms can be " +
+                "found and joined by anyone in this community.",
+            )}</p>;
         }
 
         let e2eeSection;
@@ -218,6 +225,19 @@ export default createReactClass({
             </React.Fragment>;
         }
 
+        let federateLabel = _t(
+            "You might enable this if the room will only be used for collaborating with internal " +
+            "teams on your homeserver. This cannot be changed later.",
+        );
+        if (SdkConfig.get().default_federate === false) {
+            // We only change the label if the default setting is different to avoid jarring text changes to the
+            // user. They will have read the implications of turning this off/on, so no need to rephrase for them.
+            federateLabel = _t(
+                "You might disable this if the room will be used for collaborating with external " +
+                "teams who have their own homeserver. This cannot be changed later.",
+            );
+        }
+
         let title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
         if (TagOrderStore.getSelectedPrototypeTag()) {
             const summary = GroupStore.getSummary(TagOrderStore.getSelectedPrototypeTag());
@@ -238,7 +258,15 @@ export default createReactClass({
                         { aliasField }
                         <details ref={this.collectDetailsRef} className="mx_CreateRoomDialog_details">
                             <summary className="mx_CreateRoomDialog_details_summary">{ this.state.detailsOpen ? _t('Hide advanced') : _t('Show advanced') }</summary>
-                            <LabelledToggleSwitch label={ _t('Block users on other matrix homeservers from joining this room (This setting cannot be changed later!)')} onChange={this.onNoFederateChange} value={this.state.noFederate} />
+                            <LabelledToggleSwitch
+                                label={_t(
+                                    "Block anyone not part of %(serverName)s from ever joining this room.",
+                                    {serverName: MatrixClientPeg.getHomeserverName()},
+                                )}
+                                onChange={this.onNoFederateChange}
+                                value={this.state.noFederate}
+                            />
+                            <p>{federateLabel}</p>
                         </details>
                     </div>
                 </form>

@@ -80,11 +80,11 @@ limitations under the License.
 }
 
 .mx_TagTile:not(.mx_TagTile_selected_prototype) .mx_TagTile_homeIcon {
-    background-color: $icon-button-color; // XXX: Variable abuse
+    background-color: $roomheader-addroom-bg-color;
     border-radius: 48px;
 
     &::before {
-        background-color: $primary-bg-color; // light-on-grey
+        background-color: $roomheader-addroom-fg-color;
     }
 }
 
@@ -97,13 +97,14 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/home.svg');
         mask-position: center;
         mask-repeat: no-repeat;
-        width: 21px;
-        height: 21px;
+        mask-size: 21px;
         content: '';
         display: inline-block;
+        width: 32px;
+        height: 32px;
         position: absolute;
-        top: calc(50% - 10.5px);
-        left: calc(50% - 10.5px);
+        top: calc(50% - 16px);
+        left: calc(50% - 16px);
     }
 }
 
