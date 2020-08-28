@@ -2425,5 +2425,22 @@
     "Error leaving room": "Viga jututoast lahkumisel",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Kogukondade v2 prototüüp. Eeldab, et koduserver toetab sellist funktsionaalsust. Lahendus on esialgne ja katseline - kui kasutad, siis väga ettevaatlikult.",
     "Explore rooms in %(communityName)s": "Uuri jututubasid %(communityName)s kogukonnas",
-    "Set up Secure Backup": "Võta kasutusele turvaline varundus"
+    "Set up Secure Backup": "Võta kasutusele turvaline varundus",
+    "Information": "Teave",
+    "Add another email": "Lisa veel üks e-posti aadress",
+    "People you know on %(brand)s": "%(brand)s kasutajad, keda sa tead",
+    "Send %(count)s invites|other": "Saada %(count)s kutset",
+    "Send %(count)s invites|one": "Saada %(count)s kutse",
+    "Invite people to join %(communityName)s": "Kutsu kasutajaid %(communityName)s kogukonna liikmeks",
+    "There was an error creating your community. The name may be taken or the server is unable to process your request.": "Kogukonna loomisel tekkis viga. Selline nimi kas on  juba kasutusel või server ei saa hetkel seda päringut töödelda.",
+    "Community ID: +<localpart />:%(domain)s": "Kogukonna tunnus: +<localpart />:%(domain)s",
+    "Use this when referencing your community to others. The community ID cannot be changed.": "Viidates kogukonnale kasuta seda tunnust. Kogukonna tunnust ei ole võimalik muuta.",
+    "You can change this later if needed.": "Kui vaja, siis sa saad seda hiljem muuta.",
+    "What's the name of your community or team?": "Mis on sinu kogukonna või tiimi nimi?",
+    "Enter name": "Sisesta nimi",
+    "Add image (optional)": "Lisa pilt (kui soovid)",
+    "An image will help people identify your community.": "Pilt aitab inimestel teie kogukonda ära tunda.",
+    "Create community": "Loo kogukond",
+    "Explore community rooms": "Sirvi kogukonna jututubasid",
+    "Create a room in %(communityName)s": "Loo uus jututuba %(communityName)s kogukonda"
 }
