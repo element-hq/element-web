@@ -2428,7 +2428,7 @@
     "Show": "Показать",
     "Send %(count)s invites|other": "Отправить %(count)s приглашений",
     "Send %(count)s invites|one": "Отправить %(count)s приглашение",
-    "Invite people to join %(communityName)s": "Пригласите людей присоединиться к %(communtyName)s",
+    "Invite people to join %(communityName)s": "Пригласите людей присоединиться к %(communityName)s",
     "There was an error creating your community. The name may be taken or the server is unable to process your request.": "При создании сообщества произошла ошибка. Имя может быть занято или сервер не может обработать ваш запрос.",
     "Community ID: +<localpart />:%(domain)s": "ID сообщества: +<localpart />:%(domain)s",
     "Use this when referencing your community to others. The community ID cannot be changed.": "Используйте это при обращении к другим людям. ID сообщества не может быть изменён.",
@@ -2438,5 +2438,7 @@
     "Add image (optional)": "Добавить изображение (необязательно)",
     "An image will help people identify your community.": "Изображение поможет людям идентифицировать ваше сообщество.",
     "Create a room in %(communityName)s": "Создать комнату в %(communityName)s",
-    "Create community": "Создать сообщество"
+    "Create community": "Создать сообщество",
+    "Cross-signing and secret storage are ready for use.": "Кросс-подпись и секретное хранилище готовы к использованию.",
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Кросс-подпись готова к использованию, но секретное хранилище в настоящее время не используется для резервного копирования ваших ключей."
 }
