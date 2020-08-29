@@ -322,6 +322,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     <IconizedContextMenuOption
                         iconClassName="mx_UserMenu_iconSettings"
                         label={_t("Settings")}
+                        aria-label={_t("Community settings")}
                         onClick={this.onCommunitySettingsClick}
                     />
                     <IconizedContextMenuOption
@@ -353,6 +354,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         <IconizedContextMenuOption
                             iconClassName="mx_UserMenu_iconSettings"
                             label={_t("Settings")}
+                            aria-label={_t("User settings")}
                             onClick={(e) => this.onSettingsOpen(e, null)}
                         />
                         <IconizedContextMenuOption
