@@ -232,12 +232,12 @@ export default class RegistrationForm extends React.Component {
     };
 
     onEmailValidate = async fieldState => {
-        const result = await RegistrationForm.validateEmailRules(fieldState);
+        const result = await this.validateEmailRules(fieldState);
         this.markFieldValid(FIELD_EMAIL, result.valid);
         return result;
     };
 
-    static validateEmailRules = withValidation({
+    validateEmailRules = withValidation({
         description: () => _t("Use an email address to recover your account"),
         rules: [
             {
@@ -272,12 +272,12 @@ export default class RegistrationForm extends React.Component {
     };
 
     onPasswordConfirmValidate = async fieldState => {
-        const result = await RegistrationForm.validatePasswordConfirmRules(fieldState);
+        const result = await this.validatePasswordConfirmRules(fieldState);
         this.markFieldValid(FIELD_PASSWORD_CONFIRM, result.valid);
         return result;
     };
 
-    static validatePasswordConfirmRules = withValidation({
+    validatePasswordConfirmRules = withValidation({
         rules: [
             {
                 key: "required",
@@ -308,12 +308,12 @@ export default class RegistrationForm extends React.Component {
     };
 
     onPhoneNumberValidate = async fieldState => {
-        const result = await RegistrationForm.validatePhoneNumberRules(fieldState);
+        const result = await this.validatePhoneNumberRules(fieldState);
         this.markFieldValid(FIELD_PHONE_NUMBER, result.valid);
         return result;
     };
 
-    static validatePhoneNumberRules = withValidation({
+    validatePhoneNumberRules = withValidation({
         description: () => _t("Other users can invite you to rooms using your contact details"),
         rules: [
             {
@@ -338,12 +338,12 @@ export default class RegistrationForm extends React.Component {
     };
 
     onUsernameValidate = async fieldState => {
-        const result = await RegistrationForm.validateUsernameRules(fieldState);
+        const result = await this.validateUsernameRules(fieldState);
         this.markFieldValid(FIELD_USERNAME, result.valid);
         return result;
     };
 
-    static validateUsernameRules = withValidation({
+    validateUsernameRules = withValidation({
         description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
         rules: [
             {
