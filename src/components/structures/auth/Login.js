@@ -569,7 +569,7 @@ export default class LoginComponent extends React.Component {
         return null;
     }
 
-    _renderPasswordStep() {
+    _renderPasswordStep = () => {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
 
         let onEditServerDetailsClick = null;
@@ -598,9 +598,9 @@ export default class LoginComponent extends React.Component {
                busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
-    }
+    };
 
-    _renderSsoStep(loginType) {
+    _renderSsoStep = loginType => {
         const SignInToText = sdk.getComponent('views.auth.SignInToText');
 
         let onEditServerDetailsClick = null;
@@ -629,7 +629,7 @@ export default class LoginComponent extends React.Component {
                 />
             </div>
         );
-    }
+    };
 
     render() {
         const Loader = sdk.getComponent("elements.Spinner");
