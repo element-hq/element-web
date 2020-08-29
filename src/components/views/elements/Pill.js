@@ -83,6 +83,7 @@ class Pill extends React.Component {
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;

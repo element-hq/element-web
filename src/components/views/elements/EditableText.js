@@ -72,6 +72,7 @@ export default class EditableText extends React.Component {
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.initialValue !== this.props.initialValue) {
             this.value = nextProps.initialValue;
@@ -214,7 +215,9 @@ export default class EditableText extends React.Component {
         const {className, editable, initialValue, label, labelClassName} = this.props;
         let editableEl;
 
-        if (!editable || (this.state.phase === EditableText.Phases.Display && (label || labelClassName) && !this.value)) {
+        if (!editable || (this.state.phase === EditableText.Phases.Display &&
+            (label || labelClassName) && !this.value)
+        ) {
             // show the label
             editableEl = <div className={className + " " + labelClassName} onClick={this.onClickDiv}>
                 { label || initialValue }

@@ -38,7 +38,7 @@ const FIELD_PASSWORD_CONFIRM = 'field_password_confirm';
 
 const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
-/**
+/*
  * A pure UI component which displays a registration form.
  */
 export default class RegistrationForm extends React.Component {

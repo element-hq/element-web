@@ -52,7 +52,7 @@ _td("Invalid base_url for m.identity_server");
 _td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
 
-/**
+/*
  * A wire component which glues together login UI components and Login logic
  */
 export default class LoginComponent extends React.Component {
@@ -133,6 +133,7 @@ export default class LoginComponent extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;

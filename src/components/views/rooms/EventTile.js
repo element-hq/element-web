@@ -240,6 +240,7 @@ export default class EventTile extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
         this._verifyEvent(this.props.mxEvent);
     }
@@ -256,6 +257,7 @@ export default class EventTile extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(nextProps) {
         // re-check the sender verification as outgoing events progress through
         // the send process.

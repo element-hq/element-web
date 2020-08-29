@@ -24,7 +24,7 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 
-/**
+/*
  * Prompt the user to set an email address.
  *
  * On success, `onFinished(true)` is called.

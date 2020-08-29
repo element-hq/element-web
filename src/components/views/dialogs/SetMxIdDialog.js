@@ -28,7 +28,7 @@ import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 // sending a request to the server
 const USERNAME_CHECK_DEBOUNCE_MS = 250;
 
-/**
+/*
  * Prompt the user to set a display name.
  *
  * On success, `onFinished(true, newDisplayName)` is called.

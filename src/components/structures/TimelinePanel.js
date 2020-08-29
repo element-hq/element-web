@@ -221,6 +221,7 @@ class TimelinePanel extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Move into constructor
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
         if (this.props.manageReadReceipts) {
             this.updateReadReceiptOnUserActivity();
@@ -233,6 +234,7 @@ class TimelinePanel extends React.Component {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.timelineSet !== this.props.timelineSet) {
             // throw new Error("changing timelineSet on a TimelinePanel is not supported");

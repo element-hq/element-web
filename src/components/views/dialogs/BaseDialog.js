@@ -27,7 +27,7 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-/**
+/*
  * Basic container for modal dialogs.
  *
  * Includes a div for the title, and a keypress handler which cancels the
