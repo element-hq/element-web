@@ -110,6 +110,18 @@ export default class InteractiveAuthComponent extends React.Component {
             requestEmailToken: this._requestEmailToken,
         });
 
+        this._intervalId = null;
+        if (this.props.poll) {
+            this._intervalId = setInterval(() => {
+                this._authLogic.poll();
+            }, 2000);
+        }
+
+        this._stageComponent = createRef();
+    }
+
+    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
+    UNSAFE_componentWillMount() { // eslint-disable-line camelcase
         this._authLogic.attemptAuth().then((result) => {
             const extra = {
                 emailSid: this._authLogic.getEmailSid(),
@@ -128,15 +140,6 @@ export default class InteractiveAuthComponent extends React.Component {
                 errorText: msg,
             });
         });
-
-        this._intervalId = null;
-        if (this.props.poll) {
-            this._intervalId = setInterval(() => {
-                this._authLogic.poll();
-            }, 2000);
-        }
-
-        this._stageComponent = createRef();
     }
 
     componentWillUnmount() {
