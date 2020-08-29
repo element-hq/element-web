@@ -157,6 +157,7 @@ class FlairStore extends EventEmitter {
      * @returns The profile if known, otherwise null.
      */
     getGroupProfileCachedFast(matrixClient, groupId) {
+        if (!matrixClient || !groupId) return null;
         if (this._groupProfiles[groupId]) {
             return this._groupProfiles[groupId];
         }
