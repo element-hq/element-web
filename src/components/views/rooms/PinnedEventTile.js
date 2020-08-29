@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -25,22 +24,23 @@ import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import {formatFullDate} from '../../../DateUtils';
 
-export default createReactClass({
-    displayName: 'PinnedEventTile',
-    propTypes: {
+export default class PinnedEventTile extends React.Component {
+    static propTypes = {
         mxRoom: PropTypes.object.isRequired,
         mxEvent: PropTypes.object.isRequired,
         onUnpinned: PropTypes.func,
-    },
-    onTileClicked: function() {
+    };
+
+    onTileClicked = () => {
         dis.dispatch({
             action: 'view_room',
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
         });
-    },
-    onUnpinClicked: function() {
+    };
+
+    onUnpinClicked = () => {
         const pinnedEvents = this.props.mxRoom.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents || !pinnedEvents.getContent().pinned) {
             // Nothing to do: already unpinned
@@ -56,11 +56,13 @@ export default createReactClass({
                 });
             } else if (this.props.onUnpinned) this.props.onUnpinned();
         }
-    },
-    _canUnpin: function() {
+    };
+
+    _canUnpin() {
         return this.props.mxRoom.currentState.mayClientSendStateEvent('m.room.pinned_events', MatrixClientPeg.get());
-    },
-    render: function() {
+    }
+
+    render() {
         const sender = this.props.mxEvent.getSender();
         // Get the latest sender profile rather than historical
         const senderProfile = this.props.mxRoom.getMember(sender);
@@ -100,5 +102,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

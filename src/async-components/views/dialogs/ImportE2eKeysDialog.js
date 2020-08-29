@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import { MatrixClient } from 'matrix-js-sdk';
 import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
@@ -38,48 +37,45 @@ function readFileAsArrayBuffer(file) {
 const PHASE_EDIT = 1;
 const PHASE_IMPORTING = 2;
 
-export default createReactClass({
-    displayName: 'ImportE2eKeysDialog',
-
-    propTypes: {
+export default class ImportE2eKeysDialog extends React.Component {
+    static propTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            enableSubmit: false,
-            phase: PHASE_EDIT,
-            errStr: null,
-        };
-    },
+    constructor(props) {
+        super(props);
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
 
         this._file = createRef();
         this._passphrase = createRef();
-    },
 
-    componentWillUnmount: function() {
+        this.state = {
+            enableSubmit: false,
+            phase: PHASE_EDIT,
+            errStr: null,
+        };
+    }
+
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    _onFormChange: function(ev) {
+    _onFormChange = (ev) => {
         const files = this._file.current.files || [];
         this.setState({
             enableSubmit: (this._passphrase.current.value !== "" && files.length > 0),
         });
-    },
+    };
 
-    _onFormSubmit: function(ev) {
+    _onFormSubmit = (ev) => {
         ev.preventDefault();
         this._startImport(this._file.current.files[0], this._passphrase.current.value);
         return false;
-    },
+    };
 
-    _startImport: function(file, passphrase) {
+    _startImport(file, passphrase) {
         this.setState({
             errStr: null,
             phase: PHASE_IMPORTING,
@@ -105,15 +101,15 @@ export default createReactClass({
                 phase: PHASE_EDIT,
             });
         });
-    },
+    }
 
-    _onCancelClick: function(ev) {
+    _onCancelClick = (ev) => {
         ev.preventDefault();
         this.props.onFinished(false);
         return false;
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         const disableForm = (this.state.phase !== PHASE_EDIT);
@@ -188,5 +184,5 @@ export default createReactClass({
                 </form>
             </BaseDialog>
         );
-    },
-});
+    }
+}

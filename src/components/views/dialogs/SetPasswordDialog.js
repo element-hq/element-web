@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -63,32 +62,25 @@ const WarmFuzzy = function(props) {
  *
  * On success, `onFinished()` when finished
  */
-export default createReactClass({
-    displayName: 'SetPasswordDialog',
-    propTypes: {
+export default class SetPasswordDialog extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            error: null,
-        };
-    },
+    state = {
+        error: null,
+    };
 
-    componentDidMount: function() {
-        console.info('SetPasswordDialog component did mount');
-    },
-
-    _onPasswordChanged: function(res) {
+    _onPasswordChanged = res => {
         Modal.createDialog(WarmFuzzy, {
             didSetEmail: res.didSetEmail,
             onFinished: () => {
                 this.props.onFinished();
             },
         });
-    },
+    };
 
-    _onPasswordChangeError: function(err) {
+    _onPasswordChangeError = err => {
         let errMsg = err.error || "";
         if (err.httpStatus === 403) {
             errMsg = _t('Failed to change password. Is your password correct?');
@@ -101,9 +93,9 @@ export default createReactClass({
         this.setState({
             error: errMsg,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const ChangePassword = sdk.getComponent('views.settings.ChangePassword');
 
@@ -132,5 +124,5 @@ export default createReactClass({
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

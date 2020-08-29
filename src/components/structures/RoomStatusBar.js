@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import Matrix from 'matrix-js-sdk';
 import { _t, _td } from '../../languageHandler';
@@ -39,10 +38,8 @@ function getUnsentMessages(room) {
     });
 }
 
-export default createReactClass({
-    displayName: 'RoomStatusBar',
-
-    propTypes: {
+export default class RoomStatusBar extends React.Component {
+    static propTypes = {
         // the room this statusbar is representing.
         room: PropTypes.object.isRequired,
         // This is true when the user is alone in the room, but has also sent a message.
@@ -86,37 +83,35 @@ export default createReactClass({
         // callback for when the status bar is displaying something and should
         // be visible
         onVisible: PropTypes.func,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            syncState: MatrixClientPeg.get().getSyncState(),
-            syncStateData: MatrixClientPeg.get().getSyncStateData(),
-            unsentMessages: getUnsentMessages(this.props.room),
-        };
-    },
+    state = {
+        syncState: MatrixClientPeg.get().getSyncState(),
+        syncStateData: MatrixClientPeg.get().getSyncStateData(),
+        unsentMessages: getUnsentMessages(this.props.room),
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         MatrixClientPeg.get().on("sync", this.onSyncStateChange);
         MatrixClientPeg.get().on("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
 
         this._checkSize();
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         this._checkSize();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = MatrixClientPeg.get();
         if (client) {
             client.removeListener("sync", this.onSyncStateChange);
             client.removeListener("Room.localEchoUpdated", this._onRoomLocalEchoUpdated);
         }
-    },
+    }
 
-    onSyncStateChange: function(state, prevState, data) {
+    onSyncStateChange = (state, prevState, data) => {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
@@ -124,39 +119,39 @@ export default createReactClass({
             syncState: state,
             syncStateData: data,
         });
-    },
+    };
 
-    _onResendAllClick: function() {
+    _onResendAllClick = () => {
         Resend.resendUnsentEvents(this.props.room);
         dis.fire(Action.FocusComposer);
-    },
+    };
 
-    _onCancelAllClick: function() {
+    _onCancelAllClick = () => {
         Resend.cancelUnsentEvents(this.props.room);
         dis.fire(Action.FocusComposer);
-    },
+    };
 
-    _onRoomLocalEchoUpdated: function(event, room, oldEventId, oldStatus) {
+    _onRoomLocalEchoUpdated = (event, room, oldEventId, oldStatus) => {
         if (room.roomId !== this.props.room.roomId) return;
 
         this.setState({
             unsentMessages: getUnsentMessages(this.props.room),
         });
-    },
+    };
 
     // Check whether current size is greater than 0, if yes call props.onVisible
-    _checkSize: function() {
+    _checkSize() {
         if (this._getSize()) {
             if (this.props.onVisible) this.props.onVisible();
         } else {
             if (this.props.onHidden) this.props.onHidden();
         }
-    },
+    }
 
     // We don't need the actual height - just whether it is likely to have
     // changed - so we use '0' to indicate normal size, and other values to
     // indicate other sizes.
-    _getSize: function() {
+    _getSize() {
         if (this._shouldShowConnectionError() ||
             this.props.hasActiveCall ||
             this.props.sentMessageAndIsAlone
@@ -166,10 +161,10 @@ export default createReactClass({
             return STATUS_BAR_EXPANDED_LARGE;
         }
         return STATUS_BAR_HIDDEN;
-    },
+    }
 
     // return suitable content for the image on the left of the status bar.
-    _getIndicator: function() {
+    _getIndicator() {
         if (this.props.hasActiveCall) {
             const TintableSvg = sdk.getComponent("elements.TintableSvg");
             return (
@@ -182,9 +177,9 @@ export default createReactClass({
         }
 
         return null;
-    },
+    }
 
-    _shouldShowConnectionError: function() {
+    _shouldShowConnectionError() {
         // no conn bar trumps the "some not sent" msg since you can't resend without
         // a connection!
         // There's one situation in which we don't show this 'no connection' bar, and that's
@@ -195,9 +190,9 @@ export default createReactClass({
             this.state.syncStateData.error.errcode === 'M_RESOURCE_LIMIT_EXCEEDED',
         );
         return this.state.syncState === "ERROR" && !errorIsMauError;
-    },
+    }
 
-    _getUnsentMessageContent: function() {
+    _getUnsentMessageContent() {
         const unsentMessages = this.state.unsentMessages;
         if (!unsentMessages.length) return null;
 
@@ -272,10 +267,10 @@ export default createReactClass({
                 </div>
             </div>
         </div>;
-    },
+    }
 
     // return suitable content for the main (text) part of the status bar.
-    _getContent: function() {
+    _getContent() {
         if (this._shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar_connectionLostBar">
@@ -323,9 +318,9 @@ export default createReactClass({
         }
 
         return null;
-    },
+    }
 
-    render: function() {
+    render() {
         const content = this._getContent();
         const indicator = this._getIndicator();
 
@@ -339,5 +334,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

@@ -16,44 +16,39 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import GroupStore from '../../../stores/GroupStore';
 import ToggleSwitch from "../elements/ToggleSwitch";
 
-export default createReactClass({
-    displayName: 'GroupPublicityToggle',
-
-    propTypes: {
+export default class GroupPublicityToggle extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
-    },
+    };
 
-    getInitialState() {
-        return {
-            busy: false,
-            ready: false,
-            isGroupPublicised: false, // assume false as <ToggleSwitch /> expects a boolean
-        };
-    },
+    state = {
+        busy: false,
+        ready: false,
+        isGroupPublicised: false, // assume false as <ToggleSwitch /> expects a boolean
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._initGroupStore(this.props.groupId);
-    },
+    }
 
-    _initGroupStore: function(groupId) {
+    _initGroupStore(groupId) {
         this._groupStoreToken = GroupStore.registerListener(groupId, () => {
             this.setState({
                 isGroupPublicised: Boolean(GroupStore.getGroupPublicity(groupId)),
                 ready: GroupStore.isStateReady(groupId, GroupStore.STATE_KEY.Summary),
             });
         });
-    },
+    }
 
     componentWillUnmount() {
         if (this._groupStoreToken) this._groupStoreToken.unregister();
-    },
+    }
 
-    _onPublicityToggle: function() {
+    _onPublicityToggle = () => {
         this.setState({
             busy: true,
             // Optimistic early update
@@ -64,7 +59,7 @@ export default createReactClass({
                 busy: false,
             });
         });
-    },
+    };
 
     render() {
         const GroupTile = sdk.getComponent('groups.GroupTile');
@@ -76,5 +71,5 @@ export default createReactClass({
                           disabled={!this.state.ready || this.state.busy}
                           onChange={this._onPublicityToggle} />
         </div>;
-    },
-});
+    }
+}

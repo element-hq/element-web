@@ -61,7 +61,6 @@
     "classnames": "^2.2.6",
     "commonmark": "^0.29.1",
     "counterpart": "^0.18.6",
-    "create-react-class": "^15.6.3",
     "diff-dom": "^4.1.6",
     "diff-match-patch": "^1.0.5",
     "emojibase-data": "^5.0.1",
