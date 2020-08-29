@@ -45,6 +45,7 @@ import IconizedContextMenu, {
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import * as fbEmitter from "fbemitter";
 import TagOrderStore from "../../stores/TagOrderStore";
+import { showCommunityInviteDialog } from "../../RoomInvite";
 
 interface IProps {
     isMinimized: boolean;
@@ -217,7 +218,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO@onCommunityInviteClick");
+        showCommunityInviteDialog(TagOrderStore.getSelectedPrototypeTag());
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private renderContextMenu = (): React.ReactNode => {

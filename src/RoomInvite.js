@@ -25,6 +25,7 @@ import { _t } from './languageHandler';
 import {KIND_DM, KIND_INVITE} from "./components/views/dialogs/InviteDialog";
 import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
 import GroupStore from "./stores/GroupStore";
+import {CommunityPrototypeStore} from "./stores/CommunityPrototypeStore";
 
 /**
  * Invites multiple addresses to a room
@@ -76,7 +77,7 @@ export function showCommunityInviteDialog(communityId) {
     });
     if (!chat) chat = rooms[0];
     if (chat) {
-        const name = CommunityPrototypeInviteDialog.instance.getCommunityName(communityId);
+        const name = CommunityPrototypeStore.instance.getCommunityName(communityId);
         showCommunityRoomInviteDialog(chat.roomId, name);
     } else {
         throw new Error("Failed to locate appropriate room to start an invite in");
