@@ -55,7 +55,7 @@ _td("General failure");
 /**
  * A wire component which glues together login UI components and Login logic
  */
-export default class Login extends React.Component {
+export default class LoginComponent extends React.Component {
     static propTypes = {
         // Called when the user has logged in. Params:
         // - The object returned by the login API
