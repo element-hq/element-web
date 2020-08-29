@@ -35,8 +35,8 @@ export default class GroupInviteTile extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             hover: false,

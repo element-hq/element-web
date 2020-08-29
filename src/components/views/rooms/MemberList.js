@@ -47,19 +47,23 @@ export default class MemberList extends React.Component {
             this.state = this._getMembersState(this.roomMembers());
         }
 
-        this._mounted = true;
-        if (cli.hasLazyLoadMembersEnabled()) {
-            this._showMembersAccordingToMembershipWithLL();
-            cli.on("Room.myMembership", this.onMyMembership);
-        } else {
-            this._listenForMembersChanges();
-        }
         cli.on("Room", this.onRoom); // invites & joining after peek
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
         this._showPresence = true;
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
             this._showPresence = enablePresenceByHsUrl[hsUrl];
+        }
+    }
+
+    componentDidMount() {
+        const cli = MatrixClientPeg.get();
+        this._mounted = true;
+        if (cli.hasLazyLoadMembersEnabled()) {
+            this._showMembersAccordingToMembershipWithLL();
+            cli.on("Room.myMembership", this.onMyMembership);
+        } else {
+            this._listenForMembersChanges();
         }
     }
 
@@ -412,24 +416,20 @@ export default class MemberList extends React.Component {
         });
     }
 
-    _getChildrenJoined(start, end) {
-        return this._makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
-    }
+    _getChildrenJoined = (start, end) => this._makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
 
-    _getChildCountJoined() {
-        return this.state.filteredJoinedMembers.length;
-    }
+    _getChildCountJoined = () => this.state.filteredJoinedMembers.length;
 
-    _getChildrenInvited(start, end) {
+    _getChildrenInvited = (start, end) => {
         let targets = this.state.filteredInvitedMembers;
         if (end > this.state.filteredInvitedMembers.length) {
             targets = targets.concat(this._getPending3PidInvites());
         }
 
         return this._makeMemberTiles(targets.slice(start, end));
-    }
+    };
 
-    _getChildCountInvited() {
+    _getChildCountInvited = () => {
         return this.state.filteredInvitedMembers.length + (this._getPending3PidInvites() || []).length;
     }
 

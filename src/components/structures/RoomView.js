@@ -99,8 +99,8 @@ export default class RoomView extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         const llMembers = this.context.hasLazyLoadMembersEnabled();
         this.state = {
@@ -186,7 +186,6 @@ export default class RoomView extends React.Component {
         // Start listening for RoomViewStore updates
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         this._rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this._onRightPanelStoreUpdate);
-        this._onRoomViewStoreUpdate(true);
 
         WidgetEchoStore.on('update', this._onWidgetEchoStoreUpdate);
         this._showReadReceiptsWatchRef = SettingsStore.watchSetting("showReadReceipts", null,
@@ -196,6 +195,11 @@ export default class RoomView extends React.Component {
         this._searchResultsPanel = createRef();
 
         this._layoutWatcherRef = SettingsStore.watchSetting("useIRCLayout", null, this.onLayoutChange);
+    }
+
+    // TODO: [REACT-WARNING] Move into constructor
+    UNSAFE_componentWillMount() {
+        this._onRoomViewStoreUpdate(true);
     }
 
     _onReadReceiptsChange = () => {

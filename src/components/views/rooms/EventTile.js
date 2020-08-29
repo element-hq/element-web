@@ -215,8 +215,8 @@ export default class EventTile extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             // Whether the action bar is focused.
@@ -234,10 +234,14 @@ export default class EventTile extends React.Component {
 
         // don't do RR animations until we are mounted
         this._suppressReadReceiptAnimation = true;
-        this._verifyEvent(this.props.mxEvent);
 
         this._tile = createRef();
         this._replyThread = createRef();
+    }
+
+    // TODO: [REACT-WARNING] Move into constructor
+    UNSAFE_componentWillMount() {
+        this._verifyEvent(this.props.mxEvent);
     }
 
     componentDidMount() {

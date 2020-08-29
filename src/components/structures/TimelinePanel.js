@@ -134,13 +134,6 @@ class TimelinePanel extends React.Component {
 
         this._messagePanel = createRef();
 
-        if (this.props.manageReadReceipts) {
-            this.updateReadReceiptOnUserActivity();
-        }
-        if (this.props.manageReadMarkers) {
-            this.updateReadMarkerOnUserActivity();
-        }
-
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
         let initialReadMarker = null;
@@ -225,6 +218,16 @@ class TimelinePanel extends React.Component {
         MatrixClientPeg.get().on("Event.decrypted", this.onEventDecrypted);
         MatrixClientPeg.get().on("Event.replaced", this.onEventReplaced);
         MatrixClientPeg.get().on("sync", this.onSync);
+    }
+
+    // TODO: [REACT-WARNING] Move into constructor
+    UNSAFE_componentWillMount() {
+        if (this.props.manageReadReceipts) {
+            this.updateReadReceiptOnUserActivity();
+        }
+        if (this.props.manageReadMarkers) {
+            this.updateReadMarkerOnUserActivity();
+        }
 
         this._initTimeline(this.props);
     }
@@ -1360,9 +1363,7 @@ class TimelinePanel extends React.Component {
         });
     }
 
-    getRelationsForEvent(...args) {
-        return this.props.timelineSet.getRelationsForEvent(...args);
-    }
+    getRelationsForEvent = (...args) => this.props.timelineSet.getRelationsForEvent(...args);
 
     render() {
         const MessagePanel = sdk.getComponent("structures.MessagePanel");
