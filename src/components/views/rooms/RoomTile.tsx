@@ -31,7 +31,7 @@ import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextM
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE, } from "../../../RoomNotifs";
+import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
 import { Volume } from "../../../RoomNotifsTypes";
@@ -48,7 +48,7 @@ import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
-    IconizedContextMenuRadio
+    IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -249,7 +249,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 removeTag,
                 addTag,
                 undefined,
-                0
+                0,
             ));
         } else {
             console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);

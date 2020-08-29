@@ -69,7 +69,7 @@ import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
 import {
     showToast as showAnalyticsToast,
-    hideToast as hideAnalyticsToast
+    hideToast as hideAnalyticsToast,
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
@@ -129,6 +129,7 @@ interface IScreen {
     params?: object;
 }
 
+/* eslint-disable camelcase */
 interface IRoomInfo {
     room_id?: string;
     room_alias?: string;
@@ -140,6 +141,7 @@ interface IRoomInfo {
     oob_data?: object;
     via_servers?: string[];
 }
+/* eslint-enable camelcase */
 
 interface IProps { // TODO type things better
     config: Record<string, any>;
@@ -165,6 +167,7 @@ interface IState {
     // the master view we are showing.
     view: Views;
     // What the LoggedInView would be showing if visible
+    // eslint-disable-next-line camelcase
     page_type?: PageTypes;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
@@ -180,8 +183,11 @@ interface IState {
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
     // Parameters used in the registration dance with the IS
+    // eslint-disable-next-line camelcase
     register_client_secret?: string;
+    // eslint-disable-next-line camelcase
     register_session_id?: string;
+    // eslint-disable-next-line camelcase
     register_id_sid?: string;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
@@ -341,6 +347,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillUpdate(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
@@ -610,8 +617,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
                     {initialTabId: tabPayload.initialTabId},
-                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true
-                );
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -1080,7 +1086,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             title: _t("Leave room"),
             description: (
                 <span>
-                { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                    { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                     { warnings }
                 </span>
             ),
@@ -1433,7 +1439,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("crypto.warning", (type) => {
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
-                    const brand = SdkConfig.get().brand;
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
@@ -1444,7 +1449,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             "in this version. This may also cause messages exchanged with this " +
                             "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
-                            { brand },
+                            { brand: SdkConfig.get().brand },
                         ),
                     });
                     break;

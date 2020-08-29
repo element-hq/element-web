@@ -31,7 +31,13 @@ interface IPropsExtended extends IProps {
     onReject();
 }
 
-const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({description, acceptLabel, rejectLabel, onAccept, onReject}) => {
+const GenericToast: React.FC<XOR<IPropsExtended, IProps>> = ({
+    description,
+    acceptLabel,
+    rejectLabel,
+    onAccept,
+    onReject,
+}) => {
     return <div>
         <div className="mx_Toast_description">
             { description }

@@ -139,7 +139,11 @@ export default class EmojiProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("Emoji Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_pill"
+                role="listbox"
+                aria-label={_t("Emoji Autocomplete")}
+            >
                 { completions }
             </div>
         );

@@ -23,7 +23,10 @@ import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/RightPanelStore";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from '../../../dispatcher/actions';
-import {SetRightPanelPhasePayload, SetRightPanelPhaseRefireParams} from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
+import {
+    SetRightPanelPhasePayload,
+    SetRightPanelPhaseRefireParams,
+} from '../../../dispatcher/payloads/SetRightPanelPhasePayload';
 import {EventSubscription} from "fbemitter";
 
 export enum HeaderKind {
@@ -38,7 +41,7 @@ interface IState {
 
 interface IProps {}
 
-export default class HeaderButtons extends React.Component<IProps, IState> {
+export default abstract class HeaderButtons extends React.Component<IProps, IState> {
     private storeToken: EventSubscription;
     private dispatcherRef: string;
 
@@ -92,14 +95,7 @@ export default class HeaderButtons extends React.Component<IProps, IState> {
     }
 
     // XXX: Make renderButtons a prop
-    public renderButtons(): JSX.Element[] {
-        // Ignore - intended to be overridden by subclasses
-        // Return empty fragment to satisfy the type
-        return [
-          <React.Fragment>
-          </React.Fragment>
-        ];
-    }
+    public abstract renderButtons(): JSX.Element[];
 
     public render() {
         // inline style as this will be swapped around in future commits

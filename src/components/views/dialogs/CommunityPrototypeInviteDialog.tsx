@@ -21,9 +21,6 @@ import { IDialogProps } from "./IDialogProps";
 import Field from "../elements/Field";
 import AccessibleButton from "../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import InfoTooltip from "../elements/InfoTooltip";
-import dis from "../../../dispatcher/dispatcher";
-import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
 import { arrayFastClone } from "../../../utils/arrays";
 import SdkConfig from "../../../SdkConfig";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -31,7 +28,6 @@ import InviteDialog from "./InviteDialog";
 import BaseAvatar from "../avatars/BaseAvatar";
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {inviteMultipleToRoom, showAnyInviteErrors} from "../../../RoomInvite";
-import {humanizeTime} from "../../../utils/humanize";
 import StyledCheckbox from "../elements/StyledCheckbox";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";
@@ -171,44 +167,38 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
     public render() {
         const emailAddresses = [];
         this.state.emailTargets.forEach((address, i) => {
-            emailAddresses.push(
-                <Field
-                    key={i}
-                    value={address}
-                    onChange={(e) => this.onAddressChange(e, i)}
-                    label={_t("Email address")}
-                    placeholder={_t("Email address")}
-                    onBlur={() => this.onAddressBlur(i)}
-                />
-            );
+            emailAddresses.push(<Field
+                key={i}
+                value={address}
+                onChange={(e) => this.onAddressChange(e, i)}
+                label={_t("Email address")}
+                placeholder={_t("Email address")}
+                onBlur={() => this.onAddressBlur(i)}
+            />);
         });
 
         // Push a clean input
-        emailAddresses.push(
-            <Field
-                key={emailAddresses.length}
-                value={""}
-                onChange={(e) => this.onAddressChange(e, emailAddresses.length)}
-                label={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
-                placeholder={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
-            />
-        );
+        emailAddresses.push(<Field
+            key={emailAddresses.length}
+            value={""}
+            onChange={(e) => this.onAddressChange(e, emailAddresses.length)}
+            label={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
+            placeholder={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
+        />);
 
         let peopleIntro = null;
-        let people = [];
+        const people = [];
         if (this.state.showPeople) {
             const humansToPresent = this.state.people.slice(0, this.state.numPeople);
             humansToPresent.forEach((person, i) => {
                 people.push(this.renderPerson(person, i));
             });
             if (humansToPresent.length < this.state.people.length) {
-                people.push(
-                    <AccessibleButton
-                        onClick={this.onShowMorePeople}
-                        kind="link" key="more"
-                        className="mx_CommunityPrototypeInviteDialog_morePeople"
-                    >{_t("Show more")}</AccessibleButton>
-                );
+                people.push(<AccessibleButton
+                    onClick={this.onShowMorePeople}
+                    kind="link" key="more"
+                    className="mx_CommunityPrototypeInviteDialog_morePeople"
+                >{_t("Show more")}</AccessibleButton>);
             }
         }
         if (this.state.people.length > 0) {

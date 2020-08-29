@@ -89,7 +89,11 @@ export default class CommandProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_block" role="listbox" aria-label={_t("Command Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_block"
+                role="listbox"
+                aria-label={_t("Command Autocomplete")}
+            >
                 { completions }
             </div>
         );

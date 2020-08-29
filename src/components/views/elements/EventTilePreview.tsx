@@ -39,6 +39,7 @@ interface IProps {
     className: string;
 }
 
+/* eslint-disable camelcase */
 interface IState {
     userId: string;
     displayname: string;
@@ -72,7 +73,6 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             displayname: profileInfo.displayname,
             avatar_url,
         });
-
     }
 
     private fakeEvent({userId, displayname, avatar_url}: IState) {
@@ -114,16 +114,14 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     public render() {
         const event = this.fakeEvent(this.state);
 
-        let className = classnames(
-            this.props.className,
-            {
-                "mx_IRCLayout": this.props.useIRCLayout,
-                "mx_GroupLayout": !this.props.useIRCLayout,
-            }
-        );
+        const className = classnames(this.props.className, {
+            "mx_IRCLayout": this.props.useIRCLayout,
+            "mx_GroupLayout": !this.props.useIRCLayout,
+        });
 
         return <div className={className}>
             <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
         </div>;
     }
 }
+/* eslint-enable camelcase */

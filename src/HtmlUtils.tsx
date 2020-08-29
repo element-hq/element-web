@@ -339,6 +339,7 @@ class HtmlHighlighter extends BaseHighlighter<string> {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class TextHighlighter extends BaseHighlighter<React.ReactNode> {
     private key = 0;
 
@@ -366,6 +367,7 @@ class TextHighlighter extends BaseHighlighter<React.ReactNode> {
 
 interface IContent {
     format?: string;
+    // eslint-disable-next-line camelcase
     formatted_body?: string;
     body: string;
 }
@@ -474,8 +476,13 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     });
 
     return isDisplayedWithHtml ?
-        <span key="body" ref={opts.ref} className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
+        <span
+            key="body"
+            ref={opts.ref}
+            className={className}
+            dangerouslySetInnerHTML={{ __html: safeBody }}
+            dir="auto"
+        /> : <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
 }
 
 /**

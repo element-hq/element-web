@@ -164,7 +164,10 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
         );
         if (this.state.error) {
             helpText = (
-                <span className="mx_CreateCommunityPrototypeDialog_subtext mx_CreateCommunityPrototypeDialog_subtext_error">
+                <span
+                    className={"mx_CreateCommunityPrototypeDialog_subtext " +
+                    "mx_CreateCommunityPrototypeDialog_subtext_error"}
+                >
                     {this.state.error}
                 </span>
             );
@@ -205,7 +208,10 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                                 ref={this.avatarUploadRef} accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
-                            <AccessibleButton onClick={this.onChangeAvatar} className="mx_CreateCommunityPrototypeDialog_avatarContainer">
+                            <AccessibleButton
+                                onClick={this.onChangeAvatar}
+                                className="mx_CreateCommunityPrototypeDialog_avatarContainer"
+                            >
                                 {preview}
                             </AccessibleButton>
                             <div className="mx_CreateCommunityPrototypeDialog_tip">

@@ -517,15 +517,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         if (this.state.rooms) {
             const visibleRooms = this.state.rooms.slice(0, this.numVisibleTiles);
             for (const room of visibleRooms) {
-                tiles.push(
-                    <RoomTile
-                        room={room}
-                        key={`room-${room.roomId}`}
-                        showMessagePreview={this.layout.showPreviews}
-                        isMinimized={this.props.isMinimized}
-                        tag={this.props.tagId}
-                    />
-                );
+                tiles.push(<RoomTile
+                    room={room}
+                    key={`room-${room.roomId}`}
+                    showMessagePreview={this.layout.showPreviews}
+                    isMinimized={this.props.isMinimized}
+                    tag={this.props.tagId}
+                />);
             }
         }
 
@@ -710,7 +708,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                     // doesn't become sticky.
                     // The same applies to the notification badge.
                     return (
-                        <div className={classes} onKeyDown={this.onHeaderKeyDown} onFocus={onFocus} aria-label={this.props.label}>
+                        <div
+                            className={classes}
+                            onKeyDown={this.onHeaderKeyDown}
+                            onFocus={onFocus}
+                            aria-label={this.props.label}
+                        >
                             <div className="mx_RoomSublist_stickable">
                                 <Button
                                     onFocus={onFocus}
@@ -762,7 +765,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
             const showMoreAtMinHeight = minTiles < this.numTiles;
             const minHeightPadding = RESIZE_HANDLE_HEIGHT + (showMoreAtMinHeight ? SHOW_N_BUTTON_HEIGHT : 0);
             const minTilesPx = layout.tilesToPixelsWithPadding(minTiles, minHeightPadding);
-            let maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
+            const maxTilesPx = layout.tilesToPixelsWithPadding(this.numTiles, this.padding);
             const showMoreBtnClasses = classNames({
                 'mx_RoomSublist_showNButton': true,
             });
