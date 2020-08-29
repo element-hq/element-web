@@ -2445,5 +2445,12 @@
     "An image will help people identify your community.": "圖片可以協助人們辨識您的社群。",
     "Create community": "建立社群",
     "Explore community rooms": "探索社群聊天室",
-    "Create a room in %(communityName)s": "在 %(communityName)s 中建立聊天室"
+    "Create a room in %(communityName)s": "在 %(communityName)s 中建立聊天室",
+    "Cross-signing and secret storage are ready for use.": "交叉簽章與秘密儲存空間已可使用。",
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "交叉簽章已準備好使用，但目前未使用秘密儲存空間備份您的金鑰。",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "私人聊天室僅能透過邀請找到與加入。公開聊天室則任何人都可以找到並加入。",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "私人聊天室僅能透過邀請找到與加入。公開聊天室則任何在此社群的人都可以找到並加入。",
+    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "如果聊天室僅用於與在您的家伺服器上的內部團隊協作的話，可以啟用此功能。這無法在稍後變更。",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "如果聊天室會用於與有自己的家伺服器的外部團隊協作的話，可以停用此功能。這無法在稍後變更。",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "阻止任何不屬於 %(serverName)s 的人加入此聊天室。"
 }
