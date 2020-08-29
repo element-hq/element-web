@@ -6,7 +6,7 @@ import React from 'react';
 export default function({displayName = "StubComponent", render} = {}) {
     if (!render) {
         render = function() {
-            return <div>{ this.displayName }</div>;
+            return <div>{ displayName }</div>;
         };
     }
 
