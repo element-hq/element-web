@@ -321,6 +321,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show typing notifications"),
         default: true,
     },
+    "MessageComposerInput.ctrlEnterToSend": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Use Ctrl + Enter to send a message (Mac: Command + Enter)"),
+        default: false,
+    },
     "MessageComposerInput.autoReplaceEmoji": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),

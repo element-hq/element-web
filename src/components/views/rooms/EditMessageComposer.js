@@ -29,9 +29,10 @@ import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import classNames from 'classnames';
 import {EventStatus} from 'matrix-js-sdk';
 import BasicMessageComposer from "./BasicMessageComposer";
-import {Key} from "../../../Keyboard";
+import {Key, isOnlyCtrlOrCmdKeyEvent} from "../../../Keyboard";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
+import SettingsStore from "../../../settings/SettingsStore";
 
 function _isReply(mxEvent) {
     const relatesTo = mxEvent.getContent()["m.relates_to"];
@@ -135,7 +136,10 @@ export default class EditMessageComposer extends React.Component {
         if (event.metaKey || event.altKey || event.shiftKey) {
             return;
         }
-        if (event.key === Key.ENTER) {
+        const ctrlEnterToSend = !!SettingsStore.getValue('MessageComposerInput.ctrlEnterToSend');
+        const send = ctrlEnterToSend ? event.key === Key.ENTER && isOnlyCtrlOrCmdKeyEvent(event)
+            : event.key === Key.ENTER;
+        if (send) {
             this._sendEdit();
             event.preventDefault();
         } else if (event.key === Key.ESCAPE) {
