@@ -2442,5 +2442,12 @@
     "Create community": "Közösség létrehozása",
     "Set up Secure Backup": "Biztonsági mentés beállítása",
     "Explore community rooms": "Fedezd fel a közösségi szobákat",
-    "Create a room in %(communityName)s": "Készíts szobát itt: %(communityName)s"
+    "Create a room in %(communityName)s": "Készíts szobát itt: %(communityName)s",
+    "Cross-signing and secret storage are ready for use.": "Az eszközök közti hitelesítés és a biztonsági tároló kész a használatra.",
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Az eszközök közti hitelesítés kész a használatra, de a biztonsági tároló nincs használva a kulcsok mentéséhez.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Privát szobák csak meghívóval találhatók meg és meghívóval lehet belépni. A nyilvános szobákat bárki megtalálhatja és be is léphet.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Privát szobák csak meghívóval találhatók meg és meghívóval lehet belépni. A nyilvános szobákat a közösség bármely tagja megtalálhatja és be is léphet.",
+    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Beállíthatod, ha a szobát csak egy belső csoport használja majd a matrix szervereden. Ezt később nem lehet megváltoztatni.",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Ne engedélyezd ezt, ha a szobát külső csapat is használja másik matrix szerverről. Később nem lehet megváltoztatni.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "A szobába való belépés megtagadása mindenkitől ki nem ezt a matrix szervert használja: %(serverName)s."
 }
