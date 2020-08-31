@@ -589,7 +589,7 @@
     "Incorrect password": "Felaktigt lösenord",
     "State Key": "Lägesnyckel",
     "Send Account Data": "Skicka kontodata",
-    "Explore Account Data": "Utforska kontodata",
+    "Explore Account Data": "Utforska Konto Data",
     "Toolbox": "Verktygslåda",
     "Developer Tools": "Utvecklarverktyg",
     "Clear Storage and Sign Out": "Rensa lagring och logga ut",
@@ -1436,7 +1436,7 @@
     "Show more": "Visa mer",
     "Direct Messages": "Direktmeddelanden",
     "Go": "Gå",
-    "Waiting for partner to confirm...": "Väntar på att kompanjon ska bekräfta...",
+    "Waiting for partner to confirm...": "Väntar på att partnern ska bekräfta...",
     "Incoming Verification Request": "Inkommande verifieringsbegäran",
     "Integrations are disabled": "Integrationer är inaktiverade",
     "Enable 'Manage Integrations' in Settings to do this.": "Aktivera \"Hantera integrationer\" i Inställningar för att göra detta.",
@@ -2075,5 +2075,9 @@
     "Confirm your account deactivation by using Single Sign On to prove your identity.": "Bekräfta din kontoinaktivering genom att använda single sign-on för att bevisa din identitet.",
     "Are you sure you want to deactivate your account? This is irreversible.": "Är du säker på att du vill inaktivera ditt konto? Detta är oåterkalleligt.",
     "Confirm account deactivation": "Bekräfta kontoinaktivering",
-    "Security & privacy": "Säkerhet & sekretess"
+    "Security & privacy": "Säkerhet & sekretess",
+    "There was a problem communicating with the server. Please try again.": "Det var ett problem med att kommunicera med servern. Snälla försök igen.",
+    "Server did not require any authentication": "Servern behövde inte någon auktorisering",
+    "Verification Requests": "Verifikations Förfråga",
+    "Confirm to continue": "Konfirmera genom att fortsätta"
 }
