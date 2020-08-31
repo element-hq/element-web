@@ -26,6 +26,7 @@ import FlairStore from "./FlairStore";
 import TagOrderStore from "./TagOrderStore";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import GroupStore from "./GroupStore";
+import dis from "../dispatcher/dispatcher";
 
 interface IState {
     // nothing of value - we use account data
@@ -110,6 +111,15 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         } else if (payload.action === "MatrixActions.accountData") {
             if (payload.event_type.startsWith("im.vector.group_info.")) {
                 this.emit(UPDATE_EVENT, payload.event_type.substring("im.vector.group_info.".length));
+            }
+        } else if (payload.action === "select_tag") {
+            // Automatically select the general chat when switching communities
+            const chat = this.getGeneralChat(payload.tag);
+            if (chat) {
+                dis.dispatch({
+                    action: 'view_room',
+                    room_id: chat.roomId,
+                });
             }
         }
     }
