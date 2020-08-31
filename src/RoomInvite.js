@@ -67,15 +67,7 @@ export function showCommunityRoomInviteDialog(roomId, communityName) {
 }
 
 export function showCommunityInviteDialog(communityId) {
-    const rooms = GroupStore.getGroupRooms(communityId)
-        .map(r => MatrixClientPeg.get().getRoom(r.roomId))
-        .filter(r => !!r);
-    let chat = rooms.find(r => {
-        const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
-        if (!idState || idState.getContent()['groupId'] !== communityId) return false;
-        return true;
-    });
-    if (!chat) chat = rooms[0];
+    const chat = CommunityPrototypeStore.instance.getGeneralChat(communityId);
     if (chat) {
         const name = CommunityPrototypeStore.instance.getCommunityName(communityId);
         showCommunityRoomInviteDialog(chat.roomId, name);

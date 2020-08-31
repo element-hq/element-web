@@ -24,6 +24,8 @@ import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import FlairStore from "./FlairStore";
 import TagOrderStore from "./TagOrderStore";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import GroupStore from "./GroupStore";
 
 interface IState {
     // nothing of value - we use account data
@@ -52,6 +54,19 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
     public getCommunityName(communityId: string): string {
         const profile = FlairStore.getGroupProfileCachedFast(this.matrixClient, communityId);
         return profile?.name || communityId;
+    }
+
+    public getGeneralChat(communityId: string): Room {
+        const rooms = GroupStore.getGroupRooms(communityId)
+            .map(r => MatrixClientPeg.get().getRoom(r.roomId))
+            .filter(r => !!r);
+        let chat = rooms.find(r => {
+            const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
+            if (!idState || idState.getContent()['groupId'] !== communityId) return false;
+            return true;
+        });
+        if (!chat) chat = rooms[0];
+        return chat; // can be null
     }
 
     protected async onAction(payload: ActionPayload): Promise<any> {

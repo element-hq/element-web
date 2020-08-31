@@ -168,6 +168,7 @@ class TagOrderStore extends Store {
 
                 if (!allowMultiple && newTags.length === 1) {
                     // We're in prototype behaviour: select the general chat for the community
+                    // XXX: This is duplicated with the CommunityPrototypeStore as a cyclical reference
                     const rooms = GroupStore.getGroupRooms(newTags[0])
                         .map(r => MatrixClientPeg.get().getRoom(r.roomId))
                         .filter(r => !!r);

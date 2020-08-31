@@ -46,6 +46,9 @@ import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import * as fbEmitter from "fbemitter";
 import TagOrderStore from "../../stores/TagOrderStore";
 import { showCommunityInviteDialog } from "../../RoomInvite";
+import dis from "../../dispatcher/dispatcher";
+import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
+import ErrorDialog from "../views/dialogs/ErrorDialog";
 
 interface IProps {
     isMinimized: boolean;
@@ -211,7 +214,25 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO@onCommunityMembersClick");
+        // We'd ideally just pop open a right panel with the member list, but the current
+        // way the right panel is structured makes this exceedingly difficult. Instead, we'll
+        // switch to the general room and open the member list there as it should be in sync
+        // anyways.
+        const chat = CommunityPrototypeStore.instance.getGeneralChat(TagOrderStore.getSelectedPrototypeTag());
+        if (chat) {
+            dis.dispatch({
+                action: 'view_room',
+                room_id: chat.roomId,
+            }, true);
+            dis.dispatch({action: Action.SetRightPanelPhase, phase: RightPanelPhases.RoomMemberList});
+        } else {
+            // "This should never happen" clauses go here for the prototype.
+            Modal.createTrackedDialog('Failed to find general chat', '', ErrorDialog, {
+                title: _t('Failed to find the general chat for this community'),
+                description: _t("Failed to find the general chat for this community"),
+            });
+        }
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onCommunityInviteClick = (ev: ButtonEvent) => {

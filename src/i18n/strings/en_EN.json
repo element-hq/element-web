@@ -2121,6 +2121,7 @@
     "Uploading %(filename)s and %(count)s others|other": "Uploading %(filename)s and %(count)s others",
     "Uploading %(filename)s and %(count)s others|zero": "Uploading %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Uploading %(filename)s and %(count)s other",
+    "Failed to find the general chat for this community": "Failed to find the general chat for this community",
     "Notification settings": "Notification settings",
     "Security & privacy": "Security & privacy",
     "All settings": "All settings",
