@@ -18,7 +18,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import Modal from './Modal';
+import * as sdk from './index';
+import { AccessCancelledError, confirmToDismiss } from "./CrossSigningManager";
 import Matrix from "matrix-js-sdk";
+import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
+import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 
 export default class Login {
     constructor(hsUrl, isUrl, fallbackHsUrl, opts) {
@@ -159,12 +164,18 @@ export default class Login {
  * @returns {MatrixClientCreds}
  */
 export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
+    let rehydrationKeyInfo;
+    let rehydrationKey;
+
     const client = Matrix.createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
+        cryptoCallbacks: {
+            getDehydrationKey
+        }
     });
 
-    const data = await client.login(loginType, loginParams);
+    const data = await client.loginWithRehydration(null, loginType, loginParams);
 
     const wellknown = data.well_known;
     if (wellknown) {
@@ -185,5 +196,52 @@ export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
         userId: data.user_id,
         deviceId: data.device_id,
         accessToken: data.access_token,
+        rehydrationKeyInfo,
+        rehydrationKey,
+        olmAccount: data._olm_account,
     };
+}
+
+async function getDehydrationKey(keyInfo) {
+    const inputToKey = async ({ passphrase, recoveryKey }) => {
+        if (passphrase) {
+            return deriveKey(
+                passphrase,
+                keyInfo.passphrase.salt,
+                keyInfo.passphrase.iterations,
+            );
+        } else {
+            return decodeRecoveryKey(recoveryKey);
+        }
+    };
+    const AccessSecretStorageDialog =
+        sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
+    const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
+        AccessSecretStorageDialog,
+        /* props= */
+        {
+            keyInfo,
+            checkPrivateKey: async (input) => {
+                // FIXME:
+                return true;
+            },
+        },
+        /* className= */ null,
+        /* isPriorityModal= */ false,
+        /* isStaticModal= */ false,
+        /* options= */ {
+            onBeforeClose: async (reason) => {
+                if (reason === "backgroundClick") {
+                    return confirmToDismiss();
+                }
+                return true;
+            },
+        },
+    );
+    const [input] = await finished;
+    if (!input) {
+        throw new AccessCancelledError();
+    }
+    const key = await inputToKey(input);
+    return key;
 }

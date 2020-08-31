@@ -40,7 +40,7 @@ export class AccessCancelledError extends Error {
     }
 }
 
-async function confirmToDismiss() {
+export async function confirmToDismiss() {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),

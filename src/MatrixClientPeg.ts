@@ -42,6 +42,9 @@ export interface IMatrixClientCreds {
     accessToken: string;
     guest: boolean;
     pickleKey?: string;
+    rehydrationKey?: Uint8Array;
+    rehydrationKeyInfo?: {[props: string]: any};
+    olmAccount?: any;
 }
 
 // TODO: Move this to the js-sdk
@@ -248,12 +251,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     private createClient(creds: IMatrixClientCreds): void {
         // TODO: Make these opts typesafe with the js-sdk
-        const opts = {
+        const opts: any = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
-            userId: creds.userId,
-            deviceId: creds.deviceId,
             pickleKey: creds.pickleKey,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
@@ -268,12 +269,33 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             cryptoCallbacks: {},
         };
 
+        if (creds.olmAccount) {
+            opts.deviceToImport = {
+                olmDevice: {
+                    pickledAccount: creds.olmAccount.pickle("DEFAULT_KEY"),
+                    sessions: [],
+                    pickleKey: "DEFAULT_KEY",
+                },
+                userId: creds.userId,
+                deviceId: creds.deviceId,
+            };
+        } else {
+            opts.userId = creds.userId;
+            opts.deviceId = creds.deviceId;
+        }
+
+        // FIXME: modify crossSigningCallbacks.getSecretStorageKey so that it tries using rehydrationkey and/or saves the passphrase info
+
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
         Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
 
         this.matrixClient = createMatrixClient(opts);
+
+        if (creds.rehydrationKey) {
+            this.matrixClient.cacheDehydrationKey(creds.rehydrationKey, creds.rehydrationKeyInfo || {});
+        }
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.
