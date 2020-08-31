@@ -152,9 +152,9 @@ class FlairStore extends EventEmitter {
      * Gets the profile for the given group if known, otherwise returns null.
      * This triggers `getGroupProfileCached` if needed, though the result of the
      * call will not be returned by this function.
-     * @param matrixClient The matrix client to use to fetch the profile, if needed.
-     * @param groupId The group ID to get the profile for.
-     * @returns The profile if known, otherwise null.
+     * @param matrixClient {MatrixClient} The matrix client to use to fetch the profile, if needed.
+     * @param groupId {string} The group ID to get the profile for.
+     * @returns {*} The profile if known, otherwise null.
      */
     getGroupProfileCachedFast(matrixClient, groupId) {
         if (!matrixClient || !groupId) return null;
