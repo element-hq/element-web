@@ -47,8 +47,22 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         return CommunityPrototypeStore.internalInstance;
     }
 
+    public getSelectedCommunityId(): string {
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            return TagOrderStore.getSelectedTags()[0];
+        }
+        return null; // no selection as far as this function is concerned
+    }
+
     public getSelectedCommunityName(): string {
-        return CommunityPrototypeStore.instance.getCommunityName(TagOrderStore.getSelectedPrototypeTag());
+        return CommunityPrototypeStore.instance.getCommunityName(this.getSelectedCommunityId());
+    }
+
+    public getSelectedCommunityGeneralChat(): Room {
+        const communityId = this.getSelectedCommunityId();
+        if (communityId) {
+            return this.getGeneralChat(communityId);
+        }
     }
 
     public getCommunityName(communityId: string): string {

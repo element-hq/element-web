@@ -37,7 +37,6 @@ import {Key} from "../../../Keyboard";
 import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
-import TagOrderStore from "../../../stores/TagOrderStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
@@ -913,7 +912,7 @@ export default class InviteDialog extends React.PureComponent {
 
     _onCommunityInviteClick = (e) => {
         this.props.onFinished();
-        showCommunityInviteDialog(TagOrderStore.getSelectedPrototypeTag());
+        showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
     };
 
     _renderSection(kind: "recents"|"suggestions") {
@@ -924,8 +923,8 @@ export default class InviteDialog extends React.PureComponent {
         let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
         let sectionSubname = null;
 
-        if (kind === 'suggestions' && TagOrderStore.getSelectedPrototypeTag()) {
-            const communityName = CommunityPrototypeStore.instance.getCommunityName(TagOrderStore.getSelectedPrototypeTag());
+        if (kind === 'suggestions' && CommunityPrototypeStore.instance.getSelectedCommunityId()) {
+            const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
             sectionSubname = _t("May include members not in %(communityName)s", {communityName});
         }
 
@@ -1097,7 +1096,7 @@ export default class InviteDialog extends React.PureComponent {
                     return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
                 }},
             );
-            if (TagOrderStore.getSelectedPrototypeTag()) {
+            if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
                 const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
                 helpText = _t(
                     "Start a conversation with someone using their name, username (like <userId/>) or email address. " +

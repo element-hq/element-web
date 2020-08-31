@@ -218,7 +218,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         // way the right panel is structured makes this exceedingly difficult. Instead, we'll
         // switch to the general room and open the member list there as it should be in sync
         // anyways.
-        const chat = CommunityPrototypeStore.instance.getGeneralChat(TagOrderStore.getSelectedPrototypeTag());
+        const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
         if (chat) {
             dis.dispatch({
                 action: 'view_room',
@@ -239,7 +239,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        showCommunityInviteDialog(TagOrderStore.getSelectedPrototypeTag());
+        showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
         this.setState({contextMenuPosition: null}); // also close the menu
     };
 
