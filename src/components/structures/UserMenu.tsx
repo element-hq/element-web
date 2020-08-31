@@ -49,6 +49,7 @@ import { showCommunityInviteDialog } from "../../RoomInvite";
 import dis from "../../dispatcher/dispatcher";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
+import EditCommunityPrototypeDialog from "../views/dialogs/EditCommunityPrototypeDialog";
 
 interface IProps {
     isMinimized: boolean;
@@ -207,7 +208,10 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        console.log("TODO@onCommunitySettingsClick");
+        Modal.createTrackedDialog('Edit Community', '', EditCommunityPrototypeDialog, {
+            communityId: CommunityPrototypeStore.instance.getSelectedCommunityId(),
+        });
+        this.setState({contextMenuPosition: null}); // also close the menu
     };
 
     private onCommunityMembersClick = (ev: ButtonEvent) => {

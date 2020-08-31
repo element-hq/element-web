@@ -71,6 +71,10 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
         return profile?.name || communityId;
     }
 
+    public getCommunityProfile(communityId: string): { name?: string, avatarUrl?: string } {
+        return FlairStore.getGroupProfileCachedFast(this.matrixClient, communityId);
+    }
+
     public getGeneralChat(communityId: string): Room {
         const rooms = GroupStore.getGroupRooms(communityId)
             .map(r => MatrixClientPeg.get().getRoom(r.roomId))

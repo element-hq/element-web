@@ -1687,6 +1687,8 @@
     "Verification Requests": "Verification Requests",
     "Toolbox": "Toolbox",
     "Developer Tools": "Developer Tools",
+    "There was an error updating your community. The server is unable to process your request.": "There was an error updating your community. The server is unable to process your request.",
+    "Update community": "Update community",
     "An error has occurred.": "An error has occurred.",
     "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.": "Verify this user to mark them as trusted. Trusting users gives you extra peace of mind when using end-to-end encrypted messages.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.",
