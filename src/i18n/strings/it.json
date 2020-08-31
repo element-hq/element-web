@@ -2447,5 +2447,10 @@
     "Create a room in %(communityName)s": "Crea una stanza in %(communityName)s",
     "Explore rooms in %(communityName)s": "Esplora le stanze in %(communityName)s",
     "Create community": "Crea comunità",
-    "Set up Secure Backup": "Imposta il Backup Sicuro"
+    "Set up Secure Backup": "Imposta il Backup Sicuro",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Le stanze private possono essere trovate e visitate solo con invito. Le stanze pubbliche invece sono aperte a tutti.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Le stanze private possono essere trovate e visitate solo con invito. Le stanze pubbliche invece sono aperte a tutti i membri di questa comunità.",
+    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Dovresti attivarlo se questa stanza verrà usata solo per collaborazioni tra squadre interne nel tuo homeserver. Non può essere cambiato in seguito.",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Dovresti disattivarlo se questa stanza verrà usata per collaborazioni con squadre esterne che hanno il loro homeserver. Non può essere cambiato in seguito.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Blocca l'accesso alla stanza per chiunque non faccia parte di %(serverName)s."
 }
