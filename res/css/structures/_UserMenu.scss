@@ -36,7 +36,7 @@ limitations under the License.
         // we cheat opacity on the theme colour with an after selector here
         &::after {
             content: '';
-            border-bottom: 1px solid $roomsublist-divider-color;
+            border-bottom: 1px solid $primary-fg-color; // XXX: Variable abuse
             opacity: 0.2;
             display: block;
             padding-top: 8px;
@@ -154,7 +154,7 @@ limitations under the License.
             width: 85%;
             opacity: 0.2;
             border: none;
-            border-bottom: 1px solid $roomsublist-divider-color;
+            border-bottom: 1px solid $primary-fg-color; // XXX: Variable abuse
         }
 
         &.mx_IconizedContextMenu {
