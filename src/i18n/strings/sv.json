@@ -860,7 +860,7 @@
     "Update any local room aliases to point to the new room": "Uppdatera lokala rumsalias att peka på det nya rummet",
     "Stop users from speaking in the old version of the room, and post a message advising users to move to the new room": "Hindra användare från att prata i den gamla rumsversionen och posta ett meddelande som rekommenderar användare att flytta till det nya rummet",
     "Put a link back to the old room at the start of the new room so people can see old messages": "Sätta en länk tillbaka till det gamla rummet i början av det nya rummet så att folk kan se gamla meddelanden",
-    "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar den aktuella utgående gruppsessionen i ett krypterat rum att överges",
+    "Forces the current outbound group session in an encrypted room to be discarded": "Tvingar den aktuella externa gruppsessionen i ett krypterat rum att överges",
     "Unable to connect to Homeserver. Retrying...": "Kunde inte ansluta till hemservern. Försöker igen…",
     "%(senderName)s set the main address for this room to %(address)s.": "%(senderName)s satte huvudadressen för detta rum till %(address)s.",
     "%(senderName)s removed the main address for this room.": "%(senderName)s tog bort huvudadressen för detta rum.",
