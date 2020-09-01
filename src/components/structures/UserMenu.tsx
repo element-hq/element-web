@@ -40,7 +40,7 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
-    IconizedContextMenuOptionList
+    IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 
 interface IProps {
@@ -234,12 +234,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
         >
             <div className="mx_UserMenu_contextMenu_header">
                 <div className="mx_UserMenu_contextMenu_name">
-                        <span className="mx_UserMenu_contextMenu_displayName">
-                            {OwnProfileStore.instance.displayName}
-                        </span>
+                    <span className="mx_UserMenu_contextMenu_displayName">
+                        {OwnProfileStore.instance.displayName}
+                    </span>
                     <span className="mx_UserMenu_contextMenu_userId">
-                            {MatrixClientPeg.get().getUserId()}
-                        </span>
+                        {MatrixClientPeg.get().getUserId()}
+                    </span>
                 </div>
                 <AccessibleTooltipButton
                     className="mx_UserMenu_contextMenu_themeButton"

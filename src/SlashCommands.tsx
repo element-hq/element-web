@@ -860,12 +860,12 @@ export const Commands = [
                                 _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
                                     ' %(deviceId)s is "%(fprint)s" which does not match the provided key ' +
                                     '"%(fingerprint)s". This could mean your communications are being intercepted!',
-                                    {
-                                        fprint,
-                                        userId,
-                                        deviceId,
-                                        fingerprint,
-                                    }));
+                                {
+                                    fprint,
+                                    userId,
+                                    deviceId,
+                                    fingerprint,
+                                }));
                         }
 
                         await cli.setDeviceVerified(userId, deviceId, true);
@@ -879,7 +879,7 @@ export const Commands = [
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
                                             'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
-                                            {userId, deviceId})
+                                        {userId, deviceId})
                                     }
                                 </p>
                             </div>,

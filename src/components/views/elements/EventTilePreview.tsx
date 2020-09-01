@@ -39,11 +39,13 @@ interface IProps {
     className: string;
 }
 
+/* eslint-disable camelcase */
 interface IState {
     userId: string;
     displayname: string;
     avatar_url: string;
 }
+/* eslint-enable camelcase */
 
 const AVATAR_SIZE = 32;
 
@@ -63,19 +65,18 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         const client = MatrixClientPeg.get();
         const userId = client.getUserId();
         const profileInfo = await client.getProfileInfo(userId);
-        const avatar_url = Avatar.avatarUrlForUser(
+        const avatarUrl = Avatar.avatarUrlForUser(
             {avatarUrl: profileInfo.avatar_url},
             AVATAR_SIZE, AVATAR_SIZE, "crop");
 
         this.setState({
             userId,
             displayname: profileInfo.displayname,
-            avatar_url,
+            avatar_url: avatarUrl,
         });
-
     }
 
-    private fakeEvent({userId, displayname, avatar_url}: IState) {
+    private fakeEvent({userId, displayname, avatar_url: avatarUrl}: IState) {
         // Fake it till we make it
         const event = new MatrixEvent(JSON.parse(`{
                 "type": "m.room.message",
@@ -85,12 +86,12 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
                     "msgtype": "m.text",
                     "body": "${this.props.message}",
                     "displayname": "${displayname}",
-                    "avatar_url": "${avatar_url}"
+                    "avatar_url": "${avatarUrl}"
                   },
                   "msgtype": "m.text",
                   "body": "${this.props.message}",
                   "displayname": "${displayname}",
-                  "avatar_url": "${avatar_url}"
+                  "avatar_url": "${avatarUrl}"
                 },
                 "unsigned": {
                   "age": 97
@@ -104,7 +105,7 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             name: displayname,
             userId: userId,
             getAvatarUrl: (..._) => {
-                return avatar_url;
+                return avatarUrl;
             },
         };
 
@@ -114,13 +115,10 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
     public render() {
         const event = this.fakeEvent(this.state);
 
-        let className = classnames(
-            this.props.className,
-            {
-                "mx_IRCLayout": this.props.useIRCLayout,
-                "mx_GroupLayout": !this.props.useIRCLayout,
-            }
-        );
+        const className = classnames(this.props.className, {
+            "mx_IRCLayout": this.props.useIRCLayout,
+            "mx_GroupLayout": !this.props.useIRCLayout,
+        });
 
         return <div className={className}>
             <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
