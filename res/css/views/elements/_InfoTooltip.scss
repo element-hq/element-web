@@ -14,22 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-
-import {useRovingTabIndex} from "../RovingTabIndex";
-import {FocusHandler, Ref} from "./types";
-
-interface IProps {
-    inputRef?: Ref;
-    children(renderProps: {
-        onFocus: FocusHandler;
-        isActive: boolean;
-        ref: Ref;
-    });
+.mx_InfoTooltip_icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
 }
 
-// Wrapper to allow use of useRovingTabIndex outside of React Functional Components.
-export const RovingTabIndexWrapper: React.FC<IProps> = ({children, inputRef}) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
-    return children({onFocus, isActive, ref});
-};
+.mx_InfoTooltip_icon::before {
+    display: inline-block;
+    background-color: $muted-fg-color;
+    mask-repeat: no-repeat;
+    mask-size: 16px;
+    width: 16px;
+    height: 16px;
+    mask-position: center;
+    content: '';
+    vertical-align: middle;
+    mask-image: url('$(res)/img/element-icons/info.svg');
+}

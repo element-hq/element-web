@@ -91,15 +91,15 @@ export default class CommunityProvider extends AutocompleteProvider {
                 href: makeGroupPermalink(groupId),
                 component: (
                     <PillCompletion title={name} description={groupId}>
-                        <BaseAvatar name={name || groupId}
-                                    width={24}
-                                    height={24}
-                                    url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
+                        <BaseAvatar
+                            name={name || groupId}
+                            width={24}
+                            height={24}
+                            url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
                     </PillCompletion>
                 ),
                 range,
-            }))
-            .slice(0, 4);
+            })).slice(0, 4);
         }
         return completions;
     }

@@ -31,6 +31,7 @@ import {toRightOf} from "../../structures/ContextMenu";
 import {copyPlaintext, selectText} from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
+import { IDialogProps } from "./IDialogProps";
 
 const socials = [
     {
@@ -60,8 +61,7 @@ const socials = [
     },
 ];
 
-interface IProps {
-    onFinished: () => void;
+interface IProps extends IDialogProps {
     target: Room | User | Group | RoomMember | MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
 }
@@ -186,8 +186,8 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             title = _t('Share Room Message');
             checkbox = <div>
                 <StyledCheckbox
-                       checked={this.state.linkSpecificEvent}
-                       onClick={this.onLinkSpecificEventCheckboxClick}
+                    checked={this.state.linkSpecificEvent}
+                    onClick={this.onLinkSpecificEventCheckboxClick}
                 >
                     { _t('Link to selected message') }
                 </StyledCheckbox>
@@ -198,16 +198,18 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         const encodedUrl = encodeURIComponent(matrixToUrl);
 
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        return <BaseDialog title={title}
-                           className='mx_ShareDialog'
-                           contentId='mx_Dialog_content'
-                           onFinished={this.props.onFinished}
+        return <BaseDialog
+            title={title}
+            className='mx_ShareDialog'
+            contentId='mx_Dialog_content'
+            onFinished={this.props.onFinished}
         >
             <div className="mx_ShareDialog_content">
                 <div className="mx_ShareDialog_matrixto">
-                    <a href={matrixToUrl}
-                       onClick={ShareDialog.onLinkClick}
-                       className="mx_ShareDialog_matrixto_link"
+                    <a
+                        href={matrixToUrl}
+                        onClick={ShareDialog.onLinkClick}
+                        className="mx_ShareDialog_matrixto_link"
                     >
                         { matrixToUrl }
                     </a>

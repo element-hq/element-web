@@ -110,9 +110,7 @@ export default class RoomProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            })
-            .filter((completion) => !!completion.completion && completion.completion.length > 0)
-            .slice(0, 4);
+            }).filter((completion) => !!completion.completion && completion.completion.length > 0).slice(0, 4);
         }
         return completions;
     }

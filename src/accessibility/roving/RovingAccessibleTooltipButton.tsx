@@ -20,7 +20,8 @@ import AccessibleTooltipButton from "../../components/views/elements/AccessibleT
 import {useRovingTabIndex} from "../RovingTabIndex";
 import {Ref} from "./types";
 
-interface IProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButton>, "onFocus" | "inputRef" | "tabIndex"> {
+type ATBProps = React.ComponentProps<typeof AccessibleTooltipButton>;
+interface IProps extends Omit<ATBProps, "onFocus" | "inputRef" | "tabIndex"> {
     inputRef?: Ref;
 }
 
