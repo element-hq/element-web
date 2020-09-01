@@ -1571,7 +1571,7 @@
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s hat die Haupt- und Alternativadresse für diesen Raum geändert.",
     "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Nutzer!nnen, die %(glob)s entsprechen",
     "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Räume, die %(glob)s entsprechen",
-    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Server, die %(glob)s entsprechen",
+    "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Server die %(glob)s entsprechen",
     "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel, die %(glob)s entspricht",
     "%(senderName)s updated the rule banning users matching %(glob)s for %(reason)s": "%(senderName)s aktualisierte die Ausschluss-Regel für Nutzer, die aufgrund von %(reason)s %(glob)s entsprechen",
     "%(senderName)s updated the rule banning rooms matching %(glob)s for %(reason)s": "%(senderName)s aktualisierte die Ausschluss-Regel für Räume, die aufgrund von %(reason)s %(glob)s entsprechen",
