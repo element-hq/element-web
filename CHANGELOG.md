@@ -1,3 +1,17 @@
+Changes in [1.7.5](https://github.com/vector-im/element-web/releases/tag/v1.7.5) (2020-09-01)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5-rc.1...v1.7.5)
+
+## Security notice
+
+Element Web 1.7.5 fixes an issue where encrypted state events could break incoming call handling.
+Thanks to @awesome-michael from Awesome Technologies for responsibly disclosing this via Matrix's
+Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.3.0 and JS SDK 8.2.0
+
 Changes in [1.7.5-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.5-rc.1) (2020-08-26)
 =======================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4...v1.7.5-rc.1)
