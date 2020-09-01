@@ -190,7 +190,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
             ev.preventDefault();
             ev.stopPropagation();
         } else if (onKeyDown) {
-            return onKeyDown(ev, state);
+            return onKeyDown(ev, context.state);
         }
     }, [context.state, onKeyDown, handleHomeEnd]);
 

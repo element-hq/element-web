@@ -92,6 +92,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
     };
 
     public render(): React.ReactElement {
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {notification, forceCount, roomId, onClick, ...props} = this.props;
 
         // Don't show a badge if we don't need to
