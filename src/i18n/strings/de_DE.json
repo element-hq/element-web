@@ -2435,5 +2435,10 @@
     "Enter name": "Namen eingeben",
     "Add image (optional)": "Bild hinzufügen (optional)",
     "Create a room in %(communityName)s": "Erstelle einen Raum in %(communityName)s",
-    "Create community": "Erstelle Community"
+    "Create community": "Erstelle Community",
+    "Cross-signing and secret storage are ready for use.": "Cross-Signing und der sichere Speicher sind bereit zur Benutzung.",
+    "Cross-signing is ready for use, but secret storage is currently not being used to backup your keys.": "Cross-Signing ist bereit, aber der sichere Speicher wird noch nicht als Schlüsselbackup benutzt.",
+    "People you know on %(brand)s": "Leute, die du auf %(brand)s kennst",
+    "Send %(count)s invites|one": "%(count)s Einladung senden",
+    "Invite people to join %(communityName)s": "Lade Leute ein %(communityName)s beizutreten"
 }
