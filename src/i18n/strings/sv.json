@@ -318,7 +318,7 @@
     "Please set a password!": "Vänligen välj ett lösenord!",
     "You have successfully set a password!": "Du har valt ett nytt lösenord!",
     "An error occurred whilst saving your email notification preferences.": "Ett fel inträffade då e-postaviseringsinställningarna sparades.",
-    "Explore Room State": "Utforska rumläget",
+    "Explore Room State": "Utforska rumsstatus",
     "Source URL": "Käll-URL",
     "Failed to add tag %(tagName)s to room": "Det gick inte att lägga till etiketten \"%(tagName)s\" till rummet",
     "Filter results": "Filtrera resultaten",
