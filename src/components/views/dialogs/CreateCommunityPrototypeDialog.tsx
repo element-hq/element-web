@@ -163,11 +163,9 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
             </span>
         );
         if (this.state.error) {
+            const classes = "mx_CreateCommunityPrototypeDialog_subtext mx_CreateCommunityPrototypeDialog_subtext_error";
             helpText = (
-                <span
-                    className={"mx_CreateCommunityPrototypeDialog_subtext " +
-                    "mx_CreateCommunityPrototypeDialog_subtext_error"}
-                >
+                <span className={classes}>
                     {this.state.error}
                 </span>
             );
