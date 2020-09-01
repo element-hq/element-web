@@ -167,24 +167,28 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
     public render() {
         const emailAddresses = [];
         this.state.emailTargets.forEach((address, i) => {
-            emailAddresses.push(<Field
-                key={i}
-                value={address}
-                onChange={(e) => this.onAddressChange(e, i)}
-                label={_t("Email address")}
-                placeholder={_t("Email address")}
-                onBlur={() => this.onAddressBlur(i)}
-            />);
+            emailAddresses.push((
+                <Field
+                    key={i}
+                    value={address}
+                    onChange={(e) => this.onAddressChange(e, i)}
+                    label={_t("Email address")}
+                    placeholder={_t("Email address")}
+                    onBlur={() => this.onAddressBlur(i)}
+                />
+            ));
         });
 
         // Push a clean input
-        emailAddresses.push(<Field
-            key={emailAddresses.length}
-            value={""}
-            onChange={(e) => this.onAddressChange(e, emailAddresses.length)}
-            label={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
-            placeholder={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
-        />);
+        emailAddresses.push((
+            <Field
+                key={emailAddresses.length}
+                value={""}
+                onChange={(e) => this.onAddressChange(e, emailAddresses.length)}
+                label={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
+                placeholder={emailAddresses.length > 0 ? _t("Add another email") : _t("Email address")}
+            />
+        ));
 
         let peopleIntro = null;
         const people = [];
@@ -194,11 +198,13 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
                 people.push(this.renderPerson(person, i));
             });
             if (humansToPresent.length < this.state.people.length) {
-                people.push(<AccessibleButton
-                    onClick={this.onShowMorePeople}
-                    kind="link" key="more"
-                    className="mx_CommunityPrototypeInviteDialog_morePeople"
-                >{_t("Show more")}</AccessibleButton>);
+                people.push((
+                    <AccessibleButton
+                        onClick={this.onShowMorePeople}
+                        kind="link" key="more"
+                        className="mx_CommunityPrototypeInviteDialog_morePeople"
+                    >{_t("Show more")}</AccessibleButton>
+                ));
             }
         }
         if (this.state.people.length > 0) {
