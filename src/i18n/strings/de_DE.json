@@ -1569,7 +1569,7 @@
     "%(senderName)s removed the alternative addresses %(addresses)s for this room.|one": "%(senderName)s hat die alternative Adresse %(addresses)s für diesen Raum entfernt.",
     "%(senderName)s changed the alternative addresses for this room.": "%(senderName)s hat die alternative Adresse für diesen Raum geändert.",
     "%(senderName)s changed the main and alternative addresses for this room.": "%(senderName)s hat die Haupt- und Alternativadresse für diesen Raum geändert.",
-    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Nutzer, die %(glob)s entsprechen",
+    "%(senderName)s removed the rule banning users matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Nutzer!nnen, die %(glob)s entsprechen",
     "%(senderName)s removed the rule banning rooms matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Räume, die %(glob)s entsprechen",
     "%(senderName)s removed the rule banning servers matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel für Server, die %(glob)s entsprechen",
     "%(senderName)s removed a ban rule matching %(glob)s": "%(senderName)s entfernte die Ausschluss-Regel, die %(glob)s entspricht",
@@ -2428,7 +2428,7 @@
     "Add another email": "Weitere E-Mail-Adresse hinzufügen",
     "Send %(count)s invites|other": "%(count)s Einladungen senden",
     "There was an error creating your community. The name may be taken or the server is unable to process your request.": "Beim Erstellen deiner Community ist ein Fehler aufgetreten. Entweder ist der Name schon vergeben oder der Server kann die Anfrage nicht verarbeiten.",
-    "Community ID: +<localpart />:%(domain)s": "Community ID: +<localpart />:%(domain)s",
+    "Community ID: +<localpart />:%(domain)s": "Community-ID: +<localpart />:%(domain)s",
     "Explore community rooms": "Entdecke Community Räume",
     "You can change this later if needed.": "Falls nötig, kannst du es später noch ändern.",
     "What's the name of your community or team?": "Welchen Namen hat deine Community oder dein Team?",
@@ -2441,5 +2441,11 @@
     "People you know on %(brand)s": "Leute, die du auf %(brand)s kennst",
     "Send %(count)s invites|one": "%(count)s Einladung senden",
     "Invite people to join %(communityName)s": "Lade Leute ein %(communityName)s beizutreten",
-    "An image will help people identify your community.": "Ein Bild hilft anderen deine Community zu Identifizieren."
+    "An image will help people identify your community.": "Ein Bild hilft anderen, deine Community zu Identifizieren.",
+    "Use this when referencing your community to others. The community ID cannot be changed.": "Verwende dies, um deine Community von andere referenzieren zu lassen. Die Community-ID kann später nicht geändert werden.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone.": "Private Räume können nur auf Einladung gefunden und betreten werden. Öffentliche Räume können von jedem/r gefunden und betreten werden.",
+    "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Private Räume können nur auf Einladung gefunden und betreten werden. Öffentliche Räume können von jedem/r in dieser Community gefunden und betreten werden.",
+    "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Du solltest dies aktivieren, wenn der Raum nur für die Zusammenarbeit mit internen Teams auf deinem Heimserver verwendet wird. Dies kann später nicht mehr geändert werden.",
+    "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Du solltest dies deaktivieren, wenn der Raum für die Zusammenarbeit mit externen Teams auf deren Home-Server verwendet wird. Dies kann später nicht mehr geändert werden.",
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Blockiere alle, die nicht Teil von %(serverName)s sind, diesen Raum jemals zu betreten."
 }
