@@ -8,7 +8,7 @@ module.exports = {
         "quotes": "off",
     },
     "overrides": [{
-        "files": ["src/**/*.{ts, tsx}"],
+        "files": ["src/**/*.{ts,tsx}"],
         "extends": ["matrix-org/ts", "matrix-org/react"],
         "env": {
             "browser": true,
