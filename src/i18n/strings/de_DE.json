@@ -1380,7 +1380,7 @@
     "Manage": "Verwalten",
     "Securely cache encrypted messages locally for them to appear in search results.": "Speichere verschlüsselte Nachrichten sicher lokal zwischen, sodass sie in Suchergebnissen erscheinen können.",
     "Enable": "Aktivieren",
-    "Connecting to integration manager...": "Verbinden zum Integrationsmanager...",
+    "Connecting to integration manager...": "Verbinde mit Integrationsmanager...",
     "Cannot connect to integration manager": "Verbindung zum Integrationsmanager fehlgeschlagen",
     "The integration manager is offline or it cannot reach your homeserver.": "Der Integrationsmanager ist offline oder er kann den Heimserver nicht erreichen.",
     "not stored": "nicht gespeichert",
