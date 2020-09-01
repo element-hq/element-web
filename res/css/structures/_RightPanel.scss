@@ -95,21 +95,19 @@ limitations under the License.
     mask-position: center;
 }
 
-.mx_RightPanel_headerButton_highlight {
-    background: rgba($accent-color, 0.25);
-    // make the icon the accent color too
-    &::before {
-        background-color: $accent-color !important;
-    }
-}
-
-.mx_RightPanel_headerButton:not(.mx_RightPanel_headerButton_highlight) {
+.mx_RightPanel_headerButton {
     &:hover {
         background: rgba($accent-color, 0.1);
 
         &::before {
             background-color: $accent-color;
         }
+    }
+}
+
+.mx_RightPanel_headerButton_highlight {
+    &::before {
+        background-color: $accent-color !important;
     }
 }
 
