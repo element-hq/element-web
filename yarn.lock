@@ -7312,9 +7312,10 @@ mathml-tag-names@^2.1.1:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "8.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/64cdd73b93a475d10284977b69ef73138315b3be"
+matrix-js-sdk@8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-8.2.0.tgz#6fbdadcdc563e41671d407d772a4d52ec8adc480"
+  integrity sha512-yKF/H1Matgf4b7bfa/gOPNcgMEujogC1r89Au8ZYKfv3dmNdJupE9ktdGJ28QVeKIyF5Ew1stLI4MdGWT1gYPw==
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
@@ -7334,9 +7335,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.2.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/c91fc99d4bfd76808c99327979c1b7dbcb9bf093"
+matrix-react-sdk@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.3.0.tgz#42749f59151a1fbd8be81d917b7f2dfc406a4ad5"
+  integrity sha512-042QFASwbYYX69TQTzzSnRyaD4NXiME/Unn+GmUfWJBnGieuNaYb7ZFxVdUuPpks2UfHJF6xswsr1LpKWi92IQ==
   dependencies:
     "@babel/runtime" "^7.10.5"
     await-lock "^2.0.1"
@@ -7364,7 +7366,7 @@ matrix-mock-request@^1.2.3:
     is-ip "^2.0.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.19"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "8.2.0"
     minimist "^1.2.5"
     pako "^1.0.11"
     parse5 "^5.1.1"
@@ -7381,6 +7383,7 @@ matrix-mock-request@^1.2.3:
     react-transition-group "^4.4.1"
     resize-observer-polyfill "^1.5.1"
     sanitize-html "^1.27.1"
+    tar-js "^0.3.0"
     text-encoding-utf-8 "^1.0.2"
     url "^0.11.0"
     velocity-animate "^1.5.2"
@@ -11349,6 +11352,11 @@ tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-1.1.3.tgz#a1fccc06b58db61fd7a45da2da44f5f3a3e67ba2"
   integrity sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==
+
+tar-js@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/tar-js/-/tar-js-0.3.0.tgz#6949aabfb0ba18bb1562ae51a439fd0f30183a17"
+  integrity sha1-aUmqv7C6GLsVYq5RpDn9DzAYOhc=
 
 tar@^4:
   version "4.4.13"
