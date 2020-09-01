@@ -24,6 +24,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import InfoTooltip from "../elements/InfoTooltip";
 import dis from "../../../dispatcher/dispatcher";
 import {showCommunityRoomInviteDialog} from "../../../RoomInvite";
+import GroupStore from "../../../stores/GroupStore";
 
 interface IProps extends IDialogProps {
 }
@@ -92,6 +93,8 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
             this.props.onFinished(true);
 
             if (result.room_id) {
+                // Force the group store to update as it might have missed the general chat
+                await GroupStore.refreshGroupRooms(result.group_id);
                 dis.dispatch({
                     action: 'view_room',
                     room_id: result.room_id,

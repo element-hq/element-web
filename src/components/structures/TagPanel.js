@@ -95,11 +95,6 @@ const TagPanel = createReactClass({
         }
     },
 
-    onCreateGroupClick(ev) {
-        ev.stopPropagation();
-        dis.dispatch({action: 'view_create_group'});
-    },
-
     onClearFilterClick(ev) {
         dis.dispatch({action: 'deselect_tags'});
     },
@@ -117,9 +112,7 @@ const TagPanel = createReactClass({
 
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const ActionButton = sdk.getComponent('elements.ActionButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -131,17 +124,6 @@ const TagPanel = createReactClass({
         });
 
         const itemsSelected = this.state.selectedTags.length > 0;
-
-        let clearButton;
-        if (itemsSelected) {
-            clearButton = <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
-                <TintableSvg src={require("../../../res/img/icons-close.svg")} width="24" height="24"
-                             alt={_t("Clear filter")}
-                             title={_t("Clear filter")}
-                />
-            </AccessibleButton>;
-        }
-
         const classes = classNames('mx_TagPanel', {
             mx_TagPanel_items_selected: itemsSelected,
         });
@@ -164,10 +146,7 @@ const TagPanel = createReactClass({
             );
         }
 
-        return <div className={classes}>
-            <div className="mx_TagPanel_clearButton_container">
-                { clearButton }
-            </div>
+        return <div className={classes} onClick={this.onClearFilterClick}>
             <AutoHideScrollbar
                 className="mx_TagPanel_scroller"
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
