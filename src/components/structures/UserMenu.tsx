@@ -40,7 +40,7 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
-    IconizedContextMenuOptionList
+    IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import * as fbEmitter from "fbemitter";

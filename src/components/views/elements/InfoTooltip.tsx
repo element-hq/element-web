@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import AccessibleButton from "./AccessibleButton";
 import Tooltip from './Tooltip';
 import { _t } from "../../../languageHandler";
 

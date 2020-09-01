@@ -19,7 +19,7 @@ module.exports = {
     },
 
     overrides: [{
-        "files": ["src/**/*.{ts, tsx}"],
+        "files": ["src/**/*.{ts,tsx}"],
         "extends": ["matrix-org/ts"],
         "rules": {
             // We disable this while we're transitioning
