@@ -2413,5 +2413,20 @@
     "You’re all caught up": "您都設定好了",
     "You have no visible notifications in this room.": "您在此聊天室沒有可見的通知。",
     "%(brand)s Android": "%(brand)s Android",
-    "Master private key:": "主控私鑰："
+    "Master private key:": "主控私鑰：",
+    "Show message previews for reactions in DMs": "在直接訊息中顯示反應的訊息預覽",
+    "Show message previews for reactions in all rooms": "在所有聊天室中顯示反應的訊息預覽",
+    "Explore public rooms": "探索公開聊天室",
+    "Uploading logs": "正在上傳紀錄檔",
+    "Downloading logs": "正在下載紀錄檔",
+    "Can't see what you’re looking for?": "看不到您要找的東西嗎？",
+    "Explore all public rooms": "探索所有公開聊天室",
+    "%(count)s results|other": "%(count)s 個結果",
+    "Preparing to download logs": "正在準備下載紀錄檔",
+    "Download logs": "下載紀錄檔",
+    "Unexpected server error trying to leave the room": "試圖離開聊天室時發生意外的伺服器錯誤",
+    "Error leaving room": "離開聊天室時發生錯誤",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "社群 v2 原型。需要相容的家伺服器。高度實驗性，小心使用。",
+    "Explore rooms in %(communityName)s": "在 %(communityName)s 中探索聊天室",
+    "Set up Secure Backup": "設定安全備份"
 }

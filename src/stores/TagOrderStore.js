@@ -115,9 +115,11 @@ class TagOrderStore extends Store {
                 break;
             }
             case 'select_tag': {
+                const allowMultiple = !SettingsStore.getValue("feature_communities_v2_prototypes");
+
                 let newTags = [];
                 // Shift-click semantics
-                if (payload.shiftKey) {
+                if (payload.shiftKey && allowMultiple) {
                     // Select range of tags
                     let start = this._state.orderedTags.indexOf(this._state.anchorTag);
                     let end = this._state.orderedTags.indexOf(payload.tag);
@@ -135,7 +137,7 @@ class TagOrderStore extends Store {
                         this._state.orderedTags.slice(start, end + 1).concat(newTags),
                     )];
                 } else {
-                    if (payload.ctrlOrCmdKey) {
+                    if (payload.ctrlOrCmdKey && allowMultiple) {
                         // Toggle individual tag
                         if (this._state.selectedTags.includes(payload.tag)) {
                             newTags = this._state.selectedTags.filter((t) => t !== payload.tag);
@@ -163,6 +165,25 @@ class TagOrderStore extends Store {
                 this._setState({
                     selectedTags: newTags,
                 });
+
+                if (!allowMultiple && newTags.length === 1) {
+                    // We're in prototype behaviour: select the general chat for the community
+                    const rooms = GroupStore.getGroupRooms(newTags[0])
+                        .map(r => MatrixClientPeg.get().getRoom(r.roomId))
+                        .filter(r => !!r);
+                    let chat = rooms.find(r => {
+                        const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
+                        if (!idState || idState.getContent()['groupId'] !== newTags[0]) return false;
+                        return true;
+                    });
+                    if (!chat) chat = rooms[0];
+                    if (chat) {
+                        dis.dispatch({
+                            action: 'view_room',
+                            room_id: chat.roomId,
+                        });
+                    }
+                }
 
                 Analytics.trackEvent('FilterStore', 'select_tag');
             }
@@ -263,6 +284,13 @@ class TagOrderStore extends Store {
 
     getSelectedTags() {
         return this._state.selectedTags;
+    }
+
+    getSelectedPrototypeTag() {
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            return this.getSelectedTags()[0];
+        }
+        return null; // no selection as far as this function is concerned
     }
 }
 

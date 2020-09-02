@@ -20,7 +20,6 @@ import classNames from "classnames";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { throttle } from 'lodash';
 import { Key } from "../../Keyboard";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
@@ -137,7 +136,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         });
 
         let icon = (
-            <div className='mx_RoomSearch_icon'/>
+            <div className='mx_RoomSearch_icon' />
         );
         let input = (
             <input

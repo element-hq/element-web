@@ -26,8 +26,8 @@ import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
 import DMRoomMap from "./utils/DMRoomMap";
 import {getAddressType} from "./UserAddress";
-
-const E2EE_WK_KEY = "im.vector.riot.e2ee";
+import { getE2EEWellKnown } from "./utils/WellKnownUtils";
+import GroupStore from "./stores/GroupStore";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -80,6 +80,7 @@ interface IOpts {
     encryption?: boolean;
     inlineErrors?: boolean;
     andView?: boolean;
+    associatedWithCommunity?: string;
 }
 
 /**
@@ -181,6 +182,10 @@ export default function createRoom(opts: IOpts): Promise<string | null> {
             return Rooms.setDMRoom(roomId, opts.dmUserId);
         } else {
             return Promise.resolve();
+        }
+    }).then(() => {
+        if (opts.associatedWithCommunity) {
+            return GroupStore.addRoomToGroup(opts.associatedWithCommunity, roomId, false);
         }
     }).then(function() {
         // NB createRoom doesn't block on the client seeing the echo that the
@@ -294,12 +299,11 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
     return roomId;
 }
 
-export function privateShouldBeEncrypted() {
-    const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
-    if (clientWellKnown && clientWellKnown[E2EE_WK_KEY]) {
-        const defaultDisabled = clientWellKnown[E2EE_WK_KEY]["default"] === false;
+export function privateShouldBeEncrypted(): boolean {
+    const e2eeWellKnown = getE2EEWellKnown();
+    if (e2eeWellKnown) {
+        const defaultDisabled = e2eeWellKnown["default"] === false;
         return !defaultDisabled;
     }
-
     return true;
 }

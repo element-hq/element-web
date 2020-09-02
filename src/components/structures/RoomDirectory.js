@@ -30,6 +30,10 @@ import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/Di
 import Analytics from '../../Analytics';
 import {getHttpUriForMxc} from "matrix-js-sdk/src/content-repo";
 import {ALL_ROOMS} from "../views/directory/NetworkDropdown";
+import SettingsStore from "../../settings/SettingsStore";
+import TagOrderStore from "../../stores/TagOrderStore";
+import GroupStore from "../../stores/GroupStore";
+import FlairStore from "../../stores/FlairStore";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 160;
@@ -46,6 +50,7 @@ export default createReactClass({
     },
 
     getInitialState: function() {
+        const selectedCommunityId = TagOrderStore.getSelectedTags()[0];
         return {
             publicRooms: [],
             loading: true,
@@ -54,6 +59,10 @@ export default createReactClass({
             instanceId: undefined,
             roomServer: MatrixClientPeg.getHomeserverName(),
             filterString: null,
+            selectedCommunityId: SettingsStore.getValue("feature_communities_v2_prototypes")
+                ? selectedCommunityId
+                : null,
+            communityName: null,
         };
     },
 
@@ -71,28 +80,39 @@ export default createReactClass({
             this.setState({protocolsLoading: false});
             return;
         }
-        MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
-            this.protocols = response;
-            this.setState({protocolsLoading: false});
-        }, (err) => {
-            console.warn(`error loading third party protocols: ${err}`);
-            this.setState({protocolsLoading: false});
-            if (MatrixClientPeg.get().isGuest()) {
-                // Guests currently aren't allowed to use this API, so
-                // ignore this as otherwise this error is literally the
-                // thing you see when loading the client!
-                return;
-            }
-            track('Failed to get protocol list from homeserver');
-            const brand = SdkConfig.get().brand;
-            this.setState({
-                error: _t(
-                    '%(brand)s failed to get the protocol list from the homeserver. ' +
-                    'The homeserver may be too old to support third party networks.',
-                    { brand },
-                ),
+
+        if (!this.state.selectedCommunityId) {
+            MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
+                this.protocols = response;
+                this.setState({protocolsLoading: false});
+            }, (err) => {
+                console.warn(`error loading third party protocols: ${err}`);
+                this.setState({protocolsLoading: false});
+                if (MatrixClientPeg.get().isGuest()) {
+                    // Guests currently aren't allowed to use this API, so
+                    // ignore this as otherwise this error is literally the
+                    // thing you see when loading the client!
+                    return;
+                }
+                track('Failed to get protocol list from homeserver');
+                const brand = SdkConfig.get().brand;
+                this.setState({
+                    error: _t(
+                        '%(brand)s failed to get the protocol list from the homeserver. ' +
+                        'The homeserver may be too old to support third party networks.',
+                        {brand},
+                    ),
+                });
             });
-        });
+        } else {
+            // We don't use the protocols in the communities v2 prototype experience
+            this.setState({protocolsLoading: false});
+
+            // Grab the profile info async
+            FlairStore.getGroupProfileCached(MatrixClientPeg.get(), this.state.selectedCommunityId).then(profile => {
+                this.setState({communityName: profile.name});
+            });
+        }
 
         this.refreshRoomList();
     },
@@ -105,6 +125,33 @@ export default createReactClass({
     },
 
     refreshRoomList: function() {
+        if (this.state.selectedCommunityId) {
+            this.setState({
+                publicRooms: GroupStore.getGroupRooms(this.state.selectedCommunityId).map(r => {
+                    return {
+                        // Translate all the group properties to the directory format
+                        room_id: r.roomId,
+                        name: r.name,
+                        topic: r.topic,
+                        canonical_alias: r.canonicalAlias,
+                        num_joined_members: r.numJoinedMembers,
+                        avatarUrl: r.avatarUrl,
+                        world_readable: r.worldReadable,
+                        guest_can_join: r.guestsCanJoin,
+                    };
+                }).filter(r => {
+                    const filterString = this.state.filterString;
+                    if (filterString) {
+                        const containedIn = (s: string) => (s || "").toLowerCase().includes(filterString.toLowerCase());
+                        return containedIn(r.name) || containedIn(r.topic) || containedIn(r.canonical_alias);
+                    }
+                    return true;
+                }),
+                loading: false,
+            });
+            return;
+        }
+
         this.nextBatch = null;
         this.setState({
             publicRooms: [],
@@ -114,6 +161,7 @@ export default createReactClass({
     },
 
     getMoreRooms: function() {
+        if (this.state.selectedCommunityId) return Promise.resolve(); // no more rooms
         if (!MatrixClientPeg.get()) return Promise.resolve();
 
         this.setState({
@@ -239,7 +287,7 @@ export default createReactClass({
     },
 
     onRoomClicked: function(room, ev) {
-        if (ev.shiftKey) {
+        if (ev.shiftKey && !this.state.selectedCommunityId) {
             ev.preventDefault();
             this.removeFromDirectory(room);
         } else {
@@ -610,6 +658,18 @@ export default createReactClass({
                 }
             }
 
+            let dropdown = (
+                <NetworkDropdown
+                    protocols={this.protocols}
+                    onOptionChange={this.onOptionChange}
+                    selectedServerName={this.state.roomServer}
+                    selectedInstanceId={this.state.instanceId}
+                />
+            );
+            if (this.state.selectedCommunityId) {
+                dropdown = null;
+            }
+
             listHeader = <div className="mx_RoomDirectory_listheader">
                 <DirectorySearchBox
                     className="mx_RoomDirectory_searchbox"
@@ -619,12 +679,7 @@ export default createReactClass({
                     placeholder={placeholder}
                     showJoinButton={showJoinButton}
                 />
-                <NetworkDropdown
-                    protocols={this.protocols}
-                    onOptionChange={this.onOptionChange}
-                    selectedServerName={this.state.roomServer}
-                    selectedInstanceId={this.state.instanceId}
-                />
+                {dropdown}
             </div>;
         }
         const explanation =
@@ -637,12 +692,16 @@ export default createReactClass({
                 }},
             );
 
+        const title = this.state.selectedCommunityId
+            ? _t("Explore rooms in %(communityName)s", {
+                communityName: this.state.communityName || this.state.selectedCommunityId,
+            }) : _t("Explore rooms");
         return (
             <BaseDialog
                 className={'mx_RoomDirectory_dialog'}
                 hasCancel={true}
                 onFinished={this.props.onFinished}
-                title={_t("Explore rooms")}
+                title={title}
             >
                 <div className="mx_RoomDirectory">
                     {explanation}

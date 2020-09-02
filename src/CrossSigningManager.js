@@ -21,6 +21,7 @@ import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
+import { isSecureBackupRequired } from './utils/WellKnownUtils';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -31,6 +32,17 @@ let secretStorageKeys = {};
 let secretStorageBeingAccessed = false;
 
 function isCachingAllowed() {
+    return secretStorageBeingAccessed;
+}
+
+/**
+ * This can be used by other components to check if secret storage access is in
+ * progress, so that we can e.g. avoid intermittently showing toasts during
+ * secret storage setup.
+ *
+ * @returns {bool}
+ */
+export function isSecretStorageBeingAccessed() {
     return secretStorageBeingAccessed;
 }
 
@@ -57,19 +69,19 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     if (keyInfoEntries.length > 1) {
         throw new Error("Multiple storage key requests not implemented");
     }
-    const [name, info] = keyInfoEntries[0];
+    const [keyId, keyInfo] = keyInfoEntries[0];
 
     // Check the in-memory cache
-    if (isCachingAllowed() && secretStorageKeys[name]) {
-        return [name, secretStorageKeys[name]];
+    if (isCachingAllowed() && secretStorageKeys[keyId]) {
+        return [keyId, secretStorageKeys[keyId]];
     }
 
     const inputToKey = async ({ passphrase, recoveryKey }) => {
         if (passphrase) {
             return deriveKey(
                 passphrase,
-                info.passphrase.salt,
-                info.passphrase.iterations,
+                keyInfo.passphrase.salt,
+                keyInfo.passphrase.iterations,
             );
         } else {
             return decodeRecoveryKey(recoveryKey);
@@ -81,10 +93,10 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         AccessSecretStorageDialog,
         /* props= */
         {
-            keyInfo: info,
+            keyInfo,
             checkPrivateKey: async (input) => {
                 const key = await inputToKey(input);
-                return await MatrixClientPeg.get().checkSecretStorageKey(key, info);
+                return await MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
             },
         },
         /* className= */ null,
@@ -106,11 +118,15 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     const key = await inputToKey(input);
 
     // Save to cache to avoid future prompts in the current session
-    if (isCachingAllowed()) {
-        secretStorageKeys[name] = key;
-    }
+    cacheSecretStorageKey(keyId, key);
 
-    return [name, key];
+    return [keyId, key];
+}
+
+function cacheSecretStorageKey(keyId, key) {
+    if (isCachingAllowed()) {
+        secretStorageKeys[keyId] = key;
+    }
 }
 
 const onSecretRequested = async function({
@@ -158,6 +174,7 @@ const onSecretRequested = async function({
 
 export const crossSigningCallbacks = {
     getSecretStorageKey,
+    cacheSecretStorageKey,
     onSecretRequested,
 };
 
@@ -206,9 +223,20 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
                 import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
                 {
-                    force: forceReset,
+                    forceReset,
                 },
-                null, /* priority = */ false, /* static = */ true,
+                null,
+                /* priority = */ false,
+                /* static = */ true,
+                /* options = */ {
+                    onBeforeClose(reason) {
+                        // If Secure Backup is required, you cannot leave the modal.
+                        if (reason === "backgroundClick") {
+                            return !isSecureBackupRequired();
+                        }
+                        return true;
+                    },
+                },
             );
             const [confirmed] = await finished;
             if (!confirmed) {
@@ -216,7 +244,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             }
         } else {
             const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
-            await cli.bootstrapSecretStorage({
+            await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
                     const { finished } = Modal.createTrackedDialog(
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
@@ -231,7 +259,9 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                         throw new Error("Cross-signing key upload auth canceled");
                     }
                 },
-                getBackupPassphrase: promptForBackupPassphrase,
+            });
+            await cli.bootstrapSecretStorage({
+                getKeyBackupPassphrase: promptForBackupPassphrase,
             });
         }
 
