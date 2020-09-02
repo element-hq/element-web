@@ -2451,5 +2451,11 @@
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Sa võid sellise võimaluse jätta kasutusele võtmata, kui seda jututuba kasutatakse erinevate väliste tiimide ühistööks kasutades erinevaid koduservereid. Seda ei saa hiljem muuta.",
     "Block anyone not part of %(serverName)s from ever joining this room.": "Keela kõikide niisuguste kasutajate liitumine selle jututoaga, kelle kasutajakonto ei asu %(serverName)s koduserveris.",
     "May include members not in %(communityName)s": "Siin võib leiduda kasutajaid, kes ei ole %(communityName)s kogukonna liikmed",
-    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Alusta vestust teise osapoolega tema nime, kasutajanime (näiteks <userId/>) või e-posti aadressi alusel. Sellega aga sa ei kutsu teda %(communityName)s kogukonna liikmeks. Kui soovid kedagi kutsuda %(communityName)s kogukonda, siis vajuta <a>siia</a>."
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Alusta vestust teise osapoolega tema nime, kasutajanime (näiteks <userId/>) või e-posti aadressi alusel. Sellega aga sa ei kutsu teda %(communityName)s kogukonna liikmeks. Kui soovid kedagi kutsuda %(communityName)s kogukonda, siis vajuta <a>siia</a>.",
+    "There was an error updating your community. The server is unable to process your request.": "Sinu kogukonna andmete uuendamisel tekkis viga. Server ei suuda sinu päringut töödelda.",
+    "Update community": "Uuenda kogukonda",
+    "Failed to find the general chat for this community": "Ei õnnestunud tuvastada selle kogukonna üldist rühmavestlust",
+    "Community settings": "Kogukonna seadistused",
+    "User settings": "Kasutaja seadistused",
+    "Community and user menu": "Kogukonna ja kasutaja menüü"
 }
