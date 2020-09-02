@@ -166,25 +166,6 @@ class TagOrderStore extends Store {
                     selectedTags: newTags,
                 });
 
-                if (!allowMultiple && newTags.length === 1) {
-                    // We're in prototype behaviour: select the general chat for the community
-                    const rooms = GroupStore.getGroupRooms(newTags[0])
-                        .map(r => MatrixClientPeg.get().getRoom(r.roomId))
-                        .filter(r => !!r);
-                    let chat = rooms.find(r => {
-                        const idState = r.currentState.getStateEvents("im.vector.general_chat", "");
-                        if (!idState || idState.getContent()['groupId'] !== newTags[0]) return false;
-                        return true;
-                    });
-                    if (!chat) chat = rooms[0];
-                    if (chat) {
-                        dis.dispatch({
-                            action: 'view_room',
-                            room_id: chat.roomId,
-                        });
-                    }
-                }
-
                 Analytics.trackEvent('FilterStore', 'select_tag');
             }
             break;
@@ -284,13 +265,6 @@ class TagOrderStore extends Store {
 
     getSelectedTags() {
         return this._state.selectedTags;
-    }
-
-    getSelectedPrototypeTag() {
-        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
-            return this.getSelectedTags()[0];
-        }
-        return null; // no selection as far as this function is concerned
     }
 }
 
