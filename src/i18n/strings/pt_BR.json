@@ -2289,5 +2289,11 @@
     "Unexpected server error trying to leave the room": "Erro inesperado no servidor, ao tentar sair da sala",
     "Error leaving room": "Erro ao sair da sala",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Protótipo da segunda versão das Comunidades. Requer servidor principal compatível. Altamente experimental - use com cautela.",
-    "Space": "Barra de espaço"
+    "Space": "Barra de espaço",
+    "People you know on %(brand)s": "Pessoas que você conhece em %(brand)s",
+    "Show": "Mostrar",
+    "Send %(count)s invites|other": "Enviar %(count)s convites",
+    "Send %(count)s invites|one": "Enviar %(count)s convite",
+    "Community ID: +<localpart />:%(domain)s": "ID da comunidade: +<localpart />:%(domain)s",
+    "Enter name": "Digitar nome"
 }
