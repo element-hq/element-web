@@ -332,7 +332,7 @@
     "Add": "Adicionar",
     "Error: Problem communicating with the given homeserver.": "Erro: problema de comunicação com o Servidor de Base fornecido.",
     "Failed to fetch avatar URL": "Falha ao obter o link da foto de perfil",
-    "Home": "Início",
+    "Home": "Home",
     "The phone number entered looks invalid": "O número de telefone inserido parece ser inválido",
     "Uploading %(filename)s and %(count)s others|zero": "Enviando o arquivo %(filename)s",
     "Uploading %(filename)s and %(count)s others|one": "Enviando o arquivo %(filename)s e %(count)s outros arquivos",
@@ -1700,7 +1700,7 @@
     "Verification Requests": "Solicitações de confirmação",
     "Integrations are disabled": "As integrações estão desativadas",
     "Integrations not allowed": "As integrações não estão permitidas",
-    "End": "Fim",
+    "End": "End",
     "List options": "Opções da Lista",
     "Jump to first unread room.": "Ir para a primeira sala não lida.",
     "Jump to first invite.": "Ir para o primeiro convite.",
@@ -2285,5 +2285,9 @@
     "Verified": "Confirmado",
     "Close dialog or context menu": "Fechar caixa de diálogo ou menu",
     "Try scrolling up in the timeline to see if there are any earlier ones.": "Tente rolar para cima na conversa para ver se há mensagens anteriores.",
-    "Navigate composer history": "Ver o histórico de mensagens enviadas no campo de texto"
+    "Navigate composer history": "Ver o histórico de mensagens enviadas no campo de texto",
+    "Unexpected server error trying to leave the room": "Erro inesperado no servidor, ao tentar sair da sala",
+    "Error leaving room": "Erro ao sair da sala",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "Protótipo da segunda versão das Comunidades. Requer servidor principal compatível. Altamente experimental - use com cautela.",
+    "Space": "Barra de espaço"
 }
