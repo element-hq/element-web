@@ -145,9 +145,10 @@ export default class EditCommunityPrototypeDialog extends React.PureComponent<IP
                                 ref={this.avatarUploadRef} accept="image/*"
                                 onChange={this.onAvatarChanged}
                             />
-                            <AccessibleButton onClick={this.onChangeAvatar} className="mx_EditCommunityPrototypeDialog_avatarContainer">
-                                {preview}
-                            </AccessibleButton>
+                            <AccessibleButton
+                                onClick={this.onChangeAvatar}
+                                className="mx_EditCommunityPrototypeDialog_avatarContainer"
+                            >{preview}</AccessibleButton>
                             <div className="mx_EditCommunityPrototypeDialog_tip">
                                 <b>{_t("Add image (optional)")}</b>
                                 <span>
