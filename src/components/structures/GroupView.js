@@ -1335,7 +1335,7 @@ export default createReactClass({
                         </div>
                         <GroupHeaderButtons />
                     </div>
-                    <MainSplit panel={rightPanel}>
+                    <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                         <AutoHideScrollbar className="mx_GroupView_body">
                             { this._getMembershipSection() }
                             { this._getGroupSection() }

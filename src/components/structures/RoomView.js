@@ -2096,10 +2096,7 @@ export default createReactClass({
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
                         />
-                        <MainSplit
-                            panel={rightPanel}
-                            resizeNotifier={this.props.resizeNotifier}
-                        >
+                        <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className={fadableSectionClasses}>
                                 {auxPanel}
                                 <div className={timelineClasses}>

@@ -166,7 +166,7 @@ export default createReactClass({
         this._pendingFillRequests = {b: null, f: null};
 
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+            this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
         }
 
         this.resetScrollState();
@@ -196,11 +196,12 @@ export default createReactClass({
         this.unmounted = true;
 
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+            this.props.resizeNotifier.removeListener("middlePanelResizedNoisy", this.onResize);
         }
     },
 
     onScroll: function(ev) {
+        if (this.props.resizeNotifier.isResizing) return; // skip scroll events caused by resizing
         debuglog("onScroll", this._getScrollNode().scrollTop);
         this._scrollTimeout.restart();
         this._saveScrollState();

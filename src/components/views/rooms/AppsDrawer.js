@@ -252,6 +252,7 @@ const PersistentVResizer = ({
         maxHeight={maxHeight}
         onResizeStart={() => {
             if (!resizing) setResizing(true);
+            resizeNotifier.startResizing();
         }}
         onResize={() => {
             resizeNotifier.notifyTimelineHeightChanged();
@@ -259,7 +260,7 @@ const PersistentVResizer = ({
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
             if (resizing) setResizing(false);
-            resizeNotifier.notifyTimelineHeightChanged();
+            resizeNotifier.stopResizing();
         }}
         handleWrapperClass={handleWrapperClass}
         handleClasses={{bottom: handleClass}}
