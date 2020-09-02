@@ -331,8 +331,14 @@ export default class ReplyThread extends React.Component {
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
                         'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
-                        'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
-                                      url={makeUserPermalink(ev.getSender())} shouldShowPillAvatar={true} />,
+                        'pill': (
+                            <Pill
+                                type={Pill.TYPE_USER_MENTION}
+                                room={room}
+                                url={makeUserPermalink(ev.getSender())}
+                                shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
+                            />
+                        ),
                     })
                 }
             </blockquote>;
