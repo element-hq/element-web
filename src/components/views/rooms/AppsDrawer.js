@@ -33,6 +33,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import classNames from 'classnames';
 import {Resizable} from "re-resizable";
 import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -43,6 +44,7 @@ export default createReactClass({
     propTypes: {
         userId: PropTypes.string.isRequired,
         room: PropTypes.object.isRequired,
+        resizeNotifier: PropTypes.instanceOf(ResizeNotifier).isRequired,
         showApps: PropTypes.bool, // Should apps be rendered
         hide: PropTypes.bool, // If rendered, should apps drawer be visible
     },
@@ -217,9 +219,10 @@ export default createReactClass({
                 <PersistentVResizer
                     id={"apps-drawer_" + this.props.room.roomId}
                     minHeight={100}
-                    maxHeight={this.props.maxHeight - 50}
+                    maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
                     handleClass="mx_AppsContainer_resizerHandle"
                     className="mx_AppsContainer"
+                    resizeNotifier={this.props.resizeNotifier}
                 >
                     { apps }
                     { spinner }
@@ -230,7 +233,16 @@ export default createReactClass({
     },
 });
 
-const PersistentVResizer = ({id, minHeight, maxHeight, className, handleWrapperClass, handleClass, children}) => {
+const PersistentVResizer = ({
+    id,
+    minHeight,
+    maxHeight,
+    className,
+    handleWrapperClass,
+    handleClass,
+    resizeNotifier,
+    children,
+}) => {
     const [height, setHeight] = useLocalStorageState("pvr_" + id, 100);
     const [resizing, setResizing] = useState(false);
 
@@ -241,9 +253,13 @@ const PersistentVResizer = ({id, minHeight, maxHeight, className, handleWrapperC
         onResizeStart={() => {
             if (!resizing) setResizing(true);
         }}
+        onResize={() => {
+            resizeNotifier.notifyTimelineHeightChanged();
+        }}
         onResizeStop={(e, dir, ref, d) => {
             setHeight(height + d.height);
             if (resizing) setResizing(false);
+            resizeNotifier.notifyTimelineHeightChanged();
         }}
         handleWrapperClass={handleWrapperClass}
         handleClasses={{bottom: handleClass}}

@@ -1886,15 +1886,19 @@ export default createReactClass({
         }
 
         const auxPanel = (
-            <AuxPanel room={this.state.room}
-              fullHeight={false}
-              userId={this.context.credentials.userId}
-              conferenceHandler={this.props.ConferenceHandler}
-              draggingFile={this.state.draggingFile}
-              displayConfCallNotification={this.state.displayConfCallNotification}
-              maxHeight={this.state.auxPanelMaxHeight}
-              showApps={this.state.showApps}
-              hideAppsDrawer={false} >
+            <AuxPanel
+                room={this.state.room}
+                fullHeight={false}
+                userId={this.context.credentials.userId}
+                conferenceHandler={this.props.ConferenceHandler}
+                draggingFile={this.state.draggingFile}
+                displayConfCallNotification={this.state.displayConfCallNotification}
+                maxHeight={this.state.auxPanelMaxHeight}
+                showApps={this.state.showApps}
+                hideAppsDrawer={false}
+                onResize={this.onResize}
+                resizeNotifier={this.props.resizeNotifier}
+            >
                 { aux }
             </AuxPanel>
         );

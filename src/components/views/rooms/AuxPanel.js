@@ -203,6 +203,7 @@ export default createReactClass({
             maxHeight={this.props.maxHeight}
             showApps={this.props.showApps}
             hide={this.props.hideAppsDrawer}
+            resizeNotifier={this.props.resizeNotifier}
         />;
 
         let stateViews = null;

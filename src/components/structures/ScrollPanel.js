@@ -210,6 +210,7 @@ export default createReactClass({
     },
 
     onResize: function() {
+        debuglog("onResize");
         this.checkScroll();
         // update preventShrinkingState if present
         if (this.preventShrinkingState) {
@@ -239,7 +240,6 @@ export default createReactClass({
         // when scrolled all the way down. E.g. Chrome 72 on debian.
         // so check difference <= 1;
         return Math.abs(sn.scrollHeight - (sn.scrollTop + sn.clientHeight)) <= 1;
-
     },
 
     // returns the vertical height in the given direction that can be removed from
