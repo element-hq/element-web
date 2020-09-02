@@ -2167,5 +2167,6 @@
     "Enter recovery key": "Skriv in återställningsnyckel",
     "This looks like a valid recovery key!": "Det här ser ut som en giltig återställningsnyckel!",
     "Not a valid recovery key": "Inte en giltig återställningsnyckel",
-    "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Varning</b>: Du bör endast sätta upp nyckelsäkerhetskopiering från en betrodd dator."
+    "<b>Warning</b>: You should only set up key backup from a trusted computer.": "<b>Varning</b>: Du bör endast sätta upp nyckelsäkerhetskopiering från en betrodd dator.",
+    "Access your secure message history and set up secure messaging by entering your recovery key.": "Kom åt din säkra meddelandehistorik och sätt upp säker kommunikation genom att skriva in din återställningsnyckel."
 }
