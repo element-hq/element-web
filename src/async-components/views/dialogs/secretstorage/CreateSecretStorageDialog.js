@@ -22,7 +22,7 @@ import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import FileSaver from 'file-saver';
 import {_t, _td} from '../../../../languageHandler';
 import Modal from '../../../../Modal';
-import { promptForBackupPassphrase } from '../../../../CrossSigningManager';
+import { promptForBackupPassphrase } from '../../../../SecurityManager';
 import {copyNode} from "../../../../utils/strings";
 import {SSOAuthEntry} from "../../../../components/views/auth/InteractiveAuthEntryComponents";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";

@@ -21,7 +21,7 @@ import * as sdk from './index';
 import { _t } from './languageHandler';
 import {RightPanelPhases} from "./stores/RightPanelStorePhases";
 import {findDMForUser} from './createRoom';
-import {accessSecretStorage} from './CrossSigningManager';
+import {accessSecretStorage} from './SecurityManager';
 import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import {Action} from './dispatcher/actions';
 

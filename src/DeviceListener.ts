@@ -30,7 +30,7 @@ import {
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
 import { privateShouldBeEncrypted } from "./createRoom";
-import { isSecretStorageBeingAccessed, accessSecretStorage } from "./CrossSigningManager";
+import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
 
