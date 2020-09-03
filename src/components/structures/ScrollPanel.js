@@ -97,7 +97,7 @@ export default createReactClass({
 
         /* startAtBottom: if set to true, the view is assumed to start
          * scrolled to the bottom.
-         * XXX: It's likley this is unecessary and can be derived from
+         * XXX: It's likely this is unnecessary and can be derived from
          * stickyBottom, but I'm adding an extra parameter to ensure
          * behaviour stays the same for other uses of ScrollPanel.
          * If so, let's remove this parameter down the line.
@@ -141,6 +141,7 @@ export default createReactClass({
         /* style: styles to add to the top-level div
          */
         style: PropTypes.object,
+
         /* resizeNotifier: ResizeNotifier to know when middle column has changed size
          */
         resizeNotifier: PropTypes.object,
