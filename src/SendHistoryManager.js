@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import _clamp from 'lodash/clamp';
+import {clamp} from "lodash";
 
 export default class SendHistoryManager {
     history: Array<HistoryItem> = [];
@@ -54,7 +54,7 @@ export default class SendHistoryManager {
     }
 
     getItem(offset: number): ?HistoryItem {
-        this.currentIndex = _clamp(this.currentIndex + offset, 0, this.history.length - 1);
+        this.currentIndex = clamp(this.currentIndex + offset, 0, this.history.length - 1);
         return this.history[this.currentIndex];
     }
 }
