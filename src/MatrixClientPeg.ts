@@ -31,7 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import { crossSigningCallbacks } from './CrossSigningManager';
+import { cacheDehydrationKey, crossSigningCallbacks } from './CrossSigningManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 export interface IMatrixClientCreds {
@@ -270,32 +270,42 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         };
 
         if (creds.olmAccount) {
+            console.log("got a dehydrated account");
             opts.deviceToImport = {
                 olmDevice: {
-                    pickledAccount: creds.olmAccount.pickle("DEFAULT_KEY"),
+                    pickledAccount: creds.olmAccount.pickle(creds.pickleKey || "DEFAULT_KEY"),
                     sessions: [],
-                    pickleKey: "DEFAULT_KEY",
+                    pickleKey: creds.pickleKey || "DEFAULT_KEY",
                 },
                 userId: creds.userId,
                 deviceId: creds.deviceId,
             };
+            creds.olmAccount.free();
         } else {
             opts.userId = creds.userId;
             opts.deviceId = creds.deviceId;
         }
-
-        // FIXME: modify crossSigningCallbacks.getSecretStorageKey so that it tries using rehydrationkey and/or saves the passphrase info
 
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
         Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
 
-        this.matrixClient = createMatrixClient(opts);
+        // set dehydration key after cross-signing gets set up -- we wait until
+        // cross-signing is set up because we want to cross-sign the dehydrated
+        // key
+        const origGetSecretStorageKey = opts.cryptoCallbacks.getSecretStorageKey
+        opts.cryptoCallbacks.getSecretStorageKey = async (keyinfo, ssssItemName) => {
+            const [name, key] = await origGetSecretStorageKey(keyinfo, ssssItemName);
+            this.matrixClient.setDehydrationKey(key, {passphrase: keyinfo.keys[name].passphrase});
+            return [name, key];
+        }
 
         if (creds.rehydrationKey) {
-            this.matrixClient.cacheDehydrationKey(creds.rehydrationKey, creds.rehydrationKeyInfo || {});
+            cacheDehydrationKey(creds.rehydrationKey, creds.rehydrationKeyInfo);
         }
+
+        this.matrixClient = createMatrixClient(opts);
 
         // we're going to add eventlisteners for each matrix event tile, so the
         // potential number of event listeners is quite high.

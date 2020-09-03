@@ -30,6 +30,16 @@ import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 let secretStorageKeys = {};
 let secretStorageBeingAccessed = false;
 
+let dehydrationInfo = {};
+
+export function cacheDehydrationKey(key, keyInfo = {}) {
+    dehydrationInfo = {key, keyInfo};
+}
+
+export function getDehydrationKeyCache() {
+    return dehydrationInfo;
+}
+
 function isCachingAllowed() {
     return secretStorageBeingAccessed;
 }
@@ -62,6 +72,22 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     // Check the in-memory cache
     if (isCachingAllowed() && secretStorageKeys[name]) {
         return [name, secretStorageKeys[name]];
+    }
+
+    // if we dehydrated a device, see if that key works for SSSS
+    if (dehydrationInfo.key) {
+        try {
+            if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationInfo.key, info)) {
+                const key = dehydrationInfo.key;
+                // Save to cache to avoid future prompts in the current session
+                if (isCachingAllowed()) {
+                    secretStorageKeys[name] = key;
+                }
+                dehydrationInfo = {};
+                return [name, key];
+            }
+        } catch {}
+        dehydrationInfo = {};
     }
 
     const inputToKey = async ({ passphrase, recoveryKey }) => {

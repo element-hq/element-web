@@ -20,7 +20,12 @@ limitations under the License.
 
 import Modal from './Modal';
 import * as sdk from './index';
-import { AccessCancelledError, confirmToDismiss } from "./CrossSigningManager";
+import {
+    AccessCancelledError,
+    cacheDehydrationKey,
+    confirmToDismiss,
+    getDehydrationKeyCache,
+} from "./CrossSigningManager";
 import Matrix from "matrix-js-sdk";
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
@@ -164,9 +169,6 @@ export default class Login {
  * @returns {MatrixClientCreds}
  */
 export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
-    let rehydrationKeyInfo;
-    let rehydrationKey;
-
     const client = Matrix.createClient({
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
@@ -190,14 +192,16 @@ export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
         }
     }
 
+    const dehydrationKeyCache = getDehydrationKeyCache();
+
     return {
         homeserverUrl: hsUrl,
         identityServerUrl: isUrl,
         userId: data.user_id,
         deviceId: data.device_id,
         accessToken: data.access_token,
-        rehydrationKeyInfo,
-        rehydrationKey,
+        rehydrationKeyInfo: dehydrationKeyCache.keyInfo,
+        rehydrationKey: dehydrationKeyCache.key,
         olmAccount: data._olm_account,
     };
 }
@@ -243,5 +247,7 @@ async function getDehydrationKey(keyInfo) {
         throw new AccessCancelledError();
     }
     const key = await inputToKey(input);
+    // need to copy the key because rehydration (unpickling) will clobber it
+    cacheDehydrationKey(new Uint8Array(key), keyInfo);
     return key;
 }
