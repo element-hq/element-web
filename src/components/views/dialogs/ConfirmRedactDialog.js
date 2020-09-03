@@ -15,17 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
 /*
  * A dialog for confirming a redaction.
  */
-export default createReactClass({
-    displayName: 'ConfirmRedactDialog',
-
-    render: function() {
+export default class ConfirmRedactDialog extends React.Component {
+    render() {
         const QuestionDialog = sdk.getComponent('views.dialogs.QuestionDialog');
         return (
             <QuestionDialog onFinished={this.props.onFinished}
@@ -36,5 +33,5 @@ export default createReactClass({
                 button={_t("Remove")}>
             </QuestionDialog>
         );
-    },
-});
+    }
+}

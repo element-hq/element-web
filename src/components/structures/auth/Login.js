@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import {_t, _td} from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -53,13 +52,11 @@ _td("Invalid base_url for m.identity_server");
 _td("Identity server URL does not appear to be a valid identity server");
 _td("General failure");
 
-/**
+/*
  * A wire component which glues together login UI components and Login logic
  */
-export default createReactClass({
-    displayName: 'Login',
-
-    propTypes: {
+export default class LoginComponent extends React.Component {
+    static propTypes = {
         // Called when the user has logged in. Params:
         // - The object returned by the login API
         // - The user's password, if applicable, (may be cached in memory for a
@@ -85,10 +82,14 @@ export default createReactClass({
 
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         isSyncing: PropTypes.bool,
-    },
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this._unmounted = false;
+
+        this.state = {
             busy: false,
             busyLoggingIn: null,
             errorText: null,
@@ -113,11 +114,6 @@ export default createReactClass({
             serverErrorIsFatal: false,
             serverDeadError: "",
         };
-    },
-
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount: function() {
-        this._unmounted = false;
 
         // map from login step type to a function which will render a control
         // letting you do that login type
@@ -130,33 +126,32 @@ export default createReactClass({
         };
 
         this._initLoginLogic();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         // Ensure that we end up actually logging in to the right place
         this._initLoginLogic(newProps.serverConfig.hsUrl, newProps.serverConfig.isUrl);
-    },
+    }
 
-    onPasswordLoginError: function(errorText) {
+    onPasswordLoginError = errorText => {
         this.setState({
             errorText,
             loginIncorrect: Boolean(errorText),
         });
-    },
+    };
 
-    isBusy: function() {
-        return this.state.busy || this.props.busy;
-    },
+    isBusy = () => this.state.busy || this.props.busy;
 
-    onPasswordLogin: async function(username, phoneCountry, phoneNumber, password) {
+    onPasswordLogin = async (username, phoneCountry, phoneNumber, password) => {
         if (!this.state.serverIsAlive) {
             this.setState({busy: true});
             // Do a quick liveliness check on the URLs
@@ -263,13 +258,13 @@ export default createReactClass({
                 loginIncorrect: error.httpStatus === 401 || error.httpStatus === 403,
             });
         });
-    },
+    };
 
-    onUsernameChanged: function(username) {
+    onUsernameChanged = username => {
         this.setState({ username: username });
-    },
+    };
 
-    onUsernameBlur: async function(username) {
+    onUsernameBlur = async username => {
         const doWellknownLookup = username[0] === "@";
         this.setState({
             username: username,
@@ -314,19 +309,19 @@ export default createReactClass({
                 });
             }
         }
-    },
+    };
 
-    onPhoneCountryChanged: function(phoneCountry) {
+    onPhoneCountryChanged = phoneCountry => {
         this.setState({ phoneCountry: phoneCountry });
-    },
+    };
 
-    onPhoneNumberChanged: function(phoneNumber) {
+    onPhoneNumberChanged = phoneNumber => {
         this.setState({
             phoneNumber: phoneNumber,
         });
-    },
+    };
 
-    onPhoneNumberBlur: function(phoneNumber) {
+    onPhoneNumberBlur = phoneNumber => {
         // Validate the phone number entered
         if (!PHONE_NUMBER_REGEX.test(phoneNumber)) {
             this.setState({
@@ -339,15 +334,15 @@ export default createReactClass({
                 canTryLogin: true,
             });
         }
-    },
+    };
 
-    onRegisterClick: function(ev) {
+    onRegisterClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onRegisterClick();
-    },
+    };
 
-    onTryRegisterClick: function(ev) {
+    onTryRegisterClick = ev => {
         const step = this._getCurrentFlowStep();
         if (step === 'm.login.sso' || step === 'm.login.cas') {
             // If we're showing SSO it means that registration is also probably disabled,
@@ -361,23 +356,23 @@ export default createReactClass({
             // Don't intercept - just go through to the register page
             this.onRegisterClick(ev);
         }
-    },
+    };
 
-    async onServerDetailsNextPhaseClick() {
+    onServerDetailsNextPhaseClick = () => {
         this.setState({
             phase: PHASE_LOGIN,
         });
-    },
+    };
 
-    onEditServerDetailsClick(ev) {
+    onEditServerDetailsClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
             phase: PHASE_SERVER_DETAILS,
         });
-    },
+    };
 
-    _initLoginLogic: async function(hsUrl, isUrl) {
+    async _initLoginLogic(hsUrl, isUrl) {
         hsUrl = hsUrl || this.props.serverConfig.hsUrl;
         isUrl = isUrl || this.props.serverConfig.isUrl;
 
@@ -465,9 +460,9 @@ export default createReactClass({
                 busy: false,
             });
         });
-    },
+    }
 
-    _isSupportedFlow: function(flow) {
+    _isSupportedFlow(flow) {
         // technically the flow can have multiple steps, but no one does this
         // for login and loginLogic doesn't support it so we can ignore it.
         if (!this._stepRendererMap[flow.type]) {
@@ -475,11 +470,11 @@ export default createReactClass({
             return false;
         }
         return true;
-    },
+    }
 
-    _getCurrentFlowStep: function() {
+    _getCurrentFlowStep() {
         return this._loginLogic ? this._loginLogic.getCurrentFlowStep() : null;
-    },
+    }
 
     _errorTextFromError(err) {
         let errCode = err.errcode;
@@ -526,7 +521,7 @@ export default createReactClass({
         }
 
         return errorText;
-    },
+    }
 
     renderServerComponent() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
@@ -552,7 +547,7 @@ export default createReactClass({
             delayTimeMs={250}
             {...serverDetailsProps}
         />;
-    },
+    }
 
     renderLoginComponentForStep() {
         if (PHASES_ENABLED && this.state.phase !== PHASE_LOGIN) {
@@ -572,9 +567,9 @@ export default createReactClass({
         }
 
         return null;
-    },
+    }
 
-    _renderPasswordStep: function() {
+    _renderPasswordStep = () => {
         const PasswordLogin = sdk.getComponent('auth.PasswordLogin');
 
         let onEditServerDetailsClick = null;
@@ -603,9 +598,9 @@ export default createReactClass({
                busy={this.props.isSyncing || this.state.busyLoggingIn}
             />
         );
-    },
+    };
 
-    _renderSsoStep: function(loginType) {
+    _renderSsoStep = loginType => {
         const SignInToText = sdk.getComponent('views.auth.SignInToText');
 
         let onEditServerDetailsClick = null;
@@ -634,9 +629,9 @@ export default createReactClass({
                 />
             </div>
         );
-    },
+    };
 
-    render: function() {
+    render() {
         const Loader = sdk.getComponent("elements.Spinner");
         const InlineSpinner = sdk.getComponent("elements.InlineSpinner");
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
@@ -704,5 +699,5 @@ export default createReactClass({
                 </AuthBody>
             </AuthPage>
         );
-    },
-});
+    }
+}

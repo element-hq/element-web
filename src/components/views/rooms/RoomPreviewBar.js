@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -46,10 +45,8 @@ const MessageCase = Object.freeze({
     OtherError: "OtherError",
 });
 
-export default createReactClass({
-    displayName: 'RoomPreviewBar',
-
-    propTypes: {
+export default class RoomPreviewBar extends React.Component {
+    static propTypes = {
         onJoinClick: PropTypes.func,
         onRejectClick: PropTypes.func,
         onRejectAndIgnoreClick: PropTypes.func,
@@ -86,36 +83,32 @@ export default createReactClass({
         // If given, this will be how the room is referred to (eg.
         // in error messages).
         roomAlias: PropTypes.string,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            onJoinClick: function() {},
-        };
-    },
+    static defaultProps = {
+        onJoinClick() {},
+    };
 
-    getInitialState: function() {
-        return {
-            busy: false,
-        };
-    },
+    state = {
+        busy: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._checkInvitedEmail();
         CommunityPrototypeStore.instance.on(UPDATE_EVENT, this._onCommunityUpdate);
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.props.invitedEmail !== prevProps.invitedEmail || this.props.inviterName !== prevProps.inviterName) {
             this._checkInvitedEmail();
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         CommunityPrototypeStore.instance.off(UPDATE_EVENT, this._onCommunityUpdate);
-    },
+    }
 
-    _checkInvitedEmail: async function() {
+    async _checkInvitedEmail() {
         // If this is an invite and we've been told what email address was
         // invited, fetch the user's account emails and discovery bindings so we
         // can check them against the email that was invited.
@@ -148,14 +141,14 @@ export default createReactClass({
             }
             this.setState({busy: false});
         }
-    },
+    }
 
-    _onCommunityUpdate: function (roomId) {
+    _onCommunityUpdate = (roomId) => {
         if (this.props.room && this.props.room.roomId !== roomId) {
             return;
         }
         this.forceUpdate(); // we have nothing to update
-    },
+    };
 
     _getMessageCase() {
         const isGuest = MatrixClientPeg.get().isGuest();
@@ -207,7 +200,7 @@ export default createReactClass({
         } else {
             return MessageCase.ViewingRoom;
         }
-    },
+    }
 
     _getKickOrBanInfo() {
         const myMember = this._getMyMember();
@@ -221,9 +214,9 @@ export default createReactClass({
             kickerMember.name : myMember.events.member.getSender();
         const reason = myMember.events.member.getContent().reason;
         return {memberName, reason};
-    },
+    }
 
-    _joinRule: function() {
+    _joinRule() {
         const room = this.props.room;
         if (room) {
             const joinRules = room.currentState.getStateEvents('m.room.join_rules', '');
@@ -231,14 +224,14 @@ export default createReactClass({
                 return joinRules.getContent().join_rule;
             }
         }
-    },
+    }
 
-    _communityProfile: function() {
+    _communityProfile() {
         if (this.props.room) return CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
         return {displayName: null, avatarMxc: null};
-    },
+    }
 
-    _roomName: function(atStart = false) {
+    _roomName(atStart = false) {
         let name = this.props.room ? this.props.room.name : this.props.roomAlias;
         const profile = this._communityProfile();
         if (profile.displayName) name = profile.displayName;
@@ -249,16 +242,16 @@ export default createReactClass({
         } else {
             return _t("this room");
         }
-    },
+    }
 
     _getMyMember() {
         return (
             this.props.room &&
             this.props.room.getMember(MatrixClientPeg.get().getUserId())
         );
-    },
+    }
 
-    _getInviteMember: function() {
+    _getInviteMember() {
         const {room} = this.props;
         if (!room) {
             return;
@@ -270,7 +263,7 @@ export default createReactClass({
         }
         const inviterUserId = inviteEvent.events.member.getSender();
         return room.currentState.getMember(inviterUserId);
-    },
+    }
 
     _isDMInvite() {
         const myMember = this._getMyMember();
@@ -280,7 +273,7 @@ export default createReactClass({
         const memberEvent = myMember.events.member;
         const memberContent = memberEvent.getContent();
         return memberContent.membership === "invite" && memberContent.is_direct;
-    },
+    }
 
     _makeScreenAfterLogin() {
         return {
@@ -293,17 +286,17 @@ export default createReactClass({
                 inviter_name: this.props.oobData ? this.props.oobData.inviterName : null,
             }
         };
-    },
+    }
 
-    onLoginClick: function() {
+    onLoginClick = () => {
         dis.dispatch({ action: 'start_login', screenAfterLogin: this._makeScreenAfterLogin() });
-    },
+    };
 
-    onRegisterClick: function() {
+    onRegisterClick = () => {
         dis.dispatch({ action: 'start_registration', screenAfterLogin: this._makeScreenAfterLogin() });
-    },
+    };
 
-    render: function() {
+    render() {
         const brand = SdkConfig.get().brand;
         const Spinner = sdk.getComponent('elements.Spinner');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
@@ -597,5 +590,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

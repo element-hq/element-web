@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import * as Email from '../../../email';
@@ -25,31 +24,28 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 
 
-/**
+/*
  * Prompt the user to set an email address.
  *
  * On success, `onFinished(true)` is called.
  */
-export default createReactClass({
-    displayName: 'SetEmailDialog',
-    propTypes: {
+export default class SetEmailDialog extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            emailAddress: '',
-            emailBusy: false,
-        };
-    },
+    state = {
+        emailAddress: '',
+        emailBusy: false,
+    };
 
-    onEmailAddressChanged: function(value) {
+    onEmailAddressChanged = value => {
         this.setState({
             emailAddress: value,
         });
-    },
+    };
 
-    onSubmit: function() {
+    onSubmit = () => {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
 
@@ -81,21 +77,21 @@ export default createReactClass({
             });
         });
         this.setState({emailBusy: true});
-    },
+    };
 
-    onCancelled: function() {
+    onCancelled = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    onEmailDialogFinished: function(ok) {
+    onEmailDialogFinished = ok => {
         if (ok) {
             this.verifyEmailAddress();
         } else {
             this.setState({emailBusy: false});
         }
-    },
+    };
 
-    verifyEmailAddress: function() {
+    verifyEmailAddress() {
         this._addThreepid.checkEmailLinkClicked().then(() => {
             this.props.onFinished(true);
         }, (err) => {
@@ -119,9 +115,9 @@ export default createReactClass({
                 });
             }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const Spinner = sdk.getComponent('elements.Spinner');
         const EditableText = sdk.getComponent('elements.EditableText');
@@ -161,5 +157,5 @@ export default createReactClass({
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

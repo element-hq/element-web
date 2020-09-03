@@ -16,14 +16,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 
-export default createReactClass({
-    displayName: 'CustomServerDialog',
-
-    render: function() {
+export default class CustomServerDialog extends React.Component {
+    render() {
         const brand = SdkConfig.get().brand;
         return (
             <div className="mx_ErrorDialog">
@@ -46,5 +43,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

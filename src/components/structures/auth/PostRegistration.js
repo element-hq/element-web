@@ -15,29 +15,24 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import AuthPage from "../../views/auth/AuthPage";
 
-export default createReactClass({
-    displayName: 'PostRegistration',
-
-    propTypes: {
+export default class PostRegistration extends React.Component {
+    static propTypes = {
         onComplete: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            avatarUrl: null,
-            errorString: null,
-            busy: false,
-        };
-    },
+    state = {
+        avatarUrl: null,
+        errorString: null,
+        busy: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         // There is some assymetry between ChangeDisplayName and ChangeAvatar,
         // as ChangeDisplayName will auto-get the name but ChangeAvatar expects
         // the URL to be passed to you (because it's also used for room avatars).
@@ -55,9 +50,9 @@ export default createReactClass({
                 busy: false,
             });
         });
-    },
+    }
 
-    render: function() {
+    render() {
         const ChangeDisplayName = sdk.getComponent('settings.ChangeDisplayName');
         const ChangeAvatar = sdk.getComponent('settings.ChangeAvatar');
         const AuthHeader = sdk.getComponent('auth.AuthHeader');
@@ -78,5 +73,5 @@ export default createReactClass({
                 </AuthBody>
             </AuthPage>
         );
-    },
-});
+    }
+}

@@ -18,17 +18,14 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import * as sdk from "../../../index";
 import {MatrixEvent} from "matrix-js-sdk";
 import {isValid3pidInvite} from "../../../RoomInvite";
 
-export default createReactClass({
-    displayName: 'MemberEventListSummary',
-
-    propTypes: {
+export default class MemberEventListSummary extends React.Component {
+    static propTypes = {
         // An array of member events to summarise
         events: PropTypes.arrayOf(PropTypes.instanceOf(MatrixEvent)).isRequired,
         // An array of EventTiles to render when expanded
@@ -43,17 +40,15 @@ export default createReactClass({
         onToggle: PropTypes.func,
         // Whether or not to begin with state.expanded=true
         startExpanded: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            summaryLength: 1,
-            threshold: 3,
-            avatarsMaxLength: 5,
-        };
-    },
+    static defaultProps = {
+        summaryLength: 1,
+        threshold: 3,
+        avatarsMaxLength: 5,
+    };
 
-    shouldComponentUpdate: function(nextProps) {
+    shouldComponentUpdate(nextProps) {
         // Update if
         //  - The number of summarised events has changed
         //  - or if the summary is about to toggle to become collapsed
@@ -62,7 +57,7 @@ export default createReactClass({
             nextProps.events.length !== this.props.events.length ||
             nextProps.events.length < this.props.threshold
         );
-    },
+    }
 
     /**
      * Generate the text for users aggregated by their transition sequences (`eventAggregates`) where
@@ -73,7 +68,7 @@ export default createReactClass({
      * `Object.keys(eventAggregates)`.
      * @returns {string} the textual summary of the aggregated events that occurred.
      */
-    _generateSummary: function(eventAggregates, orderedTransitionSequences) {
+    _generateSummary(eventAggregates, orderedTransitionSequences) {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this._renderNameList(userNames);
@@ -105,7 +100,7 @@ export default createReactClass({
         }
 
         return summaries.join(", ");
-    },
+    }
 
     /**
      * @param {string[]} users an array of user display names or user IDs.
@@ -113,9 +108,9 @@ export default createReactClass({
      * more items in `users` than `this.props.summaryLength`, which is the number of names
      * included before "and [n] others".
      */
-    _renderNameList: function(users) {
+    _renderNameList(users) {
         return formatCommaSeparatedList(users, this.props.summaryLength);
-    },
+    }
 
     /**
      * Canonicalise an array of transitions such that some pairs of transitions become
@@ -124,7 +119,7 @@ export default createReactClass({
      * @param {string[]} transitions an array of transitions.
      * @returns {string[]} an array of transitions.
      */
-    _getCanonicalTransitions: function(transitions) {
+    _getCanonicalTransitions(transitions) {
         const modMap = {
             'joined': {
                 'after': 'left',
@@ -155,7 +150,7 @@ export default createReactClass({
             res.push(transition);
         }
         return res;
-    },
+    }
 
     /**
      * Transform an array of transitions into an array of transitions and how many times
@@ -171,7 +166,7 @@ export default createReactClass({
      * @param {string[]} transitions the array of transitions to transform.
      * @returns {object[]} an array of coalesced transitions.
      */
-    _coalesceRepeatedTransitions: function(transitions) {
+    _coalesceRepeatedTransitions(transitions) {
         const res = [];
         for (let i = 0; i < transitions.length; i++) {
             if (res.length > 0 && res[res.length - 1].transitionType === transitions[i]) {
@@ -184,7 +179,7 @@ export default createReactClass({
             }
         }
         return res;
-    },
+    }
 
     /**
      * For a certain transition, t, describe what happened to the users that
@@ -268,11 +263,11 @@ export default createReactClass({
         }
 
         return res;
-    },
+    }
 
-    _getTransitionSequence: function(events) {
+    _getTransitionSequence(events) {
         return events.map(this._getTransition);
-    },
+    }
 
     /**
      * Label a given membership event, `e`, where `getContent().membership` has
@@ -282,7 +277,7 @@ export default createReactClass({
      * @returns {string?} the transition type given to this event. This defaults to `null`
      * if a transition is not recognised.
      */
-    _getTransition: function(e) {
+    _getTransition(e) {
         if (e.mxEvent.getType() === 'm.room.third_party_invite') {
             // Handle 3pid invites the same as invites so they get bundled together
             if (!isValid3pidInvite(e.mxEvent)) {
@@ -323,9 +318,9 @@ export default createReactClass({
                 }
             default: return null;
         }
-    },
+    }
 
-    _getAggregate: function(userEvents) {
+    _getAggregate(userEvents) {
         // A map of aggregate type to arrays of display names. Each aggregate type
         // is a comma-delimited string of transitions, e.g. "joined,left,kicked".
         // The array of display names is the array of users who went through that
@@ -364,9 +359,9 @@ export default createReactClass({
             names: aggregate,
             indices: aggregateIndices,
         };
-    },
+    }
 
-    render: function() {
+    render() {
         const eventsToRender = this.props.events;
 
         // Map user IDs to an array of objects:
@@ -420,5 +415,5 @@ export default createReactClass({
             children={this.props.children}
             summaryMembers={avatarMembers}
             summaryText={this._generateSummary(aggregate.names, orderedTransitionSequences)} />;
-    },
-});
+    }
+}
