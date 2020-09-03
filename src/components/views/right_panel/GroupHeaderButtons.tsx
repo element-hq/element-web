@@ -46,8 +46,6 @@ export default class GroupHeaderButtons extends HeaderButtons {
     }
 
     protected onAction(payload: ActionPayload) {
-        super.onAction(payload);
-
         if (payload.action === Action.ViewUser) {
             if ((payload as ViewUserPayload).member) {
                 this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});

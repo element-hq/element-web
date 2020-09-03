@@ -36,13 +36,9 @@ const MEMBER_PHASES = [
 export default class RoomHeaderButtons extends HeaderButtons {
     constructor(props) {
         super(props, HeaderKind.Room);
-        this.onMembersClicked = this.onMembersClicked.bind(this);
-        this.onFilesClicked = this.onFilesClicked.bind(this);
-        this.onNotificationsClicked = this.onNotificationsClicked.bind(this);
     }
 
     protected onAction(payload: ActionPayload) {
-        super.onAction(payload);
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
                 this.setPhase(RightPanelPhases.RoomMemberInfo, {member: payload.member});
