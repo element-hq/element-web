@@ -2452,5 +2452,13 @@
     "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "私人聊天室僅能透過邀請找到與加入。公開聊天室則任何在此社群的人都可以找到並加入。",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "如果聊天室僅用於與在您的家伺服器上的內部團隊協作的話，可以啟用此功能。這無法在稍後變更。",
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "如果聊天室會用於與有自己的家伺服器的外部團隊協作的話，可以停用此功能。這無法在稍後變更。",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "阻止任何不屬於 %(serverName)s 的人加入此聊天室。"
+    "Block anyone not part of %(serverName)s from ever joining this room.": "阻止任何不屬於 %(serverName)s 的人加入此聊天室。",
+    "There was an error updating your community. The server is unable to process your request.": "更新您的社群時發生錯誤。伺服器無法處理您的請求。",
+    "Update community": "更新社群",
+    "May include members not in %(communityName)s": "可能包含不在 %(communityName)s 中的成員",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "使用某人的名稱、使用者名稱（如 <userId/>）或電子郵件地址開始與他們對話。這不會邀請他們加入 %(communityName)s。要邀請某人加入 %(communityName)s，請點擊<a>此處</a>。",
+    "Failed to find the general chat for this community": "找不到此社群的一般聊天紀錄",
+    "Community settings": "社群設定",
+    "User settings": "使用者設定",
+    "Community and user menu": "社群與使用者選單"
 }
