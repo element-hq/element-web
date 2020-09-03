@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, {createRef, KeyboardEvent} from 'react';
 import classNames from 'classnames';
-import flatMap from 'lodash/flatMap';
+import {flatMap} from "lodash";
 import {ICompletion, ISelectionRange, IProviderCompletions} from '../../../autocomplete/Autocompleter';
 import {Room} from 'matrix-js-sdk/src/models/room';
 

@@ -27,6 +27,7 @@ import rate_limited_func from "../../../ratelimitedfunc";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import CallHandler from "../../../CallHandler";
+import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -464,10 +465,16 @@ export default createReactClass({
                 }
             }
 
+            let inviteButtonText = _t("Invite to this room");
+            const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
+            if (chat && chat.roomId === this.props.roomId) {
+                inviteButtonText = _t("Invite to this community");
+            }
+
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
-                    <span>{ _t('Invite to this room') }</span>
+                    <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
 

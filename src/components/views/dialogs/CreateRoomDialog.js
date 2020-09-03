@@ -25,8 +25,7 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import {Key} from "../../../Keyboard";
 import {privateShouldBeEncrypted} from "../../../createRoom";
-import TagOrderStore from "../../../stores/TagOrderStore";
-import GroupStore from "../../../stores/GroupStore";
+import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 
 export default createReactClass({
     displayName: 'CreateRoomDialog',
@@ -72,8 +71,8 @@ export default createReactClass({
             opts.encryption = this.state.isEncrypted;
         }
 
-        if (TagOrderStore.getSelectedPrototypeTag()) {
-            opts.associatedWithCommunity = TagOrderStore.getSelectedPrototypeTag();
+        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
+            opts.associatedWithCommunity = CommunityPrototypeStore.instance.getSelectedCommunityId();
         }
 
         return opts;
@@ -198,7 +197,7 @@ export default createReactClass({
             "Private rooms can be found and joined by invitation only. Public rooms can be " +
             "found and joined by anyone.",
         )}</p>;
-        if (TagOrderStore.getSelectedPrototypeTag()) {
+        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
             publicPrivateLabel = <p>{_t(
                 "Private rooms can be found and joined by invitation only. Public rooms can be " +
                 "found and joined by anyone in this community.",
@@ -239,9 +238,8 @@ export default createReactClass({
         }
 
         let title = this.state.isPublic ? _t('Create a public room') : _t('Create a private room');
-        if (TagOrderStore.getSelectedPrototypeTag()) {
-            const summary = GroupStore.getSummary(TagOrderStore.getSelectedPrototypeTag());
-            const name = summary?.profile?.name || TagOrderStore.getSelectedPrototypeTag();
+        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
+            const name = CommunityPrototypeStore.instance.getSelectedCommunityName();
             title = _t("Create a room in %(communityName)s", {communityName: name});
         }
         return (
