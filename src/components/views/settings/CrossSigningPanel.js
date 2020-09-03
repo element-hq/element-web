@@ -163,8 +163,8 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
-            const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
-            summarisedStatus = <p><InlineSpinner /></p>;
+            const Spinner = sdk.getComponent('views.elements.Spinner');
+            summarisedStatus = <Spinner />;
         } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = <p>{_t(
                 "Your homeserver does not support cross-signing.",
