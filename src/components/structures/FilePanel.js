@@ -216,7 +216,7 @@ class FilePanel extends React.Component {
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
                 <div className="mx_FilePanel" role="tabpanel">
-                    <TimelinePanel key={"filepanel_" + this.props.roomId}
+                    <TimelinePanel
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state.timelineSet}
