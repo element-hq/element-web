@@ -21,6 +21,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {Room} from "matrix-js-sdk/src/models/room";
+
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
@@ -34,7 +36,7 @@ import {Action} from "../../dispatcher/actions";
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {
-            room: PropTypes.string, // if showing panels for a given room, this is set
+            room: PropTypes.instanceOf(Room), // if showing panels for a given room, this is set
             groupId: PropTypes.string, // if showing panels for a given group, this is set
             user: PropTypes.object, // used if we know the user ahead of opening the panel
         };
