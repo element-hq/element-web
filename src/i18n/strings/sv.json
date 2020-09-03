@@ -2212,5 +2212,11 @@
     "Create a Group Chat": "Skapa en gruppchatt",
     "Explore rooms": "Utforska rum",
     "Self-verification request": "Självverifieringsförfrågan",
-    "%(creator)s created and configured the room.": "%(creator)s skapade och konfigurerade rummet."
+    "%(creator)s created and configured the room.": "%(creator)s skapade och konfigurerade rummet.",
+    "You’re all caught up": "Du är ikapp",
+    "You have no visible notifications in this room.": "Du har inga synliga aviseringar i det här rummet.",
+    "%(brand)s failed to get the protocol list from the homeserver. The homeserver may be too old to support third party networks.": "%(brand)s misslyckades att hämta protokollistan från hemservern. Hemservern kan vara för gammal för att stödja tredjepartsnätverk.",
+    "%(brand)s failed to get the public room list.": "%(brand)s misslyckades att hämta listan över offentliga rum.",
+    "The homeserver may be unavailable or overloaded.": "Hemservern kan vara otillgänglig eller överbelastad.",
+    "Delete the room address %(alias)s and remove %(name)s from the directory?": "Radera rumsadressen %(alias)s och ta bort %(name)s från den här katalogen?"
 }
