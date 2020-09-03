@@ -21,6 +21,7 @@ import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
 import { accessSecretStorage } from '../../../SecurityManager';
 import Modal from '../../../Modal';
+import Spinner from '../elements/Spinner';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -163,7 +164,6 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
-            const Spinner = sdk.getComponent('views.elements.Spinner');
             summarisedStatus = <Spinner />;
         } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = <p>{_t(
