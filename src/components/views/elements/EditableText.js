@@ -60,12 +60,7 @@ export default class EditableText extends React.Component {
         this.placeholder = false;
 
         this._editable_div = createRef();
-
-        this.state = {
-            phase: EditableText.Phases.Display,
-        };
     }
-
 
     state = {
         phase: EditableText.Phases.Display,

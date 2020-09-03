@@ -56,7 +56,8 @@ export default class MemberList extends React.Component {
         }
     }
 
-    componentDidMount() {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
         const cli = MatrixClientPeg.get();
         this._mounted = true;
         if (cli.hasLazyLoadMembersEnabled()) {
