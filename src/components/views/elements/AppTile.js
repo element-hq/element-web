@@ -603,6 +603,7 @@ export default class AppTile extends React.Component {
             // TODO: Namespace themes through some standard
             'theme': SettingsStore.getValue("theme"),
         });
+        console.log("DEBUG TEMPLATEDURL APPTILE", vars);
 
         if (vars.conferenceId === undefined) {
             // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
@@ -626,7 +627,10 @@ export default class AppTile extends React.Component {
 
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             console.log("Replacing Jitsi widget URL with local wrapper");
-            url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
+            url = WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: true,
+                auth: this.props.app.data ? this.props.app.data.auth : null,
+            });
             url = this._addWurlParams(url);
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
@@ -637,7 +641,10 @@ export default class AppTile extends React.Component {
     _getPopoutUrl() {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
-                WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                WidgetUtils.getLocalJitsiWrapperUrl({
+                    forLocalRender: false,
+                    auth: this.props.app.data ? this.props.app.data.auth : null,
+                }),
                 this.props.app.type,
             );
         } else {

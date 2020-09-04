@@ -405,13 +405,12 @@ async function _startCallApp(roomId, type) {
         confId = `JitsiConference${generateHumanReadableId()}`;
     }
 
-    let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
+    let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl({auth: jitsiAuth});
 
     // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
     const parsedUrl = new URL(widgetUrl);
     parsedUrl.search = ''; // set to empty string to make the URL class use searchParams instead
     parsedUrl.searchParams.set('confId', confId);
-    parsedUrl.searchParams.set('auth', jitsiAuth);
     widgetUrl = parsedUrl.toString();
 
     const widgetData = {
@@ -419,6 +418,7 @@ async function _startCallApp(roomId, type) {
         isAudioOnly: type === 'voice',
         domain: jitsiDomain,
         auth: jitsiAuth,
+        roomId: roomId,
     };
 
     const widgetId = (
