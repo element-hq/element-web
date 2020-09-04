@@ -19,6 +19,7 @@ require("./index.scss");
 
 import * as qs from 'querystring';
 import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
+import { KJUR } from "jsrsasign";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -33,6 +34,8 @@ let conferenceId: string;
 let displayName: string;
 let avatarUrl: string;
 let userId: string;
+let jitsiAuth: string;
+let roomId: string;
 
 let widgetApi: WidgetApi;
 
@@ -69,6 +72,8 @@ let widgetApi: WidgetApi;
         displayName = qsParam('displayName', true);
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
+        jitsiAuth = qsParam('auth', true);
+        roomId = qsParam('roomId', true);
 
         if (widgetApi) {
             await widgetApi.waitReady();
@@ -91,6 +96,45 @@ function switchVisibleContainers() {
     document.getElementById("joinButtonContainer").style.visibility = inConference ? 'hidden' : 'unset';
 }
 
+/**
+ * Create a JWT token fot jitsi openidtoken-jwt auth
+ *
+ * See TODO add link
+ */
+function createJWTToken() {
+    // Header
+    const header = {alg: 'HS256', typ: 'JWT'};
+    // Payload
+    const payload = {
+        // TODO change this to refer to spec?
+        iss: "app_id",
+        sub: jitsiDomain,
+        aud: `https://${jitsiDomain}`,
+        room: "*",
+        context: {
+            matrix: {
+                // TODO openid token retrieved as per MSC1960
+                token: "foobar",
+                room_id: roomId,
+            },
+            user: {
+                avatar: avatarUrl,
+                name: displayName,
+            },
+        },
+    };
+    // Sign JWT
+    // The secret string here is irrelevant, we're only using the JWT
+    // to transport data to Prosody in the Jitsi stack.
+    // See TODO add link
+    return KJUR.jws.JWS.sign(
+        "HS256",
+        JSON.stringify(header),
+        JSON.stringify(payload),
+        "notused",
+    );
+}
+
 function joinConference() { // event handler bound in HTML
     switchVisibleContainers();
 
@@ -102,7 +146,7 @@ function joinConference() { // event handler bound in HTML
         "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
         "our fragment values and not recognizing the options.",
     );
-    const meetApi = new JitsiMeetExternalAPI(jitsiDomain, {
+    const options = {
         width: "100%",
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
@@ -113,7 +157,12 @@ function joinConference() { // event handler bound in HTML
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
         },
-    });
+        jwt: undefined,
+    };
+    if (jitsiAuth === "openidtoken-jwt") {
+        options.jwt = createJWTToken();
+    }
+    const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
