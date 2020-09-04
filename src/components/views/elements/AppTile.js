@@ -603,7 +603,6 @@ export default class AppTile extends React.Component {
             // TODO: Namespace themes through some standard
             'theme': SettingsStore.getValue("theme"),
         });
-        console.log("DEBUG TEMPLATEDURL APPTILE", vars);
 
         if (vars.conferenceId === undefined) {
             // we'll need to parse the conference ID out of the URL for v1 Jitsi widgets
