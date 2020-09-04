@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
+import {base32} from "rfc4648";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -388,8 +389,21 @@ async function _startCallApp(roomId, type) {
         return;
     }
 
-    const confId = `JitsiConference${generateHumanReadableId()}`;
     const jitsiDomain = Jitsi.getInstance().preferredDomain;
+    const jitsiAuth = await Jitsi.getInstance().getJitsiAuth();
+    let confId;
+    if (jitsiAuth === 'openidtoken-jwt') {
+        // Create conference ID from room ID
+        // For compatibility with Jitsi, use base32 without padding.
+        // If the room ID needs to be decoded from the conference ID,
+        // the receiver should first uppercase it if needed and then add padding.
+        // More details here:
+        // TODO add link
+        confId = base32.stringify(Buffer.from(roomId), { pad: false });
+    } else {
+        // Create a random human readable conference ID
+        confId = `JitsiConference${generateHumanReadableId()}`;
+    }
 
     let widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
 
