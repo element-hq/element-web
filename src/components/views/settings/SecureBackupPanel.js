@@ -165,31 +165,30 @@ export default class SecureBackupPanel extends React.PureComponent {
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const encryptedMessageAreEncrypted = _t(
-            "Encrypted messages are secured with end-to-end encryption. " +
-            "Only you and the recipient(s) have the keys to read these messages.",
+        const featureDescription = _t(
+            "Back up your encryption keys with your account data in case you " +
+            "lose access to your sessions. Your keys will be secured with a " +
+            "unique Recovery Key.",
         );
 
+        let statusDescription;
+        let details;
+        let actions;
         if (this.state.error) {
-            return (
+            statusDescription = (
                 <div className="error">
                     {_t("Unable to load key backup status")}
                 </div>
             );
         } else if (this.state.loading) {
-            return <Spinner />;
+            statusDescription = <Spinner />;
         } else if (this.state.backupInfo) {
-            let clientBackupStatus;
             let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
-                clientBackupStatus = <div>
-                    <p>{encryptedMessageAreEncrypted}</p>
-                    <p>✅ {_t("This session is backing up your keys. ")}</p>
-                </div>;
+                statusDescription = <p>✅ {_t("This session is backing up your keys. ")}</p>;
             } else {
-                clientBackupStatus = <div>
-                    <p>{encryptedMessageAreEncrypted}</p>
+                statusDescription = <>
                     <p>{_t(
                         "This session is <b>not backing up your keys</b>, " +
                         "but you do have an existing backup you can restore from " +
@@ -200,7 +199,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                         "Connect this session to key backup before signing out to avoid " +
                         "losing any keys that may only be on this session.",
                     )}</p>
-                </div>;
+                </>;
                 restoreButtonCaption = _t("Connect this session to Key Backup");
             }
 
@@ -323,17 +322,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 </AccessibleButton>;
             }
 
-            const buttonRow = (
-                <div className="mx_SecureBackupPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                        {restoreButtonCaption}
-                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                    {deleteBackupButton}
-                </div>
-            );
-
-            return <div>
-                <div>{clientBackupStatus}</div>
+            details = (
                 <details>
                     <summary>{_t("Advanced")}</summary>
                     <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
@@ -343,24 +332,40 @@ export default class SecureBackupPanel extends React.PureComponent {
                     <div>{backupSigStatuses}</div>
                     <div>{trustedLocally}</div>
                 </details>
-                {buttonRow}
-            </div>;
-        } else {
-            return <div>
-                <div>
-                    <p>{_t(
-                        "Your keys are <b>not being backed up from this session</b>.", {},
-                        {b: sub => <b>{sub}</b>},
-                    )}</p>
-                    <p>{encryptedMessageAreEncrypted}</p>
-                    <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+            );
+
+            actions = (
+                <div className="mx_SecureBackupPanel_buttonRow">
+                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                        {restoreButtonCaption}
+                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
+                    {deleteBackupButton}
                 </div>
+            );
+        } else {
+            statusDescription = <>
+                <p>{_t(
+                    "Your keys are <b>not being backed up from this session</b>.", {},
+                    {b: sub => <b>{sub}</b>},
+                )}</p>
+                <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
+            </>;
+            actions = (
                 <div className="mx_SecureBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._startNewBackup}>
                         {_t("Start using Key Backup")}
                     </AccessibleButton>
                 </div>
-            </div>;
+            );
         }
+
+        return (
+            <div>
+                <p>{featureDescription}</p>
+                {statusDescription}
+                {details}
+                {actions}
+            </div>
+        );
     }
 }
