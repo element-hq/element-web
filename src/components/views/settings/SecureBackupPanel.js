@@ -229,14 +229,14 @@ export default class SecureBackupPanel extends React.PureComponent {
             let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device ? (sig.device.getDisplayName() || sig.device.deviceId) : null;
                 const validity = sub =>
-                    <span className={sig.valid ? 'mx_KeyBackupPanel_sigValid' : 'mx_KeyBackupPanel_sigInvalid'}>
+                    <span className={sig.valid ? 'mx_SecureBackupPanel_sigValid' : 'mx_SecureBackupPanel_sigInvalid'}>
                         {sub}
                     </span>;
                 const verify = sub =>
-                    <span className={sig.device && sig.deviceTrust.isVerified() ? 'mx_KeyBackupPanel_deviceVerified' : 'mx_KeyBackupPanel_deviceNotVerified'}>
+                    <span className={sig.device && sig.deviceTrust.isVerified() ? 'mx_SecureBackupPanel_deviceVerified' : 'mx_SecureBackupPanel_deviceNotVerified'}>
                         {sub}
                     </span>;
-                const device = sub => <span className="mx_KeyBackupPanel_deviceName">{deviceName}</span>;
+                const device = sub => <span className="mx_SecureBackupPanel_deviceName">{deviceName}</span>;
                 const fromThisDevice = (
                     sig.device &&
                     sig.device.getFingerprint() === MatrixClientPeg.get().getDeviceEd25519Key()
@@ -324,7 +324,7 @@ export default class SecureBackupPanel extends React.PureComponent {
             }
 
             const buttonRow = (
-                <div className="mx_KeyBackupPanel_buttonRow">
+                <div className="mx_SecureBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._restoreBackup}>
                         {restoreButtonCaption}
                     </AccessibleButton>&nbsp;&nbsp;&nbsp;
@@ -355,7 +355,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                     <p>{encryptedMessageAreEncrypted}</p>
                     <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
                 </div>
-                <div className="mx_KeyBackupPanel_buttonRow">
+                <div className="mx_SecureBackupPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._startNewBackup}>
                         {_t("Start using Key Backup")}
                     </AccessibleButton>
