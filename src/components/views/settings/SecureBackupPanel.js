@@ -17,11 +17,14 @@ limitations under the License.
 
 import React from 'react';
 
-import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
+import Spinner from '../elements/Spinner';
+import AccessibleButton from '../elements/AccessibleButton';
+import QuestionDialog from '../dialogs/QuestionDialog';
+import RestoreKeyBackupDialog from '../dialogs/keybackup/RestoreKeyBackupDialog';
 
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -135,7 +138,6 @@ export default class SecureBackupPanel extends React.PureComponent {
     }
 
     _deleteBackup = () => {
-        const QuestionDialog = sdk.getComponent('dialogs.QuestionDialog');
         Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
             title: _t('Delete Backup'),
             description: _t(
@@ -155,7 +157,6 @@ export default class SecureBackupPanel extends React.PureComponent {
     }
 
     _restoreBackup = async () => {
-        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, null, null,
             /* priority = */ false, /* static = */ true,
@@ -163,9 +164,6 @@ export default class SecureBackupPanel extends React.PureComponent {
     }
 
     render() {
-        const Spinner = sdk.getComponent("elements.Spinner");
-        const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-
         const {
             loading,
             error,
