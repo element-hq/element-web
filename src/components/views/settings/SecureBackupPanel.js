@@ -23,7 +23,7 @@ import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
 
-export default class KeyBackupPanel extends React.PureComponent {
+export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
         super(props);
 
