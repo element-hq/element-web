@@ -69,13 +69,15 @@ import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
 import {
     showToast as showAnalyticsToast,
-    hideToast as hideAnalyticsToast
+    hideToast as hideAnalyticsToast,
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { leaveRoomBehaviour } from "../../utils/membership";
+import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -127,6 +129,7 @@ interface IScreen {
     params?: object;
 }
 
+/* eslint-disable camelcase */
 interface IRoomInfo {
     room_id?: string;
     room_alias?: string;
@@ -138,6 +141,7 @@ interface IRoomInfo {
     oob_data?: object;
     via_servers?: string[];
 }
+/* eslint-enable camelcase */
 
 interface IProps { // TODO type things better
     config: Record<string, any>;
@@ -163,6 +167,7 @@ interface IState {
     // the master view we are showing.
     view: Views;
     // What the LoggedInView would be showing if visible
+    // eslint-disable-next-line camelcase
     page_type?: PageTypes;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
@@ -178,8 +183,11 @@ interface IState {
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
     // Parameters used in the registration dance with the IS
+    // eslint-disable-next-line camelcase
     register_client_secret?: string;
+    // eslint-disable-next-line camelcase
     register_session_id?: string;
+    // eslint-disable-next-line camelcase
     register_id_sid?: string;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
@@ -339,6 +347,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillUpdate(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
@@ -415,7 +424,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
         this.pageChanging = true;
-        performance.mark('riot_MatrixChat_page_change_start');
+        performance.mark('element_MatrixChat_page_change_start');
     }
 
     stopPageChangeTimer() {
@@ -427,15 +436,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return;
         }
         this.pageChanging = false;
-        performance.mark('riot_MatrixChat_page_change_stop');
+        performance.mark('element_MatrixChat_page_change_stop');
         performance.measure(
-            'riot_MatrixChat_page_change_delta',
-            'riot_MatrixChat_page_change_start',
-            'riot_MatrixChat_page_change_stop',
+            'element_MatrixChat_page_change_delta',
+            'element_MatrixChat_page_change_start',
+            'element_MatrixChat_page_change_stop',
         );
-        performance.clearMarks('riot_MatrixChat_page_change_start');
-        performance.clearMarks('riot_MatrixChat_page_change_stop');
-        const measurement = performance.getEntriesByName('riot_MatrixChat_page_change_delta').pop();
+        performance.clearMarks('element_MatrixChat_page_change_start');
+        performance.clearMarks('element_MatrixChat_page_change_stop');
+        const measurement = performance.getEntriesByName('element_MatrixChat_page_change_delta').pop();
 
         // In practice, sometimes the entries list is empty, so we get no measurement
         if (!measurement) return null;
@@ -608,8 +617,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
                     {initialTabId: tabPayload.initialTabId},
-                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true
-                );
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -619,7 +627,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.createRoom(payload.public);
                 break;
             case 'view_create_group': {
-                const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
+                let CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog")
+                if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+                    CreateGroupDialog = CreateCommunityPrototypeDialog;
+                }
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
                 break;
             }
@@ -1075,57 +1086,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             title: _t("Leave room"),
             description: (
                 <span>
-                { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                    { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                     { warnings }
                 </span>
             ),
             button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
-                    const d = MatrixClientPeg.get().leaveRoomChain(roomId);
+                    const d = leaveRoomBehaviour(roomId);
 
                     // FIXME: controller shouldn't be loading a view :(
                     const Loader = sdk.getComponent("elements.Spinner");
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                    d.then((errors) => {
-                        modal.close();
-
-                        for (const leftRoomId of Object.keys(errors)) {
-                            const err = errors[leftRoomId];
-                            if (!err) continue;
-
-                            console.error("Failed to leave room " + leftRoomId + " " + err);
-                            let title = _t("Failed to leave room");
-                            let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
-                            if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
-                                title = _t("Can't leave Server Notices room");
-                                message = _t(
-                                    "This room is used for important messages from the Homeserver, " +
-                                    "so you cannot leave it.",
-                                );
-                            } else if (err && err.message) {
-                                message = err.message;
-                            }
-                            Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                                title: title,
-                                description: message,
-                            });
-                            return;
-                        }
-
-                        if (this.state.currentRoomId === roomId) {
-                            dis.dispatch({action: 'view_next_room'});
-                        }
-                    }, (err) => {
-                        // This should only happen if something went seriously wrong with leaving the chain.
-                        modal.close();
-                        console.error("Failed to leave room " + roomId + " " + err);
-                        Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                            title: _t("Failed to leave room"),
-                            description: _t("Unknown error"),
-                        });
-                    });
+                    d.finally(() => modal.close());
                 }
             },
         });
@@ -1323,7 +1297,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // state (each of which can be 10s of MBs) for each DISJOINT timeline. This is
         // particularly noticeable when there are lots of 'limited' /sync responses
         // such as when laptops unsleep.
-        // https://github.com/vector-im/riot-web/issues/3307#issuecomment-282895568
+        // https://github.com/vector-im/element-web/issues/3307#issuecomment-282895568
         cli.setCanResetTimelineCallback((roomId) => {
             console.log("Request to reset timeline in room ", roomId, " viewing:", this.state.currentRoomId);
             if (roomId !== this.state.currentRoomId) {
@@ -1465,7 +1439,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("crypto.warning", (type) => {
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
-                    const brand = SdkConfig.get().brand;
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
@@ -1476,7 +1449,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             "in this version. This may also cause messages exchanged with this " +
                             "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
-                            { brand },
+                            { brand: SdkConfig.get().brand },
                         ),
                     });
                     break;
@@ -1661,7 +1634,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // of the app, we coerce the eventId to be undefined where applicable.
             if (!eventId) eventId = undefined;
 
-            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/riot-web/issues/9149
+            // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
             // FIXME: sort_out caseConsistency
             const thirdPartyInvite = {
@@ -1935,7 +1908,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         let fragmentAfterLogin = "";
         const initialScreenAfterLogin = this.props.initialScreenAfterLogin;
         if (initialScreenAfterLogin &&
-            // XXX: workaround for https://github.com/vector-im/riot-web/issues/11643 causing a login-loop
+            // XXX: workaround for https://github.com/vector-im/element-web/issues/11643 causing a login-loop
             !["welcome", "login", "register", "start_sso", "start_cas"].includes(initialScreenAfterLogin.screen)
         ) {
             fragmentAfterLogin = `/${initialScreenAfterLogin.screen}`;
@@ -2084,4 +2057,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             {view}
         </ErrorBoundary>;
     }
+}
+
+export function isLoggedIn(): boolean {
+    // JRS: Maybe we should move the step that writes this to the window out of
+    // `element-web` and into this file? Better yet, we should probably create a
+    // store to hold this state.
+    // See also https://github.com/vector-im/element-web/issues/15034.
+    const app = window.matrixChat;
+    return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
 }

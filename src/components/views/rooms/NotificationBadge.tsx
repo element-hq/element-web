@@ -92,12 +92,13 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
     };
 
     public render(): React.ReactElement {
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {notification, forceCount, roomId, onClick, ...props} = this.props;
 
         // Don't show a badge if we don't need to
         if (notification.isIdle) return null;
 
-        // TODO: Update these booleans for FTUE Notifications: https://github.com/vector-im/riot-web/issues/14261
+        // TODO: Update these booleans for FTUE Notifications: https://github.com/vector-im/element-web/issues/14261
         // As of writing, that is "if red, show count always" and "optionally show counts instead of dots".
         // See git diff for what that boolean state looks like.
         // XXX: We ignore this.state.showCounts (the setting which controls counts vs dots).

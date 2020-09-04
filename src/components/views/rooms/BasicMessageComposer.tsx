@@ -93,7 +93,7 @@ interface IProps {
     initialCaret?: DocumentOffset;
 
     onChange();
-    onPaste(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
+    onPaste?(event: ClipboardEvent<HTMLDivElement>, model: EditorModel): boolean;
 }
 
 interface IState {
@@ -242,7 +242,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // so trigger a model update after the composition is done by calling the input handler.
 
         // however, modifying the DOM (caused by the editor model update) from the compositionend handler seems
-        // to confuse the IME in Chrome, likely causing https://github.com/vector-im/riot-web/issues/10913 ,
+        // to confuse the IME in Chrome, likely causing https://github.com/vector-im/element-web/issues/10913 ,
         // so we do it async
 
         // however, doing this async seems to break things in Safari for some reason, so browser sniff.
@@ -273,7 +273,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             const {model} = this.props;
             const range = getRangeForSelection(this.editorRef.current, model, selection);
             const selectedParts = range.parts.map(p => p.serialize());
-            event.clipboardData.setData("application/x-riot-composer", JSON.stringify(selectedParts));
+            event.clipboardData.setData("application/x-element-composer", JSON.stringify(selectedParts));
             event.clipboardData.setData("text/plain", text); // so plain copy/paste works
             if (type === "cut") {
                 // Remove the text, updating the model as appropriate
@@ -301,7 +301,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
         const {model} = this.props;
         const {partCreator} = model;
-        const partsText = event.clipboardData.getData("application/x-riot-composer");
+        const partsText = event.clipboardData.getData("application/x-element-composer");
         let parts;
         if (partsText) {
             const serializedTextParts = JSON.parse(partsText);
@@ -554,10 +554,12 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     private onAutoCompleteConfirm = (completion: ICompletion) => {
+        this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentConfirm(completion);
     };
 
     private onAutoCompleteSelectionChange = (completion: ICompletion, completionIndex: number) => {
+        this.modifiedFlag = true;
         this.props.model.autoComplete.onComponentSelectionChange(completion);
         this.setState({completionIndex});
     };

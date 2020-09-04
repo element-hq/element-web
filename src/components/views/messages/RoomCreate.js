@@ -17,22 +17,19 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 
 import dis from '../../../dispatcher/dispatcher';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
-export default createReactClass({
-    displayName: 'RoomCreate',
-
-    propTypes: {
+export default class RoomCreate extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
-    },
+    };
 
-    _onLinkClicked: function(e) {
+    _onLinkClicked = e => {
         e.preventDefault();
 
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
@@ -43,9 +40,9 @@ export default createReactClass({
             highlighted: true,
             room_id: predecessor['room_id'],
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
             return <div />; // We should never have been instaniated in this case
@@ -66,5 +63,5 @@ export default createReactClass({
                 {_t("Click here to see older messages.")}
             </a>
         </div>;
-    },
-});
+    }
+}

@@ -19,9 +19,7 @@ import classNames from "classnames";
 import {
     RovingAccessibleButton,
     RovingAccessibleTooltipButton,
-    RovingTabIndexWrapper
 } from "../../../accessibility/RovingTabIndex";
-import AccessibleButton from "../../views/elements/AccessibleButton";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 
@@ -38,7 +36,7 @@ interface IState {
     hover: boolean;
 }
 
-// TODO: Remove with community invites in the room list: https://github.com/vector-im/riot-web/issues/14456
+// TODO: Remove with community invites in the room list: https://github.com/vector-im/element-web/issues/14456
 export default class TemporaryTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

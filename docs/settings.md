@@ -9,7 +9,7 @@ of dealing with the different levels and exposes easy to use getters and setters
 ## Levels
 
 Granular Settings rely on a series of known levels in order to use the correct value for the scenario. These levels, in 
-order of prioirty, are:
+order of priority, are:
 * `device` - The current user's device
 * `room-device` - The current user's device, but only when in a specific room
 * `room-account` - The current user's account, but only when in a specific room
@@ -25,33 +25,10 @@ that room administrators cannot force account-only settings upon participants.
 ## Settings
 
 Settings are the different options a user may set or experience in the application. These are pre-defined in 
-`src/settings/Settings.js` under the `SETTINGS` constant and have the following minimum requirements:
-```
-// The ID is used to reference the setting throughout the application. This must be unique.
-"theSettingId": {
-  // The levels this setting supports is required. In `src/settings/Settings.js` there are various pre-set arrays
-  // for this option - they should be used where possible to avoid copy/pasting arrays across settings.
-  supportedLevels: [...],
+`src/settings/Settings.ts` under the `SETTINGS` constant, and match the `ISetting` interface as defined there.
 
-  // The default for this setting serves two purposes: It provides a value if the setting is not defined at other
-  // levels, and it serves to demonstrate the expected type to other developers. The value isn't enforced, but it
-  // should be respected throughout the code. The default may be any data type.
-  default: false,
-
-  // The display name has two notations: string and object. The object notation allows for different translatable
-  // strings to be used for different levels, while the string notation represents the string for all levels.
-
-  displayName: _td("Change something"), // effectively `displayName: { "default": _td("Change something") }`
-  displayName: {
-    "room": _td("Change something for participants of this room"),
-
-    // Note: the default will be used if the level requested (such as `device`) does not have a string defined here.
-    "default": _td("Change something"),
-  }
-}
-```
-
-Settings that support the config level can be set in the config file under the `settingDefaults` key (note that some settings, like the "theme" setting, are special cased in the config file):
+Settings that support the config level can be set in the config file under the `settingDefaults` key (note that some 
+settings, like the "theme" setting, are special cased in the config file):
 ```json
 {
   ...
@@ -119,38 +96,29 @@ for you. If a display name cannot be found, it will return `null`.
 
 ## Features
 
-Occasionally some parts of the application may be undergoing testing and are not quite production ready. These are 
-commonly known to be behind a "labs flag". Features behind lab flags must go through the granular settings system, and 
-look and act very much normal settings. The exception is that they must supply `isFeature: true` as part of the setting 
-definition and should go through the helper functions on `SettingsStore`.
+Feature flags are just like regular settings with some underlying semantics for how they are meant to be used. Usually
+a feature flag is used when a portion of the application is under development or not ready for full release yet, such
+as new functionality or experimental ideas. In these cases, the feature name *should* be named with the `feature_*`
+convention and must be tagged with `isFeature: true` in the setting definition. By doing so, the feature will automatically
+appear in the "labs" section of the user's settings.
 
-Although features have levels and a default value, the calculation of those options is blocked by the feature's state. 
-A feature's state is determined from the `SdkConfig` and is a little complex. If `enableLabs` (a legacy flag) is `true` 
-then the feature's state is `labs`, if it is `false`, the state is `disable`. If `enableLabs` is not set then the state 
-is determined from the `features` config, such as in the following:
+Features can be controlled at the config level using the following structure:
 ```json
 "features": {
-    "feature_lazyloading": "labs"
+  "feature_lazyloading": true
 }
 ```
-In this example, `feature_lazyloading` is in the `labs` state. It may also be in the `enable` or `disable` state with a 
-similar approach. If the state is invalid, the feature is in the `disable` state. A feature's levels are only calculated 
-if it is in the `labs` state, therefore the default only applies in that scenario. If the state is `enable`, the feature 
-is always-on.
 
-Once a feature flag has served its purpose, it is generally recommended to remove it and the associated feature flag 
-checks. This would enable the feature implicitly as it is part of the application now.
+When `true`, the user will see the feature as enabled. Similarly, when `false` the user will see the feature as disabled.
+The user will only be able to change/see these states if `showLabsSettings: true` is in the config.
 
 ### Determining if a feature is enabled
 
-A simple call to `SettingsStore.isFeatureEnabled` will tell you if the feature is enabled. This will perform all the 
-required calculations to determine if the feature is enabled based upon the configuration and user selection.
+Call `SettingsStore.getValue()` as you would for any other setting.
 
 ### Enabling a feature
 
-Features can only be enabled if the feature is in the `labs` state, otherwise this is a no-op. To find the current set 
-of features in the `labs` state, call `SettingsStore.getLabsFeatures`. To set the value, call 
-`SettingsStore.setFeatureEnabled`. 
+Call `SettingsStore.setValue("feature_name", null, SettingLevel.DEVICE, true)`.
 
 
 ## Setting controllers
@@ -162,7 +130,7 @@ kept up to date with the setting where it is otherwise not possible. An example 
 they can only be considered enabled if the platform supports notifications, and enabling notifications requires 
 additional steps to actually enable notifications.
 
-For more information, see `src/settings/controllers/SettingController.js`.
+For more information, see `src/settings/controllers/SettingController.ts`.
 
 
 ## Local echo
@@ -222,7 +190,7 @@ The `SettingsStore` uses the hardcoded `LEVEL_ORDER` constant to ensure that it 
 The array is checked from left to right, simulating the behaviour of overriding values from the higher levels. Each 
 level should be defined in this array, including `default`.
 
-Handlers (`src/settings/handlers/SettingsHandler.js`) represent a single level and are responsible for getting and 
+Handlers (`src/settings/handlers/SettingsHandler.ts`) represent a single level and are responsible for getting and 
 setting values at that level. Handlers also provide additional information to the `SettingsStore` such as if the level 
 is supported or if the current user may set values at the level. The `SettingsStore` will use the handler to enforce 
 checks and manipulate settings. Handlers are also responsible for dealing with migration patterns or legacy settings for 
@@ -230,7 +198,7 @@ their level (for example, a setting being renamed or using a different key from 
 Handlers are provided to the `SettingsStore` via the `LEVEL_HANDLERS` constant. `SettingsStore` will optimize lookups by 
 only considering handlers that are supported on the platform.
 
-Local echo is achieved through `src/settings/handlers/LocalEchoWrapper.js` which acts as a wrapper around a given 
+Local echo is achieved through `src/settings/handlers/LocalEchoWrapper.ts` which acts as a wrapper around a given 
 handler. This is automatically applied to all defined `LEVEL_HANDLERS` and proxies the calls to the wrapped handler 
 where possible. The echo is achieved by a simple object cache stored within the class itself. The cache is invalidated 
 immediately upon the proxied save call succeeding or failing.
@@ -240,20 +208,7 @@ Controllers are notified of changes by the `SettingsStore`, and are given the op
 
 ### Features
 
-Features automatically get considered as `disabled` if they are not listed in the `SdkConfig` or `enableLabs` is 
-false/not set. Features are always checked against the configuration before going through the level order as they have 
-the option of being forced-on or forced-off for the application. This is done by the `features` section and looks 
-something like this:
- 
-```
-"features": {
-  "feature_groups": "enable",
-  "feature_pinning": "disable", // the default
-  "feature_presence": "labs"
-}
-```
-
-If `enableLabs` is true in the configuration, the default for features becomes `"labs"`.
+See above for feature reference.
 
 ### Watchers
 

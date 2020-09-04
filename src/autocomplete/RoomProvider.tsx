@@ -27,7 +27,7 @@ import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import {makeRoomPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
-import { uniqBy, sortBy } from 'lodash';
+import {uniqBy, sortBy} from "lodash";
 
 const ROOM_REGEX = /\B#\S*/g;
 
@@ -110,15 +110,13 @@ export default class RoomProvider extends AutocompleteProvider {
                     ),
                     range,
                 };
-            })
-            .filter((completion) => !!completion.completion && completion.completion.length > 0)
-            .slice(0, 4);
+            }).filter((completion) => !!completion.completion && completion.completion.length > 0).slice(0, 4);
         }
         return completions;
     }
 
     getName() {
-        return '💬 ' + _t('Rooms');
+        return _t('Rooms');
     }
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {

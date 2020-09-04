@@ -217,7 +217,7 @@ function getTranslationsOther(file) {
 
     const trs = new Set();
 
-    // Taken from riot-web src/components/structures/HomePage.js
+    // Taken from element-web src/components/structures/HomePage.js
     const translationsRegex = /_t\(['"]([\s\S]*?)['"]\)/mg;
     let matches;
     while (matches = translationsRegex.exec(contents)) {

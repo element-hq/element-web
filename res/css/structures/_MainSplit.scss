@@ -23,6 +23,8 @@ limitations under the License.
 
 .mx_MainSplit > .mx_RightPanel_ResizeWrapper {
     padding: 5px;
+    // margin left to not allow the handle to not encroach on the space for the scrollbar
+    margin-left: 8px;
 
     &:hover .mx_RightPanel_ResizeHandle {
         // Need to use important to override element style attributes

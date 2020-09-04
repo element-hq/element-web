@@ -327,7 +327,7 @@ class Tinter {
                 // Vector Green as its primary color?
                 // --richvdh
 
-                // Yes, tinting assumes that you are using the Riot skin for now.
+                // Yes, tinting assumes that you are using the Element skin for now.
                 // The right solution will be to move the CSS over to react-sdk.
                 // And yes, the default assets for the base skin might as well use
                 // Vector Green as any other colour.

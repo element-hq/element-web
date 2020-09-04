@@ -87,7 +87,7 @@ export default class RoomSettingsDialog extends React.Component {
             <NotificationSettingsTab roomId={this.props.roomId} />,
         ));
 
-        if (SettingsStore.isFeatureEnabled("feature_bridge_state")) {
+        if (SettingsStore.getValue("feature_bridge_state")) {
             tabs.push(new Tab(
                 ROOM_BRIDGES_TAB,
                 _td("Bridges"),

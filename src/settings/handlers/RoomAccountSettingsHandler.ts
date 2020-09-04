@@ -59,7 +59,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         } else if (event.getType() === "im.vector.web.settings") {
             // Figure out what changed and fire those updates
             const prevContent = prevEvent ? prevEvent.getContent() : {};
-            const changedSettings = objectKeyChanges(prevContent, event.getContent());
+            const changedSettings = objectKeyChanges<Record<string, any>>(prevContent, event.getContent());
             for (const settingName of changedSettings) {
                 const val = event.getContent()[settingName];
                 this.watchers.notifyUpdate(settingName, roomId, SettingLevel.ROOM_ACCOUNT, val);

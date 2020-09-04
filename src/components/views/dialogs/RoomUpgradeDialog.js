@@ -15,38 +15,33 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 
-export default createReactClass({
-    displayName: 'RoomUpgradeDialog',
-
-    propTypes: {
+export default class RoomUpgradeDialog extends React.Component {
+    static propTypes = {
         room: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: async function() {
+    state = {
+        busy: true,
+    };
+
+    async componentDidMount() {
         const recommended = await this.props.room.getRecommendedVersion();
         this._targetVersion = recommended.version;
         this.setState({busy: false});
-    },
+    }
 
-    getInitialState: function() {
-        return {
-            busy: true,
-        };
-    },
-
-    _onCancelClick: function() {
+    _onCancelClick = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    _onUpgradeClick: function() {
+    _onUpgradeClick = () => {
         this.setState({busy: true});
         MatrixClientPeg.get().upgradeRoom(this.props.room.roomId, this._targetVersion).then(() => {
             this.props.onFinished(true);
@@ -59,9 +54,9 @@ export default createReactClass({
         }).finally(() => {
             this.setState({busy: false});
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const Spinner = sdk.getComponent('views.elements.Spinner');
@@ -106,5 +101,5 @@ export default createReactClass({
                 {buttons}
             </BaseDialog>
         );
-    },
-});
+    }
+}

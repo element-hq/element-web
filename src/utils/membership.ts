@@ -15,6 +15,13 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { _t } from "../languageHandler";
+import Modal from "../Modal";
+import ErrorDialog from "../components/views/dialogs/ErrorDialog";
+import React from "react";
+import dis from "../dispatcher/dispatcher";
+import RoomViewStore from "../stores/RoomViewStore";
 
 /**
  * Approximation of a membership status for a given room.
@@ -63,10 +70,71 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
     if (membership === 'invite') {
         return EffectiveMembership.Invite;
     } else if (membership === 'join') {
-        // TODO: Include knocks? Update docs as needed in the enum. https://github.com/vector-im/riot-web/issues/14237
+        // TODO: Include knocks? Update docs as needed in the enum. https://github.com/vector-im/element-web/issues/14237
         return EffectiveMembership.Join;
     } else {
         // Probably a leave, kick, or ban
         return EffectiveMembership.Leave;
+    }
+}
+
+export async function leaveRoomBehaviour(roomId: string) {
+    let leavingAllVersions = true;
+    const history = await MatrixClientPeg.get().getRoomUpgradeHistory(roomId);
+    if (history && history.length > 0) {
+        const currentRoom = history[history.length - 1];
+        if (currentRoom.roomId !== roomId) {
+            // The user is trying to leave an older version of the room. Let them through
+            // without making them leave the current version of the room.
+            leavingAllVersions = false;
+        }
+    }
+
+    let results: { [roomId: string]: Error & { errcode: string, message: string } } = {};
+    if (!leavingAllVersions) {
+        try {
+            await MatrixClientPeg.get().leave(roomId);
+        } catch (e) {
+            if (e && e.data && e.data.errcode) {
+                const message = e.data.error || _t("Unexpected server error trying to leave the room");
+                results[roomId] = Object.assign(new Error(message), {errcode: e.data.errcode});
+            } else {
+                results[roomId] = e || new Error("Failed to leave room for unknown causes");
+            }
+        }
+    } else {
+        results = await MatrixClientPeg.get().leaveRoomChain(roomId);
+    }
+
+    const errors = Object.entries(results).filter(r => !!r[1]);
+    if (errors.length > 0) {
+        const messages = [];
+        for (const roomErr of errors) {
+            const err = roomErr[1]; // [0] is the roomId
+            let message = _t("Unexpected server error trying to leave the room");
+            if (err.errcode && err.message) {
+                if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
+                    Modal.createTrackedDialog('Error Leaving Room', '', ErrorDialog, {
+                        title: _t("Can't leave Server Notices room"),
+                        description: _t(
+                            "This room is used for important messages from the Homeserver, " +
+                            "so you cannot leave it.",
+                        ),
+                    });
+                    return;
+                }
+                message = results[roomId].message;
+            }
+            messages.push(message, React.createElement('BR')); // createElement to avoid using a tsx file in utils
+        }
+        Modal.createTrackedDialog('Error Leaving Room', '', ErrorDialog, {
+            title: _t("Error leaving room"),
+            description: messages,
+        });
+        return;
+    }
+
+    if (RoomViewStore.getRoomId() === roomId) {
+        dis.dispatch({action: 'view_next_room'});
     }
 }

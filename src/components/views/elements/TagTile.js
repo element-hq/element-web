@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -30,36 +29,32 @@ import GroupStore from '../../../stores/GroupStore';
 import TagOrderStore from '../../../stores/TagOrderStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
+import SettingsStore from "../../../settings/SettingsStore";
 
 // A class for a child of TagPanel (possibly wrapped in a DNDTagTile) that represents
 // a thing to click on for the user to filter the visible rooms in the RoomList to:
 //  - Rooms that are part of the group
 //  - Direct messages with members of the group
 // with the intention that this could be expanded to arbitrary tags in future.
-export default createReactClass({
-    displayName: 'TagTile',
-
-    propTypes: {
+export default class TagTile extends React.Component {
+    static propTypes = {
         // A string tag such as "m.favourite" or a group ID such as "+groupid:domain.bla"
         // For now, only group IDs are handled.
         tag: PropTypes.string,
         contextMenuButtonRef: PropTypes.object,
         openMenu: PropTypes.func,
         menuDisplayed: PropTypes.bool,
-    },
+        selected: PropTypes.bool,
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState() {
-        return {
-            // Whether the mouse is over the tile
-            hover: false,
-            // The profile data of the group if this.props.tag is a group ID
-            profile: null,
-        };
-    },
+    state = {
+        // Whether the mouse is over the tile
+        hover: false,
+        // The profile data of the group if this.props.tag is a group ID
+        profile: null,
+    };
 
     componentDidMount() {
         this.unmounted = false;
@@ -69,16 +64,16 @@ export default createReactClass({
             // New rooms or members may have been added to the group, fetch async
             this._refreshGroup(this.props.tag);
         }
-    },
+    }
 
     componentWillUnmount() {
         this.unmounted = true;
         if (this.props.tag[0] === '+') {
             FlairStore.removeListener('updateGroupProfile', this._onFlairStoreUpdated);
         }
-    },
+    }
 
-    _onFlairStoreUpdated() {
+    _onFlairStoreUpdated = () => {
         if (this.unmounted) return;
         FlairStore.getGroupProfileCached(
             this.context,
@@ -89,14 +84,14 @@ export default createReactClass({
         }).catch((err) => {
             console.warn('Could not fetch group profile for ' + this.props.tag, err);
         });
-    },
+    };
 
     _refreshGroup(groupId) {
         GroupStore.refreshGroupRooms(groupId);
         GroupStore.refreshGroupMembers(groupId);
-    },
+    }
 
-    onClick: function(e) {
+    onClick = e => {
         e.preventDefault();
         e.stopPropagation();
         dis.dispatch({
@@ -109,25 +104,27 @@ export default createReactClass({
             // New rooms or members may have been added to the group, fetch async
             this._refreshGroup(this.props.tag);
         }
-    },
+    };
 
-    onMouseOver: function() {
+    onMouseOver = () => {
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) return;
         this.setState({ hover: true });
-    },
+    };
 
-    onMouseLeave: function() {
+    onMouseLeave = () => {
         this.setState({ hover: false });
-    },
+    };
 
-    openMenu: function(e) {
+    openMenu = e => {
         // Prevent the TagTile onClick event firing as well
         e.stopPropagation();
         e.preventDefault();
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) return;
         this.setState({ hover: false });
         this.props.openMenu();
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const profile = this.state.profile || {};
         const name = profile.name || this.props.tag;
@@ -137,9 +134,12 @@ export default createReactClass({
             profile.avatarUrl, avatarHeight, avatarHeight, "crop",
         ) : null;
 
+        const isPrototype = SettingsStore.getValue("feature_communities_v2_prototypes");
         const className = classNames({
             mx_TagTile: true,
-            mx_TagTile_selected: this.props.selected,
+            mx_TagTile_prototype: isPrototype,
+            mx_TagTile_selected: this.props.selected && !isPrototype,
+            mx_TagTile_selected_prototype: this.props.selected && isPrototype,
         });
 
         const badge = TagOrderStore.getGroupBadge(this.props.tag);
@@ -185,5 +185,5 @@ export default createReactClass({
                 {badgeElement}
             </div>
         </AccessibleTooltipButton>;
-    },
-});
+    }
+}

@@ -43,7 +43,7 @@ import SdkConfig from "./SdkConfig";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
-import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
+import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -479,7 +479,7 @@ export const Commands = [
                     const parsedUrl = new URL(params[0]);
                     const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
 
-                    // if we're using a Riot permalink handler, this will catch it before we get much further.
+                    // if we're using a Element permalink handler, this will catch it before we get much further.
                     // see below where we make assumptions about parsing the URL.
                     if (isPermalinkHost(hostname)) {
                         isPermalink = true;
@@ -601,11 +601,7 @@ export const Commands = [
             }
 
             if (!targetRoomId) targetRoomId = roomId;
-            return success(
-                cli.leaveRoomChain(targetRoomId).then(function() {
-                    dis.dispatch({action: 'view_next_room'});
-                }),
-            );
+            return success(leaveRoomBehaviour(targetRoomId));
         },
         category: CommandCategories.actions,
     }),
@@ -733,7 +729,7 @@ export const Commands = [
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
                         if (!room) return reject(_t("Command failed"));
-                        const member = room.getMember(args);
+                        const member = room.getMember(userId);
                         if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
                             return reject(_t("Could not find user in room"));
                         }
@@ -864,12 +860,12 @@ export const Commands = [
                                 _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
                                     ' %(deviceId)s is "%(fprint)s" which does not match the provided key ' +
                                     '"%(fingerprint)s". This could mean your communications are being intercepted!',
-                                    {
-                                        fprint,
-                                        userId,
-                                        deviceId,
-                                        fingerprint,
-                                    }));
+                                {
+                                    fprint,
+                                    userId,
+                                    deviceId,
+                                    fingerprint,
+                                }));
                         }
 
                         await cli.setDeviceVerified(userId, deviceId, true);
@@ -883,7 +879,7 @@ export const Commands = [
                                     {
                                         _t('The signing key you provided matches the signing key you received ' +
                                             'from %(userId)s\'s session %(deviceId)s. Session marked as verified.',
-                                            {userId, deviceId})
+                                        {userId, deviceId})
                                     }
                                 </p>
                             </div>,

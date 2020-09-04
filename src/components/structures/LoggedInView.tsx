@@ -43,11 +43,11 @@ import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
 import {
     showToast as showSetPasswordToast,
-    hideToast as hideSetPasswordToast
+    hideToast as hideSetPasswordToast,
 } from "../../toasts/SetPasswordToast";
 import {
     showToast as showServerLimitToast,
-    hideToast as hideServerLimitToast
+    hideToast as hideServerLimitToast,
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
@@ -79,6 +79,7 @@ interface IProps {
     initialEventPixelOffset: number;
     leftDisabled: boolean;
     rightDisabled: boolean;
+    // eslint-disable-next-line camelcase
     page_type: string;
     autoJoin: boolean;
     thirdPartyInvite?: object;
@@ -98,7 +99,9 @@ interface IProps {
 }
 
 interface IUsageLimit {
+    // eslint-disable-next-line camelcase
     limit_type: "monthly_active_user" | string;
+    // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
 
@@ -316,10 +319,10 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    _calculateServerLimitToast(syncErrorData: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
-        const error = syncErrorData && syncErrorData.error && syncErrorData.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
+    _calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
+        const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
-            usageLimitEventContent = syncErrorData.error.data;
+            usageLimitEventContent = syncError.error.data;
         }
 
         if (usageLimitEventContent) {
@@ -596,7 +599,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const maxRadius = 5; // People shouldn't be straying too far, hopefully
 
         // Note: we track how far the user moved their mouse to help
-        // combat against https://github.com/vector-im/riot-web/issues/7158
+        // combat against https://github.com/vector-im/element-web/issues/7158
 
         if (distance < maxRadius) {
             // This is probably a real click, and not a drag
@@ -620,18 +623,18 @@ class LoggedInView extends React.Component<IProps, IState> {
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 pageElement = <RoomView
-                        ref={this._roomView}
-                        autoJoin={this.props.autoJoin}
-                        onRegistered={this.props.onRegistered}
-                        thirdPartyInvite={this.props.thirdPartyInvite}
-                        oobData={this.props.roomOobData}
-                        viaServers={this.props.viaServers}
-                        eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomId || 'roomview'}
-                        disabled={this.props.middleDisabled}
-                        ConferenceHandler={this.props.ConferenceHandler}
-                        resizeNotifier={this.props.resizeNotifier}
-                    />;
+                    ref={this._roomView}
+                    autoJoin={this.props.autoJoin}
+                    onRegistered={this.props.onRegistered}
+                    thirdPartyInvite={this.props.thirdPartyInvite}
+                    oobData={this.props.roomOobData}
+                    viaServers={this.props.viaServers}
+                    eventPixelOffset={this.props.initialEventPixelOffset}
+                    key={this.props.currentRoomId || 'roomview'}
+                    disabled={this.props.middleDisabled}
+                    ConferenceHandler={this.props.ConferenceHandler}
+                    resizeNotifier={this.props.resizeNotifier}
+                />;
                 break;
 
             case PageTypes.MyGroups:

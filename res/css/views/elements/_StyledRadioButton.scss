@@ -63,6 +63,7 @@ limitations under the License.
             box-sizing: border-box;
             height: $font-16px;
             width: $font-16px;
+            margin-left: 2px; // For the highlight on focus
 
             border: $font-1-5px solid $radio-circle-color;
             border-radius: $font-16px;
@@ -74,6 +75,12 @@ limitations under the License.
                 width: $font-8px;
 
                 border-radius: $font-8px;
+            }
+        }
+
+        &.focus-visible {
+            & + div {
+                @mixin unreal-focus;
             }
         }
 

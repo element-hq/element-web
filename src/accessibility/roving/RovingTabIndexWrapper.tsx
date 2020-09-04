@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 
-import AccessibleButton from "../../components/views/elements/AccessibleButton";
 import {useRovingTabIndex} from "../RovingTabIndex";
 import {FocusHandler, Ref} from "./types";
 

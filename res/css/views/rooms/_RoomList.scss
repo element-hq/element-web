@@ -17,3 +17,43 @@ limitations under the License.
 .mx_RoomList {
     padding-right: 7px; // width of the scrollbar, to line things up
 }
+
+.mx_RoomList_iconPlus::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
+}
+.mx_RoomList_iconExplore::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+}
+
+.mx_RoomList_explorePrompt {
+    margin: 4px 12px 4px;
+    padding-top: 12px;
+    border-top: 1px solid $tertiary-fg-color;
+    font-size: $font-13px;
+
+    div:first-child {
+        font-weight: $font-semi-bold;
+        margin-bottom: 8px;
+    }
+
+    .mx_AccessibleButton {
+        color: $secondary-fg-color;
+        position: relative;
+        padding: 0 0 0 24px;
+        font-size: inherit;
+
+        &::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: $secondary-fg-color;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+        }
+    }
+}

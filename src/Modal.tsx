@@ -151,7 +151,7 @@ export class ModalManager {
         prom: Promise<React.ComponentType>,
         props?: IProps<T>,
         className?: string,
-        options?: IOptions<T>
+        options?: IOptions<T>,
     ) {
         const modal: IModal<T> = {
             onFinished: props ? props.onFinished : null,
@@ -182,7 +182,7 @@ export class ModalManager {
 
     private getCloseFn<T extends any[]>(
         modal: IModal<T>,
-        props: IProps<T>
+        props: IProps<T>,
     ): [IHandle<T>["close"], IHandle<T>["finished"]] {
         const deferred = defer<T>();
         return [async (...args: T) => {
@@ -264,7 +264,7 @@ export class ModalManager {
         className?: string,
         isPriorityModal = false,
         isStaticModal = false,
-        options: IOptions<T> = {}
+        options: IOptions<T> = {},
     ): IHandle<T> {
         const {modal, closeDialog, onFinishedProm} = this.buildModal<T>(prom, props, className, options);
         if (isPriorityModal) {
@@ -287,7 +287,7 @@ export class ModalManager {
     private appendDialogAsync<T extends any[]>(
         prom: Promise<React.ComponentType>,
         props?: IProps<T>,
-        className?: string
+        className?: string,
     ): IHandle<T> {
         const {modal, closeDialog, onFinishedProm} = this.buildModal<T>(prom, props, className, {});
 
@@ -319,7 +319,7 @@ export class ModalManager {
 
     private reRender() {
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
-            // If there is no modal to render, make all of Riot available
+            // If there is no modal to render, make all of Element available
             // to screen reader users again
             dis.dispatch({
                 action: 'aria_unhide_main_app',

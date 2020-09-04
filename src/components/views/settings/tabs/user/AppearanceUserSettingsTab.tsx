@@ -170,7 +170,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             "baseFontSize",
             null,
             SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
@@ -237,7 +237,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         }
 
         let customThemeForm: JSX.Element;
-        if (SettingsStore.isFeatureEnabled("feature_custom_themes")) {
+        if (SettingsStore.getValue("feature_custom_themes")) {
             let messageElement = null;
             if (this.state.customThemeMessage.text) {
                 if (this.state.customThemeMessage.isError) {
@@ -294,7 +294,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                 </div>
                 {customThemeForm}
-           </div>
+            </div>
         );
     }
 

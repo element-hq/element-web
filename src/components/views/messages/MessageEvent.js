@@ -16,17 +16,14 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import {Mjolnir} from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 
-export default createReactClass({
-    displayName: 'MessageEvent',
-
-    propTypes: {
+export default class MessageEvent extends React.Component {
+    static propTypes = {
         /* the MatrixEvent to show */
         mxEvent: PropTypes.object.isRequired,
 
@@ -50,22 +47,23 @@ export default createReactClass({
 
         overrideBodyTypes: PropTypes.object,
         overrideEventTypes: PropTypes.object,
-    },
+    };
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
+    constructor(props) {
+        super(props);
+
         this._body = createRef();
-    },
+    }
 
-    getEventTileOps: function() {
+    getEventTileOps = () => {
         return this._body.current && this._body.current.getEventTileOps ? this._body.current.getEventTileOps() : null;
-    },
+    };
 
-    onTileUpdate: function() {
+    onTileUpdate = () => {
         this.forceUpdate();
-    },
+    };
 
-    render: function() {
+    render() {
         const bodyTypes = {
             'm.text': sdk.getComponent('messages.TextualBody'),
             'm.notice': sdk.getComponent('messages.TextualBody'),
@@ -100,7 +98,7 @@ export default createReactClass({
             }
         }
 
-        if (SettingsStore.isFeatureEnabled("feature_mjolnir")) {
+        if (SettingsStore.getValue("feature_mjolnir")) {
             const key = `mx_mjolnir_render_${this.props.mxEvent.getRoomId()}__${this.props.mxEvent.getId()}`;
             const allowRender = localStorage.getItem(key) === "true";
 
@@ -128,5 +126,5 @@ export default createReactClass({
             onHeightChanged={this.props.onHeightChanged}
             onMessageAllowed={this.onTileUpdate}
         /> : null;
-    },
-});
+    }
+}

@@ -80,7 +80,7 @@ export default class AutoDiscoveryUtils {
                 {
                     a: (sub) => {
                         return <a
-                            href="https://github.com/vector-im/riot-web/blob/master/docs/config.md"
+                            href="https://github.com/vector-im/element-web/blob/master/docs/config.md"
                             target="_blank"
                             rel="noreferrer noopener"
                         >{sub}</a>;
@@ -203,7 +203,7 @@ export default class AutoDiscoveryUtils {
         // Note: In the cases where we rely on the default IS from the config (namely
         // lack of identity server provided by the discovery method), we intentionally do not
         // validate it. This has already been validated and this helps some off-the-grid usage
-        // of Riot.
+        // of Element.
         let preferredIdentityUrl = defaultConfig && defaultConfig['isUrl'];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
             preferredIdentityUrl = isResult["base_url"];

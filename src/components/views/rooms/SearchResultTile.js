@@ -17,14 +17,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import {haveTileForEvent} from "./EventTile";
 
-export default createReactClass({
-    displayName: 'SearchResult',
-
-    propTypes: {
+export default class SearchResultTile extends React.Component {
+    static propTypes = {
         // a matrix-js-sdk SearchResult containing the details of this result
         searchResult: PropTypes.object.isRequired,
 
@@ -35,9 +32,9 @@ export default createReactClass({
         resultLink: PropTypes.string,
 
         onHeightChanged: PropTypes.func,
-    },
+    };
 
-    render: function() {
+    render() {
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const result = this.props.searchResult;
@@ -66,5 +63,5 @@ export default createReactClass({
             <li data-scroll-tokens={eventId+"+"+j}>
                 { ret }
             </li>);
-    },
-});
+    }
+}

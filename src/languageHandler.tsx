@@ -64,7 +64,7 @@ export function _td(s: string): string {
 // Wrapper for counterpart's translation function so that it handles nulls and undefineds properly
 // Takes the same arguments as counterpart.translate()
 function safeCounterpartTranslate(text: string, options?: object) {
-    // Horrible hack to avoid https://github.com/vector-im/riot-web/issues/4191
+    // Horrible hack to avoid https://github.com/vector-im/element-web/issues/4191
     // The interpolation library that counterpart uses does not support undefined/null
     // values and instead will throw an error. This is a problem since everywhere else
     // in JS land passing undefined/null will simply stringify instead, and when converting
@@ -295,7 +295,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
 
 // Allow overriding the text displayed when no translation exists
 // Currently only used in unit tests to avoid having to load
-// the translations in riot-web
+// the translations in element-web
 export function setMissingEntryGenerator(f: (value: string) => void) {
     counterpart.setMissingEntryGenerator(f);
 }
@@ -442,7 +442,7 @@ export function pickBestLanguage(langs: string[]): string {
 }
 
 function getLangsJson(): Promise<object> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         let url;
         if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
             url = webpackLangJsonUrl;
@@ -453,7 +453,7 @@ function getLangsJson(): Promise<object> {
             { method: "GET", url },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
-                    reject({err: err, response: response});
+                    reject(err);
                     return;
                 }
                 resolve(JSON.parse(body));
@@ -488,7 +488,7 @@ function getLanguage(langPath: string): object {
             { method: "GET", url: langPath },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
-                    reject({err: err, response: response});
+                    reject(err);
                     return;
                 }
                 resolve(weblateToCounterpart(JSON.parse(body)));

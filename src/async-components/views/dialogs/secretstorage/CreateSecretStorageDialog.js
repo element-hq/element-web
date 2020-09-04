@@ -30,6 +30,7 @@ import StyledRadioButton from '../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
+import { isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -55,12 +56,12 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     static propTypes = {
         hasCancel: PropTypes.bool,
         accountPassword: PropTypes.string,
-        force: PropTypes.bool,
+        forceReset: PropTypes.bool,
     };
 
     static defaultProps = {
         hasCancel: true,
-        force: false,
+        forceReset: false,
     };
 
     constructor(props) {
@@ -85,8 +86,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
-
             passPhraseKeySelected: CREATE_STORAGE_OPTION_KEY,
+            canSkip: !isSecureBackupRequired(),
         };
 
         this._passphraseField = createRef();
@@ -117,8 +118,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 MatrixClientPeg.get().isCryptoEnabled() && await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo)
             );
 
-            const { force } = this.props;
-            const phase = (backupInfo && !force) ? PHASE_MIGRATE : PHASE_CHOOSE_KEY_PASSPHRASE;
+            const { forceReset } = this.props;
+            const phase = (backupInfo && !forceReset) ? PHASE_MIGRATE : PHASE_CHOOSE_KEY_PASSPHRASE;
 
             this.setState({
                 phase,
@@ -276,20 +277,25 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
 
         const cli = MatrixClientPeg.get();
 
-        const { force } = this.props;
+        const { forceReset } = this.props;
 
         try {
-            if (force) {
-                console.log("Forcing secret storage reset"); // log something so we can debug this later
+            if (forceReset) {
+                console.log("Forcing cross-signing and secret storage reset");
                 await cli.bootstrapSecretStorage({
-                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                     createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
-            } else {
-                await cli.bootstrapSecretStorage({
+                await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
+                    setupNewCrossSigning: true,
+                });
+            } else {
+                await cli.bootstrapCrossSigning({
+                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
+                });
+                await cli.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this._recoveryKey,
                     keyBackupInfo: this.state.backupInfo,
                     setupNewKeyBackup: !this.state.backupInfo,
@@ -470,7 +476,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 primaryButton={_t("Continue")}
                 onPrimaryButtonClick={this._onChooseKeyPassphraseFormSubmit}
                 onCancel={this._onCancelClick}
-                hasCancel={true}
+                hasCancel={this.state.canSkip}
             />
         </form>;
     }
@@ -480,7 +486,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // click the button are aware they're making a change to their account.
         // Once we're confident enough in this (and it's supported enough) we can do
         // it automatically.
-        // https://github.com/vector-im/riot-web/issues/11696
+        // https://github.com/vector-im/element-web/issues/11696
         const Field = sdk.getComponent('views.elements.Field');
 
         let authPrompt;
@@ -575,7 +581,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             changeText = _t("Use a different passphrase?");
         } else if (!this.state.passPhrase.startsWith(this.state.passPhraseConfirm)) {
             // only tell them they're wrong if they've actually gone wrong.
-            // Security concious readers will note that if you left riot-web unattended
+            // Security concious readers will note that if you left element-web unattended
             // on this screen, this would make it easy for a malicious person to guess
             // your passphrase one letter at a time, but they could get this faster by
             // just opening the browser's developer tools and reading it.
@@ -687,7 +693,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             <div className="mx_Dialog_buttons">
                 <DialogButtons primaryButton={_t('Retry')}
                     onPrimaryButtonClick={this._onLoadRetryClick}
-                    hasCancel={true}
+                    hasCancel={this.state.canSkip}
                     onCancel={this._onCancel}
                 />
             </div>
@@ -714,7 +720,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
     _titleForPhase(phase) {
         switch (phase) {
             case PHASE_CHOOSE_KEY_PASSPHRASE:
-                return _t('Set up Secure backup');
+                return _t('Set up Secure Backup');
             case PHASE_MIGRATE:
                 return _t('Upgrade your encryption');
             case PHASE_PASSPHRASE:
@@ -742,7 +748,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                 <div className="mx_Dialog_buttons">
                     <DialogButtons primaryButton={_t('Retry')}
                         onPrimaryButtonClick={this._bootstrapSecretStorage}
-                        hasCancel={true}
+                        hasCancel={this.state.canSkip}
                         onCancel={this._onCancel}
                     />
                 </div>
