@@ -174,6 +174,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         } = this.state;
 
         let statusDescription;
+        let extraDetailsTableRows;
         let extraDetails;
         let actions;
         if (error) {
@@ -316,9 +317,18 @@ export default class SecureBackupPanel extends React.PureComponent {
                 </AccessibleButton>;
             }
 
+            extraDetailsTableRows = <>
+                <tr>
+                    <td>{_t("Backup version:")}</td>
+                    <td>{backupInfo.version}</td>
+                </tr>
+                <tr>
+                    <td>{_t("Algorithm:")}</td>
+                    <td>{backupInfo.algorithm}</td>
+                </tr>
+            </>;
+
             extraDetails = <>
-                <div>{_t("Backup version: ")}{backupInfo.version}</div>
-                <div>{_t("Algorithm: ")}{backupInfo.algorithm}</div>
                 {uploadStatus}
                 <div>{backupSigStatuses}</div>
                 <div>{trustedLocally}</div>
@@ -359,9 +369,15 @@ export default class SecureBackupPanel extends React.PureComponent {
                 {statusDescription}
                 <details>
                     <summary>{_t("Advanced")}</summary>
-                    <div>{_t("Backup key stored: ")}{
-                        backupKeyStored === true ? _t("in secret storage") : _t("not stored")
-                    }</div>
+                    <table className="mx_SecureBackupPanel_statusList"><tbody>
+                        <tr>
+                            <td>{_t("Backup key stored:")}</td>
+                            <td>{
+                                backupKeyStored === true ? _t("in secret storage") : _t("not stored")
+                            }</td>
+                        </tr>
+                        {extraDetailsTableRows}
+                    </tbody></table>
                     {extraDetails}
                 </details>
                 {actions}
