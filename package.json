@@ -95,6 +95,7 @@
     "react-focus-lock": "^2.4.1",
     "react-transition-group": "^4.4.1",
     "resize-observer-polyfill": "^1.5.1",
+    "rfc4648": "^1.4.0",
     "sanitize-html": "^1.27.1",
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
