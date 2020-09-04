@@ -54,7 +54,7 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    private onMembersClicked() {
+    private onMembersClicked = () => {
         if (this.state.phase === RightPanelPhases.RoomMemberInfo) {
             // send the active phase to trigger a toggle
             // XXX: we should pass refireParams here but then it won't collapse as we desire it to
@@ -63,17 +63,17 @@ export default class RoomHeaderButtons extends HeaderButtons {
             // This toggles for us, if needed
             this.setPhase(RightPanelPhases.RoomMemberList);
         }
-    }
+    };
 
-    private onFilesClicked() {
+    private onFilesClicked = () => {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.FilePanel);
-    }
+    };
 
-    private onNotificationsClicked() {
+    private onNotificationsClicked = () => {
         // This toggles for us, if needed
         this.setPhase(RightPanelPhases.NotificationPanel);
-    }
+    };
 
     public renderButtons() {
         return [
