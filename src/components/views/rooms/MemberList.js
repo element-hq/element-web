@@ -247,15 +247,15 @@ export default class MemberList extends React.Component {
         return filteredAndSortedMembers;
     }
 
-    _createOverflowTileJoined(overflowCount, totalCount) {
+    _createOverflowTileJoined = (overflowCount, totalCount) => {
         return this._createOverflowTile(overflowCount, totalCount, this._showMoreJoinedMemberList);
-    }
+    };
 
-    _createOverflowTileInvited(overflowCount, totalCount) {
+    _createOverflowTileInvited = (overflowCount, totalCount) => {
         return this._createOverflowTile(overflowCount, totalCount, this._showMoreInvitedMemberList);
-    }
+    };
 
-    _createOverflowTile(overflowCount, totalCount, onClick) {
+    _createOverflowTile = (overflowCount, totalCount, onClick) => {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const EntityTile = sdk.getComponent("rooms.EntityTile");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
@@ -266,7 +266,7 @@ export default class MemberList extends React.Component {
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={onClick} />
         );
-    }
+    };
 
     _showMoreJoinedMemberList = () => {
         this.setState({
