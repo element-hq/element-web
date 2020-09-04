@@ -19,7 +19,7 @@ import * as sdk from "../index";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
 import SetupEncryptionDialog from "../components/views/dialogs/SetupEncryptionDialog";
-import { accessSecretStorage } from "../CrossSigningManager";
+import { accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";
 

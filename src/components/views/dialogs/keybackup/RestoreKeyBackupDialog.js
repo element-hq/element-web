@@ -21,7 +21,7 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
 import { _t } from '../../../../languageHandler';
-import { accessSecretStorage } from '../../../../CrossSigningManager';
+import { accessSecretStorage } from '../../../../SecurityManager';
 
 const RESTORE_TYPE_PASSPHRASE = 0;
 const RESTORE_TYPE_RECOVERYKEY = 1;
