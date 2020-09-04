@@ -165,24 +165,28 @@ export default class SecureBackupPanel extends React.PureComponent {
     render() {
         const Spinner = sdk.getComponent("elements.Spinner");
         const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
-        const featureDescription = _t(
-            "Back up your encryption keys with your account data in case you " +
-            "lose access to your sessions. Your keys will be secured with a " +
-            "unique Recovery Key.",
-        );
+
+        const {
+            loading,
+            error,
+            backupInfo,
+            backupSigStatus,
+            backupKeyStored,
+            sessionsRemaining,
+        } = this.state;
 
         let statusDescription;
-        let details;
+        let extraDetails;
         let actions;
-        if (this.state.error) {
+        if (error) {
             statusDescription = (
                 <div className="error">
                     {_t("Unable to load key backup status")}
                 </div>
             );
-        } else if (this.state.loading) {
+        } else if (loading) {
             statusDescription = <Spinner />;
-        } else if (this.state.backupInfo) {
+        } else if (backupInfo) {
             let restoreButtonCaption = _t("Restore from Backup");
 
             if (MatrixClientPeg.get().getKeyBackupEnabled()) {
@@ -203,15 +207,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 restoreButtonCaption = _t("Connect this session to Key Backup");
             }
 
-            let keyStatus;
-            if (this.state.backupKeyStored === true) {
-                keyStatus = _t("in secret storage");
-            } else {
-                keyStatus = _t("not stored");
-            }
-
             let uploadStatus;
-            const { sessionsRemaining } = this.state;
             if (!MatrixClientPeg.get().getKeyBackupEnabled()) {
                 // No upload status to show when backup disabled.
                 uploadStatus = "";
@@ -225,7 +221,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 </div>;
             }
 
-            let backupSigStatuses = this.state.backupSigStatus.sigs.map((sig, i) => {
+            let backupSigStatuses = backupSigStatus.sigs.map((sig, i) => {
                 const deviceName = sig.device ? (sig.device.getDisplayName() || sig.device.deviceId) : null;
                 const validity = sub =>
                     <span className={sig.valid ? 'mx_SecureBackupPanel_sigValid' : 'mx_SecureBackupPanel_sigInvalid'}>
@@ -306,12 +302,12 @@ export default class SecureBackupPanel extends React.PureComponent {
                     {sigStatus}
                 </div>;
             });
-            if (this.state.backupSigStatus.sigs.length === 0) {
+            if (backupSigStatus.sigs.length === 0) {
                 backupSigStatuses = _t("Backup is not signed by any of your sessions");
             }
 
             let trustedLocally;
-            if (this.state.backupSigStatus.trusted_locally) {
+            if (backupSigStatus.trusted_locally) {
                 trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 
@@ -322,17 +318,13 @@ export default class SecureBackupPanel extends React.PureComponent {
                 </AccessibleButton>;
             }
 
-            details = (
-                <details>
-                    <summary>{_t("Advanced")}</summary>
-                    <div>{_t("Backup version: ")}{this.state.backupInfo.version}</div>
-                    <div>{_t("Algorithm: ")}{this.state.backupInfo.algorithm}</div>
-                    <div>{_t("Backup key stored: ")}{keyStatus}</div>
-                    {uploadStatus}
-                    <div>{backupSigStatuses}</div>
-                    <div>{trustedLocally}</div>
-                </details>
-            );
+            extraDetails = <>
+                <div>{_t("Backup version: ")}{backupInfo.version}</div>
+                <div>{_t("Algorithm: ")}{backupInfo.algorithm}</div>
+                {uploadStatus}
+                <div>{backupSigStatuses}</div>
+                <div>{trustedLocally}</div>
+            </>;
 
             actions = (
                 <div className="mx_SecureBackupPanel_buttonRow">
@@ -361,9 +353,19 @@ export default class SecureBackupPanel extends React.PureComponent {
 
         return (
             <div>
-                <p>{featureDescription}</p>
+                <p>{_t(
+                    "Back up your encryption keys with your account data in case you " +
+                    "lose access to your sessions. Your keys will be secured with a " +
+                    "unique Recovery Key.",
+                )}</p>
                 {statusDescription}
-                {details}
+                <details>
+                    <summary>{_t("Advanced")}</summary>
+                    <div>{_t("Backup key stored: ")}{
+                        backupKeyStored === true ? _t("in secret storage") : _t("not stored")
+                    }</div>
+                    {extraDetails}
+                </details>
                 {actions}
             </div>
         );
