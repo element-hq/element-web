@@ -2062,7 +2062,7 @@ export default class RoomView extends React.Component {
 
         const showRightPanel = !forceHideRightPanel && this.state.room && this.state.showRightPanel;
         const rightPanel = showRightPanel
-            ? <RightPanel roomId={this.state.room.roomId} resizeNotifier={this.props.resizeNotifier} />
+            ? <RightPanel room={this.state.room} resizeNotifier={this.props.resizeNotifier} />
             : null;
 
         const timelineClasses = classNames("mx_RoomView_timeline", {

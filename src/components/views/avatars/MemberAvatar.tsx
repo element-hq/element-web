@@ -16,23 +16,24 @@ limitations under the License.
 */
 
 import React from 'react';
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+
 import dis from "../../../dispatcher/dispatcher";
 import {Action} from "../../../dispatcher/actions";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import BaseAvatar from "./BaseAvatar";
 
 interface IProps {
-    // TODO: replace with correct type
-    member: any;
-    fallbackUserId: string;
+    member: RoomMember;
+    fallbackUserId?: string;
     width: number;
     height: number;
-    resizeMethod: string;
+    resizeMethod?: string;
     // The onClick to give the avatar
-    onClick: React.MouseEventHandler;
+    onClick?: React.MouseEventHandler;
     // Whether the onClick of the avatar should be overriden to dispatch `Action.ViewUser`
-    viewUserOnClick: boolean;
-    title: string;
+    viewUserOnClick?: boolean;
+    title?: string;
 }
 
 interface IState {
