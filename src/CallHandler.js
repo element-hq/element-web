@@ -411,12 +411,14 @@ async function _startCallApp(roomId, type) {
     const parsedUrl = new URL(widgetUrl);
     parsedUrl.search = ''; // set to empty string to make the URL class use searchParams instead
     parsedUrl.searchParams.set('confId', confId);
+    parsedUrl.searchParams.set('auth', jitsiAuth);
     widgetUrl = parsedUrl.toString();
 
     const widgetData = {
         conferenceId: confId,
         isAudioOnly: type === 'voice',
         domain: jitsiDomain,
+        auth: jitsiAuth,
     };
 
     const widgetId = (
