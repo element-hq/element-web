@@ -69,7 +69,7 @@ let widgetApi: WidgetApi;
             readyPromise = Promise.all([
                 widgetApi.waitFor<CustomEvent<IWidgetApiRequest>>("im.vector.ready")
                     .then(ev => widgetApi.transport.reply(ev.detail, {})),
-                widgetApi.waitFor("ready"),
+                widgetApi.waitFor("ready").then<void>(),
             ]);
             widgetApi.start();
         } else {
