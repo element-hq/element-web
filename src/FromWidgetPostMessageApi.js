@@ -218,6 +218,9 @@ export default class FromWidgetPostMessageApi {
             if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.AlwaysOnScreen)) {
                 ActiveWidgetStore.setWidgetPersistence(widgetId, val);
             }
+
+            // acknowledge
+            this.sendResponse(event, {});
         } else if (action === 'get_openid') {
             // Handled by caller
         } else {
