@@ -2449,5 +2449,14 @@
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Poderías desactivalo se a sala vai ser utilizada para colaborar con equipos externos que teñen o seu propio servidor. Esto non se pode cambiar máis tarde.",
     "Create a room in %(communityName)s": "Crear unha sala en %(communityName)s",
     "Block anyone not part of %(serverName)s from ever joining this room.": "Evitar que calquera externo a %(serverName)s se poida unir a esta sala.",
-    "Create community": "Crear comunidade"
+    "Create community": "Crear comunidade",
+    "Privacy": "Privacidade",
+    "There was an error updating your community. The server is unable to process your request.": "Algo fallou ó actualizar a comunidade. O servidor non é quen de procesar a solicitude.",
+    "Update community": "Actualizar comunidade",
+    "May include members not in %(communityName)s": "Podería incluir membros que non están en %(communityName)s",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Iniciar unha conversa con alguén utilizando o seu nome, nome de usuaria (como <userId/>) ou enderezo de email. Esto non as convidará a %(communityName)s. Para convidar a alguén a %(communityName)s, preme <a>aquí</a>.",
+    "Failed to find the general chat for this community": "Non se atopou o chat xenérico para esta comunidade",
+    "Community settings": "Axustes da comunidade",
+    "User settings": "Axustes de usuaria",
+    "Community and user menu": "Menú de usuaria e comunidade"
 }
