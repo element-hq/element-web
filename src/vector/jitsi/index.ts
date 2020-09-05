@@ -18,7 +18,12 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
+import {
+    IWidgetApiRequest,
+    IWidgetApiRequestEmptyData,
+    VideoConferenceCapabilities,
+    WidgetApi
+} from "matrix-widget-api";
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -56,11 +61,19 @@ let widgetApi: WidgetApi;
         const widgetId = qsParam('widgetId', true);
 
         // Set this up as early as possible because Element will be hitting it almost immediately.
+        let readyPromise: Promise<[void, void]>;
         if (parentUrl && widgetId) {
-            widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), [
-                Capability.AlwaysOnScreen,
+            const parentOrigin = new URL(qsParam('parentUrl')).origin;
+            widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
+            widgetApi.requestCapabilities(VideoConferenceCapabilities);
+            readyPromise = Promise.all([
+                widgetApi.waitFor<CustomEvent<IWidgetApiRequest>>("im.vector.ready")
+                    .then(ev => widgetApi.transport.reply(ev.detail, {})),
+                widgetApi.waitFor("ready"),
             ]);
-            widgetApi.expectingExplicitReady = true;
+            widgetApi.start();
+        } else {
+            throw new Error("No parent URL or no widget ID");
         }
 
         // Populate the Jitsi params now
@@ -70,10 +83,8 @@ let widgetApi: WidgetApi;
         avatarUrl = qsParam('avatarUrl', true); // http not mxc
         userId = qsParam('userId');
 
-        if (widgetApi) {
-            await widgetApi.waitReady();
-            await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
-        }
+        await readyPromise;
+        await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
         // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
