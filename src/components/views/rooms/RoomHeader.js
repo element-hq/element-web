@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import classNames from 'classnames';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
@@ -35,10 +34,8 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
-export default createReactClass({
-    displayName: 'RoomHeader',
-
-    propTypes: {
+export default class RoomHeader extends React.Component {
+    static propTypes = {
         room: PropTypes.object,
         oobData: PropTypes.object,
         inRoom: PropTypes.bool,
@@ -48,22 +45,21 @@ export default createReactClass({
         onLeaveClick: PropTypes.func,
         onCancelClick: PropTypes.func,
         e2eStatus: PropTypes.string,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            editing: false,
-            inRoom: false,
-            onCancelClick: null,
-        };
-    },
+    static defaultProps = {
+        editing: false,
+        inRoom: false,
+        onCancelClick: null,
+    };
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
+    constructor(props) {
+        super(props);
+
         this._topic = createRef();
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.events", this._onRoomStateEvents);
         cli.on("Room.accountData", this._onRoomAccountData);
@@ -74,15 +70,15 @@ export default createReactClass({
         if (this.props.room) {
             this.props.room.on("Room.name", this._onRoomNameChange);
         }
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         if (this._topic.current) {
             linkifyElement(this._topic.current);
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         if (this.props.room) {
             this.props.room.removeListener("Room.name", this._onRoomNameChange);
         }
@@ -91,41 +87,41 @@ export default createReactClass({
             cli.removeListener("RoomState.events", this._onRoomStateEvents);
             cli.removeListener("Room.accountData", this._onRoomAccountData);
         }
-    },
+    }
 
-    _onRoomStateEvents: function(event, state) {
+    _onRoomStateEvents = (event, state) => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
 
         // redisplay the room name, topic, etc.
         this._rateLimitedUpdate();
-    },
+    };
 
-    _onRoomAccountData: function(event, room) {
+    _onRoomAccountData = (event, room) => {
         if (!this.props.room || room.roomId !== this.props.room.roomId) return;
         if (event.getType() !== "im.vector.room.read_pins") return;
 
         this._rateLimitedUpdate();
-    },
+    };
 
-    _rateLimitedUpdate: new RateLimitedFunc(function() {
+    _rateLimitedUpdate = new RateLimitedFunc(function() {
         /* eslint-disable babel/no-invalid-this */
         this.forceUpdate();
-    }, 500),
+    }, 500);
 
-    _onRoomNameChange: function(room) {
+    _onRoomNameChange = (room) => {
         this.forceUpdate();
-    },
+    };
 
-    onShareRoomClick: function(ev) {
+    onShareRoomClick = (ev) => {
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
             target: this.props.room,
         });
-    },
+    };
 
-    _hasUnreadPins: function() {
+    _hasUnreadPins() {
         const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
         if (!currentPinEvent) return false;
         if (currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0) {
@@ -142,16 +138,16 @@ export default createReactClass({
 
         // There's pins, and we haven't read any of them
         return true;
-    },
+    }
 
-    _hasPins: function() {
+    _hasPins() {
         const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
         if (!currentPinEvent) return false;
 
         return !(currentPinEvent.getContent().pinned && currentPinEvent.getContent().pinned.length <= 0);
-    },
+    }
 
-    render: function() {
+    render() {
         let searchStatus = null;
         let cancelButton = null;
         let settingsButton = null;
@@ -301,5 +297,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

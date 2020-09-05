@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
-import _uniq from 'lodash/uniq';
+import {uniq} from "lodash";
 import {Room} from "matrix-js-sdk/src/matrix";
 
 /**
@@ -111,7 +111,7 @@ export default class DMRoomMap {
                     userToRooms[userId] = [roomId];
                 } else {
                     roomIds.push(roomId);
-                    userToRooms[userId] = _uniq(roomIds);
+                    userToRooms[userId] = uniq(roomIds);
                 }
             });
             return true;

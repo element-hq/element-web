@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -28,16 +27,14 @@ import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-/**
+/*
  * Basic container for modal dialogs.
  *
  * Includes a div for the title, and a keypress handler which cancels the
  * dialog on escape.
  */
-export default createReactClass({
-    displayName: 'BaseDialog',
-
-    propTypes: {
+export default class BaseDialog extends React.Component {
+    static propTypes = {
         // onFinished callback to call when Escape is pressed
         // Take a boolean which is true if the dialog was dismissed
         // with a positive / confirm action or false if it was
@@ -81,21 +78,20 @@ export default createReactClass({
             PropTypes.object,
             PropTypes.arrayOf(PropTypes.string),
         ]),
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            hasCancel: true,
-            fixedWidth: true,
-        };
-    },
+    static defaultProps = {
+        hasCancel: true,
+        fixedWidth: true,
+    };
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() {
+    constructor(props) {
+        super(props);
+
         this._matrixClient = MatrixClientPeg.get();
-    },
+    }
 
-    _onKeyDown: function(e) {
+    _onKeyDown = (e) => {
         if (this.props.onKeyDown) {
             this.props.onKeyDown(e);
         }
@@ -104,13 +100,13 @@ export default createReactClass({
             e.preventDefault();
             this.props.onFinished(false);
         }
-    },
+    };
 
-    _onCancelClick: function(e) {
+    _onCancelClick = (e) => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = (
@@ -161,5 +157,5 @@ export default createReactClass({
                 </FocusLock>
             </MatrixClientContext.Provider>
         );
-    },
-});
+    }
+}

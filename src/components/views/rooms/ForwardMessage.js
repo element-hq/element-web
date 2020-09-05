@@ -17,49 +17,46 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import {Key} from '../../../Keyboard';
 
 
-export default createReactClass({
-    displayName: 'ForwardMessage',
-
-    propTypes: {
+export default class ForwardMessage extends React.Component {
+    static propTypes = {
         onCancelClick: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         dis.dispatch({
             action: 'panel_disable',
             middleDisabled: true,
         });
 
         document.addEventListener('keydown', this._onKeyDown);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         dis.dispatch({
             action: 'panel_disable',
             middleDisabled: false,
         });
         document.removeEventListener('keydown', this._onKeyDown);
-    },
+    }
 
-    _onKeyDown: function(ev) {
+    _onKeyDown = ev => {
         switch (ev.key) {
             case Key.ESCAPE:
                 this.props.onCancelClick();
                 break;
         }
-    },
+    };
 
-    render: function() {
+    render() {
         return (
             <div className="mx_ForwardMessage">
                 <h1>{ _t('Please select the destination room for this message') }</h1>
             </div>
         );
-    },
-});
+    }
+}

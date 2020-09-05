@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import url from 'url';
 import classnames from 'classnames';
@@ -75,14 +74,10 @@ import AccessibleButton from "../elements/AccessibleButton";
 
 export const DEFAULT_PHASE = 0;
 
-export const PasswordAuthEntry = createReactClass({
-    displayName: 'PasswordAuthEntry',
+export class PasswordAuthEntry extends React.Component {
+    static LOGIN_TYPE = "m.login.password";
 
-    statics: {
-        LOGIN_TYPE: "m.login.password",
-    },
-
-    propTypes: {
+    static propTypes = {
         matrixClient: PropTypes.object.isRequired,
         submitAuthDict: PropTypes.func.isRequired,
         errorText: PropTypes.string,
@@ -90,19 +85,17 @@ export const PasswordAuthEntry = createReactClass({
         // happen?
         busy: PropTypes.bool,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
-    },
+    }
 
-    getInitialState: function() {
-        return {
-            password: "",
-        };
-    },
+    state = {
+        password: "",
+    };
 
-    _onSubmit: function(e) {
+    _onSubmit = e => {
         e.preventDefault();
         if (this.props.busy) return;
 
@@ -117,16 +110,16 @@ export const PasswordAuthEntry = createReactClass({
             },
             password: this.state.password,
         });
-    },
+    };
 
-    _onPasswordFieldChange: function(ev) {
+    _onPasswordFieldChange = ev => {
         // enable the submit button iff the password is non-empty
         this.setState({
             password: ev.target.value,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const passwordBoxClass = classnames({
             "error": this.props.errorText,
         });
@@ -176,36 +169,32 @@ export const PasswordAuthEntry = createReactClass({
             { errorSection }
             </div>
         );
-    },
-});
+    }
+}
 
-export const RecaptchaAuthEntry = createReactClass({
-    displayName: 'RecaptchaAuthEntry',
+export class RecaptchaAuthEntry extends React.Component {
+    static LOGIN_TYPE = "m.login.recaptcha";
 
-    statics: {
-        LOGIN_TYPE: "m.login.recaptcha",
-    },
-
-    propTypes: {
+    static propTypes = {
         submitAuthDict: PropTypes.func.isRequired,
         stageParams: PropTypes.object.isRequired,
         errorText: PropTypes.string,
         busy: PropTypes.bool,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
-    },
+    }
 
-    _onCaptchaResponse: function(response) {
+    _onCaptchaResponse = response => {
         this.props.submitAuthDict({
             type: RecaptchaAuthEntry.LOGIN_TYPE,
             response: response,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.props.busy) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
@@ -241,31 +230,24 @@ export const RecaptchaAuthEntry = createReactClass({
                 { errorSection }
             </div>
         );
-    },
-});
+    }
+}
 
-export const TermsAuthEntry = createReactClass({
-    displayName: 'TermsAuthEntry',
+export class TermsAuthEntry extends React.Component {
+    static LOGIN_TYPE = "m.login.terms";
 
-    statics: {
-        LOGIN_TYPE: "m.login.terms",
-    },
-
-    propTypes: {
+    static propTypes = {
         submitAuthDict: PropTypes.func.isRequired,
         stageParams: PropTypes.object.isRequired,
         errorText: PropTypes.string,
         busy: PropTypes.bool,
         showContinue: PropTypes.bool,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
-        this.props.onPhaseChange(DEFAULT_PHASE);
-    },
+    constructor(props) {
+        super(props);
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    componentWillMount: function() {
         // example stageParams:
         //
         // {
@@ -310,17 +292,22 @@ export const TermsAuthEntry = createReactClass({
             pickedPolicies.push(langPolicy);
         }
 
-        this.setState({
-            "toggledPolicies": initToggles,
-            "policies": pickedPolicies,
-        });
-    },
+        this.state = {
+            toggledPolicies: initToggles,
+            policies: pickedPolicies,
+        };
+    }
 
-    tryContinue: function() {
+
+    componentDidMount() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
+    }
+
+    tryContinue = () => {
         this._trySubmit();
-    },
+    };
 
-    _togglePolicy: function(policyId) {
+    _togglePolicy(policyId) {
         const newToggles = {};
         for (const policy of this.state.policies) {
             let checked = this.state.toggledPolicies[policy.id];
@@ -329,9 +316,9 @@ export const TermsAuthEntry = createReactClass({
             newToggles[policy.id] = checked;
         }
         this.setState({"toggledPolicies": newToggles});
-    },
+    }
 
-    _trySubmit: function() {
+    _trySubmit = () => {
         let allChecked = true;
         for (const policy of this.state.policies) {
             const checked = this.state.toggledPolicies[policy.id];
@@ -340,9 +327,9 @@ export const TermsAuthEntry = createReactClass({
 
         if (allChecked) this.props.submitAuthDict({type: TermsAuthEntry.LOGIN_TYPE});
         else this.setState({errorText: _t("Please review and accept all of the homeserver's policies")});
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.props.busy) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
@@ -387,17 +374,13 @@ export const TermsAuthEntry = createReactClass({
                 { submitButton }
             </div>
         );
-    },
-});
+    }
+}
 
-export const EmailIdentityAuthEntry = createReactClass({
-    displayName: 'EmailIdentityAuthEntry',
+export class EmailIdentityAuthEntry extends React.Component {
+    static LOGIN_TYPE = "m.login.email.identity";
 
-    statics: {
-        LOGIN_TYPE: "m.login.email.identity",
-    },
-
-    propTypes: {
+    static propTypes = {
         matrixClient: PropTypes.object.isRequired,
         submitAuthDict: PropTypes.func.isRequired,
         authSessionId: PropTypes.string.isRequired,
@@ -407,13 +390,13 @@ export const EmailIdentityAuthEntry = createReactClass({
         fail: PropTypes.func.isRequired,
         setEmailSid: PropTypes.func.isRequired,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
-    },
+    }
 
-    render: function() {
+    render() {
         // This component is now only displayed once the token has been requested,
         // so we know the email has been sent. It can also get loaded after the user
         // has clicked the validation link if the server takes a while to propagate
@@ -434,17 +417,13 @@ export const EmailIdentityAuthEntry = createReactClass({
                 </div>
             );
         }
-    },
-});
+    }
+}
 
-export const MsisdnAuthEntry = createReactClass({
-    displayName: 'MsisdnAuthEntry',
+export class MsisdnAuthEntry extends React.Component {
+    static LOGIN_TYPE = "m.login.msisdn";
 
-    statics: {
-        LOGIN_TYPE: "m.login.msisdn",
-    },
-
-    propTypes: {
+    static propTypes = {
         inputs: PropTypes.shape({
             phoneCountry: PropTypes.string,
             phoneNumber: PropTypes.string,
@@ -454,16 +433,14 @@ export const MsisdnAuthEntry = createReactClass({
         submitAuthDict: PropTypes.func.isRequired,
         matrixClient: PropTypes.object,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            token: '',
-            requestingToken: false,
-        };
-    },
+    state = {
+        token: '',
+        requestingToken: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.props.onPhaseChange(DEFAULT_PHASE);
 
         this._submitUrl = null;
@@ -477,12 +454,12 @@ export const MsisdnAuthEntry = createReactClass({
         }).finally(() => {
             this.setState({requestingToken: false});
         });
-    },
+    }
 
     /*
      * Requests a verification token by SMS.
      */
-    _requestMsisdnToken: function() {
+    _requestMsisdnToken() {
         return this.props.matrixClient.requestRegisterMsisdnToken(
             this.props.inputs.phoneCountry,
             this.props.inputs.phoneNumber,
@@ -493,15 +470,15 @@ export const MsisdnAuthEntry = createReactClass({
             this._sid = result.sid;
             this._msisdn = result.msisdn;
         });
-    },
+    }
 
-    _onTokenChange: function(e) {
+    _onTokenChange = e => {
         this.setState({
             token: e.target.value,
         });
-    },
+    };
 
-    _onFormSubmit: async function(e) {
+    _onFormSubmit = async e => {
         e.preventDefault();
         if (this.state.token == '') return;
 
@@ -552,9 +529,9 @@ export const MsisdnAuthEntry = createReactClass({
             this.props.fail(e);
             console.log("Failed to submit msisdn token");
         }
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.state.requestingToken) {
             const Loader = sdk.getComponent("elements.Spinner");
             return <Loader />;
@@ -598,8 +575,8 @@ export const MsisdnAuthEntry = createReactClass({
                 </div>
             );
         }
-    },
-});
+    }
+}
 
 export class SSOAuthEntry extends React.Component {
     static propTypes = {
@@ -686,46 +663,46 @@ export class SSOAuthEntry extends React.Component {
     }
 }
 
-export const FallbackAuthEntry = createReactClass({
-    displayName: 'FallbackAuthEntry',
-
-    propTypes: {
+export class FallbackAuthEntry extends React.Component {
+    static propTypes = {
         matrixClient: PropTypes.object.isRequired,
         authSessionId: PropTypes.string.isRequired,
         loginType: PropTypes.string.isRequired,
         submitAuthDict: PropTypes.func.isRequired,
         errorText: PropTypes.string,
         onPhaseChange: PropTypes.func.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
-        this.props.onPhaseChange(DEFAULT_PHASE);
-    },
+    constructor(props) {
+        super(props);
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         // we have to make the user click a button, as browsers will block
         // the popup if we open it immediately.
         this._popupWindow = null;
         window.addEventListener("message", this._onReceiveMessage);
 
         this._fallbackButton = createRef();
-    },
+    }
 
-    componentWillUnmount: function() {
+
+    componentDidMount() {
+        this.props.onPhaseChange(DEFAULT_PHASE);
+    }
+
+    componentWillUnmount() {
         window.removeEventListener("message", this._onReceiveMessage);
         if (this._popupWindow) {
             this._popupWindow.close();
         }
-    },
+    }
 
-    focus: function() {
+    focus = () => {
         if (this._fallbackButton.current) {
             this._fallbackButton.current.focus();
         }
-    },
+    };
 
-    _onShowFallbackClick: function(e) {
+    _onShowFallbackClick = e => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -735,18 +712,18 @@ export const FallbackAuthEntry = createReactClass({
         );
         this._popupWindow = window.open(url);
         this._popupWindow.opener = null;
-    },
+    };
 
-    _onReceiveMessage: function(event) {
+    _onReceiveMessage = event => {
         if (
             event.data === "authDone" &&
             event.origin === this.props.matrixClient.getHomeserverUrl()
         ) {
             this.props.submitAuthDict({});
         }
-    },
+    };
 
-    render: function() {
+    render() {
         let errorSection;
         if (this.props.errorText) {
             errorSection = (
@@ -761,8 +738,8 @@ export const FallbackAuthEntry = createReactClass({
                 {errorSection}
             </div>
         );
-    },
-});
+    }
+}
 
 const AuthEntryComponents = [
     PasswordAuthEntry,

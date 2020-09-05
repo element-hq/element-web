@@ -97,10 +97,7 @@ export default class CallView extends React.Component<IProps, IState> {
         if (this.props.room) {
             const roomId = this.props.room.roomId;
             call = CallHandler.getCallForRoom(roomId) ||
-                (this.props.ConferenceHandler ?
-                 this.props.ConferenceHandler.getConferenceCallForRoom(roomId) :
-                 null
-                );
+                (this.props.ConferenceHandler ? this.props.ConferenceHandler.getConferenceCallForRoom(roomId) : null);
 
             if (this.call) {
                 this.setState({ call: call });

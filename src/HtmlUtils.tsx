@@ -339,33 +339,9 @@ class HtmlHighlighter extends BaseHighlighter<string> {
     }
 }
 
-class TextHighlighter extends BaseHighlighter<React.ReactNode> {
-    private key = 0;
-
-    /* create a <span> node to hold the given content
-     *
-     * snippet: content of the span
-     * highlight: true to highlight as a search match
-     *
-     * returns a React node
-     */
-    protected processSnippet(snippet: string, highlight: boolean): React.ReactNode {
-        const key = this.key++;
-
-        let node = <span key={key} className={highlight ? this.highlightClass : null}>
-            { snippet }
-        </span>;
-
-        if (highlight && this.highlightLink) {
-            node = <a key={key} href={this.highlightLink}>{ node }</a>;
-        }
-
-        return node;
-    }
-}
-
 interface IContent {
     format?: string;
+    // eslint-disable-next-line camelcase
     formatted_body?: string;
     body: string;
 }
@@ -474,8 +450,13 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     });
 
     return isDisplayedWithHtml ?
-        <span key="body" ref={opts.ref} className={className} dangerouslySetInnerHTML={{ __html: safeBody }} dir="auto" /> :
-        <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
+        <span
+            key="body"
+            ref={opts.ref}
+            className={className}
+            dangerouslySetInnerHTML={{ __html: safeBody }}
+            dir="auto"
+        /> : <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
 }
 
 /**

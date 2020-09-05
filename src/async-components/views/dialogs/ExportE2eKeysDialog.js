@@ -17,7 +17,6 @@ limitations under the License.
 import FileSaver from 'file-saver';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
@@ -27,34 +26,31 @@ import * as sdk from '../../../index';
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;
 
-export default createReactClass({
-    displayName: 'ExportE2eKeysDialog',
-
-    propTypes: {
+export default class ExportE2eKeysDialog extends React.Component {
+    static propTypes = {
         matrixClient: PropTypes.instanceOf(MatrixClient).isRequired,
         onFinished: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            phase: PHASE_EDIT,
-            errStr: null,
-        };
-    },
+    constructor(props) {
+        super(props);
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this._unmounted = false;
 
         this._passphrase1 = createRef();
         this._passphrase2 = createRef();
-    },
 
-    componentWillUnmount: function() {
+        this.state = {
+            phase: PHASE_EDIT,
+            errStr: null,
+        };
+    }
+
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    _onPassphraseFormSubmit: function(ev) {
+    _onPassphraseFormSubmit = (ev) => {
         ev.preventDefault();
 
         const passphrase = this._passphrase1.current.value;
@@ -69,9 +65,9 @@ export default createReactClass({
 
         this._startExport(passphrase);
         return false;
-    },
+    };
 
-    _startExport: function(passphrase) {
+    _startExport(passphrase) {
         // extra Promise.resolve() to turn synchronous exceptions into
         // asynchronous ones.
         Promise.resolve().then(() => {
@@ -102,15 +98,15 @@ export default createReactClass({
             errStr: null,
             phase: PHASE_EXPORTING,
         });
-    },
+    }
 
-    _onCancelClick: function(ev) {
+    _onCancelClick = (ev) => {
         ev.preventDefault();
         this.props.onFinished(false);
         return false;
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
 
         const disableForm = (this.state.phase === PHASE_EXPORTING);
@@ -184,5 +180,5 @@ export default createReactClass({
                 </form>
             </BaseDialog>
         );
-    },
-});
+    }
+}

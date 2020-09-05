@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -142,7 +142,7 @@ const onSecretRequested = async function({
         return;
     }
     if (!deviceTrust || !deviceTrust.isVerified()) {
-        console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
+        console.log(`Ignoring secret request from untrusted device ${deviceId}`);
         return;
     }
     if (

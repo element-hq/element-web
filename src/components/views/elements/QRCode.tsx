@@ -41,7 +41,7 @@ const QRCode: React.FC<IProps> = ({data, className, ...options}) => {
         return () => {
             cancelled = true;
         };
-    }, [JSON.stringify(data), options]);
+    }, [JSON.stringify(data), options]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return <div className={classNames("mx_QRCode", className)}>
         { dataUri ? <img src={dataUri} className="mx_VerificationQRCode" alt={_t("QR Code")} /> : <Spinner /> }

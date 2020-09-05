@@ -19,8 +19,9 @@ import React from 'react';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import { accessSecretStorage } from '../../../CrossSigningManager';
+import { accessSecretStorage } from '../../../SecurityManager';
 import Modal from '../../../Modal';
+import Spinner from '../elements/Spinner';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -163,8 +164,7 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         let summarisedStatus;
         if (homeserverSupportsCrossSigning === undefined) {
-            const InlineSpinner = sdk.getComponent('views.elements.InlineSpinner');
-            summarisedStatus = <p><InlineSpinner /></p>;
+            summarisedStatus = <Spinner />;
         } else if (!homeserverSupportsCrossSigning) {
             summarisedStatus = <p>{_t(
                 "Your homeserver does not support cross-signing.",

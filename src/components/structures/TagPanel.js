@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -32,21 +31,15 @@ import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";
 import UserTagTile from "../views/elements/UserTagTile";
 
-const TagPanel = createReactClass({
-    displayName: 'TagPanel',
+class TagPanel extends React.Component {
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    state = {
+        orderedTags: [],
+        selectedTags: [],
+    };
 
-    getInitialState() {
-        return {
-            orderedTags: [],
-            selectedTags: [],
-        };
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this.unmounted = false;
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);
@@ -62,7 +55,7 @@ const TagPanel = createReactClass({
         });
         // This could be done by anything with a matrix client
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
-    },
+    }
 
     componentWillUnmount() {
         this.unmounted = true;
@@ -71,14 +64,14 @@ const TagPanel = createReactClass({
         if (this._tagOrderStoreToken) {
             this._tagOrderStoreToken.remove();
         }
-    },
+    }
 
-    _onGroupMyMembership() {
+    _onGroupMyMembership = () => {
         if (this.unmounted) return;
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
-    },
+    };
 
-    _onClientSync(syncState, prevState) {
+    _onClientSync = (syncState, prevState) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
@@ -86,18 +79,18 @@ const TagPanel = createReactClass({
             // Load joined groups
             dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
         }
-    },
+    };
 
-    onMouseDown(e) {
+    onMouseDown = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
             dis.dispatch({action: 'deselect_tags'});
         }
-    },
+    };
 
-    onClearFilterClick(ev) {
+    onClearFilterClick = ev => {
         dis.dispatch({action: 'deselect_tags'});
-    },
+    };
 
     renderGlobalIcon() {
         if (!SettingsStore.getValue("feature_communities_v2_prototypes")) return null;
@@ -108,7 +101,7 @@ const TagPanel = createReactClass({
                 <hr className="mx_TagPanel_divider" />
             </div>
         );
-    },
+    }
 
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
@@ -173,6 +166,6 @@ const TagPanel = createReactClass({
                 </Droppable>
             </AutoHideScrollbar>
         </div>;
-    },
-});
+    }
+}
 export default TagPanel;

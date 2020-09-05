@@ -223,3 +223,5 @@ export default class RightPanelStore extends Store<ActionPayload> {
         return RightPanelStore.instance;
     }
 }
+
+window.mxRightPanelStore = RightPanelStore.getSharedInstance();

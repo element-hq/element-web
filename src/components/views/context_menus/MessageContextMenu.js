@@ -19,7 +19,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {EventStatus} from 'matrix-js-sdk';
 
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -37,10 +36,8 @@ function canCancel(eventStatus) {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
 }
 
-export default createReactClass({
-    displayName: 'MessageContextMenu',
-
-    propTypes: {
+export default class MessageContextMenu extends React.Component {
+    static propTypes = {
         /* the MatrixEvent associated with the context menu */
         mxEvent: PropTypes.object.isRequired,
 
@@ -52,28 +49,26 @@ export default createReactClass({
 
         /* callback called when the menu is dismissed */
         onFinished: PropTypes.func,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            canRedact: false,
-            canPin: false,
-        };
-    },
+    state = {
+        canRedact: false,
+        canPin: false,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         MatrixClientPeg.get().on('RoomMember.powerLevel', this._checkPermissions);
         this._checkPermissions();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli) {
             cli.removeListener('RoomMember.powerLevel', this._checkPermissions);
         }
-    },
+    }
 
-    _checkPermissions: function() {
+    _checkPermissions = () => {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.mxEvent.getRoomId());
 
@@ -84,47 +79,47 @@ export default createReactClass({
         if (!SettingsStore.getValue("feature_pinning")) canPin = false;
 
         this.setState({canRedact, canPin});
-    },
+    };
 
-    _isPinned: function() {
+    _isPinned() {
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const pinnedEvent = room.currentState.getStateEvents('m.room.pinned_events', '');
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
-    },
+    }
 
-    onResendClick: function() {
+    onResendClick = () => {
         Resend.resend(this.props.mxEvent);
         this.closeMenu();
-    },
+    };
 
-    onResendEditClick: function() {
+    onResendEditClick = () => {
         Resend.resend(this.props.mxEvent.replacingEvent());
         this.closeMenu();
-    },
+    };
 
-    onResendRedactionClick: function() {
+    onResendRedactionClick = () => {
         Resend.resend(this.props.mxEvent.localRedactionEvent());
         this.closeMenu();
-    },
+    };
 
-    onResendReactionsClick: function() {
+    onResendReactionsClick = () => {
         for (const reaction of this._getUnsentReactions()) {
             Resend.resend(reaction);
         }
         this.closeMenu();
-    },
+    };
 
-    onReportEventClick: function() {
+    onReportEventClick = () => {
         const ReportEventDialog = sdk.getComponent("dialogs.ReportEventDialog");
         Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
             mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_reportEvent');
         this.closeMenu();
-    },
+    };
 
-    onViewSourceClick: function() {
+    onViewSourceClick = () => {
         const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Event Source', '', ViewSource, {
@@ -133,9 +128,9 @@ export default createReactClass({
             content: ev.event,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
-    },
+    };
 
-    onViewClearSourceClick: function() {
+    onViewClearSourceClick = () => {
         const ev = this.props.mxEvent.replacingEvent() || this.props.mxEvent;
         const ViewSource = sdk.getComponent('structures.ViewSource');
         Modal.createTrackedDialog('View Clear Event Source', '', ViewSource, {
@@ -145,9 +140,9 @@ export default createReactClass({
             content: ev._clearEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
-    },
+    };
 
-    onRedactClick: function() {
+    onRedactClick = () => {
         const ConfirmRedactDialog = sdk.getComponent("dialogs.ConfirmRedactDialog");
         Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
             onFinished: async (proceed) => {
@@ -176,9 +171,9 @@ export default createReactClass({
             },
         }, 'mx_Dialog_confirmredact');
         this.closeMenu();
-    },
+    };
 
-    onCancelSendClick: function() {
+    onCancelSendClick = () => {
         const mxEvent = this.props.mxEvent;
         const editEvent = mxEvent.replacingEvent();
         const redactEvent = mxEvent.localRedactionEvent();
@@ -199,17 +194,17 @@ export default createReactClass({
             Resend.removeFromQueue(this.props.mxEvent);
         }
         this.closeMenu();
-    },
+    };
 
-    onForwardClick: function() {
+    onForwardClick = () => {
         dis.dispatch({
             action: 'forward_event',
             event: this.props.mxEvent,
         });
         this.closeMenu();
-    },
+    };
 
-    onPinClick: function() {
+    onPinClick = () => {
         MatrixClientPeg.get().getStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', '')
             .catch((e) => {
                 // Intercept the Event Not Found error and fall through the promise chain with no event.
@@ -230,28 +225,28 @@ export default createReactClass({
                 cli.sendStateEvent(this.props.mxEvent.getRoomId(), 'm.room.pinned_events', {pinned: eventIds}, '');
             });
         this.closeMenu();
-    },
+    };
 
-    closeMenu: function() {
+    closeMenu = () => {
         if (this.props.onFinished) this.props.onFinished();
-    },
+    };
 
-    onUnhidePreviewClick: function() {
+    onUnhidePreviewClick = () => {
         if (this.props.eventTileOps) {
             this.props.eventTileOps.unhideWidget();
         }
         this.closeMenu();
-    },
+    };
 
-    onQuoteClick: function() {
+    onQuoteClick = () => {
         dis.dispatch({
             action: 'quote',
             event: this.props.mxEvent,
         });
         this.closeMenu();
-    },
+    };
 
-    onPermalinkClick: function(e: Event) {
+    onPermalinkClick = (e: Event) => {
         e.preventDefault();
         const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
         Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
@@ -259,12 +254,12 @@ export default createReactClass({
             permalinkCreator: this.props.permalinkCreator,
         });
         this.closeMenu();
-    },
+    };
 
-    onCollapseReplyThreadClick: function() {
+    onCollapseReplyThreadClick = () => {
         this.props.collapseReplyThread();
         this.closeMenu();
-    },
+    };
 
     _getReactions(filter) {
         const cli = MatrixClientPeg.get();
@@ -277,17 +272,17 @@ export default createReactClass({
                 relation.event_id === eventId &&
                 filter(e);
         });
-    },
+    }
 
     _getPendingReactions() {
         return this._getReactions(e => canCancel(e.status));
-    },
+    }
 
     _getUnsentReactions() {
         return this._getReactions(e => e.status === EventStatus.NOT_SENT);
-    },
+    }
 
-    render: function() {
+    render() {
         const cli = MatrixClientPeg.get();
         const me = cli.getUserId();
         const mxEvent = this.props.mxEvent;
@@ -489,5 +484,5 @@ export default createReactClass({
                 { reportEventButton }
             </div>
         );
-    },
-});
+    }
+}

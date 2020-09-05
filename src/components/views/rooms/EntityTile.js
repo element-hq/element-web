@@ -18,7 +18,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -51,10 +50,8 @@ function presenceClassForMember(presenceState, lastActiveAgo, showPresence) {
     }
 }
 
-const EntityTile = createReactClass({
-    displayName: 'EntityTile',
-
-    propTypes: {
+class EntityTile extends React.Component {
+    static propTypes = {
         name: PropTypes.string,
         title: PropTypes.string,
         avatarJsx: PropTypes.any, // <BaseAvatar />
@@ -70,33 +67,29 @@ const EntityTile = createReactClass({
         showPresence: PropTypes.bool,
         subtextLabel: PropTypes.string,
         e2eStatus: PropTypes.string,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            shouldComponentUpdate: function(nextProps, nextState) { return true; },
-            onClick: function() {},
-            presenceState: "offline",
-            presenceLastActiveAgo: 0,
-            presenceLastTs: 0,
-            showInviteButton: false,
-            suppressOnHover: false,
-            showPresence: true,
-        };
-    },
+    static defaultProps = {
+        shouldComponentUpdate: function(nextProps, nextState) { return true; },
+        onClick: function() {},
+        presenceState: "offline",
+        presenceLastActiveAgo: 0,
+        presenceLastTs: 0,
+        showInviteButton: false,
+        suppressOnHover: false,
+        showPresence: true,
+    };
 
-    getInitialState: function() {
-        return {
-            hover: false,
-        };
-    },
+    state = {
+        hover: false,
+    };
 
-    shouldComponentUpdate: function(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
         if (this.state.hover !== nextState.hover) return true;
         return this.props.shouldComponentUpdate(nextProps, nextState);
-    },
+    }
 
-    render: function() {
+    render() {
         const mainClassNames = {
             "mx_EntityTile": true,
             "mx_EntityTile_noHover": this.props.suppressOnHover,
@@ -193,8 +186,8 @@ const EntityTile = createReactClass({
                 </AccessibleButton>
             </div>
         );
-    },
-});
+    }
+}
 
 EntityTile.POWER_STATUS_MODERATOR = "moderator";
 EntityTile.POWER_STATUS_ADMIN = "admin";

@@ -21,7 +21,7 @@ import * as sdk from '../../../../index';
 import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import PropTypes from 'prop-types';
 import {_t, _td} from '../../../../languageHandler';
-import { accessSecretStorage } from '../../../../CrossSigningManager';
+import { accessSecretStorage } from '../../../../SecurityManager';
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import {copyNode} from "../../../../utils/strings";
 import PassphraseField from "../../../../components/views/auth/PassphraseField";

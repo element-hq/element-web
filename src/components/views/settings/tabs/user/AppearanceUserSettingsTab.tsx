@@ -170,7 +170,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             "baseFontSize",
             null,
             SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
@@ -294,7 +294,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                 </div>
                 {customThemeForm}
-           </div>
+            </div>
         );
     }
 

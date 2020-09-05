@@ -17,24 +17,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import SyntaxHighlight from '../views/elements/SyntaxHighlight';
 import {_t} from "../../languageHandler";
 import * as sdk from "../../index";
 
 
-export default createReactClass({
-    displayName: 'ViewSource',
-
-    propTypes: {
+export default class ViewSource extends React.Component {
+    static propTypes = {
         content: PropTypes.object.isRequired,
         onFinished: PropTypes.func.isRequired,
         roomId: PropTypes.string.isRequired,
         eventId: PropTypes.string.isRequired,
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t('View Source')}>
@@ -49,5 +46,5 @@ export default createReactClass({
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

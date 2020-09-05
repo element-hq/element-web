@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
@@ -25,53 +24,45 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 function nop() {}
 
-const GroupTile = createReactClass({
-    displayName: 'GroupTile',
-
-    propTypes: {
+class GroupTile extends React.Component {
+    static propTypes = {
         groupId: PropTypes.string.isRequired,
         // Whether to show the short description of the group on the tile
         showDescription: PropTypes.bool,
         // Height of the group avatar in pixels
         avatarHeight: PropTypes.number,
         draggable: PropTypes.bool,
-    },
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState() {
-        return {
-            profile: null,
-        };
-    },
+    static defaultProps = {
+        showDescription: true,
+        avatarHeight: 50,
+        draggable: true,
+    };
 
-    getDefaultProps() {
-        return {
-            showDescription: true,
-            avatarHeight: 50,
-            draggable: true,
-        };
-    },
+    state = {
+        profile: null,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         FlairStore.getGroupProfileCached(this.context, this.props.groupId).then((profile) => {
             this.setState({profile});
         }).catch((err) => {
             console.error('Error whilst getting cached profile for GroupTile', err);
         });
-    },
+    }
 
-    onMouseDown: function(e) {
+    onMouseDown = e => {
         e.preventDefault();
         dis.dispatch({
             action: 'view_group',
             group_id: this.props.groupId,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const profile = this.state.profile || {};
@@ -135,7 +126,7 @@ const GroupTile = createReactClass({
                 <div className="mx_GroupTile_groupId">{ this.props.groupId }</div>
             </div>
         </AccessibleButton>;
-    },
-});
+    }
+}
 
 export default GroupTile;

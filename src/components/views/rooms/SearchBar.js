@@ -15,35 +15,31 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
 
-export default createReactClass({
-    displayName: 'SearchBar',
+export default class SearchBar extends React.Component {
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
-        return ({
-            scope: 'Room',
-        });
-    },
-
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this._search_term = createRef();
-    },
 
-    onThisRoomClick: function() {
+        this.state = {
+            scope: 'Room',
+        };
+    }
+
+    onThisRoomClick = () => {
         this.setState({ scope: 'Room' }, () => this._searchIfQuery());
-    },
+    };
 
-    onAllRoomsClick: function() {
+    onAllRoomsClick = () => {
         this.setState({ scope: 'All' }, () => this._searchIfQuery());
-    },
+    };
 
-    onSearchChange: function(e) {
+    onSearchChange = (e) => {
         switch (e.key) {
             case Key.ENTER:
                 this.onSearch();
@@ -52,19 +48,19 @@ export default createReactClass({
                 this.props.onCancelClick();
                 break;
         }
-    },
+    };
 
-    _searchIfQuery: function() {
+    _searchIfQuery() {
         if (this._search_term.current.value) {
             this.onSearch();
         }
-    },
+    }
 
-    onSearch: function() {
+    onSearch = () => {
         this.props.onSearch(this._search_term.current.value, this.state.scope);
-    },
+    };
 
-    render: function() {
+    render() {
         const searchButtonClasses = classNames("mx_SearchBar_searchButton", {
             mx_SearchBar_searching: this.props.searchInProgress,
         });
@@ -92,5 +88,5 @@ export default createReactClass({
                 <AccessibleButton className="mx_SearchBar_cancel" onClick={this.props.onCancelClick} />
             </div>
         );
-    },
-});
+    }
+}

@@ -23,7 +23,7 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
-import _sortBy from 'lodash/sortBy';
+import {sortBy} from "lodash";
 import {makeGroupPermalink} from "../utils/permalinks/Permalinks";
 import {ICompletion, ISelectionRange} from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
@@ -81,7 +81,7 @@ export default class CommunityProvider extends AutocompleteProvider {
 
             const matchedString = command[0];
             completions = this.matcher.match(matchedString);
-            completions = _sortBy(completions, [
+            completions = sortBy(completions, [
                 (c) => score(matchedString, c.groupId),
                 (c) => c.groupId.length,
             ]).map(({avatarUrl, groupId, name}) => ({
@@ -91,15 +91,15 @@ export default class CommunityProvider extends AutocompleteProvider {
                 href: makeGroupPermalink(groupId),
                 component: (
                     <PillCompletion title={name} description={groupId}>
-                        <BaseAvatar name={name || groupId}
-                                    width={24}
-                                    height={24}
-                                    url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
+                        <BaseAvatar
+                            name={name || groupId}
+                            width={24}
+                            height={24}
+                            url={avatarUrl ? cli.mxcUrlToHttp(avatarUrl, 24, 24) : null} />
                     </PillCompletion>
                 ),
                 range,
-            }))
-            .slice(0, 4);
+            })).slice(0, 4);
         }
         return completions;
     }

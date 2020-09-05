@@ -21,6 +21,8 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {Room} from "matrix-js-sdk/src/models/room";
+
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
 import RateLimitedFunc from '../../ratelimitedfunc';
@@ -34,7 +36,7 @@ import {Action} from "../../dispatcher/actions";
 export default class RightPanel extends React.Component {
     static get propTypes() {
         return {
-            roomId: PropTypes.string, // if showing panels for a given room, this is set
+            room: PropTypes.instanceOf(Room), // if showing panels for a given room, this is set
             groupId: PropTypes.string, // if showing panels for a given group, this is set
             user: PropTypes.object, // used if we know the user ahead of opening the panel
         };
@@ -42,8 +44,8 @@ export default class RightPanel extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.state = {
             phase: this._getPhaseFromProps(),
             isUserPrivilegedInGroup: null,
@@ -161,13 +163,13 @@ export default class RightPanel extends React.Component {
     }
 
     onRoomStateMember(ev, state, member) {
-        if (member.roomId !== this.props.roomId) {
+        if (member.roomId !== this.props.room.roomId) {
             return;
         }
         // redraw the badge on the membership list
-        if (this.state.phase === RightPanelPhases.RoomMemberList && member.roomId === this.props.roomId) {
+        if (this.state.phase === RightPanelPhases.RoomMemberList && member.roomId === this.props.room.roomId) {
             this._delayedUpdate();
-        } else if (this.state.phase === RightPanelPhases.RoomMemberInfo && member.roomId === this.props.roomId &&
+        } else if (this.state.phase === RightPanelPhases.RoomMemberInfo && member.roomId === this.props.room.roomId &&
                 member.userId === this.state.member.userId) {
             // refresh the member info (e.g. new power level)
             this._delayedUpdate();
@@ -226,8 +228,8 @@ export default class RightPanel extends React.Component {
 
         switch (this.state.phase) {
             case RightPanelPhases.RoomMemberList:
-                if (this.props.roomId) {
-                    panel = <MemberList roomId={this.props.roomId} key={this.props.roomId} />;
+                if (this.props.room.roomId) {
+                    panel = <MemberList roomId={this.props.room.roomId} key={this.props.room.roomId} />;
                 }
                 break;
             case RightPanelPhases.GroupMemberList:
@@ -242,8 +244,8 @@ export default class RightPanel extends React.Component {
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
-                    roomId={this.props.roomId}
-                    key={this.props.roomId || this.state.member.userId}
+                    roomId={this.props.room.roomId}
+                    key={this.props.room.roomId || this.state.member.userId}
                     onClose={this.onCloseUserInfo}
                     phase={this.state.phase}
                     verificationRequest={this.state.verificationRequest}
@@ -251,7 +253,7 @@ export default class RightPanel extends React.Component {
                 />;
                 break;
             case RightPanelPhases.Room3pidMemberInfo:
-                panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.roomId} />;
+                panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.room.roomId} />;
                 break;
             case RightPanelPhases.GroupMemberInfo:
                 panel = <UserInfo
@@ -270,7 +272,7 @@ export default class RightPanel extends React.Component {
                 panel = <NotificationPanel />;
                 break;
             case RightPanelPhases.FilePanel:
-                panel = <FilePanel roomId={this.props.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                panel = <FilePanel roomId={this.props.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
                 break;
         }
 

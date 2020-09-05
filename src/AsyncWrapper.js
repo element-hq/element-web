@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import createReactClass from 'create-react-class';
+import React from "react";
 import * as sdk from './index';
 import PropTypes from 'prop-types';
 import { _t } from './languageHandler';
@@ -24,21 +24,19 @@ import { _t } from './languageHandler';
  * Wrap an asynchronous loader function with a react component which shows a
  * spinner until the real component loads.
  */
-export default createReactClass({
-    propTypes: {
+export default class AsyncWrapper extends React.Component {
+    static propTypes = {
         /** A promise which resolves with the real component
          */
         prom: PropTypes.object.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            component: null,
-            error: null,
-        };
-    },
+    state = {
+        component: null,
+        error: null,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._unmounted = false;
         // XXX: temporary logging to try to diagnose
         // https://github.com/vector-im/element-web/issues/3148
@@ -56,17 +54,17 @@ export default createReactClass({
             console.warn('AsyncWrapper promise failed', e);
             this.setState({error: e});
         });
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    _onWrapperCancelClick: function() {
+    _onWrapperCancelClick = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.state.component) {
             const Component = this.state.component;
             return <Component {...this.props} />;
@@ -87,6 +85,6 @@ export default createReactClass({
             const Spinner = sdk.getComponent("elements.Spinner");
             return <Spinner />;
         }
-    },
-});
+    }
+}
 
