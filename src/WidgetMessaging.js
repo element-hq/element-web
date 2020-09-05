@@ -190,7 +190,7 @@ export default class WidgetMessaging {
                         // Legacy (early draft) fields
                         success: confirm,
 
-                        // New style MSC1961 fields
+                        // New style MSC1960 fields
                         state: confirm ? "allowed" : "blocked",
                         original_request_id: ev.requestId, // eslint-disable-line camelcase
                     };
