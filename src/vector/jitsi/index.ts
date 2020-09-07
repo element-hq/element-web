@@ -132,7 +132,7 @@ function onWidgetMessage(msg) {
                 widgetApi.callAction(
                     KnownWidgetActions.GetOpenIDCredentials,
                     {},
-                    (response) => {console.log(response);},
+                    () => {},
                 );
             } else {
                 enableJoinButton();
