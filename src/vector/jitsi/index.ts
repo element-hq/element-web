@@ -61,6 +61,7 @@ function processOpenIDMessage(msg) {
             break;
         case 'blocked':
             console.warn('OpenID credentials request was blocked by user.');
+            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
             break;
         default:
            // nothing to do
@@ -142,8 +143,7 @@ function onWidgetMessage(msg) {
         }
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
-        document.getElementById("jitsiContainer").innerText = "Failed to load Jitsi widget";
-        switchVisibleContainers();
+        document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
     }
 })();
 
