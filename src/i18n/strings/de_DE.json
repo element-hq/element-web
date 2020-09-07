@@ -2447,5 +2447,14 @@
     "Private rooms can be found and joined by invitation only. Public rooms can be found and joined by anyone in this community.": "Private Räume können nur auf Einladung gefunden und betreten werden. Öffentliche Räume können von jedem/r in dieser Community gefunden und betreten werden.",
     "You might enable this if the room will only be used for collaborating with internal teams on your homeserver. This cannot be changed later.": "Du solltest dies aktivieren, wenn der Raum nur für die Zusammenarbeit mit internen Teams auf deinem Heimserver verwendet wird. Dies kann später nicht mehr geändert werden.",
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Du solltest dies deaktivieren, wenn der Raum für die Zusammenarbeit mit externen Teams auf deren Home-Server verwendet wird. Dies kann später nicht mehr geändert werden.",
-    "Block anyone not part of %(serverName)s from ever joining this room.": "Blockiere alle, die nicht Teil von %(serverName)s sind, diesen Raum jemals zu betreten."
+    "Block anyone not part of %(serverName)s from ever joining this room.": "Blockiere alle, die nicht Teil von %(serverName)s sind, diesen Raum jemals zu betreten.",
+    "Privacy": "Privatsphäre",
+    "There was an error updating your community. The server is unable to process your request.": "Beim Aktualisieren deiner Community ist ein Fehler aufgetreten. Der Server kann deine Anfrage nicht verarbeiten.",
+    "Update community": "Community aktualisieren",
+    "May include members not in %(communityName)s": "Kann Mitglieder enthalten, die nicht in %(communityName)s enthalten sind",
+    "Start a conversation with someone using their name, username (like <userId/>) or email address. This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>.": "Starte ein Gespräch mit jemandem unter Verwendung seines/ihres Namens, Nutzernamens (wie <userId/>) oder E-Mail-Adresse. Dadurch werden sie nicht zu %(communityName)s eingeladen. Klicke hier <a>hier</a>, um jemanden zu %(communityName)s einzuladen.",
+    "Failed to find the general chat for this community": "Der allgemeine Chat für diese Community konnte nicht gefunden werden",
+    "Community settings": "Community-Einstellungen",
+    "User settings": "Nutzer-Einstellungen",
+    "Community and user menu": "Community- und Nutzer-Menü"
 }
