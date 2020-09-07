@@ -18,8 +18,9 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import { Capability, WidgetApi } from "matrix-react-sdk/src/widgets/WidgetApi";
-import { KJUR } from "jsrsasign";
+import {Capability, KnownWidgetActions, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
+import {KJUR} from 'jsrsasign';
+import {objectClone} from 'matrix-react-sdk/lib/utils/objects';
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
@@ -36,8 +37,53 @@ let avatarUrl: string;
 let userId: string;
 let jitsiAuth: string;
 let roomId: string;
+let openIDToken: string;
 
 let widgetApi: WidgetApi;
+
+function processOpenIDMessage(msg) {
+    const data = (msg.action === 'get_openid') ? msg.response : msg.data;
+    // TODO: just use data.state once https://github.com/matrix-org/matrix-react-sdk/pull/5172 is out
+    const result = (data.state !== undefined) ? data.state :
+        (data.success === true) ? 'allowed' : 'blocked';
+
+    switch (result) {
+        case 'allowed':
+            console.info('Successfully got OpenID credentials.');
+            openIDToken = data.access_token;
+            // Send a response if this was not a response
+            if (msg.action === 'openid_credentials') {
+                const request = objectClone(msg);
+                request.response = {};
+                window.parent.postMessage(request, '*');
+            }
+            enableJoinButton();
+            break;
+        case 'blocked':
+            console.warn('OpenID credentials request was blocked by user.');
+            break;
+        default:
+           // nothing to do
+    }
+}
+
+/**
+ * Implements processing OpenID token requests as per MSC1960
+ */
+function onWidgetMessage(msg) {
+    const data = msg.data;
+    if (!data) {
+        return;
+    }
+    switch (data.action) {
+        case 'get_openid':
+        case 'openid_credentials':
+            processOpenIDMessage(data);
+            break;
+        default:
+            // Nothing to do
+    }
+}
 
 (async function() {
     try {
@@ -78,17 +124,32 @@ let widgetApi: WidgetApi;
         if (widgetApi) {
             await widgetApi.waitReady();
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
+
+            if (jitsiAuth === 'openidtoken-jwt') {
+                window.addEventListener('message', onWidgetMessage);
+                widgetApi.callAction(
+                    KnownWidgetActions.GetOpenIDCredentials,
+                    {},
+                    (response) => {console.log(response);},
+                );
+            } else {
+                enableJoinButton();
+            }
+            // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
+        } else {
+            enableJoinButton();
         }
-
-        // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
-
-        document.getElementById("joinButton").onclick = () => joinConference();
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
         document.getElementById("jitsiContainer").innerText = "Failed to load Jitsi widget";
         switchVisibleContainers();
     }
 })();
+
+
+function enableJoinButton() {
+    document.getElementById("joinButton").onclick = () => joinConference();
+}
 
 function switchVisibleContainers() {
     inConference = !inConference;
@@ -107,14 +168,13 @@ function createJWTToken() {
     // Payload
     const payload = {
         // TODO change this to refer to spec?
-        iss: "app_id",
+        iss: 'app_id',
         sub: jitsiDomain,
         aud: `https://${jitsiDomain}`,
         room: "*",
         context: {
             matrix: {
-                // TODO openid token retrieved as per MSC1960
-                token: "foobar",
+                token: openIDToken,
                 room_id: roomId,
             },
             user: {
@@ -128,10 +188,10 @@ function createJWTToken() {
     // to transport data to Prosody in the Jitsi stack.
     // See TODO add link
     return KJUR.jws.JWS.sign(
-        "HS256",
+        'HS256',
         JSON.stringify(header),
         JSON.stringify(payload),
-        "notused",
+        'notused',
     );
 }
 
@@ -159,7 +219,7 @@ function joinConference() { // event handler bound in HTML
         },
         jwt: undefined,
     };
-    if (jitsiAuth === "openidtoken-jwt") {
+    if (jitsiAuth === 'penidtoken-jwt') {
         options.jwt = createJWTToken();
     }
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
@@ -168,6 +228,7 @@ function joinConference() { // event handler bound in HTML
     if (userId) meetApi.executeCommand("email", userId);
 
     meetApi.on("readyToClose", () => {
+        window.removeEventListener('message', onWidgetMessage);
         switchVisibleContainers();
 
         // noinspection JSIgnoredPromiseFromCall
