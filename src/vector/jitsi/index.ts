@@ -125,6 +125,7 @@ function onWidgetMessage(msg) {
             await widgetApi.waitReady();
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
+            // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === 'openidtoken-jwt') {
                 window.addEventListener('message', onWidgetMessage);
                 widgetApi.callAction(
@@ -160,7 +161,7 @@ function switchVisibleContainers() {
 /**
  * Create a JWT token fot jitsi openidtoken-jwt auth
  *
- * See TODO add link
+ * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
  */
 function createJWTToken() {
     // Header
