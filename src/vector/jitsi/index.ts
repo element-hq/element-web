@@ -221,7 +221,7 @@ function joinConference() { // event handler bound in HTML
         },
         jwt: undefined,
     };
-    if (jitsiAuth === 'penidtoken-jwt') {
+    if (jitsiAuth === 'openidtoken-jwt') {
         options.jwt = createJWTToken();
     }
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
