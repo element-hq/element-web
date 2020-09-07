@@ -34,6 +34,7 @@ export enum KnownWidgetActions {
     GetCapabilities = "capabilities",
     SendEvent = "send_event",
     UpdateVisibility = "visibility",
+    GetOpenIDCredentials = "get_openid",
     ReceiveOpenIDCredentials = "openid_credentials",
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
