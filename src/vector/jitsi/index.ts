@@ -189,7 +189,6 @@ function createJWTToken() {
     // Sign JWT
     // The secret string here is irrelevant, we're only using the JWT
     // to transport data to Prosody in the Jitsi stack.
-    // See TODO add link
     return KJUR.jws.JWS.sign(
         'HS256',
         JSON.stringify(header),
