@@ -17,46 +17,42 @@ limitations under the License.
 
 import React from "react";
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import AccessibleButton from "../elements/AccessibleButton";
 import PinnedEventTile from "./PinnedEventTile";
 import { _t } from '../../../languageHandler';
 import PinningUtils from "../../../utils/PinningUtils";
 
-export default createReactClass({
-    displayName: 'PinnedEventsPanel',
-    propTypes: {
+export default class PinnedEventsPanel extends React.Component {
+    static propTypes = {
         // The Room from the js-sdk we're going to show pinned events for
         room: PropTypes.object.isRequired,
 
         onCancelClick: PropTypes.func,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            loading: true,
-        };
-    },
+    state = {
+        loading: true,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._updatePinnedMessages();
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvent);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("RoomState.events", this._onStateEvent);
         }
-    },
+    }
 
-    _onStateEvent: function(ev) {
+    _onStateEvent = ev => {
         if (ev.getRoomId() === this.props.room.roomId && ev.getType() === "m.room.pinned_events") {
             this._updatePinnedMessages();
         }
-    },
+    };
 
-    _updatePinnedMessages: function() {
+    _updatePinnedMessages = () => {
         const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents || !pinnedEvents.getContent().pinned) {
             this.setState({ loading: false, pinned: [] });
@@ -85,9 +81,9 @@ export default createReactClass({
         }
 
         this._updateReadState();
-    },
+    };
 
-    _updateReadState: function() {
+    _updateReadState() {
         const pinnedEvents = this.props.room.currentState.getStateEvents("m.room.pinned_events", "");
         if (!pinnedEvents) return; // nothing to read
 
@@ -107,9 +103,9 @@ export default createReactClass({
                 event_ids: readStateEvents,
             });
         }
-    },
+    }
 
-    _getPinnedTiles: function() {
+    _getPinnedTiles() {
         if (this.state.pinned.length === 0) {
             return (<div>{ _t("No pinned messages.") }</div>);
         }
@@ -120,9 +116,9 @@ export default createReactClass({
                                      mxEvent={context.event}
                                      onUnpinned={this._updatePinnedMessages} />);
         });
-    },
+    }
 
-    render: function() {
+    render() {
         let tiles = <div>{ _t("Loading...") }</div>;
         if (this.state && !this.state.loading) {
             tiles = this._getPinnedTiles();
@@ -139,5 +135,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

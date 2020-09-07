@@ -15,14 +15,12 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import Field from "../elements/Field";
 
-export default createReactClass({
-    displayName: 'TextInputDialog',
-    propTypes: {
+export default class TextInputDialog extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
         description: PropTypes.oneOfType([
             PropTypes.element,
@@ -36,39 +34,36 @@ export default createReactClass({
         hasCancel: PropTypes.bool,
         validator: PropTypes.func, // result of withValidation
         fixedWidth: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            title: "",
-            value: "",
-            description: "",
-            focus: true,
-            hasCancel: true,
-        };
-    },
+    static defaultProps = {
+        title: "",
+        value: "",
+        description: "",
+        focus: true,
+        hasCancel: true,
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this._field = createRef();
+
+        this.state = {
             value: this.props.value,
             valid: false,
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._field = createRef();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         if (this.props.focus) {
             // Set the cursor at the end of the text input
             // this._field.current.value = this.props.value;
             this._field.current.focus();
         }
-    },
+    }
 
-    onOk: async function(ev) {
+    onOk = async ev => {
         ev.preventDefault();
         if (this.props.validator) {
             await this._field.current.validate({ allowEmpty: false });
@@ -80,27 +75,27 @@ export default createReactClass({
             }
         }
         this.props.onFinished(true, this.state.value);
-    },
+    };
 
-    onCancel: function() {
+    onCancel = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    onChange: function(ev) {
+    onChange = ev => {
         this.setState({
             value: ev.target.value,
         });
-    },
+    };
 
-    onValidate: async function(fieldState) {
+    onValidate = async fieldState => {
         const result = await this.props.validator(fieldState);
         this.setState({
             valid: result.valid,
         });
         return result;
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
@@ -137,5 +132,5 @@ export default createReactClass({
                 />
             </BaseDialog>
         );
-    },
-});
+    }
+}

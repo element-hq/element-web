@@ -99,8 +99,8 @@ export default class SendMessageComposer extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.model = null;
         this._editorRef = null;
         this.currentlyComposedEditorState = null;

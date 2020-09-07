@@ -31,7 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import { crossSigningCallbacks } from './CrossSigningManager';
+import { crossSigningCallbacks } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 export interface IMatrixClientCreds {

@@ -332,9 +332,8 @@ export default class SecurityUserSettingsTab extends React.Component {
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 {warning}
-                <div className="mx_SettingsTab_heading">{_t("Security & Privacy")}</div>
+                <div className="mx_SettingsTab_heading">{_t("Where you’re logged in")}</div>
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Where you’re logged in")}</span>
                     <span>
                         {_t(
                             "Manage the names of and sign out of your sessions below or " +
@@ -351,11 +350,15 @@ export default class SecurityUserSettingsTab extends React.Component {
                         <DevicesPanel />
                     </div>
                 </div>
-                {keyBackup}
-                {eventIndex}
-                {crossSigning}
-                {this._renderCurrentDeviceInfo()}
-                <div className='mx_SettingsTab_section'>
+                <div className="mx_SettingsTab_heading">{_t("Encryption")}</div>
+                <div className="mx_SettingsTab_section">
+                    {keyBackup}
+                    {eventIndex}
+                    {crossSigning}
+                    {this._renderCurrentDeviceInfo()}
+                </div>
+                <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
+                <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         {_t(
@@ -372,9 +375,12 @@ export default class SecurityUserSettingsTab extends React.Component {
                     <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
                                   onChange={this._updateAnalytics} />
                 </div>
-                {this._renderIgnoredUsers()}
-                {this._renderManageInvites()}
-                <E2eAdvancedPanel />
+                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
+                <div className="mx_SettingsTab_section">
+                    {this._renderIgnoredUsers()}
+                    {this._renderManageInvites()}
+                    <E2eAdvancedPanel />
+                </div>
             </div>
         );
     }

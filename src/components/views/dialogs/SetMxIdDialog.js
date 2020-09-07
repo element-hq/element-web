@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React, {createRef} from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
@@ -29,23 +28,27 @@ import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 // sending a request to the server
 const USERNAME_CHECK_DEBOUNCE_MS = 250;
 
-/**
+/*
  * Prompt the user to set a display name.
  *
  * On success, `onFinished(true, newDisplayName)` is called.
  */
-export default createReactClass({
-    displayName: 'SetMxIdDialog',
-    propTypes: {
+export default class SetMxIdDialog extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func.isRequired,
         // Called when the user requests to register with a different homeserver
         onDifferentServerClicked: PropTypes.func.isRequired,
         // Called if the user wants to switch to login instead
         onLoginClick: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this._input_value = createRef();
+        this._uiAuth = createRef();
+
+        this.state = {
             // The entered username
             username: '',
             // Indicate ongoing work on the username
@@ -60,21 +63,15 @@ export default createReactClass({
             // Indicate error with auth
             authError: '',
         };
-    },
+    }
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
-        this._input_value = createRef();
-        this._uiAuth = createRef();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this._input_value.current.select();
 
         this._matrixClient = MatrixClientPeg.get();
-    },
+    }
 
-    onValueChange: function(ev) {
+    onValueChange = ev => {
         this.setState({
             username: ev.target.value,
             usernameBusy: true,
@@ -99,24 +96,24 @@ export default createReactClass({
                 });
             }, USERNAME_CHECK_DEBOUNCE_MS);
         });
-    },
+    };
 
-    onKeyUp: function(ev) {
+    onKeyUp = ev => {
         if (ev.key === Key.ENTER) {
             this.onSubmit();
         }
-    },
+    };
 
-    onSubmit: function(ev) {
+    onSubmit = ev => {
         if (this._uiAuth.current) {
             this._uiAuth.current.tryContinue();
         }
         this.setState({
             doingUIAuth: true,
         });
-    },
+    };
 
-    _doUsernameCheck: function() {
+    _doUsernameCheck() {
         // We do a quick check ahead of the username availability API to ensure the
         // user ID roughly looks okay from a Matrix perspective.
         if (!SAFE_LOCALPART_REGEX.test(this.state.username)) {
@@ -167,13 +164,13 @@ export default createReactClass({
                 this.setState(newState);
             },
         );
-    },
+    }
 
-    _generatePassword: function() {
+    _generatePassword() {
         return Math.random().toString(36).slice(2);
-    },
+    }
 
-    _makeRegisterRequest: function(auth) {
+    _makeRegisterRequest = auth => {
         // Not upgrading - changing mxids
         const guestAccessToken = null;
         if (!this._generatedPassword) {
@@ -187,9 +184,9 @@ export default createReactClass({
             {},
             guestAccessToken,
         );
-    },
+    };
 
-    _onUIAuthFinished: function(success, response) {
+    _onUIAuthFinished = (success, response) => {
         this.setState({
             doingUIAuth: false,
         });
@@ -207,9 +204,9 @@ export default createReactClass({
             accessToken: response.access_token,
             password: this._generatedPassword,
         });
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const InteractiveAuth = sdk.getComponent('structures.InteractiveAuth');
 
@@ -303,5 +300,5 @@ export default createReactClass({
                 </div>
             </BaseDialog>
         );
-    },
-});
+    }
+}

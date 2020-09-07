@@ -16,14 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 
-export default createReactClass({
-    displayName: 'QuestionDialog',
-    propTypes: {
+export default class QuestionDialog extends React.Component {
+    static propTypes = {
         title: PropTypes.string,
         description: PropTypes.node,
         extraButtons: PropTypes.node,
@@ -34,29 +32,27 @@ export default createReactClass({
         headerImage: PropTypes.string,
         quitOnly: PropTypes.bool, // quitOnly doesn't show the cancel button just the quit [x].
         fixedWidth: PropTypes.bool,
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            title: "",
-            description: "",
-            extraButtons: null,
-            focus: true,
-            hasCancelButton: true,
-            danger: false,
-            quitOnly: false,
-        };
-    },
+    static defaultProps = {
+        title: "",
+        description: "",
+        extraButtons: null,
+        focus: true,
+        hasCancelButton: true,
+        danger: false,
+        quitOnly: false,
+    };
 
-    onOk: function() {
+    onOk = () => {
         this.props.onFinished(true);
-    },
+    };
 
-    onCancel: function() {
+    onCancel = () => {
         this.props.onFinished(false);
-    },
+    };
 
-    render: function() {
+    render() {
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         let primaryButtonClass = "";
@@ -88,5 +84,5 @@ export default createReactClass({
                 </DialogButtons>
             </BaseDialog>
         );
-    },
-});
+    }
+}

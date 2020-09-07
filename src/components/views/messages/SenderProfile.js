@@ -16,31 +16,25 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import Flair from '../elements/Flair.js';
 import FlairStore from '../../../stores/FlairStore';
 import { _t } from '../../../languageHandler';
 import {getUserNameColorClass} from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-export default createReactClass({
-    displayName: 'SenderProfile',
-    propTypes: {
+export default class SenderProfile extends React.Component {
+    static propTypes = {
         mxEvent: PropTypes.object.isRequired, // event whose sender we're showing
         text: PropTypes.string, // Text to show. Defaults to sender name
         onClick: PropTypes.func,
-    },
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    static contextType = MatrixClientContext;
 
-    getInitialState() {
-        return {
-            userGroups: null,
-            relatedGroups: [],
-        };
-    },
+    state = {
+        userGroups: null,
+        relatedGroups: [],
+    };
 
     componentDidMount() {
         this.unmounted = false;
@@ -54,20 +48,20 @@ export default createReactClass({
         });
 
         this.context.on('RoomState.events', this.onRoomStateEvents);
-    },
+    }
 
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('RoomState.events', this.onRoomStateEvents);
-    },
+    }
 
-    onRoomStateEvents(event) {
+    onRoomStateEvents = event => {
         if (event.getType() === 'm.room.related_groups' &&
             event.getRoomId() === this.props.mxEvent.getRoomId()
         ) {
             this._updateRelatedGroups();
         }
-    },
+    };
 
     _updateRelatedGroups() {
         if (this.unmounted) return;
@@ -78,7 +72,7 @@ export default createReactClass({
         this.setState({
             relatedGroups: relatedGroupsEvent ? relatedGroupsEvent.getContent().groups || [] : [],
         });
-    },
+    }
 
     _getDisplayedGroups(userGroups, relatedGroups) {
         let displayedGroups = userGroups || [];
@@ -90,7 +84,7 @@ export default createReactClass({
             displayedGroups = [];
         }
         return displayedGroups;
-    },
+    }
 
     render() {
         const {mxEvent} = this.props;
@@ -138,5 +132,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

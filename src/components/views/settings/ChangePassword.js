@@ -18,7 +18,6 @@ limitations under the License.
 import Field from "../elements/Field";
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -28,10 +27,8 @@ import Modal from "../../../Modal";
 
 import sessionStore from '../../../stores/SessionStore';
 
-export default createReactClass({
-    displayName: 'ChangePassword',
-
-    propTypes: {
+export default class ChangePassword extends React.Component {
+    static propTypes = {
         onFinished: PropTypes.func,
         onError: PropTypes.func,
         onCheckPassword: PropTypes.func,
@@ -41,65 +38,61 @@ export default createReactClass({
         confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
         autoFocusNewPasswordInput: PropTypes.bool,
-    },
+    };
 
-    Phases: {
+    static Phases = {
         Edit: "edit",
         Uploading: "uploading",
         Error: "error",
-    },
+    };
 
-    getDefaultProps: function() {
-        return {
-            onFinished: function() {},
-            onError: function() {},
-            onCheckPassword: function(oldPass, newPass, confirmPass) {
-                if (newPass !== confirmPass) {
-                    return {
-                        error: _t("New passwords don't match"),
-                    };
-                } else if (!newPass || newPass.length === 0) {
-                    return {
-                        error: _t("Passwords can't be empty"),
-                    };
-                }
-            },
-            confirm: true,
-        };
-    },
+    static defaultProps = {
+        onFinished() {},
+        onError() {},
+        onCheckPassword(oldPass, newPass, confirmPass) {
+            if (newPass !== confirmPass) {
+                return {
+                    error: _t("New passwords don't match"),
+                };
+            } else if (!newPass || newPass.length === 0) {
+                return {
+                    error: _t("Passwords can't be empty"),
+                };
+            }
+        },
+        confirm: true,
+    }
 
-    getInitialState: function() {
-        return {
-            phase: this.Phases.Edit,
-            cachedPassword: null,
-            oldPassword: "",
-            newPassword: "",
-            newPasswordConfirm: "",
-        };
-    },
+    state = {
+        phase: ChangePassword.Phases.Edit,
+        cachedPassword: null,
+        oldPassword: "",
+        newPassword: "",
+        newPasswordConfirm: "",
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this._sessionStore = sessionStore;
         this._sessionStoreToken = this._sessionStore.addListener(
             this._setStateFromSessionStore,
         );
 
         this._setStateFromSessionStore();
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         if (this._sessionStoreToken) {
             this._sessionStoreToken.remove();
         }
-    },
+    }
 
-    _setStateFromSessionStore: function() {
+    _setStateFromSessionStore = () => {
         this.setState({
             cachedPassword: this._sessionStore.getCachedPassword(),
         });
-    },
+    };
 
-    changePassword: function(oldPassword, newPassword) {
+    changePassword(oldPassword, newPassword) {
         const cli = MatrixClientPeg.get();
 
         if (!this.props.confirm) {
@@ -136,9 +129,9 @@ export default createReactClass({
                 }
             },
         });
-    },
+    }
 
-    _changePassword: function(cli, oldPassword, newPassword) {
+    _changePassword(cli, oldPassword, newPassword) {
         const authDict = {
             type: 'm.login.password',
             identifier: {
@@ -152,7 +145,7 @@ export default createReactClass({
         };
 
         this.setState({
-            phase: this.Phases.Uploading,
+            phase: ChangePassword.Phases.Uploading,
         });
 
         cli.setPassword(authDict, newPassword).then(() => {
@@ -172,51 +165,51 @@ export default createReactClass({
             this.props.onError(err);
         }).finally(() => {
             this.setState({
-                phase: this.Phases.Edit,
+                phase: ChangePassword.Phases.Edit,
                 oldPassword: "",
                 newPassword: "",
                 newPasswordConfirm: "",
             });
         });
-    },
+    }
 
-    _optionallySetEmail: function() {
+    _optionallySetEmail() {
         // Ask for an email otherwise the user has no way to reset their password
         const SetEmailDialog = sdk.getComponent("dialogs.SetEmailDialog");
         const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
         });
         return modal.finished.then(([confirmed]) => confirmed);
-    },
+    }
 
-    _onExportE2eKeysClicked: function() {
+    _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
             import('../../../async-components/views/dialogs/ExportE2eKeysDialog'),
             {
                 matrixClient: MatrixClientPeg.get(),
             },
         );
-    },
+    };
 
-    onChangeOldPassword(ev) {
+    onChangeOldPassword = (ev) => {
         this.setState({
             oldPassword: ev.target.value,
         });
-    },
+    };
 
-    onChangeNewPassword(ev) {
+    onChangeNewPassword = (ev) => {
         this.setState({
             newPassword: ev.target.value,
         });
-    },
+    };
 
-    onChangeNewPasswordConfirm(ev) {
+    onChangeNewPasswordConfirm = (ev) => {
         this.setState({
             newPasswordConfirm: ev.target.value,
         });
-    },
+    };
 
-    onClickChange: function(ev) {
+    onClickChange = (ev) => {
         ev.preventDefault();
         const oldPassword = this.state.cachedPassword || this.state.oldPassword;
         const newPassword = this.state.newPassword;
@@ -229,9 +222,9 @@ export default createReactClass({
         } else {
             this.changePassword(oldPassword, newPassword);
         }
-    },
+    };
 
-    render: function() {
+    render() {
         // TODO: Live validation on `new pw == confirm pw`
 
         const rowClassName = this.props.rowClassName;
@@ -252,7 +245,7 @@ export default createReactClass({
         }
 
         switch (this.state.phase) {
-            case this.Phases.Edit:
+            case ChangePassword.Phases.Edit:
                 const passwordLabel = this.state.cachedPassword ?
                     _t('Password') : _t('New Password');
                 return (
@@ -282,7 +275,7 @@ export default createReactClass({
                         </AccessibleButton>
                     </form>
                 );
-            case this.Phases.Uploading:
+            case ChangePassword.Phases.Uploading:
                 var Loader = sdk.getComponent("elements.Spinner");
                 return (
                     <div className="mx_Dialog_content">
@@ -290,5 +283,5 @@ export default createReactClass({
                     </div>
                 );
         }
-    },
-});
+    }
+}

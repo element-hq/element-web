@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
 import Modal from '../../../Modal';
@@ -38,51 +37,52 @@ import ResizeNotifier from "../../../utils/ResizeNotifier";
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
 
-export default createReactClass({
-    displayName: 'AppsDrawer',
-
-    propTypes: {
+export default class AppsDrawer extends React.Component {
+    static propTypes = {
         userId: PropTypes.string.isRequired,
         room: PropTypes.object.isRequired,
         resizeNotifier: PropTypes.instanceOf(ResizeNotifier).isRequired,
         showApps: PropTypes.bool, // Should apps be rendered
         hide: PropTypes.bool, // If rendered, should apps drawer be visible
-    },
+    };
 
-    getDefaultProps: () => ({
+    static defaultProps = {
         showApps: true,
         hide: false,
-    }),
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             apps: this._getApps(),
         };
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         ScalarMessaging.startListening();
         MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
         WidgetEchoStore.on('update', this._updateApps);
         this.dispatcherRef = dis.register(this.onAction);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         ScalarMessaging.stopListening();
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
         WidgetEchoStore.removeListener('update', this._updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         // Room has changed probably, update apps
         this._updateApps();
-    },
+    }
 
-    onAction: function(action) {
+    onAction = (action) => {
         const hideWidgetKey = this.props.room.roomId + '_hide_widget_drawer';
         switch (action.action) {
             case 'appsDrawer':
@@ -98,16 +98,16 @@ export default createReactClass({
 
                 break;
         }
-    },
+    };
 
-    onRoomStateEvents: function(ev, state) {
+    onRoomStateEvents = (ev, state) => {
         if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'im.vector.modular.widgets') {
             return;
         }
         this._updateApps();
-    },
+    };
 
-    _getApps: function() {
+    _getApps() {
         const widgets = WidgetEchoStore.getEchoedRoomWidgets(
             this.props.room.roomId, WidgetUtils.getRoomWidgets(this.props.room),
         );
@@ -116,33 +116,33 @@ export default createReactClass({
                 ev.getStateKey(), ev.getContent(), ev.getSender(), ev.getRoomId(), ev.getId(),
             );
         });
-    },
+    }
 
-    _updateApps: function() {
+    _updateApps = () => {
         const apps = this._getApps();
         this.setState({
             apps: apps,
         });
-    },
+    };
 
-    _canUserModify: function() {
+    _canUserModify() {
         try {
             return WidgetUtils.canUserModifyWidgets(this.props.room.roomId);
         } catch (err) {
             console.error(err);
             return false;
         }
-    },
+    }
 
-    _launchManageIntegrations: function() {
+    _launchManageIntegrations() {
         if (SettingsStore.getValue("feature_many_integration_managers")) {
             IntegrationManagers.sharedInstance().openAll();
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(this.props.room, 'add_integ');
         }
-    },
+    }
 
-    onClickAddWidget: function(e) {
+    onClickAddWidget = (e) => {
         e.preventDefault();
         // Display a warning dialog if the max number of widgets have already been added to the room
         const apps = this._getApps();
@@ -157,9 +157,9 @@ export default createReactClass({
             return;
         }
         this._launchManageIntegrations();
-    },
+    };
 
-    render: function() {
+    render() {
         const apps = this.state.apps.map((app, index, arr) => {
             const capWhitelist = WidgetUtils.getCapWhitelistForAppTypeInRoomId(app.type, this.props.room.roomId);
 
@@ -230,8 +230,8 @@ export default createReactClass({
                 { this._canUserModify() && addWidget }
             </div>
         );
-    },
-});
+    }
+}
 
 const PersistentVResizer = ({
     id,

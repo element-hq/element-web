@@ -16,29 +16,26 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 
-export default createReactClass({
-    displayName: 'RoomUpgradeWarningBar',
-
-    propTypes: {
+export default class RoomUpgradeWarningBar extends React.Component {
+    static propTypes = {
         room: PropTypes.object.isRequired,
         recommendation: PropTypes.object.isRequired,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
 
         MatrixClientPeg.get().on("RoomState.events", this._onStateEvents);
-    },
+    }
 
-    _onStateEvents: function(event, state) {
+    _onStateEvents = (event, state) => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }
@@ -47,14 +44,14 @@ export default createReactClass({
 
         const tombstone = this.props.room.currentState.getStateEvents("m.room.tombstone", "");
         this.setState({upgraded: tombstone && tombstone.getContent().replacement_room});
-    },
+    };
 
-    onUpgradeClick: function() {
+    onUpgradeClick = () => {
         const RoomUpgradeDialog = sdk.getComponent('dialogs.RoomUpgradeDialog');
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, {room: this.props.room});
-    },
+    };
 
-    render: function() {
+    render() {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
 
         let doUpgradeWarnings = (
@@ -117,5 +114,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

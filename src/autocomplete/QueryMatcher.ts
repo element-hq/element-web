@@ -16,8 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import _at from 'lodash/at';
-import _uniq from 'lodash/uniq';
+import {at, uniq} from 'lodash';
 import {removeHiddenChars} from "matrix-js-sdk/src/utils";
 
 interface IOptions<T extends {}> {
@@ -73,7 +72,7 @@ export default class QueryMatcher<T extends Object> {
             // type for their values. We assume that those values who's keys have
             // been specified will be string. Also, we cannot infer all the
             // types of the keys of the objects at compile.
-            const keyValues = _at<string>(<any>object, this._options.keys);
+            const keyValues = at<string>(<any>object, this._options.keys);
 
             if (this._options.funcs) {
                 for (const f of this._options.funcs) {
@@ -137,7 +136,7 @@ export default class QueryMatcher<T extends Object> {
         });
 
         // Now map the keys to the result objects. Also remove any duplicates.
-        return _uniq(matches.map((match) => match.object));
+        return uniq(matches.map((match) => match.object));
     }
 
     private processQuery(query: string): string {

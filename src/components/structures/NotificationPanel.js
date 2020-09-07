@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { _t } from '../../languageHandler';
 import {MatrixClientPeg} from "../../MatrixClientPeg";
 import * as sdk from "../../index";
@@ -25,13 +24,8 @@ import * as sdk from "../../index";
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
-const NotificationPanel = createReactClass({
-    displayName: 'NotificationPanel',
-
-    propTypes: {
-    },
-
-    render: function() {
+class NotificationPanel extends React.Component {
+    render() {
         // wrap a TimelinePanel with the jump-to-event bits turned off.
         const TimelinePanel = sdk.getComponent("structures.TimelinePanel");
         const Loader = sdk.getComponent("elements.Spinner");
@@ -45,7 +39,7 @@ const NotificationPanel = createReactClass({
         if (timelineSet) {
             return (
                 <div className="mx_NotificationPanel" role="tabpanel">
-                    <TimelinePanel key={"NotificationPanel_" + this.props.roomId}
+                    <TimelinePanel
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={timelineSet}
@@ -63,7 +57,7 @@ const NotificationPanel = createReactClass({
                 </div>
             );
         }
-    },
-});
+    }
+}
 
 export default NotificationPanel;
