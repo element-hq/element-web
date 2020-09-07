@@ -395,10 +395,8 @@ async function _startCallApp(roomId, type) {
     if (jitsiAuth === 'openidtoken-jwt') {
         // Create conference ID from room ID
         // For compatibility with Jitsi, use base32 without padding.
-        // If the room ID needs to be decoded from the conference ID,
-        // the receiver should first uppercase it if needed and then add padding.
         // More details here:
-        // TODO add link
+        // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
         confId = base32.stringify(Buffer.from(roomId), { pad: false });
     } else {
         // Create a random human readable conference ID
