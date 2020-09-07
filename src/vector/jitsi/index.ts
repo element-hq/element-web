@@ -167,8 +167,10 @@ function createJWTToken() {
     const header = {alg: 'HS256', typ: 'JWT'};
     // Payload
     const payload = {
-        // TODO change this to refer to spec?
-        iss: 'app_id',
+        // As per Jitsi token auth, `iss` needs to be set to something agreed between
+        // JWT generating side and Prosody config. Since we have no configuration for
+        // the widgets, we can't set one anywhere. Using the Jitsi domain here probably makes sense.
+        iss: jitsiDomain,
         sub: jitsiDomain,
         aud: `https://${jitsiDomain}`,
         room: "*",
