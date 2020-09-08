@@ -186,7 +186,14 @@ export default class WidgetMessaging {
                 isUserWidget: this.isUserWidget,
 
                 onFinished: async (confirm) => {
-                    const responseBody = {success: confirm};
+                    const responseBody = {
+                        // Legacy (early draft) fields
+                        success: confirm,
+
+                        // New style MSC1960 fields
+                        state: confirm ? "allowed" : "blocked",
+                        original_request_id: ev.requestId, // eslint-disable-line camelcase
+                    };
                     if (confirm) {
                         const credentials = await MatrixClientPeg.get().getOpenIdToken();
                         Object.assign(responseBody, credentials);
