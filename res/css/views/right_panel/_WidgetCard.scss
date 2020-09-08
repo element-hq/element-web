@@ -22,4 +22,20 @@ limitations under the License.
         height: 100%;
         border: 0;
     }
+
+    &.mx_WidgetCard_noEdit {
+        .mx_AccessibleButton_kind_secondary {
+            margin: 0 12px;
+
+            &:first-child {
+                // expand the Pin to room primary action
+                flex-grow: 1;
+            }
+        }
+    }
+}
+
+.mx_WidgetCard_maxPinnedTooltip {
+    background-color: $notice-primary-color;
+    color: #ffffff;
 }

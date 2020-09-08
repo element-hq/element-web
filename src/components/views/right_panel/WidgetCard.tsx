@@ -37,6 +37,8 @@ import IconizedContextMenu, {
 } from "../context_menus/IconizedContextMenu";
 import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
 import {Capability} from "../../../widgets/WidgetApi";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import classNames from "classnames";
 
 interface IProps {
     room: Room;
@@ -134,13 +136,39 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         WidgetUtils.editWidget(room, app);
     };
 
-    const footer = <React.Fragment>
-        <AccessibleButton kind="secondary" onClick={onEditClick} disabled={!canModify}>
+    let editButton;
+    if (canModify) {
+        editButton = <AccessibleButton kind="secondary" onClick={onEditClick}>
             { _t("Edit") }
-        </AccessibleButton>
-        <AccessibleButton kind="secondary" onClick={onPinClick} disabled={!WidgetStore.instance.canPin(app.id)}>
+        </AccessibleButton>;
+    }
+
+    const pinButtonClasses = canModify ? "" : "mx_WidgetCard_widePinButton";
+
+    let pinButton;
+    if (WidgetStore.instance.canPin(app.id)) {
+        pinButton = <AccessibleButton
+            kind="secondary"
+            onClick={onPinClick}
+            className={pinButtonClasses}
+        >
             { _t("Pin to room") }
-        </AccessibleButton>
+        </AccessibleButton>;
+    } else {
+        pinButton = <AccessibleTooltipButton
+            title={_t("You can only pin 2 apps at a time")}
+            tooltipClassName="mx_WidgetCard_maxPinnedTooltip"
+            kind="secondary"
+            className={pinButtonClasses}
+            disabled
+        >
+            { _t("Pin to room") }
+        </AccessibleTooltipButton>;
+    }
+
+    const footer = <React.Fragment>
+        { editButton }
+        { pinButton }
         <ContextMenuButton
             kind="secondary"
             className={""}
@@ -158,7 +186,9 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     return <BaseCard
         header={header}
         footer={footer}
-        className="mx_WidgetCard"
+        className={classNames("mx_WidgetCard", {
+            mx_WidgetCard_noEdit: !canModify,
+        })}
         onClose={onClose}
         previousPhase={RightPanelPhases.RoomSummary}
         withoutScrollContainer

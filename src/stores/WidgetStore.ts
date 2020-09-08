@@ -23,7 +23,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import SettingsStore from "../settings/SettingsStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetUtils from "../utils/WidgetUtils";
-import {IRRELEVANT_ROOM} from "../settings/WatchManager";
 import {SettingLevel} from "../settings/SettingLevel";
 
 interface IState {}
@@ -55,7 +54,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private constructor() {
         super(defaultDispatcher, {});
 
-        SettingsStore.watchSetting("Widgets.pinned", IRRELEVANT_ROOM, this.onPinnedWidgetsChange);
+        SettingsStore.watchSetting("Widgets.pinned", null, this.onPinnedWidgetsChange);
         WidgetEchoStore.on("update", this.onWidgetEchoStoreUpdate);
     }
 
