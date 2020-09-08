@@ -81,9 +81,9 @@ export interface OpenIDCredentials {
  *   the given promise resolves.
  */
 export class WidgetApi extends EventEmitter {
-    private origin: string;
+    private readonly origin: string;
     private inFlightRequests: { [requestId: string]: (reply: FromWidgetRequest) => void } = {};
-    private readyPromise: Promise<any>;
+    private readonly readyPromise: Promise<any>;
     private readyPromiseResolve: () => void;
     private openIDCredentialsCallback: () => void;
     public openIDCredentials: OpenIDCredentials;
