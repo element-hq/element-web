@@ -174,8 +174,11 @@ function joinConference() { // event handler bound in HTML
 
     switchVisibleContainers();
 
-    // noinspection JSIgnoredPromiseFromCall
-    if (widgetApi) widgetApi.setAlwaysOnScreen(true); // ignored promise because we don't care if it works
+    if (widgetApi) {
+        // ignored promise because we don't care if it works
+        // noinspection JSIgnoredPromiseFromCall
+        widgetApi.setAlwaysOnScreen(true);
+    }
 
     console.warn(
         "[Jitsi Widget] The next few errors about failing to parse URL parameters are fine if " +
@@ -204,8 +207,11 @@ function joinConference() { // event handler bound in HTML
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
 
-        // noinspection JSIgnoredPromiseFromCall
-        if (widgetApi) widgetApi.setAlwaysOnScreen(false); // ignored promise because we don't care if it works
+        if (widgetApi) {
+            // ignored promise because we don't care if it works
+            // noinspection JSIgnoredPromiseFromCall
+            widgetApi.setAlwaysOnScreen(false);
+        }
 
         document.getElementById("jitsiContainer").innerHTML = "";
     });
