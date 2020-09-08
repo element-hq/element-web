@@ -31,7 +31,6 @@ import AccessibleButton from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
 import SettingsStore from "../../../settings/SettingsStore";
 import {EventTimeline} from "matrix-js-sdk";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
