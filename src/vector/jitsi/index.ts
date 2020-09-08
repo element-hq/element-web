@@ -18,9 +18,8 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {Capability, KnownWidgetActions, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
+import {Capability, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
 import {KJUR} from 'jsrsasign';
-import {objectClone} from 'matrix-react-sdk/src/utils/objects';
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 
@@ -39,7 +38,6 @@ let avatarUrl: string;
 let userId: string;
 let jitsiAuth: string;
 let roomId: string;
-let openIDToken: string;
 
 let widgetApi: WidgetApi;
 
@@ -85,12 +83,8 @@ let widgetApi: WidgetApi;
 
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-                window.addEventListener('message', onWidgetMessage);
-                widgetApi.callAction(
-                    KnownWidgetActions.GetOpenIDCredentials,
-                    {},
-                    () => {},
-                );
+                // Request credentials, give callback to continue when received
+                widgetApi.requestOpenIDCredentials(credentialsResponseCallback);
             } else {
                 enableJoinButton();
             }
@@ -104,45 +98,16 @@ let widgetApi: WidgetApi;
     }
 })();
 
-function processOpenIDMessage(msg) {
-    const data = (msg.action === KnownWidgetActions.GetOpenIDCredentials) ? msg.response : msg.data;
-
-    switch (data.state) {
-        case 'allowed':
-            console.info('Successfully got OpenID credentials.');
-            openIDToken = data.access_token;
-            // Send a response if this was not a response to GetOpenIDCredentials
-            if (msg.action === KnownWidgetActions.ReceiveOpenIDCredentials) {
-                const request = objectClone(msg);
-                request.response = {};
-                window.parent.postMessage(request, '*');
-            }
-            enableJoinButton();
-            break;
-        case 'blocked':
-            console.warn('OpenID credentials request was blocked by user.');
-            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
-            break;
-        default:
-           // nothing to do
-    }
-}
-
 /**
- * Implements processing OpenID token requests as per MSC1960
+ * Enable or show error depending on what the credentials response is.
  */
-function onWidgetMessage(msg) {
-    const data = msg.data;
-    if (!data) {
-        return;
-    }
-    switch (data.action) {
-        case KnownWidgetActions.GetOpenIDCredentials:
-        case KnownWidgetActions.ReceiveOpenIDCredentials:
-            processOpenIDMessage(data);
-            break;
-        default:
-            // Nothing to do
+function credentialsResponseCallback() {
+    if (widgetApi.openIDCredentials) {
+        console.info('Successfully got OpenID credentials.');
+        enableJoinButton();
+    } else {
+        console.warn('OpenID credentials request was blocked by user.');
+        document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
     }
 }
 
@@ -175,7 +140,7 @@ function createJWTToken() {
         room: "*",
         context: {
             matrix: {
-                token: openIDToken,
+                token: widgetApi.openIDCredentials.accessToken,
                 room_id: roomId,
             },
             user: {
@@ -196,6 +161,17 @@ function createJWTToken() {
 }
 
 function joinConference() { // event handler bound in HTML
+    let jwt;
+    if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
+        if (!widgetApi.openIDCredentials || !widgetApi.openIDCredentials.accessToken) {
+            // We've failing to get a token, don't try to init conference
+            console.warn('Expected to have an OpenID credential, cannot initialize widget.');
+            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
+            return;
+        }
+        jwt = createJWTToken();
+    }
+
     switchVisibleContainers();
 
     // noinspection JSIgnoredPromiseFromCall
@@ -217,18 +193,15 @@ function joinConference() { // event handler bound in HTML
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
         },
-        jwt: undefined,
+        jwt: jwt,
     };
-    if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        options.jwt = createJWTToken();
-    }
+
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
 
     meetApi.on("readyToClose", () => {
-        window.removeEventListener('message', onWidgetMessage);
         switchVisibleContainers();
 
         // noinspection JSIgnoredPromiseFromCall
