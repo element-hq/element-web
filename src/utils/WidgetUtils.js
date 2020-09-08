@@ -480,13 +480,11 @@ export default class WidgetUtils {
     }
 
     static getWidgetName(app) {
-        if (!app || !app.name) return "";
-        return app.name.trim() || _t("Unknown App");
+        return app?.name?.trim() || _t("Unknown App");
     }
 
     static getWidgetDataTitle(app) {
-        if (!app || !app.data || !app.data.title) return "";
-        return app.data.title.trim();
+        return app?.data?.title?.trim() || "";
     }
 
     static editWidget(room, app) {
