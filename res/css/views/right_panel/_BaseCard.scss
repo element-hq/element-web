@@ -35,7 +35,7 @@ limitations under the License.
 
         .mx_BaseCard_back, .mx_BaseCard_close {
             position: absolute;
-            background-color: rgba(141, 151, 165, 0.2); // TODO
+            background-color: rgba(141, 151, 165, 0.2);
             height: 20px;
             width: 20px;
             margin: 12px;
@@ -44,10 +44,10 @@ limitations under the License.
             &::before {
                 content: "";
                 position: absolute;
-                height: 16px;
-                width: 16px;
-                top: 2px;
-                left: 2px;
+                height: 20px;
+                width: 20px;
+                top: 0;
+                left: 0;
                 mask-repeat: no-repeat;
                 mask-position: center;
                 background-color: $rightpanel-button-color;
@@ -60,8 +60,8 @@ limitations under the License.
 
             &::before {
                 transform: rotate(90deg);
-                mask-size: 20px;
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg'); // TODO
+                mask-size: 22px;
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
             }
         }
 
@@ -70,7 +70,8 @@ limitations under the License.
             right: 0;
 
             &::before {
-                mask-image: url('$(res)/img/icons-close.svg'); // TODO
+                mask-image: url('$(res)/img/icons-close.svg');
+                mask-size: 8px;
             }
         }
     }
@@ -126,7 +127,7 @@ limitations under the License.
                 background-color: $icon-button-color;
                 transform: rotate(270deg);
                 mask-size: 20px;
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg'); // TODO
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
             }
         }
     }
@@ -139,11 +140,11 @@ limitations under the License.
 
         .mx_AccessibleButton_kind_secondary {
             color: $secondary-fg-color;
-            background-color: rgba(141, 151, 165, 0.2); // TODO
+            background-color: rgba(141, 151, 165, 0.2);
             font-weight: $font-semi-bold;
             font-size: $font-14px;
         }
-        
+
         .mx_AccessibleButton_disabled {
             cursor: not-allowed;
         }
