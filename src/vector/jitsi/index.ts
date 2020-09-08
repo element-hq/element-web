@@ -22,6 +22,8 @@ import {Capability, KnownWidgetActions, WidgetApi} from 'matrix-react-sdk/src/wi
 import {KJUR} from 'jsrsasign';
 import {objectClone} from 'matrix-react-sdk/src/utils/objects';
 
+const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
+
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
 
@@ -82,7 +84,7 @@ let widgetApi: WidgetApi;
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
-            if (jitsiAuth === 'openidtoken-jwt') {
+            if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
                 window.addEventListener('message', onWidgetMessage);
                 widgetApi.callAction(
                     KnownWidgetActions.GetOpenIDCredentials,
@@ -103,14 +105,14 @@ let widgetApi: WidgetApi;
 })();
 
 function processOpenIDMessage(msg) {
-    const data = (msg.action === 'get_openid') ? msg.response : msg.data;
+    const data = (msg.action === KnownWidgetActions.GetOpenIDCredentials) ? msg.response : msg.data;
 
     switch (data.state) {
         case 'allowed':
             console.info('Successfully got OpenID credentials.');
             openIDToken = data.access_token;
-            // Send a response if this was not a response
-            if (msg.action === 'openid_credentials') {
+            // Send a response if this was not a response to GetOpenIDCredentials
+            if (msg.action === KnownWidgetActions.ReceiveOpenIDCredentials) {
                 const request = objectClone(msg);
                 request.response = {};
                 window.parent.postMessage(request, '*');
@@ -135,8 +137,8 @@ function onWidgetMessage(msg) {
         return;
     }
     switch (data.action) {
-        case 'get_openid':
-        case 'openid_credentials':
+        case KnownWidgetActions.GetOpenIDCredentials:
+        case KnownWidgetActions.ReceiveOpenIDCredentials:
             processOpenIDMessage(data);
             break;
         default:
@@ -217,7 +219,7 @@ function joinConference() { // event handler bound in HTML
         },
         jwt: undefined,
     };
-    if (jitsiAuth === 'openidtoken-jwt') {
+    if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         options.jwt = createJWTToken();
     }
     const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
