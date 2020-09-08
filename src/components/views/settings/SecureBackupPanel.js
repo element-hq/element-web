@@ -34,9 +34,13 @@ export default class SecureBackupPanel extends React.PureComponent {
         this.state = {
             loading: true,
             error: null,
+            backupKeyStored: null,
+            backupKeyCached: null,
+            backupKeyWellFormed: null,
+            secretStorageKeyInAccount: null,
+            secretStorageReady: null,
             backupInfo: null,
             backupSigStatus: null,
-            backupKeyStored: null,
             sessionsRemaining: 0,
         };
     }
@@ -76,54 +80,71 @@ export default class SecureBackupPanel extends React.PureComponent {
     }
 
     async _checkKeyBackupStatus() {
+        this._getUpdatedDiagnostics();
         try {
             const {backupInfo, trustInfo} = await MatrixClientPeg.get().checkKeyBackup();
-            const backupKeyStored = Boolean(await MatrixClientPeg.get().isKeyBackupKeyStored());
             this.setState({
+                loading: false,
+                error: null,
                 backupInfo,
                 backupSigStatus: trustInfo,
-                backupKeyStored,
-                error: null,
-                loading: false,
             });
         } catch (e) {
             console.log("Unable to fetch check backup status", e);
             if (this._unmounted) return;
             this.setState({
+                loading: false,
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
-                backupKeyStored: null,
-                loading: false,
             });
         }
     }
 
     async _loadBackupStatus() {
-        this.setState({loading: true});
+        this.setState({ loading: true });
+        this._getUpdatedDiagnostics();
         try {
             const backupInfo = await MatrixClientPeg.get().getKeyBackupVersion();
             const backupSigStatus = await MatrixClientPeg.get().isKeyBackupTrusted(backupInfo);
-            const backupKeyStored = await MatrixClientPeg.get().isKeyBackupKeyStored();
             if (this._unmounted) return;
             this.setState({
+                loading: false,
                 error: null,
                 backupInfo,
                 backupSigStatus,
-                backupKeyStored,
-                loading: false,
             });
         } catch (e) {
             console.log("Unable to fetch key backup status", e);
             if (this._unmounted) return;
             this.setState({
+                loading: false,
                 error: e,
                 backupInfo: null,
                 backupSigStatus: null,
-                backupKeyStored: null,
-                loading: false,
             });
         }
+    }
+
+    async _getUpdatedDiagnostics() {
+        const cli = MatrixClientPeg.get();
+        const secretStorage = cli._crypto._secretStorage;
+
+        const backupKeyStored = await cli.isKeyBackupKeyStored();
+        const backupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
+        const backupKeyCached = !!(backupKeyFromCache);
+        const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
+        const secretStorageKeyInAccount = await secretStorage.hasKey();
+        const secretStorageReady = await cli.isSecretStorageReady();
+
+        if (this._unmounted) return;
+        this.setState({
+            backupKeyStored,
+            backupKeyCached,
+            backupKeyWellFormed,
+            secretStorageKeyInAccount,
+            secretStorageReady,
+        });
     }
 
     _startNewBackup = () => {
@@ -167,9 +188,13 @@ export default class SecureBackupPanel extends React.PureComponent {
         const {
             loading,
             error,
+            backupKeyStored,
+            backupKeyCached,
+            backupKeyWellFormed,
+            secretStorageKeyInAccount,
+            secretStorageReady,
             backupInfo,
             backupSigStatus,
-            backupKeyStored,
             sessionsRemaining,
         } = this.state;
 
@@ -359,6 +384,16 @@ export default class SecureBackupPanel extends React.PureComponent {
             );
         }
 
+        let backupKeyWellFormedText = "";
+        if (backupKeyCached) {
+            backupKeyWellFormedText = ", ";
+            if (backupKeyWellFormed) {
+                backupKeyWellFormedText += _t("well formed");
+            } else {
+                backupKeyWellFormedText += _t("unexpected type");
+            }
+        }
+
         return (
             <div>
                 <p>{_t(
@@ -375,6 +410,21 @@ export default class SecureBackupPanel extends React.PureComponent {
                             <td>{
                                 backupKeyStored === true ? _t("in secret storage") : _t("not stored")
                             }</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Backup key cached:")}</td>
+                            <td>
+                                {backupKeyCached ? _t("cached locally") : _t("not found locally")}
+                                {backupKeyWellFormedText}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Secret storage public key:")}</td>
+                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
+                        </tr>
+                        <tr>
+                            <td>{_t("Secret storage:")}</td>
+                            <td>{secretStorageReady ? _t("ready") : _t("not ready")}</td>
                         </tr>
                         {extraDetailsTableRows}
                     </tbody></table>

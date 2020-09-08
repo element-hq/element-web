@@ -31,13 +31,13 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         this.state = {
             error: null,
-            crossSigningPublicKeysOnDevice: false,
-            crossSigningPrivateKeysInStorage: false,
-            masterPrivateKeyCached: false,
-            selfSigningPrivateKeyCached: false,
-            userSigningPrivateKeyCached: false,
-            sessionBackupKeyCached: false,
-            secretStorageKeyInAccount: false,
+            crossSigningPublicKeysOnDevice: null,
+            crossSigningPrivateKeysInStorage: null,
+            masterPrivateKeyCached: null,
+            selfSigningPrivateKeyCached: null,
+            userSigningPrivateKeyCached: null,
+            homeserverSupportsCrossSigning: null,
+            crossSigningReady: null,
         };
     }
 
@@ -83,14 +83,9 @@ export default class CrossSigningPanel extends React.PureComponent {
         const masterPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("master"));
         const selfSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"));
         const userSigningPrivateKeyCached = !!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"));
-        const sessionBackupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
-        const sessionBackupKeyCached = !!(sessionBackupKeyFromCache);
-        const sessionBackupKeyWellFormed = sessionBackupKeyFromCache instanceof Uint8Array;
-        const secretStorageKeyInAccount = await secretStorage.hasKey();
         const homeserverSupportsCrossSigning =
             await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing");
         const crossSigningReady = await cli.isCrossSigningReady();
-        const secretStorageReady = await cli.isSecretStorageReady();
 
         this.setState({
             crossSigningPublicKeysOnDevice,
@@ -98,12 +93,8 @@ export default class CrossSigningPanel extends React.PureComponent {
             masterPrivateKeyCached,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
-            sessionBackupKeyCached,
-            sessionBackupKeyWellFormed,
-            secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
-            secretStorageReady,
         });
     }
 
@@ -149,12 +140,8 @@ export default class CrossSigningPanel extends React.PureComponent {
             masterPrivateKeyCached,
             selfSigningPrivateKeyCached,
             userSigningPrivateKeyCached,
-            sessionBackupKeyCached,
-            sessionBackupKeyWellFormed,
-            secretStorageKeyInAccount,
             homeserverSupportsCrossSigning,
             crossSigningReady,
-            secretStorageReady,
         } = this.state;
 
         let errorSection;
@@ -169,14 +156,9 @@ export default class CrossSigningPanel extends React.PureComponent {
             summarisedStatus = <p>{_t(
                 "Your homeserver does not support cross-signing.",
             )}</p>;
-        } else if (crossSigningReady && secretStorageReady) {
+        } else if (crossSigningReady) {
             summarisedStatus = <p>✅ {_t(
-                "Cross-signing and secret storage are ready for use.",
-            )}</p>;
-        } else if (crossSigningReady && !secretStorageReady) {
-            summarisedStatus = <p>✅ {_t(
-                "Cross-signing is ready for use, but secret storage is " +
-                "currently not being used to backup your keys.",
+                "Cross-signing is ready for use.",
             )}</p>;
         } else if (crossSigningPrivateKeysInStorage) {
             summarisedStatus = <p>{_t(
@@ -185,17 +167,15 @@ export default class CrossSigningPanel extends React.PureComponent {
             )}</p>;
         } else {
             summarisedStatus = <p>{_t(
-                "Cross-signing and secret storage are not yet set up.",
+                "Cross-signing is not set up.",
             )}</p>;
         }
 
         const keysExistAnywhere = (
-            secretStorageKeyInAccount ||
             crossSigningPrivateKeysInStorage ||
             crossSigningPublicKeysOnDevice
         );
         const keysExistEverywhere = (
-            secretStorageKeyInAccount &&
             crossSigningPrivateKeysInStorage &&
             crossSigningPublicKeysOnDevice
         );
@@ -223,16 +203,6 @@ export default class CrossSigningPanel extends React.PureComponent {
             );
         }
 
-        let sessionBackupKeyWellFormedText = "";
-        if (sessionBackupKeyCached) {
-            sessionBackupKeyWellFormedText = ", ";
-            if (sessionBackupKeyWellFormed) {
-                sessionBackupKeyWellFormedText += _t("well formed");
-            } else {
-                sessionBackupKeyWellFormedText += _t("unexpected type");
-            }
-        }
-
         return (
             <div>
                 {summarisedStatus}
@@ -258,17 +228,6 @@ export default class CrossSigningPanel extends React.PureComponent {
                         <tr>
                             <td>{_t("User signing private key:")}</td>
                             <td>{userSigningPrivateKeyCached ? _t("cached locally") : _t("not found locally")}</td>
-                        </tr>
-                        <tr>
-                            <td>{_t("Session backup key:")}</td>
-                            <td>
-                                {sessionBackupKeyCached ? _t("cached locally") : _t("not found locally")}
-                                {sessionBackupKeyWellFormedText}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{_t("Secret storage public key:")}</td>
-                            <td>{secretStorageKeyInAccount ? _t("in account data") : _t("not found")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Homeserver feature support:")}</td>
