@@ -37,7 +37,7 @@ import * as sdk from '../../index';
 import CallHandler from '../../CallHandler';
 import dis from '../../dispatcher/dispatcher';
 import Tinter from '../../Tinter';
-import rate_limited_func from '../../ratelimitedfunc';
+import rateLimitedFunc from '../../ratelimitedfunc';
 import * as ObjectUtils from '../../ObjectUtils';
 import * as Rooms from '../../Rooms';
 import eventSearch, {searchPagination} from '../../Searching';
@@ -1014,7 +1014,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     }
 
     // rate limited because a power level change will emit an event for every member in the room.
-    private updateRoomMembers = rate_limited_func((dueToMember) => {
+    private updateRoomMembers = rateLimitedFunc((dueToMember) => {
         // a member state changed in this room
         // refresh the conf call notification state
         this.updateConfCallNotification();
