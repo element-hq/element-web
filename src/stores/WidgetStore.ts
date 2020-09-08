@@ -25,6 +25,7 @@ import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import {SettingLevel} from "../settings/SettingLevel";
 import {WidgetType} from "../widgets/WidgetType";
+import {UPDATE_EVENT} from "./AsyncStore";
 
 interface IState {}
 
@@ -87,7 +88,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
             this.loadRoomWidgets(room);
         });
-        this.emit("update");
+        this.emit(UPDATE_EVENT);
     }
 
     protected async onNotReady(): Promise<any> {
@@ -105,7 +106,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private onWidgetEchoStoreUpdate(roomId: string, widgetId: string) {
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit("update");
+        this.emit(UPDATE_EVENT);
     }
 
     private generateApps(room: Room): IApp[] {
@@ -131,7 +132,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomId = ev.getRoomId();
         this.initRoom(roomId);
         this.loadRoomWidgets(this.matrixClient.getRoom(roomId));
-        this.emit("update");
+        this.emit(UPDATE_EVENT);
     }
 
     public getRoomId = (widgetId: string) => {
@@ -148,7 +149,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.initRoom(roomId);
         this.getRoom(roomId).pinned = SettingsStore.getValue(settingName, roomId);
         this.emit(roomId);
-        this.emit("update");
+        this.emit(UPDATE_EVENT);
     };
 
     public isPinned(widgetId: string) {
@@ -192,7 +193,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, roomInfo.pinned);
         this.emit(roomId);
-        this.emit("update");
+        this.emit(UPDATE_EVENT);
     }
 
     public getApps(room: Room, pinned?: boolean): IApp[] {
