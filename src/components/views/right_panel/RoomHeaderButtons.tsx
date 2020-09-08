@@ -25,6 +25,7 @@ import HeaderButtons, {HeaderKind} from './HeaderButtons';
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
+import RightPanelStore from "../../../stores/RightPanelStore";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -57,11 +58,15 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    // TODO make it restore whatever widget they were on last
     private onRoomSummaryClicked = () => {
-        if (this.state.phase === RightPanelPhases.Widget) {
-            // Close the panel
-            this.setPhase(RightPanelPhases.Widget);
+        // use roomPanelPhase rather than this.state.phase as it remembers the latest one if we close
+        const lastPhase = RightPanelStore.getSharedInstance().roomPanelPhase;
+        if (ROOM_INFO_PHASES.includes(lastPhase)) {
+            if (this.state.phase === lastPhase) {
+                this.setPhase(lastPhase);
+            } else {
+                this.setPhase(lastPhase, RightPanelStore.getSharedInstance().roomPanelPhaseParams);
+            }
         } else {
             // This toggles for us, if needed
             this.setPhase(RightPanelPhases.RoomSummary);

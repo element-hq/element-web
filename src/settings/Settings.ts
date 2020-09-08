@@ -609,6 +609,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "Widgets.pinned": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
-        default: [],
+        default: {},
     },
 };

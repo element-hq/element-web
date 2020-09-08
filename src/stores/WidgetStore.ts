@@ -24,6 +24,7 @@ import SettingsStore from "../settings/SettingsStore";
 import WidgetEchoStore from "../stores/WidgetEchoStore";
 import WidgetUtils from "../utils/WidgetUtils";
 import {SettingLevel} from "../settings/SettingLevel";
+import {WidgetType} from "../widgets/WidgetType";
 
 interface IState {}
 
@@ -40,7 +41,7 @@ export interface IApp {
 
 interface IRoomWidgets {
     widgets: IApp[];
-    pinned: Set<string>;
+    pinned: Record<string, boolean>;
 }
 
 // TODO consolidate WidgetEchoStore into this
@@ -65,7 +66,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private initRoom(roomId: string) {
         if (!this.roomMap.has(roomId)) {
             this.roomMap.set(roomId, {
-                pinned: new Set(),
+                pinned: {},
                 widgets: [],
             });
         }
@@ -81,7 +82,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
             }
 
             if (pinned) {
-                this.getRoom(room.roomId).pinned = new Set(pinned);
+                this.getRoom(room.roomId).pinned = pinned;
             }
 
             this.loadRoomWidgets(room);
@@ -144,9 +145,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     };
 
     private onPinnedWidgetsChange = (settingName: string, roomId: string) => {
-        const pinned = SettingsStore.getValue(settingName, roomId);
         this.initRoom(roomId);
-        this.getRoom(roomId).pinned = new Set(pinned);
+        this.getRoom(roomId).pinned = SettingsStore.getValue(settingName, roomId);
         this.emit(roomId);
         this.emit("update");
     };
@@ -154,8 +154,11 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     public isPinned(widgetId: string) {
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
-        // TODO heuristic for Jitsi etc
-        return roomInfo ? roomInfo.pinned.has(widgetId) : false;
+
+        let pinned = roomInfo && roomInfo.pinned[widgetId];
+        // Jitsi widgets should be pinned by default
+        if (pinned === undefined && WidgetType.JITSI.matches(this.widgetMap.get(widgetId).type)) pinned = true;
+        return pinned;
     }
 
     public canPin(widgetId: string) {
@@ -163,25 +166,31 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // the only case it will go to three is if you have two and then a Jitsi gets added
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
-        return roomInfo && roomInfo.pinned.size < 2;
+        return roomInfo && Object.keys(roomInfo.pinned).length < 2;
     }
 
     public pinWidget(widgetId: string) {
-        const roomId = this.getRoomId(widgetId);
-        const roomInfo = this.getRoom(roomId);
-        if (!roomInfo) return;
-        roomInfo.pinned.add(widgetId);
-        SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, Array.from(roomInfo.pinned));
-        this.emit(roomId);
-        this.emit("update");
+        this.setPinned(widgetId, true);
     }
 
     public unpinWidget(widgetId: string) {
+        this.setPinned(widgetId, false);
+    }
+
+    private setPinned(widgetId: string, value: boolean) {
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
         if (!roomInfo) return;
-        roomInfo.pinned.delete(widgetId);
-        SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, Array.from(roomInfo.pinned));
+        roomInfo.pinned[widgetId] = value;
+
+        // Clean up the pinned record
+        Object.keys(roomInfo).forEach(wId => {
+            if (!roomInfo.widgets.some(w => w.id === wId)) {
+                delete roomInfo.pinned[wId];
+            }
+        });
+
+        SettingsStore.setValue("Widgets.pinned", roomId, SettingLevel.ROOM_ACCOUNT, roomInfo.pinned);
         this.emit(roomId);
         this.emit("update");
     }

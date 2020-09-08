@@ -46,13 +46,6 @@ interface IProps {
     onClose(): void;
 }
 
-const onFinished = () => {
-    defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-        action: Action.SetRightPanelPhase,
-        phase: RightPanelPhases.RoomSummary,
-    });
-}
-
 const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -64,8 +57,11 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     useEffect(() => {
         if (!app || isPinned) {
-            // TODO maybe we should do this in the ActiveWidgetStore instead
-            onFinished();
+            // stop showing this card
+            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+                action: Action.SetRightPanelPhase,
+                phase: RightPanelPhases.RoomSummary,
+            });
         }
     }, [app, isPinned]);
 

@@ -17,7 +17,7 @@ limitations under the License.
 .mx_RoomSummaryCard {
     // shrink left gutter by 12 and instead add it as margin to all things except the buttons
     // as their hover effect should go into the gutter
-    & > * { // TODO consolidate this as the standard effect
+    & > * {
         margin-left: 10px;
         margin-right: 10px;
     }
@@ -57,7 +57,7 @@ limitations under the License.
                 width: 54px;
                 height: 54px;
                 border-radius: 50%;
-                background-color: #737D8C;
+                background-color: #737D8C; // TODO
                 margin-top: -3px; // alignment
                 margin-left: -10px; // overlap
                 border: 3px solid $dark-panel-bg-color;
@@ -77,8 +77,8 @@ limitations under the License.
                 }
             }
 
-            .mx_RoomSummaryCard_e2ee_secure{
-                background-color: #5ABFF2;
+            .mx_RoomSummaryCard_e2ee_secure {
+                background-color: #5ABFF2; // TODO
                 &::before {
                     mask-image: url('$(res)/img/e2e/normal.svg');
                 }
