@@ -57,7 +57,7 @@ limitations under the License.
                 width: 54px;
                 height: 54px;
                 border-radius: 50%;
-                background-color: #737D8C; // TODO
+                background-color: #737d8c;
                 margin-top: -3px; // alignment
                 margin-left: -10px; // overlap
                 border: 3px solid $dark-panel-bg-color;
@@ -78,7 +78,7 @@ limitations under the License.
             }
 
             .mx_RoomSummaryCard_e2ee_secure {
-                background-color: #5ABFF2; // TODO
+                background-color: #5abff2;
                 &::before {
                     mask-image: url('$(res)/img/e2e/normal.svg');
                 }
