@@ -18,7 +18,7 @@ import { SettingLevel } from "./SettingLevel";
 
 export type CallbackFn = (changedInRoomId: string, atLevel: SettingLevel, newValAtLevel: any) => void;
 
-const IRRELEVANT_ROOM = String(null);
+const IRRELEVANT_ROOM: string = null;
 
 interface RoomWatcherMap {
     [roomId: string]: CallbackFn[];
