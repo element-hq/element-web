@@ -70,18 +70,13 @@ limitations under the License.
     }
 }
 
-.mx_RightPanel_membersButton::before {
-    mask-image: url('$(res)/img/element-icons/room/members.svg');
-    mask-position: center;
-}
-
-.mx_RightPanel_filesButton::before {
-    mask-image: url('$(res)/img/element-icons/room/files.svg');
-    mask-position: center;
-}
-
 .mx_RightPanel_notifsButton::before {
     mask-image: url('$(res)/img/element-icons/notifications.svg');
+    mask-position: center;
+}
+
+.mx_RightPanel_roomSummaryButton::before {
+    mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
     mask-position: center;
 }
 
@@ -144,7 +139,7 @@ limitations under the License.
 }
 
 .mx_RightPanel_empty {
-    margin-right: -42px;
+    margin-right: -28px;
 
     h2 {
         font-weight: 700;

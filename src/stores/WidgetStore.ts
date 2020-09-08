@@ -46,7 +46,7 @@ interface IRoomWidgets {
 
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
-export class WidgetStore extends AsyncStoreWithClient<IState> {
+export default class WidgetStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new WidgetStore();
 
     private widgetMap = new Map<string, IApp>();
@@ -157,6 +157,14 @@ export class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomInfo = this.getRoom(roomId);
         // TODO heuristic for Jitsi etc
         return roomInfo ? roomInfo.pinned.has(widgetId) : false;
+    }
+
+    public canPin(widgetId: string) {
+        // only allow pinning up to a max of two as we do not yet have grid splits
+        // the only case it will go to three is if you have two and then a Jitsi gets added
+        const roomId = this.getRoomId(widgetId);
+        const roomInfo = this.getRoom(roomId);
+        return roomInfo && roomInfo.pinned.size < 2;
     }
 
     public pinWidget(widgetId: string) {

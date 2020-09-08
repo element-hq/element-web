@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HeaderButtons {
-    display: flex;
-}
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
 
-.mx_RoomHeader_buttons + .mx_HeaderButtons {
-    // remove the | separator line for when next to RoomHeaderButtons
-    // TODO: remove this once when we redo communities and make the right panel similar to the new rooms one
-    &::before {
-        content: unset;
-    }
-}
-
-.mx_HeaderButtons::before {
-    content: "";
-    background-color: $header-divider-color;
-    opacity: 0.5;
-    margin: 6px 8px;
-    border-radius: 1px;
-    width: 1px;
+export interface AppTileActionPayload extends ActionPayload {
+    action: Action.AppTileDelete | Action.AppTileRevoke;
+    widgetId: string;
 }

@@ -18,14 +18,11 @@ limitations under the License.
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
-import Modal from "../../../Modal";
 import RateLimitedFunc from '../../../ratelimitedfunc';
 
 import { linkifyElement } from '../../../HtmlUtils';
-import ManageIntegsButton from '../elements/ManageIntegsButton';
 import {CancelButton} from './SimpleRoomHeader';
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
@@ -114,13 +111,6 @@ export default class RoomHeader extends React.Component {
         this.forceUpdate();
     };
 
-    onShareRoomClick = (ev) => {
-        const ShareDialog = sdk.getComponent("dialogs.ShareDialog");
-        Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
-            target: this.props.room,
-        });
-    };
-
     _hasUnreadPins() {
         const currentPinEvent = this.props.room.currentState.getStateEvents("m.room.pinned_events", '');
         if (!currentPinEvent) return false;
@@ -150,7 +140,6 @@ export default class RoomHeader extends React.Component {
     render() {
         let searchStatus = null;
         let cancelButton = null;
-        let settingsButton = null;
         let pinnedEventsButton = null;
 
         if (this.props.onCancelClick) {
@@ -214,14 +203,6 @@ export default class RoomHeader extends React.Component {
             />;
         }
 
-        if (this.props.onSettingsClick) {
-            settingsButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_settingsButton"
-                    onClick={this.props.onSettingsClick}
-                    title={_t("Settings")} />;
-        }
-
         if (this.props.onPinnedClick && SettingsStore.getValue('feature_pinning')) {
             let pinsIndicator = null;
             if (this._hasUnreadPins()) {
@@ -258,26 +239,9 @@ export default class RoomHeader extends React.Component {
                     title={_t("Search")} />;
         }
 
-        let shareRoomButton;
-        if (this.props.inRoom) {
-            shareRoomButton =
-                <AccessibleTooltipButton
-                    className="mx_RoomHeader_button mx_RoomHeader_shareButton"
-                    onClick={this.onShareRoomClick}
-                    title={_t('Share room')} />;
-        }
-
-        let manageIntegsButton;
-        if (this.props.room && this.props.room.roomId && this.props.inRoom) {
-            manageIntegsButton = <ManageIntegsButton room={this.props.room} />;
-        }
-
         const rightRow =
             <div className="mx_RoomHeader_buttons">
-                { settingsButton }
                 { pinnedEventsButton }
-                { shareRoomButton }
-                { manageIntegsButton }
                 { forgetButton }
                 { searchButton }
             </div>;

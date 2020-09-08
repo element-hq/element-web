@@ -28,7 +28,15 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {Action} from "../../../dispatcher/actions";
-import {WidgetStore} from "../../../stores/WidgetStore";
+import WidgetStore from "../../../stores/WidgetStore";
+import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
+import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
+import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
+import {Capability} from "../../../widgets/WidgetApi";
 
 interface IProps {
     room: Room;
@@ -50,6 +58,8 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     const app = apps.find(a => a.id === widgetId);
     const isPinned = app && WidgetStore.instance.isPinned(app.id);
 
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
+
     useEffect(() => {
         if (!app || isPinned) {
             // TODO maybe we should do this in the ActiveWidgetStore instead
@@ -64,6 +74,58 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         <h2>{ WidgetUtils.getWidgetName(app) }</h2>
     </React.Fragment>;
 
+    const canModify = WidgetUtils.canUserModifyWidgets(room.roomId);
+
+    let contextMenu;
+    if (menuDisplayed) {
+        let snapshotButton;
+        if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
+            const onSnapshotClick = () => {
+                WidgetUtils.snapshotWidget(app);
+                closeMenu();
+            };
+
+            snapshotButton = <IconizedContextMenuOption onClick={onSnapshotClick} label={_t("Take a picture")} />;
+        }
+
+        let deleteButton;
+        if (canModify) {
+            const onDeleteClick = () => {
+                defaultDispatcher.dispatch<AppTileActionPayload>({
+                    action: Action.AppTileDelete,
+                    widgetId: app.id,
+                });
+                closeMenu();
+            };
+
+            deleteButton = <IconizedContextMenuOption onClick={onDeleteClick} label={_t("Remove for everyone")} />;
+        }
+
+        const onRevokeClick = () => {
+            defaultDispatcher.dispatch<AppTileActionPayload>({
+                action: Action.AppTileRevoke,
+                widgetId: app.id,
+            });
+            closeMenu();
+        };
+
+        const rect = handle.current.getBoundingClientRect();
+        contextMenu = (
+            <IconizedContextMenu
+                chevronFace={ChevronFace.None}
+                right={window.innerWidth - rect.right}
+                bottom={window.innerHeight - rect.top}
+                onFinished={closeMenu}
+            >
+                <IconizedContextMenuOptionList>
+                    { snapshotButton }
+                    { deleteButton }
+                    <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>
+        );
+    }
+
     const onPinClick = () => {
         WidgetStore.instance.pinWidget(app.id);
     };
@@ -73,12 +135,24 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     };
 
     const footer = <React.Fragment>
-        <AccessibleButton kind="secondary" onClick={onPinClick}>
-            { _t("Pin to room") }
-        </AccessibleButton>
-        <AccessibleButton kind="secondary" onClick={onEditClick}>
+        <AccessibleButton kind="secondary" onClick={onEditClick} disabled={!canModify}>
             { _t("Edit") }
         </AccessibleButton>
+        <AccessibleButton kind="secondary" onClick={onPinClick} disabled={!WidgetStore.instance.canPin(app.id)}>
+            { _t("Pin to room") }
+        </AccessibleButton>
+        <ContextMenuButton
+            kind="secondary"
+            className={""}
+            inputRef={handle}
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            label={_t("Options")}
+        >
+            ...
+        </ContextMenuButton>
+
+        { contextMenu }
     </React.Fragment>;
 
     return <BaseCard

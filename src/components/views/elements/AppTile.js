@@ -42,6 +42,8 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import {Capability} from "../../../widgets/WidgetApi";
 import {sleep} from "../../../utils/promise";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import WidgetStore from "../../../stores/WidgetStore";
+import {Action} from "../../../dispatcher/actions";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -315,17 +317,7 @@ export default class AppTile extends React.Component {
     }
 
     _onSnapshotClick() {
-        console.log("Requesting widget snapshot");
-        ActiveWidgetStore.getWidgetMessaging(this.props.app.id).getScreenshot()
-            .catch((err) => {
-                console.error("Failed to get screenshot", err);
-            })
-            .then((screenshot) => {
-                dis.dispatch({
-                    action: 'picture_snapshot',
-                    file: screenshot,
-                }, true);
-            });
+        WidgetUtils.snapshotWidget(this.props.app);
     }
 
     /**
@@ -406,6 +398,10 @@ export default class AppTile extends React.Component {
         }
     }
 
+    _onUnpinClicked = () => {
+        WidgetStore.instance.unpinWidget(this.props.app.id);
+    }
+
     _onRevokeClicked() {
         console.info("Revoke widget permissions - %s", this.props.app.id);
         this._revokeWidgetPermission();
@@ -477,12 +473,20 @@ export default class AppTile extends React.Component {
         if (payload.widgetId === this.props.app.id) {
             switch (payload.action) {
                 case 'm.sticker':
-                if (this._hasCapability('m.sticker')) {
-                    dis.dispatch({action: 'post_sticker_message', data: payload.data});
-                } else {
-                    console.warn('Ignoring sticker message. Invalid capability');
-                }
-                break;
+                    if (this._hasCapability('m.sticker')) {
+                        dis.dispatch({action: 'post_sticker_message', data: payload.data});
+                    } else {
+                        console.warn('Ignoring sticker message. Invalid capability');
+                    }
+                    break;
+
+                case Action.AppTileDelete:
+                    this._onDeleteClick();
+                    break;
+
+                case Action.AppTileRevoke:
+                    this._onRevokeClicked();
+                    break;
             }
         }
     }
@@ -826,6 +830,7 @@ export default class AppTile extends React.Component {
             contextMenu = (
                 <ContextMenu {...aboveLeftOf(elementRect, null)} onFinished={this._closeContextMenu}>
                     <WidgetContextMenu
+                        onUnpinClicked={this._onUnpinClicked}
                         onRevokeClicked={this._onRevokeClicked}
                         onEditClicked={showEditButton ? this._onEditClick : undefined}
                         onDeleteClicked={showDeleteButton ? this._onDeleteClick : undefined}

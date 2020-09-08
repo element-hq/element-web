@@ -39,7 +39,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import {IApp, WidgetStore} from "../../../stores/WidgetStore";
+import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 
 interface IProps {
     room: Room;

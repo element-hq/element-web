@@ -46,6 +46,7 @@ import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { verifyUser, legacyVerifyUser, verifyDevice } from '../../../verification';
 import {Action} from "../../../dispatcher/actions";
 import {useIsEncrypted} from "../../../hooks/useIsEncrypted";
+import BaseCard from "./BaseCard";
 
 const _disambiguateDevices = (devices) => {
     const names = Object.create(null);
@@ -451,7 +452,7 @@ const _isMuted = (member, powerLevelContent) => {
     return member.powerLevel < levelToSend;
 };
 
-const useRoomPowerLevels = (cli, room) => {
+export const useRoomPowerLevels = (cli, room) => {
     const [powerLevels, setPowerLevels] = useState({});
 
     const update = useCallback(() => {
@@ -1364,15 +1365,8 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     </React.Fragment>;
 };
 
-const UserInfoHeader = ({onClose, member, e2eStatus}) => {
+const UserInfoHeader = ({member, e2eStatus}) => {
     const cli = useContext(MatrixClientContext);
-
-    let closeButton;
-    if (onClose) {
-        closeButton = <AccessibleButton className="mx_UserInfo_cancel" onClick={onClose} title={_t('Close')}>
-            <div />
-        </AccessibleButton>;
-    }
 
     const onMemberAvatarClick = useCallback(() => {
         const avatarUrl = member.getMxcAvatarUrl ? member.getMxcAvatarUrl() : member.avatarUrl;
@@ -1448,7 +1442,6 @@ const UserInfoHeader = ({onClose, member, e2eStatus}) => {
 
     const displayName = member.name || member.displayname;
     return <React.Fragment>
-        { closeButton }
         { avatarElement }
 
         <div className="mx_UserInfo_container mx_UserInfo_separator">
@@ -1510,15 +1503,16 @@ const UserInfo = ({user, groupId, roomId, onClose, phase=RightPanelPhases.RoomMe
             break;
     }
 
-    return (
-        <div className={classes.join(" ")} role="tabpanel">
-            <AutoHideScrollbar className="mx_UserInfo_scrollContainer">
-                <UserInfoHeader member={member} e2eStatus={e2eStatus} onClose={onClose} />
+    let previousPhase: RightPanelPhases;
+    // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
+    if (room) {
+        previousPhase = RightPanelPhases.RoomMemberList;
+    }
 
-                { content }
-            </AutoHideScrollbar>
-        </div>
-    );
+    const header = <UserInfoHeader member={member} e2eStatus={e2eStatus} onClose={onClose} />;
+    return <BaseCard className={classes.join(" ")} header={header} onClose={onClose} previousPhase={previousPhase}>
+        { content }
+    </BaseCard>;
 };
 
 UserInfo.propTypes = {

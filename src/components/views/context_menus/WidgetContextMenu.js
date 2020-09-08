@@ -26,6 +26,9 @@ export default class WidgetContextMenu extends React.Component {
         // Callback for when the revoke button is clicked. Required.
         onRevokeClicked: PropTypes.func.isRequired,
 
+        // Callback for when the unpin button is clicked. Required.
+        onUnpinClicked: PropTypes.func.isRequired,
+
         // Callback for when the snapshot button is clicked. Button not shown
         // without a callback.
         onSnapshotClicked: PropTypes.func,
@@ -70,6 +73,8 @@ export default class WidgetContextMenu extends React.Component {
         this.proxyClick(this.props.onRevokeClicked);
     };
 
+    onUnpinClicked = () => this.proxyClick(this.props.onUnpinClicked);
+
     render() {
         const options = [];
 
@@ -80,6 +85,12 @@ export default class WidgetContextMenu extends React.Component {
                 </MenuItem>,
             );
         }
+
+        options.push(
+            <MenuItem className="mx_WidgetContextMenu_option" onClick={this.onUnpinClicked} key="unpin">
+                {_t("Unpin")}
+            </MenuItem>,
+        );
 
         if (this.props.onReloadClicked) {
             options.push(

@@ -479,6 +479,16 @@ export default class WidgetUtils {
         return url.href;
     }
 
+    static getWidgetName(app) {
+        if (!app || !app.name) return "";
+        return app.name.trim() || _t("Unknown App");
+    }
+
+    static getWidgetDataTitle(app) {
+        if (!app || !app.data || !app.data.title) return "";
+        return app.data.title.trim();
+    }
+
     static editWidget(room, app) {
         // TODO: Open the right manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {
@@ -488,13 +498,15 @@ export default class WidgetUtils {
         }
     }
 
-    static getWidgetName(app) {
-        if (!app || !app.name) return "";
-        return app.name.trim() || _t("Unknown App");
-    }
-
-    static getWidgetDataTitle(app) {
-        if (!app || !app.data || !app.data.title) return "";
-        return app.data.title.trim();
+    static snapshotWidget(app) {
+        console.log("Requesting widget snapshot");
+        ActiveWidgetStore.getWidgetMessaging(app.id).getScreenshot().catch((err) => {
+            console.error("Failed to get screenshot", err);
+        }).then((screenshot) => {
+            dis.dispatch({
+                action: 'picture_snapshot',
+                file: screenshot,
+            }, true);
+        });
     }
 }
