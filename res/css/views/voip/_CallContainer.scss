@@ -36,6 +36,10 @@ limitations under the License.
         }
     }
 
+    .mx_AppTile_persistedWrapper div {
+        min-width: 300px;
+    }
+
     .mx_IncomingCallBox {
         min-width: 250px;
         background-color: $primary-bg-color;

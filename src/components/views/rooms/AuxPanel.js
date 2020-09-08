@@ -204,6 +204,7 @@ export default class AuxPanel extends React.Component {
             maxHeight={this.props.maxHeight}
             showApps={this.props.showApps}
             hide={this.props.hideAppsDrawer}
+            resizeNotifier={this.props.resizeNotifier}
         />;
 
         let stateViews = null;

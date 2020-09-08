@@ -804,14 +804,16 @@ export default class AppTile extends React.Component {
         const showMinimiseButton = this.props.showMinimise && this.props.show;
         const showMaximiseButton = this.props.showMinimise && !this.props.show;
 
-        let appTileClass;
+        let appTileClasses;
         if (this.props.miniMode) {
-            appTileClass = 'mx_AppTile_mini';
+            appTileClasses = {mx_AppTile_mini: true};
         } else if (this.props.fullWidth) {
-            appTileClass = 'mx_AppTileFullWidth';
+            appTileClasses = {mx_AppTileFullWidth: true};
         } else {
-            appTileClass = 'mx_AppTile';
+            appTileClasses = {mx_AppTile: true};
         }
+        appTileClasses.mx_AppTile_minimised = !this.props.show;
+        appTileClasses = classNames(appTileClasses);
 
         const menuBarClasses = classNames({
             mx_AppTileMenuBar: true,
@@ -843,7 +845,7 @@ export default class AppTile extends React.Component {
         }
 
         return <React.Fragment>
-            <div className={appTileClass} id={this.props.app.id}>
+            <div className={appTileClasses} id={this.props.app.id}>
                 { this.props.showMenubar &&
                 <div ref={this._menu_bar} className={menuBarClasses} onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>

@@ -1545,9 +1545,9 @@ export default class RoomView extends React.Component {
 
         // header + footer + status + give us at least 120px of scrollback at all times.
         let auxPanelMaxHeight = window.innerHeight -
-                (83 + // height of RoomHeader
+                (54 + // height of RoomHeader
                  36 + // height of the status area
-                 72 + // minimum height of the message compmoser
+                 51 + // minimum height of the message compmoser
                  120); // amount of desired scrollback
 
         // XXX: this is a bit of a hack and might possibly cause the video to push out the page anyway
@@ -1884,15 +1884,19 @@ export default class RoomView extends React.Component {
         }
 
         const auxPanel = (
-            <AuxPanel room={this.state.room}
-              fullHeight={false}
-              userId={this.context.credentials.userId}
-              conferenceHandler={this.props.ConferenceHandler}
-              draggingFile={this.state.draggingFile}
-              displayConfCallNotification={this.state.displayConfCallNotification}
-              maxHeight={this.state.auxPanelMaxHeight}
-              showApps={this.state.showApps}
-              hideAppsDrawer={false} >
+            <AuxPanel
+                room={this.state.room}
+                fullHeight={false}
+                userId={this.context.credentials.userId}
+                conferenceHandler={this.props.ConferenceHandler}
+                draggingFile={this.state.draggingFile}
+                displayConfCallNotification={this.state.displayConfCallNotification}
+                maxHeight={this.state.auxPanelMaxHeight}
+                showApps={this.state.showApps}
+                hideAppsDrawer={false}
+                onResize={this.onResize}
+                resizeNotifier={this.props.resizeNotifier}
+            >
                 { aux }
             </AuxPanel>
         );
@@ -2090,10 +2094,7 @@ export default class RoomView extends React.Component {
                             onLeaveClick={(myMembership === "join") ? this.onLeaveClick : null}
                             e2eStatus={this.state.e2eStatus}
                         />
-                        <MainSplit
-                            panel={rightPanel}
-                            resizeNotifier={this.props.resizeNotifier}
-                        >
+                        <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
                             <div className={fadableSectionClasses}>
                                 {auxPanel}
                                 <div className={timelineClasses}>
