@@ -24,7 +24,7 @@ limitations under the License.
     .mx_BaseCard_header {
         margin: 8px 0;
 
-        h2 {
+        > h2 {
             margin: 0 44px;
             font-size: $font-18px;
             font-weight: $font-semi-bold;
@@ -89,11 +89,11 @@ limitations under the License.
         margin: 20px 0 16px;
 
         & > * {
-            margin-left: 10px;
-            margin-right: 10px;
+            margin-left: 12px;
+            margin-right: 12px;
         }
 
-        h1 {
+        > h1 {
             color: $tertiary-fg-color;
             font-size: $font-12px;
             font-weight: 500;

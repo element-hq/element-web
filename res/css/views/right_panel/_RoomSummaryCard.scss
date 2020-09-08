@@ -15,16 +15,6 @@ limitations under the License.
 */
 
 .mx_RoomSummaryCard {
-    // shrink left gutter by 12 and instead add it as margin to all things except the buttons
-    // as their hover effect should go into the gutter
-    & > * {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-    .mx_AutoHideScrollbar {
-        margin-left: 0;
-    }
-
     .mx_BaseCard_header {
         text-align: center;
         margin-top: 20px;
@@ -88,13 +78,13 @@ limitations under the License.
 
     .mx_RoomSummaryCard_aboutGroup {
         .mx_RoomSummaryCard_Button {
-            padding-left: 48px;
+            padding-left: 44px;
 
             &::before {
                 content: '';
                 position: absolute;
                 top: 8px;
-                left: 8px;
+                left: 10px;
                 height: 24px;
                 width: 24px;
                 mask-repeat: no-repeat;
@@ -106,7 +96,7 @@ limitations under the License.
 
     .mx_RoomSummaryCard_appsGroup {
         .mx_RoomSummaryCard_Button {
-            padding-left: 10px;
+            padding-left: 12px;
             color: $tertiary-fg-color;
 
             span {
@@ -115,7 +105,7 @@ limitations under the License.
 
             img {
                 vertical-align: top;
-                margin-right: 18px;
+                margin-right: 12px;
                 border-radius: 4px;
             }
 

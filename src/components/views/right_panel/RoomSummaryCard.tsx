@@ -148,11 +148,13 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
                 });
             };
 
-            return <Button key={app.id} className={classes} onClick={onOpenWidgetClick}>
-                <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
-                <span>{name}</span>
-                { subtitle }
-            </Button>;
+            return (
+                <Button key={app.id} className={classes} onClick={onOpenWidgetClick}>
+                    <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
+                    <span>{name}</span>
+                    { subtitle }
+                </Button>
+            );
         }) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
