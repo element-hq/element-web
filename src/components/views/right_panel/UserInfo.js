@@ -20,7 +20,7 @@ limitations under the License.
 import React, {useCallback, useMemo, useState, useEffect, useContext} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {Group, RoomMember, User} from 'matrix-js-sdk';
+import {Group, RoomMember, User, Room} from 'matrix-js-sdk';
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
@@ -1463,11 +1463,9 @@ const UserInfoHeader = ({member, e2eStatus}) => {
     </React.Fragment>;
 };
 
-const UserInfo = ({user, groupId, roomId, onClose, phase=RightPanelPhases.RoomMemberInfo, ...props}) => {
+const UserInfo = ({user, groupId, room, onClose, phase=RightPanelPhases.RoomMemberInfo, ...props}) => {
     const cli = useContext(MatrixClientContext);
 
-    // Load room if we are given a room id and memoize it - this can be undefined for User Info/Group Member Info
-    const room = useMemo(() => roomId ? cli.getRoom(roomId) : null, [cli, roomId]);
     // fetch latest room member if we have a room, so we don't show historical information, falling back to user
     const member = useMemo(() => room ? (room.getMember(user.userId) || user) : user, [room, user]);
 
@@ -1522,7 +1520,7 @@ UserInfo.propTypes = {
     ]).isRequired,
     group: PropTypes.instanceOf(Group),
     groupId: PropTypes.string,
-    roomId: PropTypes.string,
+    room: PropTypes.instanceOf(Room),
 
     onClose: PropTypes.func,
 };
