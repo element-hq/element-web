@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
+import {_t} from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, {HeaderKind} from './HeaderButtons';
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
@@ -59,8 +59,13 @@ export default class RoomHeaderButtons extends HeaderButtons {
 
     // TODO make it restore whatever widget they were on last
     private onRoomSummaryClicked = () => {
-        // This toggles for us, if needed
-        this.setPhase(RightPanelPhases.RoomSummary);
+        if (this.state.phase === RightPanelPhases.Widget) {
+            // Close the panel
+            this.setPhase(RightPanelPhases.Widget);
+        } else {
+            // This toggles for us, if needed
+            this.setPhase(RightPanelPhases.RoomSummary);
+        }
     };
 
     private onNotificationsClicked = () => {

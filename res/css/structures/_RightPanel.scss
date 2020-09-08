@@ -68,6 +68,14 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: contain;
     }
+
+    &:hover {
+        background: rgba($accent-color, 0.1);
+
+        &::before {
+            background-color: $accent-color;
+        }
+    }
 }
 
 .mx_RightPanel_notifsButton::before {
@@ -88,16 +96,6 @@ limitations under the License.
 .mx_RightPanel_roomsButton::before {
     mask-image: url('$(res)/img/element-icons/community-rooms.svg');
     mask-position: center;
-}
-
-.mx_RightPanel_headerButton {
-    &:hover {
-        background: rgba($accent-color, 0.1);
-
-        &::before {
-            background-color: $accent-color;
-        }
-    }
 }
 
 .mx_RightPanel_headerButton_highlight {
