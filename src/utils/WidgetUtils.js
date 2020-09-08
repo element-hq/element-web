@@ -405,6 +405,7 @@ export default class WidgetUtils {
         app.creatorUserId = senderUserId;
 
         app.id = appId;
+        app.roomId = roomId;
         app.eventId = eventId;
         app.name = app.name || app.type;
 
@@ -475,5 +476,14 @@ export default class WidgetUtils {
         }
         const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
         return url.href;
+    }
+
+    static editWidget(room, app) {
+        // TODO: Open the right manager for the widget
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll(room, 'type_' + app.type, app.id);
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
+        }
     }
 }
