@@ -41,51 +41,6 @@ let openIDToken: string;
 
 let widgetApi: WidgetApi;
 
-function processOpenIDMessage(msg) {
-    const data = (msg.action === 'get_openid') ? msg.response : msg.data;
-    // TODO: just use data.state once https://github.com/matrix-org/matrix-react-sdk/pull/5172 is out
-    const result = (data.state !== undefined) ? data.state :
-        (data.success === true) ? 'allowed' : 'blocked';
-
-    switch (result) {
-        case 'allowed':
-            console.info('Successfully got OpenID credentials.');
-            openIDToken = data.access_token;
-            // Send a response if this was not a response
-            if (msg.action === 'openid_credentials') {
-                const request = objectClone(msg);
-                request.response = {};
-                window.parent.postMessage(request, '*');
-            }
-            enableJoinButton();
-            break;
-        case 'blocked':
-            console.warn('OpenID credentials request was blocked by user.');
-            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
-            break;
-        default:
-           // nothing to do
-    }
-}
-
-/**
- * Implements processing OpenID token requests as per MSC1960
- */
-function onWidgetMessage(msg) {
-    const data = msg.data;
-    if (!data) {
-        return;
-    }
-    switch (data.action) {
-        case 'get_openid':
-        case 'openid_credentials':
-            processOpenIDMessage(data);
-            break;
-        default:
-            // Nothing to do
-    }
-}
-
 (async function() {
     try {
         // The widget's options are encoded into the fragment to avoid leaking info to the server. The widget
@@ -147,6 +102,47 @@ function onWidgetMessage(msg) {
     }
 })();
 
+function processOpenIDMessage(msg) {
+    const data = (msg.action === 'get_openid') ? msg.response : msg.data;
+
+    switch (data.state) {
+        case 'allowed':
+            console.info('Successfully got OpenID credentials.');
+            openIDToken = data.access_token;
+            // Send a response if this was not a response
+            if (msg.action === 'openid_credentials') {
+                const request = objectClone(msg);
+                request.response = {};
+                window.parent.postMessage(request, '*');
+            }
+            enableJoinButton();
+            break;
+        case 'blocked':
+            console.warn('OpenID credentials request was blocked by user.');
+            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
+            break;
+        default:
+           // nothing to do
+    }
+}
+
+/**
+ * Implements processing OpenID token requests as per MSC1960
+ */
+function onWidgetMessage(msg) {
+    const data = msg.data;
+    if (!data) {
+        return;
+    }
+    switch (data.action) {
+        case 'get_openid':
+        case 'openid_credentials':
+            processOpenIDMessage(data);
+            break;
+        default:
+            // Nothing to do
+    }
+}
 
 function enableJoinButton() {
     document.getElementById("joinButton").onclick = () => joinConference();
