@@ -225,11 +225,12 @@ export default class RightPanel extends React.Component {
         const GroupRoomInfo = sdk.getComponent('groups.GroupRoomInfo');
 
         let panel = <div />;
+        const roomId = this.props.room ? this.props.room.roomId : undefined;
 
         switch (this.state.phase) {
             case RightPanelPhases.RoomMemberList:
-                if (this.props.room.roomId) {
-                    panel = <MemberList roomId={this.props.room.roomId} key={this.props.room.roomId} />;
+                if (roomId) {
+                    panel = <MemberList roomId={roomId} key={roomId} />;
                 }
                 break;
             case RightPanelPhases.GroupMemberList:
@@ -244,8 +245,8 @@ export default class RightPanel extends React.Component {
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
                     user={this.state.member}
-                    roomId={this.props.room.roomId}
-                    key={this.props.room.roomId || this.state.member.userId}
+                    room={this.props.room}
+                    key={roomId || this.state.member.userId}
                     onClose={this.onCloseUserInfo}
                     phase={this.state.phase}
                     verificationRequest={this.state.verificationRequest}
@@ -253,7 +254,7 @@ export default class RightPanel extends React.Component {
                 />;
                 break;
             case RightPanelPhases.Room3pidMemberInfo:
-                panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.room.roomId} />;
+                panel = <ThirdPartyMemberInfo event={this.state.event} key={roomId} />;
                 break;
             case RightPanelPhases.GroupMemberInfo:
                 panel = <UserInfo
@@ -272,7 +273,7 @@ export default class RightPanel extends React.Component {
                 panel = <NotificationPanel />;
                 break;
             case RightPanelPhases.FilePanel:
-                panel = <FilePanel roomId={this.props.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                panel = <FilePanel roomId={roomId} resizeNotifier={this.props.resizeNotifier} />;
                 break;
         }
 
