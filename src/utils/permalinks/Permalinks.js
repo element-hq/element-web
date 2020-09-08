@@ -332,6 +332,10 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
             if (permalinkParts.roomIdOrAlias) {
                 const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
                 permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
+                if (permalinkParts.viaServers.length > 0) {
+                    const riotPermalinkConstructor = new SpecPermalinkConstructor();
+                    permalink += riotPermalinkConstructor.encodeServerCandidates(permalinkParts.viaServers);
+                }
             } else if (permalinkParts.groupId) {
                 permalink = `#/group/${permalinkParts.groupId}`;
             } else if (permalinkParts.userId) {
