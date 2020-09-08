@@ -333,8 +333,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
                 permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
                 if (permalinkParts.viaServers.length > 0) {
-                    const riotPermalinkConstructor = new SpecPermalinkConstructor();
-                    permalink += riotPermalinkConstructor.encodeServerCandidates(permalinkParts.viaServers);
+                    permalink += new SpecPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                 }
             } else if (permalinkParts.groupId) {
                 permalink = `#/group/${permalinkParts.groupId}`;
