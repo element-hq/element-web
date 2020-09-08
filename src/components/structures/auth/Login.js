@@ -124,7 +124,11 @@ export default class LoginComponent extends React.Component {
             'm.login.cas': () => this._renderSsoStep("cas"),
             'm.login.sso': () => this._renderSsoStep("sso"),
         };
+    }
 
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
         this._initLoginLogic();
     }
 
