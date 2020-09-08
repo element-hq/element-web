@@ -20,7 +20,7 @@ require("./index.scss");
 import * as qs from 'querystring';
 import {Capability, KnownWidgetActions, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
 import {KJUR} from 'jsrsasign';
-import {objectClone} from 'matrix-react-sdk/lib/utils/objects';
+import {objectClone} from 'matrix-react-sdk/src/utils/objects';
 
 // Dev note: we use raw JS without many dependencies to reduce bundle size.
 // We do not need all of React to render a Jitsi conference.
