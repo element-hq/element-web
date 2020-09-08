@@ -69,6 +69,8 @@ import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
+import type * as ConferenceHandler from '../../VectorConferenceHandler';
+import {XOR} from "../../@types/common";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -81,7 +83,7 @@ if (DEBUG) {
 }
 
 interface IProps {
-    ConferenceHandler?: any;
+    ConferenceHandler?: ConferenceHandler;
 
     // An object representing a third party invite to join this room
     // Fields:
@@ -102,7 +104,11 @@ interface IProps {
     //  * avatarUrl (string) The mxc:// avatar URL for the room
     //  * inviterName (string) The display name of the person who
     //  *                      invited us to the room
-    oobData?: any;
+    oobData?: {
+        name?: string;
+        avatarUrl?: string;
+        inviterName?: string;
+    };
 
     // Servers the RoomView can use to try and assist joins
     viaServers?: string[];
@@ -137,7 +143,12 @@ export interface IState {
     searching: boolean;
     searchTerm?: string;
     searchScope?: "All" | "Room";
-    searchResults?: any;
+    searchResults?: XOR<{}, {
+        count: number;
+        highlights: string[];
+        results: MatrixEvent[];
+        next_batch: string; // eslint-disable-line camelcase
+    }>;
     searchHighlights?: string[];
     searchInProgress?: boolean;
     callState?: string;
@@ -166,7 +177,11 @@ export interface IState {
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
     // This object is the result of Room#getRecommendedVersion()
-    upgradeRecommendation?: any;
+    upgradeRecommendation?: {
+        version: string;
+        needsUpgrade: boolean;
+        urgent: boolean;
+    };
     canReact: boolean;
     canReply: boolean;
     useIRCLayout: boolean;
@@ -1034,7 +1049,7 @@ export default class RoomView extends React.Component<IProps, IState> {
     private checkIfAlone(room: Room, countInfluence?: number) {
         let warnedAboutLonelyRoom = false;
         if (localStorage) {
-            warnedAboutLonelyRoom = !!localStorage.getItem('mx_user_alone_warned_' + this.state.room.roomId);
+            warnedAboutLonelyRoom = Boolean(localStorage.getItem('mx_user_alone_warned_' + this.state.room.roomId));
         }
         if (warnedAboutLonelyRoom) {
             if (this.state.isAlone) this.setState({isAlone: false});
