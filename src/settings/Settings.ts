@@ -32,6 +32,7 @@ import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
 import { RightPanelPhases } from "../stores/RightPanelStorePhases";
+import { isMac } from '../Keyboard';
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -323,7 +324,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td("Use Ctrl + Enter to send a message (Mac: Command + Enter)"),
+        displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
         default: false,
     },
     "MessageComposerInput.autoReplaceEmoji": {
