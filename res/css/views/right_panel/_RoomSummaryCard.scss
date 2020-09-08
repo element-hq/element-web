@@ -125,7 +125,7 @@ limitations under the License.
         }
 
         .mx_RoomSummaryCard_icon_app_pinned::after {
-            mask-image: url('$(res)/img/element-icons/room/pin2.svg');
+            mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
             background-color: $accent-color;
             transform: unset;
         }
