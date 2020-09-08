@@ -25,6 +25,7 @@ import Spinner from '../elements/Spinner';
 import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/keybackup/RestoreKeyBackupDialog';
+import { accessSecretStorage } from '../../../SecurityManager';
 
 export default class SecureBackupPanel extends React.PureComponent {
     constructor(props) {
@@ -184,6 +185,19 @@ export default class SecureBackupPanel extends React.PureComponent {
         );
     }
 
+    _resetSecretStorage = async () => {
+        this.setState({ error: null });
+        try {
+            await accessSecretStorage(() => { }, /* forceReset = */ true);
+        } catch (e) {
+            console.error("Error resetting secret storage", e);
+            if (this._unmounted) return;
+            this.setState({ error: e });
+        }
+        if (this._unmounted) return;
+        this._loadBackupStatus();
+    }
+
     render() {
         const {
             loading,
@@ -201,7 +215,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         let statusDescription;
         let extraDetailsTableRows;
         let extraDetails;
-        let actions;
+        let actions = [];
         if (error) {
             statusDescription = (
                 <div className="error">
@@ -335,13 +349,6 @@ export default class SecureBackupPanel extends React.PureComponent {
                 trustedLocally = _t("This backup is trusted because it has been restored on this session");
             }
 
-            let deleteBackupButton;
-            if (!isSecureBackupRequired()) {
-                deleteBackupButton = <AccessibleButton kind="danger" onClick={this._deleteBackup}>
-                    {_t("Delete Backup")}
-                </AccessibleButton>;
-            }
-
             extraDetailsTableRows = <>
                 <tr>
                     <td>{_t("Backup version:")}</td>
@@ -359,14 +366,19 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <div>{trustedLocally}</div>
             </>;
 
-            actions = (
-                <div className="mx_SecureBackupPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._restoreBackup}>
-                        {restoreButtonCaption}
-                    </AccessibleButton>&nbsp;&nbsp;&nbsp;
-                    {deleteBackupButton}
-                </div>
+            actions.push(
+                <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                    {restoreButtonCaption}
+                </AccessibleButton>,
             );
+
+            if (!isSecureBackupRequired()) {
+                actions.push(
+                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                        {_t("Delete Backup")}
+                    </AccessibleButton>,
+                );
+            }
         } else {
             statusDescription = <>
                 <p>{_t(
@@ -375,12 +387,18 @@ export default class SecureBackupPanel extends React.PureComponent {
                 )}</p>
                 <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
             </>;
-            actions = (
-                <div className="mx_SecureBackupPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._startNewBackup}>
-                        {_t("Start using Key Backup")}
-                    </AccessibleButton>
-                </div>
+            actions.push(
+                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                    {_t("Set up")}
+                </AccessibleButton>,
+            );
+        }
+
+        if (secretStorageKeyInAccount) {
+            actions.push(
+                <AccessibleButton kind="danger" onClick={this._resetSecretStorage}>
+                    {_t("Reset")}
+                </AccessibleButton>,
             );
         }
 
@@ -392,6 +410,13 @@ export default class SecureBackupPanel extends React.PureComponent {
             } else {
                 backupKeyWellFormedText += _t("unexpected type");
             }
+        }
+
+        let actionRow;
+        if (actions.length) {
+            actionRow = <div className="mx_SecureBackupPanel_buttonRow">
+                {actions}
+            </div>;
         }
 
         return (
@@ -430,7 +455,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                     </tbody></table>
                     {extraDetails}
                 </details>
-                {actions}
+                {actionRow}
             </div>
         );
     }

@@ -19,9 +19,9 @@ import React from 'react';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
-import { accessSecretStorage } from '../../../SecurityManager';
 import Modal from '../../../Modal';
 import Spinner from '../elements/Spinner';
+import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -66,7 +66,7 @@ export default class CrossSigningPanel extends React.PureComponent {
     };
 
     _onBootstrapClick = () => {
-        this._bootstrapSecureSecretStorage(false);
+        this._bootstrapCrossSigning({ forceReset: false });
     };
 
     onStatusChanged = () => {
@@ -99,35 +99,50 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     /**
-     * Bootstrapping secret storage may take one of these paths:
-     * 1. Create secret storage from a passphrase and store cross-signing keys
-     *    in secret storage.
+     * Bootstrapping cross-signing take one of these paths:
+     * 1. Create cross-signing keys locally and store in secret storage (if it
+     *    already exists on the account).
      * 2. Access existing secret storage by requesting passphrase and accessing
      *    cross-signing keys as needed.
      * 3. All keys are loaded and there's nothing to do.
      * @param {bool} [forceReset] Bootstrap again even if keys already present
      */
-    _bootstrapSecureSecretStorage = async (forceReset=false) => {
+    _bootstrapCrossSigning = async ({ forceReset = false }) => {
         this.setState({ error: null });
         try {
-            await accessSecretStorage(() => undefined, forceReset);
+            const cli = MatrixClientPeg.get();
+            await cli.bootstrapCrossSigning({
+                authUploadDeviceSigningKeys: async (makeRequest) => {
+                    const { finished } = Modal.createTrackedDialog(
+                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
+                        {
+                            title: _t("Setting up keys"),
+                            matrixClient: cli,
+                            makeRequest,
+                        },
+                    );
+                    const [confirmed] = await finished;
+                    if (!confirmed) {
+                        throw new Error("Cross-signing key upload auth canceled");
+                    }
+                },
+                setupNewCrossSigning: forceReset,
+            });
         } catch (e) {
             this.setState({ error: e });
-            console.error("Error bootstrapping secret storage", e);
+            console.error("Error bootstrapping cross-signing", e);
         }
         if (this._unmounted) return;
         this._getUpdatedStatus();
     }
 
-    onDestroyStorage = (act) => {
-        if (!act) return;
-        this._bootstrapSecureSecretStorage(true);
-    }
-
-    _destroySecureSecretStorage = () => {
+    _resetCrossSigning = () => {
         const ConfirmDestroyCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
         Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
-            onFinished: this.onDestroyStorage,
+            onFinished: (act) => {
+                if (!act) return;
+                this._bootstrapCrossSigning({ forceReset: true });
+            },
         });
     }
 
@@ -184,8 +199,8 @@ export default class CrossSigningPanel extends React.PureComponent {
         if (keysExistAnywhere) {
             resetButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="danger" onClick={this._destroySecureSecretStorage}>
-                        {_t("Reset cross-signing and secret storage")}
+                    <AccessibleButton kind="danger" onClick={this._resetCrossSigning}>
+                        {_t("Reset")}
                     </AccessibleButton>
                 </div>
             );
@@ -197,7 +212,7 @@ export default class CrossSigningPanel extends React.PureComponent {
             bootstrapButton = (
                 <div className="mx_CrossSigningPanel_buttonRow">
                     <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
-                        {_t("Bootstrap cross-signing and secret storage")}
+                        {_t("Set up")}
                     </AccessibleButton>
                 </div>
             );

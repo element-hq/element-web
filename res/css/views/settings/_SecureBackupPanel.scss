@@ -34,6 +34,10 @@ limitations under the License.
 
 .mx_SecureBackupPanel_buttonRow {
     margin: 1em 0;
+
+    :nth-child(n + 1) {
+        margin-inline-end: 10px;
+    }
 }
 
 .mx_SecureBackupPanel_statusList {
