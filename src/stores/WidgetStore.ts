@@ -196,11 +196,12 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     public getApps(room: Room, pinned?: boolean): IApp[] {
-        const apps = this.getRoom(room.roomId).widgets;
+        const roomInfo = this.getRoom(room.roomId);
+        if (!roomInfo) return [];
         if (pinned) {
-            return apps.filter(app => this.isPinned(app.id));
+            return roomInfo.widgets.filter(app => this.isPinned(app.id));
         }
-        return apps
+        return roomInfo.widgets;
     }
 }
 
