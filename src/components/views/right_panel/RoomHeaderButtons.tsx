@@ -26,7 +26,10 @@ import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 import {Action} from "../../../dispatcher/actions";
 import {ActionPayload} from "../../../dispatcher/payloads";
 
-const MEMBER_PHASES = [
+const ROOM_INFO_PHASES = [
+    RightPanelPhases.RoomSummary,
+    RightPanelPhases.Widget,
+    RightPanelPhases.FilePanel,
     RightPanelPhases.RoomMemberList,
     RightPanelPhases.RoomMemberInfo,
     RightPanelPhases.EncryptionPanel,
@@ -54,20 +57,10 @@ export default class RoomHeaderButtons extends HeaderButtons {
         }
     }
 
-    private onMembersClicked = () => {
-        if (this.state.phase === RightPanelPhases.RoomMemberInfo) {
-            // send the active phase to trigger a toggle
-            // XXX: we should pass refireParams here but then it won't collapse as we desire it to
-            this.setPhase(RightPanelPhases.RoomMemberInfo);
-        } else {
-            // This toggles for us, if needed
-            this.setPhase(RightPanelPhases.RoomMemberList);
-        }
-    };
-
-    private onFilesClicked = () => {
+    // TODO make it restore whatever widget they were on last
+    private onRoomSummaryClicked = () => {
         // This toggles for us, if needed
-        this.setPhase(RightPanelPhases.FilePanel);
+        this.setPhase(RightPanelPhases.RoomSummary);
     };
 
     private onNotificationsClicked = () => {
@@ -77,19 +70,17 @@ export default class RoomHeaderButtons extends HeaderButtons {
 
     public renderButtons() {
         return [
-            <HeaderButton key="membersButton" name="membersButton"
-                title={_t('Members')}
-                isHighlighted={this.isPhase(MEMBER_PHASES)}
-                onClick={this.onMembersClicked}
-                analytics={['Right Panel', 'Member List Button', 'click']}
+            <HeaderButton
+                key="roomSummaryButton"
+                name="roomSummaryButton"
+                title={_t('Room Info')}
+                isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
+                onClick={this.onRoomSummaryClicked}
+                analytics={['Right Panel', 'Room Summary Button', 'click']}
             />,
-            <HeaderButton key="filesButton" name="filesButton"
-                title={_t('Files')}
-                isHighlighted={this.isPhase(RightPanelPhases.FilePanel)}
-                onClick={this.onFilesClicked}
-                analytics={['Right Panel', 'File List Button', 'click']}
-            />,
-            <HeaderButton key="notifsButton" name="notifsButton"
+            <HeaderButton
+                key="notifsButton"
+                name="notifsButton"
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                 onClick={this.onNotificationsClicked}

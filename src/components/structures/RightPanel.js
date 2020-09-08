@@ -32,6 +32,9 @@ import {RightPanelPhases, RIGHT_PANEL_PHASES_NO_ARGS} from "../../stores/RightPa
 import RightPanelStore from "../../stores/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {Action} from "../../dispatcher/actions";
+import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
+import WidgetCard from "../views/right_panel/WidgetCard";
+import defaultDispatcher from "../../dispatcher/dispatcher";
 
 export default class RightPanel extends React.Component {
     static get propTypes() {
@@ -182,6 +185,7 @@ export default class RightPanel extends React.Component {
                 event: payload.event,
                 verificationRequest: payload.verificationRequest,
                 verificationRequestPromise: payload.verificationRequestPromise,
+                widgetId: payload.widgetId,
             });
         }
     }
@@ -209,6 +213,14 @@ export default class RightPanel extends React.Component {
         }
     };
 
+    onClose = () => {
+        // the RightPanelStore has no way of knowing which mode room/group it is in, so we handle closing here
+        defaultDispatcher.dispatch({
+            action: Action.ToggleRightPanel,
+            type: this.props.groupId ? "group" : "room",
+        });
+    };
+
     render() {
         const MemberList = sdk.getComponent('rooms.MemberList');
         const UserInfo = sdk.getComponent('right_panel.UserInfo');
@@ -225,17 +237,24 @@ export default class RightPanel extends React.Component {
         switch (this.state.phase) {
             case RightPanelPhases.RoomMemberList:
                 if (this.props.room.roomId) {
-                    panel = <MemberList roomId={this.props.room.roomId} key={this.props.room.roomId} />;
+                    panel = <MemberList
+                        roomId={this.props.room.roomId}
+                        key={this.props.room.roomId}
+                        onClose={this.onClose}
+                    />;
                 }
                 break;
+
             case RightPanelPhases.GroupMemberList:
                 if (this.props.groupId) {
                     panel = <GroupMemberList groupId={this.props.groupId} key={this.props.groupId} />;
                 }
                 break;
+
             case RightPanelPhases.GroupRoomList:
                 panel = <GroupRoomList groupId={this.props.groupId} key={this.props.groupId} />;
                 break;
+
             case RightPanelPhases.RoomMemberInfo:
             case RightPanelPhases.EncryptionPanel:
                 panel = <UserInfo
@@ -248,9 +267,11 @@ export default class RightPanel extends React.Component {
                     verificationRequestPromise={this.state.verificationRequestPromise}
                 />;
                 break;
+
             case RightPanelPhases.Room3pidMemberInfo:
                 panel = <ThirdPartyMemberInfo event={this.state.event} key={this.props.room.roomId} />;
                 break;
+
             case RightPanelPhases.GroupMemberInfo:
                 panel = <UserInfo
                     user={this.state.member}
@@ -258,17 +279,31 @@ export default class RightPanel extends React.Component {
                     key={this.state.member.userId}
                     onClose={this.onCloseUserInfo} />;
                 break;
+
             case RightPanelPhases.GroupRoomInfo:
                 panel = <GroupRoomInfo
                     groupRoomId={this.state.groupRoomId}
                     groupId={this.props.groupId}
                     key={this.state.groupRoomId} />;
                 break;
+
             case RightPanelPhases.NotificationPanel:
-                panel = <NotificationPanel />;
+                panel = <NotificationPanel onClose={this.onClose} />;
                 break;
+
             case RightPanelPhases.FilePanel:
-                panel = <FilePanel roomId={this.props.room.roomId} resizeNotifier={this.props.resizeNotifier} />;
+                panel = <FilePanel
+                    roomId={this.props.room.roomId}
+                    resizeNotifier={this.props.resizeNotifier}
+                    onClose={this.onClose} />;
+                break;
+
+            case RightPanelPhases.RoomSummary:
+                panel = <RoomSummaryCard room={this.props.room} onClose={this.onClose} />;
+                break;
+
+            case RightPanelPhases.Widget:
+                panel = <WidgetCard room={this.props.room} widgetId={this.state.widgetId} onClose={this.onClose} />;
                 break;
         }
 
