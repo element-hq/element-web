@@ -450,7 +450,7 @@ export default class WidgetUtils {
 
     static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string}={}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
-        const queryParts = [
+        const queryStringParts = [
             'conferenceDomain=$domain',
             'conferenceId=$conferenceId',
             'isAudioOnly=$isAudioOnly',
@@ -460,9 +460,9 @@ export default class WidgetUtils {
             'roomId=$matrix_room_id',
         ];
         if (opts.auth) {
-            queryParts.push(`auth=${opts.auth}`);
+            queryStringParts.push(`auth=${opts.auth}`);
         }
-        const queryString = queryParts.join('&');
+        const queryString = queryStringParts.join('&');
 
         let baseUrl = window.location;
         if (window.location.protocol !== "https:" && !opts.forLocalRender) {

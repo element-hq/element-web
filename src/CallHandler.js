@@ -416,7 +416,6 @@ async function _startCallApp(roomId, type) {
         isAudioOnly: type === 'voice',
         domain: jitsiDomain,
         auth: jitsiAuth,
-        roomId: roomId,
     };
 
     const widgetId = (
