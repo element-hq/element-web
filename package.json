@@ -61,7 +61,7 @@
     "highlight.js": "^9.13.1",
     "jsrsasign": "^9.1.5",
     "matrix-js-sdk": "8.3.0-rc.1",
-    "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
+    "matrix-react-sdk": "3.4.0-rc.1",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
