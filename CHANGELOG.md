@@ -1,3 +1,17 @@
+Changes in [1.7.6-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.6-rc.1) (2020-09-09)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5...v1.7.6-rc.1)
+
+ * Upgrade to React SDK 3.4.0-rc.1 and JS SDK 8.3.0-rc.1
+ * Update from Weblate
+   [\#15125](https://github.com/vector-im/element-web/pull/15125)
+ * Support usage of Jitsi widgets with "openidtoken-jwt" auth
+   [\#15114](https://github.com/vector-im/element-web/pull/15114)
+ * Fix eslint ts override tsx matching and delint
+   [\#15064](https://github.com/vector-im/element-web/pull/15064)
+ * Add testing to review guidelines
+   [\#15050](https://github.com/vector-im/element-web/pull/15050)
+
 Changes in [1.7.5](https://github.com/vector-im/element-web/releases/tag/v1.7.5) (2020-09-01)
 =============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5-rc.1...v1.7.5)
