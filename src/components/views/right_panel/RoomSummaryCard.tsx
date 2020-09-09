@@ -181,6 +181,14 @@ const onRoomSettingsClick = () => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
 };
 
+const useMemberCount = (room: Room) => {
+    const [count, setCount] = useState(room.getJoinedMembers().length);
+    useEventEmitter(room.currentState, "RoomState.members", () => {
+        setCount(room.getJoinedMembers().length);
+    });
+    return count;
+};
+
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
@@ -210,10 +218,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
         </div>
     </React.Fragment>;
 
+    const memberCount = useMemberCount(room);
+
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
             <Button className="mx_RoomSummaryCard_icon_people" onClick={onRoomMembersClick}>
-                {_t("%(count)s people", { count: room.getJoinedMembers().length })}
+                {_t("%(count)s people", { count: memberCount })}
             </Button>
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                 {_t("Show files")}
