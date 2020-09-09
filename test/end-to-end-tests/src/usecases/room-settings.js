@@ -47,9 +47,8 @@ async function findTabs(session) {
     await session.delay(1000);
     const roomSummaryButton = await session.query('.mx_RoomHeader .mx_AccessibleButton[aria-label="Room Info"]');
     await roomSummaryButton.click();
-    await session.delay(1000);
-    const settingsButton = await session.query(".mx_RoomSummaryCard_icon_settings");
-    await settingsButton.click();
+    // const settingsButton = await session.query(".mx_RoomSummaryCard_icon_settings");
+    // await settingsButton.click();
 
     //find tabs
     const tabButtons = await session.queryAll(".mx_RoomSettingsDialog .mx_TabbedView_tabLabel");
