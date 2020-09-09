@@ -207,7 +207,7 @@ const PersistentVResizer = ({
     resizeNotifier,
     children,
 }) => {
-    const [height, setHeight] = useLocalStorageState("pvr_" + id, 100);
+    const [height, setHeight] = useLocalStorageState("pvr_" + id, 280); // old fixed height was 273px
     const [resizing, setResizing] = useState(false);
 
     return <Resizable
