@@ -46,6 +46,8 @@ For a good example, see https://develop.element.io/config.json.
    may be left blank to disable integrations.
 1. `integrations_rest_url`: URL to the REST interface for the integrations server.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
+1. `widget_domain_allowlist`: list of domains to allow widgets to load from without prompting to
+   user for permission.
 1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
    https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
    "Send Logs" within the application. Bug reports can be disabled by leaving the
