@@ -1624,6 +1624,7 @@
     "Removing…": "Removing…",
     "Confirm Removal": "Confirm Removal",
     "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.": "Are you sure you wish to remove (delete) this event? Note that if you delete a room name or topic change, it could undo the change.",
+    "Reason (optional)": "Reason (optional)",
     "Clear all data in this session?": "Clear all data in this session?",
     "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.": "Clearing all data from this session is permanent. Encrypted messages will be lost unless their keys have been backed up.",
     "Clear all data": "Clear all data",
