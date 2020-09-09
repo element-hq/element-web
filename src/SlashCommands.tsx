@@ -974,7 +974,7 @@ export const Commands = [
         args: "<description>",
         runFn: function(roomId, args) {
             return success(
-                Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {
+                Modal.createTrackedDialog('Slash Commands', 'Bug Report Dialog', BugReportDialog, {
                     initialText: args,
                 }).finished,
             );
