@@ -19,6 +19,7 @@ limitations under the License.
     display: contents;
 
     .mx_AppTileFullWidth {
+        max-width: unset;
         height: 100%;
         border: 0;
     }
