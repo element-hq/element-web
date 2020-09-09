@@ -2457,5 +2457,22 @@
     "Community settings": "Community-Einstellungen",
     "User settings": "Nutzer-Einstellungen",
     "Community and user menu": "Community- und Nutzer-Menü",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Stellt ( ͡° ͜ʖ ͡°) einer Klartextnachricht voran"
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Stellt ( ͡° ͜ʖ ͡°) einer Klartextnachricht voran",
+    "Unknown App": "Unbekannte App",
+    "%(count)s results|one": "%(count)s Ergebnis",
+    "Room Info": "Raum-Info",
+    "Apps": "Apps",
+    "Unpin app": "App nicht mehr anheften",
+    "Edit apps, bridges & bots": "Apps, Bridges & Bots bearbeiten",
+    "Add apps, bridges & bots": "Apps, Bridges & Bots hinzufügen",
+    "Not encrypted": "Nicht verschlüsselt",
+    "About": "Über",
+    "%(count)s people|other": "%(count)s Personen",
+    "%(count)s people|one": "%(count)s Person",
+    "Show files": "Dateien anzeigen",
+    "Room settings": "Raum-Einstellungen",
+    "Take a picture": "Foto aufnehmen",
+    "Pin to room": "An Raum anheften",
+    "You can only pin 2 apps at a time": "Du kannst nur 2 Apps gleichzeitig anheften",
+    "Unpin": "Nicht mehr anheften"
 }
