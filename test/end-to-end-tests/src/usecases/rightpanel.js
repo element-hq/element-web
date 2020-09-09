@@ -32,9 +32,6 @@ module.exports.goBackToRoomSummaryCard = async function(session) {
             // Sometimes our tests have this opened to MemberInfo
             await backButton.click();
         } catch (e) {
-            const memberPanelButton = await session.query(".mx_RoomSummaryCard_icon_people");
-            // We are back at the room summary card
-            await memberPanelButton.click();
             break; // stop trying to go further back
         }
     }

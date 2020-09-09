@@ -65,6 +65,9 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
 
 async function getMembersInMemberlist(session) {
     await openRoomSummaryCard(session);
+    const memberPanelButton = await session.query(".mx_RoomSummaryCard_icon_people");
+    // We are back at the room summary card
+    await memberPanelButton.click();
 
     const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
     return Promise.all(memberNameElements.map(async (el) => {
