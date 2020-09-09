@@ -230,6 +230,7 @@ class FilePanel extends React.Component {
                     className="mx_FilePanel"
                     onClose={this.props.onClose}
                     previousPhase={RightPanelPhases.RoomSummary}
+                    withoutScrollContainer
                 >
                     <TimelinePanel
                         manageReadReceipts={false}

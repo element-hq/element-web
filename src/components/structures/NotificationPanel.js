@@ -60,7 +60,7 @@ class NotificationPanel extends React.Component {
             content = <Loader />;
         }
 
-        return <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose}>
+        return <BaseCard className="mx_NotificationPanel" onClose={this.props.onClose} withoutScrollContainer>
             { content }
         </BaseCard>;
     }
