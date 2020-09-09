@@ -155,9 +155,12 @@
 @import "./views/messages/_UnknownBody.scss";
 @import "./views/messages/_ViewSourceEvent.scss";
 @import "./views/messages/_common_CryptoEvent.scss";
+@import "./views/right_panel/_BaseCard.scss";
 @import "./views/right_panel/_EncryptionInfo.scss";
+@import "./views/right_panel/_RoomSummaryCard.scss";
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
+@import "./views/right_panel/_WidgetCard.scss";
 @import "./views/room_settings/_AliasSettings.scss";
 @import "./views/rooms/_AppsDrawer.scss";
 @import "./views/rooms/_Autocomplete.scss";

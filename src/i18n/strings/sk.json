@@ -1798,5 +1798,18 @@
     "Security & privacy": "Bezpečnosť & súkromie",
     "All settings": "Všetky nastavenia",
     "Feedback": "Spätná väzba",
-    "Indexed rooms:": "Indexované miestnosti:"
+    "Indexed rooms:": "Indexované miestnosti:",
+    "Unexpected server error trying to leave the room": "Neočakávaná chyba servera pri pokuse opustiť miestnosť",
+    "Emoji picker": "Vybrať emoji",
+    "Send a reply…": "Odoslať odpoveď…",
+    "Send a message…": "Odoslať správu…",
+    "Bold": "Tučné",
+    "Italics": "Kurzíva",
+    "Strikethrough": "Preškrtnuté",
+    "Leave Room": "Opustiť miestnosť",
+    "Direct message": "Priama správa",
+    "Security": "Zabezpečenie",
+    "Send a Direct Message": "Poslať priamu správu",
+    "User menu": "Používateľské menu",
+    "Toggle Italics": "Prepnúť kurzíva"
 }

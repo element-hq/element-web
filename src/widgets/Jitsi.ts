@@ -34,6 +34,30 @@ export class Jitsi {
         return this.domain || 'jitsi.riot.im';
     }
 
+    /**
+     * Checks for auth needed by looking up a well-known file
+     *
+     * If the file does not exist, we assume no auth.
+     *
+     * See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
+     */
+    public async getJitsiAuth(): Promise<string|null> {
+        if (!this.preferredDomain) {
+            return null;
+        }
+        let data;
+        try {
+            const response = await fetch(`https://${this.preferredDomain}/.well-known/element/jitsi`);
+            data = await response.json();
+        } catch (error) {
+            return null;
+        }
+        if (data.auth) {
+            return data.auth;
+        }
+        return null;
+    }
+
     public start() {
         const cli = MatrixClientPeg.get();
         cli.on("WellKnown.client", this.update);
