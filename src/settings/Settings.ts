@@ -566,7 +566,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "lastRightPanelPhaseForRoom": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RightPanelPhases.RoomMemberInfo,
+        default: RightPanelPhases.RoomSummary,
     },
     "lastRightPanelPhaseForGroup": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
