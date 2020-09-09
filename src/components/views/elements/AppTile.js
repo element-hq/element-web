@@ -605,7 +605,7 @@ export default class AppTile extends React.Component {
     /**
      * Whether we're using a local version of the widget rather than loading the
      * actual widget URL
-     * @returns true If using a local version of the widget
+     * @returns {bool} true If using a local version of the widget
      */
     _usingLocalWidget() {
         return WidgetType.JITSI.matches(this.props.app.type);
