@@ -15,18 +15,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
-the tile title bar is 5 (top border) + 12 (title, buttons) + 5 (bottom padding) px = 22px
-the body is assumed to be 300px (assumed by at least the sticker pickerm, perhaps elsewhere),
-so the body height would be 300px - 22px (room for title bar) = 278px
-BUT! the sticker picker also assumes it's a little less high than that because the iframe
-for the sticker picker doesn't have any padding or margin on it's bottom.
-so subtracking another 5px, which brings us at 273px.
-*/
-$AppsDrawerBodyHeight: 273px;
+$MiniAppTileHeight: 114px;
 
 .mx_AppsDrawer {
-    margin: 5px;
+    margin: 5px 5px 5px 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .mx_AppsContainer_resizerHandle {
+        cursor: ns-resize;
+        border-radius: 3px;
+
+        // Override styles from library
+        width: unset !important;
+        height: 4px !important;
+
+        // This is positioned directly below frame
+        position: absolute;
+        bottom: -8px !important; // override from library
+
+        // Together, these make the bar 64px wide
+        // These are also overridden from the library
+        left: calc(50% - 32px) !important;
+        right: calc(50% - 32px) !important;
+    }
+
+    &:hover {
+        .mx_AppsContainer_resizerHandle {
+            opacity: 0.8;
+            background: $primary-fg-color;
+        }
+    }
 }
 
 .mx_AppsDrawer_hidden {
@@ -36,15 +57,23 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AppsContainer {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
+    height: 100%;
+    margin-bottom: 8px;
+}
+
+.mx_AppsDrawer_minimised .mx_AppsContainer {
+    // override the re-resizable inline styles
+    height: inherit !important;
+    min-height: inherit !important;
 }
 
 .mx_AddWidget_button {
     order: 2;
     cursor: pointer;
     padding: 0;
-    margin: 5px auto 5px auto;
+    margin: -3px auto 5px 0;
     color: $accent-color;
     font-size: $font-12px;
 }
@@ -65,40 +94,52 @@ $AppsDrawerBodyHeight: 273px;
 .mx_AppTile {
     max-width: 960px;
     width: 50%;
-    margin-right: 5px;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 4px;
-}
+    display: flex;
+    flex-direction: column;
 
-.mx_AppTile:last-child {
-    margin-right: 1px;
+    & + .mx_AppTile {
+        margin-left: 5px;
+    }
 }
 
 .mx_AppTileFullWidth {
     max-width: 960px;
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
     border: 5px solid $widget-menu-bar-bg-color;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
 .mx_AppTile_mini {
     max-width: 960px;
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: $MiniAppTileHeight;
 }
 
-.mx_AppTile_persistedWrapper {
-    height: $AppsDrawerBodyHeight;
+.mx_AppTile.mx_AppTile_minimised,
+.mx_AppTileFullWidth.mx_AppTile_minimised,
+.mx_AppTile_mini.mx_AppTile_minimised {
+    height: 14px;
 }
 
+.mx_AppTile .mx_AppTile_persistedWrapper,
+.mx_AppTileFullWidth .mx_AppTile_persistedWrapper,
 .mx_AppTile_mini .mx_AppTile_persistedWrapper {
-    height: 114px;
-    min-width: 300px;
+    flex: 1;
+}
+
+.mx_AppTile_persistedWrapper div {
+    width: 100%;
+    height: 100%;
 }
 
 .mx_AppTileMenuBar {
@@ -110,6 +151,7 @@ $AppsDrawerBodyHeight: 273px;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    width: 100%;
 }
 
 .mx_AppTileMenuBar_expanded {
@@ -172,7 +214,7 @@ $AppsDrawerBodyHeight: 273px;
 }
 
 .mx_AppTileBody {
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
     width: 100%;
     overflow: hidden;
 }
@@ -183,6 +225,13 @@ $AppsDrawerBodyHeight: 273px;
     overflow: hidden;
 }
 
+.mx_AppTile .mx_AppTileBody,
+.mx_AppTileFullWidth .mx_AppTileBody,
+.mx_AppTile_mini .mx_AppTileBody_mini {
+    height: inherit;
+    flex: 1;
+}
+
 .mx_AppTileBody_mini iframe {
     border: none;
     width: 100%;
@@ -191,7 +240,7 @@ $AppsDrawerBodyHeight: 273px;
 
 .mx_AppTileBody iframe {
     width: 100%;
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
     overflow: hidden;
     border: none;
     padding: 0;
@@ -331,7 +380,7 @@ form.mx_Custom_Widget_Form div {
     align-items: center;
     font-weight: bold;
     position: relative;
-    height: $AppsDrawerBodyHeight;
+    height: 100%;
 }
 
 .mx_AppLoading .mx_Spinner {
@@ -357,4 +406,17 @@ form.mx_Custom_Widget_Form div {
 
 .mx_AppLoading iframe {
     display: none;
+}
+
+.mx_AppsDrawer_minimised .mx_AppsContainer_resizerHandle {
+    display: none;
+}
+
+/* Avoid apptile iframes capturing mouse event focus when resizing */
+.mx_AppsDrawer_resizing iframe {
+    pointer-events: none;
+}
+
+.mx_AppsDrawer_resizing .mx_AppTile_persistedWrapper {
+    z-index: 1;
 }

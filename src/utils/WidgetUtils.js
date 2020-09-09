@@ -405,6 +405,7 @@ export default class WidgetUtils {
         app.creatorUserId = senderUserId;
 
         app.id = appId;
+        app.roomId = roomId;
         app.eventId = eventId;
         app.name = app.name || app.type;
 
@@ -448,16 +449,21 @@ export default class WidgetUtils {
         return encodeURIComponent(`${widgetLocation}::${widgetUrl}`);
     }
 
-    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean}={}) {
+    static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string}={}) {
         // NB. we can't just encodeURIComponent all of these because the $ signs need to be there
-        const queryString = [
+        const queryStringParts = [
             'conferenceDomain=$domain',
             'conferenceId=$conferenceId',
             'isAudioOnly=$isAudioOnly',
             'displayName=$matrix_display_name',
             'avatarUrl=$matrix_avatar_url',
             'userId=$matrix_user_id',
-        ].join('&');
+            'roomId=$matrix_room_id',
+        ];
+        if (opts.auth) {
+            queryStringParts.push(`auth=${opts.auth}`);
+        }
+        const queryString = queryStringParts.join('&');
 
         let baseUrl = window.location;
         if (window.location.protocol !== "https:" && !opts.forLocalRender) {
@@ -470,5 +476,14 @@ export default class WidgetUtils {
         }
         const url = new URL("jitsi.html#" + queryString, baseUrl); // this strips hash fragment from baseUrl
         return url.href;
+    }
+
+    static editWidget(room, app) {
+        // TODO: Open the right manager for the widget
+        if (SettingsStore.getValue("feature_many_integration_managers")) {
+            IntegrationManagers.sharedInstance().openAll(room, 'type_' + app.type, app.id);
+        } else {
+            IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
+        }
     }
 }

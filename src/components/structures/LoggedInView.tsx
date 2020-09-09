@@ -257,6 +257,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                 window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.notifyLeftHandleResized();
             },
+            onResizeStart: () => {
+                this.props.resizeNotifier.startResizing();
+            },
+            onResizeStop: () => {
+                this.props.resizeNotifier.stopResizing();
+            },
         };
         const resizer = new Resizer(
             this._resizeContainer.current,
@@ -650,12 +656,13 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.UserView:
-                pageElement = <UserView userId={this.props.currentUserId} />;
+                pageElement = <UserView userId={this.props.currentUserId} resizeNotifier={this.props.resizeNotifier} />;
                 break;
             case PageTypes.GroupView:
                 pageElement = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
+                    resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;
         }

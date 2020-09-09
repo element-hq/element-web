@@ -310,20 +310,7 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            // TODO: Open the right manager for the widget
-            if (SettingsStore.getValue("feature_many_integration_managers")) {
-                IntegrationManagers.sharedInstance().openAll(
-                    this.props.room,
-                    'type_' + this.props.app.type,
-                    this.props.app.id,
-                );
-            } else {
-                IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                    this.props.room,
-                    'type_' + this.props.app.type,
-                    this.props.app.id,
-                );
-            }
+            WidgetUtils.editWidget(this.props.room, this.props.app);
         }
     }
 
@@ -626,7 +613,10 @@ export default class AppTile extends React.Component {
 
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             console.log("Replacing Jitsi widget URL with local wrapper");
-            url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
+            url = WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: true,
+                auth: this.props.app.data ? this.props.app.data.auth : null,
+            });
             url = this._addWurlParams(url);
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
@@ -637,7 +627,10 @@ export default class AppTile extends React.Component {
     _getPopoutUrl() {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
-                WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                WidgetUtils.getLocalJitsiWrapperUrl({
+                    forLocalRender: false,
+                    auth: this.props.app.data ? this.props.app.data.auth : null,
+                }),
                 this.props.app.type,
             );
         } else {
@@ -804,14 +797,16 @@ export default class AppTile extends React.Component {
         const showMinimiseButton = this.props.showMinimise && this.props.show;
         const showMaximiseButton = this.props.showMinimise && !this.props.show;
 
-        let appTileClass;
+        let appTileClasses;
         if (this.props.miniMode) {
-            appTileClass = 'mx_AppTile_mini';
+            appTileClasses = {mx_AppTile_mini: true};
         } else if (this.props.fullWidth) {
-            appTileClass = 'mx_AppTileFullWidth';
+            appTileClasses = {mx_AppTileFullWidth: true};
         } else {
-            appTileClass = 'mx_AppTile';
+            appTileClasses = {mx_AppTile: true};
         }
+        appTileClasses.mx_AppTile_minimised = !this.props.show;
+        appTileClasses = classNames(appTileClasses);
 
         const menuBarClasses = classNames({
             mx_AppTileMenuBar: true,
@@ -843,7 +838,7 @@ export default class AppTile extends React.Component {
         }
 
         return <React.Fragment>
-            <div className={appTileClass} id={this.props.app.id}>
+            <div className={appTileClasses} id={this.props.app.id}>
                 { this.props.showMenubar &&
                 <div ref={this._menu_bar} className={menuBarClasses} onClick={this.onClickMenuBar}>
                     <span className="mx_AppTileMenuBarTitle" style={{pointerEvents: (this.props.handleMinimisePointerEvents ? 'all' : false)}}>

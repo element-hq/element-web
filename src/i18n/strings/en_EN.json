@@ -149,6 +149,7 @@
     "Command error": "Command error",
     "Usage": "Usage",
     "Prepends ¯\\_(ツ)_/¯ to a plain-text message": "Prepends ¯\\_(ツ)_/¯ to a plain-text message",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message",
     "Sends a message as plain text, without interpreting it as markdown": "Sends a message as plain text, without interpreting it as markdown",
     "Sends a message as html, without interpreting it as markdown": "Sends a message as html, without interpreting it as markdown",
     "Searches DuckDuckGo for results": "Searches DuckDuckGo for results",

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import AppTile from '../elements/AppTile';
@@ -29,6 +29,10 @@ import WidgetEchoStore from "../../../stores/WidgetEchoStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import {IntegrationManagers} from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
+import classNames from 'classnames';
+import {Resizable} from "re-resizable";
+import {useLocalStorageState} from "../../../hooks/useLocalStorageState";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 
 // The maximum number of widgets that can be added in a room
 const MAX_WIDGETS = 2;
@@ -37,6 +41,7 @@ export default class AppsDrawer extends React.Component {
     static propTypes = {
         userId: PropTypes.string.isRequired,
         room: PropTypes.object.isRequired,
+        resizeNotifier: PropTypes.instanceOf(ResizeNotifier).isRequired,
         showApps: PropTypes.bool, // Should apps be rendered
         hide: PropTypes.bool, // If rendered, should apps drawer be visible
     };
@@ -161,7 +166,7 @@ export default class AppsDrawer extends React.Component {
             return (<AppTile
                 key={app.id}
                 app={app}
-                fullWidth={arr.length<2 ? true : false}
+                fullWidth={arr.length < 2}
                 room={this.props.room}
                 userId={this.props.userId}
                 show={this.props.showApps}
@@ -172,8 +177,8 @@ export default class AppsDrawer extends React.Component {
             />);
         });
 
-        if (apps.length == 0) {
-            return <div></div>;
+        if (apps.length === 0) {
+            return <div />;
         }
 
         let addWidget;
@@ -202,14 +207,68 @@ export default class AppsDrawer extends React.Component {
             spinner = <Loader />;
         }
 
+        const classes = classNames({
+            "mx_AppsDrawer": true,
+            "mx_AppsDrawer_hidden": this.props.hide,
+            "mx_AppsDrawer_fullWidth": apps.length < 2,
+            "mx_AppsDrawer_minimised": !this.props.showApps,
+        });
+
         return (
-            <div className={'mx_AppsDrawer' + (this.props.hide ? ' mx_AppsDrawer_hidden' : '')}>
-                <div id='apps' className='mx_AppsContainer'>
+            <div className={classes}>
+                <PersistentVResizer
+                    id={"apps-drawer_" + this.props.room.roomId}
+                    minHeight={100}
+                    maxHeight={this.props.maxHeight ? this.props.maxHeight - 50 : undefined}
+                    handleClass="mx_AppsContainer_resizerHandle"
+                    className="mx_AppsContainer"
+                    resizeNotifier={this.props.resizeNotifier}
+                >
                     { apps }
                     { spinner }
-                </div>
+                </PersistentVResizer>
                 { this._canUserModify() && addWidget }
             </div>
         );
     }
 }
+
+const PersistentVResizer = ({
+    id,
+    minHeight,
+    maxHeight,
+    className,
+    handleWrapperClass,
+    handleClass,
+    resizeNotifier,
+    children,
+}) => {
+    const [height, setHeight] = useLocalStorageState("pvr_" + id, 100);
+    const [resizing, setResizing] = useState(false);
+
+    return <Resizable
+        size={{height: Math.min(height, maxHeight)}}
+        minHeight={minHeight}
+        maxHeight={maxHeight}
+        onResizeStart={() => {
+            if (!resizing) setResizing(true);
+            resizeNotifier.startResizing();
+        }}
+        onResize={() => {
+            resizeNotifier.notifyTimelineHeightChanged();
+        }}
+        onResizeStop={(e, dir, ref, d) => {
+            setHeight(height + d.height);
+            if (resizing) setResizing(false);
+            resizeNotifier.stopResizing();
+        }}
+        handleWrapperClass={handleWrapperClass}
+        handleClasses={{bottom: handleClass}}
+        className={classNames(className, {
+            mx_AppsDrawer_resizing: resizing,
+        })}
+        enable={{bottom: true}}
+    >
+        { children }
+    </Resizable>;
+};
