@@ -100,6 +100,8 @@ export default class AppTile extends React.Component {
     _getNewState(newProps) {
         // This is a function to make the impact of calling SettingsStore slightly less
         const hasPermissionToLoad = () => {
+            if (this._usingLocalWidget()) return true;
+
             const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", newProps.room.roomId);
             return !!currentlyAllowedWidgets[newProps.app.eventId];
         };
@@ -598,6 +600,15 @@ export default class AppTile extends React.Component {
         }
 
         return uriFromTemplate(u, vars);
+    }
+
+    /**
+     * Whether we're using a local version of the widget rather than loading the
+     * actual widget URL
+     * @returns true If using a local version of the widget
+     */
+    _usingLocalWidget() {
+        return WidgetType.JITSI.matches(this.props.app.type);
     }
 
     /**
