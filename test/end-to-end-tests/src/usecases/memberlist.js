@@ -17,6 +17,11 @@ limitations under the License.
 
 const assert = require('assert');
 
+module.exports.openMemberList = async function(session) {
+    const peopleButton = await session.query(".mx_RoomSummaryCard_icon_people");
+    await peopleButton.click();
+};
+
 async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
     const matchingLabel = membersAndNames.filter((m) => {
