@@ -158,7 +158,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
-            { apps.length > 0 ? _t("Edit apps") : _t("Add apps") }
+            { apps.length > 0 ? _t("Edit apps, bridges & bots") : _t("Add apps, bridges & bots") }
         </AccessibleButton>
     </Group>;
 };

@@ -167,14 +167,12 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         { pinButton }
         <ContextMenuButton
             kind="secondary"
-            className={""}
+            className="mx_WidgetCard_optionsButton"
             inputRef={handle}
             onClick={openMenu}
             isExpanded={menuDisplayed}
             label={_t("Options")}
-        >
-            ...
-        </ContextMenuButton>
+        />
 
         { contextMenu }
     </React.Fragment>;

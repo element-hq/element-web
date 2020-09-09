@@ -34,6 +34,26 @@ limitations under the License.
             }
         }
     }
+
+    .mx_WidgetCard_optionsButton {
+        position: relative;
+        height: 18px;
+        width: 26px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            top: 7px;
+            left: 18px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+            background-color: $secondary-fg-color;
+        }
+    }
 }
 
 .mx_WidgetCard_maxPinnedTooltip {
