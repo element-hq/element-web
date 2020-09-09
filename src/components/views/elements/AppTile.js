@@ -42,6 +42,8 @@ import {WidgetType} from "../../../widgets/WidgetType";
 import {Capability} from "../../../widgets/WidgetApi";
 import {sleep} from "../../../utils/promise";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import WidgetStore from "../../../stores/WidgetStore";
+import {Action} from "../../../dispatcher/actions";
 
 const ALLOWED_APP_URL_SCHEMES = ['https:', 'http:'];
 const ENABLE_REACT_PERF = false;
@@ -310,35 +312,12 @@ export default class AppTile extends React.Component {
         if (this.props.onEditClick) {
             this.props.onEditClick();
         } else {
-            // TODO: Open the right manager for the widget
-            if (SettingsStore.getValue("feature_many_integration_managers")) {
-                IntegrationManagers.sharedInstance().openAll(
-                    this.props.room,
-                    'type_' + this.props.app.type,
-                    this.props.app.id,
-                );
-            } else {
-                IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                    this.props.room,
-                    'type_' + this.props.app.type,
-                    this.props.app.id,
-                );
-            }
+            WidgetUtils.editWidget(this.props.room, this.props.app);
         }
     }
 
     _onSnapshotClick() {
-        console.log("Requesting widget snapshot");
-        ActiveWidgetStore.getWidgetMessaging(this.props.app.id).getScreenshot()
-            .catch((err) => {
-                console.error("Failed to get screenshot", err);
-            })
-            .then((screenshot) => {
-                dis.dispatch({
-                    action: 'picture_snapshot',
-                    file: screenshot,
-                }, true);
-            });
+        WidgetUtils.snapshotWidget(this.props.app);
     }
 
     /**
@@ -419,6 +398,10 @@ export default class AppTile extends React.Component {
         }
     }
 
+    _onUnpinClicked = () => {
+        WidgetStore.instance.unpinWidget(this.props.app.id);
+    }
+
     _onRevokeClicked() {
         console.info("Revoke widget permissions - %s", this.props.app.id);
         this._revokeWidgetPermission();
@@ -490,12 +473,20 @@ export default class AppTile extends React.Component {
         if (payload.widgetId === this.props.app.id) {
             switch (payload.action) {
                 case 'm.sticker':
-                if (this._hasCapability('m.sticker')) {
-                    dis.dispatch({action: 'post_sticker_message', data: payload.data});
-                } else {
-                    console.warn('Ignoring sticker message. Invalid capability');
-                }
-                break;
+                    if (this._hasCapability('m.sticker')) {
+                        dis.dispatch({action: 'post_sticker_message', data: payload.data});
+                    } else {
+                        console.warn('Ignoring sticker message. Invalid capability');
+                    }
+                    break;
+
+                case Action.AppTileDelete:
+                    this._onDeleteClick();
+                    break;
+
+                case Action.AppTileRevoke:
+                    this._onRevokeClicked();
+                    break;
             }
         }
     }
@@ -626,7 +617,10 @@ export default class AppTile extends React.Component {
 
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             console.log("Replacing Jitsi widget URL with local wrapper");
-            url = WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: true});
+            url = WidgetUtils.getLocalJitsiWrapperUrl({
+                forLocalRender: true,
+                auth: this.props.app.data ? this.props.app.data.auth : null,
+            });
             url = this._addWurlParams(url);
         } else {
             url = this._getSafeUrl(this.state.widgetUrl);
@@ -637,7 +631,10 @@ export default class AppTile extends React.Component {
     _getPopoutUrl() {
         if (WidgetType.JITSI.matches(this.props.app.type)) {
             return this._templatedUrl(
-                WidgetUtils.getLocalJitsiWrapperUrl({forLocalRender: false}),
+                WidgetUtils.getLocalJitsiWrapperUrl({
+                    forLocalRender: false,
+                    auth: this.props.app.data ? this.props.app.data.auth : null,
+                }),
                 this.props.app.type,
             );
         } else {
@@ -833,6 +830,7 @@ export default class AppTile extends React.Component {
             contextMenu = (
                 <ContextMenu {...aboveLeftOf(elementRect, null)} onFinished={this._closeContextMenu}>
                     <WidgetContextMenu
+                        onUnpinClicked={this._onUnpinClicked}
                         onRevokeClicked={this._onRevokeClicked}
                         onEditClicked={showEditButton ? this._onEditClick : undefined}
                         onDeleteClicked={showDeleteButton ? this._onDeleteClick : undefined}

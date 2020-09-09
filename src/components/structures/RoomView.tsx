@@ -56,6 +56,7 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import {E2EStatus, shieldStatusForRoom} from '../../utils/ShieldUtils';
 import {Action} from "../../dispatcher/actions";
 import {SettingLevel} from "../../settings/SettingLevel";
+import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 import {IMatrixClientCreds} from "../../MatrixClientPeg";
 import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
@@ -1424,7 +1425,10 @@ export default class RoomView extends React.Component<IProps, IState> {
     };
 
     private onSettingsClick = () => {
-        dis.dispatch({ action: 'open_room_settings' });
+        dis.dispatch({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.RoomSummary,
+        });
     };
 
     private onCancelClick = () => {

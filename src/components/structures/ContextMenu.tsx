@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {CSSProperties, useRef, useState} from "react";
+import React, {CSSProperties, RefObject, useRef, useState} from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
@@ -416,8 +416,8 @@ export const aboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None
     return menuOptions;
 };
 
-export const useContextMenu = () => {
-    const button = useRef(null);
+export const useContextMenu = (): [boolean, RefObject<HTMLElement>, () => void, () => void, (val: boolean) => void] => {
+    const button = useRef<HTMLElement>(null);
     const [isOpen, setIsOpen] = useState(false);
     const open = () => {
         setIsOpen(true);
