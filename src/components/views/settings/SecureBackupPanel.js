@@ -215,7 +215,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         let statusDescription;
         let extraDetailsTableRows;
         let extraDetails;
-        let actions = [];
+        const actions = [];
         if (error) {
             statusDescription = (
                 <div className="error">
