@@ -38,8 +38,7 @@ import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml } from "parse5";
-import sendBugReport from "./rageshake/submit-rageshake";
-import SdkConfig from "./SdkConfig";
+import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
@@ -975,16 +974,9 @@ export const Commands = [
         args: "<description>",
         runFn: function(roomId, args) {
             return success(
-                sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
-                    userText: args,
-                    sendLogs: true,
-                }).then(() => {
-                    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
-                    Modal.createTrackedDialog('Slash Commands', 'Rageshake sent', InfoDialog, {
-                        title: _t('Logs sent'),
-                        description: _t('Thank you!'),
-                    });
-                }),
+                Modal.createTrackedDialog('Slash Commands', 'Bug Report Dialog', BugReportDialog, {
+                    initialText: args,
+                }).finished,
             );
         },
         category: CommandCategories.advanced,
