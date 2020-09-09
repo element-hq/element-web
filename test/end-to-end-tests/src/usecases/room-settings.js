@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
+const {openRoomSummaryCard} = require("./rightpanel");
 const {acceptDialog} = require('./dialog');
 
 async function setSettingsToggle(session, toggle, enabled) {
@@ -45,8 +46,9 @@ async function findTabs(session) {
     /// XXX delay is needed here, possibly because the header is being rerendered
     /// click doesn't do anything otherwise
     await session.delay(1000);
-    const roomSummaryButton = await session.query('.mx_RoomHeader .mx_AccessibleButton[aria-label="Room Info"]');
-    await roomSummaryButton.click();
+
+    await openRoomSummaryCard(session);
+
     const settingsButton = await session.query(".mx_RoomSummaryCard_icon_settings");
     await settingsButton.click();
 

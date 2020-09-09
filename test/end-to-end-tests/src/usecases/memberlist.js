@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 const assert = require('assert');
+const {openRoomSummaryCard} = require("./rightpanel");
 
 async function openMemberInfo(session, name) {
     const membersAndNames = await getMembersInMemberlist(session);
@@ -63,27 +64,8 @@ module.exports.verifyDeviceForUser = async function(session, name, expectedDevic
 };
 
 async function getMembersInMemberlist(session) {
-    try {
-        await session.query('.mx_RoomHeader .mx_RightPanel_headerButton_highlight[aria-label="Room Info"]');
-    } catch (e) {
-        // If the room summary is not yet open, open it
-        const roomSummaryButton = await session.query('.mx_RoomHeader .mx_AccessibleButton[aria-label="Room Info"]');
-        await roomSummaryButton.click();
-    }
+    await openRoomSummaryCard(session);
 
-    for (let i = 0; i < 5; i++) {
-        try {
-            const backButton = await session.query(".mx_BaseCard_back", 500);
-            // Right panel is open to the wrong thing - go back up to the Room Summary Card
-            // Sometimes our tests have this opened to MemberInfo
-            await backButton.click();
-        } catch (e) {
-            const memberPanelButton = await session.query(".mx_RoomSummaryCard_icon_people");
-            // We are back at the room summary card
-            await memberPanelButton.click();
-            break; // stop trying to go further back
-        }
-    }
     const memberNameElements = await session.queryAll(".mx_MemberList .mx_EntityTile_name");
     return Promise.all(memberNameElements.map(async (el) => {
         return {label: el, displayName: await session.innerText(el)};
