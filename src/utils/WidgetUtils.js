@@ -32,6 +32,7 @@ import {Capability} from "../widgets/WidgetApi";
 import {Room} from "matrix-js-sdk/src/models/room";
 import {WidgetType} from "../widgets/WidgetType";
 import {objectClone} from "./objects";
+import {_t} from "../languageHandler";
 
 export default class WidgetUtils {
     /* Returns true if user is able to send state events to modify widgets in this room
@@ -478,6 +479,14 @@ export default class WidgetUtils {
         return url.href;
     }
 
+    static getWidgetName(app) {
+        return app?.name?.trim() || _t("Unknown App");
+    }
+
+    static getWidgetDataTitle(app) {
+        return app?.data?.title?.trim() || "";
+    }
+
     static editWidget(room, app) {
         // TODO: Open the right manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {
@@ -485,5 +494,17 @@ export default class WidgetUtils {
         } else {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
+    }
+
+    static snapshotWidget(app) {
+        console.log("Requesting widget snapshot");
+        ActiveWidgetStore.getWidgetMessaging(app.id).getScreenshot().catch((err) => {
+            console.error("Failed to get screenshot", err);
+        }).then((screenshot) => {
+            dis.dispatch({
+                action: 'picture_snapshot',
+                file: screenshot,
+            }, true);
+        });
     }
 }

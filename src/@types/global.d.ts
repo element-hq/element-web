@@ -29,6 +29,7 @@ import {ActiveRoomObserver} from "../ActiveRoomObserver";
 import {Notifier} from "../Notifier";
 import type {Renderer} from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
+import WidgetStore from "../stores/WidgetStore";
 
 declare global {
     interface Window {
@@ -51,6 +52,7 @@ declare global {
         mxSettingsStore: SettingsStore;
         mxNotifier: typeof Notifier;
         mxRightPanelStore: RightPanelStore;
+        mxWidgetStore: WidgetStore;
     }
 
     interface Document {
