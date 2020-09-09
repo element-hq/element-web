@@ -76,7 +76,6 @@ interface IProps {
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     middleDisabled: boolean;
-    initialEventPixelOffset: number;
     leftDisabled: boolean;
     rightDisabled: boolean;
     // eslint-disable-next-line camelcase
@@ -635,7 +634,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     thirdPartyInvite={this.props.thirdPartyInvite}
                     oobData={this.props.roomOobData}
                     viaServers={this.props.viaServers}
-                    eventPixelOffset={this.props.initialEventPixelOffset}
                     key={this.props.currentRoomId || 'roomview'}
                     disabled={this.props.middleDisabled}
                     ConferenceHandler={this.props.ConferenceHandler}
