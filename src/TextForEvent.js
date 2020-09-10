@@ -19,6 +19,7 @@ import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
+import {WidgetType} from "./widgets/WidgetType";
 import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
@@ -475,7 +476,10 @@ function textForWidgetEvent(event) {
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
 
-    if (type === 'jitsi' || prevType === 'jitsi') {
+    const prevWidgetType = WidgetType.fromString(prevType);
+    const widgetType = WidgetType.fromString(type);
+
+    if (widgetType === WidgetType.JITSI || prevWidgetType === WidgetType.JITSI) {
         return textForJitsiWidgetEvent(event, senderName, url, prevUrl);
     }
 
