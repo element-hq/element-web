@@ -29,7 +29,7 @@ export default class E2eSetup extends React.Component {
         super();
         // awkwardly indented because https://github.com/eslint/eslint/issues/11310
         this._createStorageDialogPromise =
-            import("../../../async-components/views/dialogs/secretstorage/CreateSecretStorageDialog");
+            import("../../../async-components/views/dialogs/security/CreateSecretStorageDialog");
     }
 
     render() {

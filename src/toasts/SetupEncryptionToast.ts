@@ -18,7 +18,7 @@ import Modal from "../Modal";
 import * as sdk from "../index";
 import { _t } from "../languageHandler";
 import DeviceListener from "../DeviceListener";
-import SetupEncryptionDialog from "../components/views/dialogs/SetupEncryptionDialog";
+import SetupEncryptionDialog from "../components/views/dialogs/security/SetupEncryptionDialog";
 import { accessSecretStorage } from "../SecurityManager";
 import ToastStore from "../stores/ToastStore";
 import GenericToast from "../components/views/toasts/GenericToast";

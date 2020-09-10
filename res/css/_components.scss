@@ -91,11 +91,11 @@
 @import "./views/dialogs/_UploadConfirmDialog.scss";
 @import "./views/dialogs/_UserSettingsDialog.scss";
 @import "./views/dialogs/_WidgetOpenIDPermissionsDialog.scss";
-@import "./views/dialogs/keybackup/_CreateKeyBackupDialog.scss";
-@import "./views/dialogs/keybackup/_KeyBackupFailedDialog.scss";
-@import "./views/dialogs/keybackup/_RestoreKeyBackupDialog.scss";
-@import "./views/dialogs/secretstorage/_AccessSecretStorageDialog.scss";
-@import "./views/dialogs/secretstorage/_CreateSecretStorageDialog.scss";
+@import "./views/dialogs/security/_AccessSecretStorageDialog.scss";
+@import "./views/dialogs/security/_CreateKeyBackupDialog.scss";
+@import "./views/dialogs/security/_CreateSecretStorageDialog.scss";
+@import "./views/dialogs/security/_KeyBackupFailedDialog.scss";
+@import "./views/dialogs/security/_RestoreKeyBackupDialog.scss";
 @import "./views/directory/_NetworkDropdown.scss";
 @import "./views/elements/_AccessibleButton.scss";
 @import "./views/elements/_AddressSelector.scss";

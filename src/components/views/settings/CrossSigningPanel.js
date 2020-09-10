@@ -22,6 +22,7 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
+import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -137,7 +138,6 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     _resetCrossSigning = () => {
-        const ConfirmDestroyCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
         Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
             onFinished: (act) => {
                 if (!act) return;

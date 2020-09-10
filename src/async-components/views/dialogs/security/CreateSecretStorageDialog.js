@@ -30,6 +30,7 @@ import StyledRadioButton from '../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
+import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import { isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 
 const PHASE_LOADING = 0;
@@ -341,7 +342,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // so let's stash it here, rather than prompting for it twice.
         const keyCallback = k => this._backupKey = k;
 
-        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog,
             {

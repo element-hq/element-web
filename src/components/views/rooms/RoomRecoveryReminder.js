@@ -23,6 +23,7 @@ import Modal from "../../../Modal";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import {SettingLevel} from "../../../settings/SettingLevel";
+import RestoreKeyBackupDialog from "../dialogs/security/RestoreKeyBackupDialog";
 
 export default class RoomRecoveryReminder extends React.PureComponent {
     static propTypes = {
@@ -70,14 +71,13 @@ export default class RoomRecoveryReminder extends React.PureComponent {
             // A key backup exists for this account, but the creating device is not
             // verified, so restore the backup which will give us the keys from it and
             // allow us to trust it (ie. upload keys to it)
-            const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
             Modal.createTrackedDialog(
                 'Restore Backup', '', RestoreKeyBackupDialog, null, null,
                 /* priority = */ false, /* static = */ true,
             );
         } else {
             Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
-                import("../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog"),
+                import("../../../async-components/views/dialogs/security/CreateKeyBackupDialog"),
                 null, null, /* priority = */ false, /* static = */ true,
             );
         }
@@ -91,7 +91,7 @@ export default class RoomRecoveryReminder extends React.PureComponent {
         // When you choose "Don't ask again" from the room reminder, we show a
         // dialog to confirm the choice.
         Modal.createTrackedDialogAsync("Ignore Recovery Reminder", "Ignore Recovery Reminder",
-            import("../../../async-components/views/dialogs/keybackup/IgnoreRecoveryReminderDialog"),
+            import("../../../async-components/views/dialogs/security/IgnoreRecoveryReminderDialog"),
             {
                 onDontAskAgain: async () => {
                     await SettingsStore.setValue(

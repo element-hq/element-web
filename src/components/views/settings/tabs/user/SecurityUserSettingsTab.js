@@ -103,14 +103,14 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
 
     _onImportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };

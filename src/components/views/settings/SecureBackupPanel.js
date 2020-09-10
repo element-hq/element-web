@@ -24,7 +24,7 @@ import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
 import Spinner from '../elements/Spinner';
 import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
-import RestoreKeyBackupDialog from '../dialogs/keybackup/RestoreKeyBackupDialog';
+import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
 
 export default class SecureBackupPanel extends React.PureComponent {
@@ -150,7 +150,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
     _startNewBackup = () => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            import('../../../async-components/views/dialogs/security/CreateKeyBackupDialog'),
             {
                 onFinished: () => {
                     this._loadBackupStatus();
