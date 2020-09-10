@@ -40,7 +40,7 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp} from "../../../stores/WidgetStore";
-import { E2EStatus, shieldStatusForRoom } from "../../../utils/ShieldUtils";
+import { shieldStatusForRoom } from "../../../utils/ShieldUtils";
 
 interface IProps {
     room: Room;
@@ -201,7 +201,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
 
-    const [e2eStatus, setE2eStatus] = useState<E2EStatus>();
+    const [e2eStatus, setE2eStatus] = useState<string>();
     useEffect(() => {
         if (isRoomEncrypted) {
             shieldStatusForRoom(cli, room).then(e => setE2eStatus(e));
@@ -216,8 +216,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
                 tooltip={isRoomEncrypted ? _t("Encrypted") : _t("Not encrypted")}
                 class={classNames("mx_RoomSummaryCard_e2ee", {
                     mx_RoomSummaryCard_e2ee_normal: isRoomEncrypted,
-                    mx_RoomSummaryCard_e2ee_warning: isRoomEncrypted && e2eStatus === E2EStatus.Warning,
-                    mx_RoomSummaryCard_e2ee_verified: isRoomEncrypted && e2eStatus === E2EStatus.Verified,
+                    mx_RoomSummaryCard_e2ee_warning: isRoomEncrypted && e2eStatus === "warning",
+                    mx_RoomSummaryCard_e2ee_verified: isRoomEncrypted && e2eStatus === "verified",
                 })}
             />
         </div>
