@@ -841,7 +841,9 @@ export default class AppTile extends React.Component {
             contextMenu = (
                 <ContextMenu {...aboveLeftOf(elementRect, null)} onFinished={this._closeContextMenu}>
                     <WidgetContextMenu
-                        onUnpinClicked={ActiveWidgetStore.getWidgetPersistence(this.props.app.id) ? null : this._onUnpinClicked}
+                        onUnpinClicked={
+                            ActiveWidgetStore.getWidgetPersistence(this.props.app.id) ? null : this._onUnpinClicked
+                        }
                         onRevokeClicked={this._onRevokeClicked}
                         onEditClicked={showEditButton ? this._onEditClick : undefined}
                         onDeleteClicked={showDeleteButton ? this._onDeleteClick : undefined}
