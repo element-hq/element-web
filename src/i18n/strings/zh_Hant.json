@@ -2462,5 +2462,22 @@
     "User settings": "使用者設定",
     "Community and user menu": "社群與使用者選單",
     "Privacy": "隱私",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "把 ( ͡° ͜ʖ ͡°) 加在純文字訊息前"
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "把 ( ͡° ͜ʖ ͡°) 加在純文字訊息前",
+    "Unknown App": "未知的應用程式",
+    "%(count)s results|one": "%(count)s 個結果",
+    "Room Info": "聊天室資訊",
+    "Apps": "應用程式",
+    "Unpin app": "取消釘選應用程式",
+    "Edit apps, bridges & bots": "編輯應用程式、橋接與機器人",
+    "Add apps, bridges & bots": "新增應用程式、橋接與機器人",
+    "Not encrypted": "未加密",
+    "About": "關於",
+    "%(count)s people|other": "%(count)s 個夥伴",
+    "%(count)s people|one": "%(count)s 個人",
+    "Show files": "顯示檔案",
+    "Room settings": "聊天室設定",
+    "Take a picture": "拍照",
+    "Pin to room": "釘選到聊天室",
+    "You can only pin 2 apps at a time": "您僅能同時釘選 2 個應用程式",
+    "Unpin": "取消釘選"
 }
