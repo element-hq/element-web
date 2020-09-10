@@ -69,6 +69,8 @@ import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
 import {base32} from "rfc4648";
 
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+
 global.mxCalls = {
     //room_id: MatrixCall
 };
@@ -202,7 +204,6 @@ function _setCallState(call, roomId, status) {
 
 function _showICEFallbackPrompt() {
     const cli = MatrixClientPeg.get();
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const code = sub => <code>{sub}</code>;
     Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
         title: _t("Call failed due to misconfigured server"),
@@ -380,11 +381,17 @@ async function _startCallApp(roomId, type) {
             "Refusing to start conference call widget in " + roomId +
             " a conference call widget is already present",
         );
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-        Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
-            title: _t('Call in Progress'),
-            description: _t('A call is already in progress!'),
+        Modal.createTrackedDialog('Already have Jitsi Widget', '', QuestionDialog, {
+            title: _t('End Call'),
+            description: _t('Remove the group call from the room?'),
+            button: _t('End Call'),
+            cancelButton: _t('Cancel'),
+            onFinished: (endCall) => {
+                if (endCall) {
+                    WidgetUtils.setRoomWidget(roomId, currentJitsiWidgets[0].getContent()['id']);
+                }
+            },
         });
         return;
     }
