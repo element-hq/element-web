@@ -1330,7 +1330,7 @@
     "If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.": "Wenn du den gesuchten Raum nicht finden kannst, frage nach einer Einladung für den Raum oder <a>Erstelle einen neuen Raum</a>.",
     "Alternatively, you can try to use the public server at <code>turn.matrix.org</code>, but this will not be as reliable, and it will share your IP address with that server. You can also manage this in Settings.": "Alternativ kannst du versuchen, den öffentlichen Server unter <code>turn.matrix.org</code> zu verwenden. Allerdings wird dieser nicht so zuverlässig sein, und deine IP-Adresse mit diesem Server teilen. Du kannst dies auch in den Einstellungen konfigurieren.",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "Diese Handlung erfordert es, auf den Standard-Identitätsserver <server /> zuzugreifen, um eine E-Mail Adresse oder Telefonnummer zu validieren, aber der Server hat keine Nutzungsbedingungen.",
-    "Only continue if you trust the owner of the server.": "Fahre nur fort, wenn du den Inhaber*innen des Servers vertraust.",
+    "Only continue if you trust the owner of the server.": "Fahre nur fort, wenn du dem Besitzer*in des Servers vertraust.",
     "Trust": "Vertrauen",
     "Custom (%(level)s)": "Benutzerdefinierte (%(level)s)",
     "Sends a message as plain text, without interpreting it as markdown": "Verschickt eine Nachricht in reinem Textformat, ohne sie in Markdown zu formatieren",
