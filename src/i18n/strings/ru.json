@@ -2455,5 +2455,22 @@
     "User settings": "Пользовательские настройки",
     "Community and user menu": "Сообщество и меню пользователя",
     "Privacy": "Конфиденциальность",
-    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению"
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению",
+    "Unknown App": "Неизвестное приложение",
+    "%(count)s results|one": "%(count)s результат",
+    "Room Info": "Информация о комнате",
+    "Apps": "Приложения",
+    "Unpin app": "Открепить приложение",
+    "Edit apps, bridges & bots": "Редактировать приложения, мосты и ботов",
+    "Add apps, bridges & bots": "Добавить приложения, мосты и ботов",
+    "Not encrypted": "Не зашифровано",
+    "About": "О приложение",
+    "%(count)s people|other": "%(count)s человек",
+    "%(count)s people|one": "%(count)s человек",
+    "Show files": "Показать файлы",
+    "Room settings": "Настройки комнаты",
+    "Take a picture": "Сделать снимок",
+    "Pin to room": "Закрепить в комнате",
+    "You can only pin 2 apps at a time": "Вы можете закрепить только 2 приложения за раз",
+    "Unpin": "Открепить"
 }
