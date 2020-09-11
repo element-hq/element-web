@@ -195,27 +195,30 @@ export default class CrossSigningPanel extends React.PureComponent {
             crossSigningPublicKeysOnDevice
         );
 
-        let resetButton;
-        if (keysExistAnywhere) {
-            resetButton = (
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="danger" onClick={this._resetCrossSigning}>
-                        {_t("Reset")}
-                    </AccessibleButton>
-                </div>
+        const actions = [];
+
+        // TODO: determine how better to expose this to users in addition to prompts at login/toast
+        if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
+            actions.push(
+                <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
+                    {_t("Set up")}
+                </AccessibleButton>,
             );
         }
 
-        // TODO: determine how better to expose this to users in addition to prompts at login/toast
-        let bootstrapButton;
-        if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
-            bootstrapButton = (
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
-                        {_t("Set up")}
-                    </AccessibleButton>
-                </div>
+        if (keysExistAnywhere) {
+            actions.push(
+                <AccessibleButton kind="danger" onClick={this._resetCrossSigning}>
+                    {_t("Reset")}
+                </AccessibleButton>,
             );
+        }
+
+        let actionRow;
+        if (actions.length) {
+            actionRow = <div className="mx_CrossSigningPanel_buttonRow">
+                {actions}
+            </div>;
         }
 
         return (
@@ -251,8 +254,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                    </tbody></table>
                 </details>
                 {errorSection}
-                {bootstrapButton}
-                {resetButton}
+                {actionRow}
             </div>
         );
     }
