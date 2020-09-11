@@ -71,11 +71,16 @@ function onHashChange(ev: HashChangeEvent) {
 
 // This will be called whenever the SDK changes screens,
 // so a web page can update the URL bar appropriately.
-function onNewScreen(screen: string) {
+function onNewScreen(screen: string, replaceLast = false) {
     console.log("newscreen " + screen);
     const hash = '#/' + screen;
     lastLocationHashSet = hash;
-    window.location.hash = hash;
+
+    if (replaceLast) {
+        window.location.replace(hash);
+    } else {
+        window.location.assign(hash);
+    }
 }
 
 // We use this to work out what URL the SDK should
