@@ -295,7 +295,7 @@
     "A text message has been sent to %(msisdn)s": "Na číslo %(msisdn)s bola odoslaná textová správa",
     "Please enter the code it contains:": "Prosím, zadajte kód z tejto správy:",
     "Start authentication": "Spustiť overenie",
-    "powered by Matrix": "Poháňa Matrix",
+    "powered by Matrix": "používa protokol Matrix",
     "Sign in with": "Na prihlásenie sa použije",
     "Email address": "Emailová adresa",
     "Sign in": "Prihlásiť sa",
