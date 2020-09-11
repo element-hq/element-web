@@ -147,7 +147,7 @@ interface IProps { // TODO type things better
     config: Record<string, any>;
     serverConfig?: ValidatedServerConfig;
     ConferenceHandler?: any;
-    onNewScreen: (string) => void;
+    onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
     realQueryParams?: Record<string, string>;
@@ -886,6 +886,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
             }
 
+            // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item
+            const replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
+
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
@@ -898,7 +901,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 viaServers: roomInfo.via_servers,
                 ready: true,
             }, () => {
-                this.notifyNewScreen('room/' + presentedId);
+                this.notifyNewScreen('room/' + presentedId, replaceLast);
             });
         });
     }
@@ -1699,9 +1702,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    notifyNewScreen(screen: string) {
+    notifyNewScreen(screen: string, replaceLast = false) {
         if (this.props.onNewScreen) {
-            this.props.onNewScreen(screen);
+            this.props.onNewScreen(screen, replaceLast);
         }
         this.setPageSubtitle();
     }
