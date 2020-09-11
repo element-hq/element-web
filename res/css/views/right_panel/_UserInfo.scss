@@ -219,9 +219,8 @@ limitations under the License.
         text-overflow: clip;
     }
 
-    .mx_UserInfo_scrollContainer {
+    .mx_AutoHideScrollbar {
         flex: 1 1 0;
-        padding-bottom: 16px;
     }
 
     .mx_UserInfo_container:not(.mx_UserInfo_separator) {
