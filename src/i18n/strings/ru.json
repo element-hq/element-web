@@ -2472,5 +2472,16 @@
     "Take a picture": "Сделать снимок",
     "Pin to room": "Закрепить в комнате",
     "You can only pin 2 apps at a time": "Вы можете закрепить только 2 приложения за раз",
-    "Unpin": "Открепить"
+    "Unpin": "Открепить",
+    "Cross-signing is ready for use.": "Кросс-подпись готова к использованию.",
+    "Cross-signing is not set up.": "Кросс-подпись не настроена.",
+    "Backup version:": "Версия резервной копии:",
+    "Algorithm:": "Алгоритм:",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Сделайте резервную копию ключей шифрования с данными вашей учетной записи на случай, если вы потеряете доступ к своим сеансам. Ваши ключи будут защищены уникальным ключом восстановления.",
+    "Backup key stored:": "Резервный ключ сохранён:",
+    "Backup key cached:": "Резервный ключ кэширован:",
+    "Secret storage:": "Секретное хранилище:",
+    "ready": "готов",
+    "not ready": "не готов",
+    "Secure Backup": "Безопасное резервное копирование"
 }
