@@ -2483,5 +2483,8 @@
     "Secret storage:": "Секретное хранилище:",
     "ready": "готов",
     "not ready": "не готов",
-    "Secure Backup": "Безопасное резервное копирование"
+    "Secure Backup": "Безопасное резервное копирование",
+    "Group call modified by %(senderName)s": "%(senderName)s изменил(а) групповой вызов",
+    "Group call started by %(senderName)s": "Групповой вызов начат %(senderName)s",
+    "Group call ended by %(senderName)s": "%(senderName)s завершил(а) групповой вызов"
 }
