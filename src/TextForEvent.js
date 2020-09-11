@@ -476,9 +476,6 @@ function textForWidgetEvent(event) {
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
 
-    const prevWidgetType = WidgetType.fromString(prevType);
-    const widgetType = WidgetType.fromString(type);
-
     if (WidgetType.JITSI.matches(type) || WidgetType.JITSI.matches(prevType)) {
         return textForJitsiWidgetEvent(event, senderName, url, prevUrl);
     }
