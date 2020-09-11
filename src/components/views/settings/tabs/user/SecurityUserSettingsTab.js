@@ -29,6 +29,7 @@ import {sleep} from "../../../../../utils/promise";
 import dis from "../../../../../dispatcher/dispatcher";
 import {privateShouldBeEncrypted} from "../../../../../createRoom";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import SecureBackupPanel from "../../SecureBackupPanel";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -288,12 +289,11 @@ export default class SecurityUserSettingsTab extends React.Component {
         const SettingsFlag = sdk.getComponent('views.elements.SettingsFlag');
         const EventIndexPanel = sdk.getComponent('views.settings.EventIndexPanel');
 
-        const KeyBackupPanel = sdk.getComponent('views.settings.KeyBackupPanel');
-        const keyBackup = (
+        const secureBackup = (
             <div className='mx_SettingsTab_section'>
-                <span className="mx_SettingsTab_subheading">{_t("Key backup")}</span>
+                <span className="mx_SettingsTab_subheading">{_t("Secure Backup")}</span>
                 <div className='mx_SettingsTab_subsectionText'>
-                    <KeyBackupPanel />
+                    <SecureBackupPanel />
                 </div>
             </div>
         );
@@ -352,7 +352,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                 </div>
                 <div className="mx_SettingsTab_heading">{_t("Encryption")}</div>
                 <div className="mx_SettingsTab_section">
-                    {keyBackup}
+                    {secureBackup}
                     {eventIndex}
                     {crossSigning}
                     {this._renderCurrentDeviceInfo()}

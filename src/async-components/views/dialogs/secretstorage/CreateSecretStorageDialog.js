@@ -280,6 +280,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const { forceReset } = this.props;
 
         try {
+            // JRS: In an upcoming change, the cross-signing steps will be
+            // removed from here and this will instead be about secret storage
+            // only.
             if (forceReset) {
                 console.log("Forcing cross-signing and secret storage reset");
                 await cli.bootstrapSecretStorage({

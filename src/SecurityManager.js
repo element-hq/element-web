@@ -250,7 +250,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
                         {
                             title: _t("Setting up keys"),
-                            matrixClient: MatrixClientPeg.get(),
+                            matrixClient: cli,
                             makeRequest,
                         },
                     );
