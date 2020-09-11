@@ -2476,5 +2476,19 @@
     "Take a picture": "Tee foto",
     "Pin to room": "Klammerda jututoa külge",
     "You can only pin 2 apps at a time": "Sul võib korraga olla vaid kaks klammerdatud rakendust",
-    "Unpin": "Eemalda klammerdus"
+    "Unpin": "Eemalda klammerdus",
+    "Group call modified by %(senderName)s": "%(senderName)s muutis rühmakõnet",
+    "Group call started by %(senderName)s": "%(senderName)s algatas rühmakõne",
+    "Group call ended by %(senderName)s": "%(senderName)s lõpetas rühmakõne",
+    "Cross-signing is ready for use.": "Risttunnustamine on kasutamiseks valmis.",
+    "Cross-signing is not set up.": "Risttunnustamine on seadistamata.",
+    "Backup version:": "Varukoopia versioon:",
+    "Algorithm:": "Algoritm:",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Selleks puhuks, kui sa kaotad ligipääsu kõikidele oma sessioonidele, tee varukoopia oma krüptovõtmetest ja kasutajakonto seadistustest. Unikaalse taastevõtmega tagad selle, et sinu varukoopia on turvaline.",
+    "Backup key stored:": "Varukoopia võti on salvestatud:",
+    "Backup key cached:": "Varukoopia võti on puhverdatud:",
+    "Secret storage:": "Turvahoidla:",
+    "ready": "valmis",
+    "not ready": "ei ole valmis",
+    "Secure Backup": "Turvaline varundus"
 }
