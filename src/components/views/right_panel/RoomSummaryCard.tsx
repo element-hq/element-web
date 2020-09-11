@@ -40,7 +40,7 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp} from "../../../stores/WidgetStore";
-import { shieldStatusForRoom } from "../../../utils/ShieldUtils";
+import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
     room: Room;
@@ -200,13 +200,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
-
-    const [e2eStatus, setE2eStatus] = useState<string>();
-    useEffect(() => {
-        if (isRoomEncrypted) {
-            shieldStatusForRoom(cli, room).then(e => setE2eStatus(e));
-        }
-    });
+    const roomContext = useContext(RoomContext);
+    const e2eStatus = roomContext['e2eStatus'];
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const header = <React.Fragment>
