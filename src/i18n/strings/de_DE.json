@@ -2474,5 +2474,19 @@
     "Take a picture": "Foto aufnehmen",
     "Pin to room": "An Raum anheften",
     "You can only pin 2 apps at a time": "Du kannst nur 2 Apps gleichzeitig anheften",
-    "Unpin": "Nicht mehr anheften"
+    "Unpin": "Nicht mehr anheften",
+    "Group call modified by %(senderName)s": "Gruppenanruf wurde von %(senderName)s verändert",
+    "Group call started by %(senderName)s": "Gruppenanruf von %(senderName)s gestartet",
+    "Group call ended by %(senderName)s": "Gruppenanruf wurde von %(senderName)s beendet",
+    "Cross-signing is ready for use.": "Cross-Signing ist bereit zur Anwendung.",
+    "Cross-signing is not set up.": "Cross-Signing wurde nicht eingerichtet.",
+    "Backup version:": "Backup-Version:",
+    "Algorithm:": "Algorithmus:",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Sichere deine Verschlüsselungsschlüssel mit deinen Kontodaten, falls du den Zugriff auf deine Sitzungen verlierst. Deine Schlüssel werden mit einem eindeutigen Wiederherstellungsschlüssel gesichert.",
+    "Backup key stored:": "Sicherungsschlüssel gespeichert:",
+    "Backup key cached:": "Sicherungsschlüssel zwischengespeichert:",
+    "Secret storage:": "Sicherer Speicher:",
+    "ready": "bereit",
+    "not ready": "nicht bereit",
+    "Secure Backup": "Sicheres Backup"
 }
