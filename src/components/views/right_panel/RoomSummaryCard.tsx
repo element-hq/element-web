@@ -40,6 +40,7 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import BaseAvatar from "../avatars/BaseAvatar";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp} from "../../../stores/WidgetStore";
+import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
     room: Room;
@@ -199,6 +200,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     };
 
     const isRoomEncrypted = useIsEncrypted(cli, room);
+    const roomContext = useContext(RoomContext);
+    const e2eStatus = roomContext['e2eStatus'];
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const header = <React.Fragment>
@@ -207,7 +210,9 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <TextWithTooltip
                 tooltip={isRoomEncrypted ? _t("Encrypted") : _t("Not encrypted")}
                 class={classNames("mx_RoomSummaryCard_e2ee", {
-                    mx_RoomSummaryCard_e2ee_secure: isRoomEncrypted,
+                    mx_RoomSummaryCard_e2ee_normal: isRoomEncrypted,
+                    mx_RoomSummaryCard_e2ee_warning: isRoomEncrypted && e2eStatus === "warning",
+                    mx_RoomSummaryCard_e2ee_verified: isRoomEncrypted && e2eStatus === "verified",
                 })}
             />
         </div>
