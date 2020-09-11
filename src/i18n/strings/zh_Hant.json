@@ -2479,5 +2479,19 @@
     "Take a picture": "拍照",
     "Pin to room": "釘選到聊天室",
     "You can only pin 2 apps at a time": "您僅能同時釘選 2 個應用程式",
-    "Unpin": "取消釘選"
+    "Unpin": "取消釘選",
+    "Group call modified by %(senderName)s": "由 %(senderName)s 修改的群組通話",
+    "Group call started by %(senderName)s": "由 %(senderName)s 開始的群組通話",
+    "Group call ended by %(senderName)s": "由 %(senderName)s 結束的群組通話",
+    "Cross-signing is ready for use.": "交叉簽章已準備好使用。",
+    "Cross-signing is not set up.": "交叉簽章尚未設定。",
+    "Backup version:": "備份版本：",
+    "Algorithm:": "演算法：",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "如果您無法存取您的工作階段，請使用您的帳號資料來備份加密金鑰。您的金鑰將會被獨一無二的金鑰保護。",
+    "Backup key stored:": "備份金鑰已儲存：",
+    "Backup key cached:": "備份金鑰已快取：",
+    "Secret storage:": "秘密儲存空間：",
+    "ready": "準備好",
+    "not ready": "尚未準備好",
+    "Secure Backup": "安全備份"
 }
