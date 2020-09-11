@@ -2476,5 +2476,19 @@
     "Take a picture": "Fénykép készítése",
     "Pin to room": "A szobába kitűz",
     "You can only pin 2 apps at a time": "Csak 2 alkalmazást tűzhetsz ki egyszerre",
-    "Unpin": "Leszed"
+    "Unpin": "Leszed",
+    "Group call modified by %(senderName)s": "A konferenciahívást módosította: %(senderName)s",
+    "Group call started by %(senderName)s": "A konferenciahívást elindította: %(senderName)s",
+    "Group call ended by %(senderName)s": "A konferenciahívást befejezte: %(senderName)s",
+    "Cross-signing is ready for use.": "Eszközök közötti hitelesítés kész a használatra.",
+    "Cross-signing is not set up.": "Eszközök közötti hitelesítés nincs beállítva.",
+    "Backup version:": "Mentés verzió:",
+    "Algorithm:": "Algoritmus:",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Ments el a titkosítási kulcsaidat a fiókadatokkal arra az esetre ha levesztenéd a hozzáférést a munkameneteidhez. A kulcsok egy egyedi visszaállítási kulccsal lesznek védve.",
+    "Backup key stored:": "Mentési kulcs tár:",
+    "Backup key cached:": "Mentési kulcs gyorsítótár:",
+    "Secret storage:": "Biztonsági tároló:",
+    "ready": "kész",
+    "not ready": "nem kész",
+    "Secure Backup": "Biztonsági Mentés"
 }
