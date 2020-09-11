@@ -479,7 +479,7 @@ function textForWidgetEvent(event) {
     const prevWidgetType = WidgetType.fromString(prevType);
     const widgetType = WidgetType.fromString(type);
 
-    if (widgetType === WidgetType.JITSI || prevWidgetType === WidgetType.JITSI) {
+    if (WidgetType.JITSI.matches(type) || WidgetType.JITSI.matches(prevType)) {
         return textForJitsiWidgetEvent(event, senderName, url, prevUrl);
     }
 
