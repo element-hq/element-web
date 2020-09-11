@@ -1633,7 +1633,7 @@
     "Sends a message as html, without interpreting it as markdown": "Verschickt eine Nachricht im html-Format, ohne sie in Markdown zu formatieren",
     "Show rooms with unread notifications first": "Räume mit ungelesenen Benachrichtigungen zuerst zeigen",
     "Show shortcuts to recently viewed rooms above the room list": "Kurzbefehle zu den kürzlich gesichteten Räumen über der Raumliste anzeigen",
-    "Use Single Sign On to continue": "Verwende Single Sign on um fortzufahren",
+    "Use Single Sign On to continue": "Benutze Single Sign-On um fortzufahren",
     "Confirm adding this email address by using Single Sign On to prove your identity.": "Bestätige die hinzugefügte E-Mail-Adresse mit Single Sign-On, um deine Identität nachzuweisen.",
     "Single Sign On": "Single Sign-On",
     "Confirm adding email": "Bestätige hinzugefügte E-Mail-Addresse",
