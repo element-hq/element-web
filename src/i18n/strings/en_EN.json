@@ -53,6 +53,7 @@
     "End Call": "End Call",
     "Remove the group call from the room?": "Remove the group call from the room?",
     "Cancel": "Cancel",
+    "You don't have permission to remove the call from the room": "You don't have permission to remove the call from the room",
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
     "Replying With Files": "Replying With Files",
