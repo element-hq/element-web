@@ -658,6 +658,7 @@
     "not found": "not found",
     "Cross-signing private keys:": "Cross-signing private keys:",
     "in secret storage": "in secret storage",
+    "not found in storage": "not found in storage",
     "Master private key:": "Master private key:",
     "cached locally": "cached locally",
     "not found locally": "not found locally",

@@ -233,7 +233,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>{_t("Cross-signing private keys:")}</td>
-                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found")}</td>
+                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found in storage")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Master private key:")}</td>
