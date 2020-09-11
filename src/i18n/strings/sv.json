@@ -2409,5 +2409,19 @@
     "Take a picture": "Ta en bild",
     "Pin to room": "Fäst i rum",
     "You can only pin 2 apps at a time": "Du kan bara fästa två appar på en gång",
-    "Unpin": "Avfäst"
+    "Unpin": "Avfäst",
+    "Group call modified by %(senderName)s": "Gruppsamtal ändrat av %(senderName)s",
+    "Group call started by %(senderName)s": "Gruppsamtal startat av %(senderName)s",
+    "Group call ended by %(senderName)s": "Gruppsamtal avslutat av %(senderName)s",
+    "Cross-signing is ready for use.": "Korssignering är klart att användas.",
+    "Cross-signing is not set up.": "Korssignering är inte inställt.",
+    "Backup version:": "Version av säkerhetskopia:",
+    "Algorithm:": "Algoritm:",
+    "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Recovery Key.": "Säkerhetskopiera dina krypteringsnycklar med dina kontodata ifall du förlorar åtkomst till dina sessioner. Dina nycklar skyddas med en unik återställningsnyckel.",
+    "Backup key stored:": "Lagrad säkerhetskopieringsnyckel:",
+    "Backup key cached:": "Cachad säkerhetskopieringsnyckel:",
+    "Secret storage:": "Hemlig lagring:",
+    "ready": "klart",
+    "not ready": "inte klart",
+    "Secure Backup": "Säker säkerhetskopiering"
 }
