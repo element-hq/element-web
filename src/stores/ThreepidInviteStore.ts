@@ -15,22 +15,20 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import { ComponentClass } from "../@types/common";
-import { UPDATE_EVENT } from "./AsyncStore";
-import { base32, base64 } from "rfc4648";
+import { base32 } from "rfc4648";
 
 // Dev note: the interface is split in two so we don't have to disable the
 // linter across the whole project.
 export interface IThreepidInviteWireFormat {
     email: string;
     signurl: string;
-    room_name: string;
-    room_avatar_url: string;
-    inviter_name: string;
+    room_name: string; // eslint-disable-line camelcase
+    room_avatar_url: string; // eslint-disable-line camelcase
+    inviter_name: string; // eslint-disable-line camelcase
 
     // TODO: Figure out if these are ever populated
-    guest_access_token?: string;
-    guest_user_id?: string;
+    guest_access_token?: string; // eslint-disable-line camelcase
+    guest_user_id?: string; // eslint-disable-line camelcase
 }
 
 interface IPersistedThreepidInvite extends IThreepidInviteWireFormat {
