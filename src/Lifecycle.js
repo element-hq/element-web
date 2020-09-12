@@ -671,6 +671,7 @@ export async function onLoggedOut() {
 }
 
 /**
+ * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 async function _clearStorage(opts: {deleteEverything: boolean}) {
