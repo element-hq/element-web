@@ -413,8 +413,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         }).then((loadedSession) => {
             if (!loadedSession) {
-                // fall back to showing the welcome screen
-                dis.dispatch({action: "view_welcome_page"});
+                // fall back to showing the welcome screen... unless we have a 3pid invite pending
+                if (ThreepidInviteStore.instance.pickBestInvite()) {
+                    dis.dispatch({action: 'start_registration'});
+                } else {
+                    dis.dispatch({action: "view_welcome_page"});
+                }
             }
         });
         // Note we don't catch errors from this: we catch everything within
