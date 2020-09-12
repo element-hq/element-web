@@ -1676,6 +1676,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // associated EventTile.
                 highlighted: Boolean(eventId),
                 threepid_invite: threepidInvite,
+                // TODO: Replace oob_data with the threepidInvite (which has the same info).
+                // This isn't done yet because it's threaded through so many more places.
+                // See https://github.com/vector-im/element-web/issues/15157
                 oob_data: {
                     name: threepidInvite?.roomName,
                     avatarUrl: threepidInvite?.roomAvatarUrl,
