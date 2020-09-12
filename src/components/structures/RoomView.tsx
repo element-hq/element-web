@@ -72,6 +72,7 @@ import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
 import type * as ConferenceHandler from '../../VectorConferenceHandler';
 import {XOR} from "../../@types/common";
+import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -86,15 +87,7 @@ if (DEBUG) {
 interface IProps {
     ConferenceHandler?: ConferenceHandler;
 
-    // An object representing a third party invite to join this room
-    // Fields:
-    // * inviteSignUrl (string) The URL used to join this room from an email invite
-    //                          (given as part of the link in the invite email)
-    // * invitedEmail (string) The email address that was invited to this room
-    thirdPartyInvite?: {
-        inviteSignUrl: string;
-        invitedEmail: string;
-    };
+    threepidInvite: IThreepidInvite,
 
     // Any data about the room that would normally come from the homeserver
     // but has been passed out-of-band, eg. the room name and avatar URL
@@ -1178,8 +1171,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             // return;
         } else {
             Promise.resolve().then(() => {
-                const signUrl = this.props.thirdPartyInvite ?
-                    this.props.thirdPartyInvite.inviteSignUrl : undefined;
+                const signUrl = this.props.threepidInvite?.signUrl;
                 dis.dispatch({
                     action: 'join_room',
                     opts: { inviteSignUrl: signUrl, viaServers: this.props.viaServers },
@@ -1752,10 +1744,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 if (this.props.oobData) {
                     inviterName = this.props.oobData.inviterName;
                 }
-                let invitedEmail = undefined;
-                if (this.props.thirdPartyInvite) {
-                    invitedEmail = this.props.thirdPartyInvite.invitedEmail;
-                }
+                const invitedEmail = this.props.threepidInvite?.toEmail;
 
                 // We have no room object for this room, only the ID.
                 // We've got to this room by following a link, possibly a third party invite.
@@ -1773,7 +1762,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                                 inviterName={inviterName}
                                 invitedEmail={invitedEmail}
                                 oobData={this.props.oobData}
-                                signUrl={this.props.thirdPartyInvite ? this.props.thirdPartyInvite.inviteSignUrl : null}
+                                signUrl={this.props.threepidInvite?.signUrl}
                                 room={this.state.room}
                             />
                         </ErrorBoundary>
@@ -1907,10 +1896,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             if (this.props.oobData) {
                 inviterName = this.props.oobData.inviterName;
             }
-            let invitedEmail = undefined;
-            if (this.props.thirdPartyInvite) {
-                invitedEmail = this.props.thirdPartyInvite.invitedEmail;
-            }
+            const invitedEmail = this.props.threepidInvite?.toEmail;
             hideCancel = true;
             previewBar = (
                 <RoomPreviewBar

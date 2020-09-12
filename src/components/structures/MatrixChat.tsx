@@ -78,6 +78,7 @@ import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotif
 import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
 import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
+import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -137,9 +138,9 @@ interface IRoomInfo {
 
     auto_join?: boolean;
     highlighted?: boolean;
-    third_party_invite?: object;
     oob_data?: object;
     via_servers?: string[];
+    threepid_invite?: IThreepidInvite;
 }
 /* eslint-enable camelcase */
 
@@ -196,7 +197,7 @@ interface IState {
     resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
-    thirdPartyInvite?: object;
+    threepidInvite?: IThreepidInvite,
     roomOobData?: object;
     viaServers?: string[];
     pendingInitialSync?: boolean;
@@ -260,6 +261,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // outside this.state because updating it should never trigger a
         // rerender.
         this.screenAfterLogin = this.props.initialScreenAfterLogin;
+        if (this.screenAfterLogin) {
+            const params = this.screenAfterLogin.params || {};
+            if (this.screenAfterLogin.screen.startsWith("room/") && params['signurl'] && params['email']) {
+                // probably a threepid invite - try to store it
+                const roomId = this.screenAfterLogin.screen.substring("room/".length);
+                ThreepidInviteStore.instance.storeInvite(roomId, params as IThreepidInviteWireFormat);
+            }
+        }
 
         this.windowWidth = 10000;
         this.handleResize();
@@ -835,10 +844,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     //                                    context of that particular event.
     // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
     //                                        and alter the EventTile to appear highlighted.
-    // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
-    //                                    we received to join the room, if any.
-    // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
-    // @param {string=} roomInfo.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} roomInfo.threepid_invite Object containing data about the third party
+    //                                           we received to join the room, if any.
     // @param {Object=} roomInfo.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
@@ -896,7 +903,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 view: Views.LOGGED_IN,
                 currentRoomId: roomInfo.room_id || null,
                 page_type: PageTypes.RoomView,
-                thirdPartyInvite: roomInfo.third_party_invite,
+                threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
                 viaServers: roomInfo.via_servers,
                 ready: true,
@@ -1639,16 +1646,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
-            // FIXME: sort_out caseConsistency
-            const thirdPartyInvite = {
-                inviteSignUrl: params.signurl,
-                invitedEmail: params.email,
-            };
-            const oobData = {
-                name: params.room_name,
-                avatarUrl: params.room_avatar_url,
-                inviterName: params.inviter_name,
-            };
+            let threepidInvite: IThreepidInvite;
+            if (params.signurl && params.email) {
+                threepidInvite = ThreepidInviteStore.instance
+                    .storeInvite(roomString, params as IThreepidInviteWireFormat);
+            }
 
             // on our URLs there might be a ?via=matrix.org or similar to help
             // joins to the room succeed. We'll pass these through as an array
@@ -1669,8 +1671,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // it as highlighted, which will propagate to RoomView and highlight the
                 // associated EventTile.
                 highlighted: Boolean(eventId),
-                third_party_invite: thirdPartyInvite,
-                oob_data: oobData,
+                threepid_invite: threepidInvite,
+                oob_data: {
+                    name: threepidInvite?.roomName,
+                    avatarUrl: threepidInvite?.roomAvatarUrl,
+                    inviterName: threepidInvite?.inviterName,
+                },
                 room_alias: undefined,
                 room_id: undefined,
             };
