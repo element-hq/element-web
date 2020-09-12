@@ -60,23 +60,24 @@ export default class ThreepidInviteStore extends EventEmitter {
     }
 
     public storeInvite(roomId: string, wireInvite: IThreepidInviteWireFormat): IThreepidInvite {
-        console.log("Storing invite: ", {roomId, ...wireInvite});
         const invite = <IPersistedThreepidInvite>{roomId, ...wireInvite};
         const id = this.generateIdOf(invite);
         localStorage.setItem(`${STORAGE_PREFIX}${id}`, JSON.stringify(invite));
         return this.translateInvite(invite);
     }
 
-    public getInvites(): IThreepidInvite[] {
-        const result: IThreepidInvite[] = [];
+    public getWireInvites(): IPersistedThreepidInvite[] {
+        const results: IPersistedThreepidInvite[] = [];
         for (let i = 0; i < localStorage.length; i++) {
             const keyName = localStorage.key(i);
             if (!keyName.startsWith(STORAGE_PREFIX)) continue;
-
-            const persisted = JSON.parse(localStorage.getItem(keyName)) as IPersistedThreepidInvite;
-            result.push(this.translateInvite(persisted));
+            results.push(JSON.parse(localStorage.getItem(keyName)) as IPersistedThreepidInvite);
         }
-        return result;
+        return results;
+    }
+
+    public getInvites(): IThreepidInvite[] {
+        return this.getWireInvites().map(i => this.translateInvite(i));
     }
 
     // Currently Element can only handle one invite at a time, so handle that
@@ -102,6 +103,16 @@ export default class ThreepidInviteStore extends EventEmitter {
             roomName: persisted.room_name,
             roomAvatarUrl: persisted.room_avatar_url,
             inviterName: persisted.inviter_name,
+        };
+    }
+
+    public translateToWireFormat(invite: IThreepidInvite): IThreepidInviteWireFormat {
+        return {
+            email: invite.toEmail,
+            signurl: invite.signUrl,
+            room_name: invite.roomName,
+            room_avatar_url: invite.roomAvatarUrl,
+            inviter_name: invite.inviterName,
         };
     }
 }

@@ -1214,6 +1214,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     // the homepage.
                     dis.dispatch({action: 'view_home_page'});
                 }
+            } else if (ThreepidInviteStore.instance.pickBestInvite()) {
+                // The user has a 3pid invite pending - show them that
+                const threepidInvite = ThreepidInviteStore.instance.pickBestInvite();
+
+                // HACK: This is a pretty brutal way of threading the invite back through
+                // our systems, but it's the safest we have for now.
+                const params = ThreepidInviteStore.instance.translateToWireFormat(threepidInvite);
+                this.showScreen(`room/${threepidInvite.roomId}`, params)
             } else {
                 // The user has just logged in after registering,
                 // so show the homepage.
@@ -2015,12 +2023,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             view = <Welcome />;
         } else if (this.state.view === Views.REGISTER) {
             const Registration = sdk.getComponent('structures.auth.Registration');
+            const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (
                 <Registration
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
-                    email={this.props.startingFragmentQueryParams.email}
+                    email={email}
                     brand={this.props.config.brand}
                     makeRegistrationUrl={this.makeRegistrationUrl}
                     onLoggedIn={this.onRegisterFlowComplete}
