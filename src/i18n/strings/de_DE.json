@@ -1836,7 +1836,7 @@
     "Mark all as read": "Alle als gelesen markieren",
     "Local address": "Lokale Adresse",
     "Published Addresses": "Öffentliche Adresse",
-    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "Öffentliche Adressen können von jedem verwendet werden um den Raum zu betreten. Um eine Adresse zu veröffentlichen musst du zunächst eine lokale Adresse anlegen.",
+    "Published addresses can be used by anyone on any server to join your room. To publish an address, it needs to be set as a local address first.": "Öffentliche Adressen können von jedem/r verwendet werden, um den Raum zu betreten. Um eine Adresse zu veröffentlichen musst du zunächst eine lokale Adresse anlegen.",
     "Other published addresses:": "Andere öffentliche Adressen:",
     "No other published addresses yet, add one below": "Keine anderen öffentlichen Adressen vorhanden, füge unten eine hinzu",
     "New published address (e.g. #alias:server)": "Neue öffentliche Adresse (z.B. #alias:server)",
