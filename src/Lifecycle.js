@@ -667,13 +667,13 @@ export async function onLoggedOut() {
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    await _clearStorage();
+    await _clearStorage({deleteEverything: true});
 }
 
 /**
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function _clearStorage() {
+async function _clearStorage(opts: {deleteEverything: boolean}) {
     Analytics.disable();
 
     if (window.localStorage) {
@@ -683,11 +683,13 @@ async function _clearStorage() {
         window.localStorage.clear();
 
         // now restore those invites
-        pendingInvites.forEach(i => {
-            const roomId = i.roomId;
-            delete i.roomId; // delete to avoid confusing the store
-            ThreepidInviteStore.instance.storeInvite(roomId, i);
-        });
+        if (!opts?.deleteEverything) {
+            pendingInvites.forEach(i => {
+                const roomId = i.roomId;
+                delete i.roomId; // delete to avoid confusing the store
+                ThreepidInviteStore.instance.storeInvite(roomId, i);
+            });
+        }
     }
 
     if (window.sessionStorage) {
