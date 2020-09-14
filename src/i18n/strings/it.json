@@ -2493,5 +2493,8 @@
     "Failed to find the general chat for this community": "Impossibile trovare la chat generale di questa comunità",
     "Community settings": "Impostazioni comunità",
     "User settings": "Impostazioni utente",
-    "Community and user menu": "Menu comunità e utente"
+    "Community and user menu": "Menu comunità e utente",
+    "End Call": "Chiudi chiamata",
+    "Remove the group call from the room?": "Rimuovere la chiamata di gruppo dalla stanza?",
+    "You don't have permission to remove the call from the room": "Non hai l'autorizzazione per rimuovere la chiamata dalla stanza"
 }
