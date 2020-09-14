@@ -33,6 +33,7 @@ import Modal from './Modal';
 import SettingsStore from "./settings/SettingsStore";
 import { hideToast as hideNotificationsToast } from "./toasts/DesktopNotificationsToast";
 import {SettingLevel} from "./settings/SettingLevel";
+import {isPushNotifyDisabled} from "./settings/controllers/NotificationControllers";
 
 /*
  * Dispatches:
@@ -302,7 +303,7 @@ export const Notifier = {
             return false;
         }
         const isGuest = client.isGuest();
-        return !isGuest && this.supportsDesktopNotifications() &&
+        return !isGuest && this.supportsDesktopNotifications() && !isPushNotifyDisabled() &&
             !this.isEnabled() && !this._isToolbarHidden();
     },
 
