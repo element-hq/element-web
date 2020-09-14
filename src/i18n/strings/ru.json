@@ -2486,5 +2486,8 @@
     "Secure Backup": "Безопасное резервное копирование",
     "Group call modified by %(senderName)s": "%(senderName)s изменил(а) групповой вызов",
     "Group call started by %(senderName)s": "Групповой вызов начат %(senderName)s",
-    "Group call ended by %(senderName)s": "%(senderName)s завершил(а) групповой вызов"
+    "Group call ended by %(senderName)s": "%(senderName)s завершил(а) групповой вызов",
+    "End Call": "Завершить звонок",
+    "Remove the group call from the room?": "Удалить групповой вызов из комнаты?",
+    "You don't have permission to remove the call from the room": "У вас нет разрешения на удаление звонка из комнаты"
 }
