@@ -1,3 +1,87 @@
+Changes in [3.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.0) (2020-09-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.4.0-rc.1...v3.4.0)
+
+ * Upgrade to JS SDK 8.3.0
+ * [Release] Show verification status in the room summary card
+   [\#5196](https://github.com/matrix-org/matrix-react-sdk/pull/5196)
+ * Fix user info scrolling in new card view
+   [\#5200](https://github.com/matrix-org/matrix-react-sdk/pull/5200)
+ * Fix sticker picker height
+   [\#5199](https://github.com/matrix-org/matrix-react-sdk/pull/5199)
+ * [Release] Account for via in pill matching regex
+   [\#5190](https://github.com/matrix-org/matrix-react-sdk/pull/5190)
+
+Changes in [3.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.0-rc.1) (2020-09-09)
+=============================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.3.0...v3.4.0-rc.1)
+
+ * Upgrade to JS SDK 8.3.0-rc.1
+ * Update from Weblate
+   [\#5183](https://github.com/matrix-org/matrix-react-sdk/pull/5183)
+ * Right Panel Room Summary and Widgets
+   [\#5167](https://github.com/matrix-org/matrix-react-sdk/pull/5167)
+ * null-guard roomId in RightPanel and pass Room to UserView
+   [\#5180](https://github.com/matrix-org/matrix-react-sdk/pull/5180)
+ * Fix create-react-class regression.
+   [\#5178](https://github.com/matrix-org/matrix-react-sdk/pull/5178)
+ * Fix WatchManager for global room watchers and tidy widget code a little
+   [\#5176](https://github.com/matrix-org/matrix-react-sdk/pull/5176)
+ * Fix permalink local linkification to not strip via servers
+   [\#5174](https://github.com/matrix-org/matrix-react-sdk/pull/5174)
+ * Support creation of Jitsi widgets with "openidtoken-jwt" auth
+   [\#5173](https://github.com/matrix-org/matrix-react-sdk/pull/5173)
+ * Fix create-react-class regression.
+   [\#5177](https://github.com/matrix-org/matrix-react-sdk/pull/5177)
+ * Update openid_credentials Widget API action for MSC1960 updates
+   [\#5172](https://github.com/matrix-org/matrix-react-sdk/pull/5172)
+ * Allow persistent resizing of the widget app drawer
+   [\#5138](https://github.com/matrix-org/matrix-react-sdk/pull/5138)
+ * add lenny face command
+   [\#5158](https://github.com/matrix-org/matrix-react-sdk/pull/5158)
+ * Prep work for Settings changes with cross-signing deferral
+   [\#5169](https://github.com/matrix-org/matrix-react-sdk/pull/5169)
+ * Small code clean ups and tweaks
+   [\#5168](https://github.com/matrix-org/matrix-react-sdk/pull/5168)
+ * Fix soft crash from TruncatedList in the createReactClass conversion
+   [\#5170](https://github.com/matrix-org/matrix-react-sdk/pull/5170)
+ * Remove create-react-class
+   [\#5157](https://github.com/matrix-org/matrix-react-sdk/pull/5157)
+ * Consolidate Lodash files in bundle
+   [\#5162](https://github.com/matrix-org/matrix-react-sdk/pull/5162)
+ * Communities v2 prototype: "In community" view
+   [\#5161](https://github.com/matrix-org/matrix-react-sdk/pull/5161)
+ * Respect user preference for whether pills should have an avatar or not
+   [\#5165](https://github.com/matrix-org/matrix-react-sdk/pull/5165)
+ * Communities v2 prototype: DM copy updates
+   [\#5153](https://github.com/matrix-org/matrix-react-sdk/pull/5153)
+ * Only wait for public keys during verification
+   [\#5164](https://github.com/matrix-org/matrix-react-sdk/pull/5164)
+ * Fix eslint ts override tsx matching and delint
+   [\#5155](https://github.com/matrix-org/matrix-react-sdk/pull/5155)
+ * Fix react error about functional components can't take refs
+   [\#5159](https://github.com/matrix-org/matrix-react-sdk/pull/5159)
+ * Remove redundant components and devDependencies
+   [\#5156](https://github.com/matrix-org/matrix-react-sdk/pull/5156)
+ * Add display-capture to iframe allow for widgets
+   [\#5154](https://github.com/matrix-org/matrix-react-sdk/pull/5154)
+ * Update create room dialog copy & community prototype home icon
+   [\#5151](https://github.com/matrix-org/matrix-react-sdk/pull/5151)
+ * Migrate to new, separate APIs for cross-signing and secret storage
+   [\#5149](https://github.com/matrix-org/matrix-react-sdk/pull/5149)
+ * Fix clicking the background of the tag panel not clearing the filter
+   [\#5152](https://github.com/matrix-org/matrix-react-sdk/pull/5152)
+ * Communities v2 prototype: Associate created rooms with the selected
+   community
+   [\#5147](https://github.com/matrix-org/matrix-react-sdk/pull/5147)
+ * Communities v2 prototype: Tag panel selection changes
+   [\#5145](https://github.com/matrix-org/matrix-react-sdk/pull/5145)
+ * Communities v2 prototype: Create community flow
+   [\#5144](https://github.com/matrix-org/matrix-react-sdk/pull/5144)
+ * Communities v2 prototype: Override invite aesthetics for community-as-room
+   invites
+   [\#5143](https://github.com/matrix-org/matrix-react-sdk/pull/5143)
+
 Changes in [3.3.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.3.0) (2020-09-01)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.3.0-rc.1...v3.3.0)
