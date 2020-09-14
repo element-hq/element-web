@@ -1,3 +1,17 @@
+Changes in [3.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.0) (2020-09-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.4.0-rc.1...v3.4.0)
+
+ * Upgrade to JS SDK 8.3.0
+ * [Release] Show verification status in the room summary card
+   [\#5196](https://github.com/matrix-org/matrix-react-sdk/pull/5196)
+ * Fix user info scrolling in new card view
+   [\#5200](https://github.com/matrix-org/matrix-react-sdk/pull/5200)
+ * Fix sticker picker height
+   [\#5199](https://github.com/matrix-org/matrix-react-sdk/pull/5199)
+ * [Release] Account for via in pill matching regex
+   [\#5190](https://github.com/matrix-org/matrix-react-sdk/pull/5190)
+
 Changes in [3.4.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.0-rc.1) (2020-09-09)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.3.0...v3.4.0-rc.1)
