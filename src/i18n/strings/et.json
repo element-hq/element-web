@@ -2490,5 +2490,8 @@
     "Secret storage:": "Turvahoidla:",
     "ready": "valmis",
     "not ready": "ei ole valmis",
-    "Secure Backup": "Turvaline varundus"
+    "Secure Backup": "Turvaline varundus",
+    "End Call": "Lõpeta kõne",
+    "Remove the group call from the room?": "Kas eemaldame jututoast rühmakõne?",
+    "You don't have permission to remove the call from the room": "Sinul pole õigusi rühmakõne eemaldamiseks sellest jututoast"
 }
