@@ -2490,5 +2490,8 @@
     "Secret storage:": "Biztonsági tároló:",
     "ready": "kész",
     "not ready": "nem kész",
-    "Secure Backup": "Biztonsági Mentés"
+    "Secure Backup": "Biztonsági Mentés",
+    "End Call": "Hívás befejezése",
+    "Remove the group call from the room?": "Törlöd a konferenciahívást a szobából?",
+    "You don't have permission to remove the call from the room": "A konferencia hívás törléséhez nincs jogosultságod"
 }
