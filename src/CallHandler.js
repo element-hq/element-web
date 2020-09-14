@@ -56,7 +56,6 @@ limitations under the License.
 import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher/dispatcher';
@@ -68,6 +67,9 @@ import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
 import {base32} from "rfc4648";
+
+import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -131,7 +133,6 @@ function _setCallListeners(call) {
             return;
         }
 
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
             title: _t('Call Failed'),
             description: err.message,
@@ -160,7 +161,6 @@ function _setCallListeners(call) {
             _setCallState(call, call.roomId, "busy");
             pause("ringbackAudio");
             play("busyAudio");
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog('Call Handler', 'Call Timeout', ErrorDialog, {
                 title: _t('Call Timeout'),
                 description: _t('The remote side failed to pick up') + '.',
@@ -202,7 +202,6 @@ function _setCallState(call, roomId, status) {
 
 function _showICEFallbackPrompt() {
     const cli = MatrixClientPeg.get();
-    const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const code = sub => <code>{sub}</code>;
     Modal.createTrackedDialog('No TURN servers', '', QuestionDialog, {
         title: _t("Call failed due to misconfigured server"),
@@ -245,7 +244,6 @@ function _onAction(payload) {
             if (screenCapErrorString) {
                 _setCallState(undefined, newCall.roomId, "ended");
                 console.log("Can't capture screen: " + screenCapErrorString);
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
                     title: _t('Unable to capture screen'),
                     description: screenCapErrorString,
@@ -265,7 +263,6 @@ function _onAction(payload) {
         case 'place_call':
             {
                 if (callHandler.getAnyActiveCall()) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Call Handler', 'Existing Call', ErrorDialog, {
                         title: _t('Existing Call'),
                         description: _t('You are already in a call.'),
@@ -275,7 +272,6 @@ function _onAction(payload) {
 
                 // if the runtime env doesn't do VoIP, whine.
                 if (!MatrixClientPeg.get().supportsVoip()) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Call Handler', 'VoIP is unsupported', ErrorDialog, {
                         title: _t('VoIP is unsupported'),
                         description: _t('You cannot place VoIP calls in this browser.'),
@@ -291,7 +287,6 @@ function _onAction(payload) {
 
                 const members = room.getJoinedMembers();
                 if (members.length <= 1) {
-                    const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                     Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
                         description: _t('You cannot place a call with yourself.'),
                     });
@@ -366,8 +361,6 @@ async function _startCallApp(roomId, type) {
     const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
 
     if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
         Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
             title: _t('Call in Progress'),
             description: _t('A call is currently being placed!'),
@@ -380,12 +373,25 @@ async function _startCallApp(roomId, type) {
             "Refusing to start conference call widget in " + roomId +
             " a conference call widget is already present",
         );
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
 
-        Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
-            title: _t('Call in Progress'),
-            description: _t('A call is already in progress!'),
-        });
+        if (WidgetUtils.canUserModifyWidgets(roomId)) {
+            Modal.createTrackedDialog('Already have Jitsi Widget', '', QuestionDialog, {
+                title: _t('End Call'),
+                description: _t('Remove the group call from the room?'),
+                button: _t('End Call'),
+                cancelButton: _t('Cancel'),
+                onFinished: (endCall) => {
+                    if (endCall) {
+                        WidgetUtils.setRoomWidget(roomId, currentJitsiWidgets[0].getContent()['id']);
+                    }
+                },
+            });
+        } else {
+            Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
+                title: _t('Call in Progress'),
+                description: _t("You don't have permission to remove the call from the room"),
+            });
+        }
         return;
     }
 
@@ -429,8 +435,6 @@ async function _startCallApp(roomId, type) {
         console.log('Jitsi widget added');
     }).catch((e) => {
         if (e.errcode === 'M_FORBIDDEN') {
-            const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
-
             Modal.createTrackedDialog('Call Failed', '', ErrorDialog, {
                 title: _t('Permission Required'),
                 description: _t("You do not have permission to start a conference call in this room"),
