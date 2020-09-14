@@ -167,7 +167,9 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // the only case it will go to three is if you have two and then a Jitsi gets added
         const roomId = this.getRoomId(widgetId);
         const roomInfo = this.getRoom(roomId);
-        return roomInfo && Object.keys(roomInfo.pinned).length < 2;
+        return roomInfo && Object.keys(roomInfo.pinned).filter(k => {
+            return roomInfo.widgets.some(app => app.id === k);
+        }).length < 2;
     }
 
     public pinWidget(widgetId: string) {
