@@ -198,7 +198,8 @@ export default class ScrollPanel extends React.Component {
     }
 
     onScroll = ev => {
-        if (this.props.resizeNotifier.isResizing) return; // skip scroll events caused by resizing
+        // skip scroll events caused by resizing
+        if (this.props.resizeNotifier && this.props.resizeNotifier.isResizing) return;
         debuglog("onScroll", this._getScrollNode().scrollTop);
         this._scrollTimeout.restart();
         this._saveScrollState();
