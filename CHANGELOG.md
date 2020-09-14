@@ -1,3 +1,12 @@
+Changes in [3.4.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.1) (2020-09-14)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.4.0...v3.4.1)
+
+ * Don't count widgets which no longer exist towards pinned count
+   [\#5202](https://github.com/matrix-org/matrix-react-sdk/pull/5202)
+ * Fix crashes with cannot read isResizing of undefined
+   [\#5205](https://github.com/matrix-org/matrix-react-sdk/pull/5205)
+
 Changes in [3.4.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.4.0) (2020-09-14)
 ===================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.4.0-rc.1...v3.4.0)
