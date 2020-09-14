@@ -2262,7 +2262,7 @@
     "Message layout": "Nachrichtenlayout",
     "Compact": "Kompakt",
     "Modern": "Modern",
-    "Use a system font": "Verwende die System-Schriftart",
+    "Use a system font": "Verwende eine System-Schriftart",
     "System font name": "System-Schriftart",
     "Customise your appearance": "Verändere das Erscheinungsbild",
     "Appearance Settings only affect this %(brand)s session.": "Einstellungen zum Erscheinungsbild wirken sich nur auf diese %(brand)s Sitzung aus.",
@@ -2488,5 +2488,8 @@
     "Secret storage:": "Sicherer Speicher:",
     "ready": "bereit",
     "not ready": "nicht bereit",
-    "Secure Backup": "Sicheres Backup"
+    "Secure Backup": "Sicheres Backup",
+    "End Call": "Anruf beenden",
+    "Remove the group call from the room?": "Konferenzgespräch aus diesem Raum entfernen?",
+    "You don't have permission to remove the call from the room": "Du hast keine Berechtigung um den Konferenzanruf aus dem Raum zu entfernen"
 }
