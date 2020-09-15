@@ -30,7 +30,7 @@ import './modernizr';
 
 // load service worker if available on this platform
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
+    navigator.serviceWorker.register('service-worker.js');
 }
 
 async function settled(...promises: Array<Promise<any>>) {

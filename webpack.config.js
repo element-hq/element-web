@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const webpack = require("webpack");
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
 let og_image_url = process.env.RIOT_OG_IMAGE_URL;
 if (!og_image_url) og_image_url = 'https://app.element.io/themes/element/img/logos/opengraph.png';
@@ -248,9 +248,9 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    // cache-bust languages.json file placed in
+                    // cache-bust i18n .json files placed in
                     // riot-web/webapp/i18n during build by copy-res.js
-                    test: /\.*languages.json$/,
+                    test: /i18n\/.*\.json$/,
                     type: "javascript/auto",
                     loader: 'file-loader',
                     options: {
@@ -355,6 +355,20 @@ module.exports = (env, argv) => {
                 filename: 'usercontent/index.html',
                 minify: argv.mode === 'production',
                 chunks: ['usercontent'],
+            }),
+
+            new WorkboxPlugin.GenerateSW({
+                runtimeCaching: [{
+                    urlPattern: /i18n\/.*\.json$/,
+                    handler: 'CacheFirst',
+
+                    options: {
+                        cacheName: 'i18n',
+                        expiration: {
+                            maxEntries: 2,
+                        },
+                    },
+                }],
             }),
         ],
 
