@@ -144,3 +144,15 @@ Desktop app configuration
 =========================
 
 See https://github.com/vector-im/riot-desktop#user-specified-configjson
+
+UI Features
+===========
+
+Parts of the UI can be disabled using UI features. These are settings which appear
+under `settingDefaults` and can only be `true` (default) or `false`. When `false`,
+parts of the UI relating to that feature will be disabled regardless of the user's
+preferences.
+
+Currently, the following UI feature flags are supported:
+
+* `UIFeature.URLPreviews` - Disables URL previews across the entire application.
