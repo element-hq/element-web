@@ -281,21 +281,21 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const { forceReset } = this.props;
 
         try {
-            // JRS: In an upcoming change, the cross-signing steps will be
-            // removed from here and this will instead be about secret storage
-            // only.
             if (forceReset) {
-                console.log("Forcing cross-signing and secret storage reset");
+                console.log("Forcing secret storage reset");
                 await cli.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
-                await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    setupNewCrossSigning: true,
-                });
             } else {
+                // For password authentication users after 2020-09, this cross-signing
+                // step will be a no-op since it is now setup during registration or login
+                // when needed. We should keep this here to cover other cases such as:
+                //   * Users with existing sessions prior to 2020-09 changes
+                //   * SSO authentication users which require interactive auth to upload
+                //     keys (and also happen to skip all post-authentication flows at the
+                //     moment via token login)
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 });
