@@ -2423,5 +2423,8 @@
     "Secret storage:": "Hemlig lagring:",
     "ready": "klart",
     "not ready": "inte klart",
-    "Secure Backup": "Säker säkerhetskopiering"
+    "Secure Backup": "Säker säkerhetskopiering",
+    "End Call": "Avsluta samtal",
+    "Remove the group call from the room?": "Ta bort gruppsamtalet från rummet?",
+    "You don't have permission to remove the call from the room": "Du har inte behörighet från att ta bort samtalet från rummet"
 }
