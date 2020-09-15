@@ -42,6 +42,7 @@ import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
+import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -666,17 +667,30 @@ export async function onLoggedOut() {
     // that can occur when components try to use a null client.
     dis.dispatch({action: 'on_logged_out'}, true);
     stopMatrixClient();
-    await _clearStorage();
+    await _clearStorage({deleteEverything: true});
 }
 
 /**
+ * @param {object} opts Options for how to clear storage.
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
-async function _clearStorage() {
+async function _clearStorage(opts: {deleteEverything: boolean}) {
     Analytics.disable();
 
     if (window.localStorage) {
+        // try to save any 3pid invites from being obliterated
+        const pendingInvites = ThreepidInviteStore.instance.getWireInvites();
+
         window.localStorage.clear();
+
+        // now restore those invites
+        if (!opts?.deleteEverything) {
+            pendingInvites.forEach(i => {
+                const roomId = i.roomId;
+                delete i.roomId; // delete to avoid confusing the store
+                ThreepidInviteStore.instance.storeInvite(roomId, i);
+            });
+        }
     }
 
     if (window.sessionStorage) {
