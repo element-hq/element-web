@@ -367,14 +367,14 @@ export default class SecureBackupPanel extends React.PureComponent {
             </>;
 
             actions.push(
-                <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                <AccessibleButton key="restore" kind="primary" onClick={this._restoreBackup}>
                     {restoreButtonCaption}
                 </AccessibleButton>,
             );
 
             if (!isSecureBackupRequired()) {
                 actions.push(
-                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                    <AccessibleButton key="delete" kind="danger" onClick={this._deleteBackup}>
                         {_t("Delete Backup")}
                     </AccessibleButton>,
                 );
@@ -388,7 +388,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
             </>;
             actions.push(
-                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                <AccessibleButton key="setup" kind="primary" onClick={this._startNewBackup}>
                     {_t("Set up")}
                 </AccessibleButton>,
             );
@@ -396,7 +396,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
         if (secretStorageKeyInAccount) {
             actions.push(
-                <AccessibleButton kind="danger" onClick={this._resetSecretStorage}>
+                <AccessibleButton key="reset" kind="danger" onClick={this._resetSecretStorage}>
                     {_t("Reset")}
                 </AccessibleButton>,
             );

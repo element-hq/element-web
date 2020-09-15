@@ -200,7 +200,7 @@ export default class CrossSigningPanel extends React.PureComponent {
         // TODO: determine how better to expose this to users in addition to prompts at login/toast
         if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
             actions.push(
-                <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
+                <AccessibleButton key="setup" kind="primary" onClick={this._onBootstrapClick}>
                     {_t("Set up")}
                 </AccessibleButton>,
             );
@@ -208,7 +208,7 @@ export default class CrossSigningPanel extends React.PureComponent {
 
         if (keysExistAnywhere) {
             actions.push(
-                <AccessibleButton kind="danger" onClick={this._resetCrossSigning}>
+                <AccessibleButton key="reset" kind="danger" onClick={this._resetCrossSigning}>
                     {_t("Reset")}
                 </AccessibleButton>,
             );
