@@ -1,7 +1,7 @@
 {
   "name": "riot-web",
   "productName": "Riot",
-  "version": "1.7.4",
+  "version": "1.7.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -72,6 +72,7 @@
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
     "highlight.js": "^9.13.1",
+    "jsrsasign": "^9.1.5",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:navgurukul/matrix-react-sdk#develop",
     "olm": "https://packages.matrix.org/npm/olm/olm-3.1.4.tgz",

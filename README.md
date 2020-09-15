@@ -83,7 +83,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
 1. Install or update `node.js` so that your `node` is at least v10.x.
 1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
-1. Switch to the riot-web directory: `cd riot-web`.
+1. Switch to the element-web directory: `cd element-web`.
 1. Install the prerequisites: `yarn install`.
    *  If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
@@ -126,31 +126,31 @@ override the desktop app's default settings if desired.
 Running from Docker
 ===================
 
-The Docker image can be used to serve riot-web as a web server. The easiest way to use
+The Docker image can be used to serve element-web as a web server. The easiest way to use
 it is to use the prebuilt image:
 ```bash
 docker run -p 80:80 vectorim/riot-web
 ```
 
 To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
-if your custom config was located at `/etc/riot-web/config.json` then your Docker command
+if your custom config was located at `/etc/element-web/config.json` then your Docker command
 would be:
 ```bash
-docker run -p 80:80 -v /etc/riot-web/config.json:/app/config.json vectorim/riot-web
+docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/riot-web
 ```
 
 To build the image yourself:
 ```bash
-git clone https://github.com/vector-im/riot-web.git riot-web
-cd riot-web
+git clone https://github.com/vector-im/element-web.git element-web
+cd element-web
 git checkout master
-docker build -t vectorim/riot-web .
+docker build .
 ```
 
 If you're building a custom branch, or want to use the develop branch, check out the appropriate
-riot-web branch and then run:
+element-web branch and then run:
 ```bash
-docker build -t vectorim/riot-web:develop \
+docker build -t \
     --build-arg USE_CUSTOM_SDKS=true \
     --build-arg REACT_SDK_REPO="https://github.com/matrix-org/matrix-react-sdk.git" \
     --build-arg REACT_SDK_BRANCH="develop" \
@@ -169,7 +169,7 @@ Labs Features
 =============
 
 Some features of Element may be enabled by flags in the `Labs` section of the settings.
-Some of these features are described in [labs.md](https://github.com/vector-im/riot-web/blob/develop/docs/labs.md).
+Some of these features are described in [labs.md](https://github.com/vector-im/element-web/blob/develop/docs/labs.md).
 
 Caching requirements
 ====================
@@ -186,13 +186,13 @@ Element requires the following URLs not to be cached, when/if you are serving El
 Development
 ===========
 
-Before attempting to develop on Riot you **must** read the [developer guide
+Before attempting to develop on Element you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
 also defines the design, architecture and style for Element too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
-with our vision for Riot. Please chat with the team in
-[#riot-dev:matrix.org](https://matrix.to/#/#riot-dev:matrix.org) before you
+with our vision for Element. Please chat with the team in
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
 start so we can ensure it's something we'd be willing to merge.
 
 You should also familiarise yourself with the ["Here be Dragons" guide
@@ -246,8 +246,8 @@ popd
 Finally, build and start Element itself:
 
 ```bash
-git clone https://github.com/vector-im/riot-web.git
-cd riot-web
+git clone https://github.com/vector-im/element-web.git
+cd element-web
 git checkout develop
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
@@ -275,7 +275,7 @@ bundle.css.map   116 kB       0  [emitted]  main
 Configure the app by copying `config.sample.json` to `config.json` and
 modifying it. See the [configuration docs](docs/config.md) for details.
 
-Open http://127.0.0.1:8080/ in your browser to see your newly built Riot.
+Open http://127.0.0.1:8080/ in your browser to see your newly built Element.
 
 **Note**: The build script uses inotify by default on Linux to monitor directories
 for changes. If the inotify watch limit is too low your build will silently fail.
@@ -336,7 +336,7 @@ To add a new translation, head to the [translating doc](docs/translating.md).
 
 For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 
-[<img src="https://translate.riot.im/widgets/riot-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/riot-web/?utm_source=widget)
+[<img src="https://translate.riot.im/widgets/element-web/-/multi-auto.svg" alt="translationsstatus" width="340">](https://translate.riot.im/engage/element-web/?utm_source=widget)
 
 Triaging issues
 ===============

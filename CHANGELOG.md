@@ -1,3 +1,75 @@
+Changes in [1.7.7](https://github.com/vector-im/element-web/releases/tag/v1.7.7) (2020-09-14)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.6...v1.7.7)
+
+ * Upgrade to React SDK 3.4.1
+
+Changes in [1.7.6](https://github.com/vector-im/element-web/releases/tag/v1.7.6) (2020-09-14)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.6-rc.1...v1.7.6)
+
+ * Upgrade to React SDK 3.4.0 and JS SDK 8.3.0
+
+Changes in [1.7.6-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.6-rc.1) (2020-09-09)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5...v1.7.6-rc.1)
+
+ * Upgrade to React SDK 3.4.0-rc.1 and JS SDK 8.3.0-rc.1
+ * Update from Weblate
+   [\#15125](https://github.com/vector-im/element-web/pull/15125)
+ * Support usage of Jitsi widgets with "openidtoken-jwt" auth
+   [\#15114](https://github.com/vector-im/element-web/pull/15114)
+ * Fix eslint ts override tsx matching and delint
+   [\#15064](https://github.com/vector-im/element-web/pull/15064)
+ * Add testing to review guidelines
+   [\#15050](https://github.com/vector-im/element-web/pull/15050)
+
+Changes in [1.7.5](https://github.com/vector-im/element-web/releases/tag/v1.7.5) (2020-09-01)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.5-rc.1...v1.7.5)
+
+## Security notice
+
+Element Web 1.7.5 fixes an issue where encrypted state events could break incoming call handling.
+Thanks to @awesome-michael from Awesome Technologies for responsibly disclosing this via Matrix's
+Security Disclosure Policy.
+
+## All changes
+
+ * Upgrade to React SDK 3.3.0 and JS SDK 8.2.0
+
+Changes in [1.7.5-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.5-rc.1) (2020-08-26)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4...v1.7.5-rc.1)
+
+ * Upgrade to React SDK 3.3.0-rc.1 and JS SDK 8.2.0-rc.1
+ * Update from Weblate
+   [\#15045](https://github.com/vector-im/element-web/pull/15045)
+ * Document .well-known E2EE secure backup setting
+   [\#15003](https://github.com/vector-im/element-web/pull/15003)
+ * Add docs for communities v2 prototyping feature flag
+   [\#15013](https://github.com/vector-im/element-web/pull/15013)
+ * Update links in README.md to point to Element
+   [\#14973](https://github.com/vector-im/element-web/pull/14973)
+ * Make kabyle translation available
+   [\#15027](https://github.com/vector-im/element-web/pull/15027)
+ * Change Riot to Element in readme
+   [\#15016](https://github.com/vector-im/element-web/pull/15016)
+ * Update links to element in the readme
+   [\#15014](https://github.com/vector-im/element-web/pull/15014)
+ * Link to Element in F-Droid as well
+   [\#15002](https://github.com/vector-im/element-web/pull/15002)
+ * Settings v3: Update documentation and configs for new feature flag behaviour
+   [\#14986](https://github.com/vector-im/element-web/pull/14986)
+ * Update jitsi.md with Element Android details
+   [\#14952](https://github.com/vector-im/element-web/pull/14952)
+ * TypeScript: enable es2019 lib for newer definitions
+   [\#14983](https://github.com/vector-im/element-web/pull/14983)
+ * Add reaction preview labs flags to develop
+   [\#14979](https://github.com/vector-im/element-web/pull/14979)
+ * Document new labs tweaks
+   [\#14958](https://github.com/vector-im/element-web/pull/14958)
+
 Changes in [1.7.4](https://github.com/vector-im/element-web/releases/tag/v1.7.4) (2020-08-17)
 =============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.4-rc.1...v1.7.4)

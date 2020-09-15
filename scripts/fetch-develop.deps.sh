@@ -70,7 +70,6 @@ function dodep() {
 
 ##############################
 
-echo -en 'travis_fold:start:matrix-js-sdk\r'
 echo 'Setting up matrix-js-sdk'
 
 dodep matrix-org matrix-js-sdk
@@ -83,11 +82,8 @@ popd
 
 yarn link matrix-js-sdk
 
-echo -en 'travis_fold:end:matrix-js-sdk\r'
-
 ##############################
 
-echo -en 'travis_fold:start:matrix-react-sdk\r'
 echo 'Setting up matrix-react-sdk'
 
 dodep matrix-org matrix-react-sdk
@@ -100,8 +96,6 @@ yarn build
 popd
 
 yarn link matrix-react-sdk
-
-echo -en 'travis_fold:end:matrix-react-sdk\r'
 
 ##############################
 

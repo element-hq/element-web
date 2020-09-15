@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import olmWasmPath from "olm/olm.wasm";
 import Olm from 'olm';
@@ -127,6 +128,7 @@ export async function loadSkin() {
         import(
             /* webpackChunkName: "riot-web-component-index" */
             /* webpackPreload: true */
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - this module is generated so may fail lint
             "../component-index"),
     ]);
