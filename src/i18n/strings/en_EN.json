@@ -474,7 +474,6 @@
     "Show timestamps in 12 hour format (e.g. 2:30pm)": "Show timestamps in 12 hour format (e.g. 2:30pm)",
     "Always show message timestamps": "Always show message timestamps",
     "Autoplay GIFs and videos": "Autoplay GIFs and videos",
-    "Always show encryption icons": "Always show encryption icons",
     "Show a reminder to enable Secure Message Recovery in encrypted rooms": "Show a reminder to enable Secure Message Recovery in encrypted rooms",
     "Enable automatic language detection for syntax highlighting": "Enable automatic language detection for syntax highlighting",
     "Show avatars in user and room mentions": "Show avatars in user and room mentions",
