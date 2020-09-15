@@ -259,7 +259,7 @@ export const Notifier = {
         }
         // set the notifications_hidden flag, as the user has knowingly interacted
         // with the setting we shouldn't nag them any further
-        this.setToolbarHidden(true);
+        this.setPromptHidden(true);
     },
 
     isEnabled: function() {
@@ -284,7 +284,7 @@ export const Notifier = {
         return SettingsStore.getValue("audioNotificationsEnabled");
     },
 
-    setToolbarHidden: function(hidden: boolean, persistent = true) {
+    setPromptHidden: function(hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
 
         Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', hidden);
@@ -297,17 +297,17 @@ export const Notifier = {
         }
     },
 
-    shouldShowToolbar: function() {
+    shouldShowPrompt: function() {
         const client = MatrixClientPeg.get();
         if (!client) {
             return false;
         }
         const isGuest = client.isGuest();
         return !isGuest && this.supportsDesktopNotifications() && !isPushNotifyDisabled() &&
-            !this.isEnabled() && !this._isToolbarHidden();
+            !this.isEnabled() && !this._isPromptHidden();
     },
 
-    _isToolbarHidden: function() {
+    _isPromptHidden: function() {
         // Check localStorage for any such meta data
         if (global.localStorage) {
             return global.localStorage.getItem("notifications_hidden") === "true";
