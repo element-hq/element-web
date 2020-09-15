@@ -92,6 +92,7 @@
 @import "./views/dialogs/_UserSettingsDialog.scss";
 @import "./views/dialogs/_WidgetOpenIDPermissionsDialog.scss";
 @import "./views/dialogs/security/_AccessSecretStorageDialog.scss";
+@import "./views/dialogs/security/_CreateCrossSigningDialog.scss";
 @import "./views/dialogs/security/_CreateKeyBackupDialog.scss";
 @import "./views/dialogs/security/_CreateSecretStorageDialog.scss";
 @import "./views/dialogs/security/_KeyBackupFailedDialog.scss";
@@ -187,7 +188,6 @@
 @import "./views/rooms/_RoomHeader.scss";
 @import "./views/rooms/_RoomList.scss";
 @import "./views/rooms/_RoomPreviewBar.scss";
-@import "./views/rooms/_RoomRecoveryReminder.scss";
 @import "./views/rooms/_RoomSublist.scss";
 @import "./views/rooms/_RoomTile.scss";
 @import "./views/rooms/_RoomUpgradeWarningBar.scss";
