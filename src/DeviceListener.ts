@@ -33,7 +33,7 @@ import { privateShouldBeEncrypted } from "./createRoom";
 import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
-
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -66,6 +66,7 @@ export default class DeviceListener {
         MatrixClientPeg.get().on('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
         MatrixClientPeg.get().on('accountData', this._onAccountData);
         MatrixClientPeg.get().on('sync', this._onSync);
+        MatrixClientPeg.get().on('RoomState.events', this._onRoomStateEvents);
         this.dispatcherRef = dis.register(this._onAction);
         this._recheck();
     }
@@ -79,6 +80,7 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
             MatrixClientPeg.get().removeListener('accountData', this._onAccountData);
             MatrixClientPeg.get().removeListener('sync', this._onSync);
+            MatrixClientPeg.get().removeListener('RoomState.events', this._onRoomStateEvents);
         }
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
@@ -167,6 +169,16 @@ export default class DeviceListener {
 
     _onSync = (state, prevState) => {
         if (state === 'PREPARED' && prevState === null) this._recheck();
+    };
+
+    _onRoomStateEvents = (ev: MatrixEvent) => {
+        if (ev.getType() !== "m.room.encryption") {
+            return;
+        }
+
+        // If a room changes to encrypted, re-check as it may be our first
+        // encrypted room. This also catches encrypted room creation as well.
+        this._recheck();
     };
 
     _onAction = ({ action }) => {
