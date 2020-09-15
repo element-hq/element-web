@@ -1027,11 +1027,7 @@ class E2ePadlock extends React.Component {
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} dir="auto" />;
         }
 
-        let classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
-        if (!SettingsStore.getValue("alwaysShowEncryptionIcons")) {
-            classes += ' mx_EventTile_e2eIcon_hidden';
-        }
-
+        const classes = `mx_EventTile_e2eIcon mx_EventTile_e2eIcon_${this.props.icon}`;
         return (
             <div
                 className={classes}
