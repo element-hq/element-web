@@ -2493,5 +2493,8 @@
     "Secret storage:": "秘密儲存空間：",
     "ready": "準備好",
     "not ready": "尚未準備好",
-    "Secure Backup": "安全備份"
+    "Secure Backup": "安全備份",
+    "End Call": "結束通話",
+    "Remove the group call from the room?": "從聊天室中移除群組通話？",
+    "You don't have permission to remove the call from the room": "您沒有從聊天室移除通話的權限"
 }
