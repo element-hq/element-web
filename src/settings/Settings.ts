@@ -275,11 +275,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Autoplay GIFs and videos'),
         default: false,
     },
-    "alwaysShowEncryptionIcons": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Always show encryption icons'),
-        default: true,
-    },
     "showRoomRecoveryReminder": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),

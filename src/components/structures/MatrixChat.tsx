@@ -1363,7 +1363,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowToolbar()) {
+            if (Notifier.shouldShowPrompt()) {
                 showNotificationsToast();
             }
 
