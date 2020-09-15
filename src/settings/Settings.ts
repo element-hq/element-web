@@ -32,6 +32,8 @@ import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
 import { RightPanelPhases } from "../stores/RightPanelStorePhases";
+import UIFeatureController from "./controllers/UIFeatureController";
+import { UIFeature } from "./UIFeature";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -68,6 +70,10 @@ const LEVELS_DEVICE_ONLY_SETTINGS = [
 const LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG = [
     SettingLevel.DEVICE,
     SettingLevel.CONFIG,
+];
+const LEVELS_UI_FEATURE = [
+    SettingLevel.CONFIG,
+    // in future we might have a .well-known level or something
 ];
 
 export interface ISetting {
@@ -447,6 +453,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room": _td("Enable URL previews by default for participants in this room"),
         },
         default: true,
+        controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "urlPreviewsEnabled_e2ee": {
         supportedLevels: [SettingLevel.ROOM_DEVICE, SettingLevel.ROOM_ACCOUNT],
@@ -454,6 +461,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room-account": _td("Enable URL previews for this room (only affects you)"),
         },
         default: false,
+        controller: new UIFeatureController(UIFeature.URLPreviews),
     },
     "roomColor": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
@@ -610,5 +618,9 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.pinned": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
+    },
+    [UIFeature.URLPreviews]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
     },
 };

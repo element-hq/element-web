@@ -23,6 +23,7 @@ import Field from "../../../elements/Field";
 import * as sdk from "../../../../..";
 import PlatformPeg from "../../../../../PlatformPeg";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {UIFeature} from "../../../../../settings/UIFeature";
 
 export default class PreferencesUserSettingsTab extends React.Component {
     static ROOM_LIST_SETTINGS = [
@@ -138,6 +139,10 @@ export default class PreferencesUserSettingsTab extends React.Component {
     };
 
     _renderGroup(settingIds) {
+        if (!SettingsStore.getValue(UIFeature.URLPreviews)) {
+            settingIds = settingIds.filter(i => i !== 'urlPreviewsEnabled');
+        }
+
         const SettingsFlag = sdk.getComponent("views.elements.SettingsFlag");
         return settingIds.map(i => <SettingsFlag key={i} name={i} level={SettingLevel.ACCOUNT} />);
     }
