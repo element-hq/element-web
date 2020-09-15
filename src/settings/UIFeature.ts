@@ -16,5 +16,5 @@ limitations under the License.
 
 // see settings.md for documentation on conventions
 export enum UIFeature {
-    URLPreviews = "UIFeature.URLPreviews",
+    URLPreviews = "UIFeature.urlPreviews",
 }
