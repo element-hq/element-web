@@ -18,4 +18,5 @@ limitations under the License.
 export enum UIFeature {
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
+    AdvancedSettings = "UIFeature.advancedSettings",
 }

@@ -29,6 +29,7 @@ import * as sdk from "../../../index";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -96,12 +97,14 @@ export default class RoomSettingsDialog extends React.Component {
             ));
         }
 
-        tabs.push(new Tab(
-            ROOM_ADVANCED_TAB,
-            _td("Advanced"),
-            "mx_RoomSettingsDialog_warningIcon",
-            <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
-        ));
+        if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
+            tabs.push(new Tab(
+                ROOM_ADVANCED_TAB,
+                _td("Advanced"),
+                "mx_RoomSettingsDialog_warningIcon",
+                <AdvancedRoomSettingsTab roomId={this.props.roomId} closeSettingsFn={this.props.onFinished} />,
+            ));
+        }
 
         return tabs;
     }
