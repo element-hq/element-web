@@ -70,6 +70,8 @@ import {base32} from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import WidgetStore from "./stores/WidgetStore";
+import ActiveWidgetStore from "./stores/ActiveWidgetStore";
 
 global.mxCalls = {
     //room_id: MatrixCall
@@ -310,6 +312,14 @@ function _onAction(payload) {
             console.info("Place conference call in %s", payload.room_id);
             _startCallApp(payload.room_id, payload.type);
             break;
+        case 'end_conference':
+            console.info("Terminating conference call in %s", payload.room_id);
+            _terminateCallApp(payload.room_id);
+            break;
+        case 'hangup_conference':
+            console.info("Leaving conference call in %s", payload.room_id);
+            _hangupWithCallApp(payload.room_id);
+            break;
         case 'incoming_call':
             {
                 if (callHandler.getAnyActiveCall()) {
@@ -357,41 +367,16 @@ async function _startCallApp(roomId, type) {
         show: true,
     });
 
+    // prevent double clicking the call button
     const room = MatrixClientPeg.get().getRoom(roomId);
     const currentJitsiWidgets = WidgetUtils.getRoomWidgetsOfType(room, WidgetType.JITSI);
-
-    if (WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI)) {
+    const hasJitsi = currentJitsiWidgets.length > 0
+        || WidgetEchoStore.roomHasPendingWidgetsOfType(roomId, currentJitsiWidgets, WidgetType.JITSI);
+    if (hasJitsi) {
         Modal.createTrackedDialog('Call already in progress', '', ErrorDialog, {
             title: _t('Call in Progress'),
             description: _t('A call is currently being placed!'),
         });
-        return;
-    }
-
-    if (currentJitsiWidgets.length > 0) {
-        console.warn(
-            "Refusing to start conference call widget in " + roomId +
-            " a conference call widget is already present",
-        );
-
-        if (WidgetUtils.canUserModifyWidgets(roomId)) {
-            Modal.createTrackedDialog('Already have Jitsi Widget', '', QuestionDialog, {
-                title: _t('End Call'),
-                description: _t('Remove the group call from the room?'),
-                button: _t('End Call'),
-                cancelButton: _t('Cancel'),
-                onFinished: (endCall) => {
-                    if (endCall) {
-                        WidgetUtils.setRoomWidget(roomId, currentJitsiWidgets[0].getContent()['id']);
-                    }
-                },
-            });
-        } else {
-            Modal.createTrackedDialog('Already have Jitsi Widget', '', ErrorDialog, {
-                title: _t('Call in Progress'),
-                description: _t("You don't have permission to remove the call from the room"),
-            });
-        }
         return;
     }
 
@@ -441,6 +426,40 @@ async function _startCallApp(roomId, type) {
             });
         }
         console.error(e);
+    });
+}
+
+function _terminateCallApp(roomId) {
+    Modal.createTrackedDialog('Confirm Jitsi Terminate', '', QuestionDialog, {
+        hasCancelButton: true,
+        title: _t("End conference"),
+        description: _t("Ending the conference will end the call for everyone. Continue?"),
+        button: _t("End conference"),
+        onFinished: (proceed) => {
+            if (!proceed) return;
+
+            // We'll just obliterate them all. There should only ever be one, but might as well
+            // be safe.
+            const roomInfo = WidgetStore.instance.getRoom(roomId);
+            const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+            jitsiWidgets.forEach(w => {
+                // setting invalid content removes it
+                WidgetUtils.setRoomWidget(roomId, w.id);
+            });
+        },
+    });
+}
+
+function _hangupWithCallApp(roomId) {
+    const roomInfo = WidgetStore.instance.getRoom(roomId);
+    if (!roomInfo) return; // "should never happen" clauses go here
+
+    const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
+    jitsiWidgets.forEach(w => {
+        const messaging = ActiveWidgetStore.getWidgetMessaging(w.id);
+        if (!messaging) return; // more "should never happen" words
+
+        messaging.hangup();
     });
 }
 
