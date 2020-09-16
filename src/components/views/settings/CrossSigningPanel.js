@@ -187,12 +187,18 @@ export default class CrossSigningPanel extends React.PureComponent {
         }
 
         const keysExistAnywhere = (
+            crossSigningPublicKeysOnDevice ||
             crossSigningPrivateKeysInStorage ||
-            crossSigningPublicKeysOnDevice
+            masterPrivateKeyCached ||
+            selfSigningPrivateKeyCached ||
+            userSigningPrivateKeyCached
         );
         const keysExistEverywhere = (
+            crossSigningPublicKeysOnDevice &&
             crossSigningPrivateKeysInStorage &&
-            crossSigningPublicKeysOnDevice
+            masterPrivateKeyCached &&
+            selfSigningPrivateKeyCached &&
+            userSigningPrivateKeyCached
         );
 
         const actions = [];
