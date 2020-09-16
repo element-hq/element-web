@@ -44,6 +44,8 @@ import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
+import SettingsStore from "./settings/SettingsStore";
+import {UIFeature} from "./settings/UIFeature";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -797,6 +799,7 @@ export const Commands = [
         command: 'addwidget',
         args: '<url | embed code | Jitsi url>',
         description: _td('Adds a custom widget by URL to the room'),
+        isEnabled: () => SettingsStore.getValue(UIFeature.Widgets),
         runFn: function(roomId, widgetUrl) {
             if (!widgetUrl) {
                 return reject(_t("Please supply a widget URL or embed code"));

@@ -28,6 +28,7 @@ import RateLimitedFunc from '../../../ratelimitedfunc';
 import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import CallView from "../voip/CallView";
+import {UIFeature} from "../../../settings/UIFeature";
 
 
 export default class AuxPanel extends React.Component {
@@ -198,18 +199,21 @@ export default class AuxPanel extends React.Component {
             />
         );
 
-        const appsDrawer = <AppsDrawer
-            room={this.props.room}
-            userId={this.props.userId}
-            maxHeight={this.props.maxHeight}
-            showApps={this.props.showApps}
-            hide={this.props.hideAppsDrawer}
-            resizeNotifier={this.props.resizeNotifier}
-        />;
+        let appsDrawer;
+        if (SettingsStore.getValue(UIFeature.Widgets)) {
+            appsDrawer = <AppsDrawer
+                room={this.props.room}
+                userId={this.props.userId}
+                maxHeight={this.props.maxHeight}
+                showApps={this.props.showApps}
+                hide={this.props.hideAppsDrawer}
+                resizeNotifier={this.props.resizeNotifier}
+            />;
+        }
 
         let stateViews = null;
         if (this.state.counters && SettingsStore.getValue("feature_state_counters")) {
-            let counters = [];
+            const counters = [];
 
             this.state.counters.forEach((counter, idx) => {
                 const title = counter.title;
@@ -218,7 +222,7 @@ export default class AuxPanel extends React.Component {
                 const severity = counter.severity;
                 const stateKey = counter.stateKey;
 
-                let span = <span>{ title }: { value }</span>
+                let span = <span>{ title }: { value }</span>;
 
                 if (link) {
                     span = (
