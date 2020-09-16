@@ -476,10 +476,6 @@ function textForWidgetEvent(event) {
     const {name: prevName, type: prevType, url: prevUrl} = event.getPrevContent();
     const {name, type, url} = event.getContent() || {};
 
-    if (WidgetType.JITSI.matches(type) || WidgetType.JITSI.matches(prevType)) {
-        return textForJitsiWidgetEvent(event, senderName, url, prevUrl);
-    }
-
     let widgetName = name || prevName || type || prevType || '';
     // Apply sentence case to widget name
     if (widgetName && widgetName.length > 0) {
