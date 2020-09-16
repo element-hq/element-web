@@ -225,7 +225,6 @@ First clone and build `matrix-js-sdk`:
 ``` bash
 git clone https://github.com/matrix-org/matrix-js-sdk.git
 pushd matrix-js-sdk
-git checkout develop
 yarn link
 yarn install
 popd
@@ -236,7 +235,6 @@ Then similarly with `matrix-react-sdk`:
 ```bash
 git clone https://github.com/matrix-org/matrix-react-sdk.git
 pushd matrix-react-sdk
-git checkout develop
 yarn link
 yarn link matrix-js-sdk
 yarn install
@@ -248,7 +246,6 @@ Finally, build and start Element itself:
 ```bash
 git clone https://github.com/vector-im/element-web.git
 cd element-web
-git checkout develop
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
