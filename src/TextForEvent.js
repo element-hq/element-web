@@ -19,7 +19,6 @@ import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
 import SettingsStore from "./settings/SettingsStore";
-import {WidgetType} from "./widgets/WidgetType";
 import {ALL_RULE_TYPES, ROOM_RULE_TYPES, SERVER_RULE_TYPES, USER_RULE_TYPES} from "./mjolnir/BanList";
 
 function textForMemberEvent(ev) {
@@ -497,24 +496,6 @@ function textForWidgetEvent(event) {
     } else {
         return _t('%(widgetName)s widget removed by %(senderName)s', {
             widgetName, senderName,
-        });
-    }
-}
-
-function textForJitsiWidgetEvent(event, senderName, url, prevUrl) {
-    if (url) {
-        if (prevUrl) {
-            return _t('Group call modified by %(senderName)s', {
-                senderName,
-            });
-        } else {
-            return _t('Group call started by %(senderName)s', {
-                senderName,
-            });
-        }
-    } else {
-        return _t('Group call ended by %(senderName)s', {
-            senderName,
         });
     }
 }
