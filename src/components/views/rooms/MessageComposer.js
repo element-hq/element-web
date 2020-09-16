@@ -31,6 +31,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuTooltipButton, useContextMenu} from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
+import {UIFeature} from "../../../settings/UIFeature";
 
 function ComposerAvatar(props) {
     const MemberStatusMessageAvatar = sdk.getComponent('avatars.MemberStatusMessageAvatar');
@@ -384,8 +385,11 @@ export default class MessageComposer extends React.Component {
                     permalinkCreator={this.props.permalinkCreator} />,
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} />,
                 <EmojiButton key="emoji_button" addEmoji={this.addEmoji} />,
-                <Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />,
             );
+
+            if (SettingsStore.getValue(UIFeature.Widgets)) {
+                controls.push(<Stickerpicker key="stickerpicker_controls_button" room={this.props.room} />);
+            }
 
             if (this.state.showCallButtons) {
                 if (callInProgress) {

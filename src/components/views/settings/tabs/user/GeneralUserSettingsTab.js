@@ -37,6 +37,7 @@ import {abbreviateUrl} from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
 import Spinner from "../../../elements/Spinner";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import {UIFeature} from "../../../../../settings/UIFeature";
 
 export default class GeneralUserSettingsTab extends React.Component {
     static propTypes = {
@@ -366,6 +367,8 @@ export default class GeneralUserSettingsTab extends React.Component {
     }
 
     _renderIntegrationManagerSection() {
+        if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
+
         const SetIntegrationManager = sdk.getComponent("views.settings.SetIntegrationManager");
 
         return (
