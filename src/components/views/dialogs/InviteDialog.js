@@ -1098,9 +1098,9 @@ export default class InviteDialog extends React.PureComponent {
 
             if (identityServersEnabled) {
                 helpText = _t(
-                "Start a conversation with someone using their name, username (like <userId/>) or email address.",
-                {},
-                {userId: () => {
+                    "Start a conversation with someone using their name, username (like <userId/>) or email address.",
+                    {},
+                    {userId: () => {
                         return (
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
                         );
