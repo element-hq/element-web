@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+const { acceptToast } = require("./toasts");
+
 const assert = require('assert');
 
 module.exports = async function signup(session, username, password, homeserver) {
