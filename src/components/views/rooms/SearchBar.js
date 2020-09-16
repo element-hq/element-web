@@ -20,8 +20,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 import { _t } from '../../../languageHandler';
 import {Key} from "../../../Keyboard";
-import SdkConfig from "../../../SdkConfig";
-import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import DesktopBuildsNotice, {WarningKind} from "../elements/DesktopBuildsNotice";
 
 export default class SearchBar extends React.Component {
