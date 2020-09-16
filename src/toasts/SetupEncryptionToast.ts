@@ -28,7 +28,7 @@ const TOAST_KEY = "setupencryption";
 const getTitle = (kind: Kind) => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-            return _t("Set up encryption");
+            return _t("Set up Secure Backup");
         case Kind.UPGRADE_ENCRYPTION:
             return _t("Encryption upgrade available");
         case Kind.VERIFY_THIS_SESSION:
@@ -36,10 +36,20 @@ const getTitle = (kind: Kind) => {
     }
 };
 
+const getIcon = (kind: Kind) => {
+    switch (kind) {
+        case Kind.SET_UP_ENCRYPTION:
+        case Kind.UPGRADE_ENCRYPTION:
+            return "secure_backup";
+        case Kind.VERIFY_THIS_SESSION:
+            return "verification_warning";
+    }
+};
+
 const getSetupCaption = (kind: Kind) => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
-            return _t("Set up");
+            return _t("Continue");
         case Kind.UPGRADE_ENCRYPTION:
             return _t("Upgrade");
         case Kind.VERIFY_THIS_SESSION:
@@ -51,7 +61,7 @@ const getDescription = (kind: Kind) => {
     switch (kind) {
         case Kind.SET_UP_ENCRYPTION:
         case Kind.UPGRADE_ENCRYPTION:
-            return _t("Verify yourself & others to keep your chats safe");
+            return _t("Safeguard against losing access to encrypted messages & data");
         case Kind.VERIFY_THIS_SESSION:
             return _t("Other users may not trust it");
     }
@@ -88,7 +98,7 @@ export const showToast = (kind: Kind) => {
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: getTitle(kind),
-        icon: "verification_warning",
+        icon: getIcon(kind),
         props: {
             description: getDescription(kind),
             acceptLabel: getSetupCaption(kind),
