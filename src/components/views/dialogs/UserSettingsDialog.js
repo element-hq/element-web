@@ -32,6 +32,7 @@ import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
+import {UIFeature} from "../../../settings/UIFeature";
 
 export const USER_GENERAL_TAB = "USER_GENERAL_TAB";
 export const USER_APPEARANCE_TAB = "USER_APPEARANCE_TAB";
@@ -86,12 +87,14 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_FLAIR_TAB,
-            _td("Flair"),
-            "mx_UserSettingsDialog_flairIcon",
-            <FlairUserSettingsTab />,
-        ));
+        if (SettingsStore.getValue(UIFeature.Flair)) {
+            tabs.push(new Tab(
+                USER_FLAIR_TAB,
+                _td("Flair"),
+                "mx_UserSettingsDialog_flairIcon",
+                <FlairUserSettingsTab />,
+            ));
+        }
         tabs.push(new Tab(
             USER_NOTIFICATIONS_TAB,
             _td("Notifications"),
