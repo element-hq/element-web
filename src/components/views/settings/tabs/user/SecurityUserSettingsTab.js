@@ -329,24 +329,27 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>;
         }
 
-        let analyticsSection;
+        let privacySection;
         if (Analytics.canEnable()) {
-            analyticsSection = <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
-                <div className='mx_SettingsTab_subsectionText'>
-                    {_t(
-                        "%(brand)s collects anonymous analytics to allow us to improve the application.",
-                        { brand },
-                    )}
-                    &nbsp;
-                    {_t("Privacy is important to us, so we don't collect any personal or " +
-                        "identifiable data for our analytics.")}
-                    <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
-                        {_t("Learn more about how we use analytics.")}
-                    </AccessibleButton>
+            privacySection = <React.Fragment>
+                <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
+                    <div className="mx_SettingsTab_subsectionText">
+                        {_t(
+                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                            { brand },
+                        )}
+                        &nbsp;
+                        {_t("Privacy is important to us, so we don't collect any personal or " +
+                            "identifiable data for our analytics.")}
+                        <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
+                            {_t("Learn more about how we use analytics.")}
+                        </AccessibleButton>
+                    </div>
+                    <SettingsFlag name="analyticsOptIn" level={SettingLevel.DEVICE} onChange={this._updateAnalytics} />
                 </div>
-                <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE} onChange={this._updateAnalytics} />
-            </div>;
+            </React.Fragment>;
         }
 
         return (
@@ -377,8 +380,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     {crossSigning}
                     {this._renderCurrentDeviceInfo()}
                 </div>
-                <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
-                { analyticsSection }
+                { privacySection }
                 <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
                 <div className="mx_SettingsTab_section">
                     {this._renderIgnoredUsers()}
