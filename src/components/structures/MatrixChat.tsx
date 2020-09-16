@@ -79,6 +79,7 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
 import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import {UIFeature} from "../../settings/UIFeature";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1373,6 +1374,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         });
         cli.on('Call.incoming', function(call) {
+            // Check if the VoIP UI has been disabled
+            if (!SettingsStore.getValue(UIFeature.Voip)) return;
             // we dispatch this synchronously to make sure that the event
             // handlers on the call are set up immediately (so that if
             // we get an immediate hangup, we don't get a stuck call)
