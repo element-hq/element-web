@@ -38,6 +38,8 @@ import {Action} from "../../../dispatcher/actions";
 import {DefaultTagID} from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -549,7 +551,7 @@ export default class InviteDialog extends React.PureComponent {
         if (this.state.filterText.startsWith('@')) {
             // Assume mxid
             newMember = new DirectoryMember({user_id: this.state.filterText, display_name: null, avatar_url: null});
-        } else {
+        } else if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             // Assume email
             newMember = new ThreepidMember(this.state.filterText);
         }
@@ -734,7 +736,7 @@ export default class InviteDialog extends React.PureComponent {
                 this.setState({tryingIdentityServer: true});
                 return;
             }
-            if (term.indexOf('@') > 0 && Email.looksValid(term)) {
+            if (term.indexOf('@') > 0 && Email.looksValid(term) && SettingsStore.getValue(UIFeature.IdentityServer)) {
                 // Start off by suggesting the plain email while we try and resolve it
                 // to a real account.
                 this.setState({
@@ -1037,7 +1039,9 @@ export default class InviteDialog extends React.PureComponent {
     }
 
     _renderIdentityServerWarning() {
-        if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer) {
+        if (!this.state.tryingIdentityServer || this.state.canUseIdentityServer ||
+            !SettingsStore.getValue(UIFeature.IdentityServer)
+        ) {
             return null;
         }
 
@@ -1086,22 +1090,41 @@ export default class InviteDialog extends React.PureComponent {
         let buttonText;
         let goButtonFn;
 
+        const identityServersEnabled = SettingsStore.getValue(UIFeature.IdentityServer);
+
         const userId = MatrixClientPeg.get().getUserId();
         if (this.props.kind === KIND_DM) {
             title = _t("Direct Messages");
-            helpText = _t(
+
+            if (identityServersEnabled) {
+                helpText = _t(
                 "Start a conversation with someone using their name, username (like <userId/>) or email address.",
                 {},
                 {userId: () => {
-                    return <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>;
-                }},
-            );
+                        return (
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                        );
+                    }},
+                );
+            } else {
+                helpText = _t(
+                "Start a conversation with someone using their name or username (like <userId/>).",
+                {},
+                {userId: () => {
+                        return (
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
+                        );
+                    }},
+                );
+            }
+
             if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
                 const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-                helpText = _t(
-                    "Start a conversation with someone using their name, username (like <userId/>) or email address. " +
-                    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click " +
-                    "<a>here</a>.",
+
+                helpText = <React.Fragment>
+                    { helpText } {_t(
+                        "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, " +
+                        "click <a>here</a>",
                     {communityName}, {
                         userId: () => {
                             return (
@@ -1120,23 +1143,39 @@ export default class InviteDialog extends React.PureComponent {
                                 >{sub}</AccessibleButton>
                             );
                         },
-                    },
-                );
+                    })}
+                </React.Fragment>;
             }
             buttonText = _t("Go");
             goButtonFn = this._startDm;
         } else { // KIND_INVITE
             title = _t("Invite to this room");
-            helpText = _t(
-                "Invite someone using their name, username (like <userId/>), email address or <a>share this room</a>.",
-                {},
-                {
-                    userId: () =>
-                        <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
-                    a: (sub) =>
-                        <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
-                },
-            );
+
+            if (identityServersEnabled) {
+                helpText = _t(
+                    "Invite someone using their name, username (like <userId/>), email address or " +
+                        "<a>share this room</a>.",
+                    {},
+                    {
+                        userId: () =>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                        a: (sub) =>
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                    },
+                );
+            } else {
+                helpText = _t(
+                    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.",
+                    {},
+                    {
+                        userId: () =>
+                            <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>,
+                        a: (sub) =>
+                            <a href={makeRoomPermalink(this.props.roomId)} rel="noreferrer noopener" target="_blank">{sub}</a>,
+                    },
+                );
+            }
+
             buttonText = _t("Invite");
             goButtonFn = this._inviteUsers;
         }
