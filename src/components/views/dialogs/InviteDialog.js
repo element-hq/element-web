@@ -1123,24 +1123,25 @@ export default class InviteDialog extends React.PureComponent {
                 const inviteText = _t("This won't invite them to %(communityName)s. " +
                     "To invite someone to %(communityName)s, click <a>here</a>",
                     {communityName}, {
-                    userId: () => {
-                        return (
-                            <a
-                                href={makeUserPermalink(userId)}
-                                rel="noreferrer noopener"
-                                target="_blank"
-                            >{userId}</a>
-                        );
+                        userId: () => {
+                            return (
+                                <a
+                                    href={makeUserPermalink(userId)}
+                                    rel="noreferrer noopener"
+                                    target="_blank"
+                                >{userId}</a>
+                            );
+                        },
+                        a: (sub) => {
+                            return (
+                                <AccessibleButton
+                                    kind="link"
+                                    onClick={this._onCommunityInviteClick}
+                                >{sub}</AccessibleButton>
+                            );
+                        },
                     },
-                    a: (sub) => {
-                        return (
-                            <AccessibleButton
-                                kind="link"
-                                onClick={this._onCommunityInviteClick}
-                            >{sub}</AccessibleButton>
-                        );
-                    },
-                });
+                );
                 helpText = <React.Fragment>
                     { helpText } {inviteText}
                 </React.Fragment>;
