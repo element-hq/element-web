@@ -1108,9 +1108,9 @@ export default class InviteDialog extends React.PureComponent {
                 );
             } else {
                 helpText = _t(
-                "Start a conversation with someone using their name or username (like <userId/>).",
-                {},
-                {userId: () => {
+                    "Start a conversation with someone using their name or username (like <userId/>).",
+                    {},
+                    {userId: () => {
                         return (
                             <a href={makeUserPermalink(userId)} rel="noreferrer noopener" target="_blank">{userId}</a>
                         );
@@ -1120,30 +1120,29 @@ export default class InviteDialog extends React.PureComponent {
 
             if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
                 const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-
-                helpText = <React.Fragment>
-                    { helpText } {_t(
-                        "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, " +
-                        "click <a>here</a>",
+                const inviteText = _t("This won't invite them to %(communityName)s. " +
+                    "To invite someone to %(communityName)s, click <a>here</a>",
                     {communityName}, {
-                        userId: () => {
-                            return (
-                                <a
-                                    href={makeUserPermalink(userId)}
-                                    rel="noreferrer noopener"
-                                    target="_blank"
-                                >{userId}</a>
-                            );
-                        },
-                        a: (sub) => {
-                            return (
-                                <AccessibleButton
-                                    kind="link"
-                                    onClick={this._onCommunityInviteClick}
-                                >{sub}</AccessibleButton>
-                            );
-                        },
-                    })}
+                    userId: () => {
+                        return (
+                            <a
+                                href={makeUserPermalink(userId)}
+                                rel="noreferrer noopener"
+                                target="_blank"
+                            >{userId}</a>
+                        );
+                    },
+                    a: (sub) => {
+                        return (
+                            <AccessibleButton
+                                kind="link"
+                                onClick={this._onCommunityInviteClick}
+                            >{sub}</AccessibleButton>
+                        );
+                    },
+                });
+                helpText = <React.Fragment>
+                    { helpText } {inviteText}
                 </React.Fragment>;
             }
             buttonText = _t("Go");
