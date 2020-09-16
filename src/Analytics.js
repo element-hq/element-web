@@ -170,15 +170,19 @@ class Analytics {
         return !this.baseUrl;
     }
 
+    canEnable() {
+        const config = SdkConfig.get();
+        return navigator.doNotTrack !== "1" && config && config.piwik && config.piwik.url && config.piwik.siteId;
+    }
+
     /**
      * Enable Analytics if initialized but disabled
      * otherwise try and initalize, no-op if piwik config missing
      */
     async enable() {
         if (!this.disabled) return;
-
+        if (!this.canEnable()) return;
         const config = SdkConfig.get();
-        if (!config || !config.piwik || !config.piwik.url || !config.piwik.siteId) return;
 
         this.baseUrl = new URL("piwik.php", config.piwik.url);
         // set constants

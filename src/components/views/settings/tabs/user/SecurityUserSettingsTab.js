@@ -329,6 +329,26 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>;
         }
 
+        let analyticsSection;
+        if (Analytics.canEnable()) {
+            analyticsSection = <div className="mx_SettingsTab_section">
+                <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
+                <div className='mx_SettingsTab_subsectionText'>
+                    {_t(
+                        "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                        { brand },
+                    )}
+                    &nbsp;
+                    {_t("Privacy is important to us, so we don't collect any personal or " +
+                        "identifiable data for our analytics.")}
+                    <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
+                        {_t("Learn more about how we use analytics.")}
+                    </AccessibleButton>
+                </div>
+                <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE} onChange={this._updateAnalytics} />
+            </div>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 {warning}
@@ -358,23 +378,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     {this._renderCurrentDeviceInfo()}
                 </div>
                 <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t(
-                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
-                            { brand },
-                        )}
-                        &nbsp;
-                        {_t("Privacy is important to us, so we don't collect any personal or " +
-                            "identifiable data for our analytics.")}
-                        <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
-                            {_t("Learn more about how we use analytics.")}
-                        </AccessibleButton>
-                    </div>
-                    <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
-                                  onChange={this._updateAnalytics} />
-                </div>
+                { analyticsSection }
                 <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
                 <div className="mx_SettingsTab_section">
                     {this._renderIgnoredUsers()}

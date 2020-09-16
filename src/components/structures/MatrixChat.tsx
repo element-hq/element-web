@@ -1214,8 +1214,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         StorageManager.tryPersistStorage();
 
-        if (SettingsStore.getValue("showCookieBar") && this.props.config.piwik && navigator.doNotTrack !== "1") {
-            showAnalyticsToast(this.props.config.piwik && this.props.config.piwik.policyUrl);
+        if (SettingsStore.getValue("showCookieBar") && Analytics.canEnable()) {
+            showAnalyticsToast(this.props.config.piwik?.policyUrl);
         }
     }
 
