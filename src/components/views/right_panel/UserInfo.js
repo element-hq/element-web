@@ -952,30 +952,26 @@ function useRoomPermissions(cli, room, user) {
 
 const PowerLevelSection = ({user, room, roomPermissions, powerLevels}) => {
     const [isEditing, setEditing] = useState(false);
-    if (room && user.roomId) { // is in room
-        if (isEditing) {
-            return (<PowerLevelEditor
-                user={user} room={room} roomPermissions={roomPermissions}
-                onFinished={() => setEditing(false)} />);
-        } else {
-            const IconButton = sdk.getComponent('elements.IconButton');
-            const powerLevelUsersDefault = powerLevels.users_default || 0;
-            const powerLevel = parseInt(user.powerLevel, 10);
-            const modifyButton = roomPermissions.canEdit ?
-                (<IconButton icon="edit" onClick={() => setEditing(true)} />) : null;
-            const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
-            const label = _t("<strong>%(role)s</strong> in %(roomName)s",
-                {role, roomName: room.name},
-                {strong: label => <strong>{label}</strong>},
-            );
-            return (
-                <div className="mx_UserInfo_profileField">
-                    <div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div>
-                </div>
-            );
-        }
+    if (isEditing) {
+        return (<PowerLevelEditor
+            user={user} room={room} roomPermissions={roomPermissions}
+            onFinished={() => setEditing(false)} />);
     } else {
-        return null;
+        const IconButton = sdk.getComponent('elements.IconButton');
+        const powerLevelUsersDefault = powerLevels.users_default || 0;
+        const powerLevel = parseInt(user.powerLevel, 10);
+        const modifyButton = roomPermissions.canEdit ?
+            (<IconButton icon="edit" onClick={() => setEditing(true)} />) : null;
+        const role = textualPowerLevel(powerLevel, powerLevelUsersDefault);
+        const label = _t("<strong>%(role)s</strong> in %(roomName)s",
+            {role, roomName: room.name},
+            {strong: label => <strong>{label}</strong>},
+        );
+        return (
+            <div className="mx_UserInfo_profileField">
+                <div className="mx_UserInfo_roleDescription">{label}{modifyButton}</div>
+            </div>
+        );
     }
 };
 
@@ -1268,14 +1264,15 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
         spinner = <Loader imgClassName="mx_ContextualMenu_spinner" />;
     }
 
-    const memberDetails = (
-        <PowerLevelSection
+    let memberDetails;
+    if (room && member.roomId) {
+        memberDetails = <PowerLevelSection
             powerLevels={powerLevels}
             user={member}
             room={room}
             roomPermissions={roomPermissions}
-        />
-    );
+        />;
+    }
 
     // only display the devices list if our client supports E2E
     const cryptoEnabled = cli.isCryptoEnabled();
