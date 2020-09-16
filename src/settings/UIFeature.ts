@@ -18,4 +18,6 @@ limitations under the License.
 export enum UIFeature {
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
+    ShareQRCode = "UIFeature.shareQrCode",
+    ShareSocial = "UIFeature.shareSocial",
 }
