@@ -24,13 +24,9 @@ interface IProps {
     mxEvent: MatrixEvent;
 }
 
-interface IState {
-}
-
-export default class MJitsiWidgetEvent extends React.PureComponent<IProps, IState> {
+export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
     constructor(props) {
         super(props);
-        this.state = {};
     }
 
     render() {
