@@ -18,6 +18,11 @@ limitations under the License.
 export enum UIFeature {
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
+    Voip = "UIFeature.voip",
+    Feedback = "UIFeature.feedback",
+    Registration = "UIFeature.registration",
+    PasswordReset = "UIFeature.passwordReset",
+    Deactivate = "UIFeature.deactivate",
     ShareQRCode = "UIFeature.shareQrCode",
     ShareSocial = "UIFeature.shareSocial",
 }
