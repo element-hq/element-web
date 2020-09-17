@@ -189,7 +189,7 @@ limitations under the License.
     padding: 0 24px;
     margin-right: 30px;
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 80px; // visually center the content (intentional offset)
 }
 
 .mx_RoomView_MessageList {
