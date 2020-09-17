@@ -223,6 +223,7 @@ $MiniAppTileHeight: 200px;
     height: $MiniAppTileHeight;
     width: 100%;
     overflow: hidden;
+    border-radius: 8px;
 }
 
 .mx_AppTile .mx_AppTileBody,
