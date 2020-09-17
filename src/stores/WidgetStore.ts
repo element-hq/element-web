@@ -158,7 +158,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
 
         let pinned = roomInfo && roomInfo.pinned[widgetId];
         // Jitsi widgets should be pinned by default
-        if (pinned === undefined && WidgetType.JITSI.matches(this.widgetMap.get(widgetId).type)) pinned = true;
+        const widget = this.widgetMap.get(widgetId);
+        if (pinned === undefined && WidgetType.JITSI.matches(widget?.type)) pinned = true;
         return pinned;
     }
 
