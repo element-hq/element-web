@@ -79,6 +79,7 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
 import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import {UIFeature} from "../../settings/UIFeature";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1942,7 +1943,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
-        let view;
+        let view = null;
 
         if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
@@ -2021,7 +2022,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
-        } else if (this.state.view === Views.REGISTER) {
+        } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (
@@ -2039,7 +2040,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.FORGOT_PASSWORD) {
+        } else if (this.state.view === Views.FORGOT_PASSWORD && SettingsStore.getValue(UIFeature.PasswordReset)) {
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             view = (
                 <ForgotPassword
@@ -2050,6 +2051,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 />
             );
         } else if (this.state.view === Views.LOGIN) {
+            const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
@@ -2058,7 +2060,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    onForgotPasswordClick={this.onForgotPasswordClick}
+                    onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
