@@ -20,4 +20,5 @@ export enum UIFeature {
     Widgets = "UIFeature.widgets",
     Voip = "UIFeature.voip",
     Feedback = "UIFeature.feedback",
+    ThirdPartyID = "UIFeature.thirdPartyId",
 }
