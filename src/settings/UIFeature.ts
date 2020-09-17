@@ -20,4 +20,7 @@ export enum UIFeature {
     Widgets = "UIFeature.widgets",
     Voip = "UIFeature.voip",
     Feedback = "UIFeature.feedback",
+    Registration = "UIFeature.registration",
+    PasswordReset = "UIFeature.passwordReset",
+    Deactivate = "UIFeature.deactivate",
 }
