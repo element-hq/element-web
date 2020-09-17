@@ -2493,5 +2493,8 @@
     "Secure Backup": "Biztonsági Mentés",
     "End Call": "Hívás befejezése",
     "Remove the group call from the room?": "Törlöd a konferenciahívást a szobából?",
-    "You don't have permission to remove the call from the room": "A konferencia hívás törléséhez nincs jogosultságod"
+    "You don't have permission to remove the call from the room": "A konferencia hívás törléséhez nincs jogosultságod",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Indíts beszélgetést valakivel és használd hozzá a nevét vagy a felhasználói nevét (mint <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Ez nem hívja meg őket ebbe a közösségbe: %(communityName)s. Hogy meghívj valakit ebbe a közösségbe: %(communityName)s kattints <a>ide</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Hívj meg valakit a nevével, felhasználói nevével (pl. <userId/>) vagy <a>oszd meg ezt a szobát</a>."
 }
