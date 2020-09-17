@@ -93,7 +93,6 @@ let meetApi: any; // JitsiMeetExternalAPI
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
             widgetApi.on('hangup', () => {
-                console.log("@@ HANGUP");
                 if (meetApi) meetApi.executeCommand('hangup');
             });
         } else {
