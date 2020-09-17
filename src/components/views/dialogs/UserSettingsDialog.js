@@ -87,12 +87,14 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_FLAIR_TAB,
-            _td("Flair"),
-            "mx_UserSettingsDialog_flairIcon",
-            <FlairUserSettingsTab />,
-        ));
+        if (SettingsStore.getValue(UIFeature.Flair)) {
+            tabs.push(new Tab(
+                USER_FLAIR_TAB,
+                _td("Flair"),
+                "mx_UserSettingsDialog_flairIcon",
+                <FlairUserSettingsTab />,
+            ));
+        }
         tabs.push(new Tab(
             USER_NOTIFICATIONS_TAB,
             _td("Notifications"),

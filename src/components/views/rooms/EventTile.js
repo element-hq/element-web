@@ -206,6 +206,9 @@ export default class EventTile extends React.Component {
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -736,10 +739,10 @@ export default class EventTile extends React.Component {
                 else if (msgtype === 'm.file') text = _td('%(senderName)s uploaded a file');
                 sender = <SenderProfile onClick={this.onSenderProfileClick}
                                         mxEvent={this.props.mxEvent}
-                                        enableFlair={!text}
+                                        enableFlair={this.props.enableFlair && !text}
                                         text={text} />;
             } else {
-                sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={true} />;
+                sender = <SenderProfile mxEvent={this.props.mxEvent} enableFlair={this.props.enableFlair} />;
             }
         }
 

@@ -26,4 +26,5 @@ export enum UIFeature {
     ShareQRCode = "UIFeature.shareQrCode",
     ShareSocial = "UIFeature.shareSocial",
     IdentityServer = "UIFeature.identityServer",
+    Flair = "UIFeature.flair",
 }

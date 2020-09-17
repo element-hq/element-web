@@ -28,6 +28,7 @@ import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -366,6 +367,7 @@ export default class ReplyThread extends React.Component {
                     isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     useIRCLayout={this.props.useIRCLayout}
+                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                 />
             </blockquote>;
         });
