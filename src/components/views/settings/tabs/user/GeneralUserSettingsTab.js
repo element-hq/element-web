@@ -386,6 +386,14 @@ export default class GeneralUserSettingsTab extends React.Component {
                 width="18" height="18" alt={_t("Warning")} />
             : null;
 
+        let accountManagementSection;
+        if (SettingsStore.getValue(UIFeature.Deactivate)) {
+            accountManagementSection = <>
+                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
+                {this._renderManagementSection()}
+            </>;
+        }
+
         let discoverySection;
         if (SettingsStore.getValue(UIFeature.IdentityServer)) {
             discoverySection = <>
@@ -402,8 +410,7 @@ export default class GeneralUserSettingsTab extends React.Component {
                 {this._renderLanguageSection()}
                 { discoverySection }
                 {this._renderIntegrationManagerSection() /* Has its own title */}
-                <div className="mx_SettingsTab_heading">{_t("Deactivate account")}</div>
-                {this._renderManagementSection()}
+                { accountManagementSection }
             </div>
         );
     }
