@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$MiniAppTileHeight: 114px;
+$MiniAppTileHeight: 200px;
 
 .mx_AppsDrawer {
     margin: 5px 5px 5px 18px;
@@ -220,7 +220,7 @@ $MiniAppTileHeight: 114px;
 }
 
 .mx_AppTileBody_mini {
-    height: 112px;
+    height: $MiniAppTileHeight;
     width: 100%;
     overflow: hidden;
 }
