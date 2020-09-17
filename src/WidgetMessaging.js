@@ -109,7 +109,7 @@ export default class WidgetMessaging {
 
     /**
      * Tells the widget to hang up on its call.
-     * @returns {Promise<*>} Resolves when teh widget has acknowledged the message.
+     * @returns {Promise<*>} Resolves when the widget has acknowledged the message.
      */
     hangup() {
         return this.messageToWidget({
