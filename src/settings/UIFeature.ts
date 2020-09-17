@@ -23,4 +23,6 @@ export enum UIFeature {
     Registration = "UIFeature.registration",
     PasswordReset = "UIFeature.passwordReset",
     Deactivate = "UIFeature.deactivate",
+    ShareQRCode = "UIFeature.shareQrCode",
+    ShareSocial = "UIFeature.shareSocial",
 }
