@@ -2493,5 +2493,8 @@
     "Secure Backup": "Turvaline varundus",
     "End Call": "Lõpeta kõne",
     "Remove the group call from the room?": "Kas eemaldame jututoast rühmakõne?",
-    "You don't have permission to remove the call from the room": "Sinul pole õigusi rühmakõne eemaldamiseks sellest jututoast"
+    "You don't have permission to remove the call from the room": "Sinul pole õigusi rühmakõne eemaldamiseks sellest jututoast",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Alusta vestlust kasutades teise osapoole nime või kasutajanime (näiteks <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Sellega ei kutsu sa teda %(communityName)s kogukonna liikmeks. %(communityName)s kogukonna kutse saatmiseks klõpsi <a>siin</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>."
 }
