@@ -588,6 +588,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "showCallButtonsInComposer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
+        controller: new UIFeatureController(UIFeature.Voip),
     },
     "e2ee.manuallyVerifyAllSessions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -615,6 +616,18 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: {},
     },
     [UIFeature.URLPreviews]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Widgets]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Voip]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Feedback]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },

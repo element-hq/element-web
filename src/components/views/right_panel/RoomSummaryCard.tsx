@@ -42,6 +42,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
+import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
     room: Room;
@@ -242,7 +243,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             </Button>
         </Group>
 
-        <AppsSection room={room} />
+        { SettingsStore.getValue(UIFeature.Widgets) && <AppsSection room={room} /> }
     </BaseCard>;
 };
 
