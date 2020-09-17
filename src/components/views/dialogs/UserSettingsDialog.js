@@ -32,6 +32,7 @@ import FlairUserSettingsTab from "../settings/tabs/user/FlairUserSettingsTab";
 import * as sdk from "../../../index";
 import SdkConfig from "../../../SdkConfig";
 import MjolnirUserSettingsTab from "../settings/tabs/user/MjolnirUserSettingsTab";
+import {UIFeature} from "../../../settings/UIFeature";
 
 export const USER_GENERAL_TAB = "USER_GENERAL_TAB";
 export const USER_APPEARANCE_TAB = "USER_APPEARANCE_TAB";
@@ -104,12 +105,16 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_VOICE_TAB,
-            _td("Voice & Video"),
-            "mx_UserSettingsDialog_voiceIcon",
-            <VoiceUserSettingsTab />,
-        ));
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            tabs.push(new Tab(
+                USER_VOICE_TAB,
+                _td("Voice & Video"),
+                "mx_UserSettingsDialog_voiceIcon",
+                <VoiceUserSettingsTab />,
+            ));
+        }
+
         tabs.push(new Tab(
             USER_SECURITY_TAB,
             _td("Security & Privacy"),
