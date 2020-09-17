@@ -318,7 +318,7 @@ function _onAction(payload) {
             break;
         case 'hangup_conference':
             console.info("Leaving conference call in %s", payload.room_id);
-            _hangupWithCallApp(payload.room_id);
+            _hangupCallApp(payload.room_id);
             break;
         case 'incoming_call':
             {
@@ -450,7 +450,7 @@ function _terminateCallApp(roomId) {
     });
 }
 
-function _hangupWithCallApp(roomId) {
+function _hangupCallApp(roomId) {
     const roomInfo = WidgetStore.instance.getRoom(roomId);
     if (!roomInfo) return; // "should never happen" clauses go here
 
