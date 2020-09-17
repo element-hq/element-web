@@ -18,8 +18,8 @@ WORKDIR /src
 
 COPY . /src
 RUN dos2unix /src/scripts/docker-link-repos.sh && bash /src/scripts/docker-link-repos.sh
-RUN yarn --network-timeout=100000 install
-RUN yarn build
+RUN yarn --max_old_space_size=4096 --network-timeout=100000 install
+RUN yarn --max_old_space_size=4096 build
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/config.sample.json /src/webapp/config.json
