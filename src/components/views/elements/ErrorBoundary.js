@@ -20,6 +20,7 @@ import { _t } from '../../../languageHandler';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 import PlatformPeg from '../../../PlatformPeg';
 import Modal from '../../../Modal';
+import SdkConfig from "../../../SdkConfig";
 
 /**
  * This error boundary component can be used to wrap large content areas and
@@ -73,9 +74,10 @@ export default class ErrorBoundary extends React.PureComponent {
         if (this.state.error) {
             const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
             const newIssueUrl = "https://github.com/vector-im/element-web/issues/new";
-            return <div className="mx_ErrorBoundary">
-                <div className="mx_ErrorBoundary_body">
-                    <h1>{_t("Something went wrong!")}</h1>
+
+            let bugReportSection;
+            if (SdkConfig.get().bug_report_endpoint_url) {
+                bugReportSection = <React.Fragment>
                     <p>{_t(
                         "Please <newIssueLink>create a new issue</newIssueLink> " +
                         "on GitHub so that we can investigate this bug.", {}, {
@@ -94,6 +96,13 @@ export default class ErrorBoundary extends React.PureComponent {
                     <AccessibleButton onClick={this._onBugReport} kind='primary'>
                         {_t("Submit debug logs")}
                     </AccessibleButton>
+                </React.Fragment>;
+            }
+
+            return <div className="mx_ErrorBoundary">
+                <div className="mx_ErrorBoundary_body">
+                    <h1>{_t("Something went wrong!")}</h1>
+                    { bugReportSection }
                     <AccessibleButton onClick={this._onClearCacheAndReload} kind='danger'>
                         {_t("Clear cache and reload")}
                     </AccessibleButton>

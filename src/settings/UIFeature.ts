@@ -19,4 +19,5 @@ export enum UIFeature {
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
     Voip = "UIFeature.voip",
+    Feedback = "UIFeature.feedback",
 }
