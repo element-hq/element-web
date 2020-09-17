@@ -148,6 +148,10 @@ export default class EventTile extends React.Component {
          */
         last: PropTypes.bool,
 
+        // true if the event is the last event in a section (adds a css class for
+        // targeting)
+        lastInSection: PropTypes.bool,
+
         /* true if this is search context (which has the effect of greying out
          * the text
          */
@@ -674,6 +678,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
+            mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
             mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,

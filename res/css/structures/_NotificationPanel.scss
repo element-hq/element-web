@@ -44,7 +44,7 @@ limitations under the License.
     position: relative;
     padding-bottom: 18px;
 
-    &:not(.mx_EventTile_last)::after {
+    &:not(.mx_EventTile_last):not(.mx_EventTile_lastInSection)::after {
         position: absolute;
         bottom: 0;
         left: 0;
