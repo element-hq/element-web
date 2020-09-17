@@ -34,6 +34,7 @@ import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -821,6 +822,7 @@ export default class EventTile extends React.Component {
                 return (
                     <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_roomName">
+                            <RoomAvatar room={room} width={28} height={28} />
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
                             </a>

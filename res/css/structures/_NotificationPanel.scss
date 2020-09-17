@@ -22,7 +22,13 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_RoomView_messageListWrapper {
-    margin-right: 20px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_NotificationPanel .mx_RoomView_MessageList {
+    width: 100%;
 }
 
 .mx_NotificationPanel .mx_RoomView_MessageList h2 {
@@ -35,11 +41,32 @@ limitations under the License.
 
 .mx_NotificationPanel .mx_EventTile {
     word-break: break-word;
+    position: relative;
+    padding-bottom: 18px;
+
+    &:not(.mx_EventTile_last)::after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: $tertiary-fg-color;
+        height: 1px;
+        opacity: 0.4;
+        content: '';
+    }
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName {
     font-weight: bold;
     font-size: $font-14px;
+
+    > * {
+        vertical-align: middle;
+    }
+
+    > .mx_BaseAvatar {
+       margin-right: 8px;
+    }
 }
 
 .mx_NotificationPanel .mx_EventTile_roomName a {
@@ -47,8 +74,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile_avatar {
-    top: 8px;
-    left: 0px;
+    display: none;
 }
 
 .mx_NotificationPanel .mx_EventTile .mx_SenderProfile,
@@ -60,8 +86,7 @@ limitations under the License.
 }
 
 .mx_NotificationPanel .mx_EventTile_senderDetails {
-    padding-left: 32px;
-    padding-top: 8px;
+    padding-left: 36px;
     position: relative;
 
     a {
@@ -82,7 +107,7 @@ limitations under the License.
 
 .mx_NotificationPanel .mx_EventTile_line {
     margin-right: 0px;
-    padding-left: 32px;
+    padding-left: 36px;
     padding-top: 0px;
     padding-bottom: 0px;
     padding-right: 0px;
