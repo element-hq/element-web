@@ -518,10 +518,13 @@ export default class MessagePanel extends React.Component {
             if (!grouper) {
                 const wantTile = this._shouldShowEvent(mxEv);
                 if (wantTile) {
+                    const nextEvent = i < this.props.events.length - 1
+                        ? this.props.events[i + 1]
+                        : null;
                     // make sure we unpack the array returned by _getTilesForEvent,
                     // otherwise react will auto-generate keys and we will end up
                     // replacing all of the DOM elements every time we paginate.
-                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last));
+                    ret.push(...this._getTilesForEvent(prevEvent, mxEv, last, nextEvent));
                     prevEvent = mxEv;
                 }
 
@@ -537,7 +540,7 @@ export default class MessagePanel extends React.Component {
         return ret;
     }
 
-    _getTilesForEvent(prevEvent, mxEv, last) {
+    _getTilesForEvent(prevEvent, mxEv, last, nextEvent) {
         const TileErrorBoundary = sdk.getComponent('messages.TileErrorBoundary');
         const EventTile = sdk.getComponent('rooms.EventTile');
         const DateSeparator = sdk.getComponent('messages.DateSeparator');
@@ -560,6 +563,11 @@ export default class MessagePanel extends React.Component {
         if (wantsDateSeparator) {
             const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
             ret.push(dateSeparator);
+        }
+
+        let willWantDateSeparator = false;
+        if (nextEvent) {
+            willWantDateSeparator = this._wantsDateSeparator(mxEv, nextEvent.getDate() || new Date());
         }
 
         // is this a continuation of the previous message?
@@ -598,6 +606,7 @@ export default class MessagePanel extends React.Component {
                         isTwelveHour={this.props.isTwelveHour}
                         permalinkCreator={this.props.permalinkCreator}
                         last={last}
+                        lastInSection={willWantDateSeparator}
                         isSelectedEvent={highlight}
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}

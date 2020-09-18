@@ -34,6 +34,7 @@ import * as ObjectUtils from "../../../ObjectUtils";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {E2E_STATE} from "./E2EIcon";
 import {toRem} from "../../../utils/units";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 const eventTileTypes = {
     'm.room.message': 'messages.MessageEvent',
@@ -146,6 +147,10 @@ export default class EventTile extends React.Component {
          * of always showing the timestamp)
          */
         last: PropTypes.bool,
+
+        // true if the event is the last event in a section (adds a css class for
+        // targeting)
+        lastInSection: PropTypes.bool,
 
         /* true if this is search context (which has the effect of greying out
          * the text
@@ -673,6 +678,7 @@ export default class EventTile extends React.Component {
             mx_EventTile_selected: this.props.isSelectedEvent,
             mx_EventTile_continuation: this.props.tileShape ? '' : this.props.continuation,
             mx_EventTile_last: this.props.last,
+            mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
             mx_EventTile_actionBarFocused: this.state.actionBarFocused,
             mx_EventTile_verified: !isBubbleMessage && this.state.verified === E2E_STATE.VERIFIED,
@@ -821,6 +827,7 @@ export default class EventTile extends React.Component {
                 return (
                     <div className={classes} aria-live={ariaLive} aria-atomic="true">
                         <div className="mx_EventTile_roomName">
+                            <RoomAvatar room={room} width={28} height={28} />
                             <a href={permalink} onClick={this.onPermalinkClicked}>
                                 { room ? room.name : '' }
                             </a>
