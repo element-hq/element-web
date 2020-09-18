@@ -32,6 +32,7 @@ import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import {UIFeature} from "../../../../../settings/UIFeature";
+import {isE2eAdvancedPanelPossible} from "../../E2eAdvancedPanel";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -219,6 +220,15 @@ export default class SecurityUserSettingsTab extends React.Component {
             );
         }
 
+        let noSendUnverifiedSetting;
+        if (SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
+            noSendUnverifiedSetting = <SettingsFlag
+                name='blacklistUnverifiedDevices'
+                level={SettingLevel.DEVICE}
+                onChange={this._updateBlacklistDevicesFlag}
+            />;
+        }
+
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
@@ -233,8 +243,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </li>
                 </ul>
                 {importExportButtons}
-                <SettingsFlag name='blacklistUnverifiedDevices' level={SettingLevel.DEVICE}
-                              onChange={this._updateBlacklistDevicesFlag} />
+                {noSendUnverifiedSetting}
             </div>
         );
     }
@@ -355,14 +364,20 @@ export default class SecurityUserSettingsTab extends React.Component {
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
         let advancedSection;
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
-            advancedSection = <>
-                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
-                <div className="mx_SettingsTab_section">
-                    {this._renderIgnoredUsers()}
-                    {this._renderManageInvites()}
-                    <E2eAdvancedPanel />
-                </div>
-            </>;
+            const ignoreUsersPanel = this._renderIgnoredUsers();
+            const invitesPanel = this._renderManageInvites();
+            const e2ePanel = isE2eAdvancedPanelPossible() ? <E2eAdvancedPanel /> : null;
+            // only show the section if there's something to show
+            if (ignoreUsersPanel || invitesPanel || e2ePanel) {
+                advancedSection = <>
+                    <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
+                    <div className="mx_SettingsTab_section">
+                        {ignoreUsersPanel}
+                        {invitesPanel}
+                        {e2ePanel}
+                    </div>
+                </>;
+            }
         }
 
         return (

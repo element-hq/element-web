@@ -34,6 +34,7 @@ import SettingController from "./controllers/SettingController";
 import { RightPanelPhases } from "../stores/RightPanelStorePhases";
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
+import { OrderedMultiController } from "./controllers/OrderedMultiController";
 
 // These are just a bunch of helper arrays to avoid copy/pasting a bunch of times
 const LEVELS_ROOM_SETTINGS = [
@@ -436,6 +437,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             "room-device": _td('Never send encrypted messages to unverified sessions in this room from this session'),
         },
         default: false,
+        controller: new UIFeatureController(UIFeature.AdvancedEncryption),
     },
     "urlPreviewsEnabled": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
@@ -591,9 +593,15 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         displayName: _td("Manually verify all remote sessions"),
         default: false,
-        controller: new PushToMatrixClientController(
-            MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
-        ),
+        controller: new OrderedMultiController([
+            // Apply the feature controller first to ensure that the setting doesn't
+            // show up and can't be toggled. PushToMatrixClientController doesn't
+            // do any overrides anyways.
+            new UIFeatureController(UIFeature.AdvancedEncryption),
+            new PushToMatrixClientController(
+                MatrixClient.prototype.setCryptoTrustCrossSignedDevices, true,
+            ),
+        ]),
     },
     "ircDisplayNameWidth": {
         // We specifically want to have room-device > device so that users may set a device default
@@ -611,6 +619,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "Widgets.pinned": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: {},
+    },
+    [UIFeature.AdvancedEncryption]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
     },
     [UIFeature.URLPreviews]: {
         supportedLevels: LEVELS_UI_FEATURE,

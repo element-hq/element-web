@@ -16,6 +16,7 @@ limitations under the License.
 
 // see settings.md for documentation on conventions
 export enum UIFeature {
+    AdvancedEncryption = "UIFeature.advancedEncryption",
     URLPreviews = "UIFeature.urlPreviews",
     Widgets = "UIFeature.widgets",
     Voip = "UIFeature.voip",
