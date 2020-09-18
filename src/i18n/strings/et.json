@@ -2496,5 +2496,15 @@
     "You don't have permission to remove the call from the room": "Sinul pole õigusi rühmakõne eemaldamiseks sellest jututoast",
     "Start a conversation with someone using their name or username (like <userId/>).": "Alusta vestlust kasutades teise osapoole nime või kasutajanime (näiteks <userId/>).",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Sellega ei kutsu sa teda %(communityName)s kogukonna liikmeks. %(communityName)s kogukonna kutse saatmiseks klõpsi <a>siin</a>",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>."
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Kutsu kedagi tema nime, kasutajanime (nagu <userId/>) alusel või <a>jaga seda jututuba</a>.",
+    "Safeguard against losing access to encrypted messages & data": "Hoia ära, et kaotad ligipääsu krüptitud sõnumitele ja andmetele",
+    "not found in storage": "ei leidunud turvahoidlas",
+    "Widgets": "Vidinad",
+    "Edit widgets, bridges & bots": "Muuda vidinaid, võrgusildu ja roboteid",
+    "Add widgets, bridges & bots": "Lisa vidinaid, võrgusildu ja roboteid",
+    "You can only pin 2 widgets at a time": "Korraga saavad kinniklammerdatud olla vaid 2 vidinat",
+    "Minimize widget": "Vähenda vidinat",
+    "Maximize widget": "Suurenda vidinat",
+    "Your server requires encryption to be enabled in private rooms.": "Sinu koduserveri seadistused eeldavad, et mitteavalikud jututoad asutavad läbivat krüptimist.",
+    "Unable to set up keys": "Krüptovõtmete kasutuselevõtmine ei õnnestu"
 }
