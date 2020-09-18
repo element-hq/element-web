@@ -1306,7 +1306,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
 
     const showDeviceListSpinner = devices === undefined;
     if (canVerify) {
-        if (hasCrossSigningKeys !== undefined) {
+        if (hasCrossSigningKeys !== undefined && devices.length > 0) {
             // Note: mx_UserInfo_verifyButton is for the end-to-end tests
             verifyButton = (
                 <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
