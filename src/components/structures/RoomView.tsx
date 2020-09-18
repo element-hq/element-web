@@ -65,7 +65,6 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import ForwardMessage from "../views/rooms/ForwardMessage";
 import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
-import RoomRecoveryReminder from "../views/rooms/RoomRecoveryReminder";
 import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
@@ -814,12 +813,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.state.room && room.roomId == this.state.room.roomId) {
             this.forceUpdate();
         }
-    };
-
-    private onRoomRecoveryReminderDontAskAgain = () => {
-        // Called when the option to not ask again is set:
-        // force an update to hide the recovery reminder
-        this.forceUpdate();
     };
 
     private onKeyBackupStatus = () => {
@@ -1858,13 +1851,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.state.room.userMayUpgradeRoom(this.context.credentials.userId)
         );
 
-        const showRoomRecoveryReminder = (
-            this.context.isCryptoEnabled() &&
-            SettingsStore.getValue("showRoomRecoveryReminder") &&
-            this.context.isRoomEncrypted(this.state.room.roomId) &&
-            this.context.getKeyBackupEnabled() === false
-        );
-
         const hiddenHighlightCount = this.getHiddenHighlightCount();
 
         let aux = null;
@@ -1883,9 +1869,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
-            hideCancel = true;
-        } else if (showRoomRecoveryReminder) {
-            aux = <RoomRecoveryReminder onDontAskAgainSet={this.onRoomRecoveryReminderDontAskAgain} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel

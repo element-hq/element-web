@@ -281,11 +281,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Autoplay GIFs and videos'),
         default: false,
     },
-    "showRoomRecoveryReminder": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show a reminder to enable Secure Message Recovery in encrypted rooms'),
-        default: true,
-    },
     "enableSyntaxHighlightLanguageDetection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable automatic language detection for syntax highlighting'),
@@ -588,6 +583,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "showCallButtonsInComposer": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: true,
+        controller: new UIFeatureController(UIFeature.Voip),
     },
     "e2ee.manuallyVerifyAllSessions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
@@ -622,7 +618,49 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+    [UIFeature.Voip]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
     [UIFeature.Feedback]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Registration]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.PasswordReset]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Deactivate]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShareQRCode]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.ShareSocial]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.IdentityServer]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+        // Identity Server (Discovery) Settings make no sense if 3PIDs in general are hidden
+        controller: new UIFeatureController(UIFeature.ThirdPartyID),
+    },
+    [UIFeature.ThirdPartyID]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.Flair]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+    },
+    [UIFeature.AdvancedSettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },

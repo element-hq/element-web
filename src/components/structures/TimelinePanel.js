@@ -35,6 +35,7 @@ import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
+import {UIFeature} from "../../settings/UIFeature";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1446,6 +1447,7 @@ class TimelinePanel extends React.Component {
                 editState={this.state.editState}
                 showReactions={this.props.showReactions}
                 useIRCLayout={this.props.useIRCLayout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         );
     }

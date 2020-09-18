@@ -15,10 +15,14 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from "classnames";
+
 import * as sdk from '../../../index';
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
 import {_td} from "../../../languageHandler";
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
@@ -39,7 +43,9 @@ export default class Welcome extends React.PureComponent {
 
         return (
             <AuthPage>
-                <div className="mx_Welcome">
+                <div className={classNames("mx_Welcome", {
+                    mx_WelcomePage_registrationDisabled: !SettingsStore.getValue(UIFeature.Registration),
+                })}>
                     <EmbeddedPage
                         className="mx_WelcomePage"
                         url={pageUrl}
