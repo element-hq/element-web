@@ -24,6 +24,7 @@ import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import {SettingLevel} from "../../../../../settings/SettingLevel";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 export default class SecurityRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -340,10 +341,13 @@ export default class SecurityRoomSettingsTab extends React.Component {
         const canEnableEncryption = !isEncrypted && hasEncryptionPermission;
 
         let encryptionSettings = null;
-        if (isEncrypted) {
-            encryptionSettings = <SettingsFlag name="blacklistUnverifiedDevices" level={SettingLevel.ROOM_DEVICE}
-                                               onChange={this._updateBlacklistDevicesFlag}
-                                               roomId={this.props.roomId} />;
+        if (isEncrypted && SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
+            encryptionSettings = <SettingsFlag
+                name="blacklistUnverifiedDevices"
+                level={SettingLevel.ROOM_DEVICE}
+                onChange={this._updateBlacklistDevicesFlag}
+                roomId={this.props.roomId}
+            />;
         }
 
         return (
