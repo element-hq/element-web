@@ -99,7 +99,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }
     };
 
-    return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Apps")}>
+    return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
         { apps.map(app => {
             const name = WidgetUtils.getWidgetName(app);
             const dataTitle = WidgetUtils.getWidgetDataTitle(app);
@@ -161,7 +161,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         }) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
-            { apps.length > 0 ? _t("Edit apps, bridges & bots") : _t("Add apps, bridges & bots") }
+            { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
         </AccessibleButton>
     </Group>;
 };
