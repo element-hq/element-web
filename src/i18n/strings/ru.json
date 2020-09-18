@@ -2489,5 +2489,18 @@
     "Group call ended by %(senderName)s": "%(senderName)s завершил(а) групповой вызов",
     "End Call": "Завершить звонок",
     "Remove the group call from the room?": "Удалить групповой вызов из комнаты?",
-    "You don't have permission to remove the call from the room": "У вас нет разрешения на удаление звонка из комнаты"
+    "You don't have permission to remove the call from the room": "У вас нет разрешения на удаление звонка из комнаты",
+    "Safeguard against losing access to encrypted messages & data": "Защита от потери доступа к зашифрованным сообщениям и данным",
+    "not found in storage": "не найдено в хранилище",
+    "Widgets": "Виджеты",
+    "Edit widgets, bridges & bots": "Редактировать виджеты, мосты и ботов",
+    "Add widgets, bridges & bots": "Добавить виджеты, мосты и ботов",
+    "You can only pin 2 widgets at a time": "Вы можете закрепить только 2 виджета за раз",
+    "Minimize widget": "Свернуть виджет",
+    "Maximize widget": "Развернуть виджет",
+    "Your server requires encryption to be enabled in private rooms.": "Вашему серверу необходимо включить шифрование в приватных комнатах.",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Начните разговор с кем-нибудь, используя его имя или имя пользователя (например, <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Это не пригласит их в %(communityName)s. Чтобы пригласить кого-нибудь в %(communityName)s, нажмите <a>здесь</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Пригласите кого-нибудь, используя его имя, имя пользователя (например, <userId/>) или <a>поделитесь этой комнатой</a>.",
+    "Unable to set up keys": "Невозможно настроить ключи"
 }
