@@ -675,7 +675,7 @@ export default class RoomView extends React.Component<IProps, IState> {
             case Key.U: // Mac returns lowercase
             case Key.U.toUpperCase():
                 if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
-                    dis.dispatch({ action: "upload_file" });
+                    dis.dispatch({ action: "upload_file" }, true);
                     handled = true;
                 }
                 break;
