@@ -25,7 +25,7 @@ import {
     cacheDehydrationKey,
     confirmToDismiss,
     getDehydrationKeyCache,
-} from "./CrossSigningManager";
+} from "./SecurityManager";
 import Matrix from "matrix-js-sdk";
 import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
 import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
@@ -173,8 +173,8 @@ export async function sendLoginRequest(hsUrl, isUrl, loginType, loginParams) {
         baseUrl: hsUrl,
         idBaseUrl: isUrl,
         cryptoCallbacks: {
-            getDehydrationKey
-        }
+            getDehydrationKey,
+        },
     });
 
     const data = await client.loginWithRehydration(null, loginType, loginParams);

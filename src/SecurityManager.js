@@ -91,7 +91,7 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     // if we dehydrated a device, see if that key works for SSSS
     if (dehydrationInfo.key) {
         try {
-            if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationInfo.key, info)) {
+            if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationInfo.key, keyInfo)) {
                 const key = dehydrationInfo.key;
                 // Save to cache to avoid future prompts in the current session
                 if (isCachingAllowed()) {
