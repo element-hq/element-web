@@ -263,7 +263,7 @@ export default class SettingsStore {
      * @param {string} settingName The setting to look up.
      * @return {boolean} True if the setting is enabled.
      */
-    public static isEnabled(settingName: string) {
+    public static isEnabled(settingName: string): boolean {
         if (!SETTINGS[settingName]) return false;
         return SETTINGS[settingName].controller ? !SETTINGS[settingName].controller.settingDisabled : true;
     }
