@@ -1319,7 +1319,7 @@
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "他のユーザーがあなたのホームサーバー (%(localDomain)s) を通じてこの部屋を見つけられるよう、アドレスを設定しましょう",
     "Enter recovery key": "リカバリキーを入力",
     "Verify this login": "このログインを承認",
-    "Signing In...": "サインインしています...",
+    "Signing In...": "サインイン中...",
     "If you've joined lots of rooms, this might take a while": "たくさんの部屋に参加している場合は、時間がかかる可能性があります",
     "Confirm your identity by verifying this login from one of your other sessions, granting it access to encrypted messages.": "このログインを他のセッションで承認し、あなたの認証情報を確認すれば、暗号化されたメッセージへアクセスできるようになります。",
     "This requires the latest %(brand)s on your other devices:": "最新版の %(brand)s が他のあなたのデバイスで実行されている必要があります:",
@@ -1387,5 +1387,15 @@
     "Your server": "あなたのサーバー",
     "Matrix": "Matrix",
     "Add a new server": "新しいサーバーを追加",
-    "Server name": "サーバー名"
+    "Server name": "サーバー名",
+    "Privacy": "プライバシー",
+    "Syncing...": "同期中...",
+    "<a>Log in</a> to your new account.": "新しいアカウントで<a>ログイン</a>する。",
+    "Use Recovery Key or Passphrase": "リカバリーキーまたはパスフレーズを使う",
+    "Use Recovery Key": "リカバリーキーを使う",
+    "%(brand)s Web": "%(brand)s ウェブ",
+    "%(brand)s Desktop": "%(brand)s デスクトップ",
+    "%(brand)s iOS": "%(brand)s iOS",
+    "%(brand)s Android": "%(brand)s Android",
+    "Your recovery key": "あなたのリカバリーキー"
 }
