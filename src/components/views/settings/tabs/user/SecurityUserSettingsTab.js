@@ -30,6 +30,8 @@ import dis from "../../../../../dispatcher/dispatcher";
 import {privateShouldBeEncrypted} from "../../../../../createRoom";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import {UIFeature} from "../../../../../settings/UIFeature";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -311,15 +313,13 @@ export default class SecurityUserSettingsTab extends React.Component {
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
         const crossSigning = (
-                <div className='mx_SettingsTab_section'>
-                    <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        <CrossSigningPanel />
-                    </div>
+            <div className='mx_SettingsTab_section'>
+                <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
+                <div className='mx_SettingsTab_subsectionText'>
+                    <CrossSigningPanel />
                 </div>
-            );
-
-        const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
+            </div>
+        );
 
         let warning;
         if (!privateShouldBeEncrypted()) {
@@ -352,6 +352,19 @@ export default class SecurityUserSettingsTab extends React.Component {
             </React.Fragment>;
         }
 
+        const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
+        let advancedSection;
+        if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
+            advancedSection = <>
+                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
+                <div className="mx_SettingsTab_section">
+                    {this._renderIgnoredUsers()}
+                    {this._renderManageInvites()}
+                    <E2eAdvancedPanel />
+                </div>
+            </>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 {warning}
@@ -381,12 +394,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     {this._renderCurrentDeviceInfo()}
                 </div>
                 { privacySection }
-                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
-                <div className="mx_SettingsTab_section">
-                    {this._renderIgnoredUsers()}
-                    {this._renderManageInvites()}
-                    <E2eAdvancedPanel />
-                </div>
+                { advancedSection }
             </div>
         );
     }

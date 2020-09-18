@@ -28,4 +28,5 @@ export enum UIFeature {
     IdentityServer = "UIFeature.identityServer",
     ThirdPartyID = "UIFeature.thirdPartyId",
     Flair = "UIFeature.flair",
+    AdvancedSettings = "UIFeature.advancedSettings",
 }
