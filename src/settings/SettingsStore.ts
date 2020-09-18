@@ -257,6 +257,12 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
+    /**
+     * Determines if a setting is enabled.
+     * If a setting is disabled then it should be hidden from the user.
+     * @param {string} settingName The setting to look up.
+     * @return {boolean} True if the setting is enabled.
+     */
     public static isEnabled(settingName: string) {
         if (!SETTINGS[settingName]) return false;
         return SETTINGS[settingName].controller ? !SETTINGS[settingName].controller.settingDisabled : true;
