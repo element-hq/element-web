@@ -71,7 +71,7 @@ export default class SearchResultTile extends React.Component {
             }
         }
         return (
-            <li data-scroll-tokens={eventId+"+"+j}>
+            <li data-scroll-tokens={eventId}>
                 { ret }
             </li>);
     }
