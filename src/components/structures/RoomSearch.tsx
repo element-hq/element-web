@@ -165,7 +165,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             icon = (
                 <AccessibleButton
                     title={_t("Search rooms")}
-                    className="mx_RoomSearch_icon"
+                    className="mx_RoomSearch_icon mx_RoomSearch_minimizedHandle"
                     onClick={this.openSearch}
                 />
             );
