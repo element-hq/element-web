@@ -1296,7 +1296,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
     const userTrust = cryptoEnabled && cli.checkUserTrust(member.userId);
     const userVerified = cryptoEnabled && userTrust.isCrossSigningVerified();
     const isMe = member.userId === cli.getUserId();
-    const canVerify = cryptoEnabled && homeserverSupportsCrossSigning && !userVerified && !isMe;
+    const canVerify = cryptoEnabled && homeserverSupportsCrossSigning && !userVerified && !isMe && devices.length > 0;
 
     const setUpdating = (updating) => {
         setPendingUpdateCount(count => count + (updating ? 1 : -1));
@@ -1306,7 +1306,7 @@ const BasicUserInfo = ({room, member, groupId, devices, isRoomEncrypted}) => {
 
     const showDeviceListSpinner = devices === undefined;
     if (canVerify) {
-        if (hasCrossSigningKeys !== undefined && devices.length > 0) {
+        if (hasCrossSigningKeys !== undefined) {
             // Note: mx_UserInfo_verifyButton is for the end-to-end tests
             verifyButton = (
                 <AccessibleButton className="mx_UserInfo_field mx_UserInfo_verifyButton" onClick={() => {
