@@ -392,22 +392,12 @@ export default class RoomDirectory extends React.Component {
     };
 
     onPreviewClick = (ev, room) => {
-        this.props.onFinished();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: room.room_id,
-            should_peek: true,
-        });
+        this.showRoom(room, null, false, true);
         ev.stopPropagation();
     };
 
     onViewClick = (ev, room) => {
-        this.props.onFinished();
-        dis.dispatch({
-            action: 'view_room',
-            room_id: room.room_id,
-            should_peek: false,
-        });
+        this.showRoom(room);
         ev.stopPropagation();
     };
 
@@ -428,11 +418,12 @@ export default class RoomDirectory extends React.Component {
         this.showRoom(null, alias, autoJoin);
     }
 
-    showRoom(room, room_alias, autoJoin=false) {
+    showRoom(room, room_alias, autoJoin = false, shouldPeek = false) {
         this.props.onFinished();
         const payload = {
             action: 'view_room',
             auto_join: autoJoin,
+            should_peek: shouldPeek,
         };
         if (room) {
             // Don't let the user view a room they won't be able to either
@@ -457,6 +448,7 @@ export default class RoomDirectory extends React.Component {
             };
 
             if (this.state.roomServer) {
+                payload.via_servers = [this.state.roomServer];
                 payload.opts = {
                     viaServers: [this.state.roomServer],
                 };
