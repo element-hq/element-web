@@ -248,7 +248,9 @@ export default class GeneralUserSettingsTab extends React.Component {
         // validate 3PID ownership even if we're just adding to the homeserver only.
         // For newer homeservers with separate 3PID add and bind methods (MSC2290),
         // there is no such concern, so we can always show the HS account 3PIDs.
-        if (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true) {
+        if (SettingsStore.getValue(UIFeature.ThirdPartyID) &&
+            (this.state.haveIdServer || this.state.serverSupportsSeparateAddAndBind === true)
+        ) {
             const emails = this.state.loading3pids
                 ? <Spinner />
                 : <EmailAddresses
