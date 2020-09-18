@@ -28,4 +28,8 @@ limitations under the License.
 
 .mx_CrossSigningPanel_buttonRow {
     margin: 1em 0;
+
+    :nth-child(n + 1) {
+        margin-inline-end: 10px;
+    }
 }

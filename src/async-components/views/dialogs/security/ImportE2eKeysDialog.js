@@ -18,9 +18,9 @@ import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
 
 import { MatrixClient } from 'matrix-js-sdk';
-import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import * as sdk from '../../../index';
-import { _t } from '../../../languageHandler';
+import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
+import * as sdk from '../../../../index';
+import { _t } from '../../../../languageHandler';
 
 function readFileAsArrayBuffer(file) {
     return new Promise((resolve, reject) => {

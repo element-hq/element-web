@@ -17,11 +17,11 @@ limitations under the License.
 import FileSaver from 'file-saver';
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import { _t } from '../../../languageHandler';
+import { _t } from '../../../../languageHandler';
 
 import { MatrixClient } from 'matrix-js-sdk';
-import * as MegolmExportEncryption from '../../../utils/MegolmExportEncryption';
-import * as sdk from '../../../index';
+import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
+import * as sdk from '../../../../index';
 
 const PHASE_EDIT = 1;
 const PHASE_EXPORTING = 2;

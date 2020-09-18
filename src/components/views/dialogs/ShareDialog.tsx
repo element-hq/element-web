@@ -32,6 +32,8 @@ import {copyPlaintext, selectText} from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { IDialogProps } from "./IDialogProps";
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 const socials = [
     {
@@ -197,6 +199,35 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         const matrixToUrl = this.getUrl();
         const encodedUrl = encodeURIComponent(matrixToUrl);
 
+        const showQrCode = SettingsStore.getValue(UIFeature.ShareQRCode);
+        const showSocials = SettingsStore.getValue(UIFeature.ShareSocial);
+
+        let qrSocialSection;
+        if (showQrCode || showSocials) {
+            qrSocialSection = <>
+                <hr />
+                <div className="mx_ShareDialog_split">
+                    { showQrCode && <div className="mx_ShareDialog_qrcode_container">
+                        <QRCode data={matrixToUrl} width={256} />
+                    </div> }
+                    { showSocials && <div className="mx_ShareDialog_social_container">
+                        { socials.map((social) => (
+                            <a
+                                rel="noreferrer noopener"
+                                target="_blank"
+                                key={social.name}
+                                title={social.name}
+                                href={social.url(encodedUrl)}
+                                className="mx_ShareDialog_social_icon"
+                            >
+                                <img src={social.img} alt={social.name} height={64} width={64} />
+                            </a>
+                        )) }
+                    </div> }
+                </div>
+            </>;
+        }
+
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         return <BaseDialog
             title={title}
@@ -220,27 +251,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
                     />
                 </div>
                 { checkbox }
-                <hr />
-
-                <div className="mx_ShareDialog_split">
-                    <div className="mx_ShareDialog_qrcode_container">
-                        <QRCode data={matrixToUrl} width={256} />
-                    </div>
-                    <div className="mx_ShareDialog_social_container">
-                        { socials.map((social) => (
-                            <a
-                                rel="noreferrer noopener"
-                                target="_blank"
-                                key={social.name}
-                                title={social.name}
-                                href={social.url(encodedUrl)}
-                                className="mx_ShareDialog_social_icon"
-                            >
-                                <img src={social.img} alt={social.name} height={64} width={64} />
-                            </a>
-                        )) }
-                    </div>
-                </div>
+                { qrSocialSection }
             </div>
         </BaseDialog>;
     }

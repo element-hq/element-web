@@ -105,14 +105,14 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
 
     _onImportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
@@ -329,6 +329,29 @@ export default class SecurityUserSettingsTab extends React.Component {
             </div>;
         }
 
+        let privacySection;
+        if (Analytics.canEnable()) {
+            privacySection = <React.Fragment>
+                <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
+                    <div className="mx_SettingsTab_subsectionText">
+                        {_t(
+                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
+                            { brand },
+                        )}
+                        &nbsp;
+                        {_t("Privacy is important to us, so we don't collect any personal or " +
+                            "identifiable data for our analytics.")}
+                        <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
+                            {_t("Learn more about how we use analytics.")}
+                        </AccessibleButton>
+                    </div>
+                    <SettingsFlag name="analyticsOptIn" level={SettingLevel.DEVICE} onChange={this._updateAnalytics} />
+                </div>
+            </React.Fragment>;
+        }
+
         const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
         let advancedSection;
         if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
@@ -370,24 +393,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     {crossSigning}
                     {this._renderCurrentDeviceInfo()}
                 </div>
-                <div className="mx_SettingsTab_heading">{_t("Privacy")}</div>
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Analytics")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        {_t(
-                            "%(brand)s collects anonymous analytics to allow us to improve the application.",
-                            { brand },
-                        )}
-                        &nbsp;
-                        {_t("Privacy is important to us, so we don't collect any personal or " +
-                            "identifiable data for our analytics.")}
-                        <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={Analytics.showDetailsModal}>
-                            {_t("Learn more about how we use analytics.")}
-                        </AccessibleButton>
-                    </div>
-                    <SettingsFlag name='analyticsOptIn' level={SettingLevel.DEVICE}
-                                  onChange={this._updateAnalytics} />
-                </div>
+                { privacySection }
                 { advancedSection }
             </div>
         );

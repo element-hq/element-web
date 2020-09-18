@@ -79,6 +79,7 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
 import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import {UIFeature} from "../../settings/UIFeature";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1233,8 +1234,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         StorageManager.tryPersistStorage();
 
-        if (SettingsStore.getValue("showCookieBar") && this.props.config.piwik && navigator.doNotTrack !== "1") {
-            showAnalyticsToast(this.props.config.piwik && this.props.config.piwik.policyUrl);
+        if (SettingsStore.getValue("showCookieBar") && Analytics.canEnable()) {
+            showAnalyticsToast(this.props.config.piwik?.policyUrl);
         }
     }
 
@@ -1372,15 +1373,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ready: true,
             });
         });
-        cli.on('Call.incoming', function(call) {
-            // we dispatch this synchronously to make sure that the event
-            // handlers on the call are set up immediately (so that if
-            // we get an immediate hangup, we don't get a stuck call)
-            dis.dispatch({
-                action: 'incoming_call',
-                call: call,
-            }, true);
-        });
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            cli.on('Call.incoming', function(call) {
+                // we dispatch this synchronously to make sure that the event
+                // handlers on the call are set up immediately (so that if
+                // we get an immediate hangup, we don't get a stuck call)
+                dis.dispatch({
+                    action: 'incoming_call',
+                    call: call,
+                }, true);
+            });
+        }
+
         cli.on('Session.logged_out', function(errObj) {
             if (Lifecycle.isLoggingOut()) return;
 
@@ -1496,12 +1501,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (haveNewVersion) {
                 Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    import('../../async-components/views/dialogs/security/NewRecoveryMethodDialog'),
                     { newVersionInfo },
                 );
             } else {
                 Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
-                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                    import('../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog'),
                 );
             }
         });
@@ -1876,6 +1881,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return this.props.makeRegistrationUrl(params);
     };
 
+    /**
+     * After registration or login, we run various post-auth steps before entering the app
+     * proper, such setting up cross-signing or verifying the new session.
+     *
+     * Note: SSO users (and any others using token login) currently do not pass through
+     * this, as they instead jump straight into the app after `attemptTokenLogin`.
+     */
     onUserCompletedLoginFlow = async (credentials: object, password: string) => {
         this.accountPassword = password;
         // self-destruct the password after 5mins
@@ -1942,7 +1954,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
-        let view;
+        let view = null;
 
         if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
@@ -2021,7 +2033,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
-        } else if (this.state.view === Views.REGISTER) {
+        } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
             const Registration = sdk.getComponent('structures.auth.Registration');
             const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (
@@ -2039,7 +2051,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.FORGOT_PASSWORD) {
+        } else if (this.state.view === Views.FORGOT_PASSWORD && SettingsStore.getValue(UIFeature.PasswordReset)) {
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             view = (
                 <ForgotPassword
@@ -2050,6 +2062,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 />
             );
         } else if (this.state.view === Views.LOGIN) {
+            const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
@@ -2058,7 +2071,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    onForgotPasswordClick={this.onForgotPasswordClick}
+                    onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
