@@ -31,7 +31,12 @@ export class OrderedMultiController extends SettingController {
         super();
     }
 
-    public getValueOverride(level: SettingLevel, roomId: string, calculatedValue: any, calculatedAtLevel: SettingLevel): any {
+    public getValueOverride(
+        level: SettingLevel,
+        roomId: string,
+        calculatedValue: any,
+        calculatedAtLevel: SettingLevel,
+    ): any {
         for (const controller of this.controllers) {
             const override = controller.getValueOverride(level, roomId, calculatedValue, calculatedAtLevel);
             if (override !== undefined && override !== null) return override;
