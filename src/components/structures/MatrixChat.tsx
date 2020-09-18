@@ -1501,12 +1501,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (haveNewVersion) {
                 Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    import('../../async-components/views/dialogs/security/NewRecoveryMethodDialog'),
                     { newVersionInfo },
                 );
             } else {
                 Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
-                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                    import('../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog'),
                 );
             }
         });
@@ -1881,6 +1881,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return this.props.makeRegistrationUrl(params);
     };
 
+    /**
+     * After registration or login, we run various post-auth steps before entering the app
+     * proper, such setting up cross-signing or verifying the new session.
+     *
+     * Note: SSO users (and any others using token login) currently do not pass through
+     * this, as they instead jump straight into the app after `attemptTokenLogin`.
+     */
     onUserCompletedLoginFlow = async (credentials: object, password: string) => {
         this.accountPassword = password;
         // self-destruct the password after 5mins
