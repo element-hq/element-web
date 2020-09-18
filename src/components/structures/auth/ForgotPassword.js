@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import { _t } from '../../../languageHandler';
 import * as sdk from '../../../index';
@@ -40,50 +39,47 @@ const PHASE_EMAIL_SENT = 3;
 // User has clicked the link in email and completed reset
 const PHASE_DONE = 4;
 
-export default createReactClass({
-    displayName: 'ForgotPassword',
-
-    propTypes: {
+export default class ForgotPassword extends React.Component {
+    static propTypes = {
         serverConfig: PropTypes.instanceOf(ValidatedServerConfig).isRequired,
         onServerConfigChange: PropTypes.func.isRequired,
         onLoginClick: PropTypes.func,
         onComplete: PropTypes.func.isRequired,
-    },
+    };
 
-    getInitialState: function() {
-        return {
-            phase: PHASE_FORGOT,
-            email: "",
-            password: "",
-            password2: "",
-            errorText: null,
+    state = {
+        phase: PHASE_FORGOT,
+        email: "",
+        password: "",
+        password2: "",
+        errorText: null,
 
-            // We perform liveliness checks later, but for now suppress the errors.
-            // We also track the server dead errors independently of the regular errors so
-            // that we can render it differently, and override any other error the user may
-            // be seeing.
-            serverIsAlive: true,
-            serverErrorIsFatal: false,
-            serverDeadError: "",
-            serverRequiresIdServer: null,
-        };
-    },
+        // We perform liveliness checks later, but for now suppress the errors.
+        // We also track the server dead errors independently of the regular errors so
+        // that we can render it differently, and override any other error the user may
+        // be seeing.
+        serverIsAlive: true,
+        serverErrorIsFatal: false,
+        serverDeadError: "",
+        serverRequiresIdServer: null,
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.reset = null;
         this._checkServerLiveliness(this.props.serverConfig);
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps: function(newProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.serverConfig.hsUrl === this.props.serverConfig.hsUrl &&
             newProps.serverConfig.isUrl === this.props.serverConfig.isUrl) return;
 
         // Do a liveliness check on the new URLs
         this._checkServerLiveliness(newProps.serverConfig);
-    },
+    }
 
-    _checkServerLiveliness: async function(serverConfig) {
+    async _checkServerLiveliness(serverConfig) {
         try {
             await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
                 serverConfig.hsUrl,
@@ -100,9 +96,9 @@ export default createReactClass({
         } catch (e) {
             this.setState(AutoDiscoveryUtils.authComponentStateForError(e, "forgot_password"));
         }
-    },
+    }
 
-    submitPasswordReset: function(email, password) {
+    submitPasswordReset(email, password) {
         this.setState({
             phase: PHASE_SENDING_EMAIL,
         });
@@ -117,9 +113,9 @@ export default createReactClass({
                 phase: PHASE_FORGOT,
             });
         });
-    },
+    }
 
-    onVerify: async function(ev) {
+    onVerify = async ev => {
         ev.preventDefault();
         if (!this.reset) {
             console.error("onVerify called before submitPasswordReset!");
@@ -131,9 +127,9 @@ export default createReactClass({
         } catch (err) {
             this.showErrorDialog(err.message);
         }
-    },
+    };
 
-    onSubmitForm: async function(ev) {
+    onSubmitForm = async ev => {
         ev.preventDefault();
 
         // refresh the server errors, just in case the server came back online
@@ -166,41 +162,41 @@ export default createReactClass({
                 },
             });
         }
-    },
+    };
 
-    onInputChanged: function(stateKey, ev) {
+    onInputChanged = (stateKey, ev) => {
         this.setState({
             [stateKey]: ev.target.value,
         });
-    },
+    };
 
-    async onServerDetailsNextPhaseClick() {
+    onServerDetailsNextPhaseClick = async () => {
         this.setState({
             phase: PHASE_FORGOT,
         });
-    },
+    };
 
-    onEditServerDetailsClick(ev) {
+    onEditServerDetailsClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.setState({
             phase: PHASE_SERVER_DETAILS,
         });
-    },
+    };
 
-    onLoginClick: function(ev) {
+    onLoginClick = ev => {
         ev.preventDefault();
         ev.stopPropagation();
         this.props.onLoginClick();
-    },
+    };
 
-    showErrorDialog: function(body, title) {
+    showErrorDialog(body, title) {
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
             title: title,
             description: body,
         });
-    },
+    }
 
     renderServerDetails() {
         const ServerConfig = sdk.getComponent("auth.ServerConfig");
@@ -218,7 +214,7 @@ export default createReactClass({
             submitText={_t("Next")}
             submitClass="mx_Login_submit"
         />;
-    },
+    }
 
     renderForgot() {
         const Field = sdk.getComponent('elements.Field');
@@ -335,12 +331,12 @@ export default createReactClass({
                 {_t('Sign in instead')}
             </a>
         </div>;
-    },
+    }
 
     renderSendingEmail() {
         const Spinner = sdk.getComponent("elements.Spinner");
         return <Spinner />;
-    },
+    }
 
     renderEmailSent() {
         return <div>
@@ -350,7 +346,7 @@ export default createReactClass({
             <input className="mx_Login_submit" type="button" onClick={this.onVerify}
                 value={_t('I have verified my email address')} />
         </div>;
-    },
+    }
 
     renderDone() {
         return <div>
@@ -363,9 +359,9 @@ export default createReactClass({
             <input className="mx_Login_submit" type="button" onClick={this.props.onComplete}
                 value={_t('Return to login screen')} />
         </div>;
-    },
+    }
 
-    render: function() {
+    render() {
         const AuthHeader = sdk.getComponent("auth.AuthHeader");
         const AuthBody = sdk.getComponent("auth.AuthBody");
 
@@ -397,5 +393,5 @@ export default createReactClass({
                 </AuthBody>
             </AuthPage>
         );
-    },
-});
+    }
+}

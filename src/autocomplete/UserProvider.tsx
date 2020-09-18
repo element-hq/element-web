@@ -23,7 +23,7 @@ import AutocompleteProvider from './AutocompleteProvider';
 import {PillCompletion} from './Components';
 import * as sdk from '../index';
 import QueryMatcher from './QueryMatcher';
-import _sortBy from 'lodash/sortBy';
+import {sortBy} from 'lodash';
 import {MatrixClientPeg} from '../MatrixClientPeg';
 
 import MatrixEvent from "matrix-js-sdk/src/models/event";
@@ -71,8 +71,13 @@ export default class UserProvider extends AutocompleteProvider {
         }
     }
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed: boolean,
-                       data: IRoomTimelineData) => {
+    private onRoomTimeline = (
+        ev: MatrixEvent,
+        room: Room,
+        toStartOfTimeline: boolean,
+        removed: boolean,
+        data: IRoomTimelineData,
+    ) => {
         if (!room) return;
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
@@ -151,7 +156,7 @@ export default class UserProvider extends AutocompleteProvider {
         const currentUserId = MatrixClientPeg.get().credentials.userId;
         this.users = this.room.getJoinedMembers().filter(({userId}) => userId !== currentUserId);
 
-        this.users = _sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
+        this.users = sortBy(this.users, (member) => 1E20 - lastSpoken[member.userId] || 1E20);
 
         this.matcher.setObjects(this.users);
     }
@@ -171,7 +176,11 @@ export default class UserProvider extends AutocompleteProvider {
 
     renderCompletions(completions: React.ReactNode[]): React.ReactNode {
         return (
-            <div className="mx_Autocomplete_Completion_container_pill" role="listbox" aria-label={_t("User Autocomplete")}>
+            <div
+                className="mx_Autocomplete_Completion_container_pill"
+                role="listbox"
+                aria-label={_t("User Autocomplete")}
+            >
                 { completions }
             </div>
         );

@@ -28,6 +28,7 @@ import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import {Action} from "../../../dispatcher/actions";
 import sanitizeHtml from "sanitize-html";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
@@ -45,8 +46,8 @@ export default class ReplyThread extends React.Component {
 
     static contextType = MatrixClientContext;
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             // The loaded events to be rendered as linear-replies
@@ -331,8 +332,14 @@ export default class ReplyThread extends React.Component {
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
                         'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyThread_show">{ sub }</a>,
-                        'pill': <Pill type={Pill.TYPE_USER_MENTION} room={room}
-                                      url={makeUserPermalink(ev.getSender())} shouldShowPillAvatar={true} />,
+                        'pill': (
+                            <Pill
+                                type={Pill.TYPE_USER_MENTION}
+                                room={room}
+                                url={makeUserPermalink(ev.getSender())}
+                                shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
+                            />
+                        ),
                     })
                 }
             </blockquote>;
@@ -360,6 +367,7 @@ export default class ReplyThread extends React.Component {
                     isRedacted={ev.isRedacted()}
                     isTwelveHour={SettingsStore.getValue("showTwelveHourTimestamps")}
                     useIRCLayout={this.props.useIRCLayout}
+                    enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                 />
             </blockquote>;
         });

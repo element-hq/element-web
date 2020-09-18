@@ -69,13 +69,17 @@ import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
 import {
     showToast as showAnalyticsToast,
-    hideToast as hideAnalyticsToast
+    hideToast as hideAnalyticsToast,
 } from "../../toasts/AnalyticsToast";
 import {showToast as showNotificationsToast} from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { leaveRoomBehaviour } from "../../utils/membership";
+import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
+import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
+import {UIFeature} from "../../settings/UIFeature";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -127,6 +131,7 @@ interface IScreen {
     params?: object;
 }
 
+/* eslint-disable camelcase */
 interface IRoomInfo {
     room_id?: string;
     room_alias?: string;
@@ -134,16 +139,17 @@ interface IRoomInfo {
 
     auto_join?: boolean;
     highlighted?: boolean;
-    third_party_invite?: object;
     oob_data?: object;
     via_servers?: string[];
+    threepid_invite?: IThreepidInvite;
 }
+/* eslint-enable camelcase */
 
 interface IProps { // TODO type things better
     config: Record<string, any>;
     serverConfig?: ValidatedServerConfig;
     ConferenceHandler?: any;
-    onNewScreen: (string) => void;
+    onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
     realQueryParams?: Record<string, string>;
@@ -163,6 +169,7 @@ interface IState {
     // the master view we are showing.
     view: Views;
     // What the LoggedInView would be showing if visible
+    // eslint-disable-next-line camelcase
     page_type?: PageTypes;
     // The ID of the room we're viewing. This is either populated directly
     // in the case where we view a room by ID or by RoomView when it resolves
@@ -178,8 +185,11 @@ interface IState {
     middleDisabled: boolean;
     // the right panel's disabled state is tracked in its store.
     // Parameters used in the registration dance with the IS
+    // eslint-disable-next-line camelcase
     register_client_secret?: string;
+    // eslint-disable-next-line camelcase
     register_session_id?: string;
+    // eslint-disable-next-line camelcase
     register_id_sid?: string;
     // When showing Modal dialogs we need to set aria-hidden on the root app element
     // and disable it when there are no dialogs
@@ -188,7 +198,7 @@ interface IState {
     resizeNotifier: ResizeNotifier;
     serverConfig?: ValidatedServerConfig;
     ready: boolean;
-    thirdPartyInvite?: object;
+    threepidInvite?: IThreepidInvite,
     roomOobData?: object;
     viaServers?: string[];
     pendingInitialSync?: boolean;
@@ -252,6 +262,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // outside this.state because updating it should never trigger a
         // rerender.
         this.screenAfterLogin = this.props.initialScreenAfterLogin;
+        if (this.screenAfterLogin) {
+            const params = this.screenAfterLogin.params || {};
+            if (this.screenAfterLogin.screen.startsWith("room/") && params['signurl'] && params['email']) {
+                // probably a threepid invite - try to store it
+                const roomId = this.screenAfterLogin.screen.substring("room/".length);
+                ThreepidInviteStore.instance.storeInvite(roomId, params as IThreepidInviteWireFormat);
+            }
+        }
 
         this.windowWidth = 10000;
         this.handleResize();
@@ -339,6 +357,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle stage
+    // eslint-disable-next-line camelcase
     UNSAFE_componentWillUpdate(props, state) {
         if (this.shouldTrackPageChange(this.state, state)) {
             this.startPageChangeTimer();
@@ -395,8 +414,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         }).then((loadedSession) => {
             if (!loadedSession) {
-                // fall back to showing the welcome screen
-                dis.dispatch({action: "view_welcome_page"});
+                // fall back to showing the welcome screen... unless we have a 3pid invite pending
+                if (ThreepidInviteStore.instance.pickBestInvite()) {
+                    dis.dispatch({action: 'start_registration'});
+                } else {
+                    dis.dispatch({action: "view_welcome_page"});
+                }
             }
         });
         // Note we don't catch errors from this: we catch everything within
@@ -608,8 +631,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 const UserSettingsDialog = sdk.getComponent("dialogs.UserSettingsDialog");
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
                     {initialTabId: tabPayload.initialTabId},
-                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true
-                );
+                    /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -619,7 +641,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.createRoom(payload.public);
                 break;
             case 'view_create_group': {
-                const CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog");
+                let CreateGroupDialog = sdk.getComponent("dialogs.CreateGroupDialog")
+                if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+                    CreateGroupDialog = CreateCommunityPrototypeDialog;
+                }
                 Modal.createTrackedDialog('Create Community', '', CreateGroupDialog);
                 break;
             }
@@ -824,10 +849,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     //                                    context of that particular event.
     // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
     //                                        and alter the EventTile to appear highlighted.
-    // @param {Object=} roomInfo.third_party_invite Object containing data about the third party
-    //                                    we received to join the room, if any.
-    // @param {string=} roomInfo.third_party_invite.inviteSignUrl 3pid invite sign URL
-    // @param {string=} roomInfo.third_party_invite.invitedEmail The email address the invite was sent to
+    // @param {Object=} roomInfo.threepid_invite Object containing data about the third party
+    //                                           we received to join the room, if any.
     // @param {Object=} roomInfo.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
@@ -875,6 +898,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
             }
 
+            // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item
+            const replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
+
             if (roomInfo.event_id && roomInfo.highlighted) {
                 presentedId += "/" + roomInfo.event_id;
             }
@@ -882,12 +908,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 view: Views.LOGGED_IN,
                 currentRoomId: roomInfo.room_id || null,
                 page_type: PageTypes.RoomView,
-                thirdPartyInvite: roomInfo.third_party_invite,
+                threepidInvite: roomInfo.threepid_invite,
                 roomOobData: roomInfo.oob_data,
                 viaServers: roomInfo.via_servers,
                 ready: true,
             }, () => {
-                this.notifyNewScreen('room/' + presentedId);
+                this.notifyNewScreen('room/' + presentedId, replaceLast);
             });
         });
     }
@@ -1075,57 +1101,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             title: _t("Leave room"),
             description: (
                 <span>
-                { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
+                    { _t("Are you sure you want to leave the room '%(roomName)s'?", {roomName: roomToLeave.name}) }
                     { warnings }
                 </span>
             ),
             button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
-                    const d = MatrixClientPeg.get().leaveRoomChain(roomId);
+                    const d = leaveRoomBehaviour(roomId);
 
                     // FIXME: controller shouldn't be loading a view :(
                     const Loader = sdk.getComponent("elements.Spinner");
                     const modal = Modal.createDialog(Loader, null, 'mx_Dialog_spinner');
 
-                    d.then((errors) => {
-                        modal.close();
-
-                        for (const leftRoomId of Object.keys(errors)) {
-                            const err = errors[leftRoomId];
-                            if (!err) continue;
-
-                            console.error("Failed to leave room " + leftRoomId + " " + err);
-                            let title = _t("Failed to leave room");
-                            let message = _t("Server may be unavailable, overloaded, or you hit a bug.");
-                            if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
-                                title = _t("Can't leave Server Notices room");
-                                message = _t(
-                                    "This room is used for important messages from the Homeserver, " +
-                                    "so you cannot leave it.",
-                                );
-                            } else if (err && err.message) {
-                                message = err.message;
-                            }
-                            Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                                title: title,
-                                description: message,
-                            });
-                            return;
-                        }
-
-                        if (this.state.currentRoomId === roomId) {
-                            dis.dispatch({action: 'view_next_room'});
-                        }
-                    }, (err) => {
-                        // This should only happen if something went seriously wrong with leaving the chain.
-                        modal.close();
-                        console.error("Failed to leave room " + roomId + " " + err);
-                        Modal.createTrackedDialog('Failed to leave room', '', ErrorDialog, {
-                            title: _t("Failed to leave room"),
-                            description: _t("Unknown error"),
-                        });
-                    });
+                    d.finally(() => modal.close());
                 }
             },
         });
@@ -1226,6 +1215,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     // the homepage.
                     dis.dispatch({action: 'view_home_page'});
                 }
+            } else if (ThreepidInviteStore.instance.pickBestInvite()) {
+                // The user has a 3pid invite pending - show them that
+                const threepidInvite = ThreepidInviteStore.instance.pickBestInvite();
+
+                // HACK: This is a pretty brutal way of threading the invite back through
+                // our systems, but it's the safest we have for now.
+                const params = ThreepidInviteStore.instance.translateToWireFormat(threepidInvite);
+                this.showScreen(`room/${threepidInvite.roomId}`, params)
             } else {
                 // The user has just logged in after registering,
                 // so show the homepage.
@@ -1237,8 +1234,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         StorageManager.tryPersistStorage();
 
-        if (SettingsStore.getValue("showCookieBar") && this.props.config.piwik && navigator.doNotTrack !== "1") {
-            showAnalyticsToast(this.props.config.piwik && this.props.config.piwik.policyUrl);
+        if (SettingsStore.getValue("showCookieBar") && Analytics.canEnable()) {
+            showAnalyticsToast(this.props.config.piwik?.policyUrl);
         }
     }
 
@@ -1367,7 +1364,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.firstSyncComplete = true;
             this.firstSyncPromise.resolve();
 
-            if (Notifier.shouldShowToolbar()) {
+            if (Notifier.shouldShowPrompt()) {
                 showNotificationsToast();
             }
 
@@ -1376,15 +1373,19 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ready: true,
             });
         });
-        cli.on('Call.incoming', function(call) {
-            // we dispatch this synchronously to make sure that the event
-            // handlers on the call are set up immediately (so that if
-            // we get an immediate hangup, we don't get a stuck call)
-            dis.dispatch({
-                action: 'incoming_call',
-                call: call,
-            }, true);
-        });
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            cli.on('Call.incoming', function(call) {
+                // we dispatch this synchronously to make sure that the event
+                // handlers on the call are set up immediately (so that if
+                // we get an immediate hangup, we don't get a stuck call)
+                dis.dispatch({
+                    action: 'incoming_call',
+                    call: call,
+                }, true);
+            });
+        }
+
         cli.on('Session.logged_out', function(errObj) {
             if (Lifecycle.isLoggingOut()) return;
 
@@ -1465,7 +1466,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on("crypto.warning", (type) => {
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
-                    const brand = SdkConfig.get().brand;
                     Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
@@ -1476,7 +1476,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                             "in this version. This may also cause messages exchanged with this " +
                             "version to fail. If you experience problems, log out and back in " +
                             "again. To retain message history, export and re-import your keys.",
-                            { brand },
+                            { brand: SdkConfig.get().brand },
                         ),
                     });
                     break;
@@ -1501,12 +1501,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (haveNewVersion) {
                 Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
-                    import('../../async-components/views/dialogs/keybackup/NewRecoveryMethodDialog'),
+                    import('../../async-components/views/dialogs/security/NewRecoveryMethodDialog'),
                     { newVersionInfo },
                 );
             } else {
                 Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
-                    import('../../async-components/views/dialogs/keybackup/RecoveryMethodRemovedDialog'),
+                    import('../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog'),
                 );
             }
         });
@@ -1663,16 +1663,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             // TODO: Handle encoded room/event IDs: https://github.com/vector-im/element-web/issues/9149
 
-            // FIXME: sort_out caseConsistency
-            const thirdPartyInvite = {
-                inviteSignUrl: params.signurl,
-                invitedEmail: params.email,
-            };
-            const oobData = {
-                name: params.room_name,
-                avatarUrl: params.room_avatar_url,
-                inviterName: params.inviter_name,
-            };
+            let threepidInvite: IThreepidInvite;
+            if (params.signurl && params.email) {
+                threepidInvite = ThreepidInviteStore.instance
+                    .storeInvite(roomString, params as IThreepidInviteWireFormat);
+            }
 
             // on our URLs there might be a ?via=matrix.org or similar to help
             // joins to the room succeed. We'll pass these through as an array
@@ -1693,8 +1688,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // it as highlighted, which will propagate to RoomView and highlight the
                 // associated EventTile.
                 highlighted: Boolean(eventId),
-                third_party_invite: thirdPartyInvite,
-                oob_data: oobData,
+                threepid_invite: threepidInvite,
+                // TODO: Replace oob_data with the threepidInvite (which has the same info).
+                // This isn't done yet because it's threaded through so many more places.
+                // See https://github.com/vector-im/element-web/issues/15157
+                oob_data: {
+                    name: threepidInvite?.roomName,
+                    avatarUrl: threepidInvite?.roomAvatarUrl,
+                    inviterName: threepidInvite?.inviterName,
+                },
                 room_alias: undefined,
                 room_id: undefined,
             };
@@ -1726,9 +1728,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    notifyNewScreen(screen: string) {
+    notifyNewScreen(screen: string, replaceLast = false) {
         if (this.props.onNewScreen) {
-            this.props.onNewScreen(screen);
+            this.props.onNewScreen(screen, replaceLast);
         }
         this.setPageSubtitle();
     }
@@ -1879,6 +1881,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         return this.props.makeRegistrationUrl(params);
     };
 
+    /**
+     * After registration or login, we run various post-auth steps before entering the app
+     * proper, such setting up cross-signing or verifying the new session.
+     *
+     * Note: SSO users (and any others using token login) currently do not pass through
+     * this, as they instead jump straight into the app after `attemptTokenLogin`.
+     */
     onUserCompletedLoginFlow = async (credentials: object, password: string) => {
         this.accountPassword = password;
         // self-destruct the password after 5mins
@@ -1945,7 +1954,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     render() {
         const fragmentAfterLogin = this.getFragmentAfterLogin();
-        let view;
+        let view = null;
 
         if (this.state.view === Views.LOADING) {
             const Spinner = sdk.getComponent('elements.Spinner');
@@ -2024,14 +2033,15 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else if (this.state.view === Views.WELCOME) {
             const Welcome = sdk.getComponent('auth.Welcome');
             view = <Welcome />;
-        } else if (this.state.view === Views.REGISTER) {
+        } else if (this.state.view === Views.REGISTER && SettingsStore.getValue(UIFeature.Registration)) {
             const Registration = sdk.getComponent('structures.auth.Registration');
+            const email = ThreepidInviteStore.instance.pickBestInvite()?.toEmail;
             view = (
                 <Registration
                     clientSecret={this.state.register_client_secret}
                     sessionId={this.state.register_session_id}
                     idSid={this.state.register_id_sid}
-                    email={this.props.startingFragmentQueryParams.email}
+                    email={email}
                     brand={this.props.config.brand}
                     makeRegistrationUrl={this.makeRegistrationUrl}
                     onLoggedIn={this.onRegisterFlowComplete}
@@ -2041,7 +2051,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     {...this.getServerProperties()}
                 />
             );
-        } else if (this.state.view === Views.FORGOT_PASSWORD) {
+        } else if (this.state.view === Views.FORGOT_PASSWORD && SettingsStore.getValue(UIFeature.PasswordReset)) {
             const ForgotPassword = sdk.getComponent('structures.auth.ForgotPassword');
             view = (
                 <ForgotPassword
@@ -2052,6 +2062,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 />
             );
         } else if (this.state.view === Views.LOGIN) {
+            const showPasswordReset = SettingsStore.getValue(UIFeature.PasswordReset);
             const Login = sdk.getComponent('structures.auth.Login');
             view = (
                 <Login
@@ -2060,7 +2071,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     onRegisterClick={this.onRegisterClick}
                     fallbackHsUrl={this.getFallbackHsUrl()}
                     defaultDeviceDisplayName={this.props.defaultDeviceDisplayName}
-                    onForgotPasswordClick={this.onForgotPasswordClick}
+                    onForgotPasswordClick={showPasswordReset ? this.onForgotPasswordClick : undefined}
                     onServerConfigChange={this.onServerConfigChange}
                     fragmentAfterLogin={fragmentAfterLogin}
                     {...this.getServerProperties()}
@@ -2084,4 +2095,13 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             {view}
         </ErrorBoundary>;
     }
+}
+
+export function isLoggedIn(): boolean {
+    // JRS: Maybe we should move the step that writes this to the window out of
+    // `element-web` and into this file? Better yet, we should probably create a
+    // store to hold this state.
+    // See also https://github.com/vector-im/element-web/issues/15034.
+    const app = window.matrixChat;
+    return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
 }

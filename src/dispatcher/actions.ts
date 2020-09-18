@@ -94,4 +94,14 @@ export enum Action {
      * Trigged after the phase of the right panel is set. Should be used with AfterRightPanelPhaseChangePayload.
      */
     AfterRightPanelPhaseChange = "after_right_panel_phase_change",
+
+    /**
+     * Requests that the AppTile deletes the widget. Should be used with the AppTileActionPayload.
+     */
+    AppTileDelete = "appTile_delete",
+
+    /**
+     * Requests that the AppTile revokes the widget. Should be used with the AppTileActionPayload.
+     */
+    AppTileRevoke = "appTile_revoke",
 }

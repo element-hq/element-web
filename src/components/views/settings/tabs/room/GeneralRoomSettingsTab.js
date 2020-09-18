@@ -22,6 +22,8 @@ import * as sdk from "../../../../..";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import {UIFeature} from "../../../../../settings/UIFeature";
 
 export default class GeneralRoomSettingsTab extends React.Component {
     static propTypes = {
@@ -61,6 +63,28 @@ export default class GeneralRoomSettingsTab extends React.Component {
         const canChangeGroups = room.currentState.mayClientSendStateEvent("m.room.related_groups", client);
         const groupsEvent = room.currentState.getStateEvents("m.room.related_groups", "");
 
+        let urlPreviewSettings = <>
+            <span className='mx_SettingsTab_subheading'>{_t("URL Previews")}</span>
+            <div className='mx_SettingsTab_section'>
+                <UrlPreviewSettings room={room} />
+            </div>
+        </>;
+        if (!SettingsStore.getValue(UIFeature.URLPreviews)) {
+            urlPreviewSettings = null;
+        }
+
+        let flairSection;
+        if (SettingsStore.getValue(UIFeature.Flair)) {
+            flairSection = <>
+                <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
+                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
+                    <RelatedGroupSettings roomId={room.roomId}
+                                          canSetRelatedGroups={canChangeGroups}
+                                          relatedGroupsEvent={groupsEvent} />
+                </div>
+            </>;
+        }
+
         return (
             <div className="mx_SettingsTab mx_GeneralRoomSettingsTab">
                 <div className="mx_SettingsTab_heading">{_t("General")}</div>
@@ -75,17 +99,8 @@ export default class GeneralRoomSettingsTab extends React.Component {
                                    canonicalAliasEvent={canonicalAliasEv} aliasEvents={aliasEvents} />
                 </div>
                 <div className="mx_SettingsTab_heading">{_t("Other")}</div>
-                <span className='mx_SettingsTab_subheading'>{_t("Flair")}</span>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <RelatedGroupSettings roomId={room.roomId}
-                                          canSetRelatedGroups={canChangeGroups}
-                                          relatedGroupsEvent={groupsEvent} />
-                </div>
-
-                <span className='mx_SettingsTab_subheading'>{_t("URL Previews")}</span>
-                <div className='mx_SettingsTab_section'>
-                    <UrlPreviewSettings room={room} />
-                </div>
+                { flairSection }
+                { urlPreviewSettings }
 
                 <span className='mx_SettingsTab_subheading'>{_t("Leave room")}</span>
                 <div className='mx_SettingsTab_section'>

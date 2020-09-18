@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import classNames from 'classnames';
@@ -30,29 +29,31 @@ import {Action} from "../../../dispatcher/actions";
 
 // For URLs of matrix.to links in the timeline which have been reformatted by
 // HttpUtils transformTags to relative links. This excludes event URLs (with `[^\/]*`)
-const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+])[^/]*)$/;
+const REGEX_LOCAL_PERMALINK = /^#\/(?:user|room|group)\/(([#!@+]).*?)(?=\/|\?|$)/;
 
-const Pill = createReactClass({
-    statics: {
-        isPillUrl: (url) => {
-            return !!getPrimaryPermalinkEntity(url);
-        },
-        isMessagePillUrl: (url) => {
-            return !!REGEX_LOCAL_PERMALINK.exec(url);
-        },
-        roomNotifPos: (text) => {
-            return text.indexOf("@room");
-        },
-        roomNotifLen: () => {
-            return "@room".length;
-        },
-        TYPE_USER_MENTION: 'TYPE_USER_MENTION',
-        TYPE_ROOM_MENTION: 'TYPE_ROOM_MENTION',
-        TYPE_GROUP_MENTION: 'TYPE_GROUP_MENTION',
-        TYPE_AT_ROOM_MENTION: 'TYPE_AT_ROOM_MENTION', // '@room' mention
-    },
+class Pill extends React.Component {
+    static isPillUrl(url) {
+        return !!getPrimaryPermalinkEntity(url);
+    }
 
-    props: {
+    static isMessagePillUrl(url) {
+        return !!REGEX_LOCAL_PERMALINK.exec(url);
+    }
+
+    static roomNotifPos(text) {
+        return text.indexOf("@room");
+    }
+
+    static roomNotifLen() {
+        return "@room".length;
+    }
+
+    static TYPE_USER_MENTION = 'TYPE_USER_MENTION';
+    static TYPE_ROOM_MENTION = 'TYPE_ROOM_MENTION';
+    static TYPE_GROUP_MENTION = 'TYPE_GROUP_MENTION';
+    static TYPE_AT_ROOM_MENTION = 'TYPE_AT_ROOM_MENTION'; // '@room' mention
+
+    static propTypes = {
         // The Type of this Pill. If url is given, this is auto-detected.
         type: PropTypes.string,
         // The URL to pillify (no validation is done, see isPillUrl and isMessagePillUrl)
@@ -65,25 +66,24 @@ const Pill = createReactClass({
         shouldShowPillAvatar: PropTypes.bool,
         // Whether to render this pill as if it were highlit by a selection
         isSelected: PropTypes.bool,
-    },
+    };
 
-    getInitialState() {
-        return {
-            // ID/alias of the room/user
-            resourceId: null,
-            // Type of pill
-            pillType: null,
+    state = {
+        // ID/alias of the room/user
+        resourceId: null,
+        // Type of pill
+        pillType: null,
 
-            // The member related to the user pill
-            member: null,
-            // The group related to the group pill
-            group: null,
-            // The room related to the room pill
-            room: null,
-        };
-    },
+        // The member related to the user pill
+        member: null,
+        // The group related to the group pill
+        group: null,
+        // The room related to the room pill
+        room: null,
+    };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
     async UNSAFE_componentWillReceiveProps(nextProps) {
         let resourceId;
         let prefix;
@@ -155,7 +155,7 @@ const Pill = createReactClass({
             }
         }
         this.setState({resourceId, pillType, member, group, room});
-    },
+    }
 
     componentDidMount() {
         this._unmounted = false;
@@ -163,13 +163,13 @@ const Pill = createReactClass({
 
         // eslint-disable-next-line new-cap
         this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
-    },
+    }
 
     componentWillUnmount() {
         this._unmounted = true;
-    },
+    }
 
-    doProfileLookup: function(userId, member) {
+    doProfileLookup(userId, member) {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
             if (this._unmounted) {
                 return;
@@ -188,15 +188,16 @@ const Pill = createReactClass({
         }).catch((err) => {
             console.error('Could not retrieve profile data for ' + userId + ':', err);
         });
-    },
+    }
 
-    onUserPillClicked: function() {
+    onUserPillClicked = () => {
         dis.dispatch({
             action: Action.ViewUser,
             member: this.state.member,
         });
-    },
-    render: function() {
+    };
+
+    render() {
         const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
@@ -285,7 +286,7 @@ const Pill = createReactClass({
             // Deliberately render nothing if the URL isn't recognised
             return null;
         }
-    },
-});
+    }
+}
 
 export default Pill;

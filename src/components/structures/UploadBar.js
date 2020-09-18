@@ -16,30 +16,28 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 import ContentMessages from '../../ContentMessages';
 import dis from "../../dispatcher/dispatcher";
 import filesize from "filesize";
 import { _t } from '../../languageHandler';
 
-export default createReactClass({
-    displayName: 'UploadBar',
-    propTypes: {
+export default class UploadBar extends React.Component {
+    static propTypes = {
         room: PropTypes.object,
-    },
+    };
 
-    componentDidMount: function() {
+    componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
         this.mounted = true;
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.mounted = false;
         dis.unregister(this.dispatcherRef);
-    },
+    }
 
-    onAction: function(payload) {
+    onAction = payload => {
         switch (payload.action) {
             case 'upload_progress':
             case 'upload_finished':
@@ -48,9 +46,9 @@ export default createReactClass({
                 if (this.mounted) this.forceUpdate();
                 break;
         }
-    },
+    };
 
-    render: function() {
+    render() {
         const uploads = ContentMessages.sharedInstance().getCurrentUploads();
 
         // for testing UI... - also fix up the ContentMessages.getCurrentUploads().length
@@ -105,5 +103,5 @@ export default createReactClass({
                 <div className="mx_UploadBar_uploadFilename">{ uploadText }</div>
             </div>
         );
-    },
-});
+    }
+}

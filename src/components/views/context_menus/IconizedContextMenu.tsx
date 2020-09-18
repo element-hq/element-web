@@ -37,7 +37,7 @@ interface IOptionListProps {
 }
 
 interface IOptionProps extends React.ComponentProps<typeof MenuItem> {
-    iconClassName: string;
+    iconClassName?: string;
 }
 
 interface ICheckboxProps extends React.ComponentProps<typeof MenuItemCheckbox> {
@@ -92,7 +92,7 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
 
 export const IconizedContextMenuOption: React.FC<IOptionProps> = ({label, iconClassName, ...props}) => {
     return <MenuItem {...props} label={label}>
-        <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
+        { iconClassName && <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} /> }
         <span className="mx_IconizedContextMenu_label">{label}</span>
     </MenuItem>;
 };

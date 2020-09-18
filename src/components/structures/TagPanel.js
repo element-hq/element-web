@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import TagOrderStore from '../../stores/TagOrderStore';
 
 import GroupActions from '../../actions/GroupActions';
@@ -29,22 +28,18 @@ import { Droppable } from 'react-beautiful-dnd';
 import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
+import SettingsStore from "../../settings/SettingsStore";
+import UserTagTile from "../views/elements/UserTagTile";
 
-const TagPanel = createReactClass({
-    displayName: 'TagPanel',
+class TagPanel extends React.Component {
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    state = {
+        orderedTags: [],
+        selectedTags: [],
+    };
 
-    getInitialState() {
-        return {
-            orderedTags: [],
-            selectedTags: [],
-        };
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this.unmounted = false;
         this.context.on("Group.myMembership", this._onGroupMyMembership);
         this.context.on("sync", this._onClientSync);
@@ -60,7 +55,7 @@ const TagPanel = createReactClass({
         });
         // This could be done by anything with a matrix client
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
-    },
+    }
 
     componentWillUnmount() {
         this.unmounted = true;
@@ -69,14 +64,14 @@ const TagPanel = createReactClass({
         if (this._tagOrderStoreToken) {
             this._tagOrderStoreToken.remove();
         }
-    },
+    }
 
-    _onGroupMyMembership() {
+    _onGroupMyMembership = () => {
         if (this.unmounted) return;
         dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
-    },
+    };
 
-    _onClientSync(syncState, prevState) {
+    _onClientSync = (syncState, prevState) => {
         // Consider the client reconnected if there is no error with syncing.
         // This means the state could be RECONNECTING, SYNCING, PREPARED or CATCHUP.
         const reconnected = syncState !== "ERROR" && prevState !== syncState;
@@ -84,29 +79,33 @@ const TagPanel = createReactClass({
             // Load joined groups
             dis.dispatch(GroupActions.fetchJoinedGroups(this.context));
         }
-    },
+    };
 
-    onMouseDown(e) {
+    onMouseDown = e => {
         // only dispatch if its not a no-op
         if (this.state.selectedTags.length > 0) {
             dis.dispatch({action: 'deselect_tags'});
         }
-    },
+    };
 
-    onCreateGroupClick(ev) {
-        ev.stopPropagation();
-        dis.dispatch({action: 'view_create_group'});
-    },
-
-    onClearFilterClick(ev) {
+    onClearFilterClick = ev => {
         dis.dispatch({action: 'deselect_tags'});
-    },
+    };
+
+    renderGlobalIcon() {
+        if (!SettingsStore.getValue("feature_communities_v2_prototypes")) return null;
+
+        return (
+            <div>
+                <UserTagTile />
+                <hr className="mx_TagPanel_divider" />
+            </div>
+        );
+    }
 
     render() {
         const DNDTagTile = sdk.getComponent('elements.DNDTagTile');
-        const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const ActionButton = sdk.getComponent('elements.ActionButton');
-        const TintableSvg = sdk.getComponent('elements.TintableSvg');
 
         const tags = this.state.orderedTags.map((tag, index) => {
             return <DNDTagTile
@@ -118,26 +117,29 @@ const TagPanel = createReactClass({
         });
 
         const itemsSelected = this.state.selectedTags.length > 0;
-
-        let clearButton;
-        if (itemsSelected) {
-            clearButton = <AccessibleButton className="mx_TagPanel_clearButton" onClick={this.onClearFilterClick}>
-                <TintableSvg src={require("../../../res/img/icons-close.svg")} width="24" height="24"
-                             alt={_t("Clear filter")}
-                             title={_t("Clear filter")}
-                />
-            </AccessibleButton>;
-        }
-
         const classes = classNames('mx_TagPanel', {
             mx_TagPanel_items_selected: itemsSelected,
         });
 
-        return <div className={classes}>
-            <div className="mx_TagPanel_clearButton_container">
-                { clearButton }
-            </div>
-            <div className="mx_TagPanel_divider" />
+        let createButton = (
+            <ActionButton
+                tooltip
+                label={_t("Communities")}
+                action="toggle_my_groups"
+                className="mx_TagTile mx_TagTile_plus" />
+        );
+
+        if (SettingsStore.getValue("feature_communities_v2_prototypes")) {
+            createButton = (
+                <ActionButton
+                    tooltip
+                    label={_t("Create community")}
+                    action="view_create_group"
+                    className="mx_TagTile mx_TagTile_plus" />
+            );
+        }
+
+        return <div className={classes} onClick={this.onClearFilterClick}>
             <AutoHideScrollbar
                 className="mx_TagPanel_scroller"
                 // XXX: Use onMouseDown as a workaround for https://github.com/atlassian/react-beautiful-dnd/issues/273
@@ -153,13 +155,10 @@ const TagPanel = createReactClass({
                                 className="mx_TagPanel_tagTileContainer"
                                 ref={provided.innerRef}
                             >
+                                { this.renderGlobalIcon() }
                                 { tags }
                                 <div>
-                                    <ActionButton
-                                        tooltip
-                                        label={_t("Communities")}
-                                        action="toggle_my_groups"
-                                        className="mx_TagTile mx_TagTile_plus" />
+                                    {createButton}
                                 </div>
                                 { provided.placeholder }
                             </div>
@@ -167,6 +166,6 @@ const TagPanel = createReactClass({
                 </Droppable>
             </AutoHideScrollbar>
         </div>;
-    },
-});
+    }
+}
 export default TagPanel;

@@ -30,30 +30,11 @@ limitations under the License.
     cursor: pointer;
 }
 
-.mx_TagPanel .mx_TagPanel_clearButton_container {
-    /* Constant height within flex mx_TagPanel */
-    height: 70px;
-    width: 56px;
-
-    flex: none;
-
-    justify-content: center;
-    align-items: flex-start;
-
-    display: none;
-}
-
-.mx_TagPanel .mx_TagPanel_clearButton object {
-    /* Same as .mx_SearchBox padding-top */
-    margin-top: 24px;
-    pointer-events: none;
-}
-
 .mx_TagPanel .mx_TagPanel_divider {
     height: 0px;
-    width: 34px;
-    border-bottom: 1px solid $panel-divider-color;
-    display: none;
+    width: 90%;
+    border: none;
+    border-bottom: 1px solid $tagpanel-divider-color;
 }
 
 .mx_TagPanel .mx_TagPanel_scroller {
@@ -76,10 +57,55 @@ limitations under the License.
     // opacity: 0.5;
     position: relative;
 }
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_prototype {
+    padding: 3px;
+}
+
 .mx_TagPanel .mx_TagTile:focus,
 .mx_TagPanel .mx_TagTile:hover,
 .mx_TagPanel .mx_TagTile.mx_TagTile_selected {
     // opacity: 1;
+}
+
+.mx_TagPanel .mx_TagTile.mx_TagTile_selected_prototype {
+    background-color: $primary-bg-color;
+    border-radius: 6px;
+}
+
+.mx_TagTile_selected_prototype {
+    .mx_TagTile_homeIcon::before {
+        background-color: $primary-fg-color; // dark-on-light
+    }
+}
+
+.mx_TagTile:not(.mx_TagTile_selected_prototype) .mx_TagTile_homeIcon {
+    background-color: $roomheader-addroom-bg-color;
+    border-radius: 48px;
+
+    &::before {
+        background-color: $roomheader-addroom-fg-color;
+    }
+}
+
+.mx_TagTile_homeIcon {
+    width: 32px;
+    height: 32px;
+    position: relative;
+
+    &::before {
+        mask-image: url('$(res)/img/element-icons/home.svg');
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 21px;
+        content: '';
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        top: calc(50% - 16px);
+        left: calc(50% - 16px);
+    }
 }
 
 .mx_TagPanel .mx_TagTile_plus {

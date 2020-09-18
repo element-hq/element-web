@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { formatMinimalBadgeCount } from "../../../utils/FormattingUtils";
+import { formatCount } from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
@@ -92,6 +92,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
     };
 
     public render(): React.ReactElement {
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const {notification, forceCount, roomId, onClick, ...props} = this.props;
 
         // Don't show a badge if we don't need to
@@ -108,7 +109,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
             if (!notification.hasUnreadCount) return null; // Can't render a badge
         }
 
-        let symbol = notification.symbol || formatMinimalBadgeCount(notification.count);
+        let symbol = notification.symbol || formatCount(notification.count);
         if (isEmptyBadge) symbol = "";
 
         const classes = classNames({

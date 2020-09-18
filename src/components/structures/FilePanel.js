@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 import {Filter} from 'matrix-js-sdk';
@@ -24,27 +23,27 @@ import * as sdk from '../../index';
 import {MatrixClientPeg} from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
+import BaseCard from "../views/right_panel/BaseCard";
+import {RightPanelPhases} from "../../stores/RightPanelStorePhases";
 
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
-const FilePanel = createReactClass({
-    displayName: 'FilePanel',
+class FilePanel extends React.Component {
+    static propTypes = {
+        roomId: PropTypes.string.isRequired,
+        onClose: PropTypes.func.isRequired,
+    };
+
     // This is used to track if a decrypted event was a live event and should be
     // added to the timeline.
-    decryptingEvents: new Set(),
+    decryptingEvents = new Set();
 
-    propTypes: {
-        roomId: PropTypes.string.isRequired,
-    },
+    state = {
+        timelineSet: null,
+    };
 
-    getInitialState: function() {
-        return {
-            timelineSet: null,
-        };
-    },
-
-    onRoomTimeline(ev, room, toStartOfTimeline, removed, data) {
+    onRoomTimeline = (ev, room, toStartOfTimeline, removed, data) => {
         if (room.roomId !== this.props.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
@@ -53,9 +52,9 @@ const FilePanel = createReactClass({
         } else {
             this.addEncryptedLiveEvent(ev);
         }
-    },
+    };
 
-    onEventDecrypted(ev, err) {
+    onEventDecrypted = (ev, err) => {
         if (ev.getRoomId() !== this.props.roomId) return;
         const eventId = ev.getId();
 
@@ -63,7 +62,7 @@ const FilePanel = createReactClass({
         if (err) return;
 
         this.addEncryptedLiveEvent(ev);
-    },
+    };
 
     addEncryptedLiveEvent(ev, toStartOfTimeline) {
         if (!this.state.timelineSet) return;
@@ -77,7 +76,7 @@ const FilePanel = createReactClass({
         if (!this.state.timelineSet.eventIdToTimeline(ev.getId())) {
             this.state.timelineSet.addEventToTimeline(ev, timeline, false);
         }
-    },
+    }
 
     async componentDidMount() {
         const client = MatrixClientPeg.get();
@@ -98,7 +97,7 @@ const FilePanel = createReactClass({
             client.on('Room.timeline', this.onRoomTimeline);
             client.on('Event.decrypted', this.onEventDecrypted);
         }
-    },
+    }
 
     componentWillUnmount() {
         const client = MatrixClientPeg.get();
@@ -110,7 +109,7 @@ const FilePanel = createReactClass({
             client.removeListener('Room.timeline', this.onRoomTimeline);
             client.removeListener('Event.decrypted', this.onEventDecrypted);
         }
-    },
+    }
 
     async fetchFileEventsServer(room) {
         const client = MatrixClientPeg.get();
@@ -134,9 +133,9 @@ const FilePanel = createReactClass({
         const timelineSet = room.getOrCreateFilteredTimelineSet(filter);
 
         return timelineSet;
-    },
+    }
 
-    onPaginationRequest(timelineWindow, direction, limit) {
+    onPaginationRequest = (timelineWindow, direction, limit) => {
         const client = MatrixClientPeg.get();
         const eventIndex = EventIndexPeg.get();
         const roomId = this.props.roomId;
@@ -152,7 +151,7 @@ const FilePanel = createReactClass({
         } else {
             return timelineWindow.paginate(direction, limit);
         }
-    },
+    };
 
     async updateTimelineSet(roomId: string) {
         const client = MatrixClientPeg.get();
@@ -188,22 +187,30 @@ const FilePanel = createReactClass({
         } else {
             console.error("Failed to add filtered timelineSet for FilePanel as no room!");
         }
-    },
+    }
 
-    render: function() {
+    render() {
         if (MatrixClientPeg.get().isGuest()) {
-            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+            return <BaseCard
+                className="mx_FilePanel mx_RoomView_messageListWrapper"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
                 <div className="mx_RoomView_empty">
                 { _t("You must <a>register</a> to use this functionality",
                     {},
                     { 'a': (sub) => <a href="#/register" key="sub">{ sub }</a> })
                 }
                 </div>
-            </div>;
+            </BaseCard>;
         } else if (this.noRoom) {
-            return <div className="mx_FilePanel mx_RoomView_messageListWrapper">
+            return <BaseCard
+                className="mx_FilePanel mx_RoomView_messageListWrapper"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
                 <div className="mx_RoomView_empty">{ _t("You must join the room to see its files") }</div>
-            </div>;
+            </BaseCard>;
         }
 
         // wrap a TimelinePanel with the jump-to-event bits turned off.
@@ -219,8 +226,13 @@ const FilePanel = createReactClass({
             // console.log("rendering TimelinePanel for timelineSet " + this.state.timelineSet.room.roomId + " " +
             //             "(" + this.state.timelineSet._timelines.join(", ") + ")" + " with key " + this.props.roomId);
             return (
-                <div className="mx_FilePanel" role="tabpanel">
-                    <TimelinePanel key={"filepanel_" + this.props.roomId}
+                <BaseCard
+                    className="mx_FilePanel"
+                    onClose={this.props.onClose}
+                    previousPhase={RightPanelPhases.RoomSummary}
+                    withoutScrollContainer
+                >
+                    <TimelinePanel
                         manageReadReceipts={false}
                         manageReadMarkers={false}
                         timelineSet={this.state.timelineSet}
@@ -230,16 +242,20 @@ const FilePanel = createReactClass({
                         resizeNotifier={this.props.resizeNotifier}
                         empty={emptyState}
                     />
-                </div>
+                </BaseCard>
             );
         } else {
             return (
-                <div className="mx_FilePanel" role="tabpanel">
+                <BaseCard
+                    className="mx_FilePanel"
+                    onClose={this.props.onClose}
+                    previousPhase={RightPanelPhases.RoomSummary}
+                >
                     <Loader />
-                </div>
+                </BaseCard>
             );
         }
-    },
-});
+    }
+}
 
 export default FilePanel;

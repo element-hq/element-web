@@ -17,8 +17,6 @@ limitations under the License.
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 
-const CHECK_BOX_SVG = require("../../../../res/img/feather-customised/check.svg");
-
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
@@ -39,13 +37,14 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
     }
 
     public render() {
+        /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { children, className, ...otherProps } = this.props;
         return <span className={"mx_Checkbox " + className}>
             <input id={this.id} {...otherProps} type="checkbox" />
             <label htmlFor={this.id}>
                 {/* Using the div to center the image */}
                 <div className="mx_Checkbox_background">
-                    <img src={CHECK_BOX_SVG}/>
+                    <img src={require("../../../../res/img/feather-customised/check.svg")} />
                 </div>
                 <div>
                     { this.props.children }

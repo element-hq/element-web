@@ -17,15 +17,12 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import classNames from 'classnames';
 import { UserAddressType } from '../../../UserAddress';
 
-export default createReactClass({
-    displayName: 'AddressSelector',
-
-    propTypes: {
+export default class AddressSelector extends React.Component {
+    static propTypes = {
         onSelected: PropTypes.func.isRequired,
 
         // List of the addresses to display
@@ -37,90 +34,91 @@ export default createReactClass({
 
         // Element to put as a header on top of the list
         header: PropTypes.node,
-    },
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             selected: this.props.selected === undefined ? 0 : this.props.selected,
             hover: false,
         };
-    },
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    UNSAFE_componentWillReceiveProps: function(props) {
+    UNSAFE_componentWillReceiveProps(props) {
         // Make sure the selected item isn't outside the list bounds
         const selected = this.state.selected;
         const maxSelected = this._maxSelected(props.addressList);
         if (selected > maxSelected) {
             this.setState({ selected: maxSelected });
         }
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         // As the user scrolls with the arrow keys keep the selected item
         // at the top of the window.
         if (this.scrollElement && this.props.addressList.length > 0 && !this.state.hover) {
             const elementHeight = this.addressListElement.getBoundingClientRect().height;
             this.scrollElement.scrollTop = (this.state.selected * elementHeight) - elementHeight;
         }
-    },
+    }
 
-    moveSelectionTop: function() {
+    moveSelectionTop = () => {
         if (this.state.selected > 0) {
             this.setState({
                 selected: 0,
                 hover: false,
             });
         }
-    },
+    };
 
-    moveSelectionUp: function() {
+    moveSelectionUp = () => {
         if (this.state.selected > 0) {
             this.setState({
                 selected: this.state.selected - 1,
                 hover: false,
             });
         }
-    },
+    };
 
-    moveSelectionDown: function() {
+    moveSelectionDown = () => {
         if (this.state.selected < this._maxSelected(this.props.addressList)) {
             this.setState({
                 selected: this.state.selected + 1,
                 hover: false,
             });
         }
-    },
+    };
 
-    chooseSelection: function() {
+    chooseSelection = () => {
         this.selectAddress(this.state.selected);
-    },
+    };
 
-    onClick: function(index) {
+    onClick = index => {
         this.selectAddress(index);
-    },
+    };
 
-    onMouseEnter: function(index) {
+    onMouseEnter = index => {
         this.setState({
             selected: index,
             hover: true,
         });
-    },
+    };
 
-    onMouseLeave: function() {
+    onMouseLeave = () => {
         this.setState({ hover: false });
-    },
+    };
 
-    selectAddress: function(index) {
+    selectAddress = index => {
         // Only try to select an address if one exists
         if (this.props.addressList.length !== 0) {
             this.props.onSelected(index);
             this.setState({ hover: false });
         }
-    },
+    };
 
-    createAddressListTiles: function() {
-        const self = this;
+    createAddressListTiles() {
         const AddressTile = sdk.getComponent("elements.AddressTile");
         const maxSelected = this._maxSelected(this.props.addressList);
         const addressList = [];
@@ -157,15 +155,15 @@ export default createReactClass({
             }
         }
         return addressList;
-    },
+    }
 
-    _maxSelected: function(list) {
+    _maxSelected(list) {
         const listSize = list.length === 0 ? 0 : list.length - 1;
         const maxSelected = listSize > (this.props.truncateAt - 1) ? (this.props.truncateAt - 1) : listSize;
         return maxSelected;
-    },
+    }
 
-    render: function() {
+    render() {
         const classes = classNames({
             "mx_AddressSelector": true,
             "mx_AddressSelector_empty": this.props.addressList.length === 0,
@@ -177,5 +175,5 @@ export default createReactClass({
                 { this.createAddressListTiles() }
             </div>
         );
-    },
-});
+    }
+}

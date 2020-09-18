@@ -442,7 +442,7 @@ export function pickBestLanguage(langs: string[]): string {
 }
 
 function getLangsJson(): Promise<object> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         let url;
         if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
             url = webpackLangJsonUrl;
@@ -453,7 +453,7 @@ function getLangsJson(): Promise<object> {
             { method: "GET", url },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
-                    reject({err: err, response: response});
+                    reject(err);
                     return;
                 }
                 resolve(JSON.parse(body));
@@ -488,7 +488,7 @@ function getLanguage(langPath: string): object {
             { method: "GET", url: langPath },
             (err, response, body) => {
                 if (err || response.status < 200 || response.status >= 300) {
-                    reject({err: err, response: response});
+                    reject(err);
                     return;
                 }
                 resolve(weblateToCounterpart(JSON.parse(body)));

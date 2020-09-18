@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../index';
 import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
@@ -26,29 +25,23 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 
-export default createReactClass({
-    displayName: 'MyGroups',
+export default class MyGroups extends React.Component {
+    static contextType = MatrixClientContext;
 
-    getInitialState: function() {
-        return {
-            groups: null,
-            error: null,
-        };
-    },
+    state = {
+        groups: null,
+        error: null,
+    };
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this._fetch();
-    },
+    }
 
-    _onCreateGroupClick: function() {
+    _onCreateGroupClick = () => {
         dis.dispatch({action: 'view_create_group'});
-    },
+    };
 
-    _fetch: function() {
+    _fetch() {
         this.context.getJoinedGroups().then((result) => {
             this.setState({groups: result.groups, error: null});
         }, (err) => {
@@ -59,9 +52,9 @@ export default createReactClass({
             }
             this.setState({groups: null, error: err});
         });
-    },
+    }
 
-    render: function() {
+    render() {
         const brand = SdkConfig.get().brand;
         const Loader = sdk.getComponent("elements.Spinner");
         const SimpleRoomHeader = sdk.getComponent('rooms.SimpleRoomHeader');
@@ -149,5 +142,5 @@ export default createReactClass({
                 { content }
             </div>
         </div>;
-    },
-});
+    }
+}

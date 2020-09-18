@@ -16,49 +16,44 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import * as sdk from '../../../index';
 import {MatrixClientPeg} from '../../../MatrixClientPeg';
 
-export default createReactClass({
-    displayName: 'PersistentApp',
+export default class PersistentApp extends React.Component {
+    state = {
+        roomId: RoomViewStore.getRoomId(),
+        persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
+    };
 
-    getInitialState: function() {
-        return {
-            roomId: RoomViewStore.getRoomId(),
-            persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
-        };
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this._roomStoreToken = RoomViewStore.addListener(this._onRoomViewStoreUpdate);
         ActiveWidgetStore.on('update', this._onActiveWidgetStoreUpdate);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         if (this._roomStoreToken) {
             this._roomStoreToken.remove();
         }
         ActiveWidgetStore.removeListener('update', this._onActiveWidgetStoreUpdate);
-    },
+    }
 
-    _onRoomViewStoreUpdate: function(payload) {
+    _onRoomViewStoreUpdate = payload => {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
         this.setState({
             roomId: RoomViewStore.getRoomId(),
         });
-    },
+    };
 
-    _onActiveWidgetStoreUpdate: function() {
+    _onActiveWidgetStoreUpdate = () => {
         this.setState({
             persistentWidgetId: ActiveWidgetStore.getPersistentWidgetId(),
         });
-    },
+    };
 
-    render: function() {
+    render() {
         if (this.state.persistentWidgetId) {
             const persistentWidgetInRoomId = ActiveWidgetStore.getRoomId(this.state.persistentWidgetId);
             if (this.state.roomId !== persistentWidgetInRoomId) {
@@ -81,7 +76,7 @@ export default createReactClass({
                     userId={MatrixClientPeg.get().credentials.userId}
                     show={true}
                     creatorUserId={app.creatorUserId}
-                    widgetPageTitle={(app.data && app.data.title) ? app.data.title : ''}
+                    widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
                     waitForIframeLoad={app.waitForIframeLoad}
                     whitelistCapabilities={capWhitelist}
                     showDelete={false}
@@ -91,6 +86,6 @@ export default createReactClass({
             }
         }
         return null;
-    },
-});
+    }
+}
 

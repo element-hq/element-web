@@ -15,33 +15,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-export default createReactClass({
-    displayName: 'GroupUserSettings',
+export default class GroupUserSettings extends React.Component {
+    static contextType = MatrixClientContext;
 
-    statics: {
-        contextType: MatrixClientContext,
-    },
+    state = {
+        error: null,
+        groups: null,
+    };
 
-    getInitialState() {
-        return {
-            error: null,
-            groups: null,
-        };
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
         this.context.getJoinedGroups().then((result) => {
             this.setState({groups: result.groups || [], error: null});
         }, (err) => {
             console.error(err);
             this.setState({groups: null, error: err});
         });
-    },
+    }
 
     render() {
         let text = "";
@@ -70,5 +63,5 @@ export default createReactClass({
                 </div>
             </div>
         );
-    },
-});
+    }
+}

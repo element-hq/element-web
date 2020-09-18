@@ -17,7 +17,6 @@ limitations under the License.
 
 import React, {createRef} from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import { AllHtmlEntities } from 'html-entities';
 import {linkifyElement} from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -27,24 +26,21 @@ import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
 import { _t } from "../../../languageHandler";
 
-export default createReactClass({
-    displayName: 'LinkPreviewWidget',
-
-    propTypes: {
+export default class LinkPreviewWidget extends React.Component {
+    static propTypes = {
         link: PropTypes.string.isRequired, // the URL being previewed
         mxEvent: PropTypes.object.isRequired, // the Event associated with the preview
         onCancelClick: PropTypes.func, // called when the preview's cancel ('hide') button is clicked
         onHeightChanged: PropTypes.func, // called when the preview's contents has loaded
-    },
+    };
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+
+        this.state = {
             preview: null,
         };
-    },
 
-    // TODO: [REACT-WARNING] Replace component with real class, use constructor for refs
-    UNSAFE_componentWillMount: function() {
         this.unmounted = false;
         MatrixClientPeg.get().getUrlPreview(this.props.link, this.props.mxEvent.getTs()).then((res)=>{
             if (this.unmounted) {
@@ -59,25 +55,25 @@ export default createReactClass({
         });
 
         this._description = createRef();
-    },
+    }
 
-    componentDidMount: function() {
+    componentDidMount() {
         if (this._description.current) {
             linkifyElement(this._description.current);
         }
-    },
+    }
 
-    componentDidUpdate: function() {
+    componentDidUpdate() {
         if (this._description.current) {
             linkifyElement(this._description.current);
         }
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this.unmounted = true;
-    },
+    }
 
-    onImageClick: function(ev) {
+    onImageClick = ev => {
         const p = this.state.preview;
         if (ev.button != 0 || ev.metaKey) return;
         ev.preventDefault();
@@ -98,9 +94,9 @@ export default createReactClass({
         };
 
         Modal.createDialog(ImageView, params, "mx_Dialog_lightbox");
-    },
+    };
 
-    render: function() {
+    render() {
         const p = this.state.preview;
         if (!p || Object.keys(p).length === 0) {
             return <div />;
@@ -149,5 +145,5 @@ export default createReactClass({
                 </AccessibleButton>
             </div>
         );
-    },
-});
+    }
+}

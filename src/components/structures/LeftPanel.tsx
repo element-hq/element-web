@@ -52,7 +52,7 @@ interface IState {
 // List of CSS classes which should be included in keyboard navigation within the room list
 const cssClasses = [
     "mx_RoomSearch_input",
-    "mx_RoomSearch_icon", // minimized <RoomSearch />
+    "mx_RoomSearch_minimizedHandle", // minimized <RoomSearch />
     "mx_RoomSublist_headerText",
     "mx_RoomTile",
     "mx_RoomSublist_showNButton",
@@ -377,7 +377,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
     public render(): React.ReactNode {
         const tagPanel = !this.state.showTagPanel ? null : (
             <div className="mx_LeftPanel_tagPanelContainer">
-                <TagPanel/>
+                <TagPanel />
                 {SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null}
             </div>
         );

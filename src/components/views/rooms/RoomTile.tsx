@@ -27,11 +27,11 @@ import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
-import { ChevronFace, ContextMenuTooltipButton, MenuItemRadio } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore, ROOM_PREVIEW_CHANGED } from "../../../stores/room-list/MessagePreviewStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE, } from "../../../RoomNotifs";
+import { ALL_MESSAGES, ALL_MESSAGES_LOUD, MENTIONS_ONLY, MUTE } from "../../../RoomNotifs";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import NotificationBadge from "./NotificationBadge";
 import { Volume } from "../../../RoomNotifsTypes";
@@ -47,8 +47,11 @@ import { PROPERTY_UPDATED } from "../../../stores/local-echo/GenericEchoChamber"
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
     IconizedContextMenuOption,
-    IconizedContextMenuOptionList, IconizedContextMenuRadio
+    IconizedContextMenuOptionList,
+    IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
+import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/CommunityPrototypeStore";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 
 interface IProps {
     room: Room;
@@ -101,6 +104,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
         this.roomProps = EchoChamber.forRoom(this.props.room);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        CommunityPrototypeStore.instance.on(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     private onNotificationUpdate = () => {
@@ -140,6 +144,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         defaultDispatcher.unregister(this.dispatcherRef);
         MessagePreviewStore.instance.off(ROOM_PREVIEW_CHANGED, this.onRoomPreviewChanged);
         this.notificationState.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        CommunityPrototypeStore.instance.off(UPDATE_EVENT, this.onCommunityUpdate);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -148,6 +153,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 this.scrollIntoView();
             });
         }
+    };
+
+    private onCommunityUpdate = (roomId: string) => {
+        if (roomId !== this.props.room.roomId) return;
+        this.forceUpdate(); // we don't have anything to actually update
     };
 
     private onRoomPreviewChanged = (room: Room) => {
@@ -239,7 +249,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 removeTag,
                 addTag,
                 undefined,
-                0
+                0,
             ));
         } else {
             console.warn(`Unexpected tag ${tagId} applied to ${this.props.room.room_id}`);
@@ -461,11 +471,21 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             'mx_RoomTile_minimized': this.props.isMinimized,
         });
 
+        let roomProfile: IRoomProfile = {displayName: null, avatarMxc: null};
+        if (this.props.tag === DefaultTagID.Invite) {
+            roomProfile = CommunityPrototypeStore.instance.getInviteProfile(this.props.room.roomId);
+        }
+
+        let name = roomProfile.displayName || this.props.room.name;
+        if (typeof name !== 'string') name = '';
+        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
+
         const roomAvatar = <DecoratedRoomAvatar
             room={this.props.room}
             avatarSize={32}
             tag={this.props.tag}
             displayBadge={this.props.isMinimized}
+            oobData={({avatarUrl: roomProfile.avatarMxc})}
         />;
 
         let badge: React.ReactNode;
@@ -481,10 +501,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 </div>
             );
         }
-
-        let name = this.props.room.name;
-        if (typeof name !== 'string') name = '';
-        name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
         let messagePreview = null;
         if (this.showMessagePreview && this.state.messagePreview) {

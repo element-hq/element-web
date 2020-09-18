@@ -43,11 +43,11 @@ import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
 import {
     showToast as showSetPasswordToast,
-    hideToast as hideSetPasswordToast
+    hideToast as hideSetPasswordToast,
 } from "../../toasts/SetPasswordToast";
 import {
     showToast as showServerLimitToast,
-    hideToast as hideServerLimitToast
+    hideToast as hideServerLimitToast,
 } from "../../toasts/ServerLimitToast";
 import { Action } from "../../dispatcher/actions";
 import LeftPanel from "./LeftPanel";
@@ -56,6 +56,7 @@ import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPay
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
 import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
+import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -76,12 +77,12 @@ interface IProps {
     hideToSRUsers: boolean;
     resizeNotifier: ResizeNotifier;
     middleDisabled: boolean;
-    initialEventPixelOffset: number;
     leftDisabled: boolean;
     rightDisabled: boolean;
+    // eslint-disable-next-line camelcase
     page_type: string;
     autoJoin: boolean;
-    thirdPartyInvite?: object;
+    threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     currentRoomId: string;
     ConferenceHandler?: object;
@@ -98,7 +99,9 @@ interface IProps {
 }
 
 interface IUsageLimit {
+    // eslint-disable-next-line camelcase
     limit_type: "monthly_active_user" | string;
+    // eslint-disable-next-line camelcase
     admin_contact?: string;
 }
 
@@ -254,6 +257,12 @@ class LoggedInView extends React.Component<IProps, IState> {
                 window.localStorage.setItem("mx_lhs_size", '' + size);
                 this.props.resizeNotifier.notifyLeftHandleResized();
             },
+            onResizeStart: () => {
+                this.props.resizeNotifier.startResizing();
+            },
+            onResizeStop: () => {
+                this.props.resizeNotifier.stopResizing();
+            },
         };
         const resizer = new Resizer(
             this._resizeContainer.current,
@@ -316,10 +325,10 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    _calculateServerLimitToast(syncErrorData: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
-        const error = syncErrorData && syncErrorData.error && syncErrorData.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
+    _calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
+        const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
-            usageLimitEventContent = syncErrorData.error.data;
+            usageLimitEventContent = syncError.error.data;
         }
 
         if (usageLimitEventContent) {
@@ -620,18 +629,17 @@ class LoggedInView extends React.Component<IProps, IState> {
         switch (this.props.page_type) {
             case PageTypes.RoomView:
                 pageElement = <RoomView
-                        ref={this._roomView}
-                        autoJoin={this.props.autoJoin}
-                        onRegistered={this.props.onRegistered}
-                        thirdPartyInvite={this.props.thirdPartyInvite}
-                        oobData={this.props.roomOobData}
-                        viaServers={this.props.viaServers}
-                        eventPixelOffset={this.props.initialEventPixelOffset}
-                        key={this.props.currentRoomId || 'roomview'}
-                        disabled={this.props.middleDisabled}
-                        ConferenceHandler={this.props.ConferenceHandler}
-                        resizeNotifier={this.props.resizeNotifier}
-                    />;
+                    ref={this._roomView}
+                    autoJoin={this.props.autoJoin}
+                    onRegistered={this.props.onRegistered}
+                    threepidInvite={this.props.threepidInvite}
+                    oobData={this.props.roomOobData}
+                    viaServers={this.props.viaServers}
+                    key={this.props.currentRoomId || 'roomview'}
+                    disabled={this.props.middleDisabled}
+                    ConferenceHandler={this.props.ConferenceHandler}
+                    resizeNotifier={this.props.resizeNotifier}
+                />;
                 break;
 
             case PageTypes.MyGroups:
@@ -647,12 +655,13 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.UserView:
-                pageElement = <UserView userId={this.props.currentUserId} />;
+                pageElement = <UserView userId={this.props.currentUserId} resizeNotifier={this.props.resizeNotifier} />;
                 break;
             case PageTypes.GroupView:
                 pageElement = <GroupView
                     groupId={this.props.currentGroupId}
                     isNew={this.props.currentGroupIsNew}
+                    resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;
         }

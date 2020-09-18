@@ -36,6 +36,7 @@ import EventTilePreview from '../../../elements/EventTilePreview';
 import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import classNames from 'classnames';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
+import {UIFeature} from "../../../../../settings/UIFeature";
 
 interface IProps {
 }
@@ -170,7 +171,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             "baseFontSize",
             null,
             SettingLevel.DEVICE,
-            parseInt(value, 10) - FontWatcher.SIZE_DIFF
+            parseInt(value, 10) - FontWatcher.SIZE_DIFF,
         );
 
         return {valid: true, feedback: _t('Use between %(min)s pt and %(max)s pt', {min, max})};
@@ -294,7 +295,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     />
                 </div>
                 {customThemeForm}
-           </div>
+            </div>
         );
     }
 
@@ -386,6 +387,8 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     };
 
     private renderAdvancedSection() {
+        if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
+
         const brand = SdkConfig.get().brand;
         const toggle = <div
             className="mx_AppearanceUserSettingsTab_AdvancedToggle"

@@ -17,16 +17,17 @@ limitations under the License.
 */
 
 import React from 'react';
-import createReactClass from 'create-react-class';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher/dispatcher';
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import CallHandler from "../../../CallHandler";
+import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import BaseCard from "../right_panel/BaseCard";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -36,29 +37,18 @@ const SHOW_MORE_INCREMENT = 100;
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
 
-export default createReactClass({
-    displayName: 'MemberList',
+export default class MemberList extends React.Component {
+    constructor(props) {
+        super(props);
 
-    getInitialState: function() {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             // show an empty list
-            return this._getMembersState([]);
+            this.state = this._getMembersState([]);
         } else {
-            return this._getMembersState(this.roomMembers());
+            this.state = this._getMembersState(this.roomMembers());
         }
-    },
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount: function() {
-        this._mounted = true;
-        const cli = MatrixClientPeg.get();
-        if (cli.hasLazyLoadMembersEnabled()) {
-            this._showMembersAccordingToMembershipWithLL();
-            cli.on("Room.myMembership", this.onMyMembership);
-        } else {
-            this._listenForMembersChanges();
-        }
         cli.on("Room", this.onRoom); // invites & joining after peek
         const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
         const hsUrl = MatrixClientPeg.get().baseUrl;
@@ -66,9 +56,21 @@ export default createReactClass({
         if (enablePresenceByHsUrl && enablePresenceByHsUrl[hsUrl] !== undefined) {
             this._showPresence = enablePresenceByHsUrl[hsUrl];
         }
-    },
+    }
 
-    _listenForMembersChanges: function() {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
+        const cli = MatrixClientPeg.get();
+        this._mounted = true;
+        if (cli.hasLazyLoadMembersEnabled()) {
+            this._showMembersAccordingToMembershipWithLL();
+            cli.on("Room.myMembership", this.onMyMembership);
+        } else {
+            this._listenForMembersChanges();
+        }
+    }
+
+    _listenForMembersChanges() {
         const cli = MatrixClientPeg.get();
         cli.on("RoomState.members", this.onRoomStateMember);
         cli.on("RoomMember.name", this.onRoomMemberName);
@@ -80,9 +82,9 @@ export default createReactClass({
         cli.on("User.presence", this.onUserPresenceChange);
         cli.on("User.currentlyActive", this.onUserPresenceChange);
         // cli.on("Room.timeline", this.onRoomTimeline);
-    },
+    }
 
-    componentWillUnmount: function() {
+    componentWillUnmount() {
         this._mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {
@@ -98,14 +100,14 @@ export default createReactClass({
 
         // cancel any pending calls to the rate_limited_funcs
         this._updateList.cancelPendingCall();
-    },
+    }
 
     /**
      * If lazy loading is enabled, either:
      * show a spinner and load the members if the user is joined,
      * or show the members available so far if the user is invited
      */
-    _showMembersAccordingToMembershipWithLL: async function() {
+    async _showMembersAccordingToMembershipWithLL() {
         const cli = MatrixClientPeg.get();
         if (cli.hasLazyLoadMembersEnabled()) {
             const cli = MatrixClientPeg.get();
@@ -125,9 +127,9 @@ export default createReactClass({
                 this.setState(this._getMembersState(this.roomMembers()));
             }
         }
-    },
+    }
 
-    _getMembersState: function(members) {
+    _getMembersState(members) {
         // set the state after determining _showPresence to make sure it's
         // taken into account while rerendering
         return {
@@ -142,9 +144,9 @@ export default createReactClass({
             truncateAtInvited: INITIAL_LOAD_NUM_INVITED,
             searchQuery: "",
         };
-    },
+    }
 
-    onUserPresenceChange(event, user) {
+    onUserPresenceChange = (event, user) => {
         // Attach a SINGLE listener for global presence changes then locate the
         // member tile and re-render it. This is more efficient than every tile
         // ever attaching their own listener.
@@ -153,9 +155,9 @@ export default createReactClass({
         if (tile) {
             this._updateList(); // reorder the membership list
         }
-    },
+    };
 
-    onRoom: function(room) {
+    onRoom = room => {
         if (room.roomId !== this.props.roomId) {
             return;
         }
@@ -163,40 +165,40 @@ export default createReactClass({
         // we need to wait till the room is fully populated with state
         // before refreshing the member list else we get a stale list.
         this._showMembersAccordingToMembershipWithLL();
-    },
+    };
 
-    onMyMembership: function(room, membership, oldMembership) {
+    onMyMembership = (room, membership, oldMembership) => {
         if (room.roomId === this.props.roomId && membership === "join") {
             this._showMembersAccordingToMembershipWithLL();
         }
-    },
+    };
 
-    onRoomStateMember: function(ev, state, member) {
+    onRoomStateMember = (ev, state, member) => {
         if (member.roomId !== this.props.roomId) {
             return;
         }
         this._updateList();
-    },
+    };
 
-    onRoomMemberName: function(ev, member) {
+    onRoomMemberName = (ev, member) => {
         if (member.roomId !== this.props.roomId) {
             return;
         }
         this._updateList();
-    },
+    };
 
-    onRoomStateEvent: function(event, state) {
+    onRoomStateEvent = (event, state) => {
         if (event.getRoomId() === this.props.roomId &&
             event.getType() === "m.room.third_party_invite") {
             this._updateList();
         }
-    },
+    };
 
-    _updateList: rate_limited_func(function() {
+    _updateList = rate_limited_func(() => {
         this._updateListNow();
-    }, 500),
+    }, 500);
 
-    _updateListNow: function() {
+    _updateListNow() {
         // console.log("Updating memberlist");
         const newState = {
             loading: false,
@@ -205,9 +207,9 @@ export default createReactClass({
         newState.filteredJoinedMembers = this._filterMembers(newState.members, 'join', this.state.searchQuery);
         newState.filteredInvitedMembers = this._filterMembers(newState.members, 'invite', this.state.searchQuery);
         this.setState(newState);
-    },
+    }
 
-    getMembersWithUser: function() {
+    getMembersWithUser() {
         if (!this.props.roomId) return [];
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(this.props.roomId);
@@ -228,9 +230,9 @@ export default createReactClass({
         });
 
         return allMembers;
-    },
+    }
 
-    roomMembers: function() {
+    roomMembers() {
         const ConferenceHandler = CallHandler.getConferenceHandler();
 
         const allMembers = this.getMembersWithUser();
@@ -244,17 +246,17 @@ export default createReactClass({
         });
         filteredAndSortedMembers.sort(this.memberSort);
         return filteredAndSortedMembers;
-    },
+    }
 
-    _createOverflowTileJoined: function(overflowCount, totalCount) {
+    _createOverflowTileJoined = (overflowCount, totalCount) => {
         return this._createOverflowTile(overflowCount, totalCount, this._showMoreJoinedMemberList);
-    },
+    };
 
-    _createOverflowTileInvited: function(overflowCount, totalCount) {
+    _createOverflowTileInvited = (overflowCount, totalCount) => {
         return this._createOverflowTile(overflowCount, totalCount, this._showMoreInvitedMemberList);
-    },
+    };
 
-    _createOverflowTile: function(overflowCount, totalCount, onClick) {
+    _createOverflowTile = (overflowCount, totalCount, onClick) => {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const EntityTile = sdk.getComponent("rooms.EntityTile");
         const BaseAvatar = sdk.getComponent("avatars.BaseAvatar");
@@ -265,33 +267,33 @@ export default createReactClass({
             } name={text} presenceState="online" suppressOnHover={true}
             onClick={onClick} />
         );
-    },
+    };
 
-    _showMoreJoinedMemberList: function() {
+    _showMoreJoinedMemberList = () => {
         this.setState({
             truncateAtJoined: this.state.truncateAtJoined + SHOW_MORE_INCREMENT,
         });
-    },
+    };
 
-    _showMoreInvitedMemberList: function() {
+    _showMoreInvitedMemberList = () => {
         this.setState({
             truncateAtInvited: this.state.truncateAtInvited + SHOW_MORE_INCREMENT,
         });
-    },
+    };
 
-    memberString: function(member) {
+    memberString(member) {
         if (!member) {
             return "(null)";
         } else {
             const u = member.user;
             return "(" + member.name + ", " + member.powerLevel + ", " + (u ? u.lastActiveAgo : "<null>") + ", " + (u ? u.getLastActiveTs() : "<null>") + ", " + (u ? u.currentlyActive : "<null>") + ", " + (u ? u.presence : "<null>") + ")";
         }
-    },
+    }
 
     // returns negative if a comes before b,
     // returns 0 if a and b are equivalent in ordering
     // returns positive if a comes after b.
-    memberSort: function(memberA, memberB) {
+    memberSort = (memberA, memberB) => {
         // order by presence, with "active now" first.
         // ...and then by power level
         // ...and then by last active
@@ -348,24 +350,24 @@ export default createReactClass({
             ignorePunctuation: true,
             sensitivity: "base",
         });
-    },
+    };
 
-    onSearchQueryChanged: function(searchQuery) {
+    onSearchQueryChanged = searchQuery => {
         this.setState({
             searchQuery,
             filteredJoinedMembers: this._filterMembers(this.state.members, 'join', searchQuery),
             filteredInvitedMembers: this._filterMembers(this.state.members, 'invite', searchQuery),
         });
-    },
+    };
 
-    _onPending3pidInviteClick: function(inviteEvent) {
+    _onPending3pidInviteClick = inviteEvent => {
         dis.dispatch({
             action: 'view_3pid_invite',
             event: inviteEvent,
         });
-    },
+    };
 
-    _filterMembers: function(members, membership, query) {
+    _filterMembers(members, membership, query) {
         return members.filter((m) => {
             if (query) {
                 query = query.toLowerCase();
@@ -379,9 +381,9 @@ export default createReactClass({
 
             return m.membership === membership;
         });
-    },
+    }
 
-    _getPending3PidInvites: function() {
+    _getPending3PidInvites() {
         // include 3pid invites (m.room.third_party_invite) state events.
         // The HS may have already converted these into m.room.member invites so
         // we shouldn't add them if the 3pid invite state key (token) is in the
@@ -399,9 +401,9 @@ export default createReactClass({
                 return true;
             });
         }
-    },
+    }
 
-    _makeMemberTiles: function(members) {
+    _makeMemberTiles(members) {
         const MemberTile = sdk.getComponent("rooms.MemberTile");
         const EntityTile = sdk.getComponent("rooms.EntityTile");
 
@@ -415,33 +417,35 @@ export default createReactClass({
                                    onClick={() => this._onPending3pidInviteClick(m)} />;
             }
         });
-    },
+    }
 
-    _getChildrenJoined: function(start, end) {
-        return this._makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
-    },
+    _getChildrenJoined = (start, end) => this._makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
 
-    _getChildCountJoined: function() {
-        return this.state.filteredJoinedMembers.length;
-    },
+    _getChildCountJoined = () => this.state.filteredJoinedMembers.length;
 
-    _getChildrenInvited: function(start, end) {
+    _getChildrenInvited = (start, end) => {
         let targets = this.state.filteredInvitedMembers;
         if (end > this.state.filteredInvitedMembers.length) {
             targets = targets.concat(this._getPending3PidInvites());
         }
 
         return this._makeMemberTiles(targets.slice(start, end));
-    },
+    };
 
-    _getChildCountInvited: function() {
+    _getChildCountInvited = () => {
         return this.state.filteredInvitedMembers.length + (this._getPending3PidInvites() || []).length;
-    },
+    }
 
-    render: function() {
+    render() {
         if (this.state.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <div className="mx_MemberList"><Spinner /></div>;
+            return <BaseCard
+                className="mx_MemberList"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
+                <Spinner />
+            </BaseCard>;
         }
 
         const SearchBox = sdk.getComponent('structures.SearchBox');
@@ -464,10 +468,16 @@ export default createReactClass({
                 }
             }
 
+            let inviteButtonText = _t("Invite to this room");
+            const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
+            if (chat && chat.roomId === this.props.roomId) {
+                inviteButtonText = _t("Invite to this community");
+            }
+
             const AccessibleButton = sdk.getComponent("elements.AccessibleButton");
             inviteButton =
                 <AccessibleButton className="mx_MemberList_invite" onClick={this.onInviteButtonClick} disabled={!canInvite}>
-                    <span>{ _t('Invite to this room') }</span>
+                    <span>{ inviteButtonText }</span>
                 </AccessibleButton>;
         }
 
@@ -482,28 +492,32 @@ export default createReactClass({
                 />;
         }
 
-        return (
-            <div className="mx_MemberList" role="tabpanel">
-                { inviteButton }
-                <AutoHideScrollbar>
-                    <div className="mx_MemberList_wrapper">
-                        <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
-                            createOverflowElement={this._createOverflowTileJoined}
-                            getChildren={this._getChildrenJoined}
-                            getChildCount={this._getChildCountJoined} />
-                        { invitedHeader }
-                        { invitedSection }
-                    </div>
-                </AutoHideScrollbar>
-
-                <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                           placeholder={ _t('Filter room members') }
-                           onSearch={ this.onSearchQueryChanged } />
-            </div>
+        const footer = (
+            <SearchBox
+                className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
+                placeholder={ _t('Filter room members') }
+                onSearch={ this.onSearchQueryChanged } />
         );
-    },
 
-    onInviteButtonClick: function() {
+        return <BaseCard
+            className="mx_MemberList"
+            header={inviteButton}
+            footer={footer}
+            onClose={this.props.onClose}
+            previousPhase={RightPanelPhases.RoomSummary}
+        >
+            <div className="mx_MemberList_wrapper">
+                <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
+                               createOverflowElement={this._createOverflowTileJoined}
+                               getChildren={this._getChildrenJoined}
+                               getChildCount={this._getChildCountJoined} />
+                { invitedHeader }
+                { invitedSection }
+            </div>
+        </BaseCard>;
+    }
+
+    onInviteButtonClick = () => {
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({action: 'require_registration'});
             return;
@@ -514,5 +528,5 @@ export default createReactClass({
             action: 'view_invite',
             roomId: this.props.roomId,
         });
-    },
-});
+    };
+}
