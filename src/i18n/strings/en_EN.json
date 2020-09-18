@@ -2057,6 +2057,8 @@
     "Create a Group Chat": "Create a Group Chat",
     "Explore rooms": "Explore rooms",
     "Failed to reject invitation": "Failed to reject invitation",
+    "Cannot create rooms in this community": "Cannot create rooms in this community",
+    "You do not have permission to create rooms in this community.": "You do not have permission to create rooms in this community.",
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
     "Failed to forget room %(errCode)s": "Failed to forget room %(errCode)s",

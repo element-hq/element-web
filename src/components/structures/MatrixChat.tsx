@@ -80,6 +80,8 @@ import { leaveRoomBehaviour } from "../../utils/membership";
 import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import {UIFeature} from "../../settings/UIFeature";
+import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
+import GroupStore from "../../stores/GroupStore";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -1016,6 +1018,18 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async createRoom(defaultPublic = false) {
+        const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
+        if (communityId) {
+            // double check the user will have permission to associate this room with the community
+            if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
+                Modal.createTrackedDialog('Pre-failure to create room', '', ErrorDialog, {
+                    title: _t("Cannot create rooms in this community"),
+                    description: _t("You do not have permission to create rooms in this community."),
+                });
+                return;
+            }
+        }
+
         const CreateRoomDialog = sdk.getComponent('dialogs.CreateRoomDialog');
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, { defaultPublic });
 
