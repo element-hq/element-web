@@ -2490,5 +2490,14 @@
     "Secret storage:": "Almacenaxe segreda:",
     "ready": "lista",
     "not ready": "non lista",
-    "Secure Backup": "Copia Segura"
+    "Secure Backup": "Copia Segura",
+    "End Call": "Finalizar chamada",
+    "Remove the group call from the room?": "Eliminar a chamada en grupo da sala?",
+    "You don't have permission to remove the call from the room": "Non tes permiso para eliminar a chamada da sala",
+    "Safeguard against losing access to encrypted messages & data": "Protéxete de perder o acceso a mensaxes e datos cifrados",
+    "not found in storage": "non atopado no almacenaxe",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Inicia unha conversa con alguén usando o seu nome ou nome de usuaria (como <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Esto non as convidará a %(communityName)s. Para convidar alguén a %(communityName)s, preme <a>aquí</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
+    "Unable to set up keys": "Non se puideron configurar as chaves"
 }
