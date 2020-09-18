@@ -2371,5 +2371,18 @@
     "Toggle this dialog": "切换此对话框",
     "End": "End",
     "The server is not configured to indicate what the problem is (CORS).": "服务器没有配置为提示错误是什么（CORS）。",
-    "Activate selected button": "激活选择的按钮"
+    "Activate selected button": "激活选择的按钮",
+    "End Call": "结束通话",
+    "Remove the group call from the room?": "是否从聊天室中移除聊天室？",
+    "You don't have permission to remove the call from the room": "您没有权限从聊天室中移除此通话",
+    "Prepends ( ͡° ͜ʖ ͡°) to a plain-text message": "在纯文本消息之前附加 ( ͡° ͜ʖ ͡°)",
+    "Group call modified by %(senderName)s": "群通话被 %(senderName)s 修改",
+    "Group call started by %(senderName)s": "%(senderName)s 发起的群通话",
+    "Group call ended by %(senderName)s": "%(senderName)s 结束了群通话",
+    "Unknown App": "未知应用",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "社区 v2 原型。需要兼容的主服务器。高度实验性 - 谨慎使用。",
+    "Cross-signing is ready for use.": "交叉签名已可用。",
+    "Cross-signing is not set up.": "未设置交叉签名。",
+    "Backup version:": "备份版本：",
+    "Algorithm:": "算法："
 }
