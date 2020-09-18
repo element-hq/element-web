@@ -70,10 +70,10 @@ export default class RoomDirectory extends React.Component {
         this.scrollPanel = null;
         this.protocols = null;
 
-        this.setState({protocolsLoading: true});
+        this.state.protocolsLoading = true;
         if (!MatrixClientPeg.get()) {
             // We may not have a client yet when invoked from welcome page
-            this.setState({protocolsLoading: false});
+            this.state.protocolsLoading = false;
             return;
         }
 
@@ -102,14 +102,16 @@ export default class RoomDirectory extends React.Component {
             });
         } else {
             // We don't use the protocols in the communities v2 prototype experience
-            this.setState({protocolsLoading: false});
+            this.state.protocolsLoading = false;
 
             // Grab the profile info async
             FlairStore.getGroupProfileCached(MatrixClientPeg.get(), this.state.selectedCommunityId).then(profile => {
                 this.setState({communityName: profile.name});
             });
         }
+    }
 
+    componentDidMount() {
         this.refreshRoomList();
     }
 

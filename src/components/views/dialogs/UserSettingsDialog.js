@@ -107,12 +107,16 @@ export default class UserSettingsDialog extends React.Component {
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab />,
         ));
-        tabs.push(new Tab(
-            USER_VOICE_TAB,
-            _td("Voice & Video"),
-            "mx_UserSettingsDialog_voiceIcon",
-            <VoiceUserSettingsTab />,
-        ));
+
+        if (SettingsStore.getValue(UIFeature.Voip)) {
+            tabs.push(new Tab(
+                USER_VOICE_TAB,
+                _td("Voice & Video"),
+                "mx_UserSettingsDialog_voiceIcon",
+                <VoiceUserSettingsTab />,
+            ));
+        }
+
         tabs.push(new Tab(
             USER_SECURITY_TAB,
             _td("Security & Privacy"),

@@ -112,6 +112,7 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
             body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
 
+            body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
             const sessionBackupKeyFromCache = await client._crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));

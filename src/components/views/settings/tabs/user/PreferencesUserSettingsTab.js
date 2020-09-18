@@ -49,10 +49,10 @@ export default class PreferencesUserSettingsTab extends React.Component {
         'showAvatarChanges',
         'showDisplaynameChanges',
         'showImages',
+        'Pill.shouldShowPillAvatar',
     ];
 
-    static ADVANCED_SETTINGS = [
-        'Pill.shouldShowPillAvatar',
+    static GENERAL_SETTINGS = [
         'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
         // Start automatically after startup (electron-only)
@@ -188,8 +188,8 @@ export default class PreferencesUserSettingsTab extends React.Component {
                 </div>
 
                 <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{_t("Advanced")}</span>
-                    {this._renderGroup(PreferencesUserSettingsTab.ADVANCED_SETTINGS)}
+                    <span className="mx_SettingsTab_subheading">{_t("General")}</span>
+                    {this._renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS)}
                     {minimizeToTrayOption}
                     {autoHideMenuOption}
                     {autoLaunchOption}
