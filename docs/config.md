@@ -101,6 +101,15 @@ For a good example, see https://develop.element.io/config.json.
     Defaults to false (3rd party identity options are shown).
 1. `default_federate`: Default option for room federation when creating a room
     Defaults to true (room federation enabled).
+1. `desktopBuilds`: Used to alter promotional links to the desktop app. By default
+   the builds are considered available and accessible from https://element.io. This
+   config option is typically used in the context of encouraging encrypted message
+   search capabilities (Seshat). All the options listed below are required if this
+   option is specified.
+   1. `available`: When false, the desktop app will not be promoted to the user.
+   1. `logo`: An HTTP URL to the avatar for the desktop build. Should be 24x24, ideally
+      an SVG.
+   1. `url`: An HTTP URL for where to send the user to download the desktop build.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
@@ -181,3 +190,5 @@ Currently, the following UI feature flags are supported:
   useful if accounts are managed externally.
 * `UIFeature.deactivate` - Whether or not the deactivate account button is accessible. Typically
   useful if accounts are managed externally.
+* `UIFeature.advancedEncryption` - Whether or not advanced encryption options are shown to the
+  user.
