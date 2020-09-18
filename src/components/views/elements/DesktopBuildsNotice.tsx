@@ -41,7 +41,7 @@ export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
         logo = <img src={desktopBuilds.logo} />;
         switch (kind) {
             case WarningKind.Files:
-                text = _t("Use the <a>Desktop app</a> to see encrypted files", {}, {
+                text = _t("Use the <a>Desktop app</a> to see all encrypted files", {}, {
                     a: sub => (<a href={desktopBuilds.url} target="_blank" rel="noreferrer noopener">{sub}</a>),
                 });
                 break;
@@ -54,7 +54,7 @@ export default function DesktopBuildsNotice({isRoomEncrypted, kind}: IProps) {
     } else {
         switch (kind) {
             case WarningKind.Files:
-                text = _t("This version of %(brand)s does not support viewing encrypted files", {brand});
+                text = _t("This version of %(brand)s does not support viewing some encrypted files", {brand});
                 break;
             case WarningKind.Search:
                 text = _t("This version of %(brand)s does not support searching encrypted messages", {brand});
