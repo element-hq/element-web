@@ -135,6 +135,9 @@ export default class MessagePanel extends React.Component {
 
         // whether to use the irc layout
         useIRCLayout: PropTypes.bool,
+
+        // whether or not to show flair at all
+        enableFlair: PropTypes.bool,
     };
 
     // Force props to be loaded for useIRCLayout
@@ -579,7 +582,8 @@ export default class MessagePanel extends React.Component {
                 data-scroll-tokens={scrollToken}
             >
                 <TileErrorBoundary mxEvent={mxEv}>
-                    <EventTile mxEvent={mxEv}
+                    <EventTile
+                        mxEvent={mxEv}
                         continuation={continuation}
                         isRedacted={mxEv.isRedacted()}
                         replacingEventId={mxEv.replacingEventId()}
@@ -598,6 +602,7 @@ export default class MessagePanel extends React.Component {
                         getRelationsForEvent={this.props.getRelationsForEvent}
                         showReactions={this.props.showReactions}
                         useIRCLayout={this.props.useIRCLayout}
+                        enableFlair={this.props.enableFlair}
                     />
                 </TileErrorBoundary>
             </li>,
