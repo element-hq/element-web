@@ -81,7 +81,6 @@ import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityProt
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import {UIFeature} from "../../settings/UIFeature";
 import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
-import GroupStore from "../../stores/GroupStore";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
