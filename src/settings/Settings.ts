@@ -332,6 +332,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Enable Community Filter Panel'),
         default: true,
         invertedSettingName: 'TagPanel.disableTagPanel',
+        // We force the value to true because the invertedSettingName causes it to flip
+        controller: new UIFeatureController(UIFeature.Communities, true),
     },
     "theme": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
@@ -657,6 +659,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
     },
     [UIFeature.Flair]: {
+        supportedLevels: LEVELS_UI_FEATURE,
+        default: true,
+        // Disable Flair when Communities are disabled
+        controller: new UIFeatureController(UIFeature.Communities),
+    },
+    [UIFeature.Communities]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },

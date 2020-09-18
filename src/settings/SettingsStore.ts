@@ -257,6 +257,11 @@ export default class SettingsStore {
         return SETTINGS[settingName].isFeature;
     }
 
+    public static isEnabled(settingName: string) {
+        if (!SETTINGS[settingName]) return false;
+        return SETTINGS[settingName].controller ? !SETTINGS[settingName].controller.settingDisabled : true;
+    }
+
     /**
      * Gets the value of a setting. The room ID is optional if the setting is not to
      * be applied to any particular room, otherwise it should be supplied.
