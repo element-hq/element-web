@@ -271,11 +271,12 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
         if (creds.olmAccount) {
             console.log("got a dehydrated account");
+            const pickleKey = creds.pickleKey || "DEFAULT_KEY";
             opts.deviceToImport = {
                 olmDevice: {
-                    pickledAccount: creds.olmAccount.pickle(creds.pickleKey || "DEFAULT_KEY"),
+                    pickledAccount: creds.olmAccount.pickle(pickleKey),
                     sessions: [],
-                    pickleKey: creds.pickleKey || "DEFAULT_KEY",
+                    pickleKey: pickleKey,
                 },
                 userId: creds.userId,
                 deviceId: creds.deviceId,
@@ -293,7 +294,7 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
         // set dehydration key after cross-signing gets set up -- we wait until
         // cross-signing is set up because we want to cross-sign the dehydrated
-        // key
+        // device
         const origGetSecretStorageKey = opts.cryptoCallbacks.getSecretStorageKey
         opts.cryptoCallbacks.getSecretStorageKey = async (keyinfo, ssssItemName) => {
             const [name, key] = await origGetSecretStorageKey(keyinfo, ssssItemName);
@@ -302,6 +303,8 @@ class _MatrixClientPeg implements IMatrixClientPeg {
         }
 
         if (creds.rehydrationKey) {
+            // cache the key so that the SSSS prompt tries using it without
+            // prompting the user
             cacheDehydrationKey(creds.rehydrationKey, creds.rehydrationKeyInfo);
         }
 
