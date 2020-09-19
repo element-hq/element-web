@@ -26,6 +26,7 @@ import _linkifyString from 'linkifyjs/string';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
+import katex from 'katex';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";

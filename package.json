@@ -76,6 +76,7 @@
     "highlight.js": "^10.1.2",
     "html-entities": "^1.3.1",
     "is-ip": "^2.0.0",
+    "katex": "^0.12.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
