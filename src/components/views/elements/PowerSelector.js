@@ -57,11 +57,14 @@ export default class PowerSelector extends React.Component {
             customValue: this.props.value,
             selectValue: 0,
         };
-
-        this._initStateFromProps(this.props);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
+        this._initStateFromProps(this.props);
+    }
+
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillReceiveProps(newProps) {
         this._initStateFromProps(newProps);

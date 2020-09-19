@@ -94,7 +94,7 @@ export default class ScrollPanel extends React.Component {
 
         /* startAtBottom: if set to true, the view is assumed to start
          * scrolled to the bottom.
-         * XXX: It's likley this is unecessary and can be derived from
+         * XXX: It's likely this is unnecessary and can be derived from
          * stickyBottom, but I'm adding an extra parameter to ensure
          * behaviour stays the same for other uses of ScrollPanel.
          * If so, let's remove this parameter down the line.
@@ -138,6 +138,7 @@ export default class ScrollPanel extends React.Component {
         /* style: styles to add to the top-level div
          */
         style: PropTypes.object,
+
         /* resizeNotifier: ResizeNotifier to know when middle column has changed size
          */
         resizeNotifier: PropTypes.object,
@@ -162,7 +163,7 @@ export default class ScrollPanel extends React.Component {
         this._pendingFillRequests = {b: null, f: null};
 
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResized", this.onResize);
+            this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
         }
 
         this.resetScrollState();
@@ -192,11 +193,13 @@ export default class ScrollPanel extends React.Component {
         this.unmounted = true;
 
         if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.removeListener("middlePanelResized", this.onResize);
+            this.props.resizeNotifier.removeListener("middlePanelResizedNoisy", this.onResize);
         }
     }
 
     onScroll = ev => {
+        // skip scroll events caused by resizing
+        if (this.props.resizeNotifier && this.props.resizeNotifier.isResizing) return;
         debuglog("onScroll", this._getScrollNode().scrollTop);
         this._scrollTimeout.restart();
         this._saveScrollState();
@@ -206,6 +209,7 @@ export default class ScrollPanel extends React.Component {
     };
 
     onResize = () => {
+        debuglog("onResize");
         this.checkScroll();
         // update preventShrinkingState if present
         if (this.preventShrinkingState) {
@@ -235,7 +239,6 @@ export default class ScrollPanel extends React.Component {
         // when scrolled all the way down. E.g. Chrome 72 on debian.
         // so check difference <= 1;
         return Math.abs(sn.scrollHeight - (sn.scrollTop + sn.clientHeight)) <= 1;
-
     };
 
     // returns the vertical height in the given direction that can be removed from

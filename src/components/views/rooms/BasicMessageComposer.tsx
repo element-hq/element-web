@@ -207,7 +207,8 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         // If the user is entering a command, only consider them typing if it is one which sends a message into the room
         if (isTyping && this.props.model.parts[0].type === "command") {
             const {cmd} = parseCommandString(this.props.model.parts[0].text);
-            if (!CommandMap.has(cmd) || CommandMap.get(cmd).category !== CommandCategories.messages) {
+            const command = CommandMap.get(cmd);
+            if (!command || !command.isEnabled() || command.category !== CommandCategories.messages) {
                 isTyping = false;
             }
         }

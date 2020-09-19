@@ -1,0 +1,161 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomSummaryCard {
+    .mx_BaseCard_header {
+        text-align: center;
+        margin-top: 20px;
+
+        h2 {
+            font-weight: $font-semi-bold;
+            font-size: $font-18px;
+            margin: 12px 0 4px;
+        }
+
+        .mx_RoomSummaryCard_alias {
+            font-size: $font-13px;
+            color: $secondary-fg-color;
+        }
+
+        h2, .mx_RoomSummaryCard_alias {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mx_RoomSummaryCard_avatar {
+            display: inline-flex;
+
+            .mx_RoomSummaryCard_e2ee {
+                display: inline-block;
+                position: relative;
+                width: 54px;
+                height: 54px;
+                border-radius: 50%;
+                background-color: #737d8c;
+                margin-top: -3px; // alignment
+                margin-left: -10px; // overlap
+                border: 3px solid $dark-panel-bg-color;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 13px;
+                    left: 13px;
+                    height: 28px;
+                    width: 28px;
+                    mask-size: cover;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-image: url('$(res)/img/e2e/disabled.svg');
+                    background-color: #ffffff;
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_normal {
+                background-color: #424446;
+                &::before {
+                    mask-image: url('$(res)/img/e2e/normal.svg');
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_verified {
+                background-color: #0dbd8b;
+                &::before {
+                    mask-image: url('$(res)/img/e2e/verified.svg');
+                }
+            }
+
+            .mx_RoomSummaryCard_e2ee_warning {
+                background-color: #ff4b55;
+                &::before {
+                    mask-image: url('$(res)/img/e2e/warning.svg');
+                }
+            }
+        }
+    }
+
+    .mx_RoomSummaryCard_aboutGroup {
+        .mx_RoomSummaryCard_Button {
+            padding-left: 44px;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 10px;
+                height: 24px;
+                width: 24px;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: $icon-button-color;
+            }
+        }
+    }
+
+    .mx_RoomSummaryCard_appsGroup {
+        .mx_RoomSummaryCard_Button {
+            padding-left: 12px;
+            color: $tertiary-fg-color;
+
+            span {
+                color: $primary-fg-color;
+            }
+
+            img {
+                vertical-align: top;
+                margin-right: 12px;
+                border-radius: 4px;
+            }
+
+            &::before {
+                content: unset;
+            }
+        }
+
+        .mx_RoomSummaryCard_icon_app_pinned::after {
+            mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+            background-color: $accent-color;
+            transform: unset;
+        }
+    }
+
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        font-size: $font-13px;
+        font-weight: $font-semi-bold;
+    }
+}
+
+.mx_RoomSummaryCard_icon_people::before {
+    mask-image: url("$(res)/img/element-icons/room/members.svg");
+}
+
+.mx_RoomSummaryCard_icon_files::before {
+    mask-image: url('$(res)/img/element-icons/room/files.svg');
+}
+
+.mx_RoomSummaryCard_icon_share::before {
+    mask-image: url('$(res)/img/element-icons/room/share.svg');
+}
+
+.mx_RoomSummaryCard_icon_settings::before {
+    mask-image: url('$(res)/img/element-icons/settings.svg');
+}

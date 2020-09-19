@@ -34,7 +34,7 @@ export default class BugReportDialog extends React.Component {
             busy: false,
             err: null,
             issueUrl: "",
-            text: "",
+            text: props.initialText || "",
             progress: null,
             downloadBusy: false,
             downloadProgress: null,
@@ -255,4 +255,5 @@ export default class BugReportDialog extends React.Component {
 
 BugReportDialog.propTypes = {
     onFinished: PropTypes.func.isRequired,
+    initialText: PropTypes.string,
 };

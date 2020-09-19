@@ -1,5 +1,5 @@
 /*
-Copyright 2019 New Vector Ltd
+Copyright 2019, 2020 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_SettingsTab {
+    color: $muted-fg-color;
+}
+
 .mx_SettingsTab_warningText {
     color: $warning-color;
 }
@@ -22,6 +26,7 @@ limitations under the License.
     font-size: $font-20px;
     font-weight: 600;
     color: $primary-fg-color;
+    margin-bottom: 10px;
 }
 
 .mx_SettingsTab_heading:nth-child(n + 2) {

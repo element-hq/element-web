@@ -20,13 +20,14 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import dis from '../../../dispatcher/dispatcher';
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
 import CallHandler from "../../../CallHandler";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
+import BaseCard from "../right_panel/BaseCard";
+import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -438,7 +439,13 @@ export default class MemberList extends React.Component {
     render() {
         if (this.state.loading) {
             const Spinner = sdk.getComponent("elements.Spinner");
-            return <div className="mx_MemberList"><Spinner /></div>;
+            return <BaseCard
+                className="mx_MemberList"
+                onClose={this.props.onClose}
+                previousPhase={RightPanelPhases.RoomSummary}
+            >
+                <Spinner />
+            </BaseCard>;
         }
 
         const SearchBox = sdk.getComponent('structures.SearchBox');
@@ -485,25 +492,29 @@ export default class MemberList extends React.Component {
                 />;
         }
 
-        return (
-            <div className="mx_MemberList" role="tabpanel">
-                { inviteButton }
-                <AutoHideScrollbar>
-                    <div className="mx_MemberList_wrapper">
-                        <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
-                            createOverflowElement={this._createOverflowTileJoined}
-                            getChildren={this._getChildrenJoined}
-                            getChildCount={this._getChildCountJoined} />
-                        { invitedHeader }
-                        { invitedSection }
-                    </div>
-                </AutoHideScrollbar>
-
-                <SearchBox className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
-                           placeholder={ _t('Filter room members') }
-                           onSearch={ this.onSearchQueryChanged } />
-            </div>
+        const footer = (
+            <SearchBox
+                className="mx_MemberList_query mx_textinput_icon mx_textinput_search"
+                placeholder={ _t('Filter room members') }
+                onSearch={ this.onSearchQueryChanged } />
         );
+
+        return <BaseCard
+            className="mx_MemberList"
+            header={inviteButton}
+            footer={footer}
+            onClose={this.props.onClose}
+            previousPhase={RightPanelPhases.RoomSummary}
+        >
+            <div className="mx_MemberList_wrapper">
+                <TruncatedList className="mx_MemberList_section mx_MemberList_joined" truncateAt={this.state.truncateAtJoined}
+                               createOverflowElement={this._createOverflowTileJoined}
+                               getChildren={this._getChildrenJoined}
+                               getChildCount={this._getChildCountJoined} />
+                { invitedHeader }
+                { invitedSection }
+            </div>
+        </BaseCard>;
     }
 
     onInviteButtonClick = () => {

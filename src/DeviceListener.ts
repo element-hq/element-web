@@ -29,11 +29,10 @@ import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
-import { privateShouldBeEncrypted } from "./createRoom";
-import { isSecretStorageBeingAccessed, accessSecretStorage } from "./CrossSigningManager";
+import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
-
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -66,6 +65,7 @@ export default class DeviceListener {
         MatrixClientPeg.get().on('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
         MatrixClientPeg.get().on('accountData', this._onAccountData);
         MatrixClientPeg.get().on('sync', this._onSync);
+        MatrixClientPeg.get().on('RoomState.events', this._onRoomStateEvents);
         this.dispatcherRef = dis.register(this._onAction);
         this._recheck();
     }
@@ -79,6 +79,7 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener('crossSigning.keysChanged', this._onCrossSingingKeysChanged);
             MatrixClientPeg.get().removeListener('accountData', this._onAccountData);
             MatrixClientPeg.get().removeListener('sync', this._onSync);
+            MatrixClientPeg.get().removeListener('RoomState.events', this._onRoomStateEvents);
         }
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
@@ -169,6 +170,16 @@ export default class DeviceListener {
         if (state === 'PREPARED' && prevState === null) this._recheck();
     };
 
+    _onRoomStateEvents = (ev: MatrixEvent) => {
+        if (ev.getType() !== "m.room.encryption") {
+            return;
+        }
+
+        // If a room changes to encrypted, re-check as it may be our first
+        // encrypted room. This also catches encrypted room creation as well.
+        this._recheck();
+    };
+
     _onAction = ({ action }) => {
         if (action !== "on_logged_in") return;
         this._recheck();
@@ -189,9 +200,7 @@ export default class DeviceListener {
         // If we're in the middle of a secret storage operation, we're likely
         // modifying the state involved here, so don't add new toasts to setup.
         if (isSecretStorageBeingAccessed()) return false;
-        // In a default configuration, show the toasts. If the well-known config causes e2ee default to be false
-        // then do not show the toasts until user is in at least one encrypted room.
-        if (privateShouldBeEncrypted()) return true;
+        // Show setup toasts once the user is in at least one encrypted room.
         const cli = MatrixClientPeg.get();
         return cli && cli.getRooms().some(r => cli.isRoomEncrypted(r.roomId));
     }
@@ -207,8 +216,6 @@ export default class DeviceListener {
         // (we add a listener on sync to do once check after the initial sync is done)
         if (!cli.isInitialSyncComplete()) return;
 
-        // JRS: This will change again in the next PR which moves secret storage
-        // later in the process.
         const crossSigningReady = await cli.isCrossSigningReady();
         const secretStorageReady = await cli.isSecretStorageReady();
         const allSystemsReady = crossSigningReady && secretStorageReady;

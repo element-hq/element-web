@@ -184,7 +184,7 @@ export default class ChangePassword extends React.Component {
 
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
-            import('../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {
                 matrixClient: MatrixClientPeg.get(),
             },

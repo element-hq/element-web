@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
 import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
+import AccessSecretStorageDialog from './components/views/dialogs/security/AccessSecretStorageDialog';
+import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -87,8 +89,6 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
             return decodeRecoveryKey(recoveryKey);
         }
     };
-    const AccessSecretStorageDialog =
-        sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
         AccessSecretStorageDialog,
         /* props= */
@@ -142,7 +142,7 @@ const onSecretRequested = async function({
         return;
     }
     if (!deviceTrust || !deviceTrust.isVerified()) {
-        console.log(`CrossSigningManager: Ignoring request from untrusted device ${deviceId}`);
+        console.log(`Ignoring secret request from untrusted device ${deviceId}`);
         return;
     }
     if (
@@ -181,7 +181,6 @@ export const crossSigningCallbacks = {
 export async function promptForBackupPassphrase() {
     let key;
 
-    const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
     const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         showSummary: false, keyCallback: k => key = k,
     }, null, /* priority = */ false, /* static = */ true);
@@ -221,7 +220,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
             const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
-                import("./async-components/views/dialogs/secretstorage/CreateSecretStorageDialog"),
+                import("./async-components/views/dialogs/security/CreateSecretStorageDialog"),
                 {
                     forceReset,
                 },
@@ -250,7 +249,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                         'Cross-signing keys dialog', '', InteractiveAuthDialog,
                         {
                             title: _t("Setting up keys"),
-                            matrixClient: MatrixClientPeg.get(),
+                            matrixClient: cli,
                             makeRequest,
                         },
                     );

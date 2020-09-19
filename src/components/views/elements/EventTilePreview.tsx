@@ -21,6 +21,8 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import * as Avatar from '../../../Avatar';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTile from '../rooms/EventTile';
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 interface IProps {
     /**
@@ -121,7 +123,11 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
         });
 
         return <div className={className}>
-            <EventTile mxEvent={event} useIRCLayout={this.props.useIRCLayout} />
+            <EventTile
+                mxEvent={event}
+                useIRCLayout={this.props.useIRCLayout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
+            />
         </div>;
     }
 }

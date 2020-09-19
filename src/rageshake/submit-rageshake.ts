@@ -90,32 +90,32 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
             body.append('device_keys', keys.join(', '));
             body.append('cross_signing_key', client.getCrossSigningId());
 
-            body.append('device_keys', keys.join(', '));
-
             // add cross-signing status information
             const crossSigning = client._crypto._crossSigningInfo;
             const secretStorage = client._crypto._secretStorage;
 
+            body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
+            body.append("cross_signing_supported_by_hs",
+                String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
             body.append("cross_signing_key", crossSigning.getId());
-            body.append("cross_signing_pk_in_ssss",
+            body.append("cross_signing_pk_in_secret_storage",
                 String(!!(await crossSigning.isStoredInSecretStorage(secretStorage))));
-            body.append("ssss_key_in_account", String(!!(await secretStorage.hasKey())));
 
             const pkCache = client.getCrossSigningCacheCallbacks();
-            body.append("master_pk_cached",
+            body.append("cross_signing_master_pk_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("master"))));
-            body.append("self_signing_pk_cached",
+            body.append("cross_signing_self_signing_pk_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("self_signing"))));
-            body.append("user_signing_pk_cached",
+            body.append("cross_signing_user_signing_pk_cached",
                 String(!!(pkCache && await pkCache.getCrossSigningKeyCache("user_signing"))));
 
+            body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
+            body.append("secret_storage_key_in_account", String(!!(await secretStorage.hasKey())));
+
+            body.append("session_backup_key_in_secret_storage", String(!!(await client.isKeyBackupKeyStored())));
             const sessionBackupKeyFromCache = await client._crypto.getSessionBackupPrivateKey();
             body.append("session_backup_key_cached", String(!!sessionBackupKeyFromCache));
             body.append("session_backup_key_well_formed", String(sessionBackupKeyFromCache instanceof Uint8Array));
-            body.append("cross_signing_supported_by_hs",
-                String(await client.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing")));
-            body.append("cross_signing_ready", String(await client.isCrossSigningReady()));
-            body.append("secret_storage_ready", String(await client.isSecretStorageReady()));
         }
     }
 
