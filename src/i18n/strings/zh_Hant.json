@@ -2499,5 +2499,15 @@
     "You don't have permission to remove the call from the room": "您沒有從聊天室移除通話的權限",
     "Start a conversation with someone using their name or username (like <userId/>).": "使用某人的名字或使用者名稱（如 <userId/>）以與他們開始對話。",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "這不會邀請他們加入 %(communityName)s。要邀請某人加入 %(communityName)s，請點擊<a>這裡</a>",
-    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請他們。"
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "使用某人的名字、使用者名稱（如 <userId/>）或<a>分享此聊天室</a>來邀請他們。",
+    "Safeguard against losing access to encrypted messages & data": "防止遺失對加密訊息與資料的存取權",
+    "not found in storage": "在儲存空間中找不到",
+    "Widgets": "小工具",
+    "Edit widgets, bridges & bots": "編輯小工具、橋接與機器人",
+    "Add widgets, bridges & bots": "新增小工具、橋接與機器人",
+    "You can only pin 2 widgets at a time": "您僅能同時釘選兩個小工具",
+    "Minimize widget": "最小化小工具",
+    "Maximize widget": "最大化小工具",
+    "Your server requires encryption to be enabled in private rooms.": "您的伺服器需要在私人聊天室中啟用加密。",
+    "Unable to set up keys": "無法設定金鑰"
 }
