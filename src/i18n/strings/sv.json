@@ -2426,5 +2426,18 @@
     "Secure Backup": "Säker säkerhetskopiering",
     "End Call": "Avsluta samtal",
     "Remove the group call from the room?": "Ta bort gruppsamtalet från rummet?",
-    "You don't have permission to remove the call from the room": "Du har inte behörighet från att ta bort samtalet från rummet"
+    "You don't have permission to remove the call from the room": "Du har inte behörighet från att ta bort samtalet från rummet",
+    "Safeguard against losing access to encrypted messages & data": "Skydda mot att förlora åtkomst till krypterade meddelanden och data",
+    "not found in storage": "hittades inte i lagring",
+    "Widgets": "Widgets",
+    "Edit widgets, bridges & bots": "Redigera widgets, bryggor och bottar",
+    "Add widgets, bridges & bots": "Lägg till widgets, bryggor och bottar",
+    "You can only pin 2 widgets at a time": "Du kan bara fästa 2 widgets i taget",
+    "Minimize widget": "Minimera widget",
+    "Maximize widget": "Maximera widget",
+    "Your server requires encryption to be enabled in private rooms.": "Din server kräver att kryptering ska användas i privata rum.",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Starta en konversation med någon med deras namn eller användarnamn (som <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Detta kommer inte att bjuda in dem till %(communityName)s. För att bjuda in någon till %(communityName)s, klicka <a>här</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Bjud in någon med deras namn eller användarnamn (som <userId/>) eller <a>dela det här rummet</a>.",
+    "Unable to set up keys": "Kunde inte ställa in nycklar"
 }
