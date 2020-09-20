@@ -53,9 +53,9 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
             md = md.replace(reg, function(match, p1) {
                 const p1e = AllHtmlEntities.encode(p1);
                 if (d.display == true) {
-                    return `<div data-mx-maths="${p1e}"><pre>${p1e}</pre></div>`;
+                    return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
                 } else {
-                    return `<span data-mx-maths="${p1e}"><pre>${p1e}</pre></span>`;
+                    return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
                 }
             });
         });
