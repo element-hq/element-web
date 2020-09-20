@@ -18,6 +18,7 @@ limitations under the License.
 import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
+import { AllHtmlEntities } from 'html-entities';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -38,7 +39,27 @@ export function mdSerialize(model: EditorModel) {
 }
 
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
-    const md = mdSerialize(model);
+    var md = mdSerialize(model);
+
+    if (true) { // TODO: add katex setting
+        const mathDelimiters = [ // TODO: make customizable
+            { left: "\\$\\$\\$", right: "\\$\\$\\$", display: true },
+            { left: "\\$\\$", right: "\\$\\$", display: false }
+        ];
+
+        mathDelimiters.forEach(function (d) {
+            var reg = RegExp(d.left + "(.*?)" + d.right, "g");
+            md = md.replace(reg, function(match, p1) {
+                const p1e = AllHtmlEntities.encode(p1);
+                if (d.display == true) {
+                    return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
+                } else {
+                    return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
+                }
+            });
+        });
+    }
+
     const parser = new Markdown(md);
     if (!parser.isPlainText() || forceHTML) {
         return parser.toHTML();

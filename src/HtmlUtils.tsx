@@ -27,6 +27,7 @@ import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 import katex from 'katex';
+import { AllHtmlEntities } from 'html-entities';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
@@ -236,7 +237,8 @@ const sanitizeHtmlParams: sanitizeHtml.IOptions = {
     allowedAttributes: {
         // custom ones first:
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
-        span: ['data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
+        span: ['data-mx-maths', 'data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
+        div: ['data-mx-maths'],
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
         img: ['src', 'width', 'height', 'alt', 'title'],
         ol: ['start'],
@@ -409,6 +411,27 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
+            if (true) { // TODO: add katex setting
+                const mathDelimiters = [
+                    { left: "<div data-mx-maths=\"", right: "\">.*?</div>", display: true },
+                    { left: "<span data-mx-maths=\"", right: "\">.*?</span>", display: false }
+                ];
+
+                mathDelimiters.forEach(function (d) {
+                    var reg = RegExp(d.left + "(.*?)" + d.right, "g");
+
+                    safeBody = safeBody.replace(reg, function(match, p1) {
+                        return katex.renderToString(
+                            AllHtmlEntities.decode(p1),
+                            {
+                                throwOnError: false,
+                                displayMode: d.display,
+                                output: "mathml"
+                            })
+                    });
+                });
+        }
+
         }
     } finally {
         delete sanitizeParams.textFilter;
@@ -449,6 +472,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         'mx_EventTile_bigEmoji': emojiBody,
         'markdown-body': isHtmlMessage && !emojiBody,
     });
+
 
     return isDisplayedWithHtml ?
         <span
