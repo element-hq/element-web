@@ -28,6 +28,7 @@ import EMOJIBASE_REGEX from 'emojibase-regex';
 import url from 'url';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
+import SdkConfig from './SdkConfig';
 
 import {MatrixClientPeg} from './MatrixClientPeg';
 import {tryTransformPermalinkToLocalHref} from "./utils/permalinks/Permalinks";
@@ -49,6 +50,7 @@ const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
 
 // Regex pattern for whitespace characters
 const WHITESPACE_REGEX = new RegExp("\\s", "g");
+
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
@@ -411,7 +413,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         if (isHtmlMessage) {
             isDisplayedWithHtml = true;
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
-            if (true) { // TODO: add katex setting
+            if (SdkConfig.get()['latex_maths']) {
                 const mathDelimiters = [
                     { left: "<div data-mx-maths=\"", right: "\">.*?</div>", display: true },
                     { left: "<span data-mx-maths=\"", right: "\">.*?</span>", display: false }

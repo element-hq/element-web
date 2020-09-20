@@ -19,6 +19,7 @@ import Markdown from '../Markdown';
 import {makeGenericPermalink} from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
 import { AllHtmlEntities } from 'html-entities';
+import SdkConfig from '../SdkConfig';
 
 export function mdSerialize(model: EditorModel) {
     return model.parts.reduce((html, part) => {
@@ -41,7 +42,7 @@ export function mdSerialize(model: EditorModel) {
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
     var md = mdSerialize(model);
 
-    if (true) { // TODO: add katex setting
+    if (SdkConfig.get()['latex_maths']) {
         const mathDelimiters = [ // TODO: make customizable
             { left: "\\$\\$\\$", right: "\\$\\$\\$", display: true },
             { left: "\\$\\$", right: "\\$\\$", display: false }
