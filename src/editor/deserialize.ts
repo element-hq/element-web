@@ -130,6 +130,18 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             }
             break;
         }
+        case "DIV":
+        case "SPAN": {
+            // math nodes are translated back into delimited latex strings
+            if (n.hasAttribute("data-mx-maths")) {
+                const delim = (n.nodeName == "SPAN") ? "$$" : "$$$";
+                const tex = n.getAttribute("data-mx-maths");
+                return partCreator.plain(delim + tex + delim);
+            } else if (!checkDescendInto(n)) {
+                return partCreator.plain(n.textContent);
+            }
+            break;
+        }
         case "OL":
             state.listIndex.push((<HTMLOListElement>n).start || 1);
             /* falls through */

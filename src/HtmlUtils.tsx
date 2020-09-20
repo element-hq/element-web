@@ -534,7 +534,6 @@ export function checkBlockNode(node: Node) {
         case "H6":
         case "PRE":
         case "BLOCKQUOTE":
-        case "DIV":
         case "P":
         case "UL":
         case "OL":
@@ -547,6 +546,9 @@ export function checkBlockNode(node: Node) {
         case "TH":
         case "TD":
             return true;
+        case "DIV":
+            // don't treat math nodes as block nodes for deserializing
+            return !(node as HTMLElement).hasAttribute("data-mx-maths");
         default:
             return false;
     }
