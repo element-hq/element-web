@@ -1434,7 +1434,7 @@
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Durch die Änderung des Passworts werden derzeit alle Ende-zu-Ende-Verschlüsselungsschlüssel in allen Sitzungen zurückgesetzt, sodass der verschlüsselte Chat-Verlauf nicht mehr lesbar ist, es sei denn, du exportierst zuerst deine Raumschlüssel und importierst sie anschließend wieder. In Zukunft wird dies verbessert werden.",
     "Delete %(count)s sessions|other": "Lösche %(count)s Sitzungen",
     "Backup is not signed by any of your sessions": "Die Sicherung wurde von keiner deiner Sitzungen unterzeichnet",
-    "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Ihr Passwort wurde erfolgreich geändert. Sie erhalten keine Push-Benachrichtigungen zu anderen Sitzungen, bis Sie sich wieder bei diesen anmelden",
+    "Your password was successfully changed. You will not receive push notifications on other sessions until you log back in to them": "Dein Passwort wurde erfolgreich geändert. Du erhälst keine Push-Benachrichtigungen zu anderen Sitzungen, bis du dich wieder bei diesen anmeldst",
     "Notification sound": "Benachrichtigungston",
     "Set a new custom sound": "Setze einen neuen benutzerdefinierten Ton",
     "Browse": "Durchsuche",
@@ -2491,5 +2491,18 @@
     "Secure Backup": "Sicheres Backup",
     "End Call": "Anruf beenden",
     "Remove the group call from the room?": "Konferenzgespräch aus diesem Raum entfernen?",
-    "You don't have permission to remove the call from the room": "Du hast keine Berechtigung um den Konferenzanruf aus dem Raum zu entfernen"
+    "You don't have permission to remove the call from the room": "Du hast keine Berechtigung um den Konferenzanruf aus dem Raum zu entfernen",
+    "Safeguard against losing access to encrypted messages & data": "Schütze dich vor dem Verlust des Zugriffs auf verschlüsselte Nachrichten und Daten",
+    "not found in storage": "nicht im Speicher gefunden",
+    "Widgets": "Widgets",
+    "Edit widgets, bridges & bots": "Widgets, Bridges & Bots bearbeiten",
+    "Add widgets, bridges & bots": "Widgets, Bridges & Bots hinzufügen",
+    "You can only pin 2 widgets at a time": "Du kannst jeweils nur 2 Widgets anheften",
+    "Minimize widget": "Widget minimieren",
+    "Maximize widget": "Widget maximieren",
+    "Your server requires encryption to be enabled in private rooms.": "Für deinen Server muss die Verschlüsselung in privaten Räumen aktiviert sein.",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Starte ein Gespräch unter Verwendung des Namen oder Benutzernamens des Gegenübers (z. B. <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Das wird sie nicht zu %(communityName)s einladen. Um jemand zu %(communityName)s einzuladen, klicke <a>hier</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Lade jemand mittels seinem/ihrem Namen oder Benutzernamen (z.B. <userId/>) ein, oder <a>teile diesem Raum</a>.",
+    "Unable to set up keys": "Schlüssel können nicht eingerichtet werden"
 }
