@@ -6,7 +6,6 @@
   ],
   "feature-detects": [
     "test/css/animations",
-    "test/css/displaytable",
     "test/css/filters",
     "test/css/flexbox",
     "test/css/objectfit",
