@@ -44,12 +44,12 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
 
     if (SdkConfig.get()['latex_maths']) {
         const mathDelimiters = [ // TODO: make customizable
-            { left: "\\$\\$\\$", right: "\\$\\$\\$", display: true },
-            { left: "\\$\\$", right: "\\$\\$", display: false }
+            { pattern: "\\$\\$\\$(([^$]|\\\\\\$)*)\\$\\$\\$", display: true },
+            { pattern: "\\$\\$(([^$]|\\\\\\$)*)\\$\\$", display: false }
         ];
 
         mathDelimiters.forEach(function (d) {
-            var reg = RegExp(d.left + "(.*?)" + d.right, "g");
+            var reg = RegExp(d.pattern, "gm");
             md = md.replace(reg, function(match, p1) {
                 const p1e = AllHtmlEntities.encode(p1);
                 if (d.display == true) {

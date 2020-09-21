@@ -415,12 +415,12 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             safeBody = sanitizeHtml(formattedBody, sanitizeParams);
             if (SdkConfig.get()['latex_maths']) {
                 const mathDelimiters = [
-                    { left: "<div data-mx-maths=\"", right: "\">.*?</div>", display: true },
-                    { left: "<span data-mx-maths=\"", right: "\">.*?</span>", display: false }
+                    { pattern: "<div data-mx-maths=\"([^\"]*)\">(.|\\s)*?</div>", display: true },
+                    { pattern: "<span data-mx-maths=\"([^\"]*)\">(.|\\s)*?</span>", display: false }
                 ];
 
                 mathDelimiters.forEach(function (d) {
-                    var reg = RegExp(d.left + "(.*?)" + d.right, "g");
+                    var reg = RegExp(d.pattern, "gm");
 
                     safeBody = safeBody.replace(reg, function(match, p1) {
                         return katex.renderToString(
