@@ -8,6 +8,7 @@
             "base_url": "https://vector.im"
         }
     },
+    "kdp_hint": "KDPHINT",
     "disable_custom_urls": false,
     "disable_guests": false,
     "disable_login_language_selector": false,
