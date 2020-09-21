@@ -818,7 +818,7 @@
     "Share Room Message": "Teile Raumnachricht",
     "Link to selected message": "Link zur ausgewählten Nachricht",
     "COPY": "KOPIEREN",
-    "Share Message": "Teile Nachricht",
+    "Share Message": "Nachricht teilen",
     "No Audio Outputs detected": "Keine Ton-Ausgabe erkannt",
     "Audio Output": "Ton-Ausgabe",
     "In encrypted rooms, like this one, URL previews are disabled by default to ensure that your homeserver (where the previews are generated) cannot gather information about links you see in this room.": "In verschlüsselten Räumen, wie diesem, ist die Link-Vorschau standardmäßig deaktiviert damit dein Heimserver (auf dem die Vorschau erzeugt wird) keine Informationen über Links in diesem Raum bekommt.",
