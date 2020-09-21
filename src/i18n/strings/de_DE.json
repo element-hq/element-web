@@ -960,7 +960,7 @@
     "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Wenn du die neue Wiederherstellungsmethode nicht festgelegt hast, versucht ein/e Angreifer!n möglicherweise, auf dein Konto zuzugreifen. Ändere dein Kontopasswort und lege sofort eine neue Wiederherstellungsmethode in den Einstellungen fest.",
     "Set up Secure Messages": "Richte sichere Nachrichten ein",
     "Go to Settings": "Gehe zu Einstellungen",
-    "Sign in with single sign-on": "Melden Sie sich mit Single Sign-On an",
+    "Sign in with single sign-on": "Melden Sie sich mit „Single Sign-On“ an",
     "Unrecognised address": "Nicht erkannte Adresse",
     "User %(user_id)s may or may not exist": "Existenz der Benutzer %(user_id)s unsicher",
     "Prompt before sending invites to potentially invalid matrix IDs": "Nachfragen bevor Einladungen zu möglichen ungültigen Matrix IDs gesendet werden",
