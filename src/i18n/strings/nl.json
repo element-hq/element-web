@@ -2026,5 +2026,6 @@
     "To return to your account in future you need to set a password": "Zonder wachtwoord kunt u later niet tot uw account terugkeren",
     "Restart": "Herstarten",
     "People": "Tweegesprekken",
-    "Set a room address to easily share your room with other people.": "Geef het gesprek een adres om het gemakkelijk met anderen te kunnen delen."
+    "Set a room address to easily share your room with other people.": "Geef het gesprek een adres om het gemakkelijk met anderen te kunnen delen.",
+    "Invite people to join %(communityName)s": "Stuur uitnodigingen voor %(communityName)s"
 }
