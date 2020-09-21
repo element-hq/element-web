@@ -24,8 +24,10 @@ import {MatrixClientPeg} from "./MatrixClientPeg";
 import RoomViewStore from "./stores/RoomViewStore";
 import {IntegrationManagers} from "./integrations/IntegrationManagers";
 import SettingsStore from "./settings/SettingsStore";
-import {Capability} from "./widgets/WidgetApi";
+import {Capability, KnownWidgetActions} from "./widgets/WidgetApi";
 import {objectClone} from "./utils/objects";
+import {Action} from "./dispatcher/actions";
+import {TempWidgetStore} from "./stores/TempWidgetStore";
 
 const WIDGET_API_VERSION = '0.0.2'; // Current API version
 const SUPPORTED_WIDGET_API_VERSIONS = [
@@ -218,8 +220,12 @@ export default class FromWidgetPostMessageApi {
             if (ActiveWidgetStore.widgetHasCapability(widgetId, Capability.AlwaysOnScreen)) {
                 ActiveWidgetStore.setWidgetPersistence(widgetId, val);
             }
-        } else if (action === 'get_openid') {
+        } else if (action === 'get_openid'
+            || action === KnownWidgetActions.CloseWidget) {
             // Handled by caller
+        } else if (action === KnownWidgetActions.OpenTempWidget) {
+            TempWidgetStore.instance.openTempWidget(event.data.data, widgetId);
+            this.sendResponse(event, {}); // ack
         } else {
             console.warn('Widget postMessage event unhandled');
             this.sendError(event, {message: 'The postMessage was unhandled'});

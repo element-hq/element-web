@@ -39,6 +39,12 @@ export enum KnownWidgetActions {
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
     Terminate = "im.vector.terminate",
+
+    OpenTempWidget = "io.element.start_temp",
+    UpdateThemeInfo = "io.element.theme_info",
+    SendWidgetConfig = "io.element.widget_config",
+    CloseWidget = "io.element.exit",
+    ClosedWidgetResponse = "io.element.exit_response",
 }
 
 export type WidgetAction = KnownWidgetActions | string;
@@ -134,6 +140,19 @@ export class WidgetApi extends EventEmitter {
                     // Save OpenID credentials
                     this.setOpenIDCredentials(<ToWidgetRequest>payload);
                     this.replyToRequest(<ToWidgetRequest>payload, {});
+                } else if (payload.action === KnownWidgetActions.UpdateThemeInfo
+                    || payload.action === KnownWidgetActions.SendWidgetConfig
+                    || payload.action === KnownWidgetActions.ClosedWidgetResponse) {
+                    // Finalization needs to be async, so postpone with a promise
+                    let finalizePromise = Promise.resolve();
+                    const wait = (promise) => {
+                        finalizePromise = finalizePromise.then(() => promise);
+                    };
+                    this.emit(payload.action, payload, wait);
+                    Promise.resolve(finalizePromise).then(() => {
+                        // Acknowledge that we're shut down now
+                        this.replyToRequest(<ToWidgetRequest>payload, {});
+                    });
                 } else {
                     console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }
@@ -203,9 +222,8 @@ export class WidgetApi extends EventEmitter {
             response: {}, // Not used at this layer - it's used when the client responds
         };
 
-        if (callback) {
-            this.inFlightRequests[request.requestId] = callback;
-        }
+        if (!callback) callback = () => {}; // noop
+        this.inFlightRequests[request.requestId] = callback;
 
         console.log(`[WidgetAPI] Sending request: `, request);
         window.parent.postMessage(request, "*");
@@ -215,6 +233,20 @@ export class WidgetApi extends EventEmitter {
         return new Promise<any>(resolve => {
             this.callAction(KnownWidgetActions.SetAlwaysOnScreen, {value: onScreen}, null);
             resolve(); // SetAlwaysOnScreen is currently fire-and-forget, but that could change.
+        });
+    }
+
+    public closeWidget(exitData: any): Promise<any> {
+        return new Promise<any>(resolve => {
+            this.callAction(KnownWidgetActions.CloseWidget, exitData, null);
+            resolve();
+        });
+    }
+
+    public openTempWidget(url: string, data: any): Promise<any> {
+        return new Promise<any>(resolve => {
+            this.callAction(KnownWidgetActions.OpenTempWidget, {url, data}, null);
+            resolve();
         });
     }
 }

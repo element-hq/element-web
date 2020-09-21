@@ -147,6 +147,36 @@ export default class WidgetMessaging {
         });
     }
 
+    sendThemeInfo(themeInfo: any) {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.UpdateThemeInfo,
+            data: themeInfo,
+        }).catch((error) => {
+            console.error("Failed to send theme info: ", error);
+        });
+    }
+
+    sendWidgetConfig(widgetConfig: any) {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.SendWidgetConfig,
+            data: widgetConfig,
+        }).catch((error) => {
+            console.error("Failed to send widget info: ", error);
+        });
+    }
+
+    sendTempCloseInfo(info: any) {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.ClosedWidgetResponse,
+            data: info,
+        }).catch((error) => {
+            console.error("Failed to send temp widget close info: ", error);
+        });
+    }
+
     start() {
         this.fromWidget.addEndpoint(this.widgetId, this.renderedUrl);
         this.fromWidget.addListener("get_openid", this._onOpenIdRequest);

@@ -28,7 +28,7 @@ import AsyncWrapper from './AsyncWrapper';
 const DIALOG_CONTAINER_ID = "mx_Dialog_Container";
 const STATIC_DIALOG_CONTAINER_ID = "mx_Dialog_StaticContainer";
 
-interface IModal<T extends any[]> {
+export interface IModal<T extends any[]> {
     elem: React.ReactNode;
     className?: string;
     beforeClosePromise?: Promise<boolean>;
