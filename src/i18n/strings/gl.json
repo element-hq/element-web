@@ -2499,5 +2499,12 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Inicia unha conversa con alguén usando o seu nome ou nome de usuaria (como <userId/>).",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Esto non as convidará a %(communityName)s. Para convidar alguén a %(communityName)s, preme <a>aquí</a>",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Convida a alguén usando o seu nome, nome de usuaria (como <userId/>) ou <a>comparte esta sala</a>.",
-    "Unable to set up keys": "Non se puideron configurar as chaves"
+    "Unable to set up keys": "Non se puideron configurar as chaves",
+    "Widgets": "Widgets",
+    "Edit widgets, bridges & bots": "Editar widgets, pontes e bots",
+    "Add widgets, bridges & bots": "Engade widgets, pontes e bots",
+    "You can only pin 2 widgets at a time": "Só podes fixar 2 widgets ó mesmo tempo",
+    "Minimize widget": "Minimizar widget",
+    "Maximize widget": "Maximizar widget",
+    "Your server requires encryption to be enabled in private rooms.": "O servidor require que actives o cifrado nas salas privadas."
 }
