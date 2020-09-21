@@ -21,6 +21,7 @@ import { walkDOMDepthFirst } from "./dom";
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { PartCreator } from "./parts";
+import SdkConfig from "../SdkConfig";
 
 function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     const ATROOM = "@room";
@@ -134,9 +135,14 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
         case "SPAN": {
             // math nodes are translated back into delimited latex strings
             if (n.hasAttribute("data-mx-maths")) {
-                const delim = (n.nodeName == "SPAN") ? "$$" : "$$$";
+                const delimLeft = (n.nodeName == "SPAN") ?
+                    (SdkConfig.get()['latex_maths_delims'] || {})['inline_left'] || "$$" :
+                    (SdkConfig.get()['latex_maths_delims'] || {})['display_left'] || "$$$";
+                const delimRight = (n.nodeName == "SPAN") ?
+                    (SdkConfig.get()['latex_maths_delims'] || {})['inline_right'] || "$$" :
+                    (SdkConfig.get()['latex_maths_delims'] || {})['display_right'] || "$$$";
                 const tex = n.getAttribute("data-mx-maths");
-                return partCreator.plain(delim + tex + delim);
+                return partCreator.plain(delimLeft + tex + delimRight);
             } else if (!checkDescendInto(n)) {
                 return partCreator.plain(n.textContent);
             }

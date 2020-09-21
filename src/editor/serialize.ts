@@ -43,21 +43,19 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
     var md = mdSerialize(model);
 
     if (SdkConfig.get()['latex_maths']) {
-        const mathDelimiters = [ // TODO: make customizable
-            { pattern: "\\$\\$\\$(([^$]|\\\\\\$)*)\\$\\$\\$", display: true },
-            { pattern: "\\$\\$(([^$]|\\\\\\$)*)\\$\\$", display: false }
-        ];
+        const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
+            "\\$\\$\\$(([^$]|\\\\\\$)*)\\$\\$\\$";
+        const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
+            "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
 
-        mathDelimiters.forEach(function (d) {
-            var reg = RegExp(d.pattern, "gm");
-            md = md.replace(reg, function(match, p1) {
-                const p1e = AllHtmlEntities.encode(p1);
-                if (d.display == true) {
-                    return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
-                } else {
-                    return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
-                }
-            });
+        md = md.replace(RegExp(displayPattern, "gm"), function(m,p1) {
+            const p1e = AllHtmlEntities.encode(p1);
+            return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
+        });
+
+        md = md.replace(RegExp(inlinePattern, "gm"), function(m,p1) {
+            const p1e = AllHtmlEntities.encode(p1);
+            return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
         });
     }
 
