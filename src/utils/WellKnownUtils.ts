@@ -38,3 +38,19 @@ export function isSecureBackupRequired(): boolean {
     const wellKnown = getE2EEWellKnown();
     return wellKnown && wellKnown["secure_backup_required"] === true;
 }
+
+export function getSecureBackupSetupMethods(): string[] {
+    const wellKnown = getE2EEWellKnown();
+    if (
+        !wellKnown ||
+        !wellKnown["secure_backup_setup_methods"] ||
+        !wellKnown["secure_backup_setup_methods"].length ||
+        !(
+            wellKnown["secure_backup_setup_methods"].includes("key") ||
+            wellKnown["secure_backup_setup_methods"].includes("passphrase")
+        )
+    ) {
+        return ["key", "passphrase"];
+    }
+    return wellKnown["secure_backup_setup_methods"];
+}
