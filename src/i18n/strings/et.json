@@ -1930,7 +1930,7 @@
     "'%(groupId)s' is not a valid community ID": "'%(groupId)s' ei ole korrektne kogukonna tunnus",
     "Direct message": "Otsevestlus",
     "Demote yourself?": "Kas vähendad enda õigusi?",
-    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Kuna sa vähendad enda õigusi, siis sul ei pruugi enam olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.",
+    "You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.": "Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.",
     "Demote": "Vähenda enda õigusi",
     "Ban": "Keela ligipääs",
     "Unban this user?": "Kas taastame selle kasutaja ligipääsu?",
