@@ -39,6 +39,8 @@ module.exports = (env, argv) => {
             "indexeddb-worker": "./src/vector/indexeddb-worker.js",
             "mobileguide": "./src/vector/mobile_guide/index.js",
             "jitsi": "./src/vector/jitsi/index.ts",
+            "theme_widget": "./src/vector/theme_widget/index.ts",
+            "dummy_widget": "./src/vector/dummy_widget/index.ts",
             "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
 
             // CSS themes
@@ -312,7 +314,7 @@ module.exports = (env, argv) => {
                 // HtmlWebpackPlugin will screw up our formatting like the names
                 // of the themes and which chunks we actually care about.
                 inject: false,
-                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
+                excludeChunks: ['mobileguide', 'usercontent', 'jitsi', 'theme_widget', 'dummy_widget'],
                 minify: argv.mode === 'production',
                 vars: {
                     og_image_url: og_image_url,
@@ -325,6 +327,22 @@ module.exports = (env, argv) => {
                 filename: 'jitsi.html',
                 minify: argv.mode === 'production',
                 chunks: ['jitsi'],
+            }),
+
+            // This is the theme_widget wrapper (embedded, so isolated stack)
+            new HtmlWebpackPlugin({
+                template: './src/vector/theme_widget/index.html',
+                filename: 'theme_widget.html',
+                minify: argv.mode === 'production',
+                chunks: ['theme_widget'],
+            }),
+
+            // This is the dummy_widget wrapper (embedded, so isolated stack)
+            new HtmlWebpackPlugin({
+                template: './src/vector/dummy_widget/index.html',
+                filename: 'dummy_widget.html',
+                minify: argv.mode === 'production',
+                chunks: ['dummy_widget'],
             }),
 
             // This is the mobile guide's entry point (separate for faster mobile loading)
