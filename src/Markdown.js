@@ -16,13 +16,19 @@ limitations under the License.
 
 import commonmark from 'commonmark';
 import {escape} from "lodash";
+import SdkConfig from './SdkConfig';
 
-const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
+const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u', 'code'];
 
 // These types of node are definitely text
 const TEXT_NODES = ['text', 'softbreak', 'linebreak', 'paragraph', 'document'];
 
 function is_allowed_html_tag(node) {
+    if (SdkConfig.get()['latex_maths'] &&
+        node.literal.match(/^<\/?(div|span)( data-mx-maths="[^"]*")?>$/) != null) {
+        return true;
+    }
+
     // Regex won't work for tags with attrs, but we only
     // allow <del> anyway.
     const matches = /^<\/?(.*)>$/.exec(node.literal);
@@ -30,6 +36,7 @@ function is_allowed_html_tag(node) {
         const tag = matches[1];
         return ALLOWED_HTML_TAGS.indexOf(tag) > -1;
     }
+
     return false;
 }
 
