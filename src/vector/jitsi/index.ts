@@ -18,7 +18,6 @@ limitations under the License.
 require("./index.scss");
 
 import * as qs from 'querystring';
-import {Capability, WidgetApi} from 'matrix-react-sdk/src/widgets/WidgetApi';
 import {KJUR} from 'jsrsasign';
 import {
     IWidgetApiRequest,
@@ -92,13 +91,14 @@ let widgetApi: WidgetApi;
         roomId = qsParam('roomId', true);
 
         if (widgetApi) {
-            await widgetApi.waitReady();
+            await readyPromise;
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
                 // Request credentials, give callback to continue when received
-                widgetApi.requestOpenIDCredentials(credentialsResponseCallback);
+                // TODO: Implement in widget API
+                //widgetApi.requestOpenIDCredentials(credentialsResponseCallback);
             } else {
                 enableJoinButton();
             }
