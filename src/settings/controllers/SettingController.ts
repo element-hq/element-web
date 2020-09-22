@@ -55,4 +55,11 @@ export default abstract class SettingController {
     public onChange(level: SettingLevel, roomId: string, newValue: any) {
         // do nothing by default
     }
+
+    /**
+     * Gets whether the setting has been disabled due to this controller.
+     */
+    public get settingDisabled() {
+        return false;
+    }
 }

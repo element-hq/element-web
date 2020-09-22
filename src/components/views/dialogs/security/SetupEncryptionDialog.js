@@ -16,16 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import SetupEncryptionBody from '../../structures/auth/SetupEncryptionBody';
-import BaseDialog from './BaseDialog';
-import { _t } from '../../../languageHandler';
-import { SetupEncryptionStore, PHASE_DONE } from '../../../stores/SetupEncryptionStore';
+import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
+import BaseDialog from '../BaseDialog';
+import { _t } from '../../../../languageHandler';
+import { SetupEncryptionStore, PHASE_DONE } from '../../../../stores/SetupEncryptionStore';
 
 function iconFromPhase(phase) {
     if (phase === PHASE_DONE) {
-        return require("../../../../res/img/e2e/verified.svg");
+        return require("../../../../../res/img/e2e/verified.svg");
     } else {
-        return require("../../../../res/img/e2e/warning.svg");
+        return require("../../../../../res/img/e2e/warning.svg");
     }
 }
 

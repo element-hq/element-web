@@ -1,0 +1,166 @@
+/*
+Copyright 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_BaseCard {
+    padding: 0 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .mx_BaseCard_header {
+        margin: 8px 0;
+
+        > h2 {
+            margin: 0 44px;
+            font-size: $font-18px;
+            font-weight: $font-semi-bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mx_BaseCard_back, .mx_BaseCard_close {
+            position: absolute;
+            background-color: rgba(141, 151, 165, 0.2);
+            height: 20px;
+            width: 20px;
+            margin: 12px;
+            top: 0;
+
+            &::before {
+                content: "";
+                position: absolute;
+                height: 20px;
+                width: 20px;
+                top: 0;
+                left: 0;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: $rightpanel-button-color;
+            }
+        }
+
+        .mx_BaseCard_back {
+            border-radius: 4px;
+            left: 0;
+
+            &::before {
+                transform: rotate(90deg);
+                mask-size: 22px;
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            }
+        }
+
+        .mx_BaseCard_close {
+            border-radius: 10px;
+            right: 0;
+
+            &::before {
+                mask-image: url('$(res)/img/icons-close.svg');
+                mask-size: 8px;
+            }
+        }
+    }
+
+    .mx_AutoHideScrollbar {
+        // collapse the margin into a padding to move the scrollbar into the right gutter
+        margin-right: -8px;
+        padding-right: 8px;
+        min-height: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .mx_BaseCard_Group {
+        margin: 20px 0 16px;
+
+        & > * {
+            margin-left: 12px;
+            margin-right: 12px;
+        }
+
+        > h1 {
+            color: $tertiary-fg-color;
+            font-size: $font-12px;
+            font-weight: 500;
+        }
+
+        .mx_BaseCard_Button {
+            padding: 10px 38px 10px 12px;
+            margin: 0;
+            position: relative;
+            font-size: $font-13px;
+            height: 20px;
+            line-height: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &:hover {
+                background-color: rgba(141, 151, 165, 0.1);
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 10px;
+                right: 6px;
+                height: 20px;
+                width: 20px;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                background-color: $icon-button-color;
+                transform: rotate(270deg);
+                mask-size: 20px;
+                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            }
+        }
+    }
+
+    .mx_BaseCard_footer {
+        padding-top: 4px;
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+
+        .mx_AccessibleButton_kind_secondary {
+            color: $secondary-fg-color;
+            background-color: rgba(141, 151, 165, 0.2);
+            font-weight: $font-semi-bold;
+            font-size: $font-14px;
+        }
+
+        .mx_AccessibleButton_disabled {
+            cursor: not-allowed;
+        }
+    }
+}
+
+.mx_FilePanel,
+.mx_UserInfo,
+.mx_NotificationPanel,
+.mx_MemberList {
+    &.mx_BaseCard {
+        padding: 32px 0 0;
+
+        .mx_AutoHideScrollbar {
+            margin-right: unset;
+            padding-right: unset;
+        }
+    }
+}

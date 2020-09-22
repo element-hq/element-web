@@ -38,12 +38,14 @@ import {inviteUsersToRoom} from "./RoomInvite";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
 import { parseFragment as parseHtml } from "parse5";
-import sendBugReport from "./rageshake/submit-rageshake";
-import SdkConfig from "./SdkConfig";
+import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
 import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
+import SdkConfig from "./SdkConfig";
+import SettingsStore from "./settings/SettingsStore";
+import {UIFeature} from "./settings/UIFeature";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -88,6 +90,7 @@ interface ICommandOpts {
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
+    isEnabled?(): boolean;
 }
 
 export class Command {
@@ -98,6 +101,7 @@ export class Command {
     runFn: undefined | RunFn;
     category: string;
     hideCompletionAfterSpace: boolean;
+    _isEnabled?: () => boolean;
 
     constructor(opts: ICommandOpts) {
         this.command = opts.command;
@@ -107,6 +111,7 @@ export class Command {
         this.runFn = opts.runFn;
         this.category = opts.category || CommandCategories.other;
         this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
+        this._isEnabled = opts.isEnabled;
     }
 
     getCommand() {
@@ -125,6 +130,10 @@ export class Command {
 
     getUsage() {
         return _t('Usage') + ': ' + this.getCommandWithArgs();
+    }
+
+    isEnabled() {
+        return this._isEnabled ? this._isEnabled() : true;
     }
 }
 
@@ -147,6 +156,19 @@ export const Commands = [
         description: _td('Prepends ¯\\_(ツ)_/¯ to a plain-text message'),
         runFn: function(roomId, args) {
             let message = '¯\\_(ツ)_/¯';
+            if (args) {
+                message = message + ' ' + args;
+            }
+            return success(MatrixClientPeg.get().sendTextMessage(roomId, message));
+        },
+        category: CommandCategories.messages,
+    }),
+    new Command({
+        command: 'lenny',
+        args: '<message>',
+        description: _td('Prepends ( ͡° ͜ʖ ͡°) to a plain-text message'),
+        runFn: function(roomId, args) {
+            let message = '( ͡° ͜ʖ ͡°)';
             if (args) {
                 message = message + ' ' + args;
             }
@@ -777,6 +799,7 @@ export const Commands = [
         command: 'addwidget',
         args: '<url | embed code | Jitsi url>',
         description: _td('Adds a custom widget by URL to the room'),
+        isEnabled: () => SettingsStore.getValue(UIFeature.Widgets),
         runFn: function(roomId, widgetUrl) {
             if (!widgetUrl) {
                 return reject(_t("Please supply a widget URL or embed code"));
@@ -959,19 +982,13 @@ export const Commands = [
         command: "rageshake",
         aliases: ["bugreport"],
         description: _td("Send a bug report with logs"),
+        isEnabled: () => !!SdkConfig.get().bug_report_endpoint_url,
         args: "<description>",
         runFn: function(roomId, args) {
             return success(
-                sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
-                    userText: args,
-                    sendLogs: true,
-                }).then(() => {
-                    const InfoDialog = sdk.getComponent('dialogs.InfoDialog');
-                    Modal.createTrackedDialog('Slash Commands', 'Rageshake sent', InfoDialog, {
-                        title: _t('Logs sent'),
-                        description: _t('Thank you!'),
-                    });
-                }),
+                Modal.createTrackedDialog('Slash Commands', 'Bug Report Dialog', BugReportDialog, {
+                    initialText: args,
+                }).finished,
             );
         },
         category: CommandCategories.advanced,
@@ -1043,7 +1060,7 @@ Commands.forEach(cmd => {
     });
 });
 
-export function parseCommandString(input) {
+export function parseCommandString(input: string) {
     // trim any trailing whitespace, as it can confuse the parser for
     // IRC-style commands
     input = input.replace(/\s+$/, '');
@@ -1070,10 +1087,10 @@ export function parseCommandString(input) {
  * processing the command, or 'promise' if a request was sent out.
  * Returns null if the input didn't match a command.
  */
-export function getCommand(roomId, input) {
+export function getCommand(roomId: string, input: string) {
     const {cmd, args} = parseCommandString(input);
 
-    if (CommandMap.has(cmd)) {
+    if (CommandMap.has(cmd) && CommandMap.get(cmd).isEnabled()) {
         return () => CommandMap.get(cmd).run(roomId, args, cmd);
     }
 }

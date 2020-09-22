@@ -68,20 +68,23 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: contain;
     }
-}
 
-.mx_RightPanel_membersButton::before {
-    mask-image: url('$(res)/img/element-icons/room/members.svg');
-    mask-position: center;
-}
+    &:hover {
+        background: rgba($accent-color, 0.1);
 
-.mx_RightPanel_filesButton::before {
-    mask-image: url('$(res)/img/element-icons/room/files.svg');
-    mask-position: center;
+        &::before {
+            background-color: $accent-color;
+        }
+    }
 }
 
 .mx_RightPanel_notifsButton::before {
     mask-image: url('$(res)/img/element-icons/notifications.svg');
+    mask-position: center;
+}
+
+.mx_RightPanel_roomSummaryButton::before {
+    mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
     mask-position: center;
 }
 
@@ -96,20 +99,8 @@ limitations under the License.
 }
 
 .mx_RightPanel_headerButton_highlight {
-    background: rgba($accent-color, 0.25);
-    // make the icon the accent color too
     &::before {
         background-color: $accent-color !important;
-    }
-}
-
-.mx_RightPanel_headerButton:not(.mx_RightPanel_headerButton_highlight) {
-    &:hover {
-        background: rgba($accent-color, 0.1);
-
-        &::before {
-            background-color: $accent-color;
-        }
     }
 }
 
@@ -146,7 +137,7 @@ limitations under the License.
 }
 
 .mx_RightPanel_empty {
-    margin-right: -42px;
+    margin-right: -28px;
 
     h2 {
         font-weight: 700;

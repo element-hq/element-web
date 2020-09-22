@@ -28,6 +28,8 @@ import classNames from "classnames";
 import AuthPage from "../../views/auth/AuthPage";
 import SSOButton from "../../views/elements/SSOButton";
 import PlatformPeg from '../../../PlatformPeg';
+import SettingsStore from "../../../settings/SettingsStore";
+import {UIFeature} from "../../../settings/UIFeature";
 
 // For validating phone numbers without country codes
 const PHONE_NUMBER_REGEX = /^[0-9()\-\s]*$/;
@@ -124,7 +126,11 @@ export default class LoginComponent extends React.Component {
             'm.login.cas': () => this._renderSsoStep("cas"),
             'm.login.sso': () => this._renderSsoStep("sso"),
         };
+    }
 
+    // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
         this._initLoginLogic();
     }
 
@@ -675,7 +681,7 @@ export default class LoginComponent extends React.Component {
                     {_t("If you've joined lots of rooms, this might take a while")}
                 </div> }
             </div>;
-        } else {
+        } else if (SettingsStore.getValue(UIFeature.Registration)) {
             footer = (
                 <a className="mx_AuthBody_changeFlow" onClick={this.onTryRegisterClick} href="#">
                     { _t('Create account') }

@@ -80,7 +80,9 @@ export default class UserView extends React.Component {
             const RightPanel = sdk.getComponent('structures.RightPanel');
             const MainSplit = sdk.getComponent('structures.MainSplit');
             const panel = <RightPanel user={this.state.member} />;
-            return (<MainSplit panel={panel}><HomePage /></MainSplit>);
+            return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
+                <HomePage />
+            </MainSplit>);
         } else {
             return (<div />);
         }

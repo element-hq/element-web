@@ -35,6 +35,7 @@ import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import {haveTileForEvent} from "../views/rooms/EventTile";
+import {UIFeature} from "../../settings/UIFeature";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -104,8 +105,8 @@ class TimelinePanel extends React.Component {
         // shape property to be passed to EventTiles
         tileShape: PropTypes.string,
 
-        // placeholder text to use if the timeline is empty
-        empty: PropTypes.string,
+        // placeholder to use if the timeline is empty
+        empty: PropTypes.node,
 
         // whether to show reactions for an event
         showReactions: PropTypes.bool,
@@ -1446,6 +1447,7 @@ class TimelinePanel extends React.Component {
                 editState={this.state.editState}
                 showReactions={this.props.showReactions}
                 useIRCLayout={this.props.useIRCLayout}
+                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
             />
         );
     }

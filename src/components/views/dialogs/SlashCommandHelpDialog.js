@@ -24,6 +24,7 @@ export default ({onFinished}) => {
 
     const categories = {};
     Commands.forEach(cmd => {
+        if (!cmd.isEnabled()) return;
         if (!categories[cmd.category]) {
             categories[cmd.category] = [];
         }

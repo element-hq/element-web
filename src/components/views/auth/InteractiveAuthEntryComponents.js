@@ -25,6 +25,7 @@ import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
+import Spinner from "../elements/Spinner";
 
 /* This file contains a collection of components which are used by the
  * InteractiveAuth to prompt the user to enter the information needed
@@ -404,8 +405,12 @@ export class EmailIdentityAuthEntry extends React.Component {
         // the validation link, we won't know the email address, so if we don't have it,
         // assume that the link has been clicked and the server will realise when we poll.
         if (this.props.inputs.emailAddress === undefined) {
-            const Loader = sdk.getComponent("elements.Spinner");
-            return <Loader />;
+            return <Spinner />;
+        } else if (this.props.stageState?.emailSid) {
+            // we only have a session ID if the user has clicked the link in their email,
+            // so show a loading state instead of "an email has been sent to..." because
+            // that's confusing when you've already read that email.
+            return <Spinner />;
         } else {
             return (
                 <div>

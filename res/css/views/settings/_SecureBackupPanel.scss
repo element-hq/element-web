@@ -1,6 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,23 +15,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_KeyBackupPanel_sigValid, .mx_KeyBackupPanel_sigInvalid,
-.mx_KeyBackupPanel_deviceVerified, .mx_KeyBackupPanel_deviceNotVerified {
+.mx_SecureBackupPanel_sigValid, .mx_SecureBackupPanel_sigInvalid,
+.mx_SecureBackupPanel_deviceVerified, .mx_SecureBackupPanel_deviceNotVerified {
     font-weight: bold;
 }
 
-.mx_KeyBackupPanel_sigValid, .mx_KeyBackupPanel_deviceVerified {
+.mx_SecureBackupPanel_sigValid, .mx_SecureBackupPanel_deviceVerified {
     color: $e2e-verified-color;
 }
 
-.mx_KeyBackupPanel_sigInvalid, .mx_KeyBackupPanel_deviceNotVerified {
+.mx_SecureBackupPanel_sigInvalid, .mx_SecureBackupPanel_deviceNotVerified {
     color: $e2e-warning-color;
 }
 
-.mx_KeyBackupPanel_deviceName {
+.mx_SecureBackupPanel_deviceName {
     font-style: italic;
 }
 
-.mx_KeyBackupPanel_buttonRow {
+.mx_SecureBackupPanel_buttonRow {
     margin: 1em 0;
+
+    :nth-child(n + 1) {
+        margin-inline-end: 10px;
+    }
+}
+
+.mx_SecureBackupPanel_statusList {
+    border-spacing: 0;
+
+    td {
+        padding: 0;
+
+        &:first-of-type {
+            padding-inline-end: 1em;
+        }
+    }
 }

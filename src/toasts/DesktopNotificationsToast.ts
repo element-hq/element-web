@@ -24,7 +24,7 @@ const onAccept = () => {
 };
 
 const onReject = () => {
-    Notifier.setToolbarHidden(true);
+    Notifier.setPromptHidden(true);
 };
 
 const TOAST_KEY = "desktopnotifications";
