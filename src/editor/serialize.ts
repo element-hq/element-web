@@ -40,7 +40,7 @@ export function mdSerialize(model: EditorModel) {
 }
 
 export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = {}) {
-    var md = mdSerialize(model);
+    let md = mdSerialize(model);
 
     if (SdkConfig.get()['latex_maths']) {
         const displayPattern = (SdkConfig.get()['latex_maths_delims'] || {})['display_pattern'] ||
@@ -48,12 +48,12 @@ export function htmlSerializeIfNeeded(model: EditorModel, {forceHTML = false} = 
         const inlinePattern = (SdkConfig.get()['latex_maths_delims'] || {})['inline_pattern'] ||
             "\\$\\$(([^$]|\\\\\\$)*)\\$\\$";
 
-        md = md.replace(RegExp(displayPattern, "gm"), function(m,p1) {
+        md = md.replace(RegExp(displayPattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
             return `<div data-mx-maths="${p1e}"><code>${p1e}</code></div>`;
         });
 
-        md = md.replace(RegExp(inlinePattern, "gm"), function(m,p1) {
+        md = md.replace(RegExp(inlinePattern, "gm"), function(m, p1) {
             const p1e = AllHtmlEntities.encode(p1);
             return `<span data-mx-maths="${p1e}"><code>${p1e}</code></span>`;
         });

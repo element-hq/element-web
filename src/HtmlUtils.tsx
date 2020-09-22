@@ -416,24 +416,21 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             if (SdkConfig.get()['latex_maths']) {
                 const mathDelimiters = [
                     { pattern: "<div data-mx-maths=\"([^\"]*)\">(.|\\s)*?</div>", display: true },
-                    { pattern: "<span data-mx-maths=\"([^\"]*)\">(.|\\s)*?</span>", display: false }
+                    { pattern: "<span data-mx-maths=\"([^\"]*)\">(.|\\s)*?</span>", display: false },
                 ];
 
-                mathDelimiters.forEach(function (d) {
-                    var reg = RegExp(d.pattern, "gm");
-
-                    safeBody = safeBody.replace(reg, function(match, p1) {
+                mathDelimiters.forEach(function(d) {
+                    safeBody = safeBody.replace(RegExp(d.pattern, "gm"), function(m, p1) {
                         return katex.renderToString(
                             AllHtmlEntities.decode(p1),
                             {
                                 throwOnError: false,
                                 displayMode: d.display,
-                                output: "mathml"
+                                output: "mathml",
                             })
                     });
                 });
-        }
-
+            }
         }
     } finally {
         delete sanitizeParams.textFilter;
