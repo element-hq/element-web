@@ -19,9 +19,13 @@ import {MatrixClientPeg} from '../MatrixClientPeg';
 const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 
+/* eslint-disable camelcase */
 export interface IE2EEWellKnown {
     default?: boolean;
+    secure_backup_required?: boolean;
+    secure_backup_setup_methods?: SecureBackupSetupMethod[];
 }
+/* eslint-enable camelcase */
 
 export function getE2EEWellKnown(): IE2EEWellKnown {
     const clientWellKnown = MatrixClientPeg.get().getClientWellKnown();
@@ -39,18 +43,26 @@ export function isSecureBackupRequired(): boolean {
     return wellKnown && wellKnown["secure_backup_required"] === true;
 }
 
-export function getSecureBackupSetupMethods(): string[] {
+export enum SecureBackupSetupMethod {
+    Key = "key",
+    Passphrase = "passphrase",
+}
+
+export function getSecureBackupSetupMethods(): SecureBackupSetupMethod[] {
     const wellKnown = getE2EEWellKnown();
     if (
         !wellKnown ||
         !wellKnown["secure_backup_setup_methods"] ||
         !wellKnown["secure_backup_setup_methods"].length ||
         !(
-            wellKnown["secure_backup_setup_methods"].includes("key") ||
-            wellKnown["secure_backup_setup_methods"].includes("passphrase")
+            wellKnown["secure_backup_setup_methods"].includes(SecureBackupSetupMethod.Key) ||
+            wellKnown["secure_backup_setup_methods"].includes(SecureBackupSetupMethod.Passphrase)
         )
     ) {
-        return ["key", "passphrase"];
+        return [
+            SecureBackupSetupMethod.Key,
+            SecureBackupSetupMethod.Passphrase,
+        ];
     }
     return wellKnown["secure_backup_setup_methods"];
 }
