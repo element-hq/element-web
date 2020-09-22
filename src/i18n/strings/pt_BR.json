@@ -866,7 +866,7 @@
     "Submit debug logs": "Submeter registros de depuração",
     "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited and the usernames of other users. They do not contain messages.": "Os registros de depuração contêm dados de uso do aplicativo, incluindo seu nome de usuário, os IDs ou aliases das salas ou comunidades que você visitou e os nomes de usuários de outros usuários. Eles não contêm mensagens.",
     "Before submitting logs, you must <a>create a GitHub issue</a> to describe your problem.": "Antes de enviar os registros, você deve <a>criar um bilhete de erro no GitHub</a> para descrever seu problema.",
-    "Unable to load commit detail: %(msg)s": "Não é possível carregar os detalhes do commit: %(msg)s",
+    "Unable to load commit detail: %(msg)s": "Não foi possível carregar os detalhes do envio: %(msg)s",
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Para evitar perder seu histórico de bate-papo, você precisa exportar as chaves da sua sala antes de se desconectar. Quando entrar novamente, você precisará usar a versão mais atual do %(brand)s",
     "Incompatible Database": "Banco de dados incompatível",
     "Continue With Encryption Disabled": "Continuar com criptografia desativada",
