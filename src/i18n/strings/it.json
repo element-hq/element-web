@@ -2496,5 +2496,18 @@
     "Community and user menu": "Menu comunità e utente",
     "End Call": "Chiudi chiamata",
     "Remove the group call from the room?": "Rimuovere la chiamata di gruppo dalla stanza?",
-    "You don't have permission to remove the call from the room": "Non hai l'autorizzazione per rimuovere la chiamata dalla stanza"
+    "You don't have permission to remove the call from the room": "Non hai l'autorizzazione per rimuovere la chiamata dalla stanza",
+    "Safeguard against losing access to encrypted messages & data": "Proteggiti dalla perdita dei messaggi e dati crittografati",
+    "not found in storage": "non trovato nell'archivio",
+    "Widgets": "Widget",
+    "Edit widgets, bridges & bots": "Modifica widget, bridge e bot",
+    "Add widgets, bridges & bots": "Aggiungi widget, bridge e bot",
+    "You can only pin 2 widgets at a time": "Puoi fissare solo 2 widget alla volta",
+    "Minimize widget": "Riduci widget",
+    "Maximize widget": "Espandi widget",
+    "Your server requires encryption to be enabled in private rooms.": "Il tuo server richiede la crittografia attiva nelle stanze private.",
+    "Start a conversation with someone using their name or username (like <userId/>).": "Inizia una conversazione con qualcuno usando il suo nome o il nome utente (come <userId/>).",
+    "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Ciò non lo inviterà in %(communityName)s. Per invitare qualcuno in %(communityName)s, clicca <a>qui</a>",
+    "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Invita qualcuno usando il suo nome, nome utente (come <userId/>) o <a>condividi questa stanza</a>.",
+    "Unable to set up keys": "Impossibile impostare le chiavi"
 }
