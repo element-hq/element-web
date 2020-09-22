@@ -1,4 +1,4 @@
-Contributing code to Riot
-=========================
+Contributing code to Element
+============================
 
-Riot follows the same pattern as https://github.com/matrix-org/matrix-js-sdk/blob/master/CONTRIBUTING.rst.
+Element follows the same pattern as https://github.com/matrix-org/matrix-js-sdk/blob/master/CONTRIBUTING.rst.
