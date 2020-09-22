@@ -2502,5 +2502,11 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Начните разговор с кем-нибудь, используя его имя или имя пользователя (например, <userId/>).",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Это не пригласит их в %(communityName)s. Чтобы пригласить кого-нибудь в %(communityName)s, нажмите <a>здесь</a>",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Пригласите кого-нибудь, используя его имя, имя пользователя (например, <userId/>) или <a>поделитесь этой комнатой</a>.",
-    "Unable to set up keys": "Невозможно настроить ключи"
+    "Unable to set up keys": "Невозможно настроить ключи",
+    "Use the <a>Desktop app</a> to see all encrypted files": "Используйте <a>настольное приложение</a>, чтобы просмотреть все зашифрованные файлы",
+    "Use the <a>Desktop app</a> to search encrypted messages": "Используйте <a>настольное приложение</a> для поиска зашифрованных сообщений",
+    "This version of %(brand)s does not support viewing some encrypted files": "Эта версия %(brand)s не поддерживает просмотр некоторых зашифрованных файлов",
+    "This version of %(brand)s does not support searching encrypted messages": "Эта версия %(brand)s не поддерживает поиск зашифрованных сообщений",
+    "Cannot create rooms in this community": "Невозможно создать комнаты в этом сообществе",
+    "You do not have permission to create rooms in this community.": "У вас нет разрешения на создание комнат в этом сообществе."
 }
