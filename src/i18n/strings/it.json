@@ -2509,5 +2509,11 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Inizia una conversazione con qualcuno usando il suo nome o il nome utente (come <userId/>).",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Ciò non lo inviterà in %(communityName)s. Per invitare qualcuno in %(communityName)s, clicca <a>qui</a>",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Invita qualcuno usando il suo nome, nome utente (come <userId/>) o <a>condividi questa stanza</a>.",
-    "Unable to set up keys": "Impossibile impostare le chiavi"
+    "Unable to set up keys": "Impossibile impostare le chiavi",
+    "Use the <a>Desktop app</a> to see all encrypted files": "Usa <a>l'app desktop</a> per vedere tutti i file cifrati",
+    "Use the <a>Desktop app</a> to search encrypted messages": "Usa <a>l'app desktop</a> per cercare i messaggi cifrati",
+    "This version of %(brand)s does not support viewing some encrypted files": "Questa versione di %(brand)s non supporta la visualizzazione di alcuni file cifrati",
+    "This version of %(brand)s does not support searching encrypted messages": "Questa versione di %(brand)s non supporta la ricerca di messaggi cifrati",
+    "Cannot create rooms in this community": "Impossibile creare stanze in questa comunità",
+    "You do not have permission to create rooms in this community.": "Non hai i permessi per creare stanze in questa comunità."
 }
