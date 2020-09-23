@@ -102,15 +102,11 @@ limitations under the License.
         right: 0;
     }
 
-    .mx_AvatarSetting_avatarPlaceholder ~ .mx_AvatarSetting_uploadButton {
-        border: 1px solid $settings-profile-overlay-placeholder-fg-color;
-    }
-
     .mx_AvatarSetting_uploadButton {
         width: 32px;
         height: 32px;
         border-radius: 32px;
-        background-color: $settings-profile-placeholder-bg-color;
+        background-color: $settings-profile-button-bg-color;
 
         position: absolute;
         bottom: 0;
@@ -125,7 +121,7 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 55%;
-        background-color: $settings-profile-overlay-placeholder-fg-color;
+        background-color: $settings-profile-button-fg-color;
         mask-image: url('$(res)/img/feather-customised/edit.svg');
     }
 }
