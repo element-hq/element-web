@@ -31,11 +31,16 @@ interface IState {}
 
 export interface IApp {
     id: string;
+    url: string;
     type: string;
+    name: string;
     roomId: string;
     eventId: string;
     creatorUserId: string;
     waitForIframeLoad?: boolean;
+    data?: {
+        title?: string;
+    };
     // eslint-disable-next-line camelcase
     avatar_url: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
