@@ -2506,5 +2506,11 @@
     "You can only pin 2 widgets at a time": "Só podes fixar 2 widgets ó mesmo tempo",
     "Minimize widget": "Minimizar widget",
     "Maximize widget": "Maximizar widget",
-    "Your server requires encryption to be enabled in private rooms.": "O servidor require que actives o cifrado nas salas privadas."
+    "Your server requires encryption to be enabled in private rooms.": "O servidor require que actives o cifrado nas salas privadas.",
+    "Use the <a>Desktop app</a> to see all encrypted files": "Usa a <a>app de Escritorio</a> para ver todos os ficheiros cifrados",
+    "Use the <a>Desktop app</a> to search encrypted messages": "Usa a <a>app de Escritorio</a> para buscar mensaxes cifradas",
+    "This version of %(brand)s does not support viewing some encrypted files": "Esta versión de %(brand)s non soporta o visionado dalgúns ficheiros cifrados",
+    "This version of %(brand)s does not support searching encrypted messages": "Esta versión de %(brand)s non soporta a busca de mensaxes cifradas",
+    "Cannot create rooms in this community": "Non se poden crear salas nesta comunidade",
+    "You do not have permission to create rooms in this community.": "Non tes permiso para crear salas nesta comunidade."
 }
