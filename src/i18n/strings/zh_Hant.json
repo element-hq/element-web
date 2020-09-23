@@ -2509,5 +2509,11 @@
     "Minimize widget": "最小化小工具",
     "Maximize widget": "最大化小工具",
     "Your server requires encryption to be enabled in private rooms.": "您的伺服器需要在私人聊天室中啟用加密。",
-    "Unable to set up keys": "無法設定金鑰"
+    "Unable to set up keys": "無法設定金鑰",
+    "Use the <a>Desktop app</a> to see all encrypted files": "使用<a>桌面應用程式</a>以檢視所有加密的檔案",
+    "Use the <a>Desktop app</a> to search encrypted messages": "使用<a>桌面應用程式</a>以搜尋加密訊息",
+    "This version of %(brand)s does not support viewing some encrypted files": "此版本的 %(brand)s 不支援檢視某些加密檔案",
+    "This version of %(brand)s does not support searching encrypted messages": "此版本的 %(brand)s 不支援搜尋加密訊息",
+    "Cannot create rooms in this community": "無法在此社群中建立聊天室",
+    "You do not have permission to create rooms in this community.": "您沒有在此社群中建立聊天室的權限。"
 }
