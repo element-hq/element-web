@@ -35,6 +35,27 @@ following on your homeserver's `/.well-known/matrix/client` config:
 }
 ```
 
+## Preferring setup methods
+
+By default, Element offers users a choice of a random key or user-chosen
+passphrase when setting up Secure Backup. If a homeserver admin would like to
+only offer one of these, you can signal this via the
+`/.well-known/matrix/client` config, for example:
+
+```json
+{
+  "io.element.e2ee": {
+    "secure_backup_setup_methods": ["passphrase"]
+  }
+}
+```
+
+The field `secure_backup_setup_methods` is an array listing the methods the
+client should display. Supported values currently include `key` and
+`passphrase`. If the `secure_backup_setup_methods` field is not present or
+exists but does not contain any supported methods, Element will fallback to the
+default value of: `["key", "passphrase"]`.
+
 # Compatibility
 
 The settings above were first proposed under a `im.vector.riot.e2ee` key, which
