@@ -210,9 +210,18 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 if (!header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.add("mx_RoomSublist_headerContainer_stickyBottom");
                 }
+
+                const offset = window.innerHeight - (list.parentElement.offsetTop + list.parentElement.offsetHeight);
+                const newBottom = `${offset}px`;
+                if (header.style.bottom !== newBottom) {
+                    header.style.bottom = newBottom;
+                }
             } else {
                 if (header.classList.contains("mx_RoomSublist_headerContainer_stickyBottom")) {
                     header.classList.remove("mx_RoomSublist_headerContainer_stickyBottom");
+                }
+                if (header.style.bottom) {
+                    header.style.removeProperty('bottom');
                 }
             }
 
