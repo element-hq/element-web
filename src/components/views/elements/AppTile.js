@@ -104,6 +104,7 @@ export default class AppTile extends React.Component {
         const hasPermissionToLoad = () => {
             if (this._usingLocalWidget()) return true;
 
+            if (!newProps.room) return true; // user widgets always have permissions
             const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", newProps.room.roomId);
             return !!currentlyAllowedWidgets[newProps.app.eventId];
         };
@@ -419,7 +420,9 @@ export default class AppTile extends React.Component {
         ActiveWidgetStore.delWidgetMessaging(this.props.app.id);
         this._setupWidgetMessaging();
 
-        ActiveWidgetStore.setRoomId(this.props.app.id, this.props.room.roomId);
+        if (this.props.room) {
+            ActiveWidgetStore.setRoomId(this.props.app.id, this.props.room.roomId);
+        }
         this.setState({loading: false});
     }
 
@@ -589,7 +592,7 @@ export default class AppTile extends React.Component {
         const myUser = MatrixClientPeg.get().getUser(myUserId);
         const vars = Object.assign(targetData, this.props.app.data, {
             'matrix_user_id': myUserId,
-            'matrix_room_id': this.props.room.roomId,
+            'matrix_room_id': this.props.room ? this.props.room.roomId : null,
             'matrix_display_name': myUser ? myUser.displayName : myUserId,
             'matrix_avatar_url': myUser ? MatrixClientPeg.get().mxcUrlToHttp(myUser.avatarUrl) : '',
 
@@ -754,6 +757,7 @@ export default class AppTile extends React.Component {
                 </div>
             );
             if (!this.state.hasPermissionToLoad) {
+                // only possible for room widgets, can assert this.props.room here
                 const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
                 appTileBody = (
                     <div className={appTileBodyClass}>
@@ -904,7 +908,9 @@ AppTile.displayName = 'AppTile';
 
 AppTile.propTypes = {
     app: PropTypes.object.isRequired,
-    room: PropTypes.object.isRequired,
+    // If room is not specified then it is an account level widget
+    // which bypasses permission prompts as it was added explicitly by that user
+    room: PropTypes.object,
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth: PropTypes.bool,
