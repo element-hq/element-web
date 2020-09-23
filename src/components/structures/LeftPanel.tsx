@@ -139,7 +139,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         const bottomEdge = list.offsetHeight + list.scrollTop;
         const sublists = list.querySelectorAll<HTMLDivElement>(".mx_RoomSublist");
 
-        const headerRightMargin = 16; // calculated from margins and widths to align with non-sticky tiles
+        const headerRightMargin = 15; // calculated from margins and widths to align with non-sticky tiles
         const headerStickyWidth = list.clientWidth - headerRightMargin;
 
         // We track which styles we want on a target before making the changes to avoid
