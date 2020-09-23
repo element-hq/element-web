@@ -19,6 +19,7 @@ limitations under the License.
 
 import React from 'react';
 import sanitizeHtml from 'sanitize-html';
+import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import * as linkify from 'linkifyjs';
 import linkifyMatrix from './linkify-matrix';
 import _linkifyElement from 'linkifyjs/element';
@@ -151,7 +152,7 @@ export function isUrlPermitted(inputUrl: string) {
     }
 }
 
-const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to matrix
+const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to matrix
     // add blank targets to all hyperlinks except vector URLs
     'a': function(tagName: string, attribs: sanitizeHtml.Attributes) {
         if (attribs.href) {
@@ -224,7 +225,7 @@ const transformTags: sanitizeHtml.IOptions["transformTags"] = { // custom to mat
     },
 };
 
-const sanitizeHtmlParams: sanitizeHtml.IOptions = {
+const sanitizeHtmlParams: IExtendedSanitizeOptions = {
     allowedTags: [
         'font', // custom to matrix for IRC-style font coloring
         'del', // for markdown
@@ -245,13 +246,14 @@ const sanitizeHtmlParams: sanitizeHtml.IOptions = {
     selfClosing: ['img', 'br', 'hr', 'area', 'base', 'basefont', 'input', 'link', 'meta'],
     // URL schemes we permit
     allowedSchemes: PERMITTED_URL_SCHEMES,
-
     allowProtocolRelative: false,
     transformTags,
+    // 50 levels deep "should be enough for anyone"
+    nestingLimit: 50,
 };
 
 // this is the same as the above except with less rewriting
-const composerSanitizeHtmlParams: sanitizeHtml.IOptions = {
+const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
     ...sanitizeHtmlParams,
     transformTags: {
         'code': transformTags['code'],
