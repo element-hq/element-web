@@ -204,7 +204,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({children, handleHomeEn
 // onFocus should be called when the index gained focus in any manner
 // isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`
 // ref should be passed to a DOM node which will be used for DOM compareDocumentPosition
-export const useRovingTabIndex = (inputRef: Ref): [FocusHandler, boolean, Ref] => {
+export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] => {
     const context = useContext(RovingTabIndexContext);
     let ref = useRef<HTMLElement>(null);
 
