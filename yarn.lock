@@ -7356,20 +7356,6 @@ matrix-js-sdk@8.4.0-rc.1:
     request "^2.88.0"
     unhomoglyph "^1.0.2"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "8.3.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b9886d4f3479c041fc6d91ebc88c4a998e9d2e7c"
-  dependencies:
-    "@babel/runtime" "^7.8.3"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.2"
-    loglevel "^1.6.4"
-    qs "^6.5.2"
-    request "^2.88.0"
-    unhomoglyph "^1.0.2"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -7378,9 +7364,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.4.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/747126950b14ded4e09b3c0c8cc6beb04b64b052"
+matrix-react-sdk@3.5.0-rc.1:
+  version "3.5.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.5.0-rc.1.tgz#215de18f11e40617f62f48eed2ddca0a5fdcb54c"
+  integrity sha512-MGQEnd+7yYPUYDcAM1Ye5RcUHuQYyJjMFwA1dFAjJrgO6aq75vVB3UNuoMz1bGxP0C+hmDJtrHxEMEN72XXJeg==
   dependencies:
     "@babel/runtime" "^7.10.5"
     await-lock "^2.0.1"
@@ -7407,7 +7394,7 @@ matrix-mock-request@^1.2.3:
     is-ip "^2.0.0"
     linkifyjs "^2.1.9"
     lodash "^4.17.19"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "8.4.0-rc.1"
     minimist "^1.2.5"
     pako "^1.0.11"
     parse5 "^5.1.1"
@@ -7424,7 +7411,7 @@ matrix-mock-request@^1.2.3:
     react-transition-group "^4.4.1"
     resize-observer-polyfill "^1.5.1"
     rfc4648 "^1.4.0"
-    sanitize-html "^1.27.1"
+    sanitize-html "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db"
     tar-js "^0.3.0"
     text-encoding-utf-8 "^1.0.2"
     url "^0.11.0"
@@ -10471,16 +10458,6 @@ sane@^4.0.3:
     minimist "^1.1.1"
     walker "~1.0.5"
 
-sanitize-html@^1.27.1:
-  version "1.27.1"
-  resolved "https://registry.yarnpkg.com/sanitize-html/-/sanitize-html-1.27.1.tgz#ce147951aa3defba13448e2ca8a4e18d8f2e2cd7"
-  integrity sha512-C+N7E+7ikYaLHdb9lEkQaFOgmj+9ddZ311Ixs/QsBsoLD411/vdLweiFyGqrswUVgLqagOS5NCDxcEPH7trObQ==
-  dependencies:
-    htmlparser2 "^4.1.0"
-    lodash "^4.17.15"
-    postcss "^7.0.27"
-    srcset "^2.0.1"
-
 "sanitize-html@github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db":
   version "2.0.0-rc.3"
   resolved "https://codeload.github.com/apostrophecms/sanitize-html/tar.gz/3c7f93f2058f696f5359e3e58d464161647226db"
@@ -10958,11 +10935,6 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
-
-srcset@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/srcset/-/srcset-2.0.1.tgz#8f842d357487eb797f413d9c309de7a5149df5ac"
-  integrity sha512-00kZI87TdRKwt+P8jj8UZxbfp7mK2ufxcIMWvhAOZNJTRROimpHeruWrGvCZneiuVDLqdyHefVp748ECTnyUBQ==
 
 srcset@^3.0.0:
   version "3.0.0"
