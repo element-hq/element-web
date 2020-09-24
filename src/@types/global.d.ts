@@ -64,6 +64,8 @@ declare global {
 
     interface Navigator {
         userLanguage?: string;
+        // https://github.com/Microsoft/TypeScript/issues/19473
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaSession
         mediaSession: any;
     }
 
