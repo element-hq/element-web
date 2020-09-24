@@ -2056,6 +2056,7 @@
     "Explore Public Rooms": "Explore Public Rooms",
     "Create a Group Chat": "Create a Group Chat",
     "Explore rooms": "Explore rooms",
+    "Maximize": "Maximize",
     "Failed to reject invitation": "Failed to reject invitation",
     "This room is not public. You will not be able to rejoin without an invite.": "This room is not public. You will not be able to rejoin without an invite.",
     "Are you sure you want to leave the room '%(roomName)s'?": "Are you sure you want to leave the room '%(roomName)s'?",
