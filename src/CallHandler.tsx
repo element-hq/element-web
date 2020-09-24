@@ -74,8 +74,11 @@ import {base32} from "rfc4648";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 
+// until we ts-ify the js-sdk voip code
+type Call = any;
+
 export default class CallHandler {
-    private calls = {};
+    private calls = new Map<string, Call>();
     private audioPromises = {};
 
     static sharedInstance() {
@@ -101,16 +104,16 @@ export default class CallHandler {
         }
     }
 
-    getCallForRoom(roomId: string) {
-        return this.calls[roomId] || null;
+    getCallForRoom(roomId: string): Call {
+        return this.calls.get(roomId) || null;
     }
 
     getAnyActiveCall() {
         const roomsWithCalls = Object.keys(this.calls);
         for (let i = 0; i < roomsWithCalls.length; i++) {
-            if (this.calls[roomsWithCalls[i]] &&
-                    this.calls[roomsWithCalls[i]].call_state !== "ended") {
-                return this.calls[roomsWithCalls[i]];
+            if (this.calls.get(roomsWithCalls[i]) &&
+                    this.calls.get(roomsWithCalls[i]).call_state !== "ended") {
+                return this.calls.get(roomsWithCalls[i]);
             }
         }
         return null;
@@ -219,7 +222,7 @@ export default class CallHandler {
         console.log(
             `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
         );
-        this.calls[roomId] = call;
+        this.calls.set(roomId, call);
 
         if (status === "ringing") {
             this.play("ringAudio");
@@ -368,18 +371,18 @@ export default class CallHandler {
                 }
                 break;
             case 'hangup':
-                if (!this.calls[payload.room_id]) {
+                if (!this.calls.get(payload.room_id)) {
                     return; // no call to hangup
                 }
-                this.calls[payload.room_id].hangup();
+                this.calls.get(payload.room_id).hangup();
                 this.setCallState(null, payload.room_id, "ended");
                 break;
             case 'answer':
-                if (!this.calls[payload.room_id]) {
+                if (!this.calls.get(payload.room_id)) {
                     return; // no call to answer
                 }
-                this.calls[payload.room_id].answer();
-                this.setCallState(this.calls[payload.room_id], payload.room_id, "connected");
+                this.calls.get(payload.room_id).answer();
+                this.setCallState(this.calls.get(payload.room_id), payload.room_id, "connected");
                 dis.dispatch({
                     action: "view_room",
                     room_id: payload.room_id,
