@@ -41,6 +41,7 @@ export interface IWidget {
     id: string;
     type: string;
     sender: string;
+    // eslint-disable-next-line camelcase
     state_key: string;
     content: Partial<IApp>;
 }
@@ -224,7 +225,13 @@ export default class WidgetUtils {
         });
     }
 
-    static setUserWidget(widgetId: string, widgetType: WidgetType, widgetUrl: string, widgetName: string, widgetData: object) {
+    static setUserWidget(
+        widgetId: string,
+        widgetType: WidgetType,
+        widgetUrl: string,
+        widgetName: string,
+        widgetData: object,
+    ) {
         const content = {
             type: widgetType.preferred,
             url: widgetUrl,
@@ -268,7 +275,14 @@ export default class WidgetUtils {
         });
     }
 
-    static setRoomWidget(roomId: string, widgetId: string, widgetType: WidgetType, widgetUrl: string, widgetName: string, widgetData: object) {
+    static setRoomWidget(
+        roomId: string,
+        widgetId: string,
+        widgetType: WidgetType,
+        widgetUrl: string,
+        widgetName: string,
+        widgetData: object,
+    ) {
         let content;
 
         const addingWidget = Boolean(widgetUrl);
@@ -410,7 +424,13 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId: string, app: Partial<IApp>, senderUserId: string, roomId: string | null, eventId: string): IApp {
+    static makeAppConfig(
+        appId: string,
+        app: Partial<IApp>,
+        senderUserId: string,
+        roomId: string | null,
+        eventId: string,
+    ): IApp {
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");
         }

@@ -54,7 +54,7 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
             widgetConfig.sender,
             null,
             widgetConfig.id);
-    }, [cli, mWidgetsEvent, leftPanelWidgetId]);
+    }, [mWidgetsEvent, leftPanelWidgetId]);
 
     const [height, setHeight] = useLocalStorageState("left-panel-widget-height", INITIAL_HEIGHT);
     const [expanded, setExpanded] = useLocalStorageState("left-panel-widget-expanded", true);
@@ -64,21 +64,6 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
     const tabIndex = isActive ? 0 : -1;
 
     if (!app) return null;
-
-    let auxButton = null;
-    if (1) {
-        auxButton = (
-            <AccessibleTooltipButton
-                tabIndex={tabIndex}
-                onClick={() => {
-                    console.log("@@ Maximise Left Panel Widget")
-                }}
-                className="mx_LeftPanelWidget_maximizeButton"
-                tooltipClassName="mx_LeftPanelWidget_maximizeButtonTooltip"
-                title={_t("Maximize")}
-            />
-        );
-    }
 
     let content;
     if (expanded) {
@@ -112,10 +97,7 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
     return <div className="mx_LeftPanelWidget">
         <div
             onFocus={onFocus}
-            className={classNames({
-                "mx_LeftPanelWidget_headerContainer": true,
-                "mx_LeftPanelWidget_headerContainer_withAux": !!auxButton,
-            })}
+            className="mx_LeftPanelWidget_headerContainer"
             onKeyDown={(ev: React.KeyboardEvent) => {
                 switch (ev.key) {
                     case Key.ARROW_LEFT:
@@ -149,7 +131,16 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
                     })} />
                     <span>{ WidgetUtils.getWidgetName(app) }</span>
                 </AccessibleButton>
-                { auxButton }
+
+                {/* Code for the maximise button for once we have full screen widgets */}
+                {/*<AccessibleTooltipButton
+                    tabIndex={tabIndex}
+                    onClick={() => {
+                    }}
+                    className="mx_LeftPanelWidget_maximizeButton"
+                    tooltipClassName="mx_LeftPanelWidget_maximizeButtonTooltip"
+                    title={_t("Maximize")}
+                />*/}
             </div>
         </div>
 
