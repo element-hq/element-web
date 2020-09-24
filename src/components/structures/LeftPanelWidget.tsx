@@ -35,7 +35,7 @@ interface IProps {
 }
 
 const MIN_HEIGHT = 100;
-const MAX_HEIGHT = 500;
+const MAX_HEIGHT = 500; // or 50% of the window height
 const INITIAL_HEIGHT = 280;
 
 const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
@@ -85,7 +85,7 @@ const LeftPanelWidget: React.FC<IProps> = ({ onResize }) => {
         content = <Resizable
             size={{height} as any}
             minHeight={MIN_HEIGHT}
-            maxHeight={MAX_HEIGHT}
+            maxHeight={Math.min(window.innerHeight / 2, MAX_HEIGHT)}
             onResize={onResize}
             onResizeStop={(e, dir, ref, d) => {
                 setHeight(height + d.height);
