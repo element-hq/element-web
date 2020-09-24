@@ -20,6 +20,7 @@ require("./index.scss");
 import * as qs from 'querystring';
 import {KJUR} from 'jsrsasign';
 import {
+    IOpenIDCredentials,
     IWidgetApiRequest,
     IWidgetApiRequestEmptyData,
     VideoConferenceCapabilities,
@@ -43,6 +44,7 @@ let avatarUrl: string;
 let userId: string;
 let jitsiAuth: string;
 let roomId: string;
+let openIdToken: IOpenIDCredentials;
 
 let widgetApi: WidgetApi;
 
@@ -72,9 +74,16 @@ let widgetApi: WidgetApi;
             widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
             readyPromise = Promise.all([
-                widgetApi.waitFor<CustomEvent<IWidgetApiRequest>>("im.vector.ready")
-                    .then(ev => widgetApi.transport.reply(ev.detail, {})),
-                widgetApi.waitFor("ready").then<void>(),
+                new Promise<void>(resolve => {
+                    widgetApi.once<CustomEvent<IWidgetApiRequest>>("action:im.vector.ready", ev => {
+                        ev.preventDefault();
+                        widgetApi.transport.reply(ev.detail, {});
+                        resolve();
+                    });
+                }),
+                new Promise<void>(resolve => {
+                    widgetApi.once("ready", () => resolve());
+                }),
             ]);
             widgetApi.start();
         } else {
@@ -97,8 +106,9 @@ let widgetApi: WidgetApi;
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
                 // Request credentials, give callback to continue when received
-                // TODO: Implement in widget API
-                //widgetApi.requestOpenIDCredentials(credentialsResponseCallback);
+                openIdToken = await widgetApi.requestOpenIDConnectToken();
+                console.log("Got OpenID Connect token");
+                enableJoinButton();
             } else {
                 enableJoinButton();
             }
@@ -111,19 +121,6 @@ let widgetApi: WidgetApi;
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
     }
 })();
-
-/**
- * Enable or show error depending on what the credentials response is.
- */
-function credentialsResponseCallback() {
-    if (widgetApi.openIDCredentials) {
-        console.info('Successfully got OpenID credentials.');
-        enableJoinButton();
-    } else {
-        console.warn('OpenID credentials request was blocked by user.');
-        document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
-    }
-}
 
 function enableJoinButton() {
     document.getElementById("joinButton").onclick = () => joinConference();
@@ -154,7 +151,7 @@ function createJWTToken() {
         room: "*",
         context: {
             matrix: {
-                token: widgetApi.openIDCredentials.accessToken,
+                token: openIdToken.access_token,
                 room_id: roomId,
             },
             user: {
@@ -177,7 +174,7 @@ function createJWTToken() {
 function joinConference() { // event handler bound in HTML
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        if (!widgetApi.openIDCredentials || !widgetApi.openIDCredentials.accessToken) {
+        if (!openIdToken?.access_token) {
             // We've failing to get a token, don't try to init conference
             console.warn('Expected to have an OpenID credential, cannot initialize widget.');
             document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
