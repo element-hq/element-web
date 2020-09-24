@@ -69,6 +69,7 @@ import {generateHumanReadableId} from "./utils/NamingUtils";
 import {Jitsi} from "./widgets/Jitsi";
 import {WidgetType} from "./widgets/WidgetType";
 import {SettingLevel} from "./settings/SettingLevel";
+import { ActionPayload } from "./dispatcher/payloads";
 import {base32} from "rfc4648";
 
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
@@ -269,7 +270,7 @@ export default class CallHandler {
         }, null, true);
     }
 
-    private onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         const placeCall = (newCall) => {
             this.setCallListeners(newCall);
             if (payload.type === 'voice') {
