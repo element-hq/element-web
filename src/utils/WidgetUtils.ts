@@ -42,7 +42,7 @@ export interface IWidget {
     type: string;
     sender: string;
     state_key: string;
-    content: IApp;
+    content: Partial<IApp>;
 }
 
 export default class WidgetUtils {
@@ -410,7 +410,7 @@ export default class WidgetUtils {
         return client.setAccountData('m.widgets', userWidgets);
     }
 
-    static makeAppConfig(appId: string, app: IApp, senderUserId: string, roomId: string | null, eventId: string): IApp {
+    static makeAppConfig(appId: string, app: Partial<IApp>, senderUserId: string, roomId: string | null, eventId: string): IApp {
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");
         }
@@ -421,7 +421,7 @@ export default class WidgetUtils {
         app.eventId = eventId;
         app.name = app.name || app.type;
 
-        return app;
+        return app as IApp;
     }
 
     static getCapWhitelistForAppTypeInRoomId(appType: string, roomId: string): Capability[] {

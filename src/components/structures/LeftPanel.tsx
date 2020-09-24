@@ -38,6 +38,7 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import RoomListNumResults from "../views/rooms/RoomListNumResults";
+import LeftPanelWidget from "./LeftPanelWidget";
 
 interface IProps {
     isMinimized: boolean;
@@ -432,6 +433,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             {roomList}
                         </div>
                     </div>
+                    { !this.props.isMinimized && <LeftPanelWidget onResize={this.onResize} /> }
                 </aside>
             </div>
         );
