@@ -1,6 +1,10 @@
 const en = require("../src/i18n/strings/en_EN");
 const de = require("../src/i18n/strings/de_DE");
 
+// Mock the browser-request for the languageHandler tests to return
+// Fake languages.json containing references to en_EN and de_DE
+// en_EN.json
+// de_DE.json
 module.exports = jest.fn((opts, cb) => {
     const url = opts.url || opts.uri;
     if (url && url.endsWith("languages.json")) {
