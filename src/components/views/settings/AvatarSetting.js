@@ -21,7 +21,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import classNames from "classnames";
 
 const AvatarSetting = ({avatarUrl, avatarAltText, avatarName, uploadAvatar, removeAvatar}) => {
-    const [isHovering, setIsHovering] = useState();
+    const [isHovering, setIsHovering] = useState(false);
     const hoveringProps = {
         onMouseEnter: () => setIsHovering(true),
         onMouseLeave: () => setIsHovering(false),

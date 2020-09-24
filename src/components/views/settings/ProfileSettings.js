@@ -155,7 +155,8 @@ export default class ProfileSettings extends React.Component {
         return (
             <form
                 onSubmit={this._saveProfile}
-                autoComplete="off" noValidate={true}
+                autoComplete="off"
+                noValidate={true}
                 className="mx_ProfileSettings_profileForm"
             >
                 <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
@@ -183,13 +184,15 @@ export default class ProfileSettings extends React.Component {
                 </div>
                 <div className="mx_ProfileSettings_buttons">
                     <AccessibleButton
-                        onClick={this._clearProfile} kind="link"
+                        onClick={this._clearProfile}
+                        kind="link"
                         disabled={!this.state.enableProfileSave}
                     >
                         {_t("Cancel")}
                     </AccessibleButton>
                     <AccessibleButton
-                        onClick={this._saveProfile} kind="primary"
+                        onClick={this._saveProfile}
+                        kind="primary"
                         disabled={!this.state.enableProfileSave}
                     >
                         {_t("Save")}
