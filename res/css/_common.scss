@@ -18,6 +18,8 @@ limitations under the License.
 
 @import "./_font-sizes.scss";
 
+$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+
 :root {
     font-size: 10px;
 }

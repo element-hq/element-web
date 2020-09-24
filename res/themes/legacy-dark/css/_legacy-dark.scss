@@ -86,10 +86,9 @@ $lightbox-background-bg-color: #000;
 
 $settings-grey-fg-color: #a2a2a2;
 $settings-profile-placeholder-bg-color: #e7e7e7;
-$settings-profile-overlay-bg-color: #000;
-$settings-profile-overlay-placeholder-bg-color: transparent;
-$settings-profile-overlay-fg-color: #fff;
 $settings-profile-overlay-placeholder-fg-color: #454545;
+$settings-profile-button-bg-color: #e7e7e7;
+$settings-profile-button-fg-color: $settings-profile-overlay-placeholder-fg-color;
 $settings-subsection-fg-color: $text-secondary-color;
 
 $topleftmenu-color: $text-primary-color;
