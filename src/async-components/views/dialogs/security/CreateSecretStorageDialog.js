@@ -31,7 +31,7 @@ import AccessibleButton from "../../../../components/views/elements/AccessibleBu
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
 import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
-import { isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
+import { getSecureBackupSetupMethods, isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -87,9 +87,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
-            passPhraseKeySelected: CREATE_STORAGE_OPTION_KEY,
             canSkip: !isSecureBackupRequired(),
         };
+
+        const setupMethods = getSecureBackupSetupMethods();
+        if (setupMethods.includes("key")) {
+            this.state.passPhraseKeySelected = CREATE_STORAGE_OPTION_KEY;
+        } else {
+            this.state.passPhraseKeySelected = CREATE_STORAGE_OPTION_PASSPHRASE;
+        }
 
         this._passphraseField = createRef();
 
@@ -441,39 +447,55 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _renderOptionKey() {
+        return (
+            <StyledRadioButton
+                key={CREATE_STORAGE_OPTION_KEY}
+                value={CREATE_STORAGE_OPTION_KEY}
+                name="keyPassphrase"
+                checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                outlined
+            >
+                <div className="mx_CreateSecretStorageDialog_optionTitle">
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
+                    {_t("Generate a Security Key")}
+                </div>
+                <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
+            </StyledRadioButton>
+        );
+    }
+
+    _renderOptionPassphrase() {
+        return (
+            <StyledRadioButton
+                key={CREATE_STORAGE_OPTION_PASSPHRASE}
+                value={CREATE_STORAGE_OPTION_PASSPHRASE}
+                name="keyPassphrase"
+                checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                outlined
+            >
+                <div className="mx_CreateSecretStorageDialog_optionTitle">
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
+                    {_t("Enter a Security Phrase")}
+                </div>
+                <div>{_t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.")}</div>
+            </StyledRadioButton>
+        );
+    }
+
     _renderPhaseChooseKeyPassphrase() {
+        const setupMethods = getSecureBackupSetupMethods();
+        const optionKey = setupMethods.includes("key") ? this._renderOptionKey() : null;
+        const optionPassphrase = setupMethods.includes("passphrase") ? this._renderOptionPassphrase() : null;
+
         return <form onSubmit={this._onChooseKeyPassphraseFormSubmit}>
             <p className="mx_CreateSecretStorageDialog_centeredBody">{_t(
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
             <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
-                <StyledRadioButton
-                    key={CREATE_STORAGE_OPTION_KEY}
-                    value={CREATE_STORAGE_OPTION_KEY}
-                    name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
-                    outlined
-                >
-                    <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
-                        {_t("Generate a Security Key")}
-                    </div>
-                    <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
-                </StyledRadioButton>
-                <StyledRadioButton
-                    key={CREATE_STORAGE_OPTION_PASSPHRASE}
-                    value={CREATE_STORAGE_OPTION_PASSPHRASE}
-                    name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
-                    outlined
-                >
-                    <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
-                        {_t("Enter a Security Phrase")}
-                    </div>
-                    <div>{_t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.")}</div>
-                </StyledRadioButton>
+                {optionKey}
+                {optionPassphrase}
             </div>
             <DialogButtons
                 primaryButton={_t("Continue")}

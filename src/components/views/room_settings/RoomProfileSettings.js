@@ -75,6 +75,15 @@ export default class RoomProfileSettings extends React.Component {
         });
     };
 
+    _clearProfile = async (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (!this.state.enableProfileSave) return;
+        this._removeAvatar();
+        this.setState({enableProfileSave: false, displayName: this.state.originalDisplayName});
+    };
+
     _saveProfile = async (e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -150,7 +159,12 @@ export default class RoomProfileSettings extends React.Component {
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
         const AvatarSetting = sdk.getComponent('settings.AvatarSetting');
         return (
-            <form onSubmit={this._saveProfile} autoComplete="off" noValidate={true}>
+            <form
+                onSubmit={this._saveProfile}
+                autoComplete="off"
+                noValidate={true}
+                className="mx_ProfileSettings_profileForm"
+            >
                 <input type="file" ref={this._avatarUpload} className="mx_ProfileSettings_avatarUpload"
                        onChange={this._onAvatarChanged} accept="image/*" />
                 <div className="mx_ProfileSettings_profile">
@@ -169,10 +183,22 @@ export default class RoomProfileSettings extends React.Component {
                         uploadAvatar={this.state.canSetAvatar ? this._uploadAvatar : undefined}
                         removeAvatar={this.state.canSetAvatar ? this._removeAvatar : undefined} />
                 </div>
-                <AccessibleButton onClick={this._saveProfile} kind="primary"
-                                  disabled={!this.state.enableProfileSave}>
-                    {_t("Save")}
-                </AccessibleButton>
+                <div className="mx_ProfileSettings_buttons">
+                    <AccessibleButton
+                        onClick={this._clearProfile}
+                        kind="link"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Cancel")}
+                    </AccessibleButton>
+                    <AccessibleButton
+                        onClick={this._saveProfile}
+                        kind="primary"
+                        disabled={!this.state.enableProfileSave}
+                    >
+                        {_t("Save")}
+                    </AccessibleButton>
+                </div>
             </form>
         );
     }

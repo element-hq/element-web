@@ -95,7 +95,7 @@
     "react-transition-group": "^4.4.1",
     "resize-observer-polyfill": "^1.5.1",
     "rfc4648": "^1.4.0",
-    "sanitize-html": "^1.27.1",
+    "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
     "tar-js": "^0.3.0",
     "text-encoding-utf-8": "^1.0.2",
     "url": "^0.11.0",
