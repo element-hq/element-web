@@ -31,6 +31,84 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
+    const plugins = [
+        // This exports our CSS using the splitChunks and loaders above.
+        new MiniCssExtractPlugin({
+            filename: 'bundles/[hash]/[name].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
+        }),
+
+        // This is the app's main entry point.
+        new HtmlWebpackPlugin({
+            template: './src/vector/index.html',
+
+            // we inject the links ourselves via the template, because
+            // HtmlWebpackPlugin will screw up our formatting like the names
+            // of the themes and which chunks we actually care about.
+            inject: false,
+            excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
+            minify: argv.mode === 'production',
+            vars: {
+                og_image_url: og_image_url,
+            },
+        }),
+
+        // This is the jitsi widget wrapper (embedded, so isolated stack)
+        new HtmlWebpackPlugin({
+            template: './src/vector/jitsi/index.html',
+            filename: 'jitsi.html',
+            minify: argv.mode === 'production',
+            chunks: ['jitsi'],
+        }),
+
+        // This is the mobile guide's entry point (separate for faster mobile loading)
+        new HtmlWebpackPlugin({
+            template: './src/vector/mobile_guide/index.html',
+            filename: 'mobile_guide/index.html',
+            minify: argv.mode === 'production',
+            chunks: ['mobileguide'],
+        }),
+
+        // These are the static error pages for when the javascript env is *really unsupported*
+        new HtmlWebpackPlugin({
+            template: './src/vector/static/unable-to-load.html',
+            filename: 'static/unable-to-load.html',
+            minify: argv.mode === 'production',
+            chunks: [],
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/vector/static/incompatible-browser.html',
+            filename: 'static/incompatible-browser.html',
+            minify: argv.mode === 'production',
+            chunks: [],
+        }),
+
+        // This is the usercontent sandbox's entry point (separate for iframing)
+        new HtmlWebpackPlugin({
+            template: './node_modules/matrix-react-sdk/src/usercontent/index.html',
+            filename: 'usercontent/index.html',
+            minify: argv.mode === 'production',
+            chunks: ['usercontent'],
+        }),
+    ];
+
+    if (argv.mode === "production") {
+        plugins.push(new WorkboxPlugin.GenerateSW({
+            maximumFileSizeToCacheInBytes: 22000000,
+            runtimeCaching: [{
+                urlPattern: /i18n\/.*\.json$/,
+                handler: 'CacheFirst',
+
+                options: {
+                    cacheName: 'i18n',
+                    expiration: {
+                        maxEntries: 2,
+                    },
+                },
+            }],
+        }));
+    }
+
     return {
         ...development,
 
@@ -148,8 +226,8 @@ module.exports = (env, argv) => {
                     },
                     loader: 'babel-loader',
                     options: {
-                        cacheDirectory: true
-                    }
+                        cacheDirectory: true,
+                    },
                 },
                 {
                     test: /\.css$/,
@@ -160,7 +238,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
@@ -198,7 +276,7 @@ module.exports = (env, argv) => {
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.scss$/,
@@ -209,7 +287,7 @@ module.exports = (env, argv) => {
                             options: {
                                 importLoaders: 1,
                                 sourceMap: true,
-                            }
+                            },
                         },
                         {
                             loader: 'postcss-loader',
@@ -236,7 +314,7 @@ module.exports = (env, argv) => {
                                 "local-plugins": true,
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.wasm$/,
@@ -294,83 +372,10 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
-            ]
+            ],
         },
 
-        plugins: [
-            // This exports our CSS using the splitChunks and loaders above.
-            new MiniCssExtractPlugin({
-                filename: 'bundles/[hash]/[name].css',
-                ignoreOrder: false, // Enable to remove warnings about conflicting order
-            }),
-
-            // This is the app's main entry point.
-            new HtmlWebpackPlugin({
-                template: './src/vector/index.html',
-
-                // we inject the links ourselves via the template, because
-                // HtmlWebpackPlugin will screw up our formatting like the names
-                // of the themes and which chunks we actually care about.
-                inject: false,
-                excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
-                minify: argv.mode === 'production',
-                vars: {
-                    og_image_url: og_image_url,
-                },
-            }),
-
-            // This is the jitsi widget wrapper (embedded, so isolated stack)
-            new HtmlWebpackPlugin({
-                template: './src/vector/jitsi/index.html',
-                filename: 'jitsi.html',
-                minify: argv.mode === 'production',
-                chunks: ['jitsi'],
-            }),
-
-            // This is the mobile guide's entry point (separate for faster mobile loading)
-            new HtmlWebpackPlugin({
-                template: './src/vector/mobile_guide/index.html',
-                filename: 'mobile_guide/index.html',
-                minify: argv.mode === 'production',
-                chunks: ['mobileguide'],
-            }),
-
-            // These are the static error pages for when the javascript env is *really unsupported*
-            new HtmlWebpackPlugin({
-                template: './src/vector/static/unable-to-load.html',
-                filename: 'static/unable-to-load.html',
-                minify: argv.mode === 'production',
-                chunks: [],
-            }),
-            new HtmlWebpackPlugin({
-                template: './src/vector/static/incompatible-browser.html',
-                filename: 'static/incompatible-browser.html',
-                minify: argv.mode === 'production',
-                chunks: [],
-            }),
-
-            // This is the usercontent sandbox's entry point (separate for iframing)
-            new HtmlWebpackPlugin({
-                template: './node_modules/matrix-react-sdk/src/usercontent/index.html',
-                filename: 'usercontent/index.html',
-                minify: argv.mode === 'production',
-                chunks: ['usercontent'],
-            }),
-
-            new WorkboxPlugin.GenerateSW({
-                runtimeCaching: [{
-                    urlPattern: /i18n\/.*\.json$/,
-                    handler: 'CacheFirst',
-
-                    options: {
-                        cacheName: 'i18n',
-                        expiration: {
-                            maxEntries: 2,
-                        },
-                    },
-                }],
-            }),
-        ],
+        plugins,
 
         output: {
             path: path.join(__dirname, "webapp"),
