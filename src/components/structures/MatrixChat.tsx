@@ -148,7 +148,6 @@ interface IRoomInfo {
 interface IProps { // TODO type things better
     config: Record<string, any>;
     serverConfig?: ValidatedServerConfig;
-    ConferenceHandler?: any;
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
