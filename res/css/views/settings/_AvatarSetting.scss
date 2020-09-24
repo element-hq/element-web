@@ -21,7 +21,7 @@ limitations under the License.
     position: relative;
 
     .mx_AvatarSetting_hover {
-        transition: opacity 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+        transition: opacity $hover-transition;
 
         // position to place the hover bg over the entire thing
         position: absolute;
