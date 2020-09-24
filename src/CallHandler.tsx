@@ -79,7 +79,7 @@ type Call = any;
 
 export default class CallHandler {
     private calls = new Map<string, Call>();
-    private audioPromises = {};
+    private audioPromises = new Map<string, Promise<void>>();
 
     static sharedInstance() {
         if (!window.mxCallHandler) {
@@ -119,7 +119,7 @@ export default class CallHandler {
         return null;
     }
 
-    play(audioId) {
+    play(audioId: string) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -137,32 +137,32 @@ export default class CallHandler {
                     console.log("Unable to play audio clip", e);
                 }
             };
-            if (this.audioPromises[audioId]) {
-                this.audioPromises[audioId] = this.audioPromises[audioId].then(() => {
+            if (this.audioPromises.has(audioId)) {
+                this.audioPromises.set(audioId, this.audioPromises.get(audioId).then(() => {
                     audio.load();
                     return playAudio();
-                });
+                }));
             } else {
-                this.audioPromises[audioId] = playAudio();
+                this.audioPromises.set(audioId, playAudio());
             }
         }
     }
 
-    pause(audioId) {
+    pause(audioId: string) {
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
         if (audio) {
-            if (this.audioPromises[audioId]) {
-                this.audioPromises[audioId] = this.audioPromises[audioId].then(() => audio.pause());
+            if (this.audioPromises.has(audioId)) {
+                this.audioPromises.set(audioId, this.audioPromises.get(audioId).then(() => audio.pause()));
             } else {
-                // pause doesn't actually return a promise, but might as well do this for symmetry with play();
-                this.audioPromises[audioId] = audio.pause();
+                // pause doesn't return a promise, so just do it
+                audio.pause();
             }
         }
     }
 
-    private setCallListeners(call) {
+    private setCallListeners(call: Call) {
         call.on("error", (err) => {
             console.error("Call error:", err);
             if (
@@ -218,7 +218,7 @@ export default class CallHandler {
         });
     }
 
-    private setCallState(call, roomId, status) {
+    private setCallState(call: Call, roomId: string, status: string) {
         console.log(
             `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
         );
@@ -391,7 +391,7 @@ export default class CallHandler {
         }
     }
 
-    private async startCallApp(roomId, type) {
+    private async startCallApp(roomId: string, type: string) {
         dis.dispatch({
             action: 'appsDrawer',
             show: true,
