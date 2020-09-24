@@ -59,6 +59,7 @@ import {MatrixClientPeg} from './MatrixClientPeg';
 import PlatformPeg from './PlatformPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
+// @ts-ignore - XXX: tsc doesn't like this: our js-sdk imports are complex so this isn't surprising
 import Matrix from 'matrix-js-sdk';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
