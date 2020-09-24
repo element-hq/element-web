@@ -18,8 +18,6 @@ import React, {useContext, useEffect, useMemo} from "react";
 import {Resizable} from "re-resizable";
 import classNames from "classnames";
 
-import {_t} from "../../languageHandler";
-import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import {useRovingTabIndex} from "../../accessibility/RovingTabIndex";
 import {Key} from "../../Keyboard";
