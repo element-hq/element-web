@@ -426,7 +426,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
                             {
                                 throwOnError: false,
                                 displayMode: d.display,
-                                output: "mathml",
+                                output: "htmlAndMathml",
                             })
                     });
                 });
