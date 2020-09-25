@@ -38,7 +38,7 @@ export interface IModal<T extends any[]> {
     close(...args: T): void;
 }
 
-interface IHandle<T extends any[]> {
+export interface IHandle<T extends any[]> {
     finished: Promise<T>;
     close(...args: T): void;
 }

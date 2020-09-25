@@ -147,33 +147,33 @@ export default class WidgetMessaging {
         });
     }
 
-    sendThemeInfo(themeInfo: any) {
-        return this.messageToWidget({
-            api: OUTBOUND_API_NAME,
-            action: KnownWidgetActions.UpdateThemeInfo,
-            data: themeInfo,
-        }).catch((error) => {
-            console.error("Failed to send theme info: ", error);
-        });
-    }
-
     sendWidgetConfig(widgetConfig: any) {
         return this.messageToWidget({
             api: OUTBOUND_API_NAME,
-            action: KnownWidgetActions.SendWidgetConfig,
+            action: KnownWidgetActions.GetWidgetConfig,
             data: widgetConfig,
         }).catch((error) => {
             console.error("Failed to send widget info: ", error);
         });
     }
 
-    sendTempCloseInfo(info: any) {
+    sendModalButtonClicked(id: string) {
         return this.messageToWidget({
             api: OUTBOUND_API_NAME,
-            action: KnownWidgetActions.ClosedWidgetResponse,
+            action: KnownWidgetActions.ButtonClicked,
+            data: {id},
+        }).catch((error) => {
+            console.error("Failed to send modal widget button clicked: ", error);
+        });
+    }
+
+    sendModalCloseInfo(info: any) {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.CloseModalWidget,
             data: info,
         }).catch((error) => {
-            console.error("Failed to send temp widget close info: ", error);
+            console.error("Failed to send modal widget close info: ", error);
         });
     }
 

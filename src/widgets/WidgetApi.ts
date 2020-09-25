@@ -25,6 +25,7 @@ export enum Capability {
     Screenshot = "m.capability.screenshot",
     Sticker = "m.sticker",
     AlwaysOnScreen = "m.always_on_screen",
+    Modals = "m.modals",
     ReceiveTerminate = "im.vector.receive_terminate",
 }
 
@@ -39,12 +40,10 @@ export enum KnownWidgetActions {
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
     Terminate = "im.vector.terminate",
-
-    OpenTempWidget = "io.element.start_temp",
-    UpdateThemeInfo = "io.element.theme_info",
-    SendWidgetConfig = "io.element.widget_config",
-    CloseWidget = "io.element.exit",
-    ClosedWidgetResponse = "io.element.exit_response",
+    OpenModalWidget = "open_modal",
+    CloseModalWidget = "close_modal",
+    GetWidgetConfig = "widget_config",
+    ButtonClicked = "button_clicked",
 }
 
 export type WidgetAction = KnownWidgetActions | string;
@@ -76,6 +75,18 @@ export interface OpenIDCredentials {
     tokenType: string;
     matrixServerName: string;
     expiresIn: number;
+}
+
+export enum ButtonKind {
+    Primary = "m.primary",
+    Secondary = "m.secondary",
+    Danger = "m.danger",
+}
+
+export interface IButton {
+    id: "m.close" | string;
+    label: string;
+    kind: ButtonKind;
 }
 
 /**
@@ -140,9 +151,7 @@ export class WidgetApi extends EventEmitter {
                     // Save OpenID credentials
                     this.setOpenIDCredentials(<ToWidgetRequest>payload);
                     this.replyToRequest(<ToWidgetRequest>payload, {});
-                } else if (payload.action === KnownWidgetActions.UpdateThemeInfo
-                    || payload.action === KnownWidgetActions.SendWidgetConfig
-                    || payload.action === KnownWidgetActions.ClosedWidgetResponse) {
+                } else if (payload.action === KnownWidgetActions.GetWidgetConfig) {
                     // Finalization needs to be async, so postpone with a promise
                     let finalizePromise = Promise.resolve();
                     const wait = (promise) => {
@@ -236,16 +245,16 @@ export class WidgetApi extends EventEmitter {
         });
     }
 
-    public closeWidget(exitData: any): Promise<any> {
+    public closeModalWidget(exitData: any): Promise<any> {
         return new Promise<any>(resolve => {
-            this.callAction(KnownWidgetActions.CloseWidget, exitData, null);
+            this.callAction(KnownWidgetActions.CloseModalWidget, exitData, null);
             resolve();
         });
     }
 
-    public openTempWidget(url: string, data: any): Promise<any> {
+    public openModalWidget(url: string, name: string, buttons: IButton[], data: any): Promise<any> {
         return new Promise<any>(resolve => {
-            this.callAction(KnownWidgetActions.OpenTempWidget, {url, data}, null);
+            this.callAction(KnownWidgetActions.OpenModalWidget, {url, name, buttons, data}, null);
             resolve();
         });
     }
