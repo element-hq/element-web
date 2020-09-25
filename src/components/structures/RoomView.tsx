@@ -1866,6 +1866,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 searchInProgress={this.state.searchInProgress}
                 onCancelClick={this.onCancelSearchClick}
                 onSearch={this.onSearch}
+                isRoomEncrypted={this.context.isRoomEncrypted(this.state.room.roomId)}
             />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
