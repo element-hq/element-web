@@ -87,7 +87,7 @@ VideoCallButton.propTypes = {
 function HangupButton(props) {
     const AccessibleButton = sdk.getComponent('elements.AccessibleButton');
     const onHangupClick = () => {
-        const call = CallHandler.getCallForRoom(props.roomId);
+        const call = CallHandler.sharedInstance().getCallForRoom(props.roomId);
         if (!call) {
             return;
         }

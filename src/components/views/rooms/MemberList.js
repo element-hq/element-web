@@ -24,7 +24,6 @@ import {isValid3pidInvite} from "../../../RoomInvite";
 import rate_limited_func from "../../../ratelimitedfunc";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import * as sdk from "../../../index";
-import CallHandler from "../../../CallHandler";
 import {CommunityPrototypeStore} from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
 import {RightPanelPhases} from "../../../stores/RightPanelStorePhases";
@@ -233,15 +232,10 @@ export default class MemberList extends React.Component {
     }
 
     roomMembers() {
-        const ConferenceHandler = CallHandler.getConferenceHandler();
-
         const allMembers = this.getMembersWithUser();
         const filteredAndSortedMembers = allMembers.filter((m) => {
             return (
                 m.membership === 'join' || m.membership === 'invite'
-            ) && (
-                !ConferenceHandler ||
-                (ConferenceHandler && !ConferenceHandler.isConferenceUser(m.userId))
             );
         });
         filteredAndSortedMembers.sort(this.memberSort);
