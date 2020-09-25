@@ -30,6 +30,7 @@ import {Notifier} from "../Notifier";
 import type {Renderer} from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
+import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 
 declare global {
     interface Window {
@@ -53,6 +54,7 @@ declare global {
         mxNotifier: typeof Notifier;
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
+        mxModalWidgetStore: ModalWidgetStore;
     }
 
     interface Document {

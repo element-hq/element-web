@@ -83,8 +83,9 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     public render() {
         // TODO: Don't violate every single security principle
 
-        const widgetUrl = this.props.widgetDefinition.url
-            + `?widgetId=${this.getWidgetId()}&parentUrl=${encodeURIComponent(window.location.href)}`;
+        const widgetId = encodeURIComponent(this.getWidgetId());
+        const parentUrl = encodeURIComponent(window.location.href);
+        const widgetUrl = `${this.props.widgetDefinition.url}?widgetId=${widgetId}&parentUrl=${parentUrl}`;
 
         let buttons;
         if (this.props.widgetDefinition.buttons) {

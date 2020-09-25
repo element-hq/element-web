@@ -52,7 +52,7 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         this.openSourceWidgetId = sourceWidgetId;
         this.modalInstance = Modal.createTrackedDialog('Modal Widget', '', ModalWidgetDialog, {
             widgetDefinition: {...requestData},
-            sourceWidgetId: sourceWidgetId,
+            sourceWidgetId,
             onFinished: (success: boolean, data?: any) => {
                 if (!success) {
                     this.closeModalWidget(sourceWidgetId, {
@@ -84,3 +84,5 @@ export class ModalWidgetStore extends AsyncStoreWithClient<IState> {
         }
     };
 }
+
+window.mxModalWidgetStore = ModalWidgetStore.instance;
