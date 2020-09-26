@@ -21,7 +21,7 @@ import * as PropTypes from 'prop-types';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent} from '../../Keyboard';
+import {Key, isOnlyCtrlOrCmdKeyEvent, isOnlyCtrlOrCmdIgnoreShiftKeyEvent, isMac} from '../../Keyboard';
 import PageTypes from '../../PageTypes';
 import CallMediaHandler from '../../CallMediaHandler';
 import { fixupColorFonts } from '../../utils/FontManager';
@@ -400,6 +400,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
         const hasModifier = ev.altKey || ev.ctrlKey || ev.metaKey || ev.shiftKey;
         const isModifier = ev.key === Key.ALT || ev.key === Key.CONTROL || ev.key === Key.META || ev.key === Key.SHIFT;
+        const modKey = isMac ? ev.metaKey : ev.ctrlKey;
 
         switch (ev.key) {
             case Key.PAGE_UP:
@@ -440,6 +441,15 @@ class LoggedInView extends React.Component<IProps, IState> {
             case Key.SLASH:
                 if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev)) {
                     KeyboardShortcuts.toggleDialog();
+                    handled = true;
+                }
+                break;
+
+            case Key.H:
+                if (ev.altKey && modKey) {
+                    dis.dispatch({
+                        action: 'view_home_page',
+                    });
                     handled = true;
                 }
                 break;
