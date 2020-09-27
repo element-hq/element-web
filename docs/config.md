@@ -48,7 +48,7 @@ For a good example, see https://develop.element.io/config.json.
 1. `integrations_widgets_urls`: list of URLs to the REST interface for the widget integrations server.
 1. `bug_report_endpoint_url`: endpoint to send bug reports to (must be running a
    https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
-   "Send Logs" within the application. Bug reports can be disabled by leaving the
+   "Send Logs" within the application. Bug reports can be disabled/hidden by leaving the
    `bug_report_endpoint_url` out of your config file.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
@@ -101,6 +101,15 @@ For a good example, see https://develop.element.io/config.json.
     Defaults to false (3rd party identity options are shown).
 1. `default_federate`: Default option for room federation when creating a room
     Defaults to true (room federation enabled).
+1. `desktopBuilds`: Used to alter promotional links to the desktop app. By default
+   the builds are considered available and accessible from https://element.io. This
+   config option is typically used in the context of encouraging encrypted message
+   search capabilities (Seshat). All the options listed below are required if this
+   option is specified.
+   1. `available`: When false, the desktop app will not be promoted to the user.
+   1. `logo`: An HTTP URL to the avatar for the desktop build. Should be 24x24, ideally
+      an SVG.
+   1. `url`: An HTTP URL for where to send the user to download the desktop build.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
@@ -144,3 +153,42 @@ Desktop app configuration
 =========================
 
 See https://github.com/vector-im/riot-desktop#user-specified-configjson
+
+UI Features
+===========
+
+Parts of the UI can be disabled using UI features. These are settings which appear
+under `settingDefaults` and can only be `true` (default) or `false`. When `false`,
+parts of the UI relating to that feature will be disabled regardless of the user's
+preferences.
+
+Currently, the following UI feature flags are supported:
+
+* `UIFeature.urlPreviews` - Whether URL previews are enabled across the entire application.
+* `UIFeature.feedback` - Whether prompts to supply feedback are shown.
+* `UIFeature.voip` - Whether or not VoIP is shown readily to the user. When disabled,
+  Jitsi widgets will still work though they cannot easily be added.
+* `UIFeature.widgets` - Whether or not widgets will be shown.
+* `UIFeature.flair` - Whether or not community flair is shown in rooms.
+* `UIFeature.communities` - Whether or not to show any UI related to communities. Implicitly
+  disables `UIFeature.flair` when disabled.
+* `UIFeature.advancedSettings` - Whether or not sections titled "advanced" in room and
+  user settings are shown to the user.
+* `UIFeature.shareQrCode` - Whether or not the QR code on the share room/event dialog
+  is shown.
+* `UIFeature.shareSocial` - Whether or not the social icons on the share room/event dialog
+  are shown.
+* `UIFeature.identityServer` - Whether or not functionality requiring an identity server
+  is shown. When disabled, the user will not be able to interact with the identity
+  server (sharing email addresses, 3PID invites, etc).
+* `UIFeature.thirdPartyId` - Whether or not UI relating to third party identifiers (3PIDs)
+  is shown. Typically this is considered "contact information" on the homeserver, and is
+  not directly related to the identity server.
+* `UIFeature.registration` - Whether or not the registration page is accessible. Typically
+  useful if accounts are managed externally.
+* `UIFeature.passwordReset` - Whether or not the password reset page is accessible. Typically
+  useful if accounts are managed externally.
+* `UIFeature.deactivate` - Whether or not the deactivate account button is accessible. Typically
+  useful if accounts are managed externally.
+* `UIFeature.advancedEncryption` - Whether or not advanced encryption options are shown to the
+  user.

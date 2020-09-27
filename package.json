@@ -47,7 +47,7 @@
     "build:types": "tsc --emitDeclarationOnly --jsx react",
     "deploy": "gh-pages-deploy",
     "dist": "scripts/package.sh",
-    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,riot-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
+    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development",
     "install:electron": "electron-builder install-app-deps",
@@ -79,7 +79,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "sanitize-html": "^1.19.1",
+    "sanitize-html": "github:apostrophecms/sanitize-html#3c7f93f2058f696f5359e3e58d464161647226db",
     "ua-parser-js": "^0.7.19",
     "url": "^0.11.0"
   },
@@ -155,7 +155,8 @@
     "typescript": "^3.7.3",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "workbox-webpack-plugin": "^5.1.4"
   },
   "jest": {
     "testEnvironment": "jest-environment-jsdom-fourteen",
