@@ -114,4 +114,24 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
         const driver = new SdkWidgetDriver(widget, WidgetKind.Account, userId);
         return this.generateMessaging(userId, widget, iframe, driver);
     }
+
+    /**
+     * Stops the messaging instance for the widget, unregistering it.
+     * @param {Room} room The room where the widget resides.
+     * @param {Widget} widget The widget
+     */
+    public stopMessagingForRoomWidget(room: Room, widget: Widget) {
+        const api = this.widgetMap.getOrCreate(room.roomId, new EnhancedMap()).remove(widget.id);
+        if (api) api.messaging.stop();
+    }
+
+    /**
+     * Stops the messaging instance for the widget, unregistering it.
+     * @param {Widget} widget The widget
+     */
+    public stopMessagingForAccountWidget(widget: Widget) {
+        if (!this.matrixClient) return;
+        const api = this.widgetMap.getOrCreate(this.matrixClient.getUserId(), new EnhancedMap()).remove(widget.id);
+        if (api) api.messaging.stop();
+    }
 }

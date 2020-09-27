@@ -60,4 +60,10 @@ export class EnhancedMap<K, V> extends Map<K, V> {
         this.set(key, def);
         return def;
     }
+
+    public remove(key: K): V {
+        const v = this.get(key);
+        this.delete(key);
+        return v;
+    }
 }
