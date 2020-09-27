@@ -1843,6 +1843,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else {
             subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
+
         const title = `${SdkConfig.get().brand} ${subtitle}`;
 
         if (document.title !== title) {
