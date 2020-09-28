@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,25 +16,43 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
-
 import * as recent from '../../../emojipicker/recent';
-import {DATA_BY_CATEGORY, getEmojiFromUnicode} from "../../../emoji";
+import {DATA_BY_CATEGORY, getEmojiFromUnicode, IEmoji} from "../../../emoji";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
+import Header from "./Header";
+import Search from "./Search";
+import Preview from "./Preview";
+import QuickReactions from "./QuickReactions";
+import Category, {ICategory, CategoryKey} from "./Category";
 
 export const CATEGORY_HEADER_HEIGHT = 22;
 export const EMOJI_HEIGHT = 37;
 export const EMOJIS_PER_ROW = 8;
 
-class EmojiPicker extends React.Component {
-    static propTypes = {
-        onChoose: PropTypes.func.isRequired,
-        selectedEmojis: PropTypes.instanceOf(Set),
-        showQuickReactions: PropTypes.bool,
-    };
+interface IProps {
+    selectedEmojis: Set<string>;
+    showQuickReactions?: boolean;
+    onChoose(unicode: string): boolean;
+}
+
+interface IState {
+    filter: string;
+    previewEmoji?: IEmoji;
+    scrollTop: number;
+    // initial estimation of height, dialog is hardcoded to 450px height.
+    // should be enough to never have blank rows of emojis as
+    // 3 rows of overflow are also rendered. The actual value is updated on scroll.
+    viewportHeight: number;
+}
+
+class EmojiPicker extends React.Component<IProps, IState> {
+    private readonly recentlyUsed: IEmoji[];
+    private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
+    private readonly categories: ICategory[];
+
+    private bodyRef = React.createRef<HTMLElement>();
 
     constructor(props) {
         super(props);
@@ -42,9 +61,6 @@ class EmojiPicker extends React.Component {
             filter: "",
             previewEmoji: null,
             scrollTop: 0,
-            // initial estimation of height, dialog is hardcoded to 450px height.
-            // should be enough to never have blank rows of emojis as
-            // 3 rows of overflow are also rendered. The actual value is updated on scroll.
             viewportHeight: 280,
         };
 
@@ -110,18 +126,9 @@ class EmojiPicker extends React.Component {
             visible: false,
             ref: React.createRef(),
         }];
-
-        this.bodyRef = React.createRef();
-
-        this.onChangeFilter = this.onChangeFilter.bind(this);
-        this.onHoverEmoji = this.onHoverEmoji.bind(this);
-        this.onHoverEmojiEnd = this.onHoverEmojiEnd.bind(this);
-        this.onClickEmoji = this.onClickEmoji.bind(this);
-        this.scrollToCategory = this.scrollToCategory.bind(this);
-        this.updateVisibility = this.updateVisibility.bind(this);
     }
 
-    onScroll = () => {
+    private onScroll = () => {
         const body = this.bodyRef.current;
         this.setState({
             scrollTop: body.scrollTop,
@@ -130,7 +137,7 @@ class EmojiPicker extends React.Component {
         this.updateVisibility();
     };
 
-    updateVisibility() {
+    private updateVisibility = () => {
         const body = this.bodyRef.current;
         const rect = body.getBoundingClientRect();
         for (const cat of this.categories) {
@@ -147,21 +154,21 @@ class EmojiPicker extends React.Component {
             // We update this here instead of through React to avoid re-render on scroll.
             if (cat.visible) {
                 cat.ref.current.classList.add("mx_EmojiPicker_anchor_visible");
-                cat.ref.current.setAttribute("aria-selected", true);
-                cat.ref.current.setAttribute("tabindex", 0);
+                cat.ref.current.setAttribute("aria-selected", "true");
+                cat.ref.current.setAttribute("tabindex", "0");
             } else {
                 cat.ref.current.classList.remove("mx_EmojiPicker_anchor_visible");
-                cat.ref.current.setAttribute("aria-selected", false);
-                cat.ref.current.setAttribute("tabindex", -1);
+                cat.ref.current.setAttribute("aria-selected", "false");
+                cat.ref.current.setAttribute("tabindex", "-1");
             }
         }
-    }
+    };
 
-    scrollToCategory(category) {
+    private scrollToCategory = (category: string) => {
         this.bodyRef.current.querySelector(`[data-category-id="${category}"]`).scrollIntoView();
-    }
+    };
 
-    onChangeFilter(filter) {
+    private onChangeFilter = (filter: string) => {
         filter = filter.toLowerCase(); // filter is case insensitive stored lower-case
         for (const cat of this.categories) {
             let emojis;
@@ -181,27 +188,27 @@ class EmojiPicker extends React.Component {
         // Header underlines need to be updated, but updating requires knowing
         // where the categories are, so we wait for a tick.
         setTimeout(this.updateVisibility, 0);
-    }
+    };
 
-    onHoverEmoji(emoji) {
+    private onHoverEmoji = (emoji: IEmoji) => {
         this.setState({
             previewEmoji: emoji,
         });
-    }
+    };
 
-    onHoverEmojiEnd(emoji) {
+    private onHoverEmojiEnd = (emoji: IEmoji) => {
         this.setState({
             previewEmoji: null,
         });
-    }
+    };
 
-    onClickEmoji(emoji) {
+    private onClickEmoji = (emoji: IEmoji) => {
         if (this.props.onChoose(emoji.unicode) !== false) {
             recent.add(emoji.unicode);
         }
-    }
+    };
 
-    _categoryHeightForEmojiCount(count) {
+    private static categoryHeightForEmojiCount(count: number) {
         if (count === 0) {
             return 0;
         }
@@ -209,25 +216,30 @@ class EmojiPicker extends React.Component {
     }
 
     render() {
-        const Header = sdk.getComponent("emojipicker.Header");
-        const Search = sdk.getComponent("emojipicker.Search");
-        const Category = sdk.getComponent("emojipicker.Category");
-        const Preview = sdk.getComponent("emojipicker.Preview");
-        const QuickReactions = sdk.getComponent("emojipicker.QuickReactions");
         let heightBefore = 0;
         return (
             <div className="mx_EmojiPicker">
-                <Header categories={this.categories} defaultCategory="recent" onAnchorClick={this.scrollToCategory} />
+                <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
                 <Search query={this.state.filter} onChange={this.onChangeFilter} />
-                <AutoHideScrollbar className="mx_EmojiPicker_body" wrappedRef={e => this.bodyRef.current = e} onScroll={this.onScroll}>
+                <AutoHideScrollbar className="mx_EmojiPicker_body" wrappedRef={this.bodyRef} onScroll={this.onScroll}>
                     {this.categories.map(category => {
                         const emojis = this.memoizedDataByCategory[category.id];
-                        const categoryElement = (<Category key={category.id} id={category.id} name={category.name}
-                            heightBefore={heightBefore} viewportHeight={this.state.viewportHeight}
-                            scrollTop={this.state.scrollTop} emojis={emojis} onClick={this.onClickEmoji}
-                            onMouseEnter={this.onHoverEmoji} onMouseLeave={this.onHoverEmojiEnd}
-                            selectedEmojis={this.props.selectedEmojis} />);
-                        const height = this._categoryHeightForEmojiCount(emojis.length);
+                        const categoryElement = ((
+                            <Category
+                                key={category.id}
+                                id={category.id}
+                                name={category.name}
+                                heightBefore={heightBefore}
+                                viewportHeight={this.state.viewportHeight}
+                                scrollTop={this.state.scrollTop}
+                                emojis={emojis}
+                                onClick={this.onClickEmoji}
+                                onMouseEnter={this.onHoverEmoji}
+                                onMouseLeave={this.onHoverEmojiEnd}
+                                selectedEmojis={this.props.selectedEmojis}
+                            />
+                        ));
+                        const height = EmojiPicker.categoryHeightForEmojiCount(emojis.length);
                         heightBefore += height;
                         return categoryElement;
                     })}

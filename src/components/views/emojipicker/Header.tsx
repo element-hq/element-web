@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,19 +16,19 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from "classnames";
 
 import {_t} from "../../../languageHandler";
 import {Key} from "../../../Keyboard";
+import {CategoryKey, ICategory} from "./Category";
 
-class Header extends React.PureComponent {
-    static propTypes = {
-        categories: PropTypes.arrayOf(PropTypes.object).isRequired,
-        onAnchorClick: PropTypes.func.isRequired,
-    };
+interface IProps {
+    categories: ICategory[];
+    onAnchorClick(id: CategoryKey): void
+}
 
-    findNearestEnabled(index, delta) {
+class Header extends React.PureComponent<IProps> {
+    private findNearestEnabled(index: number, delta: number) {
         index += this.props.categories.length;
         const cats = [...this.props.categories, ...this.props.categories, ...this.props.categories];
 
@@ -37,12 +38,12 @@ class Header extends React.PureComponent {
         }
     }
 
-    changeCategoryRelative(delta) {
+    private changeCategoryRelative(delta: number) {
         const current = this.props.categories.findIndex(c => c.visible);
         this.changeCategoryAbsolute(current + delta, delta);
     }
 
-    changeCategoryAbsolute(index, delta=1) {
+    private changeCategoryAbsolute(index: number, delta=1) {
         const category = this.props.categories[this.findNearestEnabled(index, delta)];
         if (category) {
             this.props.onAnchorClick(category.id);
@@ -52,7 +53,7 @@ class Header extends React.PureComponent {
 
     // Implements ARIA Tabs with Automatic Activation pattern
     // https://www.w3.org/TR/wai-aria-practices/examples/tabs/tabs-1/tabs.html
-    onKeyDown = (ev) => {
+    private onKeyDown = (ev: React.KeyboardEvent) => {
         let handled = true;
         switch (ev.key) {
             case Key.ARROW_LEFT:
@@ -80,7 +81,12 @@ class Header extends React.PureComponent {
 
     render() {
         return (
-            <nav className="mx_EmojiPicker_header" role="tablist" aria-label={_t("Categories")} onKeyDown={this.onKeyDown}>
+            <nav
+                className="mx_EmojiPicker_header"
+                role="tablist"
+                aria-label={_t("Categories")}
+                onKeyDown={this.onKeyDown}
+            >
                 {this.props.categories.map(category => {
                     const classes = classNames(`mx_EmojiPicker_anchor mx_EmojiPicker_anchor_${category.id}`, {
                         mx_EmojiPicker_anchor_visible: category.visible,

@@ -1,5 +1,6 @@
 /*
 Copyright 2019 Tulir Asokan <tulir@maunium.net>
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,19 +16,21 @@ limitations under the License.
 */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
-class Preview extends React.PureComponent {
-    static propTypes = {
-        emoji: PropTypes.object,
-    };
+import {IEmoji} from "../../../emoji";
 
+interface IProps {
+    emoji: IEmoji;
+}
+
+class Preview extends React.PureComponent<IProps> {
     render() {
         const {
             unicode = "",
             annotation = "",
             shortcodes: [shortcode = ""],
         } = this.props.emoji || {};
+
         return (
             <div className="mx_EmojiPicker_footer mx_EmojiPicker_preview">
                 <div className="mx_EmojiPicker_preview_emoji">
