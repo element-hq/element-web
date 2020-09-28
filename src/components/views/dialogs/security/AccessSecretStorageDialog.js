@@ -289,7 +289,12 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
             content = <div>
                 <p>{_t("Use your Security Key to continue.")}</p>
 
-                <form className="mx_AccessSecretStorageDialog_primaryContainer" onSubmit={this._onRecoveryKeyNext} spellCheck={false}>
+                <form
+                    className="mx_AccessSecretStorageDialog_primaryContainer"
+                    onSubmit={this._onRecoveryKeyNext}
+                    spellCheck={false}
+                    autoComplete="off"
+                >
                     <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry">
                         <div className="mx_AccessSecretStorageDialog_recoveryKeyEntry_textInput">
                             <Field
@@ -298,6 +303,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent {
                                 value={this.state.recoveryKey}
                                 onChange={this._onRecoveryKeyChange}
                                 forceValidity={this.state.recoveryKeyCorrect}
+                                autoComplete="off"
                             />
                         </div>
                         <span className="mx_AccessSecretStorageDialog_recoveryKeyEntry_entryControlSeparatorText">
