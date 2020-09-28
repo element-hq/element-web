@@ -20,7 +20,7 @@ import sdk from '../../../skinned-sdk';
 import {MatrixClientPeg} from '../../../../src/MatrixClientPeg';
 import { stubClient } from '../../../test-utils';
 
-const AccessSecretStorageDialog = sdk.getComponent("dialogs.secretstorage.AccessSecretStorageDialog");
+const AccessSecretStorageDialog = sdk.getComponent("dialogs.security.AccessSecretStorageDialog");
 
 describe("AccessSecretStorageDialog", function() {
     it("Closes the dialog if _onRecoveryKeyNext is called with a valid key", (done) => {

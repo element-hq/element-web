@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {MatrixClientPeg} from './MatrixClientPeg';
-import CallHandler from './CallHandler';
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
 import {isValid3pidInvite} from "./RoomInvite";
@@ -29,7 +28,6 @@ function textForMemberEvent(ev) {
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
 
-    const ConferenceHandler = CallHandler.getConferenceHandler();
     const reason = content.reason ? (_t('Reason') + ': ' + content.reason) : '';
     switch (content.membership) {
         case 'invite': {
@@ -44,11 +42,7 @@ function textForMemberEvent(ev) {
                     return _t('%(targetName)s accepted an invitation.', {targetName});
                 }
             } else {
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('%(senderName)s requested a VoIP conference.', {senderName});
-                } else {
-                    return _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
-                }
+                return _t('%(senderName)s invited %(targetName)s.', {senderName, targetName});
             }
         }
         case 'ban':
@@ -85,17 +79,11 @@ function textForMemberEvent(ev) {
                 }
             } else {
                 if (!ev.target) console.warn("Join message has no target! -- " + ev.getContent().state_key);
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('VoIP conference started.');
-                } else {
-                    return _t('%(targetName)s joined the room.', {targetName});
-                }
+                return _t('%(targetName)s joined the room.', {targetName});
             }
         case 'leave':
             if (ev.getSender() === ev.getStateKey()) {
-                if (ConferenceHandler && ConferenceHandler.isConferenceUser(ev.getStateKey())) {
-                    return _t('VoIP conference finished.');
-                } else if (prevContent.membership === "invite") {
+                if (prevContent.membership === "invite") {
                     return _t('%(targetName)s rejected the invitation.', {targetName});
                 } else {
                     return _t('%(targetName)s left the room.', {targetName});

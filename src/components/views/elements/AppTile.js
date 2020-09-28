@@ -863,13 +863,13 @@ export default class AppTile extends React.Component {
                         { /* Minimise widget */ }
                         { showMinimiseButton && <AccessibleButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_minimise"
-                            title={_t('Minimize apps')}
+                            title={_t('Minimize widget')}
                             onClick={this._onMinimiseClick}
                         /> }
                         { /* Maximise widget */ }
                         { showMaximiseButton && <AccessibleButton
                             className="mx_AppTileMenuBar_iconButton mx_AppTileMenuBar_iconButton_maximise"
-                            title={_t('Maximize apps')}
+                            title={_t('Maximize widget')}
                             onClick={this._onMinimiseClick}
                         /> }
                         { /* Title */ }

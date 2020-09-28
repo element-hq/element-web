@@ -65,12 +65,10 @@ import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
 import ForwardMessage from "../views/rooms/ForwardMessage";
 import SearchBar from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
-import RoomRecoveryReminder from "../views/rooms/RoomRecoveryReminder";
 import PinnedEventsPanel from "../views/rooms/PinnedEventsPanel";
 import AuxPanel from "../views/rooms/AuxPanel";
 import RoomHeader from "../views/rooms/RoomHeader";
 import TintableSvg from "../views/elements/TintableSvg";
-import type * as ConferenceHandler from '../../VectorConferenceHandler';
 import {XOR} from "../../@types/common";
 import { IThreepidInvite } from "../../stores/ThreepidInviteStore";
 
@@ -85,8 +83,6 @@ if (DEBUG) {
 }
 
 interface IProps {
-    ConferenceHandler?: ConferenceHandler;
-
     threepidInvite: IThreepidInvite,
 
     // Any data about the room that would normally come from the homeserver
@@ -182,7 +178,6 @@ export interface IState {
     matrixClientIsReady: boolean;
     showUrlPreview?: boolean;
     e2eStatus?: E2EStatus;
-    displayConfCallNotification?: boolean;
     rejecting?: boolean;
     rejectError?: Error;
 }
@@ -489,8 +484,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             callState: callState,
         });
 
-        this.updateConfCallNotification();
-
         window.addEventListener('beforeunload', this.onPageUnload);
         if (this.props.resizeNotifier) {
             this.props.resizeNotifier.on("middlePanelResized", this.onResize);
@@ -673,9 +666,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                     handled = true;
                 }
                 break;
+            case Key.U: // Mac returns lowercase
             case Key.U.toUpperCase():
                 if (isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) && ev.shiftKey) {
-                    dis.dispatch({ action: "upload_file" });
+                    dis.dispatch({ action: "upload_file" }, true);
                     handled = true;
                 }
                 break;
@@ -723,10 +717,6 @@ export default class RoomView extends React.Component<IProps, IState> {
                 if (call) {
                     callState = call.call_state;
                 }
-
-                // possibly remove the conf call notification if we're now in
-                // the conf
-                this.updateConfCallNotification();
 
                 this.setState({
                     callState: callState,
@@ -814,12 +804,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (this.state.room && room.roomId == this.state.room.roomId) {
             this.forceUpdate();
         }
-    };
-
-    private onRoomRecoveryReminderDontAskAgain = () => {
-        // Called when the option to not ask again is set:
-        // force an update to hide the recovery reminder
-        this.forceUpdate();
     };
 
     private onKeyBackupStatus = () => {
@@ -1024,9 +1008,6 @@ export default class RoomView extends React.Component<IProps, IState> {
 
     // rate limited because a power level change will emit an event for every member in the room.
     private updateRoomMembers = rateLimitedFunc((dueToMember) => {
-        // a member state changed in this room
-        // refresh the conf call notification state
-        this.updateConfCallNotification();
         this.updateDMState();
 
         let memberCountInfluence = 0;
@@ -1053,30 +1034,6 @@ export default class RoomView extends React.Component<IProps, IState> {
         let joinedOrInvitedMemberCount = room.getJoinedMemberCount() + room.getInvitedMemberCount();
         if (countInfluence) joinedOrInvitedMemberCount += countInfluence;
         this.setState({isAlone: joinedOrInvitedMemberCount === 1});
-    }
-
-    private updateConfCallNotification() {
-        const room = this.state.room;
-        if (!room || !this.props.ConferenceHandler) {
-            return;
-        }
-        const confMember = room.getMember(
-            this.props.ConferenceHandler.getConferenceUserIdForRoom(room.roomId),
-        );
-
-        if (!confMember) {
-            return;
-        }
-        const confCall = this.props.ConferenceHandler.getConferenceCallForRoom(confMember.roomId);
-
-        // A conf call notification should be displayed if there is an ongoing
-        // conf call but this cilent isn't a part of it.
-        this.setState({
-            displayConfCallNotification: (
-                (!confCall || confCall.call_state === "ended") &&
-                confMember.membership === "join"
-            ),
-        });
     }
 
     private updateDMState() {
@@ -1687,7 +1644,7 @@ export default class RoomView extends React.Component<IProps, IState> {
         if (!this.state.room) {
             return null;
         }
-        return CallHandler.getCallForRoom(this.state.room.roomId);
+        return CallHandler.sharedInstance().getCallForRoom(this.state.room.roomId);
     }
 
     // this has to be a proper method rather than an unnamed function,
@@ -1858,13 +1815,6 @@ export default class RoomView extends React.Component<IProps, IState> {
             this.state.room.userMayUpgradeRoom(this.context.credentials.userId)
         );
 
-        const showRoomRecoveryReminder = (
-            this.context.isCryptoEnabled() &&
-            SettingsStore.getValue("showRoomRecoveryReminder") &&
-            this.context.isRoomEncrypted(this.state.room.roomId) &&
-            this.context.getKeyBackupEnabled() === false
-        );
-
         const hiddenHighlightCount = this.getHiddenHighlightCount();
 
         let aux = null;
@@ -1879,12 +1829,10 @@ export default class RoomView extends React.Component<IProps, IState> {
                 searchInProgress={this.state.searchInProgress}
                 onCancelClick={this.onCancelSearchClick}
                 onSearch={this.onSearch}
+                isRoomEncrypted={this.context.isRoomEncrypted(this.state.room.roomId)}
             />;
         } else if (showRoomUpgradeBar) {
             aux = <RoomUpgradeWarningBar room={this.state.room} recommendation={roomVersionRecommendation} />;
-            hideCancel = true;
-        } else if (showRoomRecoveryReminder) {
-            aux = <RoomRecoveryReminder onDontAskAgainSet={this.onRoomRecoveryReminderDontAskAgain} />;
             hideCancel = true;
         } else if (this.state.showingPinned) {
             hideCancel = true; // has own cancel
@@ -1940,9 +1888,7 @@ export default class RoomView extends React.Component<IProps, IState> {
                 room={this.state.room}
                 fullHeight={false}
                 userId={this.context.credentials.userId}
-                conferenceHandler={this.props.ConferenceHandler}
                 draggingFile={this.state.draggingFile}
-                displayConfCallNotification={this.state.displayConfCallNotification}
                 maxHeight={this.state.auxPanelMaxHeight}
                 showApps={this.state.showApps}
                 hideAppsDrawer={false}

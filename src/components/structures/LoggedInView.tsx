@@ -85,7 +85,6 @@ interface IProps {
     threepidInvite?: IThreepidInvite;
     roomOobData?: object;
     currentRoomId: string;
-    ConferenceHandler?: object;
     collapseLhs: boolean;
     config: {
         piwik: {
@@ -637,7 +636,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                     viaServers={this.props.viaServers}
                     key={this.props.currentRoomId || 'roomview'}
                     disabled={this.props.middleDisabled}
-                    ConferenceHandler={this.props.ConferenceHandler}
                     resizeNotifier={this.props.resizeNotifier}
                 />;
                 break;

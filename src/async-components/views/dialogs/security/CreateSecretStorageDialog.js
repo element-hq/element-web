@@ -30,7 +30,8 @@ import StyledRadioButton from '../../../../components/views/elements/StyledRadio
 import AccessibleButton from "../../../../components/views/elements/AccessibleButton";
 import DialogButtons from "../../../../components/views/elements/DialogButtons";
 import InlineSpinner from "../../../../components/views/elements/InlineSpinner";
-import { isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
+import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
+import { getSecureBackupSetupMethods, isSecureBackupRequired } from '../../../../utils/WellKnownUtils';
 
 const PHASE_LOADING = 0;
 const PHASE_LOADERROR = 1;
@@ -86,9 +87,15 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
             canUploadKeysWithPasswordOnly: null,
             accountPassword: props.accountPassword || "",
             accountPasswordCorrect: null,
-            passPhraseKeySelected: CREATE_STORAGE_OPTION_KEY,
             canSkip: !isSecureBackupRequired(),
         };
+
+        const setupMethods = getSecureBackupSetupMethods();
+        if (setupMethods.includes("key")) {
+            this.state.passPhraseKeySelected = CREATE_STORAGE_OPTION_KEY;
+        } else {
+            this.state.passPhraseKeySelected = CREATE_STORAGE_OPTION_PASSPHRASE;
+        }
 
         this._passphraseField = createRef();
 
@@ -280,21 +287,21 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         const { forceReset } = this.props;
 
         try {
-            // JRS: In an upcoming change, the cross-signing steps will be
-            // removed from here and this will instead be about secret storage
-            // only.
             if (forceReset) {
-                console.log("Forcing cross-signing and secret storage reset");
+                console.log("Forcing secret storage reset");
                 await cli.bootstrapSecretStorage({
                     createSecretStorageKey: async () => this._recoveryKey,
                     setupNewKeyBackup: true,
                     setupNewSecretStorage: true,
                 });
-                await cli.bootstrapCrossSigning({
-                    authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
-                    setupNewCrossSigning: true,
-                });
             } else {
+                // For password authentication users after 2020-09, this cross-signing
+                // step will be a no-op since it is now setup during registration or login
+                // when needed. We should keep this here to cover other cases such as:
+                //   * Users with existing sessions prior to 2020-09 changes
+                //   * SSO authentication users which require interactive auth to upload
+                //     keys (and also happen to skip all post-authentication flows at the
+                //     moment via token login)
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: this._doBootstrapUIAuth,
                 });
@@ -341,7 +348,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         // so let's stash it here, rather than prompting for it twice.
         const keyCallback = k => this._backupKey = k;
 
-        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         const { finished } = Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog,
             {
@@ -441,39 +447,55 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
         });
     }
 
+    _renderOptionKey() {
+        return (
+            <StyledRadioButton
+                key={CREATE_STORAGE_OPTION_KEY}
+                value={CREATE_STORAGE_OPTION_KEY}
+                name="keyPassphrase"
+                checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
+                outlined
+            >
+                <div className="mx_CreateSecretStorageDialog_optionTitle">
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
+                    {_t("Generate a Security Key")}
+                </div>
+                <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
+            </StyledRadioButton>
+        );
+    }
+
+    _renderOptionPassphrase() {
+        return (
+            <StyledRadioButton
+                key={CREATE_STORAGE_OPTION_PASSPHRASE}
+                value={CREATE_STORAGE_OPTION_PASSPHRASE}
+                name="keyPassphrase"
+                checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
+                outlined
+            >
+                <div className="mx_CreateSecretStorageDialog_optionTitle">
+                    <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
+                    {_t("Enter a Security Phrase")}
+                </div>
+                <div>{_t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.")}</div>
+            </StyledRadioButton>
+        );
+    }
+
     _renderPhaseChooseKeyPassphrase() {
+        const setupMethods = getSecureBackupSetupMethods();
+        const optionKey = setupMethods.includes("key") ? this._renderOptionKey() : null;
+        const optionPassphrase = setupMethods.includes("passphrase") ? this._renderOptionPassphrase() : null;
+
         return <form onSubmit={this._onChooseKeyPassphraseFormSubmit}>
             <p className="mx_CreateSecretStorageDialog_centeredBody">{_t(
                 "Safeguard against losing access to encrypted messages & data by " +
                 "backing up encryption keys on your server.",
             )}</p>
             <div className="mx_CreateSecretStorageDialog_primaryContainer" role="radiogroup" onChange={this._onKeyPassphraseChange}>
-                <StyledRadioButton
-                    key={CREATE_STORAGE_OPTION_KEY}
-                    value={CREATE_STORAGE_OPTION_KEY}
-                    name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_KEY}
-                    outlined
-                >
-                    <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup"></span>
-                        {_t("Generate a Security Key")}
-                    </div>
-                    <div>{_t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.")}</div>
-                </StyledRadioButton>
-                <StyledRadioButton
-                    key={CREATE_STORAGE_OPTION_PASSPHRASE}
-                    value={CREATE_STORAGE_OPTION_PASSPHRASE}
-                    name="keyPassphrase"
-                    checked={this.state.passPhraseKeySelected === CREATE_STORAGE_OPTION_PASSPHRASE}
-                    outlined
-                >
-                    <div className="mx_CreateSecretStorageDialog_optionTitle">
-                        <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_securePhrase"></span>
-                        {_t("Enter a Security Phrase")}
-                    </div>
-                    <div>{_t("Use a secret phrase only you know, and optionally save a Security Key to use for backup.")}</div>
-                </StyledRadioButton>
+                {optionKey}
+                {optionPassphrase}
             </div>
             <DialogButtons
                 primaryButton={_t("Continue")}

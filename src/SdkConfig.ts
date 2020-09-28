@@ -33,6 +33,11 @@ export const DEFAULTS: ConfigOptions = {
         // Default conference domain
         preferredDomain: "jitsi.riot.im",
     },
+    desktopBuilds: {
+        available: true,
+        logo: require("../res/img/element-desktop-logo.svg"),
+        url: "https://element.io/get-started",
+    },
 };
 
 export default class SdkConfig {

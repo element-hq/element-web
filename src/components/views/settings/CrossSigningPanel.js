@@ -22,6 +22,7 @@ import * as sdk from '../../../index';
 import Modal from '../../../Modal';
 import Spinner from '../elements/Spinner';
 import InteractiveAuthDialog from '../dialogs/InteractiveAuthDialog';
+import ConfirmDestroyCrossSigningDialog from '../dialogs/security/ConfirmDestroyCrossSigningDialog';
 
 export default class CrossSigningPanel extends React.PureComponent {
     constructor(props) {
@@ -137,7 +138,6 @@ export default class CrossSigningPanel extends React.PureComponent {
     }
 
     _resetCrossSigning = () => {
-        const ConfirmDestroyCrossSigningDialog = sdk.getComponent("dialogs.ConfirmDestroyCrossSigningDialog");
         Modal.createDialog(ConfirmDestroyCrossSigningDialog, {
             onFinished: (act) => {
                 if (!act) return;
@@ -187,35 +187,44 @@ export default class CrossSigningPanel extends React.PureComponent {
         }
 
         const keysExistAnywhere = (
+            crossSigningPublicKeysOnDevice ||
             crossSigningPrivateKeysInStorage ||
-            crossSigningPublicKeysOnDevice
+            masterPrivateKeyCached ||
+            selfSigningPrivateKeyCached ||
+            userSigningPrivateKeyCached
         );
         const keysExistEverywhere = (
+            crossSigningPublicKeysOnDevice &&
             crossSigningPrivateKeysInStorage &&
-            crossSigningPublicKeysOnDevice
+            masterPrivateKeyCached &&
+            selfSigningPrivateKeyCached &&
+            userSigningPrivateKeyCached
         );
 
-        let resetButton;
-        if (keysExistAnywhere) {
-            resetButton = (
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="danger" onClick={this._resetCrossSigning}>
-                        {_t("Reset")}
-                    </AccessibleButton>
-                </div>
+        const actions = [];
+
+        // TODO: determine how better to expose this to users in addition to prompts at login/toast
+        if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
+            actions.push(
+                <AccessibleButton key="setup" kind="primary" onClick={this._onBootstrapClick}>
+                    {_t("Set up")}
+                </AccessibleButton>,
             );
         }
 
-        // TODO: determine how better to expose this to users in addition to prompts at login/toast
-        let bootstrapButton;
-        if (!keysExistEverywhere && homeserverSupportsCrossSigning) {
-            bootstrapButton = (
-                <div className="mx_CrossSigningPanel_buttonRow">
-                    <AccessibleButton kind="primary" onClick={this._onBootstrapClick}>
-                        {_t("Set up")}
-                    </AccessibleButton>
-                </div>
+        if (keysExistAnywhere) {
+            actions.push(
+                <AccessibleButton key="reset" kind="danger" onClick={this._resetCrossSigning}>
+                    {_t("Reset")}
+                </AccessibleButton>,
             );
+        }
+
+        let actionRow;
+        if (actions.length) {
+            actionRow = <div className="mx_CrossSigningPanel_buttonRow">
+                {actions}
+            </div>;
         }
 
         return (
@@ -230,7 +239,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                         </tr>
                         <tr>
                             <td>{_t("Cross-signing private keys:")}</td>
-                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found")}</td>
+                            <td>{crossSigningPrivateKeysInStorage ? _t("in secret storage") : _t("not found in storage")}</td>
                         </tr>
                         <tr>
                             <td>{_t("Master private key:")}</td>
@@ -251,8 +260,7 @@ export default class CrossSigningPanel extends React.PureComponent {
                    </tbody></table>
                 </details>
                 {errorSection}
-                {bootstrapButton}
-                {resetButton}
+                {actionRow}
             </div>
         );
     }

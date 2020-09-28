@@ -24,7 +24,7 @@ import { isSecureBackupRequired } from '../../../utils/WellKnownUtils';
 import Spinner from '../elements/Spinner';
 import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
-import RestoreKeyBackupDialog from '../dialogs/keybackup/RestoreKeyBackupDialog';
+import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
 
 export default class SecureBackupPanel extends React.PureComponent {
@@ -131,7 +131,7 @@ export default class SecureBackupPanel extends React.PureComponent {
         const cli = MatrixClientPeg.get();
         const secretStorage = cli._crypto._secretStorage;
 
-        const backupKeyStored = await cli.isKeyBackupKeyStored();
+        const backupKeyStored = !!(await cli.isKeyBackupKeyStored());
         const backupKeyFromCache = await cli._crypto.getSessionBackupPrivateKey();
         const backupKeyCached = !!(backupKeyFromCache);
         const backupKeyWellFormed = backupKeyFromCache instanceof Uint8Array;
@@ -150,7 +150,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
     _startNewBackup = () => {
         Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
-            import('../../../async-components/views/dialogs/keybackup/CreateKeyBackupDialog'),
+            import('../../../async-components/views/dialogs/security/CreateKeyBackupDialog'),
             {
                 onFinished: () => {
                     this._loadBackupStatus();
@@ -367,14 +367,14 @@ export default class SecureBackupPanel extends React.PureComponent {
             </>;
 
             actions.push(
-                <AccessibleButton kind="primary" onClick={this._restoreBackup}>
+                <AccessibleButton key="restore" kind="primary" onClick={this._restoreBackup}>
                     {restoreButtonCaption}
                 </AccessibleButton>,
             );
 
             if (!isSecureBackupRequired()) {
                 actions.push(
-                    <AccessibleButton kind="danger" onClick={this._deleteBackup}>
+                    <AccessibleButton key="delete" kind="danger" onClick={this._deleteBackup}>
                         {_t("Delete Backup")}
                     </AccessibleButton>,
                 );
@@ -388,7 +388,7 @@ export default class SecureBackupPanel extends React.PureComponent {
                 <p>{_t("Back up your keys before signing out to avoid losing them.")}</p>
             </>;
             actions.push(
-                <AccessibleButton kind="primary" onClick={this._startNewBackup}>
+                <AccessibleButton key="setup" kind="primary" onClick={this._startNewBackup}>
                     {_t("Set up")}
                 </AccessibleButton>,
             );
@@ -396,7 +396,7 @@ export default class SecureBackupPanel extends React.PureComponent {
 
         if (secretStorageKeyInAccount) {
             actions.push(
-                <AccessibleButton kind="danger" onClick={this._resetSecretStorage}>
+                <AccessibleButton key="reset" kind="danger" onClick={this._resetSecretStorage}>
                     {_t("Reset")}
                 </AccessibleButton>,
             );

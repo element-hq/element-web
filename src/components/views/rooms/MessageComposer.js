@@ -99,7 +99,7 @@ function HangupButton(props) {
             return;
         }
 
-        const call = CallHandler.getCallForRoom(props.roomId);
+        const call = CallHandler.sharedInstance().getCallForRoom(props.roomId);
         if (!call) {
             return;
         }

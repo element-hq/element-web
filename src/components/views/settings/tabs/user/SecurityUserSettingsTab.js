@@ -30,6 +30,9 @@ import dis from "../../../../../dispatcher/dispatcher";
 import {privateShouldBeEncrypted} from "../../../../../createRoom";
 import {SettingLevel} from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
+import SettingsStore from "../../../../../settings/SettingsStore";
+import {UIFeature} from "../../../../../settings/UIFeature";
+import {isE2eAdvancedPanelPossible} from "../../E2eAdvancedPanel";
 
 export class IgnoredUser extends React.Component {
     static propTypes = {
@@ -103,14 +106,14 @@ export default class SecurityUserSettingsTab extends React.Component {
 
     _onExportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Export E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ExportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ExportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
 
     _onImportE2eKeysClicked = () => {
         Modal.createTrackedDialogAsync('Import E2E Keys', '',
-            import('../../../../../async-components/views/dialogs/ImportE2eKeysDialog'),
+            import('../../../../../async-components/views/dialogs/security/ImportE2eKeysDialog'),
             {matrixClient: MatrixClientPeg.get()},
         );
     };
@@ -217,6 +220,15 @@ export default class SecurityUserSettingsTab extends React.Component {
             );
         }
 
+        let noSendUnverifiedSetting;
+        if (SettingsStore.isEnabled("blacklistUnverifiedDevices")) {
+            noSendUnverifiedSetting = <SettingsFlag
+                name='blacklistUnverifiedDevices'
+                level={SettingLevel.DEVICE}
+                onChange={this._updateBlacklistDevicesFlag}
+            />;
+        }
+
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{_t("Cryptography")}</span>
@@ -231,8 +243,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     </li>
                 </ul>
                 {importExportButtons}
-                <SettingsFlag name='blacklistUnverifiedDevices' level={SettingLevel.DEVICE}
-                              onChange={this._updateBlacklistDevicesFlag} />
+                {noSendUnverifiedSetting}
             </div>
         );
     }
@@ -311,15 +322,13 @@ export default class SecurityUserSettingsTab extends React.Component {
         // can remove this.
         const CrossSigningPanel = sdk.getComponent('views.settings.CrossSigningPanel');
         const crossSigning = (
-                <div className='mx_SettingsTab_section'>
-                    <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
-                    <div className='mx_SettingsTab_subsectionText'>
-                        <CrossSigningPanel />
-                    </div>
+            <div className='mx_SettingsTab_section'>
+                <span className="mx_SettingsTab_subheading">{_t("Cross-signing")}</span>
+                <div className='mx_SettingsTab_subsectionText'>
+                    <CrossSigningPanel />
                 </div>
-            );
-
-        const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
+            </div>
+        );
 
         let warning;
         if (!privateShouldBeEncrypted()) {
@@ -352,6 +361,25 @@ export default class SecurityUserSettingsTab extends React.Component {
             </React.Fragment>;
         }
 
+        const E2eAdvancedPanel = sdk.getComponent('views.settings.E2eAdvancedPanel');
+        let advancedSection;
+        if (SettingsStore.getValue(UIFeature.AdvancedSettings)) {
+            const ignoreUsersPanel = this._renderIgnoredUsers();
+            const invitesPanel = this._renderManageInvites();
+            const e2ePanel = isE2eAdvancedPanelPossible() ? <E2eAdvancedPanel /> : null;
+            // only show the section if there's something to show
+            if (ignoreUsersPanel || invitesPanel || e2ePanel) {
+                advancedSection = <>
+                    <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
+                    <div className="mx_SettingsTab_section">
+                        {ignoreUsersPanel}
+                        {invitesPanel}
+                        {e2ePanel}
+                    </div>
+                </>;
+            }
+        }
+
         return (
             <div className="mx_SettingsTab mx_SecurityUserSettingsTab">
                 {warning}
@@ -381,12 +409,7 @@ export default class SecurityUserSettingsTab extends React.Component {
                     {this._renderCurrentDeviceInfo()}
                 </div>
                 { privacySection }
-                <div className="mx_SettingsTab_heading">{_t("Advanced")}</div>
-                <div className="mx_SettingsTab_section">
-                    {this._renderIgnoredUsers()}
-                    {this._renderManageInvites()}
-                    <E2eAdvancedPanel />
-                </div>
+                { advancedSection }
             </div>
         );
     }
