@@ -1333,6 +1333,13 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/sanitize-html@^1.23.3":
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-1.27.0.tgz#77702dc856f16efecc005014c1d2e45b1f2cbc56"
+  integrity sha512-j7Vnh3P7W4ZcoRsHNO2HpwA2m1d0c2+l39xqSQqH0+WlfcvKypgZp45eCC7NJ75ZyXPxNb2PSbIL6LtZ6E0Qbw==
+  dependencies:
+    htmlparser2 "^4.1.0"
+
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-1.0.1.tgz#0a851d3bd96498fa25c33ab7278ed3bd65f06c3e"
@@ -7345,6 +7352,21 @@ matrix-js-sdk@8.4.0-rc.1:
   version "8.4.0-rc.1"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-8.4.0-rc.1.tgz#9547e6d0088ec22fc6463c3144aee8c03266c215"
   integrity sha512-u5I8OesrGePVj+NoZByXwV4QBujrMPb4BlKWII4VscvVitLoD/iuz9beNvic3esNF8U3ruWVDcOwA0XQIoumQQ==
+  dependencies:
+    "@babel/runtime" "^7.8.3"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.2"
+    loglevel "^1.6.4"
+    qs "^6.5.2"
+    request "^2.88.0"
+    unhomoglyph "^1.0.2"
+
+matrix-js-sdk@8.4.1:
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-8.4.1.tgz#4e7e8bf8d5f6d8362aef68bed8e0d2f03f262194"
+  integrity sha512-AfA2y/dt10ysXKzngwqzajzxTL0Xq8lW5bBr0mq21JUKndBP1f1AOOiIkX5nLA9IZGzVoe0anKV+cU2aGWcdkw==
   dependencies:
     "@babel/runtime" "^7.8.3"
     another-json "^0.2.0"
