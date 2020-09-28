@@ -30,6 +30,7 @@ import {Notifier} from "../Notifier";
 import type {Renderer} from "react-dom";
 import RightPanelStore from "../stores/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
+import CallHandler from "../CallHandler";
 import {ModalWidgetStore} from "../stores/ModalWidgetStore";
 
 declare global {
@@ -54,6 +55,7 @@ declare global {
         mxNotifier: typeof Notifier;
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
+        mxCallHandler: CallHandler;
         mxModalWidgetStore: ModalWidgetStore;
     }
 
@@ -64,6 +66,9 @@ declare global {
 
     interface Navigator {
         userLanguage?: string;
+        // https://github.com/Microsoft/TypeScript/issues/19473
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaSession
+        mediaSession: any;
     }
 
     interface StorageEstimate {

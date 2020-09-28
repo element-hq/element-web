@@ -149,7 +149,6 @@ interface IRoomInfo {
 interface IProps { // TODO type things better
     config: Record<string, any>;
     serverConfig?: ValidatedServerConfig;
-    ConferenceHandler?: any;
     onNewScreen: (screen: string, replaceLast: boolean) => void;
     enableGuest?: boolean;
     // the queryParams extracted from the [real] query-string of the URI
@@ -1856,7 +1855,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         } else {
             subtitle = `${this.subTitleStatus} ${subtitle}`;
         }
-        document.title = `${SdkConfig.get().brand} ${subtitle}`;
+
+        const title = `${SdkConfig.get().brand} ${subtitle}`;
+
+        if (document.title !== title) {
+            document.title = title;
+        }
     }
 
     updateStatusIndicator(state: string, prevState: string) {
