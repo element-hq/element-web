@@ -26,7 +26,6 @@ window.React = React;
 import url from 'url';
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
-import * as VectorConferenceHandler from 'matrix-react-sdk/src/VectorConferenceHandler';
 import {_td, newTranslatableError} from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import {AutoDiscovery} from "matrix-js-sdk/src/autodiscovery";
@@ -34,7 +33,6 @@ import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import CallHandler from 'matrix-react-sdk/src/CallHandler';
 
 import {parseQs, parseQsFromFragment} from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -141,7 +139,6 @@ export async function loadApp(fragParams: {}) {
         throw newTranslatableError(_td("Missing indexeddb worker script!"));
     }
     MatrixClientPeg.setIndexedDbWorkerScript(vectorIndexeddbWorkerScript);
-    CallHandler.setConferenceHandler(VectorConferenceHandler);
 
     window.addEventListener('hashchange', onHashChange);
 
@@ -160,7 +157,6 @@ export async function loadApp(fragParams: {}) {
     return <MatrixChat
         onNewScreen={onNewScreen}
         makeRegistrationUrl={makeRegistrationUrl}
-        ConferenceHandler={VectorConferenceHandler}
         config={config}
         realQueryParams={params}
         startingFragmentQueryParams={fragParams}
