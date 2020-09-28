@@ -83,9 +83,11 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
     public render() {
         // TODO: Don't violate every single security principle
 
-        const widgetId = encodeURIComponent(this.getWidgetId());
-        const parentUrl = encodeURIComponent(window.location.href);
-        const widgetUrl = `${this.props.widgetDefinition.url}?widgetId=${widgetId}&parentUrl=${parentUrl}`;
+        const widgetUrl = new URL(this.props.widgetDefinition.url);
+        // TODO: Replace these with proper widget params
+        // See https://github.com/matrix-org/matrix-doc/pull/1958/files#r405714833
+        widgetUrl.searchParams.set("widgetId", this.getWidgetId());
+        widgetUrl.searchParams.set("parentUrl", window.location.href);
 
         let buttons;
         if (this.props.widgetDefinition.buttons) {
@@ -124,10 +126,10 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             <div>
                 <iframe
                     ref={this.appFrame}
-                    sandbox="allow-forms allow-scripts"
+                    // sandbox="allow-forms allow-scripts"
                     width={700} // TODO
                     height={450} // TODO
-                    src={widgetUrl}
+                    src={widgetUrl.toString()}
                     onLoad={this.onLoad}
                 />
             </div>

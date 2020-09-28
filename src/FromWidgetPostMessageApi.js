@@ -259,6 +259,7 @@ export default class FromWidgetPostMessageApi {
     sendResponse(event, res) {
         const data = objectClone(event.data);
         data.response = res;
+        if (!event.source) return; // source may have gone away since
         event.source.postMessage(data, event.origin);
     }
 

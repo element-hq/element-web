@@ -126,44 +126,47 @@ export class WidgetApi extends EventEmitter {
             if (payload.api === WidgetApiType.ToWidget && payload.action) {
                 console.log(`[WidgetAPI] Got request: ${JSON.stringify(payload)}`);
 
-                if (payload.action === KnownWidgetActions.GetCapabilities) {
-                    this.onCapabilitiesRequest(<ToWidgetRequest>payload);
-                    if (!this.expectingExplicitReady) {
-                        this.readyPromiseResolve();
-                    }
-                } else if (payload.action === KnownWidgetActions.ClientReady) {
-                    this.readyPromiseResolve();
+                switch (payload.action) {
+                    case KnownWidgetActions.GetCapabilities:
+                        this.onCapabilitiesRequest(<ToWidgetRequest>payload);
+                        if (!this.expectingExplicitReady) {
+                            this.readyPromiseResolve();
+                        }
+                        break;
 
-                    // Automatically acknowledge so we can move on
-                    this.replyToRequest(<ToWidgetRequest>payload, {});
-                } else if (payload.action === KnownWidgetActions.Terminate) {
-                    // Finalization needs to be async, so postpone with a promise
-                    let finalizePromise = Promise.resolve();
-                    const wait = (promise) => {
-                        finalizePromise = finalizePromise.then(() => promise);
-                    };
-                    this.emit('terminate', wait);
-                    Promise.resolve(finalizePromise).then(() => {
-                        // Acknowledge that we're shut down now
+                    case KnownWidgetActions.ClientReady:
+                        this.readyPromiseResolve();
+
+                        // Automatically acknowledge so we can move on
                         this.replyToRequest(<ToWidgetRequest>payload, {});
-                    });
-                } else if (payload.action === KnownWidgetActions.ReceiveOpenIDCredentials) {
-                    // Save OpenID credentials
-                    this.setOpenIDCredentials(<ToWidgetRequest>payload);
-                    this.replyToRequest(<ToWidgetRequest>payload, {});
-                } else if (payload.action === KnownWidgetActions.GetWidgetConfig) {
-                    // Finalization needs to be async, so postpone with a promise
-                    let finalizePromise = Promise.resolve();
-                    const wait = (promise) => {
-                        finalizePromise = finalizePromise.then(() => promise);
-                    };
-                    this.emit(payload.action, payload, wait);
-                    Promise.resolve(finalizePromise).then(() => {
-                        // Acknowledge that we're shut down now
+                        break;
+
+                    case KnownWidgetActions.ReceiveOpenIDCredentials:
+                        // Save OpenID credentials
+                        this.setOpenIDCredentials(<ToWidgetRequest>payload);
                         this.replyToRequest(<ToWidgetRequest>payload, {});
-                    });
-                } else {
-                    console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
+                        break;
+
+                    // Ack, handle by caller
+                    case KnownWidgetActions.Terminate:
+                    case KnownWidgetActions.ButtonClicked:
+                    case KnownWidgetActions.GetWidgetConfig:
+                    case KnownWidgetActions.CloseModalWidget: {
+                        // Finalization needs to be async, so postpone with a promise
+                        let finalizePromise = Promise.resolve();
+                        const wait = (promise) => {
+                            finalizePromise = finalizePromise.then(() => promise);
+                        };
+                        this.emit(payload.action, payload, wait);
+                        Promise.resolve(finalizePromise).then(() => {
+                            // Acknowledge that we're shut down now
+                            this.replyToRequest(<ToWidgetRequest>payload, {});
+                        });
+                        break;
+                    }
+
+                    default:
+                        console.warn(`[WidgetAPI] Got unexpected action: ${payload.action}`);
                 }
             } else if (payload.api === WidgetApiType.FromWidget && this.inFlightRequests[payload.requestId]) {
                 console.log(`[WidgetAPI] Got reply: ${JSON.stringify(payload)}`);
