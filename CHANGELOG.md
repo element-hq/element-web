@@ -1,3 +1,9 @@
+Changes in [1.7.8](https://github.com/vector-im/element-web/releases/tag/v1.7.8) (2020-09-28)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8-rc.1...v1.7.8)
+
+ * Upgrade to React SDK 3.5.0 and JS SDK 8.4.1
+
 Changes in [1.7.8-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.8-rc.1) (2020-09-23)
 =======================================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.7...v1.7.8-rc.1)
