@@ -1,3 +1,9 @@
+Changes in [3.5.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.5.0) (2020-09-28)
+===================================================================================================
+[Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.5.0-rc.1...v3.5.0)
+
+ * Upgrade JS SDK to 8.4.1
+
 Changes in [3.5.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.5.0-rc.1) (2020-09-23)
 =============================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v3.4.1...v3.5.0-rc.1)
