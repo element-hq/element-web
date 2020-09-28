@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,22 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CrossSigningPanel_statusList {
-    border-spacing: 0;
+import sanitizeHtml from 'sanitize-html';
 
-    td {
-        padding: 0;
-
-        &:first-of-type {
-            padding-inline-end: 1em;
-        }
-    }
-}
-
-.mx_CrossSigningPanel_buttonRow {
-    margin: 1em 0;
-
-    :nth-child(n + 1) {
-        margin-inline-end: 10px;
-    }
+export interface IExtendedSanitizeOptions extends sanitizeHtml.IOptions {
+    // This option only exists in 2.x RCs so far, so not yet present in the
+    // separate type definition module.
+    nestingLimit?: number;
 }

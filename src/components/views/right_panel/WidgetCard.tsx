@@ -152,7 +152,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         </AccessibleButton>;
     } else {
         pinButton = <AccessibleTooltipButton
-            title={_t("You can only pin 2 apps at a time")}
+            title={_t("You can only pin 2 widgets at a time")}
             tooltipClassName="mx_WidgetCard_maxPinnedTooltip"
             kind="secondary"
             className={pinButtonClasses}

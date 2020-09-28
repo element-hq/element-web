@@ -22,6 +22,7 @@ import {MatrixClientPeg} from '../../../../MatrixClientPeg';
 import dis from "../../../../dispatcher/dispatcher";
 import { _t } from "../../../../languageHandler";
 import Modal from "../../../../Modal";
+import RestoreKeyBackupDialog from "../../../../components/views/dialogs/security/RestoreKeyBackupDialog";
 import {Action} from "../../../../dispatcher/actions";
 
 export default class NewRecoveryMethodDialog extends React.PureComponent {
@@ -41,7 +42,6 @@ export default class NewRecoveryMethodDialog extends React.PureComponent {
     }
 
     onSetupClick = async () => {
-        const RestoreKeyBackupDialog = sdk.getComponent('dialogs.keybackup.RestoreKeyBackupDialog');
         Modal.createTrackedDialog(
             'Restore Backup', '', RestoreKeyBackupDialog, {
                 onFinished: this.props.onFinished,
