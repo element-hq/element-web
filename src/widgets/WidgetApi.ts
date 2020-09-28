@@ -147,7 +147,7 @@ export class WidgetApi extends EventEmitter {
                         this.replyToRequest(<ToWidgetRequest>payload, {});
                         break;
 
-                    // Ack, handle by caller
+                    // Ack, handled by caller
                     case KnownWidgetActions.Terminate:
                     case KnownWidgetActions.ButtonClicked:
                     case KnownWidgetActions.GetWidgetConfig:

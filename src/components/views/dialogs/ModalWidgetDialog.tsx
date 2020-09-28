@@ -121,14 +121,11 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
             className="mx_ModalWidgetDialog"
             contentId="mx_Dialog_content"
             onFinished={this.props.onFinished}
-            hasCancel={false}
         >
             <div>
                 <iframe
                     ref={this.appFrame}
-                    // sandbox="allow-forms allow-scripts"
-                    width={700} // TODO
-                    height={450} // TODO
+                    // sandbox="allow-forms allow-scripts" TODO
                     src={widgetUrl.toString()}
                     onLoad={this.onLoad}
                 />
