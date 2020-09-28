@@ -18,10 +18,12 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
+import {Key} from "../../../Keyboard";
 
 interface IProps {
     query: string;
     onChange(value: string): void;
+    onEnter(): void;
 }
 
 class Search extends React.PureComponent<IProps> {
@@ -31,6 +33,14 @@ class Search extends React.PureComponent<IProps> {
         // For some reason, neither the autoFocus nor just calling focus() here worked, so here's a setTimeout
         setTimeout(() => this.inputRef.current.focus(), 0);
     }
+
+    private onKeyDown = (ev: React.KeyboardEvent) => {
+        if (ev.key === Key.ENTER) {
+            this.props.onEnter();
+            ev.stopPropagation();
+            ev.preventDefault();
+        }
+    };
 
     render() {
         let rightButton;
@@ -54,6 +64,7 @@ class Search extends React.PureComponent<IProps> {
                     placeholder="Search"
                     value={this.props.query}
                     onChange={ev => this.props.onChange(ev.target.value)}
+                    onKeyDown={this.onKeyDown}
                     ref={this.inputRef}
                 />
                 {rightButton}

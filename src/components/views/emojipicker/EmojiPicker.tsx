@@ -52,7 +52,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
 
-    private bodyRef = React.createRef<HTMLElement>();
+    private bodyRef = React.createRef<HTMLDivElement>();
 
     constructor(props) {
         super(props);
@@ -190,6 +190,13 @@ class EmojiPicker extends React.Component<IProps, IState> {
         setTimeout(this.updateVisibility, 0);
     };
 
+    private onEnterFilter = () => {
+        const btn = this.bodyRef.current.querySelector<HTMLButtonElement>(".mx_EmojiPicker_item");
+        if (btn) {
+            btn.click();
+        }
+    };
+
     private onHoverEmoji = (emoji: IEmoji) => {
         this.setState({
             previewEmoji: emoji,
@@ -220,8 +227,15 @@ class EmojiPicker extends React.Component<IProps, IState> {
         return (
             <div className="mx_EmojiPicker">
                 <Header categories={this.categories} onAnchorClick={this.scrollToCategory} />
-                <Search query={this.state.filter} onChange={this.onChangeFilter} />
-                <AutoHideScrollbar className="mx_EmojiPicker_body" wrappedRef={this.bodyRef} onScroll={this.onScroll}>
+                <Search query={this.state.filter} onChange={this.onChangeFilter} onEnter={this.onEnterFilter} />
+                <AutoHideScrollbar
+                    className="mx_EmojiPicker_body"
+                    wrappedRef={ref => {
+                        // @ts-ignore - AutoHideScrollbar should accept a RefObject or fall back to its own instead
+                        this.bodyRef.current = ref
+                    }}
+                    onScroll={this.onScroll}
+                >
                     {this.categories.map(category => {
                         const emojis = this.memoizedDataByCategory[category.id];
                         const categoryElement = ((
