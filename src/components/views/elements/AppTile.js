@@ -108,7 +108,6 @@ export default class AppTile extends React.Component {
             return !!currentlyAllowedWidgets[newProps.app.eventId];
         };
 
-        const PersistedElement = sdk.getComponent("elements.PersistedElement");
         return {
             initialising: true, // True while we are mangling the widget URL
             // True while the iframe content is loading
@@ -190,7 +189,6 @@ export default class AppTile extends React.Component {
         // if it's not remaining on screen, get rid of the PersistedElement container
         if (!ActiveWidgetStore.getWidgetPersistence(this.props.app.id)) {
             ActiveWidgetStore.destroyPersistentWidget(this.props.app.id);
-            const PersistedElement = sdk.getComponent("elements.PersistedElement");
             PersistedElement.destroyElement(this._persistKey);
         }
     }

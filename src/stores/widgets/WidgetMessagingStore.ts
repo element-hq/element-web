@@ -52,6 +52,25 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     }
 
     /**
+     * Finds a widget by ID. Not guaranteed to return an accurate result.
+     * @param {string} id The widget ID.
+     * @returns {{widget, room}} The widget and possible room ID, or a falsey value
+     * if not found.
+     * @deprecated Do not use.
+     */
+    public findWidgetById(id: string): { widget: Widget, room?: Room } {
+        for (const key of this.widgetMap.keys()) {
+            for (const [entityId, surrogate] of this.widgetMap.get(key).entries()) {
+                if (surrogate.definition.id === id) {
+                    const room: Room = this.matrixClient?.getRoom(entityId); // will be null for non-rooms
+                    return {room, widget: surrogate.definition};
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Gets the messaging instance for the widget. Returns a falsey value if none
      * is present.
      * @param {Room} room The room for which the widget lives within.

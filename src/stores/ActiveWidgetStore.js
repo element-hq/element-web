@@ -17,6 +17,7 @@ limitations under the License.
 import EventEmitter from 'events';
 
 import {MatrixClientPeg} from '../MatrixClientPeg';
+import {WidgetMessagingStore} from "./widgets/WidgetMessagingStore";
 
 /**
  * Stores information about the widgets active in the app right now:
@@ -28,15 +29,6 @@ class ActiveWidgetStore extends EventEmitter {
     constructor() {
         super();
         this._persistentWidgetId = null;
-
-        // A list of negotiated capabilities for each widget, by ID
-        // {
-        //     widgetId: [caps...],
-        // }
-        this._capsByWidgetId = {};
-
-        // A WidgetMessaging instance for each widget ID
-        this._widgetMessagingByWidgetId = {};
 
         // What room ID each widget is associated with (if it's a room widget)
         this._roomIdByWidgetId = {};
@@ -54,8 +46,6 @@ class ActiveWidgetStore extends EventEmitter {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
         }
-        this._capsByWidgetId = {};
-        this._widgetMessagingByWidgetId = {};
         this._roomIdByWidgetId = {};
     }
 
@@ -76,9 +66,16 @@ class ActiveWidgetStore extends EventEmitter {
         if (id !== this._persistentWidgetId) return;
         const toDeleteId = this._persistentWidgetId;
 
+        const result = WidgetMessagingStore.instance.findWidgetById(id);
+        if (result) {
+            if (result.room) {
+                WidgetMessagingStore.instance.stopMessagingForRoomWidget(result.room, result.widget);
+            } else {
+                WidgetMessagingStore.instance.stopMessagingForAccountWidget(result.widget);
+            }
+        }
+
         this.setWidgetPersistence(toDeleteId, false);
-        this.delWidgetMessaging(toDeleteId);
-        this.delWidgetCapabilities(toDeleteId);
         this.delRoomId(toDeleteId);
     }
 
@@ -97,43 +94,6 @@ class ActiveWidgetStore extends EventEmitter {
 
     getPersistentWidgetId() {
         return this._persistentWidgetId;
-    }
-
-    setWidgetCapabilities(widgetId, caps) {
-        this._capsByWidgetId[widgetId] = caps;
-        this.emit('update');
-    }
-
-    widgetHasCapability(widgetId, cap) {
-        return this._capsByWidgetId[widgetId] && this._capsByWidgetId[widgetId].includes(cap);
-    }
-
-    delWidgetCapabilities(widgetId) {
-        delete this._capsByWidgetId[widgetId];
-        this.emit('update');
-    }
-
-    setWidgetMessaging(widgetId, wm) {
-        // Stop any existing widget messaging first
-        this.delWidgetMessaging(widgetId);
-        this._widgetMessagingByWidgetId[widgetId] = wm;
-        this.emit('update');
-    }
-
-    getWidgetMessaging(widgetId) {
-        return this._widgetMessagingByWidgetId[widgetId];
-    }
-
-    delWidgetMessaging(widgetId) {
-        if (this._widgetMessagingByWidgetId[widgetId]) {
-            try {
-                this._widgetMessagingByWidgetId[widgetId].stop();
-            } catch (e) {
-                console.error('Failed to stop listening for widgetMessaging events', e.message);
-            }
-            delete this._widgetMessagingByWidgetId[widgetId];
-            this.emit('update');
-        }
     }
 
     getRoomId(widgetId) {
