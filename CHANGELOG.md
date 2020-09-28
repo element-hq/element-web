@@ -1,3 +1,35 @@
+Changes in [1.7.8](https://github.com/vector-im/element-web/releases/tag/v1.7.8) (2020-09-28)
+=============================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.8-rc.1...v1.7.8)
+
+ * Upgrade to React SDK 3.5.0 and JS SDK 8.4.1
+
+Changes in [1.7.8-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.7.8-rc.1) (2020-09-23)
+=======================================================================================================
+[Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.7...v1.7.8-rc.1)
+
+ * Upgrade to React SDK 3.5.0-rc.1 and JS SDK 8.4.0-rc.1
+ * Update from Weblate
+   [\#15262](https://github.com/vector-im/element-web/pull/15262)
+ * Upgrade sanitize-html
+   [\#15260](https://github.com/vector-im/element-web/pull/15260)
+ * Document config for preferring Secure Backup setup methods
+   [\#15251](https://github.com/vector-im/element-web/pull/15251)
+ * Add end-user documentation for UI features
+   [\#15190](https://github.com/vector-im/element-web/pull/15190)
+ * Update git checkout instructions
+   [\#15218](https://github.com/vector-im/element-web/pull/15218)
+ * If no bug_report_endpoint_url, hide rageshaking from the App
+   [\#15201](https://github.com/vector-im/element-web/pull/15201)
+ * Bump node-fetch from 2.6.0 to 2.6.1
+   [\#15153](https://github.com/vector-im/element-web/pull/15153)
+ * Remove references to Travis CI
+   [\#15137](https://github.com/vector-im/element-web/pull/15137)
+ * Fix onNewScreen to use replace when going from roomId->roomAlias
+   [\#15127](https://github.com/vector-im/element-web/pull/15127)
+ * Enable Estonian in language menu
+   [\#15136](https://github.com/vector-im/element-web/pull/15136)
+
 Changes in [1.7.7](https://github.com/vector-im/element-web/releases/tag/v1.7.7) (2020-09-14)
 =============================================================================================
 [Full Changelog](https://github.com/vector-im/element-web/compare/v1.7.6...v1.7.7)
