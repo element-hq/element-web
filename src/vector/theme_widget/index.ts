@@ -37,24 +37,21 @@ let widgetApi: WidgetApi;
         // Set this up as early as possible because Element will be hitting it almost immediately.
         widgetApi = new WidgetApi(qsParam('parentUrl'), qsParam('widgetId'), []);
 
-        widgetApi.on(KnownWidgetActions.UpdateThemeInfo, (themeInfo) => {
-            console.log("Got theme info: ", themeInfo);
-            document.getElementById("theme").innerText = "THEME: " + JSON.stringify(themeInfo.data);
-
-            const clientName = themeInfo.data.clientName || "element-web";
-            const isDark = themeInfo.data.isDark || false;
-            const accentColour = themeInfo.data.accentColor || "#03b381";
-
-            document.body.className = `client-${clientName} ${isDark ? 'is-dark' : ''}`;
-            document.body.style.setProperty("--accent-color", accentColour);
+        widgetApi.on(KnownWidgetActions.ButtonClicked, req => {
+            console.log("@@ clickety", req);
+            document.getElementById("button").innerText = "BUTTON CLICKED: " + JSON.stringify(req.data);
+            setTimeout(() => {
+                widgetApi.closeModalWidget(req.data);
+            }, 3000);
         });
-        widgetApi.on(KnownWidgetActions.SendWidgetConfig, (config) => {
+
+        widgetApi.on(KnownWidgetActions.GetWidgetConfig, (config) => {
             console.log("Got widget config: ", config);
             document.getElementById("question").innerText = "INIT PARAMS: " + JSON.stringify(config.data);
         });
 
         document.getElementById("closeButton").onclick = () => {
-            widgetApi.closeWidget({answer: 42});
+            widgetApi.closeModalWidget({answer: 42});
         };
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
