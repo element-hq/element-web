@@ -78,7 +78,7 @@
     "is-ip": "^2.0.0",
     "linkifyjs": "^2.1.9",
     "lodash": "^4.17.19",
-    "matrix-js-sdk": "8.4.0",
+    "matrix-js-sdk": "8.4.1",
     "minimist": "^1.2.5",
     "pako": "^1.0.11",
     "parse5": "^5.1.1",
