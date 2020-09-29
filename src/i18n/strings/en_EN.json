@@ -53,7 +53,7 @@
     "Permission Required": "Permission Required",
     "You do not have permission to start a conference call in this room": "You do not have permission to start a conference call in this room",
     "End conference": "End conference",
-    "Ending the conference will end the call for everyone. Continue?": "Ending the conference will end the call for everyone. Continue?",
+    "This will end the conference for everyone. Continue?": "This will end the conference for everyone. Continue?",
     "Replying With Files": "Replying With Files",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "At this time it is not possible to reply with a file. Would you like to upload this file without replying?",
     "Continue": "Continue",

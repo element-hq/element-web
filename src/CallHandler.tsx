@@ -474,7 +474,7 @@ export default class CallHandler {
         Modal.createTrackedDialog('Confirm Jitsi Terminate', '', QuestionDialog, {
             hasCancelButton: true,
             title: _t("End conference"),
-            description: _t("Ending the conference will end the call for everyone. Continue?"),
+            description: _t("This will end the conference for everyone. Continue?"),
             button: _t("End conference"),
             onFinished: (proceed) => {
                 if (!proceed) return;
