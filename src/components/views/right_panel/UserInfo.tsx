@@ -1604,8 +1604,22 @@ const UserInfo: React.FC<Props> = ({
         previousPhase = RightPanelPhases.RoomMemberList;
     }
 
-    const header = <UserInfoHeader member={member} e2eStatus={e2eStatus} onClose={onClose} />;
-    return <BaseCard className={classes.join(" ")} header={header} onClose={onClose} previousPhase={previousPhase}>
+    let closeLabel = undefined;
+    if (phase === RightPanelPhases.EncryptionPanel) {
+        const verificationRequest = (props as React.ComponentProps<typeof EncryptionPanel>).verificationRequest;
+        if (verificationRequest && verificationRequest.pending) {
+            closeLabel = _t("Cancel");
+        }
+    }
+
+    const header = <UserInfoHeader member={member} e2eStatus={e2eStatus} />;
+    return <BaseCard
+        className={classes.join(" ")}
+        header={header}
+        onClose={onClose}
+        closeLabel={closeLabel}
+        previousPhase={previousPhase}
+    >
         { content }
     </BaseCard>;
 };
