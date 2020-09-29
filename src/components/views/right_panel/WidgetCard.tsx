@@ -77,6 +77,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     let contextMenu;
     if (menuDisplayed) {
         let snapshotButton;
+        // TODO: [TravisR] Fix this
         if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
             const onSnapshotClick = () => {
                 WidgetUtils.snapshotWidget(app);

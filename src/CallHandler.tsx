@@ -495,6 +495,7 @@ export default class CallHandler {
         const roomInfo = WidgetStore.instance.getRoom(roomId);
         if (!roomInfo) return; // "should never happen" clauses go here
 
+        // TODO: [TravisR] Fix this
         const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
         jitsiWidgets.forEach(w => {
             const messaging = ActiveWidgetStore.getWidgetMessaging(w.id);
