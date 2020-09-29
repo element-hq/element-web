@@ -15,7 +15,14 @@
  */
 
 import {Room} from "matrix-js-sdk/src/models/room";
-import { ClientWidgetApi, IWidget, IWidgetData, Widget } from "matrix-widget-api";
+import {
+    ClientWidgetApi,
+    IStickyActionRequest,
+    IWidget,
+    IWidgetApiRequestEmptyData,
+    IWidgetData,
+    Widget
+} from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
@@ -26,6 +33,8 @@ import WidgetUtils from '../../utils/WidgetUtils';
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
 import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
+import { Capability } from "../../widgets/WidgetApi";
+import ActiveWidgetStore from "../ActiveWidgetStore";
 
 // TODO: Destroy all of this code
 
@@ -138,14 +147,32 @@ export class StopGapWidget extends EventEmitter {
 
     public start(iframe: HTMLIFrameElement) {
         if (this.started) return;
-        const driver = new StopGapWidgetDriver(this.appTileProps.whitelistCapabilities || []);
+        const driver = new StopGapWidgetDriver( this.appTileProps.whitelistCapabilities || []);
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.addEventListener("ready", () => this.emit("ready"));
         WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.messaging);
+
+        if (!this.appTileProps.userWidget && this.appTileProps.room) {
+            ActiveWidgetStore.setRoomId(this.mockWidget.id, this.appTileProps.room.roomId);
+        }
+
+        if (WidgetType.JITSI.matches(this.mockWidget.type)) {
+            this.messaging.addEventListener("action:set_always_on_screen",
+                (ev: CustomEvent<IStickyActionRequest>) => {
+                    if (this.messaging.hasCapability(Capability.AlwaysOnScreen)) {
+                        ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
+                        ev.preventDefault();
+                        this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
+                    }
+                },
+            );
+        }
     }
 
     public async prepare(): Promise<void> {
         if (this.scalarToken) return;
+        const existingMessaging = WidgetMessagingStore.instance.getMessaging(this.mockWidget);
+        if (existingMessaging) this.messaging = existingMessaging;
         try {
             if (WidgetUtils.isScalarUrl(this.mockWidget.templateUrl)) {
                 const managers = IntegrationManagers.sharedInstance();
@@ -165,7 +192,12 @@ export class StopGapWidget extends EventEmitter {
     }
 
     public stop() {
+        if (ActiveWidgetStore.getPersistentWidgetId() === this.mockWidget.id) {
+            console.log("Skipping destroy - persistent widget");
+            return;
+        }
         if (!this.started) return;
         WidgetMessagingStore.instance.stopMessaging(this.mockWidget);
+        ActiveWidgetStore.delRoomId(this.mockWidget.id);
     }
 }
