@@ -455,10 +455,6 @@ export default class AppTile extends React.Component {
 
             ActiveWidgetStore.setWidgetCapabilities(this.props.app.id, requestedWhitelistCapabilies);
 
-            if (this.props.onCapabilityRequest) {
-                this.props.onCapabilityRequest(requestedCapabilities);
-            }
-
             // We only tell Jitsi widgets that we're ready because they're realistically the only ones
             // using this custom extension to the widget API.
             if (WidgetType.JITSI.matches(this.props.app.type)) {
@@ -941,9 +937,6 @@ AppTile.propTypes = {
     // NOTE -- Use with caution. This is intended to aid better integration / UX
     // basic widget capabilities, e.g. injecting sticker message events.
     whitelistCapabilities: PropTypes.array,
-    // Optional function to be called on widget capability request
-    // Called with an array of the requested capabilities
-    onCapabilityRequest: PropTypes.func,
     // Is this an instance of a user widget
     userWidget: PropTypes.bool,
 };
