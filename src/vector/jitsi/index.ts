@@ -47,6 +47,7 @@ let roomId: string;
 let openIdToken: IOpenIDCredentials;
 
 let widgetApi: WidgetApi;
+let meetApi: any; // JitsiMeetExternalAPI
 
 (async function() {
     try {
@@ -112,7 +113,12 @@ let widgetApi: WidgetApi;
             } else {
                 enableJoinButton();
             }
+
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
+
+            widgetApi.on('hangup', () => {
+                if (meetApi) meetApi.executeCommand('hangup');
+            });
         } else {
             enableJoinButton();
         }
@@ -210,7 +216,7 @@ function joinConference() { // event handler bound in HTML
         jwt: jwt,
     };
 
-    const meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
+    meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     if (displayName) meetApi.executeCommand("displayName", displayName);
     if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
     if (userId) meetApi.executeCommand("email", userId);
@@ -225,5 +231,6 @@ function joinConference() { // event handler bound in HTML
         }
 
         document.getElementById("jitsiContainer").innerHTML = "";
+        meetApi = null;
     });
 }
