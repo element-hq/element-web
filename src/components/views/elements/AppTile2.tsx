@@ -31,7 +31,7 @@ interface IState {
     loading: boolean;
 }
 
-export class AppTile2 extends React.PureComponent<IProps, IState> {
+export default class AppTile2 extends React.PureComponent<IProps, IState> {
     private messaging: ClientWidgetApi;
     private iframeRef = React.createRef<HTMLIFrameElement>();
 
