@@ -90,7 +90,7 @@ function onNewScreen(screen: string) {
 // the identity server will try to 302 the browser to it, which breaks horribly.
 // so in that instance, hardcode to use riot.im/app for now instead.
 function makeRegistrationUrl(params: object) {
-    let url = params.hs_url + '/' + '#/register';
+    let url = params.hs_url + "/#/register";
 
     const keys = Object.keys(params);
     for (let i = 0; i < keys.length; ++i) {
