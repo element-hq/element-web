@@ -494,16 +494,4 @@ export default class WidgetUtils {
             IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
         }
     }
-
-    static snapshotWidget(app) {
-        console.log("Requesting widget snapshot");
-        ActiveWidgetStore.getWidgetMessaging(app.id).getScreenshot().catch((err) => {
-            console.error("Failed to get screenshot", err);
-        }).then((screenshot) => {
-            dis.dispatch({
-                action: 'picture_snapshot',
-                file: screenshot,
-            }, true);
-        });
-    }
 }
