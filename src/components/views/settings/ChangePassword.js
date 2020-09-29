@@ -35,6 +35,7 @@ export default class ChangePassword extends React.Component {
         rowClassName: PropTypes.string,
         buttonClassName: PropTypes.string,
         buttonKind: PropTypes.string,
+        buttonLabel: PropTypes.string,
         confirm: PropTypes.bool,
         // Whether to autoFocus the new password input
         autoFocusNewPasswordInput: PropTypes.bool,
@@ -271,7 +272,7 @@ export default class ChangePassword extends React.Component {
                             />
                         </div>
                         <AccessibleButton className={buttonClassName} kind={this.props.buttonKind} onClick={this.onClickChange}>
-                            { _t('Change Password') }
+                            { this.props.buttonLabel || _t('Change Password') }
                         </AccessibleButton>
                     </form>
                 );
