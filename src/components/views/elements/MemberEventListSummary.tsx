@@ -401,16 +401,21 @@ export default class MemberEventListSummary extends React.Component<IProps> {
     render() {
         const eventsToRender = this.props.events;
 
-        // Object mapping user IDs to an array of IUserEvents:
-        const userEvents: Record<string, IUserEvents[]> = {};
+        // Map user IDs to latest Avatar Member. ES6 Maps are ordered by when the key was created,
+        // so this works perfectly for us to match event order whilst storing the latest Avatar Member
+        const latestUserAvatarMember = new Map<string, RoomMember>();
 
-        const avatarMembers: RoomMember[] = [];
+        // Object mapping user IDs to an array of IUserEvents
+        const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
             const userId = e.getStateKey();
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
-                if (e.target) avatarMembers.push(e.target);
+            }
+
+            if (e.target) {
+                latestUserAvatarMember.set(userId, e.target);
             }
 
             let displayName = userId;
@@ -440,7 +445,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
             onToggle={this.props.onToggle}
             startExpanded={this.props.startExpanded}
             children={this.props.children}
-            summaryMembers={avatarMembers}
+            summaryMembers={[...latestUserAvatarMember.values()]}
             summaryText={this.generateSummary(aggregate.names, orderedTransitionSequences)} />;
     }
 }
