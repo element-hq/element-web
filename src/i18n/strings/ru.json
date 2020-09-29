@@ -2508,5 +2508,10 @@
     "This version of %(brand)s does not support viewing some encrypted files": "Эта версия %(brand)s не поддерживает просмотр некоторых зашифрованных файлов",
     "This version of %(brand)s does not support searching encrypted messages": "Эта версия %(brand)s не поддерживает поиск зашифрованных сообщений",
     "Cannot create rooms in this community": "Невозможно создать комнаты в этом сообществе",
-    "You do not have permission to create rooms in this community.": "У вас нет разрешения на создание комнат в этом сообществе."
+    "You do not have permission to create rooms in this community.": "У вас нет разрешения на создание комнат в этом сообществе.",
+    "Join the conference at the top of this room": "Присоединяйтесь к конференции в верхней части этой комнаты",
+    "Join the conference from the room information card on the right": "Присоединяйтесь к конференции, используя информационную карточку комнаты справа",
+    "Video conference ended by %(senderName)s": "%(senderName)s завершил(а) видеоконференцию",
+    "Video conference updated by %(senderName)s": "%(senderName)s обновил(а) видеоконференцию",
+    "Video conference started by %(senderName)s": "%(senderName)s начал(а) видеоконференцию"
 }
