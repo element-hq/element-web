@@ -54,7 +54,6 @@ export default class AppTile extends React.Component {
         this.state = this._getNewState(props);
 
         this._onAction = this._onAction.bind(this);
-        this._onLoaded = this._onLoaded.bind(this);
         this._onEditClick = this._onEditClick.bind(this);
         this._onDeleteClick = this._onDeleteClick.bind(this);
         this._onRevokeClicked = this._onRevokeClicked.bind(this);
@@ -67,7 +66,6 @@ export default class AppTile extends React.Component {
         this._onReloadWidgetClick = this._onReloadWidgetClick.bind(this);
 
         this._contextMenuButton = createRef();
-        this._appFrame = createRef();
         this._menu_bar = createRef();
     }
 
@@ -90,7 +88,6 @@ export default class AppTile extends React.Component {
             initialising: true, // True while we are mangling the widget URL
             // True while the iframe content is loading
             loading: this.props.waitForIframeLoad && !PersistedElement.isMounted(this._persistKey),
-            widgetUrl: this._addWurlParams(newProps.app.url),
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: newProps.userId === newProps.creatorUserId || hasPermissionToLoad(),
@@ -149,11 +146,18 @@ export default class AppTile extends React.Component {
 
     _startWidget() {
         this._sgWidget.prepare().then(() => {
-            if (this._appFrame.current) {
-                this._sgWidget.start(this._appFrame.current);
-            }
+            this.setState({initialising: false});
         });
     }
+    
+    _iframeRefChange = (ref) => {
+        this.setState({iframe: ref});
+        if (ref) {
+            this._sgWidget.start(ref);
+        } else {
+            this._resetWidget(this.props);
+        }
+    };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
     UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
@@ -222,14 +226,14 @@ export default class AppTile extends React.Component {
         // HACK: This is a really dirty way to ensure that Jitsi cleans up
         // its hold on the webcam. Without this, the widget holds a media
         // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
-        if (this._appFrame.current) {
+        if (this.state.iframe) {
             // In practice we could just do `+= ''` to trick the browser
             // into thinking the URL changed, however I can foresee this
             // being optimized out by a browser. Instead, we'll just point
             // the iframe at a page that is reasonably safe to use in the
             // event the iframe doesn't wink away.
             // This is relative to where the Element instance is located.
-            this._appFrame.current.src = 'about:blank';
+            this.state.iframe.src = 'about:blank';
         }
 
         // Delete the widget from the persisted store for good measure.
@@ -420,9 +424,9 @@ export default class AppTile extends React.Component {
         // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
         if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
             this._endWidgetActions().then(() => {
-                if (this._appFrame.current) {
+                if (this.state.iframe) {
                     // Reload iframe
-                    this._appFrame.current.src = this._sgWidget.embedUrl;
+                    this.state.iframe.src = this._sgWidget.embedUrl;
                     this.setState({});
                 }
             });
@@ -436,7 +440,7 @@ export default class AppTile extends React.Component {
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
         // eslint-disable-next-line no-self-assign
-        this._appFrame.current.src = this._appFrame.current.src;
+        this.state.iframe.src = this.state.iframe.src;
     }
 
     _onContextMenuClick = () => {
@@ -482,7 +486,7 @@ export default class AppTile extends React.Component {
                         <AppPermission
                             roomId={this.props.room.roomId}
                             creatorUserId={this.props.creatorUserId}
-                            url={this.state.widgetUrl}
+                            url={this._sgWidget.embedUrl}
                             isRoomEncrypted={isEncrypted}
                             onPermissionGranted={this._grantWidgetPermission}
                         />
@@ -507,11 +511,11 @@ export default class AppTile extends React.Component {
                             { this.state.loading && loadingElement }
                             <iframe
                                 allow={iframeFeatures}
-                                ref={this._appFrame}
+                                ref={this._iframeRefChange}
                                 src={this._sgWidget.embedUrl}
                                 allowFullScreen={true}
                                 sandbox={sandboxFlags}
-                                onLoad={this._onLoaded} />
+                            />
                         </div>
                     );
                     // if the widget would be allowed to remain on screen, we must put it in
