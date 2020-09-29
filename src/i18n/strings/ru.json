@@ -1325,7 +1325,7 @@
     "Invalid homeserver discovery response": "Неверный ответ при попытке обнаружения домашнего сервера",
     "Failed to get autodiscovery configuration from server": "Не удалось получить конфигурацию автообнаружения с сервера",
     "Invalid base_url for m.homeserver": "Неверный base_url для m.homeserver",
-    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-адрес сервера не является действительным URL-адресом сервера Матрица",
+    "Homeserver URL does not appear to be a valid Matrix homeserver": "URL-адрес домашнего сервера не является допустимым домашним сервером Matrix",
     "Invalid identity server discovery response": "Неверный ответ на запрос идентификации сервера",
     "Invalid base_url for m.identity_server": "Неверный base_url для m.identity_server",
     "Identity server URL does not appear to be a valid identity server": "URL-адрес сервера идентификации не является действительным сервером идентификации",
