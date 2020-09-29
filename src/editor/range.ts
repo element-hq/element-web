@@ -18,8 +18,8 @@ import EditorModel from "./model";
 import DocumentPosition, {Predicate} from "./position";
 import {Part} from "./parts";
 
-const whileSpacePredicate: Predicate = (index, offset, part) => {
-    return part.text[offset] === " ";
+const whitespacePredicate: Predicate = (index, offset, part) => {
+    return part.text[offset].trim() === "";
 };
 
 export default class Range {
@@ -40,8 +40,8 @@ export default class Range {
     }
 
     trim() {
-        this._start = this._start.forwardsWhile(this.model, whileSpacePredicate);
-        this._end = this._end.backwardsWhile(this.model, whileSpacePredicate);
+        this._start = this._start.forwardsWhile(this.model, whitespacePredicate);
+        this._end = this._end.backwardsWhile(this.model, whitespacePredicate);
     }
 
     expandBackwardsWhile(predicate: Predicate) {
