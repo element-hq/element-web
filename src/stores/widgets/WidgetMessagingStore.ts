@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import { ClientWidgetApi, Widget, WidgetDriver, WidgetKind } from "matrix-widget-api";
+import { ClientWidgetApi, Widget } from "matrix-widget-api";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { WidgetSurrogate } from "./WidgetSurrogate";
-import { SdkWidgetDriver } from "./SdkWidgetDriver";
 import { EnhancedMap } from "../../utils/maps";
 
 /**
