@@ -39,6 +39,7 @@ export enum KnownWidgetActions {
     SetAlwaysOnScreen = "set_always_on_screen",
     ClientReady = "im.vector.ready",
     Terminate = "im.vector.terminate",
+    Hangup = "im.vector.hangup",
 }
 
 export type WidgetAction = KnownWidgetActions | string;
@@ -119,13 +120,15 @@ export class WidgetApi extends EventEmitter {
 
                     // Automatically acknowledge so we can move on
                     this.replyToRequest(<ToWidgetRequest>payload, {});
-                } else if (payload.action === KnownWidgetActions.Terminate) {
+                } else if (payload.action === KnownWidgetActions.Terminate
+                    || payload.action === KnownWidgetActions.Hangup) {
                     // Finalization needs to be async, so postpone with a promise
                     let finalizePromise = Promise.resolve();
                     const wait = (promise) => {
                         finalizePromise = finalizePromise.then(() => promise);
                     };
-                    this.emit('terminate', wait);
+                    const emitName = payload.action === KnownWidgetActions.Terminate ? 'terminate' : 'hangup';
+                    this.emit(emitName, wait);
                     Promise.resolve(finalizePromise).then(() => {
                         // Acknowledge that we're shut down now
                         this.replyToRequest(<ToWidgetRequest>payload, {});

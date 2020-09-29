@@ -108,6 +108,17 @@ export default class WidgetMessaging {
     }
 
     /**
+     * Tells the widget to hang up on its call.
+     * @returns {Promise<*>} Resolves when the widget has acknowledged the message.
+     */
+    hangup() {
+        return this.messageToWidget({
+            api: OUTBOUND_API_NAME,
+            action: KnownWidgetActions.Hangup,
+        });
+    }
+
+    /**
      * Request a screenshot from a widget
      * @return {Promise} To be resolved with screenshot data when it has been generated
      */
