@@ -31,8 +31,7 @@ import { EnhancedMap } from "../../utils/maps";
 export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     private static internalInstance = new WidgetMessagingStore();
 
-    // <room/user ID, <widget ID, Widget>>
-    private widgetMap = new EnhancedMap<string, EnhancedMap<string, WidgetSurrogate>>();
+    private widgetMap = new EnhancedMap<string, ClientWidgetApi>(); // <widget ID, ClientWidgetAPi>
 
     public constructor() {
         super(defaultDispatcher);
@@ -51,106 +50,16 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
         this.widgetMap.clear();
     }
 
-    /**
-     * Finds a widget by ID. Not guaranteed to return an accurate result.
-     * @param {string} id The widget ID.
-     * @returns {{widget, room}} The widget and possible room ID, or a falsey value
-     * if not found.
-     * @deprecated Do not use.
-     */
-    public findWidgetById(id: string): { widget: Widget, room?: Room } {
-        for (const key of this.widgetMap.keys()) {
-            for (const [entityId, surrogate] of this.widgetMap.get(key).entries()) {
-                if (surrogate.definition.id === id) {
-                    const room: Room = this.matrixClient?.getRoom(entityId); // will be null for non-rooms
-                    return {room, widget: surrogate.definition};
-                }
-            }
-        }
-        return null;
+    public storeMessaging(widget: Widget, widgetApi: ClientWidgetApi) {
+        this.stopMessaging(widget);
+        this.widgetMap.set(widget.id, widgetApi);
     }
 
-    /**
-     * Gets the messaging instance for the widget. Returns a falsey value if none
-     * is present.
-     * @param {Room} room The room for which the widget lives within.
-     * @param {Widget} widget The widget to get messaging for.
-     * @returns {ClientWidgetApi} The messaging, or a falsey value.
-     */
-    public messagingForRoomWidget(room: Room, widget: Widget): ClientWidgetApi {
-        return this.widgetMap.get(room.roomId)?.get(widget.id)?.messaging;
+    public stopMessaging(widget: Widget) {
+        this.widgetMap.remove(widget.id)?.stop();
     }
 
-    /**
-     * Gets the messaging instance for the widget. Returns a falsey value if none
-     * is present.
-     * @param {Widget} widget The widget to get messaging for.
-     * @returns {ClientWidgetApi} The messaging, or a falsey value.
-     */
-    public messagingForAccountWidget(widget: Widget): ClientWidgetApi {
-        return this.widgetMap.get(this.matrixClient?.getUserId())?.get(widget.id)?.messaging;
-    }
-
-    private generateMessaging(locationId: string, widget: Widget, iframe: HTMLIFrameElement, driver: WidgetDriver) {
-        const messaging = new ClientWidgetApi(widget, iframe, driver);
-        this.widgetMap.getOrCreate(locationId, new EnhancedMap())
-            .getOrCreate(widget.id, new WidgetSurrogate(widget, messaging));
-        return messaging;
-    }
-
-    /**
-     * Generates a messaging instance for the widget. If an instance already exists, it
-     * will be returned instead.
-     * @param {Room} room The room in which the widget lives.
-     * @param {Widget} widget The widget to generate/get messaging for.
-     * @param {HTMLIFrameElement} iframe The widget's iframe.
-     * @returns {ClientWidgetApi} The generated/cached messaging.
-     */
-    public generateMessagingForRoomWidget(room: Room, widget: Widget, iframe: HTMLIFrameElement): ClientWidgetApi {
-        const existing = this.messagingForRoomWidget(room, widget);
-        if (existing) return existing;
-
-        const driver = new SdkWidgetDriver(widget, WidgetKind.Room, room.roomId);
-        return this.generateMessaging(room.roomId, widget, iframe, driver);
-    }
-
-    /**
-     * Generates a messaging instance for the widget. If an instance already exists, it
-     * will be returned instead.
-     * @param {Widget} widget The widget to generate/get messaging for.
-     * @param {HTMLIFrameElement} iframe The widget's iframe.
-     * @returns {ClientWidgetApi} The generated/cached messaging.
-     */
-    public generateMessagingForAccountWidget(widget: Widget, iframe: HTMLIFrameElement): ClientWidgetApi {
-        if (!this.matrixClient) {
-            throw new Error("No matrix client to create account widgets with");
-        }
-
-        const existing = this.messagingForAccountWidget(widget);
-        if (existing) return existing;
-
-        const userId = this.matrixClient.getUserId();
-        const driver = new SdkWidgetDriver(widget, WidgetKind.Account, userId);
-        return this.generateMessaging(userId, widget, iframe, driver);
-    }
-
-    /**
-     * Stops the messaging instance for the widget, unregistering it.
-     * @param {Room} room The room where the widget resides.
-     * @param {Widget} widget The widget
-     */
-    public stopMessagingForRoomWidget(room: Room, widget: Widget) {
-        const api = this.widgetMap.getOrCreate(room.roomId, new EnhancedMap()).remove(widget.id);
-        if (api) api.messaging.stop();
-    }
-
-    /**
-     * Stops the messaging instance for the widget, unregistering it.
-     * @param {Widget} widget The widget
-     */
-    public stopMessagingForAccountWidget(widget: Widget) {
-        if (!this.matrixClient) return;
-        const api = this.widgetMap.getOrCreate(this.matrixClient.getUserId(), new EnhancedMap()).remove(widget.id);
-        if (api) api.messaging.stop();
+    public getMessaging(widget: Widget): ClientWidgetApi {
+        return this.widgetMap.get(widget.id);
     }
 }
