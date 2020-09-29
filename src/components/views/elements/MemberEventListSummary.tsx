@@ -436,7 +436,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
 
         // Sort types by order of lowest event index within sequence
         const orderedTransitionSequences = Object.keys(aggregate.names).sort(
-            (seq1, seq2) => aggregate.indices[seq2] - aggregate.indices[seq1],
+            (seq1, seq2) => aggregate.indices[seq1] - aggregate.indices[seq2],
         );
 
         return <EventListSummary
