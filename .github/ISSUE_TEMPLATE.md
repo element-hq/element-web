@@ -38,7 +38,7 @@ For the web app:
 
 - **Browser**: Chrome, Safari, Firefox? which version?
 - **OS**: Windows, macOS, Ubuntu, Arch Linux, etc?
-- **URL**: develop.element.im / app.element.io / somewhere else? If a private server, what version of Element Web?
+- **URL**: develop.element.io / app.element.io / somewhere else? If a private server, what version of Element Web?
 
 For the desktop app:
 
