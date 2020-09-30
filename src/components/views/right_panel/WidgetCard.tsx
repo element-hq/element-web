@@ -29,16 +29,10 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {Action} from "../../../dispatcher/actions";
 import WidgetStore from "../../../stores/WidgetStore";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../context_menus/IconizedContextMenu";
-import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
-import {Capability} from "../../../widgets/WidgetApi";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
+import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
 
 interface IProps {
     room: Room;
@@ -76,51 +70,15 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     let contextMenu;
     if (menuDisplayed) {
-        let snapshotButton;
-        if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
-            const onSnapshotClick = () => {
-                WidgetUtils.snapshotWidget(app);
-                closeMenu();
-            };
-
-            snapshotButton = <IconizedContextMenuOption onClick={onSnapshotClick} label={_t("Take a picture")} />;
-        }
-
-        let deleteButton;
-        if (canModify) {
-            const onDeleteClick = () => {
-                defaultDispatcher.dispatch<AppTileActionPayload>({
-                    action: Action.AppTileDelete,
-                    widgetId: app.id,
-                });
-                closeMenu();
-            };
-
-            deleteButton = <IconizedContextMenuOption onClick={onDeleteClick} label={_t("Remove for everyone")} />;
-        }
-
-        const onRevokeClick = () => {
-            defaultDispatcher.dispatch<AppTileActionPayload>({
-                action: Action.AppTileRevoke,
-                widgetId: app.id,
-            });
-            closeMenu();
-        };
-
         const rect = handle.current.getBoundingClientRect();
         contextMenu = (
-            <IconizedContextMenu
+            <RoomWidgetContextMenu
                 chevronFace={ChevronFace.None}
                 right={window.innerWidth - rect.right}
                 bottom={window.innerHeight - rect.top}
                 onFinished={closeMenu}
-            >
-                <IconizedContextMenuOptionList>
-                    { snapshotButton }
-                    { deleteButton }
-                    <IconizedContextMenuOption onClick={onRevokeClick} label={_t("Remove for me")} />
-                </IconizedContextMenuOptionList>
-            </IconizedContextMenu>
+                app={app}
+            />
         );
     }
 
