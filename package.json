@@ -1,12 +1,12 @@
 {
-  "name": "riot-web",
-  "productName": "Riot",
+  "name": "element-web",
+  "productName": "Element",
   "version": "1.7.8",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vector-im/riot-web"
+    "url": "https://github.com/vector-im/element-web"
   },
   "license": "Apache-2.0",
   "files": [
