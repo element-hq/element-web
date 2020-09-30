@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# auto-deploy script for https://riot.im/develop
+# auto-deploy script for https://develop.element.io
 #
 # Listens for buildkite webhook pokes (https://buildkite.com/docs/apis/webhooks)
 # When it gets one, downloads the artifact from buildkite
