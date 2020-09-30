@@ -28,6 +28,7 @@ import { EnhancedMap } from "../../utils/maps";
 export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     private static internalInstance = new WidgetMessagingStore();
 
+    // TODO: Fix uniqueness problem (widget IDs are not unique across the whole app)
     private widgetMap = new EnhancedMap<string, ClientWidgetApi>(); // <widget ID, ClientWidgetAPi>
 
     public constructor() {
@@ -58,5 +59,15 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
 
     public getMessaging(widget: Widget): ClientWidgetApi {
         return this.widgetMap.get(widget.id);
+    }
+
+    /**
+     * Gets the widget messaging class for a given widget ID.
+     * @param {string} widgetId The widget ID.
+     * @returns {ClientWidgetApi} The widget API, or a falsey value if not found.
+     * @deprecated Widget IDs are not globally unique.
+     */
+    public getMessagingForId(widgetId: string): ClientWidgetApi {
+        return this.widgetMap.get(widgetId);
     }
 }

@@ -30,6 +30,7 @@ import {ContextMenu} from "../../structures/ContextMenu";
 import {WidgetType} from "../../../widgets/WidgetType";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import {Action} from "../../../dispatcher/actions";
+import {WidgetMessagingStore} from "../../../stores/widgets/WidgetMessagingStore";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -213,9 +214,11 @@ export default class Stickerpicker extends React.Component {
     _sendVisibilityToWidget(visible) {
         if (!this.state.stickerpickerWidget) return;
         // TODO: [TravisR] Fix this
-        const widgetMessaging = ActiveWidgetStore.getWidgetMessaging(this.state.stickerpickerWidget.id);
-        if (widgetMessaging && visible !== this._prevSentVisibility) {
-            widgetMessaging.sendVisibility(visible);
+        const messaging = WidgetMessagingStore.instance.getMessagingForId(this.state.stickerpickerWidget.id);
+        if (messaging && visible !== this._prevSentVisibility) {
+            messaging.updateVisibility(visible).catch(err => {
+                console.error("Error updating widget visibility: ", err);
+            });
             this._prevSentVisibility = visible;
         }
     }

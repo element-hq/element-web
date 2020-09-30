@@ -16,12 +16,12 @@
 
 import {Room} from "matrix-js-sdk/src/models/room";
 import {
-    ClientWidgetApi,
+    ClientWidgetApi, IStickerActionRequest,
     IStickyActionRequest,
-    IWidget,
+    IWidget, IWidgetApiRequest,
     IWidgetApiRequestEmptyData,
     IWidgetData,
-    Widget
+    Widget, WidgetApiFromWidgetAction
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -35,6 +35,9 @@ import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { Capability } from "../../widgets/WidgetApi";
 import ActiveWidgetStore from "../ActiveWidgetStore";
+import { objectShallowClone } from "../../utils/objects";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import dis from "../../dispatcher/dispatcher";
 
 // TODO: Destroy all of this code
 
@@ -88,7 +91,15 @@ export class StopGapWidget extends EventEmitter {
 
     constructor(private appTileProps: IAppTileProps) {
         super();
-        this.mockWidget = new ElementWidget(appTileProps.app);
+        let app = appTileProps.app;
+
+        // Backwards compatibility: not all old widgets have a creatorUserId
+        if (!app.creatorUserId) {
+            app = objectShallowClone(app); // clone to prevent accidental mutation
+            app.creatorUserId = MatrixClientPeg.get().getUserId();
+        }
+
+        this.mockWidget = new ElementWidget(app);
     }
 
     public get widgetApi(): ClientWidgetApi {
@@ -164,6 +175,55 @@ export class StopGapWidget extends EventEmitter {
                         ev.preventDefault();
                         this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
                     }
+                },
+            );
+        } else if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
+            this.messaging.addEventListener("action:integration_manager_open",
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    // Acknowledge first
+                    ev.preventDefault();
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+
+                    // First close the stickerpicker
+                    defaultDispatcher.dispatch({action: "stickerpicker_close"});
+
+                    // Now open the integration manager
+                    // TODO: Spec this interaction.
+                    const data = ev.detail.data;
+                    const integType = data?.integType
+                    const integId = <string>data?.integId;
+
+                    // TODO: Open the right integration manager for the widget
+                    if (SettingsStore.getValue("feature_many_integration_managers")) {
+                        IntegrationManagers.sharedInstance().openAll(
+                            MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
+                            `type_${integType}`,
+                            integId,
+                        );
+                    } else {
+                        IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                            MatrixClientPeg.get().getRoom(RoomViewStore.getRoomId()),
+                            `type_${integType}`,
+                            integId,
+                        );
+                    }
+                },
+            );
+
+            // TODO: Replace this event listener with appropriate driver functionality once the API
+            // establishes a sane way to send events back and forth.
+            this.messaging.addEventListener(`action:${WidgetApiFromWidgetAction.SendSticker}`,
+                (ev: CustomEvent<IStickerActionRequest>) => {
+                    // Acknowledge first
+                    ev.preventDefault();
+                    this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{});
+
+                    // Send the sticker
+                    defaultDispatcher.dispatch({
+                        action: 'm.sticker',
+                        data: ev.detail.data,
+                        widgetId: this.mockWidget.id,
+                    });
                 },
             );
         }
