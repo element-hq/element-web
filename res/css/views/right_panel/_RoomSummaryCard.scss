@@ -109,9 +109,57 @@ limitations under the License.
     }
 
     .mx_RoomSummaryCard_appsGroup {
+        .mx_RoomSummaryCard_widgetRow {
+            margin: 0;
+            display: flex;
+
+            .mx_RoomSummaryCard_app_pinToggle,
+            .mx_RoomSummaryCard_app_options {
+                position: relative;
+                height: 20px;
+                width: 20px;
+                padding: 10px;
+                border-radius: 8px;
+
+                &:hover {
+                    background-color: rgba(141, 151, 165, 0.1);
+                }
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    height: 20px;
+                    width: 20px;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: 16px;
+                    background-color: $icon-button-color;
+                }
+            }
+
+            .mx_RoomSummaryCard_app_pinToggle {
+                &::before {
+                    mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+                }
+
+                &.mx_RoomSummaryCard_app_pinned {
+                    &::before {
+                        background-color: $accent-color;
+                    }
+                }
+            }
+
+            .mx_RoomSummaryCard_app_options {
+                &::before {
+                    mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+                }
+            }
+        }
+
         .mx_RoomSummaryCard_Button {
             padding-left: 12px;
             color: $tertiary-fg-color;
+            flex: 1;
 
             span {
                 color: $primary-fg-color;
@@ -126,12 +174,6 @@ limitations under the License.
             &::before {
                 content: unset;
             }
-        }
-
-        .mx_RoomSummaryCard_icon_app_pinned::after {
-            mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
-            background-color: $accent-color;
-            transform: unset;
         }
     }
 

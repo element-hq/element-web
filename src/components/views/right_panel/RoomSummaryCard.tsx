@@ -43,6 +43,9 @@ import WidgetStore, {IApp} from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
 import {UIFeature} from "../../../settings/UIFeature";
+import {ContextMenuButton} from "../../../accessibility/context_menu/ContextMenuButton";
+import {ChevronFace, useContextMenu} from "../../structures/ContextMenu";
+import RoomWidgetContextMenu from "../context_menus/RoomWidgetContextMenu";
 
 interface IProps {
     room: Room;
@@ -82,8 +85,93 @@ export const useWidgets = (room: Room) => {
     return apps;
 };
 
-const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
+interface IAppRowProps {
+    app: IApp;
+}
+
+const AppRow: React.FC<IAppRowProps> = ({ app }) => {
     const cli = useContext(MatrixClientContext);
+
+    const name = WidgetUtils.getWidgetName(app);
+    const dataTitle = WidgetUtils.getWidgetDataTitle(app);
+    const subtitle = dataTitle && " - " + dataTitle;
+
+    let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
+    // heuristics for some better icons until Widgets support their own icons
+    if (app.type.includes("meeting") || app.type.includes("calendar")) {
+        iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg")];
+    } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
+        iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg")];
+    } else if (app.type.includes("clock")) {
+        iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg")];
+    }
+
+    if (app.avatar_url) { // MSC2765
+        iconUrls.unshift(getHttpUriForMxc(cli.getHomeserverUrl(), app.avatar_url, 20, 20, "crop"));
+    }
+
+    const onOpenWidgetClick = () => {
+        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
+            action: Action.SetRightPanelPhase,
+            phase: RightPanelPhases.Widget,
+            refireParams: {
+                widgetId: app.id,
+            },
+        });
+    };
+
+    const isPinned = WidgetStore.instance.isPinned(app.id);
+    const togglePin = isPinned
+        ? () => { WidgetStore.instance.unpinWidget(app.id); }
+        : () => { WidgetStore.instance.pinWidget(app.id); };
+
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    let contextMenu;
+    if (menuDisplayed) {
+        const rect = handle.current.getBoundingClientRect();
+        contextMenu = <RoomWidgetContextMenu
+            chevronFace={ChevronFace.None}
+            right={window.innerWidth - rect.right}
+            bottom={window.innerHeight - rect.top}
+            onFinished={closeMenu}
+            app={app}
+        />;
+    }
+
+    return <div className="mx_RoomSummaryCard_widgetRow" ref={handle}>
+        <AccessibleTooltipButton
+            className="mx_BaseCard_Button mx_RoomSummaryCard_Button mx_RoomSummaryCard_icon_app"
+            onClick={onOpenWidgetClick}
+            // only show a tooltip if the widget is pinned
+            title={isPinned ? _t("You can't view pinned widgets in the right panel") : ""}
+            forceHide={!isPinned}
+            disabled={isPinned}
+        >
+            <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
+            <span>{name}</span>
+            { subtitle }
+        </AccessibleTooltipButton>
+
+        <AccessibleTooltipButton
+            className={classNames("mx_RoomSummaryCard_app_pinToggle", {
+                mx_RoomSummaryCard_app_pinned: isPinned,
+            })}
+            onClick={togglePin}
+            title={isPinned ? _t("Unpin") : _t("Pin")}
+        />
+
+        <ContextMenuButton
+            className="mx_RoomSummaryCard_app_options"
+            isExpanded={menuDisplayed}
+            onClick={openMenu}
+            label={_t("Options")}
+        />
+
+        { contextMenu }
+    </div>;
+};
+
+const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     const apps = useWidgets(room);
 
     const onManageIntegrations = () => {
@@ -100,65 +188,7 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     };
 
     return <Group className="mx_RoomSummaryCard_appsGroup" title={_t("Widgets")}>
-        { apps.map(app => {
-            const name = WidgetUtils.getWidgetName(app);
-            const dataTitle = WidgetUtils.getWidgetDataTitle(app);
-            const subtitle = dataTitle && " - " + dataTitle;
-
-            let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg")];
-            // heuristics for some better icons until Widgets support their own icons
-            if (app.type.includes("meeting") || app.type.includes("calendar")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg")];
-            } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg")];
-            } else if (app.type.includes("clock")) {
-                iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg")];
-            }
-
-            if (app.avatar_url) { // MSC2765
-                iconUrls.unshift(getHttpUriForMxc(cli.getHomeserverUrl(), app.avatar_url, 20, 20, "crop"));
-            }
-
-            const isPinned = WidgetStore.instance.isPinned(app.id);
-            const classes = classNames("mx_RoomSummaryCard_icon_app", {
-                mx_RoomSummaryCard_icon_app_pinned: isPinned,
-            });
-
-            if (isPinned) {
-                const onClick = () => {
-                    WidgetStore.instance.unpinWidget(app.id);
-                };
-
-                return <AccessibleTooltipButton
-                    key={app.id}
-                    className={classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", classes)}
-                    onClick={onClick}
-                    title={_t("Unpin app")}
-                >
-                    <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
-                    <span>{name}</span>
-                    { subtitle }
-                </AccessibleTooltipButton>
-            }
-
-            const onOpenWidgetClick = () => {
-                defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                    action: Action.SetRightPanelPhase,
-                    phase: RightPanelPhases.Widget,
-                    refireParams: {
-                        widgetId: app.id,
-                    },
-                });
-            };
-
-            return (
-                <Button key={app.id} className={classes} onClick={onOpenWidgetClick}>
-                    <BaseAvatar name={app.id} urls={iconUrls} width={20} height={20} />
-                    <span>{name}</span>
-                    { subtitle }
-                </Button>
-            );
-        }) }
+        { apps.map(app => <AppRow key={app.id} app={app} />) }
 
         <AccessibleButton kind="link" onClick={onManageIntegrations}>
             { apps.length > 0 ? _t("Edit widgets, bridges & bots") : _t("Add widgets, bridges & bots") }
