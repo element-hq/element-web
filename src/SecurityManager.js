@@ -31,6 +31,7 @@ import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreK
 // single secret storage operation, as it will clear the cached keys once the
 // operation ends.
 let secretStorageKeys = {};
+let secretStorageKeyInfo = {};
 let secretStorageBeingAccessed = false;
 
 let dehydrationInfo = {};
@@ -64,7 +65,7 @@ export class AccessCancelledError extends Error {
     }
 }
 
-export async function confirmToDismiss() {
+async function confirmToDismiss() {
     const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
     const [sure] = await Modal.createDialog(QuestionDialog, {
         title: _t("Cancel entering passphrase?"),
@@ -74,6 +75,20 @@ export async function confirmToDismiss() {
         cancelButton: _t("Cancel"),
     }).finished;
     return !sure;
+}
+
+function makeInputToKey(keyInfo) {
+    return async ({ passphrase, recoveryKey }) => {
+        if (passphrase) {
+            return deriveKey(
+                passphrase,
+                keyInfo.passphrase.salt,
+                keyInfo.passphrase.iterations,
+            );
+        } else {
+            return decodeRecoveryKey(recoveryKey);
+        }
+    };
 }
 
 async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
@@ -91,12 +106,10 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     // if we dehydrated a device, see if that key works for SSSS
     if (dehydrationInfo.key) {
         try {
-            if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationInfo.key, keyInfo)) {
-                const key = dehydrationInfo.key;
+            const key = dehydrationInfo.key;
+            if (await MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo)) {
                 // Save to cache to avoid future prompts in the current session
-                if (isCachingAllowed()) {
-                    secretStorageKeys[name] = key;
-                }
+                cacheSecretStorageKey(keyId, key, keyInfo);
                 dehydrationInfo = {};
                 return [name, key];
             }
@@ -104,17 +117,7 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         dehydrationInfo = {};
     }
 
-    const inputToKey = async ({ passphrase, recoveryKey }) => {
-        if (passphrase) {
-            return deriveKey(
-                passphrase,
-                keyInfo.passphrase.salt,
-                keyInfo.passphrase.iterations,
-            );
-        } else {
-            return decodeRecoveryKey(recoveryKey);
-        }
-    };
+    const inputToKey = makeInputToKey(keyInfo);
     const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
         AccessSecretStorageDialog,
         /* props= */
@@ -144,14 +147,54 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
     const key = await inputToKey(input);
 
     // Save to cache to avoid future prompts in the current session
-    cacheSecretStorageKey(keyId, key);
+    cacheSecretStorageKey(keyId, key, keyInfo);
 
     return [keyId, key];
 }
 
-function cacheSecretStorageKey(keyId, key) {
+export async function getDehydrationKey(keyInfo, checkFunc) {
+    const inputToKey = makeInputToKey(keyInfo);
+    const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
+        AccessSecretStorageDialog,
+        /* props= */
+        {
+            keyInfo,
+            checkPrivateKey: async (input) => {
+                const key = await inputToKey(input);
+                try {
+                    checkFunc(key);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+        },
+        /* className= */ null,
+        /* isPriorityModal= */ false,
+        /* isStaticModal= */ false,
+        /* options= */ {
+            onBeforeClose: async (reason) => {
+                if (reason === "backgroundClick") {
+                    return confirmToDismiss();
+                }
+                return true;
+            },
+        },
+    );
+    const [input] = await finished;
+    if (!input) {
+        throw new AccessCancelledError();
+    }
+    const key = await inputToKey(input);
+    // need to copy the key because rehydration (unpickling) will clobber it
+    cacheDehydrationKey(key, keyInfo);
+    return key;
+}
+
+function cacheSecretStorageKey(keyId, key, keyInfo) {
     if (isCachingAllowed()) {
         secretStorageKeys[keyId] = key;
+        secretStorageKeyInfo[keyId] = keyInfo;
     }
 }
 
@@ -202,6 +245,7 @@ export const crossSigningCallbacks = {
     getSecretStorageKey,
     cacheSecretStorageKey,
     onSecretRequested,
+    getDehydrationKey,
 };
 
 export async function promptForBackupPassphrase() {
@@ -288,6 +332,18 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             await cli.bootstrapSecretStorage({
                 getKeyBackupPassphrase: promptForBackupPassphrase,
             });
+
+            const keyId = Object.keys(secretStorageKeys)[0];
+            if (keyId) {
+                const dehydrationKeyInfo =
+                      secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase
+                      ? {passphrase: secretStorageKeyInfo[keyId].passphrase}
+                      : {};
+                console.log("Setting dehydration key");
+                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo);
+            } else {
+                console.log("Not setting dehydration key: no SSSS key found");
+            }
         }
 
         // `return await` needed here to ensure `finally` block runs after the
@@ -298,6 +354,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
         secretStorageBeingAccessed = false;
         if (!isCachingAllowed()) {
             secretStorageKeys = {};
+            secretStorageKeyInfo = {};
         }
     }
 }

@@ -31,7 +31,7 @@ import {verificationMethods} from 'matrix-js-sdk/src/crypto';
 import MatrixClientBackedSettingsHandler from "./settings/handlers/MatrixClientBackedSettingsHandler";
 import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
-import { cacheDehydrationKey, crossSigningCallbacks } from './SecurityManager';
+import { crossSigningCallbacks } from './SecurityManager';
 import {SHOW_QR_CODE_METHOD} from "matrix-js-sdk/src/crypto/verification/QRCode";
 
 export interface IMatrixClientCreds {
@@ -42,9 +42,7 @@ export interface IMatrixClientCreds {
     accessToken: string;
     guest: boolean;
     pickleKey?: string;
-    rehydrationKey?: Uint8Array;
-    rehydrationKeyInfo?: {[props: string]: any};
-    olmAccount?: any;
+    freshLogin?: boolean;
 }
 
 // TODO: Move this to the js-sdk
@@ -251,10 +249,12 @@ class _MatrixClientPeg implements IMatrixClientPeg {
 
     private createClient(creds: IMatrixClientCreds): void {
         // TODO: Make these opts typesafe with the js-sdk
-        const opts: any = {
+        const opts = {
             baseUrl: creds.homeserverUrl,
             idBaseUrl: creds.identityServerUrl,
             accessToken: creds.accessToken,
+            userId: creds.userId,
+            deviceId: creds.deviceId,
             pickleKey: creds.pickleKey,
             timelineSupport: true,
             forceTURN: !SettingsStore.getValue('webRtcAllowPeerToPeer'),
@@ -269,44 +269,10 @@ class _MatrixClientPeg implements IMatrixClientPeg {
             cryptoCallbacks: {},
         };
 
-        if (creds.olmAccount) {
-            console.log("got a dehydrated account");
-            const pickleKey = creds.pickleKey || "DEFAULT_KEY";
-            opts.deviceToImport = {
-                olmDevice: {
-                    pickledAccount: creds.olmAccount.pickle(pickleKey),
-                    sessions: [],
-                    pickleKey: pickleKey,
-                },
-                userId: creds.userId,
-                deviceId: creds.deviceId,
-            };
-            creds.olmAccount.free();
-        } else {
-            opts.userId = creds.userId;
-            opts.deviceId = creds.deviceId;
-        }
-
         // These are always installed regardless of the labs flag so that
         // cross-signing features can toggle on without reloading and also be
         // accessed immediately after login.
         Object.assign(opts.cryptoCallbacks, crossSigningCallbacks);
-
-        // set dehydration key after cross-signing gets set up -- we wait until
-        // cross-signing is set up because we want to cross-sign the dehydrated
-        // device
-        const origGetSecretStorageKey = opts.cryptoCallbacks.getSecretStorageKey
-        opts.cryptoCallbacks.getSecretStorageKey = async (keyinfo, ssssItemName) => {
-            const [name, key] = await origGetSecretStorageKey(keyinfo, ssssItemName);
-            this.matrixClient.setDehydrationKey(key, {passphrase: keyinfo.keys[name].passphrase});
-            return [name, key];
-        }
-
-        if (creds.rehydrationKey) {
-            // cache the key so that the SSSS prompt tries using it without
-            // prompting the user
-            cacheDehydrationKey(creds.rehydrationKey, creds.rehydrationKeyInfo);
-        }
 
         this.matrixClient = createMatrixClient(opts);
 

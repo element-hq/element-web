@@ -314,11 +314,6 @@ export default class CreateSecretStorageDialog extends React.PureComponent {
                     },
                 });
             }
-            const dehydrationKeyInfo =
-                  this._recoveryKey.keyInfo && this._recoveryKey.keyInfo.passphrase
-                  ? {passphrase: this._recoveryKey.keyInfo.passphrase}
-                  : {};
-            await cli.setDehydrationKey(this._recoveryKey.privateKey, dehydrationKeyInfo);
             this.props.onFinished(true);
         } catch (e) {
             if (this.state.canUploadKeysWithPasswordOnly && e.httpStatus === 401 && e.data.flows) {

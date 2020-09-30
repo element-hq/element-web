@@ -42,7 +42,6 @@ import {Mjolnir} from "./mjolnir/Mjolnir";
 import DeviceListener from "./DeviceListener";
 import {Jitsi} from "./widgets/Jitsi";
 import {SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY} from "./BasePlatform";
-import {decodeBase64, encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
@@ -187,6 +186,8 @@ export function attemptTokenLogin(queryParams, defaultDeviceDisplayName) {
         console.log("Logged in with token");
         return _clearStorage().then(() => {
             _persistCredentialsToLocalStorage(creds);
+            // remember that we just logged in
+            sessionStorage.setItem("mx_fresh_login", true);
             return true;
         });
     }).catch((err) => {
@@ -313,24 +314,8 @@ async function _restoreFromLocalStorage(opts) {
             console.log("No pickle key available");
         }
 
-        const rehydrationKeyInfoJSON = sessionStorage.getItem("mx_rehydration_key_info");
-        const rehydrationKeyInfo = rehydrationKeyInfoJSON && JSON.parse(rehydrationKeyInfoJSON);
-        const rehydrationKeyB64 = sessionStorage.getItem("mx_rehydration_key");
-        const rehydrationKey = rehydrationKeyB64 && decodeBase64(rehydrationKeyB64);
-        const rehydrationOlmPickle = sessionStorage.getItem("mx_rehydration_account");
-        let olmAccount;
-        if (rehydrationOlmPickle) {
-            olmAccount = new global.Olm.Account();
-            try {
-                olmAccount.unpickle("DEFAULT_KEY", rehydrationOlmPickle);
-            } catch {
-                olmAccount.free();
-                olmAccount = undefined;
-            }
-        }
-        sessionStorage.removeItem("mx_rehydration_key_info");
-        sessionStorage.removeItem("mx_rehydration_key");
-        sessionStorage.removeItem("mx_rehydration_account");
+        const freshLogin = sessionStorage.getItem("mx_fresh_login");
+        sessionStorage.removeItem("mx_fresh_login");
 
         console.log(`Restoring session for ${userId}`);
         await _doSetLoggedIn({
@@ -341,9 +326,7 @@ async function _restoreFromLocalStorage(opts) {
             identityServerUrl: isUrl,
             guest: isGuest,
             pickleKey: pickleKey,
-            rehydrationKey: rehydrationKey,
-            rehydrationKeyInfo: rehydrationKeyInfo,
-            olmAccount: olmAccount,
+            freshLogin: freshLogin,
         }, false);
         return true;
     } else {
@@ -387,6 +370,7 @@ async function _handleLoadSessionFailure(e) {
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
 export async function setLoggedIn(credentials) {
+    credentials.freshLogin = true;
     stopMatrixClient();
     const pickleKey = credentials.userId && credentials.deviceId
           ? await PlatformPeg.get().createPickleKey(credentials.userId, credentials.deviceId)
@@ -452,6 +436,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         " guest: " + credentials.guest +
         " hs: " + credentials.homeserverUrl +
         " softLogout: " + softLogout,
+        " freshLogin: " + credentials.freshLogin,
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -485,15 +470,27 @@ async function _doSetLoggedIn(credentials, clearStorage) {
 
     Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
 
+    MatrixClientPeg.replaceUsingCreds(credentials);
+    const client = MatrixClientPeg.get();
+
+    if (credentials.freshLogin) {
+        // If we just logged in, try to rehydrate a device instead of using a
+        // new device.  If it succeeds, we'll get a new device ID, so make sure
+        // we persist that ID to localStorage
+        const newDeviceId = await client.rehydrateDevice();
+        if (newDeviceId) {
+            credentials.deviceId = newDeviceId;
+        }
+
+        delete credentials.freshLogin;
+    }
+
     if (localStorage) {
         try {
-            // drop dehydration key and olm account before persisting.  (Those
-            // get persisted for token login, but aren't needed at this point.)
-            const strippedCredentials = Object.assign({}, credentials);
-            delete strippedCredentials.rehydrationKeyInfo;
-            delete strippedCredentials.rehydrationKey;
-            delete strippedCredentials.olmAcconut;
-            _persistCredentialsToLocalStorage(strippedCredentials);
+            _persistCredentialsToLocalStorage(credentials);
+
+            // make sure we don't think that it's a fresh login any more
+            sessionStorage.removeItem("mx_fresh_login");
 
             // The user registered as a PWLU (PassWord-Less User), the generated password
             // is cached here such that the user can change it at a later time.
@@ -511,12 +508,10 @@ async function _doSetLoggedIn(credentials, clearStorage) {
         console.warn("No local storage available: can't persist session!");
     }
 
-    MatrixClientPeg.replaceUsingCreds(credentials);
-
     dis.dispatch({ action: 'on_logged_in' });
 
     await startMatrixClient(/*startSyncing=*/!softLogout);
-    return MatrixClientPeg.get();
+    return client;
 }
 
 function _showStorageEvictedDialog() {
@@ -556,19 +551,6 @@ function _persistCredentialsToLocalStorage(credentials) {
     // - that's fine for us).
     if (credentials.deviceId) {
         localStorage.setItem("mx_device_id", credentials.deviceId);
-    }
-
-    // Temporarily save dehydration information if it's provided.  This is
-    // needed for token logins, because the page reloads after the login, so we
-    // can't keep it in memory.
-    if (credentials.rehydrationKeyInfo) {
-        sessionStorage.setItem("mx_rehydration_key_info", JSON.stringify(credentials.rehydrationKeyInfo));
-    }
-    if (credentials.rehydrationKey) {
-        sessionStorage.setItem("mx_rehydration_key", encodeBase64(credentials.rehydrationKey));
-    }
-    if (credentials.olmAccount) {
-        sessionStorage.setItem("mx_rehydration_account", credentials.olmAccount.pickle("DEFAULT_KEY"));
     }
 
     console.log(`Session persisted for ${credentials.userId}`);
