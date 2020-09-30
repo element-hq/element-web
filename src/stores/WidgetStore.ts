@@ -45,6 +45,8 @@ interface IRoomWidgets {
     pinned: Record<string, boolean>;
 }
 
+const MAX_PINNED = 3;
+
 // TODO consolidate WidgetEchoStore into this
 // TODO consolidate ActiveWidgetStore into this
 export default class WidgetStore extends AsyncStoreWithClient<IState> {
@@ -169,7 +171,7 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         const roomInfo = this.getRoom(roomId);
         return roomInfo && Object.keys(roomInfo.pinned).filter(k => {
             return roomInfo.widgets.some(app => app.id === k);
-        }).length < 2;
+        }).length < MAX_PINNED;
     }
 
     public pinWidget(widgetId: string) {
