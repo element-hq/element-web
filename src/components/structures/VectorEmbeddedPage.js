@@ -25,11 +25,12 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 export default class VectorEmbeddedPage extends EmbeddedPage {
     static replaces = 'EmbeddedPage';
 
-    // we're overriding the base component here, for Riot-specific tweaks
+    // we're overriding the base component here, for Element-specific tweaks
     translate(s) {
         s = sanitizeHtml(_t(s));
         // ugly fix for https://github.com/vector-im/riot-web/issues/4243
-        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank" rel="noreferrer noopener"><img width="79" height="34" alt="[matrix]" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
+        // eslint-disable-next-line max-len
+        s = s.replace(/\[matrix\]/, '<a href="https://matrix.org" target="_blank" rel="noreferrer noopener"><img width="79" height="34" alt="Matrix" style="padding-left: 1px;vertical-align: middle" src="welcome/images/matrix.svg"/></a>');
         return s;
     }
 }

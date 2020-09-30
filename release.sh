@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to perform a release of riot-web.
+# Script to perform a release of element-web.
 #
 # Requires github-changelog-generator; to install, do
 #   pip install git+https://github.com/matrix-org/github-changelog-generator.git

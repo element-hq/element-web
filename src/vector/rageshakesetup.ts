@@ -51,12 +51,18 @@ export function initRageshake() {
 }
 
 window.mxSendRageshake = function(text: string, withLogs?: boolean) {
+    const url = SdkConfig.get().bug_report_endpoint_url;
+    if (!url) {
+        console.error("Cannot send a rageshake - no bug_report_endpoint_url configured");
+        return;
+    }
+
     if (withLogs === undefined) withLogs = true;
     if (!text || !text.trim()) {
         console.error("Cannot send a rageshake without a message - please tell us what went wrong");
         return;
     }
-    sendBugReport(SdkConfig.get().bug_report_endpoint_url, {
+    sendBugReport(url, {
         userText: text,
         sendLogs: withLogs,
         progressCallback: console.log.bind(console),

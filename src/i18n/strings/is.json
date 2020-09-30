@@ -1,12 +1,22 @@
 {
-    "%(appName)s via %(browserName)s on %(osName)s": "%(appName)s með %(browserName)s á %(osName)s",
     "powered by Matrix": "keyrt með Matrix",
-    "Welcome to Riot.im": "Velkomin í Riot.im",
-    "Riot Desktop on %(platformName)s": "Riot skjáborðsforrit á %(platformName)s",
+    "Welcome to Element": "Velkomin í Element",
     "Unknown device": "Óþekkt tæki",
     "Dismiss": "Hafna",
-    "Custom Server Options": "Sérsniðnir valkostir vefþjóns",
     "You need to be using HTTPS to place a screen-sharing call.": "Þú verður að nota HTTPS til að hringja samtal með deilingu á skjá.",
-    "Chat with Riot Bot": "Spjalla við Riot-róbótann",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]"
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Dulritað dreifvinnsluspjall &amp; samstarfstól keyrt með [matrix]",
+    "Open": "Opna",
+    "Unsupported browser": "Óstuddur vafri",
+    "Your browser can't run %(brand)s": "Vafri þinn geta ekki keyrt upp %(brand)s",
+    "Sign In": "Skrá inn",
+    "Create Account": "Stofna Reikning",
+    "Explore rooms": "Kanna herbergi",
+    "Missing indexeddb worker script!": "Að vanta indexeddb vinnumaður tölvuhandrit!",
+    "The message from the parser is: %(message)s": "Skilaboðið frá þáttaranum er %(message)s",
+    "Invalid JSON": "Ógilt JSON",
+    "Download Completed": "Niðurhalið Búið",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
+    "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "vinsamlegast setja upp <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eða <safariLink>Safari</safariLink> fyrir besta reynsluna.",
+    "I understand the risks and wish to continue": "Ég skil áhættuna og óska að halda áfram",
+    "Go to element.io": "farðu í element.io"
 }

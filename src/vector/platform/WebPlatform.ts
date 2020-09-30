@@ -184,7 +184,7 @@ export default class WebPlatform extends VectorBasePlatform {
         let appName = u.format();
         // Remove leading slashes if present
         appName = appName.replace(/^\/\//, "");
-        // `appName` is now in the format `riot.im/develop`.
+        // `appName` is now in the format `develop.element.io`.
 
         const ua = new UAParser();
         const browserName = ua.getBrowser().name || "unknown browser";

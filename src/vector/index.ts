@@ -121,7 +121,7 @@ async function start() {
             const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isAndroid = /Android/.test(navigator.userAgent);
             if (isIos || isAndroid) {
-                if (document.cookie.indexOf("riot_mobile_redirect_to_guide=false") === -1) {
+                if (document.cookie.indexOf("element_mobile_redirect_to_guide=false") === -1) {
                     window.location.href = "mobile_guide/";
                     return;
                 }
@@ -182,9 +182,14 @@ async function start() {
         } catch (error) {
             // Now that we've loaded the theme (CSS), display the config syntax error if needed.
             if (error.err && error.err instanceof SyntaxError) {
-                return showError(_t("Your Riot is misconfigured"), [
-                    _t("Your Riot configuration contains invalid JSON. Please correct the problem and reload the page."),
-                    _t("The message from the parser is: %(message)s", { message: error.err.message || _t("Invalid JSON")}),
+                // This uses the default brand since the app config is unavailable.
+                return showError(_t("Your Element is misconfigured"), [
+                    _t("Your Element configuration contains invalid JSON. " +
+                        "Please correct the problem and reload the page."),
+                    _t(
+                        "The message from the parser is: %(message)s",
+                        { message: error.err.message || _t("Invalid JSON") },
+                    ),
                 ]);
             }
             return showError(_t("Unable to load config file: please refresh the page to try again."));
@@ -205,7 +210,8 @@ async function start() {
     } catch (err) {
         console.error(err);
         // Like the compatibility page, AWOOOOOGA at the user
-        await showError(_t("Your Riot is misconfigured"), [
+        // This uses the default brand since the app config is unavailable.
+        await showError(_t("Your Element is misconfigured"), [
             err.translatedMessage || _t("Unexpected error preparing the app. See console for details."),
         ]);
     }
@@ -217,6 +223,7 @@ start().catch(err => {
     // with some basic styling to make the iframe full page
     delete document.body.style.height;
     const iframe = document.createElement("iframe");
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - typescript seems to only like the IE syntax for iframe sandboxing
     iframe["sandbox"] = "";
     iframe.src = supportedBrowser ? "static/unable-to-load.html" : "static/incompatible-browser.html";

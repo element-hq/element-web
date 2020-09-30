@@ -1,8 +1,8 @@
 import {getVectorConfig} from '../getconfig';
 
-function onBackToRiotClick() {
+function onBackToElementClick() {
     // Cookie should expire in 4 hours
-    document.cookie = 'riot_mobile_redirect_to_guide=false;path=/;max-age=14400';
+    document.cookie = 'element_mobile_redirect_to_guide=false;path=/;max-age=14400';
     window.location.href = '../';
 }
 
@@ -27,9 +27,9 @@ function renderConfigError(message) {
 }
 
 async function initPage() {
-    document.getElementById('back_to_riot_button').onclick = onBackToRiotClick;
+    document.getElementById('back_to_element_button').onclick = onBackToElementClick;
 
-    let config = await getVectorConfig('..');
+    const config = await getVectorConfig('..');
 
     // We manually parse the config similar to how validateServerConfig works because
     // calling that function pulls in roughly 4mb of JS we don't use.
@@ -91,9 +91,9 @@ async function initPage() {
     if (hsUrl && !hsUrl.endsWith('/')) hsUrl += '/';
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
-    if (hsUrl !== 'https://matrix.agent.tchap.gouv.fr/') {
-        document.getElementById('configure_riot_button').href =
-            "https://matrix.agent.tchap.gouv.fr/config/config?hs_url=" + encodeURIComponent(hsUrl) +
+    if (hsUrl !== 'https://matrix.org/') {
+        document.getElementById('configure_element_button').href =
+            "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl) +
             "&is_url=" + encodeURIComponent(isUrl);
         document.getElementById('step1_heading').innerHTML= '1: Install the app';
         document.getElementById('step2_container').style.display = 'block';

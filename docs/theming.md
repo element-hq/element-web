@@ -1,14 +1,14 @@
-Theming Riot
+Theming Element
 ============
 
 Themes are a very basic way of providing simple alternative look & feels to the
-riot-web app via CSS & custom imagery.
+Element app via CSS & custom imagery.
 
 They are *NOT* co be confused with 'skins', which describe apps which sit on top
-of matrix-react-sdk - e.g. in theory Riot itself is a react-sdk skin.
-As of Jan 2017, skins are not fully supported; riot is the only available skin.
+of matrix-react-sdk - e.g. in theory Element itself is a react-sdk skin.
+As of Jan 2017, skins are not fully supported; Element is the only available skin.
 
-To define a theme for Riot:
+To define a theme for Element:
 
  1. Pick a name, e.g. `teal`. at time of writing we have `light` and `dark`.
  2. Fork `src/skins/vector/css/themes/dark.scss` to be `teal.scss`
@@ -41,6 +41,16 @@ eg. in config.json:
             {
                 "name": "Electric Blue",
                 "is_dark": false,
+                "fonts": {
+                    "faces": [
+                        {
+                            "font-family": "Inter",
+                            "src": [{"url": "/fonts/Inter.ttf", "format": "ttf"}]
+                        }
+                    ],
+                    "general": "Inter, sans",
+                    "monospace": "'Courier New'"
+                },
                 "colors": {
                     "accent-color": "#3596fc",
                     "primary-color": "#368bd6",
@@ -84,3 +94,5 @@ eg. in config.json:
 `username-colors` is expected to contain 8 colors. `avatar-background-colors` is expected to contain 3 colors. Both values are optional and have fallbacks from the built-in theme.
 
 These are exposed as `--username-colors_0`, ... and `--avatar-background-colors_0`, ... respectively in CSS.
+
+All properties in `fonts` are optional, and will default to the standard Riot fonts.

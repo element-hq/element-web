@@ -5,14 +5,14 @@ matrix-react-sdk
   - base CSS
   - all the components needed to build a workable app (including the top layer)
 
-riot-web: the riot skin
-  - riot-specific classes (e.g. login header/footer)
-  - riot-specific themes
+element-web: the Element skin
+  - Element-specific classes (e.g. login header/footer)
+  - Element-specific themes
     - light
     - dark
 
-i.e. the only things which should go into riot-web are bits which apply vector-specific skinning
-specifically "Stuff that any other brand would not want to use. (e.g. riot logos, links, T&Cs)"
+i.e. the only things which should go into element-web are bits which apply vector-specific skinning
+specifically "Stuff that any other brand would not want to use. (e.g. Element logos, links, T&Cs)"
  - Questions:
    - Electron app?  (should probably be a separate repo in its own right?  but might as well go here for now)
    - index.html & index.js?  (should be in matrix-react-sdk, given the SDK is useless without them?)
@@ -21,7 +21,7 @@ ideally matrix-react-sdk itself should ship with a default skin which actually w
 
 status skin (can go in the same app for now)
   - has status theme
-    - which inherits from riot light theme
+    - which inherits from Element light theme
     - how do we share graphics between skins?
       - shove them into react-sdk, or...
       - guess we do ../../vector/img 
@@ -64,5 +64,5 @@ random thoughts;
 -----------------
 
 Immediate plan for Status:
- * Implement it as a theme for the riot skin
+ * Implement it as a theme for the Element skin
  * Ideally move skins to a sensible level (possibly even including src?)
