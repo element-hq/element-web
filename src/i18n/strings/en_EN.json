@@ -20,12 +20,12 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Riot with an existing Matrix account on a different homeserver.",
     "Dismiss": "Dismiss",
     "Unsupported browser": "Unsupported browser",
-    "Your browser can't run Riot": "Your browser can't run Riot",
+    "Your browser can't run Tchap": "Your browser can't run Tchap",
     "Riot uses advanced browser features which aren't supported by your current browser.": "Riot uses advanced browser features which aren't supported by your current browser.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.",
     "I understand the risks and wish to continue": "I understand the risks and wish to continue",
-    "Go to Riot.im": "Go to Riot.im",
+    "Go to Tchap": "Go to Tchap",
     "Failed to start": "Failed to start",
     "Welcome to Riot.im": "Welcome to Riot.im",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
@@ -35,5 +35,6 @@
     "Chat with Riot Bot": "Chat with Riot Bot",
     "Explore rooms": "Explore rooms",
     "Room Directory": "Room Directory",
-    "Welcome to Tchap": "Welcome to Tchap"
+    "Welcome to Tchap": "Welcome to Tchap",
+    "Use Tchap on mobile": "Use Tchap on mobile"
 }

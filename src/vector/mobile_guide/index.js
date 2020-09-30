@@ -10,7 +10,7 @@ function onBackToRiotClick() {
 function renderConfigError(message) {
     const contactMsg = "If this is unexpected, please contact your system administrator " +
         "or technical support representative.";
-    message = `<h2>Error loading Riot</h2><p>${message}</p><p>${contactMsg}</p>`;
+    message = `<h2>Error loading Tchap</h2><p>${message}</p><p>${contactMsg}</p>`;
 
     const toHide = document.getElementsByClassName("mx_HomePage_container");
     const errorContainers = document.getElementsByClassName("mx_HomePage_errorContainer");
@@ -91,9 +91,9 @@ async function initPage() {
     if (hsUrl && !hsUrl.endsWith('/')) hsUrl += '/';
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
-    if (hsUrl !== 'https://matrix.org/') {
+    if (hsUrl !== 'https://matrix.agent.tchap.gouv.fr/') {
         document.getElementById('configure_riot_button').href =
-            "https://riot.im/config/config?hs_url=" + encodeURIComponent(hsUrl) +
+            "https://matrix.agent.tchap.gouv.fr/config/config?hs_url=" + encodeURIComponent(hsUrl) +
             "&is_url=" + encodeURIComponent(isUrl);
         document.getElementById('step1_heading').innerHTML= '1: Install the app';
         document.getElementById('step2_container').style.display = 'block';

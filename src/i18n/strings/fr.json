@@ -30,12 +30,13 @@
     "Previous/next recently visited room or community": "Salon ou communauté visité récemment précédent/suivant",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navigateur non pris en charge",
-    "Your browser can't run Riot": "Votre navigateur ne peut pas exécuter Riot",
-    "Riot uses advanced browser features which aren't supported by your current browser.": "Riot utilise des fonctionnalités avancées qui ne sont pas prises en charge par votre navigateur actuel.",
+    "Your browser can't run Tchap": "Votre navigateur ne peut pas exécuter Tchap",
+    "Tchap uses advanced browser features which aren't supported by your current browser.": "Tchap utilise des fonctionnalités avancées qui ne sont pas prises en charge par votre navigateur actuel.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ou <safariLink>Safari</safariLink> pour une expérience optimale.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Vous pouvez continuer à utiliser votre navigateur actuel, mais vous risquez de trouver que certaines fonctionnalités et/ou l'apparence de l'application sont incorrectes.",
     "I understand the risks and wish to continue": "Je comprends les risques et souhaite continuer",
-    "Go to Riot.im": "Aller vers Riot.im",
+    "Go to Tchap": "Aller vers Tchap",
     "Failed to start": "Échec au démarrage",
-    "Riot Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)"
+    "Riot Desktop (%(platformName)s)": "Riot pour bureau (%(platformName)s)",
+    "Use Tchap on mobile": "Utilisez Tchap sur mobile"
 }
