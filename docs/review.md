@@ -76,7 +76,7 @@ As it can be difficult to review design work from looking at just the changed
 files in a PR, authors should be prepared for Design and / or Product teams to
 request a link to an ad-hoc build of Element (hosted anywhere) that can be used for
 the review. In the future, we [hope to automate
-this](https://github.com/vector-im/riot-web/issues/12624) for every PR.
+this](https://github.com/vector-im/element-web/issues/12624) for every PR.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
 with our vision for Element. Please chat with the team in
