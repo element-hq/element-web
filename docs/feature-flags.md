@@ -62,7 +62,7 @@ The following lists a few common options.
 Set the feature to `true` in the
 [develop](https://github.com/vector-im/element-web/blob/develop/element.io/develop/config.json)
 and
-[nightly](https://github.com/vector-im/element-web/blob/develop/element.io/nightly/config.json)
+[nightly](https://github.com/vector-im/element-desktop/blob/develop/element.io/nightly/config.json)
 configs:
 
 ```json
@@ -76,7 +76,7 @@ configs:
 Set the feature to `true` in the
 [staging / app](https://github.com/vector-im/element-web/blob/develop/element.io/app/config.json)
 and
-[release](https://github.com/vector-im/element-web/blob/develop/element.io/release/config.json)
+[release](https://github.com/vector-im/element-desktop/blob/develop/element.io/release/config.json)
 configs.
 
 **Note:** The above will only enable the feature for https://app.element.io and official Element
