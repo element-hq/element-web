@@ -1019,7 +1019,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
         if (communityId) {
             // double check the user will have permission to associate this room with the community
-            if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
+            if (!CommunityPrototypeStore.instance.isAdminOf(communityId)) {
                 Modal.createTrackedDialog('Pre-failure to create room', '', ErrorDialog, {
                     title: _t("Cannot create rooms in this community"),
                     description: _t("You do not have permission to create rooms in this community."),
