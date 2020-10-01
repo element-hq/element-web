@@ -109,9 +109,6 @@ let meetApi: any; // JitsiMeetExternalAPI
                 // Request credentials, give callback to continue when received
                 openIdToken = await widgetApi.requestOpenIDConnectToken();
                 console.log("Got OpenID Connect token");
-                enableJoinButton();
-            } else {
-                enableJoinButton();
             }
 
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
@@ -122,9 +119,9 @@ let meetApi: any; // JitsiMeetExternalAPI
                     widgetApi.transport.reply(ev.detail, {}); // ack
                 },
             );
-        } else {
-            enableJoinButton();
         }
+
+        enableJoinButton(); // always enable the button
     } catch (e) {
         console.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
