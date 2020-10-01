@@ -22,10 +22,10 @@ import {KJUR} from 'jsrsasign';
 import {
     IOpenIDCredentials,
     IWidgetApiRequest,
-    IWidgetApiRequestEmptyData,
     VideoConferenceCapabilities,
-    WidgetApi
+    WidgetApi,
 } from "matrix-widget-api";
+import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 
@@ -76,7 +76,7 @@ let meetApi: any; // JitsiMeetExternalAPI
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
             readyPromise = Promise.all([
                 new Promise<void>(resolve => {
-                    widgetApi.once<CustomEvent<IWidgetApiRequest>>("action:im.vector.ready", ev => {
+                    widgetApi.once<CustomEvent<IWidgetApiRequest>>(`action:${ElementWidgetActions.ClientReady}`, ev => {
                         ev.preventDefault();
                         widgetApi.transport.reply(ev.detail, {});
                         resolve();
@@ -116,7 +116,7 @@ let meetApi: any; // JitsiMeetExternalAPI
 
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
-            widgetApi.addEventListener('hangup', (ev: CustomEvent<IWidgetApiRequest>) => {
+            widgetApi.addEventListener(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IWidgetApiRequest>) => {
                 if (meetApi) meetApi.executeCommand('hangup');
                 widgetApi.transport.reply(ev.detail, {}); // ack
             });
