@@ -116,10 +116,12 @@ let meetApi: any; // JitsiMeetExternalAPI
 
             // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/riot-web/issues/12795)
 
-            widgetApi.addEventListener(`action:${ElementWidgetActions.HangupCall}`, (ev: CustomEvent<IWidgetApiRequest>) => {
-                if (meetApi) meetApi.executeCommand('hangup');
-                widgetApi.transport.reply(ev.detail, {}); // ack
-            });
+            widgetApi.addEventListener(`action:${ElementWidgetActions.HangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    if (meetApi) meetApi.executeCommand('hangup');
+                    widgetApi.transport.reply(ev.detail, {}); // ack
+                },
+            );
         } else {
             enableJoinButton();
         }
@@ -181,7 +183,7 @@ function createJWTToken() {
 function joinConference() { // event handler bound in HTML
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-        if (!openIdToken?.access_token) {
+        if (!openIdToken?.access_token) { // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
             console.warn('Expected to have an OpenID credential, cannot initialize widget.');
             document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
