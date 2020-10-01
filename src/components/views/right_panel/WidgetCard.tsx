@@ -39,6 +39,8 @@ import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPa
 import {Capability} from "../../../widgets/WidgetApi";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
+import dis from "../../../dispatcher/dispatcher";
+import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 
 interface IProps {
     room: Room;
@@ -77,10 +79,17 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     let contextMenu;
     if (menuDisplayed) {
         let snapshotButton;
-        // TODO: [TravisR] Fix this
-        if (ActiveWidgetStore.widgetHasCapability(app.id, Capability.Screenshot)) {
+        const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
+        if (widgetMessaging?.hasCapability(Capability.Screenshot)) {
             const onSnapshotClick = () => {
-                WidgetUtils.snapshotWidget(app);
+                widgetMessaging.takeScreenshot().then(data => {
+                    dis.dispatch({
+                        action: 'picture_snapshot',
+                        file: data.screenshot,
+                    });
+                }).catch(err => {
+                    console.error("Failed to take screenshot: ", err);
+                });
                 closeMenu();
             };
 
