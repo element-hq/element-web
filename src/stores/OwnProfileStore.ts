@@ -70,7 +70,7 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
      * will be returned as an HTTP URL.
      * @returns The HTTP URL of the user's avatar
      */
-    public getHttpAvatarUrl(size: number = 0): string {
+    public getHttpAvatarUrl(size = 0): string {
         if (!this.avatarMxc) return null;
         const adjustedSize = size > 1 ? size : undefined; // don't let negatives or zero through
         return this.matrixClient.mxcUrlToHttp(this.avatarMxc, adjustedSize, adjustedSize);

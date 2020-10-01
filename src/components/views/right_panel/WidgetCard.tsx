@@ -29,7 +29,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {SetRightPanelPhasePayload} from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import {Action} from "../../../dispatcher/actions";
 import WidgetStore from "../../../stores/WidgetStore";
-import ActiveWidgetStore from "../../../stores/ActiveWidgetStore";
 import {ChevronFace, ContextMenuButton, useContextMenu} from "../../structures/ContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
@@ -40,7 +39,6 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
 import dis from "../../../dispatcher/dispatcher";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
-import { Capability } from "matrix-widget-api/lib/interfaces/Capabilities";
 import { MatrixCapabilities } from "matrix-widget-api";
 
 interface IProps {

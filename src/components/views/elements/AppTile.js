@@ -150,7 +150,7 @@ export default class AppTile extends React.Component {
             this.setState({initialising: false});
         });
     }
-    
+
     _iframeRefChange = (ref) => {
         this.setState({iframe: ref});
         if (ref) {
@@ -223,7 +223,7 @@ export default class AppTile extends React.Component {
      * @private
      * @returns {Promise<*>} Resolves when the widget is terminated, or timeout passed.
      */
-    _endWidgetActions() {
+    async _endWidgetActions() { // widget migration dev note: async to maintain signature
         // HACK: This is a really dirty way to ensure that Jitsi cleans up
         // its hold on the webcam. Without this, the widget holds a media
         // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351

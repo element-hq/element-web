@@ -25,7 +25,7 @@ import {
     IWidgetData,
     MatrixCapabilities,
     Widget,
-    WidgetApiFromWidgetAction
+    WidgetApiFromWidgetAction,
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
