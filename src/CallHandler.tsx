@@ -112,11 +112,9 @@ export default class CallHandler {
     }
 
     getAnyActiveCall() {
-        const roomsWithCalls = Object.keys(this.calls);
-        for (let i = 0; i < roomsWithCalls.length; i++) {
-            if (this.calls.get(roomsWithCalls[i]) &&
-                    this.calls.get(roomsWithCalls[i]).call_state !== "ended") {
-                return this.calls.get(roomsWithCalls[i]);
+        for (const call of this.calls.values()) {
+            if (call.state !== "ended") {
+                return call;
             }
         }
         return null;
@@ -182,7 +180,7 @@ export default class CallHandler {
             });
         });
         call.on("hangup", () => {
-            this.setCallState(undefined, call.roomId, "ended");
+            this.removeCallForRoom(call.roomId);
         });
         // map web rtc states to dummy UI state
         // ringing|ringback|connected|ended|busy|stop_ringback|stop_ringing
@@ -194,7 +192,7 @@ export default class CallHandler {
                 this.setCallState(call, call.roomId, "ringback");
                 this.play("ringbackAudio");
             } else if (newState === "ended" && oldState === "connected") {
-                this.setCallState(undefined, call.roomId, "ended");
+                this.removeCallForRoom(call.roomId);
                 this.pause("ringbackAudio");
                 this.play("callendAudio");
             } else if (newState === "ended" && oldState === "invite_sent" &&
@@ -225,7 +223,11 @@ export default class CallHandler {
         console.log(
             `Call state in ${roomId} changed to ${status} (${call ? call.call_state : "-"})`,
         );
-        this.calls.set(roomId, call);
+        if (call) {
+            this.calls.set(roomId, call);
+        } else {
+            this.calls.delete(roomId);
+        }
 
         if (status === "ringing") {
             this.play("ringAudio");
@@ -241,6 +243,10 @@ export default class CallHandler {
             room_id: roomId,
             state: status,
         });
+    }
+
+    private removeCallForRoom(roomId: string) {
+        this.setCallState(null, roomId, null);
     }
 
     private showICEFallbackPrompt() {
@@ -285,7 +291,7 @@ export default class CallHandler {
             } else if (payload.type === 'screensharing') {
                 const screenCapErrorString = PlatformPeg.get().screenCaptureErrorString();
                 if (screenCapErrorString) {
-                    this.setCallState(undefined, newCall.roomId, "ended");
+                    this.removeCallForRoom(newCall.roomId);
                     console.log("Can't capture screen: " + screenCapErrorString);
                     Modal.createTrackedDialog('Call Handler', 'Unable to capture screen', ErrorDialog, {
                         title: _t('Unable to capture screen'),
@@ -386,7 +392,7 @@ export default class CallHandler {
                     return; // no call to hangup
                 }
                 this.calls.get(payload.room_id).hangup();
-                this.setCallState(null, payload.room_id, "ended");
+                this.removeCallForRoom(payload.room_id);
                 break;
             case 'answer':
                 if (!this.calls.get(payload.room_id)) {
