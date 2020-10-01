@@ -36,12 +36,12 @@ import SettingsStore from "../../../settings/SettingsStore";
 import {aboveLeftOf, ContextMenu, ContextMenuButton} from "../../structures/ContextMenu";
 import PersistedElement from "./PersistedElement";
 import {WidgetType} from "../../../widgets/WidgetType";
-import {Capability} from "../../../widgets/WidgetApi";
 import {SettingLevel} from "../../../settings/SettingLevel";
 import WidgetStore from "../../../stores/WidgetStore";
 import {Action} from "../../../dispatcher/actions";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
 import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
+import {MatrixCapabilities} from "matrix-widget-api";
 
 export default class AppTile extends React.Component {
     constructor(props) {
@@ -305,7 +305,7 @@ export default class AppTile extends React.Component {
         if (payload.widgetId === this.props.app.id) {
             switch (payload.action) {
                 case 'm.sticker':
-                    if (this._sgWidget.widgetApi.hasCapability(Capability.Sticker)) {
+                    if (this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
                         dis.dispatch({action: 'post_sticker_message', data: payload.data});
                     } else {
                         console.warn('Ignoring sticker message. Invalid capability');
@@ -562,7 +562,7 @@ export default class AppTile extends React.Component {
             const canUserModify = this._canUserModify();
             const showEditButton = Boolean(this._sgWidget.isManagedByManager && canUserModify);
             const showDeleteButton = (this.props.showDelete === undefined || this.props.showDelete) && canUserModify;
-            const showPictureSnapshotButton = this._sgWidget.widgetApi.hasCapability(Capability.Screenshot)
+            const showPictureSnapshotButton = this._sgWidget.widgetApi.hasCapability(MatrixCapabilities.Screenshots)
                 && this.props.show;
 
             const WidgetContextMenu = sdk.getComponent('views.context_menus.WidgetContextMenu');

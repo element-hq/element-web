@@ -66,14 +66,7 @@ class ActiveWidgetStore extends EventEmitter {
         if (id !== this._persistentWidgetId) return;
         const toDeleteId = this._persistentWidgetId;
 
-        const result = WidgetMessagingStore.instance.findWidgetById(id);
-        if (result) {
-            if (result.room) {
-                WidgetMessagingStore.instance.stopMessagingForRoomWidget(result.room, result.widget);
-            } else {
-                WidgetMessagingStore.instance.stopMessagingForAccountWidget(result.widget);
-            }
-        }
+        WidgetMessagingStore.instance.stopMessagingById(id);
 
         this.setWidgetPersistence(toDeleteId, false);
         this.delRoomId(toDeleteId);

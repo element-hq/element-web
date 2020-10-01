@@ -62,6 +62,15 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     }
 
     /**
+     * Stops the widget messaging instance for a given widget ID.
+     * @param {string} widgetId The widget ID.
+     * @deprecated Widget IDs are not globally unique.
+     */
+    public stopMessagingById(widgetId: string) {
+        this.widgetMap.remove(widgetId)?.stop();
+    }
+
+    /**
      * Gets the widget messaging class for a given widget ID.
      * @param {string} widgetId The widget ID.
      * @returns {ClientWidgetApi} The widget API, or a falsey value if not found.

@@ -36,11 +36,12 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import {AppTileActionPayload} from "../../../dispatcher/payloads/AppTileActionPayload";
-import {Capability} from "../../../widgets/WidgetApi";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import classNames from "classnames";
 import dis from "../../../dispatcher/dispatcher";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
+import { Capability } from "matrix-widget-api/lib/interfaces/Capabilities";
+import { MatrixCapabilities } from "matrix-widget-api";
 
 interface IProps {
     room: Room;
@@ -80,7 +81,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     if (menuDisplayed) {
         let snapshotButton;
         const widgetMessaging = WidgetMessagingStore.instance.getMessagingForId(app.id);
-        if (widgetMessaging?.hasCapability(Capability.Screenshot)) {
+        if (widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
             const onSnapshotClick = () => {
                 widgetMessaging.takeScreenshot().then(data => {
                     dis.dispatch({

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-import {Room} from "matrix-js-sdk/src/models/room";
+import { Room } from "matrix-js-sdk/src/models/room";
 import {
-    ClientWidgetApi, IStickerActionRequest,
+    ClientWidgetApi,
+    IStickerActionRequest,
     IStickyActionRequest,
-    IWidget, IWidgetApiRequest,
+    IWidget,
+    IWidgetApiRequest,
     IWidgetApiRequestEmptyData,
     IWidgetData,
-    Widget, WidgetApiFromWidgetAction
+    MatrixCapabilities,
+    Widget,
+    WidgetApiFromWidgetAction
 } from "matrix-widget-api";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { EventEmitter } from "events";
@@ -33,11 +37,9 @@ import WidgetUtils from '../../utils/WidgetUtils';
 import { IntegrationManagers } from "../../integrations/IntegrationManagers";
 import SettingsStore from "../../settings/SettingsStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { Capability } from "../../widgets/WidgetApi";
 import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import dis from "../../dispatcher/dispatcher";
 import { ElementWidgetActions } from "./ElementWidgetActions";
 
 // TODO: Destroy all of this code
@@ -171,7 +173,7 @@ export class StopGapWidget extends EventEmitter {
         if (WidgetType.JITSI.matches(this.mockWidget.type)) {
             this.messaging.addEventListener("action:set_always_on_screen",
                 (ev: CustomEvent<IStickyActionRequest>) => {
-                    if (this.messaging.hasCapability(Capability.AlwaysOnScreen)) {
+                    if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
                         ActiveWidgetStore.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                         ev.preventDefault();
                         this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack
