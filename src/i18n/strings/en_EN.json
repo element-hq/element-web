@@ -714,6 +714,8 @@
     "Off": "Off",
     "On": "On",
     "Noisy": "Noisy",
+    "Failed to save your profile": "Failed to save your profile",
+    "The operation could not be completed": "The operation could not be completed",
     "<a>Upgrade</a> to your own domain": "<a>Upgrade</a> to your own domain",
     "Profile": "Profile",
     "Display Name": "Display Name",
