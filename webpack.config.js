@@ -1,5 +1,4 @@
 const path = require('path');
-const {EnvironmentPlugin} = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -33,8 +32,6 @@ module.exports = (env, argv) => {
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
     const plugins = [
-        new EnvironmentPlugin(["WEBPACK_DEV_SERVER"]), // pass this as it is used for conditionally loading workbox
-
         // This exports our CSS using the splitChunks and loaders above.
         new MiniCssExtractPlugin({
             filename: 'bundles/[hash]/[name].css',
@@ -95,8 +92,7 @@ module.exports = (env, argv) => {
         }),
     ];
 
-    const isDevServer = process.env.WEBPACK_DEV_SERVER;
-    if (!isDevServer) {
+    if (argv.mode === "production") {
         plugins.push(new WorkboxPlugin.GenerateSW({
             maximumFileSizeToCacheInBytes: 22000000,
             runtimeCaching: [{
