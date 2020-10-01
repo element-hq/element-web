@@ -38,6 +38,7 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import dis from "../../dispatcher/dispatcher";
+import { ElementWidgetActions } from "./ElementWidgetActions";
 
 // TODO: Destroy all of this code
 
@@ -178,7 +179,7 @@ export class StopGapWidget extends EventEmitter {
                 },
             );
         } else if (WidgetType.STICKERPICKER.matches(this.mockWidget.type)) {
-            this.messaging.addEventListener("action:integration_manager_open",
+            this.messaging.addEventListener(`action:${ElementWidgetActions.OpenIntegrationManager}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     // Acknowledge first
                     ev.preventDefault();

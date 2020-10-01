@@ -41,6 +41,7 @@ import {SettingLevel} from "../../../settings/SettingLevel";
 import WidgetStore from "../../../stores/WidgetStore";
 import {Action} from "../../../dispatcher/actions";
 import {StopGapWidget} from "../../../stores/widgets/StopGapWidget";
+import {ElementWidgetActions} from "../../../stores/widgets/ElementWidgetActions";
 
 export default class AppTile extends React.Component {
     constructor(props) {
@@ -296,7 +297,7 @@ export default class AppTile extends React.Component {
     _onWidgetReady = () => {
         this.setState({loading: false});
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            this._sgWidget.widgetApi.transport.send("im.vector.ready", {});
+            this._sgWidget.widgetApi.transport.send(ElementWidgetActions.ClientReady, {});
         }
     };
 

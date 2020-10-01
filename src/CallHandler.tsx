@@ -76,6 +76,8 @@ import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import ActiveWidgetStore from "./stores/ActiveWidgetStore";
+import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
+import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 
 // until we ts-ify the js-sdk voip code
 type Call = any;
@@ -495,13 +497,12 @@ export default class CallHandler {
         const roomInfo = WidgetStore.instance.getRoom(roomId);
         if (!roomInfo) return; // "should never happen" clauses go here
 
-        // TODO: [TravisR] Fix this
         const jitsiWidgets = roomInfo.widgets.filter(w => WidgetType.JITSI.matches(w.type));
         jitsiWidgets.forEach(w => {
-            const messaging = ActiveWidgetStore.getWidgetMessaging(w.id);
+            const messaging = WidgetMessagingStore.instance.getMessagingForId(w.id);
             if (!messaging) return; // more "should never happen" words
 
-            messaging.hangup();
+            messaging.transport.send(ElementWidgetActions.HangupCall, {});
         });
     }
 }
