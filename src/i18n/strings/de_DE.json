@@ -2504,5 +2504,18 @@
     "Start a conversation with someone using their name or username (like <userId/>).": "Starte ein Gespräch unter Verwendung des Namen oder Benutzernamens des Gegenübers (z. B. <userId/>).",
     "This won't invite them to %(communityName)s. To invite someone to %(communityName)s, click <a>here</a>": "Das wird sie nicht zu %(communityName)s einladen. Um jemand zu %(communityName)s einzuladen, klicke <a>hier</a>",
     "Invite someone using their name, username (like <userId/>) or <a>share this room</a>.": "Lade jemand mittels seinem/ihrem Namen oder Benutzernamen (z.B. <userId/>) ein, oder <a>teile diesem Raum</a>.",
-    "Unable to set up keys": "Schlüssel können nicht eingerichtet werden"
+    "Unable to set up keys": "Schlüssel können nicht eingerichtet werden",
+    "Use the <a>Desktop app</a> to see all encrypted files": "Nutze die <a>Desktop-App</a> um alle verschlüsselten Dateien zu sehen",
+    "Use the <a>Desktop app</a> to search encrypted messages": "Nutze die <a>Desktop-App</a> um verschlüsselte Nachrichten zu suchen",
+    "This version of %(brand)s does not support viewing some encrypted files": "Diese Version von %(brand)s unterstützt nicht alle verschlüsselten Dateien anzuzeigen",
+    "This version of %(brand)s does not support searching encrypted messages": "Diese Version von %(brand)s unterstützt nicht verschlüsselte Nachrichten zu durchsuchen",
+    "Cannot create rooms in this community": "Räume können in dieser Community nicht erstellt werden",
+    "You do not have permission to create rooms in this community.": "Du bist nicht berechtigt Räume in dieser Community zu erstellen.",
+    "End conference": "Konferenzgespräch beenden",
+    "This will end the conference for everyone. Continue?": "Dies wird das Konferenzgespräch für alle beenden. Fortfahren?",
+    "Join the conference at the top of this room": "Konferenzgespräch oben in diesem Raum beitreten",
+    "Join the conference from the room information card on the right": "Konferenzgespräch in den Rauminformationen rechts beitreten",
+    "Video conference ended by %(senderName)s": "Videokonferenz von %(senderName)s beendet",
+    "Video conference updated by %(senderName)s": "Videokonferenz wurde von %(senderName)s aktualisiert",
+    "Video conference started by %(senderName)s": "Videokonferenz wurde von %(senderName)s gestartet"
 }
