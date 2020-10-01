@@ -39,12 +39,15 @@ export default class WebPlatform extends VectorBasePlatform {
 
         // load service worker if available on this platform
         if ('serviceWorker' in navigator) {
+            // clean up old dummy sw.js
+            navigator.serviceWorker.getRegistration('sw.js').then(reg => reg.unregister());
+
             // Service worker is disabled in webpack-dev-server: https://github.com/GoogleChrome/workbox/issues/1790
             if (!process.env.WEBPACK_DEV_SERVER) {
                 navigator.serviceWorker.register('service-worker.js');
             } else {
                 // we no longer run workbox when in webpack-dev-server, clean it up
-                navigator.serviceWorker.getRegistration().then(reg => reg && reg.unregister());
+                navigator.serviceWorker.getRegistration('service-worker.js').then(reg => reg.unregister());
             }
         }
     }
