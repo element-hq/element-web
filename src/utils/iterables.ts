@@ -16,6 +16,6 @@
 
 import { arrayUnion } from "./arrays";
 
-export function iterableUnion<C extends Iterable<T>, T>(a: C, b: C): Set<T> {
-    return new Set(arrayUnion(Array.from(a), Array.from(b)));
+export function iterableUnion<T>(a: Iterable<T>, b: Iterable<T>): Iterable<T> {
+    return arrayUnion(Array.from(a), Array.from(b));
 }

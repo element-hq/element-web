@@ -25,6 +25,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     public async validateCapabilities(requested: Set<Capability>): Promise<Set<Capability>> {
-        return iterableUnion(requested, new Set(this.allowedCapabilities));
+        return new Set(iterableUnion(requested, this.allowedCapabilities));
     }
 }
