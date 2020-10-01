@@ -55,6 +55,16 @@
     <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
     <script src="<%= htmlWebpackPlugin.files.chunks['bundle'].entry %>"></script>
 
+    <!-- Legacy supporting Prefetch images -->
+    <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />
         <source src="media/message.mp3" type="audio/mpeg" />
