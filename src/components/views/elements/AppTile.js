@@ -51,6 +51,7 @@ export default class AppTile extends React.Component {
         this._persistKey = 'widget_' + this.props.app.id;
         this._sgWidget = new StopGapWidget(this.props);
         this._sgWidget.on("ready", this._onWidgetReady);
+        this.iframe = null; // ref to the iframe (callback style)
 
         this.state = this._getNewState(props);
 
@@ -152,7 +153,7 @@ export default class AppTile extends React.Component {
     }
 
     _iframeRefChange = (ref) => {
-        this.setState({iframe: ref});
+        this.iframe = ref;
         if (ref) {
             this._sgWidget.start(ref);
         } else {
@@ -227,14 +228,14 @@ export default class AppTile extends React.Component {
         // HACK: This is a really dirty way to ensure that Jitsi cleans up
         // its hold on the webcam. Without this, the widget holds a media
         // stream open, even after death. See https://github.com/vector-im/element-web/issues/7351
-        if (this.state.iframe) {
+        if (this.iframe) {
             // In practice we could just do `+= ''` to trick the browser
             // into thinking the URL changed, however I can foresee this
             // being optimized out by a browser. Instead, we'll just point
             // the iframe at a page that is reasonably safe to use in the
             // event the iframe doesn't wink away.
             // This is relative to where the Element instance is located.
-            this.state.iframe.src = 'about:blank';
+            this.iframe.src = 'about:blank';
         }
 
         // Delete the widget from the persisted store for good measure.
@@ -425,9 +426,9 @@ export default class AppTile extends React.Component {
         // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
         if (WidgetType.JITSI.matches(this.props.app.type) && this.props.show) {
             this._endWidgetActions().then(() => {
-                if (this.state.iframe) {
+                if (this.iframe) {
                     // Reload iframe
-                    this.state.iframe.src = this._sgWidget.embedUrl;
+                    this.iframe.src = this._sgWidget.embedUrl;
                     this.setState({});
                 }
             });
@@ -441,7 +442,7 @@ export default class AppTile extends React.Component {
     _onReloadWidgetClick() {
         // Reload iframe in this way to avoid cross-origin restrictions
         // eslint-disable-next-line no-self-assign
-        this.state.iframe.src = this.state.iframe.src;
+        this.iframe.src = this.iframe.src;
     }
 
     _onContextMenuClick = () => {
