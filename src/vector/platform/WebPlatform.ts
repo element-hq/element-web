@@ -34,17 +34,6 @@ const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 export default class WebPlatform extends VectorBasePlatform {
     private runningVersion: string = null;
 
-    constructor() {
-        super();
-
-        // load service worker if available on this platform
-        // Service worker is disabled in development: https://github.com/GoogleChrome/workbox/issues/1790
-        if ('serviceWorker' in navigator && process.env.NODE_ENV === "production") {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    }
-
-
     getHumanReadableName(): string {
         return 'Web Platform'; // no translation required: only used for analytics
     }
