@@ -34,15 +34,9 @@ let secretStorageKeys = {};
 let secretStorageKeyInfo = {};
 let secretStorageBeingAccessed = false;
 
-let dehydrationInfo = {};
+let nonInteractive = false;
 
-export function cacheDehydrationKey(key, keyInfo = {}) {
-    dehydrationInfo = {key, keyInfo};
-}
-
-export function getDehydrationKeyCache() {
-    return dehydrationInfo;
-}
+let dehydrationCache = {};
 
 function isCachingAllowed() {
     return secretStorageBeingAccessed;
@@ -103,18 +97,15 @@ async function getSecretStorageKey({ keys: keyInfos }, ssssItemName) {
         return [keyId, secretStorageKeys[keyId]];
     }
 
-    // if we dehydrated a device, see if that key works for SSSS
-    if (dehydrationInfo.key) {
-        try {
-            const key = dehydrationInfo.key;
-            if (await MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo)) {
-                // Save to cache to avoid future prompts in the current session
-                cacheSecretStorageKey(keyId, key, keyInfo);
-                dehydrationInfo = {};
-                return [name, key];
-            }
-        } catch {}
-        dehydrationInfo = {};
+    if (dehydrationCache.key) {
+        if (await MatrixClientPeg.get().checkSecretStorageKey(dehydrationCache.key, keyInfo)) {
+            cacheSecretStorageKey(keyId, dehydrationCache.key, keyInfo);
+            return [keyId, dehydrationCache.key];
+        }
+    }
+
+    if (nonInteractive) {
+        throw new Error("Could not unlock non-interactively");
     }
 
     const inputToKey = makeInputToKey(keyInfo);
@@ -186,8 +177,10 @@ export async function getDehydrationKey(keyInfo, checkFunc) {
         throw new AccessCancelledError();
     }
     const key = await inputToKey(input);
+
     // need to copy the key because rehydration (unpickling) will clobber it
-    cacheDehydrationKey(key, keyInfo);
+    dehydrationCache = {key: new Uint8Array(key), keyInfo};
+
     return key;
 }
 
@@ -355,6 +348,56 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
         if (!isCachingAllowed()) {
             secretStorageKeys = {};
             secretStorageKeyInfo = {};
+        }
+    }
+}
+
+// FIXME: this function name is a bit of a mouthful
+export async function tryToUnlockSecretStorageWithDehydrationKey(client) {
+    const key = dehydrationCache.key;
+    let restoringBackup = false;
+    if (key && await client.isSecretStorageReady()) {
+        console.log("Trying to set up cross-signing using dehydration key");
+        secretStorageBeingAccessed = true;
+        nonInteractive = true;
+        try {
+            await client.checkOwnCrossSigningTrust();
+
+            // we also need to set a new dehydrated device to replace the
+            // device we rehydrated
+            const dehydrationKeyInfo =
+                  dehydrationCache.keyInfo && dehydrationCache.keyInfo.passphrase
+                  ? {passphrase: dehydrationCache.keyInfo.passphrase}
+                  : {};
+            await client.setDehydrationKey(key, dehydrationKeyInfo);
+
+            // and restore from backup
+            const backupInfo = await client.getKeyBackupVersion();
+            if (backupInfo) {
+                restoringBackup = true;
+                // don't await, because this can take a long time
+                client.restoreKeyBackupWithSecretStorage(backupInfo)
+                    .finally(() => {
+                        secretStorageBeingAccessed = false;
+                        nonInteractive = false;
+                        if (!isCachingAllowed()) {
+                            secretStorageKeys = {};
+                            secretStorageKeyInfo = {};
+                        }
+                    });
+            }
+        } finally {
+            dehydrationCache = {};
+            // the secret storage cache is needed for restoring from backup, so
+            // don't clear it yet if we're restoring from backup
+            if (!restoringBackup) {
+                secretStorageBeingAccessed = false;
+                nonInteractive = false;
+                if (!isCachingAllowed()) {
+                    secretStorageKeys = {};
+                    secretStorageKeyInfo = {};
+                }
+            }
         }
     }
 }
