@@ -24,6 +24,7 @@ import {encodeBase64} from "matrix-js-sdk/src/crypto/olmlib";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import AccessSecretStorageDialog from './components/views/dialogs/security/AccessSecretStorageDialog';
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
+import SettingsStore from "./settings/SettingsStore";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -327,13 +328,13 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
             });
 
             const keyId = Object.keys(secretStorageKeys)[0];
-            if (keyId) {
+            if (keyId && SettingsStore.getValue("feature_dehydration")) {
                 const dehydrationKeyInfo =
                       secretStorageKeyInfo[keyId] && secretStorageKeyInfo[keyId].passphrase
                       ? {passphrase: secretStorageKeyInfo[keyId].passphrase}
                       : {};
                 console.log("Setting dehydration key");
-                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo);
+                await cli.setDehydrationKey(secretStorageKeys[keyId], dehydrationKeyInfo, "Backup device");
             } else {
                 console.log("Not setting dehydration key: no SSSS key found");
             }
@@ -369,7 +370,7 @@ export async function tryToUnlockSecretStorageWithDehydrationKey(client) {
                   dehydrationCache.keyInfo && dehydrationCache.keyInfo.passphrase
                   ? {passphrase: dehydrationCache.keyInfo.passphrase}
                   : {};
-            await client.setDehydrationKey(key, dehydrationKeyInfo);
+            await client.setDehydrationKey(key, dehydrationKeyInfo, "Backup device");
 
             // and restore from backup
             const backupInfo = await client.getKeyBackupVersion();
