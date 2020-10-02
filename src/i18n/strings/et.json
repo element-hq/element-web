@@ -2517,5 +2517,8 @@
     "Join the conference from the room information card on the right": "Liitu konverentsiga selle jututoa infolehelt paremal",
     "Video conference ended by %(senderName)s": "%(senderName)s lõpetas video rühmakõne",
     "Video conference updated by %(senderName)s": "%(senderName)s uuendas video rühmakõne",
-    "Video conference started by %(senderName)s": "%(senderName)s alustas video rühmakõne"
+    "Video conference started by %(senderName)s": "%(senderName)s alustas video rühmakõne",
+    "End conference": "Lõpeta videokonverents",
+    "This will end the conference for everyone. Continue?": "Sellega lõpetame kõikide osalejate jaoks videokonverentsi. Nõus?",
+    "Ignored attempt to disable encryption": "Eirasin katset lõpetada krüptimise kasutamine"
 }
