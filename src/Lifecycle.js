@@ -473,7 +473,7 @@ async function _doSetLoggedIn(credentials, clearStorage) {
     MatrixClientPeg.replaceUsingCreds(credentials);
     const client = MatrixClientPeg.get();
 
-    if (credentials.freshLogin) {
+    if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
         // If we just logged in, try to rehydrate a device instead of using a
         // new device.  If it succeeds, we'll get a new device ID, so make sure
         // we persist that ID to localStorage

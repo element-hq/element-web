@@ -188,7 +188,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "feature_dehydration": {
         isFeature: true,
-        displayName: _td("Offline encrypted messaging using dehydrated devices."),
+        displayName: _td("Offline encrypted messaging using dehydrated devices"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
