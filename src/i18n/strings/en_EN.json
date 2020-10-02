@@ -452,6 +452,7 @@
     "Support adding custom themes": "Support adding custom themes",
     "Show message previews for reactions in DMs": "Show message previews for reactions in DMs",
     "Show message previews for reactions in all rooms": "Show message previews for reactions in all rooms",
+    "Offline encrypted messaging using dehydrated devices.": "Offline encrypted messaging using dehydrated devices.",
     "Enable advanced debugging for the room list": "Enable advanced debugging for the room list",
     "Show info about bridges in room settings": "Show info about bridges in room settings",
     "Font size": "Font size",
