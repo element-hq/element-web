@@ -2502,5 +2502,15 @@
     "Minimize widget": "Widget minimalizálása",
     "Maximize widget": "Widget maximalizálása",
     "Your server requires encryption to be enabled in private rooms.": "A szervered megköveteli, hogy a titkosítás be legyen kapcsolva a privát szobákban.",
-    "Unable to set up keys": "Nem sikerült a kulcsok beállítása"
+    "Unable to set up keys": "Nem sikerült a kulcsok beállítása",
+    "Safeguard against losing access to encrypted messages & data": "Biztosítás a titkosított üzenetek és adatokhoz való hozzáférés elvesztése ellen",
+    "not found in storage": "a tárban nem található",
+    "Widgets": "Kisalkalmazások",
+    "Edit widgets, bridges & bots": "Kisalkalmazások, hidak és botok szerkesztése",
+    "Use the <a>Desktop app</a> to see all encrypted files": "Minden titkosított fájl eléréséhez használd az <a>Asztali alkalmazást</a>",
+    "Use the <a>Desktop app</a> to search encrypted messages": "A titkosított üzenetek kereséséhez használd az <a>Asztali alkalmazást</a>",
+    "This version of %(brand)s does not support viewing some encrypted files": "%(brand)s ezen verziója nem minden titkosított fájl megjelenítését támogatja",
+    "This version of %(brand)s does not support searching encrypted messages": "%(brand)s ezen verziója nem támogatja a keresést a titkosított üzenetekben",
+    "Cannot create rooms in this community": "A közösségben nem lehet szobát készíteni",
+    "You do not have permission to create rooms in this community.": "A közösségben szoba létrehozásához nincs jogosultságod."
 }
