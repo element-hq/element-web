@@ -202,13 +202,19 @@ export default class RightPanel extends React.Component {
             dis.dispatch({
                 action: "view_home_page",
             });
+        } else if (this.state.phase === RightPanelPhases.EncryptionPanel &&
+            this.state.verificationRequest && this.state.verificationRequest.pending
+        ) {
+            // When the user clicks close on the encryption panel cancel the pending request first if any
+            this.state.verificationRequest.cancel();
         } else {
             // Otherwise we have got our user from RoomViewStore which means we're being shown
             // within a room/group, so go back to the member panel if we were in the encryption panel,
             // or the member list if we were in the member panel... phew.
+            const isEncryptionPhase = this.state.phase === RightPanelPhases.EncryptionPanel;
             dis.dispatch({
                 action: Action.ViewUser,
-                member: this.state.phase === RightPanelPhases.EncryptionPanel ? this.state.member : null,
+                member: isEncryptionPhase ? this.state.member : null,
             });
         }
     };
