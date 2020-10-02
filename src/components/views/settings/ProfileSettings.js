@@ -18,30 +18,21 @@ import React, {createRef} from 'react';
 import {_t} from "../../../languageHandler";
 import {MatrixClientPeg} from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import {User} from "matrix-js-sdk";
 import { getHostingLink } from '../../../utils/HostingLink';
 import * as sdk from "../../../index";
+import {OwnProfileStore} from "../../../stores/OwnProfileStore";
 
 export default class ProfileSettings extends React.Component {
     constructor() {
         super();
 
         const client = MatrixClientPeg.get();
-        let user = client.getUser(client.getUserId());
-        if (!user) {
-            // XXX: We shouldn't have to do this.
-            // There seems to be a condition where the User object won't exist until a room
-            // exists on the account. To work around this, we'll just create a temporary User
-            // and use that.
-            console.warn("User object not found - creating one for ProfileSettings");
-            user = new User(client.getUserId());
-        }
-        let avatarUrl = user.avatarUrl;
+        let avatarUrl = OwnProfileStore.instance.avatarMxc;
         if (avatarUrl) avatarUrl = client.mxcUrlToHttp(avatarUrl, 96, 96, 'crop', false);
         this.state = {
-            userId: user.userId,
-            originalDisplayName: user.rawDisplayName,
-            displayName: user.rawDisplayName,
+            userId: client.getUserId(),
+            originalDisplayName: OwnProfileStore.instance.displayName,
+            displayName: OwnProfileStore.instance.displayName,
             originalAvatarUrl: avatarUrl,
             avatarUrl: avatarUrl,
             avatarFile: null,
