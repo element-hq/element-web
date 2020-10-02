@@ -1376,6 +1376,7 @@
     "View Source": "View Source",
     "Encryption enabled": "Encryption enabled",
     "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.": "Messages in this room are end-to-end encrypted. Learn more & verify this user in their user profile.",
+    "Ignored attempt to disable encryption": "Ignored attempt to disable encryption",
     "Encryption not enabled": "Encryption not enabled",
     "The encryption used by this room isn't supported.": "The encryption used by this room isn't supported.",
     "Error decrypting audio": "Error decrypting audio",
