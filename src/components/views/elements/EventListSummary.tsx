@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
+import React, {ReactChildren, useEffect} from 'react';
+import {MatrixEvent} from "matrix-js-sdk/src/models/event";
+import {RoomMember} from "matrix-js-sdk/src/models/room-member";
+
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
-import {MatrixEvent, RoomMember} from "matrix-js-sdk";
 import {useStateToggle} from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
 
-const EventListSummary = ({events, children, threshold=3, onToggle, startExpanded, summaryMembers=[], summaryText}) => {
+interface IProps {
+    // An array of member events to summarise
+    events: MatrixEvent[];
+    // The minimum number of events needed to trigger summarisation
+    threshold?: number;
+    // Whether or not to begin with state.expanded=true
+    startExpanded?: boolean,
+    // The list of room members for which to show avatars next to the summary
+    summaryMembers?: RoomMember[],
+    // The text to show as the summary of this event list
+    summaryText?: string,
+    // An array of EventTiles to render when expanded
+    children: ReactChildren,
+    // Called when the event list expansion is toggled
+    onToggle?(): void;
+}
+
+const EventListSummary: React.FC<IProps> = ({
+    events,
+    children,
+    threshold = 3,
+    onToggle,
+    startExpanded,
+    summaryMembers = [],
+    summaryText,
+}) => {
     const [expanded, toggleExpanded] = useStateToggle(startExpanded);
 
     // Whenever expanded changes call onToggle
@@ -73,24 +99,6 @@ const EventListSummary = ({events, children, threshold=3, onToggle, startExpande
             { body }
         </li>
     );
-};
-
-EventListSummary.propTypes = {
-    // An array of member events to summarise
-    events: PropTypes.arrayOf(PropTypes.instanceOf(MatrixEvent)).isRequired,
-    // An array of EventTiles to render when expanded
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
-    // The minimum number of events needed to trigger summarisation
-    threshold: PropTypes.number,
-    // Called when the event list expansion is toggled
-    onToggle: PropTypes.func,
-    // Whether or not to begin with state.expanded=true
-    startExpanded: PropTypes.bool,
-
-    // The list of room members for which to show avatars next to the summary
-    summaryMembers: PropTypes.arrayOf(PropTypes.instanceOf(RoomMember)),
-    // The text to show as the summary of this event list
-    summaryText: PropTypes.string,
 };
 
 export default EventListSummary;
